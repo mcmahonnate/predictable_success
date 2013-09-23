@@ -17,14 +17,19 @@ class Employee(models.Model):
     )
     job_title = models.CharField(
         max_length=255,
+        blank=True,
     )
     base_camp = models.CharField(
         max_length=255,
+        blank=True,
     )
     u_name = models.CharField(
         max_length=255,
+        blank=True,
     )
-    date_of_hire = models.DateField()
+    hire_date = models.DateField(
+        null=True,
+    )
     display = models.BooleanField()
     organization = models.ForeignKey(Organization)
 
@@ -41,8 +46,8 @@ class Team(models.Model):
         return self.name
 
 class Mentorship(models.Model):
-    mentor = models.ForeignKey(Employee, related_name='mentors')
-    mentee = models.ForeignKey(Employee, related_name='mentees')
+    mentor = models.ForeignKey(Employee, related_name='+')
+    mentee = models.ForeignKey(Employee, related_name='+')
 
     def __str__(self):
         return "%s mentorship of %s" % (self.mentor.informal_name, self.mentee.informal_name)
