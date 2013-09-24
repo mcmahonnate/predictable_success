@@ -6,7 +6,7 @@ def current_year():
     return datetime.datetime.today().year
 
 class CompensationSummary(models.Model):
-    YEAR_CHOICES = [(year, year) for year in range(1979, (datetime.datetime.today().year+1))]
+    YEAR_CHOICES = [(year, year) for year in range(1979, current_year())]
 
     employee = models.ForeignKey(Employee)
     year = models.IntegerField(
