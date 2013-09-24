@@ -6,7 +6,7 @@ def current_year():
     return datetime.datetime.today().year
 
 class CompensationSummary(models.Model):
-    YEAR_CHOICES = [(year, year) for year in range(1979, current_year())]
+    YEAR_CHOICES = [(year, year) for year in range(1979, current_year() + 1)]
 
     employee = models.ForeignKey(Employee)
     year = models.IntegerField(
@@ -33,3 +33,9 @@ class CompensationSummary(models.Model):
         max_digits=12,
         decimal_places=2,
     )
+
+    def total_compensation(self):
+        return self.salary + self.bonus + self.discretionary + self.writer_payments_and_royalties
+
+    def __str__(self):
+        return "%s compensation FY%i" % (self.employee.informal_name, self.fiscal_year)

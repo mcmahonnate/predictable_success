@@ -1,16 +1,16 @@
-"""
-This file demonstrates writing tests using the unittest module. These will pass
-when you run "manage.py test".
-
-Replace this with more appropriate tests for your application.
-"""
-
 from django.test import TestCase
+from orgstructure.models import Employee
+from compensationtracking.models import CompensationSummary
 
+class CompensationSummaryTest(TestCase):
+    def test_str(self):
+        expected = 'John Doe compensation FY2012'
+        john = Employee(informal_name='John Doe')
+        compensation_summary = CompensationSummary(employee=john, fiscal_year=2012)
+        self.assertEquals(str(compensation_summary), expected)
 
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.assertEqual(1 + 1, 2)
+    def test_total(self):
+        expected = 100000
+        compensation_summary = CompensationSummary(salary=25000.00, bonus=25000.00, discretionary=25000.00, writer_payments_and_royalties=25000.00)
+        actual = compensation_summary.total_compensation()
+        self.assertEquals(actual, expected)
