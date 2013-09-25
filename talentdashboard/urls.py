@@ -4,6 +4,7 @@ from orgstructure.api import *
 from compensationtracking.api import *
 from django.contrib import admin
 from tastypie.api import Api
+from django.views.generic import TemplateView
 
 admin.autodiscover()
 
@@ -15,15 +16,7 @@ v1_api.register(MentorshipResource())
 v1_api.register(CompensationSummaryResource())
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'talentdashboard.views.home', name='home'),
-    # url(r'^talentdashboard/', include('talentdashboard.foo.urls')),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
+    url(r'^$',  TemplateView.as_view(template_name="index.html"), name='home'),
     url(r'^admin/', include(admin.site.urls)),
-
     url(r'^api/', include(v1_api.urls)),
 )
