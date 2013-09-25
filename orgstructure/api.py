@@ -1,30 +1,29 @@
 from tastypie import fields
 from tastypie.resources import ModelResource
 from orgstructure.models import Employee, Organization, Team, Mentorship
-from orgstructure.api import *
 from tastypie.constants import ALL_WITH_RELATIONS
 
 class OrganizationResource(ModelResource):
     class Meta:
         queryset = Organization.objects.all()
-        resource_name = 'organizations'
+        resource_name = 'org/organizations'
 
 class EmployeeResource(ModelResource):
     organization = fields.ToOneField(OrganizationResource, 'organization', full=True)
-    team = fields.ToOneField('TeamResource', 'team', full=True)
+    team = fields.ToOneField('orgstructure.api.TeamResource', 'team', full=True, null=True)
     class Meta:
         queryset = Employee.objects.all()
-        resource_name = 'employees'
+        resource_name = 'org/employees'
         filtering = {
             "id": ('exact'),
         }
 
 class TeamResource(ModelResource):
-    leader = fields.ToOneField(EmployeeResource, 'leader', full=True)
+    leader = fields.ToOneField(EmployeeResource, 'leader')
 
     class Meta:
         queryset = Team.objects.all()
-        resource_name = 'teams'
+        resource_name = 'org/teams'
         filtering = {
             "leader": (ALL_WITH_RELATIONS),
         }
@@ -35,4 +34,4 @@ class MentorshipResource(ModelResource):
 
     class Meta:
         queryset = Mentorship.objects.all()
-        resource_name = 'mentorships'
+        resource_name = 'org/mentorships'

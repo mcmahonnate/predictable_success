@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.conf.urls.defaults import *
 from orgstructure.api import *
+from pvptracking.api import *
 from compensationtracking.api import *
 from django.contrib import admin
 from tastypie.api import Api
@@ -14,6 +15,7 @@ v1_api.register(EmployeeResource())
 v1_api.register(TeamResource())
 v1_api.register(MentorshipResource())
 v1_api.register(CompensationSummaryResource())
+v1_api.register(PvpEvaluationResource())
 
 urlpatterns = patterns('',
     url(r'^$',  TemplateView.as_view(template_name="index.html"), name='home'),
