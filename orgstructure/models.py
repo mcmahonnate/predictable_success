@@ -32,6 +32,10 @@ class Employee(models.Model):
     )
     display = models.BooleanField()
     organization = models.ForeignKey(Organization)
+    team = models.ForeignKey(
+        'Team',
+        null=True
+    )
 
     def __str__(self):
         return self.informal_name
@@ -41,7 +45,7 @@ class Team(models.Model):
         max_length=255,
     )
     leader = models.OneToOneField('Employee', related_name='+')
-    members = models.ManyToManyField(Employee)
+
     def __str__(self):
         return self.name
 

@@ -10,6 +10,8 @@ class OrganizationResource(ModelResource):
         resource_name = 'organizations'
 
 class EmployeeResource(ModelResource):
+    organization = fields.ToOneField(OrganizationResource, 'organization', full=True)
+    team = fields.ToOneField('TeamResource', 'team', full=True)
     class Meta:
         queryset = Employee.objects.all()
         resource_name = 'employees'
@@ -19,13 +21,11 @@ class EmployeeResource(ModelResource):
 
 class TeamResource(ModelResource):
     leader = fields.ToOneField(EmployeeResource, 'leader', full=True)
-    members = fields.ToManyField(EmployeeResource, 'members', full=True)
 
     class Meta:
         queryset = Team.objects.all()
         resource_name = 'teams'
         filtering = {
-            "members": (ALL_WITH_RELATIONS),
             "leader": (ALL_WITH_RELATIONS),
         }
 

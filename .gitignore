@@ -38,3 +38,6 @@ nosetests.xml
 # Database
 .schema
 *.db
+
+# Vagrant
+.vagrant

@@ -129,6 +129,7 @@ INSTALLED_APPS = (
     'pvptracking',
     'compensationtracking',
     'tastypie',
+    'south',
 )
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
