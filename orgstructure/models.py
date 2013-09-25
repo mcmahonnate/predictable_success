@@ -34,8 +34,10 @@ class Employee(models.Model):
     organization = models.ForeignKey(Organization)
     team = models.ForeignKey(
         'Team',
-        null=True
-    )
+        null=True,
+        blank=True,
+        default=None
+   )
 
     def __str__(self):
         return self.informal_name
