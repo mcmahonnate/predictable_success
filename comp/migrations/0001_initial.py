@@ -9,9 +9,9 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         # Adding model 'CompensationSummary'
-        db.create_table(u'compensationtracking_compensationsummary', (
+        db.create_table(u'comp_compensationsummary', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('employee', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['orgstructure.Employee'])),
+            ('employee', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['org.Employee'])),
             ('year', self.gf('django.db.models.fields.IntegerField')(default=2013)),
             ('fiscal_year', self.gf('django.db.models.fields.IntegerField')(default=2013)),
             ('salary', self.gf('django.db.models.fields.DecimalField')(max_digits=12, decimal_places=2)),
@@ -19,27 +19,27 @@ class Migration(SchemaMigration):
             ('discretionary', self.gf('django.db.models.fields.DecimalField')(max_digits=12, decimal_places=2)),
             ('writer_payments_and_royalties', self.gf('django.db.models.fields.DecimalField')(max_digits=12, decimal_places=2)),
         ))
-        db.send_create_signal(u'compensationtracking', ['CompensationSummary'])
+        db.send_create_signal(u'comp', ['CompensationSummary'])
 
 
     def backwards(self, orm):
         # Deleting model 'CompensationSummary'
-        db.delete_table(u'compensationtracking_compensationsummary')
+        db.delete_table(u'comp_compensationsummary')
 
 
     models = {
-        u'compensationtracking.compensationsummary': {
+        u'comp.compensationsummary': {
             'Meta': {'object_name': 'CompensationSummary'},
             'bonus': ('django.db.models.fields.DecimalField', [], {'max_digits': '12', 'decimal_places': '2'}),
             'discretionary': ('django.db.models.fields.DecimalField', [], {'max_digits': '12', 'decimal_places': '2'}),
-            'employee': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['orgstructure.Employee']"}),
+            'employee': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['org.Employee']"}),
             'fiscal_year': ('django.db.models.fields.IntegerField', [], {'default': '2013'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'salary': ('django.db.models.fields.DecimalField', [], {'max_digits': '12', 'decimal_places': '2'}),
             'writer_payments_and_royalties': ('django.db.models.fields.DecimalField', [], {'max_digits': '12', 'decimal_places': '2'}),
             'year': ('django.db.models.fields.IntegerField', [], {'default': '2013'})
         },
-        u'orgstructure.employee': {
+        u'org.employee': {
             'Meta': {'object_name': 'Employee'},
             'base_camp': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'display': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
@@ -47,22 +47,22 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'informal_name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'job_title': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
-            'organization': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['orgstructure.Organization']"}),
-            'team': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['orgstructure.Team']", 'null': 'True'}),
+            'organization': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['org.Organization']"}),
+            'team': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'to': u"orm['org.Team']", 'null': 'True', 'blank': 'True'}),
             'u_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'})
         },
-        u'orgstructure.organization': {
+        u'org.organization': {
             'Meta': {'object_name': 'Organization'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'subdomain': ('django.db.models.fields.CharField', [], {'max_length': '15'})
         },
-        u'orgstructure.team': {
+        u'org.team': {
             'Meta': {'object_name': 'Team'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'leader': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'+'", 'unique': 'True', 'to': u"orm['orgstructure.Employee']"}),
+            'leader': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'+'", 'unique': 'True', 'to': u"orm['org.Employee']"}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         }
     }
 
-    complete_apps = ['compensationtracking']
+    complete_apps = ['comp']

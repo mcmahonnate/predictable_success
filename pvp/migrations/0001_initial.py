@@ -8,23 +8,30 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Removing unique constraint on 'PvpEvaluation', fields [u'id', 'date']
-        db.delete_unique(u'pvptracking_pvpevaluation', [u'id', 'date'])
+        # Adding model 'PvpEvaluation'
+        db.create_table(u'pvp_pvpevaluation', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('employee', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['org.Employee'])),
+            ('date', self.gf('django.db.models.fields.DateField')()),
+            ('potential', self.gf('django.db.models.fields.IntegerField')()),
+            ('performance', self.gf('django.db.models.fields.IntegerField')()),
+        ))
+        db.send_create_signal(u'pvp', ['PvpEvaluation'])
 
         # Adding unique constraint on 'PvpEvaluation', fields ['employee', 'date']
-        db.create_unique(u'pvptracking_pvpevaluation', ['employee_id', 'date'])
+        db.create_unique(u'pvp_pvpevaluation', ['employee_id', 'date'])
 
 
     def backwards(self, orm):
         # Removing unique constraint on 'PvpEvaluation', fields ['employee', 'date']
-        db.delete_unique(u'pvptracking_pvpevaluation', ['employee_id', 'date'])
+        db.delete_unique(u'pvp_pvpevaluation', ['employee_id', 'date'])
 
-        # Adding unique constraint on 'PvpEvaluation', fields [u'id', 'date']
-        db.create_unique(u'pvptracking_pvpevaluation', [u'id', 'date'])
+        # Deleting model 'PvpEvaluation'
+        db.delete_table(u'pvp_pvpevaluation')
 
 
     models = {
-        u'orgstructure.employee': {
+        u'org.employee': {
             'Meta': {'object_name': 'Employee'},
             'base_camp': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'display': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
@@ -32,30 +39,30 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'informal_name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'job_title': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
-            'organization': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['orgstructure.Organization']"}),
-            'team': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'to': u"orm['orgstructure.Team']", 'null': 'True', 'blank': 'True'}),
+            'organization': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['org.Organization']"}),
+            'team': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'to': u"orm['org.Team']", 'null': 'True', 'blank': 'True'}),
             'u_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'})
         },
-        u'orgstructure.organization': {
+        u'org.organization': {
             'Meta': {'object_name': 'Organization'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'subdomain': ('django.db.models.fields.CharField', [], {'max_length': '15'})
         },
-        u'orgstructure.team': {
+        u'org.team': {
             'Meta': {'object_name': 'Team'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'leader': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'+'", 'unique': 'True', 'to': u"orm['orgstructure.Employee']"}),
+            'leader': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'+'", 'unique': 'True', 'to': u"orm['org.Employee']"}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
-        u'pvptracking.pvpevaluation': {
+        u'pvp.pvpevaluation': {
             'Meta': {'unique_together': "(('employee', 'date'),)", 'object_name': 'PvpEvaluation'},
             'date': ('django.db.models.fields.DateField', [], {}),
-            'employee': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['orgstructure.Employee']"}),
+            'employee': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['org.Employee']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'performance': ('django.db.models.fields.IntegerField', [], {}),
             'potential': ('django.db.models.fields.IntegerField', [], {})
         }
     }
 
-    complete_apps = ['pvptracking']
+    complete_apps = ['pvp']

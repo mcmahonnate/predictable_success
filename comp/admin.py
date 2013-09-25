@@ -1,4 +1,4 @@
 from django.contrib import admin
-from compensationtracking.models import *
+from comp.models import *
 
 admin.site.register(CompensationSummary)

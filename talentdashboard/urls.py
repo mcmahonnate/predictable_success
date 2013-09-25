@@ -1,8 +1,8 @@
 from django.conf.urls import patterns, include, url
 from django.conf.urls.defaults import *
-from orgstructure.api import *
-from pvptracking.api import *
-from compensationtracking.api import *
+from org.api import *
+from pvp.api import *
+from comp.api import *
 from django.contrib import admin
 from tastypie.api import Api
 from django.views.generic import TemplateView

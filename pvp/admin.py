@@ -1,4 +1,4 @@
 from django.contrib import admin
-from pvptracking.models import *
+from pvp.models import *
 
 admin.site.register(PvpEvaluation)

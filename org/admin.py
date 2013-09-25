@@ -1,5 +1,5 @@
 from django.contrib import admin
-from orgstructure.models import *
+from org.models import *
 
 admin.site.register(Organization)
 admin.site.register(Employee)

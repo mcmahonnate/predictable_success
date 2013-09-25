@@ -1,5 +1,5 @@
 from django.db import models
-from orgstructure.models import Employee
+from org.models import Employee
 import datetime
 
 def current_year():

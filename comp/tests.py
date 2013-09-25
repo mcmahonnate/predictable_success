@@ -1,6 +1,6 @@
 from django.test import TestCase
-from orgstructure.models import Employee
-from compensationtracking.models import CompensationSummary
+from org.models import Employee
+from comp.models import CompensationSummary
 
 class CompensationSummaryTest(TestCase):
     def test_str(self):

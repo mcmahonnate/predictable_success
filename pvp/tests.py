@@ -1,6 +1,6 @@
 from django.test import TestCase
-from orgstructure.models import Employee
-from pvptracking.models import PvpEvaluation
+from org.models import Employee
+from pvp.models import PvpEvaluation
 import datetime
 
 class PvpEvaluationTest(TestCase):

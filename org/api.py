@@ -1,6 +1,6 @@
 from tastypie import fields
 from tastypie.resources import ModelResource
-from orgstructure.models import Employee, Organization, Team, Mentorship
+from org.models import Employee, Organization, Team, Mentorship
 from tastypie.constants import ALL_WITH_RELATIONS
 
 class OrganizationResource(ModelResource):
@@ -10,7 +10,7 @@ class OrganizationResource(ModelResource):
 
 class EmployeeResource(ModelResource):
     organization = fields.ToOneField(OrganizationResource, 'organization', full=True)
-    team = fields.ToOneField('orgstructure.api.TeamResource', 'team', full=True, null=True)
+    team = fields.ToOneField('org.api.TeamResource', 'team', full=True, null=True)
     class Meta:
         queryset = Employee.objects.all()
         resource_name = 'org/employees'

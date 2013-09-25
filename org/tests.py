@@ -1,8 +1,8 @@
 from django.test import TestCase
-from orgstructure.models import Employee
-from orgstructure.models import Organization
-from orgstructure.models import Team
-from orgstructure.models import Mentorship
+from org.models import Employee
+from org.models import Organization
+from org.models import Team
+from org.models import Mentorship
 
 class EmployeeTests(TestCase):
     def test_str_should_equal_informal_name(self):
