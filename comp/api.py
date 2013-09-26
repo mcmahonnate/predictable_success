@@ -1,5 +1,6 @@
 from tastypie import fields
 from tastypie.resources import ModelResource
+from tastypie.constants import ALL_WITH_RELATIONS
 from tastypie.authentication import SessionAuthentication
 from comp.models import CompensationSummary
 from org.api import EmployeeResource
@@ -27,3 +28,6 @@ class CompensationSummaryResource(ModelResource):
         authentication = SessionAuthentication()
         queryset = CompensationSummary.objects.all()
         resource_name = 'comp/summaries'
+        filtering = {
+            "employee": (ALL_WITH_RELATIONS),
+        }

@@ -1,6 +1,6 @@
 from tastypie import fields
 from tastypie.resources import ModelResource
-from tastypie.constants import ALL
+from tastypie.constants import ALL_WITH_RELATIONS
 from tastypie.authentication import SessionAuthentication
 from pvp.models import *
 from org.api import *
@@ -20,5 +20,5 @@ class PvpEvaluationResource(ModelResource):
         queryset = PvpEvaluation.objects.all()
         resource_name = 'pvp/evaluations'
         filtering = {
-            "employee": (ALL),
+            "employee": (ALL_WITH_RELATIONS),
         }
