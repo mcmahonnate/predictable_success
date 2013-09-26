@@ -1,5 +1,6 @@
 from tastypie import fields
 from tastypie.resources import ModelResource
+from tastypie.authentication import SessionAuthentication
 from comp.models import CompensationSummary
 from org.api import EmployeeResource
 
@@ -23,5 +24,6 @@ class CompensationSummaryResource(ModelResource):
         return float(bundle.obj.writer_payments_and_royalties)
 
     class Meta:
+        authentication = SessionAuthentication()
         queryset = CompensationSummary.objects.all()
         resource_name = 'comp/summaries'

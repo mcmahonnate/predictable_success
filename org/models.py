@@ -1,16 +1,5 @@
 from django.db import models
 
-class Organization(models.Model):
-    name = models.CharField(
-        max_length=255,
-    )
-    subdomain = models.CharField(
-        max_length=15,
-    )
-
-    def __str__(self):
-        return self.name
-
 class Employee(models.Model):
     informal_name = models.CharField(
         max_length=255,
@@ -31,7 +20,6 @@ class Employee(models.Model):
         null=True,
     )
     display = models.BooleanField()
-    organization = models.ForeignKey(Organization)
     team = models.ForeignKey(
         'Team',
         null=True,

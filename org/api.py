@@ -1,17 +1,13 @@
 from tastypie import fields
 from tastypie.resources import ModelResource
-from org.models import Employee, Organization, Team, Mentorship
 from tastypie.constants import ALL_WITH_RELATIONS
-
-class OrganizationResource(ModelResource):
-    class Meta:
-        queryset = Organization.objects.all()
-        resource_name = 'org/organizations'
+from tastypie.authentication import SessionAuthentication
+from org.models import Employee, Team, Mentorship
 
 class EmployeeResource(ModelResource):
-    organization = fields.ToOneField(OrganizationResource, 'organization', full=True)
     team = fields.ToOneField('org.api.TeamResource', 'team', full=True, null=True)
     class Meta:
+        authentication = SessionAuthentication()
         queryset = Employee.objects.all()
         resource_name = 'org/employees'
         filtering = {
@@ -22,6 +18,7 @@ class TeamResource(ModelResource):
     leader = fields.ToOneField(EmployeeResource, 'leader')
 
     class Meta:
+        authentication = SessionAuthentication()
         queryset = Team.objects.all()
         resource_name = 'org/teams'
         filtering = {
@@ -33,5 +30,6 @@ class MentorshipResource(ModelResource):
     mentee = fields.ToOneField(EmployeeResource, 'mentee', full=True)
 
     class Meta:
+        authentication = SessionAuthentication()
         queryset = Mentorship.objects.all()
         resource_name = 'org/mentorships'

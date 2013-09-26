@@ -11,28 +11,32 @@ def year_choices():
 class CompensationSummary(models.Model):
     employee = models.ForeignKey(Employee)
     year = models.IntegerField(
-        choices=year_choices,
+        choices=year_choices(),
         default=current_year,
     )
     fiscal_year = models.IntegerField(
-        choices=year_choices,
+        choices=year_choices(),
         default=current_year,
     )
     salary = models.DecimalField(
         max_digits=12,
         decimal_places=2,
+        default=0,
     )
     bonus = models.DecimalField(
         max_digits=12,
         decimal_places=2,
+        default=0,
     )
     discretionary = models.DecimalField(
         max_digits=12,
         decimal_places=2,
+        default=0,
     )
     writer_payments_and_royalties = models.DecimalField(
         max_digits=12,
         decimal_places=2,
+        default=0,
     )
 
     def total_compensation(self):
