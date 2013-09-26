@@ -5,16 +5,17 @@ import datetime
 def current_year():
     return datetime.datetime.today().year
 
-class CompensationSummary(models.Model):
-    YEAR_CHOICES = [(year, year) for year in range(1979, current_year() + 1)]
+def year_choices():
+    return [(year, year) for year in range(1979, current_year() + 1)]
 
+class CompensationSummary(models.Model):
     employee = models.ForeignKey(Employee)
     year = models.IntegerField(
-        choices=YEAR_CHOICES,
+        choices=year_choices,
         default=current_year,
     )
     fiscal_year = models.IntegerField(
-        choices=YEAR_CHOICES,
+        choices=year_choices,
         default=current_year,
     )
     salary = models.DecimalField(
