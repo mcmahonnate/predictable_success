@@ -2,11 +2,11 @@
 # vi: set ft=ruby :
 
 Vagrant::Config.run do |config|
-  config.vm.box = "squeeze"
+  config.vm.box = "talentdashboard"
 
   # The url from where the 'config.vm.box' box will be fetched if it
   # doesn't already exist on the user's system.
-  config.vm.box_url = "file://fooler/Primary/Techies/Developers/cms/squeeze.box"
+  config.vm.box_url = "file://fooler/Primary/Techies/Developers/vagrant/talentdashboard.box"
 
   # Boot with a GUI so you can see the screen. (Default is headless)
   # config.vm.boot_mode = :gui
