@@ -1,0 +1,1 @@
+[{"model": "org.organization","pk": 1,"fields":{"id":1,"name": "The Motley Fool","subdomain": "fool"}}, {"model": "org.organization","pk": 2,"fields":{"id":2,"name": "Your Company","subdomain": "yourcompany"}}, {"model": "org.organization", "pk": 3,"fields":{"id":3,"name": "Sunrun","subdomain": "sunrun"}}]
