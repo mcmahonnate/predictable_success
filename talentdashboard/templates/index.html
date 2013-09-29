@@ -1,9 +1,15 @@
-{% extends "base.html" %}
-
-{% block title %}
-Home
-{% endblock %}
-
-{% block content %}
-<h1>Home</h1>
-{% endblock %}
+{% load staticfiles %}<!DOCTYPE html>
+<html lang="en" ng-app="tdb">
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title %}Talent Dashboard{% endblock %}</title>
+  </head>
+  <body>
+    <div ng-view></div>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular-resource.min.js"></script>
+    <script src="{% static 'angular/services.js' %}"></script>
+    <script src="{% static 'angular/controllers.js' %}"></script>
+    <script src="{% static 'angular/app.js' %}"></script>
+  </body>
+</html>

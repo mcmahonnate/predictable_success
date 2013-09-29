@@ -33,3 +33,6 @@ class MentorshipResource(ModelResource):
         authentication = SessionAuthentication()
         queryset = Mentorship.objects.all()
         resource_name = 'org/mentorships'
+        filtering = {
+            "mentee": (ALL_WITH_RELATIONS),
+        }
