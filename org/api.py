@@ -10,6 +10,7 @@ class EmployeeResource(ModelResource):
         authentication = SessionAuthentication()
         queryset = Employee.objects.all()
         resource_name = 'org/employees'
+        max_limit = None
         filtering = {
             "id": ('exact'),
         }
