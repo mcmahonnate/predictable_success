@@ -31,3 +31,4 @@ class CompensationSummaryResource(ModelResource):
         filtering = {
             "employee": (ALL_WITH_RELATIONS),
         }
+        ordering = ['year', 'fiscal_year']
