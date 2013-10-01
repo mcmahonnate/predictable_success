@@ -1,57 +1,100 @@
-angular.module('tdb.services', ['ngResource'])
-.factory('Employee', function($resource) {
-    return $resource('/api/v1/org/employees/:id/', {}, {
-        query: {
+var tastypieHelpers = {
+    getArray: function ($http) {
+        return $http.defaults.transformResponse.concat([
+            function (data, headersGetter) {
+                var result = data.objects;
+                result.meta = data.meta;
+                return result;
+            }
+        ]);
+    },
+    getOne: function ($http) {
+        return $http.defaults.transformResponse.concat([
+            function (data, headersGetter) {
+                var result = data.objects;
+                return result.length == 1 ? result[0] : null;
+            }
+        ]);
+    }
+};
+
+var services = angular.module('tdb.services', ['ngResource']);
+
+services.factory('Employee', ['$resource', function($resource) {
+    var Employee = $resource('/api/v1/org/employees/:id/');
+
+    return Employee;
+}]);
+
+services.factory('Mentorship', ['$resource', '$http', function($resource, $http) {
+    var Mentorship = $resource('/api/v1/org/mentorships/:id/', {}, {
+        _getMentorshipsForMentee: {
             method: 'GET',
-            params: {
-                id: null,
-            },
-            isArray: false,
+            isArray: true,
+            transformResponse: tastypieHelpers.getArray($http),
+        },
+    });
+
+    Mentorship.getMentorshipsForMentee = function(id) { return this._getMentorshipsForMentee({mentee__id: id}); };
+
+    return Mentorship;
+}]);
+
+services.factory('Team', ['$resource', '$http', function($resource, $http) {
+    var Team = $resource('/api/v1/org/teams/:id/', {}, {
+        query: {
+            transformResponse: tastypieHelpers.getArray($http),
         }
     });
-})
-.factory('Mentorship', function($resource) {
-    return $resource('/api/v1/org/mentorships/:id/', {}, {
-        query: {
-            method: 'GET',
-            params: {
-                id: '',
+}]);
+
+services.factory('CompSummary', ['$resource', '$http', function($resource, $http) {
+    var CompSummary = $resource(
+        '/api/v1/comp/summaries/:id/',
+        {
+            order_by: '-year',
+        },
+        {
+            query: {
+                transformResponse: tastypieHelpers.getArray($http),
+                params: {
+                    order_by: '-year',
+                }
             },
-            isArray: false,
+            _getAllSummariesForEmployee: {
+                method: 'GET',
+                isArray: true,
+                transformResponse: tastypieHelpers.getArray($http),
+            },
+            _getMostRecentSummaryForEmployee: {
+                method: 'GET',
+                isArray: false,
+                params: { limit: 1 },
+                transformResponse: tastypieHelpers.getOne($http),
+            }
+        }
+    );
+
+    CompSummary.getMostRecentSummaryForEmployee = function(id) { return this._getMostRecentSummaryForEmployee({employee__id: id}); };
+    CompSummary.getAllSummariesForEmployee = function(id) { return this._getAllSummariesForEmployee({employee__id: id}); };
+
+    return CompSummary;
+}]);
+
+services.factory('PvpEvaluation', ['$resource', '$http', function($resource, $http) {
+    PvpEvaluation = $resource('/api/v1/pvp/evaluations/:id/', {}, {
+        query: {
+            transformResponse: tastypieHelpers.getArray($http),
+            order_by: '-evaluation_round__date',
+        },
+        _getAllEvaluationsForEmployee: {
+            method: 'GET',
+            isArray: true,
+            transformResponse: tastypieHelpers.getArray($http),
         }
     });
-})
-.factory('Team', function($resource) {
-    return $resource('/api/v1/org/teams/:id/', {}, {
-        query: {
-            method: 'GET',
-            params: {
-                id: null,
-            },
-            isArray: false,
-        }
-    });
-})
-.factory('CompSummary', function($resource) {
-    return $resource('/api/v1/comp/summaries/:id/', {}, {
-        query: {
-            method: 'GET',
-            params: {
-                id: null,
-            },
-            isArray: false,
-        }
-    });
-})
-.factory('PvpEvaluation', function($resource) {
-    return $resource('/api/v1/pvp/evaluations/:id/', {}, {
-        query: {
-            method: 'GET',
-            params: {
-                id: null,
-            },
-            isArray: false,
-        }
-    });
-})
-;
+
+    PvpEvaluation.getAllEvaluationsForEmployee = function(id) { return this._getAllEvaluationsForEmployee({ employee__id: id }); };
+
+    return PvpEvaluation;
+}]);

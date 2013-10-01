@@ -1,33 +1,33 @@
 <h1>{{employee.informal_name}}</h1>
 <div>Job Title: {{ employee.job_title }}</div>
 <div>Hire Date: {{ employee.hire_date | date:'MM/dd/yyyy' }}</div>
-<div>Team Lead:
+<div>Team Lead: {{ foo }}
   <a ng-if="team_lead" href="#/employees/{{team_lead.id}}">{{ team_lead.informal_name }}</a>
   <span ng-if="! team_lead">None</span>
 </div>
 <div>
-  Mentors: <span ng-if="mentorships.objects.length == 0">None</span>
-  <ul ng-if="mentorships.objects.length > 0">
-    <li ng-repeat="mentorship in mentorships.objects">
+  Mentors: <span ng-if="mentorships.length == 0">None</span>
+  <ul ng-if="mentorships.length > 0">
+    <li ng-repeat="mentorship in mentorships">
       <a href="#/employees/{{mentorship.mentor.id}}">{{ mentorship.mentor.informal_name }}</a>
     </li>
   </ul>
 </div>
 <div ng-controller="EmployeeCompSummariesCtrl">
-  <div ng-if="compSummaries.objects.length > 0">
+  <div ng-if="compSummaries.length > 0">
     Compensation History:
     <ul>
-      <li ng-repeat="compSummary in compSummaries.objects">
+      <li ng-repeat="compSummary in compSummaries">
         {{ compSummary.year }}: {{ compSummary.total_compensation | currency }}</a>
       </li>
     </ul>
   </div>
 </div>
 <div ng-controller="EmployeePvpEvaluationsCtrl">
-  <div ng-if="pvp.objects.length > 0">
+  <div ng-if="pvp.length > 0">
     PVP History:
     <ul>
-      <li ng-repeat="pvp in pvp.objects">
+      <li ng-repeat="pvp in pvp">
         {{ pvp.evaluation_round.date | date:'MM/dd/yyyy' }}: {{ pvp.potential }},{{ pvp.performance}}</a>
       </li>
     </ul>
