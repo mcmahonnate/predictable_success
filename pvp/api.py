@@ -10,6 +10,10 @@ class EvaluationRoundResource(ModelResource):
         authentication = SessionAuthentication()
         queryset = EvaluationRound.objects.all()
         resource_name = 'pvp/rounds'
+        ordering = ['date']
+        filtering = {
+            "id": ('exact'),
+        }
 
 class PvpEvaluationResource(ModelResource):
     employee = fields.ToOneField(EmployeeResource, 'employee', full=True)
@@ -21,4 +25,6 @@ class PvpEvaluationResource(ModelResource):
         resource_name = 'pvp/evaluations'
         filtering = {
             "employee": (ALL_WITH_RELATIONS),
+            "evaluation_round": ALL_WITH_RELATIONS,
         }
+        ordering = ['evaluation_round']
