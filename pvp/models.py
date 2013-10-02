@@ -1,11 +1,21 @@
 from django.db import models
 from org.models import Employee
 
+class EvaluationRoundManager(models.Manager):
+    def most_recent(self):
+        return self.order_by('-date')[0:1].get()
+
 class EvaluationRound(models.Model):
     date = models.DateField()
+    objects = EvaluationRoundManager()
 
     def __str__(self):
         return "%s" % self.date
+
+class PvpEvaluationManager(models.Manager):
+    def get_all_current_evaluations(self):
+        current_round = EvaluationRound.objects.most_recent()
+        return self.filter(evaluation_round__id=current_round.id)
 
 class PvpEvaluation(models.Model):
     PVP_SCALE = [(i,i) for i in range(1,5)]
@@ -16,6 +26,7 @@ class PvpEvaluation(models.Model):
     LACKS_POTENTIAL = 5
     NEEDS_DRASTIC_CHANGE = 6
 
+    objects = PvpEvaluationManager()
     employee = models.ForeignKey(Employee)
     evaluation_round = models.ForeignKey(EvaluationRound)
     potential = models.IntegerField(choices=PVP_SCALE)
