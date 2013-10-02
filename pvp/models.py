@@ -7,6 +7,7 @@ class EvaluationRoundManager(models.Manager):
 
 class EvaluationRound(models.Model):
     date = models.DateField()
+    objects = models.Manager()
     objects = EvaluationRoundManager()
 
     def __str__(self):
@@ -25,7 +26,9 @@ class PvpEvaluation(models.Model):
     WRONG_ROLE = 4
     LACKS_POTENTIAL = 5
     NEEDS_DRASTIC_CHANGE = 6
+    SUMMARY_SCORE_SCALE = [TOP_PERFORMER, STRONG_PERFORMER, GOOD_PERFORMER, WRONG_ROLE, LACKS_POTENTIAL, NEEDS_DRASTIC_CHANGE]
 
+    objects = models.Manager()
     objects = PvpEvaluationManager()
     employee = models.ForeignKey(Employee)
     evaluation_round = models.ForeignKey(EvaluationRound)
