@@ -25,9 +25,10 @@ directives.directive('compensationHistoryChart', function() {
           backgroundColor: '#2a2a2a',
           legend: {position: 'none'},
           chartArea: {top: 10},
-          isStacked: true
+          isStacked: true,
+          height: iAttrs['height'],
+          width: iAttrs['width'],
         };
-
         var columnchart = new google.visualization.ColumnChart(iElement[0]);
         columnchart.draw(table, options);
     };
