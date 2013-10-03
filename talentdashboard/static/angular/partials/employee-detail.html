@@ -84,16 +84,17 @@
             <div class="swipe-wrap slides" id="pvp_slides" style="position: relative; width: 438px; height: 150px;">
 				<div ng-controller="EmployeePvpEvaluationsCtrl">
 				  <div ng-if="pvp.length > 0">
-					<div ng-repeat="pvp in pvp" data-ribbontype="0" class="slide t-size-x24 t-main">
-						<div class="secondary-stat t-size-x48 level arrow-level-medium">
-							<span>{{ pvp.performance}}</span> <sup>Performance</sup>
-						</div>
-						<div class="secondary-stat t-size-x48 level arrow-level-medium">
-							<span>{{ pvp.potential }}</span> <sup>Potential</sup>
-						</div>
-						<span class="t-size-x12 t-muted">{{ pvp.evaluation_round.date | date:'MM/dd/yyyy' }}</span>
-						<br>
-					</div>
+					<ul rn-carousel data-ribbontype="0" class="slide t-size-x24 t-main">
+            <li ng-repeat="pvp in pvp">
+  						<div class="secondary-stat t-size-x48 level arrow-level-medium">
+  							<span>{{ pvp.performance}}</span> <sup>Performance</sup>
+  						</div>
+  						<div class="secondary-stat t-size-x48 level arrow-level-medium">
+  							<span>{{ pvp.potential }}</span> <sup>Potential</sup>
+  						</div>
+  						<span class="t-size-x12 t-muted">{{ pvp.evaluation_round.date | date:'MM/dd/yyyy' }}</span>
+						</li>
+					</ul>
 				  </div>
 				</div>
 			</div>

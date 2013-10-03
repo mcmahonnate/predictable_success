@@ -3,7 +3,8 @@
   <head>
     <meta charset="utf-8">
     <title>{% block title %}Talent Dashboard{% endblock %}</title>
-	<link href="{% static 'css/snapshot.css' %}" media="screen" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/snapshot.css' %}" media="screen" rel="stylesheet" type="text/css" />
+    <link href="{% static 'lib/angular-carousel/angular-carousel.min.css' %}" rel="stylesheet" type="text/css" />
   </head>
   <body>
     <div ng-view></div>
@@ -11,6 +12,8 @@
     <script src="//www.google.com/jsapi" type="text/javascript"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular-resource.min.js"></script>
+    <script src="{% static 'lib/angular-carousel/angular-mobile.js' %}"></script>
+    <script src="{% static 'lib/angular-carousel/angular-carousel.min.js' %}"></script>
     <script src="{% static 'angular/services.js' %}"></script>
     <script src="{% static 'angular/controllers.js' %}"></script>
     <script src="{% static 'angular/directives.js' %}"></script>
