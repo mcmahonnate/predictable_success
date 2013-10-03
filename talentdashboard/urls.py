@@ -16,8 +16,8 @@ v1_api.register(MentorshipResource())
 v1_api.register(CompensationSummaryResource())
 v1_api.register(PvpEvaluationResource())
 v1_api.register(EvaluationRoundResource())
-v1_api.register(PvpAggregate())
-
+v1_api.register(AllEmployeesTalentCategoryReportResource())
+v1_api.register(TeamTalentCategoryReportResource())
 urlpatterns = patterns('',
     url(r'^$',  TemplateView.as_view(template_name="index.html"), name='home'),
     url(r'^employees/(?P<id>\d+)$',  TemplateView.as_view(template_name="employee.html"), name='employee'),

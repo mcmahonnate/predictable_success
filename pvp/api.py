@@ -1,10 +1,15 @@
+from django.conf.urls import url
 from tastypie import fields
+from tastypie.exceptions import NotFound
+from tastypie.bundle import Bundle
+from tastypie.serializers import Serializer
 from tastypie.resources import ModelResource
 from tastypie.resources import Resource
 from tastypie.constants import ALL_WITH_RELATIONS
 from tastypie.authentication import SessionAuthentication
 from org.api import *
 from .models import *
+from .talent_categorization import get_most_recent_talent_category_report_for_all_employees, get_most_recent_talent_category_report_for_team, TalentCategoryReport
 
 class EvaluationRoundResource(ModelResource):
     class Meta:
@@ -34,30 +39,48 @@ class PvpEvaluationResource(ModelResource):
         }
         ordering = ['evaluation_round']
 
-class PvpAggregate(Resource):
-    potential_score = fields.IntegerField()
-    performance_score = fields.IntegerField()
-    num_employees = fields.IntegerField()
-    date_of_eval = fields.DateField()
+class TalentCategoryReportResource(Resource):
+    evaluation_date = fields.DateField(attribute='evaluation_date')
+    categories = fields.DictField()
+    total_evaluations = fields.IntegerField(attribute='total_evaluations')
 
-    # def detail_uri_kwargs(self, bundle_or_obj):
-    #     kwargs = {}
+    def dehydrate_categories(self, bundle):
+        categories_dict = {}
+        for category in bundle.obj.categories:
+            categories_dict[category.talent_category] = category.count
+        return categories_dict;
 
-    #     if isinstance(bundle_or_obj, Bundle):
-    #         kwargs['pk'] = bundle_or_obj.obj.uuid
-    #     else:
-    #         kwargs['pk'] = bundle_or_obj.uuid
+class AllEmployeesTalentCategoryReportResource(TalentCategoryReportResource):
 
-    def get_object_list(self, request):
-        # how to get all objects
-        return ['foo', 'bar', 'baz', 'bum']
+    def obj_get(self, bundle, **kwargs):
+        return get_most_recent_talent_category_report_for_all_employees()
 
-    def obj_get_list(self, request=None, **kwargs):
-        return ['bar', 'baz']
-
-    def obj_get(self, request=None, **kwargs):
-        return 'foo'
+    def prepend_urls(self):
+        return [
+            url(r"^(?P<resource_name>%s)/$" % self._meta.resource_name,
+                self.wrap_view('dispatch_detail'),
+                name="api_dispatch_detail"),
+        ]
 
     class Meta:
-        resource_name = 'pvp/aggregates'
+        resource_name = 'pvp/talent-category-reports/all-employees'
+        object_class = TalentCategoryReport
+        allowed_methods = ['get']
+        detail_uri_name = 'all_employees'
+
+class TeamTalentCategoryReportResource(TalentCategoryReportResource):
+
+    def obj_get(self, bundle, **kwargs):
+        return get_most_recent_talent_category_report_for_team(64)
+
+    def prepend_urls(self):
+        return [
+            url(r"^(?P<resource_name>%s)/(?P<pk>\d+)$" % self._meta.resource_name,
+                self.wrap_view('dispatch_detail'),
+                name="api_dispatch_detail"),
+        ]
+
+    class Meta:
+        resource_name = 'pvp/talent-category-reports/teams'
+        object_class = TalentCategoryReport
         allowed_methods = ['get']

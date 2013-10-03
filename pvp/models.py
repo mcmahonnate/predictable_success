@@ -18,6 +18,10 @@ class PvpEvaluationManager(models.Manager):
         current_round = EvaluationRound.objects.most_recent()
         return self.filter(evaluation_round__id=current_round.id)
 
+    def get_all_current_evaluations_for_team(self, team_id):
+        current_round = EvaluationRound.objects.most_recent()
+        return self.filter(evaluation_round__id=current_round.id, employee__team__id=team_id)
+
 class PvpEvaluation(models.Model):
     PVP_SCALE = [(i,i) for i in range(1,5)]
     TOP_PERFORMER = 1

@@ -80,10 +80,10 @@ class EvaluationRoundManagerTest(TestCase):
 
 class TalentCategoryReportTest(TestCase):
     def test_init_counts_total_evaluations_correctly(self):
-        report = TalentCategoryReport(items=[TalentCategorySummary(talent_category=6, count=5), TalentCategorySummary(talent_category=4, count=4)])
+        report = TalentCategoryReport(categories=[TalentCategorySummary(talent_category=6, count=5), TalentCategorySummary(talent_category=4, count=4)])
         self.assertEqual(9, report.total_evaluations)
 
-class AggregateTest(TestCase):
+class reportregateTest(TestCase):
     def test_get_most_recent_talent_category_report_for_all_employees(self):
         evaluation_date = datetime.date(2011, 12, 31)
         r1 = EvaluationRound(date = evaluation_date)
@@ -108,35 +108,35 @@ class AggregateTest(TestCase):
         PvpEvaluation(employee=e5, evaluation_round = r1, potential=2, performance=3).save()
         PvpEvaluation(employee=e6, evaluation_round = r1, potential=1, performance=1).save()
 
-        agg = get_most_recent_talent_category_report_for_all_employees()
+        report = get_most_recent_talent_category_report_for_all_employees()
 
-        self.assertEqual(agg.evaluation_date, evaluation_date)
-        self.assertEqual(agg.total_evaluations, 6)
-        self.assertEqual(len(agg.items), 6)
-        top_performers = [item for item in agg.items if item.talent_category == PvpEvaluation.TOP_PERFORMER]
+        self.assertEqual(report.evaluation_date, evaluation_date)
+        self.assertEqual(report.total_evaluations, 6)
+        self.assertEqual(len(report.categories), 6)
+        top_performers = [item for item in report.categories if item.talent_category == PvpEvaluation.TOP_PERFORMER]
         self.assertEqual(1, len(top_performers))
         self.assertEqual(1, top_performers[0].count)
-        strong_performers = [item for item in agg.items if item.talent_category == PvpEvaluation.STRONG_PERFORMER]
+        strong_performers = [item for item in report.categories if item.talent_category == PvpEvaluation.STRONG_PERFORMER]
         self.assertEqual(1, len(strong_performers))
         self.assertEqual(1, strong_performers[0].count)
-        good_performers = [item for item in agg.items if item.talent_category == PvpEvaluation.GOOD_PERFORMER]
+        good_performers = [item for item in report.categories if item.talent_category == PvpEvaluation.GOOD_PERFORMER]
         self.assertEqual(1, len(good_performers))
         self.assertEqual(1, good_performers[0].count)
-        wrong_roles = [item for item in agg.items if item.talent_category == PvpEvaluation.WRONG_ROLE]
+        wrong_roles = [item for item in report.categories if item.talent_category == PvpEvaluation.WRONG_ROLE]
         self.assertEqual(1, len(wrong_roles))
         self.assertEqual(1, wrong_roles[0].count)
-        lacks_potential = [item for item in agg.items if item.talent_category == PvpEvaluation.LACKS_POTENTIAL]
+        lacks_potential = [item for item in report.categories if item.talent_category == PvpEvaluation.LACKS_POTENTIAL]
         self.assertEqual(1, len(lacks_potential))
         self.assertEqual(1, lacks_potential[0].count)
-        needs_drastic_change = [item for item in agg.items if item.talent_category == PvpEvaluation.NEEDS_DRASTIC_CHANGE]
+        needs_drastic_change = [item for item in report.categories if item.talent_category == PvpEvaluation.NEEDS_DRASTIC_CHANGE]
         self.assertEqual(1, len(needs_drastic_change))
         self.assertEqual(1, needs_drastic_change[0].count)
 
 
 
 
-# agg = PvpAggregator.aggregateAllMostRecent()
-# agg.date
-# agg.total_items
-# agg.items[0].talent_category
-# agg.items[0].count
+# report = Pvpreportregator.reportregateAllMostRecent()
+# report.date
+# report.total_categories
+# report.categories[0].talent_category
+# report.categories[0].count
