@@ -7,6 +7,7 @@ var directives = angular.module('tdb.directives', []);
 directives.directive('compensationHistoryChart', function() {
     return function(scope, iElement, iAttrs){
         var table = new google.visualization.DataTable();
+
         table.addColumn('string', 'Year');
         table.addColumn('number', 'Salary');
         table.addColumn('number','Bonus');
@@ -29,7 +30,9 @@ directives.directive('compensationHistoryChart', function() {
           height: iAttrs['height'],
           width: iAttrs['width'],
         };
-        var columnchart = new google.visualization.ColumnChart(iElement[0]);
-        columnchart.draw(table, options);
+
+        var chart = new google.visualization.ColumnChart(iElement[0]);
+
+        chart.draw(table, options);
     };
 });
