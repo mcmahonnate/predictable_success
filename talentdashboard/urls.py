@@ -1,11 +1,11 @@
 from django.conf.urls import patterns, include, url
 from django.conf.urls.defaults import *
+from django.contrib import admin
+from django.views.generic import TemplateView
+from tastypie.api import Api
 from org.api import *
 from pvp.api import *
 from comp.api import *
-from django.contrib import admin
-from tastypie.api import Api
-from django.views.generic import TemplateView
 
 admin.autodiscover()
 
@@ -16,6 +16,7 @@ v1_api.register(MentorshipResource())
 v1_api.register(CompensationSummaryResource())
 v1_api.register(PvpEvaluationResource())
 v1_api.register(EvaluationRoundResource())
+v1_api.register(PvpAggregate())
 
 urlpatterns = patterns('',
     url(r'^$',  TemplateView.as_view(template_name="index.html"), name='home'),

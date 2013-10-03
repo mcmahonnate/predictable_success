@@ -35,7 +35,7 @@ class PvpEvaluation(models.Model):
     potential = models.IntegerField(choices=PVP_SCALE)
     performance = models.IntegerField(choices=PVP_SCALE)
 
-    def get_summary_score(self):
+    def get_talent_category(self):
         if self.__is_top_performer():
             return self.TOP_PERFORMER
         if self.__is_strong_performer():
