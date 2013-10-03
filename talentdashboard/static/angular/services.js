@@ -52,7 +52,7 @@ services.factory('CompSummary', ['$resource', '$http', function($resource, $http
     var CompSummary = $resource(
         '/api/v1/comp/summaries/:id/',
         {
-            order_by: '-year',
+            order_by: 'year',
         },
         {
             query: {

@@ -16,11 +16,7 @@
 <div ng-controller="EmployeeCompSummariesCtrl">
   <div ng-if="compSummaries.length > 0">
     Compensation History:
-    <ul>
-      <li ng-repeat="compSummary in compSummaries">
-        {{ compSummary.year }}: {{ compSummary.total_compensation | currency }}</a>
-      </li>
-    </ul>
+    <div style="width: 315px; height: 300px;" compensation-history-chart></div>
   </div>
 </div>
 <div ng-controller="EmployeePvpEvaluationsCtrl">
