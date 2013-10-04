@@ -1,4 +1,3 @@
-
   <header id="main-header">
     <!-- #top-bar -->
 
@@ -15,7 +14,7 @@
           </span>
         </div>
         <div style="float: right; width: 32px;">
-           <a href="#" onclick="window.history.back();return false;"><img src="/css/back.png" width="32px" height="32px" style="padding-top: 3px"/></a>
+           <a href="#" class="back-button" onclick="window.history.back();return false;"></a>
         </div>
     </div>
   </header>
@@ -30,7 +29,7 @@
         <section class="widget-body rag-widget">
           <div class="widget-canvas">
             <div class="outer" style="margin-left: auto; margin-right: auto;">
-              <div class="image" style="margin-left: auto; margin-right: auto;"><img id="avatar" src="/images/default.jpg" style="padding-bottom:15px; display: block; margin-left: auto; margin-right: auto; height: 210px;" /></div>
+              <div class="image" style="margin-left: auto; margin-right: auto;"><div class="avatar" /></div>
             </div>
 
             <ol>
@@ -76,7 +75,7 @@
     <article class="widget clock loaded" id="widget-8494" style="top: 0px; left: 325px; width: auto;">
       <div class="widget-inner widget-size-1x1 large-screen">
         <header class="no-reload">
-          <h1 style="display:inline;">PvP</h1><img id="loaderPvP" src="/css/ajax-loader.gif" style="float:right;visibility:hidden;" />
+          <h1 style="display:inline;">PvP</h1>
         </header>
 
         <section class="widget-body text-widget">
@@ -85,14 +84,14 @@
 				<div ng-controller="EmployeePvpEvaluationsCtrl">
 				  <div ng-if="pvp.length > 0">
 					<ul rn-carousel data-ribbontype="0" class="slide t-size-x24 t-main">
-            <li ng-repeat="pvp in pvp">
-  						<div class="secondary-stat t-size-x48 level arrow-level-medium">
-  							<span>{{ pvp.performance}}</span> <sup>Performance</sup>
-  						</div>
-  						<div class="secondary-stat t-size-x48 level arrow-level-medium">
-  							<span>{{ pvp.potential }}</span> <sup>Potential</sup>
-  						</div>
-  						<span class="t-size-x12 t-muted">{{ pvp.evaluation_round.date | date:'MM/dd/yyyy' }}</span>
+						<li ng-repeat="pvp in pvp">
+							<div class="secondary-stat t-size-x48 level arrow-level-medium">
+								<span>{{ pvp.performance}}</span> <sup>Performance</sup>
+							</div>
+							<div class="secondary-stat t-size-x48 level arrow-level-medium">
+								<span>{{ pvp.potential }}</span> <sup>Potential</sup>
+							</div>
+							<span class="t-size-x12 t-muted">{{ pvp.evaluation_round.date | date:'MM/dd/yyyy' }}</span>
 						</li>
 					</ul>
 				  </div>
@@ -119,7 +118,7 @@
     <article class="widget google-analytics loaded" id="widget-14808658" style="top: 0px; left: 650px; width: auto;">
       <div class="widget-inner widget-size-1x1 large-screen">
         <header class="no-reload">
-          <h1 style="display:inline;">Compensation</h1><img id="loaderComp" src="/css/ajax-loader.gif" style="float:right;visibility:hidden;" />
+          <h1 style="display:inline;">Compensation</h1>
         </header>
 		<div ng-controller="EmployeeCompSummariesCtrl">
 		  <div ng-if="compSummaries.length > 0">
@@ -133,7 +132,7 @@
     <article class="widget clock loaded" id="widget-8494" style="top: 285px; left: 325px; width: auto;">
       <div class="widget-inner widget-size-2x1 large-screen">
         <header class="no-reload">
-          <h1 style="display:inline;">Word On The Street</h1><img id="loaderStreet" src="/css/ajax-loader.gif" style="float:right;visibility:hidden;" />
+          <h1 style="display:inline;">Word On The Street</h1>
         </header>
 
         <section class="widget-body text-widget">
