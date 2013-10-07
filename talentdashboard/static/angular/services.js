@@ -104,3 +104,14 @@ services.factory('PvpEvaluation', ['$resource', '$http', function($resource, $ht
 
     return PvpEvaluation;
 }]);
+
+services.factory('TalentCategoryReport', ['$resource', '$http', function($resource, $http) {
+    TalentCategoryReport = $resource('/api/v1/pvp/talent-category-reports/all-employees/', {}, {
+        get: {
+            method: 'GET',
+            isArray: false,
+        }
+    });
+
+    return TalentCategoryReport;
+}]);

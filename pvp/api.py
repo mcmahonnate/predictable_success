@@ -57,15 +57,17 @@ class AllEmployeesTalentCategoryReportResource(TalentCategoryReportResource):
 
     def prepend_urls(self):
         return [
-            url(r"^(?P<resource_name>%s)/$" % self._meta.resource_name,
+            url(r"^(?P<resource_name>%s)/all-employees$" % self._meta.resource_name,
                 self.wrap_view('dispatch_detail'),
                 name="api_dispatch_detail"),
         ]
 
     class Meta:
-        resource_name = 'pvp/talent-category-reports/all-employees'
+        resource_name = 'pvp/talent-category-reports'
         object_class = TalentCategoryReport
-        allowed_methods = ['get']
+        include_resource_uri = False
+        detail_allowed_methods = ['get']
+        list_allowed_methods = []
         detail_uri_name = 'all_employees'
 
 class TeamTalentCategoryReportResource(TalentCategoryReportResource):
