@@ -9,7 +9,6 @@ class TalentCategorySummary:
         self.count = count
 
 class TalentCategoryReport:
-    id = None
     evaluation_date = None
     total_evaluations = 0
     categories = []
@@ -18,6 +17,14 @@ class TalentCategoryReport:
         self.evaluation_date = evaluation_date
         self.categories = categories
         self.total_evaluations = sum([item.count for item in categories])
+
+class PvpEvaluationsByTalentCategoryReport:
+    talent_category_id = None
+    evaluations = []
+
+    def __init__(self, talent_category_id=None, evaluations=[]):
+        self.talent_category_id = talent_category_id
+        self.evaluations = evaluations
 
 def build_talent_report(evaluations):
     aggregated_talent_categories = []
@@ -37,4 +44,10 @@ def get_most_recent_talent_category_report_for_all_employees():
 def get_most_recent_talent_category_report_for_team(team_id):
     evaluations = PvpEvaluation.objects.get_all_current_evaluations_for_team(team_id)
     return build_talent_report(evaluations)
+
+def get_current_evaluations_with_talent_category(talent_category_id):
+    evaluations = PvpEvaluation.objects.get_all_current_evaluations()
+    filtered_evaluations = [evaluation for evaluation in evaluations if evaluation.get_talent_category() == talent_category_id]
+    return PvpEvaluationsByTalentCategoryReport(talent_category_id=talent_category_id, evaluations=filtered_evaluations)
+
 
