@@ -1,5 +1,9 @@
 var controllers = angular.module('tdb.controllers', []);
 
+controllers.controller('EvaluationListCtrl', ['$scope', '$routeParams', 'PvpEvaluation', function($scope, $routeParams, PvpEvaluation) {
+    $scope.evaluations = PvpEvaluation.getCurrentEvaluationsForTalentCategory($routeParams.talent_category);
+}]);
+
 controllers.controller('EmployeeListCtrl', ['$scope', 'Employee', function($scope, Employee) {
     $scope.employees = Employee.query();
 }]);

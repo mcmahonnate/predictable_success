@@ -37,7 +37,7 @@ directives.directive('compensationHistoryChart', function() {
     };
 });
 
-directives.directive('talentCategoryChart', function() {
+directives.directive('talentCategoryChart', function($location) {
     return function(scope, element, attrs){
         scope.$watch("report", function() {
             if(scope.report) {
@@ -48,7 +48,7 @@ directives.directive('talentCategoryChart', function() {
                 var wrongrole = scope.report.categories[5];
                 var needschange = scope.report.categories[6];
 
-                var data = new Array(['PvP', 'Employees'],['Top Talent', top],['Strong Talent', strong],['Good But Inconsistent', good],['Lacks Potential', lackspotential],['Wrong Role', wrongrole],['Needs Drastic Change', needschange]); 
+                var data = new Array(['PvP', 'Employees', 'Talent Category'],['Top Talent', top, 1],['Strong Talent', strong, 2],['Good But Inconsistent', good, 3],['Lacks Potential', lackspotential, 4],['Wrong Role', wrongrole, 5],['Needs Drastic Change', needschange, 6]); 
                 var table = new google.visualization.arrayToDataTable(data);
 
                 var options = {
@@ -61,6 +61,15 @@ directives.directive('talentCategoryChart', function() {
                 };
 
                 var chart = new google.visualization.PieChart(element[0]);
+
+                google.visualization.events.addListener(chart, 'select', function(){
+                    var selectedItem = chart.getSelection()[0];
+                    if(selectedItem) {
+                        var talent_category = table.getValue(selectedItem.row, 2);
+                        $location.path('/evaluations/current/').search({talent_category: talent_category});
+                        scope.$apply();
+                    }
+                });
 
                 chart.draw(table, options);
             }

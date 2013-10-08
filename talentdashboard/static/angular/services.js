@@ -2,9 +2,12 @@ var tastypieHelpers = {
     getArray: function ($http) {
         return $http.defaults.transformResponse.concat([
             function (data, headersGetter) {
-                var result = data.objects;
-                result.meta = data.meta;
-                return result;
+                if(data.meta) {
+                    var result = data.objects;
+                    result.meta = data.meta;
+                    return result;
+                }
+                return data;
             }
         ]);
     },
@@ -88,19 +91,25 @@ services.factory('CompSummary', ['$resource', '$http', function($resource, $http
 }]);
 
 services.factory('PvpEvaluation', ['$resource', '$http', function($resource, $http) {
-    PvpEvaluation = $resource('/api/v1/pvp/evaluations/:id/', {}, {
+    var PvpEvaluation = $resource('/api/v1/pvp/evaluations/:id/', {}, {
         query: {
             transformResponse: tastypieHelpers.getArray($http),
             order_by: '-evaluation_round__date',
+            isArray: true,
         },
         _getAllEvaluationsForEmployee: {
             method: 'GET',
             isArray: true,
             transformResponse: tastypieHelpers.getArray($http),
+        },
+        _getCurrentEvaluationsForTalentCategory: {
+            method: 'GET',
+            isArray: true,
         }
     });
 
     PvpEvaluation.getAllEvaluationsForEmployee = function(id) { return this._getAllEvaluationsForEmployee({ employee__id: id }); };
+    PvpEvaluation.getCurrentEvaluationsForTalentCategory = function(talent_category) { return this._getAllEvaluationsForEmployee({ id: 'current', talent_category: talent_category }); };
 
     return PvpEvaluation;
 }]);
