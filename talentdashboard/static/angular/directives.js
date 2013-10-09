@@ -5,7 +5,7 @@ google.load('visualization', '1', {packages: ['corechart']});
 var directives = angular.module('tdb.directives', []);
 
 directives.directive('compensationHistoryChart', function() {
-    return function(scope, iElement, iAttrs){
+    return function(scope, element, attrs){
         var table = new google.visualization.DataTable();
 
         table.addColumn('string', 'Year');
@@ -34,11 +34,11 @@ directives.directive('compensationHistoryChart', function() {
           legend: {position: 'none'},
           chartArea: {top: 10},
           isStacked: true,
-          height: iAttrs['height'],
-          width: iAttrs['width'],
+          height: attrs['height'],
+          width: attrs['width'],
         };
 
-        var chart = new google.visualization.ColumnChart(iElement[0]);
+        var chart = new google.visualization.ColumnChart(element[0]);
 
         chart.draw(table, options);
     };
@@ -82,4 +82,36 @@ directives.directive('talentCategoryChart', function($location) {
             }
         }, true);
     };
+});
+
+directives.directive('employeeTalentCategory', function() {
+    return function(scope, element, attrs){
+		var color;
+		switch(scope.evaluation.talent_category)
+		{
+			case 1:
+				color = '#008000';
+				break;
+			case 2:
+				color = '#00f500';
+				break;
+			case 3:
+				color = '#91fa00';
+				break;
+			case 4:
+				color = '#ffca00';
+				break;
+			case 5:
+				color = '#ff4600';
+				break;
+			case 6:
+				color = '#ff0000';
+				break;
+		}
+
+ 	    var canvas=element[0];
+		var ctx=canvas.getContext("2d");
+		ctx.fillStyle=color;
+		ctx.fillRect(0,0,12,12);
+	};
 });
