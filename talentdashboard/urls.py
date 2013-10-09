@@ -11,11 +11,10 @@ from rest_framework import routers
 router = routers.DefaultRouter()
 router.register(r'api/v1/employees', EmployeeViewSet)
 router.register(r'api/v1/teams', TeamViewSet)
+router.register(r'api/v1/mentorships', MentorshipViewSet)
 admin.autodiscover()
 
 v1_api = Api(api_name='v1')
-v1_api.register(TeamResource())
-v1_api.register(MentorshipResource())
 v1_api.register(CompensationSummaryResource())
 v1_api.register(PvpEvaluationResource())
 v1_api.register(EvaluationRoundResource())

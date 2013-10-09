@@ -35,15 +35,14 @@ services.factory('Employee', ['$resource', '$http', function($resource, $http) {
 }]);
 
 services.factory('Mentorship', ['$resource', '$http', function($resource, $http) {
-    var Mentorship = $resource('/api/v1/org/mentorships/:id/', {}, {
+    var Mentorship = $resource('/api/v1/mentorships/:id/', {}, {
         _getMentorshipsForMentee: {
             method: 'GET',
             isArray: true,
-            transformResponse: tastypieHelpers.getArray($http),
         },
     });
 
-    Mentorship.getMentorshipsForMentee = function(id) { return this._getMentorshipsForMentee({mentee__id: id}); };
+    Mentorship.getMentorshipsForMentee = function(id) { return this._getMentorshipsForMentee({mentee_id: id}); };
 
     return Mentorship;
 }]);
