@@ -20,6 +20,13 @@ directives.directive('compensationHistoryChart', function() {
             table.addRow(row);
         }
 
+        var currency_format = '$#,###';
+        var formatter = new google.visualization.NumberFormat({pattern: currency_format});
+        formatter.format(table, 1);
+        formatter.format(table, 2);
+        formatter.format(table, 3);
+        formatter.format(table, 4);
+
         var options = {
           hAxis: {textStyle: {color: 'white'}},
           vAxis: {textStyle: {color: 'white'}, format: '$#,###'},
@@ -48,7 +55,7 @@ directives.directive('talentCategoryChart', function($location) {
                 var wrongrole = scope.report.categories[5];
                 var needschange = scope.report.categories[6];
 
-                var data = new Array(['PvP', 'Employees', 'Talent Category'],['Top Talent', top, 1],['Strong Talent', strong, 2],['Good But Inconsistent', good, 3],['Lacks Potential', lackspotential, 4],['Wrong Role', wrongrole, 5],['Needs Drastic Change', needschange, 6]); 
+                var data = new Array(['PvP', 'Employees', 'Talent Category'],['Top Talent', top, 1],['Strong Talent', strong, 2],['Good But Inconsistent', good, 3],['Lacks Potential', lackspotential, 4],['Wrong Role', wrongrole, 5],['Needs Drastic Change', needschange, 6]);
                 var table = new google.visualization.arrayToDataTable(data);
 
                 var options = {
