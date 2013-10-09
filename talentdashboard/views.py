@@ -2,12 +2,16 @@ from rest_framework.decorators import api_view
 from rest_framework import viewsets
 from rest_framework.response import Response
 from pvp.models import PvpEvaluation
-from org.models import Employee
-from .serializers import PvpEvaluationSerializer, EmployeeSerializer
+from org.models import Employee, Team
+from .serializers import PvpEvaluationSerializer, EmployeeSerializer, TeamSerializer
 
 class EmployeeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
+
+class TeamViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Team.objects.all()
+    serializer_class = TeamSerializer
 
 @api_view(['GET'])
 def current_pvp_evaluations(request):

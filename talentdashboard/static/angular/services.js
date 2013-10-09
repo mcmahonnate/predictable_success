@@ -49,11 +49,7 @@ services.factory('Mentorship', ['$resource', '$http', function($resource, $http)
 }]);
 
 services.factory('Team', ['$resource', '$http', function($resource, $http) {
-    var Team = $resource('/api/v1/org/teams/:id/', {}, {
-        query: {
-            transformResponse: tastypieHelpers.getArray($http),
-        }
-    });
+    var Team = $resource('/api/v1/teams/:id/', {} );
 }]);
 
 services.factory('CompSummary', ['$resource', '$http', function($resource, $http) {

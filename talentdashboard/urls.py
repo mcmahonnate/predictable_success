@@ -10,6 +10,7 @@ from views import *
 from rest_framework import routers
 router = routers.DefaultRouter()
 router.register(r'api/v1/employees', EmployeeViewSet)
+router.register(r'api/v1/teams', TeamViewSet)
 admin.autodiscover()
 
 v1_api = Api(api_name='v1')
@@ -23,7 +24,6 @@ v1_api.register(TeamTalentCategoryReportResource())
 
 urlpatterns = patterns('',
     url(r'^$',  TemplateView.as_view(template_name="index.html"), name='home'),
-    url(r'^employees/(?P<id>\d+)$',  TemplateView.as_view(template_name="employee.html"), name='employee'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api/v1/pvp/evaluations/current/', current_pvp_evaluations),
     url(r'^', include(router.urls)),
