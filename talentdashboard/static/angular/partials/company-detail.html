@@ -1,3 +1,77 @@
-<div ng-controller="TalentCategoryReportCtrl" style="margin-top: 75px; max-width: 970px; height: 804px;">
-    <div x-talent-category-chart  style="width: 620px; height: 620px;"></div>
-</div>
+  <header id="main-header">
+    <!-- #top-bar -->
+
+    <div class="clear" id="dashboard-admin-bar">
+      <div class="inner dashboard-sized-el" style="max-width: 970px;">
+        <div class="btn" id="switch-dashboard">
+          <span id="selected-dashboard-title" onmouseout="isDirty()" onmouseup="toggleDiv()" style="font-weight: 700; color: white;">Pick An Employee</span>
+          <div id="selection-list" style="display: none;"></div>
+        </div>
+        <div style="float: right;width: 339px;">
+          <span style="display: block; color: #cbcbcb; font-weight: 700; padding: 12px 36px 10px 12px;font-size: 16px;">
+            <a href="/" style="margin-right: 15px;">OVERVIEW</a>
+            <a href="/recommendations.htm" style="margin-right: 15px;">RECOMMENDATIONS</a>
+          </span>
+        </div>
+        <div style="float: right; width: 32px;">
+           <a href="#" class="back-button" onclick="window.history.back();return false;"></a>
+        </div>
+    </div>
+  </header>
+  <div class="dashboard-sized-el" id="dashboard" style="margin-top: 75px; max-width: 970px; height: 804px;">
+
+    <article class="widget clock loaded" id="widget-8494" style="top: 0px; left: 0px; width: auto;">
+      <div class="widget-inner widget-size-2x2 large-screen">
+        <header class="no-reload">
+          <h1 id="talent-header" style="display:inline;">Talent Pool</h1><img id="loaderPvP" src="/css/ajax-loader.gif" style="float:right;visibility:hidden;" />
+        </header>
+
+        <div ng-controller="TalentCategoryReportCtrl">
+			<div x-talent-category-chart  style="width: 620px; height: 620px; position: relative;"></div>
+		</div>
+
+      </div>
+    </article>
+	
+    <article class="widget google-analytics loaded" id="widget-14808658" style="top: 0px; left: 650px; width: auto;">
+      <div class="widget-inner widget-size-1x1 large-screen">
+        <header class="no-reload">
+          <h1 style="display:inline;">Cash Flow Per Employee</h1><img id="loaderComp" src="/css/ajax-loader.gif" style="float:right;visibility:hidden;" />
+        </header>
+        <section class="widget-body number-widget">
+            <div class="widget-canvas">
+                <div class="main-stat t-size-x60">
+                  $273K
+                </div>
+                <br />
+                <span class="t-size-x12 t-muted">As of 7/30/2013</span>
+                <div class="secondary-stat t-size-x48 positive arrow-up-medium">
+                  <span>2.3%</span>
+                </div>
+                <br />
+                <span class="t-size-x12 t-muted">Since Last Quarter</span>
+
+            </div><!-- .widget-canvas -->
+        </section>
+      </div><!-- .widget-inner -->
+    </article>
+
+    <article class="widget google-analytics loaded" id="widget-14808658" style="top: 285px; left: 650px; width: auto;">
+      <div class="widget-inner widget-size-1x1 large-screen">
+        <header class="no-reload">
+          <h1 style="display:inline;">Voluntary Turnover</h1><img id="loaderComp" src="/css/ajax-loader.gif" style="float:right;visibility:hidden;" />
+        </header>
+        <section class="widget-body number-widget">
+            <div class="widget-canvas">
+                <div class="main-stat t-size-x60 negative arrow-down-medium">
+                  1.5%
+                </div>
+                <br />
+                <span class="t-size-x12 t-muted">As of 7/30/2013</span>
+            </div><!-- .widget-canvas -->
+        </section>
+        <div id="salary_visualization" style="width: 315px; height: 300px;"></div>
+      </div><!-- .widget-inner -->
+    </article>
+
+  </div>	
