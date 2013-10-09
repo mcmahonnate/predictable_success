@@ -24,11 +24,10 @@ var tastypieHelpers = {
 var services = angular.module('tdb.services', ['ngResource']);
 
 services.factory('Employee', ['$resource', '$http', function($resource, $http) {
-    var Employee = $resource('/api/v1/org/employees/:id/', {}, {
+    var Employee = $resource('/api/v1/employees/:id/', {}, {
         query: {
             method: 'GET',
             isArray: true,
-            transformResponse: tastypieHelpers.getArray($http),
         }
     });
 
