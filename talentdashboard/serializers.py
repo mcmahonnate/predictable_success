@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from pvp.models import PvpEvaluation, EvaluationRound
 from org.models import Employee, Team, Mentorship
+from comp.models import CompensationSummary
 
 class TeamSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -38,3 +39,34 @@ class MentorshipSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Mentorship
         fields = ['mentor', 'mentee',]
+
+class TalentCategoryReportSerializer(serializers.Serializer):
+    evaluation_date = serializers.DateField()
+    categories = serializers.Field()
+
+class CompensationSummarySerializer(serializers.ModelSerializer):
+    employee = EmployeeSerializer()
+    total_compensation = serializers.SerializerMethodField('get_total_compensation')
+    salary = serializers.SerializerMethodField('get_salary')
+    bonus = serializers.SerializerMethodField('get_bonus')
+    discretionary = serializers.SerializerMethodField('get_discretionary')
+    writer_payments_and_royalties = serializers.SerializerMethodField('get_writer_payments_and_royalties')
+
+    def get_salary(self, obj):
+        return float(obj.salary)
+
+    def get_bonus(self, obj):
+        return float(obj.bonus)
+
+    def get_discretionary(self, obj):
+        return float(obj.discretionary)
+
+    def get_writer_payments_and_royalties(self, obj):
+        return float(obj.writer_payments_and_royalties)
+
+    def get_total_compensation(self, obj):
+        return float(obj.get_total_compensation())
+
+    class Meta:
+        model = CompensationSummary
+        fields = ('year', 'fiscal_year', 'salary', 'bonus', 'discretionary', 'writer_payments_and_royalties', 'total_compensation',)

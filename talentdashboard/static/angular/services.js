@@ -53,63 +53,40 @@ services.factory('Team', ['$resource', '$http', function($resource, $http) {
 
 services.factory('CompSummary', ['$resource', '$http', function($resource, $http) {
     var CompSummary = $resource(
-        '/api/v1/comp/summaries/:id/',
+        '/api/v1/compensation-summaries/', {},
         {
-            order_by: 'year',
-        },
-        {
-            query: {
-                transformResponse: tastypieHelpers.getArray($http),
-                params: {
-                    order_by: '-year',
-                }
-            },
             _getAllSummariesForEmployee: {
                 method: 'GET',
                 isArray: true,
-                transformResponse: tastypieHelpers.getArray($http),
             },
             _getMostRecentSummaryForEmployee: {
                 method: 'GET',
                 isArray: false,
-                params: { limit: 1 },
-                transformResponse: tastypieHelpers.getOne($http),
+                params: { most_recent: 1 },
             }
         }
     );
 
-    CompSummary.getMostRecentSummaryForEmployee = function(id) { return this._getMostRecentSummaryForEmployee({employee__id: id}); };
-    CompSummary.getAllSummariesForEmployee = function(id) { return this._getAllSummariesForEmployee({employee__id: id}); };
+    CompSummary.getMostRecentSummaryForEmployee = function(id) { return this._getMostRecentSummaryForEmployee({employee_id: id}); };
+    CompSummary.getAllSummariesForEmployee = function(id) { return this._getAllSummariesForEmployee({employee_id: id}); };
 
     return CompSummary;
 }]);
 
 services.factory('PvpEvaluation', ['$resource', '$http', function($resource, $http) {
-    var PvpEvaluation = $resource('/api/v1/pvp/evaluations/:id/', {}, {
-        query: {
-            transformResponse: tastypieHelpers.getArray($http),
-            order_by: '-evaluation_round__date',
-            isArray: true,
-        },
-        _getAllEvaluationsForEmployee: {
-            method: 'GET',
-            isArray: true,
-            transformResponse: tastypieHelpers.getArray($http),
-        },
-        _getCurrentEvaluationsForTalentCategory: {
-            method: 'GET',
-            isArray: true,
-        }
+    var PvpEvaluation = $resource('/api/v1/pvp-evaluations/', {}, {
     });
 
-    PvpEvaluation.getAllEvaluationsForEmployee = function(id) { return this._getAllEvaluationsForEmployee({ employee__id: id }); };
-    PvpEvaluation.getCurrentEvaluationsForTalentCategory = function(talent_category) { return this._getAllEvaluationsForEmployee({ id: 'current', talent_category: talent_category }); };
+    PvpEvaluation.getAllEvaluationsForEmployee = function(id) { return this.query({ employee_id: id }); };
+    PvpEvaluation.getCurrentEvaluationsForTalentCategory = function(talent_category) {
+        return this.query({ talent_category: talent_category, current_round: true });
+    };
 
     return PvpEvaluation;
 }]);
 
 services.factory('TalentCategoryReport', ['$resource', '$http', function($resource, $http) {
-    TalentCategoryReport = $resource('/api/v1/pvp/talent-category-reports/all-employees/', {}, {
+    TalentCategoryReport = $resource('/api/v1/talent-category-reports/all-employees/', {}, {
         get: {
             method: 'GET',
             isArray: false,
@@ -118,3 +95,15 @@ services.factory('TalentCategoryReport', ['$resource', '$http', function($resour
 
     return TalentCategoryReport;
 }]);
+
+services.factory('TeamTalentCategoryReport', ['$resource', '$http', function($resource, $http) {
+    TalentCategoryReport = $resource('/api/v1/talent-category-reports/teams/:id', {}, {
+        get: {
+            method: 'GET',
+            isArray: false,
+        }
+    });
+
+    return TalentCategoryReport;
+}]);
+

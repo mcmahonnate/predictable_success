@@ -12,5 +12,5 @@ class CompensationSummaryTest(TestCase):
     def test_total(self):
         expected = 100000
         compensation_summary = CompensationSummary(salary=25000.00, bonus=25000.00, discretionary=25000.00, writer_payments_and_royalties=25000.00)
-        actual = compensation_summary.total_compensation()
+        actual = compensation_summary.get_total_compensation()
         self.assertEquals(actual, expected)

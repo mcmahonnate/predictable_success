@@ -14,13 +14,11 @@ class EvaluationRound(models.Model):
         return "%s" % self.date
 
 class PvpEvaluationManager(models.Manager):
-    def get_all_current_evaluations(self):
-        current_round = EvaluationRound.objects.most_recent()
-        return self.filter(evaluation_round__id=current_round.id)
+    def get_evaluations_for_round(self, round_id):
+        return self.filter(evaluation_round__id=round_id)
 
-    def get_all_current_evaluations_for_team(self, team_id):
-        current_round = EvaluationRound.objects.most_recent()
-        return self.filter(evaluation_round__id=current_round.id, employee__team__id=team_id)
+    def get_evaluations_for_team(self, team_id, round_id):
+        return self.filter(evaluation_round__id=round_id, employee__team__id=team_id)
 
 class PvpEvaluation(models.Model):
     PVP_SCALE = [(i,i) for i in range(1,5)]
@@ -78,3 +76,4 @@ class PvpEvaluation(models.Model):
         unique_together = ("employee", "evaluation_round")
         verbose_name = "PVP Evaluation"
         verbose_name_plural = "PVP Evaluations"
+        ordering =['-evaluation_round__date',]
