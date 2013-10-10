@@ -2,9 +2,6 @@ from django.conf.urls import patterns, include, url
 from django.conf.urls.defaults import *
 from django.contrib import admin
 from django.views.generic import TemplateView
-from org.api import *
-from pvp.api import *
-from comp.api import *
 from views import *
 from rest_framework import routers
 

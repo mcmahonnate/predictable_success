@@ -127,7 +127,6 @@ INSTALLED_APPS = (
     'org',
     'pvp',
     'comp',
-    'tastypie',
     'south',
     'rest_framework',
 )
@@ -166,7 +165,3 @@ LOGGING = {
         },
     }
 }
-
-TASTYPIE_DEFAULT_FORMATS = ['json']
-API_LIMIT_PER_PAGE = 0
-
