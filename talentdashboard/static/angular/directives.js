@@ -48,6 +48,7 @@ directives.directive('talentCategoryChart', function($location) {
     return function(scope, element, attrs){
         scope.$watch("report", function() {
             if(scope.report) {
+                console.log(attrs.teamId);
                 var top = scope.report.categories[1];
                 var strong = scope.report.categories[2];
                 var good = scope.report.categories[3];
@@ -73,7 +74,8 @@ directives.directive('talentCategoryChart', function($location) {
                     var selectedItem = chart.getSelection()[0];
                     if(selectedItem) {
                         var talent_category = table.getValue(selectedItem.row, 2);
-                        $location.path('/evaluations/current/').search({talent_category: talent_category});
+                        var search = {talent_category: talent_category};
+                        $location.path('/evaluations/current/').search(search);
                         scope.$apply();
                     }
                 });

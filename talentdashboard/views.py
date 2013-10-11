@@ -81,6 +81,10 @@ def pvp_evaluations(request):
     if employee_id is not None:
         evaluations = evaluations.filter(employee__id=int(employee_id))
 
+    team_id = request.QUERY_PARAMS.get('team_id', None)
+    if team_id is not None:
+        evaluations = evaluations.filter(employee__team_id=int(team_id))
+
     # The talent_category query executes the query, so it needs to happen after all other filters
     talent_category = request.QUERY_PARAMS.get('talent_category', None)
     if talent_category is not None:

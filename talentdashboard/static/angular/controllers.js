@@ -31,8 +31,15 @@ controllers.controller('EmployeePvpEvaluationsCtrl', ['$scope', '$routeParams', 
     $scope.pvp = PvpEvaluation.getAllEvaluationsForEmployee($routeParams.id);
 }]);
 
-controllers.controller('TalentCategoryReportCtrl', ['$scope', '$routeParams', 'TalentCategoryReport', function($scope, $routeParams, TalentCategoryReport) {
-    TalentCategoryReport.get(function(data) {
+controllers.controller('CompanyOverviewCtrl', ['$scope', '$routeParams', 'TalentCategoryReport', function($scope, $routeParams, TalentCategoryReport) {
+    TalentCategoryReport.getReportForEntireCompany(function(data) {
+        $scope.report = data;
+    });
+}]);
+
+controllers.controller('TeamOverviewCtrl', ['$scope', '$routeParams', 'TalentCategoryReport', function($scope, $routeParams, TalentCategoryReport) {
+    $scope.teamId = $routeParams.id;
+    TalentCategoryReport.getReportForTeam($routeParams.id, function(data) {
         $scope.report = data;
     });
 }]);

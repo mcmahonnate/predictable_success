@@ -26,13 +26,13 @@
           <h1 id="talent-header" style="display:inline;">Talent Pool</h1><img id="loaderPvP" src="/css/ajax-loader.gif" style="float:right;visibility:hidden;" />
         </header>
 
-        <div ng-controller="TalentCategoryReportCtrl">
-			<div x-talent-category-chart  style="width: 620px; height: 620px; position: relative;"></div>
+        <div ng-controller="TeamOverviewCtrl">
+			<div x-talent-category-chart team-id="{{teamId}}" style="width: 620px; height: 620px; position: relative;"></div>
 		</div>
 
       </div>
     </article>
-	
+
     <article class="widget google-analytics loaded" id="widget-14808658" style="top: 0px; left: 650px; width: auto;">
       <div class="widget-inner widget-size-1x1 large-screen">
         <header class="no-reload">
@@ -74,4 +74,4 @@
       </div><!-- .widget-inner -->
     </article>
 
-  </div>	
+  </div>

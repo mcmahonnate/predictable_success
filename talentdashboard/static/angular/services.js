@@ -77,21 +77,29 @@ services.factory('PvpEvaluation', ['$resource', '$http', function($resource, $ht
     var PvpEvaluation = $resource('/api/v1/pvp-evaluations/', {}, {
     });
 
-    PvpEvaluation.getAllEvaluationsForEmployee = function(id) { return this.query({ employee_id: id }); };
+    PvpEvaluation.getAllEvaluationsForEmployee = function(id) {
+        return this.query({ employee_id: id });
+    };
     PvpEvaluation.getCurrentEvaluationsForTalentCategory = function(talent_category) {
         return this.query({ talent_category: talent_category, current_round: true });
+    };
+    PvpEvaluation.getCurrentEvaluationsForTalentCategoryAndTeam = function(talent_category, team_id) {
+        return this.query({ talent_category: talent_category, team_id: team_id, current_round: true });
     };
 
     return PvpEvaluation;
 }]);
 
 services.factory('TalentCategoryReport', ['$resource', '$http', function($resource, $http) {
-    TalentCategoryReport = $resource('/api/v1/talent-category-reports/all-employees/', {}, {
+    TalentCategoryReport = $resource('/api/v1/talent-category-reports/:id/:teamId', {}, {
         get: {
             method: 'GET',
             isArray: false,
         }
     });
+
+    TalentCategoryReport.getReportForEntireCompany = function(success, failure) { return this.get({ id: 'all-employees' }, success, failure); };
+    TalentCategoryReport.getReportForTeam = function(teamId, success, failure) { return this.get({ id: 'teams', teamId: teamId }, success, failure); };
 
     return TalentCategoryReport;
 }]);
