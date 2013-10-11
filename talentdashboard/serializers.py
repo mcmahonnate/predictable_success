@@ -43,6 +43,7 @@ class MentorshipSerializer(serializers.HyperlinkedModelSerializer):
 class TalentCategoryReportSerializer(serializers.Serializer):
     evaluation_date = serializers.DateField()
     categories = serializers.Field()
+    total_evaluations = serializers.Field()
 
 class CompensationSummarySerializer(serializers.ModelSerializer):
     employee = EmployeeSerializer()
