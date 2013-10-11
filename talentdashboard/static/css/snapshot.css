@@ -669,3 +669,4 @@ body{font-size:.875em;background-color:#101214}
 #dashboard-loading p{background:url(//s3.amazonaws.com/gecko.assets/assets/dashboard-loading-dark-f84781af29289fb372dd2ce58bf8c06c.gif) left center no-repeat;color:#d3d4d4;padding:9px 0 8px 42px;margin:0;font-size:16px;line-height:1}
 .avatar{background-image: url(default.jpg);background-size:210px;background-repeat:no-repeat;background-position:center center;padding-bottom:15px;display:block;margin-left:auto;margin-right:auto;height: 210px;}
 .back-button{background-image: url(back.png);background-size:32px 32px;background-position:center center;background-repeat:no-repeat;width:32px;height:35px;padding-top:3px;display:block}
+g{ cursor: pointer;}
