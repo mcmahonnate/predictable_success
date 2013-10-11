@@ -48,7 +48,6 @@ directives.directive('talentCategoryChart', function($location) {
     return function(scope, element, attrs){
         scope.$watch("report", function() {
             if(scope.report) {
-                console.log(attrs.teamId);
                 var top = scope.report.categories[1];
                 var strong = scope.report.categories[2];
                 var good = scope.report.categories[3];
@@ -75,6 +74,9 @@ directives.directive('talentCategoryChart', function($location) {
                     if(selectedItem) {
                         var talent_category = table.getValue(selectedItem.row, 2);
                         var search = {talent_category: talent_category};
+                        if(scope.teamId) {
+                            search['team_id'] = scope.teamId;
+                        }
                         $location.path('/evaluations/current/').search(search);
                         scope.$apply();
                     }
