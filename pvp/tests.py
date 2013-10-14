@@ -1,15 +1,16 @@
 import datetime
+from decimal import Decimal
 from django.test import TestCase
 from org.models import Employee
 from pvp.models import PvpEvaluation, EvaluationRound
+from comp.models import CompensationSummary
 from .talent_categorization import TalentCategoryReport, TalentCategorySummary, get_most_recent_talent_category_report_for_all_employees
-
-employee = Employee(informal_name='John Doe')
-evaluation_round = EvaluationRound(date = datetime.date(2012, 12, 31))
-
+from .salaryreports import get_salary_report_for_all_employees
 class PvpEvaluationTest(TestCase):
 
     def create_pvp(self, potential=0, performance=0):
+        employee = Employee(informal_name='John Doe')
+        evaluation_round = EvaluationRound(date = datetime.date(2012, 12, 31))
         pvp = PvpEvaluation(employee=employee, evaluation_round = evaluation_round)
         pvp.potential = potential
         pvp.performance = performance
@@ -39,12 +40,19 @@ class PvpEvaluationTest(TestCase):
         self.assertEqual(actual, expected)
 
     def test_str(self):
+        employee = Employee(informal_name='John Doe')
+        evaluation_round = EvaluationRound(date = datetime.date(2012, 12, 31))
         pvp = PvpEvaluation(employee=employee, evaluation_round = evaluation_round)
         expected = "John Doe PVP Evaluation 2012-12-31"
         actual = str(pvp)
         self.assertEqual(actual, expected)
 
 class PvpEvaluationManagerTest(TestCase):
+    def setUp(self):
+        PvpEvaluation.objects.all().delete()
+        EvaluationRound.objects.all().delete()
+        Employee.objects.all().delete()
+
     def test_get_evaluations_for_round(self):
         r1 = EvaluationRound(date = datetime.date(2011, 12, 31))
         r1.save()
@@ -64,11 +72,15 @@ class PvpEvaluationManagerTest(TestCase):
 
 class EvaluationRoundTest(TestCase):
     def test_str(self):
+        evaluation_round = EvaluationRound(date = datetime.date(2012, 12, 31))
         expected = "2012-12-31"
         actual = str(evaluation_round)
         self.assertEqual(actual, expected)
 
 class EvaluationRoundManagerTest(TestCase):
+    def setUp(self):
+        EvaluationRound.objects.all().delete()
+
     def test_most_recent(self):
         EvaluationRound(date = datetime.date(2012, 12, 31)).save()
         EvaluationRound(date = datetime.date(2013, 12, 31)).save()
@@ -79,6 +91,11 @@ class EvaluationRoundManagerTest(TestCase):
         self.assertEqual(most_recent.date, datetime.date(2013, 12, 31))
 
 class TalentCategoryReportTest(TestCase):
+    def setUp(self):
+        PvpEvaluation.objects.all().delete()
+        EvaluationRound.objects.all().delete()
+        Employee.objects.all().delete()
+
     def test_get_most_recent_talent_category_report_for_all_employees(self):
         evaluation_date = datetime.date(2011, 12, 31)
         r1 = EvaluationRound(date = evaluation_date)
@@ -109,3 +126,26 @@ class TalentCategoryReportTest(TestCase):
         self.assertEqual(report.evaluation_date, evaluation_date)
         self.assertEqual(report.total_evaluations, 6)
         self.assertEqual(report.categories, expected_categories)
+
+class SalaryReportTest(TestCase):
+    def test_get_salary_report_for_all_employees(self):
+        evaluation_date = datetime.date(2011, 12, 31)
+        r1 = EvaluationRound(date = evaluation_date)
+        r1.save()
+
+        e1 = Employee(informal_name='Employee 1')
+        e1.save()
+
+        e2 = Employee(informal_name='Employee 2')
+        e2.save()
+
+        PvpEvaluation(employee=e1, evaluation_round = r1, potential=4, performance=4).save()
+        PvpEvaluation(employee=e2, evaluation_round = r1, potential=4, performance=3).save()
+        CompensationSummary(employee=e1, salary='55000.00', year=2013).save()
+        CompensationSummary(employee=e2, salary='45000.00', year=2013).save()
+
+        report = get_salary_report_for_all_employees()
+        expected_categories = {1: 55000, 2: 45000}
+
+        self.assertEqual(100000, report.total_salaries)
+        self.assertEqual(expected_categories, report.categories)
