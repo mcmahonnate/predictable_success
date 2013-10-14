@@ -4,6 +4,10 @@ controllers.controller('EvaluationListCtrl', ['$scope', '$routeParams', 'PvpEval
     $scope.evaluations = PvpEvaluation.getCurrentEvaluationsForTalentCategory($routeParams.talent_category);
 }]);
 
+controllers.controller('EvaluationListCtrl', ['$scope', '$routeParams', 'PvpEvaluation', function($scope, $routeParams, PvpEvaluation) {
+    $scope.evaluations = PvpEvaluation.getCurrentEvaluationsForTalentCategory($routeParams.talent_category, $routeParams.team_id);
+}]);
+
 controllers.controller('EmployeeListCtrl', ['$scope', 'Employee', function($scope, Employee) {
     $scope.employees = Employee.query();
 }]);

@@ -80,13 +80,13 @@ services.factory('PvpEvaluation', ['$resource', '$http', function($resource, $ht
     PvpEvaluation.getAllEvaluationsForEmployee = function(id) {
         return this.query({ employee_id: id });
     };
-    PvpEvaluation.getCurrentEvaluationsForTalentCategory = function(talent_category) {
-        return this.query({ talent_category: talent_category, current_round: true });
+    PvpEvaluation.getCurrentEvaluationsForTalentCategory = function(talent_category, team_id) {
+        var params = { talent_category: talent_category, current_round: true };
+        if(team_id) {
+            params['team_id'] = team_id;
+        }
+        return this.query(params);
     };
-    PvpEvaluation.getCurrentEvaluationsForTalentCategoryAndTeam = function(talent_category, team_id) {
-        return this.query({ talent_category: talent_category, team_id: team_id, current_round: true });
-    };
-
     return PvpEvaluation;
 }]);
 
