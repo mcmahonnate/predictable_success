@@ -119,3 +119,12 @@ directives.directive('employeeTalentCategory', function() {
 		ctx.fillRect(0,0,12,12);
 	};
 });
+
+directives.directive('onFinishRender', function() {
+	return function(scope, element, attrs){
+	    var index = scope.$eval(attrs.index);
+		var top = Math.floor(index/4) * 240;
+		var left = (index % 4) * 240;
+	    element.animate({"left":left,"top":top},'0.8s');
+	};
+});
