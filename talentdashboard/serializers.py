@@ -2,6 +2,8 @@ from rest_framework import serializers
 from pvp.models import PvpEvaluation, EvaluationRound
 from org.models import Employee, Team, Mentorship
 from comp.models import CompensationSummary
+from blah.models import Comment
+from django.contrib.auth.models import User
 
 class TeamSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -18,6 +20,17 @@ class MinimalEmployeeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Employee
         fields = ('id', 'informal_name')
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'first_name', 'last_name')
+
+class CommentSerializer(serializers.HyperlinkedModelSerializer):
+    owner = UserSerializer()
+    class Meta:
+        model = Comment
+        fields = ('id', 'content', 'owner', 'object_id', 'created_date', 'modified_date')
 
 class EvaluationRoundSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

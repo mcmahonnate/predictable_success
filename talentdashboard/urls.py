@@ -4,12 +4,14 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 from views import *
 from rest_framework import routers
+from blah.models import Comment
 
 router = routers.DefaultRouter()
 router.register(r'api/v1/employees', EmployeeViewSet)
 router.register(r'api/v1/teams', TeamViewSet)
 router.register(r'api/v1/mentorships', MentorshipViewSet)
 
+admin.site.register(Comment)
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -20,5 +22,6 @@ urlpatterns = patterns('',
     url(r'api/v1/talent-category-reports/teams/(?P<pk>.*)', TeamTalentCategoryReportDetail.as_view()),
     url(r'api/v1/talent-category-reports/(?P<pk>.*)', TalentCategoryReportDetail.as_view()),
     url(r'api/v1/salary-reports/teams/(?P<pk>.*)', TeamSalaryReportDetail.as_view()),
+    url(r'api/v1/comments/employees/(?P<pk>.*)', EmployeeCommentList.as_view()),
     url(r'^', include(router.urls)),
 )
