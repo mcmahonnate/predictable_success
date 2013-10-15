@@ -42,3 +42,6 @@ nosetests.xml
 # Vagrant
 .vagrant
 .idea
+
+# Logs
+.log
