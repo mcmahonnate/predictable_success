@@ -13,6 +13,10 @@ class CompensationSummaryManager(models.Manager):
         most_recent_year = self.order_by('-year')[0:1].get().year
         return self.filter(year=most_recent_year)
 
+    def get_summaries_for_team(self, team_id):
+        most_recent_year = self.order_by('-year')[0:1].get().year
+        return self.filter(employee__team__id=team_id).filter(year=most_recent_year)
+
 class CompensationSummary(models.Model):
     employee = models.ForeignKey(Employee)
     year = models.IntegerField(

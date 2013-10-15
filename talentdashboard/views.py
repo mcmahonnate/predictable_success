@@ -6,8 +6,9 @@ from rest_framework import status
 from pvp.models import PvpEvaluation, EvaluationRound
 from org.models import Employee, Team, Mentorship
 from comp.models import CompensationSummary
-from .serializers import PvpEvaluationSerializer, EmployeeSerializer, TeamSerializer, MentorshipSerializer, TalentCategoryReportSerializer, CompensationSummarySerializer
+from .serializers import PvpEvaluationSerializer, EmployeeSerializer, TeamSerializer, MentorshipSerializer, TalentCategoryReportSerializer, CompensationSummarySerializer, SalaryReportSerializer
 from pvp.talent_categorization import get_most_recent_talent_category_report_for_all_employees, get_most_recent_talent_category_report_for_team
+from pvp.salaryreports import get_salary_report_for_team
 
 class EmployeeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Employee.objects.all()
@@ -48,6 +49,15 @@ class TeamTalentCategoryReportDetail(APIView):
         if report is not None:
             return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
+
+class TeamSalaryReportDetail(APIView):
+    def get(self, request, pk, format=None):
+        report = get_salary_report_for_team(pk)
+        serializer = SalaryReportSerializer(report)
+        if report is not None:
+            return Response(serializer.data)
+        return Response(None, status=status.HTTP_404_NOT_FOUND)
+
 
 @api_view(['GET'])
 def compensation_summaries(request):

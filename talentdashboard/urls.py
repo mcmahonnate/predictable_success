@@ -19,5 +19,6 @@ urlpatterns = patterns('',
     url(r'^api/v1/compensation-summaries/', compensation_summaries),
     url(r'api/v1/talent-category-reports/teams/(?P<pk>.*)', TeamTalentCategoryReportDetail.as_view()),
     url(r'api/v1/talent-category-reports/(?P<pk>.*)', TalentCategoryReportDetail.as_view()),
+    url(r'api/v1/salary-reports/teams/(?P<pk>.*)', TeamSalaryReportDetail.as_view()),
     url(r'^', include(router.urls)),
 )

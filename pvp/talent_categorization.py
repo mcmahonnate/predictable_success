@@ -1,17 +1,11 @@
 from .models import PvpEvaluation, EvaluationRound
 
 class TalentCategorySummary:
-    talent_category = None
-    count = 0
-
     def __init__(self, talent_category=0, count=0):
         self.talent_category = talent_category
         self.count = count
 
 class TalentCategoryReport:
-    evaluation_date = None
-    total_evaluations = 0
-    categories = {}
 
     def __init__(self, evaluation_round=None, evaluations=[]):
         self.evaluation_date = evaluation_round.date

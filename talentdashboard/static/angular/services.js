@@ -104,14 +104,16 @@ services.factory('TalentCategoryReport', ['$resource', '$http', function($resour
     return TalentCategoryReport;
 }]);
 
-services.factory('TeamTalentCategoryReport', ['$resource', '$http', function($resource, $http) {
-    TalentCategoryReport = $resource('/api/v1/talent-category-reports/teams/:id', {}, {
+services.factory('SalaryReport', ['$resource', '$http', function($resource, $http) {
+    SalaryReport = $resource('/api/v1/salary-reports/:id/:teamId', {}, {
         get: {
             method: 'GET',
             isArray: false,
         }
     });
 
-    return TalentCategoryReport;
+    SalaryReport.getReportForTeam = function(teamId, success, failure) { return this.get({ id: 'teams', teamId: teamId }, success, failure); };
+
+    return SalaryReport;
 }]);
 

@@ -46,14 +46,14 @@ directives.directive('compensationHistoryChart', function() {
 
 directives.directive('talentCategoryChart', function($location) {
     return function(scope, element, attrs){
-        scope.$watch("report", function() {
-            if(scope.report) {
-                var top = scope.report.categories[1];
-                var strong = scope.report.categories[2];
-                var good = scope.report.categories[3];
-                var lackspotential = scope.report.categories[4];
-                var wrongrole = scope.report.categories[5];
-                var needschange = scope.report.categories[6];
+        scope.$watch("talentCategoryReport", function() {
+            if(scope.talentCategoryReport) {
+                var top = scope.talentCategoryReport.categories[1];
+                var strong = scope.talentCategoryReport.categories[2];
+                var good = scope.talentCategoryReport.categories[3];
+                var lackspotential = scope.talentCategoryReport.categories[4];
+                var wrongrole = scope.talentCategoryReport.categories[5];
+                var needschange = scope.talentCategoryReport.categories[6];
 
                 var data = new Array(['PvP', 'Employees', 'Talent Category'],['Top Talent', top, 1],['Strong Talent', strong, 2],['Good But Inconsistent', good, 3],['Lacks Potential', lackspotential, 4],['Wrong Role', wrongrole, 5],['Needs Drastic Change', needschange, 6]);
                 var table = new google.visualization.arrayToDataTable(data);
@@ -91,7 +91,7 @@ directives.directive('talentCategoryChart', function($location) {
 directives.directive('employeeTalentCategory', function() {
     return function(scope, element, attrs){
 		var color;
-		switch(scope.evaluation.talent_category)
+		switch(parseInt(attrs.talentCategory, 10))
 		{
 			case 1:
 				color = '#008000';

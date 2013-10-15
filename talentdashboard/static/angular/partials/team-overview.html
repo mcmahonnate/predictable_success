@@ -23,10 +23,10 @@
     <article class="widget clock loaded" id="widget-8494" style="top: 0px; left: 0px; width: auto;">
       <div class="widget-inner widget-size-2x2 large-screen">
         <header class="no-reload">
-          <h1 id="talent-header" style="display:inline;">Talent Pool</h1><img id="loaderPvP" src="/css/ajax-loader.gif" style="float:right;visibility:hidden;" />
+          <h1 id="talent-header" style="display:inline;">Talent Pool</h1>
         </header>
 
-        <div ng-controller="TeamOverviewCtrl">
+        <div>
 			<div x-talent-category-chart style="width: 620px; height: 620px; position: relative;"></div>
 		</div>
 
@@ -36,7 +36,7 @@
     <article class="widget google-analytics loaded" id="widget-14808658" style="top: 0px; left: 650px; width: auto;">
       <div class="widget-inner widget-size-1x1 large-screen">
         <header class="no-reload">
-          <h1 style="display:inline;">Cash Flow Per Employee</h1><img id="loaderComp" src="/css/ajax-loader.gif" style="float:right;visibility:hidden;" />
+          <h1 style="display:inline;">Cash Flow Per Employee</h1>
         </header>
         <section class="widget-body number-widget">
             <div class="widget-canvas">
@@ -59,16 +59,17 @@
     <article class="widget google-analytics loaded" id="widget-14808658" style="top: 285px; left: 650px; width: auto;">
       <div class="widget-inner widget-size-1x1 large-screen">
         <header class="no-reload">
-          <h1 style="display:inline;">Voluntary Turnover</h1><img id="loaderComp" src="/css/ajax-loader.gif" style="float:right;visibility:hidden;" />
+          <h1 style="display:inline;">Total Salaries</h1>
         </header>
         <section class="widget-body number-widget">
-            <div class="widget-canvas">
-                <div class="main-stat t-size-x60 negative arrow-down-medium">
-                  1.5%
-                </div>
-                <br />
-                <span class="t-size-x12 t-muted">As of 7/30/2013</span>
+            <div id="total-salaries" class="main-stat t-size-x48" style="text-align: center;padding-bottom:15px;">
+            {{salaryReport.total_salaries | currency}}
             </div><!-- .widget-canvas -->
+            <div style="display:block;padding-bottom:10px;">Totals by Talent</div>
+            <div style="main-stat t-size-x12;margin-bottom:5px;" ng-repeat="(category, salaries) in salaryReport.categories">
+              <canvas width="12" height="12" employee-talent-category talent-category="{{category}}"></canvas>
+              <span style="margin-left:10px;width:80px;text-align:right;display:inline-block;">{{salaries | currency}}</span>
+            </div>
         </section>
         <div id="salary_visualization" style="width: 315px; height: 300px;"></div>
       </div><!-- .widget-inner -->

@@ -41,9 +41,13 @@ controllers.controller('CompanyOverviewCtrl', ['$scope', '$routeParams', 'Talent
     });
 }]);
 
-controllers.controller('TeamOverviewCtrl', ['$scope', '$routeParams', 'TalentCategoryReport', function($scope, $routeParams, TalentCategoryReport) {
+controllers.controller('TeamOverviewCtrl', ['$scope', '$routeParams', 'TalentCategoryReport', 'SalaryReport', function($scope, $routeParams, TalentCategoryReport, SalaryReport) {
     $scope.teamId = $routeParams.id;
+    SalaryReport.getReportForTeam($routeParams.id, function(data) {
+        $scope.salaryReport = data;
+    });
+
     TalentCategoryReport.getReportForTeam($routeParams.id, function(data) {
-        $scope.report = data;
+        $scope.talentCategoryReport = data;
     });
 }]);

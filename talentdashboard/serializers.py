@@ -45,6 +45,19 @@ class TalentCategoryReportSerializer(serializers.Serializer):
     categories = serializers.Field()
     total_evaluations = serializers.Field()
 
+class SalaryReportSerializer(serializers.Serializer):
+    categories = serializers.SerializerMethodField('get_categories')
+    total_salaries = serializers.SerializerMethodField('get_total_salaries')
+
+    def get_categories(self, obj):
+        cats = {}
+        for key in obj.categories:
+            cats[key] = float(obj.categories[key])
+        return cats
+
+    def get_total_salaries(self, obj):
+        return float(obj.total_salaries)
+
 class CompensationSummarySerializer(serializers.ModelSerializer):
     employee = EmployeeSerializer()
     total_compensation = serializers.SerializerMethodField('get_total_compensation')
