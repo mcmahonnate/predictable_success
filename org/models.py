@@ -1,4 +1,5 @@
 from django.db import models
+import blah
 
 class Employee(models.Model):
     informal_name = models.CharField(
@@ -29,6 +30,8 @@ class Employee(models.Model):
 
     def __str__(self):
         return self.informal_name
+
+blah.register(Employee)
 
 class Team(models.Model):
     name = models.CharField(
