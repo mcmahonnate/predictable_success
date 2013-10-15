@@ -37,7 +37,7 @@ controllers.controller('EmployeePvpEvaluationsCtrl', ['$scope', '$routeParams', 
 
 controllers.controller('CompanyOverviewCtrl', ['$scope', '$routeParams', 'TalentCategoryReport', function($scope, $routeParams, TalentCategoryReport) {
     TalentCategoryReport.getReportForEntireCompany(function(data) {
-        $scope.report = data;
+        $scope.talentCategoryReport = data;
     });
 }]);
 
