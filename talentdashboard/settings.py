@@ -129,6 +129,7 @@ INSTALLED_APPS = (
     'comp',
     'south',
     'rest_framework',
+    'blah',
 )
 
 REST_FRAMEWORK = {
