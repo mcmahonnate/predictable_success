@@ -4,7 +4,7 @@ from django.test import TestCase
 from org.models import Employee
 from pvp.models import PvpEvaluation, EvaluationRound
 from comp.models import CompensationSummary
-from .talentcategories import TalentCategoryReport, TalentCategorySummary, get_most_recent_talent_category_report_for_all_employees
+from .talentreports import TalentCategoryReport, TalentCategorySummary, get_most_recent_talent_category_report_for_all_employees
 from .salaryreports import get_salary_report_for_all_employees
 class PvpEvaluationTest(TestCase):
 
