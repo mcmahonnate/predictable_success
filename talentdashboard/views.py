@@ -8,7 +8,7 @@ from org.models import Employee, Team, Mentorship
 from comp.models import CompensationSummary
 from .serializers import *
 from pvp.talentcategories import get_most_recent_talent_category_report_for_all_employees, get_most_recent_talent_category_report_for_team
-from pvp.salaryreports import get_salary_report_for_team
+from pvp.salaryreports import get_current_salary_report_for_team
 
 class EmployeeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Employee.objects.all()
@@ -52,7 +52,7 @@ class TeamTalentCategoryReportDetail(APIView):
 
 class TeamSalaryReportDetail(APIView):
     def get(self, request, pk, format=None):
-        report = get_salary_report_for_team(pk)
+        report = get_current_salary_report_for_team(pk)
         serializer = SalaryReportSerializer(report)
         if report is not None:
             return Response(serializer.data)
