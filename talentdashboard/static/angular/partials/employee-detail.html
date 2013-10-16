@@ -136,13 +136,23 @@
         </header>
 
         <section class="widget-body text-widget">
-          <div class="widget-canvas swipe" id="notes_slider">
-            <div class="slides swipe-wrap" id="note_slides" style="position: relative; width: 625px; height: 150px;"></div>
+          <div ng-controller="EmployeeCommentsCtrl">
+            <div ng-if="comments.length > 0">
+              <div class="widget-canvas swipe" id="notes_slider">
+                <div class="slides swipe-wrap" id="note_slides" style="position: relative; width: 625px; height: 150px;">
+                  {{currentComment.content}}
+                </div>
 
-            <div class="slide-pagination">
-              <div class="inner" id="note_pages"></div>
+                <div class="slide-pagination">
+                  <div class="inner" id="note_pages">
+                    <nav>
+                    <a ng-repeat="comment in comments" ng-class="{activeSlide: comment==$parent.currentComment}" ng-click="$parent.currentComment = comment">{{$index}}</a>
+                    </nav>
+                  </div>
+                </div>
+              </div><!-- .widget-canvas -->
             </div>
-          </div><!-- .widget-canvas -->
+          </div>
         </section>
       </div><!-- .widget-inner -->
     </article>

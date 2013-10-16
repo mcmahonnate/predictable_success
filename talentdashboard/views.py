@@ -9,6 +9,7 @@ from comp.models import CompensationSummary
 from .serializers import *
 from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team
 from pvp.salaryreports import get_salary_report_for_team, get_salary_report_for_all_employees
+from blah.models import Comment
 
 class EmployeeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Employee.objects.all()
@@ -63,7 +64,7 @@ class EmployeeCommentList(APIView):
         employee = Employee.objects.get(id = pk)
         if employee is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
-        comments = employee.comments.all()
+        comments = Comment.objects.filter(object_id = pk)
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
 

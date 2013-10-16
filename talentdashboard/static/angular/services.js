@@ -118,3 +118,13 @@ services.factory('SalaryReport', ['$resource', '$http', function($resource, $htt
     return SalaryReport;
 }]);
 
+
+services.factory('EmployeeComments', ['$resource', '$http', function($resource, $http) {
+    var actions = {     
+        'getAll': { method:'GET' },                 
+        'addNew': { method:'POST' }, 
+        'update': { method:'PUT' },  
+    }
+    var res = $resource('/api/v1/comments/employees/:id/', {}, actions)
+    return res;
+}]);

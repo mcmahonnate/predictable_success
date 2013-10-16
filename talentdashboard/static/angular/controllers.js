@@ -58,3 +58,12 @@ controllers.controller('TeamOverviewCtrl', ['$scope', '$routeParams', 'TalentCat
         $scope.talentCategoryReport = data;
     });
 }]);
+
+controllers.controller('EmployeeCommentsCtrl', ['$scope', '$routeParams', 'EmployeeComments', function($scope, $routeParams, EmployeeComments) {
+    $scope.employeeId = $routeParams.id;
+
+    EmployeeComments.query({ id: $scope.employeeId }).$then(function(response) {
+        $scope.comments = response.data;
+        $scope.currentComment = $scope.comments[0];
+    });
+}]);
