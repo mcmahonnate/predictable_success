@@ -8,7 +8,7 @@ from org.models import Employee, Team, Mentorship
 from comp.models import CompensationSummary
 from .serializers import *
 from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team
-from pvp.salaryreports import get_salary_report_for_team
+from pvp.salaryreports import get_salary_report_for_team, get_salary_report_for_all_employees
 
 class EmployeeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Employee.objects.all()
@@ -66,6 +66,14 @@ class EmployeeCommentList(APIView):
         comments = employee.comments.all()
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
+
+@api_view(['GET'])
+def get_company_salary_report(request):
+    report = get_salary_report_for_all_employees()
+    serializer = SalaryReportSerializer(report)
+    if report is not None:
+        return Response(serializer.data)
+    return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
 def compensation_summaries(request):

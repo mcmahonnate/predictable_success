@@ -98,8 +98,8 @@ services.factory('TalentCategoryReport', ['$resource', '$http', function($resour
         }
     });
 
-    TalentCategoryReport.getReportForEntireCompany = function(success, failure) { return this.get({ id: 'all-employees' }, success, failure); };
     TalentCategoryReport.getReportForTeam = function(teamId, success, failure) { return this.get({ id: 'teams', teamId: teamId }, success, failure); };
+    TalentCategoryReport.getReportForCompany = function(success, failure) { return this.get({ id: 'all-employees' }, success, failure); };
 
     return TalentCategoryReport;
 }]);
@@ -113,6 +113,7 @@ services.factory('SalaryReport', ['$resource', '$http', function($resource, $htt
     });
 
     SalaryReport.getReportForTeam = function(teamId, success, failure) { return this.get({ id: 'teams', teamId: teamId }, success, failure); };
+    SalaryReport.getReportForCompany = function(success, failure) { return this.get({ id: 'company' }, success, failure); };
 
     return SalaryReport;
 }]);

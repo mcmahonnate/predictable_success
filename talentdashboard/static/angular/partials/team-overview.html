@@ -63,12 +63,12 @@
         </header>
         <section class="widget-body number-widget">
             <div id="total-salaries" class="main-stat t-size-x48" style="text-align: center;padding-bottom:15px;">
-            {{salaryReport.total_salaries | currency}}
+            ${{salaryReport.total_salaries | number:0 }}
             </div><!-- .widget-canvas -->
             <div style="display:block;padding-bottom:10px;">Totals by Talent</div>
             <div style="main-stat t-size-x12;margin-bottom:5px;" ng-repeat="(category, salaries) in salaryReport.categories">
               <canvas width="12" height="12" employee-talent-category talent-category="{{category}}"></canvas>
-              <span style="margin-left:10px;width:80px;text-align:right;display:inline-block;">{{salaries | currency}}</span>
+              <span style="margin-left:10px;width:80px;text-align:right;display:inline-block;">${{salaries | number:0}}</span>
             </div>
         </section>
         <div id="salary_visualization" style="width: 315px; height: 300px;"></div>

@@ -22,6 +22,7 @@ urlpatterns = patterns('',
     url(r'api/v1/talent-category-reports/teams/(?P<pk>.*)', TeamTalentCategoryReportDetail.as_view()),
     url(r'api/v1/talent-category-reports/(?P<pk>.*)', TalentCategoryReportDetail.as_view()),
     url(r'api/v1/salary-reports/teams/(?P<pk>.*)', TeamSalaryReportDetail.as_view()),
+    url(r'api/v1/salary-reports/company/', get_company_salary_report),
     url(r'api/v1/comments/employees/(?P<pk>.*)', EmployeeCommentList.as_view()),
     url(r'^', include(router.urls)),
 )

@@ -18,10 +18,11 @@ def build_salary_report(employees):
     employee_salaries = dict([(summary.employee.id, summary.salary) for summary in compensation_summaries])
     for evaluation in pvp_evaluations:
         talent_category = evaluation.get_talent_category()
+        salary = employee_salaries.get(evaluation.employee.id, 0)
         if talent_category in categories:
-             categories[talent_category] += employee_salaries[evaluation.employee.id]
+             categories[talent_category] += salary
         else:
-             categories[talent_category] = employee_salaries[evaluation.employee.id]
+             categories[talent_category] = salary
 
     return SalaryReport(total_salaries=total_salaries, categories=categories)
 
