@@ -57,9 +57,9 @@ angular.module('tdb.controllers', [])
     TalentCategoryReport.getReportForTeam($routeParams.id, function(data) {
         $scope.talentCategoryReport = data;
     });
-}]);
+}])
 
-controllers.controller('EmployeeCommentsCtrl', ['$scope', '$routeParams', 'EmployeeComments', function($scope, $routeParams, EmployeeComments) {
+.controller('EmployeeCommentsCtrl', ['$scope', '$routeParams', 'EmployeeComments', function($scope, $routeParams, EmployeeComments) {
     $scope.employeeId = $routeParams.id;
 
     EmployeeComments.query({ id: $scope.employeeId }).$then(function(response) {

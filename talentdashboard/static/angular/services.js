@@ -59,9 +59,9 @@ angular.module('tdb.services', ['ngResource'])
     SalaryReport.getReportForCompany = function(success, failure) { return this.get({ id: 'company' }, success, failure); };
 
     return SalaryReport;
-}]);
+}])
 
-services.factory('EmployeeComments', ['$resource', '$http', function($resource, $http) {
+.factory('EmployeeComments', ['$resource', '$http', function($resource, $http) {
     var actions = {                   
         'addNew': { method:'POST' }, 
         'update': { method:'PUT' },  
