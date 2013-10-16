@@ -1,22 +1,22 @@
-var controllers = angular.module('tdb.controllers', []);
+angular.module('tdb.controllers', [])
 
-controllers.controller('EvaluationListCtrl', ['$scope', '$routeParams', 'PvpEvaluation', function($scope, $routeParams, PvpEvaluation) {
+.controller('EvaluationListCtrl', ['$scope', '$routeParams', 'PvpEvaluation', function($scope, $routeParams, PvpEvaluation) {
     $scope.evaluations = PvpEvaluation.getCurrentEvaluationsForTalentCategory($routeParams.talent_category);
-}]);
+}])
 
-controllers.controller('EvaluationListCtrl', ['$scope', '$routeParams', 'PvpEvaluation', function($scope, $routeParams, PvpEvaluation) {
+.controller('EvaluationListCtrl', ['$scope', '$routeParams', 'PvpEvaluation', function($scope, $routeParams, PvpEvaluation) {
     $scope.evaluations = PvpEvaluation.getCurrentEvaluationsForTalentCategory($routeParams.talent_category, $routeParams.team_id);
 	$scope.byTeam = { };
 	$scope.byTeam.employee = { };
 	$scope.byTeam.employee.team = { };
 	$scope.menu = {show: false};
-}]);
+}])
 
-controllers.controller('EmployeeListCtrl', ['$scope', 'Employee', function($scope, Employee) {
+.controller('EmployeeListCtrl', ['$scope', 'Employee', function($scope, Employee) {
     $scope.employees = Employee.query();
-}]);
+}])
 
-controllers.controller('EmployeeDetailCtrl', ['$scope', '$routeParams', 'Employee', 'Mentorship', 'CompSummary', '$http', function($scope, $routeParams, Employee, Mentorship, CompSummary, $http) {
+.controller('EmployeeDetailCtrl', ['$scope', '$routeParams', 'Employee', 'Mentorship', 'CompSummary', '$http', function($scope, $routeParams, Employee, Mentorship, CompSummary, $http) {
     Employee.get(
         {id: $routeParams.id},
         function(data) {
@@ -29,26 +29,26 @@ controllers.controller('EmployeeDetailCtrl', ['$scope', '$routeParams', 'Employe
         }
     );
     $scope.mentorships = Mentorship.getMentorshipsForMentee($routeParams.id);
-}]);
+}])
 
-controllers.controller('EmployeeCompSummariesCtrl', ['$scope', '$routeParams', 'CompSummary', function($scope, $routeParams, CompSummary) {
+.controller('EmployeeCompSummariesCtrl', ['$scope', '$routeParams', 'CompSummary', function($scope, $routeParams, CompSummary) {
     $scope.compSummaries = CompSummary.getAllSummariesForEmployee($routeParams.id);
-}]);
+}])
 
-controllers.controller('EmployeePvpEvaluationsCtrl', ['$scope', '$routeParams', 'PvpEvaluation', function($scope, $routeParams, PvpEvaluation) {
+.controller('EmployeePvpEvaluationsCtrl', ['$scope', '$routeParams', 'PvpEvaluation', function($scope, $routeParams, PvpEvaluation) {
     $scope.pvp = PvpEvaluation.getAllEvaluationsForEmployee($routeParams.id);
-}]);
+}])
 
-controllers.controller('CompanyOverviewCtrl', ['$scope', '$routeParams', 'TalentCategoryReport', 'SalaryReport', function($scope, $routeParams, TalentCategoryReport, SalaryReport) {
+.controller('CompanyOverviewCtrl', ['$scope', '$routeParams', 'TalentCategoryReport', 'SalaryReport', function($scope, $routeParams, TalentCategoryReport, SalaryReport) {
     TalentCategoryReport.getReportForCompany(function(data) {
         $scope.talentCategoryReport = data;
     });
     SalaryReport.getReportForCompany(function(data) {
         $scope.salaryReport = data;
     });
-}]);
+}])
 
-controllers.controller('TeamOverviewCtrl', ['$scope', '$routeParams', 'TalentCategoryReport', 'SalaryReport', function($scope, $routeParams, TalentCategoryReport, SalaryReport) {
+.controller('TeamOverviewCtrl', ['$scope', '$routeParams', 'TalentCategoryReport', 'SalaryReport', function($scope, $routeParams, TalentCategoryReport, SalaryReport) {
     $scope.teamId = $routeParams.id;
     SalaryReport.getReportForTeam($routeParams.id, function(data) {
         $scope.salaryReport = data;
@@ -57,4 +57,5 @@ controllers.controller('TeamOverviewCtrl', ['$scope', '$routeParams', 'TalentCat
     TalentCategoryReport.getReportForTeam($routeParams.id, function(data) {
         $scope.talentCategoryReport = data;
     });
-}]);
+}])
+;
