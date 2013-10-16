@@ -2,9 +2,9 @@
 
 google.load('visualization', '1', {packages: ['corechart']});
 
-var directives = angular.module('tdb.directives', []);
+angular.module('tdb.directives', [])
 
-directives.directive('compensationHistoryChart', function() {
+.directive('compensationHistoryChart', function() {
     return function(scope, element, attrs){
         var table = new google.visualization.DataTable();
 
@@ -42,9 +42,9 @@ directives.directive('compensationHistoryChart', function() {
 
         chart.draw(table, options);
     };
-});
+})
 
-directives.directive('talentCategoryChart', function($location) {
+.directive('talentCategoryChart', function($location) {
     return function(scope, element, attrs){
         scope.$watch("talentCategoryReport", function() {
             if(scope.talentCategoryReport) {
@@ -86,9 +86,9 @@ directives.directive('talentCategoryChart', function($location) {
             }
         }, true);
     };
-});
+})
 
-directives.directive('employeeTalentCategory', function() {
+.directive('employeeTalentCategory', function() {
     return function(scope, element, attrs){
 		var color;
 		switch(parseInt(attrs.talentCategory, 10))
@@ -118,28 +118,29 @@ directives.directive('employeeTalentCategory', function() {
 		ctx.fillStyle=color;
 		ctx.fillRect(0,0,12,12);
 	};
-});
+})
 
-directives.directive('onFinishRender', function() {
+.directive('onFinishRender', function() {
 	return function(scope, element, attrs){
 	    var index = scope.$eval(attrs.index);
 		var top = Math.floor(index/4) * 240;
 		var left = (index % 4) * 240;
 	    element.animate({"left":left,"top":top},'0.8s');
 	};
-});
+})
 
-directives.directive('onFilter', function() {
+.directive('onFilter', function() {
 	return function(scope, element, attrs){
-	
+
 	//pick all divs that match filter.
-	
+
 	//hide all divs that do not match filter.
-		
+
 	//loop through and animate matching divs.
 	    var index = scope.$eval(attrs.index);
 		var top = Math.floor(index/4) * 240;
 		var left = (index % 4) * 240;
 	    element.animate({"left":left,"top":top},'0.8s');
 	};
-});
+})
+;

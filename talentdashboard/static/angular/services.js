@@ -1,85 +1,38 @@
-var tastypieHelpers = {
-    getArray: function ($http) {
-        return $http.defaults.transformResponse.concat([
-            function (data, headersGetter) {
-                if(data.meta) {
-                    var result = data.objects;
-                    result.meta = data.meta;
-                    return result;
-                }
-                return data;
-            }
-        ]);
-    },
-    getOne: function ($http) {
-        return $http.defaults.transformResponse.concat([
-            function (data, headersGetter) {
-                var result = data.objects;
-                return result.length == 1 ? result[0] : null;
-            }
-        ]);
-    }
-};
+angular.module('tdb.services', ['ngResource'])
 
-var services = angular.module('tdb.services', ['ngResource']);
-
-services.factory('Employee', ['$resource', '$http', function($resource, $http) {
-    var Employee = $resource('/api/v1/employees/:id/', {}, {
-        query: {
-            method: 'GET',
-            isArray: true,
-        }
-    });
+.factory('Employee', ['$resource', '$http', function($resource, $http) {
+    var Employee = $resource('/api/v1/employees/:id/');
 
     return Employee;
-}]);
+}])
 
-services.factory('Mentorship', ['$resource', '$http', function($resource, $http) {
-    var Mentorship = $resource('/api/v1/mentorships/:id/', {}, {
-        _getMentorshipsForMentee: {
-            method: 'GET',
-            isArray: true,
-        },
-    });
+.factory('Mentorship', ['$resource', '$http', function($resource, $http) {
+    var Mentorship = $resource('/api/v1/mentorships/:id/');
 
-    Mentorship.getMentorshipsForMentee = function(id) { return this._getMentorshipsForMentee({mentee_id: id}); };
+    Mentorship.getMentorshipsForMentee = function(id) { return this.query({mentee_id: id}); };
 
     return Mentorship;
-}]);
+}])
 
-services.factory('Team', ['$resource', '$http', function($resource, $http) {
-    var Team = $resource('/api/v1/teams/:id/', {} );
-}]);
+.factory('Team', ['$resource', '$http', function($resource, $http) {
+    var Team = $resource('/api/v1/teams/:id/');
+}])
 
-services.factory('CompSummary', ['$resource', '$http', function($resource, $http) {
-    var CompSummary = $resource(
-        '/api/v1/compensation-summaries/', {},
-        {
-            _getAllSummariesForEmployee: {
-                method: 'GET',
-                isArray: true,
-            },
-            _getMostRecentSummaryForEmployee: {
-                method: 'GET',
-                isArray: false,
-                params: { most_recent: 1 },
-            }
-        }
-    );
+.factory('CompSummary', ['$resource', '$http', function($resource, $http) {
+    var CompSummary = $resource('/api/v1/compensation-summaries/');
 
-    CompSummary.getMostRecentSummaryForEmployee = function(id) { return this._getMostRecentSummaryForEmployee({employee_id: id}); };
-    CompSummary.getAllSummariesForEmployee = function(id) { return this._getAllSummariesForEmployee({employee_id: id}); };
+    CompSummary.getAllSummariesForEmployee = function(id) { return this.query({employee_id: id}); };
 
     return CompSummary;
-}]);
+}])
 
-services.factory('PvpEvaluation', ['$resource', '$http', function($resource, $http) {
-    var PvpEvaluation = $resource('/api/v1/pvp-evaluations/', {}, {
-    });
+.factory('PvpEvaluation', ['$resource', '$http', function($resource, $http) {
+    var PvpEvaluation = $resource('/api/v1/pvp-evaluations/');
 
     PvpEvaluation.getAllEvaluationsForEmployee = function(id) {
         return this.query({ employee_id: id });
     };
+
     PvpEvaluation.getCurrentEvaluationsForTalentCategory = function(talent_category, team_id) {
         var params = { talent_category: talent_category, current_round: true };
         if(team_id) {
@@ -88,29 +41,19 @@ services.factory('PvpEvaluation', ['$resource', '$http', function($resource, $ht
         return this.query(params);
     };
     return PvpEvaluation;
-}]);
+}])
 
-services.factory('TalentCategoryReport', ['$resource', '$http', function($resource, $http) {
-    TalentCategoryReport = $resource('/api/v1/talent-category-reports/:id/:teamId', {}, {
-        get: {
-            method: 'GET',
-            isArray: false,
-        }
-    });
+.factory('TalentCategoryReport', ['$resource', '$http', function($resource, $http) {
+    TalentCategoryReport = $resource('/api/v1/talent-category-reports/:id/:teamId');
 
     TalentCategoryReport.getReportForTeam = function(teamId, success, failure) { return this.get({ id: 'teams', teamId: teamId }, success, failure); };
     TalentCategoryReport.getReportForCompany = function(success, failure) { return this.get({ id: 'all-employees' }, success, failure); };
 
     return TalentCategoryReport;
-}]);
+}])
 
-services.factory('SalaryReport', ['$resource', '$http', function($resource, $http) {
-    SalaryReport = $resource('/api/v1/salary-reports/:id/:teamId', {}, {
-        get: {
-            method: 'GET',
-            isArray: false,
-        }
-    });
+.factory('SalaryReport', ['$resource', '$http', function($resource, $http) {
+    SalaryReport = $resource('/api/v1/salary-reports/:id/:teamId');
 
     SalaryReport.getReportForTeam = function(teamId, success, failure) { return this.get({ id: 'teams', teamId: teamId }, success, failure); };
     SalaryReport.getReportForCompany = function(success, failure) { return this.get({ id: 'company' }, success, failure); };
@@ -118,13 +61,12 @@ services.factory('SalaryReport', ['$resource', '$http', function($resource, $htt
     return SalaryReport;
 }]);
 
-
 services.factory('EmployeeComments', ['$resource', '$http', function($resource, $http) {
-    var actions = {     
-        'getAll': { method:'GET' },                 
+    var actions = {                   
         'addNew': { method:'POST' }, 
         'update': { method:'PUT' },  
     }
     var res = $resource('/api/v1/comments/employees/:id/', {}, actions)
     return res;
 }]);
+
