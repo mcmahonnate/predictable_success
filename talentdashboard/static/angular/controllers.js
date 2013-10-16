@@ -61,9 +61,23 @@ angular.module('tdb.controllers', [])
 
 .controller('EmployeeCommentsCtrl', ['$scope', '$routeParams', 'EmployeeComments', function($scope, $routeParams, EmployeeComments) {
     $scope.employeeId = $routeParams.id;
-
+    $scope.commentIndex = 0; 
     EmployeeComments.query({ id: $scope.employeeId }).$then(function(response) {
         $scope.comments = response.data;
-        $scope.currentComment = $scope.comments[0];
+        $scope.currentComment = $scope.comments[$scope.commentIndex];
     });
+
+    $scope.selectComment = function(index) {
+        $scope.commentIndex = index;
+        $scope.currentComment = $scope.comments[$scope.commentIndex];
+    }
+
+    $scope.getAuthorName = function() {
+        var name;
+        if ($scope.currentComment.owner) {
+            name = $scope.currentComment.owner.first_name + " " + $scope.currentComment.owner.last_name;
+            return name.trim() || $scope.currentComment.owner.username || "Unknown";
+        }
+        return "Unknown";
+    }
 }]);

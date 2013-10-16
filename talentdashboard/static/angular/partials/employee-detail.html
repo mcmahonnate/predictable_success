@@ -142,11 +142,12 @@
                 <div class="slides swipe-wrap" id="note_slides" style="position: relative; width: 625px; height: 150px;">
                   {{currentComment.content}}
                 </div>
-
+                <div ng-if="currentComment">{{currentComment.modified_date | date:'MM/dd/yyyy'}} - {{getAuthorName()}}
                 <div class="slide-pagination">
                   <div class="inner" id="note_pages">
+                    <span class="slide-tally">{{commentIndex+1}}</span><span class="slide-tally"> of {{comments.length}}</span>
                     <nav>
-                    <a ng-repeat="comment in comments" ng-class="{activeSlide: comment==$parent.currentComment}" ng-click="$parent.currentComment = comment">{{$index}}</a>
+                    <a ng-repeat="comment in comments" ng-class="{activeSlide: $index==$parent.commentIndex}" ng-click="selectComment($index)">{{$index}}</a>
                     </nav>
                   </div>
                 </div>
