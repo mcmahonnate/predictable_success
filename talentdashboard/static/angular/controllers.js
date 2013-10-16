@@ -6,6 +6,10 @@ controllers.controller('EvaluationListCtrl', ['$scope', '$routeParams', 'PvpEval
 
 controllers.controller('EvaluationListCtrl', ['$scope', '$routeParams', 'PvpEvaluation', function($scope, $routeParams, PvpEvaluation) {
     $scope.evaluations = PvpEvaluation.getCurrentEvaluationsForTalentCategory($routeParams.talent_category, $routeParams.team_id);
+	$scope.byTeam = { };
+	$scope.byTeam.employee = { };
+	$scope.byTeam.employee.team = { };
+	$scope.menu = {show: false};
 }]);
 
 controllers.controller('EmployeeListCtrl', ['$scope', 'Employee', function($scope, Employee) {

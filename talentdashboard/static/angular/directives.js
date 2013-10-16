@@ -128,3 +128,18 @@ directives.directive('onFinishRender', function() {
 	    element.animate({"left":left,"top":top},'0.8s');
 	};
 });
+
+directives.directive('onFilter', function() {
+	return function(scope, element, attrs){
+	
+	//pick all divs that match filter.
+	
+	//hide all divs that do not match filter.
+		
+	//loop through and animate matching divs.
+	    var index = scope.$eval(attrs.index);
+		var top = Math.floor(index/4) * 240;
+		var left = (index % 4) * 240;
+	    element.animate({"left":left,"top":top},'0.8s');
+	};
+});

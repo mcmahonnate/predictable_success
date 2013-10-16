@@ -4,8 +4,15 @@
     <div class="clear" id="dashboard-admin-bar">
       <div class="inner dashboard-sized-el" style="max-width: 970px;">
         <div class="btn" id="switch-dashboard">
-          <span id="selected-dashboard-title" onmouseout="isDirty()" onmouseup="toggleDiv()" style="font-weight: 700; color: white;">Pick An Employee</span>
-          <div id="selection-list" style="display: none;"></div>
+          <span id="selected-dashboard-title" ng-click="menu.show = ! menu.show" style="font-weight: 700; color: white;">Filter By Team</span>
+          <div id="selection-list" ng-show="menu.show">
+			<ul>
+				<li><a id="filters" ng-click="menu.show = false;byTeam.employee.team.name = ''" style="font-weight:800;" class="dashboard">All</a></li>
+				<li ng-repeat="evaluation in evaluations">
+					<a id="filters" ng-click="menu.show = false;byTeam.employee.team.name = evaluation.employee.team.name" style="font-weight:800;" class="dashboard">{{evaluation.employee.team.name}}</a>
+				</li>
+			</ul>
+		  </div>
         </div>
         <div style="float: right;width: 339px;">
           <span style="display: block; color: #cbcbcb; font-weight: 700; padding: 12px 36px 10px 12px;font-size: 16px;">
@@ -20,7 +27,7 @@
   </header>
 
   <div class="dashboard-sized-el employees" id="dashboard" style="margin-top: 75px; max-width: 970px; height: 804px;">
-	  <div id="widget-14808658" class="widget" style="position: absolute; margin: 5px; left: 0px; top: 0px; width: 230px; height: 230px;" on-finish-render="" index="{{$index}}" ng-repeat="evaluation in evaluations">
+	  <div id="widget-14808658" class="widget" style="position: absolute; margin: 5px; left: 0px; top: 0px; width: 230px; height: 230px;" on-finish-render="" index="{{$index}}" ng-repeat="evaluation in evaluations | filter:byTeam.employee.team.name">
 		  <div class="widget-inner widget-size-1x1 large-screen" style="width: 230px; height: 230px;">
 			  <header class="no-reload">
 				<canvas width="12" height="12" employee-talent-category talent-category="{{evaluation.talent_category}}"></canvas>
