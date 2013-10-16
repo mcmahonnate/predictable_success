@@ -7,7 +7,7 @@ from pvp.models import PvpEvaluation, EvaluationRound
 from org.models import Employee, Team, Mentorship
 from comp.models import CompensationSummary
 from .serializers import *
-from pvp.talent_categorization import get_most_recent_talent_category_report_for_all_employees, get_most_recent_talent_category_report_for_team
+from pvp.talentcategories import get_most_recent_talent_category_report_for_all_employees, get_most_recent_talent_category_report_for_team
 from pvp.salaryreports import get_salary_report_for_team
 
 class EmployeeViewSet(viewsets.ReadOnlyModelViewSet):
