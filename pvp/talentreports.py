@@ -12,7 +12,8 @@ class TalentCategoryReport:
         self.total_evaluations = total_evaluations
         self.categories = categories
 
-def build_talent_category_report_for_employees(employees, evaluation_round):
+def build_talent_category_report_for_employees(employees):
+    evaluation_round = EvaluationRound.objects.most_recent()
     evaluations = PvpEvaluation.objects.filter(evaluation_round_id=evaluation_round.id).filter(employee__in=employees)
     total_evaluations = 0
     categories = {}
@@ -22,12 +23,10 @@ def build_talent_category_report_for_employees(employees, evaluation_round):
         total_evaluations += categories[talent_category]
     return TalentCategoryReport(evaluation_date=evaluation_round.date, total_evaluations=total_evaluations, categories=categories)
 
-def get_most_recent_talent_category_report_for_all_employees():
-    current_round = EvaluationRound.objects.most_recent()
+def get_talent_category_report_for_all_employees():
     employees = Employee.objects.all()
-    return build_talent_category_report_for_employees(employees, current_round)
+    return build_talent_category_report_for_employees(employees)
 
-def get_most_recent_talent_category_report_for_team(team_id):
-    current_round = EvaluationRound.objects.most_recent()
+def get_talent_category_report_for_team(team_id):
     employees = Employee.objects.filter(team_id=team_id)
-    return build_talent_category_report_for_employees(employees, current_round)
+    return build_talent_category_report_for_employees(employees)

@@ -4,7 +4,7 @@ from django.test import TestCase
 from org.models import Employee
 from pvp.models import PvpEvaluation, EvaluationRound
 from comp.models import CompensationSummary
-from .talentreports import TalentCategoryReport, TalentCategorySummary, get_most_recent_talent_category_report_for_all_employees
+from .talentreports import TalentCategoryReport, TalentCategorySummary, get_talent_category_report_for_all_employees
 from .salaryreports import get_salary_report_for_all_employees
 class PvpEvaluationTest(TestCase):
 
@@ -96,7 +96,7 @@ class TalentCategoryReportTest(TestCase):
         EvaluationRound.objects.all().delete()
         Employee.objects.all().delete()
 
-    def test_get_most_recent_talent_category_report_for_all_employees(self):
+    def test_get_talent_category_report_for_all_employees(self):
         evaluation_date = datetime.date(2011, 12, 31)
         r1 = EvaluationRound(date = evaluation_date)
         r1.save()
@@ -120,7 +120,7 @@ class TalentCategoryReportTest(TestCase):
         PvpEvaluation(employee=e5, evaluation_round = r1, potential=2, performance=3).save()
         PvpEvaluation(employee=e6, evaluation_round = r1, potential=1, performance=1).save()
 
-        report = get_most_recent_talent_category_report_for_all_employees()
+        report = get_talent_category_report_for_all_employees()
 
         expected_categories = {1:1,2:1,3:1,4:1,5:1,6:1}
         self.assertEqual(report.evaluation_date, evaluation_date)

@@ -9,7 +9,8 @@ class SalaryReport():
         self.total_salaries = total_salaries
         self.categories = categories
 
-def build_salary_report(employees, evaluation_round):
+def build_salary_report(employees):
+    evaluation_round = EvaluationRound.objects.most_recent()
     compensation_summaries = CompensationSummary.objects.get_most_recent().filter(employee__in=employees)
     pvp_evaluations = PvpEvaluation.objects.get_evaluations_for_round(evaluation_round.id).filter(employee__in=employees)
     categories = {}
@@ -24,12 +25,10 @@ def build_salary_report(employees, evaluation_round):
 
     return SalaryReport(total_salaries=total_salaries, categories=categories)
 
-def get_current_salary_report_for_all_employees():
-    evaluation_round = EvaluationRound.objects.most_recent()
+def get_salary_report_for_all_employees():
     employees = Employee.objects.all()
-    return build_salary_report(employees, evaluation_round)
+    return build_salary_report(employees)
 
-def get_current_salary_report_for_team(team_id):
-    evaluation_round = EvaluationRound.objects.most_recent()
+def get_salary_report_for_team(team_id):
     employees = Employee.objects.filter(team_id = team_id)
-    return build_salary_report(employees, evaluation_round)
+    return build_salary_report(employees)

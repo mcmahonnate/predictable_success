@@ -7,8 +7,8 @@ from pvp.models import PvpEvaluation, EvaluationRound
 from org.models import Employee, Team, Mentorship
 from comp.models import CompensationSummary
 from .serializers import *
-from pvp.talentreports import get_most_recent_talent_category_report_for_all_employees, get_most_recent_talent_category_report_for_team
-from pvp.salaryreports import get_current_salary_report_for_team
+from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team
+from pvp.salaryreports import get_salary_report_for_team
 
 class EmployeeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Employee.objects.all()
@@ -36,7 +36,7 @@ class TalentCategoryReportDetail(APIView):
     def get(self, request, pk, format=None):
         report = None
         if(pk == 'all-employees'):
-            report = get_most_recent_talent_category_report_for_all_employees()
+            report = get_talent_category_report_for_all_employees()
         serializer = TalentCategoryReportSerializer(report)
         if report is not None:
             return Response(serializer.data)
@@ -44,7 +44,7 @@ class TalentCategoryReportDetail(APIView):
 
 class TeamTalentCategoryReportDetail(APIView):
     def get(self, request, pk, format=None):
-        report = get_most_recent_talent_category_report_for_team(pk)
+        report = get_talent_category_report_for_team(pk)
         serializer = TalentCategoryReportSerializer(report)
         if report is not None:
             return Response(serializer.data)
@@ -52,7 +52,7 @@ class TeamTalentCategoryReportDetail(APIView):
 
 class TeamSalaryReportDetail(APIView):
     def get(self, request, pk, format=None):
-        report = get_current_salary_report_for_team(pk)
+        report = get_salary_report_for_team(pk)
         serializer = SalaryReportSerializer(report)
         if report is not None:
             return Response(serializer.data)
