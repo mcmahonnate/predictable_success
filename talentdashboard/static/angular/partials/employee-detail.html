@@ -2,20 +2,28 @@
     <!-- #top-bar -->
 
     <div class="clear" id="dashboard-admin-bar">
-      <div class="inner dashboard-sized-el" style="max-width: 970px;">
-        <div class="btn" id="switch-dashboard">
-          <span id="selected-dashboard-title" onmouseout="isDirty()" onmouseup="toggleDiv()" style="font-weight: 700; color: white;">Pick An Employee</span>
-          <div id="selection-list" style="display: none;"></div>
-        </div>
-        <div style="float: right;width: 339px;">
-          <span style="display: block; color: #cbcbcb; font-weight: 700; padding: 12px 36px 10px 12px;font-size: 16px;">
-            <a href="/" style="margin-right: 15px;">OVERVIEW</a>
-            <a href="/recommendations.htm" style="margin-right: 15px;">RECOMMENDATIONS</a>
-          </span>
-        </div>
-        <div style="float: right; width: 32px;">
-           <a href="#" class="back-button" onclick="window.history.back();return false;"></a>
-        </div>
+		<div ng-controller="EmployeeListCtrl" class="inner dashboard-sized-el" style="max-width: 970px;">
+			<div class="btn" id="switch-dashboard">
+			  <span ng-click="employeeMenu.show = ! employeeMenu.show" id="selected-dashboard-title" style="font-weight: 700; color: white;">Employee</span>
+			  <div id="selection-list" ng-show="employeeMenu.show" style="display: none;">
+				<ul>
+					<li ng-repeat="employee in employees | orderBy:'informal_name'">
+						<a class="dashboard" ng-click="employeeMenu.show = false;" style="font-weight:800;" href="#/employees/{{employee.id}}">{{employee.informal_name}}</a>
+					</li>
+				</ul>
+			  </div>
+			</div>
+			<div class="btn" id="switch-dashboard">
+			  <span ng-click="teamMenu.show = ! teamMenu.show" id="selected-dashboard-title" style="font-weight: 700; color: white;">Team</span>
+			  <div id="selection-list" ng-show="teamMenu.show" style="display: none;">
+				<ul>
+					<li ng-repeat="employee in employees | unique:'team.name' | orderBy:'team.name'">
+						<a class="dashboard" ng-click="teamMenu.show = false;" style="font-weight:800;" href="#/teams/{{employee.team.id}}">{{employee.team.name}}</a>
+					</li>
+				</ul>		  
+			  </div>
+			</div>
+		</div>
     </div>
   </header>
 

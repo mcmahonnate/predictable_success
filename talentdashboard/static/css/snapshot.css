@@ -172,7 +172,7 @@ sub{top:0.5ex}
 #dashboard-admin-bar .inner .btn:hover{background-color:#202020}
 #dashboard-admin{float:right}
 #dashboard-admin .float-fix span{display:block;padding:12px;color:#444;text-transform:uppercase;font-weight:700;font-size:1.2em;text-shadow:1px 1px #626262}
-#switch-dashboard{position:relative;min-height:16px;padding:0;border-radius:6px;width:200px;overflow:visible;background-color:#434343 !important;cursor:default}
+#switch-dashboard{position:relative;min-height:16px;padding:0;border-radius:6px;width:200px;margin-right:10px;overflow:visible;background-color:#434343 !important;cursor:default}
 #switch-dashboard:after{top:16px;right:6px;content:'';display:block;position:absolute;width:12px;height:6px;background-position:0 -2956px}
 #selection-list{position:absolute;top:90%;width:315px;background-color:inherit;border-radius:3px 0 3px 3px;z-index:2}
 #selection-list>ul{max-height:500px;overflow:auto;-webkit-overflow-scrolling: touch;padding:20px 10px}

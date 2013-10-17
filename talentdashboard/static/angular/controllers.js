@@ -15,6 +15,8 @@ angular.module('tdb.controllers', [])
 
 .controller('EmployeeListCtrl', ['$scope', 'Employee', function($scope, Employee) {
     $scope.employees = Employee.query();
+	$scope.employeeMenu = {show: false};
+	$scope.teamMenu = {show: false};
 }])
 
 .controller('EmployeeDetailCtrl', ['$scope', '$routeParams', 'Employee', 'Mentorship', 'CompSummary', '$http', function($scope, $routeParams, Employee, Mentorship, CompSummary, $http) {
