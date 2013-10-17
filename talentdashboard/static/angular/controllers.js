@@ -83,11 +83,27 @@ angular.module('tdb.controllers', [])
     }
 
     $scope.getAuthorName = function() {
-        var name;
+        var name = "";
         if ($scope.currentComment.owner) {
-            name = $scope.currentComment.owner.first_name + " " + $scope.currentComment.owner.last_name;
+            if ($scope.currentComment.owner.first_name) {
+                name = $scope.currentComment.owner.first_name + " ";
+            }
+             if ($scope.currentComment.owner.last_name) {
+                name += $scope.currentComment.owner.last_name;
+            }
             return name.trim() || $scope.currentComment.owner.username || "Unknown";
         }
-        return "Unknown";
+        return "No Author";
+    }
+
+    $scope.addComment = function() {
+        var newComment = {};
+        newComment.unsaved = true;
+        newComment.content = "new comment #" + ($scope.comments.length+1);
+        newComment.modified_date = new Date().toJSON();
+        newComment.owner = {};
+        newComment.owner.username = "Current User";  // Fill in later with auth service.
+        $scope.comments.push(newComment);
+        $scope.selectComment($scope.comments.length-1);
     }
 }]);
