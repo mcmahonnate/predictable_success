@@ -9,6 +9,7 @@ angular.module('tdb.controllers', [])
 	$scope.byTeam = { };
 	$scope.byTeam.employee = { };
 	$scope.byTeam.employee.team = { };
+	$scope.byTeam.employee.team.name = { };
 	$scope.menu = {show: false};
 }])
 

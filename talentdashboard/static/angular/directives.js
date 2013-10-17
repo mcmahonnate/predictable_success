@@ -120,27 +120,16 @@ angular.module('tdb.directives', [])
 	};
 })
 
-.directive('onFinishRender', function() {
-	return function(scope, element, attrs){
-	    var index = scope.$eval(attrs.index);
-		var top = Math.floor(index/4) * 240;
-		var left = (index % 4) * 240;
-	    element.animate({"left":left,"top":top},'0.8s');
-	};
-})
-
 .directive('onFilter', function() {
 	return function(scope, element, attrs){
-
-	//pick all divs that match filter.
-
-	//hide all divs that do not match filter.
-
-	//loop through and animate matching divs.
-	    var index = scope.$eval(attrs.index);
-		var top = Math.floor(index/4) * 240;
-		var left = (index % 4) * 240;
-	    element.animate({"left":left,"top":top},'0.8s');
+	    attrs.$observe('index', function(value) {
+		    console.log('filtered start');
+			var index = scope.$eval(attrs.index);
+			console.log(scope.evaluations.length);
+			var top = Math.floor(index/4) * 240;
+			var left = (index % 4) * 240;
+			element.animate({"left":left,"top":top},'0.8s');
+            console.log('filtered end');
+        });		
 	};
-})
-;
+});
