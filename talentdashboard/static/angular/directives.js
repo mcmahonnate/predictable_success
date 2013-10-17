@@ -112,11 +112,11 @@ angular.module('tdb.directives', [])
 				color = '#ff0000';
 				break;
 		}
-
+console.log(element);
  	    var canvas=element[0];
 		var ctx=canvas.getContext("2d");
 		ctx.fillStyle=color;
-		ctx.fillRect(0,0,12,12);
+		ctx.fillRect(0,0,element[0].height,element[0].width);
 	};
 })
 
