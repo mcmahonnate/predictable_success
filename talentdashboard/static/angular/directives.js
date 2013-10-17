@@ -123,13 +123,10 @@ angular.module('tdb.directives', [])
 .directive('onFilter', function() {
 	return function(scope, element, attrs){
 	    attrs.$observe('index', function(value) {
-		    console.log('filtered start');
 			var index = scope.$eval(attrs.index);
-			console.log(scope.evaluations.length);
 			var top = Math.floor(index/4) * 240;
 			var left = (index % 4) * 240;
 			element.animate({"left":left,"top":top},'0.8s');
-            console.log('filtered end');
         });		
 	};
 });
