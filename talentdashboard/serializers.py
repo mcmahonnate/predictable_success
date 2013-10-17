@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 class TeamSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Team
-        fields = ('id', 'name')
+        fields = ('id', 'name', 'leader')
 
 class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
     team = TeamSerializer()
