@@ -19,7 +19,6 @@ angular.module('tdb.controllers', [])
 	$scope.teamMenu = {show: false};
 	$scope.startsWith  = function(expected, actual){
 		if(expected && actual){
-			console.log("expected: " + expected + " actual:" +  actual + " indexOf: " + expected.indexOf(actual));
 			return expected.toLowerCase().indexOf(actual.toLowerCase()) == 0;
 		}
 		return true;
