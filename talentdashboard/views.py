@@ -10,6 +10,10 @@ from .serializers import *
 from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team
 from pvp.salaryreports import get_salary_report_for_team, get_salary_report_for_all_employees
 from blah.models import Comment
+from django.contrib.auth.models import User
+import datetime
+from django.utils.log import getLogger
+logger = getLogger('talentdashboard')
 
 class EmployeeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Employee.objects.all()
@@ -67,6 +71,32 @@ class EmployeeCommentList(APIView):
         comments = Comment.objects.filter(object_id = pk)
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
+
+    def post(self, request, pk, format=None):
+        employee = Employee.objects.get(id = pk)
+        if employee is None:
+            return Response(None, status=status.HTTP_404_NOT_FOUND)
+        owner = request.user
+        content = request.POST["_content"]
+        comment = employee.comments.add_comment(content, owner)
+        serializer = CommentSerializer(comment, many=False)
+        return Response(serializer.data)
+
+class CommentDetail(APIView):
+    def put(self, request, pk, format=None):
+        comment = Comment.objects.filter(id = pk)
+        if comment is not None:
+            comment.update(content = request.POST["_content"], modified_date = datetime.datetime.now())
+            serializer = CommentSerializer(comment, many=False)
+            return Response(None)
+        return Response(None, status=status.HTTP_404_NOT_FOUND)
+
+    def delete(self, request, pk, format=None):
+        comment = Comment.objects.filter(id = pk)
+        if comment is not None:
+            comment.delete()
+            return Response(None)
+        return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
 def get_company_salary_report(request):
