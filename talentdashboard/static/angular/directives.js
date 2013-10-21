@@ -127,6 +127,61 @@ angular.module('tdb.directives', [])
 			var top = Math.floor(index/4) * 240;
 			var left = (index % 4) * 240;
 			element.animate({"left":left,"top":top},'0.8s');
-        });		
+        });
 	};
+})
+
+.directive('pvpChart', function() {
+    return function(scope, element, attrs){
+        function setBackground(ctx, color) {
+            ctx.fillStyle = color;
+            ctx.fillRect (0, 0, ctx.canvas.height, ctx.canvas.width);
+        }
+
+        function fillSquare(ctx, x, y, color) {
+            var squareWidth = ctx.canvas.width / 4;
+            var squareHeight = ctx.canvas.height / 4;
+            var xOrigin = squareWidth * (x - 1);
+            var yOrigin = squareHeight * (4 - y);
+            ctx.fillStyle = color;
+            ctx.fillRect(xOrigin, yOrigin, squareWidth, squareHeight);
+        }
+
+        function drawGrid(ctx, color) {
+            for(var i=1; i < 4; i++) {
+                var x = (ctx.canvas.width/4) * i;
+                var y = (ctx.canvas.height/4) * i;
+
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, ctx.canvas.height);
+                ctx.stroke();
+
+                ctx.moveTo(0, y);
+                ctx.lineTo(ctx.canvas.width, y);
+                ctx.strokeStyle = color;
+                ctx.stroke();
+            }
+        }
+
+        var top = '#008000';
+        var strong = '#00f500';
+        var good = '#91fa00';
+        var lacks = '#ffca00';
+        var wrong = '#ff4600';
+        var change = '#ff0000';
+        var squareColors = [
+            [change, change, wrong, lacks],
+            [change, change, wrong, lacks],
+            [change, change, good, strong],
+            [change, change, strong, top],
+        ];
+        var canvas=element[0];
+        var ctx = canvas.getContext('2d');
+        var potential = parseInt(attrs.potential, 10);
+        var performance = parseInt(attrs.performance, 10);
+        setBackground(ctx, attrs.gridBackground);
+        var color = squareColors[performance - 1][potential - 1];
+        fillSquare(ctx, performance, potential, color);
+        drawGrid(ctx, attrs.gridLineColor);
+    };
 });
