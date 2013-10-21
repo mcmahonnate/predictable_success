@@ -1,1 +1,1 @@
-web: gunicorn talentdashboard.wsgi
+web: gunicorn talentdashboard.wsgi --settings=talentdashboard.settings.local
