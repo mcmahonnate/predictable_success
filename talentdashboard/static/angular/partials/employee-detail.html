@@ -102,13 +102,8 @@
 				  <div ng-if="pvp.length > 0">
 					<ul rn-carousel data-ribbontype="0" class="slide t-size-x24 t-main">
 						<li ng-repeat="pvp in pvp">
-							<div class="secondary-stat t-size-x48 level arrow-level-medium">
-								<span>{{ pvp.performance}}</span> <sup>Performance</sup>
-							</div>
-							<div class="secondary-stat t-size-x48 level arrow-level-medium">
-								<span>{{ pvp.potential }}</span> <sup>Potential</sup>
-							</div>
-							<span class="t-size-x12 t-muted">{{ pvp.evaluation_round.date | date:'MM/dd/yyyy' }}</span>
+              <canvas pvp-chart height="160" width="160" performance="{{pvp.performance}}" potential="{{pvp.potential}}" grid-background="#343434" grid-line-color="#000"></canvas>
+							<div class="t-size-x12 t-muted">{{ pvp.evaluation_round.date | date:'MM/dd/yyyy' }}</div>
 						</li>
 					</ul>
 				  </div>
