@@ -153,17 +153,25 @@
         </header>
 
         <section class="widget-body text-widget">
-          <div ng-controller="EmployeeCommentsCtrl">
+          <div ng-controller="EmployeeCommentsCtrl as EmpComments">
               <div class="widget-canvas swipe" id="notes_slider">
-                <div class="slides swipe-wrap" id="note_slides" style="position: relative; width: 625px; height: 150px;">
-                  {{currentComment.content}}
+                <pre ng-if="!currentComment.isEditing" ng-bind="currentComment.content" ng-click="startEdit()" style="position: relative; width: 625px; height: 110px;display:block;overflow:auto;margin-bottom:10px;"></pre>
+                <div ng-if="currentComment.isEditing" style="position:relative">
+                  <textarea ng-model="currentComment.content" class="slides swipe-wrap" id="note_slides" style="position: relative; width: 600px; height: 112px;background-color:#2a2a2a;color:#eee">
+                  </textarea>
+                  <div id="editActions" style="position:absolute;right:2px;bottom:-33px;">
+                    <button class="button small blue" ng-click="saveComment()">Save</button>
+                    <button class="button small orange" ng-click="cancelEdit()">Cancel</button>
+                    <button class="button small red" ng-click="deleteComment()">Delete</button>
+                  </div>
                 </div>
-                <div>
+                <div class="t-size-x12 t-muted">
                   <span ng-if="currentComment">{{currentComment.modified_date | date:'MM/dd/yyyy'}} - {{getAuthorName()}}</span>
+                </div>
                 <div class="slide-pagination">
                   <div class="inner" id="note_pages">
                     <span ng-if="currentComment" class="slide-tally">{{commentIndex+1}} of {{comments.length}}</span>
-                    <button ng-click="addComment()">Add</button>
+                    <button class="button small green" ng-click="addComment()">Add</button>
                     <nav>
                       <a ng-repeat="comment in comments" ng-class="{activeSlide: $index==$parent.commentIndex}" ng-click="selectComment($index)">{{$index}}</a>
                     </nav>
@@ -175,3 +183,17 @@
       </div><!-- .widget-inner -->
     </article>
   </div>
+
+<style>
+  div[contentEditable] {
+    cursor: pointer;
+  }
+  div[contentEditable]:focus {
+    cursor: pointer;
+    background-color: gray;
+    border: 1px solid red;
+    color:black;
+
+    text-shadow:none;
+  }
+</style>

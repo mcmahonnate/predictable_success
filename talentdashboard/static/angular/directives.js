@@ -120,6 +120,43 @@ angular.module('tdb.directives', [])
 	};
 })
 
+.directive('contenteditable', function() {
+    return {
+        priority: 2,
+        link: function(scope, element, attrs, ctrl) {
+            // view -> model
+            element.bind('blur', function() {
+                scope.$apply(function() {
+                    scope.currentComment.content = element.html();
+                });
+            });
+
+            // model -> view
+            //ctrl.render = function(value) {
+                //elm.text(value);
+            //};
+
+            // load init value from DOM
+            //ctrl.$setViewValue(elm.text());
+
+            element.bind('keydown', function(event) {
+                console.log("keydown " + event.which);
+                var esc = event.which == 27,
+                    el = event.target;
+
+                if (esc) {
+                        console.log("esc");
+                        //ctrl.$setViewValue(elm.html());
+                        el.blur();
+                        event.preventDefault();                        
+                    }
+                    
+            });
+            
+        }
+    };
+})
+
 .directive('onFilter', function() {
 	return function(scope, element, attrs){
 	    attrs.$observe('index', function(value) {

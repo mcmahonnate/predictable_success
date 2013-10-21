@@ -19,5 +19,11 @@
     <script src="{% static 'angular/directives.js' %}"></script>
     <script src="{% static 'angular/filters.js' %}"></script>
     <script src="{% static 'angular/app.js' %}"></script>
+    <script>
+    // Add the CSRF Token to all http requests.
+    app.config(['$httpProvider', function($httpProvider) {
+        $httpProvider.defaults.headers.common['X-CSRFToken'] = '{{ csrf_token|escapejs }}';
+    }]);
+    </script>
   </body>
 </html>

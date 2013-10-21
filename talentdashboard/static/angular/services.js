@@ -65,16 +65,16 @@ angular.module('tdb.services', ['ngResource'])
     var actions = {                   
         'addNew': { method:'POST' },  
     }
-    var res = $resource('/api/v1/comments/employees/:id/', {}, actions)
+    var res = $resource('/api/v1/comments/employees/:id/', {id:'@id'}, actions)
     return res;
 }])
 
 .factory('Comment', ['$resource', '$http', function($resource, $http) {
     var actions = {                   
-        'update': { method:'PUT' },  
+        'update': { method:'PUT', data:{content:'@content'}, isArray: false },  
         'remove': { method:'DELETE' },  
-    }
-    var res = $resource('/api/v1/comments/:id/', {}, actions)
+    };
+    var res = $resource('/api/v1/comments/:id/', {id:'@id'}, actions)
     return res;
 }]);
 

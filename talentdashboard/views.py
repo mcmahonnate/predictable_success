@@ -77,7 +77,7 @@ class EmployeeCommentList(APIView):
         if employee is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
         owner = request.user
-        content = request.POST["_content"]
+        content = request.DATA["_content"]
         comment = employee.comments.add_comment(content, owner)
         serializer = CommentSerializer(comment, many=False)
         return Response(serializer.data)
@@ -86,7 +86,7 @@ class CommentDetail(APIView):
     def put(self, request, pk, format=None):
         comment = Comment.objects.filter(id = pk)
         if comment is not None:
-            comment.update(content = request.POST["_content"], modified_date = datetime.datetime.now())
+            comment.update(content = request.DATA["_content"], modified_date = datetime.datetime.now())
             serializer = CommentSerializer(comment, many=False)
             return Response(None)
         return Response(None, status=status.HTTP_404_NOT_FOUND)

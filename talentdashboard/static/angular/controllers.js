@@ -69,11 +69,12 @@ angular.module('tdb.controllers', [])
     });
 }])
 
-.controller('EmployeeCommentsCtrl', ['$scope', '$routeParams', 'EmployeeComments', function($scope, $routeParams, EmployeeComments) {
+.controller('EmployeeCommentsCtrl', ['$scope', '$routeParams', 'EmployeeComments', 'Comment', function($scope, $routeParams, EmployeeComments, Comment) {
     $scope.employeeId = $routeParams.id;
     $scope.commentIndex = 0; 
     EmployeeComments.query({ id: $scope.employeeId }).$then(function(response) {
         $scope.comments = response.data;
+        $scope.originalComments = angular.copy($scope.comments);
         $scope.currentComment = $scope.comments[$scope.commentIndex];
     });
 
@@ -93,17 +94,73 @@ angular.module('tdb.controllers', [])
             }
             return name.trim() || $scope.currentComment.owner.username || "Unknown";
         }
-        return "No Author";
+        return "No Owner";
     }
 
-    $scope.addComment = function() {
+    $scope.isClean = function() {
+        return angular.equals($scope.comments[$scope.commentIndex], $scope.originalComments[$scope.commentIndex]);
+    }
+
+    $scope.startEdit = function(e) {
+        $scope.currentComment.isEditing = true;
+    }
+
+    $scope.cancelEdit = function(e) {
+        $scope.currentComment.isEditing = false;
+        $scope.currentComment.content = $scope.originalComments[$scope.commentIndex].content;
+    }
+
+    $scope.addComment = function(equals) {
         var newComment = {};
-        newComment.unsaved = true;
+        newComment.id = -1;
+        newComment.isEditing = true;
         newComment.content = "new comment #" + ($scope.comments.length+1);
         newComment.modified_date = new Date().toJSON();
         newComment.owner = {};
-        newComment.owner.username = "Current User";  // Fill in later with auth service.
+        newComment.owner.username = "admin";  // Fill in later with auth service.
         $scope.comments.push(newComment);
+        $scope.originalComments.push(angular.copy(newComment));
         $scope.selectComment($scope.comments.length-1);
+    }
+
+    $scope.deleteComment = function(e) {
+        var comment = $scope.currentComment;
+        var data = {id: comment.id};
+
+        var deleteSuccess = function() {
+            $scope.currentComment.isEditing = false;
+            $scope.comments.splice($scope.commentIndex, 1);
+            $scope.originalComments.splice($scope.commentIndex, 1);
+            $scope.selectComment(0);
+        }
+
+        if (data.id != -1) { 
+            Comment.remove(data, function() {
+                deleteSuccess();
+            });
+        }
+        else { // never saved.
+           deleteSuccess();
+        }
+    }
+
+    $scope.saveComment = function(e) {
+        var comment = $scope.currentComment;
+        var data = {id: comment.id, _content: comment.content};
+
+        if (data.id != -1) {
+            Comment.update(data, function() {
+                $scope.currentComment.isEditing = false;
+                $scope.originalComments[$scope.commentIndex].content = $scope.currentComment.content;
+            });
+        }   
+        else {
+            data.id = $scope.employeeId;
+            EmployeeComments.save(data, function(response) {
+                $scope.currentComment.isEditing = false;
+                $scope.currentComment.id = response.id;
+                $scope.originalComments[$scope.commentIndex].content = $scope.currentComment.content;
+            });
+        }
     }
 }]);
