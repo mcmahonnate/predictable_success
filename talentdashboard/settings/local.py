@@ -5,8 +5,8 @@ TEMPLATE_DEBUG = DEBUG
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'talentdashboard',
+        'ENGINE': 'django.db.backends.sqlite3', #postgresql_psycopg2
+        'NAME': 'talentdashboard.db',
         'USER': 'djangotalentdashboard',
         'PASSWORD': 'F00lF00l!',
         'HOST': '127.0.0.1',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
