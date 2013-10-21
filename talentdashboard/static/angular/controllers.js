@@ -46,6 +46,7 @@ angular.module('tdb.controllers', [])
 
 .controller('EmployeePvpEvaluationsCtrl', ['$scope', '$routeParams', 'PvpEvaluation', function($scope, $routeParams, PvpEvaluation) {
     $scope.pvp = PvpEvaluation.getAllEvaluationsForEmployee($routeParams.id);
+	$scope.currentIndex = 0;
 }])
 
 .controller('CompanyOverviewCtrl', ['$scope', '$routeParams', 'TalentCategoryReport', 'SalaryReport', function($scope, $routeParams, TalentCategoryReport, SalaryReport) {

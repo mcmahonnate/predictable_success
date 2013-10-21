@@ -96,11 +96,10 @@
         </header>
 
         <section class="widget-body text-widget">
-          <div class="swipe widget-canvas" id="pvp_slider">
-            <div class="swipe-wrap slides" id="pvp_slides" style="position: relative; width: 438px; height: 150px;">
-				<div ng-controller="EmployeePvpEvaluationsCtrl">
-				  <div ng-if="pvp.length > 0">
-					<ul rn-carousel data-ribbontype="0" class="slide t-size-x24 t-main">
+          <div class="swipe widget-canvas" ng-controller="EmployeePvpEvaluationsCtrl" id="pvp_slider">
+		    <div ng-if="pvp.length > 0">
+				<div class="swipe-wrap slides" id="pvp_slides" style="position: relative; width: 438px; height: 150px;">
+					<ul rn-carousel rn-carousel-index="currentIndex" data-ribbontype="0" class="slide t-size-x24 t-main">
 						<li ng-repeat="pvp in pvp">
 							<div class="secondary-stat t-size-x48 level arrow-level-medium">
 								<span>{{ pvp.performance}}</span> <sup>Performance</sup>
@@ -111,19 +110,13 @@
 							<span class="t-size-x12 t-muted">{{ pvp.evaluation_round.date | date:'MM/dd/yyyy' }}</span>
 						</li>
 					</ul>
-				  </div>
 				</div>
-			</div>
-
-            <div class="slide-pagination">
-				<div ng-controller="EmployeePvpEvaluationsCtrl">
-					<div ng-if="pvp.length > 0">
-						<div class="inner" id="pvp_pages">
-							<span class="slide-tally" id="index">1</span><span class="slide-tally"> of {{ pvp.length }}</span>
-							<nav ng-repeat="pvp in pvp">
-								<a href="#" class="activeSlide">{{$index+1}}</a>
-							</nav>
-						</div>
+				<div class="slide-pagination">
+					<div class="inner" id="pvp_pages">
+						<span class="slide-tally" data-ng-bind-html-unsafe="(currentIndex + 1)"></span><span class="slide-tally"> of {{ pvp.length }}</span>
+						<nav>
+							<a ng-repeat="pvp in pvp" ng-class="{activeSlide: $index==currentIndex}" style="cursor: pointer;">{{$index+1}}</a>
+						</nav>
 					</div>
 				</div>
             </div>
