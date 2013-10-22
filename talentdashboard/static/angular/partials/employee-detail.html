@@ -143,9 +143,9 @@
         <section class="widget-body text-widget">
           <div ng-controller="EmployeeCommentsCtrl as EmpComments">
               <div class="widget-canvas swipe" id="notes_slider">
-                <pre ng-if="!currentComment.isEditing" ng-bind="currentComment.content" ng-click="startEdit()" style="position: relative; width: 625px; height: 110px;display:block;overflow:auto;margin-bottom:10px;"></pre>
+                <pre ng-if="!currentComment.isEditing" ng-bind="currentComment.content" ng-click="startEdit()" style="position: relative; width: 625px; height: 130px;display:block;overflow:auto;margin-bottom:10px;"></pre>
                 <div ng-if="currentComment.isEditing" style="position:relative">
-                  <textarea ng-model="currentComment.content" class="slides swipe-wrap" id="note_slides" style="position: relative; width: 600px; height: 112px;background-color:#2a2a2a;color:#eee">
+                  <textarea ng-model="currentComment.content" class="slides swipe-wrap" id="note_slides" style="position: relative; width: 600px; height: 132px;background-color:#2a2a2a;color:#eee">
                   </textarea>
                   <div id="editActions" style="position:absolute;right:2px;bottom:-33px;">
                     <button class="button small blue" ng-click="saveComment()">Save</button>
@@ -159,7 +159,7 @@
                 <div class="slide-pagination">
                   <div class="inner" id="note_pages">
                     <span ng-if="currentComment" class="slide-tally">{{commentIndex+1}} of {{comments.length}}</span>
-                    <button class="button small green" ng-click="addComment()">Add</button>
+                    <button class="button small green" style="margin:-5px 5px" ng-click="addComment()">Add</button>
                     <nav>
                       <a ng-repeat="comment in comments" ng-class="{activeSlide: $index==$parent.commentIndex}" ng-click="selectComment($index)">{{$index}}</a>
                     </nav>
