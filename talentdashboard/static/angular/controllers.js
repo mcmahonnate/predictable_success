@@ -58,7 +58,7 @@ angular.module('tdb.controllers', [])
     });
 }])
 
-.controller('TeamOverviewCtrl', ['$scope', '$routeParams', 'TalentCategoryReport', 'SalaryReport', function($scope, $routeParams, TalentCategoryReport, SalaryReport) {
+.controller('TeamOverviewCtrl', ['$scope', '$routeParams', 'TalentCategoryReport', 'SalaryReport', 'Team', function($scope, $routeParams, TalentCategoryReport, SalaryReport, Team) {
     $scope.teamId = $routeParams.id;
     SalaryReport.getReportForTeam($routeParams.id, function(data) {
         $scope.salaryReport = data;
@@ -67,6 +67,13 @@ angular.module('tdb.controllers', [])
     TalentCategoryReport.getReportForTeam($routeParams.id, function(data) {
         $scope.talentCategoryReport = data;
     });
+	
+    Team.get(
+        {id: $routeParams.id},
+        function(data) {
+            $scope.team = data;
+        }
+    );
 }])
 
 .controller('EmployeeCommentsCtrl', ['$scope', '$routeParams', 'EmployeeComments', function($scope, $routeParams, EmployeeComments) {

@@ -16,6 +16,8 @@ angular.module('tdb.services', ['ngResource'])
 
 .factory('Team', ['$resource', '$http', function($resource, $http) {
     var Team = $resource('/api/v1/teams/:id/');
+	
+	return Team;
 }])
 
 .factory('CompSummary', ['$resource', '$http', function($resource, $http) {
