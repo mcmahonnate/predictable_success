@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.conf.urls.defaults import *
 from django.contrib import admin
+from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 from views import *
 from rest_framework import routers
@@ -15,7 +16,8 @@ admin.site.register(Comment)
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$',  TemplateView.as_view(template_name="index.html"), name='home'),
+    url(r'^$', login_required(TemplateView.as_view(template_name="index.html")), name='home'),
+    url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api/v1/pvp-evaluations/', pvp_evaluations),
     url(r'^api/v1/compensation-summaries/', compensation_summaries),

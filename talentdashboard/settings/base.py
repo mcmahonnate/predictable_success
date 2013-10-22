@@ -122,3 +122,5 @@ REST_FRAMEWORK = {
 }
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
+
+LOGIN_URL = '/login'
