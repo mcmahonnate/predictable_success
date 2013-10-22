@@ -44,7 +44,7 @@ angular.module('tdb.directives', [])
     };
 })
 
-.directive('talentCategoryChart', function($location) {
+.directive('talentCategoryChart', ['$location', 'TalentCategoryColors', function($location, TalentCategoryColors) {
     return function(scope, element, attrs){
         scope.$watch("talentCategoryReport", function() {
             if(scope.talentCategoryReport) {
@@ -64,7 +64,7 @@ angular.module('tdb.directives', [])
                     tooltip:{text:'value'},
                     legend:{textStyle:{color: 'white'}},
                     chartArea:{left:40,top:40,width: 620},
-                    colors:['#008000','#00f500','#91fa00','#ffca00','#ff4600','#ff0000']
+                    colors: TalentCategoryColors.colors
                 };
 
                 var chart = new google.visualization.PieChart(element[0]);
@@ -86,39 +86,17 @@ angular.module('tdb.directives', [])
             }
         }, true);
     };
-})
+}])
 
-.directive('employeeTalentCategory', function() {
+.directive('employeeTalentCategory', ['TalentCategoryColors', function(TalentCategoryColors) {
     return function(scope, element, attrs){
-		var color;
-		switch(parseInt(attrs.talentCategory, 10))
-		{
-			case 1:
-				color = '#008000';
-				break;
-			case 2:
-				color = '#00f500';
-				break;
-			case 3:
-				color = '#91fa00';
-				break;
-			case 4:
-				color = '#ffca00';
-				break;
-			case 5:
-				color = '#ff4600';
-				break;
-			case 6:
-				color = '#ff0000';
-				break;
-		}
-
- 	    var canvas=element[0];
-		var ctx=canvas.getContext("2d");
-		ctx.fillStyle=color;
-		ctx.fillRect(0,0,12,12);
-	};
-})
+        var color = TalentCategoryColors.getColorByTalentCategory(attrs.employeeTalentCategory);
+        var canvas=element[0];
+        var ctx=canvas.getContext("2d");
+        ctx.fillStyle=color;
+        ctx.fillRect(0,0,element[0].height,element[0].width);
+    };
+}])
 
 .directive('contenteditable', function() {
     return {
@@ -158,12 +136,57 @@ angular.module('tdb.directives', [])
 })
 
 .directive('onFilter', function() {
-	return function(scope, element, attrs){
-	    attrs.$observe('index', function(value) {
-			var index = scope.$eval(attrs.index);
-			var top = Math.floor(index/4) * 240;
-			var left = (index % 4) * 240;
-			element.animate({"left":left,"top":top},'0.8s');
-        });		
-	};
-});
+    return function(scope, element, attrs){
+        attrs.$observe('index', function(value) {
+            var index = scope.$eval(attrs.index);
+            var top = Math.floor(index/4) * 240;
+            var left = (index % 4) * 240;
+            element.animate({"left":left,"top":top},'0.8s');
+        });
+    };
+})
+
+.directive('pvpChart', ['TalentCategoryColors', function(TalentCategoryColors) {
+    return function(scope, element, attrs){
+        function setBackground(ctx, color) {
+            ctx.fillStyle = color;
+            ctx.fillRect (0, 0, ctx.canvas.height, ctx.canvas.width);
+        }
+
+        function fillSquare(ctx, x, y, color) {
+            var squareWidth = ctx.canvas.width / 4;
+            var squareHeight = ctx.canvas.height / 4;
+            var xOrigin = squareWidth * (x - 1);
+            var yOrigin = squareHeight * (4 - y);
+            ctx.fillStyle = color;
+            ctx.fillRect(xOrigin, yOrigin, squareWidth, squareHeight);
+        }
+
+        function drawGrid(ctx, color) {
+            for(var i=1; i < 4; i++) {
+                var x = (ctx.canvas.width/4) * i;
+                var y = (ctx.canvas.height/4) * i;
+
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, ctx.canvas.height);
+                ctx.stroke();
+
+                ctx.moveTo(0, y);
+                ctx.lineTo(ctx.canvas.width, y);
+                ctx.strokeStyle = color;
+                ctx.stroke();
+            }
+        }
+
+        var canvas=element[0];
+        var ctx = canvas.getContext('2d');
+        var potential = parseInt(attrs.potential, 10);
+        var performance = parseInt(attrs.performance, 10);
+        var talentCategory = parseInt(attrs.talentCategory, 10);
+        setBackground(ctx, attrs.gridBackground);
+
+        var squareColor = TalentCategoryColors.getColorByTalentCategory(talentCategory);
+        fillSquare(ctx, performance, potential, squareColor);
+        drawGrid(ctx, attrs.gridLineColor);
+    };
+}]);

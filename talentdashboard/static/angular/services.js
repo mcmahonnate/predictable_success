@@ -16,6 +16,8 @@ angular.module('tdb.services', ['ngResource'])
 
 .factory('Team', ['$resource', '$http', function($resource, $http) {
     var Team = $resource('/api/v1/teams/:id/');
+	
+	return Team;
 }])
 
 .factory('CompSummary', ['$resource', '$http', function($resource, $http) {
@@ -59,6 +61,17 @@ angular.module('tdb.services', ['ngResource'])
     SalaryReport.getReportForCompany = function(success, failure) { return this.get({ id: 'company' }, success, failure); };
 
     return SalaryReport;
+}])
+
+.factory('TalentCategoryColors', [function() {
+    var TalentCategoryColors = {
+        colors: ['#008000','#00f500','#91fa00','#ffca00','#ff4600','#ff0000'],
+        getColorByTalentCategory: function(category) {
+            return this.colors[category - 1];
+        }
+    };
+
+    return TalentCategoryColors;
 }])
 
 .factory('EmployeeComments', ['$resource', '$http', function($resource, $http) {

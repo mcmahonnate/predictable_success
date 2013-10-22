@@ -19,7 +19,6 @@ angular.module('tdb.controllers', [])
 	$scope.teamMenu = {show: false};
 	$scope.startsWith  = function(expected, actual){
 		if(expected && actual){
-			console.log("expected: " + expected + " actual:" +  actual + " indexOf: " + expected.indexOf(actual));
 			return expected.toLowerCase().indexOf(actual.toLowerCase()) == 0;
 		}
 		return true;
@@ -47,6 +46,7 @@ angular.module('tdb.controllers', [])
 
 .controller('EmployeePvpEvaluationsCtrl', ['$scope', '$routeParams', 'PvpEvaluation', function($scope, $routeParams, PvpEvaluation) {
     $scope.pvp = PvpEvaluation.getAllEvaluationsForEmployee($routeParams.id);
+	$scope.currentIndex = 0;
 }])
 
 .controller('CompanyOverviewCtrl', ['$scope', '$routeParams', 'TalentCategoryReport', 'SalaryReport', function($scope, $routeParams, TalentCategoryReport, SalaryReport) {
@@ -58,7 +58,7 @@ angular.module('tdb.controllers', [])
     });
 }])
 
-.controller('TeamOverviewCtrl', ['$scope', '$routeParams', 'TalentCategoryReport', 'SalaryReport', function($scope, $routeParams, TalentCategoryReport, SalaryReport) {
+.controller('TeamOverviewCtrl', ['$scope', '$routeParams', 'TalentCategoryReport', 'SalaryReport', 'Team', function($scope, $routeParams, TalentCategoryReport, SalaryReport, Team) {
     $scope.teamId = $routeParams.id;
     SalaryReport.getReportForTeam($routeParams.id, function(data) {
         $scope.salaryReport = data;
@@ -67,6 +67,13 @@ angular.module('tdb.controllers', [])
     TalentCategoryReport.getReportForTeam($routeParams.id, function(data) {
         $scope.talentCategoryReport = data;
     });
+	
+    Team.get(
+        {id: $routeParams.id},
+        function(data) {
+            $scope.team = data;
+        }
+    );
 }])
 
 .controller('EmployeeCommentsCtrl', ['$scope', '$routeParams', 'EmployeeComments', 'Comment', function($scope, $routeParams, EmployeeComments, Comment) {

@@ -6,27 +6,27 @@
 			<div style="display: block; color: #cbcbcb; font-weight: 700; padding: 12px 36px 10px 12px;font-size: 16px; width:150px; float:left">
 				<a href="/" style="color:#fff;">The Motley Fool</a>
 			</div>			
-			<div class="btn" id="switch-dashboard" style="float:right">
-			  <span ng-click="employeeMenu.show = ! employeeMenu.show" id="selected-dashboard-title" style="font-weight: 700; color: white;">People</span>
+			<div class="btn" ng-mouseover="employeeMenu.show = true" ng-mouseleave="employeeMenu.show=false" id="switch-dashboard" style="float:right">
+			  <span id="selected-dashboard-title" style="font-weight: 700; color: white;">People</span>
 			  <div id="selection-list" ng-show="employeeMenu.show" style="display: none;">
 				<ul>
 					<li>
 						<input class="search-input" ng-model="employeeQuery" type="text" placeholder="Search"/>
 					</li>
-					<li ng-repeat="employee in employees | filter:{informal_name:employeeQuery} | orderBy:'informal_name'">
+					<li ng-repeat="employee in employees | filter:{informal_name:employeeQuery}:startsWith | orderBy:'informal_name'">
 						<a class="dashboard" ng-click="employeeMenu.show = false;" style="font-weight:800;" href="#/employees/{{employee.id}}">{{employee.informal_name}}</a>
 					</li>
 				</ul>
 			  </div>
 			</div>
-			<div class="btn" id="switch-dashboard" style="float:right">
-			  <span ng-click="teamMenu.show = ! teamMenu.show" id="selected-dashboard-title" style="font-weight: 700; color: white;">Teams</span>
+			<div class="btn" ng-mouseover="teamMenu.show=true" ng-mouseleave="teamMenu.show=false" id="switch-dashboard" style="float:right">
+			  <span id="selected-dashboard-title" style="font-weight: 700; color: white;">Teams</span>
 			  <div id="selection-list" ng-show="teamMenu.show" style="display: none;">
 				<ul>
 					<li>
 						<input class="search-input" type="text" ng-model="teamQuery" placeholder="Search"/>
 					</li>
-					<li ng-repeat="employee in employees | filter:{team.name:teamQuery} | unique:'team.name' | orderBy:'team.name'">
+					<li ng-repeat="employee in employees | filter:{team.name:teamQuery}:startsWith | unique:'team.name' | orderBy:'team.name'">
 						<a class="dashboard" ng-click="teamMenu.show = false;" style="font-weight:800;" href="#/teams/{{employee.team.id}}">{{employee.team.name}}</a>
 					</li>
 				</ul>		  
@@ -40,7 +40,7 @@
     <article class="widget clock loaded" id="widget-8494" style="top: 0px; left: 0px; width: auto;">
       <div class="widget-inner widget-size-2x2 large-screen">
         <header class="no-reload">
-          <h1 id="talent-header" style="display:inline;">Talent Pool</h1>
+          <h1 id="talent-header" style="display:inline;">{{ team.name }}</h1>
         </header>
 
         <div>

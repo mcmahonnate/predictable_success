@@ -1,1 +1,1 @@
-web: python manage.py runserver 0.0.0.0:$PORT --noreload
+web: gunicorn talentdashboard.wsgi --settings=talentdashboard.settings.local
