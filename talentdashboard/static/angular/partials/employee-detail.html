@@ -110,7 +110,7 @@
 					<div class="inner" id="pvp_pages">
 						<span class="slide-tally" data-ng-bind-html-unsafe="(currentIndex + 1)"></span><span class="slide-tally"> of {{ pvp.length }}</span>
 						<nav>
-							<a ng-repeat="pvp in pvp" ng-class="{activeSlide: $index==currentIndex}" style="cursor: pointer;"><canvas employee-talent-category="{{pvp.talent_category}}"></a>
+							<a ng-repeat="pvp in pvp" ng-class="{categoryNavHighlightSmall: $index==currentIndex,categoryNavSmall: $index!=currentIndex}" style="cursor: pointer;"><canvas employee-talent-category="{{pvp.talent_category}}"></a>
 						</nav>
 					</div>
 				</div>
