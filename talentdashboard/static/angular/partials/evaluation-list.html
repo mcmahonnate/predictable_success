@@ -2,11 +2,11 @@
     <!-- #top-bar -->
 
     <div class="clear" id="dashboard-admin-bar">
-		<div ng-controller="EmployeeListCtrl" class="inner dashboard-sized-el" style="max-width: 970px;">
+		<div class="inner dashboard-sized-el" style="max-width: 970px;">
 			<div style="display: block; color: #cbcbcb; font-weight: 700; padding: 12px 36px 10px 12px;font-size: 16px; width:150px; float:left">
 				<a href="/" style="color:#fff;">The Motley Fool</a>
 			</div>			
-			<div class="btn" ng-mouseover="employeeMenu.show = true" ng-mouseleave="employeeMenu.show=false" id="switch-dashboard" style="float:right">
+			<div ng-controller="EmployeeListCtrl" class="btn" ng-mouseover="employeeMenu.show = true" ng-mouseleave="employeeMenu.show=false" id="switch-dashboard" style="float:right">
 			  <span id="selected-dashboard-title" style="font-weight: 700; color: white;">People</span>
 			  <div id="selection-list" ng-show="employeeMenu.show" style="display: none;">
 				<ul>
@@ -19,15 +19,15 @@
 				</ul>
 			  </div>
 			</div>
-			<div class="btn" ng-mouseover="teamMenu.show=true" ng-mouseleave="teamMenu.show=false" id="switch-dashboard" style="float:right">
+			<div ng-controller="TeamListCtrl" class="btn" ng-mouseover="teamMenu.show=true" ng-mouseleave="teamMenu.show=false" id="switch-dashboard" style="float:right">
 			  <span id="selected-dashboard-title" style="font-weight: 700; color: white;">Teams</span>
 			  <div id="selection-list" ng-show="teamMenu.show" style="display: none;">
 				<ul>
 					<li>
 						<input class="search-input" type="text" ng-model="teamQuery" placeholder="Search"/>
 					</li>
-					<li ng-repeat="employee in employees | filter:{team.name:teamQuery}:startsWith | unique:'team.name' | orderBy:'team.name'">
-						<a class="dashboard" ng-click="teamMenu.show = false;" style="font-weight:800;" href="#/teams/{{employee.team.id}}">{{employee.team.name}}</a>
+					<li ng-repeat="team in teams | filter:{name:teamQuery}:startsWith | unique:'name' | orderBy:'name'">
+						<a class="dashboard" ng-click="teamMenu.show = false;" style="font-weight:800;" href="#/teams/{{team.id}}">{{team.name}}</a>
 					</li>
 				</ul>		  
 			  </div>
@@ -37,22 +37,25 @@
 	<div class="clear" style="background-color: #101214;padding-top: 10px;padding-bottom: 10px;">
 		<div class="inner dashboard-sized-el" style="max-width: 970px;">
 			<div class="btn" ng-mouseover="menu.show=true" ng-mouseout="menu.show=false" style="border-style:solid; border-width: 1px;border-color: #cbcbcb;" id="switch-dashboard">
-			  <span id="selected-dashboard-title" style="font-weight: 700; color: white;">Filter By Team</span>
-			  <div id="selection-list" ng-show="menu.show" style="border-style:solid; border-width: 1px;border-color: #cbcbcb;">
+			  <span ng-if="! byTeam.employee.team.name" id="selected-dashboard-title" style="font-weight: 700; color: white;">Filter By Team</span>
+			  <span ng-if="byTeam.employee.team.name" id="selected-dashboard-title" style="font-weight: 700; color: white;">{{ byTeam.employee.team.name }}</span>
+			  <div ng-controller="TeamListCtrl" id="selection-list" ng-show="menu.show" style="border-style:solid; border-width: 1px;border-color: #cbcbcb;">
 				<ul>
-					<li><a id="filters" ng-click="menu.show = false;byTeam.employee.team.name = ''" style="font-weight:800;" class="dashboard">All</a></li>
-					<li ng-repeat="evaluation in evaluations | unique:'employee.team.name' | orderBy:'employee.team.name'">
-						<a id="filters" ng-click="menu.show = false;byTeam.employee.team.name = evaluation.employee.team.name" style="font-weight:800;" class="dashboard">{{evaluation.employee.team.name}}</a>
+					<li><a id="filters" ng-if="intialQuery.teamId" ng-href="#/evaluations/current?talent_category={{ talentCategory }}" style="font-weight:800;" class="dashboard">All</a></li>
+					<li><a id="filters" ng-if="!intialQuery.teamId" ng-click="menu.show = false;byTeam.employee.team.name = '';byTeam.employee.team.id =''" style="font-weight:800;" class="dashboard">All</a></li>
+					<li ng-repeat="team in teams | filter:{name:teamQuery}:startsWith | unique:'name' | orderBy:'name'">
+						<a id="filters" ng-if="initialQuery.teamId" ng-href="#/evaluations/current?talent_category={{ talentCategory }}&team_id={{ team.id }}" style="font-weight:800;" class="dashboard">{{team.name}}</a>
+						<a id="filters" ng-if="!initialQuery.teamId" ng-click="menu.show = false;byTeam.employee.team.name = team.name;byTeam.employee.team.id=team.id" style="font-weight:800;" class="dashboard">{{team.name}}</a>
 					</li>
 				</ul>
 			  </div>
 			</div>
-			<a href="#/evaluations/current?talent_category=1"><canvas width="24" height="24" employee-talent-category="1" style="margin:5px;"></canvas></a>
-			<a href="#/evaluations/current?talent_category=2"><canvas width="24" height="24" employee-talent-category="2" style="margin:5px;"></canvas></a>
-			<a href="#/evaluations/current?talent_category=3"><canvas width="24" height="24" employee-talent-category="3" style="margin:5px;"></canvas></a>
-			<a href="#/evaluations/current?talent_category=4"><canvas width="24" height="24" employee-talent-category="4" style="margin:5px;"></canvas></a>
-			<a href="#/evaluations/current?talent_category=5"><canvas width="24" height="24" employee-talent-category="5" style="margin:5px;"></canvas></a>
-			<a href="#/evaluations/current?talent_category=6"><canvas width="24" height="24" employee-talent-category="6" style="margin:5px;"></canvas></a>
+			<a ng-href="#/evaluations/current?talent_category=1&team_id={{ byTeam.employee.team.id }}"><canvas ng-class="{categoryNavHighlight: talentCategory==1,categoryNav: talentCategory!=1}" width="24" height="24" employee-talent-category="1"></canvas></a>
+			<a ng-href="#/evaluations/current?talent_category=2&team_id={{ byTeam.employee.team.id }}"><canvas ng-class="{categoryNavHighlight: talentCategory==2,categoryNav: talentCategory!=2}" width="24" height="24" employee-talent-category="2"></canvas></a>
+			<a ng-href="#/evaluations/current?talent_category=3&team_id={{ byTeam.employee.team.id }}"><canvas ng-class="{categoryNavHighlight: talentCategory==3,categoryNav: talentCategory!=3}" width="24" height="24" employee-talent-category="3"></canvas></a>
+			<a ng-href="#/evaluations/current?talent_category=4&team_id={{ byTeam.employee.team.id }}"><canvas ng-class="{categoryNavHighlight: talentCategory==4,categoryNav: talentCategory!=4}" width="24" height="24" employee-talent-category="4"></canvas></a>
+			<a ng-href="#/evaluations/current?talent_category=5&team_id={{ byTeam.employee.team.id }}"><canvas ng-class="{categoryNavHighlight: talentCategory==5,categoryNav: talentCategory!=5}" width="24" height="24" employee-talent-category="5"></canvas></a>
+			<a ng-href="#/evaluations/current?talent_category=6&team_id={{ byTeam.employee.team.id }}"><canvas ng-class="{categoryNavHighlight: talentCategory==6,categoryNav: talentCategory!=6}" width="24" height="24" employee-talent-category="6"></canvas></a>
 		</div>
 	</div>
 
@@ -63,13 +66,13 @@
 		  <div class="widget-inner widget-size-1x1 large-screen" style="width: 230px; height: 230px;">
 			  <header class="no-reload">
 				<canvas width="12" height="12" employee-talent-category="{{evaluation.talent_category}}"></canvas>
-   			    <span style="margin-left:10px;"><h1 style="display:inline;"><a href="#/employees/{{evaluation.employee.id}}">{{evaluation.employee.informal_name}}</a></h1></span>
+				<span style="margin-left:10px;"><h1 style="display:inline;"><a href="#/employees/{{evaluation.employee.id}}">{{evaluation.employee.informal_name}}</a></h1></span>
 			  </header>
 			  <section class="widget-body rag-widget">
 				  <div class="widget-canvas">
 					  <div class="outer" style="margin-left: auto; margin-right: auto;">
 						  <div class="image" style="margin-left: auto; margin-right: auto;">
-							<a onclick="fadeOut(this)" href="#/employees/{{evaluation.employee.id}}"><div class="avatar" /></a>
+							<a href="#/employees/{{evaluation.employee.id}}"><div class="avatar" /></a>
 						</div>
 					  </div>
 				  </div>

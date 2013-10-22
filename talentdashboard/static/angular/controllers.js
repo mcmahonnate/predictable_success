@@ -4,18 +4,43 @@ angular.module('tdb.controllers', [])
     $scope.evaluations = PvpEvaluation.getCurrentEvaluationsForTalentCategory($routeParams.talent_category);
 }])
 
-.controller('EvaluationListCtrl', ['$scope', '$routeParams', 'PvpEvaluation', function($scope, $routeParams, PvpEvaluation) {
+.controller('EvaluationListCtrl', ['$scope', '$routeParams', 'PvpEvaluation', 'Team', function($scope, $routeParams, PvpEvaluation, Team) {
     $scope.evaluations = PvpEvaluation.getCurrentEvaluationsForTalentCategory($routeParams.talent_category, $routeParams.team_id);
+	$scope.intialQuery ={};
+	$scope.intialQuery.teamId = $routeParams.team_id;
+    $scope.talentCategory = $routeParams.talent_category;
 	$scope.byTeam = { };
 	$scope.byTeam.employee = { };
 	$scope.byTeam.employee.team = { };
-	$scope.byTeam.employee.team.name = { };
+	if ($routeParams.team_id){
+		Team.get(
+			{id: $routeParams.team_id},
+			function(data) {
+				$scope.byTeam.employee.team.name = data.name
+				$scope.byTeam.employee.team.id = data.id
+			}
+		);
+	} else {
+		$scope.byTeam.employee.team.name = "";
+		$scope.byTeam.employee.team.id = "";
+	}	
 	$scope.menu = {show: false};
 }])
 
 .controller('EmployeeListCtrl', ['$scope', 'Employee', function($scope, Employee) {
     $scope.employees = Employee.query();
 	$scope.employeeMenu = {show: false};
+	$scope.teamMenu = {show: false};
+	$scope.startsWith  = function(expected, actual){
+		if(expected && actual){
+			return expected.toLowerCase().indexOf(actual.toLowerCase()) == 0;
+		}
+		return true;
+	}
+}])
+
+.controller('TeamListCtrl', ['$scope', 'Team', function($scope, Team) {
+    $scope.teams = Team.query();
 	$scope.teamMenu = {show: false};
 	$scope.startsWith  = function(expected, actual){
 		if(expected && actual){
