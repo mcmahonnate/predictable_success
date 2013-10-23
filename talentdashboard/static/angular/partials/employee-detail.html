@@ -101,7 +101,41 @@
 				<div class="swipe-wrap slides" id="pvp_slides" style="position: relative; width: 438px; height: 150px;">
 					<ul rn-carousel rn-carousel-index="currentIndex" data-ribbontype="0" class="slide t-size-x24 t-main">
 						<li ng-repeat="pvp in pvp">
-              <canvas pvp-chart height="160" width="160" performance="{{pvp.performance}}" potential="{{pvp.potential}}" talent-category={{pvp.talent_category}} grid-background="#343434" grid-line-color="#fff"></canvas>
+ <svg x-pvp-chart x-potential="{{pvp.potential}}" x-performance="{{pvp.performance}}" x-talent-category="{{pvp.talent_category}}" class="pvp-chart" width="195" height="195" style="margin: auto;" xmlns="http://www.w3.org/2000/svg">
+  <g fill="#343434">
+   <rect class="pvp-square-1-4" x="27" y="2" width="40" height="40"/>
+   <rect class="pvp-square-2-4" x="67" y="2" width="40" height="40"/>
+   <rect class="pvp-square-3-4" x="107" y="2" width="40" height="40"/>
+   <rect class="pvp-square-4-4" x="147" y="2" width="40" height="40"/>
+
+   <rect class="pvp-square-1-3" x="27" y="42" width="40" height="40"/>
+   <rect class="pvp-square-2-3" x="67" y="42" width="40" height="40"/>
+   <rect class="pvp-square-3-3" x="107" y="42" width="40" height="40"/>
+   <rect class="pvp-square-4-3" x="147" y="42" width="40" height="40"/>
+
+   <rect class="pvp-square-1-2" x="27" y="82" width="40" height="40"/>
+   <rect class="pvp-square-2-2" x="67" y="82" width="40" height="40"/>
+   <rect class="pvp-square-3-2" x="107" y="82" width="40" height="40"/>
+   <rect class="pvp-square-4-2" x="147" y="82" width="40" height="40"/>
+
+   <rect class="pvp-square-1-1" x="27" y="122" width="40" height="40"/>
+   <rect class="pvp-square-2-1" x="67" y="122" width="40" height="40"/>
+   <rect class="pvp-square-3-1" x="107" y="122" width="40" height="40"/>
+   <rect class="pvp-square-4-1" x="147" y="122" width="40" height="40"/>
+
+   <line class="grid-line" stroke="#ffffff" stroke-width="1" x1="67" y1="2" x2="67" y2="162"/>
+   <line class="grid-line" stroke="#ffffff" stroke-width="2" x1="107" y1="2" x2="107" y2="162"/>
+   <line class="grid-line" stroke="#ffffff" stroke-width="1" x1="147" y1="2" x2="147" y2="162"/>
+
+   <line class="grid-line" stroke="#ffffff" stroke-width="1" x1="27" y1="42" x2="187" y2="42"/>
+   <line class="grid-line" stroke="#ffffff" stroke-width="2" x1="27" y1="82" x2="187" y2="82"/>
+   <line class="grid-line" stroke="#ffffff" stroke-width="1" x1="27" y1="122" x2="187" y2="122"/>
+
+   <text class="performance-lable" fill="rgb(139, 139, 139)" stroke="rgb(139, 139, 139)" stroke-width="0" x="12" y="90" font-size="12" font-family="'Proxima Nova', Helvetica, sans-serif" text-anchor="middle" xml:space="preserve" transform="rotate(-90 12 83.5)">PERFORMANCE</text>
+
+   <text class="potential-label" fill="rgb(139, 139, 139)" stroke="rgb(139, 139, 139)" stroke-width="0" x="107" y="175" font-size="12" font-family="'Proxima Nova', Helvetica, sans-serif" text-anchor="middle" xml:space="preserve">POTENTIAL</text>
+ </g>
+</svg>
 							<div class="t-size-x12 t-muted">{{ pvp.evaluation_round.date | date:'MM/dd/yyyy' }}</div>
 						</li>
 					</ul>
@@ -184,4 +218,5 @@
 
     text-shadow:none;
   }
+  rect.pvp-square.selected { fill: red; }
 </style>

@@ -148,45 +148,11 @@ angular.module('tdb.directives', [])
 
 .directive('pvpChart', ['TalentCategoryColors', function(TalentCategoryColors) {
     return function(scope, element, attrs){
-        function setBackground(ctx, color) {
-            ctx.fillStyle = color;
-            ctx.fillRect (0, 0, ctx.canvas.height, ctx.canvas.width);
-        }
-
-        function fillSquare(ctx, x, y, color) {
-            var squareWidth = ctx.canvas.width / 4;
-            var squareHeight = ctx.canvas.height / 4;
-            var xOrigin = squareWidth * (x - 1);
-            var yOrigin = squareHeight * (4 - y);
-            ctx.fillStyle = color;
-            ctx.fillRect(xOrigin, yOrigin, squareWidth, squareHeight);
-        }
-
-        function drawGrid(ctx, color) {
-            for(var i=1; i < 4; i++) {
-                var x = (ctx.canvas.width/4) * i;
-                var y = (ctx.canvas.height/4) * i;
-
-                ctx.moveTo(x, 0);
-                ctx.lineTo(x, ctx.canvas.height);
-                ctx.stroke();
-
-                ctx.moveTo(0, y);
-                ctx.lineTo(ctx.canvas.width, y);
-                ctx.strokeStyle = color;
-                ctx.stroke();
-            }
-        }
-
-        var canvas=element[0];
-        var ctx = canvas.getContext('2d');
+        var svg = element[0];
         var potential = parseInt(attrs.potential, 10);
         var performance = parseInt(attrs.performance, 10);
         var talentCategory = parseInt(attrs.talentCategory, 10);
-        setBackground(ctx, attrs.gridBackground);
-
         var squareColor = TalentCategoryColors.getColorByTalentCategory(talentCategory);
-        fillSquare(ctx, performance, potential, squareColor);
-        drawGrid(ctx, attrs.gridLineColor);
+        angular.element(svg.querySelector('.pvp-square-' + performance + '-' + potential)).attr('fill', squareColor);
     };
 }]);
