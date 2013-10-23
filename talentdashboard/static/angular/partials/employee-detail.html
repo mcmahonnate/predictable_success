@@ -40,7 +40,7 @@
     <article class="widget clock loaded" id="widget-8494" style="top: 0px; left: 0px; width: auto;">
       <div class="widget-inner widget-size-1x2 large-screen">
         <header class="no-reload">
-          <h1 id="display_name">{{employee.informal_name}}</h1>
+          <h1 style="display:inline;">{{employee.informal_name}}</h1>
         </header>
 
         <section class="widget-body rag-widget">
@@ -99,7 +99,7 @@
           <div class="swipe widget-canvas" id="pvp_slider">
 		    <div ng-if="pvp.length > 0">
 				<div class="swipe-wrap slides" id="pvp_slides" style="position: relative; width: 438px; height: 150px;">
-					<ul rn-carousel rn-carousel-index="currentIndex" data-ribbontype="0" class="slide t-size-x24 t-main">
+					<ul rn-carousel rn-carousel-index="currentIndex" class="slide t-size-x24 t-main">
 						<li ng-repeat="pvp in pvp">
               <svg x-pvp-chart x-potential="{{pvp.potential}}" x-performance="{{pvp.performance}}" x-talent-category="{{pvp.talent_category}}" class="pvp-chart" width="255" height="195" style="margin-left: 35px;" xmlns="http://www.w3.org/2000/svg">
                 <g fill="#343434">
@@ -168,38 +168,39 @@
     </article>
 
     <article class="widget clock loaded" id="widget-8494" style="top: 285px; left: 325px; width: auto;">
-      <div class="widget-inner widget-size-2x1 large-screen">
+      <div ng-controller="EmployeeCommentsCtrl as EmpComments" class="widget-inner widget-size-2x1 large-screen">
         <header class="no-reload">
-          <h1 style="display:inline;">Word On The Street</h1>
+          <h1 style="display:inline;">Word On The Street</h1><a ng-click="startEdit()"><img src="/static/css/edit.png" style="float:right;margin-left:6px;margin-top:-6px"/></a><a ng-click="addComment()"><img src="/static/css/add.png" style="float:right;margin-left:6px;margin-top:-6px"/></a>
         </header>
 
         <section class="widget-body text-widget">
-          <div ng-controller="EmployeeCommentsCtrl as EmpComments">
-              <div class="widget-canvas swipe" id="notes_slider">
-                <pre ng-if="!currentComment.isEditing" ng-bind="currentComment.content" ng-click="startEdit()" style="position: relative; width: 625px; height: 130px;display:block;overflow:auto;margin-bottom:10px;"></pre>
-                <div ng-if="currentComment.isEditing" style="position:relative">
-                  <textarea ng-model="currentComment.content" class="slides swipe-wrap" id="note_slides" style="position: relative; width: 600px; height: 132px;background-color:#2a2a2a;color:#eee">
-                  </textarea>
-                  <div id="editActions" style="position:absolute;right:2px;bottom:-33px;">
-                    <button class="button small blue" ng-click="saveComment()">Save</button>
-                    <button class="button small orange" ng-click="cancelEdit()">Cancel</button>
-                    <button class="button small red" ng-click="deleteComment()">Delete</button>
-                  </div>
-                </div>
-                <div class="t-size-x12 t-muted">
-                  <span ng-if="currentComment">{{currentComment.modified_date | date:'MM/dd/yyyy'}} - {{getAuthorName()}}</span>
-                </div>
-                <div class="slide-pagination">
-                  <div class="inner" id="note_pages">
-                    <span ng-if="currentComment" class="slide-tally">{{commentIndex+1}} of {{comments.length}}</span>
-                    <button class="button small green" style="margin:-5px 5px" ng-click="addComment()">Add</button>
-                    <nav>
-                      <a ng-repeat="comment in comments" ng-class="{activeSlide: $index==$parent.commentIndex}" ng-click="selectComment($index)">{{$index}}</a>
-                    </nav>
-                  </div>
-                </div>
-              </div><!-- .widget-canvas -->
-          </div>
+		  <div class="widget-canvas swipe" id="notes_slider">
+			<ul rn-carousel rn-carousel-index="commentIndex" class="slide t-size-x24 t-main">
+			<li ng-repeat="comment in comments">
+			<pre ng-if="!currentComment.isEditing" ng-bind="comment.content" style="font-size: 13px;color: #d3d4d4;text-shadow: 1px 1px #0e0e0e;position: relative; width: 610px; height: 130px;display:block;overflow:auto;margin-bottom:10px;margin-right:5px;white-space: pre-wrap;"></pre>
+			<div ng-if="currentComment.isEditing" style="position:relative">
+			  <textarea ng-model="comment.content" class="slides swipe-wrap" id="note_slides" style="position: relative; width: 600px; height: 132px;background-color:#2a2a2a;color:#eee">
+			  </textarea>
+			  <div id="editActions" style="position:absolute;right:2px;bottom:-33px;">
+				<button class="button small blue" ng-click="saveComment()">Save</button>
+				<button class="button small orange" ng-click="cancelEdit()">Cancel</button>
+				<button class="button small red" ng-click="deleteComment()">Delete</button>
+			  </div>
+			</div>
+			<div class="t-size-x12 t-muted">
+			  <span ng-if="currentComment">{{currentComment.modified_date | date:'MM/dd/yyyy'}} - {{getAuthorName()}}</span>
+			</div>
+			</li>
+			</ul>
+			<div class="slide-pagination">
+			  <div class="inner" id="note_pages">
+				<span ng-if="currentComment" class="slide-tally">{{commentIndex+1}} of {{comments.length}}</span>
+				<nav>
+				  <a ng-repeat="comment in comments" ng-class="{activeSlide: $index==$parent.commentIndex}" ng-click="selectComment($index)">{{$index}}</a>
+				</nav>
+			  </div>
+			</div>
+		  </div><!-- .widget-canvas -->
         </section>
       </div><!-- .widget-inner -->
     </article>
