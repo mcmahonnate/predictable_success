@@ -96,11 +96,10 @@
         </header>
 
         <section class="widget-body text-widget" style="padding:12px">
-          <div class="swipe widget-canvas" id="pvp_slider">
-		    <div ng-if="pvp.length > 0">
-				<div class="swipe-wrap slides" id="pvp_slides" style="position: relative; width: 438px; height: 150px;">
-					<ul rn-carousel rn-carousel-index="currentIndex" class="slide t-size-x24 t-main">
-						<li ng-repeat="pvp in pvp">
+          <div ng-show="pvps.length > 0" class="swipe widget-canvas" id="pvp_slider">
+
+					<ul rn-carousel rn-carousel-index="pvpIndex" class="slide t-size-x24 t-main">
+						<li ng-repeat="pvp in pvps">
               <svg x-pvp-chart x-potential="{{pvp.potential}}" x-performance="{{pvp.performance}}" x-talent-category="{{pvp.talent_category}}" class="pvp-chart" width="255" height="195" style="margin-left: 35px;" xmlns="http://www.w3.org/2000/svg">
                 <g fill="#343434">
                  <title>{{ pvp.evaluation_round.date | date:'MM/yyyy' }}</title>
@@ -138,16 +137,17 @@
               </svg>
 						</li>
 					</ul>
-				</div>
+
 				<div class="slide-pagination">
 					<div class="inner" id="pvp_pages">
-						<span class="slide-tally" data-ng-bind-html-unsafe="(currentIndex + 1)"></span><span class="slide-tally"> of {{ pvp.length }}</span>
+						<span class="slide-tally" data-ng-bind-html-unsafe="(pvpIndex + 1)"></span><span class="slide-tally"> of {{ pvps.length }}</span>
 						<nav>
-							<a ng-repeat="pvp in pvp" ng-class="{categoryNavHighlightSmall: $index==currentIndex,categoryNavSmall: $index!=currentIndex}" style="cursor: pointer;"><canvas employee-talent-category="{{pvp.talent_category}}"></a>
+							<a ng-repeat="pvp in pvps" ng-class="{categoryNavHighlightSmall: $index==pvpIndex,categoryNavSmall: $index!=pvpIndex}" ng-click="selectPvP($index)" style="cursor: pointer;"><canvas employee-talent-category="{{pvp.talent_category}}"></a>
+
 						</nav>
 					</div>
 				</div>
-            </div>
+
           </div><!-- .widget-inner -->
         </section>
       </div>
@@ -168,7 +168,7 @@
     </article>
 
     <article class="widget clock loaded" id="widget-8494" style="top: 285px; left: 325px; width: auto;">
-      <div ng-controller="EmployeeCommentsCtrl as EmpComments" class="widget-inner widget-size-2x1 large-screen">
+      <div ng-controller="EmployeeCommentsCtrl" class="widget-inner widget-size-2x1 large-screen">
         <header class="no-reload">
           <h1 style="display:inline;">Word On The Street</h1><a ng-click="startEdit()"><img src="/static/css/edit.png" style="float:right;margin-left:6px;margin-top:-6px"/></a><a ng-click="addComment()"><img src="/static/css/add.png" style="float:right;margin-left:6px;margin-top:-6px"/></a>
         </header>
@@ -196,7 +196,7 @@
 			  <div class="inner" id="note_pages">
 				<span ng-if="currentComment" class="slide-tally">{{commentIndex+1}} of {{comments.length}}</span>
 				<nav>
-				  <a ng-repeat="comment in comments" ng-class="{activeSlide: $index==$parent.commentIndex}" ng-click="selectComment($index)">{{$index}}</a>
+				  <a ng-repeat="comment in comments" ng-class="{activeSlide: $index==$parent.commentIndex}" ng-click="selectComment($index)" style="cursor: pointer;">{{$index}}</a>
 				</nav>
 			  </div>
 			</div>

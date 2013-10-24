@@ -1,9 +1,5 @@
 angular.module('tdb.controllers', [])
 
-.controller('EvaluationListCtrl', ['$scope', '$routeParams', 'PvpEvaluation', function($scope, $routeParams, PvpEvaluation) {
-    $scope.evaluations = PvpEvaluation.getCurrentEvaluationsForTalentCategory($routeParams.talent_category);
-}])
-
 .controller('EvaluationListCtrl', ['$scope', '$routeParams', 'PvpEvaluation', 'Team', function($scope, $routeParams, PvpEvaluation, Team) {
     $scope.evaluations = PvpEvaluation.getCurrentEvaluationsForTalentCategory($routeParams.talent_category, $routeParams.team_id);
 	$scope.intialQuery ={};
@@ -70,8 +66,16 @@ angular.module('tdb.controllers', [])
 }])
 
 .controller('EmployeePvpEvaluationsCtrl', ['$scope', '$routeParams', 'PvpEvaluation', function($scope, $routeParams, PvpEvaluation) {
-    $scope.pvp = PvpEvaluation.getAllEvaluationsForEmployee($routeParams.id);
-	$scope.currentIndex = 0;
+	$scope.pvpIndex = 0;
+    PvpEvaluation.getAllEvaluationsForEmployee($routeParams.id).$then(function(response) {
+		$scope.pvps = response.data;
+		$scope.currentPvP = $scope.pvps[$scope.pvpIndex];
+	});
+
+	$scope.selectPvP = function(index) {
+        $scope.pvpIndex = index;
+		$scope.currentPvP = $scope.pvps[$scope.pvpIndex];
+    }
 }])
 
 .controller('CompanyOverviewCtrl', ['$scope', '$routeParams', 'TalentCategoryReport', 'SalaryReport', function($scope, $routeParams, TalentCategoryReport, SalaryReport) {
