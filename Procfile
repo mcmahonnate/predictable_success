@@ -1,1 +1,1 @@
-web: ./manage.py collectstatic --settings=talentdashboard.settings.production; gunicorn talentdashboard.wsgi --settings=talentdashboard.settings.production
+web: python manage.py collectstatic --noinput --settings=talentdashboard.settings.production; gunicorn talentdashboard.wsgi --settings=talentdashboard.settings.production
