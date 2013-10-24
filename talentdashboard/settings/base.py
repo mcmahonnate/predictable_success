@@ -1,6 +1,5 @@
 # Django settings for talentdashboard project.
 import os.path
-raise Exception(DATABASE_URL)
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
