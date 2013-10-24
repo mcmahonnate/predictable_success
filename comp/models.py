@@ -55,7 +55,7 @@ class CompensationSummary(models.Model):
         return self.salary + self.bonus + self.discretionary + self.writer_payments_and_royalties
 
     def __str__(self):
-        return "%s compensation FY%i" % (self.employee.informal_name, self.fiscal_year)
+        return "%s compensation FY%i" % (self.employee.full_name, self.fiscal_year)
 
     class Meta:
         ordering = ['year', 'fiscal_year']

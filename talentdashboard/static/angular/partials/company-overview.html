@@ -13,8 +13,8 @@
 					<li>
 						<input class="search-input" ng-model="employeeQuery" type="text" placeholder="Search"/>
 					</li>
-					<li ng-repeat="employee in employees | filter:{informal_name:employeeQuery}:startsWith | orderBy:'informal_name'">
-						<a class="dashboard" ng-click="employeeMenu.show = false;" style="font-weight:800;" href="#/employees/{{employee.id}}">{{employee.informal_name}}</a>
+					<li ng-repeat="employee in employees | filter:{full_name:employeeQuery}:startsWith | orderBy:'full_name'">
+						<a class="dashboard" ng-click="employeeMenu.show = false;" style="font-weight:800;" href="#/employees/{{employee.id}}">{{employee.full_name}}</a>
 					</li>
 				</ul>
 			  </div>

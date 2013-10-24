@@ -11,6 +11,7 @@ router = routers.DefaultRouter()
 router.register(r'api/v1/employees', EmployeeViewSet)
 router.register(r'api/v1/teams', TeamViewSet)
 router.register(r'api/v1/mentorships', MentorshipViewSet)
+router.register(r'api/v1/leadership', LeadershipViewSet)
 
 admin.site.register(Comment)
 admin.autodiscover()

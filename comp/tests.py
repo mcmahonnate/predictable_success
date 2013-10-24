@@ -5,7 +5,7 @@ from comp.models import CompensationSummary
 class CompensationSummaryTest(TestCase):
     def test_str(self):
         expected = 'John Doe compensation FY2012'
-        john = Employee(informal_name='John Doe')
+        john = Employee(full_name='John Doe')
         compensation_summary = CompensationSummary(employee=john, fiscal_year=2012)
         self.assertEquals(str(compensation_summary), expected)
 

@@ -4,7 +4,7 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
 from pvp.models import PvpEvaluation, EvaluationRound
-from org.models import Employee, Team, Mentorship
+from org.models import Employee, Team, Mentorship, Leadership
 from comp.models import CompensationSummary
 from .serializers import *
 from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team
@@ -34,6 +34,20 @@ class MentorshipViewSet(viewsets.ReadOnlyModelViewSet):
             self.queryset = self.queryset.filter(mentee__id=mentee_id)
         if mentor_id is not None:
             self.queryset = self.queryset.filter(mentor__id=mentor_id)
+
+        return self.queryset
+        
+class LeadershipViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = LeadershipSerializer
+    queryset = Leadership.objects.all()
+
+    def get_queryset(self):
+        employee_id = self.request.QUERY_PARAMS.get('employee_id', None)
+        leader_id = self.request.QUERY_PARAMS.get('leader_id', None)
+        if employee_id is not None:
+            self.queryset = self.queryset.filter(employee__id=employee_id)
+        if leader_id is not None:
+            self.queryset = self.queryset.filter(leader__id=leader_id)
 
         return self.queryset
 

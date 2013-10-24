@@ -70,7 +70,7 @@ class PvpEvaluation(models.Model):
         return self.potential <=2 and self.performance <= 2
 
     def __str__(self):
-        return "%s PVP Evaluation %s" % (self.employee.informal_name, self.evaluation_round.date)
+        return "%s PVP Evaluation %s" % (self.employee.full_name, self.evaluation_round.date)
 
     class Meta:
         unique_together = ("employee", "evaluation_round")

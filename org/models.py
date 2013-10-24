@@ -2,7 +2,7 @@ from django.db import models
 import blah
 
 class Employee(models.Model):
-    informal_name = models.CharField(
+    full_name = models.CharField(
         max_length=255,
     )
     job_title = models.CharField(
@@ -26,10 +26,10 @@ class Employee(models.Model):
         null=True,
         blank=True,
         default=None
-   )
+    )
 
     def __str__(self):
-        return self.informal_name
+        return self.full_name
 
 blah.register(Employee)
 
@@ -47,4 +47,11 @@ class Mentorship(models.Model):
     mentee = models.ForeignKey(Employee, related_name='+')
 
     def __str__(self):
-        return "%s mentorship of %s" % (self.mentor.informal_name, self.mentee.informal_name)
+        return "%s mentor of %s" % (self.mentor.full_name, self.mentee.full_name)
+
+class Leadership(models.Model):
+    leader = models.ForeignKey(Employee, related_name='+')
+    employee = models.ForeignKey(Employee, related_name='+')
+
+    def __str__(self):
+        return "%s leader of %s" % (self.leader.full_name, self.employee.full_name)

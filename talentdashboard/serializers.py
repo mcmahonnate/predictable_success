@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from pvp.models import PvpEvaluation, EvaluationRound
-from org.models import Employee, Team, Mentorship
+from org.models import Employee, Team, Mentorship, Leadership
 from comp.models import CompensationSummary
 from blah.models import Comment
 from django.contrib.auth.models import User
@@ -14,12 +14,12 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
     team = TeamSerializer()
     class Meta:
         model = Employee
-        fields = ('id', 'informal_name', 'job_title', 'hire_date', 'team')
+        fields = ('id', 'full_name', 'job_title', 'hire_date', 'team')
 
 class MinimalEmployeeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Employee
-        fields = ('id', 'informal_name')
+        fields = ('id', 'full_name')
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -52,6 +52,13 @@ class MentorshipSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Mentorship
         fields = ['mentor', 'mentee',]
+        
+class LeadershipSerializer(serializers.HyperlinkedModelSerializer):
+    leader = MinimalEmployeeSerializer()
+    employee = MinimalEmployeeSerializer()
+    class Meta:
+        model = Leadership
+        fields = ['leader', 'employee',]
 
 class TalentCategoryReportSerializer(serializers.Serializer):
     evaluation_date = serializers.DateField()

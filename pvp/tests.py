@@ -9,7 +9,7 @@ from .salaryreports import get_salary_report_for_all_employees
 class PvpEvaluationTest(TestCase):
 
     def create_pvp(self, potential=0, performance=0):
-        employee = Employee(informal_name='John Doe')
+        employee = Employee(full_name='John Doe')
         evaluation_round = EvaluationRound(date = datetime.date(2012, 12, 31))
         pvp = PvpEvaluation(employee=employee, evaluation_round = evaluation_round)
         pvp.potential = potential
@@ -58,9 +58,9 @@ class PvpEvaluationManagerTest(TestCase):
         r1.save()
         r2 = EvaluationRound(date = datetime.date(2013, 12, 31))
         r2.save()
-        e1 = Employee(informal_name='John Doe')
+        e1 = Employee(full_name='John Doe')
         e1.save()
-        e2 = Employee(informal_name='Jane Doe')
+        e2 = Employee(full_name='Jane Doe')
         e2.save()
         PvpEvaluation(employee=e1, evaluation_round = r1, potential=4, performance=4).save()
         PvpEvaluation(employee=e1, evaluation_round = r2, potential=4, performance=4).save()
@@ -100,17 +100,17 @@ class TalentCategoryReportTest(TestCase):
         evaluation_date = datetime.date(2011, 12, 31)
         r1 = EvaluationRound(date = evaluation_date)
         r1.save()
-        e1 = Employee(informal_name='Employee 1')
+        e1 = Employee(full_name='Employee 1')
         e1.save()
-        e2 = Employee(informal_name='Employee 2')
+        e2 = Employee(full_name='Employee 2')
         e2.save()
-        e3 = Employee(informal_name='Employee 3')
+        e3 = Employee(full_name='Employee 3')
         e3.save()
-        e4 = Employee(informal_name='Employee 4')
+        e4 = Employee(full_name='Employee 4')
         e4.save()
-        e5 = Employee(informal_name='Employee 5')
+        e5 = Employee(full_name='Employee 5')
         e5.save()
-        e6 = Employee(informal_name='Employee 6')
+        e6 = Employee(full_name='Employee 6')
         e6.save()
 
         PvpEvaluation(employee=e1, evaluation_round = r1, potential=4, performance=4).save()
@@ -133,10 +133,10 @@ class SalaryReportTest(TestCase):
         r1 = EvaluationRound(date = evaluation_date)
         r1.save()
 
-        e1 = Employee(informal_name='Employee 1')
+        e1 = Employee(full_name='Employee 1')
         e1.save()
 
-        e2 = Employee(informal_name='Employee 2')
+        e2 = Employee(full_name='Employee 2')
         e2.save()
 
         PvpEvaluation(employee=e1, evaluation_round = r1, potential=4, performance=4).save()

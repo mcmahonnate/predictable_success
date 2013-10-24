@@ -13,8 +13,8 @@
 					<li>
 						<input class="search-input" ng-model="employeeQuery" type="text" placeholder="Search"/>
 					</li>
-					<li ng-repeat="employee in employees | filter:{informal_name:employeeQuery}:startsWith | orderBy:'informal_name'">
-						<a class="dashboard" ng-click="employeeMenu.show = false;" style="font-weight:800;" href="#/employees/{{employee.id}}">{{employee.informal_name}}</a>
+					<li ng-repeat="employee in employees | filter:{full_name:employeeQuery}:startsWith | orderBy:'full_name'">
+						<a class="dashboard" ng-click="employeeMenu.show = false;" style="font-weight:800;" href="#/employees/{{employee.id}}">{{employee.full_name}}</a>
 					</li>
 				</ul>
 			  </div>
@@ -53,21 +53,13 @@
     <article class="widget google-analytics loaded" id="widget-14808658" style="top: 0px; left: 650px; width: auto;">
       <div class="widget-inner widget-size-1x1 large-screen">
         <header class="no-reload">
-          <h1 style="display:inline;">Cash Flow Per Employee</h1>
+          <h1 style="display:inline;">Team Leaders</h1><img id="loaderComp" src="/css/ajax-loader.gif" style="float:right;visibility:hidden;" />
         </header>
         <section class="widget-body number-widget">
-            <div class="widget-canvas">
-                <div class="main-stat t-size-x60">
-                  $273K
-                </div>
-                <br />
-                <span class="t-size-x12 t-muted">As of 7/30/2013</span>
-                <div class="secondary-stat t-size-x48 positive arrow-up-medium">
-                  <span>2.3%</span>
-                </div>
-                <br />
-                <span class="t-size-x12 t-muted">Since Last Quarter</span>
-
+            <div id="team-leaders" class="widget-canvas">
+				<div style="main-stat t-size-x12;margin-bottom:5px;">
+					<canvas width="12" height="12"></canvas><span style="margin-left:10px;"><a href="/employee.htm?e_id=1498">Burton Long</a></span>
+				</div>
             </div><!-- .widget-canvas -->
         </section>
       </div><!-- .widget-inner -->

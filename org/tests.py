@@ -4,10 +4,10 @@ from org.models import Team
 from org.models import Mentorship
 
 class EmployeeTests(TestCase):
-    def test_str_should_equal_informal_name(self):
-        informal_name = 'John Doe'
-        employee = Employee(informal_name=informal_name)
-        self.assertEquals(str(employee), informal_name)
+    def test_str_should_equal_full_name(self):
+        full_name = 'John Doe'
+        employee = Employee(full_name=full_name)
+        self.assertEquals(str(employee), full_name)
 
 class TeamTests(TestCase):
     def test_str_should_equal_name(self):
@@ -18,7 +18,15 @@ class TeamTests(TestCase):
 class MentorshipTests(TestCase):
     def test_str(self):
         expected = 'John Doe mentorship of Joe Schmoe'
-        john = Employee(informal_name='John Doe')
-        joe = Employee(informal_name='Joe Schmoe')
+        john = Employee(full_name='John Doe')
+        joe = Employee(full_name='Joe Schmoe')
         mentorship = Mentorship(mentor=john, mentee=joe)
         self.assertEquals(str(mentorship), expected)
+        
+class LeadershipTests(TestCase):
+    def test_str(self):
+        expected = 'John Doe leader of Joe Schmoe'
+        john = Employee(full_name='John Doe')
+        joe = Employee(full_name='Joe Schmoe')
+        leadership = Leadership(manager=john, employee=joe)
+        self.assertEquals(str(leadership), expected)        
