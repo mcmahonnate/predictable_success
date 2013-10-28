@@ -1,28 +1,65 @@
 <html>
-<head><title>Login</title></head>
+<head>
+	<title>Sign In</title>
+    <link href="/static/css/snapshot.css" media="screen" rel="stylesheet" type="text/css" />
+	<style>
+		input[type=text],[type=password]
+		{
+			line-height: 15px;
+			width: 280px;
+			border: 1px solid #ccc;
+			border-radius: 3px;
+			margin-right: 10px;
+			padding: 4px;
+		}
+		.login-button
+		{
+			font-size: 16.996px;
+			padding: 8px 18px 8px;
+			border: none;
+			background: #585858;
+			color: #ffffff;
+			cursor: pointer;
+		}
+		.login-button:hover
+		{
+			background: #656565;
+		}
+	</style>
+</head>
 <body>
-{% block content %}
 
-    {% if form.errors %}
-        <p>Your username and password didn't match. Please try again.</p>
-    {% endif %}
+  <div class="dashboard-sized-el" id="dashboard" style="margin-top: 75px; max-width: 970px; height: 804px;">
+  
+    <article class="widget clock loaded" id="widget-8494" style="border-radius: 6px; width: 500px;margin: auto;position: static">
+		<div class="widget-inner widget-size-2x1 large-screen" style="border-radius: 6px; width:300px; margin: auto">
+			<section class="widget-body">
+				<h1 style="padding: 25px 0 20px 0;font-size: 24px;font-weight: bold;">Sign in to Pulse</h1>
+				<div class="widget-canvas">			
+				{% block content %}
 
-    <form method="post" action="{% url 'django.contrib.auth.views.login' %}">
-        {% csrf_token %}
-        <table>
-            <tr>
-                <td>{{ form.username.label_tag }}</td>
-                <td>{{ form.username }}</td>
-            </tr>
-            <tr>
-                <td>{{ form.password.label_tag }}</td>
-                <td>{{ form.password }}</td>
-            </tr>
-       </table>
+				{% if form.errors %}
+					<p>Your username and password didn't match. Please try again.</p>
+				{% endif %}
 
-       <input type="submit" value="login" />
-       <input type="hidden" name="next" value="{{ next }}" />
-   </form>
+				<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
+					{% csrf_token %}
+						<div style="position:relative;margin-bottom: 20px;">
+							{{ form.username }}
+						</div>
+						<div style="position:relative;margin-bottom: 20px;">
+							{{ form.password }}
+						</div>
+
+				   <input class="login-button" type="submit" value="Sign in" />
+				   <input type="hidden" name="next" value="/#/" />
+			   </form>
+			   </div>
+		   </section>
+         </div>
+    </article>
+
+   </div>
 </body>
 </html>
 {% endblock %}
