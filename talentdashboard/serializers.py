@@ -12,9 +12,15 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
 
 class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
     team = TeamSerializer()
+    avatar = serializers.SerializerMethodField('get_avatar_url')
+    def get_avatar_url(self, obj):
+        url = ''
+        if obj.avatar:
+            url = obj.avatar.url
+        return url
     class Meta:
         model = Employee
-        fields = ('id', 'full_name', 'job_title', 'hire_date', 'team')
+        fields = ('id', 'full_name', 'avatar', 'job_title', 'hire_date', 'team')
 
 class MinimalEmployeeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

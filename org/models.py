@@ -5,6 +5,11 @@ class Employee(models.Model):
     full_name = models.CharField(
         max_length=255,
     )
+    avatar = models.ImageField(
+		upload_to="avatars/%Y/%m/%d",
+        max_length=100,
+        blank=True,
+    )    
     job_title = models.CharField(
         max_length=255,
         blank=True,

@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.conf.urls.defaults import *
 from django.contrib import admin
@@ -19,6 +20,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^$', login_required(TemplateView.as_view(template_name="index.html")), name='home'),
     url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}),
+    url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api/v1/pvp-evaluations/', pvp_evaluations),
     url(r'^api/v1/compensation-summaries/', compensation_summaries),
