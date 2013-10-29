@@ -5,6 +5,7 @@ from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 from views import *
+from forms import *
 from rest_framework import routers
 from blah.models import Comment
 
@@ -19,7 +20,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^$', login_required(TemplateView.as_view(template_name="index.html")), name='home'),
-    url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}),
+    url(r'^login/?$','django.contrib.auth.views.login',{'template_name':'login.html', 'authentication_form':CustomAuthenticationForm}),
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api/v1/pvp-evaluations/', pvp_evaluations),
