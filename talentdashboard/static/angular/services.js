@@ -14,6 +14,14 @@ angular.module('tdb.services', ['ngResource'])
     return Mentorship;
 }])
 
+.factory('Leadership', ['$resource', '$http', function($resource, $http) {
+    var Leadership = $resource('/api/v1/leaderships/:id/');
+
+    Leadership.getLeadershipsForEmployee = function(id) { return this.query({employee_id: id}); };
+
+    return Leadership;
+}])
+
 .factory('Team', ['$resource', '$http', function($resource, $http) {
     var Team = $resource('/api/v1/teams/:id/');
 	

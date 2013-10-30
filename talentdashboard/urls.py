@@ -1,6 +1,5 @@
 from django.conf import settings
-from django.conf.urls import patterns, include, url
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
@@ -13,7 +12,7 @@ router = routers.DefaultRouter()
 router.register(r'api/v1/employees', EmployeeViewSet)
 router.register(r'api/v1/teams', TeamViewSet)
 router.register(r'api/v1/mentorships', MentorshipViewSet)
-router.register(r'api/v1/leadership', LeadershipViewSet)
+router.register(r'api/v1/leaderships', LeadershipViewSet)
 
 admin.site.register(Comment)
 admin.autodiscover()
