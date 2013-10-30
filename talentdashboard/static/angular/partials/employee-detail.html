@@ -180,6 +180,7 @@
         <section class="widget-body text-widget">
 		  <div class="widget-canvas swipe" id="notes_slider">
 			<ul rn-carousel rn-carousel-index="commentIndex" class="slide t-size-x24 t-main">
+			<li ng-if="comments.length==0"><pre ng-if="!currentComment.isEditing" ng-bind="comment.content" style="font-size: 13px;color: #d3d4d4;text-shadow: 1px 1px #0e0e0e;position: relative; width: 610px; height: 130px;display:block;overflow:auto;margin-bottom:10px;margin-right:5px;white-space: pre-wrap;"></pre></li>
 			<li ng-repeat="comment in comments">
 			<pre ng-if="!currentComment.isEditing" ng-bind="comment.content" style="font-size: 13px;color: #d3d4d4;text-shadow: 1px 1px #0e0e0e;position: relative; width: 610px; height: 130px;display:block;overflow:auto;margin-bottom:10px;margin-right:5px;white-space: pre-wrap;"></pre>
 			<div ng-if="currentComment.isEditing" style="position:relative">
@@ -191,8 +192,8 @@
 				<button class="button small red" ng-click="deleteComment()">Delete</button>
 			  </div>
 			</div>
-			<div class="t-size-x12 t-muted">
-			  <span ng-if="currentComment">{{currentComment.modified_date | date:'MM/dd/yyyy'}} - {{getAuthorName()}}</span>
+			<div>
+			  <span ng-if="currentComment" style="font-size: 12px;">{{currentComment.modified_date | date:'MM/dd/yyyy'}} - {{getAuthorName()}}</span>
 			</div>
 			</li>
 			</ul>

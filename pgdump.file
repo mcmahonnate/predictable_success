@@ -1,0 +1,5211 @@
+--
+-- PostgreSQL database dump
+--
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: auth_group; Type: TABLE; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE TABLE auth_group (
+    id integer NOT NULL,
+    name character varying(80) NOT NULL
+);
+
+
+ALTER TABLE public.auth_group OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+CREATE SEQUENCE auth_group_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_group_id_seq OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER SEQUENCE auth_group_id_seq OWNED BY auth_group.id;
+
+
+--
+-- Name: auth_group_permissions; Type: TABLE; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE TABLE auth_group_permissions (
+    id integer NOT NULL,
+    group_id integer NOT NULL,
+    permission_id integer NOT NULL
+);
+
+
+ALTER TABLE public.auth_group_permissions OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+CREATE SEQUENCE auth_group_permissions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_group_permissions_id_seq OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER SEQUENCE auth_group_permissions_id_seq OWNED BY auth_group_permissions.id;
+
+
+--
+-- Name: auth_permission; Type: TABLE; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE TABLE auth_permission (
+    id integer NOT NULL,
+    name character varying(50) NOT NULL,
+    content_type_id integer NOT NULL,
+    codename character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.auth_permission OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+CREATE SEQUENCE auth_permission_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_permission_id_seq OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER SEQUENCE auth_permission_id_seq OWNED BY auth_permission.id;
+
+
+--
+-- Name: auth_user; Type: TABLE; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE TABLE auth_user (
+    id integer NOT NULL,
+    password character varying(128) NOT NULL,
+    last_login timestamp with time zone NOT NULL,
+    is_superuser boolean NOT NULL,
+    username character varying(30) NOT NULL,
+    first_name character varying(30) NOT NULL,
+    last_name character varying(30) NOT NULL,
+    email character varying(75) NOT NULL,
+    is_staff boolean NOT NULL,
+    is_active boolean NOT NULL,
+    date_joined timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.auth_user OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: auth_user_groups; Type: TABLE; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE TABLE auth_user_groups (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    group_id integer NOT NULL
+);
+
+
+ALTER TABLE public.auth_user_groups OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+CREATE SEQUENCE auth_user_groups_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_user_groups_id_seq OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER SEQUENCE auth_user_groups_id_seq OWNED BY auth_user_groups.id;
+
+
+--
+-- Name: auth_user_id_seq; Type: SEQUENCE; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+CREATE SEQUENCE auth_user_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_user_id_seq OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: auth_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER SEQUENCE auth_user_id_seq OWNED BY auth_user.id;
+
+
+--
+-- Name: auth_user_user_permissions; Type: TABLE; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE TABLE auth_user_user_permissions (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    permission_id integer NOT NULL
+);
+
+
+ALTER TABLE public.auth_user_user_permissions OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+CREATE SEQUENCE auth_user_user_permissions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_user_user_permissions_id_seq OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER SEQUENCE auth_user_user_permissions_id_seq OWNED BY auth_user_user_permissions.id;
+
+
+--
+-- Name: blah_comment; Type: TABLE; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE TABLE blah_comment (
+    id integer NOT NULL,
+    content_type_id integer NOT NULL,
+    object_id integer NOT NULL,
+    owner_content_type_id integer,
+    owner_id integer,
+    content text NOT NULL,
+    created_date timestamp with time zone NOT NULL,
+    modified_date timestamp with time zone NOT NULL,
+    CONSTRAINT blah_comment_object_id_check CHECK ((object_id >= 0)),
+    CONSTRAINT blah_comment_owner_id_check CHECK ((owner_id >= 0))
+);
+
+
+ALTER TABLE public.blah_comment OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: blah_comment_id_seq; Type: SEQUENCE; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+CREATE SEQUENCE blah_comment_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.blah_comment_id_seq OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: blah_comment_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER SEQUENCE blah_comment_id_seq OWNED BY blah_comment.id;
+
+
+--
+-- Name: comp_compensationsummary; Type: TABLE; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE TABLE comp_compensationsummary (
+    id integer NOT NULL,
+    employee_id integer NOT NULL,
+    year integer NOT NULL,
+    fiscal_year integer NOT NULL,
+    salary numeric(12,2) NOT NULL,
+    bonus numeric(12,2) NOT NULL,
+    discretionary numeric(12,2) NOT NULL,
+    writer_payments_and_royalties numeric(12,2) NOT NULL
+);
+
+
+ALTER TABLE public.comp_compensationsummary OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: comp_compensationsummary_id_seq; Type: SEQUENCE; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+CREATE SEQUENCE comp_compensationsummary_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.comp_compensationsummary_id_seq OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: comp_compensationsummary_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER SEQUENCE comp_compensationsummary_id_seq OWNED BY comp_compensationsummary.id;
+
+
+--
+-- Name: django_admin_log; Type: TABLE; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE TABLE django_admin_log (
+    id integer NOT NULL,
+    action_time timestamp with time zone NOT NULL,
+    user_id integer NOT NULL,
+    content_type_id integer,
+    object_id text,
+    object_repr character varying(200) NOT NULL,
+    action_flag smallint NOT NULL,
+    change_message text NOT NULL,
+    CONSTRAINT django_admin_log_action_flag_check CHECK ((action_flag >= 0))
+);
+
+
+ALTER TABLE public.django_admin_log OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+CREATE SEQUENCE django_admin_log_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.django_admin_log_id_seq OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER SEQUENCE django_admin_log_id_seq OWNED BY django_admin_log.id;
+
+
+--
+-- Name: django_content_type; Type: TABLE; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE TABLE django_content_type (
+    id integer NOT NULL,
+    name character varying(100) NOT NULL,
+    app_label character varying(100) NOT NULL,
+    model character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.django_content_type OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+CREATE SEQUENCE django_content_type_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.django_content_type_id_seq OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER SEQUENCE django_content_type_id_seq OWNED BY django_content_type.id;
+
+
+--
+-- Name: django_session; Type: TABLE; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE TABLE django_session (
+    session_key character varying(40) NOT NULL,
+    session_data text NOT NULL,
+    expire_date timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.django_session OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: django_site; Type: TABLE; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE TABLE django_site (
+    id integer NOT NULL,
+    domain character varying(100) NOT NULL,
+    name character varying(50) NOT NULL
+);
+
+
+ALTER TABLE public.django_site OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: django_site_id_seq; Type: SEQUENCE; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+CREATE SEQUENCE django_site_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.django_site_id_seq OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: django_site_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER SEQUENCE django_site_id_seq OWNED BY django_site.id;
+
+
+--
+-- Name: org_employee; Type: TABLE; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE TABLE org_employee (
+    id integer NOT NULL,
+    job_title character varying(255) NOT NULL,
+    base_camp character varying(255) NOT NULL,
+    u_name character varying(255) NOT NULL,
+    hire_date date,
+    display boolean NOT NULL,
+    team_id integer,
+    full_name character varying(255) NOT NULL,
+    avatar character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.org_employee OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: org_employee_id_seq; Type: SEQUENCE; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+CREATE SEQUENCE org_employee_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.org_employee_id_seq OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: org_employee_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER SEQUENCE org_employee_id_seq OWNED BY org_employee.id;
+
+
+--
+-- Name: org_leadership; Type: TABLE; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE TABLE org_leadership (
+    id integer NOT NULL,
+    leader_id integer NOT NULL,
+    employee_id integer NOT NULL
+);
+
+
+ALTER TABLE public.org_leadership OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: org_leadership_id_seq; Type: SEQUENCE; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+CREATE SEQUENCE org_leadership_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.org_leadership_id_seq OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: org_leadership_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER SEQUENCE org_leadership_id_seq OWNED BY org_leadership.id;
+
+
+--
+-- Name: org_mentorship; Type: TABLE; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE TABLE org_mentorship (
+    id integer NOT NULL,
+    mentor_id integer NOT NULL,
+    mentee_id integer NOT NULL
+);
+
+
+ALTER TABLE public.org_mentorship OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: org_mentorship_id_seq; Type: SEQUENCE; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+CREATE SEQUENCE org_mentorship_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.org_mentorship_id_seq OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: org_mentorship_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER SEQUENCE org_mentorship_id_seq OWNED BY org_mentorship.id;
+
+
+--
+-- Name: org_team; Type: TABLE; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE TABLE org_team (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    leader_id integer NOT NULL
+);
+
+
+ALTER TABLE public.org_team OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: org_team_id_seq; Type: SEQUENCE; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+CREATE SEQUENCE org_team_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.org_team_id_seq OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: org_team_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER SEQUENCE org_team_id_seq OWNED BY org_team.id;
+
+
+--
+-- Name: pvp_evaluationround; Type: TABLE; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE TABLE pvp_evaluationround (
+    id integer NOT NULL,
+    date date NOT NULL
+);
+
+
+ALTER TABLE public.pvp_evaluationround OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: pvp_evaluationround_id_seq; Type: SEQUENCE; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+CREATE SEQUENCE pvp_evaluationround_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.pvp_evaluationround_id_seq OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: pvp_evaluationround_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER SEQUENCE pvp_evaluationround_id_seq OWNED BY pvp_evaluationround.id;
+
+
+--
+-- Name: pvp_pvpevaluation; Type: TABLE; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE TABLE pvp_pvpevaluation (
+    id integer NOT NULL,
+    employee_id integer NOT NULL,
+    evaluation_round_id integer NOT NULL,
+    potential integer NOT NULL,
+    performance integer NOT NULL
+);
+
+
+ALTER TABLE public.pvp_pvpevaluation OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: pvp_pvpevaluation_id_seq; Type: SEQUENCE; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+CREATE SEQUENCE pvp_pvpevaluation_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.pvp_pvpevaluation_id_seq OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: pvp_pvpevaluation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER SEQUENCE pvp_pvpevaluation_id_seq OWNED BY pvp_pvpevaluation.id;
+
+
+--
+-- Name: south_migrationhistory; Type: TABLE; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE TABLE south_migrationhistory (
+    id integer NOT NULL,
+    app_name character varying(255) NOT NULL,
+    migration character varying(255) NOT NULL,
+    applied timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.south_migrationhistory OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: south_migrationhistory_id_seq; Type: SEQUENCE; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+CREATE SEQUENCE south_migrationhistory_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.south_migrationhistory_id_seq OWNER TO scsjkkyzlyzgzj;
+
+--
+-- Name: south_migrationhistory_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER SEQUENCE south_migrationhistory_id_seq OWNED BY south_migrationhistory.id;
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY auth_group ALTER COLUMN id SET DEFAULT nextval('auth_group_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY auth_group_permissions ALTER COLUMN id SET DEFAULT nextval('auth_group_permissions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY auth_permission ALTER COLUMN id SET DEFAULT nextval('auth_permission_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY auth_user ALTER COLUMN id SET DEFAULT nextval('auth_user_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY auth_user_groups ALTER COLUMN id SET DEFAULT nextval('auth_user_groups_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY auth_user_user_permissions ALTER COLUMN id SET DEFAULT nextval('auth_user_user_permissions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY blah_comment ALTER COLUMN id SET DEFAULT nextval('blah_comment_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY comp_compensationsummary ALTER COLUMN id SET DEFAULT nextval('comp_compensationsummary_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY django_admin_log ALTER COLUMN id SET DEFAULT nextval('django_admin_log_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY django_content_type ALTER COLUMN id SET DEFAULT nextval('django_content_type_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY django_site ALTER COLUMN id SET DEFAULT nextval('django_site_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY org_employee ALTER COLUMN id SET DEFAULT nextval('org_employee_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY org_leadership ALTER COLUMN id SET DEFAULT nextval('org_leadership_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY org_mentorship ALTER COLUMN id SET DEFAULT nextval('org_mentorship_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY org_team ALTER COLUMN id SET DEFAULT nextval('org_team_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY pvp_evaluationround ALTER COLUMN id SET DEFAULT nextval('pvp_evaluationround_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY pvp_pvpevaluation ALTER COLUMN id SET DEFAULT nextval('pvp_pvpevaluation_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY south_migrationhistory ALTER COLUMN id SET DEFAULT nextval('south_migrationhistory_id_seq'::regclass);
+
+
+--
+-- Data for Name: auth_group; Type: TABLE DATA; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+COPY auth_group (id, name) FROM stdin;
+\.
+
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE SET; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+SELECT pg_catalog.setval('auth_group_id_seq', 1, false);
+
+
+--
+-- Data for Name: auth_group_permissions; Type: TABLE DATA; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+COPY auth_group_permissions (id, group_id, permission_id) FROM stdin;
+\.
+
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+SELECT pg_catalog.setval('auth_group_permissions_id_seq', 1, false);
+
+
+--
+-- Data for Name: auth_permission; Type: TABLE DATA; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+COPY auth_permission (id, name, content_type_id, codename) FROM stdin;
+1	Can add permission	1	add_permission
+2	Can change permission	1	change_permission
+3	Can delete permission	1	delete_permission
+4	Can add group	2	add_group
+5	Can change group	2	change_group
+6	Can delete group	2	delete_group
+7	Can add user	3	add_user
+8	Can change user	3	change_user
+9	Can delete user	3	delete_user
+10	Can add content type	4	add_contenttype
+11	Can change content type	4	change_contenttype
+12	Can delete content type	4	delete_contenttype
+13	Can add session	5	add_session
+14	Can change session	5	change_session
+15	Can delete session	5	delete_session
+16	Can add site	6	add_site
+17	Can change site	6	change_site
+18	Can delete site	6	delete_site
+19	Can add log entry	7	add_logentry
+20	Can change log entry	7	change_logentry
+21	Can delete log entry	7	delete_logentry
+22	Can add migration history	8	add_migrationhistory
+23	Can change migration history	8	change_migrationhistory
+24	Can delete migration history	8	delete_migrationhistory
+25	Can add employee	9	add_employee
+26	Can change employee	9	change_employee
+27	Can delete employee	9	delete_employee
+28	Can add team	10	add_team
+29	Can change team	10	change_team
+30	Can delete team	10	delete_team
+31	Can add mentorship	11	add_mentorship
+32	Can change mentorship	11	change_mentorship
+33	Can delete mentorship	11	delete_mentorship
+34	Can add leadership	12	add_leadership
+35	Can change leadership	12	change_leadership
+36	Can delete leadership	12	delete_leadership
+37	Can add compensation summary	13	add_compensationsummary
+38	Can change compensation summary	13	change_compensationsummary
+39	Can delete compensation summary	13	delete_compensationsummary
+40	Can add evaluation round	14	add_evaluationround
+41	Can change evaluation round	14	change_evaluationround
+42	Can delete evaluation round	14	delete_evaluationround
+43	Can add PVP Evaluation	15	add_pvpevaluation
+44	Can change PVP Evaluation	15	change_pvpevaluation
+45	Can delete PVP Evaluation	15	delete_pvpevaluation
+46	Can add comment	16	add_comment
+47	Can change comment	16	change_comment
+48	Can delete comment	16	delete_comment
+\.
+
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+SELECT pg_catalog.setval('auth_permission_id_seq', 48, true);
+
+
+--
+-- Data for Name: auth_user; Type: TABLE DATA; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+COPY auth_user (id, password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined) FROM stdin;
+1	pbkdf2_sha256$10000$Kh0abhzyvvO4$QV3ojDe2RFE2zw+nMWXZNbnOQYh/IJBaBtBy9s7bgLo=	2013-10-29 16:50:20.428241+00	t	natem			natem@fool.com	t	t	2013-10-28 12:48:53.214776+00
+\.
+
+
+--
+-- Data for Name: auth_user_groups; Type: TABLE DATA; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+COPY auth_user_groups (id, user_id, group_id) FROM stdin;
+\.
+
+
+--
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE SET; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+SELECT pg_catalog.setval('auth_user_groups_id_seq', 1, false);
+
+
+--
+-- Name: auth_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+SELECT pg_catalog.setval('auth_user_id_seq', 1, true);
+
+
+--
+-- Data for Name: auth_user_user_permissions; Type: TABLE DATA; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+COPY auth_user_user_permissions (id, user_id, permission_id) FROM stdin;
+\.
+
+
+--
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+SELECT pg_catalog.setval('auth_user_user_permissions_id_seq', 1, false);
+
+
+--
+-- Data for Name: blah_comment; Type: TABLE DATA; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+COPY blah_comment (id, content_type_id, object_id, owner_content_type_id, owner_id, content, created_date, modified_date) FROM stdin;
+1	9	507	3	1	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\nTest line break	2013-10-30 20:07:24.345791+00	2013-10-30 20:12:02.206197+00
+\.
+
+
+--
+-- Name: blah_comment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+SELECT pg_catalog.setval('blah_comment_id_seq', 1, true);
+
+
+--
+-- Data for Name: comp_compensationsummary; Type: TABLE DATA; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+COPY comp_compensationsummary (id, employee_id, year, fiscal_year, salary, bonus, discretionary, writer_payments_and_royalties) FROM stdin;
+1	438	2010	2010	73000.08	0.00	0.00	0.00
+2	438	2011	2011	76999.92	7300.00	0.00	30.00
+3	438	2012	2012	76999.92	3965.50	0.00	0.00
+4	439	2010	2010	78000.00	0.00	0.00	0.00
+5	439	2011	2011	81100.08	13700.00	0.00	133.00
+6	439	2012	2012	94999.92	8353.31	0.00	875.00
+7	440	2010	2010	56000.16	0.00	0.00	0.00
+8	440	2011	2011	64999.92	5600.00	0.00	121.00
+9	440	2012	2012	64999.92	6694.99	2500.00	0.00
+10	441	2010	2010	125000.16	0.00	0.00	0.00
+11	441	2011	2011	130000.08	43800.00	0.00	88.00
+12	441	2012	2012	130000.08	26780.02	0.00	0.00
+13	699	2010	2010	195500.16	0.00	0.00	0.00
+14	699	2011	2011	205000.08	136900.00	0.00	21.00
+15	699	2012	2012	205000.08	0.00	0.00	0.00
+16	442	2010	2010	88500.00	0.00	0.00	0.00
+17	442	2011	2011	93000.00	15500.00	0.00	79.00
+18	442	2012	2012	93000.00	9579.00	2500.00	0.00
+19	443	2010	2010	78500.16	0.00	0.00	0.00
+20	443	2011	2011	81700.08	7900.00	0.00	132.00
+21	443	2012	2012	81700.08	4207.55	0.00	0.00
+22	444	2010	2010	104000.16	0.00	0.00	0.00
+23	444	2011	2011	108160.08	18200.00	0.00	141.00
+24	444	2012	2012	108160.08	22280.98	0.00	250.00
+25	445	2010	2010	136500.00	0.00	0.00	0.00
+26	445	2011	2011	145000.08	71700.00	5000.00	179.00
+27	445	2012	2012	145000.08	44805.02	10000.00	0.00
+28	446	2010	2010	107500.08	0.00	0.00	0.00
+29	446	2011	2011	111799.92	18900.00	0.00	105.00
+30	446	2012	2012	111799.92	23030.78	0.00	0.00
+31	700	2010	2010	128000.16	0.00	0.00	0.00
+32	700	2011	2011	133200.00	56000.00	5000.00	32.00
+33	700	2012	2012	133200.00	41158.80	1250.00	0.00
+34	701	2010	2010	78000.00	0.00	0.00	0.00
+35	701	2011	2011	82000.08	13700.00	4000.00	25.00
+36	701	2012	2012	87000.00	8961.00	2500.00	0.00
+37	447	2010	2010	87000.00	0.00	0.00	0.00
+38	447	2011	2011	105000.00	15300.00	0.00	134.00
+39	448	2010	2010	95500.08	0.00	0.00	0.00
+40	448	2011	2011	97500.00	16800.00	0.00	113.00
+41	448	2012	2012	97500.00	10042.50	0.00	0.00
+42	449	2011	2011	100000.08	4000.00	0.00	114.00
+43	449	2012	2012	109999.92	10300.01	0.00	0.00
+44	450	2011	2011	52000.08	2000.00	0.00	158.00
+45	450	2012	2012	52000.08	2678.00	10000.00	3500.00
+46	452	2011	2011	41500.08	1900.00	0.00	73.00
+47	452	2012	2012	41500.08	2137.25	0.00	0.00
+48	453	2011	2011	47250.00	2000.00	0.00	97.00
+49	453	2012	2012	47250.00	2433.38	0.00	0.00
+50	454	2011	2011	76000.08	4000.00	0.00	139.00
+51	454	2012	2012	76000.08	3914.00	0.00	0.00
+52	455	2011	2011	56200.08	2900.00	0.00	4.00
+53	455	2012	2012	61999.92	3193.00	0.00	0.00
+54	456	2011	2011	52999.92	3500.00	0.00	181.00
+55	456	2012	2012	52999.92	2729.50	1250.00	0.00
+56	457	2011	2011	55200.00	3700.00	0.00	91.00
+57	457	2012	2012	55200.00	2842.80	1250.00	50.00
+58	458	2011	2011	54000.00	4200.00	0.00	53.00
+59	458	2012	2012	61000.08	3141.50	1250.00	0.00
+60	702	2011	2011	57000.00	3300.00	2000.00	104.00
+61	702	2012	2012	57000.00	5871.00	5000.00	0.00
+62	459	2011	2011	48000.00	3900.00	2500.00	71.00
+63	460	2010	2010	58000.08	0.00	0.00	0.00
+64	460	2011	2011	65000.16	5800.00	0.00	51.00
+65	460	2012	2012	65000.16	3347.51	2500.00	0.00
+66	461	2011	2011	139999.92	58900.00	0.00	166.00
+67	461	2012	2012	139999.92	36049.98	0.00	0.00
+68	462	2010	2010	63500.16	0.00	0.00	0.00
+69	462	2011	2011	67000.08	6400.00	0.00	130.00
+70	462	2012	2012	67000.08	3450.50	0.00	0.00
+71	463	2010	2010	101500.08	0.00	0.00	0.00
+72	463	2011	2011	109999.92	17800.00	0.00	84.00
+73	463	2012	2012	109999.92	22659.98	0.00	0.00
+74	464	2010	2010	52000.08	0.00	0.00	0.00
+75	464	2011	2011	72000.00	5200.00	0.00	126.00
+76	464	2012	2012	85000.08	8755.01	1250.00	2975.00
+77	465	2010	2010	52000.08	0.00	0.00	0.00
+78	465	2011	2011	67999.92	5200.00	0.00	116.00
+79	465	2012	2012	67999.92	3502.00	5000.00	4350.00
+80	466	2010	2010	60000.00	0.00	0.00	0.00
+81	466	2011	2011	70000.08	6000.00	0.00	13.00
+82	466	2012	2012	94999.92	7210.01	10000.00	75050.00
+83	467	2010	2010	104000.16	0.00	0.00	0.00
+84	467	2011	2011	124999.92	0.00	25000.00	144.00
+85	467	2012	2012	124999.92	32187.48	0.00	0.00
+86	468	2010	2010	52000.08	0.00	0.00	0.00
+87	468	2011	2011	72000.00	5200.00	2500.00	77.00
+88	468	2012	2012	72000.00	3708.00	5000.00	5044.64
+89	469	2010	2010	41600.16	0.00	0.00	0.00
+90	469	2011	2011	43300.08	4200.00	0.00	131.00
+91	469	2012	2012	43300.08	2229.95	0.00	0.00
+92	471	2010	2010	42700.08	0.00	0.00	0.00
+93	471	2011	2011	44400.00	4300.00	0.00	123.00
+94	471	2012	2012	44400.00	2286.60	0.00	0.00
+95	472	2010	2010	182000.16	0.00	0.00	0.00
+96	472	2011	2011	220000.08	136500.00	0.00	37.00
+97	472	2012	2012	220000.08	0.00	0.00	888.00
+98	473	2010	2010	72500.16	0.00	0.00	0.00
+99	473	2011	2011	75000.00	7300.00	0.00	83.00
+100	473	2012	2012	75000.00	3862.50	0.00	0.00
+101	474	2010	2010	176800.08	0.00	0.00	0.00
+102	474	2011	2011	184000.08	123800.00	0.00	82.00
+103	474	2012	2012	184000.08	79488.04	0.00	0.00
+104	703	2010	2010	30000.00	0.00	0.00	0.00
+105	703	2011	2011	54000.00	5000.00	0.00	153.00
+106	703	2012	2012	60000.00	2781.00	0.00	0.00
+107	475	2010	2010	114400.08	0.00	0.00	0.00
+108	475	2011	2011	120000.00	20100.00	5500.00	3.00
+109	475	2012	2012	120000.00	18540.00	2500.00	100.00
+110	476	2010	2010	113500.08	0.00	0.00	0.00
+111	476	2011	2011	126000.00	42000.00	0.00	150.00
+112	476	2012	2012	126000.00	25956.00	0.00	0.00
+113	477	2010	2010	61000.08	0.00	0.00	0.00
+114	477	2011	2011	63499.92	6100.00	0.00	92.00
+115	477	2012	2012	63499.92	3270.25	0.00	0.00
+116	478	2010	2010	88000.08	0.00	0.00	0.00
+117	478	2011	2011	93000.00	8800.00	4500.00	178.00
+118	478	2012	2012	93000.00	9579.00	10000.00	0.00
+119	479	2010	2010	93000.00	0.00	0.00	0.00
+120	479	2011	2011	94999.92	16300.00	0.00	42.00
+121	479	2012	2012	94999.92	9784.99	0.00	0.00
+122	480	2010	2010	83200.08	0.00	0.00	0.00
+123	480	2011	2011	86500.08	8400.00	0.00	2.00
+124	480	2012	2012	86500.08	4454.75	0.00	0.00
+125	481	2010	2010	93000.00	0.00	0.00	0.00
+126	481	2011	2011	96000.00	16300.00	0.00	87.00
+127	481	2012	2012	96000.00	9888.00	0.00	0.00
+128	482	2010	2010	80000.16	0.00	0.00	0.00
+129	482	2011	2011	91000.08	8000.00	4000.01	152.00
+130	482	2012	2012	91000.08	9373.01	0.00	0.00
+131	483	2010	2010	74700.00	0.00	0.00	0.00
+132	483	2011	2011	77688.00	7500.00	0.00	55.00
+133	483	2012	2012	77688.00	4000.93	0.00	1975.00
+134	484	2010	2010	86500.08	0.00	0.00	0.00
+135	484	2011	2011	90000.00	8700.00	0.00	168.00
+136	484	2012	2012	90000.00	9270.00	0.00	0.00
+137	0	2010	2010	82500.00	0.00	0.00	0.00
+138	0	2011	2011	82500.00	14500.00	0.00	93.00
+139	485	2010	2010	65000.16	0.00	0.00	0.00
+140	485	2011	2011	69000.00	6500.00	3500.00	160.00
+141	485	2012	2012	75000.00	7725.00	5000.00	0.00
+142	486	2010	2010	92000.16	0.00	0.00	0.00
+143	486	2011	2011	97999.92	16100.00	4500.00	180.00
+144	486	2012	2012	97999.92	20187.98	2500.00	0.00
+145	487	2010	2010	88600.08	0.00	0.00	0.00
+146	487	2011	2011	91999.92	15500.00	3500.00	50.00
+147	487	2012	2012	91999.92	9475.99	1250.00	0.00
+148	488	2010	2010	115500.00	0.00	0.00	0.00
+149	488	2011	2011	120199.92	30400.00	0.00	129.00
+150	488	2012	2012	130000.08	20085.01	10000.00	17854.57
+151	489	2010	2010	92100.00	0.00	0.00	0.00
+152	489	2011	2011	95800.08	16200.00	0.00	78.00
+153	489	2012	2012	95800.08	9867.41	0.00	0.00
+154	490	2010	2010	285000.00	0.00	0.00	0.00
+155	490	2011	2011	285000.00	0.00	190000.00	143.00
+156	490	2012	2012	285000.00	0.00	0.00	0.00
+157	491	2010	2010	80600.16	0.00	0.00	0.00
+158	491	2011	2011	84499.92	14100.00	0.00	182.00
+159	491	2012	2012	84499.92	8703.49	0.00	0.00
+160	492	2010	2010	97800.00	0.00	0.00	0.00
+161	492	2011	2011	100800.00	17200.00	0.00	159.00
+162	492	2012	2012	100800.00	10382.40	0.00	0.00
+163	493	2010	2010	92500.08	0.00	0.00	0.00
+164	493	2011	2011	100000.08	16200.00	0.00	163.00
+165	493	2012	2012	100000.08	10300.01	2500.00	25.00
+166	494	2010	2010	100000.08	0.00	0.00	0.00
+167	494	2011	2011	124999.92	0.00	12000.00	102.00
+168	494	2012	2012	124999.92	32187.48	0.00	3075.50
+169	704	2010	2010	130000.08	0.00	0.00	0.00
+170	704	2011	2011	175000.08	45500.00	24500.00	80.00
+171	704	2012	2012	175000.08	0.00	0.00	0.00
+172	495	2010	2010	87000.00	0.00	0.00	0.00
+173	495	2011	2011	90000.00	15300.00	0.00	1.00
+174	495	2012	2012	90000.00	9270.00	0.00	0.00
+175	496	2010	2010	83200.08	0.00	0.00	0.00
+176	496	2011	2011	86500.08	8400.00	0.00	149.00
+177	496	2012	2012	86500.08	4454.75	0.00	0.00
+178	497	2010	2010	68000.16	0.00	0.00	0.00
+179	497	2011	2011	78000.00	6800.00	2500.00	140.00
+180	497	2012	2012	78000.00	4017.00	2500.00	0.00
+181	498	2010	2010	130000.08	0.00	0.00	0.00
+182	498	2011	2011	160000.08	0.00	37500.00	81.00
+183	498	2012	2012	160000.08	49440.02	0.00	109376.00
+184	499	2010	2010	79500.00	0.00	0.00	0.00
+185	499	2011	2011	102000.00	8000.00	0.00	27.00
+186	499	2012	2012	102000.00	15759.00	0.00	0.00
+187	500	2010	2010	63500.16	0.00	0.00	0.00
+188	500	2011	2011	72000.00	6400.00	0.00	142.00
+189	500	2012	2012	72000.00	3708.00	0.00	187095.00
+190	501	2010	2010	68000.16	0.00	0.00	0.00
+191	501	2011	2011	90000.00	6800.00	2500.00	12.00
+192	501	2012	2012	105000.00	9270.00	10000.00	1125.00
+193	705	2010	2010	63300.00	0.00	0.00	0.00
+194	705	2011	2011	120000.00	12600.00	3500.00	41.00
+195	705	2012	2012	139999.92	0.00	0.00	54125.00
+196	706	2010	2010	171100.08	0.00	0.00	0.00
+197	706	2011	2011	225000.00	119800.00	0.00	20.00
+198	706	2012	2012	225000.00	0.00	0.00	0.00
+199	502	2010	2010	78000.00	0.00	0.00	0.00
+200	502	2011	2011	81199.92	13700.00	0.00	24.00
+201	502	2012	2012	81199.92	4181.80	0.00	0.00
+202	503	2010	2010	85700.16	0.00	0.00	0.00
+203	503	2011	2011	89100.00	15000.00	0.00	72.00
+204	503	2012	2012	89100.00	9177.30	0.00	0.00
+205	707	2010	2010	140000.16	0.00	0.00	0.00
+206	707	2011	2011	235000.08	98000.00	7000.01	106.00
+207	707	2012	2012	235000.08	0.00	0.00	0.00
+208	504	2010	2010	87600.00	0.00	0.00	0.00
+209	504	2011	2011	87600.00	15400.00	0.00	110.00
+210	504	2012	2012	87600.00	9022.80	0.00	18238.02
+211	505	2010	2010	61500.00	0.00	0.00	0.00
+212	505	2011	2011	81000.00	6200.00	0.00	98.00
+213	505	2012	2012	81000.00	8343.00	2500.00	6125.00
+214	506	2010	2010	55000.08	0.00	0.00	0.00
+215	506	2011	2011	57000.00	5500.00	0.00	15.00
+216	506	2012	2012	57000.00	2935.50	0.00	0.00
+217	507	2010	2010	68500.08	0.00	0.00	0.00
+218	507	2011	2011	75000.00	12600.00	2500.00	170.00
+219	507	2012	2012	75000.00	7725.00	0.00	0.00
+220	508	2010	2010	49000.08	0.00	0.00	0.00
+221	508	2011	2011	51000.00	4900.00	0.00	44.00
+222	508	2012	2012	51000.00	2626.50	0.00	0.00
+223	509	2010	2010	47000.16	0.00	0.00	0.00
+224	509	2011	2011	49000.08	4700.00	0.00	23.00
+225	509	2012	2012	49000.08	2523.50	5000.00	0.00
+226	510	2010	2010	65000.16	0.00	0.00	0.00
+227	510	2011	2011	67999.92	6500.00	0.00	119.00
+228	510	2012	2012	72000.00	7416.00	0.00	1737.50
+229	511	2010	2010	124800.00	0.00	0.00	0.00
+230	511	2011	2011	130000.08	21900.00	6500.00	161.00
+231	511	2012	2012	130000.08	26780.02	0.00	0.00
+232	512	2010	2010	182000.16	0.00	0.00	0.00
+233	512	2011	2011	250000.08	0.00	25000.00	66.00
+234	512	2012	2012	250000.08	103000.03	10000.00	0.00
+235	513	2010	2010	125000.16	0.00	0.00	0.00
+236	513	2011	2011	165000.00	0.00	31000.00	68.00
+237	514	2010	2010	79000.08	0.00	0.00	0.00
+238	514	2011	2011	82200.00	13900.00	0.00	125.00
+239	514	2012	2012	82200.00	8466.60	0.00	0.00
+240	515	2010	2010	53500.08	0.00	0.00	0.00
+241	515	2011	2011	55500.00	5400.00	0.00	111.00
+242	515	2012	2012	55500.00	2858.25	1250.00	0.00
+243	516	2010	2010	92000.16	0.00	0.00	0.00
+244	516	2011	2011	103999.92	16100.00	4500.00	108.00
+245	516	2012	2012	103999.92	21423.98	5000.00	0.00
+246	517	2010	2010	149000.16	0.00	0.00	0.00
+247	517	2011	2011	154999.92	0.00	30000.00	11.00
+248	517	2012	2012	154999.92	31929.98	0.00	0.00
+249	518	2010	2010	78000.00	0.00	0.00	0.00
+250	518	2011	2011	120000.00	13700.00	4000.00	5.00
+251	518	2012	2012	120000.00	24720.00	2500.00	5725.00
+252	519	2010	2010	67500.00	0.00	0.00	0.00
+253	519	2011	2011	78000.00	6800.00	3500.00	174.00
+254	519	2012	2012	90000.00	8034.00	0.00	250.00
+255	520	2010	2010	58000.08	0.00	0.00	0.00
+256	520	2011	2011	60300.00	5800.00	0.00	175.00
+257	520	2012	2012	60300.00	3105.45	0.00	8325.00
+258	521	2010	2010	62500.08	0.00	0.00	0.00
+259	521	2011	2011	67000.08	6300.00	0.00	165.00
+260	521	2012	2012	67000.08	6901.01	0.00	375.50
+261	0	2010	2010	56600.16	0.00	0.00	0.00
+262	0	2011	2011	58600.08	5700.00	0.00	45.00
+263	0	2012	2012	58600.08	3017.90	0.00	201750.00
+264	522	2010	2010	75000.00	0.00	0.00	0.00
+265	522	2011	2011	75000.00	13200.00	0.00	172.00
+266	523	2010	2010	75000.00	0.00	0.00	0.00
+267	523	2011	2011	90000.00	13200.00	3800.00	38.00
+268	523	2012	2012	94500.00	9270.00	10000.00	1500.00
+269	524	2010	2010	57200.16	0.00	0.00	0.00
+270	524	2011	2011	59500.08	5800.00	0.00	47.00
+271	524	2012	2012	59500.08	3064.25	0.00	7925.00
+272	525	2010	2010	66300.00	0.00	0.00	0.00
+273	525	2011	2011	69000.00	6700.00	3500.00	14.00
+274	525	2012	2012	69000.00	3553.50	0.00	0.00
+275	526	2010	2010	100000.08	0.00	0.00	0.00
+276	526	2011	2011	104000.16	0.00	11500.00	65.00
+277	526	2012	2012	115000.08	23690.02	0.00	600.00
+278	527	2010	2010	60000.00	0.00	0.00	0.00
+279	527	2011	2011	62500.08	6000.00	3000.00	115.00
+280	527	2012	2012	62500.08	3218.75	0.00	138225.00
+281	528	2010	2010	120000.00	0.00	0.00	0.00
+282	528	2011	2011	139999.92	42000.00	0.00	99.00
+283	528	2012	2012	139999.92	43259.98	5000.00	0.00
+284	529	2010	2010	104000.16	0.00	0.00	0.00
+285	529	2011	2011	104000.16	0.00	0.00	173.00
+286	529	2012	2012	104000.16	0.00	10000.00	176114.00
+287	530	2010	2010	41400.00	0.00	0.00	0.00
+288	530	2011	2011	46500.00	4200.00	0.00	138.00
+289	530	2012	2012	46500.00	2394.75	0.00	0.00
+290	531	2010	2010	48600.00	0.00	0.00	0.00
+291	531	2011	2011	56700.00	9700.00	0.00	101.00
+292	531	2012	2012	56700.00	5840.10	0.00	0.00
+293	532	2010	2010	89000.16	0.00	0.00	0.00
+294	532	2011	2011	91800.00	9000.00	0.00	122.00
+295	532	2012	2012	91800.00	9455.40	0.00	0.00
+296	533	2010	2010	69000.00	0.00	0.00	0.00
+297	533	2011	2011	72000.00	6900.00	0.00	103.00
+298	533	2012	2012	72000.00	3708.00	0.00	0.00
+299	534	2010	2010	88400.16	0.00	0.00	0.00
+300	534	2011	2011	93700.08	15500.00	0.00	18.00
+301	534	2012	2012	93700.08	9651.11	0.00	0.00
+302	535	2010	2010	88400.16	0.00	0.00	0.00
+303	535	2011	2011	91000.08	15500.00	0.00	75.00
+304	535	2012	2012	91000.08	9373.01	0.00	33888.00
+305	536	2010	2010	104000.16	0.00	0.00	0.00
+306	536	2011	2011	109999.92	18200.00	5000.00	67.00
+307	536	2012	2012	109999.92	22659.98	5000.00	0.00
+308	708	2010	2010	130000.08	0.00	0.00	0.00
+309	708	2011	2011	259999.92	45500.00	24500.00	128.00
+310	708	2012	2012	259999.92	0.00	0.00	38300.00
+311	537	2010	2010	78400.08	0.00	0.00	0.00
+312	537	2011	2011	82000.08	13800.00	4000.00	33.00
+313	537	2012	2012	82000.08	8446.01	1250.00	0.00
+314	538	2010	2010	67600.08	0.00	0.00	0.00
+315	538	2011	2011	76000.08	6800.00	1500.00	39.00
+316	538	2012	2012	76000.08	7828.01	0.00	0.00
+317	539	2010	2010	101200.08	0.00	0.00	0.00
+318	539	2011	2011	108000.00	17800.00	0.00	127.00
+319	539	2012	2012	108000.00	16686.00	1250.00	0.00
+320	540	2010	2010	210000.00	0.00	0.00	0.00
+321	540	2011	2011	220000.08	147000.00	0.00	63.00
+322	540	2012	2012	220000.08	0.00	0.00	250.00
+323	0	2010	2010	78000.00	0.00	0.00	0.00
+324	0	2011	2011	79999.92	13700.00	0.00	26.00
+325	0	2012	2012	79999.92	8239.99	0.00	400.00
+326	541	2010	2010	71600.16	0.00	0.00	0.00
+327	541	2011	2011	74500.08	7200.00	0.00	117.00
+328	541	2012	2012	74500.08	3836.75	0.00	3350.00
+329	542	2010	2010	100000.08	0.00	0.00	0.00
+330	542	2011	2011	106000.08	35000.00	2500.00	22.00
+331	542	2012	2012	106000.08	21836.02	0.00	0.00
+332	544	2010	2010	78000.00	0.00	0.00	0.00
+333	544	2011	2011	78000.00	13200.00	0.00	183.00
+334	544	2012	2012	78000.00	8034.00	0.00	125.00
+335	545	2012	2012	45360.00	2336.04	1250.00	0.00
+336	547	2010	2010	71400.00	0.00	0.00	0.00
+337	547	2011	2011	74500.08	12500.00	3500.00	31.00
+338	547	2012	2012	74500.08	7673.51	0.00	234750.00
+339	548	2010	2010	100000.08	0.00	0.00	0.00
+340	548	2011	2011	119600.16	17500.00	0.00	48.00
+341	548	2012	2012	119600.16	18478.22	5000.00	0.00
+342	549	2010	2010	41600.16	0.00	0.00	0.00
+343	549	2011	2011	43300.08	4200.00	0.00	148.00
+344	549	2012	2012	43300.08	2229.95	0.00	0.00
+345	550	2010	2010	103800.00	0.00	0.00	0.00
+346	550	2011	2011	108000.00	18200.00	0.00	69.00
+347	550	2012	2012	108000.00	16686.00	0.00	500.00
+348	551	2010	2010	128400.00	0.00	0.00	0.00
+349	551	2011	2011	133500.00	45000.00	0.00	94.00
+350	551	2012	2012	133500.00	27501.00	0.00	0.00
+351	552	2010	2010	61800.00	0.00	0.00	0.00
+352	552	2011	2011	63400.08	6200.00	0.00	176.00
+353	552	2012	2012	63400.08	3265.10	0.00	18725.00
+354	554	2010	2010	83200.08	0.00	0.00	0.00
+355	554	2011	2011	86500.08	14600.00	0.00	156.00
+356	554	2012	2012	86500.08	8909.51	0.00	0.00
+357	555	2010	2010	89700.00	0.00	0.00	0.00
+358	555	2011	2011	93300.00	15700.00	0.00	90.00
+359	555	2012	2012	93300.00	9609.90	0.00	25.00
+360	556	2010	2010	206000.16	0.00	0.00	0.00
+361	556	2011	2011	214249.92	0.00	115000.00	86.00
+362	556	2012	2012	214249.92	0.00	10000.00	0.00
+363	558	2010	2010	350000.16	0.00	0.00	0.00
+364	558	2011	2011	375000.00	0.00	0.00	54.00
+365	558	2012	2012	432000.00	177984.00	10000.00	164215.00
+366	559	2010	2010	55500.00	0.00	0.00	0.00
+367	559	2011	2011	57750.00	5600.00	0.00	135.00
+368	559	2012	2012	57750.00	2974.13	0.00	184.00
+369	709	2010	2010	450540.00	0.00	0.00	0.00
+370	709	2011	2011	450540.00	0.00	700000.00	60.00
+371	709	2012	2012	450540.00	0.00	0.00	852.15
+372	560	2010	2010	46800.00	0.00	0.00	0.00
+373	560	2011	2011	62400.00	6000.00	0.00	8.00
+374	560	2012	2012	62400.00	3213.60	1250.00	0.00
+375	710	2010	2010	241200.00	0.00	0.00	0.00
+376	710	2011	2011	274999.92	168900.00	0.00	35.00
+377	710	2012	2012	274999.92	0.00	0.00	0.00
+378	561	2010	2010	49000.08	0.00	0.00	0.00
+379	561	2011	2011	51000.00	4900.00	0.00	169.00
+380	561	2012	2012	60000.00	3090.00	0.00	0.00
+381	562	2010	2010	70000.08	0.00	0.00	0.00
+382	562	2011	2011	72799.92	12300.00	3500.00	10.00
+383	562	2012	2012	72799.92	7498.39	0.00	1000.00
+384	563	2010	2010	104000.16	0.00	0.00	0.00
+385	563	2011	2011	124999.92	0.00	22500.00	164.00
+386	563	2012	2012	124999.92	32187.48	5000.00	4687.74
+387	564	2010	2010	57200.16	0.00	0.00	0.00
+388	564	2011	2011	62000.16	5800.00	3000.00	0.00
+389	564	2012	2012	62000.16	3193.01	0.00	1225.00
+390	565	2010	2010	86000.16	0.00	0.00	0.00
+391	565	2011	2011	90000.00	15100.00	0.00	124.00
+392	565	2012	2012	90000.00	9270.00	0.00	1738.00
+393	566	2010	2010	104000.16	0.00	0.00	0.00
+394	566	2011	2011	124999.92	0.00	22500.00	109.00
+395	566	2012	2012	124999.92	32187.48	0.00	9475.50
+396	567	2010	2010	154500.00	0.00	0.00	0.00
+397	567	2011	2011	154500.00	0.00	11500.00	46.00
+398	567	2012	2012	154500.00	39011.25	0.00	2850.00
+399	568	2010	2010	91500.00	0.00	0.00	0.00
+400	568	2011	2011	94500.00	16000.00	0.00	64.00
+401	568	2012	2012	94500.00	9733.50	0.00	27688.00
+402	569	2010	2010	91900.08	0.00	0.00	0.00
+403	569	2011	2011	95500.08	9200.00	0.00	157.00
+404	569	2012	2012	95500.08	9836.51	2500.00	0.00
+405	570	2010	2010	61000.08	0.00	0.00	0.00
+406	570	2011	2011	63000.00	6100.00	0.00	61.00
+407	570	2012	2012	63000.00	3244.50	0.00	0.00
+408	571	2010	2010	92500.08	0.00	0.00	0.00
+409	571	2011	2011	97999.92	16200.00	0.00	74.00
+410	571	2012	2012	97999.92	10093.99	10000.00	0.00
+411	572	2010	2010	118000.08	0.00	0.00	0.00
+412	572	2011	2011	120000.00	20700.00	0.00	52.00
+413	572	2012	2012	120000.00	24720.00	0.00	0.00
+414	573	2010	2010	96700.08	0.00	0.00	0.00
+415	573	2011	2011	100600.08	33900.00	0.00	62.00
+416	574	2010	2010	85000.08	0.00	0.00	0.00
+417	574	2011	2011	104000.16	14900.00	0.00	36.00
+418	574	2012	2012	104000.16	16068.02	10000.00	0.00
+419	575	2010	2010	78000.00	0.00	0.00	0.00
+420	575	2011	2011	81100.08	13700.00	0.00	147.00
+421	575	2012	2012	85050.00	8760.15	0.00	0.00
+422	576	2010	2010	135000.00	0.00	0.00	0.00
+423	576	2011	2011	135000.00	47300.00	0.00	136.00
+424	576	2012	2012	135000.00	27810.00	0.00	8337.50
+425	577	2010	2010	126800.16	0.00	0.00	0.00
+426	577	2011	2011	140400.00	22200.00	16000.00	58.00
+427	577	2012	2012	140400.00	28922.40	2500.00	2100.00
+428	578	2010	2010	110700.00	0.00	0.00	0.00
+429	578	2011	2011	118000.08	38800.00	15500.00	137.00
+430	578	2012	2012	124999.92	24308.02	10000.00	6175.00
+431	579	2010	2010	76500.00	0.00	0.00	0.00
+432	579	2011	2011	79600.08	13400.00	4000.00	120.00
+433	579	2012	2012	79600.08	8198.81	0.00	375.00
+434	580	2010	2010	148000.08	0.00	0.00	0.00
+435	580	2011	2011	175000.08	64800.00	7500.00	96.00
+436	580	2012	2012	175000.08	72100.03	5000.00	0.00
+437	581	2010	2010	101200.08	0.00	0.00	0.00
+438	581	2011	2011	103200.00	17800.00	0.00	49.00
+439	581	2012	2012	103200.00	10629.60	0.00	0.00
+440	582	2010	2010	115500.00	0.00	0.00	0.00
+441	582	2011	2011	123000.00	20300.00	5500.00	28.00
+442	582	2012	2012	123000.00	25338.00	0.00	0.00
+443	583	2010	2010	142500.00	0.00	0.00	0.00
+444	583	2011	2011	150000.00	74900.00	0.00	34.00
+445	583	2012	2012	150000.00	46350.00	0.00	0.00
+446	0	2010	2010	119000.16	0.00	0.00	0.00
+447	0	2011	2011	119000.16	20900.00	0.00	95.00
+448	711	2010	2010	500540.16	0.00	0.00	0.00
+449	711	2011	2011	500540.16	0.00	420000.00	59.00
+450	711	2012	2012	500540.16	0.00	0.00	1692.27
+451	584	2010	2010	195000.00	0.00	0.00	0.00
+452	584	2011	2011	204000.00	136500.00	0.00	76.00
+453	584	2012	2012	204000.00	84048.00	2500.00	0.00
+454	712	2010	2010	124800.00	0.00	0.00	0.00
+455	712	2011	2011	136999.92	45500.00	0.00	107.00
+456	712	2012	2012	136999.92	28221.98	0.00	0.00
+457	587	2010	2010	156000.00	0.00	0.00	0.00
+458	587	2011	2011	160000.08	0.00	25000.00	19.00
+459	587	2012	2012	160000.08	49440.02	0.00	0.00
+460	588	2010	2010	78000.00	0.00	0.00	0.00
+461	588	2011	2011	80500.08	7800.00	0.00	112.00
+462	588	2012	2012	80500.08	4145.75	0.00	19957.00
+463	589	2010	2010	112500.00	0.00	0.00	0.00
+464	589	2011	2011	116800.08	19700.00	0.00	57.00
+465	589	2012	2012	116800.08	18045.61	0.00	0.00
+466	713	2010	2010	226700.16	0.00	0.00	0.00
+467	713	2011	2011	255000.00	158700.00	0.00	43.00
+468	713	2012	2012	255000.00	0.00	0.00	0.00
+469	592	2010	2010	139000.08	0.00	0.00	0.00
+470	592	2011	2011	144600.00	48700.00	0.00	89.00
+471	592	2012	2012	144600.00	29787.60	0.00	0.00
+472	593	2010	2010	168000.00	0.00	0.00	0.00
+473	593	2011	2011	169999.92	117600.00	0.00	17.00
+474	593	2012	2012	169999.92	0.00	0.00	0.00
+475	594	2010	2010	105000.00	0.00	0.00	0.00
+476	594	2011	2011	109200.00	36800.00	0.00	70.00
+477	594	2012	2012	109200.00	22495.20	0.00	350.00
+478	595	2010	2010	85100.16	0.00	0.00	0.00
+479	595	2011	2011	88500.00	14900.00	0.00	29.00
+480	595	2012	2012	88500.00	9115.50	5000.00	0.00
+481	597	2010	2010	99600.00	0.00	0.00	0.00
+482	597	2011	2011	103600.08	34900.00	0.00	56.00
+483	597	2012	2012	103600.08	21341.62	2500.00	0.00
+484	598	2011	2011	82999.92	6600.00	0.00	146.00
+485	598	2012	2012	82999.92	8548.99	0.00	0.00
+486	599	2010	2010	146000.16	0.00	0.00	0.00
+487	599	2011	2011	160000.08	63900.00	5000.00	9.00
+488	599	2012	2012	160000.08	49440.02	5000.00	0.00
+489	601	2010	2010	52000.08	0.00	0.00	0.00
+490	601	2011	2011	55000.08	5200.00	0.00	167.00
+491	601	2012	2012	55000.08	2832.50	5000.00	0.00
+492	602	2011	2011	57199.92	3000.00	2500.00	6.00
+493	602	2012	2012	57199.92	2945.80	0.00	2350.00
+494	604	2011	2011	70000.08	4300.00	0.00	118.00
+495	604	2012	2012	70000.08	3605.00	0.00	400.00
+496	606	2010	2010	101500.08	0.00	0.00	0.00
+497	606	2011	2011	105499.92	17800.00	0.00	155.00
+498	606	2012	2012	105499.92	10866.49	0.00	0.00
+499	607	2010	2010	79000.08	0.00	0.00	0.00
+500	607	2011	2011	81400.08	13900.00	0.00	100.00
+501	607	2012	2012	81400.08	8384.21	0.00	0.00
+502	608	2010	2010	60000.00	0.00	0.00	0.00
+503	608	2011	2011	61800.00	6000.00	0.00	7.00
+504	608	2012	2012	61800.00	3182.70	5000.00	0.00
+505	609	2010	2010	149000.16	0.00	0.00	0.00
+506	609	2011	2011	155000.16	78300.00	1700.00	85.00
+507	609	2012	2012	155000.16	47895.05	10000.00	0.00
+508	0	2011	2011	98800.08	7700.00	0.00	171.00
+509	0	2012	2012	98800.08	10176.41	0.00	0.00
+510	610	2011	2011	91000.08	1800.00	0.00	154.00
+511	610	2012	2012	91000.08	9373.01	0.00	0.00
+512	611	2011	2011	42499.92	700.00	0.00	16.00
+513	611	2012	2012	42499.92	2188.75	5000.00	0.00
+514	612	2011	2011	52000.08	900.00	0.00	145.00
+515	612	2012	2012	52000.08	2678.00	0.00	0.00
+516	613	2011	2011	64999.92	500.00	0.00	40.00
+517	613	2012	2012	64999.92	3347.50	2500.00	0.00
+518	614	2011	2011	83200.08	2800.00	0.00	151.00
+519	614	2012	2012	83200.08	4284.80	0.00	0.00
+520	0	2011	2011	59299.92	1200.00	0.00	162.00
+521	0	2012	2012	59299.92	3053.95	0.00	43075.00
+522	616	2012	2012	51000.00	2626.50	0.00	0.00
+523	617	2012	2012	56500.08	2909.75	0.00	0.00
+524	0	2012	2012	40800.00	2101.20	0.00	0.00
+525	618	2012	2012	54000.00	2781.00	0.00	0.00
+526	619	2012	2012	40800.00	2101.20	0.00	0.00
+527	620	2012	2012	49999.92	2575.00	0.00	0.00
+528	621	2012	2012	66300.24	3414.46	0.00	0.00
+529	622	2012	2012	66300.24	3414.46	0.00	0.00
+530	623	2012	2012	85000.08	8755.01	0.00	0.00
+531	624	2012	2012	93000.00	9579.00	2500.00	0.00
+532	625	2012	2012	52999.92	2729.50	0.00	0.00
+533	626	2012	2012	100000.08	10300.01	0.00	0.00
+534	627	2012	2012	55000.08	2832.50	5000.00	41987.50
+535	628	2012	2012	40000.08	2060.00	0.00	0.00
+536	629	2012	2012	55000.08	2832.50	5000.00	38812.50
+537	630	2012	2012	52500.00	2703.75	0.00	0.00
+538	632	2012	2012	60000.00	3090.00	0.00	11500.00
+539	633	2012	2012	40000.08	2060.00	0.00	0.00
+540	635	2012	2012	40000.08	2060.00	0.00	0.00
+541	636	2012	2012	60000.00	694.19	0.00	0.00
+542	637	2012	2012	49992.00	521.97	0.00	750.00
+543	638	2012	2012	49992.00	521.97	0.00	0.00
+544	640	2012	2012	69999.84	582.72	1250.00	0.00
+545	714	2010	2010	60000.00	0.00	0.00	0.00
+546	714	2012	2012	60000.00	440.22	1250.00	0.00
+547	641	2012	2012	49999.92	400.00	0.00	0.00
+548	642	2012	2012	64999.92	476.90	0.00	0.00
+549	643	2012	2012	100000.08	1100.55	0.00	0.00
+550	644	2012	2012	55000.08	400.00	0.00	0.00
+551	645	2012	2012	40000.08	400.00	0.00	0.00
+552	646	2012	2012	60000.00	400.00	0.00	0.00
+553	647	2012	2012	90000.00	1800.00	0.00	5175.00
+554	648	2012	2012	55000.08	0.00	0.00	0.00
+555	678	2010	2010	74200.08	0.00	0.00	0.00
+556	678	2011	2011	87000.00	13000.00	4000.00	177.00
+557	678	2012	2012	87000.00	8961.00	0.00	0.00
+558	438	2013	2013	80100.00	4685.85	0.00	0.00
+559	439	2013	2013	98799.84	11559.58	0.00	0.00
+560	440	2013	2013	72000.00	12636.00	2500.00	0.00
+561	441	2013	2013	135200.16	0.00	0.00	0.00
+562	699	2013	2013	234000.00	109512.00	10000.00	0.00
+563	442	2013	2013	96700.08	11313.91	1000.00	0.00
+564	443	2013	2013	84970.08	4970.75	0.00	0.00
+565	444	2013	2013	110299.92	25810.18	2500.00	0.00
+566	445	2013	2013	150800.16	0.00	0.00	0.00
+567	446	2013	2013	116299.92	27214.18	0.00	0.00
+568	700	2013	2013	138499.92	0.00	0.00	0.00
+569	701	2013	2013	91300.08	10682.11	5000.00	0.00
+570	447	2013	2013	68952.00	19513.42	1500.00	0.00
+571	448	2013	2013	101400.00	11863.80	0.00	0.00
+572	449	2013	2013	114399.84	26769.56	0.00	0.00
+573	450	2013	2013	67599.84	3954.59	0.00	0.00
+574	451	2013	2013	67599.84	3954.59	0.00	0.00
+575	452	2013	2013	45000.00	2632.50	0.00	0.00
+576	453	2013	2013	49140.00	2874.69	0.00	0.00
+577	454	2013	2013	79040.16	4623.85	0.00	0.00
+578	455	2013	2013	64479.84	3772.07	0.00	0.00
+579	456	2013	2013	63600.00	3720.60	0.00	0.00
+580	457	2013	2013	70000.08	4095.01	2500.00	0.00
+581	458	2013	2013	67999.92	7955.99	0.00	0.00
+582	702	2013	2013	72000.00	12636.00	5000.00	0.00
+583	459	2013	2013	65100.00	3808.35	1000.00	0.00
+584	460	2013	2013	76000.08	4446.01	0.00	0.00
+585	461	2013	2013	145599.84	42587.95	2500.00	0.00
+586	462	2013	2013	69700.08	4077.45	1000.00	0.00
+587	463	2013	2013	114399.84	26769.56	0.00	0.00
+588	464	2013	2013	100000.08	11700.01	5000.00	0.00
+589	465	2013	2013	79999.92	9359.99	2500.00	0.00
+590	466	2013	2013	103000.08	0.00	0.00	0.00
+591	467	2013	2013	129999.84	0.00	0.00	0.00
+592	468	2013	2013	85000.08	9945.01	5000.00	0.00
+593	469	2013	2013	45030.00	2634.25	0.00	0.00
+594	470	2013	2013	54100.08	3164.85	0.00	0.00
+595	471	2013	2013	46200.00	2702.70	0.00	0.00
+596	472	2013	2013	228800.16	0.00	0.00	0.00
+597	473	2013	2013	78000.00	4563.00	0.00	0.00
+598	474	2013	2013	187600.08	43898.42	0.00	0.00
+599	703	2013	2013	62400.00	3650.40	0.00	0.00
+600	475	2013	2013	124800.00	21902.40	2500.00	0.00
+601	476	2013	2013	130999.92	30653.98	0.00	0.00
+602	477	2013	2013	66039.84	3863.33	0.00	0.00
+603	478	2013	2013	100000.08	23400.02	5000.00	0.00
+604	479	2013	2013	94999.92	11114.99	0.00	0.00
+605	480	2013	2013	89960.16	5262.67	0.00	0.00
+606	481	2013	2013	99799.92	11676.59	0.00	0.00
+607	482	2013	2013	100000.08	23400.02	2500.00	0.00
+608	483	2013	2013	80800.08	4726.81	0.00	0.00
+609	484	2013	2013	93600.00	10951.20	0.00	0.00
+610	485	2013	2013	100800.00	17690.40	5000.00	0.00
+611	486	2013	2013	105000.00	24570.00	5000.00	0.00
+612	487	2013	2013	95700.00	11196.90	0.00	0.00
+613	488	2013	2013	130000.08	30420.02	0.00	0.00
+614	489	2013	2013	97699.92	11430.89	0.00	0.00
+615	490	2013	2013	285000.00	66690.00	5000.00	0.00
+616	491	2013	2013	87900.00	10284.30	0.00	0.00
+617	492	2013	2013	102799.92	12027.59	0.00	0.00
+618	493	2013	2013	110000.16	25740.04	0.00	0.00
+619	494	2013	2013	125178.30	44281.82	2500.00	0.00
+620	704	2013	2013	190000.08	0.00	0.00	0.00
+621	495	2013	2013	93600.00	0.00	0.00	0.00
+622	496	2013	2013	89960.16	5262.67	0.00	0.00
+623	497	2013	2013	82999.92	4855.49	2500.00	0.00
+624	498	2013	2013	166400.16	58406.46	0.00	0.00
+625	499	2013	2013	106080.00	18617.04	0.00	0.00
+626	500	2013	2013	74880.00	4380.48	0.00	0.00
+627	501	2013	2013	109999.92	0.00	0.00	0.00
+628	705	2013	2013	175000.08	61425.02	10000.00	0.00
+629	706	2013	2013	234000.00	109512.00	10000.00	0.00
+630	502	2013	2013	87700.08	10260.91	0.00	0.00
+631	503	2013	2013	92700.00	10845.90	0.00	0.00
+632	707	2013	2013	285000.00	133380.00	15000.00	0.00
+633	504	2013	2013	91099.92	10658.69	0.00	0.00
+634	505	2013	2013	84199.92	9851.39	1000.00	0.00
+635	506	2013	2013	59280.00	3467.88	0.00	0.00
+636	507	2013	2013	78000.00	9126.00	0.00	0.00
+637	508	2013	2013	53040.00	0.00	0.00	0.00
+638	509	2013	2013	60500.16	3539.26	0.00	0.00
+639	510	2013	2013	79999.92	9359.99	0.00	0.00
+640	511	2013	2013	135200.16	31636.84	0.00	0.00
+641	512	2013	2013	316500.00	0.00	0.00	0.00
+642	513	2013	2013	161199.84	0.00	0.00	0.00
+643	514	2013	2013	85500.00	10003.50	0.00	0.00
+644	515	2013	2013	57720.00	3376.62	0.00	0.00
+645	516	2013	2013	112000.08	26208.02	7500.00	0.00
+646	517	2013	2013	158100.00	36995.40	0.00	0.00
+647	518	2013	2013	124800.00	0.00	0.00	0.00
+648	519	2013	2013	93600.00	10951.20	5000.00	0.00
+649	520	2013	2013	62700.00	3667.95	0.00	0.00
+650	521	2013	2013	69680.16	8152.58	2500.00	0.00
+651	522	2013	2013	54080.00	7652.32	3000.00	0.00
+652	523	2013	2013	124999.92	29249.98	5000.00	0.00
+653	524	2013	2013	70999.92	4153.49	0.00	0.00
+654	525	2013	2013	74880.00	8760.96	2500.00	0.00
+655	526	2013	2013	117300.00	27448.20	0.00	0.00
+656	527	2013	2013	65000.16	0.00	0.00	0.00
+657	528	2013	2013	150000.00	52650.00	10000.00	0.00
+658	529	2013	2013	108199.92	0.00	2500.00	0.00
+659	530	2013	2013	48360.00	2829.06	0.00	0.00
+660	531	2013	2013	58950.00	6897.15	0.00	0.00
+661	532	2013	2013	100000.08	11700.01	2500.00	0.00
+662	533	2013	2013	74880.00	4380.48	0.00	0.00
+663	534	2013	2013	97450.08	11401.66	2500.00	0.00
+664	535	2013	2013	94600.08	11068.21	2500.00	0.00
+665	536	2013	2013	124999.92	43874.98	0.00	0.00
+666	708	2013	2013	285000.00	0.00	0.00	0.00
+667	537	2013	2013	90000.00	10530.00	0.00	0.00
+668	538	2013	2013	79040.16	9247.70	0.00	0.00
+669	539	2013	2013	110200.08	0.00	0.00	0.00
+670	540	2013	2013	228800.16	0.00	0.00	0.00
+671	541	2013	2013	77500.08	9067.51	2500.00	0.00
+672	542	2013	2013	112000.08	26208.02	5000.00	0.00
+673	543	2013	2013	63440.00	8976.76	0.00	0.00
+674	544	2013	2013	81100.08	9488.71	0.00	0.00
+675	545	2013	2013	55000.08	3217.51	2500.00	0.00
+676	546	2013	2013	60320.00	8535.28	3000.00	0.00
+677	547	2013	2013	77500.08	9067.51	0.00	0.00
+678	548	2013	2013	124399.92	21832.18	5000.00	0.00
+679	549	2013	2013	45030.00	2634.25	0.00	0.00
+680	550	2013	2013	112300.08	19708.66	2500.00	0.00
+681	551	2013	2013	138799.92	32479.18	5000.00	0.00
+682	552	2013	2013	70000.08	4095.01	0.00	0.00
+683	553	2013	2013	100000.08	0.00	0.00	0.00
+684	554	2013	2013	115000.08	20182.52	0.00	0.00
+685	555	2013	2013	97000.08	11349.01	0.00	0.00
+686	556	2013	2013	222799.92	104270.36	2500.00	0.00
+687	557	2013	2013	364000.08	170352.04	10000.00	0.00
+688	558	2013	2013	450000.00	210600.00	10000.00	0.00
+689	559	2013	2013	69300.00	4054.05	0.00	0.00
+690	709	2013	2013	649999.92	0.00	0.00	0.00
+691	560	2013	2013	64900.08	3796.65	0.00	0.00
+692	710	2013	2013	286000.08	0.00	0.00	0.00
+693	561	2013	2013	62400.00	3650.40	0.00	0.00
+694	562	2013	2013	83199.84	9734.38	5000.00	0.00
+695	563	2013	2013	142999.92	41827.47	2500.00	0.00
+696	564	2013	2013	64480.08	3772.09	1000.00	0.00
+697	565	2013	2013	93600.00	10951.20	0.00	0.00
+698	566	2013	2013	124999.92	29249.98	0.00	0.00
+699	567	2013	2013	169000.08	49432.53	2500.00	0.00
+700	568	2013	2013	98299.92	11501.09	1000.00	0.00
+701	569	2013	2013	100000.08	11700.01	2500.00	0.00
+702	570	2013	2013	65500.08	3831.75	0.00	0.00
+703	571	2013	2013	124999.92	29249.98	10000.00	0.00
+704	572	2013	2013	122400.00	28641.60	0.00	0.00
+705	573	2013	2013	98142.00	27774.19	0.00	0.00
+706	574	2013	2013	120000.00	28080.00	10000.00	0.00
+707	575	2013	2013	88450.08	10348.66	0.00	0.00
+708	576	2013	2013	137700.00	16110.90	0.00	0.00
+709	577	2013	2013	146100.00	51281.10	7500.00	0.00
+710	578	2013	2013	135000.00	47385.00	5000.00	0.00
+711	579	2013	2013	90000.00	10530.00	0.00	0.00
+712	580	2013	2013	190000.08	88920.04	10000.00	0.00
+713	581	2013	2013	105300.00	12320.10	0.00	0.00
+714	582	2013	2013	127900.08	29928.62	1000.00	0.00
+715	583	2013	2013	156000.00	54756.00	0.00	0.00
+716	711	2013	2013	550000.08	0.00	0.00	0.00
+717	584	2013	2013	212200.08	99309.64	0.00	0.00
+718	585	2013	2013	257500.08	120510.04	5000.00	0.00
+719	586	2013	2013	52000.00	3679.00	0.00	0.00
+720	712	2013	2013	142500.00	33345.00	2500.00	0.00
+721	587	2013	2013	166400.16	58406.46	5000.00	0.00
+722	588	2013	2013	83700.00	4896.45	0.00	0.00
+723	589	2013	2013	121500.00	0.00	0.00	0.00
+724	713	2013	2013	265200.00	0.00	0.00	0.00
+725	590	2013	2013	52000.00	3679.00	0.00	0.00
+726	591	2013	2013	125000.00	17687.50	1250.00	0.00
+727	592	2013	2013	144600.00	33836.40	0.00	0.00
+728	593	2013	2013	169999.92	39779.98	0.00	0.00
+729	594	2013	2013	113599.92	0.00	0.00	0.00
+730	595	2013	2013	97999.92	17198.98	2500.00	0.00
+731	596	2013	2013	89950.08	10524.16	7500.00	0.00
+732	597	2013	2013	107500.08	25155.02	5000.00	0.00
+733	598	2013	2013	88000.08	10296.01	2500.00	0.00
+734	599	2013	2013	166400.16	0.00	0.00	0.00
+735	600	2013	2013	50960.00	7210.84	1500.00	0.00
+736	601	2013	2013	64479.84	3772.07	0.00	0.00
+737	602	2013	2013	74000.00	5235.50	0.00	0.00
+738	603	2013	2013	137899.92	40335.73	0.00	0.00
+739	604	2013	2013	90000.00	0.00	0.00	0.00
+740	605	2013	2013	113400.00	0.00	0.00	0.00
+741	606	2013	2013	109699.92	12834.89	0.00	0.00
+742	607	2013	2013	84649.92	9904.04	0.00	0.00
+743	608	2013	2013	84000.00	9828.00	2500.00	0.00
+744	609	2013	2013	182000.16	63882.06	10000.00	0.00
+745	610	2013	2013	94600.08	11068.21	0.00	0.00
+746	611	2013	2013	52999.92	3100.49	1000.00	0.00
+747	612	2013	2013	54100.08	3164.85	2500.00	0.00
+748	613	2013	2013	70000.08	8190.01	2500.00	0.00
+749	614	2013	2013	86500.08	10120.51	0.00	0.00
+750	615	2013	2013	205000.00	71955.00	10000.00	0.00
+751	616	2013	2013	61200.00	3580.20	0.00	0.00
+752	617	2013	2013	61999.92	3626.99	2500.00	0.00
+753	618	2013	2013	64800.00	3790.80	0.00	0.00
+754	619	2013	2013	49999.92	2924.99	0.00	0.00
+755	620	2013	2013	51999.84	3041.99	0.00	0.00
+756	621	2013	2013	68950.08	4033.58	0.00	0.00
+757	622	2013	2013	68950.08	4033.58	0.00	0.00
+758	623	2013	2013	75000.00	8775.00	0.00	0.00
+759	624	2013	2013	96700.08	0.00	0.00	0.00
+760	625	2013	2013	63600.00	3720.60	0.00	0.00
+761	626	2013	2013	104000.16	12168.02	0.00	0.00
+762	627	2013	2013	79999.92	0.00	0.00	0.00
+763	628	2013	2013	41600.16	2433.61	0.00	0.00
+764	629	2013	2013	85000.08	4972.51	5000.00	0.00
+765	630	2013	2013	54600.00	3194.10	0.00	0.00
+766	631	2013	2013	34320.00	2428.14	0.00	0.00
+767	632	2013	2013	79999.92	9359.99	1000.00	0.00
+768	633	2013	2013	41600.16	2433.61	0.00	0.00
+769	634	2013	2013	28600.00	2023.45	0.00	0.00
+770	635	2013	2013	41600.16	2433.61	0.00	0.00
+771	636	2013	2013	70000.08	8190.01	2500.00	0.00
+772	637	2013	2013	60000.00	3510.00	0.00	0.00
+773	638	2013	2013	60000.00	0.00	0.00	0.00
+774	639	2013	2013	157500.00	18427.50	5000.00	0.00
+775	640	2013	2013	75000.00	4387.50	1000.00	0.00
+776	714	2013	2013	62400.00	7300.80	5000.00	0.00
+777	641	2013	2013	60000.00	3510.00	0.00	0.00
+778	642	2013	2013	67999.92	3977.99	1000.00	0.00
+779	643	2013	2013	104000.16	12168.02	0.00	0.00
+780	644	2013	2013	60000.00	0.00	0.00	0.00
+781	645	2013	2013	49999.92	2924.99	1000.00	0.00
+782	646	2013	2013	64999.92	3802.49	0.00	0.00
+783	647	2013	2013	93600.00	10951.20	2500.00	0.00
+784	648	2013	2013	70000.08	4095.01	0.00	0.00
+785	649	2013	2013	85000.08	4972.51	5000.00	0.00
+786	650	2013	2013	64999.92	3802.49	0.00	0.00
+787	651	2013	2013	79999.92	9359.99	2500.00	0.00
+788	652	2013	2013	40000.08	2340.01	0.00	0.00
+789	653	2013	2013	70000.08	4095.01	5000.00	0.00
+790	654	2013	2013	67000.08	3919.51	0.00	0.00
+791	655	2013	2013	208000.08	73008.02	7500.00	0.00
+792	656	2013	2013	49999.92	2924.99	0.00	0.00
+793	657	2013	2013	64999.92	3802.49	0.00	0.00
+794	658	2013	2013	55000.08	817.16	0.00	0.00
+795	660	2013	2013	55000.08	3217.51	0.00	0.00
+796	661	2013	2013	55000.08	3217.51	0.00	0.00
+797	662	2013	2013	55000.08	3217.51	0.00	0.00
+798	663	2013	2013	55000.08	3217.51	0.00	0.00
+799	664	2013	2013	55000.08	3217.51	0.00	0.00
+800	665	2013	2013	45000.00	732.26	0.00	0.00
+801	666	2013	2013	40000.08	2340.01	0.00	0.00
+802	667	2013	2013	60000.00	3510.00	0.00	0.00
+803	668	2013	2013	40000.08	2340.01	0.00	0.00
+804	669	2013	2013	85000.08	962.20	0.00	0.00
+805	670	2013	2013	64999.92	3802.49	0.00	0.00
+806	671	2013	2013	55000.08	3217.51	0.00	0.00
+807	672	2013	2013	109999.92	0.00	0.00	0.00
+808	673	2013	2013	85000.08	9945.01	1000.00	0.00
+809	674	2013	2013	49999.92	2924.99	2500.00	0.00
+810	715	2013	2013	60000.00	3510.00	0.00	0.00
+811	675	2013	2013	49999.92	2924.99	0.00	0.00
+812	676	2013	2013	130000.00	4414.80	3125.00	0.00
+813	677	2013	2013	125000.00	4245.00	0.00	0.00
+814	678	2013	2013	90499.92	10588.49	2500.00	0.00
+815	679	2013	2013	88000.08	1307.46	0.00	0.00
+816	716	2013	2013	45000.00	668.59	0.00	0.00
+817	680	2013	2013	85000.08	1082.48	0.00	0.00
+818	681	2013	2013	45000.00	573.08	0.00	0.00
+819	682	2013	2013	55000.08	817.16	0.00	0.00
+820	683	2013	2013	65000.16	505.86	0.00	0.00
+821	1281	2010	2010	73000.08	0.00	0.00	0.00
+\.
+
+
+--
+-- Name: comp_compensationsummary_id_seq; Type: SEQUENCE SET; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+SELECT pg_catalog.setval('comp_compensationsummary_id_seq', 1, false);
+
+
+--
+-- Data for Name: django_admin_log; Type: TABLE DATA; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+COPY django_admin_log (id, action_time, user_id, content_type_id, object_id, object_repr, action_flag, change_message) FROM stdin;
+1	2013-10-29 19:04:23.193771+00	1	9	1	John Doe	1	
+2	2013-10-30 20:07:24.350382+00	1	16	1	org_employee\nLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco lab	1	
+3	2013-10-30 20:09:05.966581+00	1	16	1	org_employee\nLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco lab	2	Changed owner_content_type and owner_id.
+\.
+
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+SELECT pg_catalog.setval('django_admin_log_id_seq', 3, true);
+
+
+--
+-- Data for Name: django_content_type; Type: TABLE DATA; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+COPY django_content_type (id, name, app_label, model) FROM stdin;
+1	permission	auth	permission
+2	group	auth	group
+3	user	auth	user
+4	content type	contenttypes	contenttype
+5	session	sessions	session
+6	site	sites	site
+7	log entry	admin	logentry
+8	migration history	south	migrationhistory
+9	employee	org	employee
+10	team	org	team
+11	mentorship	org	mentorship
+12	leadership	org	leadership
+13	compensation summary	comp	compensationsummary
+14	evaluation round	pvp	evaluationround
+15	PVP Evaluation	pvp	pvpevaluation
+16	comment	blah	comment
+\.
+
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+SELECT pg_catalog.setval('django_content_type_id_seq', 16, true);
+
+
+--
+-- Data for Name: django_session; Type: TABLE DATA; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+COPY django_session (session_key, session_data, expire_date) FROM stdin;
+wpitzwfffv95bpl7u40yne5hez9knzsx	OWM2ZDQwMzRjMjIwNzA5N2ZkNTg4MGJkZDQ0OTZmNDNjODgzMzI5MDp7Il9hdXRoX3VzZXJfaWQiOjEsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIn0=	2013-11-12 16:50:20.460516+00
+\.
+
+
+--
+-- Data for Name: django_site; Type: TABLE DATA; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+COPY django_site (id, domain, name) FROM stdin;
+1	example.com	example.com
+\.
+
+
+--
+-- Name: django_site_id_seq; Type: SEQUENCE SET; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+SELECT pg_catalog.setval('django_site_id_seq', 1, true);
+
+
+--
+-- Data for Name: org_employee; Type: TABLE DATA; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+COPY org_employee (id, job_title, base_camp, u_name, hire_date, display, team_id, full_name, avatar) FROM stdin;
+474	VP BUSINESS DEVELOPMENT	1202121-tj-thomas-jones	tj	1998-11-13	t	1	TJ	/media/avatars/2013/10/30/TJ.jpg
+488	VP BUSINESS DEVELOPMENT	1194894-lacey-poliakoff	lpoliakoff	2006-06-20	t	1	Lacey Poliakoff	/media/avatars/2013/10/30/Lacey_Poliakoff.jpg
+556	SVP BUSINESS DEVELOPMENT	1193095-john-keeling	jkeeling	2005-10-24	t	1	John Keeling	/media/avatars/2013/10/30/John_Keeling.jpg
+592	VP BUS DEVELOPMENT	1167906-jesse-keyser	jkeyser	2003-02-03	t	1	Jesse Keyser	/media/avatars/2013/10/30/Jesse_Keyser.jpg
+492	DIRECTOR MEMBER EXPERIENCE	1200225-alissa-territo	alissat	1999-05-05	t	2	Alissa Territo	/media/avatars/2013/10/30/Alissa_Territo.jpg
+539	SENIOR WEB ANALYST	1204387-aseem-patel	apatel	2006-03-06	t	2	Aseem Patel	/media/avatars/2013/10/30/Aseem_Patel.jpg
+551	DIRECTOR BUSINESS INTELLIGENCE	1200229-jim-kutz	jkutz	2006-10-16	t	2	Jim Kutz	/media/avatars/2013/10/30/Jim_Kutz.jpg
+554	QUANTITATIVE ANALYST	1204312-yaunmin-tang	ytang	2009-01-12	t	2	Yuanmin Tang	/media/avatars/2013/10/30/Yuanmin_Tang.jpg
+562	BUSINESS INTELLIGENCE ANALYST	1196457-robyn-bigler	rbigler	2005-02-07	t	2	Robyn Bigler	/media/avatars/2013/10/30/Robyn_Bigler.jpg
+569	BUSINESS INTELLIGENCE ANALYST	1204305-gary-taylor	garyt	2001-01-11	t	2	Gary Taylor	/media/avatars/2013/10/30/Gary_Taylor.jpg
+589	SR DW ARCHITECT	1204607-travis-fore	travisf	1998-06-01	t	2	Travis Fore	/media/avatars/2013/10/30/Travis_Fore.jpg
+593	VP MEMBER INSIGHTS	1197599-ginni-bratti	gbratti	2001-06-22	t	2	Ginni Bratti	/media/avatars/2013/10/30/Ginni_Bratti.jpg
+626	DATA WAREHOUSING ARCHITECT	1204398-nicole-naworal	nnaworal	2011-08-22	t	2	Nicole Naworal	/media/avatars/2013/10/30/Nicole_Naworal.jpg
+653	WEB ANALYST	1197697-laura-cavanaugh	lcavanaugh	2012-06-04	t	2	Laura Cavanaugh	/media/avatars/2013/10/30/Laura_Cavanaugh.jpg
+655	VP MARKETING ANALYTICS	1200227-kelly-ronayne	kronayne	2012-06-04	t	2	Kelly Ronayne	/media/avatars/2013/10/30/Kelly_Ronayne.jpg
+679	BUSINESS INTELLIGENCE ANALYST	1919531-josh-chaplin	jchaplin	2013-01-14	t	2	Josh Chaplin	/media/avatars/2013/10/30/Josh_Chaplin.jpg
+440	HUMAN RESOURCES MANAGER	1200242-christine-noonan	cnoonan	2007-10-15	t	3	Christine Noonan	/media/avatars/2013/10/30/Christine_Noonan.jpg
+462	ACCOUNTING MANAGER	1200358-anthony-price	aprice	2000-12-29	t	3	Anthony Price	/media/avatars/2013/10/30/Anthony_Price.jpg
+540	GENERAL COUNSEL	1202394-lawrence-greenberg	lawrenceg	1996-12-02	t	3	Lawrence Greenberg	/media/avatars/2013/10/30/Lawrence_Greenberg.jpg
+545	LEGAL ASSISTANT	1200314-erik-stadnik	estadnik	2008-04-21	t	3	Erik Stadnik	/media/avatars/2013/10/30/Erik_Stadnik.jpg
+580	ASSOCIATE GENERAL COUNSEL	1202728-marthe-larosiliere	marthel	1998-09-28	t	3	Marthe LaRosiliere	/media/avatars/2013/10/30/Marthe_LaRosiliere.jpg
+584	SVP CORPORATE FINANCE	1202202-gary-hill	garyh	1996-02-16	t	3	Gary Hill	/media/avatars/2013/10/30/Gary_Hill.jpg
+597	ASSISTANT CONTROLLER	1200244-jackie-fletcher	jfletcher	2004-08-30	t	3	Jackie Fletcher	/media/avatars/2013/10/30/Jackie_Fletcher.jpg
+598	ACCOUNTING ANALYST	1200349-leigh-ann	lshollenberger	2010-10-11	t	3	Leigh Ann Shollenberger	/media/avatars/2013/10/30/Leigh_Ann_Shollenberger.jpg
+599	CONTROLLER	1196452-phil-biedronski	pbiedronski	2005-06-27	t	3	Phil Biedronski	/media/avatars/2013/10/30/Phil_Biedronski.jpg
+640	BUDGET ANALYST	1200347-chrissy-raymond	craymond	2012-02-01	t	3	Chrissy Raymond	/media/avatars/2013/10/30/Chrissy_Raymond.jpg
+642	STAFF ACCOUNTANT	1200353-lee-perryman	lperryman	2012-02-08	t	3	Lee Perryman	/media/avatars/2013/10/30/Lee_Perryman.jpg
+682	PAYROLL FOOL	1919522-jennifer-cerna	jcerna	2013-01-14	t	3	Jennifer Cerna	/media/avatars/2013/10/30/Jennifer_Cerna.jpg
+447		1203895-jill-ralph	jralph	2006-03-02	t	4	Jill Ralph	/media/avatars/2013/10/30/Jill_Ralph.jpg
+494	ADVISOR II	1204519-joe-magyer	jmagyer	2007-02-05	t	4	Joe Magyer	/media/avatars/2013/10/30/Joe_Magyer.jpg
+522		1204268-nate-weisshaar	nweisshaar	2007-09-24	t	4	Nate Weisshaar	/media/avatars/2013/10/30/Nate_Weisshaar.jpg
+543		1204155-stuart-watson	stuartw	1999-07-22	t	4	Stuart Watson	/media/avatars/2013/10/30/Stuart_Watson.jpg
+546		1202131-barry-james	barryj	2009-03-02	t	4	Barry James	/media/avatars/2013/10/30/Barry_James.jpg
+573	BUSINESS OPERATIONS MANAGER	1200366-robyn-gearey	rgearey	2005-08-16	t	4	Robyn Gearey	/media/avatars/2013/10/30/Robyn_Gearey.jpg
+578	HEAD OF EUROPE & THE AMERICAS	1200203-brian-richards	brichards	2005-01-31	t	4	Brian Richards	/media/avatars/2013/10/30/Brian_Richards.jpg
+586		1204142-jon-wallis	jonw	2000-11-20	t	4	Jon Wallis	/media/avatars/2013/10/30/Jon_Wallis.jpg
+590		1203908-maynard-paton	maynardp	1999-11-22	t	4	Maynard Paton	/media/avatars/2013/10/30/Maynard_Paton.jpg
+591		1202673-david-kuo	davidk	2000-06-05	t	4	David Kuo	/media/avatars/2013/10/30/David_Kuo.jpg
+600		1203866-andy-paul	andyp	2005-02-21	t	4	Andy Paul	/media/avatars/2013/10/30/Andy_Paul.jpg
+602	ANALYST DEVELOPMENT PROGRAM	1196280-cat-baab-muguira	cbaab	2010-09-13	t	4	Cat Baab-Muguira	/media/avatars/2013/10/30/Cat_Baab-Muguira.jpg
+615		1202161-bruce-jackson	brucej	1997-07-01	t	4	Bruce Jackson	/media/avatars/2013/10/30/Bruce_Jackson.jpg
+631		1204468-chris-nials	cnials	2011-10-03	t	4	Chris Nials	/media/avatars/2013/10/30/Chris_Nials.jpg
+634		1203862-sam-robson	srobson	2011-12-12	t	4	Sam Robson	/media/avatars/2013/10/30/Sam_Robson.jpg
+639		1204374-scott-phillips	sphillips	2012-02-20	t	4	Scott Phillips	/media/avatars/2013/10/30/Scott_Phillips.jpg
+659		1202717-mike-king	mking	2012-06-25	t	4	Mike King	/media/avatars/2013/10/30/Mike_King.jpg
+676		1483967-joanna-sng	jsng	2012-10-29	t	4	Joanna Sng	/media/avatars/2013/10/30/Joanna_Sng.jpg
+677		1483936-ian-butler	ibutler	2012-11-12	t	4	Iain Butler	/media/avatars/2013/10/30/Iain_Butler.jpg
+696			cmuguira	2013-05-01	t	4	Chris Muguira	/media/avatars/2013/10/30/Chris_Muguira.jpg
+450	RESEARCH ANALYST 1	1204296-joe-tenebruso	jtenebruso	2010-11-08	t	5	Joe Tenebruso	/media/avatars/2013/10/30/Joe_Tenebruso.jpg
+451	RESEARCH ANALYST 1	1197731-paul-chi	pchi	2010-11-08	t	5	Paul Chi	/media/avatars/2013/10/30/Paul_Chi.jpg
+461	SR QUANTITATIVE ANALYST	1204284-xander-twombly	xtwombly	2008-05-01	t	5	Xander Twombly	/media/avatars/2013/10/30/Xander_Twombly.jpg
+465	RESEARCH ANALYST II	1204439-jason-moser	jmoser	2010-02-22	t	5	Jason Moser	/media/avatars/2013/10/30/Jason_Moser.jpg
+467	ADVISOR II	1203820-alex-scherer	ascherer	2009-04-13	t	5	Alex Scherer	/media/avatars/2013/10/30/Alex_Scherer.jpg
+468	RESEARCH ANALYST II	1200337-bryan-hinmon	bhinmon	2010-02-22	t	5	Bryan Hinmon	/media/avatars/2013/10/30/Bryan_Hinmon.jpg
+469	EXECUTIVE ASSISTANT	1203888-corrina-quader	cquader	2009-02-09	t	5	Corrina Quader	/media/avatars/2013/10/30/Corrina_Quader.jpg
+472	CHIEF INVESTMENT OFFICER	1197772-andy-cross	andyc	1996-11-18	t	5	Andy Cross	/media/avatars/2013/10/30/Andy_Cross.jpg
+498	ADVISOR III	1200188-seth-jayson	sjayson	2004-08-16	t	5	Seth Jayson	/media/avatars/2013/10/30/Seth_Jayson.jpg
+500	RESEARCH ANALYST 1	1203831-jim-royal	jroyal	2009-01-12	t	5	Jim Royal	/media/avatars/2013/10/30/Jim_Royal.jpg
+510	SENIOR ANALYST I	1204395-jeremy-myers	jmyers	2009-07-15	t	5	Jeremy Myers	/media/avatars/2013/10/30/Jeremy_Myers.jpg
+512	ADVISOR	1202329-ron-gross	rgross	2008-09-16	t	5	Ron Gross	/media/avatars/2013/10/30/Ron_Gross.jpg
+518	SENIOR ANALYST II	1196262-matty-argersinger	margersinger	2008-01-14	t	5	Matt Argersinger	/media/avatars/2013/10/30/Matt_Argersinger.jpg
+519	SENIOR ANALYST I	1200334-bryan-white	bryanw	2008-01-14	t	5	Bryan White	/media/avatars/2013/10/30/Bryan_White.jpg
+523	DIRECTOR ADP	1197775-nick-crow	ncrow	2008-06-16	t	5	Nick Crow	/media/avatars/2013/10/30/Nick_Crow.jpg
+526	ADVISOR I	1204589-rich-greifner	rgreifner	2006-12-06	t	5	Rich Greifner	/media/avatars/2013/10/30/Rich_Greifner.jpg
+541	RESEARCH ANALYST II	1204480-jim-mueller	jmueller	2007-10-08	t	5	Jim Mueller	/media/avatars/2013/10/30/Jim_Mueller.jpg
+555	INVESTING OPS ADP	1202768-yervand-khoranian	ykhoranian	2008-07-07	t	5	Yervand Khoranian	/media/avatars/2013/10/30/Yervand_Khoranian.jpg
+558	ADVISOR V	1204620-jeff-fischer	jfischer	2001-05-28	t	5	Jeff Fischer	/media/avatars/2013/10/30/Jeff_Fischer.jpg
+563	ADVISOR II	1204170-charly-travers	ctravers	2007-01-31	t	5	Charly Travers	/media/avatars/2013/10/30/Charly_Travers.jpg
+565	SENIOR ANALYST I	1200081-mike-olsen	molsen	2005-03-16	t	5	Mike Olsen	/media/avatars/2013/10/30/Mike_Olsen.jpg
+566	ADVISOR I	1204475-david-meier	dmeier	2006-11-24	t	5	David Meier	/media/avatars/2013/10/30/David_Meier.jpg
+567	ADVISOR II	1197802-james-early	jearly	2004-08-16	t	5	James Early	/media/avatars/2013/10/30/James_Early.jpg
+587	PRESIDENT	1197627-robert-brokamp	robertb	1999-08-16	t	5	Robert Brokamp	/media/avatars/2013/10/30/Robert_Brokamp.jpg
+594	DIRECTOR		buckh	1998-09-09	t	5	Buck Hartzell	/media/avatars/2013/10/30/Buck_Hartzell.jpg
+621	ANALYST DEVELOPMENT PROGRAM	1200298-sara-hov	shov	2011-07-11	t	5	Sara Hov	/media/avatars/2013/10/30/Sara_Hov.jpg
+637	RESEARCH ANALYST 1	1204561-lyons-george	lgeorge	2012-01-17	t	5	Lyons George	/media/avatars/2013/10/30/Lyons_George.jpg
+638	RESEARCH ANALYST 1	1204571-scott-hall	shall	2012-01-17	t	5	Scott Hall	/media/avatars/2013/10/30/Scott_Hall.jpg
+644	RESEARCH ANALYST 1	1204528-brendan-mathews	bmathews	2012-03-13	t	5	Brendan Mathews	/media/avatars/2013/10/30/Brendan_Mathews.jpg
+658	ANALYST DEVELOPMENT PROGRAM	1624844-frank-thomas	fthomas	2013-01-14	t	5	Frank Thomas	/media/avatars/2013/10/30/Frank_Thomas.jpg
+693	ANALYST DEVELOPMENT PROGRAM	2629539-simon-erickson	serickson	2013-04-15	t	5	Simon Erickson	/media/avatars/2013/10/30/Simon_Erickson.jpg
+694	ANALYST DEVELOPMENT PROGRAM	2629529-billy-kipersztok	bkipersztok	2013-04-15	t	5	Billy Kipersztok	/media/avatars/2013/10/30/Billy_Kipersztok.jpg
+695	ANALYST DEVELOPMENT PROGRAM	2629517-micah-robinson	mrobinson	2013-04-15	t	5	Micah Robinson	/media/avatars/2013/10/30/Micah_Robinson.jpg
+485	MANAGER DRM DESIGN	1200130-gus-thorn	gthorn	2008-06-09	t	6	Gus Thorn	/media/avatars/2013/10/30/Gus_Thorn.jpg
+520	MARKETING RESEARCH ANALYST	1060707-adam-weiderman	awiederman	2007-06-11	t	6	Adam Wiederman	/media/avatars/2013/10/30/Adam_Wiederman.jpg
+529	SR. COPYWRITER II	1200128-beirne-white	beirne	2004-11-15	t	6	Beirne White	/media/avatars/2013/10/30/Beirne_White.jpg
+534	MULTIMEDIA PRODUCTION MANAGER	1483621-steve-broido	sbroido	2000-01-18	t	6	Steve Broido	/media/avatars/2013/10/30/Steve_Broido.jpg
+595	EXTERNAL MARKETING MANAGER	1197724-liz-cherry	lizc	1999-09-06	t	6	Liz Cherry	/media/avatars/2013/10/30/Liz_Cherry.jpg
+617	EXTERNAL MARKETING	1061905-erryn-gallasch	egallasch	2011-05-02	t	6	Erryn Gallasch	/media/avatars/2013/10/30/Erryn_Gallasch.jpg
+630	DRM DESIGNER	1200131-vickie-misch	vmisch	2011-10-03	t	6	Vickie Misch	/media/avatars/2013/10/30/Vickie_Misch.jpg
+636	COPYWRITER	1200097-aaron-winter	awinter	2012-01-09	t	6	Aaron Winter	/media/avatars/2013/10/30/Aaron_Winter.jpg
+647	SR. COPYWRITER I	1200264-austin-edwards	aedwards	2007-05-09	t	6	Austin Edwards	/media/avatars/2013/10/30/Austin_Edwards.jpg
+660	JR. COPYWRITER	1200099-ryan-katon	rkaton	2012-06-18	t	6	Ryan Katon	/media/avatars/2013/10/30/Ryan_Katon.jpg
+661	JR. COPYWRITER	1196680-blake-borron	bborron	2012-06-18	t	6	Blake Borron	/media/avatars/2013/10/30/Blake_Borron.jpg
+662	JR. COPYWRITER	1047876-michael-adams	madams	2012-06-18	t	6	Mike Adams	/media/avatars/2013/10/30/Mike_Adams.jpg
+663	MARKETING OPERATIONS MANAGER	1200177-thomas-russell	trussell	2012-07-09	t	6	Thom Russell	/media/avatars/2013/10/30/Thom_Russell.jpg
+664	DRM DESIGNER	1200132-frank-stewart	fstewart	2012-07-09	t	6	Frank Stewart	/media/avatars/2013/10/30/Frank_Stewart.jpg
+672	MARKETING DIRECTOR	1176945-don-lair	dlair	2012-10-08	t	6	Don Lair	/media/avatars/2013/10/30/Don_Lair.jpg
+459	RETAIL FUND ASSOCIATE MFAM	1058350-mary-henderson	mhenderson	2010-05-25	t	7	Mary Henderson	/media/avatars/2013/10/30/Mary_Henderson.jpg
+503	BUSINESS DEVELOPMENT FOOL	1200223-carl-hendley	chendley	2007-12-03	t	7	Carl Hendley	/media/avatars/2013/10/30/Carl_Hendley.jpg
+513	SENIOR ANALYST III MFAM	1204569-tim-hanson	thanson	2011-10-17	t	7	Tim Hanson	/media/avatars/2013/10/30/Tim_Hanson.jpg
+553	SENIOR ANALYST I MFAM	1196274-tony-arsta	aarsta	2008-01-14	t	7	Tony Arsta	/media/avatars/2013/10/30/Tony_Arsta.jpg
+557	CIO PORTFOLIO MANAGER	1200210-bill-mann	billm	1999-08-16	t	7	Bill Mann	/media/avatars/2013/10/30/Bill_Mann.jpg
+585	PRESIDENT MFAM	1202138-peter-jacobstein	pjacobstein	2005-11-14	t	7	Peter Jacobstein	/media/avatars/2013/10/30/Peter_Jacobstein.jpg
+596	ASST. CONTROLLER		ghaygood	2008-12-15	t	7	Greg Haygood	/media/avatars/2013/10/30/Greg_Haygood.jpg
+603	SENIOR ANALYST III MFAM	1196294-bill-barker	bbarker	2001-12-13	t	7	Bill Barker	/media/avatars/2013/10/30/Bill_Barker.jpg
+605	DIRECTOR RETAIL FUNDS	1203853-rob-runett	rrunett	2006-05-01	t	7	Rob Runett	/media/avatars/2013/10/30/Rob_Runett.jpg
+685	SALES DIRECTOR	2543972-lenore-rainer	lreiner	2013-03-01	t	7	Lenore Reiner	/media/avatars/2013/10/30/Lenore_Reiner.jpg
+456	ONLINE EDITOR	1200302-sharon-yep	syep	2010-07-19	t	8	Sharon Yep	/media/avatars/2013/10/30/Sharon_Yep.jpg
+457	ONLINE ANALYST I	1202687-mike-klesta	mklesta	2010-07-19	t	8	Mike Klesta	/media/avatars/2013/10/30/Mike_Klesta.jpg
+466	GENERAL MANAGER	1196567-eric-bleeker	ebleeker	2008-12-01	t	8	Eric Bleeker	/media/avatars/2013/10/30/Eric_Bleeker.jpg
+483	GRAPHICS EDITOR	1070212-dari-fitzgerald	dfitzgerald	2007-04-09	t	8	Dari FitzGerald	/media/avatars/2013/10/30/Dari_FitzGerald.jpg
+491	WRITER & EDITOR	1204173-dayana-yochim	dayanay	1997-07-07	t	8	Dayana Yochim	/media/avatars/2013/10/30/Dayana_Yochim.jpg
+505	WRITER	1202678-alyce-lomax	alomax	2003-12-16	t	8	Alyce Lomax	/media/avatars/2013/10/30/Alyce_Lomax.jpg
+509	PRODUCER I	1197694-susan-catloth	scatloth	2009-11-30	t	8	Susan Catloth	/media/avatars/2013/10/30/Susan_Catloth.jpg
+524	ONLINE EDITOR	1197806-kris-eddy	keddy	2007-04-02	t	8	Kris Eddy	/media/avatars/2013/10/30/Kris_Eddy.jpg
+527	ONLINE ANALYST I	1204492-ilan-moscovitz	imoscovitz	2008-01-14	t	8	Ilan Moscovitz	/media/avatars/2013/10/30/Ilan_Moscovitz.jpg
+535	ON AIR TALENT	1200164-chris-hill	chill	2000-10-20	t	8	Chris Hill	/media/avatars/2013/10/30/Chris_Hill.jpg
+537	WRITER MANAGER CDP DEAN	1197747-julie-clarenbach	jclarenbach	2008-03-10	t	8	Julie Clarenbach	/media/avatars/2013/10/30/Julie_Clarenbach.jpg
+547	EDITORIAL DIRECTOR	1204671-anand-chokkavelu	achokkavelu	2005-01-10	t	8	Anand Chokkavelu	/media/avatars/2013/10/30/Anand_Chokkavelu.jpg
+552	ONLINE ANALYST I	1204054-dave-williamson	dwilliamson	2008-12-01	t	8	Dave Williamson	/media/avatars/2013/10/30/Dave_Williamson.jpg
+559	ONLINE EDITOR	1200297-abbie-redmon	aredmon	2008-09-02	t	8	Abbie Redmon	/media/avatars/2013/10/30/Abbie_Redmon.jpg
+564	CDP TA & WRITER LIAISON	1155885-nathan-alderman	nalderman	2005-05-02	t	8	Nathan Alderman	/media/avatars/2013/10/30/Nathan_Alderman.jpg
+576	ONLINE ANALYST II	1200180-john-reeves	jreeves	2004-08-30	t	8	John Reeves	/media/avatars/2013/10/30/John_Reeves.jpg
+579	MANAGING NEWS EDITOR	1200116-hope-nelson-pope	hnelson	2004-07-06	t	8	Hope Nelson-Pope	/media/avatars/2013/10/30/Hope_Nelson-Pope.jpg
+581	PRODUCER II	1204640-rick-engdahl	rengdahl	2000-01-03	t	8	Rick Engdahl	/media/avatars/2013/10/30/Rick_Engdahl.jpg
+588	VIDEO REPORTER & PRODUCER	1204385-rex-moore	rmoore	2000-05-01	t	8	Rex Moore	/media/avatars/2013/10/30/Rex_Moore.jpg
+616	ONLINE EDITOR	1202705-erin-kennedy	ekennedy	2011-04-04	t	8	Erin Kennedy	/media/avatars/2013/10/30/Erin_Kennedy.jpg
+618	ONLINE EDITOR	1200276-bill-hitchner	bhitchner	2011-06-13	t	8	Bill Hitchner	/media/avatars/2013/10/30/Bill_Hitchner.jpg
+619	BLOG LIAISON & TALENT SCOUT	1204317-tracy-sterling	tsterling	2011-07-11	t	8	Tracy Sterling	/media/avatars/2013/10/30/Tracy_Sterling.jpg
+625	ONLINE EDITOR	1202744-lauren-kuczala	lkuczala	2011-08-16	t	8	Lauren Kuczala	/media/avatars/2013/10/30/Lauren_Kuczala.jpg
+627	DEPUTY MANAGING EDITOR	1070228-austin-smith	asmith	2011-09-26	t	8	Austin Smith	/media/avatars/2013/10/30/Austin_Smith.jpg
+632	SECTOR CHIEF	1203918-isaac-pino	ipino	2011-11-01	t	8	Isaac Pino	/media/avatars/2013/10/30/Isaac_Pino.jpg
+641	ONLINE EDITOR	1058335-james-mcclenathen	jmcclenathen	2012-02-13	t	8	James McClenathen	/media/avatars/2013/10/30/James_McClenathen.jpg
+646	BLOG EDITOR & TALENT SCOUT II	1200121-mike-finarelli	mfinarelli	2012-03-12	t	8	Mike Finarelli	/media/avatars/2013/10/30/Mike_Finarelli.jpg
+648	ONLINE ANALYST I	1200240-joel-south	jsouth	2012-04-02	t	8	Joel South	/media/avatars/2013/10/30/Joel_South.jpg
+650	SEO	1202412-jason-hellmann	jhellmann	2012-04-30	t	8	Jason Hellmann	/media/avatars/2013/10/30/Jason_Hellmann.jpg
+656	BLOG EDITOR	1200206-mark-reeth	mreeth	2012-06-11	t	8	Mark Reeth	/media/avatars/2013/10/30/Mark_Reeth.jpg
+657	ONLINE ANALYST I	1200205-max-macaluso	mmacaluso	2012-06-11	t	8	Max Macaluso	/media/avatars/2013/10/30/Max_Macaluso.jpg
+665	VIDEO FOOL	0	kochsenreiter	2012-07-05	t	8	Karen Ochsenreiter	/media/avatars/2013/10/30/Karen_Ochsenreiter.jpg
+667	BLOG EDITOR & TALENT SCOUT I	1176080-jamal-carnette	jcarnette	2012-08-20	t	8	Jamal Carnette	/media/avatars/2013/10/30/Jamal_Carnette.jpg
+670	ONLINE ANALYST I	1216121-taylor-muckerman	tmuckerman	2012-09-17	t	8	Taylor Muckerman	/media/avatars/2013/10/30/Taylor_Muckerman.jpg
+671	ONLINE ANALYST I	1163992-blake-bos	bbos	2012-09-17	t	8	Blake Bos	/media/avatars/2013/10/30/Blake_Bos.jpg
+673	SECTOR CHIEF	1175473-matt-koppenheffer	mkoppenheffer	2012-10-08	t	8	Matt Koppenheffer	/media/avatars/2013/10/30/Matt_Koppenheffer.jpg
+683	ONLINE ANALYST	2143924-david-hanson	dhanson	2013-02-19	t	8	David Hanson	/media/avatars/2013/10/30/David_Hanson.jpg
+446	IT VENDOR RELATIONSHIP MANAGER	1204470-greg-martz	gregma	1999-06-09	t	9	Greg Martz	/media/avatars/2013/10/30/Greg_Martz.jpg
+452	EXECUTIVE ASSISTANT	1200168-anne-henry	ahenry	2010-10-11	t	9	Anne Henry	/media/avatars/2013/10/30/Anne_Henry.jpg
+481	PROJECT MANAGER	1200295-natasha-keever	nkeever	2008-09-08	t	9	Natasha Keever	/media/avatars/2013/10/30/Natasha_Keever.jpg
+490	SPECIAL PROJECTS	1203823-scott-schedler	sschedler	2001-02-26	t	9	Scott Schedler	/media/avatars/2013/10/30/Scott_Schedler.jpg
+609	VP PROCESS MANAGEMENT	1200306-max-keeler	maxk	1996-10-14	t	9	Maxwell Keeler	/media/avatars/2013/10/30/Maxwell_Keeler.jpg
+455	MULTIMEDIA PRODUCER	1196244-gayle-anonuevo	ganonuevo	2010-09-13	t	10	Gayle Anonuevo	/media/avatars/2013/10/30/Gayle_Anonuevo.jpg
+464	PRODUCT MANAGER	1200085-alex-pape	apape	2010-02-22	t	10	Alex Pape	/media/avatars/2013/10/30/Alex_Pape.jpg
+471	MEMBER SERVICES FOOL	1204363-john-novak	jnovak	2005-10-04	t	10	John Novak	/media/avatars/2013/10/30/John_Novak.jpg
+489	SENIOR RETENTION MANAGER	1200253-danny-hsia	dhsia	2003-09-22	t	10	Danny Hsia	/media/avatars/2013/10/30/Danny_Hsia.jpg
+502	MEMBER SERVICES OPS MANAGER	1197707-barry-chambers	bchambers	2000-02-22	t	10	Barry Chambers	/media/avatars/2013/10/30/Barry_Chambers.jpg
+504	RETENTION MANAGER	1197763-erin-corr-miller	emiller	2007-10-16	t	10	Erin Miller	/media/avatars/2013/10/30/Erin_Miller.jpg
+508	BOARD ADMINISTRATOR	1204658-richard-dressner	richardd	1997-06-02	t	10	Richard Dressner	/media/avatars/2013/10/30/Richard_Dressner.jpg
+514	DIRECTOR MEMBER SERVICES	1200251-andy-o-sullivan	aosullivan	2006-03-01	t	10	Andy O'Sullivan	/media/avatars/2013/10/30/Andy_O'Sullivan.jpg
+515	EMAIL OPERATIONS FOOL	1204450-ravyn-mohlmann	ravynm	1999-09-27	t	10	Ravyn Mohlman	/media/avatars/2013/10/30/Ravyn_Mohlman.jpg
+516	DIRECTOR RETENTION	1200256-ursula-mead	umead	2008-03-19	t	10	Ursula Mead	/media/avatars/2013/10/30/Ursula_Mead.jpg
+525	SENIOR PREMIUM SERVICES EDITOR	1196686-ellen-bowman	ebowman	2006-08-21	t	10	Ellen Bowman	/media/avatars/2013/10/30/Ellen_Bowman.jpg
+532	RETENTION ANALYST	1200228-raff-notaro	rnotaro	2008-09-02	t	10	Raff Notaro	/media/avatars/2013/10/30/Raff_Notaro.jpg
+538	SENIOR PREMIUM SERVICES EDITOR	1197778-tracy-dahl	tdahl	2008-12-01	t	10	Tracy Dahl	/media/avatars/2013/10/30/Tracy_Dahl.jpg
+542	DIRECTOR RETENTION	1204703-tanya-carlson	tcarlson	2004-06-15	t	10	Tanya Carlson	/media/avatars/2013/10/30/Tanya_Carlson.jpg
+544	SENIOR PREMIUM SERVICES EDITOR	1200170-kate-herman	kherman	2008-01-07	t	10	Kate Herman	/media/avatars/2013/10/30/Kate_Herman.jpg
+549	MEMBER SERVICES FOOL	1200245-carl-simon	csimon	2007-05-21	t	10	Carl Simon	/media/avatars/2013/10/30/Carl_Simon.jpg
+560	EXECUTIVE PROJECT MANAGER I	1196447-meredith-bessette	mbessette	2008-08-18	t	10	Meredith Bessette	/media/avatars/2013/10/30/Meredith_Bessette.jpg
+575	CONTENT EXPERIENCE DESIGNER	1203808-rik-silverman	rsilverman	2006-04-24	t	10	Rik Silverman	/media/avatars/2013/10/30/Rik_Silverman.jpg
+622	PREMIUM SERVICES EDITOR	1070214-tom-madigan	tmadigan	2011-07-25	t	10	Tom Madigan	/media/avatars/2013/10/30/Tom_Madigan.jpg
+628	MEMBER SERVICES FOOL	1203893-krista-reichel	kreichel	2011-11-07	t	10	Krista Reichel	/media/avatars/2013/10/30/Krista_Reichel.jpg
+633	MEMBER SERVICES FOOL	1070227-chris-sacdalan	csacdalan	2011-12-05	t	10	Christian Sacdalan	/media/avatars/2013/10/30/Christian_Sacdalan.jpg
+635	MEMBER SERVICES FOOL	1047905-jared-yoder	jyoder	2011-12-14	t	10	Jared Yoder	/media/avatars/2013/10/30/Jared_Yoder.jpg
+651	RETENTION MANAGER	1200235-brenton-flynn	bflynn	2012-04-30	t	10	Brenton Flynn	/media/avatars/2013/10/30/Brenton_Flynn.jpg
+652	MEMBER SERVICES FOOL	1200273-laurie-street	lstreet	2012-04-30	t	10	Laurie Street	/media/avatars/2013/10/30/Laurie_Street.jpg
+654	PREMIUM SERVICES EDITOR	1204245-nathan-willis	nwillis	2012-06-04	t	10	Nathan Willis	/media/avatars/2013/10/30/Nathan_Willis.jpg
+666	MEMBER SERVICES FOOL	1200269-ali-norris	anorris	2012-07-16	t	10	Ali Norris	/media/avatars/2013/10/30/Ali_Norris.jpg
+668	MEMBER SERVICES FOOL	1175872-emily-wallingsford	ewallingsford	2012-08-20	t	10	Emily Wallingsford	/media/avatars/2013/10/30/Emily_Wallingsford.jpg
+678	MANAGING PREMIUM SERV EDITOR	1200267-ally-wines	awines	2007-04-16	t	10	Ally Wines	/media/avatars/2013/10/30/Ally_Wines.jpg
+438	SYSTEMS ENGINEER I	1197734-tom-chilcutt	tchilcutt	2005-07-11	t	11	Tom Chilcutt	/media/avatars/2013/10/30/Tom_Chilcutt.jpg
+439	LEAD SYSTEMS ENGINEER	1200232-brandon-ragan	bragan	2006-05-31	t	11	Brandon Ragan	/media/avatars/2013/10/30/Brandon_Ragan.jpg
+449	LEAD NETWORK ENGINEER	1069126-lawrence-morrison	lol	2010-10-11	t	11	Lawrence Morrisson	/media/avatars/2013/10/30/Lawrence_Morrisson.jpg
+463	LEAD DBA	1200136-vivek-karandikar	vkarandikar	2008-02-25	t	11	Vivek Karandikar	/media/avatars/2013/10/30/Vivek_Karandikar.jpg
+528	VP TECH OPERATIONS	1200087-jeff-lovett	jlovett	2006-12-04	t	11	Jeff Lovett	/media/avatars/2013/10/30/Jeff_Lovett.jpg
+531	DESKTOP ADMINISTRATOR II	1200322-jason-macdonald	jmacdonald	2008-03-31	t	11	Jason MacDonald	/media/avatars/2013/10/30/Jason_MacDonald.jpg
+561	JR DBA	1204025-elizabeth-venegas	evenegas	2006-12-11	t	11	Elizabeth Venegas	/media/avatars/2013/10/30/Elizabeth_Venegas.jpg
+582	DIRECTOR TECH OPERATIONS	1197716-muhammad-chaudhry	mchaudhry	2006-08-11	t	11	Muhammad Chaudhry	/media/avatars/2013/10/30/Muhammad_Chaudhry.jpg
+601	JR LINUX ENGINEER	1200196-carolina-valle	cvalle	2007-05-07	t	11	Carolina Valle	/media/avatars/2013/10/30/Carolina_Valle.jpg
+606	SR NETWORK ENGINEER	1200194-kerri-sweet	ksweet	2000-05-22	t	11	Kerri Sweet	/media/avatars/2013/10/30/Kerri_Sweet.jpg
+607	LEAD DESKTOP ADMIN	1204543-marshall-mabie	mmabie	2004-03-03	t	11	Marshall Mabie	/media/avatars/2013/10/30/Marshall_Mabie.jpg
+608	SYSTEMS ENGINEER II	1196301-anne-baynes	abaynes	2008-02-19	t	11	Anne Baynes	/media/avatars/2013/10/30/Anne_Baynes.jpg
+612	DESKTOP ADMINISTRATOR I	1412500-fred-schmid	fschmid	2011-01-24	t	11	Fred Schmid	/media/avatars/2013/10/30/Fred_Schmid.jpg
+620	DESKTOP ADMINISTRATOR I	1204625-chris-evans	cevans	2011-07-05	t	11	Chris Evans	/media/avatars/2013/10/30/Chris_Evans.jpg
+643	LINUX ENGINEER	1200201-david-mitchell	dmitchell	2012-02-21	t	11	David Mitchell	/media/avatars/2013/10/30/David_Mitchell.jpg
+669	SYSTEMS ENGINEER I	2797720-sam-davidson	sdavidson	2012-09-06	t	11	Sam Davidson	/media/avatars/2013/10/30/Sam_Davidson.jpg
+675	DESKTOP ADMINISTRATOR I	1320655-kalvin-ellis	kellis	2012-10-29	t	11	Kalvin Ellis	/media/avatars/2013/10/30/Kalvin_Ellis.jpg
+443	FRONT END WEB DEVELOPER	1200161-chris-quinn	cquinn	2010-01-04	t	12	Chris Quinn	/media/avatars/2013/10/30/Chris_Quinn.jpg
+444	SPECIAL PROJECTS	1200093-greg-robleto	grobleto	2006-01-23	t	12	Greg Robleto	/media/avatars/2013/10/30/Greg_Robleto.jpg
+448	SR USER EXPERIENCE DESIGNER	1204504-kurt-morris	kmorris	1999-11-22	t	12	Kurt Morris	/media/avatars/2013/10/30/Kurt_Morris.jpg
+454	FRONT END WEB DEVELOPER	1203839-david-rivers	drivers	2010-09-13	t	12	David Rivers	/media/avatars/2013/10/30/David_Rivers.jpg
+470	PRODUCTION DESIGNER	1197740-paul-chun	pchun	2004-02-23	t	12	Paul Chun	/media/avatars/2013/10/30/Paul_Chun.jpg
+476	DIRECTOR USER INTERFACE	1200152-kevin-smith	ksmith	2006-03-06	t	12	Kevin Smith	/media/avatars/2013/10/30/Kevin_Smith.jpg
+478	SR FRONT END WEB DEVELOPER II	1204231-chris-wisecarver	cwisecarver	2007-11-16	t	12	Chris Wisecarver	/media/avatars/2013/10/30/Chris_Wisecarver.jpg
+479	SR USER EXPERIENCE DESIGNER	1197792-doug-dosberg	ddosberg	2006-03-27	t	12	Doug Dosberg	/media/avatars/2013/10/30/Doug_Dosberg.jpg
+480	FRONT END WEB DEVELOPER	1196225-jim-amos	jamos	2009-03-02	t	12	Jim Amos	/media/avatars/2013/10/30/Jim_Amos.jpg
+482	SR USER EXPERIENCE DESIGNER II	1200255-dan-stapleton	dstapleton	2007-04-02	t	12	Dan Stapleton	/media/avatars/2013/10/30/Dan_Stapleton.jpg
+484	SR FRONT END WEB DEVELOPER	1200156-peter-varley	pvarley	2006-05-22	t	12	Peter Varley	/media/avatars/2013/10/30/Peter_Varley.jpg
+486	LEAD FEWD	1204176-patrick-woods	pwoods	2007-01-03	t	12	Patrick Woods	/media/avatars/2013/10/30/Patrick_Woods.jpg
+496	FRONT END WEB DEVELOPER	1204356-justin-sippel	jsippel	2007-07-02	t	12	Justin Sippel	/media/avatars/2013/10/30/Justin_Sippel.jpg
+623	SR USER EXPERIENCE DESIGNER	1196497-betsy-bland	bbland	2011-07-25	t	12	Betsy Bland	/media/avatars/2013/10/30/Betsy_Bland.jpg
+441	LEAD ARCHITECT	1200278-mark-kennedy	mkennedy	2002-04-13	t	13	Mark Kennedy	/media/avatars/2013/10/30/Mark_Kennedy.jpg
+442	DEVELOPER II	1200172-ben-huber	bhuber	2008-07-21	t	13	Ben Huber	/media/avatars/2013/10/30/Ben_Huber.jpg
+460	DEVELOPER I	1204628-brian-faherty	bfaherty	2009-06-08	t	13	Brian Faherty	/media/avatars/2013/10/30/Brian_Faherty.jpg
+473	DEVELOPER I	1201960-abhishek-kapatkar	akapatkar	2010-01-11	t	13	Abhishek Kapatkar	/media/avatars/2013/10/30/Abhishek_Kapatkar.jpg
+493	LEAD DEVELOPER I	1200158-aaron-torgerson	atorgerson	2006-10-16	t	13	Aaron Torgerson	/media/avatars/2013/10/30/Aaron_Torgerson.jpg
+495	DEVELOPER II	1196213-beegee-alop	balop	2006-11-16	t	13	Beegee Alop	/media/avatars/2013/10/30/Beegee_Alop.jpg
+497	DEVELOPER I	1200146-eli-robbins	erobbins	2008-06-09	t	13	Eli Robbins	/media/avatars/2013/10/30/Eli_Robbins.jpg
+501	VP STOCK QUOTES & PORT PAGES	1196539-chris-bledsoe	cbledsoe	2008-06-17	t	13	Chris Bledsoe	/media/avatars/2013/10/30/Chris_Bledsoe.jpg
+533	QUANALYST I	1204533-hassan-malik	hmalik	2008-04-28	t	13	Hassan Malik	/media/avatars/2013/10/30/Hassan_Malik.jpg
+536	LEAD DEVELOPER II	1204579-mike-gurtzweiler	mgurtzweiler	2007-06-18	t	13	Mike Gurtzweiler	/media/avatars/2013/10/30/Mike_Gurtzweiler.jpg
+548	ENTERPRISE ARCHITECT	1200149-chris-eldredge	celdredge	2006-09-05	t	13	Chris Eldredge	/media/avatars/2013/10/30/Chris_Eldredge.jpg
+571	DEVELOPER IV	1200294-adam-hill	ahill	2006-04-24	t	13	Adam Hill	/media/avatars/2013/10/30/Adam_Hill.jpg
+572	LEAD DEVELOPER I	1200105-jim-felderman	jfelderman	2005-06-06	t	13	Jim Felderman	/media/avatars/2013/10/30/Jim_Felderman.jpg
+583	VP SOFTWARE DEVELOPMENT	1197758-tom-conner	tomco	1997-06-09	t	13	Tom Conner	/media/avatars/2013/10/30/Tom_Conner.jpg
+610	DEVELOPER II	1204322-george-stocker	gstocker	2011-01-18	t	13	George Stocker	/media/avatars/2013/10/30/George_Stocker.jpg
+624	DEVELOPER II	1197745-lisa-chung	lchung	2011-07-25	t	13	Lisa Chung	/media/avatars/2013/10/30/Lisa_Chung.jpg
+649	DEVELOPER I	1200341-matt-flinn	mflinn	2012-04-30	t	13	Matt Flinn	/media/avatars/2013/10/30/Matt_Flinn.jpg
+680	DEVELOPER I	1939677-swetha-reddy	sreddy	2013-01-23	t	13	Swetha Reddy	/media/avatars/2013/10/30/Swetha_Reddy.jpg
+445	VP ENTERPRISE ARCHITECTURE	1204189-chad-wolfsheimer	cwolfshe	2000-11-10	t	14	Chad Wolfsheimer	/media/avatars/2013/10/30/Chad_Wolfsheimer.jpg
+475	SCRUM MASTER PROJECT MANAGER I	1196229-brian-andrews	bandrews	2009-08-03	t	14	Brian Andrews	/media/avatars/2013/10/30/Brian_Andrews.jpg
+499	SCRUM MASTER PROJECT MANAGER I	1196528-ben-charboneau	bcharboneau	2006-09-25	t	14	Ben Charboneau	/media/avatars/2013/10/30/Ben_Charboneau.jpg
+506	JR QUANALYST	1204765-tony-bowman	tbowman	2010-02-09	t	14	Tony Bowman	/media/avatars/2013/10/30/Tony_Bowman.jpg
+511	INTERNATIONAL TECHNOLOGY	1200101-brian-tighe	btighe	2008-03-24	t	14	Brian Tighe	/media/avatars/2013/10/30/Brian_Tighe.jpg
+517	SR PROJECT MANAGER	1196480-jeb-bishop	jebb	1997-01-17	t	14	Jeb Bishop	/media/avatars/2013/10/30/Jeb_Bishop.jpg
+550	ASSISTANT GENERAL COUNSEL	1200108-chris-harris	charris	2005-11-14	t	14	Chris Harris	/media/avatars/2013/10/30/Chris_Harris.jpg
+570	QUANALYST I	1200339-ed-gaughran	egaughran	2005-08-01	t	14	Ed Gaughran	/media/avatars/2013/10/30/Ed_Gaughran.jpg
+574	SCRUM MASTER PROJ MANAGER II	1197769-denise-coursey	dcoursey	2006-01-09	t	14	Denise Coursey	/media/avatars/2013/10/30/Denise_Coursey.jpg
+613	QUANALYST II	1061235-reuben-dalke	rdalke	2011-02-28	t	14	Reuben Dalke	/media/avatars/2013/10/30/Reuben_Dalke.jpg
+453	MARKETING COORDINATOR	1175367-jason-leaf	jleaf	2010-10-04	t	\N	Jason Leaf	/media/avatars/2013/10/30/Jason_Leaf.jpg
+458	ORGANIZATIONAL DEVELOPMENT	1048546-anessa-fike	afike	2010-05-03	t	\N	Anessa Fike	/media/avatars/2013/10/30/Anessa_Fike.jpg
+477	TRAINING COORDINATOR	1177568-sara-klieger	sklieger	2008-04-28	t	\N	Sara Klieger	/media/avatars/2013/10/30/Sara_Klieger.jpg
+487	COLLABORATION FOOL	1200114-todd-etter	todde	1998-11-15	t	\N	Todd Etter	/media/avatars/2013/10/30/Todd_Etter.jpg
+507	EMPLOYEE DEV SPECIALIST	1047992-alex-vidales	avidales	2000-05-09	t	\N	Alex Vidales	/media/avatars/2013/10/30/Alex_Vidales.jpg
+521	THE CONNECTOR	1176725-matt-trogdon	mtrogdon	2007-07-19	t	\N	Matt Trogdon	/media/avatars/2013/10/30/Matt_Trogdon.jpg
+530	WRITER LIAISON	1200259-dan-rittenhouse	drittenhouse	2008-07-14	t	\N	Dan Rittenhouse	/media/avatars/2013/10/30/Dan_Rittenhouse.jpg
+568	EXECUTIVE PRODUCER	1200181-mac-greer	macg	1998-08-10	t	\N	Mac Greer	/media/avatars/2013/10/30/Mac_Greer.jpg
+577	PRESIDENT WRITER NETWORK	1068739-roger-friedman	rfriedman	2004-06-01	t	\N	Roger Friedman	/media/avatars/2013/10/30/Roger_Friedman.jpg
+604	DIRECTOR BUSINESS RELATIONS	1204477-maggie-muraca	mmuraca	2010-08-02	t	\N	Maggie Muraca	/media/avatars/2013/10/30/Maggie_Muraca.jpg
+611	DESKTOP ADMINISTRATOR I	1197593-dan-boyd	dboyd	2011-01-31	t	\N	Dan Boyd	/media/avatars/2013/10/30/Dan_Boyd.jpg
+614	DIRECTOR TALENT MANAGEMENT	1200095-alison-southwick	asouthwick	2011-01-18	t	\N	Alison Southwick	/media/avatars/2013/10/30/Alison_Southwick.jpg
+629	BUSINESS DEV NY	1197678-brendan-byrnes	bbyrnes	2011-09-26	t	\N	Brendan Byrnes	/media/avatars/2013/10/30/Brendan_Byrnes.jpg
+645	OFFICE OPERATIONS	1200113-tamsin-green	tgreen	2012-03-12	t	\N	Tamsin Green	/media/avatars/2013/10/30/Tamsin_Green.jpg
+674	RECRUITING COORDINATOR	2080004-annie-healy	ahealy	2012-10-23	t	\N	Annie Healy	/media/avatars/2013/10/30/Annie_Healy.jpg
+681	MASTER OF THE HOUSE	1939645-anthony-lehman	alehman	2013-01-23	t	\N	Anthony Lehman	/media/avatars/2013/10/30/Anthony_Lehman.jpg
+684	OFFICE OPERATIONS	2378732-chelsea-gustafson	cgustafson	2012-09-19	t	\N	Chelsea Gustafson	/media/avatars/2013/10/30/Chelsea_Gustafson.jpg
+686	INTERN	2544168-spencer-holleman	sholleman	2013-04-01	t	\N	Spencer Holleman	/media/avatars/2013/10/30/Spencer_Holleman.jpg
+687	INTERN	2544204-brian-degrano	bdegrano	2013-04-01	t	\N	Brian DeGrano	/media/avatars/2013/10/30/Brian_DeGrano.jpg
+688	INTERN	2544192-katelyn-burgett	kburgett	2013-04-01	t	\N	Kate Burgett	/media/avatars/2013/10/30/Kate_Burgett.jpg
+689	INTERN	2544216-jason-myer	jmyer	2013-04-01	t	\N	Jason Myer	/media/avatars/2013/10/30/Jason_Myer.jpg
+690	INTERN	2544179-emily-williamson	ewilliamson	2013-04-01	t	\N	Emily Williamson	/media/avatars/2013/10/30/Emily_Williamson.jpg
+691	INTERN	2544156-risto-keravuori	rkeravuori	2013-04-01	t	\N	Risto Keravuori	/media/avatars/2013/10/30/Risto_Keravuori.jpg
+692	INTERN	2544041-jeffrey-lee	jlee	2013-01-14	t	\N	Jeff Lee	/media/avatars/2013/10/30/Jeff_Lee.jpg
+697	MEMBER SERVICES FOOL	2995112-ayanna-washington	awashington	2013-05-29	t	\N	Ayanna Washington	/media/avatars/2013/10/30/Ayanna_Washington.jpg
+698	EMAIL MARKETING FOOL	2995122-chris-mccorkle	cmccorkle	2013-06-03	t	\N	Chris McCorkle	/media/avatars/2013/10/30/Chris_McCorkle.jpg
+699	INTERNAL COMMUNITY CAPTAIN	1058353-lee-burbage	leeb	1998-12-01	f	\N	Lee Burbage	/media/avatars/2013/10/30/Lee_Burbage.jpg
+700	DEAN OF LEARNING & DEVELOPMENT	1176873-sam-cicotello	scicotello	2003-09-02	f	\N	Sam Cicotello	/media/avatars/2013/10/30/Sam_Cicotello.jpg
+701	VP PEOPLE STRATEGY	1205926-kara-chambers	kchambers	2005-11-14	f	\N	Kara Chambers	/media/avatars/2013/10/30/Kara_Chambers.jpg
+702	SR OFFICE OPERATIONS MANAGER	1204515-melissa-malinowski	mmalinowski	2010-06-14	f	\N	Melissa Malinowski	/media/avatars/2013/10/30/Melissa_Malinowski.jpg
+703	WELLNESS PROGRAM ADMIN	1200126-ben-sterling	bsterling	2007-08-20	f	\N	Ben Sterling	/media/avatars/2013/10/30/Ben_Sterling.jpg
+704	CHIEF MARKETING OFFICER	1202170-rebekah-hughes	rhughes	2002-06-17	f	\N	Rebekah Hughes	/media/avatars/2013/10/30/Rebekah_Hughes.jpg
+705	VP ONLINE STRATEGY	1197782-jordan-dipietro	jdipietro	2009-06-22	f	\N	Jordan DiPietro	/media/avatars/2013/10/30/Jordan_DiPietro.jpg
+706	CHIEF PLATFORM SYNERGIZER	1197638-mark-brooks	mbrooks	2005-06-20	f	\N	Mark Brooks	/media/avatars/2013/10/30/Mark_Brooks.jpg
+707	CHIEF PERFORMANCE OFFICER	1204508-kerra-mcdonough	kmaples	2000-05-22	f	\N	Kerra McDonough	/media/avatars/2013/10/30/Kerra_McDonough.jpg
+708	CTO	1204382-jeremy-phillips	jphillips	2006-12-04	f	\N	Jeremy Phillips	/media/avatars/2013/10/30/Jeremy_Phillips.jpg
+709	CO FOUNDER & CEO	1200285-tom-gardner	tomg	1994-07-19	f	\N	Tom Gardner	/media/avatars/2013/10/30/Tom_Gardner.jpg
+710	CHIEF COMMERCIAL OFFICER	1197761-randy-coon	rcoon	2004-10-25	f	\N	Randy Coon	/media/avatars/2013/10/30/Randy_Coon.jpg
+711	CO FOUNDER & INNOV & NEW IDEAS	1200291-david-gardner	davidg	1994-07-19	f	\N	David Gardner	/media/avatars/2013/10/30/David_Gardner.jpg
+712	COACH		natem	1998-04-06	f	\N	Nate McMahon	/media/avatars/2013/10/30/Nate_McMahon.jpg
+713	CHIEF FINANCIAL OFFICER	1197793-ollen-douglass	odouglass	2001-01-08	f	\N	Ollen Douglass	/media/avatars/2013/10/30/Ollen_Douglass.jpg
+714	INTERNAL COMMUNICATIONS	1047673-adrienne-perryman	aperryman	2007-08-13	f	\N	Adrienne Perryman	/media/avatars/2013/10/30/Adrienne_Perryman.jpg
+715	EXECUTIVE ASSISTANT	1177358-deirdre-pontbriand	dpontbriand	2012-10-23	f	\N	Deirdre Pontbriand	/media/avatars/2013/10/30/Deirdre_Pontbriand.jpg
+716	EXECUTIVE ASSISTANT	1919554-jes-hrivnak	jhrivnak	2013-04-01	f	\N	Jessie Hrivnak	/media/avatars/2013/10/30/Jessie_Hrivnak.jpg
+717	INTERN		davidleesmith	2013-04-01	f	\N	David Smith	/media/avatars/2013/10/30/David_Smith.jpg
+718	NETWORK ENGINEER		gharrelson	2012-04-30	f	\N	Grant Harrelson	/media/avatars/2013/10/30/Grant_Harrelson.jpg
+\.
+
+
+--
+-- Name: org_employee_id_seq; Type: SEQUENCE SET; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+SELECT pg_catalog.setval('org_employee_id_seq', 1, true);
+
+
+--
+-- Data for Name: org_leadership; Type: TABLE DATA; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+COPY org_leadership (id, leader_id, employee_id) FROM stdin;
+1	547	483
+2	547	527
+3	547	650
+4	547	576
+5	701	674
+6	681	703
+7	516	684
+8	681	645
+9	594	467
+10	594	519
+11	472	594
+12	594	563
+13	594	469
+14	594	566
+15	472	567
+16	472	558
+17	594	518
+18	594	523
+19	594	526
+20	472	587
+21	472	512
+22	472	498
+23	594	555
+24	472	631
+25	514	666
+26	514	697
+27	514	549
+28	514	633
+29	514	668
+30	514	635
+31	514	471
+32	514	628
+33	514	652
+34	464	461
+35	714	507
+36	714	477
+37	714	487
+38	466	614
+39	627	665
+40	493	495
+41	493	610
+42	678	622
+43	678	538
+44	502	514
+45	502	455
+46	502	515
+47	529	636
+48	529	661
+49	529	662
+50	529	660
+51	651	552
+52	651	657
+53	651	456
+54	557	603
+55	557	513
+56	557	553
+57	439	608
+58	439	669
+59	439	438
+60	466	547
+61	466	627
+62	708	466
+63	466	579
+64	466	568
+65	615	696
+66	615	591
+67	615	677
+68	615	447
+69	615	659
+70	615	639
+71	519	644
+72	523	468
+73	519	541
+74	519	500
+75	472	450
+76	518	638
+77	511	506
+78	445	499
+79	445	475
+80	445	548
+81	445	517
+82	445	441
+83	591	676
+84	672	698
+85	672	453
+86	466	559
+87	466	616
+88	466	632
+89	466	641
+90	466	648
+91	466	673
+92	466	457
+93	466	670
+94	485	664
+95	485	630
+96	579	491
+97	579	524
+98	648	618
+101	579	505
+102	537	530
+103	646	564
+104	705	502
+105	516	651
+106	655	532
+107	705	575
+108	705	542
+109	705	516
+110	572	442
+111	572	460
+112	572	497
+113	572	680
+114	597	462
+115	597	682
+116	597	642
+117	556	592
+118	556	488
+119	556	474
+120	445	539
+123	445	653
+124	445	626
+126	445	589
+127	528	582
+128	655	445
+129	708	528
+130	708	476
+131	708	577
+132	708	583
+133	447	546
+134	447	543
+135	576	522
+136	701	458
+137	544	525
+138	544	654
+139	707	446
+140	707	609
+141	707	490
+142	655	492
+143	655	593
+144	655	551
+145	655	554
+146	476	623
+147	476	482
+148	476	479
+149	476	444
+150	476	448
+151	476	486
+152	476	470
+153	540	545
+154	540	580
+155	699	714
+156	699	716
+157	699	701
+158	699	702
+159	699	700
+160	595	617
+161	595	663
+162	449	601
+163	449	643
+164	449	718
+165	449	606
+166	685	503
+167	568	535
+168	568	588
+169	568	581
+170	568	509
+171	518	465
+172	518	510
+173	518	637
+174	518	565
+175	518	451
+176	706	501
+177	706	550
+178	706	574
+179	706	570
+180	706	613
+181	582	439
+182	582	449
+183	582	607
+184	582	463
+185	646	667
+186	646	656
+187	536	473
+188	536	571
+189	441	624
+190	673	683
+191	607	620
+192	607	611
+193	607	612
+194	607	531
+195	607	675
+196	702	681
+197	712	521
+198	523	694
+199	523	658
+200	523	695
+201	523	621
+202	523	693
+203	583	533
+204	713	557
+205	713	584
+206	713	540
+207	713	585
+208	713	599
+209	599	640
+210	599	440
+211	599	596
+212	599	597
+213	599	598
+214	585	685
+215	585	605
+216	486	443
+217	486	478
+218	486	454
+219	486	480
+220	486	496
+221	486	484
+222	710	464
+223	710	472
+224	710	578
+225	710	511
+226	710	602
+227	710	494
+228	710	556
+229	710	705
+230	710	655
+231	464	560
+232	710	704
+233	710	573
+234	710	615
+235	577	537
+236	577	646
+237	577	619
+238	704	520
+239	704	647
+240	704	529
+241	704	672
+242	704	485
+243	704	595
+244	704	534
+245	704	600
+246	605	459
+247	700	712
+248	714	452
+249	543	586
+250	543	590
+251	543	634
+252	542	489
+253	542	544
+254	583	493
+255	583	687
+256	583	717
+257	583	690
+258	583	689
+259	583	692
+260	583	572
+261	583	688
+262	583	536
+263	583	691
+264	583	686
+265	709	629
+266	709	715
+267	709	708
+268	709	707
+269	709	699
+270	521	604
+271	709	706
+272	709	713
+273	709	710
+274	516	678
+275	516	504
+276	516	508
+277	463	561
+279	536	649
+280	609	481
+\.
+
+
+--
+-- Name: org_leadership_id_seq; Type: SEQUENCE SET; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+SELECT pg_catalog.setval('org_leadership_id_seq', 1, false);
+
+
+--
+-- Data for Name: org_mentorship; Type: TABLE DATA; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+COPY org_mentorship (id, mentor_id, mentee_id) FROM stdin;
+1	464	473
+2	464	571
+3	707	571
+4	700	714
+5	712	0
+6	464	464
+7	516	666
+8	700	614
+9	706	492
+10	636	505
+11	537	608
+12	706	608
+13	440	452
+14	512	462
+15	544	539
+16	609	499
+17	712	671
+18	494	602
+19	637	684
+20	472	640
+21	714	469
+22	510	469
+23	605	489
+24	518	483
+25	704	566
+26	512	552
+27	445	570
+28	700	525
+29	595	690
+30	605	545
+31	492	504
+32	562	617
+33	545	455
+34	588	455
+35	579	610
+36	566	641
+37	699	494
+38	492	537
+39	544	688
+40	707	544
+41	445	628
+42	440	628
+43	709	653
+44	537	625
+45	504	652
+46	712	449
+47	713	624
+48	609	649
+49	492	521
+50	563	657
+51	712	657
+52	707	702
+53	644	662
+54	644	457
+55	710	582
+56	541	654
+57	707	523
+58	445	0
+59	710	605
+60	710	587
+61	707	562
+62	510	660
+63	563	621
+64	492	477
+65	574	456
+66	617	686
+67	544	645
+68	541	622
+69	592	506
+70	507	538
+71	713	578
+72	565	666
+73	456	689
+74	674	668
+75	649	664
+76	578	488
+77	577	714
+78	518	656
+79	494	673
+\.
+
+
+--
+-- Name: org_mentorship_id_seq; Type: SEQUENCE SET; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+SELECT pg_catalog.setval('org_mentorship_id_seq', 1, false);
+
+
+--
+-- Data for Name: org_team; Type: TABLE DATA; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+COPY org_team (id, name, leader_id) FROM stdin;
+1	Business Development	556
+2	Business Intelligence	655
+3	Finance/HR	713
+4	International	710
+5	Investing	472
+6	Marketing	704
+7	MFAM	585
+8	Online Strategy	466
+9	Performance	707
+10	Retention & Member Services	516
+11	Tech - Iglod	528
+12	Tech - UI	476
+13	Tech Dev	583
+14	Tech Ops	528
+\.
+
+
+--
+-- Name: org_team_id_seq; Type: SEQUENCE SET; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+SELECT pg_catalog.setval('org_team_id_seq', 1, false);
+
+
+--
+-- Data for Name: pvp_evaluationround; Type: TABLE DATA; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+COPY pvp_evaluationround (id, date) FROM stdin;
+1	2013-06-12
+2	2013-06-12
+3	2012-12-18
+4	2012-07-10
+5	2012-01-31
+6	2011-07-30
+7	2011-02-01
+8	2010-08-03
+9	2009-07-09
+10	2009-03-04
+11	2008-10-26
+\.
+
+
+--
+-- Name: pvp_evaluationround_id_seq; Type: SEQUENCE SET; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+SELECT pg_catalog.setval('pvp_evaluationround_id_seq', 1, false);
+
+
+--
+-- Data for Name: pvp_pvpevaluation; Type: TABLE DATA; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+COPY pvp_pvpevaluation (id, employee_id, evaluation_round_id, potential, performance) FROM stdin;
+1	452	1	2	2
+2	469	1	2	2
+3	549	1	2	2
+4	601	1	2	2
+5	504	1	3	2
+6	480	1	2	2
+7	448	1	1	2
+8	665	1	3	2
+9	652	1	2	2
+10	656	1	3	2
+11	0	1	3	2
+12	543	1	4	2
+13	608	1	3	3
+14	547	1	3	3
+15	473	1	2	3
+16	492	1	3	3
+17	505	1	1	3
+18	600	1	3	3
+19	514	1	1	3
+20	539	1	3	3
+21	462	1	2	3
+22	559	1	1	3
+23	627	1	4	3
+24	493	1	4	3
+25	520	1	2	3
+26	495	1	3	3
+27	623	1	4	3
+28	661	1	3	3
+29	671	1	3	3
+30	499	1	3	3
+31	460	1	2	3
+32	651	1	4	3
+33	618	1	1	3
+34	694	1	3	3
+35	644	1	4	3
+36	439	1	3	3
+37	519	1	4	3
+38	594	1	3	3
+39	501	1	3	3
+40	548	1	3	3
+41	620	1	3	3
+42	550	1	4	3
+43	503	1	3	3
+44	696	1	3	3
+45	443	1	2	3
+46	640	1	3	3
+47	445	1	3	3
+48	591	1	2	3
+49	491	1	3	3
+50	479	1	3	3
+51	483	1	1	3
+52	683	1	3	3
+53	672	1	4	3
+54	566	1	3	3
+55	643	1	3	3
+56	454	1	3	3
+57	552	1	2	3
+58	570	1	3	3
+59	616	1	3	3
+60	545	1	3	3
+61	664	1	3	3
+62	658	1	3	3
+63	455	1	2	3
+64	593	1	3	3
+65	596	1	3	3
+66	444	1	3	3
+67	610	1	3	3
+68	533	1	2	3
+69	677	1	3	3
+70	527	1	2	3
+71	632	1	3	3
+72	667	1	2	3
+73	682	1	3	3
+74	679	1	3	3
+75	537	1	3	3
+76	572	1	2	3
+77	650	1	3	3
+78	592	1	2	3
+79	531	1	2	3
+80	494	1	4	3
+81	641	1	2	3
+82	646	1	3	3
+83	576	1	3	3
+84	500	1	2	3
+85	496	1	2	3
+86	676	1	3	3
+87	450	1	3	3
+88	675	1	3	3
+89	476	1	3	3
+90	653	1	4	3
+91	624	1	3	3
+92	637	1	3	3
+93	642	1	3	3
+94	488	1	3	3
+95	685	1	4	3
+96	662	1	3	3
+97	0	1	2	3
+98	560	1	2	3
+99	582	1	4	3
+100	673	1	4	3
+101	657	1	4	3
+102	695	1	3	3
+103	481	1	3	3
+104	626	1	3	3
+105	451	1	3	3
+106	470	1	1	3
+107	484	1	1	3
+108	562	1	3	3
+109	613	1	3	3
+110	581	1	1	3
+111	573	1	2	3
+112	526	1	3	3
+113	508	1	1	3
+114	660	1	3	3
+115	588	1	3	3
+116	532	1	4	3
+117	575	1	2	3
+118	693	1	3	3
+119	638	1	3	3
+120	621	1	3	3
+121	680	1	2	3
+122	634	1	3	3
+123	490	1	4	3
+124	456	1	3	3
+125	474	1	2	3
+126	670	1	3	3
+127	663	1	3	3
+128	630	1	3	3
+129	555	1	3	3
+130	554	1	4	3
+131	553	1	4	4
+132	647	1	3	4
+133	571	1	4	4
+134	472	1	4	4
+135	666	1	3	4
+136	464	1	4	4
+137	467	1	3	4
+138	678	1	3	4
+139	636	1	4	4
+140	475	1	3	4
+141	546	1	4	4
+142	603	1	3	4
+143	502	1	2	4
+144	529	1	4	4
+145	468	1	4	4
+146	442	1	3	4
+147	557	1	4	4
+148	578	1	4	4
+149	615	1	4	4
+150	511	1	3	4
+151	602	1	3	4
+152	550	1	4	4
+153	535	1	3	4
+154	631	1	3	4
+155	440	1	4	4
+156	633	1	2	4
+157	563	1	4	4
+158	478	1	4	4
+159	574	1	4	4
+160	489	1	2	4
+161	482	1	4	4
+162	466	1	4	4
+163	525	1	3	4
+164	617	1	3	4
+165	497	1	3	4
+166	561	1	2	4
+167	668	1	3	4
+168	612	1	3	4
+169	584	1	3	4
+170	569	1	3	4
+171	446	1	3	4
+172	485	1	4	4
+173	579	1	2	4
+174	567	1	3	4
+175	517	1	4	4
+176	558	1	4	4
+177	597	1	2	4
+178	556	1	4	4
+179	551	1	4	4
+180	528	1	4	4
+181	465	1	3	4
+182	541	1	3	4
+183	510	1	3	4
+184	471	1	1	4
+185	586	1	2	4
+186	447	1	3	4
+187	648	1	3	4
+188	635	1	2	4
+189	524	1	2	4
+190	544	1	2	4
+191	628	1	2	4
+192	655	1	4	4
+193	606	1	2	4
+194	540	1	3	4
+195	595	1	3	4
+196	625	1	3	4
+197	449	1	4	4
+198	598	1	3	4
+199	518	1	4	4
+200	580	1	3	4
+201	609	1	4	4
+202	590	1	3	4
+203	649	1	3	4
+204	536	1	3	4
+205	459	1	3	4
+206	441	1	3	4
+207	659	1	3	4
+208	457	1	4	4
+209	607	1	2	4
+210	565	1	3	4
+211	564	1	2	4
+212	523	1	4	4
+213	522	1	4	4
+214	654	1	2	4
+215	0	1	3	4
+216	599	1	4	4
+217	585	1	4	4
+218	486	1	4	4
+219	515	1	1	4
+220	512	1	4	4
+221	587	1	4	4
+222	605	1	4	4
+223	534	1	3	4
+224	509	1	2	4
+225	669	1	2	4
+226	498	1	3	4
+227	639	1	4	4
+228	639	1	4	4
+229	506	1	2	4
+230	542	1	4	4
+231	438	1	3	4
+232	538	1	2	4
+233	513	1	4	4
+234	622	1	2	4
+235	583	1	3	4
+236	589	1	2	4
+237	619	1	2	4
+238	516	1	4	4
+239	463	1	3	4
+240	461	1	3	4
+241	0	3	2	2
+242	492	3	3	2
+243	507	3	3	2
+244	678	3	3	2
+245	479	3	3	2
+246	566	3	3	2
+247	530	3	1	2
+248	504	3	3	2
+249	533	3	2	2
+250	667	3	3	2
+251	450	3	3	2
+252	0	3	1	2
+253	637	3	3	2
+254	488	3	3	2
+255	656	3	3	2
+256	481	3	4	2
+257	484	3	1	2
+258	581	3	1	2
+259	608	3	4	3
+260	547	3	3	3
+261	647	3	4	3
+262	473	3	2	3
+263	505	3	1	3
+264	600	3	3	3
+265	666	3	2	3
+266	539	3	4	3
+267	714	3	4	3
+268	559	3	1	3
+269	467	3	3	3
+270	627	3	4	3
+271	0	3	2	3
+272	493	3	4	3
+273	520	3	2	3
+274	495	3	3	3
+275	546	3	2	3
+276	623	3	4	3
+277	661	3	3	3
+278	671	3	2	3
+279	502	3	3	3
+280	499	3	3	3
+281	460	3	2	3
+282	618	3	1	3
+283	644	3	3	3
+284	439	3	3	3
+285	519	3	4	3
+286	703	3	2	3
+287	511	3	3	3
+288	602	3	3	3
+289	501	3	4	3
+290	548	3	3	3
+291	550	3	4	3
+292	503	3	3	3
+293	631	3	4	3
+294	469	3	2	3
+295	443	3	2	3
+296	640	3	3	3
+297	601	3	3	3
+298	591	3	2	3
+299	491	3	2	3
+300	611	3	3	3
+301	483	3	1	3
+302	672	3	4	3
+303	454	3	3	3
+304	552	3	2	3
+305	525	3	3	3
+306	570	3	3	3
+307	616	3	3	3
+308	545	3	3	3
+309	561	3	2	3
+310	612	3	2	3
+311	455	3	2	3
+312	593	3	3	3
+313	718	3	3	3
+314	596	3	3	3
+315	444	3	3	3
+316	610	3	3	3
+317	527	3	2	3
+318	632	3	3	3
+319	537	3	3	3
+320	517	3	4	3
+321	572	3	2	3
+322	650	3	4	3
+323	592	3	3	3
+324	453	3	2	3
+325	531	3	2	3
+326	641	3	2	3
+327	586	3	1	3
+328	576	3	3	3
+329	500	3	2	3
+330	496	3	2	3
+331	676	3	4	3
+332	675	3	2	3
+333	544	3	3	3
+334	448	3	1	3
+335	624	3	3	3
+336	642	3	4	3
+337	598	3	3	3
+338	652	3	2	3
+339	568	3	2	3
+340	662	3	3	3
+341	518	3	4	3
+342	0	3	2	3
+343	582	3	4	3
+344	646	3	3	3
+345	649	3	3	3
+346	659	3	2	3
+347	673	3	3	3
+348	657	3	3	3
+349	0	3	2	3
+350	626	3	4	3
+351	451	3	4	3
+352	470	3	1	3
+353	562	3	2	3
+354	613	3	3	3
+355	573	3	3	3
+356	573	3	2	3
+357	526	3	3	3
+358	660	3	3	3
+359	588	3	3	3
+360	575	3	3	3
+361	0	3	3	3
+362	534	3	3	3
+363	669	3	3	3
+364	638	3	4	3
+365	621	3	3	3
+366	477	3	3	3
+367	543	3	1	3
+368	0	3	2	3
+369	456	3	3	3
+370	538	3	2	3
+371	474	3	3	3
+372	622	3	3	3
+373	670	3	3	3
+374	487	3	2	3
+375	663	3	3	3
+376	630	3	3	3
+377	555	3	3	3
+378	554	3	4	3
+379	553	3	4	4
+380	458	3	3	4
+381	674	3	3	4
+382	571	3	3	4
+383	514	3	2	4
+384	464	3	4	4
+385	462	3	2	4
+386	636	3	4	4
+387	475	3	4	4
+388	603	3	3	4
+389	529	3	4	4
+390	468	3	4	4
+391	442	3	3	4
+392	511	3	4	4
+393	594	3	3	4
+394	620	3	2	4
+395	535	3	2	4
+396	440	3	3	4
+397	633	3	2	4
+398	549	3	2	4
+399	563	3	4	4
+400	478	3	4	4
+401	574	3	4	4
+402	643	3	2	4
+403	482	3	4	4
+404	466	3	4	4
+405	617	3	3	4
+406	497	3	3	4
+407	664	3	3	4
+408	584	3	3	4
+409	569	3	3	4
+410	446	3	4	4
+411	485	3	4	4
+412	579	3	2	4
+413	480	3	2	4
+414	567	3	3	4
+415	558	3	4	4
+416	597	3	2	4
+417	556	3	4	4
+418	551	3	4	4
+419	494	3	4	4
+420	465	3	3	4
+421	541	3	3	4
+422	510	3	3	4
+423	471	3	1	4
+424	447	3	3	4
+425	648	3	3	4
+426	635	3	2	4
+427	524	3	2	4
+428	628	3	2	4
+429	606	3	1	4
+430	540	3	3	4
+431	653	3	4	4
+432	595	3	3	4
+433	625	3	3	4
+434	449	3	3	4
+435	580	3	3	4
+436	609	3	4	4
+437	590	3	2	4
+438	536	3	3	4
+439	459	3	3	4
+440	441	3	3	4
+441	457	3	4	4
+442	607	3	2	4
+443	702	3	4	4
+444	565	3	3	4
+445	0	3	2	4
+446	521	3	3	4
+447	564	3	2	4
+448	712	3	4	4
+449	523	3	4	4
+450	522	3	4	4
+451	599	3	4	4
+452	486	3	4	4
+453	515	3	2	4
+454	512	3	4	4
+455	532	3	3	4
+456	587	3	3	4
+457	605	3	4	4
+458	509	3	2	4
+459	498	3	3	4
+460	639	3	4	4
+461	634	3	3	4
+462	490	3	4	4
+463	506	3	2	4
+464	542	3	4	4
+465	438	3	3	4
+466	645	3	3	4
+467	513	3	4	4
+468	589	3	2	4
+469	619	3	2	4
+470	516	3	4	4
+471	463	3	2	4
+472	461	3	3	4
+473	573	4	4	1
+474	495	4	3	2
+475	502	4	3	2
+476	469	4	2	2
+477	479	4	3	2
+478	0	4	3	2
+479	530	4	1	2
+480	593	4	3	2
+481	610	4	3	2
+482	527	4	3	2
+483	453	4	2	2
+484	642	4	4	2
+485	0	4	1	2
+486	484	4	1	2
+487	588	4	1	2
+488	0	4	2	2
+489	0	4	2	2
+490	0	4	2	2
+491	547	4	3	3
+492	647	4	4	3
+493	452	4	1	3
+494	473	4	2	3
+495	492	4	3	3
+496	505	4	2	3
+497	514	4	2	3
+498	464	4	3	3
+499	559	4	2	3
+500	467	4	3	3
+501	0	4	3	3
+502	520	4	2	3
+503	678	4	3	3
+504	636	4	4	3
+505	603	4	3	3
+506	460	4	3	3
+507	618	4	2	3
+508	644	4	3	3
+509	439	4	2	3
+510	519	4	4	3
+511	602	4	3	3
+512	620	4	2	3
+513	503	4	3	3
+514	535	4	2	3
+515	640	4	3	3
+516	633	4	1	3
+517	563	4	4	3
+518	483	4	2	3
+519	0	4	3	3
+520	566	4	3	3
+521	643	4	2	3
+522	454	4	3	3
+523	552	4	3	3
+524	525	4	2	3
+525	570	4	2	3
+526	504	4	3	3
+527	545	4	3	3
+528	561	4	2	3
+529	612	4	2	3
+530	718	4	2	3
+531	596	4	3	3
+532	533	4	2	3
+533	579	4	3	3
+534	632	4	3	3
+535	537	4	3	3
+536	572	4	2	3
+537	592	4	2	3
+538	531	4	1	3
+539	641	4	2	3
+540	465	4	4	3
+541	500	4	2	3
+542	496	4	1	3
+543	450	4	3	3
+544	635	4	1	3
+545	524	4	1	3
+546	544	4	2	3
+547	448	4	1	3
+548	628	4	1	3
+549	624	4	3	3
+550	637	4	2	3
+551	598	4	3	3
+552	598	4	3	3
+553	568	4	2	3
+554	518	4	4	3
+555	0	4	2	3
+556	582	4	3	3
+557	536	4	3	3
+558	604	4	3	3
+559	565	4	4	3
+560	0	4	2	3
+561	0	4	1	3
+562	0	4	3	3
+563	0	4	2	3
+564	481	4	2	3
+565	626	4	4	3
+566	451	4	3	3
+567	470	4	1	3
+568	613	4	3	3
+569	526	4	3	3
+570	532	4	3	3
+571	534	4	3	3
+572	509	4	2	3
+573	638	4	2	3
+574	0	4	2	3
+575	506	4	2	3
+576	538	4	2	3
+577	474	4	2	3
+578	622	4	3	3
+579	619	4	2	3
+580	516	4	4	3
+581	630	4	3	3
+582	461	4	3	3
+583	554	4	4	3
+584	553	4	4	4
+585	608	4	3	4
+586	0	4	3	4
+587	571	4	3	4
+588	539	4	4	4
+589	462	4	2	4
+590	627	4	4	4
+591	493	4	4	4
+592	629	4	4	4
+593	529	4	4	4
+594	468	4	4	4
+595	557	4	4	4
+596	578	4	4	4
+597	594	4	3	4
+598	440	4	3	4
+599	549	4	2	4
+600	601	4	4	4
+601	478	4	4	4
+602	491	4	2	4
+603	482	4	4	4
+604	466	4	4	4
+605	617	4	3	4
+606	497	4	2	4
+607	584	4	3	4
+608	569	4	3	4
+609	446	4	4	4
+610	485	4	4	4
+611	480	4	2	4
+612	567	4	3	4
+613	558	4	4	4
+614	597	4	2	4
+615	556	4	3	4
+616	551	4	3	4
+617	494	4	3	4
+618	541	4	2	4
+619	510	4	3	4
+620	471	4	1	4
+621	576	4	3	4
+622	606	4	1	4
+623	540	4	3	4
+624	595	4	3	4
+625	625	4	3	4
+626	449	4	3	4
+627	488	4	4	4
+628	580	4	3	4
+629	0	4	4	4
+630	459	4	3	4
+631	457	4	4	4
+632	607	4	2	4
+633	523	4	4	4
+634	0	4	3	4
+635	522	4	4	4
+636	599	4	4	4
+637	486	4	4	4
+638	515	4	2	4
+639	562	4	3	4
+640	512	4	4	4
+641	587	4	3	4
+642	605	4	4	4
+643	575	4	2	4
+644	498	4	3	4
+645	490	4	4	4
+646	456	4	4	4
+647	542	4	4	4
+648	438	4	3	4
+649	513	4	4	4
+650	589	4	2	4
+651	463	4	2	4
+652	555	4	2	4
+653	469	5	3	1
+654	0	5	3	1
+655	0	5	2	2
+656	0	5	4	2
+657	500	5	2	2
+658	0	5	2	2
+659	0	5	2	2
+660	0	5	3	2
+661	0	5	4	2
+662	0	5	4	2
+663	484	5	1	2
+664	0	5	1	2
+665	621	5	3	2
+666	0	5	2	2
+667	506	5	2	2
+668	555	5	3	2
+669	0	5	2	3
+670	608	5	3	3
+671	0	5	3	3
+672	547	5	3	3
+673	0	5	3	3
+674	452	5	3	3
+675	505	5	2	3
+676	600	5	4	3
+677	559	5	2	3
+678	614	5	3	3
+679	0	5	3	3
+680	0	5	2	3
+681	520	5	4	3
+682	678	5	3	3
+683	495	5	3	3
+684	546	5	4	3
+685	499	5	2	3
+686	460	5	3	3
+687	468	5	4	3
+688	618	5	2	3
+689	519	5	3	3
+690	511	5	4	3
+691	594	5	3	3
+692	602	5	4	3
+693	620	5	2	3
+694	535	5	1	3
+695	631	5	4	3
+696	443	5	2	3
+697	563	5	4	3
+698	591	5	4	3
+699	491	5	2	3
+700	479	5	3	3
+701	0	5	2	3
+702	0	5	3	3
+703	489	5	3	3
+704	566	5	3	3
+705	454	5	3	3
+706	552	5	2	3
+707	525	5	4	3
+708	617	5	3	3
+709	617	5	3	3
+710	570	5	2	3
+711	616	5	2	3
+712	561	5	1	3
+713	612	5	3	3
+714	455	5	3	3
+715	444	5	3	3
+716	610	5	3	3
+717	579	5	3	3
+718	527	5	2	3
+719	480	5	1	3
+720	537	5	3	3
+721	517	5	3	3
+722	572	5	3	3
+723	465	5	3	3
+724	541	5	3	3
+725	586	5	2	3
+726	447	5	3	3
+727	500	5	3	3
+728	496	5	1	3
+729	450	5	4	3
+730	0	5	1	3
+731	524	5	2	3
+732	544	5	3	3
+733	448	5	1	3
+734	624	5	3	3
+735	449	5	3	3
+736	598	5	3	3
+737	568	5	1	3
+738	0	5	2	3
+739	590	5	2	3
+740	582	5	3	3
+741	536	5	3	3
+742	441	5	3	3
+743	457	5	2	3
+744	607	5	2	3
+745	0	5	2	3
+746	0	5	3	3
+747	0	5	2	3
+748	481	5	3	3
+749	451	5	3	3
+750	470	5	1	3
+751	515	5	2	3
+752	581	5	3	3
+753	526	5	3	3
+754	588	5	1	3
+755	534	5	3	3
+756	0	5	2	3
+757	0	5	4	3
+758	0	5	3	3
+759	543	5	3	3
+760	0	5	3	3
+761	456	5	3	3
+762	542	5	3	3
+763	0	5	2	3
+764	0	5	3	3
+765	619	5	3	3
+766	0	5	3	3
+767	0	5	3	3
+768	463	5	2	3
+769	571	5	3	4
+770	473	5	3	4
+771	514	5	2	4
+772	539	5	4	4
+773	462	5	2	4
+774	467	5	3	4
+775	627	5	4	4
+776	493	5	4	4
+777	475	5	4	4
+778	629	5	4	4
+779	502	5	3	4
+780	529	5	4	4
+781	442	5	2	4
+782	439	5	3	4
+783	578	5	4	4
+784	615	5	4	4
+785	548	5	4	4
+786	440	5	3	4
+787	549	5	3	4
+788	601	5	4	4
+789	478	5	4	4
+790	574	5	4	4
+791	0	5	4	4
+792	482	5	4	4
+793	466	5	4	4
+794	617	5	3	4
+795	497	5	2	4
+796	584	5	4	4
+797	569	5	3	4
+798	446	5	4	4
+799	485	5	4	4
+800	0	5	3	4
+801	567	5	3	4
+802	558	5	4	4
+803	597	5	2	4
+804	551	5	3	4
+805	494	5	3	4
+806	510	5	3	4
+807	471	5	2	4
+808	606	5	1	4
+809	595	5	3	4
+810	609	5	4	4
+811	604	5	3	4
+812	565	5	3	4
+813	564	5	2	4
+814	523	5	4	4
+815	0	5	3	4
+816	599	5	4	4
+817	0	5	4	4
+818	486	5	4	4
+819	613	5	3	4
+820	577	5	4	4
+821	512	5	4	4
+822	0	5	3	4
+823	532	5	3	4
+824	587	5	3	4
+825	575	5	3	4
+826	498	5	3	4
+827	0	5	4	4
+828	438	5	3	4
+829	538	5	4	4
+830	622	5	2	4
+831	516	5	4	4
+832	570	6	2	1
+833	608	6	3	2
+834	499	6	2	2
+835	499	6	2	2
+836	511	6	4	2
+837	550	6	3	2
+838	503	6	4	2
+839	591	6	3	2
+840	491	6	2	2
+841	552	6	2	2
+842	466	6	4	2
+843	0	6	2	2
+844	561	6	2	2
+845	612	6	3	2
+846	567	6	3	2
+847	500	6	2	2
+848	0	6	1	2
+849	0	6	2	2
+850	568	6	1	2
+851	457	6	2	2
+852	0	6	2	2
+853	0	6	3	2
+854	0	6	4	2
+855	0	6	4	2
+856	588	6	1	2
+857	0	6	1	2
+858	0	6	3	2
+859	0	6	2	2
+860	456	6	2	2
+861	0	6	3	2
+862	0	6	2	3
+863	0	6	3	3
+864	0	6	3	3
+865	473	6	3	3
+866	505	6	3	3
+867	600	6	4	3
+868	464	6	4	3
+869	559	6	3	3
+870	614	6	3	3
+871	0	6	3	3
+872	0	6	2	3
+873	0	6	2	3
+874	520	6	3	3
+875	678	6	4	3
+876	495	6	3	3
+877	603	6	3	3
+878	502	6	2	3
+879	529	6	4	3
+880	460	6	3	3
+881	468	6	4	3
+882	618	6	3	3
+883	439	6	2	3
+884	615	6	4	3
+885	519	6	3	3
+886	703	6	3	3
+887	594	6	3	3
+888	602	6	4	3
+889	535	6	1	3
+890	469	6	3	3
+891	443	6	3	3
+892	549	6	3	3
+893	563	6	3	3
+894	574	6	3	3
+895	479	6	4	3
+896	0	6	3	3
+897	483	6	2	3
+898	0	6	3	3
+899	0	6	3	3
+900	566	6	3	3
+901	530	6	2	3
+902	454	6	2	3
+903	617	6	3	3
+904	616	6	3	3
+905	504	6	3	3
+906	545	6	2	3
+907	0	6	3	3
+908	593	6	3	3
+909	596	6	3	3
+910	444	6	3	3
+911	610	6	3	3
+912	527	6	3	3
+913	480	6	2	3
+914	517	6	3	3
+915	572	6	3	3
+916	453	6	4	3
+917	494	6	3	3
+918	465	6	3	3
+919	0	6	2	3
+920	541	6	2	3
+921	510	6	4	3
+922	586	6	3	3
+923	447	6	4	3
+924	496	6	2	3
+925	450	6	4	3
+926	524	6	3	3
+927	544	6	3	3
+928	448	6	2	3
+929	0	6	1	3
+930	595	6	4	3
+931	598	6	3	3
+932	0	6	2	3
+933	590	6	2	3
+934	536	6	4	3
+935	459	6	3	3
+936	607	6	2	3
+937	604	6	4	3
+938	565	6	3	3
+939	0	6	2	3
+940	0	6	3	3
+941	481	6	3	3
+942	522	6	3	3
+943	451	6	4	3
+944	470	6	2	3
+945	484	6	2	3
+946	515	6	2	3
+947	613	6	3	3
+948	581	6	3	3
+949	526	6	3	3
+950	0	6	3	3
+951	575	6	3	3
+952	0	6	3	3
+953	509	6	3	3
+954	0	6	2	3
+955	477	6	3	3
+956	0	6	4	3
+957	543	6	3	3
+958	0	6	3	3
+959	506	6	2	3
+960	538	6	3	3
+961	474	6	3	3
+962	0	6	4	3
+963	0	6	3	3
+964	0	6	3	3
+965	463	6	4	3
+966	461	6	4	3
+967	553	6	4	4
+968	0	6	4	4
+969	547	6	3	4
+970	0	6	3	4
+971	571	6	3	4
+972	492	6	4	4
+973	514	6	3	4
+974	539	6	3	4
+975	462	6	2	4
+976	467	6	3	4
+977	493	6	4	4
+978	475	6	4	4
+979	557	6	4	4
+980	578	6	4	4
+981	501	6	3	4
+982	440	6	2	4
+983	478	6	4	4
+984	489	6	3	4
+985	482	6	4	4
+986	525	6	4	4
+987	497	6	2	4
+988	455	6	3	4
+989	584	6	3	4
+990	584	6	4	4
+991	446	6	4	4
+992	533	6	3	4
+993	579	6	3	4
+994	0	6	3	4
+995	537	6	3	4
+996	705	6	4	4
+997	558	6	4	4
+998	597	6	2	4
+999	556	6	3	4
+1000	592	6	3	4
+1001	551	6	3	4
+1002	471	6	2	4
+1003	606	6	3	4
+1004	449	6	3	4
+1005	488	6	4	4
+1006	518	6	4	4
+1007	580	6	4	4
+1008	609	6	4	4
+1009	560	6	2	4
+1010	582	6	4	4
+1011	441	6	3	4
+1012	564	6	3	4
+1013	523	6	4	4
+1014	0	6	3	4
+1015	599	6	4	4
+1016	0	6	4	4
+1017	486	6	4	4
+1018	562	6	3	4
+1019	573	6	4	4
+1020	512	6	4	4
+1021	508	6	2	4
+1022	532	6	3	4
+1023	587	6	4	4
+1024	605	6	4	4
+1025	534	6	3	4
+1026	498	6	3	4
+1027	542	6	3	4
+1028	438	6	2	4
+1029	513	6	4	4
+1030	513	6	4	4
+1031	589	6	3	4
+1032	516	6	4	4
+1033	555	6	3	4
+1034	554	6	1	4
+1035	552	7	2	1
+1036	0	7	3	1
+1037	535	7	3	2
+1038	491	7	3	2
+1039	0	7	4	2
+1040	454	7	3	2
+1041	570	7	2	2
+1042	0	7	2	2
+1043	561	7	2	2
+1044	0	7	3	2
+1045	0	7	3	2
+1046	500	7	3	2
+1047	448	7	2	2
+1048	568	7	3	2
+1049	590	7	2	2
+1050	607	7	2	2
+1051	0	7	3	2
+1052	0	7	3	2
+1053	470	7	2	2
+1054	0	7	2	2
+1055	0	7	3	2
+1056	608	7	2	3
+1057	458	7	4	3
+1058	0	7	3	3
+1059	452	7	2	3
+1060	473	7	3	3
+1061	505	7	1	3
+1062	559	7	3	3
+1063	493	7	4	3
+1064	520	7	3	3
+1065	546	7	4	3
+1066	603	7	3	3
+1067	502	7	2	3
+1068	499	7	4	3
+1069	529	7	4	3
+1070	442	7	3	3
+1071	439	7	2	3
+1072	703	7	3	3
+1073	594	7	4	3
+1074	602	7	4	3
+1075	550	7	3	3
+1076	503	7	3	3
+1077	469	7	3	3
+1078	443	7	3	3
+1079	549	7	3	3
+1080	601	7	3	3
+1081	479	7	3	3
+1082	483	7	2	3
+1083	0	7	3	3
+1084	0	7	3	3
+1085	530	7	2	3
+1086	466	7	4	3
+1087	0	7	3	3
+1088	504	7	3	3
+1089	545	7	3	3
+1090	593	7	3	3
+1091	596	7	4	3
+1092	444	7	3	3
+1093	485	7	2	3
+1094	527	7	3	3
+1095	480	7	2	3
+1096	572	7	3	3
+1097	556	7	3	3
+1098	453	7	3	3
+1099	528	7	4	3
+1100	531	7	4	3
+1101	496	7	2	3
+1102	701	7	3	3
+1103	0	7	2	3
+1104	524	7	3	3
+1105	544	7	3	3
+1106	476	7	4	3
+1107	606	7	3	3
+1108	0	7	3	3
+1109	595	7	4	3
+1110	0	7	4	3
+1111	598	7	3	3
+1112	0	7	2	3
+1113	536	7	4	3
+1114	459	7	3	3
+1115	441	7	4	3
+1116	457	7	3	3
+1117	0	7	2	3
+1118	604	7	4	3
+1119	521	7	2	3
+1120	0	7	3	3
+1121	564	7	4	3
+1122	712	7	4	3
+1123	0	7	4	3
+1124	481	7	3	3
+1125	484	7	2	3
+1126	515	7	2	3
+1127	581	7	3	3
+1128	588	7	2	3
+1129	0	7	3	3
+1130	575	7	2	3
+1131	0	7	3	3
+1132	0	7	4	3
+1133	509	7	3	3
+1134	700	7	4	3
+1135	0	7	2	3
+1136	477	7	4	3
+1137	0	7	3	3
+1138	0	7	3	3
+1139	543	7	3	3
+1140	0	7	3	3
+1141	456	7	3	3
+1142	506	7	2	3
+1143	438	7	3	3
+1144	538	7	3	3
+1145	474	7	3	3
+1146	0	7	4	3
+1147	487	7	3	3
+1148	0	7	2	3
+1149	0	7	3	3
+1150	463	7	4	3
+1151	555	7	3	3
+1152	554	7	3	3
+1153	0	7	3	4
+1154	553	7	4	4
+1155	547	7	4	4
+1156	0	7	3	4
+1157	571	7	3	4
+1158	492	7	4	4
+1159	514	7	3	4
+1160	539	7	3	4
+1161	462	7	2	4
+1162	678	7	4	4
+1163	495	7	3	4
+1164	475	7	3	4
+1165	460	7	4	4
+1166	557	7	4	4
+1167	578	7	4	4
+1168	615	7	4	4
+1169	511	7	3	4
+1170	501	7	3	4
+1171	548	7	3	4
+1172	440	7	2	4
+1173	478	7	4	4
+1174	445	7	4	4
+1175	591	7	3	4
+1176	574	7	4	4
+1177	489	7	3	4
+1178	482	7	4	4
+1179	525	7	4	4
+1180	497	7	2	4
+1181	0	7	2	4
+1182	455	7	3	4
+1183	584	7	4	4
+1184	569	7	3	4
+1185	446	7	4	4
+1186	533	7	3	4
+1187	579	7	3	4
+1188	0	7	3	4
+1189	537	7	3	4
+1190	705	7	4	4
+1191	597	7	2	4
+1192	592	7	3	4
+1193	551	7	3	4
+1194	471	7	2	4
+1195	447	7	4	4
+1196	576	7	4	4
+1197	540	7	3	4
+1198	449	7	3	4
+1199	488	7	4	4
+1200	580	7	4	4
+1201	609	7	4	4
+1202	582	7	4	4
+1203	702	7	4	4
+1204	0	7	3	4
+1205	599	7	4	4
+1206	0	7	4	4
+1207	486	7	4	4
+1208	562	7	3	4
+1209	577	7	4	4
+1210	573	7	4	4
+1211	532	7	3	4
+1212	605	7	4	4
+1213	534	7	3	4
+1214	542	7	3	4
+1215	583	7	4	4
+1216	589	7	3	4
+1217	0	7	4	4
+1218	516	7	4	4
+1219	473	8	3	2
+1220	0	8	2	2
+1221	499	8	3	2
+1222	535	8	2	2
+1223	491	8	3	2
+1224	0	8	3	2
+1225	552	8	2	2
+1226	561	8	3	2
+1227	0	8	3	2
+1228	500	8	3	2
+1229	607	8	3	2
+1230	0	8	2	2
+1231	581	8	3	2
+1232	0	8	3	2
+1233	0	8	3	2
+1234	0	8	3	2
+1235	608	8	4	3
+1236	0	8	2	3
+1237	0	8	4	3
+1238	0	8	3	3
+1239	0	8	2	3
+1240	505	8	1	3
+1241	600	8	4	3
+1242	464	8	3	3
+1243	467	8	4	3
+1244	493	8	4	3
+1245	507	8	4	3
+1246	520	8	3	3
+1247	603	8	3	3
+1248	502	8	2	3
+1249	529	8	4	3
+1250	460	8	3	3
+1251	468	8	4	3
+1252	442	8	3	3
+1253	439	8	4	3
+1254	511	8	3	3
+1255	550	8	4	3
+1256	503	8	4	3
+1257	469	8	2	3
+1258	0	8	2	3
+1259	601	8	3	3
+1260	479	8	4	3
+1261	483	8	3	3
+1262	0	8	4	3
+1263	0	8	3	3
+1264	566	8	3	3
+1265	530	8	2	3
+1266	466	8	3	3
+1267	570	8	2	3
+1268	570	8	2	3
+1269	504	8	3	3
+1270	545	8	3	3
+1271	0	8	3	3
+1272	0	8	2	3
+1273	596	8	4	3
+1274	444	8	4	3
+1275	533	8	2	3
+1276	527	8	3	3
+1277	480	8	3	3
+1278	567	8	2	3
+1279	572	8	3	3
+1280	528	8	4	3
+1281	531	8	4	3
+1282	465	8	3	3
+1283	541	8	2	3
+1284	541	8	2	3
+1285	510	8	3	3
+1286	701	8	3	3
+1287	0	8	3	3
+1288	524	8	2	3
+1289	544	8	3	3
+1290	448	8	3	3
+1291	476	8	4	3
+1292	606	8	3	3
+1293	0	8	3	3
+1294	595	8	3	3
+1295	0	8	2	3
+1296	568	8	4	3
+1297	518	8	4	3
+1298	0	8	2	3
+1299	590	8	1	3
+1300	457	8	3	3
+1301	702	8	3	3
+1302	565	8	2	3
+1303	0	8	3	3
+1304	521	8	3	3
+1305	0	8	3	3
+1306	564	8	2	3
+1307	712	8	4	3
+1308	523	8	4	3
+1309	0	8	4	3
+1310	481	8	3	3
+1311	0	8	2	3
+1312	484	8	2	3
+1313	577	8	4	3
+1314	588	8	2	3
+1315	0	8	3	3
+1316	575	8	2	3
+1317	0	8	3	3
+1318	0	8	4	3
+1319	0	8	2	3
+1320	498	8	4	3
+1321	0	8	2	3
+1322	0	8	4	3
+1323	0	8	2	3
+1324	0	8	3	3
+1325	0	8	4	3
+1326	456	8	3	3
+1327	506	8	4	3
+1328	542	8	3	3
+1329	438	8	3	3
+1330	538	8	2	3
+1331	0	8	4	3
+1332	0	8	3	3
+1333	463	8	3	3
+1334	553	8	4	4
+1335	547	8	4	4
+1336	571	8	3	4
+1337	492	8	4	4
+1338	472	8	4	4
+1339	600	8	3	4
+1340	514	8	2	4
+1341	539	8	3	4
+1342	714	8	4	4
+1343	462	8	2	4
+1344	559	8	3	4
+1345	678	8	4	4
+1346	495	8	3	4
+1347	475	8	3	4
+1348	546	8	3	4
+1349	557	8	4	4
+1350	578	8	4	4
+1351	519	8	3	4
+1352	703	8	3	4
+1353	594	8	3	4
+1354	501	8	3	4
+1355	548	8	3	4
+1356	440	8	2	4
+1357	549	8	2	4
+1358	563	8	3	4
+1359	478	8	4	4
+1360	445	8	4	4
+1361	591	8	2	4
+1362	574	8	4	4
+1363	489	8	3	4
+1364	482	8	3	4
+1365	525	8	4	4
+1366	497	8	2	4
+1367	584	8	4	4
+1368	569	8	4	4
+1369	485	8	4	4
+1370	579	8	3	4
+1371	0	8	4	4
+1372	537	8	4	4
+1373	705	8	3	4
+1374	558	8	4	4
+1375	597	8	2	4
+1376	592	8	4	4
+1377	551	8	3	4
+1378	494	8	3	4
+1379	471	8	2	4
+1380	586	8	2	4
+1381	447	8	3	4
+1382	0	8	1	4
+1383	488	8	4	4
+1384	609	8	4	4
+1385	0	8	4	4
+1386	582	8	4	4
+1387	536	8	4	4
+1388	441	8	4	4
+1389	0	8	3	4
+1390	0	8	3	4
+1391	522	8	3	4
+1392	599	8	4	4
+1393	470	8	3	4
+1394	486	8	4	4
+1395	515	8	4	4
+1396	562	8	3	4
+1397	573	8	4	4
+1398	526	8	4	4
+1399	512	8	4	4
+1400	704	8	4	4
+1401	508	8	2	4
+1402	532	8	3	4
+1403	587	8	3	4
+1404	605	8	4	4
+1405	534	8	3	4
+1406	700	8	3	4
+1407	0	8	3	4
+1408	477	8	2	4
+1409	543	8	3	4
+1410	513	8	4	4
+1411	487	8	4	4
+1412	583	8	3	4
+1413	589	8	2	4
+1414	516	8	3	4
+1415	461	8	4	4
+1416	555	8	4	4
+1417	554	8	4	4
+1418	0	9	3	2
+1419	561	9	2	2
+1420	0	9	3	2
+1421	0	9	4	2
+1422	0	9	3	2
+1423	0	9	3	2
+1424	538	9	2	2
+1425	647	9	4	3
+1426	647	9	4	3
+1427	0	9	4	3
+1428	0	9	4	3
+1429	505	9	2	3
+1430	559	9	1	3
+1431	0	9	2	3
+1432	0	9	4	3
+1433	493	9	4	3
+1434	520	9	3	3
+1435	520	9	3	3
+1436	499	9	3	3
+1437	529	9	3	3
+1438	529	9	3	3
+1439	442	9	3	3
+1440	557	9	3	3
+1441	439	9	3	3
+1442	703	9	4	3
+1443	511	9	3	3
+1444	550	9	4	3
+1445	535	9	2	3
+1446	0	9	2	3
+1447	563	9	4	3
+1448	601	9	2	3
+1449	0	9	3	3
+1450	491	9	2	3
+1451	479	9	3	3
+1452	483	9	2	3
+1453	0	9	3	3
+1454	0	9	4	3
+1455	566	9	3	3
+1456	0	9	4	3
+1457	0	9	4	3
+1458	552	9	2	3
+1459	504	9	3	3
+1460	497	9	2	3
+1461	0	9	2	3
+1462	0	9	2	3
+1463	596	9	3	3
+1464	533	9	2	3
+1465	527	9	3	3
+1466	480	9	4	3
+1467	0	9	2	3
+1468	0	9	2	3
+1469	705	9	2	3
+1470	567	9	3	3
+1471	517	9	3	3
+1472	0	9	2	3
+1473	0	9	2	3
+1474	531	9	3	3
+1475	541	9	2	3
+1476	447	9	4	3
+1477	500	9	3	3
+1478	496	9	2	3
+1479	701	9	3	3
+1480	544	9	2	3
+1481	448	9	2	3
+1482	488	9	4	3
+1483	0	9	2	3
+1484	607	9	2	3
+1485	0	9	2	3
+1486	565	9	2	3
+1487	521	9	3	3
+1488	521	9	3	3
+1489	0	9	3	3
+1490	712	9	4	3
+1491	523	9	4	3
+1492	0	9	4	3
+1493	481	9	3	3
+1494	484	9	2	3
+1495	577	9	4	3
+1496	526	9	4	3
+1497	0	9	3	3
+1498	0	9	3	3
+1499	588	9	2	3
+1500	0	9	3	3
+1501	0	9	3	3
+1502	700	9	4	3
+1503	0	9	3	3
+1504	498	9	4	3
+1505	477	9	3	3
+1506	0	9	2	3
+1507	0	9	3	3
+1508	0	9	3	3
+1509	0	9	4	3
+1510	438	9	3	3
+1511	487	9	3	3
+1512	0	9	1	3
+1513	0	9	4	3
+1514	516	9	4	3
+1515	463	9	2	3
+1516	555	9	4	3
+1517	0	9	4	4
+1518	553	9	4	4
+1519	0	9	2	4
+1520	608	9	2	4
+1521	547	9	4	4
+1522	571	9	3	4
+1523	492	9	4	4
+1524	472	9	4	4
+1525	539	9	3	4
+1526	0	9	1	4
+1527	507	9	4	4
+1528	678	9	3	4
+1529	495	9	3	4
+1530	475	9	3	4
+1531	557	9	4	4
+1532	578	9	4	4
+1533	519	9	3	4
+1534	594	9	3	4
+1535	501	9	3	4
+1536	0	9	3	4
+1537	548	9	3	4
+1538	440	9	3	4
+1539	478	9	4	4
+1540	445	9	4	4
+1541	574	9	4	4
+1542	489	9	2	4
+1543	489	9	3	4
+1544	482	9	3	4
+1545	466	9	3	4
+1546	525	9	3	4
+1547	545	9	3	4
+1548	0	9	3	4
+1549	569	9	3	4
+1550	444	9	3	4
+1551	485	9	2	4
+1552	485	9	2	4
+1553	579	9	3	4
+1554	537	9	3	4
+1555	572	9	3	4
+1556	558	9	4	4
+1557	551	9	4	4
+1558	528	9	4	4
+1559	494	9	3	4
+1560	0	9	4	4
+1561	708	9	4	4
+1562	708	9	4	4
+1563	0	9	4	4
+1564	524	9	1	4
+1565	476	9	4	4
+1566	606	9	2	4
+1567	0	9	1	4
+1568	595	9	3	4
+1569	595	9	3	4
+1570	518	9	4	4
+1571	609	9	4	4
+1572	0	9	3	4
+1573	582	9	3	4
+1574	536	9	4	4
+1575	441	9	4	4
+1576	564	9	2	4
+1577	0	9	3	4
+1578	0	9	3	4
+1579	0	9	3	4
+1580	522	9	3	4
+1581	486	9	4	4
+1582	515	9	4	4
+1583	562	9	4	4
+1584	573	9	4	4
+1585	512	9	4	4
+1586	704	9	4	4
+1587	704	9	4	4
+1588	508	9	3	4
+1589	532	9	3	4
+1590	587	9	3	4
+1591	605	9	4	4
+1592	575	9	2	4
+1593	534	9	2	4
+1594	0	9	2	4
+1595	0	9	2	4
+1596	542	9	2	4
+1597	513	9	4	4
+1598	583	9	3	4
+1599	589	9	2	4
+1600	461	9	4	4
+1601	554	9	4	4
+1602	520	10	3	2
+1603	0	10	2	2
+1604	549	10	2	2
+1605	0	10	3	2
+1606	530	10	3	2
+1607	0	10	1	2
+1608	0	10	2	2
+1609	596	10	3	2
+1610	0	10	3	2
+1611	607	10	2	2
+1612	588	10	3	2
+1613	0	10	3	2
+1614	538	10	3	2
+1615	487	10	3	2
+1616	553	10	4	3
+1617	608	10	2	3
+1618	0	10	2	3
+1619	0	10	3	3
+1620	647	10	4	3
+1621	0	10	4	3
+1622	505	10	2	3
+1623	462	10	2	3
+1624	559	10	1	3
+1625	0	10	3	3
+1626	0	10	4	3
+1627	0	10	4	3
+1628	493	10	4	3
+1629	520	10	2	3
+1630	603	10	3	3
+1631	502	10	2	3
+1632	499	10	3	3
+1633	529	10	3	3
+1634	442	10	3	3
+1635	0	10	3	3
+1636	0	10	2	3
+1637	519	10	3	3
+1638	519	10	3	3
+1639	703	10	4	3
+1640	0	10	3	3
+1641	501	10	2	3
+1642	550	10	4	3
+1643	535	10	2	3
+1644	469	10	2	3
+1645	0	10	2	3
+1646	563	10	3	3
+1647	601	10	3	3
+1648	445	10	4	3
+1649	0	10	2	3
+1650	0	10	3	3
+1651	491	10	2	3
+1652	479	10	3	3
+1653	483	10	3	3
+1654	0	10	3	3
+1655	566	10	3	3
+1656	0	10	3	3
+1657	0	10	3	3
+1658	0	10	2	3
+1659	466	10	2	3
+1660	570	10	1	3
+1661	504	10	2	3
+1662	497	10	2	3
+1663	0	10	2	3
+1664	596	10	3	3
+1665	444	10	3	3
+1666	485	10	2	3
+1667	527	10	3	3
+1668	0	10	2	3
+1669	567	10	4	3
+1670	517	10	3	3
+1671	0	10	3	3
+1672	0	10	2	3
+1673	531	10	3	3
+1674	541	10	2	3
+1675	0	10	3	3
+1676	500	10	2	3
+1677	496	10	2	3
+1678	544	10	3	3
+1679	448	10	2	3
+1680	568	10	3	3
+1681	518	10	4	3
+1682	0	10	2	3
+1683	0	10	4	3
+1684	673	10	4	3
+1685	0	10	2	3
+1686	565	10	3	3
+1687	0	10	1	3
+1688	521	10	3	3
+1689	0	10	2	3
+1690	564	10	2	3
+1691	523	10	4	3
+1692	0	10	4	3
+1693	481	10	3	3
+1694	0	10	3	3
+1695	0	10	3	3
+1696	470	10	2	3
+1697	0	10	3	3
+1698	484	10	2	3
+1699	0	10	4	3
+1700	0	10	1	3
+1701	581	10	3	3
+1702	577	10	4	3
+1703	0	10	3	3
+1704	0	10	1	3
+1705	532	10	3	3
+1706	587	10	4	3
+1707	0	10	3	3
+1708	0	10	4	3
+1709	700	10	4	3
+1710	0	10	2	3
+1711	0	10	2	3
+1712	498	10	4	3
+1713	477	10	3	3
+1714	0	10	2	3
+1715	0	10	2	3
+1716	0	10	1	3
+1717	0	10	3	3
+1718	542	10	3	3
+1719	438	10	3	3
+1720	0	10	2	3
+1721	513	10	4	3
+1722	0	10	4	3
+1723	0	10	1	3
+1724	0	10	4	3
+1725	463	10	2	3
+1726	0	10	3	3
+1727	0	10	3	3
+1728	555	10	4	3
+1729	0	10	4	4
+1730	0	10	2	4
+1731	547	10	4	4
+1732	571	10	3	4
+1733	492	10	4	4
+1734	472	10	4	4
+1735	514	10	2	4
+1736	539	10	3	4
+1737	714	10	4	4
+1738	0	10	1	4
+1739	507	10	4	4
+1740	678	10	2	4
+1741	495	10	3	4
+1742	557	10	4	4
+1743	557	10	4	4
+1744	439	10	3	4
+1745	578	10	4	4
+1746	511	10	3	4
+1747	594	10	3	4
+1748	0	10	3	4
+1749	548	10	3	4
+1750	0	10	2	4
+1751	440	10	3	4
+1752	478	10	4	4
+1753	0	10	3	4
+1754	574	10	3	4
+1755	489	10	2	4
+1756	482	10	3	4
+1757	525	10	3	4
+1758	545	10	4	4
+1759	561	10	3	4
+1760	0	10	3	4
+1761	584	10	3	4
+1762	569	10	3	4
+1763	446	10	3	4
+1764	533	10	2	4
+1765	579	10	4	4
+1766	537	10	3	4
+1767	572	10	2	4
+1768	558	10	4	4
+1769	597	10	2	4
+1770	551	10	4	4
+1771	528	10	4	4
+1772	494	10	3	4
+1773	0	10	4	4
+1774	471	10	2	4
+1775	708	10	4	4
+1776	447	10	4	4
+1777	0	10	2	4
+1778	701	10	3	4
+1779	0	10	4	4
+1780	524	10	1	4
+1781	707	10	3	4
+1782	0	10	2	4
+1783	476	10	4	4
+1784	606	10	3	4
+1785	0	10	1	4
+1786	595	10	3	4
+1787	488	10	3	4
+1788	518	10	4	4
+1789	609	10	4	4
+1790	0	10	2	4
+1791	582	10	3	4
+1792	536	10	4	4
+1793	441	10	4	4
+1794	0	10	3	4
+1795	522	10	3	4
+1796	599	10	4	4
+1797	486	10	4	4
+1798	515	10	4	4
+1799	562	10	3	4
+1800	573	10	4	4
+1801	526	10	4	4
+1802	512	10	4	4
+1803	704	10	4	4
+1804	508	10	3	4
+1805	0	10	3	4
+1806	0	10	2	4
+1807	0	10	3	4
+1808	605	10	4	4
+1809	575	10	2	4
+1810	0	10	2	4
+1811	0	10	4	4
+1812	534	10	2	4
+1813	0	10	3	4
+1814	583	10	3	4
+1815	589	10	2	4
+1816	0	10	4	4
+1817	516	10	4	4
+1818	461	10	4	4
+1819	554	10	4	4
+1820	712	10	4	0
+1821	0	11	1	1
+1822	520	11	3	2
+1823	603	11	4	2
+1824	0	11	2	2
+1825	0	11	3	2
+1826	0	11	3	2
+1827	491	11	2	2
+1828	491	11	2	2
+1829	0	11	3	2
+1830	0	11	1	2
+1831	0	11	3	2
+1832	0	11	3	2
+1833	588	11	3	2
+1834	0	11	4	2
+1835	0	11	2	2
+1836	487	11	3	2
+1837	553	11	4	3
+1838	0	11	1	3
+1839	608	11	2	3
+1840	0	11	2	3
+1841	0	11	2	3
+1842	647	11	4	3
+1843	0	11	4	3
+1844	571	11	3	3
+1845	505	11	2	3
+1846	462	11	2	3
+1847	559	11	1	3
+1848	0	11	3	3
+1849	0	11	4	3
+1850	493	11	4	3
+1851	520	11	1	3
+1852	502	11	2	3
+1853	499	11	3	3
+1854	529	11	3	3
+1855	442	11	3	3
+1856	0	11	4	3
+1857	0	11	3	3
+1858	439	11	3	3
+1859	519	11	3	3
+1860	703	11	3	3
+1861	0	11	2	3
+1862	501	11	2	3
+1863	0	11	2	3
+1864	535	11	2	3
+1865	549	11	2	3
+1866	0	11	2	3
+1867	563	11	3	3
+1868	601	11	3	3
+1869	478	11	3	3
+1870	574	11	4	3
+1871	479	11	3	3
+1872	483	11	3	3
+1873	0	11	4	3
+1874	530	11	1	3
+1875	0	11	3	3
+1876	482	11	3	3
+1877	570	11	1	3
+1878	504	11	2	3
+1879	497	11	2	3
+1880	0	11	2	3
+1881	561	11	3	3
+1882	584	11	3	3
+1883	0	11	2	3
+1884	444	11	3	3
+1885	485	11	2	3
+1886	533	11	2	3
+1887	527	11	3	3
+1888	0	11	2	3
+1889	567	11	4	3
+1890	572	11	2	3
+1891	0	11	2	3
+1892	531	11	2	3
+1893	494	11	3	3
+1894	0	11	3	3
+1895	541	11	2	3
+1896	0	11	3	3
+1897	496	11	2	3
+1898	707	11	3	3
+1899	448	11	2	3
+1900	0	11	2	3
+1901	568	11	3	3
+1902	518	11	4	3
+1903	0	11	2	3
+1904	0	11	3	3
+1905	0	11	3	3
+1906	673	11	4	3
+1907	607	11	2	3
+1908	0	11	3	3
+1909	565	11	2	3
+1910	565	11	3	3
+1911	0	11	1	3
+1912	521	11	3	3
+1913	0	11	2	3
+1914	564	11	2	3
+1915	712	11	4	3
+1916	523	11	4	3
+1917	0	11	4	3
+1918	0	11	3	3
+1919	481	11	2	3
+1920	0	11	3	3
+1921	470	11	1	3
+1922	0	11	1	3
+1923	581	11	4	3
+1924	577	11	4	3
+1925	0	11	2	3
+1926	0	11	3	3
+1927	532	11	3	3
+1928	587	11	4	3
+1929	0	11	3	3
+1930	0	11	3	3
+1931	700	11	4	3
+1932	0	11	2	3
+1933	0	11	2	3
+1934	0	11	3	3
+1935	477	11	2	3
+1936	0	11	2	3
+1937	0	11	3	3
+1938	542	11	3	3
+1939	0	11	2	3
+1940	513	11	4	3
+1941	0	11	4	3
+1942	0	11	4	3
+1943	0	11	1	3
+1944	463	11	2	3
+1945	0	11	3	3
+1946	555	11	4	3
+1947	0	11	4	4
+1948	547	11	4	4
+1949	492	11	3	4
+1950	472	11	4	4
+1951	514	11	3	4
+1952	539	11	3	4
+1953	714	11	4	4
+1954	0	11	1	4
+1955	507	11	4	4
+1956	678	11	3	4
+1957	495	11	3	4
+1958	557	11	4	4
+1959	578	11	4	4
+1960	511	11	3	4
+1961	594	11	3	4
+1962	0	11	2	4
+1963	620	11	3	4
+1964	550	11	4	4
+1965	440	11	2	4
+1966	0	11	3	4
+1967	489	11	2	4
+1968	566	11	4	4
+1969	0	11	3	4
+1970	525	11	3	4
+1971	545	11	4	4
+1972	0	11	3	4
+1973	569	11	3	4
+1974	446	11	2	4
+1975	579	11	4	4
+1976	537	11	3	4
+1977	597	11	2	4
+1978	551	11	4	4
+1979	528	11	4	4
+1980	471	11	2	4
+1981	708	11	4	4
+1982	447	11	4	4
+1983	0	11	2	4
+1984	701	11	3	4
+1985	0	11	4	4
+1986	524	11	1	4
+1987	544	11	3	4
+1988	476	11	4	4
+1989	606	11	2	4
+1990	0	11	1	4
+1991	595	11	3	4
+1992	488	11	3	4
+1993	580	11	4	4
+1994	582	11	3	4
+1995	536	11	4	4
+1996	441	11	4	4
+1997	0	11	2	4
+1998	522	11	3	4
+1999	599	11	4	4
+2000	0	11	4	4
+2001	484	11	2	4
+2002	486	11	4	4
+2003	515	11	2	4
+2004	562	11	3	4
+2005	573	11	4	4
+2006	526	11	4	4
+2007	704	11	4	4
+2008	508	11	2	4
+2009	0	11	3	4
+2010	0	11	3	4
+2011	0	11	2	4
+2012	605	11	4	4
+2013	575	11	2	4
+2014	0	11	2	4
+2015	0	11	4	4
+2016	534	11	2	4
+2017	498	11	4	4
+2018	0	11	2	4
+2019	0	11	3	4
+2020	438	11	3	4
+2021	589	11	2	4
+2022	516	11	4	4
+2023	461	11	4	4
+\.
+
+
+--
+-- Name: pvp_pvpevaluation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+SELECT pg_catalog.setval('pvp_pvpevaluation_id_seq', 1, false);
+
+
+--
+-- Data for Name: south_migrationhistory; Type: TABLE DATA; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+COPY south_migrationhistory (id, app_name, migration, applied) FROM stdin;
+1	org	0001_initial	2013-10-28 12:50:10.891852+00
+2	org	0002_auto__add_field_employee_full_name	2013-10-28 12:50:10.950265+00
+3	org	0003_convert_names	2013-10-28 12:50:10.970746+00
+4	org	0004_auto__del_field_employee_informal_name	2013-10-28 12:50:10.996731+00
+5	org	0005_auto__add_leadership	2013-10-28 12:50:11.04263+00
+6	comp	0001_initial	2013-10-28 12:50:34.440179+00
+7	pvp	0001_initial	2013-10-28 12:50:47.96555+00
+8	blah	0001_initial	2013-10-28 12:51:01.17241+00
+9	org	0006_auto__add_field_employee_avatar	2013-10-29 18:35:36.189585+00
+\.
+
+
+--
+-- Name: south_migrationhistory_id_seq; Type: SEQUENCE SET; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+SELECT pg_catalog.setval('south_migrationhistory_id_seq', 9, true);
+
+
+--
+-- Name: auth_group_name_key; Type: CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_group
+    ADD CONSTRAINT auth_group_name_key UNIQUE (name);
+
+
+--
+-- Name: auth_group_permissions_group_id_permission_id_key; Type: CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_group_id_permission_id_key UNIQUE (group_id, permission_id);
+
+
+--
+-- Name: auth_group_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_group_pkey; Type: CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_group
+    ADD CONSTRAINT auth_group_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_permission_content_type_id_codename_key; Type: CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_permission
+    ADD CONSTRAINT auth_permission_content_type_id_codename_key UNIQUE (content_type_id, codename);
+
+
+--
+-- Name: auth_permission_pkey; Type: CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_permission
+    ADD CONSTRAINT auth_permission_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_user_groups
+    ADD CONSTRAINT auth_user_groups_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_groups_user_id_group_id_key; Type: CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_user_groups
+    ADD CONSTRAINT auth_user_groups_user_id_group_id_key UNIQUE (user_id, group_id);
+
+
+--
+-- Name: auth_user_pkey; Type: CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_user
+    ADD CONSTRAINT auth_user_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_user_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_user_permissions_user_id_permission_id_key; Type: CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permissions_user_id_permission_id_key UNIQUE (user_id, permission_id);
+
+
+--
+-- Name: auth_user_username_key; Type: CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_user
+    ADD CONSTRAINT auth_user_username_key UNIQUE (username);
+
+
+--
+-- Name: blah_comment_pkey; Type: CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+ALTER TABLE ONLY blah_comment
+    ADD CONSTRAINT blah_comment_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: comp_compensationsummary_pkey; Type: CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+ALTER TABLE ONLY comp_compensationsummary
+    ADD CONSTRAINT comp_compensationsummary_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_admin_log_pkey; Type: CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+ALTER TABLE ONLY django_admin_log
+    ADD CONSTRAINT django_admin_log_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_content_type_app_label_model_key; Type: CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+ALTER TABLE ONLY django_content_type
+    ADD CONSTRAINT django_content_type_app_label_model_key UNIQUE (app_label, model);
+
+
+--
+-- Name: django_content_type_pkey; Type: CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+ALTER TABLE ONLY django_content_type
+    ADD CONSTRAINT django_content_type_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_session_pkey; Type: CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+ALTER TABLE ONLY django_session
+    ADD CONSTRAINT django_session_pkey PRIMARY KEY (session_key);
+
+
+--
+-- Name: django_site_pkey; Type: CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+ALTER TABLE ONLY django_site
+    ADD CONSTRAINT django_site_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: org_employee_pkey; Type: CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+ALTER TABLE ONLY org_employee
+    ADD CONSTRAINT org_employee_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: org_leadership_pkey; Type: CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+ALTER TABLE ONLY org_leadership
+    ADD CONSTRAINT org_leadership_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: org_mentorship_pkey; Type: CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+ALTER TABLE ONLY org_mentorship
+    ADD CONSTRAINT org_mentorship_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: org_team_pkey; Type: CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+ALTER TABLE ONLY org_team
+    ADD CONSTRAINT org_team_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: pvp_evaluationround_pkey; Type: CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+ALTER TABLE ONLY pvp_evaluationround
+    ADD CONSTRAINT pvp_evaluationround_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: pvp_pvpevaluation_pkey; Type: CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+ALTER TABLE ONLY pvp_pvpevaluation
+    ADD CONSTRAINT pvp_pvpevaluation_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: south_migrationhistory_pkey; Type: CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+ALTER TABLE ONLY south_migrationhistory
+    ADD CONSTRAINT south_migrationhistory_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_group_name_like; Type: INDEX; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE INDEX auth_group_name_like ON auth_group USING btree (name varchar_pattern_ops);
+
+
+--
+-- Name: auth_group_permissions_group_id; Type: INDEX; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE INDEX auth_group_permissions_group_id ON auth_group_permissions USING btree (group_id);
+
+
+--
+-- Name: auth_group_permissions_permission_id; Type: INDEX; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE INDEX auth_group_permissions_permission_id ON auth_group_permissions USING btree (permission_id);
+
+
+--
+-- Name: auth_permission_content_type_id; Type: INDEX; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE INDEX auth_permission_content_type_id ON auth_permission USING btree (content_type_id);
+
+
+--
+-- Name: auth_user_groups_group_id; Type: INDEX; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE INDEX auth_user_groups_group_id ON auth_user_groups USING btree (group_id);
+
+
+--
+-- Name: auth_user_groups_user_id; Type: INDEX; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE INDEX auth_user_groups_user_id ON auth_user_groups USING btree (user_id);
+
+
+--
+-- Name: auth_user_user_permissions_permission_id; Type: INDEX; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE INDEX auth_user_user_permissions_permission_id ON auth_user_user_permissions USING btree (permission_id);
+
+
+--
+-- Name: auth_user_user_permissions_user_id; Type: INDEX; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE INDEX auth_user_user_permissions_user_id ON auth_user_user_permissions USING btree (user_id);
+
+
+--
+-- Name: auth_user_username_like; Type: INDEX; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE INDEX auth_user_username_like ON auth_user USING btree (username varchar_pattern_ops);
+
+
+--
+-- Name: blah_comment_content_type_id; Type: INDEX; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE INDEX blah_comment_content_type_id ON blah_comment USING btree (content_type_id);
+
+
+--
+-- Name: blah_comment_object_id; Type: INDEX; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE INDEX blah_comment_object_id ON blah_comment USING btree (object_id);
+
+
+--
+-- Name: blah_comment_owner_content_type_id; Type: INDEX; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE INDEX blah_comment_owner_content_type_id ON blah_comment USING btree (owner_content_type_id);
+
+
+--
+-- Name: blah_comment_owner_id; Type: INDEX; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE INDEX blah_comment_owner_id ON blah_comment USING btree (owner_id);
+
+
+--
+-- Name: comp_compensationsummary_employee_id; Type: INDEX; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE INDEX comp_compensationsummary_employee_id ON comp_compensationsummary USING btree (employee_id);
+
+
+--
+-- Name: django_admin_log_content_type_id; Type: INDEX; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE INDEX django_admin_log_content_type_id ON django_admin_log USING btree (content_type_id);
+
+
+--
+-- Name: django_admin_log_user_id; Type: INDEX; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE INDEX django_admin_log_user_id ON django_admin_log USING btree (user_id);
+
+
+--
+-- Name: django_session_expire_date; Type: INDEX; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE INDEX django_session_expire_date ON django_session USING btree (expire_date);
+
+
+--
+-- Name: django_session_session_key_like; Type: INDEX; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE INDEX django_session_session_key_like ON django_session USING btree (session_key varchar_pattern_ops);
+
+
+--
+-- Name: org_employee_team_id; Type: INDEX; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE INDEX org_employee_team_id ON org_employee USING btree (team_id);
+
+
+--
+-- Name: org_leadership_employee_id; Type: INDEX; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE INDEX org_leadership_employee_id ON org_leadership USING btree (employee_id);
+
+
+--
+-- Name: org_leadership_leader_id; Type: INDEX; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE INDEX org_leadership_leader_id ON org_leadership USING btree (leader_id);
+
+
+--
+-- Name: org_mentorship_mentee_id; Type: INDEX; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE INDEX org_mentorship_mentee_id ON org_mentorship USING btree (mentee_id);
+
+
+--
+-- Name: org_mentorship_mentor_id; Type: INDEX; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE INDEX org_mentorship_mentor_id ON org_mentorship USING btree (mentor_id);
+
+
+--
+-- Name: pvp_pvpevaluation_employee_id; Type: INDEX; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE INDEX pvp_pvpevaluation_employee_id ON pvp_pvpevaluation USING btree (employee_id);
+
+
+--
+-- Name: pvp_pvpevaluation_evaluation_round_id; Type: INDEX; Schema: public; Owner: scsjkkyzlyzgzj; Tablespace: 
+--
+
+CREATE INDEX pvp_pvpevaluation_evaluation_round_id ON pvp_pvpevaluation USING btree (evaluation_round_id);
+
+
+--
+-- Name: auth_group_permissions_permission_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_permission_id_fkey FOREIGN KEY (permission_id) REFERENCES auth_permission(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_groups_group_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY auth_user_groups
+    ADD CONSTRAINT auth_user_groups_group_id_fkey FOREIGN KEY (group_id) REFERENCES auth_group(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_user_permissions_permission_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permissions_permission_id_fkey FOREIGN KEY (permission_id) REFERENCES auth_permission(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: content_type_id_refs_id_ac14a6dc; Type: FK CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY blah_comment
+    ADD CONSTRAINT content_type_id_refs_id_ac14a6dc FOREIGN KEY (content_type_id) REFERENCES django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: content_type_id_refs_id_d043b34a; Type: FK CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY auth_permission
+    ADD CONSTRAINT content_type_id_refs_id_d043b34a FOREIGN KEY (content_type_id) REFERENCES django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: django_admin_log_content_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY django_admin_log
+    ADD CONSTRAINT django_admin_log_content_type_id_fkey FOREIGN KEY (content_type_id) REFERENCES django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: django_admin_log_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY django_admin_log
+    ADD CONSTRAINT django_admin_log_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: employee_id_refs_id_7fef637c; Type: FK CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY org_leadership
+    ADD CONSTRAINT employee_id_refs_id_7fef637c FOREIGN KEY (employee_id) REFERENCES org_employee(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: evaluation_round_id_refs_id_a0946cb9; Type: FK CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY pvp_pvpevaluation
+    ADD CONSTRAINT evaluation_round_id_refs_id_a0946cb9 FOREIGN KEY (evaluation_round_id) REFERENCES pvp_evaluationround(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: group_id_refs_id_f4b32aac; Type: FK CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY auth_group_permissions
+    ADD CONSTRAINT group_id_refs_id_f4b32aac FOREIGN KEY (group_id) REFERENCES auth_group(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: leader_id_refs_id_1fb1f576; Type: FK CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY org_team
+    ADD CONSTRAINT leader_id_refs_id_1fb1f576 FOREIGN KEY (leader_id) REFERENCES org_employee(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: leader_id_refs_id_7fef637c; Type: FK CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY org_leadership
+    ADD CONSTRAINT leader_id_refs_id_7fef637c FOREIGN KEY (leader_id) REFERENCES org_employee(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: mentor_id_refs_id_09661bdf; Type: FK CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY org_mentorship
+    ADD CONSTRAINT mentor_id_refs_id_09661bdf FOREIGN KEY (mentor_id) REFERENCES org_employee(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: owner_content_type_id_refs_id_ac14a6dc; Type: FK CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY blah_comment
+    ADD CONSTRAINT owner_content_type_id_refs_id_ac14a6dc FOREIGN KEY (owner_content_type_id) REFERENCES django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: team_id_refs_id_818d7514; Type: FK CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY org_employee
+    ADD CONSTRAINT team_id_refs_id_818d7514 FOREIGN KEY (team_id) REFERENCES org_team(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: user_id_refs_id_40c41112; Type: FK CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY auth_user_groups
+    ADD CONSTRAINT user_id_refs_id_40c41112 FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: user_id_refs_id_4dc23c39; Type: FK CONSTRAINT; Schema: public; Owner: scsjkkyzlyzgzj
+--
+
+ALTER TABLE ONLY auth_user_user_permissions
+    ADD CONSTRAINT user_id_refs_id_4dc23c39 FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: public; Type: ACL; Schema: -; Owner: scsjkkyzlyzgzj
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM scsjkkyzlyzgzj;
+GRANT ALL ON SCHEMA public TO scsjkkyzlyzgzj;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- PostgreSQL database dump complete
+--
+

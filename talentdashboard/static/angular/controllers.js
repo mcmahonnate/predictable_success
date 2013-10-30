@@ -151,7 +151,7 @@ angular.module('tdb.controllers', [])
         var newComment = {};
         newComment.id = -1;
         newComment.isEditing = true;
-        newComment.content = "new comment #" + ($scope.comments.length+1);
+        newComment.content = "";
         newComment.modified_date = new Date().toJSON();
         newComment.owner = {};
         newComment.owner.username = "admin";  // Fill in later with auth service.
