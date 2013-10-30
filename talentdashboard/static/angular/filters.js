@@ -40,3 +40,9 @@ filters.filter('noCents', function() {
     return value.replace(/\.\d+/, '');
   };
 });
+
+filters.filter('reverseArray', function() {
+  return function(items) {
+    return items.slice().reverse();
+  };
+});
