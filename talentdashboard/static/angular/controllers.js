@@ -1,7 +1,13 @@
 angular.module('tdb.controllers', [])
 
 .controller('EvaluationListCtrl', ['$scope', '$routeParams', 'PvpEvaluation', 'Team', function($scope, $routeParams, PvpEvaluation, Team) {
-    $scope.evaluations = PvpEvaluation.getCurrentEvaluationsForTalentCategory($routeParams.talent_category, $routeParams.team_id);
+	$scope.init = function(id)
+	{
+		$scope.team_id = id;
+	    $scope.evaluations = PvpEvaluation.getCurrentEvaluationsForTalentCategory($routeParams.talent_category, $scope.team_id);
+	}
+	$scope.team_id = $routeParams.team_id;
+    $scope.evaluations = PvpEvaluation.getCurrentEvaluationsForTalentCategory($routeParams.talent_category, $scope.team_id);
 	$scope.intialQuery ={};
 	$scope.intialQuery.teamId = $routeParams.team_id;
     $scope.talentCategory = $routeParams.talent_category;
