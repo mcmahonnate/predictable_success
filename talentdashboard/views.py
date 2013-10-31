@@ -13,14 +13,24 @@ from blah.models import Comment
 from django.contrib.auth.models import User
 import datetime
 from django.utils.log import getLogger
+from django.core.cache import cache
+
 logger = getLogger('talentdashboard')
 
 class EmployeeViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Employee.objects.all()
+    cache_key = "allemployees"
+    queryset = cache.get(cache_key)
+    if not queryset:
+        queryset = Employee.objects.all()
+        cache.set(cache_key, queryset)
     serializer_class = EmployeeSerializer
 
 class TeamViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Team.objects.all()
+    cache_key = "allteams"
+    queryset = cache.get(cache_key)
+    if not queryset:
+        queryset = Team.objects.all()
+        cache.set(cache_key, queryset)
     serializer_class = TeamSerializer
 
 class MentorshipViewSet(viewsets.ReadOnlyModelViewSet):
@@ -142,25 +152,29 @@ def compensation_summaries(request):
 
 @api_view(['GET'])
 def pvp_evaluations(request):
-    evaluations = PvpEvaluation.objects.all()
-
     current_round = request.QUERY_PARAMS.get('current_round', None)
-    if current_round is not None:
-        current_round = EvaluationRound.objects.most_recent()
-        evaluations = evaluations.filter(evaluation_round__id = current_round.id)
-
     employee_id = request.QUERY_PARAMS.get('employee_id', None)
-    if employee_id is not None:
-        evaluations = evaluations.filter(employee__id=int(employee_id))
-
-    team_id = request.QUERY_PARAMS.get('team_id', None)
-    if team_id is not None:
-        evaluations = evaluations.filter(employee__team_id=int(team_id))
-
-    # The talent_category query executes the query, so it needs to happen after all other filters
+    team_id = request.QUERY_PARAMS.get('team_id', None)    
     talent_category = request.QUERY_PARAMS.get('talent_category', None)
-    if talent_category is not None:
-        evaluations = [item for item in evaluations if item.get_talent_category() == int(talent_category)]
+    cache_key = "cr:{0}ei:{1}ti:{2}tc:{3}".format(current_round, employee_id, talent_category, team_id, talent_category)
+    evaluations = cache.get(cache_key)
+    if not evaluations:
+        evaluations = PvpEvaluation.objects.all()
+        
+        if current_round is not None:
+            current_round = EvaluationRound.objects.most_recent()
+            evaluations = evaluations.filter(evaluation_round__id = current_round.id)
+
+        if employee_id is not None:
+            evaluations = evaluations.filter(employee__id=int(employee_id))
+
+        if team_id is not None:
+            evaluations = evaluations.filter(employee__team_id=int(team_id))
+
+        # The talent_category query executes the query, so it needs to happen after all other filters
+        if talent_category is not None:
+            evaluations = [item for item in evaluations if item.get_talent_category() == int(talent_category)]
+        cache.set(cache_key, evaluations)
 
     serializer = PvpEvaluationSerializer(evaluations, many=True)
     return Response(serializer.data)
