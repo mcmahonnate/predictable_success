@@ -83,6 +83,7 @@ class EmployeeCommentList(APIView):
         if employee is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
         comments = Comment.objects.filter(object_id = pk)
+        comments = comments.extra(order_by = ['-created_date'])
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
 
