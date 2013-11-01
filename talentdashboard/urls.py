@@ -3,6 +3,7 @@ from django.conf.urls import *
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
+from django.views.decorators.cache import cache_page
 from views import *
 from forms import *
 from rest_framework import routers
@@ -22,12 +23,12 @@ urlpatterns = patterns('',
     url(r'^login/?$','django.contrib.auth.views.login',{'template_name':'login.html', 'authentication_form':CustomAuthenticationForm}),
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^api/v1/pvp-evaluations/', pvp_evaluations),
-    url(r'^api/v1/compensation-summaries/', compensation_summaries),
-    url(r'api/v1/talent-category-reports/teams/(?P<pk>.*)', TeamTalentCategoryReportDetail.as_view()),
-    url(r'api/v1/talent-category-reports/(?P<pk>.*)', TalentCategoryReportDetail.as_view()),
-    url(r'api/v1/salary-reports/teams/(?P<pk>.*)', TeamSalaryReportDetail.as_view()),
-    url(r'api/v1/salary-reports/company/', get_company_salary_report),
+    url(r'^api/v1/pvp-evaluations/', cache_page(60 * 15)(pvp_evaluations)),
+    url(r'^api/v1/compensation-summaries/', cache_page(60 * 15)(compensation_summaries)),
+    url(r'api/v1/talent-category-reports/teams/(?P<pk>.*)', cache_page(60 * 15)(TeamTalentCategoryReportDetail.as_view())),
+    url(r'api/v1/talent-category-reports/(?P<pk>.*)', cache_page(60 * 15)(TalentCategoryReportDetail.as_view())),
+    url(r'api/v1/salary-reports/teams/(?P<pk>.*)', cache_page(60 * 15)(TeamSalaryReportDetail.as_view())),
+    url(r'api/v1/salary-reports/company/', cache_page(60 * 15)(get_company_salary_report)),
     url(r'api/v1/comments/employees/(?P<pk>.*)', EmployeeCommentList.as_view()),
     url(r'api/v1/comments/(?P<pk>.*)', CommentDetail.as_view()),
     url(r'^', include(router.urls)),
