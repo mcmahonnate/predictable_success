@@ -10,7 +10,6 @@ from comp.models import CompensationSummary
 from .serializers import *
 from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team
 from pvp.salaryreports import get_salary_report_for_team, get_salary_report_for_all_employees
-from org.teamreports import get_talent_category_report_for_team_lead
 from blah.models import Comment
 from django.contrib.auth.models import User
 import datetime
