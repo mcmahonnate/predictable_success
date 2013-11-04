@@ -53,6 +53,15 @@ angular.module('tdb.services', ['ngResource'])
     return PvpEvaluation;
 }])
 
+.factory('TeamLeads', ['$resource', '$http', function($resource, $http) {
+    var TeamLeads = $resource('/api/v1/team-leads/');
+
+    TeamLeads.getCurrentEvaluationsForTeamLeads = function(team_id) {
+        return this.query({team_id: team_id});
+    };
+    return TeamLeads;
+}])
+
 .factory('TalentCategoryReport', ['$resource', '$http', function($resource, $http) {
     TalentCategoryReport = $resource('/api/v1/talent-category-reports/:id/:teamId');
 

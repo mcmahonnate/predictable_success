@@ -53,11 +53,11 @@
     <article class="widget google-analytics loaded" id="widget-14808658" style="top: 0px; left: 650px; width: auto;">
       <div class="widget-inner widget-size-1x1 large-screen">
         <header class="no-reload">
-          <h1 style="display:inline;">Team Members</h1>
+          <h1 style="display:inline;">Team Leads</h1>
         </header>
         <section class="widget-body number-widget">
-            <div class="widget-canvas" ng-controller="EvaluationListCtrl" ng-init="init(teamId)">
-				<div ng-repeat="evaluation in evaluations | orderBy:'talent_category'" style="main-stat t-size-x12;margin-bottom:5px;">
+            <div class="widget-canvas" ng-controller="TeamLeadsCtrl" ng-init="init(teamId)">
+				<div ng-repeat="evaluation in teamLeads | orderBy:'talent_category'" style="main-stat t-size-x12;margin-bottom:5px;">
 					<canvas employee-talent-category="{{evaluation.talent_category}}" width="12" height="12"></canvas><span style="margin-left:10px;"><a href="#/employees/{{evaluation.employee.id}}">{{evaluation.employee.full_name}}</a></span>
 				</div>
             </div><!-- .widget-canvas -->

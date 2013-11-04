@@ -10,6 +10,7 @@ from comp.models import CompensationSummary
 from .serializers import *
 from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team
 from pvp.salaryreports import get_salary_report_for_team, get_salary_report_for_all_employees
+from org.teamreports import get_talent_category_report_for_team_lead
 from blah.models import Comment
 from django.contrib.auth.models import User
 import datetime
@@ -158,25 +159,39 @@ def pvp_evaluations(request):
     employee_id = request.QUERY_PARAMS.get('employee_id', None)
     team_id = request.QUERY_PARAMS.get('team_id', None)    
     talent_category = request.QUERY_PARAMS.get('talent_category', None)
-    cache_key = "cr:{0}ei:{1}ti:{2}tc:{3}".format(current_round, employee_id, talent_category, team_id, talent_category)
-    evaluations = cache.get(cache_key)
-    if not evaluations:
-        evaluations = PvpEvaluation.objects.all()
+    evaluations = PvpEvaluation.objects.all()
         
-        if current_round is not None:
-            current_round = EvaluationRound.objects.most_recent()
-            evaluations = evaluations.filter(evaluation_round__id = current_round.id)
+    if current_round is not None:
+        current_round = EvaluationRound.objects.most_recent()
+        evaluations = evaluations.filter(evaluation_round__id = current_round.id)
 
-        if employee_id is not None:
-            evaluations = evaluations.filter(employee__id=int(employee_id))
+    if employee_id is not None:
+        evaluations = evaluations.filter(employee__id=int(employee_id))
 
-        if team_id is not None:
-            evaluations = evaluations.filter(employee__team_id=int(team_id))
+    if team_id is not None:
+        evaluations = evaluations.filter(employee__team_id=int(team_id))
 
-        # The talent_category query executes the query, so it needs to happen after all other filters
-        if talent_category is not None:
-            evaluations = [item for item in evaluations if item.get_talent_category() == int(talent_category)]
-        cache.set(cache_key, evaluations)
+    # The talent_category query executes the query, so it needs to happen after all other filters
+    if talent_category is not None:
+        evaluations = [item for item in evaluations if item.get_talent_category() == int(talent_category)]
 
     serializer = PvpEvaluationSerializer(evaluations, many=True)
     return Response(serializer.data)
+    
+@api_view(['GET'])
+def team_leads(request):
+    team_id = request.QUERY_PARAMS.get('team_id', None)    
+    leads = Leadership.objects.filter(leader__team_id=int(team_id))
+    current_round = EvaluationRound.objects.most_recent()
+    evaluations = PvpEvaluation.objects.filter(employee__team_id=int(team_id))
+    evaluations = evaluations.filter(evaluation_round__id = current_round.id)
+       
+    employees = []
+    for lead in leads:
+        if lead.leader not in employees:
+            employees.append(lead.leader)
+            
+    evaluations = evaluations.filter(employee__in=employees)            
+    serializer = PvpEvaluationSerializer(evaluations, many=True)
+    
+    return Response(serializer.data)    

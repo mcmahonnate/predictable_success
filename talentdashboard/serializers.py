@@ -43,7 +43,7 @@ class EvaluationRoundSerializer(serializers.HyperlinkedModelSerializer):
         model = EvaluationRound
         fields = ['id', 'date',]
 
-class PvpEvaluationSerializer(serializers.ModelSerializer ):
+class PvpEvaluationSerializer(serializers.ModelSerializer):
     talent_category = serializers.IntegerField(source='get_talent_category')
     employee = EmployeeSerializer()
     evaluation_round = EvaluationRoundSerializer()

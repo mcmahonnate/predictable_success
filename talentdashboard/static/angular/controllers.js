@@ -29,6 +29,11 @@ angular.module('tdb.controllers', [])
 	$scope.menu = {show: false};
 }])
 
+.controller('TeamLeadsCtrl', ['$scope', '$routeParams', 'TeamLeads', function($scope, $routeParams, TeamLeads) {
+    $scope.team_id = $routeParams.id;
+    $scope.teamLeads = TeamLeads.getCurrentEvaluationsForTeamLeads($scope.team_id)
+}])
+
 .controller('EmployeeListCtrl', ['$scope', 'Employee', function($scope, Employee) {
     $scope.employees = Employee.query();
 	$scope.employeeMenu = {show: false};
@@ -110,6 +115,7 @@ angular.module('tdb.controllers', [])
             $scope.team = data;
         }
     );
+   
 }])
 
 .controller('EmployeeCommentsCtrl', ['$scope', '$routeParams', 'EmployeeComments', 'Comment', function($scope, $routeParams, EmployeeComments, Comment) {
