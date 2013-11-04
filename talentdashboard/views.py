@@ -1,5 +1,6 @@
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
+from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
@@ -17,21 +18,22 @@ from django.core.cache import cache
 
 logger = getLogger('talentdashboard')
 
-class EmployeeViewSet(viewsets.ReadOnlyModelViewSet):
-    cache_key = "allemployees"
-    queryset = cache.get(cache_key)
-    if not queryset:
-        queryset = Employee.objects.all()
-        cache.set(cache_key, queryset)
+class EmployeeList(generics.ListAPIView):
     serializer_class = EmployeeSerializer
+    queryset = Employee.objects.all()
+
+class EmployeeDetail(generics.RetrieveAPIView):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeSerializer
+    
+    def get_object(self):
+        pk = self.kwargs.get(self.pk_url_kwarg, None)
+        pk = pk.replace("/", "")
+        return Employee.objects.get(id=pk)
 
 class TeamViewSet(viewsets.ReadOnlyModelViewSet):
-    cache_key = "allteams"
-    queryset = cache.get(cache_key)
-    if not queryset:
-        queryset = Team.objects.all()
-        cache.set(cache_key, queryset)
     serializer_class = TeamSerializer
+    queryset = Team.objects.all()
 
 class MentorshipViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = MentorshipSerializer

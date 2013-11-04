@@ -10,7 +10,6 @@ from rest_framework import routers
 from blah.models import Comment
 
 router = routers.DefaultRouter()
-router.register(r'api/v1/employees', EmployeeViewSet)
 router.register(r'api/v1/teams', TeamViewSet)
 router.register(r'api/v1/mentorships', MentorshipViewSet)
 router.register(r'api/v1/leaderships', LeadershipViewSet)
@@ -23,6 +22,8 @@ urlpatterns = patterns('',
     url(r'^login/?$','django.contrib.auth.views.login',{'template_name':'login.html', 'authentication_form':CustomAuthenticationForm}),
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'api/v1/employees/(?P<pk>.*)/', cache_page(60 * 15)(EmployeeDetail.as_view()), name='employee-detail'),
+    url(r'api/v1/employees', cache_page(60 * 15)(EmployeeList.as_view()), name='employee-list'),
     url(r'^api/v1/pvp-evaluations/', cache_page(60 * 15)(pvp_evaluations)),
     url(r'^api/v1/compensation-summaries/', cache_page(60 * 15)(compensation_summaries)),
     url(r'api/v1/talent-category-reports/teams/(?P<pk>.*)', cache_page(60 * 15)(TeamTalentCategoryReportDetail.as_view())),
