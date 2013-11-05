@@ -20,10 +20,10 @@ logger = getLogger('talentdashboard')
 
 class EmployeeList(generics.ListAPIView):
     serializer_class = EmployeeSerializer
-    queryset = Employee.objects.all()
+    queryset = Employee.objects.filter(display='t')
 
 class EmployeeDetail(generics.RetrieveAPIView):
-    queryset = Employee.objects.all()
+    queryset = Employee.objects.filter(display='t')
     serializer_class = EmployeeSerializer
     
     def get_object(self):
