@@ -48,6 +48,7 @@ angular.module('tdb.controllers', [])
 
 .controller('TeamListCtrl', ['$scope', 'Team', function($scope, Team) {
     $scope.teams = Team.query();
+    $scope.teamQuery = $scope.teams[0];
 	$scope.teamMenu = {show: false};
 	$scope.startsWith  = function(expected, actual){
 		if(expected && actual){
