@@ -699,3 +699,14 @@ g{ cursor: pointer;}
 .blue.button:hover                      { background-color: #2575cf; }
 .yellow.button, .yellow.button:visited  { background-color: #ffb515; }
 .yellow.button:hover                    { background-color: #fc9200; }
+.fade {
+  opacity: 0;
+  -webkit-transition: opacity 0.5s ease-in;
+  -moz-transition: opacity 0.5s ease-in;
+  -o-transition: opacity 0.5s ease-in;
+  -ms-transition: opacity 0.5s ease-in;
+  transition: opacity 0.5s ease-in;
+}
+.fade.in{
+  opacity: 1;
+}
