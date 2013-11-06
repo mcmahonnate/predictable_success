@@ -19,15 +19,15 @@
 				</ul>
 			  </div>
 			</div>
-			<div class="btn" ng-mouseover="teamMenu.show=true" ng-mouseleave="teamMenu.show=false" id="switch-dashboard" style="float:right">
+			<div ng-controller="TeamListCtrl" class="btn" ng-mouseover="teamMenu.show=true" ng-mouseleave="teamMenu.show=false" id="switch-dashboard" style="float:right">
 			  <span id="selected-dashboard-title" style="font-weight: 700; color: white;">Teams</span>
 			  <div id="selection-list" ng-show="teamMenu.show" style="display: none;">
 				<ul>
 					<li>
 						<input class="search-input" type="text" ng-model="teamQuery" placeholder="Search"/>
 					</li>
-					<li ng-repeat="employee in employees | filter:{team.name:teamQuery}:startsWith | orderBy:'team.name'">
-						<a class="dashboard" ng-click="teamMenu.show = false;" style="font-weight:800;" href="#/teams/{{employee.team.id}}">{{employee.team.name}}</a>
+					<li ng-repeat="team in teams | filter:{name:teamQuery}:startsWith | orderBy:'name'">
+						<a class="dashboard" ng-click="teamMenu.show = false;" style="font-weight:800;" href="#/teams/{{team.id}}">{{team.name}}</a>
 					</li>
 				</ul>		  
 			  </div>
