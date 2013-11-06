@@ -60,3 +60,28 @@ class Leadership(models.Model):
 
     def __str__(self):
         return "%s leader of %s" % (self.leader.full_name, self.employee.full_name)
+
+class Attribute(models.Model):
+    employee = models.ForeignKey(Employee, related_name='+')
+    name = models.CharField(
+        max_length=255,
+        blank=True,
+    )
+    category = models.ForeignKey(
+        'AttributeCategory',
+        null=True,
+        blank=True,
+        default=None
+    )
+
+    def __str__(self):
+        return "%s is a %s" % (self.name, self.category.name)        
+
+class AttributeCategory(models.Model):
+    name = models.CharField(
+        max_length=255,
+        blank=True,
+    )
+
+    def __str__(self):
+        return self.name        

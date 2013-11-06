@@ -57,7 +57,7 @@ angular.module('tdb.controllers', [])
 	}
 }])
 
-.controller('EmployeeDetailCtrl', ['$scope', '$routeParams', 'Employee', 'Mentorship', 'Leadership', 'CompSummary', '$http', function($scope, $routeParams, Employee, Mentorship, Leadership, CompSummary, $http) {
+.controller('EmployeeDetailCtrl', ['$scope', '$routeParams', 'Employee', 'Mentorship', 'Leadership', 'Attribute', 'CompSummary', '$http', function($scope, $routeParams, Employee, Mentorship, Leadership, Attribute, CompSummary, $http) {
     Employee.get(
         {id: $routeParams.id},
         function(data) {
@@ -71,6 +71,8 @@ angular.module('tdb.controllers', [])
     );
     $scope.mentorships = Mentorship.getMentorshipsForMentee($routeParams.id);
 	$scope.leaderships = Leadership.getLeadershipsForEmployee($routeParams.id);
+    $scope.passions = Attribute.getAttributtesForEmployee($routeParams.id, 1);
+    $scope.super_powers = Attribute.getAttributtesForEmployee($routeParams.id, 2);
 }])
 
 .controller('EmployeeCompSummariesCtrl', ['$scope', '$routeParams', 'CompSummary', function($scope, $routeParams, CompSummary) {

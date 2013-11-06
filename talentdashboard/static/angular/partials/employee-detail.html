@@ -93,7 +93,12 @@
                 </div>
 
                 <div class="t-size-x20" id="mentor">
-					<span>?</span>
+					<span ng-if="passions.length == 0">None</span>
+					<ul ng-if="passions.length > 0">
+						<li ng-repeat="passion in passions">
+						  {{ passion.name }}
+						</li>
+					 </ul>
 				</div>
               </li>			  
               <li class="clear" style="padding-top:10px;padding-bottom:10px;">
@@ -102,7 +107,12 @@
                 </div>
 
                 <div class="t-size-x20" id="mentor">
-					<span>?</span>
+					<span ng-if="super_powers.length == 0">None</span>
+					<ul ng-if="super_powers.length > 0">
+						<li ng-repeat="super_power in super_powers">
+						  {{ super_power.name }}
+						</li>
+					 </ul>
 				</div>
               </li>			  			  
             </ol>

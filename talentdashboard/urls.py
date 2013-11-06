@@ -13,6 +13,7 @@ router = routers.DefaultRouter()
 router.register(r'api/v1/teams', TeamViewSet)
 router.register(r'api/v1/mentorships', MentorshipViewSet)
 router.register(r'api/v1/leaderships', LeadershipViewSet)
+router.register(r'api/v1/attributes', AttributeViewSet)
 
 admin.site.register(Comment)
 admin.autodiscover()

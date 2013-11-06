@@ -22,6 +22,14 @@ angular.module('tdb.services', ['ngResource'])
     return Leadership;
 }])
 
+.factory('Attribute', ['$resource', '$http', function($resource, $http) {
+    var Attribute = $resource('/api/v1/attributes/');
+
+    Attribute.getAttributtesForEmployee = function(employee_id, category_id) { return this.query({employee_id: employee_id, category_id: category_id}); };
+
+    return Attribute;
+}])
+
 .factory('Team', ['$resource', '$http', function($resource, $http) {
     var Team = $resource('/api/v1/teams/:id/');
 	
