@@ -26,7 +26,7 @@
 					<li>
 						<input class="search-input" type="text" ng-model="teamQuery" placeholder="Search"/>
 					</li>
-					<li ng-repeat="employee in employees | filter:{team.name:teamQuery}:startsWith | unique:'team.name' | orderBy:'team.name'">
+					<li ng-repeat="employee in employees | filter:{team.name:teamQuery}:startsWith | orderBy:'team.name'">
 						<a class="dashboard" ng-click="teamMenu.show = false;" style="font-weight:800;" href="#/teams/{{employee.team.id}}">{{employee.team.name}}</a>
 					</li>
 				</ul>		  
