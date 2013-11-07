@@ -193,7 +193,7 @@ def pvp_evaluations(request):
         serializer = PvpEvaluationSerializer(evaluations, many=True)
         data = serializer.data
 
-        return Response(data)
+    return Response(data)
     
 @api_view(['GET'])
 def team_leads(request):
