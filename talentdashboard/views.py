@@ -188,8 +188,12 @@ def pvp_evaluations(request):
     if talent_category is not None:
         evaluations = [item for item in evaluations if item.get_talent_category() == int(talent_category)]
 
-    serializer = PvpEvaluationSerializer(evaluations, many=True)
-    return Response(serializer.data)
+    data= [{'empty':1}]
+    if len(evaluations)>0:
+        serializer = PvpEvaluationSerializer(evaluations, many=True)
+        data = serializer.data
+
+        return Response(data)
     
 @api_view(['GET'])
 def team_leads(request):

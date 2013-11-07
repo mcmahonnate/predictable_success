@@ -1,6 +1,7 @@
 angular.module('tdb.controllers', [])
 
 .controller('EvaluationListCtrl', ['$scope', '$routeParams', 'PvpEvaluation', 'Team', function($scope, $routeParams, PvpEvaluation, Team) {
+	$scope.showNoResults = false;
 	$scope.init = function(id)
 	{
 		$scope.team_id = id;
