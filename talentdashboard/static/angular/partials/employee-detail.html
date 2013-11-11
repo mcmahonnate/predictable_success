@@ -84,7 +84,7 @@
 					<ul ng-if="mentorships.length > 0">
 						<li ng-repeat="mentorship in mentorships">
 						  <a ng-if="mentorship.mentor.display" href="#/employees/{{mentorship.mentor.id}}">{{ mentorship.mentor.full_name }}</a>
-                          <div ng-if="!mentorship.mentor.display">{{ leadership.leader.full_name }}</div>
+                          <div ng-if="!mentorship.mentor.display">{{ mentorship.mentor.full_name }}</div>
 						</li>
 					 </ul>
 				</div>
@@ -94,7 +94,7 @@
                   Passion
                 </div>
 
-                <div class="t-size-x20" id="mentor">
+                <div class="t-size-x20">
 					<span ng-if="passions.length == 0">None</span>
 					<ul ng-if="passions.length > 0">
 						<li ng-repeat="passion in passions">
@@ -108,7 +108,7 @@
                   Super Power
                 </div>
 
-                <div class="t-size-x20" id="mentor">
+                <div class="t-size-x20">
 					<span ng-if="super_powers.length == 0">None</span>
 					<ul ng-if="super_powers.length > 0">
 						<li ng-repeat="super_power in super_powers">
