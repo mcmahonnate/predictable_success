@@ -61,7 +61,7 @@
 					<canvas employee-talent-category="{{evaluation.talent_category}}" width="12" height="12"></canvas>
                     <span style="margin-left:10px;">
                         <a ng-if="evaluation.employee.display" href="#/employees/{{evaluation.employee.id}}">{{evaluation.employee.full_name}}</a>
-                        <div ng-if="!evaluation.employee.display">{{evaluation.employee.full_name}}</div>
+                        <span ng-if="!evaluation.employee.display">{{evaluation.employee.full_name}}</span>
                     </span>
 				</div>
             </div><!-- .widget-canvas -->
