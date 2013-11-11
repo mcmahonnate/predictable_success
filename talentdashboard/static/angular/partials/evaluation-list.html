@@ -19,7 +19,7 @@
 				</ul>
 			  </div>
 			</div>
-			<div ng-controller="TeamListCtrl" class="btn" ng-mouseover="teamMenu.show=!teamMenu.show" ng-mouseleave="teamMenu.show=false" id="switch-dashboard" style="float:right">
+			<div ng-controller="TeamListCtrl" class="btn" ng-mouseover="teamMenu.show=true" ng-mouseleave="teamMenu.show=false" id="switch-dashboard" style="float:right">
 			  <span id="selected-dashboard-title" style="font-weight: 700; color: white;">Teams</span>
 			  <div id="selection-list" ng-show="teamMenu.show" style="display: none;">
 				<ul>
@@ -37,7 +37,7 @@
     <div class="fade" ng-class="{in:evaluations}">
         <div class="clear" style="background-color: #101214;padding-top: 10px;padding-bottom: 10px;">
             <div class="inner dashboard-sized-el" style="max-width: 970px;">
-                <div class="btn" ng-mouseover="menu.show=!menu.show" ng-mouseout="menu.show=false" style="border-style:solid; border-width: 1px;border-color: #cbcbcb;" id="switch-dashboard">
+                <div class="btn" ng-mouseover="menu.show=true" ng-mouseout="menu.show=false" style="border-style:solid; border-width: 1px;border-color: #cbcbcb;" id="switch-dashboard">
                   <span ng-if="! byTeam.employee.team.name" id="selected-dashboard-title" style="font-weight: 700; color: white;">Filter By Team</span>
                   <span ng-if="byTeam.employee.team.name" id="selected-dashboard-title" style="font-weight: 700; color: white;">{{ byTeam.employee.team.name }}</span>
                   <div ng-controller="TeamListCtrl" id="selection-list" ng-show="menu.show" style="border-style:solid; border-width: 1px;border-color: #cbcbcb;">
