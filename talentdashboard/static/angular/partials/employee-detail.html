@@ -68,7 +68,7 @@
 					<ul ng-if="leaderships.length > 0">
 						<li ng-repeat="leadership in leaderships">
 						  <a ng-if="leadership.leader.display" href="#/employees/{{leadership.leader.id}}">{{ leadership.leader.full_name }}</a>
-                          <div ng-if="!leadership.leader.display">{{ leadership.leader.full_name }}</div>
+                          <span ng-if="!leadership.leader.display">{{ leadership.leader.full_name }}</span>
 						</li>
 					 </ul>					
 				</div>
@@ -84,7 +84,7 @@
 					<ul ng-if="mentorships.length > 0">
 						<li ng-repeat="mentorship in mentorships">
 						  <a ng-if="mentorship.mentor.display" href="#/employees/{{mentorship.mentor.id}}">{{ mentorship.mentor.full_name }}</a>
-                          <div ng-if="!mentorship.mentor.display">{{ mentorship.mentor.full_name }}</div>
+                          <span ng-if="!mentorship.mentor.display">{{ mentorship.mentor.full_name }}</span>
 						</li>
 					 </ul>
 				</div>
