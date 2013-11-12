@@ -47,7 +47,7 @@
                         <li><a id="filters" ng-if="!intialQuery.teamId" ng-click="menu.show=false;byTeam.employee.team.name = '';byTeam.employee.team.id =''" style="font-weight:800;cursor: pointer;" class="dashboard">All</a></li>
                         <li ng-repeat="team in teams | filter:{name:teamQuery}:startsWith | unique:'name' | orderBy:'name'">
                             <a id="filters" ng-if="initialQuery.teamId" ng-href="#/evaluations/current?talent_category={{ talentCategory }}&team_id={{ team.id }}" style="font-weight:800;cursor: pointer;" class="dashboard">{{team.name}}</a>
-                            <a id="filters" ng-if="!initialQuery.teamId" ng-click="menu.show=false;byTeam.employee.team.name = team.name;byTeam.employee.team.id=team.id;filterList()" style="font-weight:800;cursor: pointer;" class="dashboard">{{team.name}}</a>
+                            <a id="filters" ng-if="!initialQuery.teamId" ng-click="menu.show=false;byTeam.employee.team.name = team.name;byTeam.employee.team.id=team.id;" style="font-weight:800;cursor: pointer;" class="dashboard">{{team.name}}</a>
                         </li>
                     </ul>
                   </div>
