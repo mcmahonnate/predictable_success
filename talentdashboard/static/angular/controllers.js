@@ -16,6 +16,8 @@ angular.module('tdb.controllers', [])
 	$scope.byTeam.employee = { };
 	$scope.byTeam.employee.team = { };
 	$scope.showNoResults = false;
+	$scope.byTeam.employee.team.name = "";
+	$scope.byTeam.employee.team.id = "";
 	if ($routeParams.team_id){
 		Team.get(
 			{id: $routeParams.team_id},
@@ -24,12 +26,10 @@ angular.module('tdb.controllers', [])
 				$scope.byTeam.employee.team.id = data.id
 			}
 		);
-	} else {
-		$scope.byTeam.employee.team.name = "";
-		$scope.byTeam.employee.team.id = "";
 	}
 	$scope.filterList = function(){
 		var found = false;
+		$scope.showNoResults = false;
 	    angular.forEach($scope.evaluations, function(evaluation) {
 			if (evaluation.employee.team.name == $scope.byTeam.employee.team.name) {
 				found=true;

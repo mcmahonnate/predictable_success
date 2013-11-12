@@ -94,7 +94,7 @@
                   Super Power
                 </div>
 
-                <div class="t-size-x12" style="min-width: 65%">
+                <div class="t-size-x14" style="min-width: 65%">
 					<span ng-if="super_powers.length == 0">--</span>
 					<ul ng-if="super_powers.length > 0">
 						<li ng-repeat="super_power in super_powers">
@@ -113,7 +113,7 @@
 					<span ng-if="passions.length == 0">--</span>
 					<ul ng-if="passions.length > 0">
 						<li>
-							<span ng-repeat="passion in passions">
+							<span ng-repeat="passion in passions | limitTo:4">
 							  <text ng-if="!$last">{{ passion.name }},</text>
 							  <text ng-if="$last">{{ passion.name }}</text>
 							</span>
@@ -131,7 +131,7 @@
 					<span ng-if="skills.length == 0">--</span>
 					<ul ng-if="skills.length > 0">
 						<li>
-							<span ng-repeat="skill in skills">
+							<span ng-repeat="skill in skills | limitTo:4">
 							  <text ng-if="!$last">{{ skill.name }},</text>
 							  <text ng-if="$last">{{ skill.name }}</text>
 							</span>
