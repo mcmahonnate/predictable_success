@@ -55,7 +55,7 @@
                   Hire Date
                 </div>
 
-                <div class="t-size-x14" id="start_date">{{ employee.hire_date | date:'MM/dd/yyyy' }}</div>
+                <div class="t-size-x14" id="start_date" style="min-width: 65%">{{ employee.hire_date | date:'MM/dd/yyyy' }}</div>
               </li>
 
               <li class="clear" style="padding-top:10px;padding-bottom:10px;">
@@ -63,7 +63,7 @@
                   Team Lead
                 </div>
 
-                <div class="t-size-x14" id="team_lead">
+                <div class="t-size-x14" id="team_lead" style="min-width: 65%">
 					<span ng-if="leaderships.length==0">--</span>
 					<ul ng-if="leaderships.length > 0">
 						<li ng-repeat="leadership in leaderships">
@@ -79,7 +79,7 @@
                   Mentor
                 </div>
 
-                <div class="t-size-x14" id="mentor">
+                <div class="t-size-x14" id="mentor" style="min-width: 65%">
 					<span ng-if="mentorships.length == 0">--</span>
 					<ul ng-if="mentorships.length > 0">
 						<li ng-repeat="mentorship in mentorships">
@@ -94,7 +94,7 @@
                   Super Power
                 </div>
 
-                <div class="t-size-x12">
+                <div class="t-size-x12" style="min-width: 65%">
 					<span ng-if="super_powers.length == 0">--</span>
 					<ul ng-if="super_powers.length > 0">
 						<li ng-repeat="super_power in super_powers">
@@ -109,7 +109,7 @@
                   Passions
                 </div>
 
-                <div class="t-size-x12">
+                <div class="t-size-x12" style="min-width: 65%">
 					<span ng-if="passions.length == 0">--</span>
 					<ul ng-if="passions.length > 0">
 						<li>
@@ -127,7 +127,7 @@
                   Skills
                 </div>
 
-                <div class="t-size-x12">
+                <div class="t-size-x12" style="min-width: 65%">
 					<span ng-if="skills.length == 0">--</span>
 					<ul ng-if="skills.length > 0">
 						<li>
