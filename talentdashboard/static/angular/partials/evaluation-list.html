@@ -47,7 +47,7 @@
                         <li><a id="filters" ng-if="!intialQuery.teamId" ng-click="menu.show=false;byTeam.employee.team.name = '';byTeam.employee.team.id =''" style="font-weight:800;cursor: pointer;" class="dashboard">All</a></li>
                         <li ng-repeat="team in teams | filter:{name:teamQuery}:startsWith | unique:'name' | orderBy:'name'">
                             <a id="filters" ng-if="initialQuery.teamId" ng-href="#/evaluations/current?talent_category={{ talentCategory }}&team_id={{ team.id }}" style="font-weight:800;cursor: pointer;" class="dashboard">{{team.name}}</a>
-                            <a id="filters" ng-if="!initialQuery.teamId" ng-click="menu.show=false;byTeam.employee.team.name = team.name;byTeam.employee.team.id=team.id" style="font-weight:800;cursor: pointer;" class="dashboard">{{team.name}}</a>
+                            <a id="filters" ng-if="!initialQuery.teamId" ng-click="menu.show=false;byTeam.employee.team.name = team.name;byTeam.employee.team.id=team.id;filterList()" style="font-weight:800;cursor: pointer;" class="dashboard">{{team.name}}</a>
                         </li>
                     </ul>
                   </div>
@@ -64,7 +64,7 @@
       </header>
 
       <div class="dashboard-sized-el employees"id="dashboard" style="margin-top: 115px; max-width: 970px; height: 804px;">
-		  <div ng-show="evaluations[0].empty" style="text-align:center; font-size:2.5em; font-weight:bold; color: #585858;position: absolute; margin: 5px; left: 0px; top: 150px; width: 970px;">No Results</div>	
+		  <div ng-show="evaluations[0].empty || showNoResults" style="text-align:center; font-size:2.5em; font-weight:bold; color: #585858;position: absolute; margin: 5px; left: 0px; top: 150px; width: 970px;">No Results</div>	
           <div id="widget-14808658" class="widget" style="position: absolute; margin: 5px; left: 0px; top: 0px; width: 230px; height: 230px;" on-filter="" index="{{$index}}" ng-repeat="evaluation in evaluations | filter:byTeam.employee.team.name | orderBy:'employee.full_name'">
               <div class="widget-inner widget-size-1x1 large-screen" style="width: 230px; height: 230px;">
                   <header class="no-reload">
