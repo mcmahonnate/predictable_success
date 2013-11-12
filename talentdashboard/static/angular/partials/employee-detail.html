@@ -91,20 +91,6 @@
               </li>
               <li class="clear" style="padding-top:10px;padding-bottom:10px;">
                 <div class="t-secondary">
-                  Passion
-                </div>
-
-                <div class="t-size-x18">
-					<span ng-if="passions.length == 0">None</span>
-					<ul ng-if="passions.length > 0">
-						<li ng-repeat="passion in passions">
-						  {{ passion.name }}
-						</li>
-					 </ul>
-				</div>
-              </li>			  
-              <li class="clear" style="padding-top:10px;padding-bottom:10px;">
-                <div class="t-secondary">
                   Super Power
                 </div>
 
@@ -116,7 +102,26 @@
 						</li>
 					 </ul>
 				</div>
-              </li>			  			  
+              </li>			
+  			  
+              <li class="clear" style="padding-top:10px;padding-bottom:10px;">
+                <div class="t-secondary">
+                  Passions
+                </div>
+
+                <div class="t-size-x12">
+					<span ng-if="passions.length == 0">None</span>
+					<ul ng-if="passions.length > 0">
+						<li>
+							<span ng-repeat="passion in passions">
+							  <text ng-if="!$last">{{ passion.name }},</text>
+							  <text ng-if="$last">{{ passion.name }}</text>
+							</span>
+						</li>
+					 </ul>
+				</div>
+              </li>			  
+			  
             </ol>
           </div>
         </section>
