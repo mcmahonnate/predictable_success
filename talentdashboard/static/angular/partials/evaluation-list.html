@@ -65,7 +65,7 @@
 
       <div class="dashboard-sized-el employees"id="dashboard" style="margin-top: 115px; max-width: 970px; height: 804px;">
 		  <div ng-show="evaluations[0].empty || showNoResults" style="text-align:center; font-size:2.5em; font-weight:bold; color: #585858;position: absolute; margin: 5px; left: 0px; top: 150px; width: 970px;">No Results</div>	
-          <div id="widget-14808658" class="widget" style="position: absolute; margin: 5px; left: 0px; top: 0px; width: 230px; height: 230px;" on-filter="" index="{{$index}}" ng-repeat="evaluation in evaluations | filter:byTeam.employee.team.name | orderBy:'employee.full_name'">
+          <div id="widget-14808658" class="widget" style="position: absolute; margin: 5px; left: 0px; top: 0px; width: 230px; height: 230px;" on-filter="" index="{{$index}}" ng-repeat="evaluation in evaluations | filter:byTeam.employee.team.name:true | orderBy:'employee.full_name'">
               <div class="widget-inner widget-size-1x1 large-screen" style="width: 230px; height: 230px;">
                   <header class="no-reload">
                     <canvas width="12" height="12" employee-talent-category="{{evaluation.talent_category}}"></canvas>
