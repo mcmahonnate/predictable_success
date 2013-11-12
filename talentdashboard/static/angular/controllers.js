@@ -75,6 +75,7 @@ angular.module('tdb.controllers', [])
 	$scope.leaderships = Leadership.getLeadershipsForEmployee($routeParams.id);
     $scope.passions = Attribute.getAttributtesForEmployee($routeParams.id, 1);
     $scope.super_powers = Attribute.getAttributtesForEmployee($routeParams.id, 2);
+	$scope.skills = Attribute.getAttributtesForEmployee($routeParams.id, 3);
 }])
 
 .controller('EmployeeCompSummariesCtrl', ['$scope', '$routeParams', 'CompSummary', function($scope, $routeParams, CompSummary) {

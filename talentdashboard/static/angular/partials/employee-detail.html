@@ -51,19 +51,19 @@
 
             <ol>
               <li class="clear" style="padding-top:10px;padding-bottom:10px;">
-                <div class="t-secondary">
+                <div class="t-secondary" style="min-width: 35%">
                   Hire Date
                 </div>
 
-                <div class="t-size-x18" id="start_date">{{ employee.hire_date | date:'MM/dd/yyyy' }}</div>
+                <div class="t-size-x14" id="start_date">{{ employee.hire_date | date:'MM/dd/yyyy' }}</div>
               </li>
 
               <li class="clear" style="padding-top:10px;padding-bottom:10px;">
-                <div class="t-secondary">
+                <div class="t-secondary" style="min-width: 35%">
                   Team Lead
                 </div>
 
-                <div class="t-size-x18" id="team_lead">
+                <div class="t-size-x14" id="team_lead">
 					<span ng-if="leaderships.length==0">None</span>
 					<ul ng-if="leaderships.length > 0">
 						<li ng-repeat="leadership in leaderships">
@@ -75,11 +75,11 @@
               </li>
 
               <li class="clear" style="padding-top:10px;padding-bottom:10px;">
-                <div class="t-secondary">
+                <div class="t-secondary" style="min-width: 35%">
                   Mentor
                 </div>
 
-                <div class="t-size-x18" id="mentor">
+                <div class="t-size-x14" id="mentor">
 					<span ng-if="mentorships.length == 0">None</span>
 					<ul ng-if="mentorships.length > 0">
 						<li ng-repeat="mentorship in mentorships">
@@ -90,11 +90,11 @@
 				</div>
               </li>
               <li class="clear" style="padding-top:10px;padding-bottom:10px;">
-                <div class="t-secondary">
+                <div class="t-secondary" style="min-width: 35%">
                   Super Power
                 </div>
 
-                <div class="t-size-x18">
+                <div class="t-size-x12">
 					<span ng-if="super_powers.length == 0">None</span>
 					<ul ng-if="super_powers.length > 0">
 						<li ng-repeat="super_power in super_powers">
@@ -105,7 +105,7 @@
               </li>			
   			  
               <li class="clear" style="padding-top:10px;padding-bottom:10px;">
-                <div class="t-secondary">
+                <div class="t-secondary" style="min-width: 35%">
                   Passions
                 </div>
 
@@ -121,6 +121,24 @@
 					 </ul>
 				</div>
               </li>			  
+
+              <li class="clear" style="padding-top:10px;padding-bottom:10px;">
+                <div class="t-secondary" style="min-width: 35%">
+                  Skills
+                </div>
+
+                <div class="t-size-x12">
+					<span ng-if="skills.length == 0">None</span>
+					<ul ng-if="skills.length > 0">
+						<li>
+							<span ng-repeat="skill in skills">
+							  <text ng-if="!$last">{{ skill.name }},</text>
+							  <text ng-if="$last">{{ skill.name }}</text>
+							</span>
+						</li>
+					 </ul>
+				</div>
+              </li>					  
 			  
             </ol>
           </div>
