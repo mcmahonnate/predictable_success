@@ -1,6 +1,9 @@
 angular.module('tdb.controllers', [])
 
-.controller('EvaluationListCtrl', ['$scope', '$routeParams', 'PvpEvaluation', 'Team', function($scope, $routeParams, PvpEvaluation, Team) {
+.controller('EvaluationListCtrl', ['$scope', '$rootScope', '$window', '$location', '$routeParams', 'PvpEvaluation', 'Team', function($scope, $rootScope, $window, $location, $routeParams, PvpEvaluation, Team) {
+    $rootScope.$on('$viewContentLoaded', function(event) {
+      $window._gaq.push(['_trackPageView', $location.path()]);
+    });
 	$scope.showNoResults = false;
 	$scope.init = function(id)
 	{
@@ -71,7 +74,10 @@ angular.module('tdb.controllers', [])
 	}
 }])
 
-.controller('EmployeeDetailCtrl', ['$scope', '$routeParams', 'Employee', 'Mentorship', 'Leadership', 'Attribute', 'CompSummary', '$http', function($scope, $routeParams, Employee, Mentorship, Leadership, Attribute, CompSummary, $http) {
+.controller('EmployeeDetailCtrl', ['$scope', '$rootScope', '$window', '$location', '$routeParams', 'Employee', 'Mentorship', 'Leadership', 'Attribute', 'CompSummary', '$http', function($scope, $rootScope, $window, $location, $routeParams, Employee, Mentorship, Leadership, Attribute, CompSummary, $http) {
+    $rootScope.$on('$viewContentLoaded', function(event) {
+      $window._gaq.push(['_trackPageView', $location.path()]);
+    });
     Employee.get(
         {id: $routeParams.id},
         function(data) {
@@ -107,7 +113,10 @@ angular.module('tdb.controllers', [])
     }
 }])
 
-.controller('CompanyOverviewCtrl', ['$scope', '$routeParams', 'TalentCategoryReport', 'SalaryReport', function($scope, $routeParams, TalentCategoryReport, SalaryReport) {
+.controller('CompanyOverviewCtrl', ['$scope', '$rootScope', '$window', '$location', '$routeParams', 'TalentCategoryReport', 'SalaryReport', function($scope, $rootScope, $window, $location, $routeParams, TalentCategoryReport, SalaryReport) {
+    $rootScope.$on('$viewContentLoaded', function(event) {
+      $window._gaq.push(['_trackPageView', $location.path()]);
+    });
     TalentCategoryReport.getReportForCompany(function(data) {
         $scope.talentCategoryReport = data;
     });
@@ -116,7 +125,10 @@ angular.module('tdb.controllers', [])
     });
 }])
 
-.controller('TeamOverviewCtrl', ['$scope', '$routeParams', 'TalentCategoryReport', 'SalaryReport', 'Team', function($scope, $routeParams, TalentCategoryReport, SalaryReport, Team) {
+.controller('TeamOverviewCtrl', ['$scope', '$rootScope', '$window', '$location', '$routeParams', 'TalentCategoryReport', 'SalaryReport', 'Team', function($scope, $rootScope, $window, $location, $routeParams, TalentCategoryReport, SalaryReport, Team) {
+    $rootScope.$on('$viewContentLoaded', function(event) {
+      $window._gaq.push(['_trackPageView', $location.path()]);
+    });
     $scope.teamId = $routeParams.id;
     SalaryReport.getReportForTeam($routeParams.id, function(data) {
         $scope.salaryReport = data;
