@@ -5,6 +5,8 @@ ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
 
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
 MANAGERS = ADMINS
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
