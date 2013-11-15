@@ -21,6 +21,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^$', login_required(TemplateView.as_view(template_name="index.html")), name='home'),
     url(r'^login/?$','django.contrib.auth.views.login',{'template_name':'login.html', 'authentication_form':CustomAuthenticationForm}),
+    url(r'^logout/$', 'django.contrib.auth.views.logout',{'next_page': '/login/'}),
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     url(r'^admin/', include(admin.site.urls)),
     url(r'api/v1/employees/$', cache_page(60 * 15)(EmployeeList.as_view()), name='employee-list'),
