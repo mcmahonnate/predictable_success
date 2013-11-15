@@ -116,3 +116,19 @@ angular.module('tdb.services', ['ngResource'])
     return res;
 }]);
 
+angular.module('analytics', ['ng'])
+
+.service('analytics', ['$window', function($window) {
+    return {
+        trackPage: function (scope, absoluteUrl, locationPath) {
+
+          if (absoluteUrl.indexOf("localhost") == 0) {
+            scope.$on('$viewContentLoaded', function(event) {
+              $window._gaq.push(['_trackPageview', locationPath]);
+            });
+          } else {
+            console.log('not tracked', locationPath);
+          }
+        }
+    };
+}]);
