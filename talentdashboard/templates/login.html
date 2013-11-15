@@ -61,9 +61,12 @@
 						<div style="position:relative;margin-bottom: 20px;">
 							{{ form.password }}
 						</div>
-
-				   <input class="login-button" type="submit" value="Sign in" />
-				   <input type="hidden" name="next" value="/#/" />
+                    <input class="login-button" type="submit" value="Sign in" />
+                    <input type="hidden" name="next" id="next" />
+                    <script>
+                        var elem = document.getElementById("next");
+                        elem.value = "/" + location.hash;
+                    </script>
 			   </form>
 			   </div>
 		   </section>
