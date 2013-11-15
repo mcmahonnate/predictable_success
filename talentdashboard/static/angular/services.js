@@ -122,7 +122,7 @@ angular.module('analytics', ['ng'])
     return {
         trackPage: function (scope, absoluteUrl, locationPath) {
 
-          if (absoluteUrl.indexOf("localhost") == 0) {
+          if (absoluteUrl.indexOf("localhost") < 0) {
             scope.$on('$viewContentLoaded', function(event) {
               $window._gaq.push(['_trackPageview', locationPath]);
             });
