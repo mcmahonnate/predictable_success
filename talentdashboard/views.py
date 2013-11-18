@@ -7,6 +7,7 @@ from rest_framework import status
 from pvp.models import PvpEvaluation, EvaluationRound
 from org.models import Employee, Team, Mentorship, Leadership, Attribute, AttributeCategory
 from comp.models import CompensationSummary
+from django.views.decorators.cache import cache_page
 from .serializers import *
 from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team
 from pvp.salaryreports import get_salary_report_for_team, get_salary_report_for_all_employees
