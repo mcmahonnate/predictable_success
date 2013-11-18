@@ -6,7 +6,6 @@ from django.views.generic import TemplateView
 from django.views.decorators.cache import cache_page
 from views import *
 from forms import *
-from decorators import *
 from rest_framework import routers
 from blah.models import Comment
 
