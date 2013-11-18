@@ -6,6 +6,7 @@ from django.views.generic import TemplateView
 from django.views.decorators.cache import cache_page
 from views import *
 from forms import *
+from decorators import *
 from rest_framework import routers
 from blah.models import Comment
 
@@ -24,16 +25,17 @@ urlpatterns = patterns('',
     url(r'^logout/$', 'django.contrib.auth.views.logout',{'next_page': '/login/'}),
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'api/v1/employees/$', cache_page(60 * 15)(EmployeeList.as_view()), name='employee-list'),
-    url(r'api/v1/employees/(?P<pk>.*)', EmployeeDetail.as_view(), name='employee-detail'),
-    url(r'^api/v1/pvp-evaluations/', cache_page(60 * 15)(pvp_evaluations)),
-    url(r'^api/v1/team-leads/', cache_page(60 * 15)(team_leads)),
-    url(r'^api/v1/compensation-summaries/', cache_page(60 * 15)(compensation_summaries)),
-    url(r'api/v1/talent-category-reports/teams/(?P<pk>.*)', cache_page(60 * 15)(TeamTalentCategoryReportDetail.as_view())),
-    url(r'api/v1/talent-category-reports/(?P<pk>.*)', cache_page(60 * 15)(TalentCategoryReportDetail.as_view())),
-    url(r'api/v1/salary-reports/teams/(?P<pk>.*)', cache_page(60 * 15)(TeamSalaryReportDetail.as_view())),
-    url(r'api/v1/salary-reports/company/', cache_page(60 * 15)(get_company_salary_report)),
-    url(r'api/v1/comments/employees/(?P<pk>.*)', EmployeeCommentList.as_view()),
-    url(r'api/v1/comments/(?P<pk>.*)', CommentDetail.as_view()),
+    url(r'api/v1/employees/$', auth_cache(['foolsquad'], EmployeeList.as_view()), name='employee-list'),
+    url(r'api/v1/employees/(?P<pk>.*)', auth_cache(['foolsquad'], EmployeeDetail.as_view()), name='employee-detail'),
+    url(r'^api/v1/pvp-evaluations/', auth_cache(['foolsquad'], pvp_evaluations)),
+    url(r'^api/v1/team-leads/', auth_cache(['foolsquad'], team_leads)),
+    url(r'^api/v1/team-lead-employees/', auth_cache(['foolsquad'], team_lead_employees)),
+    url(r'^api/v1/compensation-summaries/', auth_cache(['foolsquad'], compensation_summaries)),
+    url(r'api/v1/talent-category-reports/teams/(?P<pk>.*)', auth_cache(['foolsquad'], TeamTalentCategoryReportDetail.as_view())),
+    url(r'api/v1/talent-category-reports/(?P<pk>.*)', auth_cache(['foolsquad'], TalentCategoryReportDetail.as_view())),
+    url(r'api/v1/salary-reports/teams/(?P<pk>.*)', auth_cache(['foolsquad'], TeamSalaryReportDetail.as_view())),
+    url(r'api/v1/salary-reports/company/', auth_cache(['foolsquad'], get_company_salary_report)),
+    url(r'api/v1/comments/employees/(?P<pk>.*)', auth_cache(['foolsquad'], EmployeeCommentList.as_view())),
+    url(r'api/v1/comments/(?P<pk>.*)', auth_cache(['foolsquad'], CommentDetail.as_view())),
     url(r'^', include(router.urls)),
 )

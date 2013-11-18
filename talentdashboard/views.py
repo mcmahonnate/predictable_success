@@ -8,6 +8,7 @@ from pvp.models import PvpEvaluation, EvaluationRound
 from org.models import Employee, Team, Mentorship, Leadership, Attribute, AttributeCategory
 from comp.models import CompensationSummary
 from .serializers import *
+from .decorators import *
 from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team
 from pvp.salaryreports import get_salary_report_for_team, get_salary_report_for_all_employees
 from blah.models import Comment
@@ -30,7 +31,7 @@ class EmployeeDetail(generics.RetrieveAPIView):
         pk = self.kwargs.get(self.pk_url_kwarg, None)
         pk = pk.replace("/", "")
         return Employee.objects.get(id=pk)
-
+        
 class TeamViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = TeamSerializer
     queryset = Team.objects.all()
@@ -140,6 +141,7 @@ class CommentDetail(APIView):
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
+@group_required('foolsquad')
 def get_company_salary_report(request):
     report = get_salary_report_for_all_employees()
     serializer = SalaryReportSerializer(report)
@@ -212,3 +214,36 @@ def team_leads(request):
     serializer = PvpEvaluationSerializer(evaluations, many=True)
     
     return Response(serializer.data)    
+
+@api_view(['GET'])
+def team_lead_employees(request):
+    current_user = request.user
+    lead_id = request.QUERY_PARAMS.get('lead_id', None)    
+    lead = Employee.objects.get(id=lead_id)
+    if lead.user == current_user or lead.user.groups:
+        leaderships = Leadership.objects.filter(leader__id=int(lead_id))
+        employees = []
+        for leadership in leaderships:
+            if leadership.employee not in employees:
+                employees.append(leadership.employee)
+        
+        serializer = EmployeeSerializer(employees, many=True)
+        
+        return Response(serializer.data)        
+    else:
+        return Response(None, status=status.HTTP_403_FORBIDDEN)
+
+def auth_cache(group_names, view, cache_interval=900):
+    """
+    Only display cached views for authorized groups.
+    """
+    @api_view(['GET'])   
+    def _func(request, *args, **kwargs):
+        u = request.user
+        if u.is_authenticated():
+            if bool(u.groups.filter(name__in=group_names)) | u.is_superuser:    
+                return cache_page(cache_interval)(view)(request, *args, **kwargs)
+            else:
+                return (view)(request, *args, **kwargs)
+        return Response({"detail": "Permission not granted."}, status=status.HTTP_403_FORBIDDEN)            
+    return _func
