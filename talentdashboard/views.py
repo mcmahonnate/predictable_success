@@ -140,7 +140,6 @@ class CommentDetail(APIView):
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
-@group_required('foolsquad')
 def get_company_salary_report(request):
     report = get_salary_report_for_all_employees()
     serializer = SalaryReportSerializer(report)
