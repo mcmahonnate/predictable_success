@@ -9,6 +9,7 @@ from org.models import Employee, Team, Mentorship, Leadership, Attribute, Attrib
 from comp.models import CompensationSummary
 from django.views.decorators.cache import cache_page
 from .serializers import *
+from .decorators import *
 from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team
 from pvp.salaryreports import get_salary_report_for_team, get_salary_report_for_all_employees
 from blah.models import Comment
@@ -76,8 +77,8 @@ class AttributeViewSet(viewsets.ReadOnlyModelViewSet):
         if category_id is not None:
             self.queryset = self.queryset.filter(category__id=category_id)            
             
-        return self.queryset        
-
+        return self.queryset  
+        
 class TalentCategoryReportDetail(APIView):
     def get(self, request, pk, format=None):
         report = None
@@ -103,7 +104,7 @@ class TeamSalaryReportDetail(APIView):
         if report is not None:
             return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
-
+        
 class EmployeeCommentList(APIView):
     def get(self, request, pk, format=None):
         employee = Employee.objects.get(id = pk)
@@ -141,6 +142,8 @@ class CommentDetail(APIView):
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
+@cache_on_auth(60*15, ['foolsquad'])
+@group_required(['foolsquad'])
 def get_company_salary_report(request):
     report = get_salary_report_for_all_employees()
     serializer = SalaryReportSerializer(report)
@@ -149,6 +152,8 @@ def get_company_salary_report(request):
     return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
+@cache_on_auth(60*15, ['foolsquad'])
+@group_required(['foolsquad'])
 def compensation_summaries(request):
     compensation_summaries = CompensationSummary.objects.all()
 
@@ -168,6 +173,8 @@ def compensation_summaries(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
+@cache_on_auth(60*15, ['foolsquad'])
+@group_required(['foolsquad'])
 def pvp_evaluations(request):
     current_round = request.QUERY_PARAMS.get('current_round', None)
     employee_id = request.QUERY_PARAMS.get('employee_id', None)
@@ -197,6 +204,8 @@ def pvp_evaluations(request):
     return Response(data)
     
 @api_view(['GET'])
+@cache_on_auth(60*15, ['foolsquad'])
+@group_required(['foolsquad'])
 def team_leads(request):
     team_id = request.QUERY_PARAMS.get('team_id', None)    
     leads = Leadership.objects.filter(leader__team_id=int(team_id))
@@ -219,7 +228,7 @@ def team_lead_employees(request):
     current_user = request.user
     lead_id = request.QUERY_PARAMS.get('lead_id', None)    
     lead = Employee.objects.get(id=lead_id)
-    if lead.user == current_user or lead.user.groups:
+    if lead.user == current_user or current_user.is_superuser:
         leaderships = Leadership.objects.filter(leader__id=int(lead_id))
         employees = []
         for leadership in leaderships:
@@ -231,18 +240,3 @@ def team_lead_employees(request):
         return Response(serializer.data)        
     else:
         return Response(None, status=status.HTTP_403_FORBIDDEN)
-
-def auth_cache(group_names, view, cache_interval=900):
-    """
-    Only display cached views for authorized groups.
-    """
-    @api_view(['GET'])   
-    def _func(request, *args, **kwargs):
-        u = request.user
-        if u.is_authenticated():
-            if bool(u.groups.filter(name__in=group_names)) | u.is_superuser:    
-                return cache_page(cache_interval)(view)(request, *args, **kwargs)
-            else:
-                return (view)(request, *args, **kwargs)
-        return Response({"detail": "Permission not granted."}, status=status.HTTP_403_FORBIDDEN)            
-    return _func
