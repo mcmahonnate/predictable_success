@@ -47,57 +47,84 @@
 		</div>
     </div>
   </header>
-  <div class="dashboard-sized-el fade" ng-class="{in:team}" id="dashboard" style="margin-top: 75px; max-width: 970px;">
 
+  <div ng-if="employee.display" class="dashboard-sized-el fade" ng-class="{in:employee}" id="dashboard" style="margin-top: 75px; max-width: 970px; height: 550px;">
     <article class="widget clock loaded" id="widget-8494" style="top: 0px; left: 0px; width: auto;">
-      <div class="widget-inner widget-size-2x2 large-screen">
+      <div class="widget-inner widget-size-1x1 large-screen">
         <header class="no-reload">
-          <h1 id="talent-header" style="display:inline;">{{ team.name }}</h1>
+          <h1 style="display:inline;">{{employee.full_name}}</h1>
         </header>
 
-        <div>
-			<div x-talent-category-chart style="width: 620px; height: 620px; position: relative;"></div>
-		</div>
+        <section class="widget-body rag-widget">
+          <div class="widget-canvas">
+            <div class="outer" style="margin-left: auto; margin-right: auto;">
+              <div class="image" style="margin-left: auto; margin-right: auto;"><img ng-src="{{ employee.avatar }}" style="padding-bottom:15px; display: block; margin-left: auto; margin-right: auto; height: 210px;"/></div>
+            </div>
 
+          </div>
+        </section>
+      </div><!-- .widget-inner -->
+    </article>
+
+    <article class="widget clock loaded" id="widget-8494" style="top: 285px; left: 0px; width: auto;">
+      <div class="widget-inner widget-size-1x1 large-screen">
+        <header class="no-reload">
+          <h1 style="display:inline;">Your Team Talent</h1>
+        </header>
+
+        <section class="widget-body text-widget" style="padding:12px">
+          <div ng-show="pvps.length > 0" class="swipe widget-canvas" id="pvp_slider">
+
+          </div><!-- .widget-inner -->
+        </section>
       </div>
     </article>
 
-    <article class="widget google-analytics loaded" id="widget-14808658" style="top: 0px; left: 650px; width: auto;">
-      <div class="widget-inner widget-size-1x1 large-screen">
+
+
+    <article class="widget clock loaded" id="widget-8494" style="top: 0px; left: 325px; width: auto;">
+      <div class="widget-inner widget-size-2x2 large-screen">
         <header class="no-reload">
-          <h1 style="display:inline;">Team Leads</h1>
+          <h1 style="display:inline;">How Are You Measuring Up?</h1>
         </header>
-        <section class="widget-body number-widget">
-            <div class="widget-canvas" ng-controller="TeamLeadsCtrl" ng-init="init(teamId)">
-				<div ng-repeat="evaluation in teamLeads | orderBy:'talent_category'" style="main-stat t-size-x12;margin-bottom:5px;">
-					<canvas employee-talent-category="{{evaluation.talent_category}}" width="12" height="12"></canvas>
-                    <span style="margin-left:10px;">
-                        <a ng-if="evaluation.employee.display" href="#/employees/{{evaluation.employee.id}}">{{evaluation.employee.full_name}}</a>
-                        <span ng-if="!evaluation.employee.display">{{evaluation.employee.full_name}}</span>
-                    </span>
-				</div>
-            </div><!-- .widget-canvas -->
-        </section>
+
+        <section class="widget-body text-widget">
+	    </section>
       </div><!-- .widget-inner -->
     </article>
-
-    <article class="widget google-analytics loaded" id="widget-14808658" style="top: 285px; left: 650px; width: auto;">
-      <div class="widget-inner widget-size-1x1 large-screen">
-        <header class="no-reload">
-          <h1 style="display:inline;">Total Salaries</h1>
-        </header>
-        <section class="widget-body number-widget">
-            <div id="total-salaries" class="main-stat t-size-x48" style="text-align: center;padding-bottom:15px;">
-            {{salaryReport.total_salaries | currency | noCents }}
-            </div><!-- .widget-canvas -->
-            <div style="display:block;padding-bottom:10px;">Totals by Talent</div>
-            <div style="main-stat t-size-x12;margin-bottom:5px;" ng-repeat="(category, salaries) in salaryReport.categories">
-              <canvas width="12" height="12" employee-talent-category="{{category}}"></canvas>
-              <span style="margin-left:10px;width:80px;text-align:right;display:inline-block;">{{salaries | currency | noCents }}</span>
-            </div>
-        </section>
-        <div id="salary_visualization" style="width: 315px; height: 300px;"></div>
-      </div><!-- .widget-inner -->
-    </article>
-
   </div>
+  <footer>
+    <div ng-if="leaderships.length > 0" style="position:relative">
+          <div ng-class="{bigAvatar: hover, smallAvatar: !hover}" ng-mouseenter="hover=true" ng-mouseleave="hover=false" style="float: left; margin: 5px;" index="{{$index}}" ng-repeat="leadership in leaderships">
+            <a href="#/employees/{{leadership.employee.id}}"><img ng-src="{{leadership.employee.avatar}}" style="display: block; margin-left: auto; margin-right: auto;height: 100%;"></a>
+          </div>
+    </div>
+  </footer>
+
+<style>
+  .bigAvatar {
+    height: 100px;
+    width: 100px;
+  }
+  
+  .smallAvatar {
+    height: 60px;
+    width: 60px;
+      filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale"); /* Firefox 3.5+ */
+  filter: gray; /* IE6-9 */
+  -webkit-filter: grayscale(100%); /* Chrome 19+ & Safari 6+ */
+  }
+  
+  div[contentEditable] {
+    cursor: pointer;
+  }
+  div[contentEditable]:focus {
+    cursor: pointer;
+    background-color: gray;
+    border: 1px solid red;
+    color:black;
+
+    text-shadow:none;
+  }
+  rect.pvp-square.selected { fill: red; }
+</style>

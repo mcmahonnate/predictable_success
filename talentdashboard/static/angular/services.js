@@ -18,6 +18,7 @@ angular.module('tdb.services', ['ngResource'])
     var Leadership = $resource('/api/v1/leaderships/:id/');
 
     Leadership.getLeadershipsForEmployee = function(id) { return this.query({employee_id: id}); };
+    Leadership.getLeadershipsForLeader = function(id) { return this.query({leader_id: id}); };
 
     return Leadership;
 }])

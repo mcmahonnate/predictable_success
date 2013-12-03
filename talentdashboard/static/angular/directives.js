@@ -139,8 +139,9 @@ angular.module('tdb.directives', [])
     return function(scope, element, attrs){
         attrs.$observe('index', function(value) {
             var index = scope.$eval(attrs.index);
-            var top = Math.floor(index/4) * 240;
-            var left = (index % 4) * 240;
+            var columns = scope.$eval(attrs.columns);
+            var top = Math.floor(index/columns) * 240;
+            var left = (index % columns) * 240;
             element.animate({"left":left,"top":top},'0.8s');
         });
     };

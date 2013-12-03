@@ -25,7 +25,7 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
 class MinimalEmployeeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Employee
-        fields = ('id', 'full_name', 'display')
+        fields = ('id', 'full_name', 'display', 'avatar')
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

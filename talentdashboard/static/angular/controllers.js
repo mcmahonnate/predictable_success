@@ -93,6 +93,22 @@ angular.module('tdb.controllers', [])
 	$scope.skills = Attribute.getAttributtesForEmployee($routeParams.id, 3);
 }])
 
+.controller('LeaderDetailCtrl', ['$scope', '$location', '$routeParams', 'Employee', 'Leadership', '$http', 'analytics', function($scope, $location, $routeParams, Employee, Leadership, $http, analytics) {
+    analytics.trackPage($scope, $location.absUrl(), $location.url());
+    Employee.get(
+        {id: $routeParams.id},
+        function(data) {
+            $scope.employee = data;
+            if(data.team && data.team.leader) {
+                $http.get(data.team.leader).success(function(data) {
+                    $scope.team_lead = data;
+                });
+            }
+        }
+    );
+    $scope.leaderships = Leadership.getLeadershipsForLeader($routeParams.id);
+}])
+
 .controller('EmployeeCompSummariesCtrl', ['$scope', '$routeParams', 'CompSummary', function($scope, $routeParams, CompSummary) {
     $scope.compSummaries = CompSummary.getAllSummariesForEmployee($routeParams.id);
 }])
