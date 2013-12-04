@@ -92,29 +92,89 @@
 	    </section>
       </div><!-- .widget-inner -->
     </article>
-  </div>
-  <footer>
-    <div ng-if="leaderships.length > 0" style="position:relative">
-          <div ng-class="{bigAvatar: hover, smallAvatar: !hover}" ng-mouseenter="hover=true" ng-mouseleave="hover=false" style="float: left; margin: 5px;" index="{{$index}}" ng-repeat="leadership in leaderships">
-            <a href="#/employees/{{leadership.employee.id}}"><img ng-src="{{leadership.employee.avatar}}" style="display: block; margin-left: auto; margin-right: auto;height: 100%;"></a>
-          </div>
+
+    <div style="position: absolute; top: 610px; left: 0px; width: auto;">    
+        <div class="dock" ng-if="leaderships.length > 0" style="position:relative;left:150px">
+          <ul>  
+          <li ng-repeat="leadership in leaderships">
+            <a href="#/employees/{{leadership.employee.id}}"><div class="description">{{leadership.employee.full_name}}</div><img ng-src="{{leadership.employee.avatar}}" style="display: block; margin-left: auto; margin-right: auto;height: 100%;"></a>
+          </li>
+          </ul>
+        </div>
     </div>
-  </footer>
+  </div>
+
 
 <style>
-  .bigAvatar {
-    height: 100px;
-    width: 100px;
-  }
-  
-  .smallAvatar {
+.dock ul{
+    display: inline-block;
+    float: left;
+    width: auto;
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+}
+.dock ul li {
+    width: auto;
+    height: auto;
+    display: inline-block;
+    bottom: 0;
+    vertical-align: bottom;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: -43px;
+}
+.dock ul li a {
+    display: block;
     height: 60px;
     width: 60px;
-      filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale"); /* Firefox 3.5+ */
-  filter: gray; /* IE6-9 */
-  -webkit-filter: grayscale(100%); /* Chrome 19+ & Safari 6+ */
-  }
-  
+    z-index: 1;
+    position: relative;
+    filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale"); /* Firefox 3.5+ */
+    filter: gray; /* IE6-9 */
+    -webkit-filter: grayscale(100%); /* Chrome 19+ & Safari 6+ */
+    
+    -webkit-transition-property: width, height,margin-top;
+    -webkit-transition-duration: 0.5s;
+    -o-transition-property: width, height,margin-top;
+    -o-transition-duration: 0.5s;
+    -moz-transition-property: width, height,margin-top;
+    -moz-transition-duration: 0.5s;
+}
+.dock ul li a:hover {
+    width: 100px;
+    height: 100px;
+    margin-top: -50px;
+    filter: none; /* IE6-9 */
+    -webkit-filter: none;
+}
+.dock ul li .description{
+    display: none;
+}
+.dock ul li:hover .description {
+    border-style:solid;
+    border-width:1px;
+    border-color:#585858;
+    display: block;
+    color: #8b8b8b;
+    position: absolute;
+    top: -40px;
+    text-align:center;
+    padding:5px 10px;
+    background:#272727;
+    border-radius:35px;
+    font-size:12px;
+    width: 80px;
+}
+
+.dock ul li a img {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    border: none;
+    padding: 0px 0px 0px 0px;
+}
   div[contentEditable] {
     cursor: pointer;
   }
