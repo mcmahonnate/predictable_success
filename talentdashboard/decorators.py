@@ -6,7 +6,7 @@ from django.utils.log import getLogger
 
 logger = getLogger('talentdashboard')
 
-def cache_on_auth(timeout, group_names):
+def cache_on_auth(timeout, *group_names):
     def decorator(view_func):
         @wraps(view_func, assigned=available_attrs(view_func))
         def _wrapped_view(request, *args, **kwargs):
