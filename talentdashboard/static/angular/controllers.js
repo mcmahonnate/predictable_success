@@ -93,7 +93,7 @@ angular.module('tdb.controllers', [])
 	$scope.skills = Attribute.getAttributtesForEmployee($routeParams.id, 3);
 }])
 
-.controller('LeaderDetailCtrl', ['$scope', '$location', '$routeParams', 'Employee', 'Leadership', '$http', 'analytics', function($scope, $location, $routeParams, Employee, Leadership, $http, analytics) {
+.controller('LeaderDetailCtrl', ['$scope', '$location', '$routeParams', 'Employee', 'Leadership', 'TalentCategoryReport', '$http', 'analytics', function($scope, $location, $routeParams, Employee, Leadership, TalentCategoryReport, $http, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     Employee.get(
         {id: $routeParams.id},
@@ -107,6 +107,9 @@ angular.module('tdb.controllers', [])
         }
     );
     $scope.leaderships = Leadership.getLeadershipsForLeader($routeParams.id);
+    TalentCategoryReport.getReportForCompany(function(data) {
+        $scope.talentCategoryReport = data;
+    });
 }])
 
 .controller('EmployeeCompSummariesCtrl', ['$scope', '$routeParams', 'CompSummary', function($scope, $routeParams, CompSummary) {
@@ -124,6 +127,16 @@ angular.module('tdb.controllers', [])
         $scope.pvpIndex = index;
 		$scope.currentPvP = $scope.pvps[$scope.pvpIndex];
     }
+}])
+
+.controller('EmployeeNavigationCtrl', ['$scope', '$routeParams', 'PvpEvaluation', 'Employee', function($scope, $routeParams, PvpEvaluation, Employee) {
+	
+    if($routeParams.talent_category) {
+        $scope.employees = PvpEvaluation.getCurrentEvaluationsForTalentCategory($routeParams.talent_category, $scope.team_id);
+    } else {
+        $scope.employees = Employee.query();    
+    }
+
 }])
 
 .controller('CompanyOverviewCtrl', ['$scope', '$location', '$routeParams', 'TalentCategoryReport', 'SalaryReport', 'analytics', function($scope, $location, $routeParams, TalentCategoryReport, SalaryReport, analytics) {

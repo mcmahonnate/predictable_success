@@ -57,15 +57,26 @@ angular.module('tdb.directives', [])
 
                 var data = new Array(['PvP', 'Employees', 'Talent Category'],['Top Talent', top, 1],['Strong Talent', strong, 2],['Good But Inconsistent', good, 3],['Lacks Potential', lackspotential, 4],['Wrong Role', wrongrole, 5],['Needs Drastic Change', needschange, 6]);
                 var table = new google.visualization.arrayToDataTable(data);
-
-                var options = {
-                    pieSliceText: 'label',
-                    backgroundColor: '#2a2a2a',
-                    tooltip:{text:'value'},
-                    legend:{textStyle:{color: 'white'}},
-                    chartArea:{left:40,top:40,width: 620},
-                    colors: TalentCategoryColors.colors
-                };
+                var options;
+                if (attrs.size=='small'){
+                    options = {
+                        pieSliceText: 'label',
+                        backgroundColor: '#2a2a2a',
+                        tooltip:{text:'value'},
+                        legend: 'none',
+                        chartArea:{left:40,top:40,width: 620},
+                        colors: TalentCategoryColors.colors
+                    };                    
+                } else {
+                    options = {
+                        pieSliceText: 'label',
+                        backgroundColor: '#2a2a2a',
+                        tooltip:{text:'value'},
+                        legend:{textStyle:{color: 'white'}},
+                        chartArea:{left:40,top:40,width: 620},
+                        colors: TalentCategoryColors.colors
+                    };
+                }
 
                 var chart = new google.visualization.PieChart(element[0]);
 
