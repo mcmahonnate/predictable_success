@@ -140,6 +140,10 @@ SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
 LOGIN_URL = '/login'
 
+LOGIN_EXEMPT_URLS = (
+    r'api/v1/user-status/', 
+)
+
 def get_cache():
   import os
   try:

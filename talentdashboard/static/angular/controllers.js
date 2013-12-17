@@ -1,5 +1,11 @@
 angular.module('tdb.controllers', [])
 
+.controller('BaseAppCtrl', ['$rootScope', '$location', function($rootScope, $location) {
+    $rootScope.$on("$routeChangeError", function() {
+        window.location = '/login?next=' + $location.path();
+    })
+}])
+
 .controller('EvaluationListCtrl', ['$scope', '$location', '$routeParams', 'PvpEvaluation', 'Team', 'analytics', function($scope, $location, $routeParams, PvpEvaluation, Team, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
 	$scope.showNoResults = false;

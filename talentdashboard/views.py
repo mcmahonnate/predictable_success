@@ -142,6 +142,11 @@ class CommentDetail(APIView):
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
+def user_status(request):
+    serializer = UserSerializer(request.user)
+    return Response(serializer.data)
+    
+@api_view(['GET'])
 @cache_on_auth(60*15, 'foolsquad')
 @group_required('foolsquad')
 def get_company_salary_report(request):
