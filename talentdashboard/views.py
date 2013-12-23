@@ -142,8 +142,13 @@ class CommentDetail(APIView):
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
-@cache_on_auth(60*15, ['foolsquad'])
-@group_required(['foolsquad'])
+def user_status(request):
+    serializer = UserSerializer(request.user)
+    return Response(serializer.data)
+    
+@api_view(['GET'])
+@cache_on_auth(60*15, 'foolsquad')
+@group_required('foolsquad')
 def get_company_salary_report(request):
     report = get_salary_report_for_all_employees()
     serializer = SalaryReportSerializer(report)
@@ -152,8 +157,8 @@ def get_company_salary_report(request):
     return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
-@cache_on_auth(60*15, ['foolsquad'])
-@group_required(['foolsquad'])
+@cache_on_auth(60*15, 'foolsquad')
+@group_required('foolsquad')
 def compensation_summaries(request):
     compensation_summaries = CompensationSummary.objects.all()
 
@@ -173,8 +178,8 @@ def compensation_summaries(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
-@cache_on_auth(60*15, ['foolsquad'])
-@group_required(['foolsquad'])
+@cache_on_auth(60*15, 'foolsquad')
+@group_required('foolsquad')
 def pvp_evaluations(request):
     current_round = request.QUERY_PARAMS.get('current_round', None)
     employee_id = request.QUERY_PARAMS.get('employee_id', None)
@@ -204,8 +209,8 @@ def pvp_evaluations(request):
     return Response(data)
     
 @api_view(['GET'])
-@cache_on_auth(60*15, ['foolsquad'])
-@group_required(['foolsquad'])
+@cache_on_auth(60*15, 'foolsquad')
+@group_required('foolsquad')
 def team_leads(request):
     team_id = request.QUERY_PARAMS.get('team_id', None)    
     leads = Leadership.objects.filter(leader__team_id=int(team_id))
