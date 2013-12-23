@@ -48,3 +48,12 @@ nosetests.xml
 
 #Static
 staticfiles
+venv/.Python
+
+venv/include/python2.7
+
+venv/pysqlite2-doc/default.css
+
+venv/pysqlite2-doc/docutils.css
+
+venv/pysqlite2-doc/install-source.txt
