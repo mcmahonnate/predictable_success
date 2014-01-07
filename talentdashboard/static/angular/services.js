@@ -115,6 +115,12 @@ angular.module('tdb.services', ['ngResource'])
     };
     var res = $resource('/api/v1/comments/:id/', {id:'@id'}, actions)
     return res;
+}])
+
+.factory('User', ['$resource', '$http', function($resource, $http) {
+    var currentUser = $resource('api/v1/user-status/');
+
+    return currentUser;
 }]);
 
 angular.module('analytics', ['ng'])

@@ -175,8 +175,9 @@ angular.module('tdb.controllers', [])
    
 }])
 
-.controller('EmployeeCommentsCtrl', ['$scope', '$filter', '$routeParams', 'EmployeeComments', 'Comment', function($scope, $filter, $routeParams, EmployeeComments, Comment) {
+.controller('EmployeeCommentsCtrl', ['$scope', '$filter', '$routeParams', 'EmployeeComments', 'Comment', 'User', function($scope, $filter, $routeParams, EmployeeComments, Comment, User) {
     $scope.employeeId = $routeParams.id;
+    $scope.newCommentText = "";
     $scope.commentIndex = 0; 
 	$scope.$watch('commentIndex', function() {
 		if ($scope.comments) {
@@ -231,14 +232,21 @@ angular.module('tdb.controllers', [])
     $scope.addComment = function(equals) {
         var newComment = {};
         newComment.id = -1;
-        newComment.isEditing = true;
-        newComment.content = "new comment #" + ($scope.comments.length+1);
+        newComment.content = $scope.newCommentText;
         newComment.modified_date = new Date().toJSON();
-        newComment.owner = {};
-        newComment.owner.username = "admin";  // Fill in later with auth service.
+        newComment.owner = User.get();
         $scope.comments.push(newComment);
         $scope.originalComments.push(angular.copy(newComment));
-        $scope.selectComment($scope.comments.length-1);
+
+        var data = {id: newComment.id, _content: newComment.content};
+
+        data.id = $scope.employeeId;
+        EmployeeComments.save(data, function(response) {
+            $scope.currentComment.id = response.id;
+            $scope.newCommentText = "";
+        });
+
+
     }
 
     $scope.deleteComment = function(e) {

@@ -64,9 +64,9 @@
         <section class="widget-body text-widget">
             <h2 style="margin:0 15px;">Discussions</h2>
             <div style="float:left;width:720px;height:35px;-webkit-border-radius: 2px;moz-border-radius: 3px;-ms-border-radius: 3px;-o-border-radius: 3px;border-radius: 3px;border: 1px solid #c1c1c1;margin:10px 15px;">
-                <textarea rows="1" cols="40" placeholder="Add a comment..." style="width:700px;height:15px;font-size:14px;padding:10px;border: none;"></textarea>
+                <textarea ng-model="newCommentText" rows="1" cols="40" placeholder="Add a comment..." style="width:700px;height:15px;font-size:14px;padding:10px;border: none;"></textarea>
             </div>
-            <input type="submit" value="Comment" class="comment"></input>
+            <button class="comment" ng-click="addComment()">Comment</button>
             <div ng-repeat="comment in comments | orderBy:'modified_date':true" style="margin:0 15px;padding:8px 0 8px 0px;">
                 <h2 ng-show="CreateHeader(comment.modified_date)" style="font-size: 14px;color: #8b8b8b;border-bottom: 2px solid #8b8b8b">{{comment.modified_date | date:'MMM d, yyyy'}}</h2>
                 <div style="display: block;width:888px;min-height: 48px;">
@@ -74,7 +74,7 @@
                         <img ng-src="{{ comment.owner.employee.avatar }}" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;"/>
                     </div>
                     <div style="display: block; float: left;padding-left:10px;max-width: 80%;min-height: 48px;">
-                        <b>{{comment.owner.username}}</b>
+                        <b style="color:#8b8b8b;">{{comment.owner.employee.full_name}}</b> -
                         <span style="">{{comment.content}}</span>
                         <span style="display:block;color:#8b8b8b">at {{comment.modified_date | date:'hh:mma'}}</span>
                     </div>
@@ -98,21 +98,20 @@
     text-shadow:none;
   }
   rect.pvp-square.selected { fill: red; }
-  input.comment {
-    border: 1px solid #ccc;
+  button.comment {
+    border: 1px solid #434343;
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
     border-radius: 3px;
     padding:10px;
     background-color:#434343;
-    border:none;
     font-size:14px;
     color:#d3d4d4;
     margin-top:10px;
     margin-bottom:15px;
     cursor: pointer;
   }
-  input.comment:hover {
+  button.comment:hover {
     background-color:#272727;
 }
 
