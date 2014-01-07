@@ -175,7 +175,7 @@ angular.module('tdb.controllers', [])
    
 }])
 
-.controller('EmployeeCommentsCtrl', ['$scope', '$routeParams', 'EmployeeComments', 'Comment', function($scope, $routeParams, EmployeeComments, Comment) {
+.controller('EmployeeCommentsCtrl', ['$scope', '$filter', '$routeParams', 'EmployeeComments', 'Comment', function($scope, $filter, $routeParams, EmployeeComments, Comment) {
     $scope.employeeId = $routeParams.id;
     $scope.commentIndex = 0; 
 	$scope.$watch('commentIndex', function() {
@@ -188,6 +188,13 @@ angular.module('tdb.controllers', [])
         $scope.comments = response.data;
         $scope.originalComments = angular.copy($scope.comments);
         $scope.currentComment = $scope.comments[$scope.commentIndex];
+        $scope.currentGroup="";
+        $scope.CreateHeader = function(date) {
+            date=$filter('date')(date,"MM/dd/yyyy");
+            showHeader = (date!=$scope.currentGroup);
+            $scope.currentGroup = date;
+            return showHeader;
+        }
     });
 
     $scope.selectComment = function(index) {

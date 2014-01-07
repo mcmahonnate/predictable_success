@@ -1,0 +1,119 @@
+  <header id="main-header">
+    <!-- #top-bar -->
+
+    <div class="clear" id="dashboard-admin-bar">
+		<div ng-controller="EmployeeListCtrl" class="inner dashboard-sized-el" style="max-width: 970px;">
+			<div style="display: block; color: #cbcbcb; font-weight: 700; padding: 12px 36px 10px 12px;font-size: 16px; width:150px; float:left">
+				<a href="/" style="color:#fff;">The Motley Fool</a>
+			</div>
+			<div class="btn" ng-mouseover="settingsMenu.show=true" ng-mouseleave="settingsMenu.show=false" id="switch-dashboard" style="float:right;width:55px;">
+			  <span id="selected-dashboard-title" style="font-weight: 700; color: white;padding:0px;">
+                <img src="/static/css/settings.png"style="width:35px;margin-left:3px;margin-top:3px;margin-bottom:-3px;"/>
+              </span>            
+                <div id="selection-list" ng-show="settingsMenu.show" style="display: none;width:100px">
+                    <ul>
+                        <li>
+                            <a class="dashboard" href="/logout" style="font-weight:800;">Sign Out</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>			
+			<div class="btn" ng-mouseover="employeeMenu.show=true" ng-mouseleave="employeeMenu.show=false" id="switch-dashboard" style="float:right">
+			  <span id="selected-dashboard-title" style="font-weight: 700; color: white;">People</span>
+			  <div id="selection-list" ng-show="employeeMenu.show" style="display: none;">
+				<ul>
+					<li>
+						<input class="search-input" ng-model="employeeQuery" type="text" placeholder="Search"/>
+					</li>
+					<li ng-repeat="employee in employees | filter:{full_name:employeeQuery}:startsWith | orderBy:'full_name'">
+						<a class="dashboard" ng-click="employeeMenu.show = false;" style="font-weight:800;" href="#/employees/{{employee.id}}">{{employee.full_name}}</a>
+					</li>
+				</ul>
+			  </div>
+			</div>
+			<div ng-controller="TeamListCtrl" class="btn" ng-mouseover="teamMenu.show=true;" ng-mouseleave="teamMenu.show=false" id="switch-dashboard" style="float:right">
+			  <span id="selected-dashboard-title" style="font-weight: 700; color: white;">Teams</span>
+			  <div id="selection-list" ng-show="teamMenu.show" style="display: none;">
+				<ul>
+					<li>
+						<input class="search-input" type="text" ng-model="teamQuery" placeholder="Search"/>
+					</li>
+					<li ng-repeat="team in teams | filter:{name:teamQuery}:startsWith | orderBy:'name'">
+						<a class="dashboard" ng-click="teamMenu.show = false;" style="font-weight:800;" href="#/teams/{{team.id}}">{{team.name}}</a>
+					</li>
+				</ul>		  
+			  </div>
+			</div>
+		</div>
+    </div>
+  </header>
+
+  <div ng-if="employee.display" class="dashboard-sized-el fade" ng-class="{in:employee}" id="dashboard" style="margin-top: 75px; max-width: 970px;">
+
+    <article class="widget clock loaded" id="widget-8494" style="top: 0px; left: 0px; width: auto;">
+      <div ng-controller="EmployeeCommentsCtrl" class="widget-inner large-screen" style="max-width:970px;min-height: 560px;">
+        <header class="no-reload" style="padding: 10px;height: 50px;">
+          <div style="display: block; float: left; width: 48px;">
+            <img ng-src="{{ employee.avatar }}" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;"/>
+          </div>
+          <div style="display: block; float: left;padding-left: 10px;">
+            <h1 style="color: #d3d4d4;">{{employee.full_name}}</h1>
+            <h1>{{employee.job_title}}</h1>
+          </div>
+        </header>
+        <section class="widget-body text-widget">
+            <h2 style="margin:0 15px;">Discussions</h2>
+            <div style="float:left;width:720px;height:35px;-webkit-border-radius: 2px;moz-border-radius: 3px;-ms-border-radius: 3px;-o-border-radius: 3px;border-radius: 3px;border: 1px solid #c1c1c1;margin:10px 15px;">
+                <textarea rows="1" cols="40" placeholder="Add a comment..." style="width:700px;height:15px;font-size:14px;padding:10px;border: none;"></textarea>
+            </div>
+            <input type="submit" value="Comment" class="comment"></input>
+            <div ng-repeat="comment in comments | orderBy:'modified_date':true" style="margin:0 15px;padding:8px 0 8px 0px;">
+                <h2 ng-show="CreateHeader(comment.modified_date)" style="font-size: 14px;color: #8b8b8b;border-bottom: 2px solid #8b8b8b">{{comment.modified_date | date:'MMM d, yyyy'}}</h2>
+                <div style="display: block;width:888px;min-height: 48px;">
+                    <div style="display: block; float: left; width: 48px;">
+                        <img ng-src="{{ comment.owner.employee.avatar }}" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;"/>
+                    </div>
+                    <div style="display: block; float: left;padding-left:10px;max-width: 80%;min-height: 48px;">
+                        <b>{{comment.owner.username}}</b>
+                        <span style="">{{comment.content}}</span>
+                        <span style="display:block;color:#8b8b8b">at {{comment.modified_date | date:'hh:mma'}}</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+      </div><!-- .widget-inner -->
+    </article>
+  </div>
+
+<style>
+  div[contentEditable] {
+    cursor: pointer;
+  }
+  div[contentEditable]:focus {
+    cursor: pointer;
+    background-color: gray;
+    border: 1px solid red;
+    color:black;
+
+    text-shadow:none;
+  }
+  rect.pvp-square.selected { fill: red; }
+  input.comment {
+    border: 1px solid #ccc;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    padding:10px;
+    background-color:#434343;
+    border:none;
+    font-size:14px;
+    color:#d3d4d4;
+    margin-top:10px;
+    margin-bottom:15px;
+    cursor: pointer;
+  }
+  input.comment:hover {
+    background-color:#272727;
+}
+
+</style>
