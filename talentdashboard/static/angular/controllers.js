@@ -175,9 +175,10 @@ angular.module('tdb.controllers', [])
    
 }])
 
-.controller('EmployeeCommentsCtrl', ['$scope', '$filter', '$routeParams', 'EmployeeComments', 'Comment', 'User', function($scope, $filter, $routeParams, EmployeeComments, Comment, User) {
+.controller('EmployeeCommentsCtrl', ['$scope', '$filter', '$routeParams', 'EmployeeComments', 'SubComments','Comment', 'User', function($scope, $filter, $routeParams, EmployeeComments, SubComments, Comment, User) {
     $scope.employeeId = $routeParams.id;
     $scope.newCommentText = "";
+    $scope.newSubCommentText = "";
     $scope.commentIndex = 0; 
 	$scope.$watch('commentIndex', function() {
 		if ($scope.comments) {
@@ -187,6 +188,14 @@ angular.module('tdb.controllers', [])
 	
     EmployeeComments.query({ id: $scope.employeeId }).$then(function(response) {
         $scope.comments = response.data;
+        angular.forEach($scope.comments, function(comment) {
+            SubComments.query({ id: comment.id }).$then(function(response) {
+                    console.log(comment.id);
+                    comment.subcomments = response.data;
+                    console.log(response.data.length);
+                }
+            );
+        });
         $scope.originalComments = angular.copy($scope.comments);
         $scope.currentComment = $scope.comments[$scope.commentIndex];
         $scope.currentGroup="";
@@ -245,8 +254,26 @@ angular.module('tdb.controllers', [])
             $scope.currentComment.id = response.id;
             $scope.newCommentText = "";
         });
+    }
+
+    $scope.addSubComment = function(equals) {
+        var newComment = {};
+        newComment.id = -1;
+        newComment.content = $scope.newSubCommentText;
+        newComment.modified_date = new Date().toJSON();
+        newComment.owner = User.get();
 
 
+        $scope.comments.push(newComment);
+        $scope.originalComments.push(angular.copy(newComment));
+
+        var data = {id: newComment.id, _content: newComment.content};
+
+        data.id = $scope.employeeId;
+        EmployeeComments.save(data, function(response) {
+            $scope.currentComment.id = response.id;
+            $scope.newCommentText = "";
+        });
     }
 
     $scope.deleteComment = function(e) {

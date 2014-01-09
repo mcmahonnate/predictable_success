@@ -67,16 +67,40 @@
                 <textarea ng-model="newCommentText" rows="1" cols="40" placeholder="Add a comment..." style="width:700px;height:15px;font-size:14px;padding:10px;border: none;"></textarea>
             </div>
             <button class="comment" ng-click="addComment()">Comment</button>
-            <div ng-repeat="comment in comments | orderBy:'modified_date':true" style="margin:0 15px;padding:8px 0 8px 0px;">
+            <div ng-repeat="comment in comments | orderBy:'modified_date':true" style="margin:0 15px;padding:8px 0 8px 0px;display: block;width:888px">
                 <h2 ng-show="CreateHeader(comment.modified_date)" style="font-size: 14px;color: #8b8b8b;border-bottom: 2px solid #8b8b8b">{{comment.modified_date | date:'MMM d, yyyy'}}</h2>
                 <div style="display: block;width:888px;min-height: 48px;">
                     <div style="display: block; float: left; width: 48px;">
                         <img ng-src="{{ comment.owner.employee.avatar }}" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;"/>
                     </div>
-                    <div style="display: block; float: left;padding-left:10px;max-width: 80%;min-height: 48px;">
-                        <b style="color:#8b8b8b;">{{comment.owner.employee.full_name}}</b> -
-                        <span style="">{{comment.content}}</span>
-                        <span style="display:block;color:#8b8b8b">at {{comment.modified_date | date:'hh:mma'}}</span>
+                    <div style="display: block; float: left;padding-left:10px;max-width: 90%;min-height: 48px;">
+                        <b style="color:#8b8b8b;">{{comment.owner.employee.full_name}}</b>
+                        <span style="margin-left:5px;line-height: 115%">{{comment.content}}</span>
+                        <ul class="feed-actions">
+                            <li>{{comment.modified_date | date:'h:mma'}}</li>
+                        </ul>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <div style="display: block; margin:0 58px;padding:10px 10px 14px 10px; background-color:#272727;border: 1px solid #434343;">
+                        <div ng-repeat="subcomment in comment.subcomments | orderBy:'modified_date':true">
+                            <div style="display: block;width:668px;min-height: 48px;">
+                                <div style="display: block; float: left; width: 48px;">
+                                    <img ng-src="{{ subcomment.owner.employee.avatar }}" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;"/>
+                                </div>
+                                <div style="display: block; float: left;padding-left:10px;max-width: 80%;min-height: 48px;">
+                                    <b style="color:#8b8b8b;">{{subcomment.owner.employee.full_name}}</b>
+                                    <span style="margin-left:5px;line-height: 115%">{{subcomment.content}}</span>
+                                    <ul class="feed-actions">
+                                        <li>{{subcomment.modified_date | date:'MMM d, yyyy h:mma'}}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="float:left;width:610px;height:25px;-webkit-border-radius: 2px;moz-border-radius: 3px;-ms-border-radius: 3px;-o-border-radius: 3px;border-radius: 3px;border: 1px solid #c1c1c1;margin:12px 0 0 0;">
+                            <textarea ng-model="newSubCommentText" rows="1" cols="40" placeholder="Add a comment..." style="width:600px;height:15px;font-size:14px;padding:5px;border: none;"></textarea>
+                        </div>
+                        <button class="small-comment" ng-click="addSubComment()">Comment</button>
+                        <div style="clear:both;"></div>
                     </div>
                 </div>
             </div>
@@ -111,8 +135,29 @@
     margin-bottom:15px;
     cursor: pointer;
   }
+  button.small-comment {
+    border: 1px solid #434343;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    padding:5px;
+    background-color:#434343;
+    font-size:12px;
+    color:#d3d4d4;
+    margin-top:10px;
+    margin-left:15px;
+    cursor: pointer;
+  }
   button.comment:hover {
     background-color:#272727;
-}
-
+  }
+  ul.feed-actions {
+    margin-top: 5px;
+    list-style: none;
+  }
+  .feed-actions li {
+    margin: 0 10px 8px 0;
+    padding: 0 14px 0 0;
+    color: #8b8b8b;
+  }
 </style>

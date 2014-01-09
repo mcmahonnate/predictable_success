@@ -104,7 +104,14 @@ class TeamSalaryReportDetail(APIView):
         if report is not None:
             return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
-        
+
+class SubCommentList(APIView):
+    def get(self, request, pk, format=None):
+        comments = Comment.objects.filter(object_id = pk)
+        comments = comments.extra(order_by = ['-created_date'])
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)
+
 class EmployeeCommentList(APIView):
     def get(self, request, pk, format=None):
         employee = Employee.objects.get(id = pk)

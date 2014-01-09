@@ -4,6 +4,7 @@ from org.models import Employee, Team, Mentorship, Leadership, Attribute, Attrib
 from comp.models import CompensationSummary
 from blah.models import Comment
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.models import ContentType
 
 class TeamSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -33,8 +34,16 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'username', 'first_name', 'last_name', 'employee')
 
+class SubCommentSerializer(serializers.HyperlinkedModelSerializer):
+    owner = UserSerializer()
+
+    class Meta:
+        model = Comment
+        fields = ('id', 'content', 'owner', 'object_id', 'created_date', 'modified_date')
+
 class CommentSerializer(serializers.HyperlinkedModelSerializer):
     owner = UserSerializer()
+
     class Meta:
         model = Comment
         fields = ('id', 'content', 'owner', 'object_id', 'created_date', 'modified_date')
