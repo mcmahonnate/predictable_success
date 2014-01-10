@@ -125,14 +125,25 @@ class EmployeeCommentList(APIView):
         return Response(serializer.data)
 
     def post(self, request, pk, format=None):
+        comment_type = ContentType.objects.get(model="comment")
+        model_name = request.DATA["_model_name"]
+        content_type = ContentType.objects.get(model=model_name)
+        object_id = request.DATA["_object_id"]
         employee = Employee.objects.get(id = pk)
         if employee is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
         owner = request.user
         content = request.DATA["_content"]
-        comment = employee.comments.add_comment(content, owner)
-        serializer = CommentSerializer(comment, many=False)
-        return Response(serializer.data)
+        if content_type == comment_type:
+            comment = Comment.objects.get(id = object_id)
+            sub_comment = Comment.objects.add_comment(comment,content,owner)
+            serializer = SubCommentSerializer(sub_comment, many=False)
+            return Response(serializer.data)
+        else:
+            comment = employee.comments.add_comment(content, owner)
+            serializer = CommentSerializer(comment, many=False)
+            return Response(serializer.data)
+
 
 class CommentDetail(APIView):
     def put(self, request, pk, format=None):

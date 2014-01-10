@@ -178,7 +178,6 @@ angular.module('tdb.controllers', [])
 .controller('EmployeeCommentsCtrl', ['$scope', '$filter', '$routeParams', 'EmployeeComments', 'SubComments','Comment', 'User', function($scope, $filter, $routeParams, EmployeeComments, SubComments, Comment, User) {
     $scope.employeeId = $routeParams.id;
     $scope.newCommentText = "";
-    $scope.newSubCommentText = "";
     $scope.commentIndex = 0; 
 	$scope.$watch('commentIndex', function() {
 		if ($scope.comments) {
@@ -189,12 +188,12 @@ angular.module('tdb.controllers', [])
     EmployeeComments.query({ id: $scope.employeeId }).$then(function(response) {
         $scope.comments = response.data;
         angular.forEach($scope.comments, function(comment) {
+            comment.subcomments = [];
             SubComments.query({ id: comment.id }).$then(function(response) {
-                    console.log(comment.id);
                     comment.subcomments = response.data;
-                    console.log(response.data.length);
                 }
             );
+            comment.newSubCommentText = "";
         });
         $scope.originalComments = angular.copy($scope.comments);
         $scope.currentComment = $scope.comments[$scope.commentIndex];
@@ -244,35 +243,36 @@ angular.module('tdb.controllers', [])
         newComment.content = $scope.newCommentText;
         newComment.modified_date = new Date().toJSON();
         newComment.owner = User.get();
+        newComment.newSubCommentText="";
+        newComment.subcomments=[];
+
         $scope.comments.push(newComment);
         $scope.originalComments.push(angular.copy(newComment));
 
-        var data = {id: newComment.id, _content: newComment.content};
+        var data = {id: newComment.id, _model_name: "employee", _object_id: 0, _content: newComment.content};
 
         data.id = $scope.employeeId;
         EmployeeComments.save(data, function(response) {
-            $scope.currentComment.id = response.id;
+            newComment.id = response.id;
             $scope.newCommentText = "";
         });
     }
 
-    $scope.addSubComment = function(equals) {
+    $scope.addSubComment = function(comment) {
         var newComment = {};
         newComment.id = -1;
-        newComment.content = $scope.newSubCommentText;
+        newComment.content = comment.newSubCommentText;
         newComment.modified_date = new Date().toJSON();
         newComment.owner = User.get();
 
+        comment.subcomments.push(newComment);
 
-        $scope.comments.push(newComment);
-        $scope.originalComments.push(angular.copy(newComment));
-
-        var data = {id: newComment.id, _content: newComment.content};
+        var data = {id: newComment.id, _model_name: "comment", _object_id: comment.id,_content: newComment.content};
 
         data.id = $scope.employeeId;
         EmployeeComments.save(data, function(response) {
-            $scope.currentComment.id = response.id;
-            $scope.newCommentText = "";
+            newComment.id = response.id;
+            comment.newSubCommentText = "";
         });
     }
 
