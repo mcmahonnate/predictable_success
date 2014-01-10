@@ -2,6 +2,9 @@
 from .base import *
 import dj_database_url
 
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
+
 DATABASES = { 'default': dj_database_url.config(default=os.environ.get('DATABASE_URL')) }
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
