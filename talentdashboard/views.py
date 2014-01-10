@@ -17,6 +17,7 @@ from django.contrib.auth.models import User
 import datetime
 from django.utils.log import getLogger
 from django.core.cache import cache
+from django.contrib.contenttypes.models import ContentType
 
 logger = getLogger('talentdashboard')
 
