@@ -243,18 +243,38 @@
         </header>
 
         <section class="widget-body text-widget">
+
+
+                              <div class="widget-canvas swipe" id="notes_slider">
+                        <ul  rn-carousel rn-carousel-index="commentIndex" class="slide">
+                                <li ng-repeat="comment in comments">
+
             <div style="display: block;width:668px;min-height: 48px;">
                 <div style="display: block; float: left; width: 48px;">
-                    <img ng-src="{{ currentComment.owner.employee.avatar }}" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;"/>
+                    <a ng-href="#/discussions/{{employee.id}}"><img ng-src="{{ comment.owner.employee.avatar }}" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;"/></a>
                 </div>
                 <div style="display: block; float: left;padding-left:10px;max-width: 80%;min-height: 48px;">
-                    <b style="color:#8b8b8b;">{{currentComment.owner.employee.full_name}}</b>
-                    <span style="margin-left:5px;line-height: 115%">{{currentComment.content}}</span>
+                    <a ng-href="#/discussions/{{employee.id}}"><b style="color:#8b8b8b;">{{comment.owner.employee.full_name}}</b></a>
+                    <span style="margin-left:5px;line-height: 115%">{{comment.content}}</span>
                     <ul class="feed-actions">
-                        <li>{{currentComment.modified_date | date:'MMM d, yyyy h:mma'}}</li>
+                        <li>{{comment.modified_date | date:'MMM d, yyyy h:mma'}}</li>
                     </ul>
                 </div>
             </div>
+                                </li>
+                        </ul>
+
+                         <div class="slide-pagination">
+                          <div class="inner" id="note_pages">
+                                <span ng-if="currentComment" class="slide-tally">{{commentIndex+1}} of {{comments.length}}</span>
+                                <nav>
+                                  <a ng-repeat="comment in comments| limitTo: 5" ng-class="{activeSlide: $index==$parent.commentIndex}" ng-click="selectComment($index)" style="cursor: pointer;">{{$index}}</a>
+                                </nav>
+                          </div>
+                        </div>
+
+
+
 		  </div><!-- .widget-canvas -->
         </section>
       </div><!-- .widget-inner -->
