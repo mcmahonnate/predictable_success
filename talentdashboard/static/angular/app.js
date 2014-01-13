@@ -6,7 +6,8 @@ var app = angular.module('tdb', ['tdb.services', 'tdb.controllers', 'tdb.directi
           when('/teams/:id/', {templateUrl: '/static/angular/partials/team-overview.html', controller: 'TeamOverviewCtrl', resolve: {authorizeRoute: authorizeRoute}}).
           when('/employees', {templateUrl: '/static/angular/partials/employee-list.html', controller: 'EmployeeListCtrl', resolve: {authorizeRoute: authorizeRoute}}).
           when('/employees/:id', {templateUrl: '/static/angular/partials/employee-detail.html', controller: 'EmployeeDetailCtrl', resolve: {authorizeRoute: authorizeRoute}}).
-          when('/discussions/:id', {templateUrl: '/static/angular/partials/discussions-overview.html', controller: 'EmployeeDetailCtrl', resolve: {authorizeRoute: authorizeRoute}}).
+          when('/discussion', {templateUrl: '/static/angular/partials/discussion-overview.html', controller: 'DiscussionOverviewCtrl', resolve: {authorizeRoute: authorizeRoute}}).
+          when('/discussion/:id', {templateUrl: '/static/angular/partials/discussion-detail.html', controller: 'EmployeeDetailCtrl', resolve: {authorizeRoute: authorizeRoute}}).
           when('/leaders/:id', {templateUrl: '/static/angular/partials/leader-detail.html', controller: 'LeaderDetailCtrl', resolve: {authorizeRoute: authorizeRoute}}).          
           otherwise({redirectTo: '/'});
     }]);
