@@ -145,6 +145,13 @@ class EmployeeCommentList(APIView):
             serializer = CommentSerializer(comment, many=False)
             return Response(serializer.data)
 
+class CommentList(APIView):
+    def get(self, request, format=None):
+        employee_type = ContentType.objects.get(model='employee')
+        comments = Comment.objects.filter(content_type = employee_type)
+        comments = comments.extra(order_by = ['-created_date'])[:5]
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)
 
 class CommentDetail(APIView):
     def get(self, request, pk, format=None):

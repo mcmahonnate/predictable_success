@@ -256,7 +256,7 @@
                             <span style="margin-left:5px;line-height: 115%">{{comment.content | cut:true:650}}</span>
                             <ul class="feed-actions">
                                 <li class="feed-action"><a ng-href="#/discussions/{{comment.id}}" style="color: #8b8b8b;">Comment<span ng-show="comment.subcomments"> ({{comment.subcomments.length}})</span></a></li>
-                                <li class="feed-action"><a ng-href="#/discussions/{{comment.id}}" style="color: #8b8b8b;">{{comment.modified_date | date:'MMM d, yyyy h:mma'}}</a></li>
+                                <li class="feed-action">{{comment.modified_date | date:'MMM d, yyyy h:mma'}}</li>
                             </ul>
                         </div>
                     </div>
@@ -287,6 +287,9 @@
     margin: 0 10px 8px 0;
     padding: 0 14px 0 0;
     color: #8b8b8b;
+  }
+  .feed-action a:hover {
+    text-decoration: none;
   }
 
   div[contentEditable] {

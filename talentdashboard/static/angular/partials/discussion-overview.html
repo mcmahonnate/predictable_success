@@ -48,38 +48,39 @@
     </div>
   </header>
 
-  <div ng-if="employee.display" class="dashboard-sized-el fade" ng-class="{in:employee}" id="dashboard" style="margin-top: 75px; max-width: 970px;">
+  <div class="dashboard-sized-el fade in" id="dashboard" style="margin-top: 75px; max-width: 970px;">
 
     <article class="widget clock loaded" id="widget-8494" style="top: 0px; left: 0px; width: auto;">
-      <div ng-controller="EmployeeCommentsCtrl" class="widget-inner large-screen" style="max-width:970px;min-height: 560px;">
-        <header class="no-reload" style="padding: 10px;height: 50px;">
-          <div style="display: block; float: left; width: 48px;">
-            <a href="#/employees/{{employee.id}}"><img ng-src="{{ employee.avatar }}" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;"/></a>
-          </div>
-          <div style="display: block; float: left;padding-left: 10px;">
-            <a href="#/employees/{{employee.id}}"><h1 style="color: #d3d4d4;">{{employee.full_name}}</h1>
-            <h1>{{employee.job_title}}</h1></a>
-          </div>
+      <div class="widget-inner large-screen" style="max-width:970px;min-height: 560px;">
+        <header class="no-reload"">
+            <h1 style="display:inline;">Discussions</h1>
         </header>
         <section class="widget-body text-widget">
-            <h2 style="margin:0 15px;">Discussions</h2>
-            <div style="float:left;width:720px;height:35px;-webkit-border-radius: 2px;moz-border-radius: 3px;-ms-border-radius: 3px;-o-border-radius: 3px;border-radius: 3px;border: 1px solid #c1c1c1;margin:10px 15px;">
-                <textarea ng-model="newCommentText" rows="1" cols="40" placeholder="Add a comment..." style="width:700px;height:15px;font-size:14px;padding:10px;border: none;"></textarea>
-            </div>
-            <button class="comment" ng-click="addComment()">Comment</button>
+
             <div ng-repeat="comment in comments | orderBy:'modified_date':true" style="margin:0 15px;padding:8px 0 8px 0px;display: block;width:888px">
                 <h2 ng-show="CreateHeader(comment.modified_date)" style="font-size: 14px;color: #8b8b8b;border-bottom: 2px solid #8b8b8b">{{comment.modified_date | date:'MMM d, yyyy'}}</h2>
                 <div style="display: block;width:888px;min-height: 48px;">
                     <div style="display: block; float: left; width: 48px;">
                         <img ng-src="{{ comment.owner.employee.avatar }}" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;"/>
                     </div>
-                    <div style="display: block; float: left;padding-left:10px;max-width: 90%;min-height: 48px;">
-                        <b style="color:#8b8b8b;">{{comment.owner.employee.full_name}}</b>
-                        <span style="margin-left:5px;line-height: 115%">{{comment.content}}</span>
-                        <ul class="feed-actions">
-                            <li>{{comment.modified_date | date:'h:mma'}}</li>
-                        </ul>
+                    <div style="display: block; margin-left:35px; padding-left:10px;min-width: 80%;min-height: 28px;">
+                        <div style="display: block; padding-left:10px;min-width: 90%;height: 22px;">
+                            <b style="color:#8b8b8b;">{{comment.owner.employee.full_name}}</b>
+                        </div>
+                        <div style="display: block; width: 788px;margin-left:15px">
+                            <div style="display: block; float:left; width: 48px;">
+                                <img ng-src="{{ comment.owner.employee.avatar }}" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;"/>
+                            </div>
+                            <div style="display: block;margin:0 10px 10px 10px;padding-left:50px;max-width: 90%;min-height: 48px;">
+                                <b style="color:#8b8b8b;">{{comment.owner.employee.full_name}}</b>
+                                <span style="margin-left:5px;line-height: 115%">{{comment.content}}</span>
+                            </div>
+                            <ul class="feed-actions">
+                                <li>{{comment.modified_date | date:'h:mma'}}</li>
+                            </ul>
+                        </div>
                     </div>
+
                     <div style="clear:both;"></div>
                     <div style="display: block; margin:0 58px;padding:0px 10px 0px 10px; background-color:#272727;border: 1px solid #434343;">
                         <div ng-repeat="subcomment in comment.subcomments | orderBy:'modified_date':true">
@@ -150,6 +151,9 @@
     margin-top:10px;
     margin-left:15px;
     cursor: pointer;
+  }
+  button.small-comment:hover {
+    background-color:#272727;
   }
   button.comment:hover {
     background-color:#272727;
