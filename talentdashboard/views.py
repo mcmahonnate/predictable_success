@@ -147,6 +147,11 @@ class EmployeeCommentList(APIView):
 
 
 class CommentDetail(APIView):
+    def get(self, request, pk, format=None):
+        comment = Comment.objects.get(id = pk)
+        serializer = CommentSerializer(comment)
+        return Response(serializer.data)
+
     def put(self, request, pk, format=None):
         comment = Comment.objects.filter(id = pk)
         if comment is not None:

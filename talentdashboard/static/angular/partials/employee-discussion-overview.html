@@ -51,7 +51,7 @@
   <div ng-if="employee.display" class="dashboard-sized-el fade" ng-class="{in:employee}" id="dashboard" style="margin-top: 75px; max-width: 970px;">
 
     <article class="widget clock loaded" id="widget-8494" style="top: 0px; left: 0px; width: auto;">
-      <div class="widget-inner large-screen" style="max-width:970px;min-height: 560px;">
+      <div ng-controller="EmployeeCommentsCtrl" class="widget-inner large-screen" style="max-width:970px;min-height: 560px;">
         <header class="no-reload" style="padding: 10px;height: 50px;">
           <div style="display: block; float: left; width: 48px;">
             <a href="#/employees/{{employee.id}}"><img ng-src="{{ employee.avatar }}" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;"/></a>
@@ -63,8 +63,12 @@
         </header>
         <section class="widget-body text-widget">
             <h2 style="margin:0 15px;">Discussions</h2>
-            <div style="margin:0 15px;padding:8px 0 8px 0px;display: block;width:888px">
-                <h2 style="font-size: 14px;color: #8b8b8b;border-bottom: 2px solid #8b8b8b">{{comment.modified_date | date:'MMM d, yyyy'}}</h2>
+            <div style="float:left;width:720px;height:35px;-webkit-border-radius: 2px;moz-border-radius: 3px;-ms-border-radius: 3px;-o-border-radius: 3px;border-radius: 3px;border: 1px solid #c1c1c1;margin:10px 15px;">
+                <textarea ng-model="newCommentText" rows="1" cols="40" placeholder="Add a comment..." style="width:700px;height:15px;font-size:14px;padding:10px;border: none;"></textarea>
+            </div>
+            <button class="comment" ng-click="addComment()">Comment</button>
+            <div ng-repeat="comment in comments | orderBy:'modified_date':true" style="margin:0 15px;padding:8px 0 8px 0px;display: block;width:888px">
+                <h2 ng-show="CreateHeader(comment.modified_date)" style="font-size: 14px;color: #8b8b8b;border-bottom: 2px solid #8b8b8b">{{comment.modified_date | date:'MMM d, yyyy'}}</h2>
                 <div style="display: block;width:888px;min-height: 48px;">
                     <div style="display: block; float: left; width: 48px;">
                         <img ng-src="{{ comment.owner.employee.avatar }}" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;"/>
@@ -97,7 +101,7 @@
                             <div style="float:left;width:610px;height:25px;-webkit-border-radius: 2px;moz-border-radius: 3px;-ms-border-radius: 3px;-o-border-radius: 3px;border-radius: 3px;border: 1px solid #c1c1c1;margin:12px 0 0 0;">
                                 <textarea ng-model="comment.newSubCommentText" rows="1" cols="40" placeholder="Add a comment..." style="width:600px;height:15px;font-size:14px;padding:5px;border: none;"></textarea>
                             </div>
-                            <button class="small-comment" ng-click="addSubComment()">Comment</button>
+                            <button class="small-comment" ng-click="addSubComment(comment)">Comment</button>
                         </div>
                         <div style="clear:both;"></div>
                     </div>

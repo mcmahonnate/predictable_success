@@ -175,6 +175,47 @@ angular.module('tdb.controllers', [])
    
 }])
 
+.controller('DiscussionDetailCtrl', ['$scope', '$location', '$filter', '$routeParams', 'EmployeeComments', 'Employee', 'Comment', 'SubComments', 'User', 'analytics', function($scope, $location, $filter, $routeParams, EmployeeComments, Employee, Comment, SubComments, User, analytics) {
+    analytics.trackPage($scope, $location.absUrl(), $location.url());
+    $scope.commentId = $routeParams.id;
+    $scope.comment="";
+    $scope.employee="";
+    $scope.comment.subcomments = [];
+
+    Comment.get({ id: $scope.commentId }).$then(function(response) {
+        $scope.comment = response.data;
+        $scope.comment.newSubCommentText = "";
+        SubComments.query({ id: $scope.comment.id }).$then(function(response) {
+                $scope.comment.subcomments = response.data;
+            }
+        );
+        Employee.get(
+            {id: $scope.comment.object_id},
+            function(data) {
+                $scope.employee = data;
+            }
+        );
+    });
+
+    $scope.addSubComment = function() {
+        var newComment = {};
+        newComment.id = -1;
+        newComment.content = $scope.comment.newSubCommentText;
+        newComment.modified_date = new Date().toJSON();
+        newComment.owner = User.get();
+
+        $scope.comment.subcomments.push(newComment);
+
+        var data = {id: newComment.id, _model_name: "comment", _object_id: $scope.comment.id,_content: newComment.content};
+
+        data.id = $scope.employee.id;
+        EmployeeComments.save(data, function(response) {
+            newComment.id = response.id;
+            $scope.comment.newSubCommentText = "";
+        });
+    }
+}])
+
 .controller('EmployeeCommentsCtrl', ['$scope', '$filter', '$routeParams', 'EmployeeComments', 'SubComments','Comment', 'User', function($scope, $filter, $routeParams, EmployeeComments, SubComments, Comment, User) {
     $scope.employeeId = $routeParams.id;
     $scope.newCommentText = "";
