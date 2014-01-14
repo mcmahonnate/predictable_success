@@ -256,8 +256,11 @@
                             <span style="margin-left:5px;line-height: 115%">{{comment.content | cut:true:650}}</span>
                             <ul class="feed-actions">
                                 <li class="feed-action"><a ng-href="#/discussions/{{comment.id}}" style="color: #8b8b8b;">Comment<span ng-show="comment.subcomments"> ({{comment.subcomments.length}})</span></a></li>
-                                <li class="feed-action">{{comment.modified_date | date:'MMM d, yyyy h:mma'}}</li>
+                                <li ng-show="comment.owner.id==currentUser.id" class="feed-action"><a ng-click="" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
+                                <li ng-show="comment.owner.id==currentUser.id" class="feed-action"><a ng-click="" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></li>
                             </ul>
+                            <span style="color:#8b8b8b;">{{comment.modified_date | date:'MMM d, yyyy h:mma'}}</span>
+
                         </div>
                     </div>
                 </li>
@@ -283,6 +286,7 @@
     list-style: none;
   }
   .feed-actions li {
+    background: url('/static/css/icon_bullet_grey2_4x4.png') no-repeat scroll 100% 6px transparent;
     float: left;
     margin: 0 10px 8px 0;
     padding: 0 14px 0 0;

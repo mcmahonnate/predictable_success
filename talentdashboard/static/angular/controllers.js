@@ -1,9 +1,10 @@
 angular.module('tdb.controllers', [])
 
-.controller('BaseAppCtrl', ['$rootScope', '$location', function($rootScope, $location) {
+.controller('BaseAppCtrl', ['$rootScope', '$location', 'User', function($rootScope, $location, User) {
     $rootScope.$on("$routeChangeError", function() {
         window.location = '/login?next=' + $location.path();
     })
+    $rootScope.currentUser = User.get();
 }])
 
 .controller('EvaluationListCtrl', ['$scope', '$location', '$routeParams', 'PvpEvaluation', 'Team', 'analytics', function($scope, $location, $routeParams, PvpEvaluation, Team, analytics) {
@@ -145,6 +146,12 @@ angular.module('tdb.controllers', [])
 
 }])
 
+.controller('ReportsCtrl', ['$scope', '$location', '$routeParams', 'PvpEvaluation', 'analytics', function($scope, $location, $routeParams, PvpEvaluation, analytics) {
+    analytics.trackPage($scope, $location.absUrl(), $location.url());
+    $scope.evaluations = PvpEvaluation.query({current_round: true});
+
+}])
+
 .controller('CompanyOverviewCtrl', ['$scope', '$location', '$routeParams', 'TalentCategoryReport', 'SalaryReport', 'analytics', function($scope, $location, $routeParams, TalentCategoryReport, SalaryReport, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     TalentCategoryReport.getReportForCompany(function(data) {
@@ -214,6 +221,7 @@ angular.module('tdb.controllers', [])
             $scope.comment.newSubCommentText = "";
         });
     }
+
 }])
 
 .controller('DiscussionOverviewCtrl', ['$scope', '$location', '$filter', '$routeParams', 'EmployeeComments', 'Employee', 'Comment', 'SubComments', 'User', 'analytics', function($scope, $location, $filter, $routeParams, EmployeeComments, Employee, Comment, SubComments, User, analytics) {
@@ -239,7 +247,7 @@ angular.module('tdb.controllers', [])
         }
         console.log($scope.comments.length)
     });
-        console.log('test');
+
     $scope.addSubComment = function(comment) {
         var newComment = {};
         newComment.id = -1;
