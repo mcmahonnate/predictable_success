@@ -240,21 +240,21 @@ angular.module('tdb.controllers', [])
         console.log($scope.comments.length)
     });
         console.log('test');
-    $scope.addSubComment = function() {
+    $scope.addSubComment = function(comment) {
         var newComment = {};
         newComment.id = -1;
-        newComment.content = $scope.comment.newSubCommentText;
+        newComment.content = comment.newSubCommentText;
         newComment.modified_date = new Date().toJSON();
         newComment.owner = User.get();
 
-        $scope.comment.subcomments.push(newComment);
+        comment.subcomments.push(newComment);
 
-        var data = {id: newComment.id, _model_name: "comment", _object_id: $scope.comment.id,_content: newComment.content};
+        var data = {id: newComment.id, _model_name: "comment", _object_id: comment.id,_content: newComment.content};
 
-        data.id = $scope.employee.id;
+        data.id = comment.associated_object.id;
         EmployeeComments.save(data, function(response) {
             newComment.id = response.id;
-            $scope.comment.newSubCommentText = "";
+            comment.newSubCommentText = "";
         });
     }
 }])
