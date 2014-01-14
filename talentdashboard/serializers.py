@@ -43,10 +43,10 @@ class SubCommentSerializer(serializers.HyperlinkedModelSerializer):
 
 class CommentSerializer(serializers.HyperlinkedModelSerializer):
     owner = UserSerializer()
-
+    associated_object = MinimalEmployeeSerializer()
     class Meta:
         model = Comment
-        fields = ('id', 'content', 'owner', 'object_id', 'created_date', 'modified_date')
+        fields = ('id', 'content', 'owner', 'object_id', 'created_date', 'modified_date', 'associated_object')
 
 class EvaluationRoundSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

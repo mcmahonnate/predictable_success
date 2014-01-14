@@ -112,7 +112,7 @@ class SubCommentList(APIView):
         comments = Comment.objects.filter(object_id = pk)
         comments = comments.filter(content_type = comment_type)
         comments = comments.extra(order_by = ['-created_date'])
-        serializer = CommentSerializer(comments, many=True)
+        serializer = SubCommentSerializer(comments, many=True)
         return Response(serializer.data)
 
 class EmployeeCommentList(APIView):
