@@ -76,8 +76,10 @@
                                 <span style="margin-left:5px;line-height: 115%">{{comment.content}}</span>
                             </div>
                             <ul class="feed-actions">
-                                <li>{{comment.modified_date | date:'h:mma'}}</li>
+                                <li ng-show="comment.owner.id==currentUser.id" class="feed-action"><a ng-click="" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
+                                <li ng-show="comment.owner.id==currentUser.id" class="feed-action"><a ng-click="deleteComment(comment.id, $index)" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></li>
                             </ul>
+                            <span style="color:#8b8b8b;">{{comment.modified_date | date:'MMM d, yyyy h:mma'}}</span>
                         </div>
                     </div>
 
@@ -88,19 +90,21 @@
                                 <div style="display: block; float: left; width: 48px;">
                                     <a ng-href="#/employees/{{subcomment.owner.employee.id}}" style="cursor: pointer;color:#8b8b8b;"><img ng-src="{{ subcomment.owner.employee.avatar }}" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;"/></a>
                                 </div>
-                                <div style="display: block; float: left;padding-left:10px;max-width: 80%;min-height: 48px;">
+                                <div style="display: block; float: left;padding-left:10px;width: 610px;min-height: 48px;">
                                     <b style="color:#8b8b8b;"><a ng-href="#/employees/{{subcomment.owner.employee.id}}" style="cursor: pointer;color:#8b8b8b;">{{subcomment.owner.employee.full_name}}</a></b>
                                     <span style="margin-left:5px;line-height: 115%">{{subcomment.content}}</span>
                                     <ul class="feed-actions">
-                                        <li>{{subcomment.modified_date | date:'MMM d, yyyy h:mma'}}</li>
+                                        <li ng-show="subcomment.owner.id==currentUser.id" class="feed-action"><a ng-click="" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
+                                        <li ng-show="subcomment.owner.id==currentUser.id" class="feed-action"><a ng-click="deleteSubComment(subcomment.id, $index, $parent.$index)" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></li>
                                     </ul>
+                                    <span style="color:#8b8b8b;">{{subcomment.modified_date | date:'MMM d, yyyy h:mma'}}</span>
                                 </div>
                             </div>
                             <div style="clear:both;"></div>
                         </div>
                         <div style="padding-bottom:12px;">
-                            <div style="float:left;width:610px;height:25px;-webkit-border-radius: 2px;moz-border-radius: 3px;-ms-border-radius: 3px;-o-border-radius: 3px;border-radius: 3px;border: 1px solid #c1c1c1;margin:12px 0 0 0;">
-                                <textarea ng-model="comment.newSubCommentText" rows="1" cols="40" placeholder="Add a comment..." style="width:600px;height:15px;font-size:14px;padding:5px;border: none;"></textarea>
+                            <div style="float:left;width:610px;-webkit-border-radius: 2px;moz-border-radius: 3px;-ms-border-radius: 3px;-o-border-radius: 3px;border-radius: 3px;border: 1px solid #c1c1c1;margin:12px 0 12px 0;background-color:white;">
+                                <textarea ng-model="comment.newSubCommentText" expand-text-area rows="1" cols="40" placeholder="Add a comment..." style="width:600px;height:15px;font-size:14px;padding:5px;border: none;resize:vertical;"></textarea>
                             </div>
                             <button class="small-comment" ng-click="addSubComment(comment)">Comment</button>
                         </div>
@@ -163,8 +167,13 @@
     list-style: none;
   }
   .feed-actions li {
+    background: url('/static/css/icon_bullet_grey2_4x4.png') no-repeat scroll 100% 6px transparent;
+    float: left;
     margin: 0 10px 8px 0;
     padding: 0 14px 0 0;
     color: #8b8b8b;
+  }
+  .feed-action a:hover {
+    text-decoration: none;
   }
 </style>

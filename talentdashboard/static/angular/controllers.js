@@ -182,7 +182,7 @@ angular.module('tdb.controllers', [])
    
 }])
 
-.controller('DiscussionDetailCtrl', ['$scope', '$location', '$filter', '$routeParams', 'EmployeeComments', 'Employee', 'Comment', 'SubComments', 'User', 'analytics', function($scope, $location, $filter, $routeParams, EmployeeComments, Employee, Comment, SubComments, User, analytics) {
+.controller('DiscussionDetailCtrl', ['$scope', '$location', '$filter', '$routeParams', '$window', 'EmployeeComments', 'Employee', 'Comment', 'SubComments', 'User', 'analytics', function($scope, $location, $filter, $routeParams, $window, EmployeeComments, Employee, Comment, SubComments, User, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     $scope.commentId = $routeParams.id;
     $scope.comment="";
@@ -222,9 +222,35 @@ angular.module('tdb.controllers', [])
         });
     }
 
+    $scope.deleteComment = function(comment_id, index) {
+        if ($window.confirm('Are you sure you want to delete this comment?')) {
+            var data = {id: comment_id};
+            var deleteSuccess = function() {
+                $location.path('/employees/' + $scope.employee.id);
+            };
+
+            Comment.remove(data, function() {
+                    deleteSuccess();
+                });
+        }
+    }
+
+    $scope.deleteSubComment = function(comment_id, index) {
+        if ($window.confirm('Are you sure you want to delete this comment?')) {
+            var data = {id: comment_id};
+            var deleteSuccess = function() {
+                $scope.comment.subcomments.splice(index, 1);
+            };
+
+            Comment.remove(data, function() {
+                    deleteSuccess();
+                });
+        }
+    }
+
 }])
 
-.controller('DiscussionOverviewCtrl', ['$scope', '$location', '$filter', '$routeParams', 'EmployeeComments', 'Employee', 'Comment', 'SubComments', 'User', 'analytics', function($scope, $location, $filter, $routeParams, EmployeeComments, Employee, Comment, SubComments, User, analytics) {
+.controller('DiscussionOverviewCtrl', ['$scope', '$location', '$filter', '$routeParams', '$window', 'EmployeeComments', 'Employee', 'Comment', 'SubComments', 'User', 'analytics', function($scope, $location, $filter, $routeParams, $window, EmployeeComments, Employee, Comment, SubComments, User, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     Comment.query().$then(function(response) {
         $scope.comments = response.data;
@@ -264,10 +290,36 @@ angular.module('tdb.controllers', [])
             newComment.id = response.id;
             comment.newSubCommentText = "";
         });
-    }
+    };
+    $scope.deleteComment = function(comment_id, index) {
+        if ($window.confirm('Are you sure you want to delete this comment?')) {
+            var data = {id: comment_id};
+            var deleteSuccess = function() {
+                $scope.comments.splice(index, 1);
+            };
+
+            Comment.remove(data, function() {
+                    deleteSuccess();
+                });
+        }
+    };
+
+    $scope.deleteSubComment = function(comment_id, index, parent_index) {
+        if ($window.confirm('Are you sure you want to delete this comment?')) {
+            var data = {id: comment_id};
+            console.log(parent_index);
+            var deleteSuccess = function() {
+                $scope.comments[parent_index].subcomments.splice(index, 1);
+            };
+
+            Comment.remove(data, function() {
+                    deleteSuccess();
+                });
+        }
+    };
 }])
 
-.controller('EmployeeCommentsCtrl', ['$scope', '$filter', '$routeParams', 'EmployeeComments', 'SubComments','Comment', 'User', function($scope, $filter, $routeParams, EmployeeComments, SubComments, Comment, User) {
+.controller('EmployeeCommentsCtrl', ['$scope', '$filter', '$routeParams', '$window', 'EmployeeComments', 'SubComments','Comment', 'User', function($scope, $filter, $routeParams, $window, EmployeeComments, SubComments, Comment, User) {
     $scope.employeeId = $routeParams.id;
     $scope.newCommentText = "";
     $scope.commentIndex = 0; 
@@ -368,26 +420,32 @@ angular.module('tdb.controllers', [])
         });
     }
 
-    $scope.deleteComment = function(e) {
-        var comment = $scope.currentComment;
-        var data = {id: comment.id};
+    $scope.deleteComment = function(comment_id, index) {
+        if ($window.confirm('Are you sure you want to delete this comment?')) {
+            var data = {id: comment_id};
+            var deleteSuccess = function() {
+                $scope.comments.splice(index, 1);
+                $scope.selectComment(0);
+            }
 
-        var deleteSuccess = function() {
-            $scope.currentComment.isEditing = false;
-            $scope.comments.splice($scope.commentIndex, 1);
-            $scope.originalComments.splice($scope.commentIndex, 1);
-            $scope.selectComment(0);
-        }
-
-        if (data.id != -1) { 
             Comment.remove(data, function() {
-                deleteSuccess();
-            });
+                    deleteSuccess();
+                });
         }
-        else { // never saved.
-           deleteSuccess();
+    };
+
+    $scope.deleteSubComment = function(comment_id, index, parent_index) {
+        if ($window.confirm('Are you sure you want to delete this comment?')) {
+            var data = {id: comment_id};
+            var deleteSuccess = function() {
+                $scope.comments[parent_index].subcomments.splice(index, 1);
+            };
+
+            Comment.remove(data, function() {
+                    deleteSuccess();
+                });
         }
-    }
+    };
 
     $scope.saveComment = function(e) {
         var comment = $scope.currentComment;

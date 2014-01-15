@@ -255,9 +255,9 @@
                             <a ng-href="#/discussions/{{comment.id}}"><b style="color:#8b8b8b;">{{comment.owner.employee.full_name}}</b></a>
                             <span style="margin-left:5px;line-height: 115%">{{comment.content | cut:true:650}}</span>
                             <ul class="feed-actions">
-                                <li class="feed-action"><a ng-href="#/discussions/{{comment.id}}" style="color: #8b8b8b;">Comment<span ng-show="comment.subcomments"> ({{comment.subcomments.length}})</span></a></li>
+                                <li class="feed-action"><a ng-href="#/discussions/{{comment.id}}" style="color: #8b8b8b;">comment<span ng-show="comment.subcomments"> ({{comment.subcomments.length}})</span></a></li>
                                 <li ng-show="comment.owner.id==currentUser.id" class="feed-action"><a ng-click="" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
-                                <li ng-show="comment.owner.id==currentUser.id" class="feed-action"><a ng-click="" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></li>
+                                <li ng-show="comment.owner.id==currentUser.id" class="feed-action"><a ng-click="deleteComment(comment.id,commentIndex)" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></li>
                             </ul>
                             <span style="color:#8b8b8b;">{{comment.modified_date | date:'MMM d, yyyy h:mma'}}</span>
 

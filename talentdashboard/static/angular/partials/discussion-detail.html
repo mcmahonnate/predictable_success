@@ -74,7 +74,7 @@
                         <span style="margin-left:5px;line-height: 115%">{{comment.content}}</span>
                         <ul class="feed-actions">
                             <li ng-show="comment.owner.id==currentUser.id" class="feed-action"><a ng-click="" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
-                            <li ng-show="comment.owner.id==currentUser.id" class="feed-action"><a ng-click="" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></li>
+                            <li ng-show="comment.owner.id==currentUser.id" class="feed-action"><a ng-click="deleteComment(comment.id, $index)" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></li>
                         </ul>
                         <span style="color:#8b8b8b;">{{comment.modified_date | date:'MMM d, yyyy h:mma'}}</span>
                     </div>
@@ -90,7 +90,7 @@
                                     <span style="margin-left:5px;line-height: 115%">{{subcomment.content}}</span>
                                     <ul class="feed-actions">
                                         <li ng-show="subcomment.owner.id==currentUser.id" class="feed-action"><a ng-click="" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
-                                        <li ng-show="subcomment.owner.id==currentUser.id" class="feed-action"><a ng-click="" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></li>
+                                        <li ng-show="subcomment.owner.id==currentUser.id" class="feed-action"><a ng-click="deleteSubComment(subcomment.id, $index)" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></li>
                                     </ul>
                                     <span style="color:#8b8b8b;">{{subcomment.modified_date | date:'MMM d, yyyy h:mma'}}</span>
                                 </div>
@@ -98,8 +98,8 @@
                             <div style="clear:both;"></div>
                         </div>
                         <div style="padding-bottom:12px;">
-                            <div style="float:left;width:610px;height:25px;-webkit-border-radius: 2px;moz-border-radius: 3px;-ms-border-radius: 3px;-o-border-radius: 3px;border-radius: 3px;border: 1px solid #c1c1c1;margin:12px 0 0 0;">
-                                <textarea ng-model="comment.newSubCommentText" rows="1" cols="40" placeholder="Add a comment..." style="width:600px;height:15px;font-size:14px;padding:5px;border: none;"></textarea>
+                            <div style="float:left;width:610px;-webkit-border-radius: 2px;moz-border-radius: 3px;-ms-border-radius: 3px;-o-border-radius: 3px;border-radius: 3px;border: 1px solid #c1c1c1;margin:12px 0 12px 0;background-color: white;">
+                                <textarea ng-model="comment.newSubCommentText" expand-text-area rows="1" cols="40" placeholder="Add a comment..." style="width:600px;font-size:14px;padding:5px;border: none;resize:vertical;"></textarea>
                             </div>
                             <button class="small-comment" ng-click="addSubComment()">Comment</button>
                         </div>
