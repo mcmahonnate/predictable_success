@@ -58,9 +58,12 @@
 						<div style="position:relative;margin-bottom: 20px;">
 							{{ form.username }}
 						</div>
-						<div style="position:relative;margin-bottom: 20px;">
+						<div style="position:relative;margin-bottom:2px;">
 							{{ form.password }}
 						</div>
+                        <div style="margin-bottom: 15px;">
+                        <a href="{% url 'django.contrib.auth.views.password_reset' %}" style="font-size: 12px;color: #585858;text-shadow: none;">Forgot your password?</a>
+                            </div>
                     <input class="login-button" type="submit" value="Sign in" />
                     <input type="hidden" name="next" id="next" />
                     <script>

@@ -138,10 +138,14 @@ REST_FRAMEWORK = {
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
-LOGIN_URL = '/login'
+LOGIN_URL = '/account/login'
 
 LOGIN_EXEMPT_URLS = (
-    r'api/v1/user-status/', 
+    r'^account/',
+    r'api/v1/user-status/',
+    r'^forgot-password/$',
+    r'^accounts/password/reset/$',
+    r'^accounts/password/reset/done/$'
 )
 
 def get_cache():

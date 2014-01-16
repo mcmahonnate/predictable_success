@@ -1,0 +1,63 @@
+<html>
+<head>
+	<title>{% block title %}{% endblock title %}</title>
+    <link href="/static/css/css/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link href="/static/css/snapshot.css" media="screen" rel="stylesheet" type="text/css" />
+	<style>
+		input[type=text],[type=password], [type=email]
+		{
+			line-height: 15px;
+			width: 280px;
+			border: 1px solid #ccc;
+			border-radius: 3px;
+			margin-right: 10px;
+			padding: 4px;
+		}
+		.login-button, .reset-button
+		{
+			font-size: 16.996px;
+			padding: 8px 18px 8px;
+			border: none;
+			background: #585858;
+			color: #ffffff;
+			cursor: pointer;
+		}
+		.login-button:hover
+		{
+			background: #656565;
+		}
+        .error-message
+        {
+            text-shadow: none;
+            color: white;
+            background-color: red;
+            padding: 8;
+        }
+	</style>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-45570095-1', 'talent-dashboard.herokuapp.com');
+      ga('send', 'pageview');
+
+    </script>
+</head>
+<body>
+
+  <div class="dashboard-sized-el" id="dashboard" style="margin-top: 75px; max-width: 970px;">
+
+    <article class="widget clock loaded" id="widget-8494" style="border-radius: 6px; width: 500px;margin: auto;position: static">
+		<div class="widget-inner large-screen" style="border-radius: 6px; width:450px; margin: auto">
+			<section class="widget-body">
+				{% block content %}{% endblock content%}
+		   </section>
+         </div>
+    </article>
+
+   </div>
+</body>
+</html>
+

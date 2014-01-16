@@ -4,19 +4,13 @@ from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
-from pvp.models import PvpEvaluation, EvaluationRound
-from org.models import Employee, Team, Mentorship, Leadership, Attribute, AttributeCategory
-from comp.models import CompensationSummary
-from django.views.decorators.cache import cache_page
 from .serializers import *
 from .decorators import *
 from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team
 from pvp.salaryreports import get_salary_report_for_team, get_salary_report_for_all_employees
 from blah.models import Comment
-from django.contrib.auth.models import User
 import datetime
 from django.utils.log import getLogger
-from django.core.cache import cache
 from django.contrib.contenttypes.models import ContentType
 
 logger = getLogger('talentdashboard')
