@@ -425,8 +425,7 @@ angular.module('tdb.controllers', [])
             var data = {id: comment_id};
             var deleteSuccess = function() {
                 $scope.comments.splice(index, 1);
-                $scope.selectComment(0);
-            }
+            };
 
             Comment.remove(data, function() {
                     deleteSuccess();

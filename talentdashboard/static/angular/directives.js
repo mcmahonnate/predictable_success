@@ -55,7 +55,7 @@ angular.module('tdb.directives', [])
                 var wrongrole = scope.talentCategoryReport.categories[5];
                 var needschange = scope.talentCategoryReport.categories[6];
 
-                var data = new Array(['PvP', 'Employees', 'Talent Category'],['Top Talent', top, 1],['Strong Talent', strong, 2],['Good But Inconsistent', good, 3],['Lacks Potential', lackspotential, 4],['Wrong Role', wrongrole, 5],['Needs Drastic Change', needschange, 6]);
+                var data = new Array(['PvP', 'Employees', 'Talent Category'],['Top', top, 1],['Strong', strong, 2],['Good', good, 3],['Low Pot', lackspotential, 4],['Low Perf', wrongrole, 5],['Poor', needschange, 6]);
                 var table = new google.visualization.arrayToDataTable(data);
                 var options;
                 if (attrs.size=='small'){

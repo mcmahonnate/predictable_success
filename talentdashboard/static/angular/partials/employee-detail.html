@@ -50,7 +50,7 @@
 
   <div ng-if="employee.display" class="dashboard-sized-el fade" ng-class="{in:employee}" id="dashboard" style="margin-top: 75px; max-width: 970px;">
     <article class="widget clock loaded" id="widget-8494" style="top: 0px; left: 0px; width: auto;">
-      <div class="widget-inner widget-size-1x2 large-screen">
+      <div class="widget-inner widget-size-1x1 large-screen">
         <header class="no-reload">
           <h1 style="display:inline;">{{employee.full_name}}</h1>
         </header>
@@ -58,9 +58,20 @@
         <section class="widget-body rag-widget">
           <div class="widget-canvas">
             <div class="outer" style="margin-left: auto; margin-right: auto;">
-              <div class="image" style="margin-left: auto; margin-right: auto;"><img ng-src="{{ employee.avatar }}" style="padding-bottom:15px; display: block; margin-left: auto; margin-right: auto; height: 210px;"/></div>
+              <div class="image" style="margin-left: auto; margin-right: auto;"><img ng-src="{{ employee.avatar }}" style="padding-bottom:15px; display: block; margin-left: auto; margin-right: auto; height: 200px;"/></div>
             </div>
+          </div>
+        </section>
+      </div><!-- .widget-inner -->
+    </article>
+    <article class="widget clock loaded" id="widget-8494" style="top: 285px; left: 0px; width: auto;">
+      <div class="widget-inner large-screen" style="width: 315px;">
+        <header class="no-reload">
+          <h1 style="display:inline;">Bio</h1>
+        </header>
 
+        <section class="widget-body rag-widget">
+          <div class="widget-canvas">
             <ol>
               <li class="clear" style="padding-top:10px;padding-bottom:10px;">
                 <div class="t-secondary" style="min-width: 35%">
@@ -82,7 +93,7 @@
 						  <a ng-if="leadership.leader.display" href="#/employees/{{leadership.leader.id}}">{{ leadership.leader.full_name }}</a>
                           <span ng-if="!leadership.leader.display">{{ leadership.leader.full_name }}</span>
 						</li>
-					 </ul>					
+					 </ul>
 				</div>
               </li>
 
@@ -114,8 +125,8 @@
 						</li>
 					 </ul>
 				</div>
-              </li>			
-  			  
+              </li>
+
               <li class="clear" style="padding-top:10px;padding-bottom:10px;">
                 <div class="t-secondary" style="min-width: 35%">
                   Passions
@@ -132,7 +143,7 @@
 						</li>
 					 </ul>
 				</div>
-              </li>			  
+              </li>
 
               <li class="clear" style="padding-top:10px;padding-bottom:10px;">
                 <div class="t-secondary" style="min-width: 35%">
@@ -150,14 +161,13 @@
 						</li>
 					 </ul>
 				</div>
-              </li>					  
-			  
+              </li>
+
             </ol>
           </div>
         </section>
       </div><!-- .widget-inner -->
     </article>
-
     <article class="widget clock loaded" id="widget-8494" style="top: 0px; left: 325px; width: auto;">
       <div ng-controller="EmployeePvpEvaluationsCtrl" class="widget-inner widget-size-1x1 large-screen">
         <header class="no-reload">
@@ -237,50 +247,111 @@
     </article>
 
     <article class="widget clock loaded" id="widget-8494" style="top: 285px; left: 325px; width: auto;">
-      <div ng-controller="EmployeeCommentsCtrl" class="widget-inner widget-size-2x1 large-screen">
+      <div ng-controller="EmployeeCommentsCtrl" class="widget-inner large-screen" style="width:640px;min-height: 309px;">
         <header class="no-reload">
-          <h1 style="display:inline;">Latest Buzz</h1><a ng-href="#/employees/{{employee.id}}/discussions" style="cursor: pointer;"><img src="/static/css/add.png" style="float:right;margin-left:6px;margin-top:-6px"/></a>
+          <h1 style="display:inline;">Latest Buzz</h1>
         </header>
-
-        <section class="widget-body text-widget">
-          <div class="widget-canvas swipe" id="notes_slider">
-             <ul  rn-carousel rn-carousel-index="commentIndex" class="slide">
-                <li ng-repeat="comment in comments">
-
-                    <div style="display: block;width:668px;min-height: 175px;">
-                        <div style="display: block; float: left; width: 48px;">
-                            <a ng-href="#/discussions/{{comment.id}}"><img ng-src="{{ comment.owner.employee.avatar }}" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;"/></a>
-                        </div>
-                        <div style="display: block; float: left;padding-left:10px;width: 545px;min-height: 48px;">
-                            <a ng-href="#/discussions/{{comment.id}}"><b style="color:#8b8b8b;">{{comment.owner.employee.full_name}}</b></a>
-                            <span style="margin-left:5px;line-height: 115%">{{comment.content | cut:true:650}}</span>
-                            <ul class="feed-actions">
-                                <li class="feed-action"><a ng-href="#/discussions/{{comment.id}}" style="color: #8b8b8b;">comment<span ng-show="comment.subcomments"> ({{comment.subcomments.length}})</span></a></li>
-                                <li ng-show="comment.owner.id==currentUser.id" class="feed-action"><a ng-click="" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
-                                <li ng-show="comment.owner.id==currentUser.id" class="feed-action"><a ng-click="deleteComment(comment.id,commentIndex)" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></li>
-                            </ul>
-                            <span style="color:#8b8b8b;">{{comment.modified_date | date:'MMM d, yyyy h:mma'}}</span>
-
-                        </div>
+        <section class="widget-body text-widget" style="padding: 10px;">
+            <div style="display: block; float:left;width:480px;-webkit-border-radius: 2px;moz-border-radius: 3px;-ms-border-radius: 3px;-o-border-radius: 3px;border-radius: 3px;border: 1px solid #c1c1c1;margin:10px 15px;background-color:white;">
+                <textarea ng-model="newCommentText" ng-class="{'expand': expandTextArea, 'compress': !expandTextArea}" ng-click="expandTextArea=true" rows="1" cols="40" placeholder="Add a comment about {{employee.full_name}}..." style="width:468px;font-size:14px;padding:5px;border: none;resize:vertical;"></textarea>
+            </div>
+            <button class="comment" ng-click="addComment();expandTextArea=false">Comment</button>
+            <div style="clear:both;"></div>
+            <div ng-repeat="comment in comments | orderBy:'modified_date':true" style="margin:0 15px;padding:8px 0 8px 0px;display: block;width:580px">
+                <h2 ng-show="CreateHeader(comment.modified_date)" style="font-size: 14px;color: #8b8b8b;border-bottom: 2px solid #8b8b8b">{{comment.modified_date | date:'MMM d, yyyy'}}</h2>
+                <div style="display: block;width:580px;min-height: 48px;">
+                    <div style="display: block; float: left; width: 48px;">
+                        <img ng-src="{{ comment.owner.employee.avatar }}" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;"/>
                     </div>
-                </li>
-              </ul>
-
-              <div class="slide-pagination">
-                  <div class="inner" id="note_pages">
-                        <span ng-if="currentComment" class="slide-tally">{{commentIndex+1}} of {{comments.length}}</span>
-                        <nav>
-                          <a ng-repeat="comment in comments" ng-class="{activeSlide: $index==$parent.commentIndex}" ng-click="selectComment($index)" style="cursor: pointer;">{{$index}}</a>
-                        </nav>
-                  </div>
-              </div>
-		  </div><!-- .widget-canvas -->
+                    <div style="display: block; float: left;padding-left:10px;width: 500px;min-height: 48px;">
+                        <b style="color:#8b8b8b;">{{comment.owner.employee.full_name}}</b>
+                        <span style="margin-left:5px;line-height: 115%">{{comment.content}}</span>
+                        <ul class="feed-actions">
+                            <li class="feed-action"><a ng-click="showCommentInput = ! showCommentInput" class="feed-action" style="color: #8b8b8b;cursor: pointer;">comment</a></li>
+                            <li ng-show="comment.owner.id==currentUser.id" class="feed-action"><a ng-click="" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
+                            <li ng-show="comment.owner.id==currentUser.id" class="feed-action"><a ng-click="deleteComment(comment.id, $index)" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></li>
+                        </ul>
+                        <span style="color:#8b8b8b;">{{comment.modified_date | date:'MMM d, yyyy h:mma'}}</span>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <div ng-show="showCommentInput || comment.subcomments" style="display: block; margin:0 0 0 58px; padding:5px; background-color:#272727;border: 1px solid #434343;">
+                        <div ng-repeat="subcomment in comment.subcomments | orderBy:'modified_date':true">
+                            <div style="display: block;width:668px;min-height: 48px; padding: 5px;">
+                                <div style="display: block; float: left; width: 48px;">
+                                    <img ng-src="{{ subcomment.owner.employee.avatar }}" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;"/>
+                                </div>
+                                <div style="display: block; float: left;padding-left:10px;width: 450px;min-height: 48px;">
+                                    <b style="color:#8b8b8b;">{{subcomment.owner.employee.full_name}}</b>
+                                    <span style="margin-left:5px;line-height: 115%">{{subcomment.content}}</span>
+                                    <ul class="feed-actions">
+                                        <li ng-show="subcomment.owner.id==currentUser.id" class="feed-action"><a ng-click="" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
+                                        <li ng-show="subcomment.owner.id==currentUser.id" class="feed-action"><a ng-click="deleteSubComment(subcomment.id, $index, $parent.$index)" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></li>
+                                    </ul>
+                                    <span style="color:#8b8b8b;">{{subcomment.modified_date | date:'MMM d, yyyy h:mma'}}</span>
+                                </div>
+                            </div>
+                            <div style="clear:both;"></div>
+                        </div>
+                        <div ng-show="showCommentInput || comment.subcomments" style="padding:5px;">
+                            <div style="float:left;width:410px;-webkit-border-radius: 2px;moz-border-radius: 3px;-ms-border-radius: 3px;-o-border-radius: 3px;border-radius: 3px;border: 1px solid #c1c1c1;background-color:white;">
+                                <textarea ng-model="comment.newSubCommentText" ng-class="{'expand': expandTextArea, 'compress': !expandTextArea}" ng-click="expandTextArea=true" rows="1" cols="40" placeholder="Add a comment..." style="width:398px;font-size:14px;padding:6px;border: none;resize:vertical;"></textarea>
+                            </div>
+                            <button class="small-comment" ng-click="addSubComment(comment);expandTextArea=false">Comment</button>
+                            <div style="clear:both;"></div>
+                        </div>
+                        <div style="clear:both;"></div>
+                    </div>
+                </div>
+            </div>
         </section>
       </div><!-- .widget-inner -->
     </article>
   </div>
 
 <style>
+  div[contentEditable] {
+    cursor: pointer;
+  }
+  div[contentEditable]:focus {
+    cursor: pointer;
+    background-color: gray;
+    border: 1px solid red;
+    color:black;
+
+    text-shadow:none;
+  }
+  rect.pvp-square.selected { fill: red; }
+  button.comment {
+    border: 1px solid #434343;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    height: 28px;
+    background-color:#434343;
+    font-size:14px;
+    color:#d3d4d4;
+    margin-top:10px;
+    margin-bottom:15px;
+    cursor: pointer;
+  }
+  button.small-comment {
+    border: 1px solid #434343;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    height:31px;
+    background-color:#434343;
+    font-size:12px;
+    color:#d3d4d4;
+    margin-left:15px;
+    cursor: pointer;
+  }
+  button.small-comment:hover {
+    background-color:#272727;
+  }
+  button.comment:hover {
+    background-color:#272727;
+  }
   ul.feed-actions {
     margin-top: 5px;
     list-style: none;
@@ -295,17 +366,12 @@
   .feed-action a:hover {
     text-decoration: none;
   }
-
-  div[contentEditable] {
-    cursor: pointer;
+  .expand {
+      transition: height .5s;
+      -webkit-transition: height .5s;
+      height: 50px;
   }
-  div[contentEditable]:focus {
-    cursor: pointer;
-    background-color: gray;
-    border: 1px solid red;
-    color:black;
-
-    text-shadow:none;
+  .compress {
+      height: 15px;
   }
-  rect.pvp-square.selected { fill: red; }
 </style>

@@ -14,11 +14,13 @@ DATABASES = {
     }
 }
 
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
+EMAIL_BACKEND = 'talentdashboard.backend.SSLEmailBackend'
+EMAIL_USE_SSL = True
+EMAIL_HOST = 'mail.dfrntlabs.com'
+EMAIL_PORT = 465
 EMAIL_HOST_USER = os.environ.get("EMAIL_ADDRESS", '')
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD", '')
+DEFAULT_FROM_EMAIL = 'Talent Dashboard Team <' + EMAIL_HOST_USER + '>'
 
 LOGGING = {
     'version': 1,
