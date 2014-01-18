@@ -120,7 +120,7 @@
                         <div style="display: block; padding-left:10px;min-width: 90%;height: 22px;">
                             <b style="color:#8b8b8b;"><a ng-href="#/employees/{{comment.owner.employee.id}}" style="cursor: pointer;color:#8b8b8b;">{{comment.owner.employee.full_name}}</a></b> commented on <b style="color:#8b8b8b;"><a ng-href="#/employees/{{comment.associated_object.id}}" style="cursor: pointer;color:#8b8b8b;">{{comment.associated_object.full_name}}</a></b>
                         </div>
-                        <div style="display: block; width: 500px;margin-left:15px">
+                        <div style="display: block; width: 500px;margin-left:15px;">
                             <div style="display: block;margin:0 10px 10px 10px;max-width: 100%;min-height: 48px;">
                                 <a ng-href="#/employees/{{comment.associated_object.id}}" style="cursor: pointer;color:#8b8b8b;"><img ng-src="{{ comment.associated_object.avatar }}" style="float: left; height: 48px; padding: 0 10px 0 0;"/></a>
                                 <span ng-init="length=500" style="line-height: 125%">{{comment.content | cut:true:length}}</span> <span ng-show="comment.content.length>length" ng-init="showMoreButton=true"><a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a><a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a></span>
@@ -136,13 +136,13 @@
 
                     <div style="clear:both;"></div>
                     <div ng-show="showCommentInput || comment.subcomments" style="display: block; margin:0 0 0 58px; padding:5px; background-color:#272727;border: 1px solid #434343;">
-                        <div ng-repeat="subcomment in comment.subcomments | orderBy:'modified_date':true">
+                        <div ng-repeat="subcomment in comment.subcomments | orderBy:'modified_date'">
                             <div style="display: block;width:668px;min-height: 48px; padding: 5px;">
                                 <div style="display: block; float: left; width: 48px;">
-                                    <img ng-src="{{ subcomment.owner.employee.avatar }}" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;"/>
+                                    <a ng-href="#/employees/{{subcomment.owner.employee.id}}" style="cursor: pointer;color:#8b8b8b;"><img ng-src="{{ subcomment.owner.employee.avatar }}" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;"/></a>
                                 </div>
-                                <div style="display: block; float: left;padding-left:10px;width: 450px;min-height: 48px;">
-                                    <b style="color:#8b8b8b;">{{subcomment.owner.employee.full_name}}</b>
+                                <div style="display: block; float: left;padding-left:10px;width: 450px;min-height: 48px;padding-bottom: 5px;">
+                                    <b style="color:#8b8b8b;"><a ng-href="#/employees/{{subcomment.owner.employee.id}}" style="cursor: pointer;color:#8b8b8b;">{{subcomment.owner.employee.full_name}}</a></b>
                                     <span ng-init="length=500" style="margin-left:5px;line-height: 115%">{{subcomment.content | cut:true:length}}</span> <span ng-show="subcomment.content.length>length" ng-init="showMoreButton=true"><a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a><a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a></span>
                                     <ul class="feed-actions">
                                         <li ng-show="subcomment.owner.id==currentUser.id" class="feed-action"><a ng-click="" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
