@@ -267,7 +267,7 @@
                         <b style="color:#8b8b8b;"><a ng-href="#/employees/{{comment.owner.employee.id}}" style="cursor: pointer;color:#8b8b8b;">{{comment.owner.employee.full_name}}</a></b>
                         <span ng-init="length=500" style="line-height: 125%">{{comment.content | cut:true:length}}</span> <span ng-show="comment.content.length>length" ng-init="showMoreButton=true"><a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a><a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a></span>
                         <ul class="feed-actions">
-                            <li class="feed-action"><a ng-click="showCommentInput = ! showCommentInput" class="feed-action" style="color: #8b8b8b;cursor: pointer;">comment</a></li>
+                            <li class="feed-action"><a ng-click="showCommentInput = ! showCommentInput" class="feed-action" style="color: #8b8b8b;cursor: pointer;">comment</a><span ng-show="comment.subcomments.length>0"> ({{comment.subcomments.length}})</span></li>
                             <li ng-show="comment.owner.id==currentUser.id" class="feed-action"><a ng-click="" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
                             <li ng-show="comment.owner.id==currentUser.id" class="feed-action"><a ng-click="deleteComment(comment.id, $index)" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></li>
                         </ul>
