@@ -280,7 +280,7 @@
                                 <div style="display: block; float: left; width: 48px;">
                                     <a ng-href="#/employees/{{subcomment.owner.employee.id}}" style="cursor: pointer;color:#8b8b8b;"><img ng-src="{{ subcomment.owner.employee.avatar }}" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;"/></a>
                                 </div>
-                                <div style="display: block; float: left;padding-left:10px;width: 450px;min-height: 48px;padding-bottom: 5px;">
+                                <div style="display: block; float: left;padding-left:10px;width: 440px;min-height: 48px;padding-bottom: 5px;">
                                     <b style="color:#8b8b8b;"><a ng-href="#/employees/{{subcomment.owner.employee.id}}" style="cursor: pointer;color:#8b8b8b;">{{subcomment.owner.employee.full_name}}</a></b>
                                     <span ng-init="length=500" style="margin-left:5px;line-height: 115%">{{subcomment.content | cut:true:length}}</span> <span ng-show="subcomment.content.length>length" ng-init="showMoreButton=true"><a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a><a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a></span>
                                     <ul class="feed-actions">
