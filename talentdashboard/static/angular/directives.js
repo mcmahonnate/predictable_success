@@ -139,7 +139,6 @@ angular.module('tdb.directives', [])
                         el.blur();
                         event.preventDefault();                        
                     }
-                    
             });
             
         }
@@ -157,17 +156,6 @@ angular.module('tdb.directives', [])
         });
     };
 })
-
-.directive('expandTextArea', function() {
-    return function(scope, element, attrs){
-        var focusCallback = function() {
-          element.animate({"height":'50px'},'0.8s');
-        };
-        element.bind('focus', focusCallback);
-    };
-})
-
-
 
 .directive('pvpChart', ['TalentCategoryColors', function(TalentCategoryColors) {
     return function(scope, element, attrs){
