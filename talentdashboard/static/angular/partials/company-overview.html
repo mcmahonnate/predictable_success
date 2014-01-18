@@ -121,7 +121,7 @@
                             <b style="color:#8b8b8b;"><a ng-href="#/employees/{{comment.owner.employee.id}}" style="cursor: pointer;color:#8b8b8b;">{{comment.owner.employee.full_name}}</a></b> commented on <b style="color:#8b8b8b;"><a ng-href="#/employees/{{comment.associated_object.id}}" style="cursor: pointer;color:#8b8b8b;">{{comment.associated_object.full_name}}</a></b>
                         </div>
                         <div style="display: block; width: 500px;margin-left:15px;">
-                            <div style="display: block;margin:0 10px 10px 10px;max-width: 100%;min-height: 48px;">
+                            <div style="display: block;max-width: 100%;min-height: 48px;">
                                 <a ng-href="#/employees/{{comment.associated_object.id}}" style="cursor: pointer;color:#8b8b8b;"><img ng-src="{{ comment.associated_object.avatar }}" style="float: left; height: 48px; padding: 0 10px 0 0;"/></a>
                                 <span ng-init="length=500" style="line-height: 125%">{{comment.content | cut:true:length}}</span> <span ng-show="comment.content.length>length" ng-init="showMoreButton=true"><a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a><a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a></span>
                             </div>
