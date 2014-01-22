@@ -265,13 +265,23 @@
                     </div>
                     <div style="display: block; float: left;padding-left:10px;width: 500px;min-height: 48px;">
                         <b style="color:#8b8b8b;"><a ng-href="#/employees/{{comment.owner.employee.id}}" style="cursor: pointer;color:#8b8b8b;">{{comment.owner.employee.full_name}}</a></b>
-                        <span ng-init="length=500" data-ng-bind-html-unsafe="comment.content | new_line | cut:true:length" style="line-height: 125%"></span> <span ng-show="comment.content.length>length" ng-init="showMoreButton=true"><a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a><a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a></span>
-                        <ul class="feed-actions">
-                            <li class="feed-action"><a ng-click="showCommentInput = ! showCommentInput" class="feed-action" style="color: #8b8b8b;cursor: pointer;">comment</a><span ng-show="comment.subcomments.length>0"> ({{comment.subcomments.length}})</span></li>
-                            <li ng-show="comment.owner.id==currentUser.id" class="feed-action"><a ng-click="" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
-                            <li ng-show="comment.owner.id==currentUser.id" class="feed-action"><a ng-click="deleteComment(comment)" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></li>
-                        </ul>
-                        <span style="color:#8b8b8b;">{{comment.modified_date | date:'MMM d, yyyy h:mma'}}</span>
+                        <div ng-show="showCommentEdit" style="position:relative">
+                          <textarea ng-model="comment.content" style="position: relative; width: 515px; height: 132px;background-color:#2a2a2a;color:#eee;resize:vertical;font-size: 13px;margin-top: 5px;">
+                          </textarea>
+                          <div id="editActions" style="right:2px;bottom:-33px;">
+                                <button class="button small blue" ng-click="saveComment(comment);showCommentEdit=false">Save</button>
+                                <button class="button small orange" ng-click="cancelEditComment(comment);showCommentEdit=false">Cancel</button>
+                          </div>
+                        </div>
+                        <div ng-show="!showCommentEdit">
+                            <span ng-init="length=500" data-ng-bind-html-unsafe="comment.content | new_line | cut:true:length" style="line-height: 125%"></span> <span ng-show="comment.content.length>length" ng-init="showMoreButton=true"><a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a><a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a></span>
+                            <ul class="feed-actions">
+                                <li class="feed-action"><a ng-click="showCommentInput = ! showCommentInput" class="feed-action" style="color: #8b8b8b;cursor: pointer;">comment</a><span ng-show="comment.subcomments.length>0"> ({{comment.subcomments.length}})</span></li>
+                                <li ng-show="comment.owner.id==currentUser.id" class="feed-action"><a ng-click="showCommentEdit=true" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
+                                <li ng-show="comment.owner.id==currentUser.id" class="feed-action"><a ng-click="deleteComment(comment)" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></li>
+                            </ul>
+                            <span style="color:#8b8b8b;">{{comment.modified_date | date:'MMM d, yyyy h:mma'}}</span>
+                        </div>
                     </div>
                     <div style="clear:both;"></div>
                     <div ng-show="showCommentInput || comment.subcomments" style="display: block; margin:0 0 0 58px; padding:5px; background-color:#272727;border: 1px solid #434343;">
@@ -282,12 +292,22 @@
                                 </div>
                                 <div style="display: block; float: left;padding-left:10px;width: 440px;min-height: 48px;padding-bottom: 5px;">
                                     <b style="color:#8b8b8b;"><a ng-href="#/employees/{{subcomment.owner.employee.id}}" style="cursor: pointer;color:#8b8b8b;">{{subcomment.owner.employee.full_name}}</a></b>
-                                    <span ng-init="length=500" data-ng-bind-html-unsafe="subcomment.content | new_line | cut:true:length" style="margin-left:5px;line-height: 115%"></span> <span ng-show="subcomment.content.length>length" ng-init="showMoreButton=true"><a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a><a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a></span>
-                                    <ul class="feed-actions">
-                                        <li ng-show="subcomment.owner.id==currentUser.id" class="feed-action"><a ng-click="" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
-                                        <li ng-show="subcomment.owner.id==currentUser.id" class="feed-action"><a ng-click="deleteSubComment(comment, subcomment)" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></li>
-                                    </ul>
-                                    <span style="color:#8b8b8b;">{{subcomment.modified_date | date:'MMM d, yyyy h:mma'}}</span>
+                                    <div ng-show="showSubCommentEdit" style="position:relative">
+                                      <textarea ng-model="subcomment.content" style="position: relative; width: 430px; height: 132px;background-color:#2a2a2a;color:#eee;resize:vertical;font-size: 13px;margin-top: 5px;">
+                                      </textarea>
+                                      <div id="editActions" style="right:2px;bottom:-33px;">
+                                            <button class="button small blue" ng-click="saveSubComment(subcomment, comment);showSubCommentEdit=false">Save</button>
+                                            <button class="button small orange" ng-click="cancelEditSubComment(subcomment, comment);showSubCommentEdit=false">Cancel</button>
+                                      </div>
+                                    </div>
+                                    <div ng-show="!showSubCommentEdit">
+                                        <span ng-init="length=500" data-ng-bind-html-unsafe="subcomment.content | new_line | cut:true:length" style="margin-left:5px;line-height: 115%"></span> <span ng-show="subcomment.content.length>length" ng-init="showMoreButton=true"><a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a><a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a></span>
+                                        <ul class="feed-actions">
+                                            <li ng-show="subcomment.owner.id==currentUser.id" class="feed-action"><a ng-click="showSubCommentEdit=true" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
+                                            <li ng-show="subcomment.owner.id==currentUser.id" class="feed-action"><a ng-click="deleteSubComment(comment, subcomment)" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></li>
+                                        </ul>
+                                        <span style="color:#8b8b8b;">{{subcomment.modified_date | date:'MMM d, yyyy h:mma'}}</span>
+                                    </div>
                                 </div>
                             </div>
                             <div style="clear:both;"></div>

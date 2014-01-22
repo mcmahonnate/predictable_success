@@ -254,95 +254,20 @@ angular.module('tdb.controllers', [])
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     Comment.query().$then(function(response) {
         $scope.comments = response.data;
+        $scope.originalComments = angular.copy($scope.comments);
         angular.forEach($scope.comments, function(comment) {
+            var index = $scope.comments.indexOf(comment);
+            var original_comment = $scope.originalComments[index];
             comment.subcomments = [];
+            original_comment.subcomments = [];
             SubComments.query({ id: comment.id }).$then(function(response) {
                     comment.subcomments = response.data;
+                    original_comment.subcomments = angular.copy(comment.subcomments);
                 }
             );
             comment.newSubCommentText = "";
         });
-        $scope.originalComments = angular.copy($scope.comments);
-        $scope.currentComment = $scope.comments[$scope.commentIndex];
-        $scope.currentGroup="";
-        $scope.CreateHeader = function(date) {
-            date=$filter('date')(date,"MM/dd/yyyy");
-            showHeader = (date!=$scope.currentGroup);
-            $scope.currentGroup = date;
-            return showHeader;
-        }
-        console.log($scope.comments.length)
-    });
 
-    $scope.addSubComment = function(comment) {
-        var newComment = {};
-        newComment.id = -1;
-        newComment.content = comment.newSubCommentText;
-        newComment.modified_date = new Date().toJSON();
-        newComment.owner = User.get();
-
-        comment.subcomments.push(newComment);
-
-        var data = {id: newComment.id, _model_name: "comment", _object_id: comment.id,_content: newComment.content};
-
-        data.id = comment.associated_object.id;
-        EmployeeComments.save(data, function(response) {
-            newComment.id = response.id;
-            comment.newSubCommentText = "";
-        });
-    };
-    $scope.deleteComment = function(comment_id, index) {
-        if ($window.confirm('Are you sure you want to delete this comment?')) {
-            var data = {id: comment_id};
-            var deleteSuccess = function() {
-                $scope.comments.splice(index, 1);
-            };
-
-            Comment.remove(data, function() {
-                    deleteSuccess();
-                });
-        }
-    };
-
-    $scope.deleteSubComment = function(comment, subcomment) {
-        if ($window.confirm('Are you sure you want to delete this comment?')) {
-            var data = {id: subcomment.id};
-            var comment_index = $scope.comments.indexOf(comment);
-            var subcomment_index = $scope.comments[comment_index].subcomments.indexOf(subcomment);
-            var deleteSuccess = function() {
-                $scope.comments[comment_index].subcomments.splice(subcomment_index, 1);
-            };
-
-            Comment.remove(data, function() {
-                    deleteSuccess();
-                });
-        }
-    };
-}])
-
-.controller('EmployeeCommentsCtrl', ['$scope', '$filter', '$routeParams', '$window', 'EmployeeComments', 'SubComments','Comment', 'User', function($scope, $filter, $routeParams, $window, EmployeeComments, SubComments, Comment, User) {
-    $scope.employeeId = $routeParams.id;
-    $scope.newCommentText = "";
-    $scope.commentIndex = 0; 
-	$scope.$watch('commentIndex', function() {
-		if ($scope.comments) {
-			$scope.currentComment = $scope.comments[$scope.commentIndex];
-		}
-	});
-	
-    EmployeeComments.query({ id: $scope.employeeId }).$then(function(response) {
-        $scope.comments = response.data;
-        angular.forEach($scope.comments, function(comment) {
-            comment.subcomments = [];
-            SubComments.query({ id: comment.id }).$then(function(response) {
-                    comment.subcomments = response.data;
-                }
-            );
-            comment.newSubCommentText = "";
-        });
-        $scope.originalComments = angular.copy($scope.comments);
-        $scope.currentComment = $scope.comments[$scope.commentIndex];
-        $scope.currentGroup="";
         $scope.CreateHeader = function(date) {
             date=$filter('date')(date,"MM/dd/yyyy");
             showHeader = (date!=$scope.currentGroup);
@@ -351,36 +276,36 @@ angular.module('tdb.controllers', [])
         }
     });
 
-    $scope.selectComment = function(index) {
-        $scope.commentIndex = index;
+    $scope.saveComment = function(comment) {
+        var index = $scope.comments.indexOf(comment);
+        var data = {id: comment.id, _content: comment.content};
+
+        Comment.update(data, function() {
+            $scope.originalComments[index].content = comment.content;
+        });
     }
 
-    $scope.getAuthorName = function() {
-        var name = "";
-        if ($scope.currentComment.owner) {
-            if ($scope.currentComment.owner.first_name) {
-                name = $scope.currentComment.owner.first_name + " ";
-            }
-             if ($scope.currentComment.owner.last_name) {
-                name += $scope.currentComment.owner.last_name;
-            }
-            return name.trim() || $scope.currentComment.owner.username || "Unknown";
-        }
-        return "No Owner";
+    $scope.cancelEditComment = function(comment) {
+        var index = $scope.comments.indexOf(comment);
+        comment.content = $scope.originalComments[index].content;
     }
 
-    $scope.isClean = function() {
-        return angular.equals($scope.comments[$scope.commentIndex], $scope.originalComments[$scope.commentIndex]);
+     $scope.saveSubComment = function(subcomment, comment) {
+        var parent_index = $scope.comments.indexOf(comment);
+        var subcomment_index = $scope.comments[parent_index].subcomments.indexOf(subcomment);
+        var data = {id: subcomment.id, _content: subcomment.content};
+
+        Comment.update(data, function() {
+            $scope.originalComments[parent_index].subcomments[subcomment_index].content = subcomment.content;
+        });
     }
 
-    $scope.startEdit = function(e) {
-        $scope.currentComment.isEditing = true;
+    $scope.cancelEditSubComment = function(subcomment, comment) {
+        var parent_index = $scope.comments.indexOf(comment);
+        var subcomment_index = $scope.comments[parent_index].subcomments.indexOf(subcomment);
+        subcomment.content = $scope.originalComments[parent_index].subcomments[subcomment_index].content;
     }
 
-    $scope.cancelEdit = function(e) {
-        $scope.currentComment.isEditing = false;
-        $scope.currentComment.content = $scope.originalComments[$scope.commentIndex].content;
-    }
 
     $scope.addComment = function(equals) {
         var newComment = {};
@@ -411,6 +336,139 @@ angular.module('tdb.controllers', [])
         newComment.owner = User.get();
 
         comment.subcomments.push(newComment);
+        var index = $scope.comments.indexOf(comment);
+        $scope.originalComments[index].subcomments.push(angular.copy(newComment));
+
+        var data = {id: newComment.id, _model_name: "comment", _object_id: comment.id,_content: newComment.content};
+
+        data.id = comment.associated_object.id;
+        EmployeeComments.save(data, function(response) {
+            newComment.id = response.id;
+            comment.newSubCommentText = "";
+        });
+    }
+
+    $scope.deleteComment = function(comment) {
+        if ($window.confirm('Are you sure you want to delete this comment?')) {
+            var data = {id: comment.id};
+            var index = $scope.comments.indexOf(comment);
+            var deleteSuccess = function() {
+                $scope.comments.splice(index, 1);
+            };
+
+            Comment.remove(data, function() {
+                    deleteSuccess();
+                });
+        }
+    };
+
+    $scope.deleteSubComment = function(comment, subcomment) {
+        if ($window.confirm('Are you sure you want to delete this comment?')) {
+            var data = {id: subcomment.id};
+            var comment_index = $scope.comments.indexOf(comment);
+            var subcomment_index = $scope.comments[comment_index].subcomments.indexOf(subcomment);
+            var deleteSuccess = function() {
+                $scope.comments[comment_index].subcomments.splice(subcomment_index, 1);
+                $scope.originalComments[comment_index].subcomments.splice(subcomment_index, 1);
+            };
+
+            Comment.remove(data, function() {
+                    deleteSuccess();
+                });
+        }
+    };
+}])
+
+.controller('EmployeeCommentsCtrl', ['$scope', '$filter', '$routeParams', '$window', 'EmployeeComments', 'SubComments','Comment', 'User', function($scope, $filter, $routeParams, $window, EmployeeComments, SubComments, Comment, User) {
+    $scope.employeeId = $routeParams.id;
+    $scope.newCommentText = "";
+
+    EmployeeComments.query({ id: $scope.employeeId }).$then(function(response) {
+        $scope.comments = response.data;
+        $scope.originalComments = angular.copy($scope.comments);
+        angular.forEach($scope.comments, function(comment) {
+            var index = $scope.comments.indexOf(comment);
+            var original_comment = $scope.originalComments[index];
+            comment.subcomments = [];
+            original_comment.subcomments = [];
+            SubComments.query({ id: comment.id }).$then(function(response) {
+                    comment.subcomments = response.data;
+                    original_comment.subcomments = angular.copy(comment.subcomments);
+                }
+            );
+            comment.newSubCommentText = "";
+        });
+
+        $scope.CreateHeader = function(date) {
+            date=$filter('date')(date,"MM/dd/yyyy");
+            showHeader = (date!=$scope.currentGroup);
+            $scope.currentGroup = date;
+            return showHeader;
+        }
+    });
+
+    $scope.saveComment = function(comment) {
+        var index = $scope.comments.indexOf(comment);
+        var data = {id: comment.id, _content: comment.content};
+
+        Comment.update(data, function() {
+            $scope.originalComments[index].content = comment.content;
+        });
+    }
+
+    $scope.cancelEditComment = function(comment) {
+        var index = $scope.comments.indexOf(comment);
+        comment.content = $scope.originalComments[index].content;
+    }
+
+     $scope.saveSubComment = function(subcomment, comment) {
+        var parent_index = $scope.comments.indexOf(comment);
+        var subcomment_index = $scope.comments[parent_index].subcomments.indexOf(subcomment);
+        var data = {id: subcomment.id, _content: subcomment.content};
+
+        Comment.update(data, function() {
+            $scope.originalComments[parent_index].subcomments[subcomment_index].content = subcomment.content;
+        });
+    }
+
+    $scope.cancelEditSubComment = function(subcomment, comment) {
+        var parent_index = $scope.comments.indexOf(comment);
+        var subcomment_index = $scope.comments[parent_index].subcomments.indexOf(subcomment);
+        subcomment.content = $scope.originalComments[parent_index].subcomments[subcomment_index].content;
+    }
+
+
+    $scope.addComment = function(equals) {
+        var newComment = {};
+        newComment.id = -1;
+        newComment.content = $scope.newCommentText;
+        newComment.modified_date = new Date().toJSON();
+        newComment.owner = User.get();
+        newComment.newSubCommentText="";
+        newComment.subcomments=[];
+
+        $scope.comments.push(newComment);
+        $scope.originalComments.push(angular.copy(newComment));
+
+        var data = {id: newComment.id, _model_name: "employee", _object_id: 0, _content: newComment.content};
+
+        data.id = $scope.employeeId;
+        EmployeeComments.save(data, function(response) {
+            newComment.id = response.id;
+            $scope.newCommentText = "";
+        });
+    }
+
+    $scope.addSubComment = function(comment) {
+        var newComment = {};
+        newComment.id = -1;
+        newComment.content = comment.newSubCommentText;
+        newComment.modified_date = new Date().toJSON();
+        newComment.owner = User.get();
+
+        comment.subcomments.push(newComment);
+        var index = $scope.comments.indexOf(comment);
+        $scope.originalComments[index].subcomments.push(angular.copy(newComment));
 
         var data = {id: newComment.id, _model_name: "comment", _object_id: comment.id,_content: newComment.content};
 
@@ -442,6 +500,7 @@ angular.module('tdb.controllers', [])
             var subcomment_index = $scope.comments[comment_index].subcomments.indexOf(subcomment);
             var deleteSuccess = function() {
                 $scope.comments[comment_index].subcomments.splice(subcomment_index, 1);
+                $scope.originalComments[comment_index].subcomments.splice(subcomment_index, 1);
             };
 
             Comment.remove(data, function() {
@@ -449,24 +508,4 @@ angular.module('tdb.controllers', [])
                 });
         }
     };
-
-    $scope.saveComment = function(e) {
-        var comment = $scope.currentComment;
-        var data = {id: comment.id, _content: comment.content};
-
-        if (data.id != -1) {
-            Comment.update(data, function() {
-                $scope.currentComment.isEditing = false;
-                $scope.originalComments[$scope.commentIndex].content = $scope.currentComment.content;
-            });
-        }   
-        else {
-            data.id = $scope.employeeId;
-            EmployeeComments.save(data, function(response) {
-                $scope.currentComment.isEditing = false;
-                $scope.currentComment.id = response.id;
-                $scope.originalComments[$scope.commentIndex].content = $scope.currentComment.content;
-            });
-        }
-    }
 }]);
