@@ -64,9 +64,13 @@ filters.filter('cut', function () {
 filters.filter('new_line', function () {
     return function (value) {
         if (!value) return '';
-console.log(value);
         var new_value = value.replace(/[\n\r]/g,"<br/>");
+        new_value = new_value.replace(/[\n]/g,"<br/>");
+        new_value = new_value.replace(/[\r]/g,"<br/>");
 
+        new_value = new_value.replace(/<br\/><br\/>/g,"<br/>");
+        new_value = new_value.replace(/<br\/><br\/>/g,"<br/>");
+        new_value = new_value.replace(/<br\/>/g,"<br/><br/>");
         return new_value;
     };
 });
