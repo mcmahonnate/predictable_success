@@ -60,3 +60,13 @@ filters.filter('cut', function () {
         return value + (tail || ' …');
     };
 });
+
+filters.filter('new_line', function () {
+    return function (value) {
+        if (!value) return '';
+console.log(value);
+        var new_value = value.replace(/[\n\r]/g,"<br/>");
+
+        return new_value;
+    };
+});
