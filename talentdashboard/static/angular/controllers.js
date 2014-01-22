@@ -304,12 +304,13 @@ angular.module('tdb.controllers', [])
         }
     };
 
-    $scope.deleteSubComment = function(comment_id, index, parent_index) {
+    $scope.deleteSubComment = function(comment, subcomment) {
         if ($window.confirm('Are you sure you want to delete this comment?')) {
-            var data = {id: comment_id};
-            console.log(parent_index);
+            var data = {id: subcomment.id};
+            var comment_index = $scope.comments.indexOf(comment);
+            var subcomment_index = $scope.comments[comment_index].subcomments.indexOf(subcomment);
             var deleteSuccess = function() {
-                $scope.comments[parent_index].subcomments.splice(index, 1);
+                $scope.comments[comment_index].subcomments.splice(subcomment_index, 1);
             };
 
             Comment.remove(data, function() {
@@ -420,9 +421,10 @@ angular.module('tdb.controllers', [])
         });
     }
 
-    $scope.deleteComment = function(comment_id, index) {
+    $scope.deleteComment = function(comment) {
         if ($window.confirm('Are you sure you want to delete this comment?')) {
-            var data = {id: comment_id};
+            var data = {id: comment.id};
+            var index = $scope.comments.indexOf(comment);
             var deleteSuccess = function() {
                 $scope.comments.splice(index, 1);
             };
@@ -433,11 +435,13 @@ angular.module('tdb.controllers', [])
         }
     };
 
-    $scope.deleteSubComment = function(comment_id, index, parent_index) {
+    $scope.deleteSubComment = function(comment, subcomment) {
         if ($window.confirm('Are you sure you want to delete this comment?')) {
-            var data = {id: comment_id};
+            var data = {id: subcomment.id};
+            var comment_index = $scope.comments.indexOf(comment);
+            var subcomment_index = $scope.comments[comment_index].subcomments.indexOf(subcomment);
             var deleteSuccess = function() {
-                $scope.comments[parent_index].subcomments.splice(index, 1);
+                $scope.comments[comment_index].subcomments.splice(subcomment_index, 1);
             };
 
             Comment.remove(data, function() {

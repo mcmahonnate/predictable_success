@@ -146,7 +146,7 @@
                                     <span ng-init="length=500" style="margin-left:5px;line-height: 115%">{{subcomment.content | cut:true:length}}</span> <span ng-show="subcomment.content.length>length" ng-init="showMoreButton=true"><a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a><a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a></span>
                                     <ul class="feed-actions">
                                         <li ng-show="subcomment.owner.id==currentUser.id" class="feed-action"><a ng-click="" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
-                                        <li ng-show="subcomment.owner.id==currentUser.id" class="feed-action"><a ng-click="deleteSubComment(subcomment.id, $index, $parent.$index)" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></li>
+                                        <li ng-show="subcomment.owner.id==currentUser.id" class="feed-action"><a ng-click="deleteSubComment(comment, subcomment)" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></li>
                                     </ul>
                                     <span style="color:#8b8b8b;">{{subcomment.modified_date | date:'MMM d, yyyy h:mma'}}</span>
                                 </div>
