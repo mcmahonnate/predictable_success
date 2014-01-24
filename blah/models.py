@@ -143,7 +143,7 @@ class Comment(models.Model):
 	content = models.TextField()	
 	created_date = models.DateTimeField(auto_now_add = True)
 	modified_date = models.DateTimeField(auto_now = True)
-	
+
 		
 	objects = CommentManager()
 	

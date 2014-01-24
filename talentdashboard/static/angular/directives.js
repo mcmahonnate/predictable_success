@@ -157,6 +157,20 @@ angular.module('tdb.directives', [])
     };
 })
 
+.directive('ngEnter', function () {
+    return function (scope, element, attrs) {
+        element.bind("keydown keypress", function (event) {
+            if(event.which === 13) {
+                scope.$apply(function (){
+                    scope.$eval(attrs.ngEnter);
+                });
+
+                event.preventDefault();
+            }
+        });
+    };
+})
+
 .directive('pvpChart', ['TalentCategoryColors', function(TalentCategoryColors) {
     return function(scope, element, attrs){
         var svg = element[0];

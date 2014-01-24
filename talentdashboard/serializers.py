@@ -1,10 +1,10 @@
 from rest_framework import serializers
 from pvp.models import PvpEvaluation, EvaluationRound
 from org.models import Employee, Team, Mentorship, Leadership, Attribute, AttributeCategory
+from todo.models import Task
 from comp.models import CompensationSummary
 from blah.models import Comment
 from django.contrib.auth.models import User
-from django.contrib.contenttypes.models import ContentType
 
 class TeamSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -47,6 +47,14 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Comment
         fields = ('id', 'content', 'owner', 'object_id', 'created_date', 'modified_date', 'associated_object')
+
+class TaskSerializer(serializers.HyperlinkedModelSerializer):
+    created_by = MinimalEmployeeSerializer()
+    assigned_to = MinimalEmployeeSerializer()
+    employee = MinimalEmployeeSerializer()
+    class Meta:
+        model = Task
+        fields = ('id', 'description', 'assigned_to', 'created_by', 'employee', 'created_date', 'due_date', 'status')
 
 class EvaluationRoundSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

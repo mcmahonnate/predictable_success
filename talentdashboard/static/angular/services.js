@@ -100,9 +100,29 @@ angular.module('tdb.services', ['ngResource'])
     return TalentCategoryColors;
 }])
 
+.factory('EmployeeToDo', ['$resource', '$http', function($resource, $http) {
+    var actions = {
+        'addNew': { method:'POST' },
+        'update': { method:'PUT', data:{description:'@description'}, isArray: false },
+        'remove': { method:'DELETE' },
+    }
+    var res = $resource('/api/v1/tasks/employees/:id/', {id:'@id'}, actions);
+    return res;
+}])
+
+.factory('ToDo', ['$resource', '$http', function($resource, $http) {
+    var actions = {
+        'addNew': { method:'POST' },
+        'update': { method:'PUT', data:{description:'@description'}, isArray: false },
+        'remove': { method:'DELETE' },
+    }
+    var res = $resource('/api/v1/tasks/:id/', {id:'@id'}, actions);
+    return res;
+}])
+
 .factory('EmployeeComments', ['$resource', '$http', function($resource, $http) {
-    var actions = {                   
-        'addNew': { method:'POST' },  
+    var actions = {
+        'addNew': { method:'POST' },
     }
     var res = $resource('/api/v1/comments/employees/:id/', {id:'@id'}, actions);
     return res;

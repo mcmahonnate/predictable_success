@@ -44,5 +44,8 @@ urlpatterns = patterns('',
     url(r'api/v1/comments/subcomments/(?P<pk>.*)', (group_required('foolsquad')(SubCommentList.as_view()))),
     url(r'api/v1/comments/$', (group_required('foolsquad')(CommentList.as_view()))),
     url(r'api/v1/comments/(?P<pk>.*)', (group_required('foolsquad')(CommentDetail.as_view()))),
+    url(r'api/v1/tasks/employees/(?P<pk>.*)', (group_required('foolsquad')(EmployeeTaskList.as_view()))),
+    url(r'api/v1/tasks/$', (group_required('foolsquad')(TaskList.as_view()))),
+    url(r'api/v1/tasks/(?P<pk>.*)', (group_required('foolsquad')(TaskDetail.as_view()))),
     url(r'^', include(router.urls)),
 )

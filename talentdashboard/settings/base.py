@@ -130,6 +130,7 @@ INSTALLED_APPS = (
     'org',
     'pvp',
     'comp',
+    'todo',
 )
 
 REST_FRAMEWORK = {

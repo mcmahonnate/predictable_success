@@ -64,7 +64,7 @@
         </section>
       </div><!-- .widget-inner -->
     </article>
-    <article class="widget clock loaded" id="widget-8494" style="top: 285px; left: 0px; width: auto;">
+    <article class="widget clock loaded" id="widget-8494" style="top: 570px; left: 0px; width: auto;">
       <div class="widget-inner large-screen" style="width: 315px;">
         <header class="no-reload">
           <h1 style="display:inline;">Bio</h1>
@@ -167,6 +167,30 @@
           </div>
         </section>
       </div><!-- .widget-inner -->
+    </article>
+    <article class="widget clock loaded" id="widget-8494" style="top: 285px; left: 0px; width: auto;">
+      <div ng-controller="EmployeeToDoListCtrl" class="widget-inner widget-size-1x1 large-screen">
+        <header class="no-reload">
+          <h1 style="display:inline;">To Do's</h1>
+        </header>
+        <section class="widget-body text-widget" style="padding:12px">
+            <div ng-if="todos.length > 0">
+                <div ng-repeat="todo in todos">
+                    <input type="checkbox" value="1" style="padding: 5px;float: left;margin-top: 5px;">
+
+                    <textarea ng-model="todo.description" ng-enter="saveToDo(todo);showToDoInput=false" ng-show="showToDoInput" style="position: relative; width: 265px; height: 13px;background-color:#2a2a2a;color:#eee;resize:none;font-size: 13px;">
+                    </textarea>
+                    <div ng-show="!showToDoInput" style="display:inline-block;width: 260px;float:left;margin-top: 3px;margin-left: 2px;padding-bottom: 3px;">{{todo.description}}</div>
+                    <ul class="feed-actions" style="margin-left: 22px;margin-top:0px;">
+                        <li class="feed-action">{{todo.assigned_to.full_name}}</li>
+                        <li class="feed-action">{{todo.due_date| date:'MMM d, yyyy'}}</li>
+                        <span style="color:#8b8b8b;"><a ng-click="showToDoInput = ! showToDoInput" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></span>
+                    </ul>
+                </div>
+            </div>
+            <button class="comment" ng-click="addComment();expandTextArea=false">Add to-do</button>
+        </section>
+      </div>
     </article>
     <article class="widget clock loaded" id="widget-8494" style="top: 0px; left: 325px; width: auto;">
       <div ng-controller="EmployeePvpEvaluationsCtrl" class="widget-inner widget-size-1x1 large-screen">

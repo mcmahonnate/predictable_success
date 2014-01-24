@@ -9,6 +9,7 @@ from .decorators import *
 from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team
 from pvp.salaryreports import get_salary_report_for_team, get_salary_report_for_all_employees
 from blah.models import Comment
+from todo.models import Task
 import datetime
 from django.utils.log import getLogger
 from django.contrib.contenttypes.models import ContentType
@@ -167,6 +168,95 @@ class CommentDetail(APIView):
             comment.delete()
             return Response(None)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
+
+class TaskList(APIView):
+    def get(self, request, format=None):
+        tasks = Task.objects.exclude(status = 'done')
+        tasks = tasks.extra(order_by = ['-created_date'])
+        serializer = TaskSerializer(tasks, many=True)
+        return Response(serializer.data)
+
+class TaskDetail(APIView):
+    def get(self, request, pk, format=None):
+        task = Task.objects.get(id = pk)
+        serializer = TaskSerializer(task)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        task = Task.objects.get(id=pk)
+        if task is None:
+            return Response(None, status=status.HTTP_404_NOT_FOUND)
+        assigned_to_id = request.DATA["_assigned_to_id"]
+        description = request.DATA["_description"]
+        due_date = request.DATA["_due_date"]
+        status = request.DATA["_status"]
+        if assigned_to_id:
+            assigned_to = Employee.objects.get(id = assigned_to_id)
+        if assigned_to:
+             task.assigned_to = assigned_to
+        if description:
+             task.description = description
+        if due_date:
+            task.due_date = due_date
+        if status:
+            task.status = status
+        task.save();
+        return Response(None)
+
+
+    def post(self, request, pk, format=None):
+        employee_id = request.DATA["_employee_id"]
+        employee = Employee.objects.get(id = employee_id)
+        if employee is None:
+            return Response(None, status=status.HTTP_404_NOT_FOUND)
+        assigned_to_id = request.DATA["_assigned_to_id"]
+        description = request.DATA["_description"]
+        due_date = request.DATA["_due_date"]
+        status = request.DATA["_status"]
+        task = Task()
+        task.employee = employee
+        task.created_by = request.user
+        if assigned_to_id:
+            assigned_to = Employee.objects.get(id = assigned_to_id)
+        if assigned_to:
+             task.assigned_to = assigned_to
+        if description:
+             task.description = description
+        if due_date:
+            task.due_date = due_date
+        if status:
+            task.status = status
+        serializer = TaskSerializer(task, many=False)
+        return Response(serializer.data)
+
+    def delete(self, request, pk, format=None):
+        task = Task.objects.filter(id = pk)
+        if task is not None:
+            task.delete()
+            return Response(None)
+        return Response(None, status=status.HTTP_404_NOT_FOUND)
+
+class EmployeeTaskList(APIView):
+    def get(self, request, pk, format=None):
+        employee = Employee.objects.get(id = pk)
+        if employee is None:
+            return Response(None, status=status.HTTP_404_NOT_FOUND)
+        tasks = Task.objects.filter(employee__id = pk)
+        tasks = tasks.extra(order_by = ['-created_date'])
+        serializer = TaskSerializer(tasks, many=True)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        task = Task.objects.get(id=pk)
+        description = request.DATA["_description"]
+        assigned_to = request.DATA["_description"]
+        task.description = description
+        serializer = TaskSerializer(task, data=request.DATA)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['GET'])
 def user_status(request):

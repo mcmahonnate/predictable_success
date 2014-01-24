@@ -379,6 +379,37 @@ angular.module('tdb.controllers', [])
     };
 }])
 
+.controller('EmployeeToDoListCtrl', ['$scope', '$routeParams', 'EmployeeToDo','ToDo', function($scope, $routeParams, EmployeeToDo,ToDo) {
+    EmployeeToDo.query({ id: $routeParams.id }).$then(function(response) {
+            $scope.todos = response.data;
+        }
+    );
+    $scope.saveToDo = function(todo) {
+        var data = {id: todo.id, _description: todo.description};
+
+        ToDo.update(data, function() {
+
+        });
+    }
+    $scope.addToDo = function(equals) {
+        var newToDo = {};
+        newToDo.id = -1;
+        newToDo.description = "";
+        newToDo.created_by =
+
+        $scope.comments.push(newComment);
+        $scope.originalComments.push(angular.copy(newComment));
+
+        var data = {id: newComment.id, _model_name: "employee", _object_id: 0, _content: newComment.content};
+
+        data.id = $scope.employeeId;
+        EmployeeComments.save(data, function(response) {
+            newComment.id = response.id;
+            $scope.newCommentText = "";
+        });
+    }
+}])
+
 .controller('EmployeeCommentsCtrl', ['$scope', '$filter', '$routeParams', '$window', 'EmployeeComments', 'SubComments','Comment', 'User', function($scope, $filter, $routeParams, $window, EmployeeComments, SubComments, Comment, User) {
     $scope.employeeId = $routeParams.id;
     $scope.newCommentText = "";
