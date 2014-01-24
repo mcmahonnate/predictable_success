@@ -113,7 +113,7 @@ angular.module('tdb.services', ['ngResource'])
 .factory('ToDo', ['$resource', '$http', function($resource, $http) {
     var actions = {
         'addNew': { method:'POST' },
-        'update': { method:'PUT', data:{description:'@description'}, isArray: false },
+        'update': { method:'PUT', data:{description:'@description', completed: '@completed', assigned_to_id: '@assigned_to_id', due_date: '@due_date'}, isArray: false },
         'remove': { method:'DELETE' },
     }
     var res = $resource('/api/v1/tasks/:id/', {id:'@id'}, actions);

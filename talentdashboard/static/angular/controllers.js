@@ -385,8 +385,13 @@ angular.module('tdb.controllers', [])
         }
     );
     $scope.saveToDo = function(todo) {
-        var data = {id: todo.id, _description: todo.description};
+        var assigned_to_id = -1;
+        if (todo.assigned_to) {
+            assigned_to_id = todo.assigned_to.id;
+        }
 
+        var data = {id: todo.id, _description: todo.description, _completed: todo.completed, _assigned_to_id: assigned_to_id, _due_date: todo.due_date};
+        console.log(data);
         ToDo.update(data, function() {
 
         });
@@ -395,7 +400,9 @@ angular.module('tdb.controllers', [])
         var newToDo = {};
         newToDo.id = -1;
         newToDo.description = "";
-        newToDo.created_by =
+        newToDo.assigned_to_id = -1;
+        newToDo.due_date = "";
+        newToDo.completed = "";
 
         $scope.comments.push(newComment);
         $scope.originalComments.push(angular.copy(newComment));

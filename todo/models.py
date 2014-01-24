@@ -14,20 +14,12 @@ class Task(models.Model):
         max_length=255,
         blank=True,
     )
-    UNASSIGNED="unassigned"
-    ASSIGNED="assigned"
-    DONE="done"
-    STATUS_CHOICES = (
-        (UNASSIGNED, 'Unassigned'),
-        (ASSIGNED, 'Assigned'),
-        (DONE, 'Done'),
-    )
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=UNASSIGNED)
+    completed = models.BooleanField()
 
     def __str__(self):
-        if self.status == "assigned":
+        if self.assigned_to:
             return "%s is assigned to %s" % (self.description, self.assigned_to)
-        elif self.status == "done":
+        elif self.completed:
             return "%s is done" % (self.description)
         elif self.created_by:
             return "%s created task %s" % (self.created_by, self.description)

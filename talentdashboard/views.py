@@ -189,18 +189,18 @@ class TaskDetail(APIView):
         assigned_to_id = request.DATA["_assigned_to_id"]
         description = request.DATA["_description"]
         due_date = request.DATA["_due_date"]
-        status = request.DATA["_status"]
-        if assigned_to_id:
+        completed = request.DATA["_completed"]
+        if assigned_to_id !=-1:
             assigned_to = Employee.objects.get(id = assigned_to_id)
-        if assigned_to:
-             task.assigned_to = assigned_to
-        if description:
-             task.description = description
-        if due_date:
+            if assigned_to is None:
+                return Response(None, status=status.HTTP_404_NOT_FOUND)
+            else:
+                 task.assigned_to = assigned_to
+        if due_date !="":
             task.due_date = due_date
-        if status:
-            task.status = status
-        task.save();
+        task.description = description
+        task.completed = completed
+        task.save()
         return Response(None)
 
 
@@ -212,7 +212,6 @@ class TaskDetail(APIView):
         assigned_to_id = request.DATA["_assigned_to_id"]
         description = request.DATA["_description"]
         due_date = request.DATA["_due_date"]
-        status = request.DATA["_status"]
         task = Task()
         task.employee = employee
         task.created_by = request.user
@@ -224,8 +223,6 @@ class TaskDetail(APIView):
              task.description = description
         if due_date:
             task.due_date = due_date
-        if status:
-            task.status = status
         serializer = TaskSerializer(task, many=False)
         return Response(serializer.data)
 

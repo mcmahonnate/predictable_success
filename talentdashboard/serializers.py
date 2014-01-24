@@ -54,7 +54,7 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
     employee = MinimalEmployeeSerializer()
     class Meta:
         model = Task
-        fields = ('id', 'description', 'assigned_to', 'created_by', 'employee', 'created_date', 'due_date', 'status')
+        fields = ('id', 'description', 'assigned_to', 'created_by', 'employee', 'created_date', 'due_date', 'completed')
 
 class EvaluationRoundSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
