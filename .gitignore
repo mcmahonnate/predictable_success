@@ -15,7 +15,8 @@ var
 sdist
 develop-eggs
 .installed.cfg
-lib
+venv
+
 lib64
 __pycache__
 
