@@ -384,24 +384,12 @@ angular.module('tdb.controllers', [])
             $scope.todos = response.data;
         }
     );
-    $scope.saveToDo = function(todo) {
-        var assigned_to_id = -1;
-        if (todo.assigned_to) {
-            assigned_to_id = todo.assigned_to.id;
-        }
-
-        var data = {id: todo.id, _description: todo.description, _completed: todo.completed, _assigned_to_id: assigned_to_id, _due_date: todo.due_date};
-        console.log(data);
-        ToDo.update(data, function() {
-
-        });
-    }
     $scope.addToDo = function(equals) {
         var newToDo = {};
         newToDo.id = -1;
         newToDo.description = "";
         newToDo.assigned_to_id = -1;
-        newToDo.due_date = "";
+        newToDo.due_date = null;
         newToDo.completed = "";
 
         $scope.comments.push(newComment);
@@ -417,11 +405,44 @@ angular.module('tdb.controllers', [])
     }
 }])
 
-.controller('DatePickerCtrl', ['$scope', '$routeParams', 'EmployeeToDo','ToDo', function($scope, $routeParams, EmployeeToDo,ToDo) {
+.controller('EmployeeToDoCtrl', ['$scope', 'Employee', 'ToDo',function($scope, Employee, ToDo) {
+    $scope.currentToDo = {due_date:null};
+    $scope.$watch('currentToDo.due_date', function(newVal, oldVal){
+        if (newVal != oldVal) {
+            $scope.saveToDo();
+        }
+    },true);
+    $scope.saveToDo = function() {
+        var assigned_to_id = -1;
+        if ($scope.currentToDo.assigned_to) {
+            assigned_to_id = $scope.currentToDo.assigned_to.id;
+        }
+        var due_date = null;
+        if ($scope.currentToDo.due_date) {
+            date = new Date($scope.currentToDo.due_date);
+            var day = date.getDate();
+            var month = date.getMonth() + 1; //Months are zero based
+            var year = date.getFullYear();
+            due_date = year + "-" + month + "-" +  day;
+        }
+        var data = {id: $scope.currentToDo.id, _description: $scope.currentToDo.description, _completed: $scope.currentToDo.completed, _assigned_to_id: assigned_to_id, _due_date: due_date};
+        console.log(data);
+        ToDo.update(data, function() {
+
+        });
+    }
+    $scope.assigneeMenu = {show: false};
+    $scope.assignees = Employee.query();
+	$scope.startsWith  = function(expected, actual){
+		if(expected && actual){
+			return expected.toLowerCase().indexOf(actual.toLowerCase()) == 0;
+		}
+		return true;
+	}
+
     $scope.today = function() {
         $scope.dt = new Date();
     };
-    $scope.today();
 
     $scope.showWeeks = false;
     $scope.toggleWeeks = function () {
@@ -445,15 +466,7 @@ angular.module('tdb.controllers', [])
     $scope.open = function($event) {
         $event.preventDefault();
         $event.stopPropagation();
-
         $scope.opened = true;
-    };
-
-    $scope.close = function($event) {
-        $event.preventDefault();
-        $event.stopPropagation();
-
-        $scope.opened = false;
     };
 
     $scope.dateOptions = {
