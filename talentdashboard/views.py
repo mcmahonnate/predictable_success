@@ -190,7 +190,7 @@ class TaskDetail(APIView):
         description = request.DATA["_description"]
         due_date = request.DATA["_due_date"]
         completed = request.DATA["_completed"]
-        if assigned_to_id !=-1:
+        if assigned_to_id is not None:
             assigned_to = Employee.objects.get(id = assigned_to_id)
             if assigned_to is None:
                 return Response(None, status=status.HTTP_404_NOT_FOUND)
@@ -202,29 +202,6 @@ class TaskDetail(APIView):
         task.completed = completed
         task.save()
         return Response(None)
-
-
-    def post(self, request, pk, format=None):
-        employee_id = request.DATA["_employee_id"]
-        employee = Employee.objects.get(id = employee_id)
-        if employee is None:
-            return Response(None, status=status.HTTP_404_NOT_FOUND)
-        assigned_to_id = request.DATA["_assigned_to_id"]
-        description = request.DATA["_description"]
-        due_date = request.DATA["_due_date"]
-        task = Task()
-        task.employee = employee
-        task.created_by = request.user
-        if assigned_to_id:
-            assigned_to = Employee.objects.get(id = assigned_to_id)
-        if assigned_to:
-             task.assigned_to = assigned_to
-        if description:
-             task.description = description
-        if due_date:
-            task.due_date = due_date
-        serializer = TaskSerializer(task, many=False)
-        return Response(serializer.data)
 
     def delete(self, request, pk, format=None):
         task = Task.objects.filter(id = pk)
@@ -243,17 +220,32 @@ class EmployeeTaskList(APIView):
         serializer = TaskSerializer(tasks, many=True)
         return Response(serializer.data)
 
-    def put(self, request, pk, format=None):
-        task = Task.objects.get(id=pk)
+    def post(self, request, pk, format=None):
+        employee_id = request.DATA["_employee_id"]
+        employee = Employee.objects.get(id = employee_id)
+        if employee is None:
+            return Response(None, status=status.HTTP_404_NOT_FOUND)
+        owner_id = request.DATA["_owner_id"]
+        owner = Employee.objects.get(user__id = owner_id)
+        if owner is None:
+            return Response(None, status=status.HTTP_404_NOT_FOUND)
+        assigned_to_id = request.DATA["_assigned_to_id"]
         description = request.DATA["_description"]
-        assigned_to = request.DATA["_description"]
-        task.description = description
-        serializer = TaskSerializer(task, data=request.DATA)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+        due_date = request.DATA["_due_date"]
+        task = Task()
+        task.employee = employee
+        task.created_by = owner
+        if assigned_to_id is not None:
+            assigned_to = Employee.objects.get(id = assigned_to_id)
+            if assigned_to is not None:
+                 task.assigned_to = assigned_to
+        if description is not None:
+             task.description = description
+        if due_date is not None:
+            task.due_date = due_date
+        task.save()
+        serializer = TaskSerializer(task)
+        return Response(serializer.data)
 
 @api_view(['GET'])
 def user_status(request):

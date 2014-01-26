@@ -169,7 +169,7 @@
       </div><!-- .widget-inner -->
     </article>
     <article class="widget clock loaded" id="widget-8494" style="top: 285px; left: 0px; width: auto;">
-      <div ng-controller="EmployeeToDoListCtrl" class="widget-inner widget-size-1x1 large-screen">
+      <div ng-controller="EmployeeToDoListCtrl" class="widget-inner large-screen" style="width:315px;min-height: 275px;">
         <header class="no-reload">
           <h1 style="display:inline;">To Do's</h1>
         </header>
@@ -178,15 +178,15 @@
                 <div ng-repeat="todo in todos" ng-controller="EmployeeToDoCtrl" ng-init="currentToDo=todo">
                     <input type="checkbox" ng-click="saveToDo(todo)" ng-model="todo.completed" style="padding: 5px;float: left;margin-top: 5px;">
 
-                    <textarea ng-model="todo.description" ng-enter="saveToDo();showToDoInput=false" ng-show="showToDoInput" style="position: relative; width: 265px; height: 13px;background-color:#2a2a2a;color:#eee;resize:none;font-size: 13px;">
+                    <textarea ng-model="todo.description" ng-enter="saveToDo();" ng-show="todo.edit"  placeholder="Add a To Do..." style="position: relative; width: 265px; height: 13px;background-color:#2a2a2a;color:#eee;resize:none;font-size: 13px;">
                     </textarea>
-                    <div ng-show="!showToDoInput" style="display:inline-block;width: 260px;float:left;margin-top: 3px;margin-left: 2px;padding-bottom: 3px;">{{todo.description}}</div>
+                    <div ng-show="!todo.edit" style="display:inline-block;width: 260px;float:left;margin-top: 3px;margin-left: 2px;padding-bottom: 3px;">{{todo.description}}</div>
                     <ul class="feed-actions" style="margin-left: 22px;margin-top:0px;">
                         <li ng-show="!todo.assigned_to" class="feed-action"><a ng-click="assigneeMenu.show=!assigneeMenu.show" style="color: #8b8b8b;cursor: pointer;">Unassigned</a></li>
                         <li ng-show="todo.assigned_to" class="feed-action"><a ng-click="assigneeMenu.show=!assigneeMenu.show" style="color: #8b8b8b;cursor: pointer;">{{todo.assigned_to.full_name}}</a></li>
                         <li ng-show="!todo.due_date" class="feed-action"><a ng-click="open($event)" style="color: #8b8b8b;cursor: pointer;">No due date</a></li>
                         <li ng-show="todo.due_date" class="feed-action"><a ng-click="open($event)" style="color: #8b8b8b;cursor: pointer;" ng-bind="todo.due_date| date:'MMM d, yyyy'"></a></li>
-                        <span style="color:#8b8b8b;"><a ng-click="showToDoInput = ! showToDoInput" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></span>
+                        <span style="color:#8b8b8b;"><a ng-click="todo.edit = !todo.edit" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></span>
                     </ul>
                     <span type="text" class="form-control" datepicker-popup="{{format}}" ng-model="todo.due_date" is-open="opened" min="minDate" datepicker-options="" date-disabled="disabled(date, mode)" show-weeks="false" ng-required="true" close-text="Close"/>
                     <div style="clear:both;"></div>
@@ -202,7 +202,7 @@
                     </div>
                 </div>
             </div>
-            <button class="comment" ng-click="addComment();expandTextArea=false">Add to-do</button>
+            <button class="comment" ng-click="addToDo(employee.id)">Add to-do</button>
         </section>
       </div>
     </article>
