@@ -20,6 +20,10 @@ class EmployeeList(generics.ListAPIView):
     serializer_class = EmployeeSerializer
     queryset = Employee.objects.filter(display='t')
 
+class CoachList(generics.ListAPIView):
+    serializer_class = EmployeeSerializer
+    queryset = Employee.objects.exclude(user__isnull=True)
+
 class EmployeeDetail(generics.RetrieveAPIView):
     queryset = Employee.objects.filter(display='t')
     serializer_class = EmployeeSerializer
@@ -196,6 +200,8 @@ class TaskDetail(APIView):
                 return Response(None, status=status.HTTP_404_NOT_FOUND)
             else:
                  task.assigned_to = assigned_to
+        else:
+            task.assigned_to = None
         if due_date !="":
             task.due_date = due_date
         task.description = description

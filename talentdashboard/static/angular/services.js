@@ -6,6 +6,13 @@ angular.module('tdb.services', ['ngResource'])
     return Employee;
 }])
 
+.factory('Coach', ['$resource', '$http', function($resource, $http) {
+    var Coach = $resource('/api/v1/coaches/');
+
+    return Coach;
+}])
+
+
 .factory('Mentorship', ['$resource', '$http', function($resource, $http) {
     var Mentorship = $resource('/api/v1/mentorships/:id/');
 

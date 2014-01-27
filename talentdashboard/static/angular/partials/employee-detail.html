@@ -180,7 +180,7 @@
 
                     <textarea ng-model="todo.description" ng-enter="saveToDo();" ng-show="todo.edit"  placeholder="Add a To Do..." style="position: relative; width: 265px; height: 13px;background-color:#2a2a2a;color:#eee;resize:none;font-size: 13px;">
                     </textarea>
-                    <div ng-show="!todo.edit" style="display:inline-block;width: 260px;float:left;margin-top: 3px;margin-left: 2px;padding-bottom: 3px;">{{todo.description}}</div>
+                    <div ng-show="!todo.edit" ng-class="{'todo-completed': todo.completed}" style="display:inline-block;width: 260px;float:left;margin-top: 3px;margin-left: 2px;padding-bottom: 3px;">{{todo.description}}</div>
                     <ul class="feed-actions" style="margin-left: 22px;margin-top:0px;">
                         <li ng-show="!todo.assigned_to" class="feed-action"><a ng-click="assigneeMenu.show=!assigneeMenu.show" style="color: #8b8b8b;cursor: pointer;">Unassigned</a></li>
                         <li ng-show="todo.assigned_to" class="feed-action"><a ng-click="assigneeMenu.show=!assigneeMenu.show" style="color: #8b8b8b;cursor: pointer;">{{todo.assigned_to.full_name}}</a></li>
@@ -190,13 +190,11 @@
                     </ul>
                     <span type="text" class="form-control" datepicker-popup="{{format}}" ng-model="todo.due_date" is-open="opened" min="minDate" datepicker-options="" date-disabled="disabled(date, mode)" show-weeks="false" ng-required="true" close-text="Close"/>
                     <div style="clear:both;"></div>
-                    <div ng-show="assigneeMenu.show">
+                    <div ng-show="assigneeMenu.show" style="border: 1px solid #ccc;padding: 8px 3px;border-radius: 4px;background-color:#272727;">
                             <ul>
-                                <li>
-                                    <input class="search-input" ng-model="assigneeQuery" type="text" placeholder="Search"/>
-                                </li>
-                                <li ng-repeat="assignee in assignees | filter:{full_name:assigneeQuery}:startsWith | orderBy:'full_name'">
-                                    <a class="dashboard" ng-click="assigneeMenu.show=false;todo.assigned_to=assignee;saveToDo()" style="font-weight:800;cursor: pointer;">{{assignee.full_name}}</a>
+                                <li class="assignee-select"><a class="assignee-select-link" ng-click="assigneeMenu.show=false;todo.assigned_to=null;saveToDo()">Unassigned</a></li>
+                                <li class="assignee-select" ng-repeat="assignee in assignees | orderBy:'full_name'">
+                                    <a class="assignee-select-link" ng-click="assigneeMenu.show=false;todo.assigned_to=assignee;saveToDo()" style="cursor: pointer;">{{assignee.full_name}}</a>
                                 </li>
                             </ul>
                     </div>

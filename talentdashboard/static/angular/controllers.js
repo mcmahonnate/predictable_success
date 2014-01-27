@@ -398,7 +398,7 @@ angular.module('tdb.controllers', [])
     }
 }])
 
-.controller('EmployeeToDoCtrl', ['$scope', 'Employee', 'ToDo', 'EmployeeToDo', function($scope, Employee, ToDo, EmployeeToDo) {
+.controller('EmployeeToDoCtrl', ['$scope', 'Employee', 'ToDo', 'EmployeeToDo', 'Coach', function($scope, Employee, ToDo, EmployeeToDo, Coach) {
     $scope.currentToDo = {due_date:null};
     $scope.$watch('currentToDo.due_date', function(newVal, oldVal){
         if (newVal != oldVal) {
@@ -421,16 +421,17 @@ angular.module('tdb.controllers', [])
         }
 
         var data = {id: $scope.currentToDo.id, _description: $scope.currentToDo.description, _completed: $scope.currentToDo.completed, _assigned_to_id: assigned_to_id, _due_date: due_date, _employee_id: $scope.currentToDo.employee_id, _owner_id: $scope.currentToDo.created_by.id};
-        console.log(data);
         if ($scope.currentToDo.id != -1) {
             ToDo.update(data);
         } else {
             data.id = $scope.currentToDo.employee_id;
-            EmployeeToDo.addNew(data);
+            EmployeeToDo.addNew(data, function(response) {
+                $scope.currentToDo.id = response.id;
+            });
         }
     }
     $scope.assigneeMenu = {show: false};
-    $scope.assignees = Employee.query();
+    $scope.assignees = Coach.query();
 	$scope.startsWith  = function(expected, actual){
 		if(expected && actual){
 			return expected.toLowerCase().indexOf(actual.toLowerCase()) == 0;

@@ -717,6 +717,7 @@ g{ cursor: pointer;}
     float: right!important;
 }
 button.btn {
+    background-color: #434343;
     display: inline-block;
     padding: 6px 12px;
     margin-bottom: 0;
@@ -750,8 +751,7 @@ button.btn-sm {
 }
 
 button.btn-default {
-    color: #333;
-    background-color: #fff;
+    background-color: #272727;
     border-color: #ccc;
 }
 
@@ -813,7 +813,7 @@ button.btn[disabled], fieldset[disabled] .btn {
 th {
     text-align: left;
     text-shadow: none;
-    color:#333;
+    color:#999;
 }
 user agent stylesheetth {
     font-weight: bold;
@@ -823,22 +823,35 @@ user agent stylesheettd, th {
     vertical-align: inherit;
 }
 .dropdown-menu {
-    position: fixed;
     top: 100%;
     left: 0;
     z-index: 1000;
     display: none;
     float: left;
     min-width: 160px;
-    padding: 5px 0;
+    padding: 5px 5px;
     margin: 2px 0 0;
     font-size: 14px;
     list-style: none;
-    background-color: #fff;
+    background-color: #272727;
     border: 1px solid #ccc;
-    border: 1px solid rgba(0,0,0,0.15);
     border-radius: 4px;
     -webkit-box-shadow: 0 6px 12px rgba(0,0,0,0.175);
     box-shadow: 0 6px 12px rgba(0,0,0,0.175);
     background-clip: padding-box;
+}
+
+.todo-completed {
+    text-decoration:line-through;
+}
+
+.assignee-select {
+    padding: 5px;
+}
+.assignee-select a{
+    padding: 5px 10px;
+}
+.assignee-select a:hover {
+    background-color: #585858;
+    text-decoration: none !important;
 }
