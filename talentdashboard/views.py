@@ -181,8 +181,7 @@ class MyTaskList(APIView):
         if assigned_to is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
         tasks = Task.objects.filter(assigned_to__id=assigned_to.id)
-        tasks = tasks.exclude(completed = True)
-        tasks = tasks.extra(order_by = ['-created_date'])
+        tasks = tasks.extra(order_by = ['-due_date'])
         serializer = TaskSerializer(tasks, many=True)
         return Response(serializer.data)
 

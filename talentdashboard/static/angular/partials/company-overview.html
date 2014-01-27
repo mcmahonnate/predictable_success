@@ -108,6 +108,7 @@
           <h1 style="display:inline;">My To Do's</h1>
         </header>
         <section class="widget-body text-widget" style="padding:12px">
+            <span ng-show="todos.length==0">You currently don't have any tasks.</span>
             <div ng-if="todos.length > 0">
                 <div ng-repeat="todo in todos" ng-controller="EmployeeToDoCtrl" ng-init="currentToDo=todo">
                     <input type="checkbox" ng-click="saveToDo(todo)" ng-model="todo.completed" style="padding: 5px;float: left;margin-top: 5px;">
