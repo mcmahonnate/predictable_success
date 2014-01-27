@@ -186,7 +186,8 @@
                         <li ng-show="todo.assigned_to" class="feed-action"><a ng-click="assigneeMenu.show=!assigneeMenu.show" style="color: #8b8b8b;cursor: pointer;">{{todo.assigned_to.full_name}}</a></li>
                         <li ng-show="!todo.due_date" class="feed-action"><a ng-click="open($event)" style="color: #8b8b8b;cursor: pointer;">No due date</a></li>
                         <li ng-show="todo.due_date" class="feed-action"><a ng-click="open($event)" style="color: #8b8b8b;cursor: pointer;" ng-bind="todo.due_date| date:'MMM d, yyyy'"></a></li>
-                        <span style="color:#8b8b8b;"><a ng-click="todo.edit = !todo.edit" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></span>
+                        <li class="feed-action"><a ng-click="todo.edit = !todo.edit" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
+                        <span style="color:#8b8b8b;"><a ng-click="deleteToDo(todo)" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></span>
                     </ul>
                     <span type="text" class="form-control" datepicker-popup="{{format}}" ng-model="todo.due_date" is-open="opened" min="minDate" datepicker-options="" date-disabled="disabled(date, mode)" show-weeks="false" ng-required="true" close-text="Close"/>
                     <div style="clear:both;"></div>
