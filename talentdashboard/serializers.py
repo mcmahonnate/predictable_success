@@ -51,10 +51,11 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
 class TaskSerializer(serializers.HyperlinkedModelSerializer):
     created_by = MinimalEmployeeSerializer()
     assigned_to = MinimalEmployeeSerializer()
+    assigned_by = MinimalEmployeeSerializer()
     employee = MinimalEmployeeSerializer()
     class Meta:
         model = Task
-        fields = ('id', 'description', 'assigned_to', 'created_by', 'employee', 'created_date', 'due_date', 'completed')
+        fields = ('id', 'description', 'assigned_to', 'assigned_by', 'created_by', 'employee', 'created_date', 'due_date', 'completed')
 
 class EvaluationRoundSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

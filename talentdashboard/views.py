@@ -199,13 +199,16 @@ class TaskDetail(APIView):
         completed = request.DATA["_completed"]
         if assigned_to_id is not None:
             assigned_to = Employee.objects.get(id = assigned_to_id)
+            assigned_by = Employee.objects.get(user__id = request.user.id)
             if assigned_to is None:
                 return Response(None, status=status.HTTP_404_NOT_FOUND)
             else:
                 if task.assigned_to is not None:
                     if task.assigned_to.id != assigned_to.id:
+                        task.assigned_by = assigned_by
                         notify = True
                 else:
+                    task.assigned_by = assigned_by
                     notify = True
                 task.assigned_to = assigned_to
         else:
@@ -216,8 +219,10 @@ class TaskDetail(APIView):
         task.completed = completed
         task.save()
         if notify:
-            message = 'http://' + get_current_site(request).domain + '/#/employees/' + str(task.employee.id)
-            send_mail('You have been assigned a To Do', message, 'natem@fool.com',[task.assigned_to.user.email], fail_silently=False)
+            subject = '(' + task.employee.full_name + ') To-do assigned to you: ' + task.description
+            message = task.assigned_by.full_name + ' just assigned this to you: \r\n' + task.description + '\r\n http://' + get_current_site(request).domain + '/#/employees/' + str(task.employee.id)
+            mail_from = task.assigned_by.full_name + '<talent-dashboard@dfrntlabs.com>'
+            send_mail(subject, message, mail_from, [task.assigned_to.user.email], fail_silently=False)
 
         return Response(None)
 
