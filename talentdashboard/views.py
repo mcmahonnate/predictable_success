@@ -12,6 +12,8 @@ from blah.models import Comment
 from todo.models import Task
 import datetime
 from django.utils.log import getLogger
+from django.core.mail import send_mail
+from django.contrib.sites.models import get_current_site
 from django.contrib.contenttypes.models import ContentType
 
 logger = getLogger('talentdashboard')
@@ -188,6 +190,7 @@ class TaskDetail(APIView):
 
     def put(self, request, pk, format=None):
         task = Task.objects.get(id=pk)
+        notify = False
         if task is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
         assigned_to_id = request.DATA["_assigned_to_id"]
@@ -199,7 +202,12 @@ class TaskDetail(APIView):
             if assigned_to is None:
                 return Response(None, status=status.HTTP_404_NOT_FOUND)
             else:
-                 task.assigned_to = assigned_to
+                if task.assigned_to is not None:
+                    if task.assigned_to.id != assigned_to.id:
+                        notify = True
+                else:
+                    notify = True
+                task.assigned_to = assigned_to
         else:
             task.assigned_to = None
         if due_date !="":
@@ -207,6 +215,10 @@ class TaskDetail(APIView):
         task.description = description
         task.completed = completed
         task.save()
+        if notify:
+            message = 'http://' + get_current_site(request).domain + '/#/employees/' + str(task.employee.id)
+            send_mail('You have been assigned a To Do', message, 'natem@fool.com',[task.assigned_to.user.email], fail_silently=False)
+
         return Response(None)
 
     def delete(self, request, pk, format=None):
