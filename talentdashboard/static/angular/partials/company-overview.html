@@ -49,7 +49,7 @@
   </header>
   <div class="dashboard-sized-el fade" ng-class="{in:salaryReport}" id="dashboard" style="margin-top: 75px; max-width: 970px;">
 
-    <article class="widget clock loaded" id="widget-8494" style="top: 0px; left: 650px; width: auto;">
+    <article class="widget clock loaded" id="widget-8494" style="top: 0px; left: 0px; width: auto;">
       <div class="widget-inner widget-size-1x1 large-screen">
         <header class="no-reload">
           <h1 id="talent-header" style="display:inline;">Talent Pool</h1>
@@ -61,7 +61,7 @@
       </div>
     </article>
 
-    <article class="widget google-analytics loaded" id="widget-14808658" style="top: 570px; left: 650px; width: auto;">
+    <article class="widget google-analytics loaded" id="widget-14808658" style="top: 0px; left: 650px; width: auto;">
       <div class="widget-inner widget-size-1x1 large-screen">
         <header class="no-reload">
           <h1 style="display:inline;">Net Cash Receipts Per Employee</h1>
@@ -84,7 +84,7 @@
       </div><!-- .widget-inner -->
     </article>
 
-    <article class="widget google-analytics loaded" id="widget-14808658" style="top: 285px; left: 650px; width: auto;">
+    <article class="widget google-analytics loaded" id="widget-14808658" style="top: 0px; left: 325px; width: auto;">
       <div class="widget-inner widget-size-1x1 large-screen">
         <header class="no-reload">
           <h1 style="display:inline;">Total Salaries</h1>
@@ -102,8 +102,43 @@
         <div id="salary_visualization" style="width: 315px; height: 300px;"></div>
       </div><!-- .widget-inner -->
     </article>
+    <article class="widget clock loaded" id="widget-8494" style="top: 285px; left: 0px; width: auto;">
+      <div ng-controller="MyToDoListCtrl" class="widget-inner large-screen" style="width:315px;min-height: 275px;">
+        <header class="no-reload">
+          <h1 style="display:inline;">My To Do's</h1>
+        </header>
+        <section class="widget-body text-widget" style="padding:12px">
+            <div ng-if="todos.length > 0">
+                <div ng-repeat="todo in todos" ng-controller="EmployeeToDoCtrl" ng-init="currentToDo=todo">
+                    <input type="checkbox" ng-click="saveToDo(todo)" ng-model="todo.completed" style="padding: 5px;float: left;margin-top: 5px;">
 
-    <article ng-controller="DiscussionOverviewCtrl" class="widget clock loaded" id="widget-8494" style="top: 0px; left: 0px; width: auto;">
+                    <textarea ng-model="todo.description" ng-enter="saveToDo();" ng-show="todo.edit"  placeholder="Add a To Do..." style="position: relative; width: 265px; height: 13px;background-color:#2a2a2a;color:#eee;resize:none;font-size: 13px;">
+                    </textarea>
+                    <div ng-show="!todo.edit" ng-class="{'todo-completed': todo.completed}" style="display:inline-block;width: 260px;float:left;margin-top: 3px;margin-left: 2px;padding-bottom: 3px;"><a ng-href="/#/employees/{{todo.employee.id}}">({{todo.employee.full_name}}) {{todo.description}}</a></div>
+                    <ul class="feed-actions" style="margin-left: 22px;margin-top:0px;">
+                        <li ng-show="!todo.assigned_to" class="feed-action"><a ng-click="assigneeMenu.show=!assigneeMenu.show" style="color: #8b8b8b;cursor: pointer;">Unassigned</a></li>
+                        <li ng-show="todo.assigned_to" class="feed-action"><a ng-click="assigneeMenu.show=!assigneeMenu.show" style="color: #8b8b8b;cursor: pointer;">{{todo.assigned_to.full_name}}</a></li>
+                        <li ng-show="!todo.due_date" class="feed-action"><a ng-click="open($event)" style="color: #8b8b8b;cursor: pointer;">No due date</a></li>
+                        <li ng-show="todo.due_date" class="feed-action"><a ng-click="open($event)" style="color: #8b8b8b;cursor: pointer;" ng-bind="todo.due_date| date:'MMM d, yyyy'"></a></li>
+                        <li class="feed-action"><a ng-click="todo.edit = !todo.edit" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
+                        <span style="color:#8b8b8b;"><a ng-click="deleteToDo(todo)" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></span>
+                    </ul>
+                    <span type="text" class="form-control" datepicker-popup="{{format}}" ng-model="todo.due_date" is-open="opened" min="minDate" datepicker-options="" date-disabled="disabled(date, mode)" show-weeks="false" ng-required="true" close-text="Close"/>
+                    <div style="clear:both;"></div>
+                    <div ng-show="assigneeMenu.show" style="border: 1px solid #ccc;padding: 8px 3px;border-radius: 4px;background-color:#272727;">
+                            <ul>
+                                <li class="assignee-select"><a class="assignee-select-link" ng-click="assigneeMenu.show=false;todo.assigned_to=null;saveToDo()">Unassigned</a></li>
+                                <li class="assignee-select" ng-repeat="assignee in assignees | orderBy:'full_name'">
+                                    <a class="assignee-select-link" ng-click="assigneeMenu.show=false;todo.assigned_to=assignee;saveToDo()" style="cursor: pointer;">{{assignee.full_name}}</a>
+                                </li>
+                            </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+      </div>
+    </article>
+    <article ng-controller="DiscussionOverviewCtrl" class="widget clock loaded" id="widget-8494" style="top: 285px; left: 325px; width: auto;">
       <div class="widget-inner large-screen" style="width:640px;min-height: 560px;">
         <header class="no-reload">
             <h1 style="display:inline;">Discussions</h1>

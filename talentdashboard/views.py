@@ -175,9 +175,13 @@ class CommentDetail(APIView):
             return Response(None)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
-class TaskList(APIView):
+class MyTaskList(APIView):
     def get(self, request, format=None):
-        tasks = Task.objects.exclude(status = 'done')
+        assigned_to = Employee.objects.get(user__id = request.user.id)
+        if assigned_to is None:
+            return Response(None, status=status.HTTP_404_NOT_FOUND)
+        tasks = Task.objects.filter(assigned_to__id=assigned_to.id)
+        tasks = tasks.exclude(completed = True)
         tasks = tasks.extra(order_by = ['-created_date'])
         serializer = TaskSerializer(tasks, many=True)
         return Response(serializer.data)

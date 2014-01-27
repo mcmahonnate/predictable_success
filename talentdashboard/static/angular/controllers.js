@@ -379,6 +379,23 @@ angular.module('tdb.controllers', [])
     };
 }])
 
+.controller('MyToDoListCtrl', ['$scope', '$rootScope', '$routeParams', '$window', 'ToDo', 'MyToDos', 'User', function($scope, $rootScope, $routeParams, $window, ToDo, MyToDos, User) {
+    $scope.todos = MyToDos.query();
+    $scope.deleteToDo = function(todo) {
+        if ($window.confirm('Are you sure you want to delete this To Do?')) {
+            var data = {id: todo.id};
+            var todo_index = $scope.todos.indexOf(todo);
+            var deleteSuccess = function() {
+                $scope.todos.splice(todo_index, 1);
+            };
+
+            ToDo.remove(data, function() {
+                    deleteSuccess();
+                });
+        }
+    }
+}])
+
 .controller('EmployeeToDoListCtrl', ['$scope', '$routeParams', '$window', 'EmployeeToDo', 'ToDo', 'User', function($scope, $routeParams, $window, EmployeeToDo, ToDo, User) {
     EmployeeToDo.query({ id: $routeParams.id }).$then(function(response) {
             $scope.todos = response.data;

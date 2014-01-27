@@ -126,6 +126,11 @@ angular.module('tdb.services', ['ngResource'])
     return res;
 }])
 
+.factory('MyToDos', ['$resource', '$http', function($resource, $http) {
+    var MyToDos = $resource('/api/v1/tasks/');
+    return MyToDos;
+}])
+
 .factory('EmployeeComments', ['$resource', '$http', function($resource, $http) {
     var actions = {
         'addNew': { method:'POST' },
