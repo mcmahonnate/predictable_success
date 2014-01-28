@@ -29,7 +29,7 @@ class Command(BaseCommand):
                     else:
                         recipient_list = recipient.email
                 df = DateFormat(dt)
-                from_email = 'People First<peoplefirst@dfrntlabs.com>'
+                from_email = 'Dash<dash@dfrntlabs.com>'
                 subject = 'Daily Recap for ' +  df.format('l, d F')
                 site = get_current_site(None).domain
                 date = df.format('l, d F')

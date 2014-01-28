@@ -158,7 +158,7 @@
                         </div>
                         <div style="display: block; width: 500px;margin-left:15px;">
                            <div ng-show="showCommentEdit" style="position:relative">
-                              <textarea ng-model="comment.content" style="position: relative; width: 515px; height: 132px;background-color:#2a2a2a;color:#eee;resize:vertical;font-size: 13px;margin-top: 5px;">
+                              <textarea ng-model="comment.content" style="position: relative; width: 515px; height: 132px;background-color:#2a2a2a;color:#eee;resize:vertical;font-size: 14px;margin-top: 5px;">
                               </textarea>
                               <div id="editActions" style="right:2px;bottom:-33px;">
                                     <button class="button small blue" ng-click="saveComment(comment);showCommentEdit=false">Save</button>
@@ -190,7 +190,7 @@
                                 <div style="display: block; float: left;padding-left:10px;width: 440px;min-height: 48px;padding-bottom: 5px;">
                                     <b style="color:#8b8b8b;"><a ng-href="#/employees/{{subcomment.owner.employee.id}}" style="cursor: pointer;color:#8b8b8b;">{{subcomment.owner.employee.full_name}}</a></b>
                                     <div ng-show="showSubCommentEdit" style="position:relative">
-                                      <textarea ng-model="subcomment.content" style="position: relative; width: 430px; height: 132px;background-color:#2a2a2a;color:#eee;resize:vertical;font-size: 13px;margin-top: 5px;">
+                                      <textarea ng-model="subcomment.content" style="position: relative; width: 430px; height: 132px;background-color:#2a2a2a;color:#eee;resize:vertical;font-size: 14px;margin-top: 5px;">
                                       </textarea>
                                       <div id="editActions" style="right:2px;bottom:-33px;">
                                             <button class="button small blue" ng-click="saveSubComment(subcomment, comment);showSubCommentEdit=false">Save</button>
@@ -274,7 +274,7 @@
   .expand {
       transition: height .5s;
       -webkit-transition: height .5s;
-      height: 50px;
+      height: 132px;
   }
   .compress {
       height: 15px;
