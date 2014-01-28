@@ -224,7 +224,7 @@ class TaskDetail(APIView):
         if notify:
             subject = '(' + task.employee.full_name + ') To-do assigned to you: ' + task.description
             message = task.assigned_by.full_name + ' just assigned this to you: \r\n' + task.description + '\r\n http://' + get_current_site(request).domain + '/#/employees/' + str(task.employee.id)
-            mail_from = task.assigned_by.full_name + '<talent-dashboard@dfrntlabs.com>'
+            mail_from = task.assigned_by.full_name + '<notify@dfrntlabs.com>'
             send_mail(subject, message, mail_from, [task.assigned_to.user.email], fail_silently=False)
 
         return Response(None)
