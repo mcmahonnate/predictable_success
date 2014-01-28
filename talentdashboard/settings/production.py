@@ -10,7 +10,7 @@ EMAIL_HOST = 'mail.dfrntlabs.com'
 EMAIL_PORT = 465
 EMAIL_HOST_USER = os.environ.get("EMAIL_ADDRESS", '')
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD", '')
-DEFAULT_FROM_EMAIL = 'Talent Dashboard Team <' + EMAIL_HOST_USER + '>'
+DEFAULT_FROM_EMAIL = 'People First Team <' + EMAIL_HOST_USER + '>'
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 

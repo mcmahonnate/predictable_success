@@ -102,7 +102,7 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-AUTO_LOGOUT_DELAY=10
+AUTO_LOGOUT_DELAY=30
 
 ROOT_URLCONF = 'talentdashboard.urls'
 
