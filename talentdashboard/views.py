@@ -24,7 +24,7 @@ class EmployeeList(generics.ListAPIView):
 
 class CoachList(generics.ListAPIView):
     serializer_class = EmployeeSerializer
-    queryset = Employee.objects.exclude(user__isnull=True)
+    queryset = Employee.objects.filter(user__groups__id=2)
 
 class EmployeeDetail(generics.RetrieveAPIView):
     queryset = Employee.objects.filter(display='t')
