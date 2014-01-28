@@ -14,7 +14,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         dt = datetime.now()
-        start_dt = dt-timedelta(days=7)
+        start_dt = dt-timedelta(days=1)
         comments = Comment.objects.filter(created_date__range=[start_dt,dt])
         todos = Task.objects.filter(created_date__range=[start_dt,dt])
         plaintext = get_template('daily_digest_email.txt')
