@@ -13,7 +13,7 @@
         <tr>
         <font face="Helvetica Neue,helvetica,arial,sans-serif" size="2">
             {% if comment.content_type == comment_type %}
-                <td valign="top" style="height:60px;width:60px">
+                <td valign="top" style="height:80px;width:60px">
                     <a href="http://{{site}}/#/employees/{{comment.associated_object.associated_object.id}}"><img style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;" src="http://{{site}}{{comment.associated_object.associated_object.avatar}}"/></a>
                 </td>
                 <td valign="top">
@@ -24,7 +24,7 @@
                     <span style="font-size:14px;color:#AA9C84"><b>from {{comment.owner.employee.full_name}}</b></span>
                 </td>
             {% else %}
-                <td valign="top" style="height:60px;width:50px">
+                <td valign="top" style="height:80px;width:50px">
                     <a href="http://{{site}}/#/employees/{{comment.associated_object.id}}"><img style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;" src="http://{{site}}{{comment.associated_object.avatar}}"/></a>
                 </td>
                 <td valign="top">
@@ -52,7 +52,7 @@
         {% for todo in todos %}
             <tr>
             <font face="Helvetica Neue,helvetica,arial,sans-serif" size="2">
-                <td valign="top" style="height:60px;width:60px">
+                <td valign="top" style="height:80px;width:60px">
                     <a href="http://{{site}}/#/employees/{{todo.employee.id}}"><img style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;" src="http://{{site}}{{todo.employee.avatar}}"/></a>
                 </td>
                 <td valign="top">
