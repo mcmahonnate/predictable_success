@@ -1,0 +1,74 @@
+
+<html>
+    <head>
+    </head>
+    <body>
+    <h2>Daily Recap {{date}}</h2>
+    <strong>Discussions</strong>
+    <br/>
+    <br/>
+    <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;border-spacing:0;width:100%;text-align:justify;margin:0;padding:0;border-width:0;">
+        <tbody>
+    {% for comment in comments %}
+        <tr>
+        <font face="Helvetica Neue,helvetica,arial,sans-serif" size="2">
+            {% if comment.content_type == comment_type %}
+                <td valign="top" style="height:60px;width:60px">
+                    <a href="http://{{site}}/#/employees/{{comment.associated_object.associated_object.id}}"><img style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;" src="http://{{site}}{{comment.associated_object.associated_object.avatar}}"/></a>
+                </td>
+                <td valign="top">
+                    <a href="http://{{site}}/#/employees/{{comment.associated_object.associated_object.id}}">{{comment.associated_object.associated_object.full_name}}</a>
+                    <br/>
+                    <span style="font-size:14px;">{{comment.content|truncatechars:140}}</span>
+                    <a href="http://{{site}}/#/employees/{{comment.associated_object.associated_object.id}}">more</a>
+                    <span style="font-size:14px;color:#AA9C84"><b>from {{comment.owner.employee.full_name}}</b></span>
+                </td>
+            {% else %}
+                <td valign="top" style="height:60px;width:50px">
+                    <a href="http://{{site}}/#/employees/{{comment.associated_object.id}}"><img style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;" src="http://{{site}}{{comment.associated_object.avatar}}"/></a>
+                </td>
+                <td valign="top">
+                    <a href="http://{{site}}/#/employees/{{comment.associated_object.id}}">{{comment.associated_object.full_name}}</a>
+                    <br/>
+                    <span style="font-size:14px;">{{comment.content|truncatechars:140}}</span>
+                    <a href="http://{{site}}/#/employees/{{comment.associated_object.id}}">more</a>
+                    <span style="font-size:14px;color:#AA9C84"><b>from {{comment.owner.employee.full_name}}</b></span>
+                </td>
+            {% endif %}
+        </font>
+        </tr>
+    {% empty %}
+        No Discussions
+    {% endfor %}
+        </tbody>
+    </table>
+    <br />
+    <strong>To-dos</strong>
+    <br/>
+    <br/>
+    <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;border-spacing:0;width:100%;text-align:justify;margin:0;padding:0;border-width:0;">
+        <tbody>
+
+        {% for todo in todos %}
+            <tr>
+            <font face="Helvetica Neue,helvetica,arial,sans-serif" size="2">
+                <td valign="top" style="height:60px;width:60px">
+                    <a href="http://{{site}}/#/employees/{{todo.employee.id}}"><img style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;" src="http://{{site}}{{todo.employee.avatar}}"/></a>
+                </td>
+                <td valign="top">
+                    <a href="http://{{site}}/#/employees/{{todo.employee.id}}">{{todo.employee.full_name}}</a>
+                    <br/>
+                    <span style="font-size:14px;">{{todo.description|truncatechars:140}}</span>
+                    <a href="http://{{site}}/#/employees/{{todo.employee.id}}">more</a>
+                    <span style="font-size:14px;color:#AA9C84"><b>created by {{todo.created_by.full_name}}</b></span>
+                </td>
+            </font>
+           </tr>
+        {% empty %}
+            No To-dos
+        {% endfor %}
+
+        </tbody>
+    </table>
+    </body>
+</html>

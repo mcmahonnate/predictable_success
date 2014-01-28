@@ -1,0 +1,28 @@
+Daily Recap {{date}}
+
+Discussions
+--------------------
+{% for comment in comments %}
+{% if comment.content_type == comment_type %}
+{{comment.associated_object.associated_object.full_name}}
+{{comment.content}} --{{comment.owner.employee.full_name}}
+http://{{site}}/#/employees/{{comment.associated_object.associated_object.id}}
+{% else %}
+{{comment.associated_object.full_name}}
+{{comment.content}} --{{comment.owner.employee.full_name}}
+http://{{site}}/#/employees/{{comment.associated_object.id}}
+{% endif %}
+{% empty %}
+No Discussions
+{% endfor %}
+
+To-dos
+--------------------
+{% for todo in todos %}
+{{todo.employee.full_name}}
+{{todo.description|truncatechars:140}} --created by {{todo.created_by.full_name}}
+http://{{site}}/#/employees/{{todo.employee.id}}
+
+{% empty %}
+No To-dos
+{% endfor %}
