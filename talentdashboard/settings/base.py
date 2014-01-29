@@ -155,7 +155,8 @@ LOGIN_EXEMPT_URLS = (
     r'api/v1/user-status/',
     r'^forgot-password/$',
     r'^accounts/password/reset/$',
-    r'^accounts/password/reset/done/$'
+    r'^accounts/password/reset/done/$',
+    r'^media/(?P<path>.*)$'
 )
 
 def get_cache():
