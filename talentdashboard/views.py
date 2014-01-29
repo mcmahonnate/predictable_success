@@ -111,7 +111,7 @@ class SubCommentList(APIView):
     def get(self, request, pk, format=None):
         comment_type = ContentType.objects.get(model="comment")
         comments = Comment.objects.filter(object_id = pk)
-        comments = comments.filter(content_type = comment_type)
+        comments = comments.filter(content_type=comment_type)
         comments = comments.extra(order_by = ['-created_date'])
         serializer = SubCommentSerializer(comments, many=True)
         return Response(serializer.data)
@@ -119,9 +119,11 @@ class SubCommentList(APIView):
 class EmployeeCommentList(APIView):
     def get(self, request, pk, format=None):
         employee = Employee.objects.get(id = pk)
+        employee_type = ContentType.objects.get(model="employee")
         if employee is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
         comments = Comment.objects.filter(object_id = pk)
+        comments = comments.exclude(object_id=employee.id,content_type=employee_type)
         comments = comments.extra(order_by = ['-created_date'])
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
@@ -148,8 +150,10 @@ class EmployeeCommentList(APIView):
 
 class CommentList(APIView):
     def get(self, request, format=None):
+        employee = Employee.objects.get(user__id = request.user.id)
         employee_type = ContentType.objects.get(model='employee')
         comments = Comment.objects.filter(content_type = employee_type)
+        comments = comments.exclude(object_id=employee.id)
         comments = comments.extra(order_by = ['-created_date'])[:25]
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)

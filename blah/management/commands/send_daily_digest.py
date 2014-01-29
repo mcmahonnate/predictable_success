@@ -14,32 +14,29 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         dt = datetime.now()
+        comment_type = ContentType.objects.get(model="comment")
+        employee_type = ContentType.objects.get(model="employee")
         start_dt = dt-timedelta(days=7)
-        comments = Comment.objects.filter(created_date__range=[start_dt,dt])
-        todos = Task.objects.filter(created_date__range=[start_dt,dt])
         plaintext = get_template('daily_digest_email.txt')
         htmly = get_template('daily_digest_email.html')
-        if comments.count > 0 or todos.count > 0:
-            recipients = User.objects.filter(groups__id=3)
-            recipient_list = []
-            if recipients is not None:
-                for recipient in recipients:
-                    self.stdout.write('appending:' + recipient.email)
-                    recipient_list += [recipient.email]
+        recipients = User.objects.filter(groups__id=3)
+        for recipient in recipients:
+            comments = Comment.objects.filter(created_date__range=[start_dt,dt])
+            comments = comments.exclude(object_id=recipient.employee.id, content_type=employee_type)
+            todos = Task.objects.filter(created_date__range=[start_dt,dt])
+            todos = todos.exclude(employee__id=recipient.employee.id)
+            if comments.count > 0 or todos.count > 0:
                 df = DateFormat(dt)
                 from_email = 'Dash<dash@dfrntlabs.com>'
                 subject = 'Daily Recap for ' +  df.format('l, d F')
                 site = get_current_site(None).domain
                 date = df.format('l, d F')
-                comment_type = ContentType.objects.get(model="comment")
-                data = Context({ 'date': date, 'comments': comments, 'todos': todos, 'site': site, 'comment_type': comment_type })
+                data = Context({ 'date': date, 'comments': comments, 'todos': todos, 'site': site, 'comment_type': comment_type, 'recipient': recipient})
                 text_content = plaintext.render(data)
                 html_content = htmly.render(data)
-                msg = EmailMultiAlternatives(subject, text_content, from_email, recipient_list)
+                msg = EmailMultiAlternatives(subject, text_content, from_email, [recipient.email])
                 msg.attach_alternative(html_content, "text/html")
                 msg.send()
                 self.stdout.write('Successfully sent Daily Digest.')
             else:
-                self.stdout.write('Daily Digest has no subscribers.')
-        else:
-            self.stdout.write('Daily Digest had no new comments to send.')
+                self.stdout.write('Daily Digest had no new comments to send.')
