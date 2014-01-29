@@ -14,20 +14,18 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         dt = datetime.now()
-        start_dt = dt-timedelta(days=1)
+        start_dt = dt-timedelta(days=7)
         comments = Comment.objects.filter(created_date__range=[start_dt,dt])
         todos = Task.objects.filter(created_date__range=[start_dt,dt])
         plaintext = get_template('daily_digest_email.txt')
         htmly = get_template('daily_digest_email.html')
         if comments.count > 0 or todos.count > 0:
             recipients = User.objects.filter(groups__id=3)
-            recipient_list = None
+            recipient_list = []
             if recipients is not None:
                 for recipient in recipients:
-                    if recipient_list is not None:
-                        recipient_list = recipient_list + recipient.email
-                    else:
-                        recipient_list = recipient.email
+                    self.stdout.write('appending:' + recipient.email)
+                    recipient_list += [recipient.email]
                 df = DateFormat(dt)
                 from_email = 'Dash<dash@dfrntlabs.com>'
                 subject = 'Daily Recap for ' +  df.format('l, d F')
@@ -37,7 +35,7 @@ class Command(BaseCommand):
                 data = Context({ 'date': date, 'comments': comments, 'todos': todos, 'site': site, 'comment_type': comment_type })
                 text_content = plaintext.render(data)
                 html_content = htmly.render(data)
-                msg = EmailMultiAlternatives(subject, text_content, from_email, [recipient_list])
+                msg = EmailMultiAlternatives(subject, text_content, from_email, recipient_list)
                 msg.attach_alternative(html_content, "text/html")
                 msg.send()
                 self.stdout.write('Successfully sent Daily Digest.')
