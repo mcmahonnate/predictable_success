@@ -428,13 +428,37 @@ angular.module('tdb.controllers', [])
     }
 }])
 
-.controller('EmployeeToDoCtrl', ['$scope', 'Employee', 'ToDo', 'EmployeeToDo', 'Coach', function($scope, Employee, ToDo, EmployeeToDo, Coach) {
+.controller('EmployeeToDoCtrl', ['$scope', '$window', 'Employee', 'ToDo', 'EmployeeToDo', 'Coach', function($scope, $window, Employee, ToDo, EmployeeToDo, Coach) {
     $scope.currentToDo = {due_date:null};
+    $scope.$window = $window;
     $scope.$watch('currentToDo.due_date', function(newVal, oldVal){
         if (newVal != oldVal) {
             $scope.saveToDo();
         }
     },true);
+    $scope.toggleAssigneeMenu = function () {
+        $scope.openAssigneeMenu = !$scope.openAssigneeMenu;
+        if ($scope.openAssigneeMenu ) {
+            $scope.$window.onclick = function (event) {
+                closeAssigneeWindow(event, $scope.toggleAssigneeMenu);
+            };
+        } else {
+            $scope.openAssigneeMenu  = false;
+            $scope.$window.onclick = null;
+            $scope.$apply(); //--> trigger digest cycle and make angular aware.
+        }
+    };
+    function closeAssigneeWindow(event, callbackOnClose) {
+        var clickedElement = event.target;
+        if (!clickedElement) return;
+
+        var elementClasses = clickedElement.classList;
+        var clickedOnAssigneeMenu = elementClasses.contains('assignee_menu');
+        if (!clickedOnAssigneeMenu) {
+            callbackOnClose();
+        }
+
+    }
     $scope.saveToDo = function() {
         $scope.currentToDo.edit = false;
         var assigned_to_id = null;
