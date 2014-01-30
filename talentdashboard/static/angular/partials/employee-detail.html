@@ -64,7 +64,7 @@
         </section>
       </div><!-- .widget-inner -->
     </article>
-    <article class="widget clock loaded" id="widget-8494" style="top: 570px; left: 0px; width: auto;">
+    <article class="widget clock loaded" id="widget-8494" ng-class="{'bio-position-restrict': currentUser.employee.id==employee.id, 'bio-position': currentUser.employee.id!=employee.id}" style="width: auto;">
       <div class="widget-inner large-screen" style="width: 315px;">
         <header class="no-reload">
           <h1 style="display:inline;">Bio</h1>
@@ -168,7 +168,7 @@
         </section>
       </div><!-- .widget-inner -->
     </article>
-    <article class="widget clock loaded" id="widget-8494" style="top: 285px; left: 0px; width: auto;">
+    <article ng-show="currentUser.employee.id!=employee.id" class="widget clock loaded" id="widget-8494" style="top: 285px; left: 0px; width: auto;">
       <div ng-controller="EmployeeToDoListCtrl" class="widget-inner large-screen" style="width:315px;min-height: 275px;">
         <header class="no-reload">
           <h1 style="display:inline;">To Do's</h1>
@@ -205,7 +205,7 @@
         </section>
       </div>
     </article>
-    <article class="widget clock loaded" id="widget-8494" style="top: 0px; left: 325px; width: auto;">
+    <article ng-show="currentUser.employee.id!=employee.id" class="widget clock loaded" id="widget-8494" style="top: 0px; left: 325px; width: auto;">
       <div ng-controller="EmployeePvpEvaluationsCtrl" class="widget-inner widget-size-1x1 large-screen">
         <header class="no-reload">
           <h1 style="display:inline;">PvP</h1>
@@ -269,7 +269,7 @@
       </div>
     </article>
 
-    <article class="widget google-analytics loaded" id="widget-14808658" style="top: 0px; left: 650px; width: auto;">
+    <article class="widget google-analytics loaded" id="widget-14808658" ng-class="{'compensation-position-restrict': currentUser.employee.id==employee.id, 'compensation-position': currentUser.employee.id!=employee.id}" style="width: auto;">
       <div class="widget-inner widget-size-1x1 large-screen">
         <header class="no-reload">
           <h1 style="display:inline;">Compensation</h1>
@@ -283,10 +283,10 @@
       </div><!-- .widget-inner -->
     </article>
 
-    <article class="widget clock loaded" id="widget-8494" style="top: 285px; left: 325px; width: auto;">
+    <article ng-show="currentUser.employee.id!=employee.id" class="widget clock loaded" id="widget-8494" style="top: 285px; left: 325px; width: auto;">
       <div ng-controller="EmployeeCommentsCtrl" class="widget-inner large-screen" style="width:640px;min-height: 309px;">
         <header class="no-reload">
-          <h1 style="display:inline;">Latest Buzz</h1>
+          <h1 style="display:inline;">Latest Buzz {{currentUser.employee.id}} {{employee.id}}</h1>
         </header>
         <section class="widget-body text-widget" style="padding: 10px;">
             <div style="display: block; float:left;width:480px;-webkit-border-radius: 2px;moz-border-radius: 3px;-ms-border-radius: 3px;-o-border-radius: 3px;border-radius: 3px;border: 1px solid #c1c1c1;margin:10px 15px;background-color:white;">
@@ -430,5 +430,20 @@
   }
   .compress {
       height: 15px;
+  }
+
+  .compensation-position {
+      top: 0px;
+      left: 650px;
+  }
+  .compensation-position-restrict {
+      top: 0px;
+      left: 325px;
+  }
+  .bio-position {
+    top: 570px; left: 0px;
+  }
+  .bio-position-restrict {
+    top: 285px; left: 0px;
   }
 </style>

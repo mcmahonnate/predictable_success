@@ -4,7 +4,11 @@ angular.module('tdb.controllers', [])
     $rootScope.$on("$routeChangeError", function() {
         window.location = '/login?next=' + $location.path();
     })
-    $rootScope.currentUser = User.get();
+   User.get(function(data) {
+            $rootScope.currentUser = data;
+           console.log($rootScope.currentUser.employee.id)
+       }
+   );
 }])
 
 .controller('EvaluationListCtrl', ['$scope', '$location', '$routeParams', 'PvpEvaluation', 'Team', 'analytics', function($scope, $location, $routeParams, PvpEvaluation, Team, analytics) {
@@ -80,7 +84,7 @@ angular.module('tdb.controllers', [])
 	}
 }])
 
-.controller('EmployeeDetailCtrl', ['$scope', '$location', '$routeParams', 'Employee', 'Mentorship', 'Leadership', 'Attribute', 'CompSummary', '$http', 'analytics', function($scope, $location, $routeParams, Employee, Mentorship, Leadership, Attribute, CompSummary, $http, analytics) {
+.controller('EmployeeDetailCtrl', ['$scope', '$location', '$routeParams', 'User', 'Employee', 'Mentorship', 'Leadership', 'Attribute', 'CompSummary', '$http', 'analytics', function($scope, $location, $routeParams, User, Employee, Mentorship, Leadership, Attribute, CompSummary, $http, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     Employee.get(
         {id: $routeParams.id},
