@@ -10,7 +10,14 @@ class Employee(models.Model):
 		upload_to="avatars/%Y/%m/%d",
         max_length=100,
         blank=True,
-    )    
+    )
+    avatar_small = models.ImageField(
+		upload_to="avatars/small/%Y/%m/%d",
+        max_length=100,
+        null=True,
+        blank=True,
+        default=None
+    )
     job_title = models.CharField(
         max_length=255,
         blank=True,
