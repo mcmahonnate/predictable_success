@@ -155,7 +155,7 @@ class CommentList(APIView):
         employee_type = ContentType.objects.get(model='employee')
         comments = Comment.objects.filter(content_type = employee_type)
         comments = comments.exclude(object_id=employee.id)
-        comments = comments.extra(order_by = ['-created_date'])[:25]
+        comments = comments.extra(order_by = ['-created_date'])[:15]
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
 
