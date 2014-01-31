@@ -21,12 +21,12 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
         return url
     class Meta:
         model = Employee
-        fields = ('id', 'full_name', 'avatar', 'job_title', 'hire_date', 'team', 'display')
+        fields = ('id', 'full_name', 'avatar', 'avatar_small', 'job_title', 'hire_date', 'team', 'display')
 
 class MinimalEmployeeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Employee
-        fields = ('id', 'full_name', 'display', 'avatar')
+        fields = ('id', 'full_name', 'display', 'avatar', 'avatar_small')
 
 class UserSerializer(serializers.ModelSerializer):
     employee = MinimalEmployeeSerializer()
