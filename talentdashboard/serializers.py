@@ -32,7 +32,7 @@ class UserSerializer(serializers.ModelSerializer):
     employee = MinimalEmployeeSerializer()
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'employee')
+        fields = ('id', 'username', 'first_name', 'last_name', 'employee', 'last_login')
 
 class SubCommentSerializer(serializers.HyperlinkedModelSerializer):
     owner = UserSerializer()

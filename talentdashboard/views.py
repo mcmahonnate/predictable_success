@@ -11,6 +11,7 @@ from pvp.salaryreports import get_salary_report_for_team, get_salary_report_for_
 from blah.models import Comment
 from todo.models import Task
 import datetime
+from django.contrib.auth.models import User
 from django.utils.log import getLogger
 from django.core.mail import send_mail
 from django.contrib.sites.models import get_current_site
@@ -21,6 +22,11 @@ logger = getLogger('talentdashboard')
 class EmployeeList(generics.ListAPIView):
     serializer_class = EmployeeSerializer
     queryset = Employee.objects.filter(display='t')
+
+class UserList(generics.ListAPIView):
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+    queryset = queryset.extra(order_by = ['-last_login'])
 
 class CoachList(generics.ListAPIView):
     serializer_class = EmployeeSerializer
