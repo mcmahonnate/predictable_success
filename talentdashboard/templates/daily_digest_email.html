@@ -15,25 +15,25 @@
             {% if comment.content_type == comment_type %}
                 {% if comment.associated_object.object_id != recipient.employee.id %}
                     <td valign="top" style="height:80px;width:60px">
-                        <a href="http://{{site}}/#/employees/{{comment.associated_object.associated_object.id}}"><img height="48" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;" src="http://{{site}}{{comment.associated_object.associated_object.avatar_small}}"/></a>
+                        <a href="http://{{site}}/#/discussions/{{comment.object_id}}"><img height="48" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;" src="http://{{site}}{{comment.associated_object.associated_object.avatar_small}}"/></a>
                     </td>
                     <td valign="top">
-                        <a href="http://{{site}}/#/employees/{{comment.associated_object.associated_object.id}}">{{comment.associated_object.associated_object.full_name}}</a>
+                        <a href="http://{{site}}/#/discussions/{{comment.object_id}">{{comment.associated_object.associated_object.full_name}}</a>
                         <br/>
-                        <span style="font-size:14px;">{{comment.content|truncatechars:280}}</span>
-                        <a href="http://{{site}}/#/employees/{{comment.associated_object.associated_object.id}}">more</a>
+                        <span style="font-size:14px;">{{comment.content}}</span>
+                        <a href="http://{{site}}/#/discussions/{{comment.object_id}}">Go to discussion</a>
                         <span style="font-size:14px;color:#AA9C84"><b>from {{comment.owner.employee.full_name}}</b></span>
                     </td>
                 {% endif %}
             {% else %}
                 <td valign="top" style="height:80px;width:50px">
-                    <a href="http://{{site}}/#/employees/{{comment.associated_object.id}}"><img height="48" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;" src="http://{{site}}{{comment.associated_object.avatar_small}}"/></a>
+                    <a href="http://{{site}}/#/discussions/{{comment.id}}"><img height="48" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;" src="http://{{site}}{{comment.associated_object.avatar_small}}"/></a>
                 </td>
                 <td valign="top">
-                    <a href="http://{{site}}/#/employees/{{comment.associated_object.id}}">{{comment.associated_object.full_name}}</a>
+                    <a href="http://{{site}}/#/discussions/{{comment.id}}">{{comment.associated_object.full_name}}</a>
                     <br/>
-                    <span style="font-size:14px;">{{comment.content|truncatechars:280}}</span>
-                    <a href="http://{{site}}/#/employees/{{comment.associated_object.id}}">more</a>
+                    <span style="font-size:14px;">{{comment.content}}</span>
+                    <a href="http://{{site}}/#/employees/{{comment.associated_object.id}}">Go to discussion</a>
                     <span style="font-size:14px;color:#AA9C84"><b>from {{comment.owner.employee.full_name}}</b></span>
                 </td>
             {% endif %}
@@ -60,8 +60,8 @@
                 <td valign="top">
                     <a href="http://{{site}}/#/employees/{{todo.employee.id}}">{{todo.employee.full_name}}</a>
                     <br/>
-                    <span style="font-size:14px;">{{todo.description|truncatechars:140}}</span>
-                    <a href="http://{{site}}/#/employees/{{todo.employee.id}}">more</a>
+                    <span style="font-size:14px;">{{todo.description}}</span>
+                    <a href="http://{{site}}/#/employees/{{todo.employee.id}}">Go to to-do</a>
                     <span style="font-size:14px;color:#AA9C84"><b>created by {{todo.created_by.full_name}}</b></span>
                 </td>
             </font>

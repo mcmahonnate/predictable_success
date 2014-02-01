@@ -295,7 +295,7 @@
             <button class="comment" ng-click="addComment();expandTextArea=false">Comment</button>
             <div style="clear:both;"></div>
             <div ng-repeat="comment in comments | orderBy:'modified_date':true" style="margin:0 15px;padding:8px 0 8px 0px;display: block;width:580px">
-                <h2 ng-show="CreateHeader(comment.modified_date)" style="font-size: 14px;color: #8b8b8b;border-bottom: 2px solid #8b8b8b">{{comment.modified_date | date:'MMM d, yyyy'}}</h2>
+                <h2 ng-show="CreateHeader(comment.modified_date)" style="font-size: 14px;color: #8b8b8b;border-bottom: 2px solid #8b8b8b">{{comment.created_date | date:'MMM d, yyyy'}}</h2>
                 <div style="display: block;width:580px;min-height: 48px;">
                     <div style="display: block; float: left; width: 48px;">
                         <a ng-href="#/employees/{{comment.owner.employee.id}}" style="cursor: pointer;color:#8b8b8b;"><img ng-src="{{ comment.owner.employee.avatar_small }}" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;"/></a>
@@ -317,7 +317,7 @@
                                 <li ng-show="comment.owner.id==currentUser.id" class="feed-action"><a ng-click="showCommentEdit=true" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
                                 <li ng-show="comment.owner.id==currentUser.id" class="feed-action"><a ng-click="deleteComment(comment)" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></li>
                             </ul>
-                            <span style="color:#8b8b8b;">{{comment.modified_date | date:'MMM d, yyyy h:mma'}}</span>
+                            <span style="color:#8b8b8b;">{{comment.created_date | date:'MMM d, yyyy h:mma'}}</span>
                         </div>
                     </div>
                     <div style="clear:both;"></div>
@@ -343,7 +343,7 @@
                                             <li ng-show="subcomment.owner.id==currentUser.id" class="feed-action"><a ng-click="showSubCommentEdit=true" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
                                             <li ng-show="subcomment.owner.id==currentUser.id" class="feed-action"><a ng-click="deleteSubComment(comment, subcomment)" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></li>
                                         </ul>
-                                        <span style="color:#8b8b8b;">{{subcomment.modified_date | date:'MMM d, yyyy h:mma'}}</span>
+                                        <span style="color:#8b8b8b;">{{subcomment.created_date | date:'MMM d, yyyy h:mma'}}</span>
                                     </div>
                                 </div>
                             </div>

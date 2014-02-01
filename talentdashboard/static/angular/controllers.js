@@ -189,68 +189,89 @@ angular.module('tdb.controllers', [])
 .controller('DiscussionDetailCtrl', ['$scope', '$location', '$filter', '$routeParams', '$window', 'EmployeeComments', 'Employee', 'Comment', 'SubComments', 'User', 'analytics', function($scope, $location, $filter, $routeParams, $window, EmployeeComments, Employee, Comment, SubComments, User, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     $scope.commentId = $routeParams.id;
-    $scope.comment="";
-    $scope.employee="";
+    $scope.comment=[];
+    $scope.originalComment=[];
     $scope.comment.subcomments = [];
+    $scope.originalComment.subcomments = [];
+    $scope.employee=[];
 
     Comment.get({ id: $scope.commentId }).$then(function(response) {
         $scope.comment = response.data;
-        $scope.comment.newSubCommentText = "";
+        $scope.originalComment = angular.copy($scope.comment);
         SubComments.query({ id: $scope.comment.id }).$then(function(response) {
                 $scope.comment.subcomments = response.data;
+                $scope.originalComment.subcomments = angular.copy($scope.comment.subcomments);
             }
         );
+        $scope.comment.newSubCommentText = "";
         Employee.get(
             {id: $scope.comment.object_id},
             function(data) {
                 $scope.employee = data;
+                $scope.employeeId = $scope.employee.id;
             }
         );
     });
 
-    $scope.addSubComment = function() {
-        var newComment = {};
-        newComment.id = -1;
-        newComment.content = $scope.comment.newSubCommentText;
-        newComment.modified_date = new Date().toJSON();
-        newComment.owner = User.get();
+    $scope.saveComment = function(comment) {
+        var data = {id: comment.id, _content: comment.content};
 
-        $scope.comment.subcomments.push(newComment);
-
-        var data = {id: newComment.id, _model_name: "comment", _object_id: $scope.comment.id,_content: newComment.content};
-
-        data.id = $scope.employee.id;
-        EmployeeComments.save(data, function(response) {
-            newComment.id = response.id;
-            $scope.comment.newSubCommentText = "";
+        Comment.update(data, function() {
+            $scope.originalComment.content = comment.content;
         });
     }
 
-    $scope.deleteComment = function(comment_id, index) {
+    $scope.cancelEditComment = function(comment) {
+        comment.content = $scope.originalComment.content;
+    }
+
+     $scope.saveSubComment = function(subcomment, comment) {
+        var subcomment_index = comment.subcomments.indexOf(subcomment);
+        var data = {id: subcomment.id, _content: subcomment.content};
+
+        Comment.update(data, function() {
+            $scope.originalComment.subcomments[subcomment_index].content = subcomment.content;
+        });
+    }
+
+    $scope.cancelEditSubComment = function(subcomment, comment) {
+        var subcomment_index = comment.subcomments.indexOf(subcomment);
+        subcomment.content = $scope.originalComment.subcomments[subcomment_index].content;
+    }
+
+    $scope.addSubComment = function(comment) {
+        var newComment = {};
+        newComment.id = -1;
+        newComment.content = comment.newSubCommentText;
+        newComment.modified_date = new Date().toJSON();
+        newComment.owner = User.get();
+
+        comment.subcomments.push(newComment);
+        $scope.originalComment.subcomments.push(angular.copy(newComment));
+
+        var data = {id: newComment.id, _model_name: "comment", _object_id: comment.id,_content: newComment.content};
+
+        data.id = $scope.employeeId;
+        EmployeeComments.save(data, function(response) {
+            newComment.id = response.id;
+            comment.newSubCommentText = "";
+        });
+    }
+
+    $scope.deleteSubComment = function(comment, subcomment) {
         if ($window.confirm('Are you sure you want to delete this comment?')) {
-            var data = {id: comment_id};
+            var data = {id: subcomment.id};
+            var subcomment_index = comment.subcomments.indexOf(subcomment);
             var deleteSuccess = function() {
-                $location.path('/employees/' + $scope.employee.id);
+                comment.subcomments.splice(subcomment_index, 1);
+                $scope.originalComment.subcomments.splice(subcomment_index, 1);
             };
 
             Comment.remove(data, function() {
                     deleteSuccess();
                 });
         }
-    }
-
-    $scope.deleteSubComment = function(comment_id, index) {
-        if ($window.confirm('Are you sure you want to delete this comment?')) {
-            var data = {id: comment_id};
-            var deleteSuccess = function() {
-                $scope.comment.subcomments.splice(index, 1);
-            };
-
-            Comment.remove(data, function() {
-                    deleteSuccess();
-                });
-        }
-    }
+    };
 
 }])
 
