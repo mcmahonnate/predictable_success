@@ -19,7 +19,7 @@ class Command(BaseCommand):
         start_dt = dt-timedelta(days=2)
         plaintext = get_template('daily_digest_email.txt')
         htmly = get_template('daily_digest_email.html')
-        recipients = User.objects.filter(groups__id=3)
+        recipients = User.objects.filter(groups__id=1)
         for recipient in recipients:
             comments = Comment.objects.filter(created_date__range=[start_dt,dt])
             comments = comments.exclude(object_id=recipient.employee.id, content_type=employee_type)
