@@ -16,7 +16,7 @@ class Command(BaseCommand):
         dt = datetime.now()
         comment_type = ContentType.objects.get(model="comment")
         employee_type = ContentType.objects.get(model="employee")
-        start_dt = dt-timedelta(days=1)
+        start_dt = dt-timedelta(days=2)
         plaintext = get_template('daily_digest_email.txt')
         htmly = get_template('daily_digest_email.html')
         recipients = User.objects.filter(groups__id=3)
