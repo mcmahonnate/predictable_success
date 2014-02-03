@@ -482,7 +482,6 @@ angular.module('tdb.controllers', [])
         if (!clickedOnAssigneeMenu) {
             callbackOnClose();
         }
-
     }
     $scope.saveToDo = function() {
         $scope.currentToDo.edit = false;
