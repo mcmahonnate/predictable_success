@@ -16,10 +16,10 @@ class Command(BaseCommand):
         dt = datetime.now()
         comment_type = ContentType.objects.get(model="comment")
         employee_type = ContentType.objects.get(model="employee")
-        start_dt = dt-timedelta(days=2)
+        start_dt = dt-timedelta(days=1)
         plaintext = get_template('daily_digest_email.txt')
         htmly = get_template('daily_digest_email.html')
-        recipients = User.objects.filter(groups__id=1)
+        recipients = User.objects.filter(groups__id=3)
         for recipient in recipients:
             comments = Comment.objects.filter(created_date__range=[start_dt,dt])
             comments = comments.exclude(object_id=recipient.employee.id, content_type=employee_type)
