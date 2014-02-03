@@ -451,6 +451,12 @@ angular.module('tdb.controllers', [])
                 });
         }
     }
+    $scope.scrubToDo = function(todo) {
+        if (!todo.description) {
+            var todo_index = $scope.todos.indexOf(todo);
+            $scope.todos.splice(todo_index, 1);
+        }
+    }
 }])
 
 .controller('EmployeeToDoCtrl', ['$scope', '$window', 'Employee', 'ToDo', 'EmployeeToDo', 'Coach', function($scope, $window, Employee, ToDo, EmployeeToDo, Coach) {
@@ -502,10 +508,14 @@ angular.module('tdb.controllers', [])
         if ($scope.currentToDo.id != -1) {
             ToDo.update(data);
         } else {
-            data.id = $scope.currentToDo.employee_id;
-            EmployeeToDo.addNew(data, function(response) {
-                $scope.currentToDo.id = response.id;
-            });
+            if ($scope.currentToDo.description) {
+                data.id = $scope.currentToDo.employee_id;
+                EmployeeToDo.addNew(data, function(response) {
+                    $scope.currentToDo.id = response.id;
+                });
+            } else {
+
+            }
         }
     }
     $scope.assigneeMenu = {show: false};
