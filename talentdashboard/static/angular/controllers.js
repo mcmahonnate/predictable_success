@@ -479,6 +479,10 @@ angular.module('tdb.controllers', [])
             $scope.$apply(); //--> trigger digest cycle and make angular aware.
         }
     };
+    $scope.closeAssigneeMenu = function() {
+        $scope.openAssigneeMenu  = false;
+        $scope.$window.onclick = null;
+    };
     function closeAssigneeWindow(event, callbackOnClose) {
         var clickedElement = event.target;
         if (!clickedElement) return;
@@ -551,9 +555,14 @@ angular.module('tdb.controllers', [])
     $scope.toggleMin();
 
     $scope.open = function($event) {
-        $event.preventDefault();
-        $event.stopPropagation();
-        $scope.opened = true;
+        if (!$scope.opened) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.opened = true;
+        } else {
+            $scope.opened = false;
+        }
+
     };
 
     $scope.dateOptions = {

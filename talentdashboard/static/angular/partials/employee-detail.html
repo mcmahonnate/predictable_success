@@ -184,17 +184,17 @@
                     <ul class="feed-actions" style="margin-left: 2px;margin-top:0px;">
                         <li ng-show="!todo.assigned_to" class="feed-action"><a class="assignee_menu" ng-click="toggleAssigneeMenu()" style="color: #8b8b8b;cursor: pointer;">Unassigned</a></li>
                         <li ng-show="todo.assigned_to" class="feed-action"><a class="assignee_menu" ng-click="toggleAssigneeMenu()" style="color: #8b8b8b;cursor: pointer;">{{todo.assigned_to.full_name}}</a></li>
-                        <li ng-show="!todo.due_date" class="feed-action"><a ng-click="open($event)" style="color: #8b8b8b;cursor: pointer;">No due date</a></li>
-                        <li ng-show="todo.due_date" class="feed-action"><a ng-click="open($event)" style="color: #8b8b8b;cursor: pointer;" ng-bind="todo.due_date| date:'MMM d, yyyy'"></a></li>
+                        <li ng-show="!todo.due_date" class="feed-action"><a ng-click="open($event);closeAssigneeMenu()" style="color: #8b8b8b;cursor: pointer;">No due date</a></li>
+                        <li ng-show="todo.due_date" class="feed-action"><a ng-click="open($event);closeAssigneeMenu()" style="color: #8b8b8b;cursor: pointer;" ng-bind="todo.due_date| date:'MMM d, yyyy'"></a></li>
                         <li class="feed-action"><a ng-click="todo.edit = !todo.edit" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
                         <span style="color:#8b8b8b;"><a ng-click="deleteToDo(todo)" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></span>
                     </ul>
                     <span type="text" class="form-control" datepicker-popup="{{format}}" ng-model="todo.due_date" is-open="opened" min="minDate" datepicker-options="" date-disabled="disabled(date, mode)" show-weeks="false" ng-required="true" close-text="Close"/>
                     <div style="clear:both;"></div>
-                    <div ng-show="openAssigneeMenu" style="border: 1px solid #ccc;padding: 5px 3px;border-radius: 4px;background-color:#272727;">
+                    <div ng-show="openAssigneeMenu" style="border: 1px solid #ccc;padding: 5px 3px;border-radius: 4px;background-color:#272727;margin-bottom:10px;">
                            <div class="assignee-arrow-border"></div>
                            <div class="assignee-arrow"></div>
-                            <ul>
+                            <ul style="margin-top: -30px;">
                                 <li class="assignee-select"><a class="assignee-select-link" ng-click="assigneeMenu.show=false;todo.assigned_to=null;saveToDo()">Unassigned</a></li>
                                 <li class="assignee-select" ng-repeat="assignee in assignees | orderBy:'full_name'">
                                     <a class="assignee-select-link" ng-click="assigneeMenu.show=false;todo.assigned_to=assignee;saveToDo()" style="cursor: pointer;">{{assignee.full_name}}</a>
@@ -454,9 +454,9 @@
        border-width: 9px;
        height:0;
        width:0;
-       position:absolute;
-       left:45px;
-       margin-top: -23px;
+       position:relative;
+       left:30px;
+       top: -22px;
   }
   .assignee-arrow {
        border-color: transparent transparent #272727 transparent;
@@ -464,9 +464,9 @@
        border-width: 9px;
        height:0;
        width:0;
-       position:absolute;
-       left:45px;
-       margin-top: -21px;
+       position:relative;
+       left:30px;
+       top: -37px;
   }
   .calendar-arrow-border {
        border-color: transparent transparent #ccc transparent;
@@ -474,9 +474,9 @@
        border-width: 9px;
        height:0;
        width:0;
-       position:absolute;
-       left:140px;
-       margin-top: -23px;
+       position:relative;
+       left:120px;
+       top: -22px;
   }
   .calendar-arrow {
        border-color: transparent transparent #272727 transparent;
@@ -484,8 +484,8 @@
        border-width: 9px;
        height:0;
        width:0;
-       position:absolute;
-       left:140px;
-       -margintop: -21px;
+       position:relative;
+       left:120px;
+       top: -37px;
   }
 </style>

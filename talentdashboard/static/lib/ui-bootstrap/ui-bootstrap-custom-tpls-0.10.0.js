@@ -1050,10 +1050,10 @@ angular.module("template/datepicker/datepicker.html", []).run(["$templateCache",
 
 angular.module("template/datepicker/popup.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("template/datepicker/popup.html",
-    "<ul class=\"dropdown-menu\" ng-style=\"{display: (isOpen && 'block') || 'none', top: position.top+'px', left: position.left+'px'}\">\n" +
+    "<ul class=\"dropdown-menu\" style=\"margin-bottom: 10px\" ng-style=\"{display: (isOpen && 'block') || 'none', top: position.top+'px', left: position.left+'px'}\">\n" +
     "   <div class=\"calendar-arrow-border\"></div>\n" +
     "   <div class=\"calendar-arrow\"></div>\n" +
-    "	<li ng-transclude></li>\n" +
+    "	<li ng-transclude style=\"margin-top: -30px;\"></li>\n" +
     "	<li ng-show=\"showButtonBar\" style=\"padding:10px 9px 2px\">\n" +
     "		<span class=\"btn-group\">\n" +
     "			<button type=\"button\" class=\"btn btn-sm btn-info\" ng-click=\"today()\">{{currentText}}</button>\n" +
