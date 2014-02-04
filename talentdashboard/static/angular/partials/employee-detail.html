@@ -168,7 +168,7 @@
         </section>
       </div><!-- .widget-inner -->
     </article>
-    <article ng-show="currentUser.employee.id!=employee.id" class="widget clock loaded" id="widget-8494" style="top: 285px; left: 0px; width: auto;">
+    <article ng-show="currentUser.employee.id!=employee.id" class="widget clock loaded" id="widget-8494" style="top: 602px; left: 0px; width: auto;">
       <div ng-controller="EmployeeToDoListCtrl" class="widget-inner large-screen" style="width:315px;min-height: 275px;">
         <header class="no-reload">
           <h1 style="display:inline;">To Do's</h1>
@@ -176,12 +176,12 @@
         <section class="widget-body text-widget" style="padding:12px">
             <div ng-if="todos.length > 0">
                 <div ng-repeat="todo in todos" ng-controller="EmployeeToDoCtrl" ng-init="currentToDo=todo">
-                    <input type="checkbox" ng-click="saveToDo(todo)" ng-model="todo.completed" style="padding: 5px;float: left;margin-top: 5px;">
+                    <input type="checkbox" ng-click="saveToDo(todo)" ng-model="todo.completed" style="padding: 5px;float: left;">
 
                     <textarea ng-model="todo.description" ng-enter="saveToDo();scrubToDo(todo);" ng-blur="saveToDo();scrubToDo(todo);" focus-me="todo.edit" ng-show="todo.edit"  placeholder="Add a To Do..." style="position: relative; width: 265px; height: 13px;background-color:#2a2a2a;color:#eee;resize:none;font-size: 13px;">
                     </textarea>
                     <div ng-show="!todo.edit" ng-class="{'todo-completed': todo.completed}" style="display:inline-block;width: 260px;float:left;margin-top: 3px;margin-left: 2px;padding-bottom: 3px;">{{todo.description}}</div>
-                    <ul class="feed-actions" style="margin-left: 22px;margin-top:0px;">
+                    <ul class="feed-actions" style="margin-left: 2px;margin-top:0px;">
                         <li ng-show="!todo.assigned_to" class="feed-action"><a class="assignee_menu" ng-click="toggleAssigneeMenu()" style="color: #8b8b8b;cursor: pointer;">Unassigned</a></li>
                         <li ng-show="todo.assigned_to" class="feed-action"><a class="assignee_menu" ng-click="toggleAssigneeMenu()" style="color: #8b8b8b;cursor: pointer;">{{todo.assigned_to.full_name}}</a></li>
                         <li ng-show="!todo.due_date" class="feed-action"><a ng-click="open($event)" style="color: #8b8b8b;cursor: pointer;">No due date</a></li>
@@ -191,7 +191,9 @@
                     </ul>
                     <span type="text" class="form-control" datepicker-popup="{{format}}" ng-model="todo.due_date" is-open="opened" min="minDate" datepicker-options="" date-disabled="disabled(date, mode)" show-weeks="false" ng-required="true" close-text="Close"/>
                     <div style="clear:both;"></div>
-                    <div ng-show="openAssigneeMenu" style="border: 1px solid #ccc;padding: 8px 3px;border-radius: 4px;background-color:#272727;">
+                    <div ng-show="openAssigneeMenu" style="border: 1px solid #ccc;padding: 5px 3px;border-radius: 4px;background-color:#272727;">
+                           <div class="assignee-arrow-border"></div>
+                           <div class="assignee-arrow"></div>
                             <ul>
                                 <li class="assignee-select"><a class="assignee-select-link" ng-click="assigneeMenu.show=false;todo.assigned_to=null;saveToDo()">Unassigned</a></li>
                                 <li class="assignee-select" ng-repeat="assignee in assignees | orderBy:'full_name'">
@@ -441,9 +443,49 @@
       left: 325px;
   }
   .bio-position {
-    top: 570px; left: 0px;
+    top: 285px; left: 0px;
   }
   .bio-position-restrict {
     top: 285px; left: 0px;
+  }
+  .assignee-arrow-border {
+       border-color: transparent transparent #ccc transparent;
+       border-style: solid;
+       border-width: 9px;
+       height:0;
+       width:0;
+       position:absolute;
+       left:45px;
+       margin-top: -23px;
+  }
+  .assignee-arrow {
+       border-color: transparent transparent #272727 transparent;
+       border-style: solid;
+       border-width: 9px;
+       height:0;
+       width:0;
+       position:absolute;
+       left:45px;
+       margin-top: -21px;
+  }
+  .calendar-arrow-border {
+       border-color: transparent transparent #ccc transparent;
+       border-style: solid;
+       border-width: 9px;
+       height:0;
+       width:0;
+       position:absolute;
+       left:140px;
+       margin-top: -23px;
+  }
+  .calendar-arrow {
+       border-color: transparent transparent #272727 transparent;
+       border-style: solid;
+       border-width: 9px;
+       height:0;
+       width:0;
+       position:absolute;
+       left:140px;
+       -margintop: -21px;
   }
 </style>
