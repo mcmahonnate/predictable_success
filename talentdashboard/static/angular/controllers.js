@@ -59,7 +59,8 @@ angular.module('tdb.controllers', [])
     $scope.teamLeads = TeamLeads.getCurrentEvaluationsForTeamLeads($scope.team_id)
 }])
 
-.controller('EmployeeListCtrl', ['$scope', 'Employee', function($scope, Employee) {
+.controller('EmployeeListCtrl', ['$scope', '$window', 'Employee', function($scope, $window, Employee) {
+    $scope.$window = $window;
     $scope.employees = Employee.query();
 	$scope.employeeMenu = {show: false};
 	$scope.teamMenu = {show: false};
@@ -70,6 +71,76 @@ angular.module('tdb.controllers', [])
 		}
 		return true;
 	}
+    $scope.toggleEmployeeMenu = function () {
+        $scope.openEmployeeMenu = !$scope.openEmployeeMenu;
+        if ($scope.openEmployeeMenu ) {
+            $scope.openTeamMenu = false;
+            $scope.openSettingsMenu  = false;
+            $scope.$window.onclick = function (event) {
+                closeEmployeeMenu(event, $scope.toggleEmployeeMenu);
+            };
+        } else {
+            $scope.openEmployeeMenu  = false;
+            $scope.$window.onclick = null;
+            $scope.$apply(); //--> trigger digest cycle and make angular aware.
+        }
+    };
+    function closeEmployeeMenu(event, callbackOnClose) {
+        var clickedElement = event.target;
+        if (!clickedElement) return;
+        var elementClasses = clickedElement.classList;
+        var clickedOnEmployeeMenu = elementClasses.contains('employee_menu');
+        if (!clickedOnEmployeeMenu) {
+            callbackOnClose();
+        }
+    }
+    $scope.toggleTeamMenu = function () {
+        $scope.openTeamMenu = !$scope.openTeamMenu;
+        if ($scope.openTeamMenu ) {
+            $scope.openEmployeeMenu  = false;
+            $scope.openSettingsMenu  = false;
+            $scope.$window.onclick = function (event) {
+                closeTeamMenu(event, $scope.toggleTeamMenu);
+            };
+        } else {
+            $scope.openTeamMenu  = false;
+            $scope.$window.onclick = null;
+            $scope.$apply(); //--> trigger digest cycle and make angular aware.
+        }
+    };
+    function closeTeamMenu(event, callbackOnClose) {
+        var clickedElement = event.target;
+        if (!clickedElement) return;
+        var elementClasses = clickedElement.classList;
+        var clickedOnTeamMenu = elementClasses.contains('team_menu');
+        if (!clickedOnTeamMenu) {
+            callbackOnClose();
+        }
+    }
+    $scope.toggleSettingsMenu = function () {
+        $scope.openSettingsMenu = !$scope.openSettingsMenu;
+        if ($scope.openSettingsMenu ) {
+            $scope.openEmployeeMenu  = false;
+            $scope.openTeamMenu  = false;
+            $scope.$window.onclick = function (event) {
+                closeSettingsMenu(event, $scope.toggleSettingsMenu);
+            };
+        } else {
+            $scope.openSettingsMenu  = false;
+            $scope.$window.onclick = null;
+            $scope.$apply(); //--> trigger digest cycle and make angular aware.
+        }
+    };
+    function closeSettingsMenu(event, callbackOnClose) {
+        var clickedElement = event.target;
+        if (!clickedElement) return;
+        console.log(clickedElement);
+        var elementClasses = clickedElement.classList;
+        var clickedOnSettingsMenu = elementClasses.contains('settings_menu');
+        if (!clickedOnSettingsMenu) {
+            callbackOnClose();
+        }
+    }
 }])
 
 .controller('TeamListCtrl', ['$scope', 'Team', function($scope, Team) {

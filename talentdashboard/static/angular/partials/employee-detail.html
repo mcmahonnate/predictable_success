@@ -6,11 +6,11 @@
 			<div style="display: block; color: #cbcbcb; font-weight: 700; padding: 12px 36px 10px 12px;font-size: 16px; width:150px; float:left">
 				<a href="/" style="color:#fff;">The Motley Fool</a>
 			</div>
-			<div class="btn" ng-mouseover="settingsMenu.show=true" ng-mouseleave="settingsMenu.show=false" id="switch-dashboard" style="float:right;width:55px;">
-			  <span id="selected-dashboard-title" style="font-weight: 700; color: white;padding:0px;">
-                <img src="/static/css/settings.png"style="width:35px;margin-left:3px;margin-top:3px;margin-bottom:-3px;"/>
+			<div class="btn" id="switch-dashboard" style="float:right;width:55px;">
+			  <span class="settings_menu" id="selected-dashboard-title" ng-click="toggleSettingsMenu()" style="font-weight: 700; color: white;padding:0px;">
+                <img class="settings_menu" src="/static/css/settings.png"style="width:35px;margin-left:3px;margin-top:3px;margin-bottom:-3px;"/>
               </span>            
-                <div id="selection-list" ng-show="settingsMenu.show" style="display: none;width:100px">
+                <div id="selection-list" ng-show="openSettingsMenu" style="display: none;width:100px">
                     <ul>
                         <li>
                             <a class="dashboard" href="/logout" style="font-weight:800;">Sign Out</a>
@@ -18,28 +18,28 @@
                     </ul>
                 </div>
             </div>			
-			<div class="btn" ng-mouseover="employeeMenu.show=true" ng-mouseleave="employeeMenu.show=false" id="switch-dashboard" style="float:right">
-			  <span id="selected-dashboard-title" style="font-weight: 700; color: white;">People</span>
-			  <div id="selection-list" ng-show="employeeMenu.show" style="display: none;">
+			<div class="btn" id="switch-dashboard" style="float:right">
+			  <span class="employee_menu" ng-click="toggleEmployeeMenu()" id="selected-dashboard-title" style="font-weight: 700; color: white;">People</span>
+			  <div id="selection-list" ng-show="openEmployeeMenu" style="display: none;">
 				<ul>
 					<li>
-						<input class="search-input" ng-model="employeeQuery" type="text" placeholder="Search"/>
+						<input class="search-input employee_menu" ng-model="employeeQuery" type="text" placeholder="Search"/>
 					</li>
 					<li ng-repeat="employee in employees | filter:{full_name:employeeQuery}:startsWith | orderBy:'full_name'">
-						<a class="dashboard" ng-click="employeeMenu.show = false;" style="font-weight:800;" href="#/employees/{{employee.id}}">{{employee.full_name}}</a>
+						<a class="dashboard" style="font-weight:800;" href="#/employees/{{employee.id}}">{{employee.full_name}}</a>
 					</li>
 				</ul>
 			  </div>
 			</div>
-			<div ng-controller="TeamListCtrl" class="btn" ng-mouseover="teamMenu.show=true;" ng-mouseleave="teamMenu.show=false" id="switch-dashboard" style="float:right">
-			  <span id="selected-dashboard-title" style="font-weight: 700; color: white;">Teams</span>
-			  <div id="selection-list" ng-show="teamMenu.show" style="display: none;">
+			<div ng-controller="TeamListCtrl" class="btn"  id="switch-dashboard" style="float:right">
+			  <span class="team_menu" id="selected-dashboard-title" ng-click="toggleTeamMenu()" style="font-weight: 700; color: white;">Teams</span>
+			  <div id="selection-list" ng-show="openTeamMenu" style="display: none;">
 				<ul>
 					<li>
-						<input class="search-input" type="text" ng-model="teamQuery" placeholder="Search"/>
+						<input class="search-input team_menu" type="text" ng-model="teamQuery" placeholder="Search"/>
 					</li>
 					<li ng-repeat="team in teams | filter:{name:teamQuery}:startsWith | orderBy:'name'">
-						<a class="dashboard" ng-click="teamMenu.show = false;" style="font-weight:800;" href="#/teams/{{team.id}}">{{team.name}}</a>
+						<a class="dashboard" style="font-weight:800;" href="#/teams/{{team.id}}">{{team.name}}</a>
 					</li>
 				</ul>		  
 			  </div>
