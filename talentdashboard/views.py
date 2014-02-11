@@ -10,6 +10,7 @@ from pvp.talentreports import get_talent_category_report_for_all_employees, get_
 from pvp.salaryreports import get_salary_report_for_team, get_salary_report_for_all_employees
 from blah.models import Comment
 from todo.models import Task
+from engagement.models import Happiness
 import datetime
 from django.contrib.auth.models import User
 from django.utils.log import getLogger
@@ -282,6 +283,16 @@ class EmployeeTaskList(APIView):
             task.due_date = due_date
         task.save()
         serializer = TaskSerializer(task)
+        return Response(serializer.data)
+
+class EmployeeEngagement(APIView):
+    def get(self, request, pk, format=None):
+        employee = Employee.objects.get(id = pk)
+        if employee is None:
+            return Response(None, status=status.HTTP_404_NOT_FOUND)
+        happys = Happiness.objects.filter(employee__id = pk)
+        happys = happys.extra(order_by = ['-assessed_date'])
+        serializer = HappinessSerializer(happys, many=True)
         return Response(serializer.data)
 
 @api_view(['GET'])

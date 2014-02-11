@@ -4,6 +4,7 @@ from org.models import Employee, Team, Mentorship, Leadership, Attribute, Attrib
 from todo.models import Task
 from comp.models import CompensationSummary
 from blah.models import Comment
+from engagement.models import Happiness
 from django.contrib.auth.models import User
 
 class TeamSerializer(serializers.HyperlinkedModelSerializer):
@@ -56,6 +57,18 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Task
         fields = ('id', 'description', 'assigned_to', 'assigned_by', 'created_by', 'employee', 'created_date', 'due_date', 'completed')
+
+class HappinessSerializer(serializers.HyperlinkedModelSerializer):
+    assessed_by = MinimalEmployeeSerializer()
+    employee = MinimalEmployeeSerializer()
+    assessment_verbose = serializers.SerializerMethodField('get_assessment_verbose')
+
+    def get_assessment_verbose(self, obj):
+        return obj.assessment_verbose
+
+    class Meta:
+        model = Happiness
+        fields = ('id', 'employee', 'assessment', 'assessment_verbose', 'assessed_by', 'assessed_date')
 
 class EvaluationRoundSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
