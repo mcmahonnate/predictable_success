@@ -65,7 +65,7 @@
       </div><!-- .widget-inner -->
     </article>
     <article class="widget clock loaded" id="widget-8494" ng-class="{'bio-position-restrict': currentUser.employee.id==employee.id, 'bio-position': currentUser.employee.id!=employee.id}" style="width: auto;">
-      <div class="widget-inner large-screen" style="width: 315px;">
+      <div class="widget-inner widget-size-1x1 large-screen">
         <header class="no-reload">
           <h1 style="display:inline;">Bio</h1>
         </header>
@@ -99,21 +99,6 @@
 
               <li class="clear" style="padding-top:10px;padding-bottom:10px;">
                 <div class="t-secondary" style="min-width: 35%">
-                  Mentor
-                </div>
-
-                <div class="t-size-x14" id="mentor" style="min-width: 65%">
-					<span ng-if="mentorships.length == 0">--</span>
-					<ul ng-if="mentorships.length > 0">
-						<li ng-repeat="mentorship in mentorships">
-						  <a ng-if="mentorship.mentor.display" href="#/employees/{{mentorship.mentor.id}}">{{ mentorship.mentor.full_name }}</a>
-                          <span ng-if="!mentorship.mentor.display">{{ mentorship.mentor.full_name }}</span>
-						</li>
-					 </ul>
-				</div>
-              </li>
-              <li class="clear" style="padding-top:10px;padding-bottom:10px;">
-                <div class="t-secondary" style="min-width: 35%">
                   Super Power
                 </div>
 
@@ -122,24 +107,6 @@
 					<ul ng-if="super_powers.length > 0">
 						<li ng-repeat="super_power in super_powers">
 						  {{ super_power.name }}
-						</li>
-					 </ul>
-				</div>
-              </li>
-
-              <li class="clear" style="padding-top:10px;padding-bottom:10px;">
-                <div class="t-secondary" style="min-width: 35%">
-                  Passions
-                </div>
-
-                <div class="t-size-x12" style="min-width: 65%">
-					<span ng-if="passions.length == 0">--</span>
-					<ul ng-if="passions.length > 0">
-						<li>
-							<span ng-repeat="passion in passions | limitTo:4">
-							  <text ng-if="!$last">{{ passion.name }},</text>
-							  <text ng-if="$last">{{ passion.name }}</text>
-							</span>
 						</li>
 					 </ul>
 				</div>
@@ -163,12 +130,28 @@
 				</div>
               </li>
 
+              <li class="clear" style="padding-top:10px;padding-bottom:10px;">
+                <div class="t-secondary" style="min-width: 35%">
+                  Engagement
+                </div>
+
+                <div style="min-width: 65%">
+					<span ng-if="happys.length == 0">--</span>
+					<ul ng-if="happys.length > 0">
+						<li ng-repeat="happy in happys" class="t-size-x12" >
+                          <span style="display:inline-block; vertical-align:middle" class="t-size-x40" ng-class="{'veryhappy': happy.assessment==5,'happy': happy.assessment==4,'indifferent': happy.assessment==3,'unhappy': happy.assessment==2,'veryunhappy': happy.assessment==1}"></span>
+                          <span style="padding:5px; display:inline-block; vertical-align:middle">{{ happy.assessed_date | date:'MM/dd/yyyy'}}</span>
+						</li>
+					 </ul>
+				</div>
+              </li>
+
             </ol>
           </div>
         </section>
       </div><!-- .widget-inner -->
     </article>
-    <article ng-show="currentUser.employee.id!=employee.id" class="widget clock loaded" id="widget-8494" style="top: 602px; left: 0px; width: auto;">
+    <article ng-show="currentUser.employee.id!=employee.id" class="widget clock loaded" id="widget-8494" style="top: 570px; left: 0px; width: auto;">
       <div ng-controller="EmployeeToDoListCtrl" class="widget-inner large-screen" style="width:315px;min-height: 275px;">
         <header class="no-reload">
           <h1 style="display:inline;">To Do's</h1>

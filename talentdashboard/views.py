@@ -123,6 +123,29 @@ class SubCommentList(APIView):
         serializer = SubCommentSerializer(comments, many=True)
         return Response(serializer.data)
 
+class EmployeeEngagement(APIView):
+    def get(self, request, pk, format=None):
+        employee = Employee.objects.get(id = pk)
+        if employee is None:
+            return Response(None, status=status.HTTP_404_NOT_FOUND)
+        happys = Happiness.objects.filter(employee__id = pk)
+        happys = happys.extra(order_by = ['-assessed_date'])
+        serializer = HappinessSerializer(happys, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, pk, format=None):
+        employee = Employee.objects.get(id = pk)
+        assessed_by_id = request.DATA["_assessed_by_id"]
+        assessed_by = Employee.objects.get(id = assessed_by_id)
+        assessment = request.DATA["_assessment"]
+        happy = Happiness()
+        happy.employee = employee
+        happy.assessed_by = assessed_by
+        happy.assessment = assessment
+        happy.save()
+        serializer = HappinessSerializer(happy)
+        return Response(serializer.data)
+
 class EmployeeCommentList(APIView):
     def get(self, request, pk, format=None):
         employee = Employee.objects.get(id = pk)
@@ -283,16 +306,6 @@ class EmployeeTaskList(APIView):
             task.due_date = due_date
         task.save()
         serializer = TaskSerializer(task)
-        return Response(serializer.data)
-
-class EmployeeEngagement(APIView):
-    def get(self, request, pk, format=None):
-        employee = Employee.objects.get(id = pk)
-        if employee is None:
-            return Response(None, status=status.HTTP_404_NOT_FOUND)
-        happys = Happiness.objects.filter(employee__id = pk)
-        happys = happys.extra(order_by = ['-assessed_date'])
-        serializer = HappinessSerializer(happys, many=True)
         return Response(serializer.data)
 
 @api_view(['GET'])

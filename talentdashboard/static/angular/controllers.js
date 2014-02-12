@@ -155,7 +155,7 @@ angular.module('tdb.controllers', [])
 	}
 }])
 
-.controller('EmployeeDetailCtrl', ['$scope', '$location', '$routeParams', 'User', 'Employee', 'Mentorship', 'Leadership', 'Attribute', 'CompSummary', '$http', 'analytics', function($scope, $location, $routeParams, User, Employee, Mentorship, Leadership, Attribute, CompSummary, $http, analytics) {
+.controller('EmployeeDetailCtrl', ['$scope', '$location', '$routeParams', 'User', 'Employee', 'Engagement', 'Mentorship', 'Leadership', 'Attribute', 'CompSummary', '$http', 'analytics', function($scope, $location, $routeParams, User, Employee, Engagement, Mentorship, Leadership, Attribute, CompSummary, $http, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     Employee.get(
         {id: $routeParams.id},
@@ -173,6 +173,12 @@ angular.module('tdb.controllers', [])
     $scope.passions = Attribute.getAttributtesForEmployee($routeParams.id, 1);
     $scope.super_powers = Attribute.getAttributtesForEmployee($routeParams.id, 2);
 	$scope.skills = Attribute.getAttributtesForEmployee($routeParams.id, 3);
+    Engagement.query(
+        {id:$routeParams.id},
+        function(data) {
+            $scope.happys = data;
+        }
+    );
 }])
 
 .controller('LeaderDetailCtrl', ['$scope', '$location', '$routeParams', 'Employee', 'Leadership', 'TalentCategoryReport', '$http', 'analytics', function($scope, $location, $routeParams, Employee, Leadership, TalentCategoryReport, $http, analytics) {

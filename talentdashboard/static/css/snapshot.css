@@ -47,10 +47,6 @@ sub{top:0.5ex}
 .action:hover{background-color:#818181;border-color:#818181}
 .loading-overlay,.disabled-overlay{position:absolute;top:0;right:0;bottom:0;left:0;opacity:.85;z-index:2}
 .loading-overlay{background:center 40px no-repeat}
-.loading-overlay.light{background-color:#e8e8e8;background-image:url(//s3.amazonaws.com/gecko.assets/assets/loading-indicators/light-5eae1fd0bf814fc3b2f64a252f7c6cf1.gif)}
-.loading-overlay.modal{background-color:#e0e0e0;background-image:url(//s3.amazonaws.com/gecko.assets/assets/loading-indicators/modal-aa21fc0c16c59e1af99e4bea78f82870.gif)}
-.loading-overlay.dark{background-color:#3a3a3a;background-image:url(//s3.amazonaws.com/gecko.assets/assets/loading-indicators/dark-06c330e914c803e0d779feeef016e01f.gif)}
-.disabled-overlay{background:url(//s3.amazonaws.com/gecko.assets/assets/ie/transparency-159826b40b1462621594354f10604570.png) repeat}
 .error,.success{padding:20px 20px 20px 61px;color:white;position:relative;border-radius:3px;line-height:1.4;display:none}
 .success{background-color:#6db64c;padding-left:54px}
 .success:before{top:17px;left:16px;content:'';display:block;position:absolute;width:26px;height:26px;background-position:0 -2160px}
@@ -457,8 +453,7 @@ sub{top:0.5ex}
 .bulletchart-widget .widget-canvas .graph.horizontal .graph-bar{top:23px;height:14px}
 .bulletchart-widget .widget-canvas .graph.horizontal .graph-line{width:5px;height:34px;top:13px}
 .bulletchart-widget .widget-canvas .graph.horizontal .graph-scale{margin-right:-18px}
-.bulletchart-widget .widget-canvas .graph.horizontal .graph-scale ul{float:right}
-.bulletchart-widget .widget-canvas .graph.horizontal .graph-scale li{float:left;text-align:center;background:url(//s3.amazonaws.com/gecko.assets/assets/widgets/graph-scale-hor-f10bcd54fd8dd918570fa63f6d13bbaa.gif) no-repeat 50% 0;padding-top:10px}
+.bulletchart-widget .widget-canvas .graph.horizontal .graph-scale ul{float:right}.bulletchart-widget .widget-canvas .graph.horizontal .graph-scale li{float:left;text-align:center;background:url(//s3.amazonaws.com/gecko.assets/assets/widgets/graph-scale-hor-f10bcd54fd8dd918570fa63f6d13bbaa.gif) no-repeat 50% 0;padding-top:10px}
 .bulletchart-widget .widget-canvas .graph.horizontal .graph-scale .p-2{margin-right:-91px}
 .bulletchart-widget .widget-canvas .graph.horizontal .graph-scale .p-2 li{width:221px}
 .bulletchart-widget .widget-canvas .graph.horizontal .graph-scale .p-2 li:first-child{width:221px}
@@ -486,7 +481,6 @@ sub{top:0.5ex}
 .bulletchart-widget .widget-canvas .graph.vertical .graph-bar .graph-measure{width:14px;display:block;position:absolute;bottom:0}
 .bulletchart-widget .widget-canvas .graph.vertical .graph-line{width:34px;height:5px;left:13px}
 .bulletchart-widget .widget-canvas .graph.vertical .graph-scale{float:left;width:41px;margin-top:-8px}
-.bulletchart-widget .widget-canvas .graph.vertical .graph-scale li{background:url(//s3.amazonaws.com/gecko.assets/assets/widgets/graph-scale-ver-ab0ca02576195d4a95437fec5d0bdc58.gif) no-repeat 100% 8px;height:59px;padding-right:19px;text-align:right}
 .bulletchart-widget .widget-canvas .graph.vertical .graph-scale li:first-child{height:57px}
 .bulletchart-widget .widget-canvas .graph.vertical .graph-scale .p-2 li{height:20px}
 .bulletchart-widget .widget-canvas .graph.vertical .graph-scale .p-2 li:first-child{height:293px}
@@ -666,7 +660,6 @@ body{font-size:.875em;background-color:#101214}
 .dashboard-sized-el{margin:0 auto}
 #dashboard{position:relative;z-index:1;margin:10px auto}
 #dashboard-loading{border-radius:8px;background-color:#313131;padding:6px 12px;margin:350px auto;width:315px}
-#dashboard-loading p{background:url(//s3.amazonaws.com/gecko.assets/assets/dashboard-loading-dark-f84781af29289fb372dd2ce58bf8c06c.gif) left center no-repeat;color:#d3d4d4;padding:9px 0 8px 42px;margin:0;font-size:16px;line-height:1}
 .avatar{background-image: url(default.jpg);background-size:210px;background-repeat:no-repeat;background-position:center center;padding-bottom:15px;display:block;margin-left:auto;margin-right:auto;height: 210px;}
 .back-button{background-image: url(back.png);background-size:32px 32px;background-position:center center;background-repeat:no-repeat;width:32px;height:35px;padding-top:3px;display:block}
 g{ cursor: pointer;}
@@ -777,6 +770,42 @@ button.btn[disabled], fieldset[disabled] .btn {
     -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
     box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
 }
+@font-face {
+  font-family: 'Emoticons';
+  src: url('../fonts/emoticons.ttf');
+}
+
+.veryhappy:before {
+    font-family: 'Emoticons';
+    text-shadow: none;
+    color: #008000;
+    content: "\0041";
+}
+.happy:before {
+    font-family: 'Emoticons';
+    text-shadow: none;
+    color: #91fa00;
+    content: "\0044";
+}
+.indifferent:before {
+    font-family: 'Emoticons';
+    text-shadow: none;
+    color: #ffca00;
+    content: "\0043";
+}
+.unhappy:before {
+    font-family: 'Emoticons';
+    text-shadow: none;
+    color: #ff4600;
+    content: "\0028";
+}
+.veryunhappy:before {
+    font-family: 'Emoticons';
+    text-shadow: none;
+    color: #ff0000;
+    content: "\0057";
+}
+
 @font-face {
   font-family: 'Glyphicons Halflings';
   src: url('../fonts/glyphicons-halflings-regular.eot');
