@@ -1050,7 +1050,7 @@ angular.module("template/datepicker/datepicker.html", []).run(["$templateCache",
 
 angular.module("template/datepicker/popup.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("template/datepicker/popup.html",
-    "<ul class=\"dropdown-menu\" style=\"margin-bottom: 10px\" ng-style=\"{display: (isOpen && 'block') || 'none', top: position.top+'px', left: position.left+'px'}\">\n" +
+    "<ul ng-scroll-into-view-pop-up class=\"dropdown-menu\" style=\"margin-bottom: 10px\" ng-style=\"{display: (isOpen && 'block') || 'none', top: position.top+'px', left: position.left+'px'}\">\n" +
     "   <div class=\"calendar-arrow-border\"></div>\n" +
     "   <div class=\"calendar-arrow\"></div>\n" +
     "	<li ng-transclude style=\"margin-top: -30px;\"></li>\n" +

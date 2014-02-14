@@ -111,16 +111,14 @@
             <span ng-show="todos.length==0">You currently don't have any tasks.</span>
             <div ng-if="todos.length > 0">
                 <div ng-repeat="todo in todos" ng-controller="EmployeeToDoCtrl" ng-init="currentToDo=todo">
-                    <input type="checkbox" ng-click="saveToDo(todo)" ng-model="todo.completed" style="padding: 5px;float: left;">
+                    <input show="{{scrollIntoView}}" ng-scroll-into-view type="checkbox" ng-click="saveToDo(todo)" ng-model="todo.completed" style="padding: 5px;float: left;">
 
                     <textarea ng-model="todo.description" focus-me="todo.edit" ng-enter="saveToDo();scrubToDo(todo);" ng-blur="saveToDo();scrubToDo(todo);" ng-show="todo.edit"  placeholder="Add a To Do..." style="position: relative; width: 265px; height: 13px;background-color:#2a2a2a;color:#eee;resize:none;font-size: 13px;">
                     </textarea>
                     <div ng-show="!todo.edit" ng-class="{'todo-completed': todo.completed}" style="display:inline-block;width: 260px;float:left;margin-top: 3px;margin-left: 2px;padding-bottom: 3px;"><a ng-href="/#/employees/{{todo.employee.id}}">({{todo.employee.full_name}}) {{todo.description}}</a></div>
                     <ul class="feed-actions" style="margin-left: 2px;margin-top:0px;">
-                        <li ng-show="!todo.assigned_to" class="feed-action"><a class="assignee_menu" ng-click="toggleAssigneeMenu()" style="color: #8b8b8b;cursor: pointer;">Unassigned</a></li>
-                        <li ng-show="todo.assigned_to" class="feed-action"><a class="assignee_menu" ng-click="toggleAssigneeMenu()" style="color: #8b8b8b;cursor: pointer;">{{todo.assigned_to.full_name}}</a></li>
-                        <li ng-show="!todo.due_date" class="feed-action"><a ng-click="open($event);closeAssigneeMenu()" style="color: #8b8b8b;cursor: pointer;">No due date</a></li>
-                        <li ng-show="todo.due_date" class="feed-action"><a ng-click="open($event);closeAssigneeMenu()" style="color: #8b8b8b;cursor: pointer;" ng-bind="todo.due_date| date:'MMM d, yyyy'"></a></li>
+                        <li class="feed-action"><a class="assignee_menu" ng-click="toggleAssigneeMenu()" style="color: #8b8b8b;cursor: pointer;">{{todo.assigned_to.full_name||"Unassigned"}}</a></li>
+                        <li class="feed-action"><a ng-click="open($event);closeAssigneeMenu()" style="color: #8b8b8b;cursor: pointer;">{{(todo.due_date | date:'MMM d, yyyy') || "No due date"}}</a></li>
                         <li class="feed-action"><a ng-click="todo.edit = !todo.edit" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
                         <span style="color:#8b8b8b;"><a ng-click="deleteToDo(todo)" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></span>
                     </ul>

@@ -6,7 +6,6 @@ angular.module('tdb.controllers', [])
     })
    User.get(function(data) {
             $rootScope.currentUser = data;
-           console.log($rootScope.currentUser.employee.id)
        }
    );
 }])
@@ -134,7 +133,6 @@ angular.module('tdb.controllers', [])
     function closeSettingsMenu(event, callbackOnClose) {
         var clickedElement = event.target;
         if (!clickedElement) return;
-        console.log(clickedElement);
         var elementClasses = clickedElement.classList;
         var clickedOnSettingsMenu = elementClasses.contains('settings_menu');
         if (!clickedOnSettingsMenu) {
@@ -544,14 +542,17 @@ angular.module('tdb.controllers', [])
             $scope.saveToDo();
         }
     },true);
+    $scope.offsetTop=0;
+    $scope.scrollIntoView=false;
     $scope.toggleAssigneeMenu = function () {
         $scope.openAssigneeMenu = !$scope.openAssigneeMenu;
+        $scope.scrollIntoView = $scope.openAssigneeMenu;
         if ($scope.openAssigneeMenu ) {
             $scope.$window.onclick = function (event) {
                 closeAssigneeWindow(event, $scope.toggleAssigneeMenu);
             };
         } else {
-            $scope.openAssigneeMenu  = false;
+            $scope.openAssigneeMenu = false;
             $scope.$window.onclick = null;
             $scope.$apply(); //--> trigger digest cycle and make angular aware.
         }
@@ -636,8 +637,10 @@ angular.module('tdb.controllers', [])
             $event.preventDefault();
             $event.stopPropagation();
             $scope.opened = true;
+            $scope.scrollIntoView = true;
         } else {
             $scope.opened = false;
+            $scope.scrollIntoView = false;
         }
 
     };

@@ -109,6 +109,36 @@ angular.module('tdb.directives', [])
     };
 }])
 
+.directive('ngScrollIntoView', function ($window) {
+    return function (scope, element, attrs) {
+        if (scope.offsetTop==0) {
+            scope.offsetTop = element.offset().top
+        }
+        console.log(attrs.show);
+        attrs.$observe("show", function(show) {
+            if (show=='true') {
+                console.log(element.offset().top + 63);
+                console.log($("html").scrollTop());
+                if (element.offset().top + 73 > $("html").scrollTop()) {
+                    $("html").animate({scrollTop:element.offset().top-73}, "fast", function(){console.log('scroll done')});
+                }
+            }
+        });
+    };
+})
+
+.directive('ngScrollIntoViewPopUp', function ($window) {
+    return function (scope, element, attrs) {
+        scope.$watch("opened", function(opened) {
+            if (opened) {
+                if (element.offset().top + element.height() > $("body, html").scrollTop() + $window.innerHeight) {
+                    $("body").animate({scrollTop:element.offset().top + element.height() -63}, "fast", function(){console.log('scroll done')});
+                }
+            }
+        });
+    };
+})
+
 .directive('contenteditable', function() {
     return {
         priority: 2,
@@ -134,7 +164,6 @@ angular.module('tdb.directives', [])
                     el = event.target;
 
                 if (esc) {
-                        console.log("esc");
                         //ctrl.$setViewValue(elm.html());
                         el.blur();
                         event.preventDefault();                        
@@ -188,7 +217,6 @@ angular.module('tdb.directives', [])
     link: function(scope, element, attrs) {
       var model = $parse(attrs.focusMe);
       scope.$watch(model, function(value) {
-        console.log('value=',value);
         if(value === true) {
           $timeout(function() {
             element[0].focus();
@@ -198,7 +226,6 @@ angular.module('tdb.directives', [])
       // to address @blesh's comment, set attribute value to 'false'
       // on blur event:
       element.bind('blur', function() {
-         console.log('blur');
          scope.$apply(model.assign(scope, false));
       });
     }
