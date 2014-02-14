@@ -7,12 +7,12 @@ class Employee(models.Model):
         max_length=255,
     )
     avatar = models.ImageField(
-		upload_to="avatars/%Y/%m/%d",
+		upload_to="media/avatars/%Y/%m/%d",
         max_length=100,
         blank=True,
     )
     avatar_small = models.ImageField(
-		upload_to="avatars/small/%Y/%m/%d",
+		upload_to="media/avatars/small/%Y/%m/%d",
         max_length=100,
         null=True,
         blank=True,
