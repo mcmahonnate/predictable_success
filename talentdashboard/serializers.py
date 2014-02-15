@@ -25,7 +25,7 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
         url = ''
         if obj.avatar_small:
             url = obj.avatar_small.url
-        return url    
+        return url
     class Meta:
         model = Employee
         fields = ('id', 'full_name', 'avatar', 'avatar_small', 'job_title', 'hire_date', 'team', 'display')
