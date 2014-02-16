@@ -177,6 +177,7 @@ angular.module('tdb.controllers', [])
             $scope.happys = data;
         }
     );
+    $scope.employeeEdit = false;
 }])
 
 .controller('LeaderDetailCtrl', ['$scope', '$location', '$routeParams', 'Employee', 'Leadership', 'TalentCategoryReport', '$http', 'analytics', function($scope, $location, $routeParams, Employee, Leadership, TalentCategoryReport, $http, analytics) {

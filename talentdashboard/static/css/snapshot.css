@@ -806,6 +806,15 @@ button.btn[disabled], fieldset[disabled] .btn {
     content: "\0057";
 }
 
+.employee-edit a{
+    cursor:pointer;
+    color: #8b8b8b;"
+}
+
+.employee-edit a:hover{
+    text-decoration: underline;
+}
+
 @font-face {
   font-family: 'Glyphicons Halflings';
   src: url('../fonts/glyphicons-halflings-regular.eot');
@@ -833,6 +842,12 @@ button.btn[disabled], fieldset[disabled] .btn {
 .glyphicon-chevron-left:before {
   content: "\e079";
 }
+
+.glyphicon-edit:before {
+    color: #8b8b8b;
+    content: "\270F";
+}
+
 .text-center {
     text-align: center;
 }

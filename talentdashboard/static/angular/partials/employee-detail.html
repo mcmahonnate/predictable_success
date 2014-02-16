@@ -52,7 +52,8 @@
     <article class="widget clock loaded" id="widget-8494" style="top: 0px; left: 0px; width: auto;">
       <div class="widget-inner widget-size-1x1 large-screen">
         <header class="no-reload">
-          <h1 style="display:inline;">{{employee.full_name}}</h1>
+          <h1 style="display:inline;">{{employee.full_name}}</h1><span ng-show="employeeEdit" class="glyphicon glyphicon-edit" style="padding-left:10px"></span>
+          <span ng-show="currentUser.can_edit_employees" class="employee-edit" style="float:right;text-transform:lowercase;color: #8b8b8b"><a ng-show="!employeeEdit" ng-click="employeeEdit=true">edit</a><a ng-show="employeeEdit" ng-click="employeeEdit=false;">done editing</a></span>
         </header>
 
         <section class="widget-body rag-widget">
@@ -78,7 +79,8 @@
                   Hire Date
                 </div>
 
-                <div class="t-size-x14" id="start_date" style="min-width: 65%">{{ employee.hire_date | date:'MM/dd/yyyy' }}</div>
+                <div class="t-size-x14" id="start_date" style="min-width: 60%">{{ employee.hire_date | date:'MM/dd/yyyy' }}</div>
+                <span ng-show="employeeEdit" class="glyphicon glyphicon-edit" style="float:right"></span>
               </li>
 
               <li class="clear" style="padding-top:10px;padding-bottom:10px;">
@@ -86,7 +88,7 @@
                   Team Lead
                 </div>
 
-                <div class="t-size-x14" id="team_lead" style="min-width: 65%">
+                <div class="t-size-x14" id="team_lead" style="min-width: 60%">
 					<span ng-if="leaderships.length==0">--</span>
 					<ul ng-if="leaderships.length > 0">
 						<li ng-repeat="leadership in leaderships">
@@ -95,6 +97,7 @@
 						</li>
 					 </ul>
 				</div>
+                <span ng-show="employeeEdit" class="glyphicon glyphicon-edit" style="float:right"></span>
               </li>
 
               <li class="clear" style="padding-top:10px;padding-bottom:10px;">
@@ -102,7 +105,7 @@
                   Super Power
                 </div>
 
-                <div class="t-size-x14" style="min-width: 65%">
+                <div class="t-size-x14" style="min-width: 60%">
 					<span ng-if="super_powers.length == 0">--</span>
 					<ul ng-if="super_powers.length > 0">
 						<li ng-repeat="super_power in super_powers">
@@ -110,6 +113,7 @@
 						</li>
 					 </ul>
 				</div>
+                <span ng-show="employeeEdit" class="glyphicon glyphicon-edit" style="float:right"></span>
               </li>
 
               <li class="clear" style="padding-top:10px;padding-bottom:10px;">
@@ -117,7 +121,7 @@
                   Skills
                 </div>
 
-                <div class="t-size-x12" style="min-width: 65%">
+                <div class="t-size-x12" style="min-width: 60%">
 					<span ng-if="skills.length == 0">--</span>
 					<ul ng-if="skills.length > 0">
 						<li>
@@ -128,6 +132,7 @@
 						</li>
 					 </ul>
 				</div>
+                <span ng-show="employeeEdit" class="glyphicon glyphicon-edit" style="float:right"></span>
               </li>
 
               <li class="clear" style="padding-top:10px;padding-bottom:10px;">
@@ -135,7 +140,7 @@
                   Engagement
                 </div>
 
-                <div style="min-width: 65%">
+                <div style="min-width: 60%">
 					<span ng-if="happys.length == 0">--</span>
 					<ul ng-if="happys.length > 0">
 						<li ng-repeat="happy in happys" class="t-size-x12" >

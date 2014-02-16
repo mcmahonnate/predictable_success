@@ -114,11 +114,8 @@ angular.module('tdb.directives', [])
         if (scope.offsetTop==0) {
             scope.offsetTop = element.offset().top
         }
-        console.log(attrs.show);
         attrs.$observe("show", function(show) {
             if (show=='true') {
-                console.log(element.offset().top + 63);
-                console.log($("html").scrollTop());
                 if (element.offset().top + 73 > $("html").scrollTop()) {
                     $("html").animate({scrollTop:element.offset().top-73}, "fast", function(){console.log('scroll done')});
                 }
