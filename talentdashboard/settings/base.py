@@ -100,13 +100,11 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'talentdashboard.middleware.AutoLogout',
     'talentdashboard.middleware.LoginRequiredMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-AUTO_LOGOUT_DELAY=30
 
 ROOT_URLCONF = 'talentdashboard.urls'
 
