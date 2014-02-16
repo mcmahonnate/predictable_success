@@ -31,6 +31,18 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'full_name', 'avatar', 'avatar_small', 'job_title', 'hire_date', 'team', 'display')
 
 class MinimalEmployeeSerializer(serializers.HyperlinkedModelSerializer):
+    avatar = serializers.SerializerMethodField('get_avatar_url')
+    avatar_small = serializers.SerializerMethodField('get_avatar_small_url')
+    def get_avatar_url(self, obj):
+        url = ''
+        if obj.avatar:
+            url = obj.avatar.url
+        return url
+    def get_avatar_small_url(self, obj):
+        url = ''
+        if obj.avatar_small:
+            url = obj.avatar_small.url
+        return url
     class Meta:
         model = Employee
         fields = ('id', 'full_name', 'display', 'avatar', 'avatar_small')
