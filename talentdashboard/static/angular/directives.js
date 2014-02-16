@@ -73,7 +73,7 @@ angular.module('tdb.directives', [])
                         backgroundColor: '#2a2a2a',
                         tooltip:{text:'value'},
                         legend:{textStyle:{color: 'white'}},
-                        chartArea:{left:40,top:40,width: 620},
+                        chartArea:{left:0,top:4,height: 205,width: 620},
                         colors: TalentCategoryColors.colors
                     };
                 }
