@@ -171,6 +171,23 @@ angular.module('tdb.directives', [])
     };
 })
 
+.directive('setPopupPosition', function() {
+    return function(scope, element, attrs){
+        element.bind("click", function (event) {
+            scope.popup.top = element.offset().top;
+            scope.popup.left = element.offset().left;
+        });
+    };
+})
+
+.directive('getPopupPosition', function() {
+    return function(scope, element, attrs){
+        scope.$watch("popup.top", function() {
+            element.css({"left":(scope.popup.left-67),"top":(scope.popup.top-87)});
+        });
+    };
+})
+
 .directive('onFilter', function() {
     return function(scope, element, attrs){
         attrs.$observe('index', function(value) {

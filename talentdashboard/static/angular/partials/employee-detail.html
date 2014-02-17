@@ -76,7 +76,7 @@
         </section>
       </div><!-- .widget-inner -->
     </article>
-    <div ng-show="editStartDate" style="z-index: 2; position:absolute;left:35px;top:60px;border-width: 1px;border-style: solid; padding: 10px;background-color: #434343;color: #d3d4d4;min-height:290px;">
+    <div get-popup-position ng-show="editStartDate" style="z-index: 2; position:absolute;left:35px;top:60px;border-width: 1px;border-style: solid; padding: 10px;background-color: #434343;color: #d3d4d4;">
         <div style="display:inline;width:8px;margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#d3d4d4 #434343 #d3d4d4 #d3d4d4;padding: 10px 5px 10px 10px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-edit"></span></div>
         <span style="padding:7px">Hire Date</span>
         <div ng-model="editEmployee.hire_date" style="padding-top: 10px;">
@@ -97,7 +97,7 @@
           <div class="widget-canvas">
             <ol>
               <li class="clear" style="padding-top:10px;padding-bottom:10px;">
-                <a ng-show="employeeEdit && !editStartDate" ng-click="editStartDate=true" class="glyphicon glyphicon-edit" style="float:left;cursor:pointer;padding-right:10px"></a>
+                <a set-popup-position ng-show="employeeEdit && !editStartDate" ng-click="editStartDate=true" class="glyphicon glyphicon-edit" style="float:left;cursor:pointer;padding-right:10px"></a>
                 <div class="t-secondary" style="min-width: 35%">
                   Hire Date
                 </div>

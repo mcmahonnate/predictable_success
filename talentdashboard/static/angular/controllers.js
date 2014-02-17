@@ -8,6 +8,20 @@ angular.module('tdb.controllers', [])
             $rootScope.currentUser = data;
        }
    );
+   // parse a date in yyyy-mm-dd format
+    $rootScope.parseDate = function (input) {
+      var parts = input.match(/(\d+)/g);
+      // new Date(year, month [, date [, hours[, minutes[, seconds[, ms]]]]])
+      return new Date(parts[0], parts[1]-1, parts[2]); // months are 0-based
+    };
+    $rootScope.scrubDate = function (input) {
+        date = new Date(input);
+        var day = date.getDate();
+        var month = date.getMonth() + 1; //Months are zero based
+        var year = date.getFullYear();
+        scrubbed_Date = year + "-" + month + "-" +  day;
+        return scrubbed_Date;
+    }
 }])
 
 .controller('EvaluationListCtrl', ['$scope', '$location', '$routeParams', 'PvpEvaluation', 'Team', 'analytics', function($scope, $location, $routeParams, PvpEvaluation, Team, analytics) {
@@ -153,12 +167,13 @@ angular.module('tdb.controllers', [])
 	}
 }])
 
-.controller('EmployeeDetailCtrl', ['$scope', '$location', '$routeParams', 'User', 'Employee', 'Engagement', 'Mentorship', 'Leadership', 'Attribute', 'CompSummary', '$http', 'analytics', function($scope, $location, $routeParams, User, Employee, Engagement, Mentorship, Leadership, Attribute, CompSummary, $http, analytics) {
+.controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', 'User', 'Employee', 'Engagement', 'Mentorship', 'Leadership', 'Attribute', 'CompSummary', '$http', 'analytics', function($rootScope, $scope, $location, $routeParams, User, Employee, Engagement, Mentorship, Leadership, Attribute, CompSummary, $http, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     Employee.get(
         {id: $routeParams.id},
         function(data) {
             $scope.employee = data;
+            $scope.employee.hire_date = $rootScope.parseDate($scope.employee.hire_date);
             $scope.editEmployee = angular.copy($scope.employee);
             if(data.team && data.team.leader) {
                 $http.get(data.team.leader).success(function(data) {
@@ -167,6 +182,9 @@ angular.module('tdb.controllers', [])
             }
         }
     );
+    $scope.popup = [];
+    $scope.popup.top = 0;
+    $scope.popup.left = 0;
     $scope.mentorships = Mentorship.getMentorshipsForMentee($routeParams.id);
 	$scope.leaderships = Leadership.getLeadershipsForEmployee($routeParams.id);
     $scope.passions = Attribute.getAttributtesForEmployee($routeParams.id, 1);
@@ -183,12 +201,19 @@ angular.module('tdb.controllers', [])
         $scope.editEmployee = angular.copy($scope.employee);
     }
     $scope.saveName = function (){
-        var data = {id: $scope.employee.id, _full_name: $scope.editEmployee.full_name};
+        var data = {id: $scope.employee.id, _full_name: $scope.editEmployee.full_name, _hire_date: null};
 
         Employee.update(data, function() {
             $scope.employee.full_name = $scope.editEmployee.full_name;
         });
-        console.log('Save name');
+    };
+    $scope.saveStartDate  = function (){
+        var hire_date = $rootScope.scrubDate($scope.editEmployee.hire_date);
+        var data = {id: $scope.employee.id, _full_name: null, _hire_date: hire_date};
+
+        Employee.update(data, function() {
+            $scope.employee.hire_date = $scope.editEmployee.hire_date;
+        });
     }
     $scope.today = function() {
         $scope.dt = new Date();
@@ -231,7 +256,7 @@ angular.module('tdb.controllers', [])
         'starting-day': 1
     };
 
-    $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'shortDate'];
+    $scope.formats = ['yyyy-mm-dd', 'mm/dd/yyyy', 'shortDate'];
     $scope.format = $scope.formats[0];
 }])
 
@@ -590,7 +615,7 @@ angular.module('tdb.controllers', [])
     }
 }])
 
-.controller('EmployeeToDoCtrl', ['$scope', '$window', 'Employee', 'ToDo', 'EmployeeToDo', 'Coach', function($scope, $window, Employee, ToDo, EmployeeToDo, Coach) {
+.controller('EmployeeToDoCtrl', ['$rootScope', '$scope', '$window', 'Employee', 'ToDo', 'EmployeeToDo', 'Coach', function($rootScope, $scope, $window, Employee, ToDo, EmployeeToDo, Coach) {
     $scope.currentToDo = {due_date:null};
     $scope.$window = $window;
     $scope.$watch('currentToDo.due_date', function(newVal, oldVal){
@@ -635,11 +660,7 @@ angular.module('tdb.controllers', [])
         }
         var due_date = null;
         if ($scope.currentToDo.due_date) {
-            date = new Date($scope.currentToDo.due_date);
-            var day = date.getDate();
-            var month = date.getMonth() + 1; //Months are zero based
-            var year = date.getFullYear();
-            due_date = year + "-" + month + "-" +  day;
+            due_date = $rootScope.scrubDate($scope.currentToDo.due_date);
         }
 
         var data = {id: $scope.currentToDo.id, _description: $scope.currentToDo.description, _completed: $scope.currentToDo.completed, _assigned_to_id: assigned_to_id, _due_date: due_date, _employee_id: $scope.currentToDo.employee_id, _owner_id: $scope.currentToDo.created_by.id};

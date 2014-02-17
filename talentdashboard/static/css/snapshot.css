@@ -748,6 +748,12 @@ button.btn-default {
     border-color: #ccc;
 }
 
+button.btn-info {
+    background-color: #8b8b8b;
+    color: #ccc;
+    border-color: #ccc;
+}
+
 button.btn[disabled], fieldset[disabled] .btn {
     pointer-events: none;
     cursor: not-allowed;

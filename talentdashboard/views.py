@@ -309,7 +309,11 @@ class EmployeeDetail(APIView):
         employee = Employee.objects.get(id = pk)
         if employee is not None:
             full_name = request.DATA["_full_name"]
-            employee.full_name = full_name
+            hire_date = request.DATA["_hire_date"]
+            if full_name is not None:
+                employee.full_name = full_name
+            if hire_date is not None:
+                employee.hire_date = hire_date
             employee.save()
             return Response(None)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
