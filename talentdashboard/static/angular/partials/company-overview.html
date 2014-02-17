@@ -119,7 +119,7 @@
                     <ul class="feed-actions" style="margin-left: 2px;margin-top:0px;">
                         <li class="feed-action"><a class="assignee_menu" ng-click="toggleAssigneeMenu()" style="color: #8b8b8b;cursor: pointer;">{{todo.assigned_to.full_name||"Unassigned"}}</a></li>
                         <li class="feed-action"><a ng-click="open($event);closeAssigneeMenu()" style="color: #8b8b8b;cursor: pointer;">{{(todo.due_date | date:'MMM d, yyyy') || "No due date"}}</a></li>
-                        <li class="feed-action"><a ng-click="todo.edit = !todo.edit" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
+                        <li class="feed-action"><a ng-show="!todo.edit" ng-click="todo.edit=true" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a><a ng-show="todo.edit" ng-click="todo.edit=false" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
                         <span style="color:#8b8b8b;"><a ng-click="deleteToDo(todo)" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></span>
                     </ul>
                     <span type="text" class="form-control" datepicker-popup="{{format}}" ng-model="todo.due_date" is-open="opened" min="minDate" datepicker-options="" date-disabled="disabled(date, mode)" show-weeks="false" ng-required="true" close-text="Close"/>

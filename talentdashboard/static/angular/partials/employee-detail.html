@@ -52,7 +52,7 @@
     <article class="widget clock loaded" id="widget-8494" style="top: 0px; left: 0px; width: auto;">
       <div class="widget-inner widget-size-1x1 large-screen">
         <header class="no-reload">
-          <h1 style="display:inline;">{{employee.full_name}}</h1><span ng-show="employeeEdit" class="glyphicon glyphicon-edit" style="padding-left:10px"></span>
+          <a ng-show="employeeEdit" ng-click="editName()" class="glyphicon glyphicon-edit" style="padding-right:10px;cursor:pointer"></a><h1 style="display:inline;">{{employee.full_name}}</h1>
           <span ng-show="currentUser.can_edit_employees" class="employee-edit" style="float:right;text-transform:lowercase;color: #8b8b8b"><a ng-show="!employeeEdit" ng-click="employeeEdit=true">edit</a><a ng-show="employeeEdit" ng-click="employeeEdit=false;">done editing</a></span>
         </header>
 
@@ -75,20 +75,22 @@
           <div class="widget-canvas">
             <ol>
               <li class="clear" style="padding-top:10px;padding-bottom:10px;">
+                <a ng-show="employeeEdit" class="glyphicon glyphicon-edit" style="float:left;cursor:pointer;padding-right:10px"></a>
                 <div class="t-secondary" style="min-width: 35%">
                   Hire Date
                 </div>
 
-                <div class="t-size-x14" id="start_date" style="min-width: 60%">{{ employee.hire_date | date:'MM/dd/yyyy' }}</div>
-                <span ng-show="employeeEdit" class="glyphicon glyphicon-edit" style="float:right"></span>
+                <div class="t-size-x14" id="start_date" style="min-width: 50%">{{ employee.hire_date | date:'MM/dd/yyyy' }}</div>
+
               </li>
 
               <li class="clear" style="padding-top:10px;padding-bottom:10px;">
+                <a ng-show="employeeEdit" class="glyphicon glyphicon-edit" style="float:left;cursor:pointer;padding-right:10px"></a>
                 <div class="t-secondary" style="min-width: 35%">
                   Team Lead
                 </div>
 
-                <div class="t-size-x14" id="team_lead" style="min-width: 60%">
+                <div class="t-size-x14" id="team_lead" style="min-width: 50%">
 					<span ng-if="leaderships.length==0">--</span>
 					<ul ng-if="leaderships.length > 0">
 						<li ng-repeat="leadership in leaderships">
@@ -97,15 +99,15 @@
 						</li>
 					 </ul>
 				</div>
-                <span ng-show="employeeEdit" class="glyphicon glyphicon-edit" style="float:right"></span>
               </li>
 
               <li class="clear" style="padding-top:10px;padding-bottom:10px;">
+                <a ng-show="employeeEdit" class="glyphicon glyphicon-edit" style="float:left;cursor:pointer;padding-right:10px"></a>
                 <div class="t-secondary" style="min-width: 35%">
                   Super Power
                 </div>
 
-                <div class="t-size-x14" style="min-width: 60%">
+                <div class="t-size-x14" style="min-width: 50%">
 					<span ng-if="super_powers.length == 0">--</span>
 					<ul ng-if="super_powers.length > 0">
 						<li ng-repeat="super_power in super_powers">
@@ -113,15 +115,15 @@
 						</li>
 					 </ul>
 				</div>
-                <span ng-show="employeeEdit" class="glyphicon glyphicon-edit" style="float:right"></span>
               </li>
 
               <li class="clear" style="padding-top:10px;padding-bottom:10px;">
+                <a ng-show="employeeEdit" class="glyphicon glyphicon-edit" style="float:left;cursor:pointer;padding-right:10px"></a>
                 <div class="t-secondary" style="min-width: 35%">
                   Skills
                 </div>
 
-                <div class="t-size-x12" style="min-width: 60%">
+                <div class="t-size-x12" style="min-width: 50%">
 					<span ng-if="skills.length == 0">--</span>
 					<ul ng-if="skills.length > 0">
 						<li>
@@ -132,7 +134,6 @@
 						</li>
 					 </ul>
 				</div>
-                <span ng-show="employeeEdit" class="glyphicon glyphicon-edit" style="float:right"></span>
               </li>
 
               <li class="clear" style="padding-top:10px;padding-bottom:10px;">
@@ -172,7 +173,7 @@
                     <ul class="feed-actions" style="margin-left: 2px;margin-top:0px;">
                         <li class="feed-action"><a class="assignee_menu" ng-click="toggleAssigneeMenu()" style="color: #8b8b8b;cursor: pointer;">{{todo.assigned_to.full_name||"Unassigned"}}</a></li>
                         <li class="feed-action"><a ng-click="open($event);closeAssigneeMenu()" style="color: #8b8b8b;cursor: pointer;">{{(todo.due_date | date:'MMM d, yyyy') || "No due date"}}</a></li>
-                        <li class="feed-action"><a ng-click="todo.edit = !todo.edit" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
+                        <li class="feed-action"><a ng-show="!todo.edit" ng-click="todo.edit=true" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a><a ng-show="todo.edit" ng-click="todo.edit=false" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
                         <span style="color:#8b8b8b;"><a ng-click="deleteToDo(todo)" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></span>
                     </ul>
                     <span type="text" class="form-control" datepicker-popup="{{format}}" ng-model="todo.due_date" is-open="opened" min="minDate" datepicker-options="" date-disabled="disabled(date, mode)" show-weeks="false" ng-required="true" close-text="Close"/>
