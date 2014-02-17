@@ -32,15 +32,6 @@ class UserList(generics.ListAPIView):
 class CoachList(generics.ListAPIView):
     serializer_class = EmployeeSerializer
     queryset = Employee.objects.filter(user__groups__id=2)
-
-class EmployeeDetail(generics.RetrieveAPIView):
-    queryset = Employee.objects.filter(display='t')
-    serializer_class = EmployeeSerializer
-    
-    def get_object(self):
-        pk = self.kwargs.get(self.pk_url_kwarg, None)
-        pk = pk.replace("/", "")
-        return Employee.objects.get(id=pk)
         
 class TeamViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = TeamSerializer
@@ -153,7 +144,7 @@ class EmployeeCommentList(APIView):
         employee_type = ContentType.objects.get(model="employee")
         if employee is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
-        comments = Comment.objects.filter(object_id = pk)
+        comments = Comment.objects.filter(object_id = pk,content_type=employee_type)
         comments = comments.exclude(object_id=user.id,content_type=employee_type)
         comments = comments.extra(order_by = ['-created_date'])
         serializer = CommentSerializer(comments, many=True)
@@ -307,6 +298,21 @@ class EmployeeTaskList(APIView):
         task.save()
         serializer = TaskSerializer(task)
         return Response(serializer.data)
+
+class EmployeeDetail(APIView):
+    def get(self, request, pk, format=None):
+        employee = Employee.objects.get(id = pk)
+        serializer = EmployeeSerializer(employee)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        employee = Employee.objects.get(id = pk)
+        if employee is not None:
+            full_name = request.DATA["_full_name"]
+            employee.full_name = full_name
+            employee.save()
+            return Response(None)
+        return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
 def user_status(request):
