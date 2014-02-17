@@ -1,9 +1,13 @@
 angular.module('tdb.services', ['ngResource'])
 
 .factory('Employee', ['$resource', '$http', function($resource, $http) {
-    var Employee = $resource('/api/v1/employees/:id/');
+    var actions = {
+        'addNew': { method:'POST', data:{full_name:'@full_name'}, isArray: false },
+        'update': { method:'PUT', data:{full_name:'@full_name'}, isArray: false }
+    };
+    var res = $resource('/api/v1/employees/:id/', {id:'@id'}, actions);
 
-    return Employee;
+    return res;
 }])
 
 .factory('Coach', ['$resource', '$http', function($resource, $http) {

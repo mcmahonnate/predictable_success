@@ -159,6 +159,7 @@ angular.module('tdb.controllers', [])
         {id: $routeParams.id},
         function(data) {
             $scope.employee = data;
+            $scope.editEmployee = angular.copy($scope.employee);
             if(data.team && data.team.leader) {
                 $http.get(data.team.leader).success(function(data) {
                     $scope.team_lead = data;
@@ -178,6 +179,60 @@ angular.module('tdb.controllers', [])
         }
     );
     $scope.employeeEdit = false;
+    $scope.cancelEdit = function (){
+        $scope.editEmployee = angular.copy($scope.employee);
+    }
+    $scope.saveName = function (){
+        var data = {id: $scope.employee.id, _full_name: $scope.editEmployee.full_name};
+
+        Employee.update(data, function() {
+            $scope.employee.full_name = $scope.editEmployee.full_name;
+        });
+        console.log('Save name');
+    }
+    $scope.today = function() {
+        $scope.dt = new Date();
+    };
+
+    $scope.showWeeks = false;
+    $scope.toggleWeeks = function () {
+        $scope.showWeeks = ! $scope.showWeeks;
+    };
+
+    $scope.clear = function () {
+        $scope.dt = null;
+    };
+
+    // Disable weekend selection
+    $scope.disabled = function(date, mode) {
+        return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+    };
+
+    $scope.toggleMin = function() {
+        $scope.minDate = ( $scope.minDate ) ? null : new Date();
+    };
+    $scope.toggleMin();
+
+    $scope.open = function($event) {
+        if (!$scope.opened) {
+            console.log('open?');
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.opened = true;
+            console.log($scope.opened);
+        } else {
+            $scope.opened = false;
+        }
+
+    };
+
+    $scope.dateOptions = {
+        'year-format': "'yy'",
+        'starting-day': 1
+    };
+
+    $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'shortDate'];
+    $scope.format = $scope.formats[0];
 }])
 
 .controller('LeaderDetailCtrl', ['$scope', '$location', '$routeParams', 'Employee', 'Leadership', 'TalentCategoryReport', '$http', 'analytics', function($scope, $location, $routeParams, Employee, Leadership, TalentCategoryReport, $http, analytics) {
