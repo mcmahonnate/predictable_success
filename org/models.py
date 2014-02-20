@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import datetime
 import blah
 
 class Employee(models.Model):
@@ -66,7 +67,8 @@ class Mentorship(models.Model):
 class Leadership(models.Model):
     leader = models.ForeignKey(Employee, related_name='+')
     employee = models.ForeignKey(Employee, related_name='+')
-
+    start_date = models.DateField(null=False, blank=False, default=datetime.date.today)
+    end_date = models.DateField(null=True, blank=True)
     def __str__(self):
         return "%s leader of %s" % (self.leader.full_name, self.employee.full_name)
 

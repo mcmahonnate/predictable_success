@@ -119,7 +119,7 @@ class LeadershipSerializer(serializers.HyperlinkedModelSerializer):
     employee = MinimalEmployeeSerializer()
     class Meta:
         model = Leadership
-        fields = ['leader', 'employee',]
+        fields = ['leader', 'employee','start_date', 'end_date']
 
 class AttributeCategorySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

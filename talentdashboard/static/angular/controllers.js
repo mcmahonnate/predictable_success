@@ -167,7 +167,7 @@ angular.module('tdb.controllers', [])
 	}
 }])
 
-.controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', 'User', 'Employee', 'Engagement', 'Mentorship', 'Leadership', 'Attribute', 'CompSummary', '$http', 'analytics', function($rootScope, $scope, $location, $routeParams, User, Employee, Engagement, Mentorship, Leadership, Attribute, CompSummary, $http, analytics) {
+.controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', 'User', 'Employee', 'Engagement', 'Mentorship', 'EmployeeLeader', 'Attribute', 'CompSummary', '$http', 'analytics', function($rootScope, $scope, $location, $routeParams, User, Employee, Engagement, Mentorship, EmployeeLeader, Attribute, CompSummary, $http, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     Employee.get(
         {id: $routeParams.id},
@@ -175,18 +175,23 @@ angular.module('tdb.controllers', [])
             $scope.employee = data;
             $scope.employee.hire_date = $rootScope.parseDate($scope.employee.hire_date);
             $scope.editEmployee = angular.copy($scope.employee);
-            if(data.team && data.team.leader) {
-                $http.get(data.team.leader).success(function(data) {
-                    $scope.team_lead = data;
-                });
-            }
         }
     );
+
+   EmployeeLeader.get(
+       {id: $routeParams.id},
+       function(data) {
+            $scope.leadership = data;
+            console.log($scope.leadership.leader);
+            $scope.edit_leadership = angular.copy($scope.leadership);
+        }
+    );
+
+    $scope.scrollIntoView = false;
     $scope.popup = [];
     $scope.popup.top = 0;
     $scope.popup.left = 0;
     $scope.mentorships = Mentorship.getMentorshipsForMentee($routeParams.id);
-	$scope.leaderships = Leadership.getLeadershipsForEmployee($routeParams.id);
     $scope.passions = Attribute.getAttributtesForEmployee($routeParams.id, 1);
     $scope.super_powers = Attribute.getAttributtesForEmployee($routeParams.id, 2);
 	$scope.skills = Attribute.getAttributtesForEmployee($routeParams.id, 3);
@@ -199,6 +204,7 @@ angular.module('tdb.controllers', [])
     $scope.employeeEdit = false;
     $scope.cancelEdit = function (){
         $scope.editEmployee = angular.copy($scope.employee);
+        $scope.edit_leadership = angular.copy($scope.leadership);
     }
     $scope.saveName = function (){
         var data = {id: $scope.employee.id, _full_name: $scope.editEmployee.full_name, _hire_date: null};
@@ -214,7 +220,14 @@ angular.module('tdb.controllers', [])
         Employee.update(data, function() {
             $scope.employee.hire_date = $scope.editEmployee.hire_date;
         });
-    }
+    };
+    $scope.saveLeader  = function (){
+        console.log($scope.edit_leadership.leader.full_name);
+        var data = {id: $scope.employee.id, _leader_id: $scope.edit_leadership.leader.id};
+        EmployeeLeader.addNew(data, function() {
+            $scope.leadership = angular.copy($scope.edit_leadership);
+        });
+    };
     $scope.today = function() {
         $scope.dt = new Date();
     };

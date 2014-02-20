@@ -10,12 +10,20 @@ angular.module('tdb.services', ['ngResource'])
     return res;
 }])
 
+.factory('EmployeeLeader', ['$resource', '$http', function($resource, $http) {
+    var actions = {
+        'addNew': { method:'POST', data:{leader:'@leader_id'}, isArray: false }
+    };
+    var res = $resource('/api/v1/leaderships/employees/:id/', {id:'@id'}, actions);
+
+    return res;
+}])
+
 .factory('Coach', ['$resource', '$http', function($resource, $http) {
     var Coach = $resource('/api/v1/coaches/');
 
     return Coach;
 }])
-
 
 .factory('Mentorship', ['$resource', '$http', function($resource, $http) {
     var Mentorship = $resource('/api/v1/mentorships/:id/');
@@ -29,6 +37,7 @@ angular.module('tdb.services', ['ngResource'])
     var Leadership = $resource('/api/v1/leaderships/:id/');
 
     Leadership.getLeadershipsForEmployee = function(id) { return this.query({employee_id: id}); };
+    Leadership.getCurrentLeader = function(id) { return this.query({employee_id: id}); };
     Leadership.getLeadershipsForLeader = function(id) { return this.query({leader_id: id}); };
 
     return Leadership;

@@ -11,7 +11,7 @@ from blah.models import Comment
 router = routers.DefaultRouter()
 router.register(r'api/v1/teams', TeamViewSet)
 router.register(r'api/v1/mentorships', MentorshipViewSet)
-router.register(r'api/v1/leaderships', LeadershipViewSet)
+router.register(r'api/v1/leaderships', LeadershipsViewSet)
 router.register(r'api/v1/attributes', AttributeViewSet)
 
 admin.site.register(Comment)
@@ -34,6 +34,7 @@ urlpatterns = patterns('',
     url(r'api/v1/coaches/$', (cache_on_auth(60*15, 'foolsquad'))(group_required('foolsquad')(CoachList.as_view())), name='coach-list'),
     url(r'api/v1/employees/$', (cache_on_auth(60*15, 'foolsquad'))(group_required('foolsquad')(EmployeeList.as_view())), name='employee-list'),
     url(r'api/v1/employees/(?P<pk>.*)', (group_required('foolsquad')(EmployeeDetail.as_view())), name='employee-detail'),
+    url(r'api/v1/leaderships/employees/(?P<pk>.*)', (group_required('foolsquad')(LeadershipDetail.as_view()))),
     url(r'^api/v1/pvp-evaluations/', pvp_evaluations),
     url(r'api/v1/engagement/employees/(?P<pk>.*)', (group_required('foolsquad')(EmployeeEngagement.as_view()))),
     url(r'^api/v1/team-leads/', team_leads),

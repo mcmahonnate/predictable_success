@@ -50,8 +50,8 @@ class MentorshipViewSet(viewsets.ReadOnlyModelViewSet):
             self.queryset = self.queryset.filter(mentor__id=mentor_id)
 
         return self.queryset
-        
-class LeadershipViewSet(viewsets.ReadOnlyModelViewSet):
+
+class LeadershipsViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = LeadershipSerializer
     queryset = Leadership.objects.all()
 
@@ -169,6 +169,28 @@ class EmployeeCommentList(APIView):
             comment = employee.comments.add_comment(content, owner)
             serializer = CommentSerializer(comment, many=False)
             return Response(serializer.data)
+
+class LeadershipDetail(APIView):
+    def get(self, request, pk, format=None):
+        employee = Employee.objects.get(id = pk)
+        if employee is not None:
+            leaderships = Leadership.objects.filter(employee__id = employee.id)
+            leadership = leaderships.latest('start_date')
+            if leadership is not None:
+                serializer = LeadershipSerializer(leadership, many=False)
+                return Response(serializer.data)
+        return Response(None, status=status.HTTP_404_NOT_FOUND)
+
+    def post(self, request, pk, format=None):
+        employee = Employee.objects.get(id = pk)
+        leader_id = request.DATA["_leader_id"]
+        leader = Employee.objects.get(id = leader_id)
+        leadership = Leadership()
+        leadership.employee = employee
+        leadership.leader = leader
+        leadership.save()
+        serializer = LeadershipSerializer(leadership, many=False)
+        return Response(serializer.data)
 
 class CommentList(APIView):
     def get(self, request, format=None):
