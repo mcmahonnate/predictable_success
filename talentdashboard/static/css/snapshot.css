@@ -677,20 +677,20 @@ g{ cursor: pointer;}
     padding:5px;
 	cursor: pointer;
 }
-
-.button:hover                           { background-color: #111; color: #000; font-weight:bold;}
+.button:disabled                        { cursor: default;opacity:0.4;}
+.button:hover:enabled                   { background-color: #111; color: #000; font-weight:bold;}
 .button:active                          { top: 1px; }
 .small.button, .small.button:visited    { font-size: 11px; width: 50px;}     
 .pink.button, .magenta.button:visited   { background-color: #e22092; }
-.pink.button:hover                      { background-color: #c81e82; }
+.pink.button:hover:enabled              { background-color: #c81e82; }
 .green.button, .green.button:visited    { background-color: #749a02; }
-.green.button:hover                     { background-color: #91bd09; }
+.green.button:hover:enabled             { background-color: #91bd09; }
 .red.button, .red.button:visited        { background-color: #e62727; }
-.red.button:hover                       { background-color: #cf2525; }
+.red.button:hover:enabled               { background-color: #cf2525; }
 .orange.button, .orange.button:visited  { background-color: #ff5c00; }
-.orange.button:hover                    { background-color: #d45500; }
+.orange.button:hover:enabled            { background-color: #d45500; }
 .blue.button, .blue.button:visited      { background-color: #2981e4; }
-.blue.button:hover                      { background-color: #2575cf; }
+.blue.button:hover:enabled              { background-color: #2575cf; }
 .yellow.button, .yellow.button:visited  { background-color: #ffb515; }
 .yellow.button:hover                    { background-color: #fc9200; }
 .fade {
@@ -812,7 +812,13 @@ button.btn[disabled], fieldset[disabled] .btn {
     color: #ff0000;
     content: "\0057";
 }
+.engage-select {
+    cursor: pointer;
+}
 
+.engage-select:hover {
+    background-color: #272727;
+}
 .employee-edit a{
     cursor:pointer;
     color: #8b8b8b;"
@@ -842,7 +848,7 @@ button.btn[disabled], fieldset[disabled] .btn {
     -moz-osx-font-smoothing: grayscale;
 }
 
-a .glyphicon:hover {
+a.glyphicon:hover {
     text-decoration: none   !important;
 }
 
@@ -862,6 +868,21 @@ a .glyphicon:hover {
 .glyphicon-edit-disable:before {
     color: #101214;
     content: "\270F";
+}
+
+.glyphicon-add:before {
+    color: #8b8b8b;
+    content: "\E081";
+}
+
+.glyphicon-add-disable:before {
+    color: #101214;
+    content: "\E081";
+}
+
+.glyphicon-check:before {
+    color: #8b8b8b;
+    content: "\E013";
 }
 
 .text-center {

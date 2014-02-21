@@ -117,7 +117,7 @@ angular.module('tdb.directives', [])
         attrs.$observe("show", function(show) {
             if (show=='true') {
                 if (element.offset().top + 73 > $("html").scrollTop()) {
-                    $("html").animate({scrollTop:element.offset().top-73}, "fast", function(){console.log('scroll done')});
+                    $("html").animate({scrollTop:element.offset().top-73}, "fast");
                 }
             }
         });
@@ -129,7 +129,7 @@ angular.module('tdb.directives', [])
         scope.$watch("opened", function(opened) {
             if (opened) {
                 if (element.offset().top + element.height() > $("body, html").scrollTop() + $window.innerHeight) {
-                    $("body").animate({scrollTop:element.offset().top + element.height() -63}, "fast", function(){console.log('scroll done')});
+                    $("body").animate({scrollTop:element.offset().top + element.height() -63}, "fast");
                 }
             }
         });
@@ -183,7 +183,15 @@ angular.module('tdb.directives', [])
 .directive('getPopupPosition', function() {
     return function(scope, element, attrs){
         scope.$watch("popup.top", function() {
-            element.css({"left":(scope.popup.left-97),"top":(scope.popup.top-87)});
+            element.css({"top":(scope.popup.top-87)});
+        });
+    };
+})
+
+.directive('getPopupPositionAdd', function() {
+    return function(scope, element, attrs){
+        scope.$watch("popup.top", function() {
+            element.css({"left":(scope.popup.left-127),"top":(scope.popup.top-87)});
         });
     };
 })

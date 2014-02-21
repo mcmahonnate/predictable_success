@@ -178,15 +178,36 @@ angular.module('tdb.controllers', [])
         }
     );
 
-   EmployeeLeader.get(
+    EmployeeLeader.get(
        {id: $routeParams.id},
        function(data) {
             $scope.leadership = data;
-            console.log($scope.leadership.leader);
             $scope.edit_leadership = angular.copy($scope.leadership);
         }
     );
-
+    $scope.engagement_choices = [
+        {id: 1, title: 'Very Happy', css: 'veryhappy'},
+        {id: 2, title: 'Happy', css: 'happy'},
+        {id: 3, title: 'Indifferent', css: 'indifferent'},
+        {id: 4, title: 'Unhappy', css: 'unhappy'},
+        {id: 5, title: 'Very Unhappy', css: 'veryunhappy'}
+    ];
+    $scope.selected=0;
+    $scope.set_choice = function(value) {
+        $scope.selected=value;
+    };
+    $scope.is_selected = function(value) {
+        return $scope.selected==value;
+    };
+    $scope.disable_save_engagement = function() {
+        return $scope.selected==0;
+    };
+    $scope.save_engagement = function() {
+        console.log($scope.selected);
+    };
+    $scope.cancel_engagement = function() {
+        $scope.selected=0;
+    };
     $scope.scrollIntoView = false;
     $scope.popup = [];
     $scope.popup.top = 0;
@@ -205,7 +226,7 @@ angular.module('tdb.controllers', [])
     $scope.cancelEdit = function (){
         $scope.editEmployee = angular.copy($scope.employee);
         $scope.edit_leadership = angular.copy($scope.leadership);
-    }
+    };
     $scope.saveName = function (){
         var data = {id: $scope.employee.id, _full_name: $scope.editEmployee.full_name, _hire_date: null};
 
@@ -222,7 +243,6 @@ angular.module('tdb.controllers', [])
         });
     };
     $scope.saveLeader  = function (){
-        console.log($scope.edit_leadership.leader.full_name);
         var data = {id: $scope.employee.id, _leader_id: $scope.edit_leadership.leader.id};
         EmployeeLeader.addNew(data, function() {
             $scope.leadership = angular.copy($scope.edit_leadership);
@@ -253,11 +273,9 @@ angular.module('tdb.controllers', [])
 
     $scope.open = function($event) {
         if (!$scope.opened) {
-            console.log('open?');
             $event.preventDefault();
             $event.stopPropagation();
             $scope.opened = true;
-            console.log($scope.opened);
         } else {
             $scope.opened = false;
         }
