@@ -186,11 +186,11 @@ angular.module('tdb.controllers', [])
         }
     );
     $scope.engagement_choices = [
-        {id: 1, title: 'Very Happy', css: 'veryhappy'},
-        {id: 2, title: 'Happy', css: 'happy'},
+        {id: 5, title: 'Very Happy', css: 'veryhappy'},
+        {id: 4, title: 'Happy', css: 'happy'},
         {id: 3, title: 'Indifferent', css: 'indifferent'},
-        {id: 4, title: 'Unhappy', css: 'unhappy'},
-        {id: 5, title: 'Very Unhappy', css: 'veryunhappy'}
+        {id: 2, title: 'Unhappy', css: 'unhappy'},
+        {id: 1, title: 'Very Unhappy', css: 'veryunhappy'},
     ];
     $scope.selected=0;
     $scope.set_choice = function(value) {
@@ -203,7 +203,14 @@ angular.module('tdb.controllers', [])
         return $scope.selected==0;
     };
     $scope.save_engagement = function() {
-        console.log($scope.selected);
+        var data = {id: $scope.employee.id, _assessment: $scope.selected, _assessed_by_id: $rootScope.currentUser.employee.id};
+        console.log(data);
+        Engagement.addNew(data, function() {
+            var happy = [];
+            happy.assessment = $scope.selected;
+            happy.assessed_date = Date.now();
+            $scope.happys.push(happy);
+        });
     };
     $scope.cancel_engagement = function() {
         $scope.selected=0;

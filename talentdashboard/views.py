@@ -126,15 +126,19 @@ class EmployeeEngagement(APIView):
 
     def post(self, request, pk, format=None):
         employee = Employee.objects.get(id = pk)
+        if employee is None:
+            return Response(None, status=status.HTTP_404_NOT_FOUND)
         assessed_by_id = request.DATA["_assessed_by_id"]
         assessed_by = Employee.objects.get(id = assessed_by_id)
+        if assessed_by is None:
+            return Response(None, status=status.HTTP_404_NOT_FOUND)
         assessment = request.DATA["_assessment"]
         happy = Happiness()
         happy.employee = employee
         happy.assessed_by = assessed_by
-        happy.assessment = assessment
+        happy.assessment = int(assessment)
         happy.save()
-        serializer = HappinessSerializer(happy)
+        serializer = HappinessSerializer(happy, many=False)
         return Response(serializer.data)
 
 class EmployeeCommentList(APIView):
