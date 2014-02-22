@@ -784,34 +784,44 @@ button.btn[disabled], fieldset[disabled] .btn {
 
 .veryhappy:before {
     font-family: 'Emoticons';
+    font-size: 40px;
     text-shadow: none;
     color: #008000;
     content: "\0041";
 }
 .happy:before {
     font-family: 'Emoticons';
+    font-size: 40px;
     text-shadow: none;
     color: #91fa00;
     content: "\0044";
 }
 .indifferent:before {
     font-family: 'Emoticons';
+    font-size: 40px;
     text-shadow: none;
     color: #ffca00;
     content: "\0043";
 }
 .unhappy:before {
     font-family: 'Emoticons';
+    font-size: 40px;
     text-shadow: none;
     color: #ff4600;
     content: "\0028";
 }
 .veryunhappy:before {
     font-family: 'Emoticons';
+    font-size: 40px;
     text-shadow: none;
     color: #ff0000;
     content: "\0057";
 }
+.small.veryhappy:before { font-size: 25px;}
+.small.happy:before { font-size: 25px;}
+.small.indifferent:before { font-size: 25px;}
+.small.unhappy:before { font-size: 25px;}
+.small.veryunhappy:before { font-size: 25px;}
 .engage-select {
     cursor: pointer;
 }

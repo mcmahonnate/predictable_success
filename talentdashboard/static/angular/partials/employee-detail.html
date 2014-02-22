@@ -49,191 +49,193 @@
   </header>
 
   <div ng-if="employee.display" class="dashboard-sized-el fade" ng-class="{in:employee}" id="dashboard" style="margin-top: 75px; max-width: 970px;">
-    <article class="widget clock loaded" id="widget-8494" style="top: 0px; left: 0px; width: auto;">
-      <div class="widget-inner widget-size-1x1 large-screen">
-        <header class="no-reload">
-          <a ng-show="employeeEdit && !currentlyEditing" ng-click="editName=true;currentlyEditing=true" class="glyphicon glyphicon-edit" style="padding-right:10px;cursor:pointer"></a><span ng-show="employeeEdit && currentlyEditing" class="glyphicon glyphicon-edit-disable" style="padding-right:10px;"></span><h1 style="display:inline;">{{employee.full_name}}</h1>
-          <span ng-show="currentUser.can_edit_employees" class="employee-edit" style="float:right;text-transform:lowercase;color: #8b8b8b"><a ng-show="!employeeEdit" ng-click="employeeEdit=true">edit</a><a ng-show="employeeEdit" ng-click="employeeEdit=false;">done editing</a></span>
-        </header>
-        <div ng-show="editName && employeeEdit" style="position:absolute;left:30px;top:5px;border-width: 1px;border-style: solid; padding: 10px;background-color: #434343;color: #d3d4d4;">
-            <div style="display:inline;width:8px;margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#d3d4d4 #434343 #d3d4d4 #d3d4d4;padding: 10px 5px 10px 10px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-edit"></span></div>
-            <span style="padding:7px">Name</span>
-            <textarea ng-model="editEmployee.full_name" placeholder="Employee Name" style="position: relative; width: 245px; height: 13px;background-color:#2a2a2a;color:#eee;resize:none;overflow:hidden;font-size: 13px;margin-top:10px;padding: 8px;">
-            </textarea>
-            <div id="editActions" style="right:2px;bottom:-33px;">
-                <button class="button small blue" style="margin-bottom:3px;" ng-click="saveName();editName=false;currentlyEditing=false">Save</button>
-                <button class="button small orange" style="margin-bottom:3px;" ng-click="cancelEdit();editName=false;currentlyEditing=false">Cancel</button>
+    <div style="position: relative;width: 315px;float:left;margin-right:10px">
+        <article class="widget clock loaded" id="widget-8494" style="position: relative;width: 315px;height:276px;margin: 0px 0px 10px 0px;">
+          <div class="widget-inner widget-size-1x1 large-screen">
+            <header class="no-reload">
+              <a ng-show="employeeEdit && !currentlyEditing" ng-click="editName=true;currentlyEditing=true" class="glyphicon glyphicon-edit" style="padding-right:10px;cursor:pointer"></a><span ng-show="employeeEdit && currentlyEditing" class="glyphicon glyphicon-edit-disable" style="padding-right:10px;"></span><h1 style="display:inline;">{{employee.full_name}}</h1>
+              <span ng-show="currentUser.can_edit_employees" class="employee-edit" style="float:right;text-transform:lowercase;color: #8b8b8b"><a ng-show="!employeeEdit" ng-click="employeeEdit=true">edit</a><a ng-show="employeeEdit" ng-click="employeeEdit=false;">done editing</a></span>
+            </header>
+            <div ng-show="editName && employeeEdit" style="position:absolute;left:30px;top:5px;border-width: 1px;border-style: solid; padding: 10px;background-color: #434343;color: #d3d4d4;">
+                <div style="display:inline;width:8px;margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#d3d4d4 #434343 #d3d4d4 #d3d4d4;padding: 10px 5px 10px 10px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-edit"></span></div>
+                <span style="padding:7px">Name</span>
+                <textarea ng-model="editEmployee.full_name" placeholder="Employee Name" style="position: relative; width: 245px; height: 13px;background-color:#2a2a2a;color:#eee;resize:none;overflow:hidden;font-size: 13px;margin-top:10px;padding: 8px;">
+                </textarea>
+                <div id="editActions" style="right:2px;bottom:-33px;">
+                    <button class="button small blue" style="margin-bottom:3px;" ng-click="saveName();editName=false;currentlyEditing=false">Save</button>
+                    <button class="button small orange" style="margin-bottom:3px;" ng-click="cancelEdit();editName=false;currentlyEditing=false">Cancel</button>
+                </div>
             </div>
-        </div>
-        <section class="widget-body rag-widget">
-          <div class="widget-canvas">
-            <div class="outer" style="margin-left: auto; margin-right: auto;">
-              <div class="image" style="margin-left: auto; margin-right: auto;"><img ng-src="{{ employee.avatar }}" style="padding-bottom:15px; display: block; margin-left: auto; margin-right: auto; height: 200px;"/></div>
-            </div>
-          </div>
-        </section>
-      </div><!-- .widget-inner -->
-    </article>
-    <!-- employee edit popups start -->
-    <div get-popup-position ng-show="editStartDate && employeeEdit" style="z-index: 2; position:absolute;left:35px;top:60px;border-width: 1px;border-style: solid; padding: 10px;background-color: #434343;color: #d3d4d4;">
-        <div style="display:inline;width:8px;margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#d3d4d4 #434343 #d3d4d4 #d3d4d4;padding: 10px 5px 10px 10px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-edit"></span></div>
-        <span style="padding:7px">Hire Date</span>
-        <div ng-model="editEmployee.hire_date" style="padding-top: 10px;">
-            <datepicker show-weeks="showWeeks"></datepicker>
-        </div>
-       <div id="editActions" style="right:2px;bottom:-33px;">
-            <button class="button small blue" style="margin-bottom:3px;" ng-click="saveStartDate();editStartDate=false;currentlyEditing=false">Save</button>
-            <button class="button small orange" style="margin-bottom:3px;" ng-click="cancelEdit();editStartDate=false;currentlyEditing=false">Cancel</button>
-       </div>
-    </div>
-    <div get-popup-position ng-show="editTeamLead && employeeEdit" style="z-index: 2; position:absolute;left:35px;top:60px;border-width: 1px;border-style: solid; padding: 10px;background-color: #434343;color: #d3d4d4;">
-        <div style="display:inline;width:8px;margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#d3d4d4 #434343 #d3d4d4 #d3d4d4;padding: 10px 5px 10px 10px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-edit"></span></div>
-        <span style="padding:7px">Team Lead</span>
-        <div ng-controller="EmployeeListCtrl" style="padding-top: 5px;">
-            <input type="text" ng-model="edit_leadership.leader.full_name" typeahead-on-select="edit_leadership.leader=$item" typeahead="employee.full_name for employee in employees | filter:{full_name:$viewValue}:startsWith | orderBy:'full_name' | limitTo:8" typeahead-editable="false" class="view-value-input"/>
-        </div>
-        <div id="editActions" style="right:2px;bottom:-33px;">
-            <button class="button small blue" style="margin-bottom:3px;" ng-click="saveLeader();editTeamLead=false;currentlyEditing=false">Save</button>
-            <button class="button small orange" style="margin-bottom:3px;" ng-click="cancelEdit();editTeamLead=false;currentlyEditing=false">Cancel</button>
-        </div>
-    </div>
-    <div get-popup-position ng-show="addEngagement" style="z-index: 2; position:absolute;left:110px;top:60px;border-width: 1px;border-style: solid; padding: 10px;background-color: #434343;color: #d3d4d4;">
-        <div>
-            <div style="display:inline;width:8px;margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#d3d4d4 #434343 #d3d4d4 #d3d4d4;padding: 10px 5px 10px 10px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-add"></span></div>
-            <span style="padding:7px">Engagement</span>
-            <ul style="padding:5px">
-                <li ng-repeat="choice in engagement_choices" ng-click="set_choice(choice.id)" class="engage-select" style="padding:5px"><span ng-class="{'glyphicon-check': is_selected(choice.id)}" class="glyphicon" style="padding-right:5px"></span><span class="{{choice.css}}"> {{choice.title}}</span></li>
-            </ul>
-            <div id="editActions" style="right:2px;bottom:-33px;">
-                <button class="button small blue" ng-disabled="disable_save_engagement()" style="margin-bottom:3px;" ng-click="save_engagement();addEngagement=false">Save</button>
-                <button class="button small orange" style="margin-bottom:3px;" ng-click="cancel_engagement();addEngagement=false">Cancel</button>
-            </div>
-        </div>
-    </div>
-    <!-- employee edit popups end -->
-    <article class="widget clock loaded" id="widget-8494" ng-class="{'bio-position-restrict': currentUser.employee.id==employee.id, 'bio-position': currentUser.employee.id!=employee.id}" style="width: auto;">
-      <div class="widget-inner widget-size-1x1 large-screen">
-        <header class="no-reload">
-          <h1 style="display:inline;">Bio</h1>
-        </header>
-
-        <section class="widget-body rag-widget">
-          <div class="widget-canvas">
-            <ol>
-              <li show="{{editStartDate}}" ng-scroll-into-view class="clear" style="padding-top:10px;padding-bottom:10px;">
-                <a set-popup-position ng-show="employeeEdit && !currentlyEditing" ng-click="editStartDate=true;currentlyEditing=true" class="glyphicon glyphicon-edit" style="float:left;cursor:pointer;padding-right:10px"></a>
-                <span ng-show="employeeEdit && currentlyEditing" class="glyphicon glyphicon-edit-disable" style="padding-right:10px;float: left;"></span>
-                <div class="t-secondary" style="min-width: 35%">
-                  Hire Date
+            <section class="widget-body rag-widget">
+              <div class="widget-canvas">
+                <div class="outer" style="margin-left: auto; margin-right: auto;">
+                  <div class="image" style="margin-left: auto; margin-right: auto;"><img ng-src="{{ employee.avatar }}" style="padding-bottom:15px; display: block; margin-left: auto; margin-right: auto; height: 200px;"/></div>
                 </div>
-                <div class="t-size-x14" id="start_date" style="min-width: 50%">{{ employee.hire_date | date:'MM/dd/yyyy' }}</div>
-              </li>
+              </div>
+            </section>
+          </div><!-- .widget-inner -->
+        </article>
+        <article class="widget clock loaded" id="widget-8494"  style="position: relative;width: 315px;margin: 0px 0px 10px 0px;min-height:276px;">
+          <div class="widget-inner large-screen" style="width:316px">
+            <header class="no-reload">
+              <h1 style="display:inline;">Bio</h1>
+            </header>
 
-              <li class="clear" style="padding-top:10px;padding-bottom:10px;">
-                <a show="{{editTeamLead}}" ng-scroll-into-view set-popup-position ng-show="employeeEdit && !currentlyEditing" ng-click="editTeamLead=true;currentlyEditing=true" class="glyphicon glyphicon-edit" style="float:left;cursor:pointer;padding-right:10px"></a>
-                <span ng-show="employeeEdit && currentlyEditing" class="glyphicon glyphicon-edit-disable" style="padding-right:10px;float: left;"></span>
-                <div class="t-secondary" style="min-width: 35%">
-                  Team Lead
-                </div>
-                <div class="t-size-x14" id="team_lead" style="min-width: 50%"><a ng-href="#/employees/{{leadership.leader.id}}">{{ leadership.leader.full_name }}</a></div>
-              </li>
+            <section class="widget-body rag-widget">
+              <div class="widget-canvas">
+                <ol>
+                  <li show="{{editStartDate}}" ng-scroll-into-view class="clear" style="padding-top:10px;padding-bottom:10px;">
+                    <a set-popup-position ng-show="employeeEdit && !currentlyEditing" ng-click="editStartDate=true;currentlyEditing=true" class="glyphicon glyphicon-edit" style="float:left;cursor:pointer;padding-right:10px"></a>
+                    <span ng-show="employeeEdit && currentlyEditing" class="glyphicon glyphicon-edit-disable" style="padding-right:10px;float: left;"></span>
+                    <div class="t-secondary" style="min-width: 35%">
+                      Hire Date
+                    </div>
+                    <div class="t-size-x14" id="start_date" style="min-width: 50%">{{ employee.hire_date | date:'MM/dd/yyyy' }}</div>
+                  </li>
 
-              <li class="clear" style="padding-top:10px;padding-bottom:10px;">
-                <!--<a ng-show="employeeEdit && !currentlyEditing" class="glyphicon glyphicon-edit" style="float:left;cursor:pointer;padding-right:10px"></a>
-                <span ng-show="employeeEdit && currentlyEditing" class="glyphicon glyphicon-edit-disable" style="padding-right:10px;float: left;"></span>-->
-                <div class="t-secondary" style="min-width: 35%">
-                  Super Power
-                </div>
+                  <li class="clear" style="padding-top:10px;padding-bottom:10px;">
+                    <a show="{{editTeamLead}}" ng-scroll-into-view set-popup-position ng-show="employeeEdit && !currentlyEditing" ng-click="editTeamLead=true;currentlyEditing=true" class="glyphicon glyphicon-edit" style="float:left;cursor:pointer;padding-right:10px"></a>
+                    <span ng-show="employeeEdit && currentlyEditing" class="glyphicon glyphicon-edit-disable" style="padding-right:10px;float: left;"></span>
+                    <div class="t-secondary" style="min-width: 35%">
+                      Team Lead
+                    </div>
+                    <div class="t-size-x14" id="team_lead" style="min-width: 50%"><a ng-href="#/employees/{{leadership.leader.id}}">{{ leadership.leader.full_name }}</a></div>
+                  </li>
 
-                <div class="t-size-x14" style="min-width: 50%">
-					<span ng-if="super_powers.length == 0">--</span>
-					<ul ng-if="super_powers.length > 0">
-						<li ng-repeat="super_power in super_powers">
-						  {{ super_power.name }}
-						</li>
-					 </ul>
-				</div>
-              </li>
+                  <li class="clear" style="padding-top:10px;padding-bottom:10px;">
+                    <!--<a ng-show="employeeEdit && !currentlyEditing" class="glyphicon glyphicon-edit" style="float:left;cursor:pointer;padding-right:10px"></a>
+                    <span ng-show="employeeEdit && currentlyEditing" class="glyphicon glyphicon-edit-disable" style="padding-right:10px;float: left;"></span>-->
+                    <div class="t-secondary" style="min-width: 35%">
+                      Super Power
+                    </div>
 
-              <li class="clear" style="padding-top:10px;padding-bottom:10px;">
-                <!--<a ng-show="employeeEdit && !currentlyEditing" class="glyphicon glyphicon-edit" style="float:left;cursor:pointer;padding-right:10px"></a>
-                <span ng-show="employeeEdit && currentlyEditing" class="glyphicon glyphicon-edit-disable" style="padding-right:10px;float: left;"></span>-->
-                <div class="t-secondary" style="min-width: 35%">
-                  Skills
-                </div>
+                    <div class="t-size-x14" style="min-width: 50%">
+                        <span ng-if="super_powers.length == 0">--</span>
+                        <ul ng-if="super_powers.length > 0">
+                            <li ng-repeat="super_power in super_powers">
+                              {{ super_power.name }}
+                            </li>
+                         </ul>
+                    </div>
+                  </li>
 
-                <div class="t-size-x12" style="min-width: 50%">
-					<span ng-if="skills.length == 0">--</span>
-					<ul ng-if="skills.length > 0">
-						<li>
-							<span ng-repeat="skill in skills | limitTo:4">
-							  <text ng-if="!$last">{{ skill.name }},</text>
-							  <text ng-if="$last">{{ skill.name }}</text>
-							</span>
-						</li>
-					 </ul>
-				</div>
-              </li>
+                  <li class="clear" style="padding-top:10px;padding-bottom:10px;">
+                    <!--<a ng-show="employeeEdit && !currentlyEditing" class="glyphicon glyphicon-edit" style="float:left;cursor:pointer;padding-right:10px"></a>
+                    <span ng-show="employeeEdit && currentlyEditing" class="glyphicon glyphicon-edit-disable" style="padding-right:10px;float: left;"></span>-->
+                    <div class="t-secondary" style="min-width: 35%">
+                      Skills
+                    </div>
 
-              <li ng-show="currentUser.employee.id!=employee.id" class="clear" style="padding-top:10px;padding-bottom:10px;">
-                <div class="t-secondary" style="min-width: 35%">
-                  Engagement <a ng-show="!employeeEdit" set-popup-position ng-click="addEngagement=true" class="glyphicon glyphicon-add" style="float:right;cursor:pointer;padding-right:10px"></a>
-                </div>
+                    <div class="t-size-x12" style="min-width: 50%">
+                        <span ng-if="skills.length == 0">--</span>
+                        <ul ng-if="skills.length > 0">
+                            <li>
+                                <span ng-repeat="skill in skills | limitTo:4">
+                                  <text ng-if="!$last">{{ skill.name }},</text>
+                                  <text ng-if="$last">{{ skill.name }}</text>
+                                </span>
+                            </li>
+                         </ul>
+                    </div>
+                  </li>
 
-                <div style="min-width: 50%">
-					<span ng-if="happys.length == 0">--</span>
-					<ul ng-if="happys.length > 0">
-						<li ng-repeat="happy in happys" class="t-size-x12" >
-                          <span style="display:inline-block; vertical-align:middle" class="t-size-x40" ng-class="{'veryhappy': happy.assessment==5,'happy': happy.assessment==4,'indifferent': happy.assessment==3,'unhappy': happy.assessment==2,'veryunhappy': happy.assessment==1}"></span>
-                          <span style="padding:5px; display:inline-block; vertical-align:middle">{{ happy.assessed_date | date:'MM/dd/yyyy'}}</span>
-						</li>
-					 </ul>
-				</div>
-              </li>
+                  <li show="{{addEngagement}}" ng-scroll-into-view ng-show="currentUser.employee.id!=employee.id" class="clear" style="padding-top:10px;padding-bottom:10px;">
+                    <div class="t-secondary" style="min-width: 35%">
+                      Engagement <a ng-show="!employeeEdit" set-popup-position ng-click="addEngagement=true" class="glyphicon glyphicon-add" style="float:right;cursor:pointer;padding-right:10px"></a>
+                    </div>
 
-            </ol>
-          </div>
-        </section>
-      </div><!-- .widget-inner -->
-    </article>
-    <article ng-show="currentUser.employee.id!=employee.id" class="widget clock loaded" id="widget-8494" style="top: 570px; left: 0px; width: auto;">
-      <div ng-controller="EmployeeToDoListCtrl" class="widget-inner large-screen" style="width:315px;min-height: 275px;">
-        <header class="no-reload">
-          <h1 style="display:inline;">To Do's</h1>
-        </header>
-        <section class="widget-body text-widget" style="padding:12px">
-            <div ng-if="todos.length > 0">
-                <div ng-repeat="todo in todos" ng-controller="EmployeeToDoCtrl" ng-init="currentToDo=todo">
-                    <input show="{{scrollIntoView}}" ng-scroll-into-view type="checkbox" ng-click="saveToDo(todo)" ng-model="todo.completed" style="padding: 5px;float: left;">
+                    <div style="min-width: 50%">
+                        <span ng-if="happys.length == 0">--</span>
+                        <ul ng-if="happys.length > 0">
+                            <li ng-repeat="happy in happys" class="t-size-x12" >
+                              <span style="display:inline-block; vertical-align:middle" class="t-size-x40" ng-class="{'veryhappy': happy.assessment==5,'happy': happy.assessment==4,'indifferent': happy.assessment==3,'unhappy': happy.assessment==2,'veryunhappy': happy.assessment==1}"></span>
+                              <span style="padding:5px; display:inline-block; vertical-align:middle">{{ happy.assessed_date | date:'MM/dd/yyyy'}}</span>
+                            </li>
+                         </ul>
+                    </div>
+                  </li>
 
-                    <textarea ng-model="todo.description" ng-enter="saveToDo();scrubToDo(todo);" ng-blur="saveToDo();scrubToDo(todo);" focus-me="todo.edit" ng-show="todo.edit"  placeholder="Add a To Do..." style="position: relative; width: 265px; height: 13px;background-color:#2a2a2a;color:#eee;resize:none;overflow:hidden;font-size: 13px;">
-                    </textarea>
-                    <div ng-show="!todo.edit" ng-class="{'todo-completed': todo.completed}" style="display:inline-block;width: 260px;float:left;margin-top: 3px;margin-left: 2px;padding-bottom: 3px;">{{todo.description}}</div>
-                    <ul class="feed-actions" style="margin-left: 2px;margin-top:0px;">
-                        <li class="feed-action"><a class="assignee_menu" ng-click="toggleAssigneeMenu()" style="color: #8b8b8b;cursor: pointer;">{{todo.assigned_to.full_name||"Unassigned"}}</a></li>
-                        <li class="feed-action"><a ng-click="open($event);closeAssigneeMenu()" style="color: #8b8b8b;cursor: pointer;">{{(todo.due_date | date:'MMM d, yyyy') || "No due date"}}</a></li>
-                        <li class="feed-action"><a ng-show="!todo.edit" ng-click="todo.edit=true" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a><a ng-show="todo.edit" ng-click="todo.edit=false" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
-                        <span style="color:#8b8b8b;"><a ng-click="deleteToDo(todo)" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></span>
-                    </ul>
-                    <span type="text" class="form-control" datepicker-popup="{{format}}" ng-model="todo.due_date" is-open="opened" min="minDate" datepicker-options="" date-disabled="disabled(date, mode)" show-weeks="false" ng-required="true" close-text="Close"/>
-                    <div style="clear:both;"></div>
-                    <div id="assignee-menu"  index="{{$index}}" ng-show="openAssigneeMenu" style="border: 1px solid #ccc;padding: 5px 3px;border-radius: 4px;background-color:#272727;margin-bottom:10px;">
-                           <div class="assignee-arrow-border"></div>
-                           <div class="assignee-arrow"></div>
-                            <ul style="margin-top: -30px;">
-                                <li class="assignee-select"><a class="assignee-select-link" ng-click="assigneeMenu.show=false;todo.assigned_to=null;saveToDo()">Unassigned</a></li>
-                                <li class="assignee-select" ng-repeat="assignee in assignees | orderBy:'full_name'">
-                                    <a class="assignee-select-link" ng-click="assigneeMenu.show=false;todo.assigned_to=assignee;saveToDo()" style="cursor: pointer;">{{assignee.full_name}}</a>
-                                </li>
-                            </ul>
+                </ol>
+              </div>
+            </section>
+          </div><!-- .widget-inner -->
+        </article>
+        <article ng-show="currentUser.employee.id!=employee.id" class="widget clock loaded" id="widget-8494" style="position: relative;width: 315px;margin: 10px 0;min-height: 277px">
+          <div ng-controller="EmployeeToDoListCtrl" class="widget-inner large-screen" style="width:315px;min-height: 275px;">
+            <header class="no-reload">
+              <h1 style="display:inline;">To Do's</h1>
+            </header>
+            <section class="widget-body text-widget" style="padding:12px">
+                <div ng-if="todos.length > 0">
+                    <div ng-repeat="todo in todos" ng-controller="EmployeeToDoCtrl" ng-init="currentToDo=todo">
+                        <input show="{{scrollIntoView}}" ng-scroll-into-view type="checkbox" ng-click="saveToDo(todo)" ng-model="todo.completed" style="padding: 5px;float: left;">
+
+                        <textarea ng-model="todo.description" ng-enter="saveToDo();scrubToDo(todo);" ng-blur="saveToDo();scrubToDo(todo);" focus-me="todo.edit" ng-show="todo.edit"  placeholder="Add a To Do..." style="position: relative; width: 265px; height: 13px;background-color:#2a2a2a;color:#eee;resize:none;overflow:hidden;font-size: 13px;">
+                        </textarea>
+                        <div ng-show="!todo.edit" ng-class="{'todo-completed': todo.completed}" style="display:inline-block;width: 260px;float:left;margin-top: 3px;margin-left: 2px;padding-bottom: 3px;">{{todo.description}}</div>
+                        <ul class="feed-actions" style="margin-left: 2px;margin-top:0px;">
+                            <li class="feed-action"><a class="assignee_menu" ng-click="toggleAssigneeMenu()" style="color: #8b8b8b;cursor: pointer;">{{todo.assigned_to.full_name||"Unassigned"}}</a></li>
+                            <li class="feed-action"><a ng-click="open($event);closeAssigneeMenu()" style="color: #8b8b8b;cursor: pointer;">{{(todo.due_date | date:'MMM d, yyyy') || "No due date"}}</a></li>
+                            <li class="feed-action"><a ng-show="!todo.edit" ng-click="todo.edit=true" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a><a ng-show="todo.edit" ng-click="todo.edit=false" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
+                            <span style="color:#8b8b8b;"><a ng-click="deleteToDo(todo)" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></span>
+                        </ul>
+                        <span type="text" class="form-control" datepicker-popup="{{format}}" ng-model="todo.due_date" is-open="opened" min="minDate" datepicker-options="" date-disabled="disabled(date, mode)" show-weeks="false" ng-required="true" close-text="Close"/>
+                        <div style="clear:both;"></div>
+                        <div id="assignee-menu"  index="{{$index}}" ng-show="openAssigneeMenu" style="border: 1px solid #ccc;padding: 5px 3px;border-radius: 4px;background-color:#272727;margin-bottom:10px;">
+                               <div class="assignee-arrow-border"></div>
+                               <div class="assignee-arrow"></div>
+                                <ul style="margin-top: -30px;">
+                                    <li class="assignee-select"><a class="assignee-select-link" ng-click="assigneeMenu.show=false;todo.assigned_to=null;saveToDo()">Unassigned</a></li>
+                                    <li class="assignee-select" ng-repeat="assignee in assignees | orderBy:'full_name'">
+                                        <a class="assignee-select-link" ng-click="assigneeMenu.show=false;todo.assigned_to=assignee;saveToDo()" style="cursor: pointer;">{{assignee.full_name}}</a>
+                                    </li>
+                                </ul>
+                        </div>
                     </div>
                 </div>
+                <button class="comment" ng-click="addToDo(employee.id)">Add to-do</button>
+            </section>
+          </div>
+        </article>
+        <!-- employee edit popups start -->
+        <div get-popup-position ng-show="editStartDate && employeeEdit" style="z-index: 2; position:absolute;left:35px;top:60px;border-width: 1px;border-style: solid; padding: 10px;background-color: #434343;color: #d3d4d4;">
+            <div style="display:inline;width:8px;margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#d3d4d4 #434343 #d3d4d4 #d3d4d4;padding: 10px 5px 10px 10px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-edit"></span></div>
+            <span style="padding:7px">Hire Date</span>
+            <div ng-model="editEmployee.hire_date" style="padding-top: 10px;">
+                <datepicker show-weeks="showWeeks"></datepicker>
             </div>
-            <button class="comment" ng-click="addToDo(employee.id)">Add to-do</button>
-        </section>
-      </div>
-    </article>
-    <article ng-show="currentUser.employee.id!=employee.id" class="widget clock loaded" id="widget-8494" style="top: 0px; left: 325px; width: auto;">
+           <div id="editActions" style="right:2px;bottom:-33px;">
+                <button class="button small blue" style="margin-bottom:3px;" ng-click="saveStartDate();editStartDate=false;currentlyEditing=false">Save</button>
+                <button class="button small orange" style="margin-bottom:3px;" ng-click="cancelEdit();editStartDate=false;currentlyEditing=false">Cancel</button>
+           </div>
+        </div>
+        <div get-popup-position ng-show="editTeamLead && employeeEdit" style="z-index: 2; position:absolute;left:35px;top:60px;border-width: 1px;border-style: solid; padding: 10px;background-color: #434343;color: #d3d4d4;">
+            <div style="display:inline;width:8px;margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#d3d4d4 #434343 #d3d4d4 #d3d4d4;padding: 10px 5px 10px 10px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-edit"></span></div>
+            <span style="padding:7px">Team Lead</span>
+            <div ng-controller="EmployeeListCtrl" style="padding-top: 5px;">
+                <input type="text" ng-model="edit_leadership.leader.full_name" typeahead-on-select="edit_leadership.leader=$item" typeahead="employee.full_name for employee in employees | filter:{full_name:$viewValue}:startsWith | orderBy:'full_name' | limitTo:8" typeahead-editable="false" class="view-value-input"/>
+            </div>
+            <div id="editActions" style="right:2px;bottom:-33px;">
+                <button class="button small blue" style="margin-bottom:3px;" ng-click="saveLeader();editTeamLead=false;currentlyEditing=false">Save</button>
+                <button class="button small orange" style="margin-bottom:3px;" ng-click="cancelEdit();editTeamLead=false;currentlyEditing=false">Cancel</button>
+            </div>
+        </div>
+        <div get-popup-position ng-show="addEngagement" style="z-index: 2; position:absolute;left:110px;top:60px;border-width: 1px;border-style: solid; padding: 10px;background-color: #434343;color: #d3d4d4;">
+            <div>
+                <div style="display:inline;width:8px;margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#d3d4d4 #434343 #d3d4d4 #d3d4d4;padding: 10px 5px 10px 10px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-add"></span></div>
+                <span style="padding:7px">Engagement</span>
+                <ul style="padding:5px">
+                    <li ng-repeat="choice in engagement_choices" ng-click="set_choice(choice.id)" class="engage-select" style="padding:5px"><span ng-class="{'glyphicon-check': is_selected(choice.id)}" class="glyphicon" style="padding-right:5px"></span><span class="{{choice.css}} small"> {{choice.title}}</span></li>
+                </ul>
+                <div id="editActions" style="right:2px;bottom:-33px;">
+                    <button class="button small blue" ng-disabled="disable_save_engagement()" style="margin-bottom:3px;" ng-click="save_engagement();addEngagement=false">Save</button>
+                    <button class="button small orange" style="margin-bottom:3px;" ng-click="cancel_engagement();addEngagement=false">Cancel</button>
+                </div>
+            </div>
+        </div>
+        <!-- employee edit popups end -->
+    </div>
+    <article ng-show="currentUser.employee.id!=employee.id" class="widget clock loaded" id="widget-8494" style="position: relative;width: 315px;height:276px;margin: 0 10px 0 0;float: left;">
       <div ng-controller="EmployeePvpEvaluationsCtrl" class="widget-inner widget-size-1x1 large-screen">
         <header class="no-reload">
           <h1 style="display:inline;">PvP</h1>
@@ -297,7 +299,7 @@
       </div>
     </article>
 
-    <article class="widget google-analytics loaded" id="widget-14808658" ng-class="{'compensation-position-restrict': currentUser.employee.id==employee.id, 'compensation-position': currentUser.employee.id!=employee.id}" style="width: auto;">
+    <article class="widget google-analytics loaded" id="widget-14808658" style="position: relative;width: 315px;margin: 10px 0 10px 650px">
       <div class="widget-inner widget-size-1x1 large-screen">
         <header class="no-reload">
           <h1 style="display:inline;">Compensation</h1>
@@ -310,8 +312,7 @@
 
       </div><!-- .widget-inner -->
     </article>
-
-    <article ng-show="currentUser.employee.id!=employee.id" class="widget clock loaded" id="widget-8494" style="top: 285px; left: 325px; width: auto;">
+    <article ng-show="currentUser.employee.id!=employee.id" class="widget clock loaded" id="widget-8494" style="position: relative;width: 630px;margin-left: 325px;">
       <div ng-controller="EmployeeCommentsCtrl" class="widget-inner large-screen" style="width:640px;min-height: 309px;">
         <header class="no-reload">
           <h1 style="display:inline;">Latest Buzz</h1>
