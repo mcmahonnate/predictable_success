@@ -86,6 +86,7 @@ TEMPLATE_DIRS = (
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.request',
     'django.contrib.auth.context_processors.auth',
 )
 
@@ -95,6 +96,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'tenant_schemas.middleware.TenantMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -111,20 +113,35 @@ ROOT_URLCONF = 'talentdashboard.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'talentdashboard.wsgi.application'
 
+SOUTH_DATABASE_ADAPTERS = {
+    'default': 'south.db.postgresql_psycopg2',
+}
+
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
 )
 
-INSTALLED_APPS = (
-    'django.contrib.auth',
+TENANT_MODEL = "customer.Client" # app.Model
+
+SHARED_APPS = (
+    'tenant_schemas',  # mandatory
+    'customer', # you must list the app where your tenant model resides in
+
     'django.contrib.contenttypes',
+    'django.contrib.auth',
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
+)
+
+TENANT_APPS = (
+    # The following Django contrib apps must be in TENANT_APPS
+    'django.contrib.contenttypes',
+    'django.contrib.auth',
     'talentdashboard',
     'south',
     'rest_framework',
@@ -135,6 +152,8 @@ INSTALLED_APPS = (
     'todo',
     'engagement',
 )
+
+INSTALLED_APPS = SHARED_APPS + TENANT_APPS + ('tenant_schemas',)
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
