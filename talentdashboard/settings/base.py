@@ -109,6 +109,7 @@ MIDDLEWARE_CLASSES = (
 
 
 ROOT_URLCONF = 'talentdashboard.urls'
+PUBLIC_SCHEMA_URLCONF = 'talentdashboard.urls_public'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'talentdashboard.wsgi.application'

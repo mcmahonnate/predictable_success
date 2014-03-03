@@ -946,3 +946,15 @@ user agent stylesheettd, th {
     background-color: #585858;
     text-decoration: none !important;
 }
+nav {
+    float:right;
+    font-size: 20px;
+}
+.nav {
+    margin: auto 0;
+}
+.nav-item {
+    padding-top: 1.25em;
+    float: left;
+    margin: 0 20px;
+}
