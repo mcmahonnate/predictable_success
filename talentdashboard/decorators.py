@@ -13,7 +13,7 @@ def cache_on_auth(timeout, *group_names):
             u = request.user
             if u.is_authenticated():
                 if u.groups.filter(name__in=group_names).exists() | u.is_superuser:
-                    return cache_page(timeout,key_prefix=request.tenant)(view_func)(request, *args, **kwargs)
+                    return cache_page(timeout)(view_func)(request, *args, **kwargs)
             return view_func(request, *args, **kwargs)
         return _wrapped_view
     return decorator

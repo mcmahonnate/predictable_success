@@ -15,4 +15,3 @@ wsgiref==0.1.2
 pil==1.1.7
 pylibmc==1.2.3
 django-pylibmc-sasl==0.2.4
-django-tenant-schemas==1.4.4

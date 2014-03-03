@@ -3,7 +3,7 @@ from .base import *
 import dj_database_url
 
 DATABASES = { 'default': dj_database_url.config(default=os.environ.get('DATABASE_URL')) }
-DATABASES['default']['ENGINE'] = 'tenant_schemas.postgresql_backend'
+
 EMAIL_BACKEND = 'talentdashboard.backend.SSLEmailBackend'
 EMAIL_USE_SSL = True
 EMAIL_HOST = 'mail.dfrntlabs.com'
