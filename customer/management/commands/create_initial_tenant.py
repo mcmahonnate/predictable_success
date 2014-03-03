@@ -5,7 +5,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         # create your public tenant
-        tenant = Client(domain_url='localhost', # don't add your port or www here! on a local server you'll want to use localhost here
+        tenant = Client(domain_url='hippoculture', # don't add your port or www here! on a local server you'll want to use localhost here
                         schema_name='public',
                         name='dfrnt Labs LLC',
                         paid_until='2026-02-24',
