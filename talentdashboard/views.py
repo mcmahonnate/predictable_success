@@ -13,6 +13,7 @@ from todo.models import Task
 from engagement.models import Happiness
 import datetime
 from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
 from django.utils.log import getLogger
 from django.core.mail import send_mail
 from django.contrib.sites.models import get_current_site
@@ -348,7 +349,14 @@ class EmployeeDetail(APIView):
 def user_status(request):
     serializer = UserSerializer(request.user)
     return Response(serializer.data)
-    
+
+@api_view(['GET'])
+def current_site(request):
+    site = Site.objects.get(domain = request.get_host())
+
+    serializer = SiteSerializer(site)
+    return Response(serializer.data)
+
 @api_view(['GET'])
 @cache_on_auth(60*15, 'foolsquad')
 @group_required('foolsquad')

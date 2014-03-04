@@ -6,6 +6,7 @@ from comp.models import CompensationSummary
 from blah.models import Comment
 from engagement.models import Happiness
 from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
 
 class TeamSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -57,6 +58,11 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'first_name', 'last_name', 'can_edit_employees', 'employee', 'last_login')
+
+class SiteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Site
+        fields = ('id', 'domain', 'name')
 
 class SubCommentSerializer(serializers.HyperlinkedModelSerializer):
     owner = UserSerializer()

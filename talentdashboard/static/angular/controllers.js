@@ -1,11 +1,15 @@
 angular.module('tdb.controllers', [])
 
-.controller('BaseAppCtrl', ['$rootScope', '$location', 'User', function($rootScope, $location, User) {
+.controller('BaseAppCtrl', ['$rootScope', '$location', 'User', 'Site', function($rootScope, $location, User, Site) {
     $rootScope.$on("$routeChangeError", function() {
         window.location = '/login?next=' + $location.path();
     })
    User.get(function(data) {
             $rootScope.currentUser = data;
+       }
+   );
+   Site.get(function(data) {
+            $rootScope.currentSite = data;
        }
    );
    // parse a date in yyyy-mm-dd format

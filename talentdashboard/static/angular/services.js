@@ -183,6 +183,12 @@ angular.module('tdb.services', ['ngResource'])
     var currentUser = $resource('api/v1/user-status/');
 
     return currentUser;
+}])
+
+.factory('Site', ['$resource', '$http', function($resource, $http) {
+    var currentSite = $resource('api/v1/current_site/');
+
+    return currentSite;
 }]);
 
 angular.module('analytics', ['ng'])
