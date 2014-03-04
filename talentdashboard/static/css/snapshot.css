@@ -875,9 +875,20 @@ a.glyphicon:hover {
     content: "\270F";
 }
 
+a.glyphicon-edit{
+    cursor:pointer;
+}
+
+a.glyphicon-edit-disable {
+    pointer-events: none;
+    cursor: default;
+}
+
 .glyphicon-edit-disable:before {
     color: #101214;
     content: "\270F";
+    pointer-events: none;
+    cursor: default;
 }
 
 .glyphicon-add:before {

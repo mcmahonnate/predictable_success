@@ -174,8 +174,12 @@ angular.module('tdb.directives', [])
 .directive('setPopupPosition', function() {
     return function(scope, element, attrs){
         element.bind("click", function (event) {
-            scope.popup.top = element.offset().top;
-            scope.popup.left = element.offset().left;
+            console.log('setPopupPosition');
+            scope.$apply(function() {
+                console.log(element.offset().top);
+                scope.popup.top = element.offset().top;
+                scope.popup.left = element.offset().left;
+            })
         });
     };
 })
@@ -183,6 +187,8 @@ angular.module('tdb.directives', [])
 .directive('getPopupPosition', function() {
     return function(scope, element, attrs){
         scope.$watch("popup.top", function() {
+            console.log('getPopupPosition');
+            console.log(scope.popup.top);
             element.css({"top":(scope.popup.top-87)});
         });
     };

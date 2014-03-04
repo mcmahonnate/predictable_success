@@ -53,11 +53,11 @@
         <article class="widget clock loaded" id="widget-8494" style="position: relative;width: 315px;height:276px;margin: 0px 0px 10px 0px;">
           <div class="widget-inner widget-size-1x1 large-screen">
             <header class="no-reload">
-              <a ng-show="employeeEdit && !currentlyEditing" ng-click="editName=true;currentlyEditing=true" class="glyphicon glyphicon-edit" style="padding-right:10px;cursor:pointer"></a><span ng-show="employeeEdit && currentlyEditing" class="glyphicon glyphicon-edit-disable" style="padding-right:10px;"></span><h1 style="display:inline;">{{employee.full_name}}</h1>
+              <a ng-show="employeeEdit" ng-click="editName=true;currentlyEditing=true" class="glyphicon" ng-class="{'glyphicon-edit': !currentlyEditing, 'glyphicon-edit-disable': currentlyEditing}" style="padding-right:10px;"></a><h1 style="display:inline;">{{employee.full_name}}</h1>
               <span ng-show="currentUser.can_edit_employees" class="employee-edit" style="float:right;text-transform:lowercase;color: #8b8b8b"><a ng-show="!employeeEdit" ng-click="employeeEdit=true">edit</a><a ng-show="employeeEdit" ng-click="employeeEdit=false;">done editing</a></span>
             </header>
             <div ng-show="editName && employeeEdit" style="position:absolute;left:30px;top:5px;border-width: 1px;border-style: solid; padding: 10px;background-color: #434343;color: #d3d4d4;">
-                <div style="display:inline;width:8px;margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#d3d4d4 #434343 #d3d4d4 #d3d4d4;padding: 10px 5px 10px 10px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-edit"></span></div>
+                <div style="display:inline;width:8px;margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#d3d4d4 #434343 #d3d4d4 #d3d4d4;padding: 11px 5px 10px 10px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-edit"></span></div>
                 <span style="padding:7px">Name</span>
                 <textarea ng-model="editEmployee.full_name" placeholder="Employee Name" style="position: relative; width: 245px; height: 13px;background-color:#2a2a2a;color:#eee;resize:none;overflow:hidden;font-size: 13px;margin-top:10px;padding: 8px;">
                 </textarea>
@@ -85,8 +85,7 @@
               <div class="widget-canvas">
                 <ol>
                   <li show="{{editStartDate}}" ng-scroll-into-view class="clear" style="padding-top:10px;padding-bottom:10px;">
-                    <a set-popup-position ng-show="employeeEdit && !currentlyEditing" ng-click="editStartDate=true;currentlyEditing=true" class="glyphicon glyphicon-edit" style="float:left;cursor:pointer;padding-right:10px"></a>
-                    <span ng-show="employeeEdit && currentlyEditing" class="glyphicon glyphicon-edit-disable" style="padding-right:10px;float: left;"></span>
+                    <a set-popup-position ng-show="employeeEdit" ng-click="editStartDate=true;currentlyEditing=true" class="glyphicon" ng-class="{'glyphicon-edit': !currentlyEditing, 'glyphicon-edit-disable': currentlyEditing}" style="float:left;padding-right:10px"></a>
                     <div class="t-secondary" style="min-width: 35%">
                       Hire Date
                     </div>
@@ -94,8 +93,7 @@
                   </li>
 
                   <li class="clear" style="padding-top:10px;padding-bottom:10px;">
-                    <a show="{{editTeamLead}}" ng-scroll-into-view set-popup-position ng-show="employeeEdit && !currentlyEditing" ng-click="editTeamLead=true;currentlyEditing=true" class="glyphicon glyphicon-edit" style="float:left;cursor:pointer;padding-right:10px"></a>
-                    <span ng-show="employeeEdit && currentlyEditing" class="glyphicon glyphicon-edit-disable" style="padding-right:10px;float: left;"></span>
+                    <a show="{{editTeamLead}}" ng-scroll-into-view set-popup-position ng-show="employeeEdit" ng-click="editTeamLead=true;currentlyEditing=true" class="glyphicon" ng-class="{'glyphicon-edit': !currentlyEditing, 'glyphicon-edit-disable': currentlyEditing}" style="float:left;padding-right:10px"></a>
                     <div class="t-secondary" style="min-width: 35%">
                       Team Lead
                     </div>
@@ -199,7 +197,7 @@
         </article>
         <!-- employee edit popups start -->
         <div get-popup-position ng-show="editStartDate && employeeEdit" style="z-index: 2; position:absolute;left:35px;top:60px;border-width: 1px;border-style: solid; padding: 10px;background-color: #434343;color: #d3d4d4;">
-            <div style="display:inline;width:8px;margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#d3d4d4 #434343 #d3d4d4 #d3d4d4;padding: 10px 5px 10px 10px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-edit"></span></div>
+            <div style="display:inline;width:8px;margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#d3d4d4 #434343 #d3d4d4 #d3d4d4;padding: 11px 5px 10px 10px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-edit"></span></div>
             <span style="padding:7px">Hire Date</span>
             <div ng-model="editEmployee.hire_date" style="padding-top: 10px;">
                 <datepicker show-weeks="showWeeks"></datepicker>
@@ -210,7 +208,7 @@
            </div>
         </div>
         <div get-popup-position ng-show="editTeamLead && employeeEdit" style="z-index: 2; position:absolute;left:35px;top:60px;border-width: 1px;border-style: solid; padding: 10px;background-color: #434343;color: #d3d4d4;">
-            <div style="display:inline;width:8px;margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#d3d4d4 #434343 #d3d4d4 #d3d4d4;padding: 10px 5px 10px 10px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-edit"></span></div>
+            <div style="display:inline;width:8px;margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#d3d4d4 #434343 #d3d4d4 #d3d4d4;padding: 11px 5px 10px 10px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-edit"></span></div>
             <span style="padding:7px">Team Lead</span>
             <div ng-controller="EmployeeListCtrl" style="padding-top: 5px;">
                 <input type="text" ng-model="edit_leadership.leader.full_name" typeahead-on-select="edit_leadership.leader=$item" typeahead="employee.full_name for employee in employees | filter:{full_name:$viewValue}:startsWith | orderBy:'full_name' | limitTo:8" typeahead-editable="false" class="view-value-input"/>
@@ -222,7 +220,7 @@
         </div>
         <div get-popup-position ng-show="addEngagement" style="z-index: 2; position:absolute;left:110px;top:60px;border-width: 1px;border-style: solid; padding: 10px;background-color: #434343;color: #d3d4d4;">
             <div>
-                <div style="display:inline;width:8px;margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#d3d4d4 #434343 #d3d4d4 #d3d4d4;padding: 10px 5px 10px 10px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-add"></span></div>
+                <div style="display:inline;width:8px;margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#d3d4d4 #434343 #d3d4d4 #d3d4d4;padding: 11px 5px 10px 10px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-add"></span></div>
                 <span style="padding:7px">Engagement</span>
                 <ul style="padding:5px">
                     <li ng-repeat="choice in engagement_choices" ng-click="set_choice(choice.id)" class="engage-select" style="padding:5px"><span ng-class="{'glyphicon-check': is_selected(choice.id)}" class="glyphicon" style="padding-right:5px"></span><span class="{{choice.css}} small"> {{choice.title}}</span></li>

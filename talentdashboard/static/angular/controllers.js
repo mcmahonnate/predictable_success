@@ -99,7 +99,7 @@ angular.module('tdb.controllers', [])
         } else {
             $scope.openEmployeeMenu  = false;
             $scope.$window.onclick = null;
-            $scope.$apply(); //--> trigger digest cycle and make angular aware.
+            $scope.$$phase || $scope.$apply(); //--> trigger digest cycle and make angular aware.
         }
     };
     function closeEmployeeMenu(event, callbackOnClose) {
@@ -122,7 +122,7 @@ angular.module('tdb.controllers', [])
         } else {
             $scope.openTeamMenu  = false;
             $scope.$window.onclick = null;
-            $scope.$apply(); //--> trigger digest cycle and make angular aware.
+            $scope.$$phase || $scope.$apply(); //--> trigger digest cycle and make angular aware.
         }
     };
     function closeTeamMenu(event, callbackOnClose) {
@@ -145,7 +145,7 @@ angular.module('tdb.controllers', [])
         } else {
             $scope.openSettingsMenu  = false;
             $scope.$window.onclick = null;
-            $scope.$apply(); //--> trigger digest cycle and make angular aware.
+            $scope.$$phase || $scope.$apply(); //--> trigger digest cycle and make angular aware.
         }
     };
     function closeSettingsMenu(event, callbackOnClose) {
@@ -677,7 +677,7 @@ angular.module('tdb.controllers', [])
         } else {
             $scope.openAssigneeMenu = false;
             $scope.$window.onclick = null;
-            $scope.$apply(); //--> trigger digest cycle and make angular aware.
+            $scope.$$phase || $scope.$apply(); //--> trigger digest cycle and make angular aware.
         }
     };
     $scope.closeAssigneeMenu = function() {
