@@ -53,19 +53,9 @@
         <article class="widget clock loaded" id="widget-8494" style="position: relative;width: 315px;height:276px;margin: 0px 0px 10px 0px;">
           <div class="widget-inner widget-size-1x1 large-screen">
             <header class="no-reload">
-              <a ng-show="employeeEdit" ng-click="editName=true;currentlyEditing=true" class="glyphicon" ng-class="{'glyphicon-edit': !currentlyEditing, 'glyphicon-edit-disable': currentlyEditing}" style="padding-right:10px;"></a><h1 style="display:inline;">{{employee.full_name}}</h1>
+              <a set-popup-position ng-show="employeeEdit" ng-click="editName=true;currentlyEditing=true" class="glyphicon" ng-class="{'glyphicon-edit': !currentlyEditing, 'glyphicon-edit-disable': currentlyEditing}" style="padding-right:10px;"></a><h1 style="display:inline;">{{employee.full_name}}</h1>
               <span ng-show="currentUser.can_edit_employees" class="employee-edit" style="float:right;text-transform:lowercase;color: #8b8b8b"><a ng-show="!employeeEdit" ng-click="employeeEdit=true">edit</a><a ng-show="employeeEdit" ng-click="employeeEdit=false;">done editing</a></span>
             </header>
-            <div ng-show="editName && employeeEdit" style="position:absolute;left:30px;top:5px;border-width: 1px;border-style: solid; padding: 10px;background-color: #434343;color: #d3d4d4;">
-                <div style="display:inline;width:8px;margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#d3d4d4 #434343 #d3d4d4 #d3d4d4;padding: 11px 5px 10px 10px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-edit"></span></div>
-                <span style="padding:7px">Name</span>
-                <textarea ng-model="editEmployee.full_name" placeholder="Employee Name" style="position: relative; width: 245px; height: 13px;background-color:#2a2a2a;color:#eee;resize:none;overflow:hidden;font-size: 13px;margin-top:10px;padding: 8px;">
-                </textarea>
-                <div id="editActions" style="right:2px;bottom:-33px;">
-                    <button class="button small blue" style="margin-bottom:3px;" ng-click="saveName();editName=false;currentlyEditing=false">Save</button>
-                    <button class="button small orange" style="margin-bottom:3px;" ng-click="cancelEdit();editName=false;currentlyEditing=false">Cancel</button>
-                </div>
-            </div>
             <section class="widget-body rag-widget">
               <div class="widget-canvas">
                 <div class="outer" style="margin-left: auto; margin-right: auto;">
@@ -196,10 +186,20 @@
           </div>
         </article>
         <!-- employee edit popups start -->
+        <div get-popup-position ng-show="editName && employeeEdit" style="z-index: 2;position:absolute;left:30px;top:5px;border-width: 1px;border-style: solid; padding: 10px;background-color: #434343;color: #d3d4d4;">
+            <div style="margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#d3d4d4 #434343 #d3d4d4 #d3d4d4;display:inline-block;width:20px;height:25px;padding-top: 8px;padding-left: 9px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-edit"></span></div>
+            <span style="padding:7px">Name</span>
+            <textarea ng-model="editEmployee.full_name" placeholder="Employee Name" style="position: relative; width: 245px; height: 13px;background-color:#2a2a2a;color:#eee;resize:none;overflow:hidden;font-size: 13px;padding: 8px;">
+            </textarea>
+            <div id="editActions" style="right:2px;bottom:-33px;">
+                <button class="button small blue" style="margin-bottom:3px;" ng-click="saveName();editName=false;currentlyEditing=false">Save</button>
+                <button class="button small orange" style="margin-bottom:3px;" ng-click="cancelEdit();editName=false;currentlyEditing=false">Cancel</button>
+            </div>
+        </div>
         <div get-popup-position ng-show="editStartDate && employeeEdit" style="z-index: 2; position:absolute;left:35px;top:60px;border-width: 1px;border-style: solid; padding: 10px;background-color: #434343;color: #d3d4d4;">
-            <div style="display:inline;width:8px;margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#d3d4d4 #434343 #d3d4d4 #d3d4d4;padding: 11px 5px 10px 10px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-edit"></span></div>
+            <div style="margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#d3d4d4 #434343 #d3d4d4 #d3d4d4;display:inline-block;width:20px;height:25px;padding-top: 8px;padding-left: 9px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-edit"></span></div>
             <span style="padding:7px">Hire Date</span>
-            <div ng-model="editEmployee.hire_date" style="padding-top: 10px;">
+            <div ng-model="editEmployee.hire_date">
                 <datepicker show-weeks="showWeeks"></datepicker>
             </div>
            <div id="editActions" style="right:2px;bottom:-33px;">
@@ -208,7 +208,7 @@
            </div>
         </div>
         <div get-popup-position ng-show="editTeamLead && employeeEdit" style="z-index: 2; position:absolute;left:35px;top:60px;border-width: 1px;border-style: solid; padding: 10px;background-color: #434343;color: #d3d4d4;">
-            <div style="display:inline;width:8px;margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#d3d4d4 #434343 #d3d4d4 #d3d4d4;padding: 11px 5px 10px 10px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-edit"></span></div>
+            <div style="margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#d3d4d4 #434343 #d3d4d4 #d3d4d4;display:inline-block;width:20px;height:25px;padding-top: 8px;padding-left: 9px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-edit"></span></div>
             <span style="padding:7px">Team Lead</span>
             <div ng-controller="EmployeeListCtrl" style="padding-top: 5px;">
                 <input type="text" ng-model="edit_leadership.leader.full_name" typeahead-on-select="edit_leadership.leader=$item" typeahead="employee.full_name for employee in employees | filter:{full_name:$viewValue}:startsWith | orderBy:'full_name' | limitTo:8" typeahead-editable="false" class="view-value-input"/>
