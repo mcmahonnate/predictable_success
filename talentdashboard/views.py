@@ -426,8 +426,9 @@ def pvp_evaluations(request):
 def comment_reports(request):
     talent_category = request.QUERY_PARAMS.get('talent_category', None)
     employee_type = ContentType.objects.get(model="employee")
-    days_to_subtract = 182
-
+    days_to_subtract = request.QUERY_PARAMS.get('days', None)
+    if days_to_subtract is None:
+        days_to_subtract = 30
     d = date.today()-timedelta(days=days_to_subtract)
     comments = Comment.objects.filter(created_date__gt=d, content_type=employee_type)
     ids = []
