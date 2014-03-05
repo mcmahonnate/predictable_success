@@ -100,6 +100,14 @@ angular.module('tdb.services', ['ngResource'])
     return TalentCategoryReport;
 }])
 
+.factory('PeopleReport', ['$resource', '$http', function($resource, $http) {
+    PeopleReport = $resource('/api/v1/employee-comment-reports/:id');
+
+    PeopleReport.getReportForCompany = function(success, failure) { return this.get({ id: 'all-employees' }, success, failure); };
+
+    return PeopleReport;
+}])
+
 .factory('SalaryReport', ['$resource', '$http', function($resource, $http) {
     SalaryReport = $resource('/api/v1/salary-reports/:id/:teamId');
 

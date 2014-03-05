@@ -364,6 +364,14 @@ angular.module('tdb.controllers', [])
     });
 }])
 
+.controller('PeopleReportCtrl', ['$scope', '$location', '$routeParams', 'PeopleReport', 'TalentCategoryReport', 'analytics', function($scope, $location, $routeParams, PeopleReport, TalentCategoryReport, analytics) {
+    analytics.trackPage($scope, $location.absUrl(), $location.url());
+    PeopleReport.getReportForCompany(function(data) {
+        console.log(data);
+        $scope.talentCategoryReport = data;
+    });
+}])
+
 .controller('TeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'TalentCategoryReport', 'SalaryReport', 'Team', 'analytics', function($scope, $location, $routeParams, TalentCategoryReport, SalaryReport, Team, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     $scope.teamId = $routeParams.id;

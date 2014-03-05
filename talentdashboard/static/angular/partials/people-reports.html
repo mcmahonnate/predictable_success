@@ -1,0 +1,160 @@
+  <header id="main-header">
+    <!-- #top-bar -->
+
+    <div class="clear" id="dashboard-admin-bar">
+		<div ng-controller="EmployeeListCtrl" class="inner dashboard-sized-el" style="max-width: 970px;">
+			<div style="display: block; color: #cbcbcb; font-weight: 700; padding: 12px 36px 10px 12px;font-size: 16px; width:150px; float:left">
+				<a href="/" style="color:#fff;">{{currentSite.name}}</a>
+			</div>
+			<div class="btn" id="switch-dashboard" style="float:right;width:55px;">
+			  <span class="settings_menu" id="selected-dashboard-title" ng-click="toggleSettingsMenu()" style="font-weight: 700; color: white;padding:0px;">
+                <img class="settings_menu" src="/static/css/settings.png"style="width:35px;margin-left:3px;margin-top:3px;margin-bottom:-3px;"/>
+              </span>
+                <div id="selection-list" ng-show="openSettingsMenu" style="display: none;width:100px">
+                    <ul>
+                        <li>
+                            <a class="dashboard" href="/logout" style="font-weight:800;">Sign Out</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+			<div class="btn" id="switch-dashboard" style="float:right">
+			  <span class="employee_menu" ng-click="toggleEmployeeMenu()" id="selected-dashboard-title" style="font-weight: 700; color: white;">People</span>
+			  <div id="selection-list" ng-show="openEmployeeMenu" style="display: none;">
+				<ul>
+					<li>
+						<input class="search-input employee_menu" ng-model="employeeQuery" type="text" placeholder="Search"/>
+					</li>
+					<li ng-repeat="employee in employees | filter:{full_name:employeeQuery}:startsWith | orderBy:'full_name'">
+						<a class="dashboard" style="font-weight:800;" href="#/employees/{{employee.id}}">{{employee.full_name}}</a>
+					</li>
+				</ul>
+			  </div>
+			</div>
+			<div ng-controller="TeamListCtrl" class="btn"  id="switch-dashboard" style="float:right">
+			  <span class="team_menu" id="selected-dashboard-title" ng-click="toggleTeamMenu()" style="font-weight: 700; color: white;">Teams</span>
+			  <div id="selection-list" ng-show="openTeamMenu" style="display: none;">
+				<ul>
+					<li>
+						<input class="search-input team_menu" type="text" ng-model="teamQuery" placeholder="Search"/>
+					</li>
+					<li ng-repeat="team in teams | filter:{name:teamQuery}:startsWith | orderBy:'name'">
+						<a class="dashboard" style="font-weight:800;" href="#/teams/{{team.id}}">{{team.name}}</a>
+					</li>
+				</ul>		  
+			  </div>
+			</div>
+		</div>
+    </div>
+  </header>
+  <div class="dashboard-sized-el fade in" id="dashboard" style="margin-top: 75px; max-width: 970px;">
+
+    <article class="widget clock loaded" id="widget-8494" style="top: 0px; left: 0px; width: auto;">
+      <div class="widget-inner widget-size-1x1 large-screen">
+        <header class="no-reload">
+          <h1 id="talent-header" style="display:inline;">Last 30 day Check-ins</h1>
+        </header>
+        <div>
+            <div x-talent-category-chart  size="small" style="width: 360px; height: 225px; position: relative; left:5px;top:10px;"></div>
+        </div>
+
+      </div>
+    </article>
+
+
+  </div>
+  <style>
+  button.comment {
+    border: 1px solid #434343;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    padding:8px;
+    background-color:#434343;
+    font-size:14px;
+    color:#d3d4d4;
+    margin-top:10px;
+    margin-bottom:15px;
+    cursor: pointer;
+  }
+  button.small-comment {
+    border: 1px solid #434343;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    height:31px;
+    background-color:#434343;
+    font-size:12px;
+    color:#d3d4d4;
+    margin-left:15px;
+    cursor: pointer;
+  }
+  button.small-comment:hover {
+    background-color:#272727;
+  }
+  button.comment:hover {
+    background-color:#272727;
+  }
+  ul.feed-actions {
+    margin-top: 5px;
+    list-style: none;
+  }
+  .feed-actions li {
+    background: url('/static/css/icon_bullet_grey2_4x4.png') no-repeat scroll 100% 6px transparent;
+    float: left;
+    margin: 0 10px 8px 0;
+    padding: 0 10px 0 0;
+    color: #8b8b8b;
+  }
+  .feed-action a:hover {
+    text-decoration: none;
+  }
+  .expand {
+      transition: height .5s;
+      -webkit-transition: height .5s;
+      height: 132px;
+  }
+  .compress {
+      height: 15px;
+  }
+  .assignee-arrow-border {
+       border-color: transparent transparent #ccc transparent;
+       border-style: solid;
+       border-width: 9px;
+       height:0;
+       width:0;
+       position:relative;
+       left:30px;
+       top: -25px;
+  }
+  .assignee-arrow {
+       border-color: transparent transparent #272727 transparent;
+       border-style: solid;
+       border-width: 9px;
+       height:0;
+       width:0;
+       position:relative;
+       left:30px;
+       top: -40px;
+  }
+  .calendar-arrow-border {
+       border-color: transparent transparent #ccc transparent;
+       border-style: solid;
+       border-width: 9px;
+       height:0;
+       width:0;
+       position:relative;
+       left:120px;
+       top: -22px;
+  }
+  .calendar-arrow {
+       border-color: transparent transparent #272727 transparent;
+       border-style: solid;
+       border-width: 9px;
+       height:0;
+       width:0;
+       position:relative;
+       left:120px;
+       top: -37px;
+  }
+</style>
