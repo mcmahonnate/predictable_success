@@ -12,6 +12,7 @@ from blah.models import Comment
 from todo.models import Task
 from engagement.models import Happiness
 import datetime
+from datetime import date, timedelta
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.utils.log import getLogger
@@ -78,8 +79,8 @@ class AttributeViewSet(viewsets.ReadOnlyModelViewSet):
         if category_id is not None:
             self.queryset = self.queryset.filter(category__id=category_id)            
             
-        return self.queryset  
-        
+        return self.queryset
+
 class TalentCategoryReportDetail(APIView):
     def get(self, request, pk, format=None):
         report = None
@@ -418,7 +419,37 @@ def pvp_evaluations(request):
         data = serializer.data
 
     return Response(data)
-    
+
+@api_view(['GET'])
+@cache_on_auth(60*15, 'foolsquad')
+@group_required('foolsquad')
+def comment_reports(request):
+    talent_category = request.QUERY_PARAMS.get('talent_category', None)
+    employee_type = ContentType.objects.get(model="employee")
+    days_to_subtract = 182
+
+    d = date.today()-timedelta(days=days_to_subtract)
+    comments = Comment.objects.filter(created_date__gt=d, content_type=employee_type)
+    ids = []
+    for comment in comments:
+        ids.append(comment.object_id)
+    employees = Employee.objects.filter(id__in=ids)
+
+    evaluations = PvpEvaluation.objects.all()
+    current_round = EvaluationRound.objects.most_recent()
+    evaluations = evaluations.filter(evaluation_round__id = current_round.id).exclude(employee__in=employees)
+
+    # The talent_category query executes the query, so it needs to happen after all other filters
+    if talent_category is not None:
+        evaluations = [item for item in evaluations if item.get_talent_category() == int(talent_category)]
+
+    data= [{'empty':1}]
+    if len(evaluations)>0:
+        serializer = PvpEvaluationSerializer(evaluations, many=True)
+        data = serializer.data
+
+    return Response(data)
+
 @api_view(['GET'])
 @cache_on_auth(60*15, 'foolsquad')
 @group_required('foolsquad')
