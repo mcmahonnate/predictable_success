@@ -421,7 +421,6 @@ def pvp_evaluations(request):
     return Response(data)
 
 @api_view(['GET'])
-@cache_on_auth(60*15, 'foolsquad')
 @group_required('foolsquad')
 def comment_reports(request):
     talent_category = request.QUERY_PARAMS.get('talent_category', None)
@@ -429,7 +428,7 @@ def comment_reports(request):
     days_to_subtract = request.QUERY_PARAMS.get('days', None)
     if days_to_subtract is None:
         days_to_subtract = 30
-    d = date.today()-timedelta(days=days_to_subtract)
+    d = date.today()-timedelta(days=int(days_to_subtract))
     comments = Comment.objects.filter(created_date__gt=d, content_type=employee_type)
     ids = []
     for comment in comments:
