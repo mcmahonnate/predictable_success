@@ -8,6 +8,7 @@ from .serializers import *
 from .decorators import *
 from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team
 from pvp.salaryreports import get_salary_report_for_team, get_salary_report_for_all_employees
+from blah.commentreports import get_employees_with_no_comments
 from blah.models import Comment
 from todo.models import Task
 from engagement.models import Happiness
@@ -80,6 +81,16 @@ class AttributeViewSet(viewsets.ReadOnlyModelViewSet):
             self.queryset = self.queryset.filter(category__id=category_id)            
             
         return self.queryset
+
+class EmployeeCommentReportDetail(APIView):
+    def get(self, request, pk, format=None):
+        report = None
+        if(pk == 'all-employees'):
+            report = get_employees_with_no_comments()
+        serializer = TalentCategoryReportSerializer(report)
+        if report is not None:
+            return Response(serializer.data)
+        return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 class TalentCategoryReportDetail(APIView):
     def get(self, request, pk, format=None):
