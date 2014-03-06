@@ -48,11 +48,10 @@
     </div>
   </header>
   <div class="dashboard-sized-el fade in" id="dashboard" style="margin-top: 75px; max-width: 970px;">
-
-    <article class="widget clock loaded" id="widget-8494" style="top: 0px; left: 0px; width: auto;">
+    <article ng-controller="EngagementReportCtrl" class="widget clock loaded" id="widget-8494" style="top: 0px; left: 0px; width: auto;">
       <div class="widget-inner widget-size-1x1 large-screen">
         <header class="no-reload">
-          <h1 id="talent-header" style="display:inline;">Last 30 day Check-ins</h1>
+          <h1 id="talent-header" style="display:inline;">Check-ins in past 60 days</h1>
         </header>
         <div>
             <div x-talent-category-chart  size="small" style="width: 360px; height: 225px; position: relative; left:5px;top:10px;"></div>
@@ -60,8 +59,17 @@
 
       </div>
     </article>
+    <article class="widget clock loaded" id="widget-8494" style="top: 285px; left: 0px; width: auto;">
+      <div class="widget-inner widget-size-1x1 large-screen">
+        <header class="no-reload">
+          <h1 id="talent-header" style="display:inline;">Discussions in past 60 days</h1>
+        </header>
+        <div>
+            <div x-talent-category-chart  size="small" style="width: 360px; height: 225px; position: relative; left:5px;top:10px;"></div>
+        </div>
 
-
+      </div>
+    </article>
   </div>
   <style>
   button.comment {

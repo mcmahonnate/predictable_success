@@ -1,7 +1,6 @@
-from .models import Comment
+from .models import Happiness
 from pvp.models import PvpEvaluation, EvaluationRound
 from org.models import Employee
-from django.contrib.contenttypes.models import ContentType
 from datetime import date, timedelta
 
 class TalentCategorySummary:
@@ -26,14 +25,12 @@ def build_talent_category_report_for_employees(employees):
         total_evaluations += categories[talent_category]
     return TalentCategoryReport(evaluation_date=evaluation_round.date, total_evaluations=total_evaluations, categories=categories)
 
-def get_employees_with_comments(days_ago):
-    employee_type = ContentType.objects.get(model="employee")
-
+def get_employees_with_happiness_scores(days_ago):
     d = date.today()-timedelta(days=days_ago)
-    comments = Comment.objects.filter(created_date__gt=d, content_type=employee_type)
+    happys = Happiness.objects.filter(assessed_date__gt=d)
     ids = []
-    for comment in comments:
-        ids.append(comment.object_id)
+    for happy in happys:
+        ids.append(happy.employee.id)
     employees = Employee.objects.filter(id__in=ids)
 
     return build_talent_category_report_for_employees(employees)

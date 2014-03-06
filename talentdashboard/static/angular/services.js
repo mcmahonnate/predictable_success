@@ -103,9 +103,17 @@ angular.module('tdb.services', ['ngResource'])
 .factory('PeopleReport', ['$resource', '$http', function($resource, $http) {
     PeopleReport = $resource('/api/v1/employee-comment-reports/:id');
 
-    PeopleReport.getReportForCompany = function(success, failure) { return this.get({ id: 'all-employees' }, success, failure); };
+    PeopleReport.getReportForCompany = function(days_ago, success, failure) { return this.get({ id: 'all-employees', days_ago: days_ago }, success, failure); };
 
     return PeopleReport;
+}])
+
+.factory('EngagementReport', ['$resource', '$http', function($resource, $http) {
+    EngagementReport = $resource('/api/v1/employee-engagement-reports/:id');
+
+    EngagementReport.getReportForCompany = function(days_ago, success, failure) { return this.get({ id: 'all-employees', days_ago: days_ago }, success, failure); };
+
+    return EngagementReport;
 }])
 
 .factory('SalaryReport', ['$resource', '$http', function($resource, $http) {

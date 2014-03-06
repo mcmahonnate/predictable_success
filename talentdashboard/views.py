@@ -8,7 +8,8 @@ from .serializers import *
 from .decorators import *
 from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team
 from pvp.salaryreports import get_salary_report_for_team, get_salary_report_for_all_employees
-from blah.commentreports import get_employees_with_no_comments
+from blah.commentreports import get_employees_with_comments
+from engagement.engagementreports import get_employees_with_happiness_scores
 from blah.models import Comment
 from todo.models import Task
 from engagement.models import Happiness
@@ -85,8 +86,24 @@ class AttributeViewSet(viewsets.ReadOnlyModelViewSet):
 class EmployeeCommentReportDetail(APIView):
     def get(self, request, pk, format=None):
         report = None
+        days_ago = self.request.QUERY_PARAMS.get('days_ago', None)
+        if days_ago is None:
+            days_ago = 30
         if(pk == 'all-employees'):
-            report = get_employees_with_no_comments()
+            report = get_employees_with_comments(int(days_ago))
+        serializer = TalentCategoryReportSerializer(report)
+        if report is not None:
+            return Response(serializer.data)
+        return Response(None, status=status.HTTP_404_NOT_FOUND)
+
+class EmployeeEngagementReportDetail(APIView):
+    def get(self, request, pk, format=None):
+        report = None
+        days_ago = self.request.QUERY_PARAMS.get('days_ago', None)
+        if days_ago is None:
+            days_ago = 30
+        if(pk == 'all-employees'):
+            report = get_employees_with_happiness_scores(int(days_ago))
         serializer = TalentCategoryReportSerializer(report)
         if report is not None:
             return Response(serializer.data)

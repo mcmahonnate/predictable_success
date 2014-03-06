@@ -366,8 +366,13 @@ angular.module('tdb.controllers', [])
 
 .controller('PeopleReportCtrl', ['$scope', '$location', '$routeParams', 'PeopleReport', 'TalentCategoryReport', 'analytics', function($scope, $location, $routeParams, PeopleReport, TalentCategoryReport, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
-    PeopleReport.getReportForCompany(function(data) {
-        console.log(data);
+    PeopleReport.getReportForCompany(30, function(data) {
+        $scope.talentCategoryReport = data;
+    });
+}])
+
+.controller('EngagementReportCtrl', ['$scope', '$location', '$routeParams', 'EngagementReport', function($scope, $location, $routeParams, EngagementReport) {
+    EngagementReport.getReportForCompany(30, function(data) {
         $scope.talentCategoryReport = data;
     });
 }])
