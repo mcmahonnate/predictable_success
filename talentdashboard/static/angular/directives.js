@@ -115,9 +115,11 @@ angular.module('tdb.directives', [])
             scope.offsetTop = element.offset().top
         }
         attrs.$observe("show", function(show) {
+            console.log(show);
             if (show=='true') {
+                console.log('test');
                 if (element.offset().top + 73 > $("html").scrollTop()) {
-                    $("html").animate({scrollTop:element.offset().top-73}, "fast");
+                    $("html,body").animate({scrollTop:element.offset().top-73}, "fast");
                 }
             }
         });
@@ -174,6 +176,7 @@ angular.module('tdb.directives', [])
 .directive('setPopupPosition', function() {
     return function(scope, element, attrs){
         element.bind("click", function (event) {
+            scope.popup.top = element.offset().top;
             console.log('setPopupPosition');
             scope.$apply(function() {
                 console.log(element.offset().top);
