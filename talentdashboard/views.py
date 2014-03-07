@@ -374,6 +374,9 @@ class EmployeeDetail(APIView):
             return Response(None)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
+def parseBoolString(theString):
+  return theString[0].upper()=='T'
+
 @api_view(['GET'])
 def user_status(request):
     serializer = UserSerializer(request.user)
@@ -453,10 +456,16 @@ def pvp_evaluations(request):
 def comment_reports(request):
     talent_category = request.QUERY_PARAMS.get('talent_category', None)
     employee_type = ContentType.objects.get(model="employee")
-    days_to_subtract = request.QUERY_PARAMS.get('days', None)
-    if days_to_subtract is None:
-        days_to_subtract = 30
-    d = date.today()-timedelta(days=int(days_to_subtract))
+    days_ago = request.QUERY_PARAMS.get('days_ago', None)
+    neglected = request.QUERY_PARAMS.get('neglected', None)
+    if days_ago is None:
+        days_ago = 30
+    d = date.today()-timedelta(days=int(days_ago))
+    if neglected is not None:
+        neglected = parseBoolString(neglected)
+    else:
+        neglected = False
+
     comments = Comment.objects.filter(created_date__gt=d, content_type=employee_type)
     ids = []
     for comment in comments:
@@ -465,7 +474,10 @@ def comment_reports(request):
 
     evaluations = PvpEvaluation.objects.all()
     current_round = EvaluationRound.objects.most_recent()
-    evaluations = evaluations.filter(evaluation_round__id = current_round.id).exclude(employee__in=employees)
+    if neglected:
+        evaluations = evaluations.filter(evaluation_round__id = current_round.id).exclude(employee__in=employees)
+    else:
+        evaluations = evaluations.filter(evaluation_round__id = current_round.id).filter(employee__in=employees)
 
     # The talent_category query executes the query, so it needs to happen after all other filters
     if talent_category is not None:
