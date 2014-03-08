@@ -87,10 +87,15 @@ class EmployeeCommentReportDetail(APIView):
     def get(self, request, pk, format=None):
         report = None
         days_ago = self.request.QUERY_PARAMS.get('days_ago', None)
+        neglected = request.QUERY_PARAMS.get('neglected', None)
+        if neglected is not None:
+            neglected = parseBoolString(neglected)
+        else:
+            neglected = False
         if days_ago is None:
             days_ago = 30
         if(pk == 'all-employees'):
-            report = get_employees_with_comments(int(days_ago))
+            report = get_employees_with_comments(int(days_ago), neglected)
         serializer = TalentCategoryReportSerializer(report)
         if report is not None:
             return Response(serializer.data)
@@ -100,10 +105,15 @@ class EmployeeEngagementReportDetail(APIView):
     def get(self, request, pk, format=None):
         report = None
         days_ago = self.request.QUERY_PARAMS.get('days_ago', None)
+        neglected = request.QUERY_PARAMS.get('neglected', None)
+        if neglected is not None:
+            neglected = parseBoolString(neglected)
+        else:
+            neglected = False
         if days_ago is None:
             days_ago = 30
         if(pk == 'all-employees'):
-            report = get_employees_with_happiness_scores(int(days_ago))
+            report = get_employees_with_happiness_scores(int(days_ago), neglected)
         serializer = TalentCategoryReportSerializer(report)
         if report is not None:
             return Response(serializer.data)
@@ -320,11 +330,16 @@ class TaskDetail(APIView):
 
 class EmployeeTaskList(APIView):
     def get(self, request, pk, format=None):
-        employee = Employee.objects.get(id = pk)
-        if employee is None:
-            return Response(None, status=status.HTTP_404_NOT_FOUND)
-        tasks = Task.objects.filter(employee__id = pk)
-        tasks = tasks.extra(order_by = ['-created_date'])
+        if(pk == 'all-employees'):
+            employee = Employee.objects.get(user__id = request.user.id)
+            tasks = Task.objects.filter(completed=False)
+            tasks = tasks.exclude(employee=employee)
+        else:
+            employee = Employee.objects.get(id = pk)
+            if employee is None:
+                return Response(None, status=status.HTTP_404_NOT_FOUND)
+            tasks = Task.objects.filter(employee__id = pk)
+            tasks = tasks.extra(order_by = ['-created_date'])
         serializer = TaskSerializer(tasks, many=True)
         return Response(serializer.data)
 
@@ -453,9 +468,8 @@ def pvp_evaluations(request):
 
 @api_view(['GET'])
 @group_required('foolsquad')
-def comment_reports(request):
+def happiness_reports(request):
     talent_category = request.QUERY_PARAMS.get('talent_category', None)
-    employee_type = ContentType.objects.get(model="employee")
     days_ago = request.QUERY_PARAMS.get('days_ago', None)
     neglected = request.QUERY_PARAMS.get('neglected', None)
     if days_ago is None:
@@ -465,16 +479,17 @@ def comment_reports(request):
         neglected = parseBoolString(neglected)
     else:
         neglected = False
-
-    comments = Comment.objects.filter(created_date__gt=d, content_type=employee_type)
-    ids = []
-    for comment in comments:
-        ids.append(comment.object_id)
-    employees = Employee.objects.filter(id__in=ids)
+    happys = Happiness.objects.filter(assessed_date__gt=d)
+    employees = []
+    for happy in happys:
+        employees.append(happy.employee)
 
     evaluations = PvpEvaluation.objects.all()
     current_round = EvaluationRound.objects.most_recent()
     if neglected:
+        tasks = Task.objects.filter(completed = False).filter(due_date__isnull=False).filter(assigned_to__isnull=False)
+        for task in tasks:
+            employees.append(task.employee)
         evaluations = evaluations.filter(evaluation_round__id = current_round.id).exclude(employee__in=employees)
     else:
         evaluations = evaluations.filter(evaluation_round__id = current_round.id).filter(employee__in=employees)

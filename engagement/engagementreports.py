@@ -14,9 +14,12 @@ class TalentCategoryReport:
         self.total_evaluations = total_evaluations
         self.categories = categories
 
-def build_talent_category_report_for_employees(employees):
+def build_talent_category_report_for_employees(employees, neglected):
     evaluation_round = EvaluationRound.objects.most_recent()
-    evaluations = PvpEvaluation.objects.filter(evaluation_round_id=evaluation_round.id).filter(employee__in=employees)
+    if neglected:
+        evaluations = PvpEvaluation.objects.filter(evaluation_round_id=evaluation_round.id).exclude(employee__in=employees)
+    else:
+        evaluations = PvpEvaluation.objects.filter(evaluation_round_id=evaluation_round.id).filter(employee__in=employees)
     total_evaluations = 0
     categories = {}
     for talent_category in PvpEvaluation.SUMMARY_SCORE_SCALE:
@@ -25,7 +28,7 @@ def build_talent_category_report_for_employees(employees):
         total_evaluations += categories[talent_category]
     return TalentCategoryReport(evaluation_date=evaluation_round.date, total_evaluations=total_evaluations, categories=categories)
 
-def get_employees_with_happiness_scores(days_ago):
+def get_employees_with_happiness_scores(days_ago, neglected):
     d = date.today()-timedelta(days=days_ago)
     happys = Happiness.objects.filter(assessed_date__gt=d)
     ids = []
@@ -33,4 +36,4 @@ def get_employees_with_happiness_scores(days_ago):
         ids.append(happy.employee.id)
     employees = Employee.objects.filter(id__in=ids)
 
-    return build_talent_category_report_for_employees(employees)
+    return build_talent_category_report_for_employees(employees, neglected)

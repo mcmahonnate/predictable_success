@@ -364,10 +364,17 @@ angular.module('tdb.controllers', [])
     });
 }])
 
-.controller('PeopleReportCtrl', ['$scope', '$location', '$routeParams', 'PeopleReport', 'TalentCategoryReport', 'analytics', function($scope, $location, $routeParams, PeopleReport, TalentCategoryReport, analytics) {
+.controller('PeopleReportCtrl', ['$scope', '$location', '$routeParams', 'HappinessReport', 'PeopleReport', 'TalentCategoryReport', 'analytics', function($scope, $location, $routeParams, HappinessReport, PeopleReport, TalentCategoryReport, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     PeopleReport.getReportForCompany(30, function(data) {
         $scope.talentCategoryReport = data;
+    });
+    $scope.neglectedEmployees = HappinessReport.getReportForCompany(30, true);
+}])
+
+.controller('ToReportCtrl', ['$scope', '$location', '$routeParams', 'EmployeeToDo', function($scope, $location, $routeParams, EmployeeToDo) {
+    EmployeeToDo.getReportForCompany(30, function(data) {
+        $scope.todos = data;
     });
 }])
 

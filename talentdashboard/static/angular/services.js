@@ -100,6 +100,17 @@ angular.module('tdb.services', ['ngResource'])
     return TalentCategoryReport;
 }])
 
+.factory('HappinessReport', ['$resource', '$http', function($resource, $http) {
+    HappinessReport = $resource('/api/v1/happiness-reports/:id');
+
+    HappinessReport.getReportForCompany = function(days_ago, neglected) {
+        var params = {id: 'all-employees', days_ago: days_ago, 'neglected': neglected };
+        return this.query(params);
+    };
+
+    return HappinessReport;
+}])
+
 .factory('PeopleReport', ['$resource', '$http', function($resource, $http) {
     PeopleReport = $resource('/api/v1/employee-comment-reports/:id');
 
@@ -154,8 +165,13 @@ angular.module('tdb.services', ['ngResource'])
         'update': { method:'PUT', data:{description:'@description'}, isArray: false },
         'remove': { method:'DELETE' },
     }
-    var res = $resource('/api/v1/tasks/employees/:id/', {id:'@id'}, actions);
-    return res;
+    var EmployeeToDo = $resource('/api/v1/tasks/employees/:id/', {id:'@id'}, actions);
+    EmployeeToDo.getReportForCompany = function(days_ago, neglected) {
+        var params = {id: 'all-employees', days_ago: days_ago, 'neglected': neglected };
+        return this.query(params);
+    };
+
+    return EmployeeToDo;
 }])
 
 .factory('ToDo', ['$resource', '$http', function($resource, $http) {
