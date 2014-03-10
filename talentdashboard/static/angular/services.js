@@ -111,6 +111,24 @@ angular.module('tdb.services', ['ngResource'])
     return HappinessReport;
 }])
 
+
+.factory('EmployeeToDo', ['$resource', '$http', function($resource, $http) {
+    //var actions = {
+    //    'addNew': { method:'POST', data:{description:'@description', completed: '@completed', assigned_to_id: '@assigned_to_id', due_date: '@due_date', owner_id: '@owner_id'}, isArray: false },
+    //    'update': { method:'PUT', data:{description:'@description'}, isArray: false },
+    //    'remove': { method:'DELETE' },
+    //}
+    //var EmployeeToDo = $resource('/api/v1/tasks/employees/:id/', {id:'@id'}, actions);
+    EmployeeToDo = $resource('/api/v1/tasks/employees/:id/');
+
+    EmployeeToDo.getReportForCompany = function() {
+        var params = {id: 'all-employees'};
+        return this.query(params);
+    };
+
+    return EmployeeToDo;
+}])
+
 .factory('PeopleReport', ['$resource', '$http', function($resource, $http) {
     PeopleReport = $resource('/api/v1/employee-comment-reports/:id');
 
@@ -157,21 +175,6 @@ angular.module('tdb.services', ['ngResource'])
     var res = $resource('/api/v1/engagement/employees/:id/', {id:'@id'}, actions);
 
     return res;
-}])
-
-.factory('EmployeeToDo', ['$resource', '$http', function($resource, $http) {
-    var actions = {
-        'addNew': { method:'POST', data:{description:'@description', completed: '@completed', assigned_to_id: '@assigned_to_id', due_date: '@due_date', owner_id: '@owner_id'}, isArray: false },
-        'update': { method:'PUT', data:{description:'@description'}, isArray: false },
-        'remove': { method:'DELETE' },
-    }
-    var EmployeeToDo = $resource('/api/v1/tasks/employees/:id/', {id:'@id'}, actions);
-    EmployeeToDo.getReportForCompany = function(days_ago, neglected) {
-        var params = {id: 'all-employees', days_ago: days_ago, 'neglected': neglected };
-        return this.query(params);
-    };
-
-    return EmployeeToDo;
 }])
 
 .factory('ToDo', ['$resource', '$http', function($resource, $http) {

@@ -957,3 +957,11 @@ user agent stylesheettd, th {
     background-color: #585858;
     text-decoration: none !important;
 }
+
+.task-past-due a{
+    color: red !important;
+}
+
+.task-no-due-date a{
+    color: yellow !important;
+}

@@ -14,9 +14,12 @@ angular.module('tdb.controllers', [])
    );
    // parse a date in yyyy-mm-dd format
     $rootScope.parseDate = function (input) {
-      var parts = input.match(/(\d+)/g);
-      // new Date(year, month [, date [, hours[, minutes[, seconds[, ms]]]]])
-      return new Date(parts[0], parts[1]-1, parts[2]); // months are 0-based
+      if (input) {
+          var parts = input.match(/(\d+)/g);
+          // new Date(year, month [, date [, hours[, minutes[, seconds[, ms]]]]])
+          return new Date(parts[0], parts[1]-1, parts[2]); // months are 0-based
+      }
+      return null;
     };
     $rootScope.scrubDate = function (input) {
         date = new Date(input);
@@ -25,7 +28,10 @@ angular.module('tdb.controllers', [])
         var year = date.getFullYear();
         scrubbed_Date = year + "-" + month + "-" +  day;
         return scrubbed_Date;
-    }
+    };
+    $rootScope.now = function () {
+        return new Date();
+    };
 }])
 
 .controller('EvaluationListCtrl', ['$scope', '$location', '$routeParams', 'PvpEvaluation', 'Team', 'analytics', function($scope, $location, $routeParams, PvpEvaluation, Team, analytics) {
@@ -372,10 +378,9 @@ angular.module('tdb.controllers', [])
     $scope.neglectedEmployees = HappinessReport.getReportForCompany(30, true);
 }])
 
-.controller('ToReportCtrl', ['$scope', '$location', '$routeParams', 'EmployeeToDo', function($scope, $location, $routeParams, EmployeeToDo) {
-    EmployeeToDo.getReportForCompany(30, function(data) {
-        $scope.todos = data;
-    });
+.controller('ToDoReportCtrl', ['$scope', '$location', '$routeParams', 'EmployeeToDo', function($scope, $location, $routeParams, EmployeeToDo) {
+    $scope.todos =[];
+    $scope.todos = EmployeeToDo.getReportForCompany();
 }])
 
 .controller('EngagementReportCtrl', ['$scope', '$location', '$routeParams', 'EngagementReport', function($scope, $location, $routeParams, EngagementReport) {

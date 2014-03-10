@@ -115,9 +115,7 @@ angular.module('tdb.directives', [])
             scope.offsetTop = element.offset().top
         }
         attrs.$observe("show", function(show) {
-            console.log(show);
             if (show=='true') {
-                console.log('test');
                 if (element.offset().top + 73 > $("html").scrollTop()) {
                     $("html,body").animate({scrollTop:element.offset().top-73}, "fast");
                 }
@@ -158,7 +156,6 @@ angular.module('tdb.directives', [])
             //ctrl.$setViewValue(elm.text());
 
             element.bind('keydown', function(event) {
-                console.log("keydown " + event.which);
                 var esc = event.which == 27,
                     el = event.target;
 
@@ -177,9 +174,7 @@ angular.module('tdb.directives', [])
     return function(scope, element, attrs){
         element.bind("click", function (event) {
             scope.popup.top = element.offset().top;
-            console.log('setPopupPosition');
             scope.$apply(function() {
-                console.log(element.offset().top);
                 scope.popup.top = element.offset().top;
                 scope.popup.left = element.offset().left;
             })
@@ -190,8 +185,6 @@ angular.module('tdb.directives', [])
 .directive('getPopupPosition', function() {
     return function(scope, element, attrs){
         scope.$watch("popup.top", function() {
-            console.log('getPopupPosition');
-            console.log(scope.popup.top);
             element.css({"top":(scope.popup.top-87)});
         });
     };
