@@ -113,16 +113,15 @@ angular.module('tdb.services', ['ngResource'])
 
 
 .factory('EmployeeToDo', ['$resource', '$http', function($resource, $http) {
-    //var actions = {
-    //    'addNew': { method:'POST', data:{description:'@description', completed: '@completed', assigned_to_id: '@assigned_to_id', due_date: '@due_date', owner_id: '@owner_id'}, isArray: false },
-    //    'update': { method:'PUT', data:{description:'@description'}, isArray: false },
-    //    'remove': { method:'DELETE' },
-    //}
-    //var EmployeeToDo = $resource('/api/v1/tasks/employees/:id/', {id:'@id'}, actions);
-    EmployeeToDo = $resource('/api/v1/tasks/employees/:id/');
+    var actions = {
+        'addNew': { method:'POST', data:{description:'@description', completed: '@completed', assigned_to_id: '@assigned_to_id', due_date: '@due_date', owner_id: '@owner_id'}, isArray: false },
+        'update': { method:'PUT', data:{description:'@description'}, isArray: false },
+        'remove': { method:'DELETE' },
+    }
+    var EmployeeToDo = $resource('/api/v1/tasks/employees/:id/', {id:'@id'}, actions);
 
-    EmployeeToDo.getReportForCompany = function() {
-        var params = {id: 'all-employees'};
+    EmployeeToDo.getReportForCompany = function(days_ahead) {
+        var params = {id: 'all-employees', days_ahead: days_ahead};
         return this.query(params);
     };
 

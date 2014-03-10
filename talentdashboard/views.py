@@ -21,6 +21,7 @@ from django.utils.log import getLogger
 from django.core.mail import send_mail
 from django.contrib.sites.models import get_current_site
 from django.contrib.contenttypes.models import ContentType
+from django.db.models import Q
 
 logger = getLogger('talentdashboard')
 
@@ -332,7 +333,11 @@ class EmployeeTaskList(APIView):
     def get(self, request, pk, format=None):
         if(pk == 'all-employees'):
             employee = Employee.objects.get(user__id = request.user.id)
-            tasks = Task.objects.filter(completed=False)
+            days_ahead = request.QUERY_PARAMS.get('days_ahead', None)
+            if days_ahead is None:
+                days_ahead = 7
+            d = date.today()+timedelta(days=int(days_ahead))
+            tasks = Task.objects.filter(completed=False).filter(Q(due_date__lt=d) | Q(due_date__isnull=True))
             tasks = tasks.exclude(employee=employee)
         else:
             employee = Employee.objects.get(id = pk)

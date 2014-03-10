@@ -380,7 +380,7 @@ angular.module('tdb.controllers', [])
 
 .controller('ToDoReportCtrl', ['$scope', '$location', '$routeParams', 'EmployeeToDo', function($scope, $location, $routeParams, EmployeeToDo) {
     $scope.todos =[];
-    $scope.todos = EmployeeToDo.getReportForCompany();
+    $scope.todos = EmployeeToDo.getReportForCompany(7);
 }])
 
 .controller('EngagementReportCtrl', ['$scope', '$location', '$routeParams', 'EngagementReport', function($scope, $location, $routeParams, EngagementReport) {
