@@ -965,3 +965,9 @@ user agent stylesheettd, th {
 .task-no-due-date a{
     color: yellow !important;
 }
+
+.people-tile-link div.people-tile:hover{
+    border-width: 1px;
+    border-color: #585858;
+    border-style: solid;
+}

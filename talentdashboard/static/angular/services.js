@@ -171,9 +171,10 @@ angular.module('tdb.services', ['ngResource'])
         'remove': { method:'DELETE' },
     }
 
-    var res = $resource('/api/v1/engagement/employees/:id/', {id:'@id'}, actions);
+    var Engagement = $resource('/api/v1/engagement/employees/:id/', {id:'@id'}, actions);
+    Engagement.getCurrentEngagement = function(id, success, failure) { return this.get({ id: id, current: true }, success, failure); };
 
-    return res;
+    return Engagement;
 }])
 
 .factory('ToDo', ['$resource', '$http', function($resource, $http) {

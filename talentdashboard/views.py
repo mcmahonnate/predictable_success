@@ -158,12 +158,24 @@ class SubCommentList(APIView):
 class EmployeeEngagement(APIView):
     def get(self, request, pk, format=None):
         employee = Employee.objects.get(id = pk)
+        current = request.QUERY_PARAMS.get('current', None)
         if employee is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
+        if current is not None:
+            current = parseBoolString(current)
         happys = Happiness.objects.filter(employee__id = pk)
-        happys = happys.extra(order_by = ['-assessed_date'])
-        serializer = HappinessSerializer(happys, many=True)
-        return Response(serializer.data)
+        if current:
+            try:
+                happy = happys.latest('assessed_date')
+                serializer = HappinessSerializer(happy, many=False)
+                return Response(serializer.data)
+            except:
+                return Response(None)
+        else:
+            happys = happys.extra(order_by = ['-assessed_date'])
+            serializer = HappinessSerializer(happys, many=True)
+            return Response(serializer.data)
+        return Response(None)
 
     def post(self, request, pk, format=None):
         employee = Employee.objects.get(id = pk)

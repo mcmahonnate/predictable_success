@@ -51,7 +51,7 @@
     <article ng-controller="EngagementReportCtrl" class="widget clock loaded" id="widget-8494" style="top: 0px; left: 650px; width: auto;">
       <div class="widget-inner widget-size-1x1 large-screen">
         <header class="no-reload">
-          <h1 id="talent-header" style="display:inline;">Check-ins in past 60 days</h1>
+          <h1 id="talent-header" style="display:inline;">Check-ins in past {{days_ago}} days</h1>
         </header>
         <div>
             <div x-talent-category-chart  size="small" style="width: 360px; height: 225px; position: relative; left:5px;top:10px;"></div>
@@ -102,14 +102,24 @@
             <h1 style="display:inline;">Who needs a check-in?</h1>
         </header>
         <div>
-        <div ng-repeat="neglected in neglectedEmployees | orderBy:['+talent_category', '+employee.full_name']" style="margin:10px; padding: 10px;height: 50px;background-color:#272727;box-shadow: -5px 5px 5px #101214;">
-          <div style="display: block; float: left; width: 48px;">
-            <a href="#/employees/{{neglected.employee.id}}"><img ng-src="{{ neglected.employee.avatar }}" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;"/></a>
-          </div>
-          <div style="display: block; float: left;padding-left: 10px;">
-            <a href="#/employees/{{neglected.employee.id}}"><canvas width="12" height="12" employee-talent-category="{{neglected.talent_category}}"></canvas><span style="margin-left:10px;">{{neglected.employee.full_name}}</span></a>
-          </div>
-        </div>
+        <a href="#/employees/{{neglected.employee.id}}" class="people-tile-link" ng-repeat="neglected in neglectedEmployees | orderBy:['+talent_category', '+employee.full_name']">
+            <div class="people-tile" style="margin:10px; padding: 10px;height: 50px;background-color:#272727;box-shadow: -5px 5px 5px #101214;">
+
+              <div style="display: block; float: left; width: 48px;">
+                <img ng-src="{{ neglected.employee.avatar }}" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;"/>
+              </div>
+              <div style="display: block; float: left;padding-left: 10px;max-width: 215px;">
+                <div><canvas width="28" height="12" employee-talent-category="{{neglected.talent_category}}"></canvas><span>{{neglected.employee.full_name}}</span></div>
+                <div style="height:28px; margin-top: 5px;">
+                    <span ng-if="!neglected.happy.assessment">Hasn't had a Check-in</span>
+                    <span ng-if="neglected.happy.assessment">
+                        <div class="t-size-x25 small" style="height:28px;width:28px;float:left;" ng-class="{'veryhappy': neglected.happy.assessment==5,'happy': neglected.happy.assessment==4,'indifferent': neglected.happy.assessment==3,'unhappy': neglected.happy.assessment==2,'veryunhappy': neglected.happy.assessment==1}"></div>
+                        <div style="float:left;padding-top: 8px;">{{(neglected.happy.assessed_date | date:'MMM d, yyyy')}}</div>
+                    </span>
+                </div>
+              </div>
+            </div>
+        </a>
         </div>
       </div>
     </article>

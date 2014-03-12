@@ -19,7 +19,7 @@ angular.module('tdb.controllers', [])
           // new Date(year, month [, date [, hours[, minutes[, seconds[, ms]]]]])
           return new Date(parts[0], parts[1]-1, parts[2]); // months are 0-based
       }
-      return null;
+      return input;
     };
     $rootScope.scrubDate = function (input) {
         date = new Date(input);
@@ -32,6 +32,13 @@ angular.module('tdb.controllers', [])
     $rootScope.now = function () {
         return new Date();
     };
+    $rootScope.engagement_choices = [
+        {id: 5, title: 'Very Happy', css: 'veryhappy'},
+        {id: 4, title: 'Happy', css: 'happy'},
+        {id: 3, title: 'Indifferent', css: 'indifferent'},
+        {id: 2, title: 'Unhappy', css: 'unhappy'},
+        {id: 1, title: 'Very Unhappy', css: 'veryunhappy'},
+    ];
 }])
 
 .controller('EvaluationListCtrl', ['$scope', '$location', '$routeParams', 'PvpEvaluation', 'Team', 'analytics', function($scope, $location, $routeParams, PvpEvaluation, Team, analytics) {
@@ -195,13 +202,14 @@ angular.module('tdb.controllers', [])
             $scope.edit_leadership = angular.copy($scope.leadership);
         }
     );
-    $scope.engagement_choices = [
-        {id: 5, title: 'Very Happy', css: 'veryhappy'},
-        {id: 4, title: 'Happy', css: 'happy'},
-        {id: 3, title: 'Indifferent', css: 'indifferent'},
-        {id: 2, title: 'Unhappy', css: 'unhappy'},
-        {id: 1, title: 'Very Unhappy', css: 'veryunhappy'},
-    ];
+
+    Engagement.query(
+        {id:$routeParams.id},
+        function(data) {
+            $scope.happys = data;
+        }
+    );
+
     $scope.selected=0;
     $scope.set_choice = function(value) {
         $scope.selected=value;
@@ -233,12 +241,7 @@ angular.module('tdb.controllers', [])
     $scope.passions = Attribute.getAttributtesForEmployee($routeParams.id, 1);
     $scope.super_powers = Attribute.getAttributtesForEmployee($routeParams.id, 2);
 	$scope.skills = Attribute.getAttributtesForEmployee($routeParams.id, 3);
-    Engagement.query(
-        {id:$routeParams.id},
-        function(data) {
-            $scope.happys = data;
-        }
-    );
+
     $scope.employeeEdit = false;
     $scope.cancelEdit = function (){
         $scope.editEmployee = angular.copy($scope.employee);
@@ -370,20 +373,39 @@ angular.module('tdb.controllers', [])
     });
 }])
 
-.controller('PeopleReportCtrl', ['$scope', '$location', '$routeParams', 'HappinessReport', 'PeopleReport', 'TalentCategoryReport', 'analytics', function($scope, $location, $routeParams, HappinessReport, PeopleReport, TalentCategoryReport, analytics) {
+.controller('PeopleReportCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'HappinessReport', 'PeopleReport', 'TalentCategoryReport', 'Engagement', 'analytics', function($scope, $rootScope, $location, $routeParams, HappinessReport, PeopleReport, TalentCategoryReport, Engagement, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
-    PeopleReport.getReportForCompany(30, function(data) {
+    $scope.days_ago = 180;
+    PeopleReport.getReportForCompany($scope.days_ago, function(data) {
         $scope.talentCategoryReport = data;
     });
-    $scope.neglectedEmployees = HappinessReport.getReportForCompany(30, true);
+
+    HappinessReport.getReportForCompany($scope.days_ago, true).$then(function(response) {
+        $scope.neglectedEmployees = response.data;
+        angular.forEach($scope.neglectedEmployees, function(neglected) {
+            neglected.happy = Engagement.getCurrentEngagement(neglected.employee.id);
+        });
+    });
 }])
 
-.controller('ToDoReportCtrl', ['$scope', '$location', '$routeParams', 'EmployeeToDo', function($scope, $location, $routeParams, EmployeeToDo) {
-    $scope.todos =[];
+.controller('ToDoReportCtrl', ['$scope', '$rootScope', '$location', '$routeParams', '$window', 'EmployeeToDo', 'ToDo', function($scope, $rootScope, $location, $routeParams, $window, EmployeeToDo, ToDo) {
     $scope.todos = EmployeeToDo.getReportForCompany(7);
+    $scope.deleteToDo = function(todo) {
+        if ($window.confirm('Are you sure you want to delete this To Do?')) {
+            var data = {id: todo.id};
+            var todo_index = $scope.todos.indexOf(todo);
+            var deleteSuccess = function() {
+                $scope.todos.splice(todo_index, 1);
+            };
+
+            ToDo.remove(data, function() {
+                    deleteSuccess();
+                });
+        }
+    }
 }])
 
-.controller('EngagementReportCtrl', ['$scope', '$location', '$routeParams', 'EngagementReport', function($scope, $location, $routeParams, EngagementReport) {
+.controller('EngagementReportCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'EngagementReport', function($scope, $rootScope, $location, $routeParams, EngagementReport) {
     EngagementReport.getReportForCompany(30, function(data) {
         $scope.talentCategoryReport = data;
     });
