@@ -222,7 +222,6 @@ angular.module('tdb.controllers', [])
     };
     $scope.save_engagement = function() {
         var data = {id: $scope.employee.id, _assessment: $scope.selected, _assessed_by_id: $rootScope.currentUser.employee.id};
-        console.log(data);
         Engagement.addNew(data, function() {
             var happy = [];
             happy.assessment = $scope.selected;

@@ -135,7 +135,7 @@
                     <div style="min-width: 50%">
                         <span ng-if="happys.length == 0">--</span>
                         <ul ng-if="happys.length > 0">
-                            <li ng-repeat="happy in happys" class="t-size-x12" >
+                            <li ng-repeat="happy in happys | orderBy:'assessed_date':true" class="t-size-x12" >
                               <span style="display:inline-block; vertical-align:middle" class="t-size-x40" ng-class="{'veryhappy': happy.assessment==5,'happy': happy.assessment==4,'indifferent': happy.assessment==3,'unhappy': happy.assessment==2,'veryunhappy': happy.assessment==1}"></span>
                               <span style="padding:5px; display:inline-block; vertical-align:middle">{{ happy.assessed_date | date:'MM/dd/yyyy'}}</span>
                             </li>

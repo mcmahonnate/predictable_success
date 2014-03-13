@@ -1,6 +1,7 @@
 # Django settings for talentdashboard project.
 import os.path
 
+DEBUG = False
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
@@ -36,6 +37,8 @@ USE_L10N = True
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
 
+AWS_STORAGE_BUCKET_NAME = os.environ['AWS_STORAGE_BUCKET_NAME']
+
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/var/www/example.com/media/"
 MEDIA_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'media')
@@ -53,7 +56,14 @@ STATIC_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'staticfi
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
+AWS_STORAGE_BUCKET_NAME = os.environ['AWS_STORAGE_BUCKET_NAME']
+AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
+AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+S3_URL = 'http://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
 STATIC_URL = '/static/'
+
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -134,6 +144,7 @@ INSTALLED_APPS = (
     'comp',
     'todo',
     'engagement',
+    'storages',
 )
 
 REST_FRAMEWORK = {
