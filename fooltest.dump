@@ -1,0 +1,1980 @@
+--
+-- PostgreSQL database dump
+--
+DROP SCHEMA fooltest CASCADE;
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- Name: fooltest; Type: SCHEMA; Schema: -; Owner: djangotalentdashboard
+--
+
+CREATE SCHEMA fooltest;
+
+
+ALTER SCHEMA fooltest OWNER TO djangotalentdashboard;
+
+SET search_path = fooltest, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: auth_group; Type: TABLE; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+CREATE TABLE auth_group (
+    id integer NOT NULL,
+    name character varying(80) NOT NULL
+);
+
+
+ALTER TABLE fooltest.auth_group OWNER TO djangotalentdashboard;
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+CREATE SEQUENCE auth_group_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE fooltest.auth_group_id_seq OWNER TO djangotalentdashboard;
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE OWNED BY; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER SEQUENCE auth_group_id_seq OWNED BY auth_group.id;
+
+
+--
+-- Name: auth_group_permissions; Type: TABLE; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+CREATE TABLE auth_group_permissions (
+    id integer NOT NULL,
+    group_id integer NOT NULL,
+    permission_id integer NOT NULL
+);
+
+
+ALTER TABLE fooltest.auth_group_permissions OWNER TO djangotalentdashboard;
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+CREATE SEQUENCE auth_group_permissions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE fooltest.auth_group_permissions_id_seq OWNER TO djangotalentdashboard;
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER SEQUENCE auth_group_permissions_id_seq OWNED BY auth_group_permissions.id;
+
+
+--
+-- Name: auth_permission; Type: TABLE; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+CREATE TABLE auth_permission (
+    id integer NOT NULL,
+    name character varying(50) NOT NULL,
+    content_type_id integer NOT NULL,
+    codename character varying(100) NOT NULL
+);
+
+
+ALTER TABLE fooltest.auth_permission OWNER TO djangotalentdashboard;
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+CREATE SEQUENCE auth_permission_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE fooltest.auth_permission_id_seq OWNER TO djangotalentdashboard;
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE OWNED BY; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER SEQUENCE auth_permission_id_seq OWNED BY auth_permission.id;
+
+
+--
+-- Name: auth_user; Type: TABLE; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+CREATE TABLE auth_user (
+    id integer NOT NULL,
+    password character varying(128) NOT NULL,
+    last_login timestamp with time zone NOT NULL,
+    is_superuser boolean NOT NULL,
+    username character varying(30) NOT NULL,
+    first_name character varying(30) NOT NULL,
+    last_name character varying(30) NOT NULL,
+    email character varying(75) NOT NULL,
+    is_staff boolean NOT NULL,
+    is_active boolean NOT NULL,
+    date_joined timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE fooltest.auth_user OWNER TO djangotalentdashboard;
+
+--
+-- Name: auth_user_groups; Type: TABLE; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+CREATE TABLE auth_user_groups (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    group_id integer NOT NULL
+);
+
+
+ALTER TABLE fooltest.auth_user_groups OWNER TO djangotalentdashboard;
+
+--
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+CREATE SEQUENCE auth_user_groups_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE fooltest.auth_user_groups_id_seq OWNER TO djangotalentdashboard;
+
+--
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE OWNED BY; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER SEQUENCE auth_user_groups_id_seq OWNED BY auth_user_groups.id;
+
+
+--
+-- Name: auth_user_id_seq; Type: SEQUENCE; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+CREATE SEQUENCE auth_user_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE fooltest.auth_user_id_seq OWNER TO djangotalentdashboard;
+
+--
+-- Name: auth_user_id_seq; Type: SEQUENCE OWNED BY; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER SEQUENCE auth_user_id_seq OWNED BY auth_user.id;
+
+
+--
+-- Name: auth_user_user_permissions; Type: TABLE; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+CREATE TABLE auth_user_user_permissions (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    permission_id integer NOT NULL
+);
+
+
+ALTER TABLE fooltest.auth_user_user_permissions OWNER TO djangotalentdashboard;
+
+--
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+CREATE SEQUENCE auth_user_user_permissions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE fooltest.auth_user_user_permissions_id_seq OWNER TO djangotalentdashboard;
+
+--
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER SEQUENCE auth_user_user_permissions_id_seq OWNED BY auth_user_user_permissions.id;
+
+
+--
+-- Name: blah_comment; Type: TABLE; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+CREATE TABLE blah_comment (
+    id integer NOT NULL,
+    content_type_id integer NOT NULL,
+    object_id integer NOT NULL,
+    owner_content_type_id integer,
+    owner_id integer,
+    content text NOT NULL,
+    created_date timestamp with time zone NOT NULL,
+    modified_date timestamp with time zone NOT NULL,
+    CONSTRAINT blah_comment_object_id_check CHECK ((object_id >= 0)),
+    CONSTRAINT blah_comment_owner_id_check CHECK ((owner_id >= 0))
+);
+
+
+ALTER TABLE fooltest.blah_comment OWNER TO djangotalentdashboard;
+
+--
+-- Name: blah_comment_id_seq; Type: SEQUENCE; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+CREATE SEQUENCE blah_comment_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE fooltest.blah_comment_id_seq OWNER TO djangotalentdashboard;
+
+--
+-- Name: blah_comment_id_seq; Type: SEQUENCE OWNED BY; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER SEQUENCE blah_comment_id_seq OWNED BY blah_comment.id;
+
+
+--
+-- Name: comp_compensationsummary; Type: TABLE; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+CREATE TABLE comp_compensationsummary (
+    id integer NOT NULL,
+    employee_id integer NOT NULL,
+    year integer NOT NULL,
+    fiscal_year integer NOT NULL,
+    salary numeric(12,2) NOT NULL,
+    bonus numeric(12,2) NOT NULL,
+    discretionary numeric(12,2) NOT NULL,
+    writer_payments_and_royalties numeric(12,2) NOT NULL
+);
+
+
+ALTER TABLE fooltest.comp_compensationsummary OWNER TO djangotalentdashboard;
+
+--
+-- Name: comp_compensationsummary_id_seq; Type: SEQUENCE; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+CREATE SEQUENCE comp_compensationsummary_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE fooltest.comp_compensationsummary_id_seq OWNER TO djangotalentdashboard;
+
+--
+-- Name: comp_compensationsummary_id_seq; Type: SEQUENCE OWNED BY; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER SEQUENCE comp_compensationsummary_id_seq OWNED BY comp_compensationsummary.id;
+
+
+--
+-- Name: django_content_type; Type: TABLE; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+CREATE TABLE django_content_type (
+    id integer NOT NULL,
+    name character varying(100) NOT NULL,
+    app_label character varying(100) NOT NULL,
+    model character varying(100) NOT NULL
+);
+
+
+ALTER TABLE fooltest.django_content_type OWNER TO djangotalentdashboard;
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+CREATE SEQUENCE django_content_type_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE fooltest.django_content_type_id_seq OWNER TO djangotalentdashboard;
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE OWNED BY; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER SEQUENCE django_content_type_id_seq OWNED BY django_content_type.id;
+
+
+--
+-- Name: engagement_happiness; Type: TABLE; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+CREATE TABLE engagement_happiness (
+    id integer NOT NULL,
+    assessed_by_id integer NOT NULL,
+    assessed_date date NOT NULL,
+    employee_id integer NOT NULL,
+    assessment integer NOT NULL
+);
+
+
+ALTER TABLE fooltest.engagement_happiness OWNER TO djangotalentdashboard;
+
+--
+-- Name: engagement_happiness_id_seq; Type: SEQUENCE; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+CREATE SEQUENCE engagement_happiness_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE fooltest.engagement_happiness_id_seq OWNER TO djangotalentdashboard;
+
+--
+-- Name: engagement_happiness_id_seq; Type: SEQUENCE OWNED BY; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER SEQUENCE engagement_happiness_id_seq OWNED BY engagement_happiness.id;
+
+
+--
+-- Name: org_attribute; Type: TABLE; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+CREATE TABLE org_attribute (
+    id integer NOT NULL,
+    employee_id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    category_id integer
+);
+
+
+ALTER TABLE fooltest.org_attribute OWNER TO djangotalentdashboard;
+
+--
+-- Name: org_attribute_id_seq; Type: SEQUENCE; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+CREATE SEQUENCE org_attribute_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE fooltest.org_attribute_id_seq OWNER TO djangotalentdashboard;
+
+--
+-- Name: org_attribute_id_seq; Type: SEQUENCE OWNED BY; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER SEQUENCE org_attribute_id_seq OWNED BY org_attribute.id;
+
+
+--
+-- Name: org_attributecategory; Type: TABLE; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+CREATE TABLE org_attributecategory (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL
+);
+
+
+ALTER TABLE fooltest.org_attributecategory OWNER TO djangotalentdashboard;
+
+--
+-- Name: org_attributecategory_id_seq; Type: SEQUENCE; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+CREATE SEQUENCE org_attributecategory_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE fooltest.org_attributecategory_id_seq OWNER TO djangotalentdashboard;
+
+--
+-- Name: org_attributecategory_id_seq; Type: SEQUENCE OWNED BY; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER SEQUENCE org_attributecategory_id_seq OWNED BY org_attributecategory.id;
+
+
+--
+-- Name: org_employee; Type: TABLE; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+CREATE TABLE org_employee (
+    id integer NOT NULL,
+    full_name character varying(255) NOT NULL,
+    avatar character varying(100) NOT NULL,
+    avatar_small character varying(100),
+    job_title character varying(255) NOT NULL,
+    base_camp character varying(255) NOT NULL,
+    u_name character varying(255) NOT NULL,
+    hire_date date,
+    display boolean NOT NULL,
+    team_id integer,
+    user_id integer
+);
+
+
+ALTER TABLE fooltest.org_employee OWNER TO djangotalentdashboard;
+
+--
+-- Name: org_employee_id_seq; Type: SEQUENCE; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+CREATE SEQUENCE org_employee_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE fooltest.org_employee_id_seq OWNER TO djangotalentdashboard;
+
+--
+-- Name: org_employee_id_seq; Type: SEQUENCE OWNED BY; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER SEQUENCE org_employee_id_seq OWNED BY org_employee.id;
+
+
+--
+-- Name: org_leadership; Type: TABLE; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+CREATE TABLE org_leadership (
+    id integer NOT NULL,
+    leader_id integer NOT NULL,
+    employee_id integer NOT NULL,
+    start_date date NOT NULL,
+    end_date date
+);
+
+
+ALTER TABLE fooltest.org_leadership OWNER TO djangotalentdashboard;
+
+--
+-- Name: org_leadership_id_seq; Type: SEQUENCE; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+CREATE SEQUENCE org_leadership_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE fooltest.org_leadership_id_seq OWNER TO djangotalentdashboard;
+
+--
+-- Name: org_leadership_id_seq; Type: SEQUENCE OWNED BY; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER SEQUENCE org_leadership_id_seq OWNED BY org_leadership.id;
+
+
+--
+-- Name: org_mentorship; Type: TABLE; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+CREATE TABLE org_mentorship (
+    id integer NOT NULL,
+    mentor_id integer NOT NULL,
+    mentee_id integer NOT NULL
+);
+
+
+ALTER TABLE fooltest.org_mentorship OWNER TO djangotalentdashboard;
+
+--
+-- Name: org_mentorship_id_seq; Type: SEQUENCE; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+CREATE SEQUENCE org_mentorship_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE fooltest.org_mentorship_id_seq OWNER TO djangotalentdashboard;
+
+--
+-- Name: org_mentorship_id_seq; Type: SEQUENCE OWNED BY; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER SEQUENCE org_mentorship_id_seq OWNED BY org_mentorship.id;
+
+
+--
+-- Name: org_team; Type: TABLE; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+CREATE TABLE org_team (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    leader_id integer NOT NULL
+);
+
+
+ALTER TABLE fooltest.org_team OWNER TO djangotalentdashboard;
+
+--
+-- Name: org_team_id_seq; Type: SEQUENCE; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+CREATE SEQUENCE org_team_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE fooltest.org_team_id_seq OWNER TO djangotalentdashboard;
+
+--
+-- Name: org_team_id_seq; Type: SEQUENCE OWNED BY; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER SEQUENCE org_team_id_seq OWNED BY org_team.id;
+
+
+--
+-- Name: pvp_evaluationround; Type: TABLE; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+CREATE TABLE pvp_evaluationround (
+    id integer NOT NULL,
+    date date NOT NULL
+);
+
+
+ALTER TABLE fooltest.pvp_evaluationround OWNER TO djangotalentdashboard;
+
+--
+-- Name: pvp_evaluationround_id_seq; Type: SEQUENCE; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+CREATE SEQUENCE pvp_evaluationround_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE fooltest.pvp_evaluationround_id_seq OWNER TO djangotalentdashboard;
+
+--
+-- Name: pvp_evaluationround_id_seq; Type: SEQUENCE OWNED BY; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER SEQUENCE pvp_evaluationround_id_seq OWNED BY pvp_evaluationround.id;
+
+
+--
+-- Name: pvp_pvpevaluation; Type: TABLE; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+CREATE TABLE pvp_pvpevaluation (
+    id integer NOT NULL,
+    employee_id integer NOT NULL,
+    evaluation_round_id integer NOT NULL,
+    potential integer NOT NULL,
+    performance integer NOT NULL
+);
+
+
+ALTER TABLE fooltest.pvp_pvpevaluation OWNER TO djangotalentdashboard;
+
+--
+-- Name: pvp_pvpevaluation_id_seq; Type: SEQUENCE; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+CREATE SEQUENCE pvp_pvpevaluation_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE fooltest.pvp_pvpevaluation_id_seq OWNER TO djangotalentdashboard;
+
+--
+-- Name: pvp_pvpevaluation_id_seq; Type: SEQUENCE OWNED BY; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER SEQUENCE pvp_pvpevaluation_id_seq OWNED BY pvp_pvpevaluation.id;
+
+
+--
+-- Name: south_migrationhistory; Type: TABLE; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+CREATE TABLE south_migrationhistory (
+    id integer NOT NULL,
+    app_name character varying(255) NOT NULL,
+    migration character varying(255) NOT NULL,
+    applied timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE fooltest.south_migrationhistory OWNER TO djangotalentdashboard;
+
+--
+-- Name: south_migrationhistory_id_seq; Type: SEQUENCE; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+CREATE SEQUENCE south_migrationhistory_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE fooltest.south_migrationhistory_id_seq OWNER TO djangotalentdashboard;
+
+--
+-- Name: south_migrationhistory_id_seq; Type: SEQUENCE OWNED BY; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER SEQUENCE south_migrationhistory_id_seq OWNED BY south_migrationhistory.id;
+
+
+--
+-- Name: todo_task; Type: TABLE; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+CREATE TABLE todo_task (
+    id integer NOT NULL,
+    created_by_id integer NOT NULL,
+    assigned_to_id integer,
+    assigned_by_id integer,
+    employee_id integer NOT NULL,
+    created_date date NOT NULL,
+    due_date date,
+    description character varying(255) NOT NULL,
+    completed boolean NOT NULL
+);
+
+
+ALTER TABLE fooltest.todo_task OWNER TO djangotalentdashboard;
+
+--
+-- Name: todo_task_id_seq; Type: SEQUENCE; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+CREATE SEQUENCE todo_task_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE fooltest.todo_task_id_seq OWNER TO djangotalentdashboard;
+
+--
+-- Name: todo_task_id_seq; Type: SEQUENCE OWNED BY; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER SEQUENCE todo_task_id_seq OWNED BY todo_task.id;
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY auth_group ALTER COLUMN id SET DEFAULT nextval('auth_group_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY auth_group_permissions ALTER COLUMN id SET DEFAULT nextval('auth_group_permissions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY auth_permission ALTER COLUMN id SET DEFAULT nextval('auth_permission_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY auth_user ALTER COLUMN id SET DEFAULT nextval('auth_user_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY auth_user_groups ALTER COLUMN id SET DEFAULT nextval('auth_user_groups_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY auth_user_user_permissions ALTER COLUMN id SET DEFAULT nextval('auth_user_user_permissions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY blah_comment ALTER COLUMN id SET DEFAULT nextval('blah_comment_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY comp_compensationsummary ALTER COLUMN id SET DEFAULT nextval('comp_compensationsummary_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY django_content_type ALTER COLUMN id SET DEFAULT nextval('django_content_type_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY engagement_happiness ALTER COLUMN id SET DEFAULT nextval('engagement_happiness_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY org_attribute ALTER COLUMN id SET DEFAULT nextval('org_attribute_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY org_attributecategory ALTER COLUMN id SET DEFAULT nextval('org_attributecategory_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY org_employee ALTER COLUMN id SET DEFAULT nextval('org_employee_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY org_leadership ALTER COLUMN id SET DEFAULT nextval('org_leadership_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY org_mentorship ALTER COLUMN id SET DEFAULT nextval('org_mentorship_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY org_team ALTER COLUMN id SET DEFAULT nextval('org_team_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY pvp_evaluationround ALTER COLUMN id SET DEFAULT nextval('pvp_evaluationround_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY pvp_pvpevaluation ALTER COLUMN id SET DEFAULT nextval('pvp_pvpevaluation_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY south_migrationhistory ALTER COLUMN id SET DEFAULT nextval('south_migrationhistory_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY todo_task ALTER COLUMN id SET DEFAULT nextval('todo_task_id_seq'::regclass);
+
+
+--
+-- Data for Name: auth_group; Type: TABLE DATA; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+COPY auth_group (id, name) FROM stdin;
+\.
+
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE SET; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+SELECT pg_catalog.setval('auth_group_id_seq', 1, false);
+
+
+--
+-- Data for Name: auth_group_permissions; Type: TABLE DATA; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+COPY auth_group_permissions (id, group_id, permission_id) FROM stdin;
+\.
+
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE SET; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+SELECT pg_catalog.setval('auth_group_permissions_id_seq', 1, false);
+
+
+--
+-- Data for Name: auth_permission; Type: TABLE DATA; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+COPY auth_permission (id, name, content_type_id, codename) FROM stdin;
+1	Can add client	1	add_client
+2	Can change client	1	change_client
+3	Can delete client	1	delete_client
+4	Can add content type	2	add_contenttype
+5	Can change content type	2	change_contenttype
+6	Can delete content type	2	delete_contenttype
+7	Can add permission	5	add_permission
+8	Can change permission	5	change_permission
+9	Can delete permission	5	delete_permission
+10	Can add group	3	add_group
+11	Can change group	3	change_group
+12	Can delete group	3	delete_group
+13	Can add user	4	add_user
+14	Can change user	4	change_user
+15	Can delete user	4	delete_user
+16	Can add session	6	add_session
+17	Can change session	6	change_session
+18	Can delete session	6	delete_session
+19	Can add site	7	add_site
+20	Can change site	7	change_site
+21	Can delete site	7	delete_site
+\.
+
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+SELECT pg_catalog.setval('auth_permission_id_seq', 21, true);
+
+
+--
+-- Data for Name: auth_user; Type: TABLE DATA; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+COPY auth_user (id, password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined) FROM stdin;
+1	pbkdf2_sha256$10000$AZiPzTf5OdWH$bkh9ncuwaJVtGJ4TydhVxHIUrhITqLVbuwSUsYB0f6U=	2014-02-25 21:16:24.077237-05	t	natem			natem@fool.com	t	t	2014-02-25 21:16:24.077237-05
+\.
+
+
+--
+-- Data for Name: auth_user_groups; Type: TABLE DATA; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+COPY auth_user_groups (id, user_id, group_id) FROM stdin;
+\.
+
+
+--
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE SET; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+SELECT pg_catalog.setval('auth_user_groups_id_seq', 1, false);
+
+
+--
+-- Name: auth_user_id_seq; Type: SEQUENCE SET; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+SELECT pg_catalog.setval('auth_user_id_seq', 1, true);
+
+
+--
+-- Data for Name: auth_user_user_permissions; Type: TABLE DATA; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+COPY auth_user_user_permissions (id, user_id, permission_id) FROM stdin;
+\.
+
+
+--
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE SET; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+SELECT pg_catalog.setval('auth_user_user_permissions_id_seq', 1, false);
+
+
+--
+-- Data for Name: blah_comment; Type: TABLE DATA; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+COPY blah_comment (id, content_type_id, object_id, owner_content_type_id, owner_id, content, created_date, modified_date) FROM stdin;
+\.
+
+
+--
+-- Name: blah_comment_id_seq; Type: SEQUENCE SET; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+SELECT pg_catalog.setval('blah_comment_id_seq', 1, false);
+
+
+--
+-- Data for Name: comp_compensationsummary; Type: TABLE DATA; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+COPY comp_compensationsummary (id, employee_id, year, fiscal_year, salary, bonus, discretionary, writer_payments_and_royalties) FROM stdin;
+\.
+
+
+--
+-- Name: comp_compensationsummary_id_seq; Type: SEQUENCE SET; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+SELECT pg_catalog.setval('comp_compensationsummary_id_seq', 1, false);
+
+
+--
+-- Data for Name: django_content_type; Type: TABLE DATA; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+COPY django_content_type (id, name, app_label, model) FROM stdin;
+1	client	customer	client
+2	content type	contenttypes	contenttype
+3	group	auth	group
+4	user	auth	user
+5	permission	auth	permission
+6	session	sessions	session
+7	site	sites	site
+\.
+
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+SELECT pg_catalog.setval('django_content_type_id_seq', 7, true);
+
+
+--
+-- Data for Name: engagement_happiness; Type: TABLE DATA; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+COPY engagement_happiness (id, assessed_by_id, assessed_date, employee_id, assessment) FROM stdin;
+\.
+
+
+--
+-- Name: engagement_happiness_id_seq; Type: SEQUENCE SET; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+SELECT pg_catalog.setval('engagement_happiness_id_seq', 1, false);
+
+
+--
+-- Data for Name: org_attribute; Type: TABLE DATA; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+COPY org_attribute (id, employee_id, name, category_id) FROM stdin;
+\.
+
+
+--
+-- Name: org_attribute_id_seq; Type: SEQUENCE SET; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+SELECT pg_catalog.setval('org_attribute_id_seq', 1, false);
+
+
+--
+-- Data for Name: org_attributecategory; Type: TABLE DATA; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+COPY org_attributecategory (id, name) FROM stdin;
+\.
+
+
+--
+-- Name: org_attributecategory_id_seq; Type: SEQUENCE SET; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+SELECT pg_catalog.setval('org_attributecategory_id_seq', 1, false);
+
+
+--
+-- Data for Name: org_employee; Type: TABLE DATA; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+COPY org_employee (id, job_title, base_camp, u_name, hire_date, display, team_id, full_name, avatar, user_id, avatar_small) FROM stdin;
+445	VP ENTERPRISE ARCHITECTURE	1204189-chad-wolfsheimer	cwolfshe	2000-11-10	t	1	Chad Wolfsheimer	/media/avatars/2013/10/30/Chad_Wolfsheimer.jpg	\N	/media/avatars/small/2013/10/30/Chad_Wolfsheimer.jpeg
+492	DIRECTOR MEMBER EXPERIENCE	1200225-alissa-territo	alissat	1999-05-05	t	1	Alissa Territo	/media/avatars/2013/10/30/Alissa_Territo.jpg	\N	/media/avatars/small/2013/10/30/Alissa_Territo.jpeg
+499	SCRUM MASTER PROJECT MANAGER I	1196528-ben-charboneau	bcharboneau	2006-09-25	t	1	Ben Charboneau	/media/avatars/2013/10/30/Ben_Charboneau.jpg	\N	/media/avatars/small/2013/10/30/Ben_Charboneau.jpeg
+532	RETENTION ANALYST	1200228-raff-notaro	rnotaro	2008-09-02	t	1	Raff Notaro	/media/avatars/2013/10/30/Raff_Notaro.jpg	\N	/media/avatars/small/2013/10/30/Raff_Notaro.jpeg
+539	SENIOR WEB ANALYST	1204387-aseem-patel	apatel	2006-03-06	t	1	Aseem Patel	/media/avatars/2013/10/30/Aseem_Patel.jpg	\N	/media/avatars/small/2013/10/30/Aseem_Patel.jpeg
+562	BUSINESS INTELLIGENCE ANALYST	1196457-robyn-bigler	rbigler	2005-02-07	t	1	Robyn Bigler	/media/avatars/2013/10/30/Robyn_Bigler.jpg	\N	/media/avatars/small/2013/10/30/Robyn_Bigler.jpeg
+569	BUSINESS INTELLIGENCE ANALYST	1204305-gary-taylor	garyt	2001-01-11	t	1	Gary Taylor	/media/avatars/2013/10/30/Gary_Taylor.jpg	\N	/media/avatars/small/2013/10/30/Gary_Taylor.jpeg
+582	DIRECTOR TECH OPERATIONS	1197716-muhammad-chaudhry	mchaudhry	2006-08-11	t	1	Muhammad Chaudhry	/media/avatars/2013/10/30/Muhammad_Chaudhry.jpg	\N	/media/avatars/small/2013/10/30/Muhammad_Chaudhry.jpeg
+589	SR DW ARCHITECT	1204607-travis-fore	travisf	1998-06-01	t	1	Travis Fore	/media/avatars/2013/10/30/Travis_Fore.jpg	\N	/media/avatars/small/2013/10/30/Travis_Fore.jpeg
+593	VP MEMBER INSIGHTS	1197599-ginni-bratti	gbratti	2001-06-22	t	1	Ginni Bratti	/media/avatars/2013/10/30/Ginni_Bratti.jpg	\N	/media/avatars/small/2013/10/30/Ginni_Bratti.jpeg
+626	DATA WAREHOUSING ARCHITECT	1204398-nicole-naworal	nnaworal	2011-08-22	t	1	Nicole Naworal	/media/avatars/2013/10/30/Nicole_Naworal.jpg	\N	/media/avatars/small/2013/10/30/Nicole_Naworal.jpeg
+653	WEB ANALYST	1197697-laura-cavanaugh	lcavanaugh	2012-06-04	t	1	Laura Cavanaugh	/media/avatars/2013/10/30/Laura_Cavanaugh.jpg	\N	/media/avatars/small/2013/10/30/Laura_Cavanaugh.jpeg
+655	VP MARKETING ANALYTICS	1200227-kelly-ronayne	kronayne	2012-06-04	t	1	Kelly Ronayne	/media/avatars/2013/10/30/Kelly_Ronayne.jpg	\N	/media/avatars/small/2013/10/30/Kelly_Ronayne.jpeg
+679	BUSINESS INTELLIGENCE ANALYST	1919531-josh-chaplin	jchaplin	2013-01-14	t	1	Josh Chaplin	/media/avatars/2013/10/30/Josh_Chaplin.jpg	\N	/media/avatars/small/2013/10/30/Josh_Chaplin.jpeg
+488	VP BUSINESS DEVELOPMENT	1194894-lacey-poliakoff	lpoliakoff	2006-06-20	t	2	Lacey Poliakoff	/media/avatars/2013/10/30/Lacey_Poliakoff.jpg	\N	/media/avatars/small/2013/10/30/Lacey_Poliakoff.jpeg
+556	SVP BUSINESS DEVELOPMENT	1193095-john-keeling	jkeeling	2005-10-24	t	2	John Keeling	/media/avatars/2013/10/30/John_Keeling.jpg	\N	/media/avatars/small/2013/10/30/John_Keeling.jpeg
+592	VP BUS DEVELOPMENT	1167906-jesse-keyser	jkeyser	2003-02-03	t	2	Jesse Keyser	/media/avatars/2013/10/30/Jesse_Keyser.jpg	\N	/media/avatars/small/2013/10/30/Jesse_Keyser.jpeg
+733	AD OPS ACCT MANAGER		kekins	2013-09-13	t	2	Kira Ekins	/media/avatars/2013/10/30/Kira_Ekins.jpg	\N	/media/avatars/small/2013/10/30/Kira_Ekins.jpeg
+446	IT VENDOR RELATIONSHIP MANAGER	1204470-greg-martz	gregma	1999-06-09	t	3	Greg Martz	/media/avatars/2013/10/30/Greg_Martz.jpg	\N	/media/avatars/small/2013/10/30/Greg_Martz.jpeg
+604	DIRECTOR BUSINESS RELATIONS	1204477-maggie-muraca	mmuraca	2010-08-02	t	3	Maggie Muraca	/media/avatars/2013/10/30/Maggie_Muraca.jpg	\N	/media/avatars/small/2013/10/30/Maggie_Muraca.jpeg
+629	BUSINESS DEV NY	1197678-brendan-byrnes	bbyrnes	2011-09-26	t	3	Brendan Byrnes	/media/avatars/2013/10/30/Brendan_Byrnes.jpg	\N	/media/avatars/small/2013/10/30/Brendan_Byrnes.jpeg
+684	OFFICE OPERATIONS	2378732-chelsea-gustafson	cgustafson	2012-09-19	t	3	Chelsea Gustafson	/media/avatars/2013/10/30/Chelsea_Gustafson.jpg	\N	/media/avatars/small/2013/10/30/Chelsea_Gustafson.jpeg
+704	CHIEF MARKETING OFFICER	1202170-rebekah-hughes	rhughes	2002-06-17	f	\N	Rebekah Hughes	/media/avatars/2013/10/30/Rebekah_Hughes.jpg	\N	/media/avatars/small/2013/10/30/Rebekah_Hughes.jpeg
+715	EXECUTIVE ASSISTANT	1177358-deirdre-pontbriand	dpontbriand	2012-10-23	t	3	Deirdre Pontbriand	/media/avatars/2013/10/30/Deirdre_Pontbriand.jpg	\N	/media/avatars/small/2013/10/30/Deirdre_Pontbriand.jpeg
+462	ACCOUNTING MANAGER	1200358-anthony-price	aprice	2000-12-29	t	4	Anthony Price	/media/avatars/2013/10/30/Anthony_Price.jpg	\N	/media/avatars/small/2013/10/30/Anthony_Price.jpeg
+540	GENERAL COUNSEL	1202394-lawrence-greenberg	lawrenceg	1996-12-02	t	4	Lawrence Greenberg	/media/avatars/2013/10/30/Lawrence_Greenberg.jpg	\N	/media/avatars/small/2013/10/30/Lawrence_Greenberg.jpeg
+545	LEGAL ASSISTANT	1200314-erik-stadnik	estadnik	2008-04-21	t	4	Erik Stadnik	/media/avatars/2013/10/30/Erik_Stadnik.jpg	\N	/media/avatars/small/2013/10/30/Erik_Stadnik.jpeg
+580	ASSOCIATE GENERAL COUNSEL	1202728-marthe-larosiliere	marthel	1998-09-28	t	4	Marthe LaRosiliere	/media/avatars/2013/10/30/Marthe_LaRosiliere.jpg	\N	/media/avatars/small/2013/10/30/Marthe_LaRosiliere.jpeg
+584	SVP CORPORATE FINANCE	1202202-gary-hill	garyh	1996-02-16	t	4	Gary Hill	/media/avatars/2013/10/30/Gary_Hill.jpg	\N	/media/avatars/small/2013/10/30/Gary_Hill.jpeg
+597	ASSISTANT CONTROLLER	1200244-jackie-fletcher	jfletcher	2004-08-30	t	4	Jackie Fletcher	/media/avatars/2013/10/30/Jackie_Fletcher.jpg	\N	/media/avatars/small/2013/10/30/Jackie_Fletcher.jpeg
+598	ACCOUNTING ANALYST	1200349-leigh-ann	lshollenberger	2010-10-11	t	4	Leigh Ann Shollenberger	/media/avatars/2013/10/30/Leigh_Ann_Shollenberger.jpg	\N	/media/avatars/small/2013/10/30/Leigh_Ann_Shollenberger.jpeg
+599	CONTROLLER	1196452-phil-biedronski	pbiedronski	2005-06-27	t	4	Phil Biedronski	/media/avatars/2013/10/30/Phil_Biedronski.jpg	\N	/media/avatars/small/2013/10/30/Phil_Biedronski.jpeg
+640	BUDGET ANALYST	1200347-chrissy-raymond	craymond	2012-02-01	t	4	Chrissy Raymond	/media/avatars/2013/10/30/Chrissy_Raymond.jpg	\N	/media/avatars/small/2013/10/30/Chrissy_Raymond.jpeg
+642	STAFF ACCOUNTANT	1200353-lee-perryman	lperryman	2012-02-08	t	4	Lee Perryman	/media/avatars/2013/10/30/Lee_Perryman.jpg	\N	/media/avatars/small/2013/10/30/Lee_Perryman.jpeg
+682	PAYROLL FOOL	1919522-jennifer-cerna	jcerna	2013-01-14	t	4	Jennifer Cerna	/media/avatars/2013/10/30/Jennifer_Cerna.jpg	\N	/media/avatars/small/2013/10/30/Jennifer_Cerna.jpeg
+719	SENIOR IN-HOUSE COUNSEL		kpollak	2013-09-27	t	4	Kerry Pollak	/media/avatars/2013/10/30/Kerry_Pollak.jpg	\N	/media/avatars/small/2013/10/30/Kerry_Pollak.jpeg
+456	ONLINE EDITOR	1200302-sharon-yep	syep	2010-07-19	t	5	Sharon Yep	/media/avatars/2013/10/30/Sharon_Yep.jpg	\N	/media/avatars/small/2013/10/30/Sharon_Yep.jpeg
+457	ONLINE ANALYST I	1202687-mike-klesta	mklesta	2010-07-19	t	5	Mike Klesta	/media/avatars/2013/10/30/Mike_Klesta.jpg	\N	/media/avatars/small/2013/10/30/Mike_Klesta.jpeg
+466	GENERAL MANAGER	1196567-eric-bleeker	ebleeker	2008-12-01	t	5	Eric Bleeker	/media/avatars/2013/10/30/Eric_Bleeker.jpg	\N	/media/avatars/small/2013/10/30/Eric_Bleeker.jpeg
+483	GRAPHICS EDITOR	1070212-dari-fitzgerald	dfitzgerald	2007-04-09	t	5	Dari FitzGerald	/media/avatars/2013/10/30/Dari_FitzGerald.jpg	\N	/media/avatars/small/2013/10/30/Dari_FitzGerald.jpeg
+710	CHIEF COMMERCIAL OFFICER	1197761-randy-coon	rcoon	2004-10-25	f	\N	Randy Coon	/media/avatars/2013/10/30/Randy_Coon.jpg	11	/media/avatars/small/2013/10/30/Randy_Coon.jpeg
+713	CHIEF FINANCIAL OFFICER	1197793-ollen-douglass	odouglass	2001-01-08	f	\N	Ollen Douglass	/media/avatars/2013/10/30/Ollen_Douglass.jpg	10	/media/avatars/small/2013/10/30/Ollen_Douglass.jpeg
+711	CO FOUNDER & INNOV & NEW IDEAS	1200291-david-gardner	davidg	1994-07-19	f	\N	David Gardner	/media/avatars/2013/10/30/David_Gardner.jpg	15	/media/avatars/small/2013/10/30/David_Gardner.jpeg
+709	CO FOUNDER & CEO	1200285-tom-gardner	tomg	1994-07-19	f	\N	Tom Gardner	/media/avatars/2013/10/30/Tom_Gardner.jpg	13	/media/avatars/small/2013/10/30/Tom_Gardner.jpeg
+707	CHIEF PERFORMANCE OFFICER	1204508-kerra-mcdonough	kmaples	2000-05-22	f	\N	Kerra McDonough	/media/avatars/2013/10/30/Kerra_McDonough.jpg	8	/media/avatars/small/2013/10/30/Kerra_McDonough.jpeg
+706	CHIEF PLATFORM SYNERGIZER	1197638-mark-brooks	mbrooks	2005-06-20	f	\N	Mark Brooks	/media/avatars/2013/10/30/Mark_Brooks.jpg	9	/media/avatars/small/2013/10/30/Mark_Brooks.jpeg
+705	VP ONLINE STRATEGY	1197782-jordan-dipietro	jdipietro	2009-06-22	f	\N	Jordan DiPietro	/media/avatars/2013/10/30/Jordan_DiPietro.jpg	7	/media/avatars/small/2013/10/30/Jordan_DiPietro.jpeg
+440	HUMAN RESOURCES MANAGER	1200242-christine-noonan	cnoonan	2007-10-15	t	4	Christine Noonan	/media/avatars/2013/10/30/Christine_Noonan.jpg	21	/media/avatars/small/2013/10/30/Christine_Noonan.jpeg
+491	WRITER & EDITOR	1204173-dayana-yochim	dayanay	1997-07-07	t	5	Dayana Yochim	/media/avatars/2013/10/30/Dayana_Yochim.jpg	\N	/media/avatars/small/2013/10/30/Dayana_Yochim.jpeg
+524	ONLINE EDITOR	1197806-kris-eddy	keddy	2007-04-02	t	5	Kris Eddy	/media/avatars/2013/10/30/Kris_Eddy.jpg	\N	/media/avatars/small/2013/10/30/Kris_Eddy.jpeg
+527	ONLINE ANALYST I	1204492-ilan-moscovitz	imoscovitz	2008-01-14	t	5	Ilan Moscovitz	/media/avatars/2013/10/30/Ilan_Moscovitz.jpg	\N	/media/avatars/small/2013/10/30/Ilan_Moscovitz.jpeg
+535	ON AIR TALENT	1200164-chris-hill	chill	2000-10-20	t	5	Chris Hill	/media/avatars/2013/10/30/Chris_Hill.jpg	\N	/media/avatars/small/2013/10/30/Chris_Hill.jpeg
+537	WRITER MANAGER CDP DEAN	1197747-julie-clarenbach	jclarenbach	2008-03-10	t	5	Julie Clarenbach	/media/avatars/2013/10/30/Julie_Clarenbach.jpg	\N	/media/avatars/small/2013/10/30/Julie_Clarenbach.jpeg
+547	EDITORIAL DIRECTOR	1204671-anand-chokkavelu	achokkavelu	2005-01-10	t	5	Anand Chokkavelu	/media/avatars/2013/10/30/Anand_Chokkavelu.jpg	\N	/media/avatars/small/2013/10/30/Anand_Chokkavelu.jpeg
+552	ONLINE ANALYST I	1204054-dave-williamson	dwilliamson	2008-12-01	t	5	Dave Williamson	/media/avatars/2013/10/30/Dave_Williamson.jpg	\N	/media/avatars/small/2013/10/30/Dave_Williamson.jpeg
+559	ONLINE EDITOR	1200297-abbie-redmon	aredmon	2008-09-02	t	5	Abbie Redmon	/media/avatars/2013/10/30/Abbie_Redmon.jpg	\N	/media/avatars/small/2013/10/30/Abbie_Redmon.jpeg
+564	CDP TA & WRITER LIAISON	1155885-nathan-alderman	nalderman	2005-05-02	t	5	Nathan Alderman	/media/avatars/2013/10/30/Nathan_Alderman.jpg	\N	/media/avatars/small/2013/10/30/Nathan_Alderman.jpeg
+576	ONLINE ANALYST II	1200180-john-reeves	jreeves	2004-08-30	t	5	John Reeves	/media/avatars/2013/10/30/John_Reeves.jpg	\N	/media/avatars/small/2013/10/30/John_Reeves.jpeg
+577	PRESIDENT WRITER NETWORK	1068739-roger-friedman	rfriedman	2004-06-01	t	5	Roger Friedman	/media/avatars/2013/10/30/Roger_Friedman.jpg	\N	/media/avatars/small/2013/10/30/Roger_Friedman.jpeg
+579	MANAGING NEWS EDITOR	1200116-hope-nelson-pope	hnelson	2004-07-06	t	5	Hope Nelson-Pope	/media/avatars/2013/10/30/Hope_Nelson-Pope.jpg	\N	/media/avatars/small/2013/10/30/Hope_Nelson-Pope.jpeg
+588	VIDEO REPORTER & PRODUCER	1204385-rex-moore	rmoore	2000-05-01	t	5	Rex Moore	/media/avatars/2013/10/30/Rex_Moore.jpg	\N	/media/avatars/small/2013/10/30/Rex_Moore.jpeg
+614	DIRECTOR TALENT MANAGEMENT	1200095-alison-southwick	asouthwick	2011-01-18	t	5	Alison Southwick	/media/avatars/2013/10/30/Alison_Southwick.jpg	\N	/media/avatars/small/2013/10/30/Alison_Southwick.jpeg
+616	ONLINE EDITOR	1202705-erin-kennedy	ekennedy	2011-04-04	t	5	Erin Kennedy	/media/avatars/2013/10/30/Erin_Kennedy.jpg	\N	/media/avatars/small/2013/10/30/Erin_Kennedy.jpeg
+618	ONLINE EDITOR	1200276-bill-hitchner	bhitchner	2011-06-13	t	5	Bill Hitchner	/media/avatars/2013/10/30/Bill_Hitchner.jpg	\N	/media/avatars/small/2013/10/30/Bill_Hitchner.jpeg
+625	ONLINE EDITOR	1202744-lauren-kuczala	lkuczala	2011-08-16	t	5	Lauren Kuczala	/media/avatars/2013/10/30/Lauren_Kuczala.jpg	\N	/media/avatars/small/2013/10/30/Lauren_Kuczala.jpeg
+627	DEPUTY MANAGING EDITOR	1070228-austin-smith	asmith	2011-09-26	t	5	Austin Smith	/media/avatars/2013/10/30/Austin_Smith.jpg	\N	/media/avatars/small/2013/10/30/Austin_Smith.jpeg
+641	ONLINE EDITOR	1058335-james-mcclenathen	jmcclenathen	2012-02-13	t	5	James McClenathen	/media/avatars/2013/10/30/James_McClenathen.jpg	\N	/media/avatars/small/2013/10/30/James_McClenathen.jpeg
+646	BLOG EDITOR & TALENT SCOUT II	1200121-mike-finarelli	mfinarelli	2012-03-12	t	5	Mike Finarelli	/media/avatars/2013/10/30/Mike_Finarelli.jpg	\N	/media/avatars/small/2013/10/30/Mike_Finarelli.jpeg
+648	ONLINE ANALYST I	1200240-joel-south	jsouth	2012-04-02	t	5	Joel South	/media/avatars/2013/10/30/Joel_South.jpg	\N	/media/avatars/small/2013/10/30/Joel_South.jpeg
+650	SEO	1202412-jason-hellmann	jhellmann	2012-04-30	t	5	Jason Hellmann	/media/avatars/2013/10/30/Jason_Hellmann.jpg	\N	/media/avatars/small/2013/10/30/Jason_Hellmann.jpeg
+651	RETENTION MANAGER	1200235-brenton-flynn	bflynn	2012-04-30	t	5	Brenton Flynn	/media/avatars/2013/10/30/Brenton_Flynn.jpg	\N	/media/avatars/small/2013/10/30/Brenton_Flynn.jpeg
+656	BLOG EDITOR	1200206-mark-reeth	mreeth	2012-06-11	t	5	Mark Reeth	/media/avatars/2013/10/30/Mark_Reeth.jpg	\N	/media/avatars/small/2013/10/30/Mark_Reeth.jpeg
+657	ONLINE ANALYST I	1200205-max-macaluso	mmacaluso	2012-06-11	t	5	Max Macaluso	/media/avatars/2013/10/30/Max_Macaluso.jpg	\N	/media/avatars/small/2013/10/30/Max_Macaluso.jpeg
+667	BLOG EDITOR & TALENT SCOUT I	1176080-jamal-carnette	jcarnette	2012-08-20	t	5	Jamal Carnette	/media/avatars/2013/10/30/Jamal_Carnette.jpg	\N	/media/avatars/small/2013/10/30/Jamal_Carnette.jpeg
+670	ONLINE ANALYST I	1216121-taylor-muckerman	tmuckerman	2012-09-17	t	5	Taylor Muckerman	/media/avatars/2013/10/30/Taylor_Muckerman.jpg	\N	/media/avatars/small/2013/10/30/Taylor_Muckerman.jpeg
+671	ONLINE ANALYST I	1163992-blake-bos	bbos	2012-09-17	t	5	Blake Bos	/media/avatars/2013/10/30/Blake_Bos.jpg	\N	/media/avatars/small/2013/10/30/Blake_Bos.jpeg
+673	SECTOR CHIEF	1175473-matt-koppenheffer	mkoppenheffer	2012-10-08	t	5	Matt Koppenheffer	/media/avatars/2013/10/30/Matt_Koppenheffer.jpg	\N	/media/avatars/small/2013/10/30/Matt_Koppenheffer.jpeg
+683	ONLINE ANALYST	2143924-david-hanson	dhanson	2013-02-19	t	5	David Hanson	/media/avatars/2013/10/30/David_Hanson.jpg	\N	/media/avatars/small/2013/10/30/David_Hanson.jpeg
+721	ONLINE ANALYST I		soreilly	2013-09-06	t	5	Sean O'Reilly	/media/avatars/2013/10/30/Sean_Oreilly.jpg	\N	/media/avatars/small/2013/10/30/Sean_Oreilly.jpeg
+723	SECTOR CHIEF		eniu	2013-08-29	t	5	Evan Niu	/media/avatars/2013/10/30/Evan_Niu.jpg	\N	/media/avatars/small/2013/10/30/Evan_Niu.jpeg
+724	VIDEO FOOL		rkeiper	2013-08-05	t	5	Ryan Keiper	/media/avatars/2013/10/30/Ryan_Keiper.jpg	\N	/media/avatars/small/2013/10/30/Ryan_Keiper.jpeg
+725	CONTRIBUTOR MANAGER		rcoleman	2013-06-10	t	5	Robert Coleman	/media/avatars/2013/10/30/Robert_Coleman.jpg	\N	/media/avatars/small/2013/10/30/Robert_Coleman.jpeg
+726	BLOG LIAISON & TALENT SCOUT		kcoia	2013-08-05	t	5	Kristen Coia	/media/avatars/2013/10/30/Kristen_Coia.jpg	\N	/media/avatars/small/2013/10/30/Kristen_Coia.jpeg
+736	SENIOR ANALYST II		mhousel	2013-10-01	t	5	Morgan Housel	/media/avatars/2013/10/30/Morgan_Housel.jpg	\N	/media/avatars/small/2013/10/30/Morgan_Housel.jpeg
+447		1203895-jill-ralph	jralph	2006-03-02	t	6	Jill Ralph	/media/avatars/2013/10/30/Jill_Ralph.jpg	\N	/media/avatars/small/2013/10/30/Jill_Ralph.jpeg
+480	FRONT END WEB DEVELOPER	1196225-jim-amos	jamos	2009-03-02	t	6	Jim Amos	/media/avatars/2013/10/30/Jim_Amos.jpg	\N	/media/avatars/small/2013/10/30/Jim_Amos.jpeg
+494	ADVISOR II	1204519-joe-magyer	jmagyer	2007-02-05	t	6	Joe Magyer	/media/avatars/2013/10/30/Joe_Magyer.jpg	\N	/media/avatars/small/2013/10/30/Joe_Magyer.jpeg
+506	JR QUANALYST	1204765-tony-bowman	tbowman	2010-02-09	t	6	Tony Bowman	/media/avatars/2013/10/30/Tony_Bowman.jpg	\N	/media/avatars/small/2013/10/30/Tony_Bowman.jpeg
+511	INTERNATIONAL TECHNOLOGY	1200101-brian-tighe	btighe	2008-03-24	t	6	Brian Tighe	/media/avatars/2013/10/30/Brian_Tighe.jpg	\N	/media/avatars/small/2013/10/30/Brian_Tighe.jpeg
+522		1204268-nate-weisshaar	nweisshaar	2007-09-24	t	6	Nate Weisshaar	/media/avatars/2013/10/30/Nate_Weisshaar.jpg	\N	/media/avatars/small/2013/10/30/Nate_Weisshaar.jpeg
+543		1204155-stuart-watson	stuartw	1999-07-22	t	6	Stuart Watson	/media/avatars/2013/10/30/Stuart_Watson.jpg	\N	/media/avatars/small/2013/10/30/Stuart_Watson.jpeg
+546		1202131-barry-james	barryj	2009-03-02	t	6	Barry James	/media/avatars/2013/10/30/Barry_James.jpg	\N	/media/avatars/small/2013/10/30/Barry_James.jpeg
+578	HEAD OF EUROPE & THE AMERICAS	1200203-brian-richards	brichards	2005-01-31	t	6	Brian Richards	/media/avatars/2013/10/30/Brian_Richards.jpg	\N	/media/avatars/small/2013/10/30/Brian_Richards.jpeg
+586		1204142-jon-wallis	jonw	2000-11-20	t	6	Jon Wallis	/media/avatars/2013/10/30/Jon_Wallis.jpg	\N	/media/avatars/small/2013/10/30/Jon_Wallis.jpeg
+590		1203908-maynard-paton	maynardp	1999-11-22	t	6	Maynard Paton	/media/avatars/2013/10/30/Maynard_Paton.jpg	\N	/media/avatars/small/2013/10/30/Maynard_Paton.jpeg
+591		1202673-david-kuo	davidk	2000-06-05	t	6	David Kuo	/media/avatars/2013/10/30/David_Kuo.jpg	\N	/media/avatars/small/2013/10/30/David_Kuo.jpeg
+600		1203866-andy-paul	andyp	2005-02-21	t	6	Andy Paul	/media/avatars/2013/10/30/Andy_Paul.jpg	\N	/media/avatars/small/2013/10/30/Andy_Paul.jpeg
+602	ANALYST DEVELOPMENT PROGRAM	1196280-cat-baab-muguira	cbaab	2010-09-13	t	6	Cat Baab-Muguira	/media/avatars/2013/10/30/Cat_Baab-Muguira.jpg	\N	/media/avatars/small/2013/10/30/Cat_Baab-Muguira.jpeg
+472	CHIEF INVESTMENT OFFICER	1197772-andy-cross	andyc	1996-11-18	t	\N	Andy Cross	/media/avatars/2013/10/30/Andy_Cross.jpg	14	/media/avatars/small/2013/10/30/Andy_Cross.jpeg
+609	VP PROCESS MANAGEMENT	1200306-max-keeler	maxk	1996-10-14	t	6	Maxwell Keeler	/media/avatars/2013/10/30/Maxwell_Keeler.jpg	\N	/media/avatars/small/2013/10/30/Maxwell_Keeler.jpeg
+615		1202161-bruce-jackson	brucej	1997-07-01	t	6	Bruce Jackson	/media/avatars/2013/10/30/Bruce_Jackson.jpg	\N	/media/avatars/small/2013/10/30/Bruce_Jackson.jpeg
+631		1204468-chris-nials	cnials	2011-10-03	t	6	Chris Nials	/media/avatars/2013/10/30/Chris_Nials.jpg	\N	/media/avatars/small/2013/10/30/Chris_Nials.jpeg
+634		1203862-sam-robson	srobson	2011-12-12	t	6	Sam Robson	/media/avatars/2013/10/30/Sam_Robson.jpg	\N	/media/avatars/small/2013/10/30/Sam_Robson.jpeg
+639		1204374-scott-phillips	sphillips	2012-02-20	t	6	Scott Phillips	/media/avatars/2013/10/30/Scott_Phillips.jpg	\N	/media/avatars/small/2013/10/30/Scott_Phillips.jpeg
+659		1202717-mike-king	mking	2012-06-25	t	6	Mike King	/media/avatars/2013/10/30/Mike_King.jpg	\N	/media/avatars/small/2013/10/30/Mike_King.jpeg
+676		1483967-joanna-sng	jsng	2012-10-29	t	6	Joanna Sng	/media/avatars/2013/10/30/Joanna_Sng.jpg	\N	/media/avatars/small/2013/10/30/Joanna_Sng.jpeg
+677		1483936-ian-butler	ibutler	2012-11-12	t	6	Iain Butler	/media/avatars/2013/10/30/Iain_Butler.jpg	\N	/media/avatars/small/2013/10/30/Iain_Butler.jpeg
+696			cmuguira	2013-05-01	t	6	Chris Muguira	/media/avatars/2013/10/30/Chris_Muguira.jpg	\N	/media/avatars/small/2013/10/30/Chris_Muguira.jpeg
+735	PROJECT COORDINATOR		jimbriano	2013-10-01	t	6	Joseph Imbriano	/media/avatars/2013/10/30/Joseph_Imbriano.jpg	\N	/media/avatars/small/2013/10/30/Joseph_Imbriano.jpeg
+738			ljackson	2013-04-01	t	6	Lynette Jackson	/media/avatars/2013/10/30/Lynette_Jackson.jpg	\N	/media/avatars/small/2013/10/30/Lynette_Jackson.jpeg
+739			ebouwmeester	2013-10-01	t	6	Erin Bouwmeester	/media/avatars/2013/10/30/Erin_Bouwmeester.jpg	\N	/media/avatars/small/2013/10/30/Erin_Bouwmeester.jpeg
+741			mrogers	2005-07-01	t	6	Mark Rogers	/media/avatars/2013/10/30/Mark_Rogers.jpg	\N	/media/avatars/small/2013/10/30/Mark_Rogers.jpeg
+450	RESEARCH ANALYST 1	1204296-joe-tenebruso	jtenebruso	2010-11-08	t	7	Joe Tenebruso	/media/avatars/2013/10/30/Joe_Tenebruso.jpg	\N	/media/avatars/small/2013/10/30/Joe_Tenebruso.jpeg
+451	RESEARCH ANALYST 1	1197731-paul-chi	pchi	2010-11-08	t	7	Paul Chi	/media/avatars/2013/10/30/Paul_Chi.jpg	\N	/media/avatars/small/2013/10/30/Paul_Chi.jpeg
+461	SR QUANTITATIVE ANALYST	1204284-xander-twombly	xtwombly	2008-05-01	t	7	Xander Twombly	/media/avatars/2013/10/30/Xander_Twombly.jpg	\N	/media/avatars/small/2013/10/30/Xander_Twombly.jpeg
+465	RESEARCH ANALYST II	1204439-jason-moser	jmoser	2010-02-22	t	7	Jason Moser	/media/avatars/2013/10/30/Jason_Moser.jpg	\N	/media/avatars/small/2013/10/30/Jason_Moser.jpeg
+467	ADVISOR II	1203820-alex-scherer	ascherer	2009-04-13	t	7	Alex Scherer	/media/avatars/2013/10/30/Alex_Scherer.jpg	\N	/media/avatars/small/2013/10/30/Alex_Scherer.jpeg
+468	RESEARCH ANALYST II	1200337-bryan-hinmon	bhinmon	2010-02-22	t	7	Bryan Hinmon	/media/avatars/2013/10/30/Bryan_Hinmon.jpg	\N	/media/avatars/small/2013/10/30/Bryan_Hinmon.jpeg
+469	EXECUTIVE ASSISTANT	1203888-corrina-quader	cquader	2009-02-09	t	7	Corrina Quader	/media/avatars/2013/10/30/Corrina_Quader.jpg	\N	/media/avatars/small/2013/10/30/Corrina_Quader.jpeg
+498	ADVISOR III	1200188-seth-jayson	sjayson	2004-08-16	t	7	Seth Jayson	/media/avatars/2013/10/30/Seth_Jayson.jpg	\N	/media/avatars/small/2013/10/30/Seth_Jayson.jpeg
+500	RESEARCH ANALYST 1	1203831-jim-royal	jroyal	2009-01-12	t	7	Jim Royal	/media/avatars/2013/10/30/Jim_Royal.jpg	\N	/media/avatars/small/2013/10/30/Jim_Royal.jpeg
+505	WRITER	1202678-alyce-lomax	alomax	2003-12-16	t	7	Alyce Lomax	/media/avatars/2013/10/30/Alyce_Lomax.jpg	\N	/media/avatars/small/2013/10/30/Alyce_Lomax.jpeg
+510	SENIOR ANALYST I	1204395-jeremy-myers	jmyers	2009-07-15	t	7	Jeremy Myers	/media/avatars/2013/10/30/Jeremy_Myers.jpg	\N	/media/avatars/small/2013/10/30/Jeremy_Myers.jpeg
+512	ADVISOR	1202329-ron-gross	rgross	2008-09-16	t	7	Ron Gross	/media/avatars/2013/10/30/Ron_Gross.jpg	\N	/media/avatars/small/2013/10/30/Ron_Gross.jpeg
+518	SENIOR ANALYST II	1196262-matty-argersinger	margersinger	2008-01-14	t	7	Matt Argersinger	/media/avatars/2013/10/30/Matt_Argersinger.jpg	\N	/media/avatars/small/2013/10/30/Matt_Argersinger.jpeg
+519	SENIOR ANALYST I	1200334-bryan-white	bryanw	2008-01-14	t	7	Bryan White	/media/avatars/2013/10/30/Bryan_White.jpg	\N	/media/avatars/small/2013/10/30/Bryan_White.jpeg
+526	ADVISOR I	1204589-rich-greifner	rgreifner	2006-12-06	t	7	Rich Greifner	/media/avatars/2013/10/30/Rich_Greifner.jpg	\N	/media/avatars/small/2013/10/30/Rich_Greifner.jpeg
+541	RESEARCH ANALYST II	1204480-jim-mueller	jmueller	2007-10-08	t	7	Jim Mueller	/media/avatars/2013/10/30/Jim_Mueller.jpg	\N	/media/avatars/small/2013/10/30/Jim_Mueller.jpeg
+555	INVESTING OPS ADP	1202768-yervand-khoranian	ykhoranian	2008-07-07	t	7	Yervand Khoranian	/media/avatars/2013/10/30/Yervand_Khoranian.jpg	\N	/media/avatars/small/2013/10/30/Yervand_Khoranian.jpeg
+558	ADVISOR V	1204620-jeff-fischer	jfischer	2001-05-28	t	7	Jeff Fischer	/media/avatars/2013/10/30/Jeff_Fischer.jpg	\N	/media/avatars/small/2013/10/30/Jeff_Fischer.jpeg
+563	ADVISOR II	1204170-charly-travers	ctravers	2007-01-31	t	7	Charly Travers	/media/avatars/2013/10/30/Charly_Travers.jpg	\N	/media/avatars/small/2013/10/30/Charly_Travers.jpeg
+565	SENIOR ANALYST I	1200081-mike-olsen	molsen	2005-03-16	t	7	Mike Olsen	/media/avatars/2013/10/30/Mike_Olsen.jpg	\N	/media/avatars/small/2013/10/30/Mike_Olsen.jpeg
+566	ADVISOR I	1204475-david-meier	dmeier	2006-11-24	t	7	David Meier	/media/avatars/2013/10/30/David_Meier.jpg	\N	/media/avatars/small/2013/10/30/David_Meier.jpeg
+567	ADVISOR II	1197802-james-early	jearly	2004-08-16	t	7	James Early	/media/avatars/2013/10/30/James_Early.jpg	\N	/media/avatars/small/2013/10/30/James_Early.jpeg
+594	DIRECTOR		buckh	1998-09-09	t	7	Buck Hartzell	/media/avatars/2013/10/30/Buck_Hartzell.jpg	\N	/media/avatars/small/2013/10/30/Buck_Hartzell.jpeg
+621	ANALYST DEVELOPMENT PROGRAM	1200298-sara-hov	shov	2011-07-11	t	7	Sara Hov	/media/avatars/2013/10/30/Sara_Hov.jpg	\N	/media/avatars/small/2013/10/30/Sara_Hov.jpeg
+638	RESEARCH ANALYST 1	1204571-scott-hall	shall	2012-01-17	t	7	Scott Hall	/media/avatars/2013/10/30/Scott_Hall.jpg	\N	/media/avatars/small/2013/10/30/Scott_Hall.jpeg
+644	RESEARCH ANALYST 1	1204528-brendan-mathews	bmathews	2012-03-13	t	7	Brendan Mathews	/media/avatars/2013/10/30/Brendan_Mathews.jpg	\N	/media/avatars/small/2013/10/30/Brendan_Mathews.jpeg
+658	ANALYST DEVELOPMENT PROGRAM	1624844-frank-thomas	fthomas	2013-01-14	t	7	Frank Thomas	/media/avatars/2013/10/30/Frank_Thomas.jpg	\N	/media/avatars/small/2013/10/30/Frank_Thomas.jpeg
+693	ANALYST DEVELOPMENT PROGRAM	2629539-simon-erickson	serickson	2013-04-15	t	7	Simon Erickson	/media/avatars/2013/10/30/Simon_Erickson.jpg	\N	/media/avatars/small/2013/10/30/Simon_Erickson.jpeg
+694	ANALYST DEVELOPMENT PROGRAM	2629529-billy-kipersztok	bkipersztok	2013-04-15	t	7	Billy Kipersztok	/media/avatars/2013/10/30/Billy_Kipersztok.jpg	\N	/media/avatars/small/2013/10/30/Billy_Kipersztok.jpeg
+695	ANALYST DEVELOPMENT PROGRAM	2629517-micah-robinson	mrobinson	2013-04-15	t	7	Micah Robinson	/media/avatars/2013/10/30/Micah_Robinson.jpg	\N	/media/avatars/small/2013/10/30/Micah_Robinson.jpeg
+740			jgillies	2013-10-01	t	7	Jim Gillies	/media/avatars/2013/10/30/Jim_Gillies.jpg	\N	/media/avatars/small/2013/10/30/Jim_Gillies.jpeg
+485	MANAGER DRM DESIGN	1200130-gus-thorn	gthorn	2008-06-09	t	8	Gus Thorn	/media/avatars/2013/10/30/Gus_Thorn.jpg	\N	/media/avatars/small/2013/10/30/Gus_Thorn.jpeg
+520	MARKETING RESEARCH ANALYST	1060707-adam-weiderman	awiederman	2007-06-11	t	8	Adam Wiederman	/media/avatars/2013/10/30/Adam_Wiederman.jpg	\N	/media/avatars/small/2013/10/30/Adam_Wiederman.jpeg
+529	SR. COPYWRITER II	1200128-beirne-white	beirne	2004-11-15	t	8	Beirne White	/media/avatars/2013/10/30/Beirne_White.jpg	\N	/media/avatars/small/2013/10/30/Beirne_White.jpeg
+534	MULTIMEDIA PRODUCTION MANAGER	1483621-steve-broido	sbroido	2000-01-18	t	8	Steve Broido	/media/avatars/2013/10/30/Steve_Broido.jpg	\N	/media/avatars/small/2013/10/30/Steve_Broido.jpeg
+568	EXECUTIVE PRODUCER	1200181-mac-greer	macg	1998-08-10	t	8	Mac Greer	/media/avatars/2013/10/30/Mac_Greer.jpg	\N	/media/avatars/small/2013/10/30/Mac_Greer.jpeg
+595	EXTERNAL MARKETING MANAGER	1197724-liz-cherry	lizc	1999-09-06	t	8	Liz Cherry	/media/avatars/2013/10/30/Liz_Cherry.jpg	\N	/media/avatars/small/2013/10/30/Liz_Cherry.jpeg
+630	DRM DESIGNER	1200131-vickie-misch	vmisch	2011-10-03	t	8	Vickie Misch	/media/avatars/2013/10/30/Vickie_Misch.jpg	\N	/media/avatars/small/2013/10/30/Vickie_Misch.jpeg
+636	COPYWRITER	1200097-aaron-winter	awinter	2012-01-09	t	8	Aaron Winter	/media/avatars/2013/10/30/Aaron_Winter.jpg	\N	/media/avatars/small/2013/10/30/Aaron_Winter.jpeg
+637	RESEARCH ANALYST 1	1204561-lyons-george	lgeorge	2012-01-17	t	8	Lyons George	/media/avatars/2013/10/30/Lyons_George.jpg	\N	/media/avatars/small/2013/10/30/Lyons_George.jpeg
+647	SR. COPYWRITER I	1200264-austin-edwards	aedwards	2007-05-09	t	8	Austin Edwards	/media/avatars/2013/10/30/Austin_Edwards.jpg	\N	/media/avatars/small/2013/10/30/Austin_Edwards.jpeg
+660	JR. COPYWRITER	1200099-ryan-katon	rkaton	2012-06-18	t	8	Ryan Katon	/media/avatars/2013/10/30/Ryan_Katon.jpg	\N	/media/avatars/small/2013/10/30/Ryan_Katon.jpeg
+661	JR. COPYWRITER	1196680-blake-borron	bborron	2012-06-18	t	8	Blake Borron	/media/avatars/2013/10/30/Blake_Borron.jpg	\N	/media/avatars/small/2013/10/30/Blake_Borron.jpeg
+662	JR. COPYWRITER	1047876-michael-adams	madams	2012-06-18	t	8	Mike Adams	/media/avatars/2013/10/30/Mike_Adams.jpg	\N	/media/avatars/small/2013/10/30/Mike_Adams.jpeg
+663	MARKETING OPERATIONS MANAGER	1200177-thomas-russell	trussell	2012-07-09	t	8	Thom Russell	/media/avatars/2013/10/30/Thom_Russell.jpg	\N	/media/avatars/small/2013/10/30/Thom_Russell.jpeg
+664	DRM DESIGNER	1200132-frank-stewart	fstewart	2012-07-09	t	8	Frank Stewart	/media/avatars/2013/10/30/Frank_Stewart.jpg	\N	/media/avatars/small/2013/10/30/Frank_Stewart.jpeg
+672	MARKETING DIRECTOR	1176945-don-lair	dlair	2012-10-08	t	8	Don Lair	/media/avatars/2013/10/30/Don_Lair.jpg	\N	/media/avatars/small/2013/10/30/Don_Lair.jpeg
+698	EMAIL MARKETING FOOL	2995122-chris-mccorkle	cmccorkle	2013-06-03	t	8	Chris McCorkle	/media/avatars/2013/10/30/Chris_McCorkle.jpg	\N	/media/avatars/small/2013/10/30/Chris_McCorkle.jpeg
+732	MARKETING MANAGER		aforbush	2013-07-01	t	8	Anne Forbush	/media/avatars/2013/10/30/Anne_Forbush.jpg	\N	/media/avatars/small/2013/10/30/Anne_Forbush.jpeg
+459	RETAIL FUND ASSOCIATE MFAM	1058350-mary-henderson	mhenderson	2010-05-25	t	9	Mary Henderson	/media/avatars/2013/10/30/Mary_Henderson.jpg	\N	/media/avatars/small/2013/10/30/Mary_Henderson.jpeg
+513	SENIOR ANALYST III MFAM	1204569-tim-hanson	thanson	2011-10-17	t	9	Tim Hanson	/media/avatars/2013/10/30/Tim_Hanson.jpg	\N	/media/avatars/small/2013/10/30/Tim_Hanson.jpeg
+553	SENIOR ANALYST I MFAM	1196274-tony-arsta	aarsta	2008-01-14	t	9	Tony Arsta	/media/avatars/2013/10/30/Tony_Arsta.jpg	\N	/media/avatars/small/2013/10/30/Tony_Arsta.jpeg
+557	CIO PORTFOLIO MANAGER	1200210-bill-mann	billm	1999-08-16	t	9	Bill Mann	/media/avatars/2013/10/30/Bill_Mann.jpg	\N	/media/avatars/small/2013/10/30/Bill_Mann.jpeg
+585	PRESIDENT MFAM	1202138-peter-jacobstein	pjacobstein	2005-11-14	t	9	Peter Jacobstein	/media/avatars/2013/10/30/Peter_Jacobstein.jpg	\N	/media/avatars/small/2013/10/30/Peter_Jacobstein.jpeg
+596	ASST. CONTROLLER		ghaygood	2008-12-15	t	9	Greg Haygood	/media/avatars/2013/10/30/Greg_Haygood.jpg	\N	/media/avatars/small/2013/10/30/Greg_Haygood.jpeg
+603	SENIOR ANALYST III MFAM	1196294-bill-barker	bbarker	2001-12-13	t	9	Bill Barker	/media/avatars/2013/10/30/Bill_Barker.jpg	\N	/media/avatars/small/2013/10/30/Bill_Barker.jpeg
+605	DIRECTOR RETAIL FUNDS	1203853-rob-runett	rrunett	2006-05-01	t	9	Rob Runett	/media/avatars/2013/10/30/Rob_Runett.jpg	\N	/media/avatars/small/2013/10/30/Rob_Runett.jpeg
+685	SALES DIRECTOR	2543972-lenore-rainer	lreiner	2013-03-01	t	9	Lenore Reiner	/media/avatars/2013/10/30/Lenore_Reiner.jpg	\N	/media/avatars/small/2013/10/30/Lenore_Reiner.jpeg
+452	EXECUTIVE ASSISTANT	1200168-anne-henry	ahenry	2010-10-11	t	10	Anne Henry	/media/avatars/2013/10/30/Anne_Henry.jpg	\N	/media/avatars/small/2013/10/30/Anne_Henry.jpeg
+477	TRAINING COORDINATOR	1177568-sara-klieger	sklieger	2008-04-28	t	10	Sara Klieger	/media/avatars/2013/10/30/Sara_Klieger.jpg	\N	/media/avatars/small/2013/10/30/Sara_Klieger.jpeg
+487	COLLABORATION FOOL	1200114-todd-etter	todde	1998-11-15	t	10	Todd Etter	/media/avatars/2013/10/30/Todd_Etter.jpg	\N	/media/avatars/small/2013/10/30/Todd_Etter.jpeg
+645	OFFICE OPERATIONS	1200113-tamsin-green	tgreen	2012-03-12	t	10	Tamsin Green	/media/avatars/2013/10/30/Tamsin_Green.jpg	\N	/media/avatars/small/2013/10/30/Tamsin_Green.jpeg
+681	MASTER OF THE HOUSE	1939645-anthony-lehman	alehman	2013-01-23	t	10	Anthony Lehman	/media/avatars/2013/10/30/Anthony_Lehman.jpg	\N	/media/avatars/small/2013/10/30/Anthony_Lehman.jpeg
+716	EXECUTIVE ASSISTANT	1919554-jes-hrivnak	jhrivnak	2013-04-01	f	10	Jessie Hrivnak	/media/avatars/2013/10/30/Jes_Hrivnak.jpg	\N	/media/avatars/small/2013/10/30/Jes_Hrivnak.jpeg
+727	OFFICE OPERATIONS		smclendon	2013-10-04	t	10	Shannon Mclendon	/media/avatars/2013/10/30/Shannon_Mclendon.jpg	\N	/media/avatars/small/2013/10/30/Shannon_Mclendon.jpeg
+728	OFFICE OPERATIONS		ajones	2013-07-01	t	10	Adam Jones	/media/avatars/2013/10/30/Adam_Jones.jpg	\N	/media/avatars/small/2013/10/30/Adam_Jones.jpeg
+729	OFFICE OPERATIONS		lfuentes	2013-10-21	t	10	Lysha Fuentes	/media/avatars/2013/10/30/Lysha_Fuentes.jpg	\N	/media/avatars/small/2013/10/30/Lysha_Fuentes.jpeg
+455	MULTIMEDIA PRODUCER	1196244-gayle-anonuevo	ganonuevo	2010-09-13	t	11	Gayle Anonuevo	/media/avatars/2013/10/30/Gayle_Anonuevo.jpg	\N	/media/avatars/small/2013/10/30/Gayle_Anonuevo.jpeg
+464	PRODUCT MANAGER	1200085-alex-pape	apape	2010-02-22	t	11	Alex Pape	/media/avatars/2013/10/30/Alex_Pape.jpg	\N	/media/avatars/small/2013/10/30/Alex_Pape.jpeg
+471	MEMBER SERVICES FOOL	1204363-john-novak	jnovak	2005-10-04	t	11	John Novak	/media/avatars/2013/10/30/John_Novak.jpg	\N	/media/avatars/small/2013/10/30/John_Novak.jpeg
+475	SCRUM MASTER PROJECT MANAGER I	1196229-brian-andrews	bandrews	2009-08-03	t	11	Brian Andrews	/media/avatars/2013/10/30/Brian_Andrews.jpg	\N	/media/avatars/small/2013/10/30/Brian_Andrews.jpeg
+489	SENIOR RETENTION MANAGER	1200253-danny-hsia	dhsia	2003-09-22	t	11	Danny Hsia	/media/avatars/2013/10/30/Danny_Hsia.jpg	\N	/media/avatars/small/2013/10/30/Danny_Hsia.jpeg
+495	DEVELOPER II	1196213-beegee-alop	balop	2006-11-16	t	11	Beegee Alop	/media/avatars/2013/10/30/Beegee_Alop.jpg	\N	/media/avatars/small/2013/10/30/Beegee_Alop.jpeg
+502	MEMBER SERVICES OPS MANAGER	1197707-barry-chambers	bchambers	2000-02-22	t	11	Barry Chambers	/media/avatars/2013/10/30/Barry_Chambers.jpg	\N	/media/avatars/small/2013/10/30/Barry_Chambers.jpeg
+508	BOARD ADMINISTRATOR	1204658-richard-dressner	richardd	1997-06-02	t	11	Richard Dressner	/media/avatars/2013/10/30/Richard_Dressner.jpg	\N	/media/avatars/small/2013/10/30/Richard_Dressner.jpeg
+514	DIRECTOR MEMBER SERVICES	1200251-andy-o-sullivan	aosullivan	2006-03-01	t	11	Andy O'Sullivan	/media/avatars/2013/10/30/Andy_O'Sullivan.jpg	\N	/media/avatars/small/2013/10/30/Andy_O'Sullivan.jpeg
+516	DIRECTOR RETENTION	1200256-ursula-mead	umead	2008-03-19	t	11	Ursula Mead	/media/avatars/2013/10/30/Ursula_Mead.jpg	\N	/media/avatars/small/2013/10/30/Ursula_Mead.jpeg
+523	DIRECTOR ADP	1197775-nick-crow	ncrow	2008-06-16	t	11	Nick Crow	/media/avatars/2013/10/30/Nick_Crow.jpg	\N	/media/avatars/small/2013/10/30/Nick_Crow.jpeg
+525	SENIOR PREMIUM SERVICES EDITOR	1196686-ellen-bowman	ebowman	2006-08-21	t	11	Ellen Bowman	/media/avatars/2013/10/30/Ellen_Bowman.jpg	\N	/media/avatars/small/2013/10/30/Ellen_Bowman.jpeg
+538	SENIOR PREMIUM SERVICES EDITOR	1197778-tracy-dahl	tdahl	2008-12-01	t	11	Tracy Dahl	/media/avatars/2013/10/30/Tracy_Dahl.jpg	\N	/media/avatars/small/2013/10/30/Tracy_Dahl.jpeg
+542	DIRECTOR RETENTION	1204703-tanya-carlson	tcarlson	2004-06-15	t	11	Tanya Carlson	/media/avatars/2013/10/30/Tanya_Carlson.jpg	\N	/media/avatars/small/2013/10/30/Tanya_Carlson.jpeg
+544	SENIOR PREMIUM SERVICES EDITOR	1200170-kate-herman	kherman	2008-01-07	t	11	Kate Herman	/media/avatars/2013/10/30/Kate_Herman.jpg	\N	/media/avatars/small/2013/10/30/Kate_Herman.jpeg
+549	MEMBER SERVICES FOOL	1200245-carl-simon	csimon	2007-05-21	t	11	Carl Simon	/media/avatars/2013/10/30/Carl_Simon.jpg	\N	/media/avatars/small/2013/10/30/Carl_Simon.jpeg
+560	EXECUTIVE PROJECT MANAGER I	1196447-meredith-bessette	mbessette	2008-08-18	t	11	Meredith Bessette	/media/avatars/2013/10/30/Meredith_Bessette.jpg	\N	/media/avatars/small/2013/10/30/Meredith_Bessette.jpeg
+575	CONTENT EXPERIENCE DESIGNER	1203808-rik-silverman	rsilverman	2006-04-24	t	11	Rik Silverman	/media/avatars/2013/10/30/Rik_Silverman.jpg	\N	/media/avatars/small/2013/10/30/Rik_Silverman.jpeg
+587	PRESIDENT	1197627-robert-brokamp	robertb	1999-08-16	t	11	Robert Brokamp	/media/avatars/2013/10/30/Robert_Brokamp.jpg	\N	/media/avatars/small/2013/10/30/Robert_Brokamp.jpeg
+504	RETENTION MANAGER	1197763-erin-corr-miller	emiller	2007-10-16	t	10	Erin Miller	/media/avatars/2013/10/30/Erin_Miller.jpg	18	/media/avatars/small/2013/10/30/Erin_Miller.jpeg
+674	RECRUITING COORDINATOR	2080004-annie-healy	ahealy	2012-10-23	t	10	Annie Healy	/media/avatars/2013/10/30/Annie_Healy.jpg	19	/media/avatars/small/2013/10/30/Annie_Healy.jpeg
+622	PREMIUM SERVICES EDITOR	1070214-tom-madigan	tmadigan	2011-07-25	t	11	Tom Madigan	/media/avatars/2013/10/30/Tom_Madigan.jpg	\N	/media/avatars/small/2013/10/30/Tom_Madigan.jpeg
+628	MEMBER SERVICES FOOL	1203893-krista-reichel	kreichel	2011-11-07	t	11	Krista Reichel	/media/avatars/2013/10/30/Krista_Reichel.jpg	\N	/media/avatars/small/2013/10/30/Krista_Reichel.jpeg
+633	MEMBER SERVICES FOOL	1070227-chris-sacdalan	csacdalan	2011-12-05	t	11	Christian Sacdalan	/media/avatars/2013/10/30/Christian_Sacdalan.jpg	\N	/media/avatars/small/2013/10/30/Christian_Sacdalan.jpeg
+635	MEMBER SERVICES FOOL	1047905-jared-yoder	jyoder	2011-12-14	t	11	Jared Yoder	/media/avatars/2013/10/30/Jared_Yoder.jpg	\N	/media/avatars/small/2013/10/30/Jared_Yoder.jpeg
+708	CTO	1204382-jeremy-phillips	jphillips	2006-12-04	f	8	Jeremy Phillips	/media/avatars/2013/10/30/Jeremy_Phillips.jpg	6	/media/avatars/small/2013/10/30/Jeremy_Phillips.jpeg
+701	VP PEOPLE STRATEGY	1205926-kara-chambers	kchambers	2005-11-14	t	10	Kara Chambers	/media/avatars/2013/10/30/Kara_Chambers.jpg	2	/media/avatars/small/2013/10/30/Kara_Chambers.jpeg
+714	INTERNAL COMMUNICATIONS	1047673-adrienne-perryman	aperryman	2007-08-13	t	10	Adrienne Perryman	/media/avatars/2013/10/30/Adrienne_Perryman.jpg	4	/media/avatars/small/2013/10/30/Adrienne_Perryman.jpeg
+654	PREMIUM SERVICES EDITOR	1204245-nathan-willis	nwillis	2012-06-04	t	11	Nathan Willis	/media/avatars/2013/10/30/Nathan_Willis.jpg	\N	/media/avatars/small/2013/10/30/Nathan_Willis.jpeg
+666	MEMBER SERVICES FOOL	1200269-ali-norris	anorris	2012-07-16	t	11	Ali Norris	/media/avatars/2013/10/30/Ali_Norris.jpg	\N	/media/avatars/small/2013/10/30/Ali_Norris.jpeg
+668	MEMBER SERVICES FOOL	1175872-emily-wallingsford	ewallingsford	2012-08-20	t	11	Emily Wallingsford	/media/avatars/2013/10/30/Emily_Wallingsford.jpg	\N	/media/avatars/small/2013/10/30/Emily_Wallingsford.jpeg
+678	MANAGING PREMIUM SERV EDITOR	1200267-ally-wines	awines	2007-04-16	t	11	Ally Wines	/media/avatars/2013/10/30/Ally_Wines.jpg	\N	/media/avatars/small/2013/10/30/Ally_Wines.jpeg
+697	MEMBER SERVICES FOOL	2995112-ayanna-washington	awashington	2013-05-29	t	11	Ayanna Washington	/media/avatars/2013/10/30/Ayanna_Washington.jpg	\N	/media/avatars/small/2013/10/30/Ayanna_Washington.jpeg
+737	MEMBER SERVICES FOOL		sdornbush	2013-09-27	t	11	Scott Dornbush	/media/avatars/2013/10/30/Scott_Dornbush.jpg	\N	/media/avatars/small/2013/10/30/Scott_Dornbush.jpeg
+438	SYSTEMS ENGINEER I	1197734-tom-chilcutt	tchilcutt	2005-07-11	t	12	Tom Chilcutt	/media/avatars/2013/10/30/Tom_Chilcutt.jpg	\N	/media/avatars/small/2013/10/30/Tom_Chilcutt.jpeg
+439	LEAD SYSTEMS ENGINEER	1200232-brandon-ragan	bragan	2006-05-31	t	12	Brandon Ragan	/media/avatars/2013/10/30/Brandon_Ragan.jpg	\N	/media/avatars/small/2013/10/30/Brandon_Ragan.jpeg
+441	LEAD ARCHITECT	1200278-mark-kennedy	mkennedy	2002-04-13	t	12	Mark Kennedy	/media/avatars/2013/10/30/Mark_Kennedy.jpg	\N	/media/avatars/small/2013/10/30/Mark_Kennedy.jpeg
+442	DEVELOPER II	1200172-ben-huber	bhuber	2008-07-21	t	12	Ben Huber	/media/avatars/2013/10/30/Ben_Huber.jpg	\N	/media/avatars/small/2013/10/30/Ben_Huber.jpeg
+443	FRONT END WEB DEVELOPER	1200161-chris-quinn	cquinn	2010-01-04	t	12	Chris Quinn	/media/avatars/2013/10/30/Chris_Quinn.jpg	\N	/media/avatars/small/2013/10/30/Chris_Quinn.jpeg
+444	SPECIAL PROJECTS	1200093-greg-robleto	grobleto	2006-01-23	t	12	Greg Robleto	/media/avatars/2013/10/30/Greg_Robleto.jpg	\N	/media/avatars/small/2013/10/30/Greg_Robleto.jpeg
+448	SR USER EXPERIENCE DESIGNER	1204504-kurt-morris	kmorris	1999-11-22	t	12	Kurt Morris	/media/avatars/2013/10/30/Kurt_Morris.jpg	\N	/media/avatars/small/2013/10/30/Kurt_Morris.jpeg
+449	LEAD NETWORK ENGINEER	1069126-lawrence-morrison	lol	2010-10-11	t	12	Lawrence Morrisson	/media/avatars/2013/10/30/Lawrence_Morrisson.jpg	\N	/media/avatars/small/2013/10/30/Lawrence_Morrisson.jpeg
+454	FRONT END WEB DEVELOPER	1203839-david-rivers	drivers	2010-09-13	t	12	David Rivers	/media/avatars/2013/10/30/David_Rivers.jpg	\N	/media/avatars/small/2013/10/30/David_Rivers.jpeg
+460	DEVELOPER I	1204628-brian-faherty	bfaherty	2009-06-08	t	12	Brian Faherty	/media/avatars/2013/10/30/Brian_Faherty.jpg	\N	/media/avatars/small/2013/10/30/Brian_Faherty.jpeg
+463	LEAD DBA	1200136-vivek-karandikar	vkarandikar	2008-02-25	t	12	Vivek Karandikar	/media/avatars/2013/10/30/Vivek_Karandikar.jpg	\N	/media/avatars/small/2013/10/30/Vivek_Karandikar.jpeg
+470	PRODUCTION DESIGNER	1197740-paul-chun	pchun	2004-02-23	t	12	Paul Chun	/media/avatars/2013/10/30/Paul_Chun.jpg	\N	/media/avatars/small/2013/10/30/Paul_Chun.jpeg
+473	DEVELOPER I	1201960-abhishek-kapatkar	akapatkar	2010-01-11	t	12	Abhishek Kapatkar	/media/avatars/2013/10/30/Abhishek_Kapatkar.jpg	\N	/media/avatars/small/2013/10/30/Abhishek_Kapatkar.jpeg
+476	DIRECTOR USER INTERFACE	1200152-kevin-smith	ksmith	2006-03-06	t	12	Kevin Smith	/media/avatars/2013/10/30/Kevin_Smith.jpg	\N	/media/avatars/small/2013/10/30/Kevin_Smith.jpeg
+478	SR FRONT END WEB DEVELOPER II	1204231-chris-wisecarver	cwisecarver	2007-11-16	t	12	Chris Wisecarver	/media/avatars/2013/10/30/Chris_Wisecarver.jpg	\N	/media/avatars/small/2013/10/30/Chris_Wisecarver.jpeg
+479	SR USER EXPERIENCE DESIGNER	1197792-doug-dosberg	ddosberg	2006-03-27	t	12	Doug Dosberg	/media/avatars/2013/10/30/Doug_Dosberg.jpg	\N	/media/avatars/small/2013/10/30/Doug_Dosberg.jpeg
+481	PROJECT MANAGER	1200295-natasha-keever	nkeever	2008-09-08	t	12	Natasha Keever	/media/avatars/2013/10/30/Natasha_Keever.jpg	\N	/media/avatars/small/2013/10/30/Natasha_Keever.jpeg
+484	SR FRONT END WEB DEVELOPER	1200156-peter-varley	pvarley	2006-05-22	t	12	Peter Varley	/media/avatars/2013/10/30/Peter_Varley.jpg	\N	/media/avatars/small/2013/10/30/Peter_Varley.jpeg
+486	LEAD FEWD	1204176-patrick-woods	pwoods	2007-01-03	t	12	Patrick Woods	/media/avatars/2013/10/30/Patrick_Woods.jpg	\N	/media/avatars/small/2013/10/30/Patrick_Woods.jpeg
+493	LEAD DEVELOPER I	1200158-aaron-torgerson	atorgerson	2006-10-16	t	12	Aaron Torgerson	/media/avatars/2013/10/30/Aaron_Torgerson.jpg	\N	/media/avatars/small/2013/10/30/Aaron_Torgerson.jpeg
+496	FRONT END WEB DEVELOPER	1204356-justin-sippel	jsippel	2007-07-02	t	12	Justin Sippel	/media/avatars/2013/10/30/Justin_Sippel.jpg	\N	/media/avatars/small/2013/10/30/Justin_Sippel.jpeg
+497	DEVELOPER I	1200146-eli-robbins	erobbins	2008-06-09	t	12	Eli Robbins	/media/avatars/2013/10/30/Eli_Robbins.jpg	\N	/media/avatars/small/2013/10/30/Eli_Robbins.jpeg
+501	VP STOCK QUOTES & PORT PAGES	1196539-chris-bledsoe	cbledsoe	2008-06-17	t	12	Chris Bledsoe	/media/avatars/2013/10/30/Chris_Bledsoe.jpg	\N	/media/avatars/small/2013/10/30/Chris_Bledsoe.jpeg
+517	SR PROJECT MANAGER	1196480-jeb-bishop	jebb	1997-01-17	t	12	Jeb Bishop	/media/avatars/2013/10/30/Jeb_Bishop.jpg	\N	/media/avatars/small/2013/10/30/Jeb_Bishop.jpeg
+528	VP TECH OPERATIONS	1200087-jeff-lovett	jlovett	2006-12-04	t	13	Jeff Lovett	/media/avatars/2013/10/30/Jeff_Lovett.jpg	\N	/media/avatars/small/2013/10/30/Jeff_Lovett.jpeg
+531	DESKTOP ADMINISTRATOR II	1200322-jason-macdonald	jmacdonald	2008-03-31	t	12	Jason MacDonald	/media/avatars/2013/10/30/Jason_MacDonald.jpg	\N	/media/avatars/small/2013/10/30/Jason_MacDonald.jpeg
+533	QUANALYST I	1204533-hassan-malik	hmalik	2008-04-28	t	12	Hassan Malik	/media/avatars/2013/10/30/Hassan_Malik.jpg	\N	/media/avatars/small/2013/10/30/Hassan_Malik.jpeg
+536	LEAD DEVELOPER II	1204579-mike-gurtzweiler	mgurtzweiler	2007-06-18	t	12	Mike Gurtzweiler	/media/avatars/2013/10/30/Mike_Gurtzweiler.jpg	\N	/media/avatars/small/2013/10/30/Mike_Gurtzweiler.jpeg
+548	ENTERPRISE ARCHITECT	1200149-chris-eldredge	celdredge	2006-09-05	t	12	Chris Eldredge	/media/avatars/2013/10/30/Chris_Eldredge.jpg	\N	/media/avatars/small/2013/10/30/Chris_Eldredge.jpeg
+550	ASSISTANT GENERAL COUNSEL	1200108-chris-harris	charris	2005-11-14	t	12	Chris Harris	/media/avatars/2013/10/30/Chris_Harris.jpg	\N	/media/avatars/small/2013/10/30/Chris_Harris.jpeg
+561	JR DBA	1204025-elizabeth-venegas	evenegas	2006-12-11	t	12	Elizabeth Venegas	/media/avatars/2013/10/30/Elizabeth_Venegas.jpg	\N	/media/avatars/small/2013/10/30/Elizabeth_Venegas.jpeg
+570	QUANALYST I	1200339-ed-gaughran	egaughran	2005-08-01	t	12	Ed Gaughran	/media/avatars/2013/10/30/Ed_Gaughran.jpg	\N	/media/avatars/small/2013/10/30/Ed_Gaughran.jpeg
+571	DEVELOPER IV	1200294-adam-hill	ahill	2006-04-24	t	12	Adam Hill	/media/avatars/2013/10/30/Adam_Hill.jpg	\N	/media/avatars/small/2013/10/30/Adam_Hill.jpeg
+652	MEMBER SERVICES FOOL	1200273-laurie-street	lstreet	2012-04-30	t	11	Laurie Street	/media/avatars/2013/10/30/Laurie_Street.jpg	22	/media/avatars/small/2013/10/30/Laurie_Street.jpeg
+482	SR USER EXPERIENCE DESIGNER II	1200255-dan-stapleton	dstapleton	2007-04-02	t	12	Daniel Stapleton	/media/avatars/2013/10/30/Dan_Stapleton.jpg	\N	/media/avatars/small/2013/10/30/Dan_Stapleton.jpeg
+572	LEAD DEVELOPER I	1200105-jim-felderman	jfelderman	2005-06-06	t	12	Jim Felderman	/media/avatars/2013/10/30/Jim_Felderman.jpg	\N	/media/avatars/small/2013/10/30/Jim_Felderman.jpeg
+574	SCRUM MASTER PROJ MANAGER II	1197769-denise-coursey	dcoursey	2006-01-09	t	12	Denise Coursey	/media/avatars/2013/10/30/Denise_Coursey.jpg	\N	/media/avatars/small/2013/10/30/Denise_Coursey.jpeg
+601	JR LINUX ENGINEER	1200196-carolina-valle	cvalle	2007-05-07	t	12	Carolina Valle	/media/avatars/2013/10/30/Carolina_Valle.jpg	\N	/media/avatars/small/2013/10/30/Carolina_Valle.jpeg
+606	SR NETWORK ENGINEER	1200194-kerri-sweet	ksweet	2000-05-22	t	12	Kerri Sweet	/media/avatars/2013/10/30/Kerri_Sweet.jpg	\N	/media/avatars/small/2013/10/30/Kerri_Sweet.jpeg
+607	LEAD DESKTOP ADMIN	1204543-marshall-mabie	mmabie	2004-03-03	t	12	Marshall Mabie	/media/avatars/2013/10/30/Marshall_Mabie.jpg	\N	/media/avatars/small/2013/10/30/Marshall_Mabie.jpeg
+608	SYSTEMS ENGINEER II	1196301-anne-baynes	abaynes	2008-02-19	t	12	Anne Baynes	/media/avatars/2013/10/30/Anne_Baynes.jpg	\N	/media/avatars/small/2013/10/30/Anne_Baynes.jpeg
+610	DEVELOPER II	1204322-george-stocker	gstocker	2011-01-18	t	12	George Stocker	/media/avatars/2013/10/30/George_Stocker.jpg	\N	/media/avatars/small/2013/10/30/George_Stocker.jpeg
+611	DESKTOP ADMINISTRATOR I	1197593-dan-boyd	dboyd	2011-01-31	t	12	Dan Boyd	/media/avatars/2013/10/30/Dan_Boyd.jpg	\N	/media/avatars/small/2013/10/30/Dan_Boyd.jpeg
+612	DESKTOP ADMINISTRATOR I	1412500-fred-schmid	fschmid	2011-01-24	t	12	Fred Schmid	/media/avatars/2013/10/30/Fred_Schmid.jpg	\N	/media/avatars/small/2013/10/30/Fred_Schmid.jpeg
+613	QUANALYST II	1061235-reuben-dalke	rdalke	2011-02-28	t	12	Reuben Dalke	/media/avatars/2013/10/30/Reuben_Dalke.jpg	\N	/media/avatars/small/2013/10/30/Reuben_Dalke.jpeg
+620	DESKTOP ADMINISTRATOR I	1204625-chris-evans	cevans	2011-07-05	t	12	Chris Evans	/media/avatars/2013/10/30/Chris_Evans.jpg	\N	/media/avatars/small/2013/10/30/Chris_Evans.jpeg
+623	SR USER EXPERIENCE DESIGNER	1196497-betsy-bland	bbland	2011-07-25	t	12	Betsy Bland	/media/avatars/2013/10/30/Betsy_Bland.jpg	\N	/media/avatars/small/2013/10/30/Betsy_Bland.jpeg
+624	DEVELOPER II	1197745-lisa-chung	lchung	2011-07-25	t	12	Lisa Chung	/media/avatars/2013/10/30/Lisa_Chung.jpg	\N	/media/avatars/small/2013/10/30/Lisa_Chung.jpeg
+643	LINUX ENGINEER	1200201-david-mitchell	dmitchell	2012-02-21	t	12	David Mitchell	/media/avatars/2013/10/30/David_Mitchell.jpg	\N	/media/avatars/small/2013/10/30/David_Mitchell.jpeg
+649	DEVELOPER I	1200341-matt-flinn	mflinn	2012-04-30	t	12	Matt Flinn	/media/avatars/2013/10/30/Matt_Flinn.jpg	\N	/media/avatars/small/2013/10/30/Matt_Flinn.jpeg
+669	SYSTEMS ENGINEER I	2797720-sam-davidson	sdavidson	2012-09-06	t	13	Sam Davidson	/media/avatars/2013/10/30/Sam_Davidson.jpg	\N	/media/avatars/small/2013/10/30/Sam_Davidson.jpeg
+675	DESKTOP ADMINISTRATOR I	1320655-kalvin-ellis	kellis	2012-10-29	t	12	Kalvin Ellis	/media/avatars/2013/10/30/Kalvin_Ellis.jpg	\N	/media/avatars/small/2013/10/30/Kalvin_Ellis.jpeg
+680	DEVELOPER I	1939677-swetha-reddy	sreddy	2013-01-23	t	12	Swetha Reddy	/media/avatars/2013/10/30/Swetha_Reddy.jpg	\N	/media/avatars/small/2013/10/30/Swetha_Reddy.jpeg
+686	INTERN	2544168-spencer-holleman	sholleman	2013-04-01	t	12	Spencer Holleman	/media/avatars/2013/10/30/Spencer_Holleman.jpg	\N	/media/avatars/small/2013/10/30/Spencer_Holleman.jpeg
+687	INTERN	2544204-brian-degrano	bdegrano	2013-04-01	t	12	Brian DeGrano	/media/avatars/2013/10/30/Brian_DeGrano.jpg	\N	/media/avatars/small/2013/10/30/Brian_DeGrano.jpeg
+689	INTERN	2544216-jason-myer	jmyer	2013-04-01	t	12	Jason Myer	/media/avatars/2013/10/30/Jason_Myer.jpg	\N	/media/avatars/small/2013/10/30/Jason_Myer.jpeg
+690	INTERN	2544179-emily-williamson	ewilliamson	2013-04-01	t	12	Emily Williamson	/media/avatars/2013/10/30/Emily_Williamson.jpg	\N	/media/avatars/small/2013/10/30/Emily_Williamson.jpeg
+691	INTERN	2544156-risto-keravuori	rkeravuori	2013-04-01	t	12	Risto Keravuori	/media/avatars/2013/10/30/Risto_Keravuori.jpg	\N	/media/avatars/small/2013/10/30/Risto_Keravuori.jpeg
+692	INTERN	2544041-jeffrey-lee	jlee	2013-01-14	t	12	Jeff Lee	/media/avatars/2013/10/30/Jeff_Lee.jpg	\N	/media/avatars/small/2013/10/30/Jeff_Lee.jpeg
+730	DEVELOPER II		mlancaster	2001-09-23	t	12	Max Lancaster	/media/avatars/2013/10/30/Max_Lancaster.jpg	\N	/media/avatars/small/2013/10/30/Max_Lancaster.jpeg
+509	PRODUCER I	1197694-susan-catloth	scatloth	2009-11-30	t	13	Susan Catloth	/media/avatars/2013/10/30/Susan_Catloth.jpg	\N	/media/avatars/small/2013/10/30/Susan_Catloth.jpeg
+581	PRODUCER II	1204640-rick-engdahl	rengdahl	2000-01-03	t	13	Rick Engdahl	/media/avatars/2013/10/30/Rick_Engdahl.jpg	\N	/media/avatars/small/2013/10/30/Rick_Engdahl.jpeg
+665	VIDEO FOOL	0	kochsenreiter	2012-07-05	t	13	Karen Ochsenreiter	/media/avatars/2013/10/30/Karen_Ochsenreiter.jpg	\N	/media/avatars/small/2013/10/30/Karen_Ochsenreiter.jpeg
+453	MARKETING COORDINATOR	1175367-jason-leaf	jleaf	2010-10-04	f	\N	Jason Leaf	/media/avatars/2013/10/30/Jason_Leaf.jpg	\N	/media/avatars/small/2013/10/30/Jason_Leaf.jpeg
+458	ORGANIZATIONAL DEVELOPMENT	1048546-anessa-fike	afike	2010-05-03	f	\N	Anessa Fike	/media/avatars/2013/10/30/Anessa_Fike.jpg	\N	/media/avatars/small/2013/10/30/Anessa_Fike.jpeg
+474	VP BUSINESS DEVELOPMENT	1202121-tj-thomas-jones	tj	1998-11-13	f	\N	TJ	/media/avatars/2013/10/30/TJ.jpg	\N	/media/avatars/small/2013/10/30/TJ.jpeg
+490	SPECIAL PROJECTS	1203823-scott-schedler	sschedler	2001-02-26	f	\N	Scott Schedler	/media/avatars/2013/10/30/Scott_Schedler.jpg	\N	/media/avatars/small/2013/10/30/Scott_Schedler.jpeg
+507	EMPLOYEE DEV SPECIALIST	1047992-alex-vidales	avidales	2000-05-09	f	\N	Alex Vidales	/media/avatars/2013/10/30/Alex_Vidales.jpg	\N	/media/avatars/small/2013/10/30/Alex_Vidales.jpeg
+530	WRITER LIAISON	1200259-dan-rittenhouse	drittenhouse	2008-07-14	f	\N	Dan Rittenhouse	/media/avatars/2013/10/30/Dan_Rittenhouse.jpg	\N	/media/avatars/small/2013/10/30/Dan_Rittenhouse.jpeg
+551	DIRECTOR BUSINESS INTELLIGENCE	1200229-jim-kutz	jkutz	2006-10-16	t	\N	Jim Kutz	/media/avatars/2013/10/30/Jim_Kutz.jpg	\N	/media/avatars/small/2013/10/30/Jim_Kutz.jpeg
+554	QUANTITATIVE ANALYST	1204312-yaunmin-tang	ytang	2009-01-12	f	\N	Yuanmin Tang	/media/avatars/2013/10/30/Yuanmin_Tang.jpg	\N	/media/avatars/small/2013/10/30/Yuanmin_Tang.jpeg
+619	BLOG LIAISON & TALENT SCOUT	1204317-tracy-sterling	tsterling	2011-07-11	f	\N	Tracy Sterling	/media/avatars/2013/10/30/Tracy_Sterling.jpg	\N	/media/avatars/small/2013/10/30/Tracy_Sterling.jpeg
+632	SECTOR CHIEF	1203918-isaac-pino	ipino	2011-11-01	f	\N	Isaac Pino	/media/avatars/2013/10/30/Isaac_Pino.jpg	\N	/media/avatars/small/2013/10/30/Isaac_Pino.jpeg
+688	INTERN	2544192-katelyn-burgett	kburgett	2013-04-01	f	\N	Kate Burgett	/media/avatars/2013/10/30/Kate_Burgett.jpg	\N	/media/avatars/small/2013/10/30/Kate_Burgett.jpeg
+703	WELLNESS PROGRAM ADMIN	1200126-ben-sterling	bsterling	2007-08-20	f	\N	Ben Sterling	/media/avatars/2013/10/30/Ben_Sterling.jpg	\N	/media/avatars/small/2013/10/30/Ben_Sterling.jpeg
+717	INTERN		davidleesmith	2013-04-01	f	\N	David Smith	/media/avatars/2013/10/30/David_Smith.jpg	\N	/media/avatars/small/2013/10/30/David_Smith.jpeg
+718	NETWORK ENGINEER		gharrelson	2012-04-30	f	\N	Grant Harrelson	/media/avatars/2013/10/30/Grant_Harrelson.jpg	\N	/media/avatars/small/2013/10/30/Grant_Harrelson.jpeg
+503	BUSINESS DEVELOPMENT FOOL	1200223-carl-hendley	chendley	2007-12-03	t	9	Carl Hendley	/media/avatars/2013/10/30/Carl_Hendley.jpg	\N	/media/avatars/small/2013/10/30/Carl_Hendley.jpeg
+515	EMAIL OPERATIONS FOOL	1204450-ravyn-mohlmann	ravynm	1999-09-27	t	11	Ravyn Mohlmann	avatars/2013/11/15/Ravyn_Mohlmann.jpg	\N	/media/avatars/small/2013/11/15/Ravyn_Mohlmann.jpeg
+699	INTERNAL COMMUNITY CAPTAIN	1058353-lee-burbage	leeb	1998-12-01	f	\N	Lee Burbage	/media/avatars/2013/10/30/Lee_Burbage.jpg	3	/media/avatars/small/2013/10/30/Lee_Burbage.jpeg
+573	International Editorial Director	1200366-robyn-gearey	rgearey	2005-08-16	t	6	Robyn Gearey	/media/avatars/2013/10/30/Robyn_Gearey.jpg	\N	/media/avatars/small/2013/10/30/Robyn_Gearey.jpeg
+712	COACH		natem	1998-04-06	t	10	Nate McMahon	/media/avatars/2013/10/30/Nate_McMahon.jpg	1	/media/avatars/small/2013/10/30/Nate_McMahon.jpeg
+702	SR OFFICE OPERATIONS MANAGER	1204515-melissa-malinowski	mmalinowski	2010-06-14	t	10	Melissa Malinowski	/media/avatars/2013/10/30/Melissa_Malinowski.jpg	5	/media/avatars/small/2013/10/30/Melissa_Malinowski.jpeg
+720	HUMAN RESOURCES FOOL		aearle	2013-10-11	t	4	Ali Earle	/media/avatars/2013/10/30/Ali_Earle.jpg	20	/media/avatars/small/2013/10/30/Ali_Earle.jpeg
+700	DEAN OF LEARNING & DEVELOPMENT	1176873-sam-cicotello	scicotello	2003-09-02	f	11	Sam Cicotello	/media/avatars/2013/10/30/Sam_Cicotello.jpg	23	/media/avatars/small/2013/10/30/Sam_Cicotello.jpeg
+742				2014-01-03	t	1	Sarah Will		\N	\N
+743				2014-02-07	t	6	Ser Jing		\N	\N
+583	VP SOFTWARE DEVELOPMENT	1197758-tom-conner	tomco	1997-06-09	t	12	Tom Conner	/media/avatars/2013/10/30/Tom_Conner.jpg	25	/media/avatars/small/2013/10/30/Tom_Conner.jpeg
+521	THE CONNECTOR	1176725-matt-trogdon	mtrogdon	2007-07-19	t	10	Matt Trogdon	/media/avatars/2013/10/30/Matt_Trogdon.jpg	26	/media/avatars/small/2013/10/30/Matt_Trogdon.jpeg
+744	Studio Producer			2013-12-11	t	5	Heather Horton	avatars/2014/02/14/Heather_Horton.jpg	\N	avatars/small/2014/02/14/Heather_Horton.jpg
+617	EXTERNAL MARKETING	1061905-erryn-gallasch	egallasch	2011-05-02	t	8	Erryn Neckel	/media/avatars/2013/10/30/Erryn_Gallasch.jpg	\N	/media/avatars/small/2013/10/30/Erryn_Gallasch.jpeg
+\.
+
+
+--
+-- Name: org_employee_id_seq; Type: SEQUENCE SET; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+SELECT pg_catalog.setval('org_employee_id_seq', 1, false);
+
+
+--
+-- Data for Name: org_leadership; Type: TABLE DATA; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+COPY org_leadership (id, leader_id, employee_id, start_date, end_date) FROM stdin;
+\.
+
+
+--
+-- Name: org_leadership_id_seq; Type: SEQUENCE SET; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+SELECT pg_catalog.setval('org_leadership_id_seq', 1, false);
+
+
+--
+-- Data for Name: org_mentorship; Type: TABLE DATA; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+COPY org_mentorship (id, mentor_id, mentee_id) FROM stdin;
+\.
+
+
+--
+-- Name: org_mentorship_id_seq; Type: SEQUENCE SET; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+SELECT pg_catalog.setval('org_mentorship_id_seq', 1, false);
+
+
+--
+-- Data for Name: org_team; Type: TABLE DATA; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+COPY org_team (id, name, leader_id) FROM stdin;
+\.
+
+
+--
+-- Name: org_team_id_seq; Type: SEQUENCE SET; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+SELECT pg_catalog.setval('org_team_id_seq', 1, false);
+
+
+--
+-- Data for Name: pvp_evaluationround; Type: TABLE DATA; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+COPY pvp_evaluationround (id, date) FROM stdin;
+\.
+
+
+--
+-- Name: pvp_evaluationround_id_seq; Type: SEQUENCE SET; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+SELECT pg_catalog.setval('pvp_evaluationround_id_seq', 1, false);
+
+
+--
+-- Data for Name: pvp_pvpevaluation; Type: TABLE DATA; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+COPY pvp_pvpevaluation (id, employee_id, evaluation_round_id, potential, performance) FROM stdin;
+\.
+
+
+--
+-- Name: pvp_pvpevaluation_id_seq; Type: SEQUENCE SET; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+SELECT pg_catalog.setval('pvp_pvpevaluation_id_seq', 1, false);
+
+
+--
+-- Data for Name: south_migrationhistory; Type: TABLE DATA; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+COPY south_migrationhistory (id, app_name, migration, applied) FROM stdin;
+\.
+
+
+--
+-- Name: south_migrationhistory_id_seq; Type: SEQUENCE SET; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+SELECT pg_catalog.setval('south_migrationhistory_id_seq', 1, false);
+
+
+--
+-- Data for Name: todo_task; Type: TABLE DATA; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+COPY todo_task (id, created_by_id, assigned_to_id, assigned_by_id, employee_id, created_date, due_date, description, completed) FROM stdin;
+\.
+
+
+--
+-- Name: todo_task_id_seq; Type: SEQUENCE SET; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+SELECT pg_catalog.setval('todo_task_id_seq', 1, false);
+
+
+--
+-- Name: auth_group_name_key; Type: CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_group
+    ADD CONSTRAINT auth_group_name_key UNIQUE (name);
+
+
+--
+-- Name: auth_group_permissions_group_id_permission_id_key; Type: CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_group_id_permission_id_key UNIQUE (group_id, permission_id);
+
+
+--
+-- Name: auth_group_permissions_pkey; Type: CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_group_pkey; Type: CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_group
+    ADD CONSTRAINT auth_group_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_permission_content_type_id_codename_key; Type: CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_permission
+    ADD CONSTRAINT auth_permission_content_type_id_codename_key UNIQUE (content_type_id, codename);
+
+
+--
+-- Name: auth_permission_pkey; Type: CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_permission
+    ADD CONSTRAINT auth_permission_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_groups_pkey; Type: CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_user_groups
+    ADD CONSTRAINT auth_user_groups_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_groups_user_id_group_id_key; Type: CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_user_groups
+    ADD CONSTRAINT auth_user_groups_user_id_group_id_key UNIQUE (user_id, group_id);
+
+
+--
+-- Name: auth_user_pkey; Type: CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_user
+    ADD CONSTRAINT auth_user_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_user_permissions_pkey; Type: CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_user_permissions_user_id_permission_id_key; Type: CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permissions_user_id_permission_id_key UNIQUE (user_id, permission_id);
+
+
+--
+-- Name: auth_user_username_key; Type: CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_user
+    ADD CONSTRAINT auth_user_username_key UNIQUE (username);
+
+
+--
+-- Name: blah_comment_pkey; Type: CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+ALTER TABLE ONLY blah_comment
+    ADD CONSTRAINT blah_comment_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: comp_compensationsummary_pkey; Type: CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+ALTER TABLE ONLY comp_compensationsummary
+    ADD CONSTRAINT comp_compensationsummary_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_content_type_app_label_model_key; Type: CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+ALTER TABLE ONLY django_content_type
+    ADD CONSTRAINT django_content_type_app_label_model_key UNIQUE (app_label, model);
+
+
+--
+-- Name: django_content_type_pkey; Type: CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+ALTER TABLE ONLY django_content_type
+    ADD CONSTRAINT django_content_type_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: engagement_happiness_pkey; Type: CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+ALTER TABLE ONLY engagement_happiness
+    ADD CONSTRAINT engagement_happiness_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: org_attribute_pkey; Type: CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+ALTER TABLE ONLY org_attribute
+    ADD CONSTRAINT org_attribute_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: org_attributecategory_pkey; Type: CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+ALTER TABLE ONLY org_attributecategory
+    ADD CONSTRAINT org_attributecategory_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: org_employee_pkey; Type: CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+ALTER TABLE ONLY org_employee
+    ADD CONSTRAINT org_employee_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: org_employee_user_id_key; Type: CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+ALTER TABLE ONLY org_employee
+    ADD CONSTRAINT org_employee_user_id_key UNIQUE (user_id);
+
+
+--
+-- Name: org_leadership_pkey; Type: CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+ALTER TABLE ONLY org_leadership
+    ADD CONSTRAINT org_leadership_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: org_mentorship_pkey; Type: CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+ALTER TABLE ONLY org_mentorship
+    ADD CONSTRAINT org_mentorship_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: org_team_leader_id_key; Type: CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+ALTER TABLE ONLY org_team
+    ADD CONSTRAINT org_team_leader_id_key UNIQUE (leader_id);
+
+
+--
+-- Name: org_team_pkey; Type: CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+ALTER TABLE ONLY org_team
+    ADD CONSTRAINT org_team_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: pvp_evaluationround_pkey; Type: CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+ALTER TABLE ONLY pvp_evaluationround
+    ADD CONSTRAINT pvp_evaluationround_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: pvp_pvpevaluation_employee_id_evaluation_round_id_key; Type: CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+ALTER TABLE ONLY pvp_pvpevaluation
+    ADD CONSTRAINT pvp_pvpevaluation_employee_id_evaluation_round_id_key UNIQUE (employee_id, evaluation_round_id);
+
+
+--
+-- Name: pvp_pvpevaluation_pkey; Type: CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+ALTER TABLE ONLY pvp_pvpevaluation
+    ADD CONSTRAINT pvp_pvpevaluation_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: south_migrationhistory_pkey; Type: CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+ALTER TABLE ONLY south_migrationhistory
+    ADD CONSTRAINT south_migrationhistory_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: todo_task_pkey; Type: CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard; Tablespace: 
+--
+
+ALTER TABLE ONLY todo_task
+    ADD CONSTRAINT todo_task_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_group_permissions_permission_id_fkey; Type: FK CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_permission_id_fkey FOREIGN KEY (permission_id) REFERENCES auth_permission(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_permission_content_type_id_fkey; Type: FK CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY auth_permission
+    ADD CONSTRAINT auth_permission_content_type_id_fkey FOREIGN KEY (content_type_id) REFERENCES django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_groups_group_id_fkey; Type: FK CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY auth_user_groups
+    ADD CONSTRAINT auth_user_groups_group_id_fkey FOREIGN KEY (group_id) REFERENCES auth_group(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_user_permissions_permission_id_fkey; Type: FK CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permissions_permission_id_fkey FOREIGN KEY (permission_id) REFERENCES auth_permission(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: blah_comment_content_type_id_fkey; Type: FK CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY blah_comment
+    ADD CONSTRAINT blah_comment_content_type_id_fkey FOREIGN KEY (content_type_id) REFERENCES django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: blah_comment_owner_content_type_id_fkey; Type: FK CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY blah_comment
+    ADD CONSTRAINT blah_comment_owner_content_type_id_fkey FOREIGN KEY (owner_content_type_id) REFERENCES django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: category_id_refs_id_6e040822; Type: FK CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY org_attribute
+    ADD CONSTRAINT category_id_refs_id_6e040822 FOREIGN KEY (category_id) REFERENCES org_attributecategory(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: comp_compensationsummary_employee_id_fkey; Type: FK CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY comp_compensationsummary
+    ADD CONSTRAINT comp_compensationsummary_employee_id_fkey FOREIGN KEY (employee_id) REFERENCES org_employee(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: engagement_happiness_assessed_by_id_fkey; Type: FK CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY engagement_happiness
+    ADD CONSTRAINT engagement_happiness_assessed_by_id_fkey FOREIGN KEY (assessed_by_id) REFERENCES org_employee(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: engagement_happiness_employee_id_fkey; Type: FK CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY engagement_happiness
+    ADD CONSTRAINT engagement_happiness_employee_id_fkey FOREIGN KEY (employee_id) REFERENCES org_employee(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: group_id_refs_id_f4b32aac; Type: FK CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY auth_group_permissions
+    ADD CONSTRAINT group_id_refs_id_f4b32aac FOREIGN KEY (group_id) REFERENCES auth_group(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: org_attribute_employee_id_fkey; Type: FK CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY org_attribute
+    ADD CONSTRAINT org_attribute_employee_id_fkey FOREIGN KEY (employee_id) REFERENCES org_employee(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: org_employee_user_id_fkey; Type: FK CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY org_employee
+    ADD CONSTRAINT org_employee_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: org_leadership_employee_id_fkey; Type: FK CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY org_leadership
+    ADD CONSTRAINT org_leadership_employee_id_fkey FOREIGN KEY (employee_id) REFERENCES org_employee(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: org_leadership_leader_id_fkey; Type: FK CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY org_leadership
+    ADD CONSTRAINT org_leadership_leader_id_fkey FOREIGN KEY (leader_id) REFERENCES org_employee(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: org_mentorship_mentee_id_fkey; Type: FK CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY org_mentorship
+    ADD CONSTRAINT org_mentorship_mentee_id_fkey FOREIGN KEY (mentee_id) REFERENCES org_employee(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: org_mentorship_mentor_id_fkey; Type: FK CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY org_mentorship
+    ADD CONSTRAINT org_mentorship_mentor_id_fkey FOREIGN KEY (mentor_id) REFERENCES org_employee(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: org_team_leader_id_fkey; Type: FK CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY org_team
+    ADD CONSTRAINT org_team_leader_id_fkey FOREIGN KEY (leader_id) REFERENCES org_employee(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: pvp_pvpevaluation_employee_id_fkey; Type: FK CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY pvp_pvpevaluation
+    ADD CONSTRAINT pvp_pvpevaluation_employee_id_fkey FOREIGN KEY (employee_id) REFERENCES org_employee(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: pvp_pvpevaluation_evaluation_round_id_fkey; Type: FK CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY pvp_pvpevaluation
+    ADD CONSTRAINT pvp_pvpevaluation_evaluation_round_id_fkey FOREIGN KEY (evaluation_round_id) REFERENCES pvp_evaluationround(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: team_id_refs_id_818d7514; Type: FK CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY org_employee
+    ADD CONSTRAINT team_id_refs_id_818d7514 FOREIGN KEY (team_id) REFERENCES org_team(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: todo_task_assigned_by_id_fkey; Type: FK CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY todo_task
+    ADD CONSTRAINT todo_task_assigned_by_id_fkey FOREIGN KEY (assigned_by_id) REFERENCES org_employee(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: todo_task_assigned_to_id_fkey; Type: FK CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY todo_task
+    ADD CONSTRAINT todo_task_assigned_to_id_fkey FOREIGN KEY (assigned_to_id) REFERENCES org_employee(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: todo_task_created_by_id_fkey; Type: FK CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY todo_task
+    ADD CONSTRAINT todo_task_created_by_id_fkey FOREIGN KEY (created_by_id) REFERENCES org_employee(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: todo_task_employee_id_fkey; Type: FK CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY todo_task
+    ADD CONSTRAINT todo_task_employee_id_fkey FOREIGN KEY (employee_id) REFERENCES org_employee(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: user_id_refs_id_40c41112; Type: FK CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY auth_user_groups
+    ADD CONSTRAINT user_id_refs_id_40c41112 FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: user_id_refs_id_4dc23c39; Type: FK CONSTRAINT; Schema: fooltest; Owner: djangotalentdashboard
+--
+
+ALTER TABLE ONLY auth_user_user_permissions
+    ADD CONSTRAINT user_id_refs_id_4dc23c39 FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- PostgreSQL database dump complete
+--
+
