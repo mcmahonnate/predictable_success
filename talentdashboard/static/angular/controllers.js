@@ -650,6 +650,7 @@ angular.module('tdb.controllers', [])
 
 .controller('MyToDoListCtrl', ['$scope', '$rootScope', '$routeParams', '$window', 'ToDo', 'MyToDos', 'User', function($scope, $rootScope, $routeParams, $window, ToDo, MyToDos, User) {
     $scope.todos = MyToDos.query();
+    $scope.completed_todos = MyToDos.query({ completed: true });
     $scope.deleteToDo = function(todo) {
         if ($window.confirm('Are you sure you want to delete this To Do?')) {
             var data = {id: todo.id};
@@ -670,6 +671,7 @@ angular.module('tdb.controllers', [])
             $scope.todos = response.data;
         }
     );
+    $scope.completed_todos = EmployeeToDo.query({ id: $routeParams.id, completed: true });
     $scope.addToDo = function(id) {
         var newToDo = {};
         newToDo.id = -1;

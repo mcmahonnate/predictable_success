@@ -118,7 +118,7 @@ angular.module('tdb.services', ['ngResource'])
         'update': { method:'PUT', data:{description:'@description'}, isArray: false },
         'remove': { method:'DELETE' },
     }
-    var EmployeeToDo = $resource('/api/v1/tasks/employees/:id/', {id:'@id'}, actions);
+    var EmployeeToDo = $resource('/api/v1/tasks/employees/:id/', {id:'@id', completed: '@completed'}, actions);
 
     EmployeeToDo.getReportForCompany = function(days_ahead) {
         var params = {id: 'all-employees', days_ahead: days_ahead};

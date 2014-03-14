@@ -945,6 +945,24 @@ user agent stylesheettd, th {
 
 .todo-completed {
     text-decoration:line-through;
+    vertical-align:middle;
+}
+
+.todo-nav {
+    float: left;
+    color: #585858;
+    cursor: pointer;
+    width: 147px;
+    text-align:center;
+    padding: 5px;
+    background: #272727;
+}
+.todo-nav:hover {
+    color: #8b8b8b;
+}
+.todo-nav-active {
+    background: #2a2a2a;
+    color: #8b8b8b;
 }
 
 .assignee-select {

@@ -25,6 +25,9 @@ from django.db.models import Q
 
 logger = getLogger('talentdashboard')
 
+def parseBoolString(theString):
+  return theString[0].upper()=='T'
+
 class EmployeeList(generics.ListAPIView):
     serializer_class = EmployeeSerializer
     queryset = Employee.objects.filter(display='t')
@@ -285,7 +288,13 @@ class MyTaskList(APIView):
         assigned_to = Employee.objects.get(user__id = request.user.id)
         if assigned_to is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
+        completed = request.QUERY_PARAMS.get('completed', None)
+        if completed is None:
+            completed = False
+        else:
+            completed = parseBoolString(completed)
         tasks = Task.objects.filter(assigned_to__id=assigned_to.id)
+        tasks = tasks.filter(completed = completed)
         tasks = tasks.extra(order_by = ['-due_date'])
         serializer = TaskSerializer(tasks, many=True)
         return Response(serializer.data)
@@ -355,7 +364,13 @@ class EmployeeTaskList(APIView):
             employee = Employee.objects.get(id = pk)
             if employee is None:
                 return Response(None, status=status.HTTP_404_NOT_FOUND)
+            completed = request.QUERY_PARAMS.get('completed', None)
+            if completed is None:
+                completed = False
+            else:
+                completed = parseBoolString(completed)
             tasks = Task.objects.filter(employee__id = pk)
+            tasks = tasks.filter(completed = completed)
             tasks = tasks.extra(order_by = ['-created_date'])
         serializer = TaskSerializer(tasks, many=True)
         return Response(serializer.data)
@@ -405,9 +420,6 @@ class EmployeeDetail(APIView):
             employee.save()
             return Response(None)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
-
-def parseBoolString(theString):
-  return theString[0].upper()=='T'
 
 @api_view(['GET'])
 def user_status(request):
