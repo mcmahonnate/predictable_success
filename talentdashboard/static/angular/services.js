@@ -111,6 +111,37 @@ angular.module('tdb.services', ['ngResource'])
     return HappinessReport;
 }])
 
+.factory('PhotoUpload', ['$resource', '$http', function($resource, $http) {
+    return function(model, files) {
+        var actions = {
+            'update': {
+                method:'POST',
+                transformRequest: function () {
+                    var formData = new FormData();
+                    //need to convert our json object to a string version of json otherwise
+                    // the browser will do a 'toString()' on the object which will result
+                    // in the value '[Object object]' on the server.
+                    formData.append("model", angular.toJson(model));
+                    //now add all of the assigned files
+                    for (var i = 0; i < files.length; i++) {
+                        //add each file to the form data and iteratively name them
+                        console.log(files[i]);
+                        formData.append("file" + i, files[i]);
+
+                    }
+                    return formData;
+                },
+                data: { model: model, files: files },
+                isArray: false,
+                headers:{'Content-Type':false}
+            },
+            'remove': { method:'DELETE' }
+        };
+        var res = $resource('/api/v1/image-upload/employees/:id/', {id:'@id'}, actions);
+
+        return res;
+    }
+}])
 
 .factory('EmployeeToDo', ['$resource', '$http', function($resource, $http) {
     var actions = {

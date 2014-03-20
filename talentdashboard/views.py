@@ -4,6 +4,7 @@ from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.parsers import MultiPartParser, FormParser
 from .serializers import *
 from .decorators import *
 from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team
@@ -420,6 +421,22 @@ class EmployeeDetail(APIView):
             employee.save()
             return Response(None)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
+
+class ImageUploadView(APIView):
+    parser_classes = (MultiPartParser,FormParser)
+    def post(self, request, pk, format=None):
+        employee = Employee.objects.get(id = pk)
+        logger.debug('try')
+        logger.debug(request.META)
+        logger.debug(request.REQUEST)
+        logger.debug(request.POST)
+        logger.debug(request.FILES)
+        image_obj = request.FILES['file0']
+        logger.debug('success?')
+        employee.avatar = image_obj
+        employee.save()
+
+        return Response(status=204)
 
 @api_view(['GET'])
 def user_status(request):

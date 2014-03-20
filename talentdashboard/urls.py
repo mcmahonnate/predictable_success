@@ -55,5 +55,6 @@ urlpatterns = patterns('',
     url(r'api/v1/tasks/employees/(?P<pk>.*)', (group_required('foolsquad')(EmployeeTaskList.as_view()))),
     url(r'api/v1/tasks/$', (group_required('foolsquad')(MyTaskList.as_view()))),
     url(r'api/v1/tasks/(?P<pk>.*)', (group_required('foolsquad')(TaskDetail.as_view()))),
+    url(r'api/v1/image-upload/employees/(?P<pk>.*)', ImageUploadView.as_view()),
     url(r'^', include(router.urls)),
 )

@@ -875,11 +875,32 @@ a.glyphicon:hover {
     content: "\270F";
 }
 
+.glyphicon-photo:before {
+    color: #8b8b8b;
+    content: "\E046";
+    font-size: 12px;
+}
+
+.glyphicon-photo-disable:before {
+    color: #101214;
+    content: "\E046";
+    font-size: 12px;
+}
+
 a.glyphicon-edit{
     cursor:pointer;
 }
 
 a.glyphicon-edit-disable {
+    pointer-events: none;
+    cursor: default;
+}
+
+a.glyphicon-photo{
+    cursor:pointer;
+}
+
+a.glyphicon-photo-disable {
     pointer-events: none;
     cursor: default;
 }

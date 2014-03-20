@@ -184,7 +184,7 @@ angular.module('tdb.controllers', [])
 	}
 }])
 
-.controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', 'User', 'Employee', 'Engagement', 'Mentorship', 'EmployeeLeader', 'Attribute', 'CompSummary', '$http', 'analytics', function($rootScope, $scope, $location, $routeParams, User, Employee, Engagement, Mentorship, EmployeeLeader, Attribute, CompSummary, $http, analytics) {
+.controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', 'User', 'Employee', 'Engagement', 'Mentorship', 'EmployeeLeader', 'Attribute', 'CompSummary', 'PhotoUpload', '$http', 'analytics', function($rootScope, $scope, $location, $routeParams, User, Employee, Engagement, Mentorship, EmployeeLeader, Attribute, CompSummary, PhotoUpload, $http, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     Employee.get(
         {id: $routeParams.id},
@@ -231,6 +231,27 @@ angular.module('tdb.controllers', [])
     };
     $scope.cancel_engagement = function() {
         $scope.selected=0;
+    };
+    $scope.image = "";
+    $scope.cancel_photo = function(){
+        $scope.image = "";
+    };
+    $scope.files = [];
+    $scope.uploadFile = function(files){
+        $scope.files = files;
+    };
+
+    $scope.model = {
+        name: "",
+        comments: ""
+    };
+
+    //the save method
+    $scope.save_photo = function() {
+        var data = {id: $scope.employee.id};
+        PhotoUpload($scope.model, $scope.files).update(data, function() {
+          //console.log('success?');
+        });
     };
     $scope.scrollIntoView = false;
     $scope.popup = [];
@@ -298,7 +319,6 @@ angular.module('tdb.controllers', [])
         } else {
             $scope.opened = false;
         }
-
     };
 
     $scope.dateOptions = {
