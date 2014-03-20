@@ -1010,3 +1010,7 @@ user agent stylesheettd, th {
     border-color: #585858;
     border-style: solid;
 }
+
+.image-upload span:hover {
+    text-decoration: underline !important;
+}

@@ -192,6 +192,7 @@ angular.module('tdb.controllers', [])
             $scope.employee = data;
             $scope.employee.hire_date = $rootScope.parseDate($scope.employee.hire_date);
             $scope.editEmployee = angular.copy($scope.employee);
+            $scope.preview=$scope.employee.avatar;
         }
     );
 
@@ -232,9 +233,9 @@ angular.module('tdb.controllers', [])
     $scope.cancel_engagement = function() {
         $scope.selected=0;
     };
-    $scope.image = "";
     $scope.cancel_photo = function(){
-        $scope.image = "";
+        $scope.files = [];
+        $scope.preview=$scope.employee.avatar;
     };
     $scope.files = [];
     $scope.uploadFile = function(files){
