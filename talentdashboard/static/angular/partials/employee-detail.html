@@ -258,7 +258,8 @@
                 <div style="display:inline;width:8px;margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#d3d4d4 #434343 #d3d4d4 #d3d4d4;padding: 11px 5px 10px 10px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-photo"></span></div>
                 <span style="padding:7px">Photo</span>
                 <form enctype="multipart/form-data" name="uploadForm">
-                    <input onchange="angular.element(this).scope().uploadFile(this.files)" type="file" name="file">
+                    <input onchange="angular.element(this).scope().uploadFile(this.files)" style="margin: 10px 0px;" type="file" name="file">
+                    <img ng-src="{{preview}}" style="height:215px;display:block;margin-left:auto;margin-right:auto;"/>
                     <div id="editActions" style="right:2px;bottom:-33px;">
                         <button class="button small blue" ng-disabled="disable_save_photo()" style="margin-bottom:3px;" ng-click="save_photo();currentlyEditing=false;addPhoto=false;">Save</button>
                         <button class="button small orange" style="margin-bottom:3px;" ng-click="cancel_photo();currentlyEditing=false;addPhoto=false;">Cancel</button>

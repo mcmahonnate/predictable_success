@@ -184,7 +184,7 @@ angular.module('tdb.controllers', [])
 	}
 }])
 
-.controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', 'User', 'Employee', 'Engagement', 'Mentorship', 'EmployeeLeader', 'Attribute', 'CompSummary', 'PhotoUpload', '$http', 'analytics', function($rootScope, $scope, $location, $routeParams, User, Employee, Engagement, Mentorship, EmployeeLeader, Attribute, CompSummary, PhotoUpload, $http, analytics) {
+.controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', 'User', 'Employee', 'Engagement', 'Mentorship', 'EmployeeLeader', 'Attribute', 'CompSummary', 'PhotoUpload', '$http', 'analytics', 'fileReader', function($rootScope, $scope, $location, $routeParams, User, Employee, Engagement, Mentorship, EmployeeLeader, Attribute, CompSummary, PhotoUpload, $http, analytics, fileReader) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     Employee.get(
         {id: $routeParams.id},
@@ -239,6 +239,10 @@ angular.module('tdb.controllers', [])
     $scope.files = [];
     $scope.uploadFile = function(files){
         $scope.files = files;
+        fileReader.readAsDataUrl($scope.files[0], $scope)
+                      .then(function(result) {
+                          $scope.preview = result;
+                      });
     };
 
     $scope.model = {
@@ -248,9 +252,9 @@ angular.module('tdb.controllers', [])
 
     //the save method
     $scope.save_photo = function() {
-        var data = {id: $scope.employee.id};
-        PhotoUpload($scope.model, $scope.files).update(data, function() {
-          //console.log('success?');
+        var upload_data = {id: $scope.employee.id};
+        PhotoUpload($scope.model, $scope.files).update(upload_data, function(data) {
+          $scope.employee.avatar = data.avatar;
         });
     };
     $scope.scrollIntoView = false;

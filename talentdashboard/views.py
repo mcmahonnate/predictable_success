@@ -426,17 +426,11 @@ class ImageUploadView(APIView):
     parser_classes = (MultiPartParser,FormParser)
     def post(self, request, pk, format=None):
         employee = Employee.objects.get(id = pk)
-        logger.debug('try')
-        logger.debug(request.META)
-        logger.debug(request.REQUEST)
-        logger.debug(request.POST)
-        logger.debug(request.FILES)
         image_obj = request.FILES['file0']
-        logger.debug('success?')
         employee.avatar = image_obj
         employee.save()
-
-        return Response(status=204)
+        serializer = MinimalEmployeeSerializer(employee)
+        return Response(serializer.data)
 
 @api_view(['GET'])
 def user_status(request):
