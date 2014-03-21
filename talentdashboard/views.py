@@ -23,6 +23,9 @@ from django.core.mail import send_mail
 from django.contrib.sites.models import get_current_site
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
+from PIL import Image
+import StringIO
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
 logger = getLogger('talentdashboard')
 
@@ -424,10 +427,29 @@ class EmployeeDetail(APIView):
 
 class ImageUploadView(APIView):
     parser_classes = (MultiPartParser,FormParser)
+
     def post(self, request, pk, format=None):
+        def resize(image, size, filename, content_type):
+            image.thumbnail(size, Image.ANTIALIAS)
+            image_io = StringIO.StringIO()
+            image.save(image_io, format=image.format)
+            image_file = InMemoryUploadedFile(image_io, None, filename, content_type, image_io.len, None)
+            return image_file
         employee = Employee.objects.get(id = pk)
         image_obj = request.FILES['file0']
-        employee.avatar = image_obj
+        image = Image.open(image_obj)
+        filename = image_obj.name
+        content_type = image_obj.content_type
+        #resize to avatar size
+        avatar_size = (215, 215)
+        avatar_file = resize(image, avatar_size, filename, content_type)
+        employee.avatar = avatar_file
+
+        #resize to small avatar size
+        avatar_small_size = (48, 48)
+        avatar_small_file = resize(image, avatar_small_size, filename, content_type)
+        employee.avatar_small = avatar_small_file
+
         employee.save()
         serializer = MinimalEmployeeSerializer(employee)
         return Response(serializer.data)
