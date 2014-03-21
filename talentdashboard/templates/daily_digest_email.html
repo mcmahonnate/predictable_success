@@ -15,7 +15,7 @@
             {% if comment.content_type == comment_type %}
                 {% if comment.associated_object.object_id != recipient.employee.id %}
                     <td valign="top" style="height:80px;width:60px">
-                        <a href="http://{{site}}/#/employees/{{comment.associated_object.associated_object.id}}"><img height="48" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;" src="{{comment.associated_object.associated_object.avatar_small}}"/></a>
+                        <a href="http://{{site}}/#/employees/{{comment.associated_object.associated_object.id}}"><img height="48" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;" src="{{comment.associated_object.associated_object.avatar_small.url}}"/></a>
                     </td>
                     <td valign="top">
                         <p>
@@ -31,7 +31,7 @@
                 {% endif %}
             {% else %}
                 <td valign="top" style="height:80px;width:50px">
-                    <a href="http://{{site}}/#/employees/{{comment.associated_object.id}}"><img height="48" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;" src="{{comment.associated_object.avatar_small}}"/></a>
+                    <a href="http://{{site}}/#/employees/{{comment.associated_object.id}}"><img height="48" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;" src="{{comment.associated_object.avatar_small.url}}"/></a>
                 </td>
                 <td valign="top">
                     <p>
@@ -63,7 +63,7 @@
             <tr>
             <font face="Helvetica Neue,helvetica,arial,sans-serif" size="2">
                 <td valign="top" style="height:80px;width:60px">
-                    <a href="http://{{site}}/#/employees/{{todo.employee.id}}"><img height="48" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;" src="{{todo.employee.avatar_small}}"/></a>
+                    <a href="http://{{site}}/#/employees/{{todo.employee.id}}"><img height="48" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;" src="{{todo.employee.avatar_small.url}}"/></a>
                 </td>
                 <td valign="top">
                     <p>
