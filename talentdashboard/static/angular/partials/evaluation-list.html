@@ -1,59 +1,16 @@
-  <header id="main-header">
-    <!-- #top-bar -->
 
-    <div class="clear" id="dashboard-admin-bar">
-		<div ng-controller="EmployeeListCtrl" class="inner dashboard-sized-el" style="max-width: 970px;">
-			<div style="display: block; color: #cbcbcb; font-weight: 700; padding: 12px 36px 10px 12px;font-size: 16px; width:150px; float:left">
-				<a href="/" style="color:#fff;">{{currentSite.name}}</a>
-			</div>
-			<div class="btn" id="switch-dashboard" style="float:right;width:55px;">
-			  <span class="settings_menu" id="selected-dashboard-title" ng-click="toggleSettingsMenu()" style="font-weight: 700; color: white;padding:0px;">
-                <img class="settings_menu" src="/static/css/settings.png"style="width:35px;margin-left:3px;margin-top:3px;margin-bottom:-3px;"/>
-              </span>
-                <div id="selection-list" ng-show="openSettingsMenu" style="display: none;width:100px">
-                    <ul>
-                        <li>
-                            <a class="dashboard" href="/logout" style="font-weight:800;">Sign Out</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-			<div class="btn" id="switch-dashboard" style="float:right">
-			  <span class="employee_menu" ng-click="toggleEmployeeMenu()" id="selected-dashboard-title" style="font-weight: 700; color: white;">People</span>
-			  <div id="selection-list" ng-show="openEmployeeMenu" style="display: none;">
-				<ul>
-					<li>
-						<input class="search-input employee_menu" ng-model="employeeQuery" type="text" placeholder="Search"/>
-					</li>
-					<li ng-repeat="employee in employees | filter:{full_name:employeeQuery}:startsWith | orderBy:'full_name'">
-						<a class="dashboard" style="font-weight:800;" href="#/employees/{{employee.id}}">{{employee.full_name}}</a>
-					</li>
-				</ul>
-			  </div>
-			</div>
-			<div ng-controller="TeamListCtrl" class="btn"  id="switch-dashboard" style="float:right">
-			  <span class="team_menu" id="selected-dashboard-title" ng-click="toggleTeamMenu()" style="font-weight: 700; color: white;">Teams</span>
-			  <div id="selection-list" ng-show="openTeamMenu" style="display: none;">
-				<ul>
-					<li>
-						<input class="search-input team_menu" type="text" ng-model="teamQuery" placeholder="Search"/>
-					</li>
-					<li ng-repeat="team in teams | filter:{name:teamQuery}:startsWith | orderBy:'name'">
-						<a class="dashboard" style="font-weight:800;" href="#/teams/{{team.id}}">{{team.name}}</a>
-					</li>
-				</ul>		  
-			  </div>
-			</div>
-		</div>
-    </div>
+
+<div ng-include="'/static/angular/partials/header.html'"></div>
   
-    <div class="fade" ng-class="{in:evaluations}">
-        <div class="clear" style="background-color: #101214;padding-top: 10px;padding-bottom: 10px;">
+    <div class="fade" ng-class="{in:evaluations}" style="padding-top:55px">
+        <div class="clear" style="background-color: #101214;padding-top: 10px;">
             <div class="inner dashboard-sized-el" style="max-width: 970px;">
                 <div class="btn" ng-mouseover="menu.show=true" ng-mouseleave="menu.show=false" style="border-style:solid; border-width: 1px;border-color: #cbcbcb;" id="switch-dashboard">
                   <span ng-if="!byTeam.employee.team.name" id="selected-dashboard-title" style="font-weight: 700; color: white;">Filter By Team</span>
                   <span ng-if="byTeam.employee.team.name" id="selected-dashboard-title" style="font-weight: 700; color: white;">{{ byTeam.employee.team.name }}</span>
-                  <div ng-controller="TeamListCtrl" id="selection-list" ng-show="menu.show" style="border-style:solid; border-width: 1px;border-color: #cbcbcb;">
+                  <div ng-controller="TeamListCtrl" id="selection-shell" ng-show="menu.show" style="border-style:solid; border-width: 1px;border-color: #cbcbcb;">
+                                    <div id="selection-title">Team</div>
+                <div id="selection-list">
                     <ul>
                         <li><a id="filters" ng-if="intialQuery.teamId" ng-href="#/evaluations/current?talent_category={{ talentCategory }}" style="font-weight:800;cursor: pointer;" class="dashboard">All</a></li>
                         <li><a id="filters" ng-if="!intialQuery.teamId" ng-click="menu.show=false;byTeam.employee.team.name = '';byTeam.employee.team.id =''" style="font-weight:800;cursor: pointer;" class="dashboard">All</a></li>
@@ -62,6 +19,7 @@
                             <a id="filters" ng-if="!initialQuery.teamId" ng-click="menu.show=false;byTeam.employee.team.name = team.name;byTeam.employee.team.id=team.id;filterList()" style="font-weight:800;cursor: pointer;" class="dashboard">{{team.name}}</a>
                         </li>
                     </ul>
+                    </div>
                   </div>
                 </div>
                 <a ng-href="#/evaluations/current?talent_category=1&team_id={{ byTeam.employee.team.id }}"><canvas ng-class="{categoryNavHighlightBig: talentCategory==1,categoryNavBig: talentCategory!=1}" width="24" height="24" employee-talent-category="1"></canvas></a>
@@ -73,9 +31,8 @@
             </div>
         </div>
 
-      </header>
 
-      <div class="dashboard-sized-el employees"id="dashboard" style="margin-top: 115px; max-width: 970px; height: 804px;">
+      <div class="dashboard-sized-el employees"id="dashboard" style="max-width: 970px; height: 804px;">
 		  <div ng-show="evaluations[0].empty || showNoResults" style="text-align:center; font-size:2.5em; font-weight:bold; color: #585858;position: absolute; margin: 5px; left: 0px; top: 150px; width: 970px;">No Results</div>	
           <div id="widget-14808658" class="widget" style="position: absolute; margin: 5px; left: 0px; top: 0px; width: 230px; height: 230px;" on-filter columns="4" index="{{$index}}" ng-repeat="evaluation in evaluations | filter:byTeam.employee.team.name:true | orderBy:'employee.full_name'">
               <div class="widget-inner widget-size-1x1 large-screen" style="width: 230px; height: 230px;">

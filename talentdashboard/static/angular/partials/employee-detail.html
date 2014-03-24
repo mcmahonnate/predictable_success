@@ -1,103 +1,4 @@
-  <header id="main-header">
-    <!-- #top-bar -->
-
-    <div class="clear" id="dashboard-admin-bar">
-		<div ng-controller="EmployeeListCtrl" class="inner dashboard-sized-el" style="max-width: 970px;">
-			<div style="display: block; color: #cbcbcb; font-weight: 700; padding: 12px 36px 10px 12px;font-size: 16px; width:150px; float:left">
-				<span class="glyphicon-regular glyphicon-home"></span><a href="/" style="color:#fff;">{{currentSite.name}}</a>
-			</div>
-			<div id="menu-item-image" ng-class="{'menu-item-active':openSettingsMenu}" ng-click="toggleSettingsMenu()">
-                <img class="settings_menu" ng-src="{{currentUser.employee.avatar_small}}" style="height:27px;"/>
-                <div id="selection-shell" ng-show="openSettingsMenu" style="display: none;margin-left:-248px">
-                    <div id="selection-title">Account</div>
-                    <div id="selection-list">
-                        <ul>
-                            <li>
-                                <a class="dashboard" href="/logout" style="font-weight:800;">Sign Out</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div id="menu-item" ng-class="{'menu-item-active':openEmployeeMenu}" ng-click="toggleEmployeeMenu()">
-			  <span class="glyphicon-regular glyphicon-employees employee_menu"></span>
-              <div id="selection-shell" ng-show="openEmployeeMenu" style="display: none;margin-left: -195px;">
-                <div id="selection-title">Find Employees</div>
-                  <div id="selection-list">
-                    <ul>
-                        <li>
-                            <input class="search-input employee_menu" ng-model="employeeQuery" type="text" placeholder="Search"/>
-                        </li>
-                        <div ng-if="employeeQuery" style="margin-top:12px">
-                            <li ng-repeat="employee in employees | filter:{full_name:employeeQuery}:startsWith | orderBy:'full_name'">
-                                <a class="dashboard" style="font-weight:800;" href="#/employees/{{employee.id}}">{{employee.full_name}}</a>
-                            </li>
-                        </div>
-                    </ul>
-                </div>
-                <div id="selection-title">Add Employees</div>
-                  <div id="selection-list">
-                    <ul style="padding: 10px 10px;">
-                        <li>
-                            <a class="dashboard" style="font-weight:800;" href="#"><span class="glyphicon-regular glyphicon-add-employee"></span><span style="margin-left:10px;">Add Empoyee</span></a>
-                        </li>
-                    </ul>
-                </div>
-			  </div>
-            </div>
-            <div id="menu-item">
-              <span class="glyphicon-regular glyphicon-filter"></span>
-              <div id="selection-shell" ng-show="openFilterMenu" style="display: none;margin-left: -195px;">
-                <div id="selection-title">Filter</div>
-                  <div id="selection-list">
-                    <ul>
-                        <li>
-                            <a class="dashboard" style="font-weight:800;" href="#/evaluations/current?talent_category=1">Top Talent</a>
-                        </li>
-                        <li>
-                            <a class="dashboard" style="font-weight:800;" href="#/evaluations/current?talent_category=1">Strong Talent</a>
-                        </li>
-                        <li>
-                            <a class="dashboard" style="font-weight:800;" href="#/evaluations/current?talent_category=1">Good Talent</a>
-                        </li>
-                        <li>
-                            <a class="dashboard" style="font-weight:800;" href="#/evaluations/current?talent_category=1">Low Potential</a>
-                        </li>
-                        <li>
-                            <a class="dashboard" style="font-weight:800;" href="#/evaluations/current?talent_category=1">Low Performing</a>
-                        </li>
-                        <li>
-                            <a class="dashboard" style="font-weight:800;" href="#/evaluations/current?talent_category=1">Poor</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div id="menu-item" ng-class="{'menu-item-active':openTeamMenu}" ng-controller="TeamListCtrl" ng-click="toggleTeamMenu()">
-              <span class="glyphicon-regular glyphicon-chart team_menu"></span>
-			  <div id="selection-shell" ng-show="openTeamMenu" style="display: none;margin-left: -89px;">
-                <div id="selection-title">Company Report</div>
-                <div id="selection-list">
-                    <ul style="padding: 10px 10px;">
-                        <li>
-                            <a class="dashboard" style="font-weight:800;" href="/">{{currentSite.name}}</a>
-                        </li>
-                    </ul>
-                </div>
-                <div id="selection-title">Team Reports</div>
-                <div id="selection-list">
-                    <ul style="padding: 10px 10px;">
-                        <li ng-repeat="team in teams | filter:{name:teamQuery}:startsWith | orderBy:'name'">
-                            <a class="dashboard" style="font-weight:800;" href="#/teams/{{team.id}}">{{team.name}}</a>
-                        </li>
-                    </ul>
-                </div>
-			  </div>
-			</div>
-
-		</div>
-    </div>
-  </header>
-
+  <div ng-include="'/static/angular/partials/header.html'"></div>
   <div ng-if="employee.display" class="dashboard-sized-el fade" ng-class="{in:employee}" id="dashboard" style="margin-top: 63px; max-width: 970px;">
     <div style="position: relative;width: 315px;float:left;margin-right:10px">
         <article class="widget clock loaded" id="widget-8494" style="position: relative;width: 315px;height:276px;margin: 0px 0px 10px 0px;">
@@ -110,11 +11,9 @@
             </header>
             <section class="widget-body rag-widget">
               <div class="widget-canvas">
-
                 <div class="outer" style="margin-left: auto; margin-right: auto;">
                   <div class="image" style="margin-left: auto; margin-right: auto;"><img ng-src="{{ employee.avatar }}" style="padding-bottom:15px; display: block; margin-left: auto; margin-right: auto; height: 200px;"/></div>
                 </div>
-
               </div>
             </section>
           </div><!-- .widget-inner -->
