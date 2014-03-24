@@ -127,12 +127,14 @@ angular.module('tdb.controllers', [])
     $scope.toggleTeamMenu = function () {
         $scope.openTeamMenu = !$scope.openTeamMenu;
         if ($scope.openTeamMenu ) {
+            console.log('open');
             $scope.openEmployeeMenu  = false;
             $scope.openSettingsMenu  = false;
             $scope.$window.onclick = function (event) {
                 closeTeamMenu(event, $scope.toggleTeamMenu);
             };
         } else {
+            console.log('close');
             $scope.openTeamMenu  = false;
             $scope.$window.onclick = null;
             $scope.$$phase || $scope.$apply(); //--> trigger digest cycle and make angular aware.
