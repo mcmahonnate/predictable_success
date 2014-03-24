@@ -51,13 +51,18 @@ class MinimalEmployeeSerializer(serializers.HyperlinkedModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     employee = MinimalEmployeeSerializer()
     can_edit_employees = serializers.SerializerMethodField('get_can_edit_employees')
+    can_view_comments = serializers.SerializerMethodField('get_can_view_comments')
     def get_can_edit_employees(self, obj):
         if obj.groups.filter(name='Edit Employee').exists() | obj.is_superuser:
                 return True
         return False
+    def get_can_view_comments(self, obj):
+        if obj.groups.filter(name='Coaches').exists() | obj.is_superuser:
+                return True
+        return False
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'can_edit_employees', 'employee', 'last_login')
+        fields = ('id', 'username', 'first_name', 'last_name', 'can_edit_employees', 'can_view_comments', 'employee', 'last_login')
 
 class SiteSerializer(serializers.ModelSerializer):
     class Meta:

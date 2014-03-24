@@ -102,7 +102,7 @@
         <div id="salary_visualization" style="width: 315px; height: 300px;"></div>
       </div><!-- .widget-inner -->
     </article>
-    <article class="widget clock loaded" id="widget-8494" style="top: 285px; left: 0px; width: auto;" ng-init="showToDo=true">
+    <article ng-if="currentUser.can_view_comments" class="widget clock loaded" id="widget-8494" style="top: 285px; left: 0px; width: auto;" ng-init="showToDo=true">
       <div ng-controller="MyToDoListCtrl" class="widget-inner large-screen" style="width:315px;min-height: 275px;">
         <header class="no-reload">
           <h1 style="display:inline;">My To Do's</h1>
@@ -157,7 +157,7 @@
         </section>
       </div>
     </article>
-    <article ng-controller="DiscussionOverviewCtrl" class="widget clock loaded" id="widget-8494" style="top: 285px; left: 325px; width: auto;">
+    <article ng-if="currentUser.can_view_comments" ng-controller="DiscussionOverviewCtrl" class="widget clock loaded" id="widget-8494" style="top: 285px; left: 325px; width: auto;">
       <div class="widget-inner large-screen" style="width:640px;min-height: 560px;">
         <header class="no-reload">
             <h1 style="display:inline;">Discussions</h1>

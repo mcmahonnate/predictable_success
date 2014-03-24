@@ -152,7 +152,7 @@
             </section>
           </div><!-- .widget-inner -->
         </article>
-        <article ng-show="currentUser.employee.id!=employee.id" ng-init="showToDo=true" class="widget clock loaded" id="widget-8494" style="position: relative;width: 315px;margin: 10px 0;min-height: 277px">
+        <article ng-if="currentUser.can_view_comments" ng-show="currentUser.employee.id!=employee.id" ng-init="showToDo=true" class="widget clock loaded" id="widget-8494" style="position: relative;width: 315px;margin: 10px 0;min-height: 277px">
           <div ng-controller="EmployeeToDoListCtrl" class="widget-inner large-screen" style="width:315px;min-height: 275px;">
             <header class="no-reload">
               <h1 style="display:inline;">To Do's</h1>
@@ -353,7 +353,7 @@
 
       </div><!-- .widget-inner -->
     </article>
-    <article ng-show="currentUser.employee.id!=employee.id" class="widget clock loaded" id="widget-8494" style="position: relative;width: 630px;margin-left: 325px;">
+    <article ng-if="currentUser.can_view_comments" ng-show="currentUser.employee.id!=employee.id" class="widget clock loaded" id="widget-8494" style="position: relative;width: 630px;margin-left: 325px;">
       <div ng-controller="EmployeeCommentsCtrl" class="widget-inner large-screen" style="width:640px;min-height: 309px;">
         <header class="no-reload">
           <h1 style="display:inline;">Latest Buzz</h1>
