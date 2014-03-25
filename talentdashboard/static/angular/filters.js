@@ -74,3 +74,25 @@ filters.filter('new_line', function () {
         return new_value;
     };
 });
+
+filters.filter('filterEvaluations', function () {
+  return function( items, talentCategory, teamId) {
+    var filtered = [];
+    angular.forEach(items, function(item) {
+      if (talentCategory && teamId) {
+          if(teamId == item.employee.team.id && talentCategory == item.talent_category) {
+            filtered.push(item);
+          }
+      } else if (talentCategory) {
+          if(talentCategory == item.talent_category) {
+            filtered.push(item);
+          }
+      } else if (teamId) {
+          if(teamId == item.employee.team.id) {
+            filtered.push(item);
+          }
+      }
+    });
+    return filtered;
+  };
+});

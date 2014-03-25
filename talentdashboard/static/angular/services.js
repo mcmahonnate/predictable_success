@@ -72,6 +72,11 @@ angular.module('tdb.services', ['ngResource'])
         return this.query({ employee_id: id });
     };
 
+    PvpEvaluation.getCurrentEvaluations = function() {
+        var params = { current_round: true };
+        return this.query(params);
+    };
+
     PvpEvaluation.getCurrentEvaluationsForTalentCategory = function(talent_category, team_id) {
         var params = { talent_category: talent_category, current_round: true };
         if(team_id) {

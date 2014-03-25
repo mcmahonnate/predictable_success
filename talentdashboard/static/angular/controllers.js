@@ -43,45 +43,25 @@ angular.module('tdb.controllers', [])
 
 .controller('EvaluationListCtrl', ['$scope', '$location', '$routeParams', 'PvpEvaluation', 'Team', 'analytics', function($scope, $location, $routeParams, PvpEvaluation, Team, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
-	$scope.showNoResults = false;
-	$scope.init = function(id)
-	{
-		$scope.team_id = id;
-	    $scope.evaluations = PvpEvaluation.getCurrentEvaluationsForTalentCategory($routeParams.talent_category, $scope.team_id);
-	}
-	$scope.team_id = $routeParams.team_id;
-    $scope.evaluations = PvpEvaluation.getCurrentEvaluationsForTalentCategory($routeParams.talent_category, $scope.team_id);
-	$scope.intialQuery ={};
-	$scope.intialQuery.teamId = $routeParams.team_id;
+    $scope.evaluations = PvpEvaluation.getCurrentEvaluations();
+	$scope.teamId = $routeParams.team_id;
     $scope.talentCategory = $routeParams.talent_category;
-	$scope.byTeam = { };
-	$scope.byTeam.employee = { };
-	$scope.byTeam.employee.team = { };
-	$scope.showNoResults = false;
-	$scope.byTeam.employee.team.name = "";
-	$scope.byTeam.employee.team.id = "";
+    $scope.teamName='';
 	if ($routeParams.team_id){
 		Team.get(
 			{id: $routeParams.team_id},
 			function(data) {
-				$scope.byTeam.employee.team.name = data.name
-				$scope.byTeam.employee.team.id = data.id
+				$scope.teamName = data.name
+				$scope.teamId = data.id
 			}
 		);
 	}
-	$scope.filterList = function(){
-		var found = false;
-		$scope.showNoResults = false;
-	    angular.forEach($scope.evaluations, function(evaluation) {
-			if (evaluation.employee.team.name == $scope.byTeam.employee.team.name) {
-				found=true;
-			}
-		});
-		if (!found) {
-			$scope.showNoResults = true;
-		} 
-	}
+
 	$scope.menu = {show: false};
+    $scope.setTeamFilter = function(id, name) {
+        $scope.teamId=id;
+        $scope.teamName=name;
+    };
 }])
 
 .controller('TeamLeadsCtrl', ['$scope', '$routeParams', 'TeamLeads', function($scope, $routeParams, TeamLeads) {
