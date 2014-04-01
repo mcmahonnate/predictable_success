@@ -256,11 +256,15 @@ angular.module('tdb.controllers', [])
     if ($routeParams.id=='add') {
         $scope.addNew = true;
     }
-
+    $scope.leadership=[];
+    $scope.edit_leadership=[];
+    $scope.edit_leadership.leader=[];
+    $scope.edit_leadership.leader.full_name='';
     Employee.get(
         {id: $routeParams.id},
         function(data) {
             $scope.employee = data;
+            $scope.edit_leadership.employee=data;
             $scope.employee.hire_date = $rootScope.parseDate($scope.employee.hire_date);
             $scope.editEmployee = angular.copy($scope.employee);
             $scope.preview=$scope.employee.avatar;
@@ -353,14 +357,14 @@ angular.module('tdb.controllers', [])
     $scope.saveStartDate  = function (){
         var hire_date = $rootScope.scrubDate($scope.editEmployee.hire_date);
         var data = {id: $scope.employee.id, _full_name: null, _hire_date: hire_date};
-
         Employee.update(data, function() {
             $scope.employee.hire_date = $scope.editEmployee.hire_date;
         });
     };
     $scope.saveLeader  = function (){
         var data = {id: $scope.employee.id, _leader_id: $scope.edit_leadership.leader.id};
-        EmployeeLeader.addNew(data, function() {
+        EmployeeLeader.addNew(data, function(response) {
+            $scope.edit_leadership = response;
             $scope.leadership = angular.copy($scope.edit_leadership);
         });
     };

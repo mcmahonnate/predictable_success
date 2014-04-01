@@ -466,7 +466,7 @@ class EmployeeDetail(APIView):
             return Response(serializer.data)
 
         employee = Employee.objects.get(id = pk)
-        if employee is not None and full_name is not None:
+        if employee is not None:
             hire_date = request.DATA["_hire_date"]
             if full_name is not None:
                 employee.full_name = full_name
