@@ -26,15 +26,17 @@ from django.db.models import Q
 from PIL import Image
 import StringIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.core.urlresolvers import reverse
+from django.http import HttpRequest
+from django.utils.cache import get_cache_key
+from django.utils.cache import _generate_cache_header_key
+from django.core.cache import cache
+from django.conf import settings
 
 logger = getLogger('talentdashboard')
 
 def parseBoolString(theString):
   return theString[0].upper()=='T'
-
-class EmployeeList(generics.ListAPIView):
-    serializer_class = EmployeeSerializer
-    queryset = Employee.objects.filter(display='t')
 
 class UserList(generics.ListAPIView):
     serializer_class = UserSerializer
@@ -152,6 +154,13 @@ class TeamSalaryReportDetail(APIView):
         if report is not None:
             return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
+
+class EmployeeList(APIView):
+    def get(self, request, format=None):
+        employees = Employee.objects.filter(display='t')
+        serializer = MinimalEmployeeSerializer(employees, many=True)
+        logger.debug('test')
+        return Response(serializer.data)
 
 class SubCommentList(APIView):
     def get(self, request, pk, format=None):
@@ -409,13 +418,55 @@ class EmployeeTaskList(APIView):
 class EmployeeDetail(APIView):
     def get(self, request, pk, format=None):
         employee = Employee.objects.get(id = pk)
-        serializer = EmployeeSerializer(employee)
-        return Response(serializer.data)
+        if employee is not None:
+            serializer = EmployeeSerializer(employee)
+            return Response(serializer.data)
+        return Response(None, status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request, pk, format=None):
+        def expire_view_cache(view_name, args=[], namespace=None, key_prefix=None, method="GET"):
+            """
+            This function allows you to invalidate any view-level cache.
+                view_name: view function you wish to invalidate or it's named url pattern
+                args: any arguments passed to the view function
+                namepace: optioal, if an application namespace is needed
+                key prefix: for the @cache_page decorator for the function (if any)
+
+                from: http://stackoverflow.com/questions/2268417/expire-a-view-cache-in-django
+                added: method to request to get the key generating properly
+            """
+
+            # create a fake request object
+            new_request = HttpRequest()
+            new_request.method = method
+            if settings.USE_I18N:
+                new_request.LANGUAGE_CODE = settings.LANGUAGE_CODE
+            # Loookup the request path:
+            if namespace:
+                view_name = namespace + ":" + view_name
+            new_request.path = reverse(view_name, args=args)
+            new_request.META['HTTP_ACCEPT']=request.META['HTTP_ACCEPT']
+            keyprefix = settings.CACHE_MIDDLEWARE_KEY_PREFIX
+            # get cache key, expire if the cached item exists:
+            key = get_cache_key(new_request, key_prefix=keyprefix)
+            if key:
+                if cache.get(key):
+                    cache.delete(key)
+                return True
+            return False
+
+        full_name = request.DATA["_full_name"]
+        if int(pk)==0 and full_name is not None:
+            employee = Employee()
+            employee.full_name = full_name
+            employee.display = True
+            employee.save()
+            test = expire_view_cache('employee-list')
+            serializer = EmployeeSerializer(employee, many=False)
+            return Response(serializer.data)
+
         employee = Employee.objects.get(id = pk)
-        if employee is not None:
-            full_name = request.DATA["_full_name"]
+        if employee is not None and full_name is not None:
             hire_date = request.DATA["_hire_date"]
             if full_name is not None:
                 employee.full_name = full_name
@@ -423,6 +474,7 @@ class EmployeeDetail(APIView):
                 employee.hire_date = hire_date
             employee.save()
             return Response(None)
+
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 class ImageUploadView(APIView):

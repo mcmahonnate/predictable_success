@@ -69,19 +69,54 @@ angular.module('tdb.controllers', [])
     $scope.teamLeads = TeamLeads.getCurrentEvaluationsForTeamLeads($scope.team_id)
 }])
 
-.controller('EmployeeListCtrl', ['$scope', '$window', 'Employee', function($scope, $window, Employee) {
+.controller('EmployeeListCtrl', ['$scope', '$routeParams', '$window', '$location', 'Employee', function($scope, $routeParams, $window, $location, Employee) {
     $scope.$window = $window;
-    $scope.employees = Employee.query();
+    if (!$scope.employees)
+    {
+        $scope.employees = Employee.query({random:Math.floor((Math.random()*1000000000))}); //!important browser cache buster
+    }
+
 	$scope.employeeMenu = {show: false};
     $scope.filterMenu = {show: false};
 	$scope.teamMenu = {show: false};
     $scope.settingsMenu = {show: false};
+    $scope.showAddEmployee = false;
+    $scope.addEmployee = [];
+    if ($routeParams.id=='add'){
+        $scope.showAddEmployee = true;
+    }
 	$scope.startsWith  = function(expected, actual){
 		if(expected && actual){
 			return expected.toLowerCase().indexOf(actual.toLowerCase()) == 0;
 		}
 		return true;
 	}
+    $scope.addNewEmployee = function(firstname, lastname) {
+        var newEmployee = {};
+        newEmployee.full_name = firstname + ' ' + lastname;
+        var data = {id: 0,_full_name: newEmployee.full_name};
+
+        Employee.addNew(data, function(response) {
+            newEmployee.id = response.id;
+            $scope.employees.push(newEmployee);
+            $scope.showAddEmployee = false;
+            changeLocation('employees/' + newEmployee.id, false);
+        });
+    }
+    //be sure to inject $scope and $location somewhere before this
+    var changeLocation = function(url, force) {
+      //this will mark the URL change
+      console.log(url);
+      $location.path(url); //use $location.path(url).replace() if you want to replace the location instead
+      $scope = $scope || angular.element(document).scope();
+      if(force || !$scope.$$phase) {
+        //this will kickstart angular if to notice the change
+        $scope.$apply();
+      }
+    };
+    $scope.cancelAddNewEmployee = function() {
+        $scope.showAddEmployee= false;
+    }
     $scope.navQuery='';
     $scope.toggleNavQuery = function () {
         $scope.openFilterMenu = false;
@@ -218,6 +253,10 @@ angular.module('tdb.controllers', [])
 
 .controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', 'User', 'Employee', 'Engagement', 'Mentorship', 'EmployeeLeader', 'Attribute', 'CompSummary', 'PhotoUpload', '$http', 'analytics', 'fileReader', function($rootScope, $scope, $location, $routeParams, User, Employee, Engagement, Mentorship, EmployeeLeader, Attribute, CompSummary, PhotoUpload, $http, analytics, fileReader) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
+    if ($routeParams.id=='add') {
+        $scope.addNew = true;
+    }
+
     Employee.get(
         {id: $routeParams.id},
         function(data) {
@@ -401,16 +440,6 @@ angular.module('tdb.controllers', [])
         $scope.pvpIndex = index;
 		$scope.currentPvP = $scope.pvps[$scope.pvpIndex];
     }
-}])
-
-.controller('EmployeeNavigationCtrl', ['$scope', '$routeParams', 'PvpEvaluation', 'Employee', function($scope, $routeParams, PvpEvaluation, Employee) {
-	
-    if($routeParams.talent_category) {
-        $scope.employees = PvpEvaluation.getCurrentEvaluationsForTalentCategory($routeParams.talent_category, $scope.team_id);
-    } else {
-        $scope.employees = Employee.query();    
-    }
-
 }])
 
 .controller('ReportsCtrl', ['$scope', '$location', '$routeParams', 'PvpEvaluation', 'analytics', function($scope, $location, $routeParams, PvpEvaluation, analytics) {
