@@ -121,11 +121,11 @@
                     <div class="glyphicon glyphicon-search" style="position: absolute;padding: 5px 10px;pointer-events: none;"></div>
                     <input ng-click="toggleNavQuery()" class="search-input nav_query" style="padding-left: 34px;width: 250px;background-color:#2a2a2a;height:18px;color:#cbcbcb;" ng-model="navQuery" type="text" placeholder="Search Employees..."/>
                 </div>
-                <div id="selection-shell" ng-show="navQuery" style="display: none;margin-left: -30px;width:350px;">
+                <div id="selection-shell" ng-show="navQuery!=''" style="display: none;margin-left: -30px;width:350px;">
                     <div id="selection-title">Employees</div>
                       <div id="selection-list">
                         <ul style="padding:0px 10px 10px 10px;">
-                            <div ng-if="navQuery" style="margin-top:12px">
+                            <div ng-if="navQuery!=''" style="margin-top:12px">
                                 <li ng-repeat="employee in filteredEmployees = (employees |filter:{full_name:navQuery}:startsWith) | orderBy:'full_name'">
                                     <a class="dashboard" style="font-weight:800;" href="#/employees/{{employee.id}}"><img class="settings_menu" ng-src="{{employee.avatar_small}}" style="padding-right:10px;height:27px;vertical-align:middle"/>{{employee.full_name}}</a>
                                 </li>
