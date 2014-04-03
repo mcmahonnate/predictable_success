@@ -625,6 +625,7 @@ angular.module('tdb.controllers', [])
                 }
             );
             comment.newSubCommentText = "";
+            comment.expandChildTextArea=false;
         });
 
         $scope.CreateHeader = function(date) {
@@ -634,6 +635,20 @@ angular.module('tdb.controllers', [])
             return showHeader;
         }
     });
+    $scope.toggleChildCommentTextExpander = function (comment) {
+        $window.onclick = function (event) {
+            if (!comment.newSubCommentText) {
+                var clickedElement = event.target;
+                if (!clickedElement) return;
+                var elementClasses = clickedElement.classList;
+                var clickedOnTextArea = elementClasses.contains('text');
+                if (!clickedOnTextArea) {
+                    comment.expandTextArea=false;
+                    $scope.$apply();
+                }
+            }
+        };
+    };
 
     $scope.saveComment = function(comment) {
         var index = $scope.comments.indexOf(comment);
@@ -914,6 +929,34 @@ angular.module('tdb.controllers', [])
 .controller('EmployeeCommentsCtrl', ['$scope', '$filter', '$routeParams', '$window', 'EmployeeComments', 'SubComments','Comment', 'User', function($scope, $filter, $routeParams, $window, EmployeeComments, SubComments, Comment, User) {
     $scope.employeeId = $routeParams.id;
     $scope.newCommentText = "";
+    $scope.toggleCommentTextExpander = function (comment) {
+        $window.onclick = function (event) {
+            if (!$scope.newCommentText) {
+                var clickedElement = event.target;
+                if (!clickedElement) return;
+                var elementClasses = clickedElement.classList;
+                var clickedOnTextArea = elementClasses.contains('text');
+                if (!clickedOnTextArea) {
+                    comment.expandTextArea=false;
+                    $scope.$apply();
+                }
+            }
+        };
+    };
+    $scope.toggleChildCommentTextExpander = function (comment) {
+        $window.onclick = function (event) {
+            if (!comment.newSubCommentText) {
+                var clickedElement = event.target;
+                if (!clickedElement) return;
+                var elementClasses = clickedElement.classList;
+                var clickedOnTextArea = elementClasses.contains('text');
+                if (!clickedOnTextArea) {
+                    comment.expandChildTextArea=false;
+                    $scope.$apply();
+                }
+            }
+        };
+    };
 
     EmployeeComments.query({ id: $scope.employeeId }).$then(function(response) {
         $scope.comments = response.data;
@@ -929,6 +972,8 @@ angular.module('tdb.controllers', [])
                 }
             );
             comment.newSubCommentText = "";
+            comment.expandTextArea = false;
+            comment.expandChildTextArea = false;
         });
 
         $scope.CreateHeader = function(date) {

@@ -309,9 +309,11 @@
         </header>
         <section class="widget-body text-widget" style="padding: 10px;">
             <div style="display: block; float:left;width:480px;-webkit-border-radius: 2px;moz-border-radius: 3px;-ms-border-radius: 3px;-o-border-radius: 3px;border-radius: 3px;border: 1px solid #c1c1c1;margin:10px 15px;background-color:white;">
-                <textarea ng-model="newCommentText" ng-class="{'expand': expandTextArea, 'compress': !expandTextArea}" ng-click="expandTextArea=true" rows="1" cols="40" placeholder="Add a comment about {{employee.full_name}}..." style="width:468px;font-size:14px;padding:5px;border: none;resize:vertical;"></textarea>
+                <textarea class="text" ng-model="newCommentText" ng-class="{'expand': comment.expandTextArea, 'compress': !comment.expandTextArea}" ng-click="comment.expandTextArea=true;toggleCommentTextExpander(comment)" rows="1" cols="40" placeholder="Add a comment about {{employee.full_name}}..." style="width:468px;font-size:14px;padding:5px;border: none;resize:vertical;"></textarea>
             </div>
-            <button class="comment" ng-click="addComment();expandTextArea=false">Comment</button>
+            <div>
+                <button class="comment" ng-disabled="!newCommentText" ng-click="addComment();comment.expandTextArea=false">Comment</button>
+            </div>
             <div style="clear:both;"></div>
             <div ng-repeat="comment in comments | orderBy:'modified_date':true" style="margin:0 15px;padding:8px 0 8px 0px;display: block;width:580px">
                 <h2 ng-show="CreateHeader(comment.modified_date)" style="font-size: 14px;color: #8b8b8b;border-bottom: 2px solid #8b8b8b">{{comment.created_date | date:'MMM d, yyyy'}}</h2>
@@ -325,7 +327,7 @@
                           <textarea ng-model="comment.content" style="position: relative; width: 515px; height: 132px;background-color:#2a2a2a;color:#eee;resize:vertical;font-size: 14px;margin-top: 5px;">
                           </textarea>
                           <div id="editActions" style="right:2px;bottom:-33px;">
-                                <button class="button small blue" ng-click="saveComment(comment);showCommentEdit=false">Save</button>
+                                <button class="button small blue" ng-disabled="!comment.content" ng-click="saveComment(comment);showCommentEdit=false">Save</button>
                                 <button class="button small orange" ng-click="cancelEditComment(comment);showCommentEdit=false">Cancel</button>
                           </div>
                         </div>
@@ -352,7 +354,7 @@
                                       <textarea ng-model="subcomment.content" style="position: relative; width: 430px; height: 132px;background-color:#2a2a2a;color:#eee;resize:vertical;font-size: 14px;margin-top: 5px;">
                                       </textarea>
                                       <div id="editActions" style="right:2px;bottom:-33px;">
-                                            <button class="button small blue" ng-click="saveSubComment(subcomment, comment);showSubCommentEdit=false">Save</button>
+                                            <button class="button small blue" ng-disabled="!subcomment.content" ng-click="saveSubComment(subcomment, comment);showSubCommentEdit=false">Save</button>
                                             <button class="button small orange" ng-click="cancelEditSubComment(subcomment, comment);showSubCommentEdit=false">Cancel</button>
                                       </div>
                                     </div>
@@ -370,9 +372,9 @@
                         </div>
                         <div ng-show="showCommentInput || comment.subcomments" style="padding:5px;">
                             <div style="float:left;width:410px;-webkit-border-radius: 2px;moz-border-radius: 3px;-ms-border-radius: 3px;-o-border-radius: 3px;border-radius: 3px;border: 1px solid #c1c1c1;background-color:white;">
-                                <textarea ng-model="comment.newSubCommentText" ng-class="{'expand': expandChildTextArea, 'compress': !expandChildTextArea}" ng-click="expandChildTextArea=true" rows="1" cols="40" placeholder="Add a comment..." style="width:398px;font-size:14px;padding:6px;border: none;resize:vertical;"></textarea>
+                                <textarea class="text" ng-model="comment.newSubCommentText" ng-class="{'expand': comment.expandChildTextArea, 'compress': !comment.expandChildTextArea}" ng-click="comment.expandChildTextArea=true;toggleChildCommentTextExpander(comment)" rows="1" cols="40" placeholder="Add a comment..." style="width:398px;font-size:14px;padding:6px;border: none;resize:vertical;"></textarea>
                             </div>
-                            <button class="small-comment" ng-click="addSubComment(comment);expandTextArea=false">Comment</button>
+                            <button class="small-comment" ng-disabled="!comment.newSubCommentText" ng-click="addSubComment(comment);comment.expandChildTextArea=false">Comment</button>
                             <div style="clear:both;"></div>
                         </div>
                         <div style="clear:both;"></div>
@@ -383,126 +385,3 @@
       </div><!-- .widget-inner -->
     </article>
   </div>
-
-<style>
-  div[contentEditable] {
-    cursor: pointer;
-  }
-  div[contentEditable]:focus {
-    cursor: pointer;
-    background-color: gray;
-    border: 1px solid red;
-    color:black;
-
-    text-shadow:none;
-  }
-  rect.pvp-square.selected { fill: red; }
-  button.comment {
-    border: 1px solid #434343;
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
-    border-radius: 3px;
-    height: 28px;
-    background-color:#434343;
-    font-size:14px;
-    color:#d3d4d4;
-    margin-top:10px;
-    margin-bottom:15px;
-    cursor: pointer;
-  }
-  button.small-comment {
-    border: 1px solid #434343;
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
-    border-radius: 3px;
-    height:31px;
-    background-color:#434343;
-    font-size:12px;
-    color:#d3d4d4;
-    margin-left:15px;
-    cursor: pointer;
-  }
-  button.small-comment:hover {
-    background-color:#272727;
-  }
-  button.comment:hover {
-    background-color:#272727;
-  }
-  ul.feed-actions {
-    margin-top: 5px;
-    list-style: none;
-  }
-  .feed-actions li {
-    background: url('/static/css/icon_bullet_grey2_4x4.png') no-repeat scroll 100% 6px transparent;
-    float: left;
-    margin: 0 10px 8px 0;
-    padding: 0 10px 0 0;
-    color: #8b8b8b;
-  }
-  .feed-action a:hover {
-    text-decoration: none;
-  }
-  .expand {
-      transition: height .5s;
-      -webkit-transition: height .5s;
-      height: 132px;
-  }
-  .compress {
-      height: 15px;
-  }
-
-  .compensation-position {
-      top: 0px;
-      left: 650px;
-  }
-  .compensation-position-restrict {
-      top: 0px;
-      left: 325px;
-  }
-  .bio-position {
-    top: 285px; left: 0px;
-  }
-  .bio-position-restrict {
-    top: 285px; left: 0px;
-  }
-  .assignee-arrow-border {
-       border-color: transparent transparent #ccc transparent;
-       border-style: solid;
-       border-width: 9px;
-       height:0;
-       width:0;
-       position:relative;
-       left:30px;
-       top: -22px;
-  }
-  .assignee-arrow {
-       border-color: transparent transparent #272727 transparent;
-       border-style: solid;
-       border-width: 9px;
-       height:0;
-       width:0;
-       position:relative;
-       left:30px;
-       top: -37px;
-  }
-  .calendar-arrow-border {
-       border-color: transparent transparent #ccc transparent;
-       border-style: solid;
-       border-width: 9px;
-       height:0;
-       width:0;
-       position:relative;
-       left:120px;
-       top: -22px;
-  }
-  .calendar-arrow {
-       border-color: transparent transparent #272727 transparent;
-       border-style: solid;
-       border-width: 9px;
-       height:0;
-       width:0;
-       position:relative;
-       left:120px;
-       top: -37px;
-  }
-</style>
