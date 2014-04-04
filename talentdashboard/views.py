@@ -29,7 +29,6 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.urlresolvers import reverse
 from django.http import HttpRequest
 from django.utils.cache import get_cache_key
-from django.utils.cache import _generate_cache_header_key
 from django.core.cache import cache
 from django.conf import settings
 
@@ -455,23 +454,23 @@ class EmployeeDetail(APIView):
                 return True
             return False
 
-        full_name = request.DATA["_full_name"]
-        if int(pk)==0 and full_name is not None:
+        if int(pk)==0 and "_full_name" in request.DATA:
             employee = Employee()
-            employee.full_name = full_name
+            employee.full_name = request.DATA["_full_name"]
             employee.display = True
             employee.save()
-            test = expire_view_cache('employee-list')
+            expire_view_cache('employee-list')
             serializer = EmployeeSerializer(employee, many=False)
             return Response(serializer.data)
 
         employee = Employee.objects.get(id = pk)
         if employee is not None:
-            hire_date = request.DATA["_hire_date"]
-            if full_name is not None:
-                employee.full_name = full_name
-            if hire_date is not None:
-                employee.hire_date = hire_date
+            if "_full_name" in request.DATA:
+                employee.full_name = request.DATA["_full_name"]
+            if "_hire_date" in request.DATA:
+                employee.hire_date = request.DATA["_hire_date"]
+            if "_departure_date" in request.DATA:
+                employee.departure_date = request.DATA["_departure_date"]
             employee.save()
             return Response(None)
 

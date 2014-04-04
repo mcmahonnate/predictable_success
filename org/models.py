@@ -34,6 +34,9 @@ class Employee(models.Model):
     hire_date = models.DateField(
         null=True,
     )
+    departure_date = models.DateField(
+        null=True,
+    )
     display = models.BooleanField()
     team = models.ForeignKey(
         'Team',

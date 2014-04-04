@@ -34,7 +34,13 @@
                     </div>
                     <div class="t-size-x14" id="start_date" style="min-width: 50%">{{ employee.hire_date | date:'MM/dd/yyyy' }}</div>
                   </li>
-
+                  <li ng-show="employeeEdit || employee.departure_date" show="{{editDepartureDate}}" ng-scroll-into-view class="clear" style="padding-top:10px;padding-bottom:10px;">
+                    <a set-popup-position ng-show="employeeEdit" ng-click="editDepartureDate=true;currentlyEditing=true" class="glyphicon" ng-class="{'glyphicon-edit': !currentlyEditing, 'glyphicon-edit-disable': currentlyEditing}" style="float:left;padding-right:10px"></a>
+                    <div class="t-secondary" style="min-width: 35%">
+                      Departure Date
+                    </div>
+                    <div class="t-size-x14" id="start_date" style="min-width: 50%">{{ employee.departure_date | date:'MM/dd/yyyy' }}</div>
+                  </li>
                   <li class="clear" style="padding-top:10px;padding-bottom:10px;">
                     <a show="{{editTeamLead}}" ng-scroll-into-view set-popup-position ng-show="employeeEdit" ng-click="editTeamLead=true;currentlyEditing=true" class="glyphicon" ng-class="{'glyphicon-edit': !currentlyEditing, 'glyphicon-edit-disable': currentlyEditing}" style="float:left;padding-right:10px"></a>
                     <div class="t-secondary" style="min-width: 35%">
@@ -136,7 +142,7 @@
                         </div>
                     </div>
                 </div>
-                <button class="comment" ng-click="addToDo(employee.id)">Add to-do</button>
+                <button class="comment" ng-click="addToDo(employee.id)">Add</button>
             </section>
             <section ng-show="showDone" class="widget-body text-widget" style="padding:12px;margin-top:20px;">
                 <span ng-show="completed_todos.length==0">Empty</span>
@@ -176,6 +182,17 @@
            <div id="editActions" style="right:2px;bottom:-33px;">
                 <button class="button small blue" style="margin-bottom:3px;" ng-click="saveStartDate();editStartDate=false;currentlyEditing=false">Save</button>
                 <button class="button small orange" style="margin-bottom:3px;" ng-click="cancelEdit();editStartDate=false;currentlyEditing=false">Cancel</button>
+           </div>
+        </div>
+        <div get-popup-position ng-show="editDepartureDate && employeeEdit" style="z-index: 2; position:absolute;left:35px;top:60px;border-width: 1px;border-style: solid; padding: 10px;background-color: #434343;color: #d3d4d4;">
+            <div style="margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#d3d4d4 #434343 #d3d4d4 #d3d4d4;display:inline-block;width:20px;height:25px;padding-top: 8px;padding-left: 9px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-edit"></span></div>
+            <span style="padding:7px">Departure Date</span>
+            <div ng-model="editEmployee.departure_date">
+                <datepicker show-weeks="showWeeks"></datepicker>
+            </div>
+           <div id="editActions" style="right:2px;bottom:-33px;">
+                <button class="button small blue" style="margin-bottom:3px;" ng-click="saveDepartureDate();editDepartureDate=false;currentlyEditing=false">Save</button>
+                <button class="button small orange" style="margin-bottom:3px;" ng-click="cancelEdit();editDepartureDate=false;currentlyEditing=false">Cancel</button>
            </div>
         </div>
         <div get-popup-position ng-show="editTeamLead && employeeEdit" style="z-index: 2; position:absolute;left:35px;top:60px;border-width: 1px;border-style: solid; padding: 10px;background-color: #434343;color: #d3d4d4;">
@@ -312,6 +329,7 @@
                 <textarea class="text" ng-model="newCommentText" ng-class="{'expand': comment.expandTextArea, 'compress': !comment.expandTextArea}" ng-click="comment.expandTextArea=true;toggleCommentTextExpander(comment)" rows="1" cols="40" placeholder="Add a comment about {{employee.full_name}}..." style="width:468px;font-size:14px;padding:5px;border: none;resize:vertical;"></textarea>
             </div>
             <div>
+                <button class="comment" ng-disabled="!newCommentText" ng-click="addComment();comment.expandTextArea=false">Comment</button>
                 <button class="comment" ng-disabled="!newCommentText" ng-click="addComment();comment.expandTextArea=false">Comment</button>
             </div>
             <div style="clear:both;"></div>

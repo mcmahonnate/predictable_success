@@ -348,7 +348,7 @@ angular.module('tdb.controllers', [])
         $scope.edit_leadership = angular.copy($scope.leadership);
     };
     $scope.saveName = function (){
-        var data = {id: $scope.employee.id, _full_name: $scope.editEmployee.full_name, _hire_date: null};
+        var data = {id: $scope.employee.id, _full_name: $scope.editEmployee.full_name};
 
         Employee.update(data, function() {
             $scope.employee.full_name = $scope.editEmployee.full_name;
@@ -356,9 +356,16 @@ angular.module('tdb.controllers', [])
     };
     $scope.saveStartDate  = function (){
         var hire_date = $rootScope.scrubDate($scope.editEmployee.hire_date);
-        var data = {id: $scope.employee.id, _full_name: null, _hire_date: hire_date};
+        var data = {id: $scope.employee.id, _hire_date: hire_date};
         Employee.update(data, function() {
             $scope.employee.hire_date = $scope.editEmployee.hire_date;
+        });
+    };
+    $scope.saveDepartureDate  = function (){
+        var departure_date = $rootScope.scrubDate($scope.editEmployee.departure_date);
+        var data = {id: $scope.employee.id, _departure_date: departure_date};
+        Employee.update(data, function() {
+            $scope.employee.departure_date = $scope.editEmployee.departure_date;
         });
     };
     $scope.saveLeader  = function (){
