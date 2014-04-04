@@ -182,6 +182,7 @@
            <div id="editActions" style="right:2px;bottom:-33px;">
                 <button class="button small blue" style="margin-bottom:3px;" ng-click="saveStartDate();editStartDate=false;currentlyEditing=false">Save</button>
                 <button class="button small orange" style="margin-bottom:3px;" ng-click="cancelEdit();editStartDate=false;currentlyEditing=false">Cancel</button>
+                <button class="button small red" style="margin-bottom:3px;" ng-click="clearStartDate();editStartDate=false;currentlyEditing=false">Reset</button>
            </div>
         </div>
         <div get-popup-position ng-show="editDepartureDate && employeeEdit" style="z-index: 2; position:absolute;left:35px;top:60px;border-width: 1px;border-style: solid; padding: 10px;background-color: #434343;color: #d3d4d4;">
@@ -193,6 +194,7 @@
            <div id="editActions" style="right:2px;bottom:-33px;">
                 <button class="button small blue" style="margin-bottom:3px;" ng-click="saveDepartureDate();editDepartureDate=false;currentlyEditing=false">Save</button>
                 <button class="button small orange" style="margin-bottom:3px;" ng-click="cancelEdit();editDepartureDate=false;currentlyEditing=false">Cancel</button>
+                <button class="button small red" style="margin-bottom:3px;" ng-click="clearDepartureDate();editDepartureDate=false;currentlyEditing=false">Reset</button>
            </div>
         </div>
         <div get-popup-position ng-show="editTeamLead && employeeEdit" style="z-index: 2; position:absolute;left:35px;top:60px;border-width: 1px;border-style: solid; padding: 10px;background-color: #434343;color: #d3d4d4;">

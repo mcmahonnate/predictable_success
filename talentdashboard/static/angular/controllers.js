@@ -361,8 +361,24 @@ angular.module('tdb.controllers', [])
             $scope.employee.hire_date = $scope.editEmployee.hire_date;
         });
     };
+    $scope.clearStartDate  = function (){
+        var hire_date = null;
+        $scope.editEmployee.hire_date = hire_date;
+        var data = {id: $scope.employee.id, _hire_date: hire_date};
+        Employee.update(data, function() {
+            $scope.employee.hire_date = $scope.editEmployee.hire_date;
+        });
+    };
     $scope.saveDepartureDate  = function (){
         var departure_date = $rootScope.scrubDate($scope.editEmployee.departure_date);
+        var data = {id: $scope.employee.id, _departure_date: departure_date};
+        Employee.update(data, function() {
+            $scope.employee.departure_date = $scope.editEmployee.departure_date;
+        });
+    };
+    $scope.clearDepartureDate  = function (){
+        var departure_date = null;
+        $scope.editEmployee.departure_date = departure_date;
         var data = {id: $scope.employee.id, _departure_date: departure_date};
         Employee.update(data, function() {
             $scope.employee.departure_date = $scope.editEmployee.departure_date;
