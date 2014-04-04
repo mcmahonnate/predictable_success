@@ -157,6 +157,7 @@ class TeamSalaryReportDetail(APIView):
 class EmployeeList(APIView):
     def get(self, request, format=None):
         employees = Employee.objects.filter(display='t')
+        employees = employees.exclude(departure_date__isnull=False)
         serializer = MinimalEmployeeSerializer(employees, many=True)
         logger.debug('test')
         return Response(serializer.data)
@@ -471,6 +472,7 @@ class EmployeeDetail(APIView):
                 employee.hire_date = request.DATA["_hire_date"]
             if "_departure_date" in request.DATA:
                 employee.departure_date = request.DATA["_departure_date"]
+                expire_view_cache('employee-list')
             employee.save()
             return Response(None)
 
