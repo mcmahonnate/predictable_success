@@ -91,12 +91,20 @@
                       Engagement <a ng-show="!employeeEdit" set-popup-position ng-click="addEngagement=true" class="glyphicon glyphicon-add" style="float:right;cursor:pointer;padding-right:10px"></a>
                     </div>
 
-                    <div style="min-width: 50%">
+                    <div style="max-width: 65%;">
                         <span ng-if="happys.length == 0">--</span>
                         <ul ng-if="happys.length > 0">
                             <li ng-repeat="happy in happys | orderBy:'assessed_date':true" class="t-size-x12" >
-                              <span style="display:inline-block; vertical-align:middle" class="t-size-x40" ng-class="{'veryhappy': happy.assessment==5,'happy': happy.assessment==4,'indifferent': happy.assessment==3,'unhappy': happy.assessment==2,'veryunhappy': happy.assessment==1}"></span>
-                              <span style="padding:5px; display:inline-block; vertical-align:middle">{{ happy.assessed_date | date:'MM/dd/yyyy'}}</span>
+                              <div style="min-width:25%">
+                                  <span style="display:inline-block; vertical-align:middle" class="t-size-x40" ng-class="{'veryhappy': happy.assessment==5,'happy': happy.assessment==4,'indifferent': happy.assessment==3,'unhappy': happy.assessment==2,'veryunhappy': happy.assessment==1}"></span>
+                              </div>
+                              <div style="margin-top: 2px;width:150px;font-size:14px">
+                                  <span style="padding:5px; display:inline-block; vertical-align:middle">{{ happy.assessed_date | date:'MM/dd/yyyy'}}</span>
+                                  <ul class="feed-actions" style="margin-top: 0px;padding-left:5px;">
+                                    <li class="feed-action" style="padding: 0 10px 0 0;"><a ng-click="" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
+                                  </ul>
+                                  <span style="color:#8b8b8b;"><a ng-click="delete_happy(happy)" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></span>
+                              </div>
                             </li>
                          </ul>
                     </div>

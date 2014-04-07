@@ -210,6 +210,13 @@ class EmployeeEngagement(APIView):
         serializer = HappinessSerializer(happy, many=False)
         return Response(serializer.data)
 
+    def delete(self, request, pk, format=None):
+        happy = Happiness.objects.filter(id = pk)
+        if happy is not None:
+            happy.delete()
+            return Response(None)
+        return Response(None, status=status.HTTP_404_NOT_FOUND)
+
 class EmployeeCommentList(APIView):
     def get(self, request, pk, format=None):
         employee = Employee.objects.get(id = pk)

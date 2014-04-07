@@ -251,7 +251,7 @@ angular.module('tdb.controllers', [])
 	}
 }])
 
-.controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', 'User', 'Employee', 'Engagement', 'Mentorship', 'EmployeeLeader', 'Attribute', 'CompSummary', 'PhotoUpload', '$http', 'analytics', 'fileReader', function($rootScope, $scope, $location, $routeParams, User, Employee, Engagement, Mentorship, EmployeeLeader, Attribute, CompSummary, PhotoUpload, $http, analytics, fileReader) {
+.controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', 'User', 'Employee', 'Engagement', 'Mentorship', 'EmployeeLeader', 'Attribute', 'CompSummary', 'PhotoUpload', '$http', 'analytics', 'fileReader', function($rootScope, $scope, $location, $routeParams, $window, User, Employee, Engagement, Mentorship, EmployeeLeader, Attribute, CompSummary, PhotoUpload, $http, analytics, fileReader) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     if ($routeParams.id=='add') {
         $scope.addNew = true;
@@ -304,6 +304,19 @@ angular.module('tdb.controllers', [])
             happy.assessed_date = Date.now();
             $scope.happys.push(happy);
         });
+    };
+    $scope.delete_happy = function(happy) {
+        if ($window.confirm('Are you sure you want to delete this engagement?')) {
+            var data = {id: happy.id };
+            var index = $scope.happys.indexOf(happy);
+            var deleteSuccess = function() {
+                $scope.happys.splice(index, 1);
+            };
+
+            Engagement.remove(data, function() {
+                deleteSuccess();
+            });
+        }
     };
     $scope.cancel_engagement = function() {
         $scope.selected=0;
