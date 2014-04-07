@@ -332,7 +332,6 @@
             </div>
             <div>
                 <button class="comment" ng-disabled="!newCommentText" ng-click="addComment();comment.expandTextArea=false">Comment</button>
-                <button class="comment" ng-disabled="!newCommentText" ng-click="addComment();comment.expandTextArea=false">Comment</button>
             </div>
             <div style="clear:both;"></div>
             <div ng-repeat="comment in comments | orderBy:'modified_date':true" style="margin:0 15px;padding:8px 0 8px 0px;display: block;width:580px">
