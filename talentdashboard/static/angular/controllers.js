@@ -285,7 +285,7 @@ angular.module('tdb.controllers', [])
             $scope.happys = data;
         }
     );
-
+    $scope.happyIndex=0;
     $scope.selected=0;
     $scope.set_choice = function(value) {
         $scope.selected=value;
@@ -473,12 +473,10 @@ angular.module('tdb.controllers', [])
 	$scope.pvpIndex = 0;
     PvpEvaluation.getAllEvaluationsForEmployee($routeParams.id).$then(function(response) {
 		$scope.pvps = response.data;
-		$scope.currentPvP = $scope.pvps[$scope.pvpIndex];
 	});
 
 	$scope.selectPvP = function(index) {
         $scope.pvpIndex = index;
-		$scope.currentPvP = $scope.pvps[$scope.pvpIndex];
     }
 }])
 

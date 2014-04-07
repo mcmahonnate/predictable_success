@@ -412,8 +412,6 @@ sub{top:0.5ex}
 .rag-widget .widget-canvas ol li:first-child,.ragcolumn-widget .widget-canvas ol li:first-child{padding-top:0}
 .rag-widget .widget-canvas ol div,.ragcolumn-widget .widget-canvas ol div{float:left}
 .rag-widget .widget-canvas ol div.t-secondary,.ragcolumn-widget .widget-canvas ol div.t-secondary{padding:2px 0 0;font-size:12px;overflow-wrap:break-word}
-.rag-widget .widget-canvas li div:first-child{min-width:50%}
-.rag-widget .widget-canvas li div:last-child{max-width:50%}
 .widget-size-2x2 .rag-widget .widget-canvas ol li,.widget-size-2x2 .ragcolumn-widget .widget-canvas ol li{padding:24px 0}
 .widget-size-2x2 .rag-widget .widget-canvas .t-secondary,.widget-size-2x2 .ragcolumn-widget .widget-canvas .t-secondary{font-size:24px}
 .large-screen .rag-widget .widget-canvas li,.large-screen .ragcolumn-widget .widget-canvas li{padding:2px 0}
@@ -821,20 +819,29 @@ button.btn[disabled], fieldset[disabled] .btn {
 .small.indifferent:before { font-size: 25px;}
 .small.unhappy:before { font-size: 25px;}
 .small.veryunhappy:before { font-size: 25px;}
+div.navveryhappy {background-color: #008000;}
+div.navhappy {background-color: #91fa00;}
+div.navindifferent{background-color: #ffca00;}
+div.navunhappy {background-color: #ff4600;}
+div.navveryunhappy {background-color: #ff0000;}
 .engage-select {
     cursor: pointer;
 }
-
 .engage-select:hover {
     background-color: #272727;
 }
 .employee-edit a{
     cursor:pointer;
-    color: #8b8b8b;"
+    color: #8b8b8b;
 }
 
 .employee-edit a:hover{
     text-decoration: underline;
+}
+
+circle.engage-selected {
+    stroke: white;
+    stroke-width: 2;
 }
 
 @font-face {

@@ -93,12 +93,12 @@
 
                     <div style="max-width: 65%;">
                         <span ng-if="happys.length == 0">--</span>
-                        <ul ng-if="happys.length > 0">
-                            <li ng-repeat="happy in happys | orderBy:'assessed_date':true" class="t-size-x12" >
-                              <div style="min-width:25%">
+                        <ul ng-if="happys.length > 0" rn-carousel rn-carousel-index="$parent.happyIndex">
+                            <li ng-repeat="happy in happys" style="border-bottom:none">
+                              <div style="width:45px">
                                   <span style="display:inline-block; vertical-align:middle" class="t-size-x40" ng-class="{'veryhappy': happy.assessment==5,'happy': happy.assessment==4,'indifferent': happy.assessment==3,'unhappy': happy.assessment==2,'veryunhappy': happy.assessment==1}"></span>
                               </div>
-                              <div style="margin-top: 2px;width:150px;font-size:14px">
+                              <div style="margin-top: 2px;width:130px;font-size:14px">
                                   <span style="padding:5px; display:inline-block; vertical-align:middle">{{ happy.assessed_date | date:'MM/dd/yyyy'}}</span>
                                   <ul class="feed-actions" style="margin-top: 0px;padding-left:5px;">
                                     <li class="feed-action" style="padding: 0 10px 0 0;"><a ng-click="" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
@@ -107,6 +107,11 @@
                               </div>
                             </li>
                          </ul>
+                        <div ng-show="happys.length > 1">
+                            <a ng-repeat="happy in happys"  ng-click="$parent.happyIndex=$index" style="cursor: pointer;">
+                                <div class="nav" style="width: 10px; height: 10px; -webkit-border-radius: 5em; -moz-border-radius: 5em;margin-right: 10px" ng-class="{'navveryhappy': happy.assessment==5,'navhappy': happy.assessment==4,'navindifferent': happy.assessment==3,'navunhappy': happy.assessment==2,'navveryunhappy': happy.assessment==1, categoryNavHighlightSmall: $index==$parent.happyIndex,categoryNavSmall: $index!=$parent.happyIndex}"/>
+                            </a>
+                        </div>
                     </div>
                   </li>
 
