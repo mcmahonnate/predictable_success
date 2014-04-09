@@ -299,7 +299,9 @@ angular.module('tdb.controllers', [])
     $scope.editEngagement=false;
     $scope.currentHappy=null;
     $scope.open_edit_engagement = function(happy) {
+        console.log($scope.editEngagement);
         $scope.editEngagement=true;
+        console.log($scope.editEngagement);
         $scope.selected=happy.assessment;
         $scope.currentHappy=happy;
     }
@@ -339,6 +341,7 @@ angular.module('tdb.controllers', [])
     $scope.cancel_engagement = function() {
         $scope.selected=0;
         $scope.currentHappy=null;
+        $scope.editEngagement=false;
     };
     $scope.cancel_photo = function(){
         $scope.files = [];
