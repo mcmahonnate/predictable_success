@@ -296,7 +296,14 @@ angular.module('tdb.controllers', [])
     $scope.disable_save_engagement = function() {
         return $scope.selected==0;
     };
-    $scope.save_engagement = function(parentScope) {
+    $scope.editEngagement=false;
+    $scope.currentHappy=null;
+    $scope.open_edit_engagement = function(happy) {
+        $scope.editEngagement=true;
+        $scope.selected=happy.assessment;
+        $scope.currentHappy=happy;
+    }
+    $scope.save_engagement = function() {
         var data = {id: $scope.employee.id, _assessment: $scope.selected, _assessed_by_id: $rootScope.currentUser.employee.id};
         Engagement.addNew(data, function() {
             var happy = [];
@@ -305,6 +312,15 @@ angular.module('tdb.controllers', [])
             $scope.happys.unshift(happy);
             $scope.selected=0;
         });
+    };
+    $scope.update_engagement = function() {
+        if ($scope.currentHappy) {
+            var data = {id: $scope.employee.id, _assessment_id: $scope.currentHappy.id, _assessment: $scope.selected, _assessed_by_id: $rootScope.currentUser.employee.id};
+            Engagement.update(data, function() {
+                var index = $scope.happys.indexOf($scope.currentHappy);
+                $scope.happys[index].assessment = $scope.selected;
+            });
+        }
     };
     $scope.delete_happy = function(happy, parentScope) {
         if ($window.confirm('Are you sure you want to delete this engagement?')) {
@@ -322,6 +338,7 @@ angular.module('tdb.controllers', [])
     };
     $scope.cancel_engagement = function() {
         $scope.selected=0;
+        $scope.currentHappy=null;
     };
     $scope.cancel_photo = function(){
         $scope.files = [];

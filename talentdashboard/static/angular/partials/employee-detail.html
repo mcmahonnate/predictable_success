@@ -87,8 +87,8 @@
                   </li>
 
                   <li show="{{addEngagement}}" ng-scroll-into-view ng-show="currentUser.employee.id!=employee.id" class="clear" style="padding-top:10px;padding-bottom:10px;">
-                    <div class="t-secondary" style="min-width: 35%">
-                      Engagement <a ng-show="!employeeEdit" set-popup-position ng-click="addEngagement=true;happyIndex=0" class="glyphicon glyphicon-add" style="float:right;cursor:pointer;padding-right:10px"></a>
+                    <div show="{{editEngagement}}" ng-scroll-into-view class="t-secondary" style="min-width: 35%">
+                      Engagement <a ng-show="!employeeEdit && currentUser.can_coach_employees" set-popup-position ng-click="addEngagement=true;happyIndex=0" class="glyphicon glyphicon-add" style="float:right;cursor:pointer;padding-right:10px"></a>
                     </div>
 
                     <div style="max-width: 65%;">
@@ -100,10 +100,12 @@
                               </div>
                               <div style="margin-top: 2px;width:130px;font-size:14px">
                                   <span style="padding:5px; display:inline-block; vertical-align:middle">{{ happy.assessed_date | date:'MM/dd/yyyy'}}</span>
-                                  <ul class="feed-actions" style="margin-top: 0px;padding-left:5px;">
-                                    <li class="feed-action" style="padding: 0 10px 0 0;"><a ng-click="" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
-                                  </ul>
-                                  <span style="color:#8b8b8b;"><a ng-click="delete_happy(happy, $parent.$parent.$parent);" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></span>
+                                  <span ng-show="!employeeEdit && currentUser.can_coach_employees">
+                                      <ul class="feed-actions" style="margin-top: 0px;padding-left:5px;">
+                                        <li class="feed-action" style="padding: 0 10px 0 0;"><a set-popup-position popup-offset-top="-17" ng-click="$parent.$parent.$parent.open_edit_engagement(happy);" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
+                                      </ul>
+                                      <span style="color:#8b8b8b;"><a ng-click="delete_happy(happy, $parent.$parent.$parent);" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></span>
+                                  </span>
                               </div>
                             </li>
                          </ul>
@@ -229,8 +231,21 @@
                     <li ng-repeat="choice in engagement_choices" ng-click="set_choice(choice.id)" class="engage-select" style="padding:5px"><span ng-class="{'glyphicon-check': is_selected(choice.id)}" class="glyphicon" style="padding-right:5px"></span><span class="{{choice.css}} small"> {{choice.title}}</span></li>
                 </ul>
                 <div id="editActions" style="right:2px;bottom:-33px;">
-                    <button class="button small blue" ng-disabled="disable_save_engagement()" style="margin-bottom:3px;" ng-click="save_engagement($parent);addEngagement=false">Save</button>
+                    <button class="button small blue" ng-disabled="disable_save_engagement()" style="margin-bottom:3px;" ng-click="save_engagement();addEngagement=false">Save</button>
                     <button class="button small orange" style="margin-bottom:3px;" ng-click="cancel_engagement();addEngagement=false">Cancel</button>
+                </div>
+            </div>
+        </div>
+        <div get-popup-position ng-show="editEngagement" style="z-index: 2; position:absolute;left:110px;top:60px;border-width: 1px;border-color:#101214;border-style: solid; padding: 10px;background-color: #434343;color: #d3d4d4;">
+            <div>
+                <div style="display:inline;width:8px;margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#101214 #434343 #101214 #101214;padding: 11px 5px 10px 10px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-edit"></span></div>
+                <span style="padding:7px">Engagement</span>
+                <ul style="padding:5px">
+                    <li ng-repeat="choice in engagement_choices" ng-click="set_choice(choice.id)" class="engage-select" style="padding:5px"><span ng-class="{'glyphicon-check': is_selected(choice.id)}" class="glyphicon" style="padding-right:5px"></span><span class="{{choice.css}} small"> {{choice.title}}</span></li>
+                </ul>
+                <div id="editActions" style="right:2px;bottom:-33px;">
+                    <button class="button small blue" ng-disabled="disable_save_engagement()" style="margin-bottom:3px;" ng-click="update_engagement();editEngagement=false">Save</button>
+                    <button class="button small orange" style="margin-bottom:3px;" ng-click="cancel_engagement();editEngagement=false">Cancel</button>
                 </div>
             </div>
         </div>

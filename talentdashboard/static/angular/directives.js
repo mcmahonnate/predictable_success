@@ -170,13 +170,16 @@ angular.module('tdb.directives', [])
     };
 })
 
-.directive('setPopupPosition', function() {
+.directive('setPopupPosition', function($parse) {
     return function(scope, element, attrs){
         element.bind("click", function (event) {
             scope.popup.top = element.offset().top;
             scope.$apply(function() {
                 scope.popup.top = element.offset().top;
                 scope.popup.left = element.offset().left;
+                if (attrs.popupOffsetTop) {
+                    scope.popup.top = scope.popup.top + parseInt(attrs.popupOffsetTop);
+                };
             })
         });
     };
