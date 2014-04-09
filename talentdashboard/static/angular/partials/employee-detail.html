@@ -88,12 +88,12 @@
 
                   <li show="{{addEngagement}}" ng-scroll-into-view ng-show="currentUser.employee.id!=employee.id" class="clear" style="padding-top:10px;padding-bottom:10px;">
                     <div class="t-secondary" style="min-width: 35%">
-                      Engagement <a ng-show="!employeeEdit" set-popup-position ng-click="addEngagement=true" class="glyphicon glyphicon-add" style="float:right;cursor:pointer;padding-right:10px"></a>
+                      Engagement <a ng-show="!employeeEdit" set-popup-position ng-click="addEngagement=true;happyIndex=0" class="glyphicon glyphicon-add" style="float:right;cursor:pointer;padding-right:10px"></a>
                     </div>
 
                     <div style="max-width: 65%;">
                         <span ng-if="happys.length == 0">--</span>
-                        <ul ng-if="happys.length > 0" rn-carousel rn-carousel-index="$parent.happyIndex">
+                        <ul ng-if="happys.length > 0" rn-carousel rn-carousel-watch rn-carousel-index="$parent.happyIndex">
                             <li ng-repeat="happy in happys" style="border-bottom:none">
                               <div style="width:45px">
                                   <span style="display:inline-block; vertical-align:middle" class="t-size-x40" ng-class="{'veryhappy': happy.assessment==5,'happy': happy.assessment==4,'indifferent': happy.assessment==3,'unhappy': happy.assessment==2,'veryunhappy': happy.assessment==1}"></span>
@@ -103,12 +103,12 @@
                                   <ul class="feed-actions" style="margin-top: 0px;padding-left:5px;">
                                     <li class="feed-action" style="padding: 0 10px 0 0;"><a ng-click="" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
                                   </ul>
-                                  <span style="color:#8b8b8b;"><a ng-click="delete_happy(happy)" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></span>
+                                  <span style="color:#8b8b8b;"><a ng-click="delete_happy(happy, $parent.$parent.$parent);" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></span>
                               </div>
                             </li>
                          </ul>
                         <div ng-show="happys.length > 1">
-                            <a ng-repeat="happy in happys"  ng-click="$parent.happyIndex=$index" style="cursor: pointer;">
+                            <a ng-repeat="happy in happys | orderBy:'assigned_date'"  ng-click="$parent.happyIndex=$index" style="cursor: pointer;">
                                 <div class="nav" style="width: 10px; height: 10px; -webkit-border-radius: 5em; -moz-border-radius: 5em;margin-right: 10px" ng-class="{'navveryhappy': happy.assessment==5,'navhappy': happy.assessment==4,'navindifferent': happy.assessment==3,'navunhappy': happy.assessment==2,'navveryunhappy': happy.assessment==1, categoryNavHighlightSmall: $index==$parent.happyIndex,categoryNavSmall: $index!=$parent.happyIndex}"/>
                             </a>
                         </div>
@@ -229,7 +229,7 @@
                     <li ng-repeat="choice in engagement_choices" ng-click="set_choice(choice.id)" class="engage-select" style="padding:5px"><span ng-class="{'glyphicon-check': is_selected(choice.id)}" class="glyphicon" style="padding-right:5px"></span><span class="{{choice.css}} small"> {{choice.title}}</span></li>
                 </ul>
                 <div id="editActions" style="right:2px;bottom:-33px;">
-                    <button class="button small blue" ng-disabled="disable_save_engagement()" style="margin-bottom:3px;" ng-click="save_engagement();addEngagement=false">Save</button>
+                    <button class="button small blue" ng-disabled="disable_save_engagement()" style="margin-bottom:3px;" ng-click="save_engagement($parent);addEngagement=false">Save</button>
                     <button class="button small orange" style="margin-bottom:3px;" ng-click="cancel_engagement();addEngagement=false">Cancel</button>
                 </div>
             </div>

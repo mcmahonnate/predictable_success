@@ -278,14 +278,14 @@ angular.module('tdb.controllers', [])
             $scope.edit_leadership = angular.copy($scope.leadership);
         }
     );
-
+    $scope.happyIndex=0;
     Engagement.query(
         {id:$routeParams.id},
         function(data) {
             $scope.happys = data;
         }
     );
-    $scope.happyIndex=0;
+
     $scope.selected=0;
     $scope.set_choice = function(value) {
         $scope.selected=value;
@@ -296,21 +296,23 @@ angular.module('tdb.controllers', [])
     $scope.disable_save_engagement = function() {
         return $scope.selected==0;
     };
-    $scope.save_engagement = function() {
+    $scope.save_engagement = function(parentScope) {
         var data = {id: $scope.employee.id, _assessment: $scope.selected, _assessed_by_id: $rootScope.currentUser.employee.id};
         Engagement.addNew(data, function() {
             var happy = [];
             happy.assessment = $scope.selected;
             happy.assessed_date = Date.now();
-            $scope.happys.push(happy);
+            $scope.happys.unshift(happy);
+            $scope.selected=0;
         });
     };
-    $scope.delete_happy = function(happy) {
+    $scope.delete_happy = function(happy, parentScope) {
         if ($window.confirm('Are you sure you want to delete this engagement?')) {
             var data = {id: happy.id };
             var index = $scope.happys.indexOf(happy);
             var deleteSuccess = function() {
                 $scope.happys.splice(index, 1);
+                parentScope.happyIndex=0;
             };
 
             Engagement.remove(data, function() {
