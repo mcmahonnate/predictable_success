@@ -776,7 +776,7 @@ button.btn[disabled], fieldset[disabled] .btn {
 }
 @font-face {
   font-family: 'Emoticons';
-  src: url('../fonts/emoticons.ttf');
+  src: url('../fonts/emoticons.eot') format('embedded-opentype'), url('../fonts/emoticons.ttf') format('truetype');
 }
 
 .veryhappy:before {

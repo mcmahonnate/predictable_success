@@ -54,7 +54,7 @@
             <h1 style="display:inline;">Who needs a check-in?</h1>
         </header>
         <div>
-        <a href="#/employees/{{neglected.employee.id}}" class="people-tile-link" ng-repeat="neglected in neglectedEmployees | orderBy:['+talent_category', '+employee.full_name']">
+        <a href="#/employees/{{neglected.employee.id}}" class="people-tile-link" ng-repeat="neglected in neglectedEmployees | orderBy:['+talent_category', '+employee.full_name'] | limitTo:10">
             <div class="people-tile" style="margin:10px; padding: 10px;height: 50px;background-color:#272727;box-shadow: -5px 5px 5px #101214;">
 
               <div style="display: block; float: left; width: 48px;">
