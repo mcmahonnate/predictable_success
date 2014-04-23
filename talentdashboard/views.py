@@ -23,7 +23,7 @@ from django.core.mail import send_mail
 from django.contrib.sites.models import get_current_site
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
-from PIL import Image
+from PIL import Image, ExifTags
 import StringIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.urlresolvers import reverse
@@ -500,25 +500,40 @@ class ImageUploadView(APIView):
     parser_classes = (MultiPartParser,FormParser)
 
     def post(self, request, pk, format=None):
-        def resize(image, size, filename, content_type):
+        def resize(image, size, filename, extension, content_type):
             image.thumbnail(size, Image.ANTIALIAS)
             image_io = StringIO.StringIO()
-            image.save(image_io, format=image.format)
+            image.save(image_io, format=extension)
             image_file = InMemoryUploadedFile(image_io, None, filename, content_type, image_io.len, None)
             return image_file
         employee = Employee.objects.get(id = pk)
         image_obj = request.FILES['file0']
         image = Image.open(image_obj)
+        extension = image.format
+
+        if hasattr(image, '_getexif'): # only present in JPEGs
+            for orientation in ExifTags.TAGS.keys():
+                if ExifTags.TAGS[orientation]=='Orientation':
+                    break
+            e = image._getexif()       # returns None if no EXIF data
+            if e is not None:
+                exif=dict(e.items())
+                orientation = exif[orientation]
+
+                if orientation == 3:   image = image.transpose(Image.ROTATE_180)
+                elif orientation == 6: image = image.transpose(Image.ROTATE_270)
+                elif orientation == 8: image = image.transpose(Image.ROTATE_90)
+
         filename = image_obj.name
         content_type = image_obj.content_type
         #resize to avatar size
         avatar_size = (215, 215)
-        avatar_file = resize(image, avatar_size, filename, content_type)
+        avatar_file = resize(image, avatar_size, filename, extension, content_type)
         employee.avatar = avatar_file
 
         #resize to small avatar size
         avatar_small_size = (48, 48)
-        avatar_small_file = resize(image, avatar_small_size, filename, content_type)
+        avatar_small_file = resize(image, avatar_small_size, filename, extension, content_type)
         employee.avatar_small = avatar_small_file
 
         employee.save()
