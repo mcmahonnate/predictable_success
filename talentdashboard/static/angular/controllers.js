@@ -46,6 +46,8 @@ angular.module('tdb.controllers', [])
     $scope.evaluations = PvpEvaluation.getCurrentEvaluations();
 	$scope.teamId = $routeParams.team_id;
     $scope.talentCategory = $routeParams.talent_category;
+    $scope.happy = $routeParams.happy;
+    $scope.days_since_happy = $routeParams.days_since_happy;
     $scope.teamName='';
 	if ($routeParams.team_id){
 		Team.get(

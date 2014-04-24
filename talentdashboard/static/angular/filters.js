@@ -76,22 +76,43 @@ filters.filter('new_line', function () {
 });
 
 filters.filter('filterEvaluations', function () {
-  return function( items, talentCategory, teamId) {
+  return function( items, talentCategory, teamId, happy, days_since_happy) {
+
+    parseDate = function (input) {
+      if (input) {
+          var parts = input.match(/(\d+)/g);
+          return new Date(parts[0], parts[1]-1, parts[2]); // months are 0-based
+      }
+      return input;
+    };
+
     var filtered = [];
     angular.forEach(items, function(item) {
-      if (talentCategory && teamId) {
-          if(teamId == item.employee.team.id && talentCategory == item.talent_category) {
-            filtered.push(item);
-          }
-      } else if (talentCategory) {
-          if(talentCategory == item.talent_category) {
-            filtered.push(item);
-          }
-      } else if (teamId) {
-          if(teamId == item.employee.team.id) {
-            filtered.push(item);
+      push=true;
+      if (talentCategory && push) {
+          if (talentCategory!=item.talent_category) {push=false}
+      }
+      if (teamId && push) {
+          if(teamId!=item.employee.team.id) {push=false}
+      }
+      if (happy && push) {
+          if(happy!=item.employee.happiness) {push=false}
+      }
+      if (teamId && push) {
+          if(teamId!=item.employee.team.id) {push=false}
+      }
+      if (days_since_happy && push) {
+          if (item.employee.happiness_date)
+          {
+              var d = new Date();
+              d.setDate(d.getDate() - days_since_happy);
+              if (d>parseDate(item.employee.happiness_date))
+              {push=false}
+          } else {
+              push=false
           }
       }
+      if (push) {filtered.push(item)}
     });
     return filtered;
   };
