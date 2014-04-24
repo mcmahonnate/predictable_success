@@ -17,6 +17,19 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
     team = TeamSerializer()
     avatar = serializers.SerializerMethodField('get_avatar_url')
     avatar_small = serializers.SerializerMethodField('get_avatar_small_url')
+    happiness = serializers.SerializerMethodField('get_happiness')
+    happiness_date = serializers.SerializerMethodField('get_happiness_date')
+
+    def get_happiness(self, obj):
+        happiness = None
+        if obj.current_happiness:
+            happiness = obj.current_happiness.assessment
+        return happiness
+    def get_happiness_date(self, obj):
+        happiness_date = None
+        if obj.current_happiness:
+            happiness_date = obj.current_happiness.assessed_date
+        return happiness_date
     def get_avatar_url(self, obj):
         url = ''
         if obj.avatar:
@@ -29,7 +42,7 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
         return url
     class Meta:
         model = Employee
-        fields = ('id', 'full_name', 'avatar', 'avatar_small', 'job_title', 'hire_date', 'departure_date', 'team', 'display')
+        fields = ('id', 'full_name', 'avatar', 'avatar_small', 'job_title', 'hire_date', 'happiness', 'happiness_date', 'departure_date', 'team', 'display')
 
 class MinimalEmployeeSerializer(serializers.HyperlinkedModelSerializer):
     avatar = serializers.SerializerMethodField('get_avatar_url')

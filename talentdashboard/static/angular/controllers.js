@@ -518,10 +518,10 @@ angular.module('tdb.controllers', [])
     });
 }])
 
-.controller('PeopleReportCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'HappinessReport', 'PeopleReport', 'TalentCategoryReport', 'Engagement', 'analytics', function($scope, $rootScope, $location, $routeParams, HappinessReport, PeopleReport, TalentCategoryReport, Engagement, analytics) {
+.controller('PeopleReportCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'HappinessReport', 'EngagementReport', 'TalentCategoryReport', 'Engagement', 'analytics', function($scope, $rootScope, $location, $routeParams, HappinessReport, EngagementReport, TalentCategoryReport, Engagement, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
-    $scope.days_ago = 180;
-    PeopleReport.getReportForCompany($scope.days_ago, function(data) {
+    $scope.days_ago = 120;
+    EngagementReport.getReportForCompany($scope.days_ago, function(data) {
         $scope.talentCategoryReport = data;
     });
 
@@ -548,12 +548,6 @@ angular.module('tdb.controllers', [])
                 });
         }
     }
-}])
-
-.controller('EngagementReportCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'EngagementReport', function($scope, $rootScope, $location, $routeParams, EngagementReport) {
-    EngagementReport.getReportForCompany(30, function(data) {
-        $scope.talentCategoryReport = data;
-    });
 }])
 
 .controller('TeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'TalentCategoryReport', 'SalaryReport', 'Team', 'analytics', function($scope, $location, $routeParams, TalentCategoryReport, SalaryReport, Team, analytics) {

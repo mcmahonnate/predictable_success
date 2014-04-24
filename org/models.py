@@ -46,8 +46,18 @@ class Employee(models.Model):
     )
     user = models.OneToOneField(User,on_delete=models.SET_NULL, null=True, blank=True)
 
+    def _get_current_happiness(self):
+        try:
+            return self.happys.latest('assessed_date')
+        except:
+            return None
+
     def __str__(self):
         return self.full_name
+
+    @property
+    def current_happiness(self):
+        return self._get_current_happiness()
 
 blah.register(Employee)
 
