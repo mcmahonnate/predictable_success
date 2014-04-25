@@ -814,16 +814,25 @@ button.btn[disabled], fieldset[disabled] .btn {
     color: #ff0000;
     content: "\0057";
 }
+.nohappydata:before {
+    font-family: 'Emoticons';
+    font-size: 40px;
+    text-shadow: none;
+    color: #434343;
+    content: "\002C";
+}
 .small.veryhappy:before { font-size: 25px;}
 .small.happy:before { font-size: 25px;}
 .small.indifferent:before { font-size: 25px;}
 .small.unhappy:before { font-size: 25px;}
 .small.veryunhappy:before { font-size: 25px;}
+.small.nohappydata:before { font-size: 25px;}
 div.navveryhappy {background-color: #008000;}
 div.navhappy {background-color: #91fa00;}
 div.navindifferent{background-color: #ffca00;}
 div.navunhappy {background-color: #ff4600;}
 div.navveryunhappy {background-color: #ff0000;}
+div.navnohappydata {background-color: #ff0000;}
 .engage-select {
     cursor: pointer;
 }
