@@ -64,6 +64,13 @@ angular.module('tdb.controllers', [])
         $scope.teamId=id;
         $scope.teamName=name;
     };
+    $scope.sortHappy = function(evaluation) {
+        if (evaluation.employee.happiness) {
+            return -evaluation.employee.happiness;
+        } else {
+            return 0;
+        }
+    }
 }])
 
 .controller('TeamLeadsCtrl', ['$scope', '$routeParams', 'TeamLeads', function($scope, $routeParams, TeamLeads) {
