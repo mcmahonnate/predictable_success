@@ -28,7 +28,7 @@
     </div>
 
     <div class="dashboard-sized-el employees"id="dashboard" style="max-width: 970px; height: 804px;">
-        <div id="widget-14808658" class="widget" style="position: absolute; margin: 5px; left: 0px; top: 0px; width: 230px; height: 230px;" on-filter columns="4" index="{{$index}}" ng-repeat="evaluation in filteredEvaluations = (evaluations | filterEvaluations:talentCategory:teamId:happy:days_since_happy) | orderBy:'employee.full_name'">
+        <div id="widget-14808658" class="widget" style="position: absolute; margin: 5px; left: 0px; top: 0px; width: 230px; height: 230px;" on-filter columns="4" index="{{$index}}" ng-repeat="evaluation in filteredEvaluations = (evaluations | filterEvaluations:talentCategory:teamId:happy:days_since_happy) | orderBy:['-employee.happiness','employee.full_name']">
           <div class="widget-inner widget-size-1x1 large-screen" style="width: 230px; height: 230px;">
               <header class="no-reload">
                 <canvas width="12" height="12" style="float:left;margin-right: 8px;" employee-talent-category="{{evaluation.talent_category}}"></canvas>
