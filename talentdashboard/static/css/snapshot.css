@@ -666,6 +666,20 @@ g{ cursor: pointer;}
 .categoryNavHighlightSmall {border-style:solid; border-width: 2px;border-color: white;}
 .categoryNavBig {margin:3px;padding: 2px;}
 .categoryNavHighlightBig {margin:3px;border-style:solid; border-width: 2px;border-color: white;}
+.happyNav {
+    height: 33px;
+    width: 33px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 29px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.happyNavHighlight {
+    border-style: solid;
+    border-width: 2px;
+    border-color: white;
+}
 .button {
     border: 0px;
     border-radius: 6px;

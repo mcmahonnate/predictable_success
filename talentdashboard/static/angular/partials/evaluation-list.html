@@ -18,12 +18,22 @@
                     </div>
                 </div>
             </div>
-            <a ng-click="talentCategory=1" style="cursor:pointer"><canvas ng-class="{categoryNavHighlightBig: talentCategory==1,categoryNavBig: talentCategory!=1}" width="24" height="24" employee-talent-category="1"></canvas></a>
-            <a ng-click="talentCategory=2" style="cursor:pointer"><canvas ng-class="{categoryNavHighlightBig: talentCategory==2,categoryNavBig: talentCategory!=2}" width="24" height="24" employee-talent-category="2"></canvas></a>
-            <a ng-click="talentCategory=3" style="cursor:pointer"><canvas ng-class="{categoryNavHighlightBig: talentCategory==3,categoryNavBig: talentCategory!=3}" width="24" height="24" employee-talent-category="3"></canvas></a>
-            <a ng-click="talentCategory=4" style="cursor:pointer"><canvas ng-class="{categoryNavHighlightBig: talentCategory==4,categoryNavBig: talentCategory!=4}" width="24" height="24" employee-talent-category="4"></canvas></a>
-            <a ng-click="talentCategory=5" style="cursor:pointer"><canvas ng-class="{categoryNavHighlightBig: talentCategory==5,categoryNavBig: talentCategory!=5}" width="24" height="24" employee-talent-category="5"></canvas></a>
-            <a ng-click="talentCategory=6" style="cursor:pointer"><canvas ng-class="{categoryNavHighlightBig: talentCategory==6,categoryNavBig: talentCategory!=6}" width="24" height="24" employee-talent-category="6"></canvas></a>
+            <div style="display:inline-block;margin-top: 3px;">
+                <a ng-click="talentCategory=1" style="cursor:pointer"><canvas ng-class="{categoryNavHighlightBig: talentCategory==1,categoryNavBig: talentCategory!=1}" width="24" height="24" employee-talent-category="1"></canvas></a>
+                <a ng-click="talentCategory=2" style="cursor:pointer"><canvas ng-class="{categoryNavHighlightBig: talentCategory==2,categoryNavBig: talentCategory!=2}" width="24" height="24" employee-talent-category="2"></canvas></a>
+                <a ng-click="talentCategory=3" style="cursor:pointer"><canvas ng-class="{categoryNavHighlightBig: talentCategory==3,categoryNavBig: talentCategory!=3}" width="24" height="24" employee-talent-category="3"></canvas></a>
+                <a ng-click="talentCategory=4" style="cursor:pointer"><canvas ng-class="{categoryNavHighlightBig: talentCategory==4,categoryNavBig: talentCategory!=4}" width="24" height="24" employee-talent-category="4"></canvas></a>
+                <a ng-click="talentCategory=5" style="cursor:pointer"><canvas ng-class="{categoryNavHighlightBig: talentCategory==5,categoryNavBig: talentCategory!=5}" width="24" height="24" employee-talent-category="5"></canvas></a>
+                <a ng-click="talentCategory=6" style="cursor:pointer"><canvas ng-class="{categoryNavHighlightBig: talentCategory==6,categoryNavBig: talentCategory!=6}" width="24" height="24" employee-talent-category="6"></canvas></a>
+            </div>
+            <div style="float:right;display:inline-block;margin-top: 2px;">
+                <div ng-click="happy=5" ng-class="{happyNavHighlight: happy==5}" class="veryhappy happyNav" style="display:inline-block;margin:0 1px;"/>
+                <div ng-click="happy=4" ng-class="{happyNavHighlight: happy==4}" class="happy happyNav" style="display:inline-block;margin:0 1px;"/>
+                <div ng-click="happy=3" ng-class="{happyNavHighlight: happy==3}" class="indifferent happyNav" style="display:inline-block;margin:0 1px;"/>
+                <div ng-click="happy=2" ng-class="{happyNavHighlight: happy==2}" class="unhappy happyNav" style="display:inline-block;margin:0 1px;"/>
+                <div ng-click="happy=1" ng-class="{happyNavHighlight: happy==1}" class="veryunhappy happyNav" style="display:inline-block;margin:0 1px;"/>
+                <div ng-click="happy=null" ng-class="{happyNavHighlight: happy==null}" class="nohappydata happyNav" style="display:inline-block;margin:0 1px;"/>
+            </div>
         </div>
     </div>
 
