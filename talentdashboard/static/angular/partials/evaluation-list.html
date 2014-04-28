@@ -25,6 +25,7 @@
                 <a ng-click="talentCategory=4" style="cursor:pointer"><canvas ng-class="{categoryNavHighlightBig: talentCategory==4,categoryNavBig: talentCategory!=4}" width="24" height="24" employee-talent-category="4"></canvas></a>
                 <a ng-click="talentCategory=5" style="cursor:pointer"><canvas ng-class="{categoryNavHighlightBig: talentCategory==5,categoryNavBig: talentCategory!=5}" width="24" height="24" employee-talent-category="5"></canvas></a>
                 <a ng-click="talentCategory=6" style="cursor:pointer"><canvas ng-class="{categoryNavHighlightBig: talentCategory==6,categoryNavBig: talentCategory!=6}" width="24" height="24" employee-talent-category="6"></canvas></a>
+                <div ng-click="talentCategory=null" class="glyphicon glyphicon-clear happyNav" style="display:inline-block;font-size:18px;vertical-align: top"/>
             </div>
             <div style="float:right;display:inline-block;margin-top: 2px;">
                 <div ng-click="happy=5" ng-class="{happyNavHighlight: happy==5}" class="veryhappy happyNav" style="display:inline-block;margin:0 1px;"/>
@@ -32,7 +33,8 @@
                 <div ng-click="happy=3" ng-class="{happyNavHighlight: happy==3}" class="indifferent happyNav" style="display:inline-block;margin:0 1px;"/>
                 <div ng-click="happy=2" ng-class="{happyNavHighlight: happy==2}" class="unhappy happyNav" style="display:inline-block;margin:0 1px;"/>
                 <div ng-click="happy=1" ng-class="{happyNavHighlight: happy==1}" class="veryunhappy happyNav" style="display:inline-block;margin:0 1px;"/>
-                <div ng-click="happy=null" ng-class="{happyNavHighlight: happy==null}" class="nohappydata happyNav" style="display:inline-block;margin:0 1px;"/>
+                <div ng-click="happy=-1" ng-class="{happyNavHighlight: happy==-1}" class="nohappydata happyNav" style="display:inline-block;margin:0 1px;"/>
+                <div ng-click="happy=null" class="glyphicon glyphicon-clear happyNav" style="display:inline-block;margin:0 1px;font-size:18px"/>
             </div>
         </div>
     </div>
@@ -42,7 +44,7 @@
           <div class="widget-inner widget-size-1x1 large-screen" style="width: 230px; height: 230px;">
               <header class="no-reload">
                 <canvas width="12" height="12" style="float:left;margin-right: 8px;" employee-talent-category="{{evaluation.talent_category}}"></canvas>
-                <span class="small" style="float:left;margin-top: -8px;" ng-class="{'veryhappy': evaluation.employee.happiness==5,'happy': evaluation.employee.happiness==4,'indifferent': evaluation.employee.happiness==3,'unhappy': evaluation.employee.happiness==2,'veryunhappy': evaluation.employee.happiness==1, 'nohappydata': evaluation.employee.happiness==null}"></span>
+                <span class="small" style="float:left;margin-top: -8px;" ng-class="{'veryhappy': evaluation.employee.happiness==5,'happy': evaluation.employee.happiness==4,'indifferent': evaluation.employee.happiness==3,'unhappy': evaluation.employee.happiness==2,'veryunhappy': evaluation.employee.happiness==1, 'nohappydata': evaluation.employee.happiness==-1}"></span>
                 <span style="margin-left:4px;"><h1 style="display:inline;"><a href="#/employees/{{evaluation.employee.id}}">{{evaluation.employee.full_name}}</a></h1></span>
               </header>
               <section class="widget-body rag-widget">

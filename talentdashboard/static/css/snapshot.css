@@ -963,6 +963,11 @@ a.glyphicon-photo-disable {
     content: "\E013";
 }
 
+.glyphicon-clear:before {
+    color: #434343;
+    content: "\E014";
+}
+
 .glyphicon-regular {
     font-size: 23px;
     position: relative;

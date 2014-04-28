@@ -21,7 +21,7 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
     happiness_date = serializers.SerializerMethodField('get_happiness_date')
 
     def get_happiness(self, obj):
-        happiness = None
+        happiness = -1
         if obj.current_happiness:
             happiness = obj.current_happiness.assessment
         return happiness

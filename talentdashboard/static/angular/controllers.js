@@ -68,7 +68,7 @@ angular.module('tdb.controllers', [])
         if (evaluation.employee.happiness) {
             return -evaluation.employee.happiness;
         } else {
-            return 0;
+            return -1;
         }
     }
 }])
