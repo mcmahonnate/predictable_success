@@ -85,6 +85,50 @@
                          </ul>
                     </div>
                   </li>
+                  <li class="clear" style="padding-top:10px;padding-bottom:10px;">
+                    <!--<a ng-show="employeeEdit && !currentlyEditing" class="glyphicon glyphicon-edit" style="float:left;cursor:pointer;padding-right:10px"></a>
+                    <span ng-show="employeeEdit && currentlyEditing" class="glyphicon glyphicon-edit-disable" style="padding-right:10px;float: left;"></span>-->
+                    <div class="t-secondary" style="min-width: 35%">
+                      Myers Briggs
+                    </div>
+
+                    <div class="t-size-x12" style="min-width: 50%">
+                        <span ng-if="mbti_ei.length == 0">--</span>
+                        <ul ng-if="mbti_ei.length > 0">
+                            <li>
+                                <text>{{ mbti_ei[0].name }}</text>
+                                <text>{{ mbti_sn[0].name }}</text>
+                                <text>{{ mbti_tf[0].name }}</text>
+                                <text>{{ mbti_pj[0].name }}</text>
+                            </li>
+                         </ul>
+                    </div>
+                  </li>
+                  <li class="clear" style="padding-top:10px;padding-bottom:10px;">
+                    <!--<a ng-show="employeeEdit && !currentlyEditing" class="glyphicon glyphicon-edit" style="float:left;cursor:pointer;padding-right:10px"></a>
+                    <span ng-show="employeeEdit && currentlyEditing" class="glyphicon glyphicon-edit-disable" style="padding-right:10px;float: left;"></span>-->
+                    <div class="t-secondary" style="min-width: 35%">
+                      Kolbe
+                    </div>
+
+                    <div class="t-size-x12" style="min-width: 50%">
+                        <span ng-if="kolbe_fact_finder.length == 0">--</span>
+                        <ul ng-if="kolbe_fact_finder.length > 0">
+                            <li>
+                                  <text>{{ kolbe_fact_finder[0].name }} - Fact Finder</text>
+                            </li>
+                            <li>
+                                  <text>{{ kolbe_follow_thru[0].name }} - Follow Thru</text>
+                            </li>
+                            <li>
+                                  <text>{{ kolbe_quick_start[0].name }} - Quick Start</text>
+                            </li>
+                            <li>
+                                  <text>{{ kolbe_implementor[0].name }} - Implementor</text>
+                            </li>
+                         </ul>
+                    </div>
+                  </li>
 
                   <li show="{{addEngagement}}" ng-scroll-into-view ng-show="currentUser.employee.id!=employee.id" class="clear" style="padding-top:10px;padding-bottom:10px;">
                     <div show="{{editEngagement}}" ng-scroll-into-view class="t-secondary" style="min-width: 35%">
