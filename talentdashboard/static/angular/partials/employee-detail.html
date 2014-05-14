@@ -89,17 +89,17 @@
                     <!--<a ng-show="employeeEdit && !currentlyEditing" class="glyphicon glyphicon-edit" style="float:left;cursor:pointer;padding-right:10px"></a>
                     <span ng-show="employeeEdit && currentlyEditing" class="glyphicon glyphicon-edit-disable" style="padding-right:10px;float: left;"></span>-->
                     <div class="t-secondary" style="min-width: 35%">
-                      Myers Briggs
+                      VOPS
                     </div>
 
                     <div class="t-size-x12" style="min-width: 50%">
-                        <span ng-if="mbti_ei.length == 0">--</span>
-                        <ul ng-if="mbti_ei.length > 0">
+                        <span ng-if="vops.length == 0">--</span>
+                        <ul ng-if="vops.length > 0">
                             <li>
-                                <text>{{ mbti_ei[0].name }}</text>
-                                <text>{{ mbti_sn[0].name }}</text>
-                                <text>{{ mbti_tf[0].name }}</text>
-                                <text>{{ mbti_pj[0].name }}</text>
+                                <span ng-repeat="vop in vops">
+                                  <text ng-if="!$last">{{ vop.name }},</text>
+                                  <text ng-if="$last">{{ vop.name }}</text>
+                                </span>
                             </li>
                          </ul>
                     </div>
@@ -129,7 +129,25 @@
                          </ul>
                     </div>
                   </li>
+                  <li class="clear" style="padding-top:10px;padding-bottom:10px;">
+                    <!--<a ng-show="employeeEdit && !currentlyEditing" class="glyphicon glyphicon-edit" style="float:left;cursor:pointer;padding-right:10px"></a>
+                    <span ng-show="employeeEdit && currentlyEditing" class="glyphicon glyphicon-edit-disable" style="padding-right:10px;float: left;"></span>-->
+                    <div class="t-secondary" style="min-width: 35%">
+                      Myers Briggs
+                    </div>
 
+                    <div class="t-size-x12" style="min-width: 50%">
+                        <span ng-if="mbti_ei.length == 0">--</span>
+                        <ul ng-if="mbti_ei.length > 0">
+                            <li>
+                                <text>{{ mbti_ei[0].name }}</text>
+                                <text>{{ mbti_sn[0].name }}</text>
+                                <text>{{ mbti_tf[0].name }}</text>
+                                <text>{{ mbti_pj[0].name }}</text>
+                            </li>
+                         </ul>
+                    </div>
+                  </li>
                   <li show="{{addEngagement}}" ng-scroll-into-view ng-show="currentUser.employee.id!=employee.id" class="clear" style="padding-top:10px;padding-bottom:10px;">
                     <div show="{{editEngagement}}" ng-scroll-into-view class="t-secondary" style="min-width: 35%">
                       Engagement <a ng-show="!employeeEdit && currentUser.can_coach_employees" set-popup-position ng-click="addEngagement=true;happyIndex=0" class="glyphicon glyphicon-add" style="float:right;cursor:pointer;padding-right:10px"></a>

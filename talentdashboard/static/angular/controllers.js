@@ -393,6 +393,7 @@ angular.module('tdb.controllers', [])
     $scope.kolbe_follow_thru = Attribute.getAttributtesForEmployee($routeParams.id, 9);
     $scope.kolbe_quick_start = Attribute.getAttributtesForEmployee($routeParams.id, 10);
     $scope.kolbe_implementor = Attribute.getAttributtesForEmployee($routeParams.id, 11);
+    $scope.vops = Attribute.getAttributtesForEmployee($routeParams.id, 12);
 
     $scope.employeeEdit = false;
     $scope.cancelEdit = function (){
