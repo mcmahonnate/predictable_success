@@ -389,10 +389,59 @@ angular.module('tdb.controllers', [])
     $scope.mbti_sn = Attribute.getAttributtesForEmployee($routeParams.id, 5);
     $scope.mbti_tf = Attribute.getAttributtesForEmployee($routeParams.id, 6);
     $scope.mbti_pj = Attribute.getAttributtesForEmployee($routeParams.id, 7);
-    $scope.kolbe_fact_finder = Attribute.getAttributtesForEmployee($routeParams.id, 8);
-    $scope.kolbe_follow_thru = Attribute.getAttributtesForEmployee($routeParams.id, 9);
-    $scope.kolbe_quick_start = Attribute.getAttributtesForEmployee($routeParams.id, 10);
-    $scope.kolbe_implementor = Attribute.getAttributtesForEmployee($routeParams.id, 11);
+    $scope.kolbe_fact_finder = [];
+    $scope.kolbe_follow_thru = [];
+    $scope.kolbe_quick_start = [];
+    $scope.kolbe_implementor = [];
+    Attribute.getAttributtesForEmployee($routeParams.id, 8).$then(function(response) {
+        $scope.kolbe_fact_finder.score = response.data;
+        if ($scope.kolbe_fact_finder.score[0]) {
+            if (parseInt($scope.kolbe_fact_finder.score[0].name) < 4) {
+                $scope.kolbe_fact_finder.action = "Simplify";
+            } else if (parseInt($scope.kolbe_fact_finder.score[0].name) > 6) {
+                $scope.kolbe_fact_finder.action = "Specify";
+            } else {
+                $scope.kolbe_fact_finder.action = "Explain";
+            }
+        }
+    });
+    Attribute.getAttributtesForEmployee($routeParams.id, 9).$then(function(response) {
+        $scope.kolbe_follow_thru.score = response.data;
+        if ($scope.kolbe_follow_thru.score[0]) {
+            if (parseInt($scope.kolbe_follow_thru.score[0].name) < 4) {
+                $scope.kolbe_follow_thru.action = "Adapt";
+            } else if (parseInt($scope.kolbe_follow_thru.score[0].name) > 6) {
+                $scope.kolbe_follow_thru.action = "Systematize";
+            } else {
+                $scope.kolbe_follow_thru.action = "Maintain";
+            }
+        }
+    });
+    Attribute.getAttributtesForEmployee($routeParams.id, 10).$then(function(response) {
+        $scope.kolbe_quick_start.score  = response.data;
+        if ($scope.kolbe_quick_start.score[0]) {
+            if (parseInt($scope.kolbe_quick_start.score[0].name) < 5) {
+                $scope.kolbe_quick_start.action = "Stabilize";
+            } else if (parseInt($scope.kolbe_quick_start.score[0].name) > 6) {
+                $scope.kolbe_quick_start.action = "Improvise";
+            } else {
+                $scope.kolbe_quick_start.action = "Modify";
+            }
+        }
+    });
+    Attribute.getAttributtesForEmployee($routeParams.id, 11).$then(function(response) {
+        $scope.kolbe_implementor.score  = response.data;
+        if ($scope.kolbe_implementor.score[0]) {
+            if (parseInt($scope.kolbe_implementor.score[0].name) < 4) {
+                $scope.kolbe_implementor.action = "Imagine";
+            } else if (parseInt($scope.kolbe_implementor.score[0].name) > 6) {
+                $scope.kolbe_implementor.action = "Build";
+            } else {
+                $scope.kolbe_implementor.action = "Restore";
+            }
+        }
+    });
+
     $scope.vops = Attribute.getAttributtesForEmployee($routeParams.id, 12);
 
     $scope.employeeEdit = false;
