@@ -99,7 +99,7 @@ class Attribute(models.Model):
     )
 
     def __str__(self):
-        return "%s is a %s" % (self.name, self.category.name)        
+        return "%s is a %s for %s" % (self.employee.full_name, self.name, self.category.name)
 
 class AttributeCategory(models.Model):
     name = models.CharField(

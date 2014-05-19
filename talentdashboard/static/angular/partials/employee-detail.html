@@ -93,13 +93,19 @@
                     </div>
 
                     <div class="t-size-x12" style="min-width: 50%">
-                        <span ng-if="vops.length == 0">--</span>
-                        <ul ng-if="vops.length > 0">
+                        <span ng-if="vops_visionary.length == 0">--</span>
+                        <ul ng-if="vops_visionary.length > 0">
                             <li>
-                                <span ng-repeat="vop in vops">
-                                  <text ng-if="!$last">{{ vop.name }},</text>
-                                  <text ng-if="$last">{{ vop.name }}</text>
-                                </span>
+                                  <text>{{ vops_visionary[0].name }} - Visionary</text>
+                            </li>
+                            <li>
+                                  <text>{{ vops_operator[0].name }} - Operator</text>
+                            </li>
+                            <li>
+                                  <text>{{ vops_processor[0].name }} - Processor</text>
+                            </li>
+                            <li>
+                                  <text>{{ vops_synergist[0].name }} - Synergist</text>
                             </li>
                          </ul>
                     </div>

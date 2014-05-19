@@ -389,6 +389,10 @@ angular.module('tdb.controllers', [])
     $scope.mbti_sn = Attribute.getAttributtesForEmployee($routeParams.id, 5);
     $scope.mbti_tf = Attribute.getAttributtesForEmployee($routeParams.id, 6);
     $scope.mbti_pj = Attribute.getAttributtesForEmployee($routeParams.id, 7);
+    $scope.vops_visionary = Attribute.getAttributtesForEmployee($routeParams.id, 13);
+    $scope.vops_operator = Attribute.getAttributtesForEmployee($routeParams.id, 14);
+    $scope.vops_processor = Attribute.getAttributtesForEmployee($routeParams.id, 15);
+    $scope.vops_synergist = Attribute.getAttributtesForEmployee($routeParams.id, 16);
     $scope.kolbe_fact_finder = [];
     $scope.kolbe_follow_thru = [];
     $scope.kolbe_quick_start = [];
@@ -441,8 +445,6 @@ angular.module('tdb.controllers', [])
             }
         }
     });
-
-    $scope.vops = Attribute.getAttributtesForEmployee($routeParams.id, 12);
 
     $scope.employeeEdit = false;
     $scope.cancelEdit = function (){
