@@ -584,7 +584,7 @@ def compensation_summaries(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
-@cache_on_auth(60*15, 'foolsquad')
+@cache_on_auth(60*1440, 'foolsquad')
 @group_required('foolsquad')
 def pvp_evaluations(request):
     current_round = request.QUERY_PARAMS.get('current_round', None)
