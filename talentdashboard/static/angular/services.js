@@ -13,19 +13,19 @@ angular.module('tdb.services', ['ngResource'])
     var actions = {
         'addNew': { method:'POST', data:{leader:'@leader_id'}, isArray: false }
     };
-    var res = $resource('/api/v1/leaderships/employees/:id/', {id:'@id'}, actions);
+    var res = $resource('/api/v1/leaderships/employees/:id', {id:'@id'}, actions);
 
     return res;
 }])
 
 .factory('Coach', ['$resource', '$http', function($resource, $http) {
-    var Coach = $resource('/api/v1/coaches/');
+    var Coach = $resource('/api/v1/coaches\\/');
 
     return Coach;
 }])
 
 .factory('Mentorship', ['$resource', '$http', function($resource, $http) {
-    var Mentorship = $resource('/api/v1/mentorships/:id/');
+    var Mentorship = $resource('/api/v1/mentorships/:id');
 
     Mentorship.getMentorshipsForMentee = function(id) { return this.query({mentee_id: id}); };
 
@@ -33,7 +33,7 @@ angular.module('tdb.services', ['ngResource'])
 }])
 
 .factory('Leadership', ['$resource', '$http', function($resource, $http) {
-    var Leadership = $resource('/api/v1/leaderships/:id/');
+    var Leadership = $resource('/api/v1/leaderships/:id');
 
     Leadership.getLeadershipsForEmployee = function(id) { return this.query({employee_id: id}); };
     Leadership.getCurrentLeader = function(id) { return this.query({employee_id: id}); };
@@ -43,7 +43,7 @@ angular.module('tdb.services', ['ngResource'])
 }])
 
 .factory('Attribute', ['$resource', '$http', function($resource, $http) {
-    var Attribute = $resource('/api/v1/attributes/');
+    var Attribute = $resource('/api/v1/attributes\\/');
 
     Attribute.getAttributtesForEmployee = function(employee_id, category_id) { return this.query({employee_id: employee_id, category_id: category_id}); };
 
@@ -51,13 +51,13 @@ angular.module('tdb.services', ['ngResource'])
 }])
 
 .factory('Team', ['$resource', '$http', function($resource, $http) {
-    var Team = $resource('/api/v1/teams/:id/');
+    var Team = $resource('/api/v1/teams/:id');
 	
 	return Team;
 }])
 
 .factory('CompSummary', ['$resource', '$http', function($resource, $http) {
-    var CompSummary = $resource('/api/v1/compensation-summaries/');
+    var CompSummary = $resource('/api/v1/compensation-summaries\\/');
 
     CompSummary.getAllSummariesForEmployee = function(id) { return this.query({employee_id: id}); };
 
@@ -65,7 +65,7 @@ angular.module('tdb.services', ['ngResource'])
 }])
 
 .factory('PvpEvaluation', ['$resource', '$http', function($resource, $http) {
-    var PvpEvaluation = $resource('/api/v1/pvp-evaluations/');
+    var PvpEvaluation = $resource('/api/v1/pvp-evaluations\\/');
 
     PvpEvaluation.getAllEvaluationsForEmployee = function(id) {
         return this.query({ employee_id: id });
@@ -87,7 +87,7 @@ angular.module('tdb.services', ['ngResource'])
 }])
 
 .factory('TeamLeads', ['$resource', '$http', function($resource, $http) {
-    var TeamLeads = $resource('/api/v1/team-leads/');
+    var TeamLeads = $resource('/api/v1/team-leads\\/');
 
     TeamLeads.getCurrentEvaluationsForTeamLeads = function(team_id) {
         return this.query({team_id: team_id});
@@ -141,7 +141,7 @@ angular.module('tdb.services', ['ngResource'])
             },
             'remove': { method:'DELETE' }
         };
-        var res = $resource('/api/v1/image-upload/employees/:id/', {id:'@id'}, actions);
+        var res = $resource('/api/v1/image-upload/employees/:id', {id:'@id'}, actions);
 
         return res;
     }
@@ -153,7 +153,7 @@ angular.module('tdb.services', ['ngResource'])
         'update': { method:'PUT', data:{description:'@description'}, isArray: false },
         'remove': { method:'DELETE' },
     }
-    var EmployeeToDo = $resource('/api/v1/tasks/employees/:id/', {id:'@id', completed: '@completed'}, actions);
+    var EmployeeToDo = $resource('/api/v1/tasks/employees/:id', {id:'@id', completed: '@completed'}, actions);
 
     EmployeeToDo.getReportForCompany = function(days_ahead) {
         var params = {id: 'all-employees', days_ahead: days_ahead};
@@ -206,7 +206,7 @@ angular.module('tdb.services', ['ngResource'])
         'remove': { method:'DELETE' },
     }
 
-    var Engagement = $resource('/api/v1/engagement/employees/:id/', {id:'@id'}, actions);
+    var Engagement = $resource('/api/v1/engagement/employees/:id', {id:'@id'}, actions);
     Engagement.getCurrentEngagement = function(id, success, failure) { return this.get({ id: id, current: true }, success, failure); };
 
     return Engagement;
@@ -217,12 +217,12 @@ angular.module('tdb.services', ['ngResource'])
         'update': { method:'PUT', data:{description:'@description', completed: '@completed', assigned_to_id: '@assigned_to_id', due_date: '@due_date'}, isArray: false },
         'remove': { method:'DELETE' },
     }
-    var res = $resource('/api/v1/tasks/:id/', {id:'@id'}, actions);
+    var res = $resource('/api/v1/tasks/:id', {id:'@id'}, actions);
     return res;
 }])
 
 .factory('MyToDos', ['$resource', '$http', function($resource, $http) {
-    var MyToDos = $resource('/api/v1/tasks/');
+    var MyToDos = $resource('/api/v1/tasks\\/');
     return MyToDos;
 }])
 
@@ -230,12 +230,12 @@ angular.module('tdb.services', ['ngResource'])
     var actions = {
         'addNew': { method:'POST' },
     }
-    var res = $resource('/api/v1/comments/employees/:id/', {id:'@id'}, actions);
+    var res = $resource('/api/v1/comments/employees/:id', {id:'@id'}, actions);
     return res;
 }])
 
 .factory('SubComments', ['$resource', '$http', function($resource, $http) {
-    var subComments = $resource('/api/v1/comments/subcomments/:id/');
+    var subComments = $resource('/api/v1/comments/subcomments/:id');
 
     return subComments;
 }])
@@ -245,18 +245,18 @@ angular.module('tdb.services', ['ngResource'])
         'update': { method:'PUT', data:{content:'@content'}, isArray: false },  
         'remove': { method:'DELETE' },  
     };
-    var res = $resource('/api/v1/comments/:id/', {id:'@id'}, actions);
+    var res = $resource('/api/v1/comments/:id', {id:'@id'}, actions);
     return res;
 }])
 
 .factory('User', ['$resource', '$http', function($resource, $http) {
-    var currentUser = $resource('api/v1/user-status/');
+    var currentUser = $resource('api/v1/user-status\\/');
 
     return currentUser;
 }])
 
 .factory('Site', ['$resource', '$http', function($resource, $http) {
-    var currentSite = $resource('api/v1/current_site/');
+    var currentSite = $resource('api/v1/current_site\\/');
 
     return currentSite;
 }])
