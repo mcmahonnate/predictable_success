@@ -98,6 +98,30 @@ class Employee(models.Model):
         except:
             return None
 
+    def _get_vops_visionary(self):
+        try:
+            return int(self.attributes.get(category__id=13).name)
+        except:
+            return None
+
+    def _get_vops_operator(self):
+        try:
+            return int(self.attributes.get(category__id=14).name)
+        except:
+            return None
+
+    def _get_vops_processor(self):
+        try:
+            return int(self.attributes.get(category__id=15).name)
+        except:
+            return None
+
+    def _get_vops_synergist(self):
+        try:
+            return int(self.attributes.get(category__id=16).name)
+        except:
+            return None
+
     def _get_current_happiness(self):
         try:
             return self.happys.latest('assessed_date')
@@ -126,6 +150,22 @@ class Employee(models.Model):
     @property
     def get_kolbe_implementor(self):
         return self._get_kolbe_implementor()
+
+    @property
+    def get_vops_visionary(self):
+        return self._get_vops_visionary()
+
+    @property
+    def get_vops_operator(self):
+        return self._get_vops_operator()
+
+    @property
+    def get_vops_processor(self):
+        return self._get_vops_processor()
+
+    @property
+    def get_vops_synergist(self):
+        return self._get_vops_synergist()
 
 blah.register(Employee)
 

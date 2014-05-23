@@ -23,6 +23,10 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
     kolbe_follow_thru = serializers.SerializerMethodField('get_kolbe_follow_thru')
     kolbe_quick_start = serializers.SerializerMethodField('get_kolbe_quick_start')
     kolbe_implementor = serializers.SerializerMethodField('get_kolbe_implementor')
+    vops_visionary = serializers.SerializerMethodField('get_vops_visionary')
+    vops_operator = serializers.SerializerMethodField('get_vops_operator')
+    vops_processor = serializers.SerializerMethodField('get_vops_processor')
+    vops_synergist = serializers.SerializerMethodField('get_vops_synergist')
 
     def get_happiness(self, obj):
         happiness = -1
@@ -54,6 +58,26 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
         if obj.get_kolbe_implementor:
             kolbe_implementor = obj.get_kolbe_implementor
         return kolbe_implementor
+    def get_vops_visionary(self, obj):
+        vops_visionary = None
+        if obj.get_vops_visionary:
+            vops_visionary = obj.get_vops_visionary
+        return vops_visionary
+    def get_vops_operator(self, obj):
+        vops_operator = None
+        if obj.get_vops_operator:
+            vops_operator = obj.get_vops_operator
+        return vops_operator
+    def get_vops_processor(self, obj):
+        vops_processor = None
+        if obj.get_vops_processor:
+            vops_processor = obj.get_vops_processor
+        return vops_processor
+    def get_vops_synergist(self, obj):
+        vops_synergist = None
+        if obj.get_vops_synergist:
+            vops_synergist = obj.get_vops_synergist
+        return vops_synergist
     def get_avatar_url(self, obj):
         url = ''
         if obj.avatar:
@@ -66,7 +90,7 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
         return url
     class Meta:
         model = Employee
-        fields = ('id', 'full_name', 'avatar', 'avatar_small', 'job_title', 'hire_date', 'happiness', 'happiness_date', 'kolbe_fact_finder','kolbe_follow_thru', 'kolbe_quick_start', 'kolbe_implementor', 'departure_date', 'team', 'display')
+        fields = ('id', 'full_name', 'avatar', 'avatar_small', 'job_title', 'hire_date', 'happiness', 'happiness_date', 'kolbe_fact_finder','kolbe_follow_thru', 'kolbe_quick_start', 'kolbe_implementor', 'vops_visionary', 'vops_operator', 'vops_processor', 'vops_synergist', 'departure_date', 'team', 'display')
 
 class MinimalEmployeeSerializer(serializers.HyperlinkedModelSerializer):
     avatar = serializers.SerializerMethodField('get_avatar_url')
