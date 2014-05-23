@@ -118,19 +118,18 @@
                     </div>
 
                     <div class="t-size-x12" style="min-width: 50%">
-                        <span ng-if="kolbe_fact_finder.score.length == 0">--</span>
-                        <ul ng-if="kolbe_fact_finder.score.length > 0">
+                        <ul>
                             <li>
-                                  <text>{{ kolbe_fact_finder.score[0].name }} ({{ kolbe_fact_finder.action }}) - Fact Finder</text>
+                                  <text>{{ employee.kolbe_fact_finder }} - Fact Finder</text>
                             </li>
                             <li>
-                                  <text>{{ kolbe_follow_thru.score[0].name }} ({{ kolbe_follow_thru.action }}) - Follow Thru</text>
+                                  <text>{{ employee.kolbe_follow_thru }} - Follow Thru</text>
                             </li>
                             <li>
-                                  <text>{{ kolbe_quick_start.score[0].name }} ({{ kolbe_quick_start.action }}) - Quick Start</text>
+                                  <text>{{ employee.kolbe_quick_start }} - Quick Start</text>
                             </li>
                             <li>
-                                  <text>{{ kolbe_implementor.score[0].name }} ({{ kolbe_implementor.action }}) - Implementor</text>
+                                  <text>{{ employee.kolbe_implementor }} - Implementor</text>
                             </li>
                          </ul>
                     </div>

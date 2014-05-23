@@ -264,7 +264,7 @@ angular.module('tdb.controllers', [])
 	}
 }])
 
-.controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', 'User', 'Employee', 'Engagement', 'Mentorship', 'EmployeeLeader', 'Attribute', 'CompSummary', 'PhotoUpload', '$http', 'analytics', 'fileReader', function($rootScope, $scope, $location, $routeParams, $window, User, Employee, Engagement, Mentorship, EmployeeLeader, Attribute, CompSummary, PhotoUpload, $http, analytics, fileReader) {
+.controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', 'User', 'Employee', 'Engagement', 'EmployeeLeader', 'Attribute', 'CompSummary', 'PhotoUpload', '$http', 'analytics', 'fileReader', function($rootScope, $scope, $location, $routeParams, $window, User, Employee, Engagement, EmployeeLeader, Attribute, CompSummary, PhotoUpload, $http, analytics, fileReader) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     if ($routeParams.id=='add') {
         $scope.addNew = true;
@@ -385,8 +385,6 @@ angular.module('tdb.controllers', [])
     $scope.popup = [];
     $scope.popup.top = 0;
     $scope.popup.left = 0;
-    $scope.mentorships = Mentorship.getMentorshipsForMentee($routeParams.id);
-    $scope.passions = Attribute.getAttributtesForEmployee($routeParams.id, 1);
     $scope.super_powers = Attribute.getAttributtesForEmployee($routeParams.id, 2);
 	$scope.skills = Attribute.getAttributtesForEmployee($routeParams.id, 3);
     $scope.mbti_ei = Attribute.getAttributtesForEmployee($routeParams.id, 4);
@@ -397,58 +395,7 @@ angular.module('tdb.controllers', [])
     $scope.vops_operator = Attribute.getAttributtesForEmployee($routeParams.id, 14);
     $scope.vops_processor = Attribute.getAttributtesForEmployee($routeParams.id, 15);
     $scope.vops_synergist = Attribute.getAttributtesForEmployee($routeParams.id, 16);
-    $scope.kolbe_fact_finder = [];
-    $scope.kolbe_follow_thru = [];
-    $scope.kolbe_quick_start = [];
-    $scope.kolbe_implementor = [];
-    Attribute.getAttributtesForEmployee($routeParams.id, 8).$then(function(response) {
-        $scope.kolbe_fact_finder.score = response.data;
-        if ($scope.kolbe_fact_finder.score[0]) {
-            if (parseInt($scope.kolbe_fact_finder.score[0].name) < 4) {
-                $scope.kolbe_fact_finder.action = "Simplify";
-            } else if (parseInt($scope.kolbe_fact_finder.score[0].name) > 6) {
-                $scope.kolbe_fact_finder.action = "Specify";
-            } else {
-                $scope.kolbe_fact_finder.action = "Explain";
-            }
-        }
-    });
-    Attribute.getAttributtesForEmployee($routeParams.id, 9).$then(function(response) {
-        $scope.kolbe_follow_thru.score = response.data;
-        if ($scope.kolbe_follow_thru.score[0]) {
-            if (parseInt($scope.kolbe_follow_thru.score[0].name) < 4) {
-                $scope.kolbe_follow_thru.action = "Adapt";
-            } else if (parseInt($scope.kolbe_follow_thru.score[0].name) > 6) {
-                $scope.kolbe_follow_thru.action = "Systematize";
-            } else {
-                $scope.kolbe_follow_thru.action = "Maintain";
-            }
-        }
-    });
-    Attribute.getAttributtesForEmployee($routeParams.id, 10).$then(function(response) {
-        $scope.kolbe_quick_start.score  = response.data;
-        if ($scope.kolbe_quick_start.score[0]) {
-            if (parseInt($scope.kolbe_quick_start.score[0].name) < 5) {
-                $scope.kolbe_quick_start.action = "Stabilize";
-            } else if (parseInt($scope.kolbe_quick_start.score[0].name) > 6) {
-                $scope.kolbe_quick_start.action = "Improvise";
-            } else {
-                $scope.kolbe_quick_start.action = "Modify";
-            }
-        }
-    });
-    Attribute.getAttributtesForEmployee($routeParams.id, 11).$then(function(response) {
-        $scope.kolbe_implementor.score  = response.data;
-        if ($scope.kolbe_implementor.score[0]) {
-            if (parseInt($scope.kolbe_implementor.score[0].name) < 4) {
-                $scope.kolbe_implementor.action = "Imagine";
-            } else if (parseInt($scope.kolbe_implementor.score[0].name) > 6) {
-                $scope.kolbe_implementor.action = "Build";
-            } else {
-                $scope.kolbe_implementor.action = "Restore";
-            }
-        }
-    });
+
 
     $scope.employeeEdit = false;
     $scope.cancelEdit = function (){
