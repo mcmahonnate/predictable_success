@@ -279,7 +279,7 @@
         <div get-popup-position ng-show="editTeamLead && employeeEdit" style="z-index: 2; position:absolute;left:35px;top:60px;border-color:#101214;border-width: 1px;border-style: solid; padding: 10px;background-color: #434343;color: #d3d4d4;">
             <div style="margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#101214 #434343 #101214 #101214;display:inline-block;width:20px;height:25px;padding-top: 8px;padding-left: 9px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-edit"></span></div>
             <span style="padding:7px">Team Lead</span>
-            <div ng-controller="EmployeeListCtrl" style="padding-top: 5px;">
+            <div style="padding-top: 5px;">
                 <input type="text" ng-model="edit_leadership.leader.full_name" typeahead-on-select="edit_leadership.leader=$item" typeahead="employee.full_name for employee in employees | filter:{full_name:$viewValue}:startsWith | orderBy:'full_name' | limitTo:8" typeahead-editable="false" class="view-value-input"/>
             </div>
             <div id="editActions" style="right:2px;bottom:-33px;">
