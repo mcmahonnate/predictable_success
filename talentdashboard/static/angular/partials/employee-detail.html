@@ -94,16 +94,16 @@
 
                     <div class="t-size-x12" style="min-width: 50%">
                         <ul>
-                            <li>
+                            <li ng-if="employee.vops_visionary!=null">
                                   <text>{{ employee.vops_visionary }} - Visionary</text>
                             </li>
-                            <li>
+                            <li ng-if="employee.vops_operator!=null">
                                   <text>{{ employee.vops_operator }} - Operator</text>
                             </li>
-                            <li>
+                            <li ng-if="employee.vops_processor!=null">
                                   <text>{{ employee.vops_processor }} - Processor</text>
                             </li>
-                            <li>
+                            <li ng-if="employee.vops_synergist!=null">
                                   <text>{{ employee.vops_synergist }} - Synergist</text>
                             </li>
                          </ul>
@@ -118,16 +118,16 @@
 
                     <div class="t-size-x12" style="min-width: 50%">
                         <ul>
-                            <li>
+                            <li ng-if="employee.kolbe_fact_finder!=null">
                                   <text>{{ employee.kolbe_fact_finder }} - Fact Finder</text>
                             </li>
-                            <li>
+                            <li ng-if="employee.kolbe_follow_thru!=null">
                                   <text>{{ employee.kolbe_follow_thru }} - Follow Thru</text>
                             </li>
-                            <li>
+                            <li ng-if="employee.kolbe_quick_start!=null">
                                   <text>{{ employee.kolbe_quick_start }} - Quick Start</text>
                             </li>
-                            <li>
+                            <li ng-if="employee.kolbe_implementor!=null">
                                   <text>{{ employee.kolbe_implementor }} - Implementor</text>
                             </li>
                          </ul>
