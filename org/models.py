@@ -46,6 +46,58 @@ class Employee(models.Model):
     )
     user = models.OneToOneField(User,on_delete=models.SET_NULL, null=True, blank=True)
 
+    def _get_kolbe_fact_finder(self):
+        try:
+            value=int(self.attributes.get(category__id=8).name)
+            if value<4:
+                description='simplify'
+            elif value>6:
+                description='specify'
+            else:
+                description='explain'
+            return description
+        except:
+            return None
+
+    def _get_kolbe_follow_thru(self):
+        try:
+            value=int(self.attributes.get(category__id=9).name)
+            if value<4:
+                description='adapt'
+            elif value>6:
+                description='systematize'
+            else:
+                description='maintain'
+            return description
+        except:
+            return None
+
+    def _get_kolbe_quick_start(self):
+        try:
+            value=int(self.attributes.get(category__id=10).name)
+            if value<5:
+                description='stabilize'
+            elif value>6:
+                description='improvise'
+            else:
+                description='modify'
+            return description
+        except:
+            return None
+
+    def _get_kolbe_implementor(self):
+        try:
+            value=int(self.attributes.get(category__id=10).name)
+            if value<4:
+                description='imagine'
+            elif value>6:
+                description='build'
+            else:
+                description='restore'
+            return description
+        except:
+            return None
+
     def _get_current_happiness(self):
         try:
             return self.happys.latest('assessed_date')
@@ -58,6 +110,22 @@ class Employee(models.Model):
     @property
     def current_happiness(self):
         return self._get_current_happiness()
+
+    @property
+    def get_kolbe_fact_finder(self):
+        return self._get_kolbe_fact_finder()
+
+    @property
+    def get_kolbe_follow_thru(self):
+        return self._get_kolbe_follow_thru()
+
+    @property
+    def get_kolbe_quick_start(self):
+        return self._get_kolbe_quick_start()
+
+    @property
+    def get_kolbe_implementor(self):
+        return self._get_kolbe_implementor()
 
 blah.register(Employee)
 
@@ -86,7 +154,7 @@ class Leadership(models.Model):
         return "%s leader of %s" % (self.leader.full_name, self.employee.full_name)
 
 class Attribute(models.Model):
-    employee = models.ForeignKey(Employee, related_name='+')
+    employee = models.ForeignKey(Employee, related_name='attributes')
     name = models.CharField(
         max_length=255,
         blank=True,
