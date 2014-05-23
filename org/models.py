@@ -122,6 +122,30 @@ class Employee(models.Model):
         except:
             return None
 
+    def _get_mbti_ei(self):
+        try:
+            return self.attributes.get(category__id=4).name
+        except:
+            return None
+
+    def _get_mbti_sn(self):
+        try:
+            return self.attributes.get(category__id=5).name
+        except:
+            return None
+
+    def _get_mbti_tf(self):
+        try:
+            return self.attributes.get(category__id=6).name
+        except:
+            return None
+
+    def _get_mbti_pj(self):
+        try:
+            return self.attributes.get(category__id=7).name
+        except:
+            return None
+
     def _get_current_happiness(self):
         try:
             return self.happys.latest('assessed_date')
@@ -134,6 +158,22 @@ class Employee(models.Model):
     @property
     def current_happiness(self):
         return self._get_current_happiness()
+
+    @property
+    def get_mbti_ei(self):
+        return self._get_mbti_ei()
+
+    @property
+    def get_mbti_sn(self):
+        return self._get_mbti_sn()
+
+    @property
+    def get_mbti_tf(self):
+        return self._get_mbti_tf()
+
+    @property
+    def get_mbti_pj(self):
+        return self._get_mbti_pj()
 
     @property
     def get_kolbe_fact_finder(self):

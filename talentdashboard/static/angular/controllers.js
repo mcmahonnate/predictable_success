@@ -387,10 +387,6 @@ angular.module('tdb.controllers', [])
     $scope.popup.left = 0;
     $scope.super_powers = Attribute.getAttributtesForEmployee($routeParams.id, 2);
 	$scope.skills = Attribute.getAttributtesForEmployee($routeParams.id, 3);
-    $scope.mbti_ei = Attribute.getAttributtesForEmployee($routeParams.id, 4);
-    $scope.mbti_sn = Attribute.getAttributtesForEmployee($routeParams.id, 5);
-    $scope.mbti_tf = Attribute.getAttributtesForEmployee($routeParams.id, 6);
-    $scope.mbti_pj = Attribute.getAttributtesForEmployee($routeParams.id, 7);
 
     $scope.employeeEdit = false;
     $scope.cancelEdit = function (){
