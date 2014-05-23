@@ -48,6 +48,10 @@ angular.module('tdb.controllers', [])
     $scope.talentCategory = $routeParams.talent_category;
     $scope.happy = $routeParams.happy;
     $scope.days_since_happy = $routeParams.days_since_happy;
+    $scope.fact_finder = $routeParams.fact_finder;
+    $scope.follow_thru = $routeParams.follow_thru;
+    $scope.quick_start = $routeParams.quick_start;
+    $scope.implementor = $routeParams.implementor;
     $scope.teamName='';
 	if ($routeParams.team_id){
 		Team.get(

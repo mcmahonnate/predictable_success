@@ -76,7 +76,7 @@ filters.filter('new_line', function () {
 });
 
 filters.filter('filterEvaluations', function () {
-  return function( items, talentCategory, teamId, happy, days_since_happy) {
+  return function( items, talentCategory, teamId, happy, days_since_happy, fact_finder, follow_thru, quick_start, implementor) {
 
     parseDate = function (input) {
       if (input) {
@@ -100,6 +100,18 @@ filters.filter('filterEvaluations', function () {
       }
       if (teamId && push) {
           if(teamId!=item.employee.team.id) {push=false}
+      }
+      if (fact_finder && push) {
+          if(fact_finder!=item.employee.kolbe_fact_finder) {push=false}
+      }
+      if (follow_thru && push) {
+          if(follow_thru!=item.employee.kolbe_follow_thru) {push=false}
+      }
+      if (quick_start && push) {
+          if(quick_start!=item.employee.kolbe_quick_start) {push=false}
+      }
+      if (implementor && push) {
+          if(implementor!=item.employee.kolbe_implementor) {push=false}
       }
       if (days_since_happy && push) {
           if (item.employee.happiness_date)
