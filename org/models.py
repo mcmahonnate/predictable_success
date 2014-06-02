@@ -65,7 +65,7 @@ class Employee(models.Model):
             if value<4:
                 description='adapt'
             elif value>6:
-                description='systematize'
+                description='systemize'
             else:
                 description='maintain'
             return description

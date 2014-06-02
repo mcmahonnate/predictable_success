@@ -102,13 +102,19 @@ filters.filter('filterEvaluations', function () {
           if(teamId!=item.employee.team.id) {push=false}
       }
       if (fact_finder && push) {
-          if(fact_finder!=item.employee.kolbe_fact_finder) {push=false}
+          if (fact_finder.length <3) {
+            if(fact_finder.indexOf(item.employee.kolbe_fact_finder)==-1) {push=false}
+          }
       }
       if (follow_thru && push) {
-          if(follow_thru!=item.employee.kolbe_follow_thru) {push=false}
+          if (follow_thru.length <3) {
+            if(follow_thru.indexOf(item.employee.kolbe_follow_thru)==-1) {push=false}
+          }
       }
       if (quick_start && push) {
-          if(quick_start!=item.employee.kolbe_quick_start) {push=false}
+          if (quick_start.length <3) {
+            if(quick_start.indexOf(item.employee.kolbe_quick_start)==-1) {push=false}
+          }
       }
       if (implementor && push) {
           if(implementor!=item.employee.kolbe_implementor) {push=false}

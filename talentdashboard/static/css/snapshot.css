@@ -1234,3 +1234,14 @@ user agent stylesheettd, th {
        left:120px;
        top: -37px;
   }
+  .ui-slider-horizontal .ui-state-default {
+    border-radius: 50%;
+  }
+  .ui-slider-tick-mark {
+    display:inline-block;
+    width:2px;
+    background-color:#585858;
+    height:12px;
+    position:relative;
+    top:-1px;
+  }
