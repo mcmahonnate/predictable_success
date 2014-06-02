@@ -117,7 +117,9 @@ filters.filter('filterEvaluations', function () {
           }
       }
       if (implementor && push) {
-          if(implementor!=item.employee.kolbe_implementor) {push=false}
+          if (implementor.length <3) {
+            if(implementor.indexOf(item.employee.kolbe_implementor)==-1) {push=false}
+          }
       }
       if (days_since_happy && push) {
           if (item.employee.happiness_date)
