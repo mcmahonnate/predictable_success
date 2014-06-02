@@ -87,7 +87,7 @@ class Employee(models.Model):
 
     def _get_kolbe_implementor(self):
         try:
-            value=int(self.attributes.get(category__id=10).name)
+            value=int(self.attributes.get(category__id=11).name)
             if value<4:
                 description='imagine'
             elif value>6:

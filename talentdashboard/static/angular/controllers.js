@@ -46,7 +46,7 @@ angular.module('tdb.controllers', [])
     $scope.kolbe_values=[0,1,2,3];
     $scope.kolbe_fact_finder_labels=['simplify','explain','specify'];
     $scope.kolbe_follow_thru_labels=['adapt','maintain','systemize'];
-    $scope.kolbe_quick_start_labels=['stabilize','modify','improvise'];
+    $scope.kolbe_quick_start_labels=['improvise','modify','stabilize'];
     $scope.kolbe_implementor_labels=['imagine','restore','build'];
     $scope.evaluations = PvpEvaluation.getCurrentEvaluations();
 	$scope.teamId = $routeParams.team_id;
