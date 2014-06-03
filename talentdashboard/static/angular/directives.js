@@ -316,6 +316,9 @@ angular.module('tdb.directives', [])
         },
         values: [scope.kolbe_values[0], scope.kolbe_values[scope.kolbe_values.length-1]],
         slide: function( event, ui ) {
+          if(ui.values[1] - ui.values[0] < 1){
+              return false;
+          }
           scope.follow_thru=[];
           for (var i = ui.values[0]; i < ui.values[1] ; i++) {
             scope.follow_thru.push(scope.kolbe_follow_thru_labels[i]);
@@ -355,6 +358,9 @@ angular.module('tdb.directives', [])
         },
         values: [scope.kolbe_values[0], scope.kolbe_values[scope.kolbe_values.length-1]],
         slide: function( event, ui ) {
+          if(ui.values[1] - ui.values[0] < 1){
+              return false;
+          }
           scope.quick_start=[];
           for (var i = ui.values[0]; i < ui.values[1] ; i++) {
             scope.quick_start.push(scope.kolbe_quick_start_labels[i]);
@@ -394,6 +400,9 @@ angular.module('tdb.directives', [])
         },
         values: [scope.kolbe_values[0], scope.kolbe_values[scope.kolbe_values.length-1]],
         slide: function( event, ui ) {
+          if(ui.values[1] - ui.values[0] < 1){
+              return false;
+          }
           scope.implementor=[];
           for (var i = ui.values[0]; i < ui.values[1] ; i++) {
             scope.implementor.push(scope.kolbe_implementor_labels[i]);
@@ -433,6 +442,9 @@ angular.module('tdb.directives', [])
         },
         values: [scope.kolbe_values[0], scope.kolbe_values[scope.kolbe_values.length-1]],
         slide: function( event, ui ) {
+          if(ui.values[1] - ui.values[0] < 1){
+              return false;
+          }
           scope.fact_finder=[];
           for (var i = ui.values[0]; i < ui.values[1] ; i++) {
             scope.fact_finder.push(scope.kolbe_fact_finder_labels[i]);
