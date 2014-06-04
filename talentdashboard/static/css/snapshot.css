@@ -94,7 +94,7 @@ sub{top:0.5ex}
 .file-field.with-delete .delete{display:block}
 .file-field.with-delete label{border-right:solid 1px #cfcfcf;margin:0 44px 0 0}
 .light-ui input[type=text],.light-ui input[type=email],.light-ui input[type=password],.light-ui .sneaky-select,.light-ui .sneaky-select label,.light-ui input[type=radio]+label{border-color:#cfcfcf}
-#main-header{position:fixed;top:0;left:0;width:100%;z-index:2}
+#main-header{position:fixed;top:0;left:0;width:100%;z-index:5}
 #main-header .inner{min-width:600px}
 #top-bar{background-color:#313131;color:#969696;padding:12px 0}
 #top-bar .inner{padding:0 20px}
@@ -1099,7 +1099,7 @@ user agent stylesheettd, th {
     text-decoration: underline !important;
 }
 #selection-list{background-color: #434343;border-radius:3px 0 3px 3px;z-index:2}
-#selection-shell{position:absolute;top:90%;width:280px;background-color: #272727;border-radius:3px 0 3px 3px;z-index:2;padding: 5px}
+#selection-shell{position:absolute;top:90%;width:280px;background-color: #272727;border-radius:3px 0 3px 3px;z-index:5;padding: 5px}
 #selection-title{color:#cbcbcb;padding: 8px 10px 10px 10px;}
 #menu-item{float: right;padding:12px 15px;cursor:pointer}
 .menu-item-active{background-color: #272727;}
