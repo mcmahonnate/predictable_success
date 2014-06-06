@@ -76,7 +76,7 @@ filters.filter('new_line', function () {
 });
 
 filters.filter('filterEvaluations', function () {
-  return function( items, talentCategory, teamId, happy, days_since_happy, fact_finder, follow_thru, quick_start, implementor) {
+  return function( items, talentCategory, teamId, happy, days_since_happy, fact_finder, follow_thru, quick_start, implementor, visionary, operator, processor, synergist) {
 
     parseDate = function (input) {
       if (input) {
@@ -119,6 +119,42 @@ filters.filter('filterEvaluations', function () {
       if (implementor && push) {
           if (implementor.length <3) {
             if(implementor.indexOf(item.employee.kolbe_implementor)==-1) {push=false}
+          }
+      }
+      if (visionary && push) {
+          if (!item.employee.vops_visionary) {
+              if (visionary[1]-visionary[0] < 960) {
+                push=false;
+              }
+          } else if (visionary[0]>item.employee.vops_visionary || visionary[1]<item.employee.vops_visionary) {
+              push=false;
+          }
+      }
+      if (operator && push) {
+         if (!item.employee.vops_operator) {
+              if (operator[1]-operator[0] < 960) {
+                push=false;
+              }
+          } else if (operator[0]>item.employee.vops_operator || operator[1]<item.employee.vops_operator) {
+              push=false;
+          }
+      }
+      if (processor && push) {
+         if (!item.employee.vops_processor) {
+              if (processor[1]-processor[0] < 960) {
+                push=false;
+              }
+          } else if (processor[0]>item.employee.vops_processor || processor[1]<item.employee.vops_processor) {
+              push=false;
+          }
+      }
+      if (synergist && push) {
+         if (!item.employee.vops_synergist) {
+              if (synergist[1]-synergist[0] < 960) {
+                push=false;
+              }
+          } else if (synergist[0]>item.employee.vops_synergist || synergist[1]<item.employee.vops_synergist) {
+              push=false;
           }
       }
       if (days_since_happy && push) {

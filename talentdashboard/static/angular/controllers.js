@@ -44,10 +44,12 @@ angular.module('tdb.controllers', [])
 .controller('EvaluationListCtrl', ['$scope', '$location', '$routeParams', 'PvpEvaluation', 'Team', 'analytics', function($scope, $location, $routeParams, PvpEvaluation, Team, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     $scope.kolbe_values=[0,1,2,3];
+    $scope.vops_values=[0,320,6400,960];
     $scope.kolbe_fact_finder_labels=['simplify','explain','specify'];
     $scope.kolbe_follow_thru_labels=['adapt','maintain','systemize'];
     $scope.kolbe_quick_start_labels=['improvise','modify','stabilize'];
     $scope.kolbe_implementor_labels=['imagine','restore','build'];
+    $scope.vops_labels=['low','medium','high'];
     $scope.evaluations = PvpEvaluation.getCurrentEvaluations();
 	$scope.teamId = $routeParams.team_id;
     $scope.talentCategory = $routeParams.talent_category;
@@ -57,6 +59,7 @@ angular.module('tdb.controllers', [])
     $scope.follow_thru = $routeParams.follow_thru;
     $scope.quick_start = $routeParams.quick_start;
     $scope.implementor = $routeParams.implementor;
+    $scope.vops = [];
     $scope.teamName='';
 	if ($routeParams.team_id){
 		Team.get(
