@@ -18,7 +18,7 @@ class CompensationSummaryManager(models.Manager):
         return self.filter(employee__team__id=team_id).filter(year=most_recent_year)
 
 class CompensationSummary(models.Model):
-    employee = models.ForeignKey(Employee)
+    employee = models.ForeignKey(Employee,related_name='comp')
     year = models.IntegerField(
         choices=year_choices(),
         default=current_year,

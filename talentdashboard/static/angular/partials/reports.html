@@ -7,7 +7,7 @@
           <h1 id="talent-header" style="display:inline;">Talent Pool</h1>
         </header>
 			<ul>
-                <li ng-repeat="eval in evaluations">{{eval.employee.full_name}},{{eval.potential}},{{eval.performance}},{{eval.evaluation_round.date}}</li>
+                <li ng-repeat="eval in evaluations">{{eval.employee.full_name}},{{eval.potential}},{{eval.performance}},{{eval.evaluation_round.date}},{{eval.employee.team.name}},{{eval.employee.current_salary}},{{eval.employee.current_bonus}}</li>
 			</ul>
       </div>
     </article>

@@ -209,6 +209,10 @@ class Employee(models.Model):
     def get_vops_synergist(self):
         return self._get_vops_synergist()
 
+    @property
+    def get_comp(self):
+        return self._get_comp()
+
 blah.register(Employee)
 
 class Team(models.Model):
