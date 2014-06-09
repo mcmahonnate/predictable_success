@@ -468,10 +468,11 @@ angular.module('tdb.directives', [])
             var max =  $slider.slider("option", "max");
             var min =  $slider.slider("option", "min");
             var $sliderrange = $slider.find('.ui-slider-range');
+            $sliderrange.css({'top': '50%', 'height': '50%'});
             console.log($sliderrange);
             $('<div style="width:' + $slider.width() + 'px;text-align:center;color:white;margin: 15px 0px 0px 0px;display:inline-block">' + attrs.label + '</div>').insertBefore($slider);
             $('<div class="ui-slider-label">' + min + '-' + max + '</div>').css({'width': + $slider.width() + 'px','text-align': 'center'}).appendTo($slider);
-            $slider.addClass('ui-slider-grad');
+            $('<div class="ui-slider-grad">&#160;</div>').css({'width': + $slider.width() + 'px','text-align': 'center'}).appendTo($slider);
         },
         values: [scope.vops_values[0], scope.vops_values[scope.vops_values.length-1]],
         slide: function( event, ui ) {
