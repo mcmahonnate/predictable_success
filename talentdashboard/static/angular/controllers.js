@@ -276,10 +276,12 @@ angular.module('tdb.controllers', [])
     if ($routeParams.id=='add') {
         $scope.addNew = true;
     }
+
     $scope.leadership=[];
     $scope.edit_leadership=[];
     $scope.edit_leadership.leader=[];
     $scope.edit_leadership.leader.full_name='';
+    $scope.employees = Employee.query();
     Employee.get(
         {id: $routeParams.id},
         function(data) {
@@ -394,7 +396,6 @@ angular.module('tdb.controllers', [])
     $scope.popup.left = 0;
     $scope.super_powers = Attribute.getAttributtesForEmployee($routeParams.id, 2);
 	$scope.skills = Attribute.getAttributtesForEmployee($routeParams.id, 3);
-
     $scope.employeeEdit = false;
     $scope.cancelEdit = function (){
         $scope.editEmployee = angular.copy($scope.employee);
