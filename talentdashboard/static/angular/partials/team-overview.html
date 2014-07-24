@@ -2,16 +2,35 @@
   <div class="dashboard-sized-el fade" ng-class="{in:team}" id="dashboard" style="margin-top: 63px; max-width: 970px;">
 
     <article class="widget clock loaded" id="widget-8494" style="top: 0px; left: 0px; width: auto;">
-      <div class="widget-inner widget-size-2x2 large-screen">
+      <div class="widget-inner widget-size-1x1 large-screen">
         <header class="no-reload">
           <h1 id="talent-header" style="display:inline;">{{ team.name }}</h1>
         </header>
 
         <div>
-			<div x-talent-category-chart style="width: 620px; height: 620px; position: relative;"></div>
+			<div x-talent-category-chart size="small" style="width: 360px; height: 225px; position: relative; left:5px;top:10px;"></div>
 		</div>
 
       </div>
+    </article>
+
+    <article class="widget google-analytics loaded" id="widget-14808658" style="top: 0px; left: 325px; width: auto;">
+      <div class="widget-inner widget-size-1x1 large-screen">
+        <header class="no-reload">
+          <h1 style="display:inline;">Total Salaries</h1>
+        </header>
+        <section class="widget-body number-widget">
+            <div id="total-salaries" class="main-stat t-size-x48" style="text-align: center;padding-bottom:15px;">
+            {{salaryReport.total_salaries | currency | noCents }}
+            </div><!-- .widget-canvas -->
+            <div style="display:block;padding-bottom:10px;">Totals by Talent</div>
+            <div style="main-stat t-size-x12;margin-bottom:5px;" ng-repeat="(category, salaries) in salaryReport.categories">
+              <canvas width="12" height="12" employee-talent-category="{{category}}"></canvas>
+              <span style="margin-left:10px;width:80px;text-align:right;display:inline-block;">{{salaries | currency | noCents }}</span>
+            </div>
+        </section>
+        <div id="salary_visualization" style="width: 315px; height: 300px;"></div>
+      </div><!-- .widget-inner -->
     </article>
 
     <article class="widget google-analytics loaded" id="widget-14808658" style="top: 0px; left: 650px; width: auto;">
@@ -33,22 +52,16 @@
       </div><!-- .widget-inner -->
     </article>
 
-    <article class="widget google-analytics loaded" id="widget-14808658" style="top: 285px; left: 650px; width: auto;">
-      <div class="widget-inner widget-size-1x1 large-screen">
+    <article class="widget clock loaded" id="widget-8494" style="top: 285px; left: 0px; width: auto;">
+      <div class="widget-inner large-screen" style="width:960px;min-height: 560px;">
         <header class="no-reload">
-          <h1 style="display:inline;">Total Salaries</h1>
+            <h1 style="display:inline;">Org Chart</h1>
         </header>
-        <section class="widget-body number-widget">
-            <div id="total-salaries" class="main-stat t-size-x48" style="text-align: center;padding-bottom:15px;">
-            {{salaryReport.total_salaries | currency | noCents }}
-            </div><!-- .widget-canvas -->
-            <div style="display:block;padding-bottom:10px;">Totals by Talent</div>
-            <div style="main-stat t-size-x12;margin-bottom:5px;" ng-repeat="(category, salaries) in salaryReport.categories">
-              <canvas width="12" height="12" employee-talent-category="{{category}}"></canvas>
-              <span style="margin-left:10px;width:80px;text-align:right;display:inline-block;">{{salaries | currency | noCents }}</span>
+        <section class="widget-body text-widget" style="padding: 10px;">
+            <div>
+                <div data-ng-chart="" data-ng-model='options' style="width: 940px; height: 480px;"></div>
             </div>
         </section>
-        <div id="salary_visualization" style="width: 315px; height: 300px;"></div>
       </div><!-- .widget-inner -->
     </article>
 

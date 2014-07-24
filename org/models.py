@@ -154,8 +154,16 @@ class Employee(models.Model):
         except:
             return None
 
+    def _get_current_leader(self):
+        obj = self.leaderships.latest('start_date')
+        return obj.leader
+
     def __str__(self):
         return self.full_name
+
+    @property
+    def current_leader(self):
+        return self._get_current_leader()
 
     @property
     def current_happiness(self):
@@ -233,7 +241,7 @@ class Mentorship(models.Model):
 
 class Leadership(models.Model):
     leader = models.ForeignKey(Employee, related_name='+')
-    employee = models.ForeignKey(Employee, related_name='+')
+    employee = models.ForeignKey(Employee, related_name='leaderships')
     start_date = models.DateField(null=False, blank=False, default=datetime.date.today)
     end_date = models.DateField(null=True, blank=True)
     def __str__(self):

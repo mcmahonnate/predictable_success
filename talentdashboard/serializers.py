@@ -13,10 +13,28 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
         model = Team
         fields = ('id', 'name', 'leader')
 
+class MinimalEmployeeSerializer(serializers.HyperlinkedModelSerializer):
+    avatar = serializers.SerializerMethodField('get_avatar_url')
+    avatar_small = serializers.SerializerMethodField('get_avatar_small_url')
+    def get_avatar_url(self, obj):
+        url = ''
+        if obj.avatar:
+            url = obj.avatar.url
+        return url
+    def get_avatar_small_url(self, obj):
+        url = ''
+        if obj.avatar_small:
+            url = obj.avatar_small.url
+        return url
+    class Meta:
+        model = Employee
+        fields = ('id', 'full_name', 'display', 'avatar', 'avatar_small')
+
 class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
     team = TeamSerializer()
     avatar = serializers.SerializerMethodField('get_avatar_url')
     avatar_small = serializers.SerializerMethodField('get_avatar_small_url')
+    leader_id = serializers.SerializerMethodField('get_leader_id')
     happiness = serializers.SerializerMethodField('get_happiness')
     happiness_date = serializers.SerializerMethodField('get_happiness_date')
     mbti_ei = serializers.SerializerMethodField('get_mbti_ei')
@@ -56,6 +74,11 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
         if obj.current_happiness:
             happiness_date = obj.current_happiness.assessed_date
         return happiness_date
+    def get_leader_id(self, obj):
+        leader_id = 0
+        if obj.current_leader:
+            leader_id = obj.current_leader.id
+        return leader_id
     def get_mbti_ei(self, obj):
         mbti_ei = None
         if obj.get_mbti_ei:
@@ -128,24 +151,7 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
         return url
     class Meta:
         model = Employee
-        fields = ('id', 'full_name', 'avatar', 'avatar_small', 'job_title', 'hire_date', 'happiness', 'happiness_date', 'kolbe_fact_finder','kolbe_follow_thru', 'kolbe_quick_start', 'kolbe_implementor', 'vops_visionary', 'vops_operator', 'vops_processor', 'vops_synergist', 'mbti_ei', 'mbti_sn', 'mbti_tf', 'mbti_pj', 'departure_date', 'team', 'display', 'current_salary', 'current_bonus')
-
-class MinimalEmployeeSerializer(serializers.HyperlinkedModelSerializer):
-    avatar = serializers.SerializerMethodField('get_avatar_url')
-    avatar_small = serializers.SerializerMethodField('get_avatar_small_url')
-    def get_avatar_url(self, obj):
-        url = ''
-        if obj.avatar:
-            url = obj.avatar.url
-        return url
-    def get_avatar_small_url(self, obj):
-        url = ''
-        if obj.avatar_small:
-            url = obj.avatar_small.url
-        return url
-    class Meta:
-        model = Employee
-        fields = ('id', 'full_name', 'display', 'avatar', 'avatar_small')
+        fields = ('id', 'full_name', 'avatar', 'avatar_small', 'job_title', 'hire_date', 'leader_id', 'happiness', 'happiness_date', 'kolbe_fact_finder','kolbe_follow_thru', 'kolbe_quick_start', 'kolbe_implementor', 'vops_visionary', 'vops_operator', 'vops_processor', 'vops_synergist', 'mbti_ei', 'mbti_sn', 'mbti_tf', 'mbti_pj', 'departure_date', 'team', 'display', 'current_salary', 'current_bonus')
 
 class UserSerializer(serializers.ModelSerializer):
     employee = MinimalEmployeeSerializer()

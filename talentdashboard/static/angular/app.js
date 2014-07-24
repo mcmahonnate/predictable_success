@@ -11,7 +11,8 @@ var app = angular.module('tdb', ['tdb.services', 'tdb.controllers', 'tdb.directi
           when('/discussions', {templateUrl: '/static/angular/partials/discussion-overview.html', controller: 'DiscussionOverviewCtrl', resolve: {authorizeRoute: authorizeRoute}}).
           when('/discussions/:id', {templateUrl: '/static/angular/partials/discussion-detail.html', controller: 'DiscussionDetailCtrl', resolve: {authorizeRoute: authorizeRoute}}).
           when('/employees/:id/discussions', {templateUrl: '/static/angular/partials/employee-discussion-overview.html', controller: 'EmployeeDetailCtrl', resolve: {authorizeRoute: authorizeRoute}}).
-          when('/leaders/:id', {templateUrl: '/static/angular/partials/leader-detail.html', controller: 'LeaderDetailCtrl', resolve: {authorizeRoute: authorizeRoute}}).          
+          when('/leaders/:id', {templateUrl: '/static/angular/partials/leader-detail.html', controller: 'LeaderDetailCtrl', resolve: {authorizeRoute: authorizeRoute}}).
+          when('/org-chart', {templateUrl: '/static/angular/partials/org-chart.html', controller: 'orgDiagramCtrl', resolve: {authorizeRoute: authorizeRoute}}).
           otherwise({redirectTo: '/'});
     }]);
     

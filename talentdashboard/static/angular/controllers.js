@@ -569,7 +569,7 @@ angular.module('tdb.controllers', [])
     }
 }])
 
-.controller('TeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'TalentCategoryReport', 'SalaryReport', 'Team', 'analytics', function($scope, $location, $routeParams, TalentCategoryReport, SalaryReport, Team, analytics) {
+.controller('TeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'TalentCategoryReport', 'SalaryReport', 'Team', 'TeamMembers', 'analytics', function($scope, $location, $routeParams, TalentCategoryReport, SalaryReport, Team, TeamMembers, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     $scope.teamId = $routeParams.id;
     SalaryReport.getReportForTeam($routeParams.id, function(data) {
@@ -586,7 +586,44 @@ angular.module('tdb.controllers', [])
             $scope.team = data;
         }
     );
-   
+    var items = [];
+    TeamMembers.query({ id: $routeParams.id}).$then(function(response) {
+        $scope.teamMembers = response.data;
+        var ids = [];
+
+        angular.forEach($scope.teamMembers, function(employee, key) {
+            ids.push(employee.id)
+        });
+        console.log(ids);
+        angular.forEach($scope.teamMembers, function(employee, key) {
+            var parent_id = null;
+            if ($.inArray(employee.leader_id, ids) > -1) {
+                parent_id = employee.leader_id
+            };
+            items.push(new primitives.orgdiagram.ItemConfig({
+                id: employee.id,
+                parent: parent_id,
+                title: employee.full_name,
+                description: employee.job_title,
+                image: employee.avatar
+            }));
+        });
+
+        console.log(items);
+    });
+
+    var options = new primitives.orgdiagram.Config();
+    options.items = items;
+    options.cursorItem = 0;
+
+
+
+    $scope.options = options;
+
+    $scope.setCursorItem = function (cursorItem) {
+        $scope.options.cursorItem = cursorItem;
+    };
+
 }])
 
 .controller('DiscussionDetailCtrl', ['$scope', '$location', '$filter', '$routeParams', '$window', 'EmployeeComments', 'Employee', 'Comment', 'SubComments', 'User', 'analytics', function($scope, $location, $filter, $routeParams, $window, EmployeeComments, Employee, Comment, SubComments, User, analytics) {

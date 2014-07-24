@@ -6,6 +6,7 @@
     <link href="{% static 'css/favicon.ico' %}" rel="shortcut icon" type="image/x-icon" />
     <link href="{% static 'css/snapshot.css' %}" media="screen" rel="stylesheet" type="text/css" />
     <link href="{% static 'lib/angular-carousel/angular-carousel.min.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'lib/primitives/primitives.latest.css' %}" media="screen" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
     <script type="text/javascript">
 
@@ -35,6 +36,7 @@
     <script src="{% static 'angular/directives.js' %}"></script>
     <script src="{% static 'angular/filters.js' %}"></script>
     <script src="{% static 'angular/app.js' %}"></script>
+    <script src="{% static 'lib/primitives/primitives.min.js' %}"></script>
     <script>
     // Add the CSRF Token to all http requests.
     app.config(['$httpProvider', function($httpProvider) {

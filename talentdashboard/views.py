@@ -159,7 +159,15 @@ class EmployeeList(APIView):
         employees = Employee.objects.filter(display='t')
         employees = employees.exclude(departure_date__isnull=False)
         serializer = MinimalEmployeeSerializer(employees, many=True)
-        logger.debug('test')
+        return Response(serializer.data)
+
+class TeamMemberList(APIView):
+    def get(self, request, pk, format=None):
+        employees = Employee.objects.filter(team__id=pk)
+        employees = employees.filter(display='t')
+        employees = employees.exclude(departure_date__isnull=False)
+
+        serializer = EmployeeSerializer(employees, many=True)
         return Response(serializer.data)
 
 class SubCommentList(APIView):

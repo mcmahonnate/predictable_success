@@ -9,12 +9,16 @@ angular.module('tdb.services', ['ngResource'])
     return res;
 }])
 
+.factory('TeamMembers', ['$resource', '$http', function($resource, $http) {
+    var res = $resource('/api/v1/team-members/:id/', {id:'@id'});
+    return res;
+}])
+
 .factory('EmployeeLeader', ['$resource', '$http', function($resource, $http) {
     var actions = {
         'addNew': { method:'POST', data:{leader:'@leader_id'}, isArray: false }
     };
     var res = $resource('/api/v1/leaderships/employees/:id', {id:'@id'}, actions);
-
     return res;
 }])
 

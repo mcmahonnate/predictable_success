@@ -4,6 +4,23 @@ google.load('visualization', '1', {packages: ['corechart']});
 
 angular.module('tdb.directives', [])
 
+.directive('ngChart', function () {
+    return {
+        link: function (scope, element, attrs) {
+            var chart = null;
+
+            scope.$watch(attrs.ngModel, function (options) {
+                if (!chart) {
+                    chart = jQuery(element).orgDiagram(scope[attrs.ngModel]);
+                } else {
+                    chart.orgDiagram(scope[attrs.ngModel]);
+                    chart.orgDiagram("update", primitives.orgdiagram.UpdateMode.Refresh);
+                }
+            }, true);
+        }
+    };
+})
+
 .directive('compensationHistoryChart', function() {
     return function(scope, element, attrs){
         var table = new google.visualization.DataTable();
