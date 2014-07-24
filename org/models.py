@@ -155,8 +155,11 @@ class Employee(models.Model):
             return None
 
     def _get_current_leader(self):
-        obj = self.leaderships.latest('start_date')
-        return obj.leader
+        try:
+            obj = self.leaderships.latest('start_date')
+            return obj.leader
+        except:
+            return None
 
     def __str__(self):
         return self.full_name
