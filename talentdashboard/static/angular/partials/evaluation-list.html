@@ -66,11 +66,11 @@
     </div>
 
     <div class="dashboard-sized-el employees"id="dashboard" style="max-width: 970px; height: 804px;">
-        <div id="widget-14808658" class="widget" style="position: absolute; margin: 5px; left: 0px; top: 0px; width: 230px; height: 230px;" on-filter columns="4" index="{{$index}}" ng-repeat="evaluation in filteredEvaluations = (evaluations | filterEvaluations:talentCategory:teamId:happy:days_since_happy:fact_finder:follow_thru:quick_start:implementor:vops[0]:vops[1]:vops[2]:vops[3]) | orderBy:[sortHappy,'employee.full_name']">
+        <div id="widget-14808658" class="widget" style="position: absolute; margin: 5px; left: 0px; top: 0px; width: 230px; height: 230px;" on-filter columns="4" index="{{$index}}" stale-days="90" ng-repeat="evaluation in filteredEvaluations = (evaluations | filterEvaluations:talentCategory:teamId:happy:days_since_happy:fact_finder:follow_thru:quick_start:implementor:vops[0]:vops[1]:vops[2]:vops[3]) | orderBy:[sortHappy,'employee.full_name']">
           <div class="widget-inner widget-size-1x1 large-screen" style="width: 230px; height: 230px;">
               <header class="no-reload">
                 <canvas width="12" height="12" style="float:left;margin-right: 8px;" employee-talent-category="{{evaluation.talent_category}}"></canvas>
-                <span class="small" style="float:left;margin-top: -8px;" ng-class="{'veryhappy': evaluation.employee.happiness==5,'happy': evaluation.employee.happiness==4,'indifferent': evaluation.employee.happiness==3,'unhappy': evaluation.employee.happiness==2,'veryunhappy': evaluation.employee.happiness==1, 'nohappydata': evaluation.employee.happiness==-1}"></span>
+                <span class="small" style="float:left;margin-top: -8px;" ng-class="{'veryhappy': evaluation.employee.happiness==5,'happy': evaluation.employee.happiness==4,'indifferent': evaluation.employee.happiness==3,'unhappy': evaluation.employee.happiness==2,'veryunhappy': evaluation.employee.happiness==1, 'nohappydata': (evaluation.employee.happiness==-1 || staleHappy(evaluation.employee.happiness_date))}"></span>
                 <span style="margin-left:4px;"><h1 style="display:inline;"><a href="#/employees/{{evaluation.employee.id}}">{{evaluation.employee.full_name}}</a></h1></span>
               </header>
               <section class="widget-body rag-widget">

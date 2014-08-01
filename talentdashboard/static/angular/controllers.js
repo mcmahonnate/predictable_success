@@ -41,7 +41,7 @@ angular.module('tdb.controllers', [])
     ];
 }])
 
-.controller('EvaluationListCtrl', ['$scope', '$location', '$routeParams', 'PvpEvaluation', 'Team', 'analytics', function($scope, $location, $routeParams, PvpEvaluation, Team, analytics) {
+.controller('EvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'PvpEvaluation', 'Team', 'analytics', function($scope, $rootScope, $location, $routeParams, PvpEvaluation, Team, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     $scope.kolbe_values=[0,1,2,3];
     $scope.vops_values=[0,320,6400,960];
@@ -61,6 +61,9 @@ angular.module('tdb.controllers', [])
     $scope.implementor = $routeParams.implementor;
     $scope.vops = [];
     $scope.teamName='';
+    $scope.staleDays=90;
+    $scope.staleDate = new Date();
+    $scope.staleDate.setDate($scope.staleDate.getDate() - $scope.staleDays);
 	if ($routeParams.team_id){
 		Team.get(
 			{id: $routeParams.team_id},
@@ -75,8 +78,12 @@ angular.module('tdb.controllers', [])
         $scope.teamId=id;
         $scope.teamName=name;
     };
+
+    $scope.staleHappy = function(date) {
+        return ($rootScope.parseDate(date) < $scope.staleDate)
+    };
     $scope.sortHappy = function(evaluation) {
-        if (evaluation.employee.happiness) {
+        if (evaluation.employee.happiness && $rootScope.parseDate(evaluation.employee.happiness_date) > $scope.staleDate) {
             return -evaluation.employee.happiness;
         } else {
             return -1;
