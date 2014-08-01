@@ -61,7 +61,7 @@ angular.module('tdb.controllers', [])
     $scope.implementor = $routeParams.implementor;
     $scope.vops = [];
     $scope.teamName='';
-    $scope.staleDays=90;
+    $scope.staleDays=360;
     $scope.staleDate = new Date();
     $scope.staleDate.setDate($scope.staleDate.getDate() - $scope.staleDays);
 	if ($routeParams.team_id){
