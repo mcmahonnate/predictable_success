@@ -14,6 +14,7 @@ from engagement.engagementreports import get_employees_with_happiness_scores
 from blah.models import Comment
 from todo.models import Task
 from engagement.models import Happiness
+from kpi.models import Performance, Indicator
 import datetime
 from datetime import date, timedelta
 from django.contrib.auth.models import User
@@ -558,6 +559,18 @@ def current_site(request):
     site = Site.objects.get(domain = request.get_host())
 
     serializer = SiteSerializer(site)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def current_kpi_indicator(request):
+    indicator = Indicator.objects.all()[0]
+    serializer = KPIIndicatorSerializer(indicator)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def current_kpi_performance(request):
+    performance = Performance.objects.latest('date')
+    serializer = KPIPerformanceSerializer(performance)
     return Response(serializer.data)
 
 @api_view(['GET'])

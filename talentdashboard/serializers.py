@@ -5,6 +5,7 @@ from todo.models import Task
 from comp.models import CompensationSummary
 from blah.models import Comment
 from engagement.models import Happiness
+from kpi.models import Indicator, Performance
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 
@@ -173,6 +174,16 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'first_name', 'last_name', 'can_edit_employees', 'can_view_comments', 'can_coach_employees', 'employee', 'last_login')
+
+class KPIIndicatorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Indicator
+        fields = ('id', 'name')
+
+class KPIPerformanceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Performance
+        fields = ('id', 'value', 'date')
 
 class SiteSerializer(serializers.ModelSerializer):
     class Meta:
