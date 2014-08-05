@@ -145,6 +145,7 @@ INSTALLED_APPS = (
     'todo',
     'engagement',
     'storages',
+    'kpi',
 )
 
 REST_FRAMEWORK = {
