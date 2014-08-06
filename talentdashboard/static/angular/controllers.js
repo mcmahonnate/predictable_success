@@ -21,12 +21,16 @@ angular.module('tdb.controllers', [])
       }
       return input;
     };
-    $rootScope.scrubDate = function (input) {
+    $rootScope.scrubDate = function (input, display) {
         date = new Date(input);
         var day = date.getDate();
         var month = date.getMonth() + 1; //Months are zero based
         var year = date.getFullYear();
-        scrubbed_Date = year + "-" + month + "-" +  day;
+        if (display) {
+            scrubbed_Date = month + "/" +  day + "/" + year;
+        } else {
+            scrubbed_Date = year + "-" + month + "-" +  day;
+        }
         return scrubbed_Date;
     };
     $rootScope.now = function () {
@@ -39,6 +43,22 @@ angular.module('tdb.controllers', [])
         {id: 2, title: 'Unhappy', css: 'unhappy'},
         {id: 1, title: 'Very Unhappy', css: 'veryunhappy'},
     ];
+    $rootScope.lazyround = function (num) {
+        return Math.abs(Number(num)) >= 1.0e+9
+
+        ? Math.abs(Number(num)) / 1.0e+9 + "B"
+        // Six Zeroes for Millions
+        : Math.abs(Number(num)) >= 1.0e+6
+
+        ? Math.abs(Number(num)) / 1.0e+6 + "M"
+        // Three Zeroes for Thousands
+        : Math.abs(Number(num)) >= 1.0e+3
+
+        ? Math.abs(Number(num)) / 1.0e+3 + "K"
+
+        : Math.abs(Number(num));
+
+    };
 }])
 
 .controller('EvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'PvpEvaluation', 'Team', 'analytics', function($scope, $rootScope, $location, $routeParams, PvpEvaluation, Team, analytics) {
@@ -416,7 +436,7 @@ angular.module('tdb.controllers', [])
         });
     };
     $scope.saveStartDate  = function (){
-        var hire_date = $rootScope.scrubDate($scope.editEmployee.hire_date);
+        var hire_date = $rootScope.scrubDate($scope.editEmployee.hire_date ,false);
         var data = {id: $scope.employee.id, _hire_date: hire_date};
         Employee.update(data, function() {
             $scope.employee.hire_date = $scope.editEmployee.hire_date;
@@ -431,7 +451,7 @@ angular.module('tdb.controllers', [])
         });
     };
     $scope.saveDepartureDate  = function (){
-        var departure_date = $rootScope.scrubDate($scope.editEmployee.departure_date);
+        var departure_date = $rootScope.scrubDate($scope.editEmployee.departure_date, false);
         var data = {id: $scope.employee.id, _departure_date: departure_date};
         Employee.update(data, function() {
             $scope.employee.departure_date = $scope.editEmployee.departure_date;
@@ -534,8 +554,18 @@ angular.module('tdb.controllers', [])
 
 }])
 
-.controller('CompanyOverviewCtrl', ['$scope', '$location', '$routeParams', 'TalentCategoryReport', 'SalaryReport', 'analytics', function($scope, $location, $routeParams, TalentCategoryReport, SalaryReport, analytics) {
+.controller('CompanyOverviewCtrl', ['$rootScope', '$scope', '$location', '$routeParams', 'TalentCategoryReport', 'SalaryReport', 'KPIIndicator', 'KPIPerformance', 'analytics', function($rootScope, $scope, $location, $routeParams, TalentCategoryReport, SalaryReport, KPIIndicator, KPIPerformance, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
+    KPIIndicator.get(function(data) {
+            $scope.indicator = data;
+       }
+    );
+    KPIPerformance.get(function(data) {
+            $scope.performance = data;
+            $scope.performance.value = $rootScope.lazyround($scope.performance.value);
+            $scope.performance.date = $rootScope.scrubDate($scope.performance.date, true);
+       }
+    );
     TalentCategoryReport.getReportForCompany(function(data) {
         $scope.talentCategoryReport = data;
     });
@@ -968,7 +998,7 @@ angular.module('tdb.controllers', [])
         }
         var due_date = null;
         if ($scope.currentToDo.due_date) {
-            due_date = $rootScope.scrubDate($scope.currentToDo.due_date);
+            due_date = $rootScope.scrubDate($scope.currentToDo.due_date, false);
         }
 
         var data = {id: $scope.currentToDo.id, _description: $scope.currentToDo.description, _completed: $scope.currentToDo.completed, _assigned_to_id: assigned_to_id, _due_date: due_date, _employee_id: $scope.currentToDo.employee_id, _owner_id: $scope.currentToDo.created_by.id};

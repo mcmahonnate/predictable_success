@@ -265,6 +265,16 @@ angular.module('tdb.services', ['ngResource'])
     return currentSite;
 }])
 
+.factory('KPIIndicator', ['$resource', '$http', function($resource, $http) {
+    var res = $resource('/api/v1/kpi-indicator\\/');
+    return res;
+}])
+
+.factory('KPIPerformance', ['$resource', '$http', function($resource, $http) {
+    var res = $resource('/api/v1/kpi-performance\\/');
+    return res;
+}])
+
 .factory('fileReader', ['$q', '$log', function ($q, $log) {
 
         var onLoad = function(reader, deferred, scope) {

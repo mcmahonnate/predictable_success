@@ -6,7 +6,7 @@
         <header class="no-reload">
           <h1 id="talent-header" style="display:inline;">Talent Pool</h1>
         </header>
-                  <div >
+        <div>
             <div x-talent-category-chart  size="small" style="width: 360px; height: 225px; position: relative; left:5px;top:10px;"></div>
         </div>
 
@@ -16,12 +16,15 @@
     <article class="widget google-analytics loaded" id="widget-14808658" style="top: 0px; left: 650px; width: auto;">
       <div class="widget-inner widget-size-1x1 large-screen">
         <header class="no-reload">
-          <h1 style="display:inline;">Revenue Per Employee</h1>
+          <h1 style="display:inline;">{{ indicator.name }}</h1>
         </header>
         <section class="widget-body number-widget">
             <div class="widget-canvas">
-
-
+                <div class="main-stat t-size-x60">
+                  ${{ performance.value }}
+                </div>
+                <br />
+                <span class="t-size-x12 t-muted">As of {{ performance.date }}</span>
             </div><!-- .widget-canvas -->
         </section>
       </div><!-- .widget-inner -->
