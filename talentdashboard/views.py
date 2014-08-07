@@ -605,7 +605,7 @@ def compensation_summaries(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
-@cache_on_auth(60*1440, 'foolsquad')
+
 @group_required('foolsquad')
 def pvp_evaluations(request):
     current_round = request.QUERY_PARAMS.get('current_round', None)
@@ -623,8 +623,8 @@ def pvp_evaluations(request):
 
     if team_id is not None:
         evaluations = evaluations.filter(employee__team_id=int(team_id))
-
-    serializer = PvpEvaluationSerializer(evaluations, many=True)
+    evaluations = evaluations.order_by('id')
+    serializer = MinimalPvpEvaluationSerializer(evaluations, many=True)
     data = serializer.data
 
     return Response(data)
