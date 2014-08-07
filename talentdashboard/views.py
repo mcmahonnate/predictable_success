@@ -618,13 +618,14 @@ def pvp_evaluations(request):
         current_round = EvaluationRound.objects.most_recent()
         evaluations = evaluations.filter(evaluation_round__id = current_round.id)
 
-    if employee_id is not None:
-        evaluations = evaluations.filter(employee__id=int(employee_id))
-
     if team_id is not None:
         evaluations = evaluations.filter(employee__team_id=int(team_id))
-    evaluations = evaluations.order_by('id')
-    serializer = MinimalPvpEvaluationSerializer(evaluations, many=True)
+
+    if employee_id is not None:
+        evaluations = evaluations.filter(employee__id=int(employee_id))
+        serializer = PvpEvaluationSerializer(evaluations, many=True)
+    else:
+        serializer = MinimalPvpEvaluationSerializer(evaluations, many=True)
     data = serializer.data
 
     return Response(data)
