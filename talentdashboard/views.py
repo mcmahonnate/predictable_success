@@ -624,14 +624,8 @@ def pvp_evaluations(request):
     if team_id is not None:
         evaluations = evaluations.filter(employee__team_id=int(team_id))
 
-    # The talent_category query executes the query, so it needs to happen after all other filters
-    if talent_category is not None:
-        evaluations = [item for item in evaluations if item.get_talent_category() == int(talent_category)]
-
-    data= [{'empty':1}]
-    if len(evaluations)>0:
-        serializer = PvpEvaluationSerializer(evaluations, many=True)
-        data = serializer.data
+    serializer = PvpEvaluationSerializer(evaluations, many=True)
+    data = serializer.data
 
     return Response(data)
 
