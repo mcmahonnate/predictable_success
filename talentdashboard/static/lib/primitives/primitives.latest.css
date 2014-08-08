@@ -13,15 +13,12 @@
 }
 
 .bp-corner-all {
-    -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
-    -khtml-border-radius: 4px;
-    border-radius: 4px;
+
 }
 
 .bt-item-frame {
     border: 1px solid #dddddd;
-    background: #eeeeee url(images/ui-bg_highlight-soft_100_eeeeee_1x100.png) 50% top repeat-x;
+    background: #2a2a2a url(images/ui-bg_highlight-soft_100_eeeeee_1x100.png) 50% top repeat-x;
     color: #333333;
 }
 
@@ -36,9 +33,9 @@
 }
 
 .bp-title-frame {
-    background: #0000ff;
+    background: #272727;
     border-width: 0;
-    color: white;
+    color: #cbcbcb;
     padding: 0;
 }
 
