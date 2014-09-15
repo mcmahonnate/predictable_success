@@ -147,7 +147,6 @@ INSTALLED_APPS = (
     'assessment',
     'storages',
     'kpi',
-    'utils',
 )
 
 REST_FRAMEWORK = {
