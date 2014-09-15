@@ -25,9 +25,7 @@ class AssessmentBand(models.Model):
     name = models.CharField(
         max_length=255,
     )
-    description = models.CharField(
-        max_length=255,
-    )
+    description = models.TextField()
 
     def __str__(self):
         return "%s" % (self.name)
@@ -44,9 +42,7 @@ class AssessmentComparison(models.Model):
     this = models.ForeignKey(AssessmentBand, related_name='+')
     that = models.ForeignKey(AssessmentBand, related_name='+')
     assessed_date = models.DateField(auto_now_add = True)
-    description = models.CharField(
-        max_length=255,
-    )
+    description = models.TextField()
 
     def __str__(self):
         return "%s compared to %s" % (self.this.name, self.that.name)
