@@ -13,7 +13,7 @@
                     <div id="selection-list">
                         <ul style="padding: 10px 10px;">
                             <li>
-                                <a class="dashboard" href="/logout" style="font-weight:800;height:27px;"><div style="float:left;margin-right: 5px;"><img class="settings_menu" ng-src="{{currentUser.employee.avatar_small}}" style="height:27px;"/></div><div style="float:left;margin-top:5px;">{{currentUser.employee.full_name}}</div><div style="float:right;margin-top:5px;">Sign Out</div></a>
+                                <a class="dashboard" href="/logout" style="height:27px;"><div style="float:left;margin-right: 5px;"><img class="settings_menu" ng-src="{{currentUser.employee.avatar_small}}" style="height:27px;"/></div><div style="float:left;margin-top:5px;">{{currentUser.employee.full_name}}</div><div style="float:right;margin-top:5px;">Sign Out</div></a>
                             </li>
                         </ul>
                     </div>
@@ -30,7 +30,7 @@
                         </li>
                         <div ng-if="employeeQuery" style="margin-top:12px">
                             <li ng-repeat="employee in employees | filter:{full_name:employeeQuery}:startsWith | orderBy:'full_name'">
-                                <a class="dashboard" style="font-weight:800;" href="#/employees/{{employee.id}}">{{employee.full_name}}</a>
+                                <a class="dashboard" href="#/employees/{{employee.id}}">{{employee.full_name}}</a>
                             </li>
                         </div>
                     </ul>
@@ -40,7 +40,7 @@
                   <div id="selection-list">
                     <ul style="padding: 10px 10px;">
                         <li ng-show="!showAddEmployee">
-                            <a class="dashboard employee_menu" style="font-weight:800;" ng-click="showAddEmployee=true"><span class="glyphicon-regular glyphicon-add-employee employee_menu"></span><span style="margin-left:10px;" class="employee_menu">Add Employee</span></a>
+                            <a class="dashboard employee_menu" ng-click="showAddEmployee=true"><span class="glyphicon-regular glyphicon-add-employee employee_menu"></span><span style="margin-left:10px;" class="employee_menu">Add Employee</span></a>
                         </li>
                         <li ng-show="showAddEmployee">
                             <div id="selection-list">
@@ -71,22 +71,22 @@
                 <div id="selection-list">
                     <ul>
                         <li>
-                            <a class="dashboard" style="font-weight:800;" href="#/evaluations/current?talent_category=1"><canvas width="12" height="12" employee-talent-category="1"></canvas><span style="margin-left: 10px;">Top Talent</span></a>
+                            <a class="dashboard" href="#/evaluations/current?talent_category=1"><canvas width="12" height="12" employee-talent-category="1"></canvas><span style="margin-left: 10px;">Top Talent</span></a>
                         </li>
                         <li>
-                            <a class="dashboard" style="font-weight:800;" href="#/evaluations/current?talent_category=2"><canvas width="12" height="12" employee-talent-category="2"></canvas><span style="margin-left: 10px;">Strong Talent</span></a>
+                            <a class="dashboard" href="#/evaluations/current?talent_category=2"><canvas width="12" height="12" employee-talent-category="2"></canvas><span style="margin-left: 10px;">Strong Talent</span></a>
                         </li>
                         <li>
-                            <a class="dashboard" style="font-weight:800;" href="#/evaluations/current?talent_category=3"><canvas width="12" height="12" employee-talent-category="3"></canvas><span style="margin-left: 10px;">Good Talent</span></a>
+                            <a class="dashboard" href="#/evaluations/current?talent_category=3"><canvas width="12" height="12" employee-talent-category="3"></canvas><span style="margin-left: 10px;">Good Talent</span></a>
                         </li>
                         <li>
-                            <a class="dashboard" style="font-weight:800;" href="#/evaluations/current?talent_category=4"><canvas width="12" height="12" employee-talent-category="4"></canvas><span style="margin-left: 10px;">Low Potential</span></a>
+                            <a class="dashboard" href="#/evaluations/current?talent_category=4"><canvas width="12" height="12" employee-talent-category="4"></canvas><span style="margin-left: 10px;">Low Potential</span></a>
                         </li>
                         <li>
-                            <a class="dashboard" style="font-weight:800;" href="#/evaluations/current?talent_category=5"><canvas width="12" height="12" employee-talent-category="5"></canvas><span style="margin-left: 10px;">Low Performing</span></a>
+                            <a class="dashboard" href="#/evaluations/current?talent_category=5"><canvas width="12" height="12" employee-talent-category="5"></canvas><span style="margin-left: 10px;">Low Performing</span></a>
                         </li>
                         <li>
-                            <a class="dashboard" style="font-weight:800;" href="#/evaluations/current?talent_category=6"><canvas width="12" height="12" employee-talent-category="6"></canvas><span style="margin-left: 10px;">Poor</span></a>
+                            <a class="dashboard" href="#/evaluations/current?talent_category=6"><canvas width="12" height="12" employee-talent-category="6"></canvas><span style="margin-left: 10px;">Poor</span></a>
                         </li>
                     </ul>
                 </div>
@@ -99,7 +99,7 @@
                 <div id="selection-list">
                     <ul style="padding: 10px 10px;">
                         <li>
-                            <a class="dashboard" style="font-weight:800;" href="/">{{currentSite.name}}</a>
+                            <a class="dashboard" href="/">{{currentSite.name}}</a>
                         </li>
                     </ul>
                 </div>
@@ -107,7 +107,7 @@
                 <div id="selection-list">
                     <ul style="padding: 10px 10px;">
                         <li ng-repeat="team in teams | filter:{name:teamQuery}:startsWith | orderBy:'name'">
-                            <a class="dashboard" style="font-weight:800;" href="#/teams/{{team.id}}">{{team.name}}</a>
+                            <a class="dashboard" href="#/teams/{{team.id}}">{{team.name}}</a>
                         </li>
                     </ul>
                 </div>
@@ -127,7 +127,7 @@
                         <ul style="padding:0px 10px 10px 10px;">
                             <div ng-if="navQuery!=''" style="margin-top:12px">
                                 <li ng-repeat="employee in filteredEmployees = (employees |filter:{full_name:navQuery}:startsWith) | orderBy:'full_name'">
-                                    <a class="dashboard" style="font-weight:800;" href="#/employees/{{employee.id}}"><img class="settings_menu" ng-src="{{employee.avatar_small}}" style="padding-right:10px;height:27px;vertical-align:middle"/>{{employee.full_name}}</a>
+                                    <a class="dashboard" href="#/employees/{{employee.id}}"><img class="settings_menu" ng-src="{{employee.avatar_small}}" style="padding-right:10px;height:27px;vertical-align:middle"/>{{employee.full_name}}</a>
                                 </li>
                                 <li ng-show="!filteredEmployees.length" style="padding: 13px 20px;">No Results</li>
                             </div>

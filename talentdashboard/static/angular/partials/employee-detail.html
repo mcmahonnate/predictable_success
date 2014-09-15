@@ -433,7 +433,7 @@
                         <a ng-href="#/employees/{{comment.owner.employee.id}}" style="cursor: pointer;color:#8b8b8b;"><img ng-src="{{ comment.owner.employee.avatar_small }}" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;"/></a>
                     </div>
                     <div style="display: block; float: left;padding-left:10px;width: 500px;min-height: 48px;">
-                        <b style="color:#8b8b8b;"><a ng-href="#/employees/{{comment.owner.employee.id}}" style="cursor: pointer;color:#8b8b8b;">{{comment.owner.employee.full_name}}</a></b>
+                        <a ng-href="#/employees/{{comment.owner.employee.id}}" style="cursor: pointer;color:#8b8b8b;">{{comment.owner.employee.full_name}}</a>
                         <div ng-show="showCommentEdit" style="position:relative">
                           <textarea ng-model="comment.content" style="position: relative; width: 515px; height: 132px;background-color:#2a2a2a;color:#eee;resize:vertical;font-size: 14px;margin-top: 5px;">
                           </textarea>
@@ -460,7 +460,7 @@
                                     <a ng-href="#/employees/{{subcomment.owner.employee.id}}" style="cursor: pointer;color:#8b8b8b;"><img ng-src="{{ subcomment.owner.employee.avatar_small }}" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;"/></a>
                                 </div>
                                 <div style="display: block; float: left;padding-left:10px;width: 440px;min-height: 48px;padding-bottom: 5px;">
-                                    <b style="color:#8b8b8b;"><a ng-href="#/employees/{{subcomment.owner.employee.id}}" style="cursor: pointer;color:#8b8b8b;">{{subcomment.owner.employee.full_name}}</a></b>
+                                    <a ng-href="#/employees/{{subcomment.owner.employee.id}}" style="cursor: pointer;color:#8b8b8b;">{{subcomment.owner.employee.full_name}}</a>
                                     <div ng-show="showSubCommentEdit" style="position:relative">
                                       <textarea ng-model="subcomment.content" style="position: relative; width: 430px; height: 132px;background-color:#2a2a2a;color:#eee;resize:vertical;font-size: 14px;margin-top: 5px;">
                                       </textarea>
