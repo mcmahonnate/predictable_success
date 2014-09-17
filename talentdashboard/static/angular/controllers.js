@@ -303,7 +303,36 @@ angular.module('tdb.controllers', [])
     if ($routeParams.id=='add') {
         $scope.addNew = true;
     }
-
+    $scope.show_bio = false;
+    $scope.show_discussions = true;
+    $scope.show_vops = false;
+    $scope.show_kolbe = false;
+    $scope.show_myers_briggs = false;
+    $scope.show_todos = false;
+    $scope.click_discussions= function() {
+        $scope.show_bio = false;
+        $scope.show_discussions = true;
+        $scope.show_vops = false;
+        $scope.show_kolbe = false;
+        $scope.show_myers_briggs = false;
+        $scope.show_todos = false;
+    };
+    $scope.click_bio= function() {
+        $scope.show_bio = true;
+        $scope.show_discussions = false;
+        $scope.show_vops = false;
+        $scope.show_kolbe = false;
+        $scope.show_myers_briggs = false;
+        $scope.show_todos = false;
+    };
+    $scope.click_todos= function() {
+        $scope.show_bio = false;
+        $scope.show_discussions = false;
+        $scope.show_vops = false;
+        $scope.show_kolbe = false;
+        $scope.show_myers_briggs = false;
+        $scope.show_todos = true;
+    };
     $scope.leadership=[];
     $scope.edit_leadership=[];
     $scope.edit_leadership.leader=[];
