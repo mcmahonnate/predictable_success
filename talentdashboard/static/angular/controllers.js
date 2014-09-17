@@ -333,6 +333,30 @@ angular.module('tdb.controllers', [])
         $scope.show_myers_briggs = false;
         $scope.show_todos = true;
     };
+    $scope.click_vops= function() {
+        $scope.show_bio = false;
+        $scope.show_discussions = false;
+        $scope.show_vops = true;
+        $scope.show_kolbe = false;
+        $scope.show_myers_briggs = false;
+        $scope.show_todos = false;
+    };
+    $scope.click_kolbe= function() {
+        $scope.show_bio = false;
+        $scope.show_discussions = false;
+        $scope.show_vops = false;
+        $scope.show_kolbe = true;
+        $scope.show_myers_briggs = false;
+        $scope.show_todos = false;
+    };
+    $scope.click_myers_briggs= function() {
+        $scope.show_bio = false;
+        $scope.show_discussions = false;
+        $scope.show_vops = false;
+        $scope.show_kolbe = false;
+        $scope.show_myers_briggs = true;
+        $scope.show_todos = false;
+    };
     $scope.leadership=[];
     $scope.edit_leadership=[];
     $scope.edit_leadership.leader=[];
