@@ -43,6 +43,10 @@ class PvPEmployeeSerializer(serializers.HyperlinkedModelSerializer):
     vops_operator = serializers.SerializerMethodField('get_vops_operator')
     vops_processor = serializers.SerializerMethodField('get_vops_processor')
     vops_synergist = serializers.SerializerMethodField('get_vops_synergist')
+    mbti_ei = serializers.SerializerMethodField('get_mbti_ei')
+    mbti_sn = serializers.SerializerMethodField('get_mbti_sn')
+    mbti_tf = serializers.SerializerMethodField('get_mbti_tf')
+    mbti_pj = serializers.SerializerMethodField('get_mbti_pj')
 
     def get_happiness(self, obj):
         happiness = -1
@@ -94,6 +98,26 @@ class PvPEmployeeSerializer(serializers.HyperlinkedModelSerializer):
         if obj.get_vops_synergist:
             vops_synergist = obj.get_vops_synergist
         return vops_synergist
+    def get_mbti_ei(self, obj):
+        mbti_ei = None
+        if obj.get_mbti_ei:
+            mbti_ei = obj.get_mbti_ei
+        return mbti_ei
+    def get_mbti_sn(self, obj):
+        mbti_sn = None
+        if obj.get_mbti_sn:
+            mbti_sn = obj.get_mbti_sn
+        return mbti_sn
+    def get_mbti_tf(self, obj):
+        mbti_tf = None
+        if obj.get_mbti_tf:
+            mbti_tf = obj.get_mbti_tf
+        return mbti_tf
+    def get_mbti_pj(self, obj):
+        mbti_pj = None
+        if obj.get_mbti_pj:
+            mbti_pj = obj.get_mbti_pj
+        return mbti_pj
     def get_avatar_url(self, obj):
         url = ''
         if obj.avatar:
@@ -101,7 +125,7 @@ class PvPEmployeeSerializer(serializers.HyperlinkedModelSerializer):
         return url
     class Meta:
         model = Employee
-        fields = ('id', 'full_name', 'avatar', 'happiness', 'happiness_date', 'kolbe_fact_finder','kolbe_follow_thru', 'kolbe_quick_start', 'kolbe_implementor', 'vops_visionary', 'vops_operator', 'vops_processor', 'vops_synergist', 'team', 'display')
+        fields = ('id', 'full_name', 'avatar', 'happiness', 'happiness_date', 'kolbe_fact_finder','kolbe_follow_thru', 'kolbe_quick_start', 'kolbe_implementor', 'vops_visionary', 'vops_operator', 'vops_processor', 'vops_synergist', 'mbti_ei', 'mbti_sn', 'mbti_tf', 'mbti_pj', 'team', 'display')
 
 
 class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
