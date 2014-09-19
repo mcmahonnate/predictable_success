@@ -36,7 +36,20 @@ class EmployeeAssessment(models.Model):
     score = models.IntegerField()
 
     def __str__(self):
-        return "%s" % (self.employee.name)
+        return "%s" % (self.employee.full_name)
+
+    def _get_description(self):
+        try:
+            bands = AssessmentBand.objects.filter(category__id=self.category.id)
+            bands = bands.filter(min_value__lte=self.score)
+            band = bands.filter(max_value__gte=self.score)[0]
+            return band.description
+        except:
+            return None
+
+    @property
+    def get_description(self):
+        return self._get_description()
 
 class AssessmentComparison(models.Model):
     this = models.ForeignKey(AssessmentBand, related_name='+')

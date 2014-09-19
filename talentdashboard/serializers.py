@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from pvp.models import PvpEvaluation, EvaluationRound
 from org.models import Employee, Team, Mentorship, Leadership, Attribute, AttributeCategory
+from assessment.models import EmployeeAssessment, AssessmentType, AssessmentBand, AssessmentCategory, AssessmentComparison
 from todo.models import Task
 from comp.models import CompensationSummary
 from blah.models import Comment
@@ -322,7 +323,36 @@ class HappinessSerializer(serializers.HyperlinkedModelSerializer):
         model = Happiness
         fields = ('id', 'employee', 'assessment', 'assessment_verbose', 'assessed_by', 'assessed_date')
 
-class EvaluationRoundSerializer(serializers.HyperlinkedModelSerializer):
+class AssessmentTypeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = AssessmentType
+        fields = ('id', 'name')
+
+class AssessmentCategorySerializer(serializers.ModelSerializer):
+    assessment = AssessmentTypeSerializer()
+
+    class Meta:
+        model = AssessmentCategory
+        fields = ('id', 'name', 'assessment')
+
+class AssessmentSerializer(serializers.ModelSerializer):
+    employee = MinimalEmployeeSerializer()
+    category = AssessmentCategorySerializer()
+    description = serializers.SerializerMethodField('get_description')
+
+    def get_description(self, obj):
+         try:
+            description = obj.get_description
+            return description
+         except:
+             return None
+
+    class Meta:
+        model = EmployeeAssessment
+        fields = ('id', 'employee', 'score', 'category', 'description')
+
+class EvaluationRoundSerializer(serializers.ModelSerializer):
     class Meta:
         model = EvaluationRound
         fields = ['id', 'date',]
