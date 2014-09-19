@@ -383,6 +383,7 @@ sub{top:0.5ex}
 .t-size-x11{font-size:11px}
 .t-size-x12{font-size:12px}
 .t-size-x14{font-size:14px}
+.t-size-x16{font-size:16px}
 .t-size-x18{font-size:18px}
 .t-size-x20{font-size:20px}
 .t-size-x24{font-size:24px}
@@ -411,7 +412,7 @@ sub{top:0.5ex}
 .rag-widget .widget-canvas ol li:last-child,.ragcolumn-widget .widget-canvas ol li:last-child{border-bottom:none}
 .rag-widget .widget-canvas ol li:first-child,.ragcolumn-widget .widget-canvas ol li:first-child{padding-top:0}
 .rag-widget .widget-canvas ol div,.ragcolumn-widget .widget-canvas ol div{float:left}
-.rag-widget .widget-canvas ol div.t-secondary,.ragcolumn-widget .widget-canvas ol div.t-secondary{padding:2px 0 0;font-size:12px;overflow-wrap:break-word}
+.rag-widget .widget-canvas ol div.t-secondary,.ragcolumn-widget .widget-canvas ol div.t-secondary{padding:2px 0 0;font-size:16px;overflow-wrap:break-word}
 .widget-size-2x2 .rag-widget .widget-canvas ol li,.widget-size-2x2 .ragcolumn-widget .widget-canvas ol li{padding:24px 0}
 .widget-size-2x2 .rag-widget .widget-canvas .t-secondary,.widget-size-2x2 .ragcolumn-widget .widget-canvas .t-secondary{font-size:24px}
 .large-screen .rag-widget .widget-canvas li,.large-screen .ragcolumn-widget .widget-canvas li{padding:2px 0}
