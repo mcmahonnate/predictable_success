@@ -9,6 +9,11 @@ angular.module('tdb.services', ['ngResource'])
     return res;
 }])
 
+.factory('Assessment', ['$resource', '$http', function($resource, $http) {
+    var res = $resource('/api/v1/assessment/employees/:id/', {id:'@id'});
+    return res;
+}])
+
 .factory('TeamMembers', ['$resource', '$http', function($resource, $http) {
     var res = $resource('/api/v1/team-members/:id/', {id:'@id'});
     return res;

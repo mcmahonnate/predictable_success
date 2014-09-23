@@ -75,6 +75,19 @@ filters.filter('new_line', function () {
     };
 });
 
+filters.filter('greaterThan', function() {
+  return function (items, number) {
+    var filtered = [];
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i];
+      if (item.score > number) {
+        filtered.push(item);
+      }
+    }
+    return filtered;
+  };
+});
+
 filters.filter('filterEvaluations', function () {
   return function( items, talentCategory, teamId, happy, days_since_happy, fact_finder, follow_thru, quick_start, implementor, visionary, operator, processor, synergist) {
 

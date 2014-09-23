@@ -298,7 +298,7 @@ angular.module('tdb.controllers', [])
 	}
 }])
 
-.controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', 'User', 'Employee', 'Engagement', 'EmployeeLeader', 'Attribute', 'CompSummary', 'PhotoUpload', '$http', 'analytics', 'fileReader', function($rootScope, $scope, $location, $routeParams, $window, User, Employee, Engagement, EmployeeLeader, Attribute, CompSummary, PhotoUpload, $http, analytics, fileReader) {
+.controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', 'User', 'Employee', 'Engagement', 'EmployeeLeader', 'Attribute', 'CompSummary', 'PhotoUpload', '$http', 'analytics', 'fileReader','Assessment', function($rootScope, $scope, $location, $routeParams, $window, User, Employee, Engagement, EmployeeLeader, Attribute, CompSummary, PhotoUpload, $http, analytics, fileReader, Assessment) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     if ($routeParams.id=='add') {
         $scope.addNew = true;
@@ -387,6 +387,13 @@ angular.module('tdb.controllers', [])
             $scope.happys = data;
         }
     );
+
+    Assessment.query(
+        {id:$routeParams.id},
+        function(data) {
+            $scope.assessments = data;
+        }
+    )
 
     $scope.selected=0;
     $scope.set_choice = function(value) {

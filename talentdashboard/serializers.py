@@ -339,7 +339,15 @@ class AssessmentCategorySerializer(serializers.ModelSerializer):
 class AssessmentSerializer(serializers.ModelSerializer):
     employee = MinimalEmployeeSerializer()
     category = AssessmentCategorySerializer()
+    name = serializers.SerializerMethodField('get_name')
     description = serializers.SerializerMethodField('get_description')
+
+    def get_name(self, obj):
+         try:
+            name = obj.get_name
+            return name
+         except:
+             return None
 
     def get_description(self, obj):
          try:
@@ -350,7 +358,7 @@ class AssessmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmployeeAssessment
-        fields = ('id', 'employee', 'score', 'category', 'description')
+        fields = ('id', 'employee', 'score', 'category', 'name', 'description')
 
 class EvaluationRoundSerializer(serializers.ModelSerializer):
     class Meta:

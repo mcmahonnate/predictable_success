@@ -47,6 +47,19 @@ class EmployeeAssessment(models.Model):
         except:
             return None
 
+    def _get_name(self):
+        try:
+            bands = AssessmentBand.objects.filter(category__id=self.category.id)
+            bands = bands.filter(min_value__lte=self.score)
+            band = bands.filter(max_value__gte=self.score)[0]
+            return band.name
+        except:
+            return None
+
+    @property
+    def get_name(self):
+        return self._get_name()
+
     @property
     def get_description(self):
         return self._get_description()
