@@ -303,8 +303,8 @@ angular.module('tdb.controllers', [])
     if ($routeParams.id=='add') {
         $scope.addNew = true;
     }
-    $scope.show_bio = false;
-    $scope.show_discussions = true;
+    $scope.show_bio = true;
+    $scope.show_discussions = false;
     $scope.show_vops = false;
     $scope.show_kolbe = false;
     $scope.show_myers_briggs = false;

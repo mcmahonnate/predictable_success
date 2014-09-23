@@ -78,11 +78,13 @@ filters.filter('new_line', function () {
 filters.filter('greaterThan', function() {
   return function (items, number) {
     var filtered = [];
-    for (var i = 0; i < items.length; i++) {
-      var item = items[i];
-      if (item.score > number) {
-        filtered.push(item);
-      }
+    if (items) {
+        for (var i = 0; i < items.length; i++) {
+          var item = items[i];
+          if (item.score > number) {
+            filtered.push(item);
+          }
+        }
     }
     return filtered;
   };
