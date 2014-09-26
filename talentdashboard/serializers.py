@@ -7,6 +7,7 @@ from comp.models import CompensationSummary
 from blah.models import Comment
 from engagement.models import Happiness
 from kpi.models import Indicator, Performance
+from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 
@@ -295,12 +296,22 @@ class SubCommentSerializer(serializers.HyperlinkedModelSerializer):
         model = Comment
         fields = ('id', 'content', 'owner', 'object_id', 'created_date', 'modified_date')
 
-class CommentSerializer(serializers.HyperlinkedModelSerializer):
+class EmployeeCommentSerializer(serializers.HyperlinkedModelSerializer):
     owner = UserSerializer()
     associated_object = MinimalEmployeeSerializer()
+
     class Meta:
         model = Comment
         fields = ('id', 'content', 'owner', 'object_id', 'created_date', 'modified_date', 'associated_object')
+
+class TeamCommentSerializer(serializers.HyperlinkedModelSerializer):
+    owner = UserSerializer()
+    associated_object = TeamSerializer()
+
+    class Meta:
+        model = Comment
+        fields = ('id', 'content', 'owner', 'object_id', 'created_date', 'modified_date', 'associated_object')
+
 
 class TaskSerializer(serializers.HyperlinkedModelSerializer):
     created_by = MinimalEmployeeSerializer()

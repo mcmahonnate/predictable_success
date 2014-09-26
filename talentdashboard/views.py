@@ -257,7 +257,7 @@ class EmployeeCommentList(APIView):
         comments = Comment.objects.filter(object_id = pk,content_type=employee_type)
         comments = comments.exclude(object_id=user.id,content_type=employee_type)
         comments = comments.extra(order_by = ['-created_date'])
-        serializer = CommentSerializer(comments, many=True)
+        serializer = EmployeeCommentSerializer(comments, many=True)
         return Response(serializer.data)
 
     def post(self, request, pk, format=None):
@@ -277,7 +277,38 @@ class EmployeeCommentList(APIView):
             return Response(serializer.data)
         else:
             comment = employee.comments.add_comment(content, owner)
-            serializer = CommentSerializer(comment, many=False)
+            serializer = EmployeeCommentSerializer(comment, many=False)
+            return Response(serializer.data)
+
+class TeamCommentList(APIView):
+    def get(self, request, pk, format=None):
+        team = Team.objects.get(id = pk)
+        team_type = ContentType.objects.get(model="team")
+        if team is None:
+            return Response(None, status=status.HTTP_404_NOT_FOUND)
+        comments = Comment.objects.filter(object_id = pk,content_type=team_type)
+        comments = comments.extra(order_by = ['-created_date'])
+        serializer = TeamCommentSerializer(comments, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, pk, format=None):
+        comment_type = ContentType.objects.get(model="comment")
+        model_name = request.DATA["_model_name"]
+        content_type = ContentType.objects.get(model=model_name)
+        object_id = request.DATA["_object_id"]
+        team = Employee.objects.get(id = pk)
+        if team is None:
+            return Response(None, status=status.HTTP_404_NOT_FOUND)
+        owner = request.user
+        content = request.DATA["_content"]
+        if content_type == comment_type:
+            comment = Comment.objects.get(id = object_id)
+            sub_comment = Comment.objects.add_comment(comment,content,owner)
+            serializer = SubCommentSerializer(sub_comment, many=False)
+            return Response(serializer.data)
+        else:
+            comment = team.comments.add_comment(content, owner)
+            serializer = TeamCommentSerializer(comment, many=False)
             return Response(serializer.data)
 
 class LeadershipDetail(APIView):
@@ -309,20 +340,20 @@ class CommentList(APIView):
         comments = Comment.objects.filter(content_type = employee_type)
         comments = comments.exclude(object_id=employee.id)
         comments = comments.extra(order_by = ['-created_date'])[:15]
-        serializer = CommentSerializer(comments, many=True)
+        serializer = EmployeeCommentSerializer(comments, many=True)
         return Response(serializer.data)
 
 class CommentDetail(APIView):
     def get(self, request, pk, format=None):
         comment = Comment.objects.get(id = pk)
-        serializer = CommentSerializer(comment)
+        serializer = EmployeeCommentSerializer(comment)
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
         comment = Comment.objects.filter(id = pk)
         if comment is not None:
             comment.update(content = request.DATA["_content"], modified_date = datetime.datetime.now())
-            serializer = CommentSerializer(comment, many=False)
+            serializer = EmployeeCommentSerializer(comment, many=False)
             return Response(None)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
