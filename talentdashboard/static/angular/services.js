@@ -243,6 +243,14 @@ angular.module('tdb.services', ['ngResource'])
     return res;
 }])
 
+.factory('TeamComments', ['$resource', '$http', function($resource, $http) {
+    var actions = {
+        'addNew': { method:'POST' },
+    }
+    var res = $resource('/api/v1/comments/teams/:id', {id:'@id'}, actions);
+    return res;
+}])
+
 .factory('SubComments', ['$resource', '$http', function($resource, $http) {
     var subComments = $resource('/api/v1/comments/subcomments/:id');
 

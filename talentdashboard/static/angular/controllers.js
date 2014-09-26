@@ -683,11 +683,10 @@ angular.module('tdb.controllers', [])
             $scope.team = data;
         }
     );
-    $scope.show_discussions = false;
+    $scope.show_discussions = true;
     $scope.show_vops = false;
     $scope.show_kolbe = false;
     $scope.show_myers_briggs = false;
-    $scope.show_todos = false;
     $scope.click_discussions= function() {
         $scope.show_discussions = true;
         $scope.show_vops = false;
@@ -701,13 +700,6 @@ angular.module('tdb.controllers', [])
         $scope.show_kolbe = false;
         $scope.show_myers_briggs = false;
         $scope.show_todos = false;
-    };
-    $scope.click_todos= function() {
-        $scope.show_discussions = false;
-        $scope.show_vops = false;
-        $scope.show_kolbe = false;
-        $scope.show_myers_briggs = false;
-        $scope.show_todos = true;
     };
     $scope.click_vops= function() {
         $scope.show_discussions = false;
@@ -1299,7 +1291,7 @@ angular.module('tdb.controllers', [])
     };
 }])
 
-.controller('TeamCommentsCtrl', ['$scope', '$filter', '$routeParams', '$window', 'TeamComments', 'SubComments','Comment', 'User', function($scope, $filter, $routeParams, $window, EmployeeComments, SubComments, Comment, User) {
+.controller('TeamCommentsCtrl', ['$scope', '$filter', '$routeParams', '$window', 'TeamComments', 'SubComments','Comment', 'User',function($scope, $filter, $routeParams, $window, TeamComments, SubComments, Comment, User) {
     $scope.teamId = $routeParams.id;
     $scope.newCommentText = "";
     $scope.toggleCommentTextExpander = function (comment) {
@@ -1331,7 +1323,7 @@ angular.module('tdb.controllers', [])
         };
     };
 
-    Team.query({ id: $scope.teamId }).$then(function(response) {
+    TeamComments.query({ id: $scope.teamId }).$then(function(response) {
         $scope.comments = response.data;
         $scope.originalComments = angular.copy($scope.comments);
         angular.forEach($scope.comments, function(comment) {
@@ -1400,10 +1392,11 @@ angular.module('tdb.controllers', [])
         $scope.comments.push(newComment);
         $scope.originalComments.push(angular.copy(newComment));
 
-        var data = {id: newComment.id, _model_name: "employee", _object_id: 0, _content: newComment.content};
-
-        data.id = $scope.employeeId;
-        EmployeeComments.save(data, function(response) {
+        var data = {id: newComment.id, _model_name: "team", _object_id: $scope.teamId, _content: newComment.content};
+        console.log(data);
+        data.id = $scope.teamId;
+        console.log(data);
+        TeamComments.save(data, function(response) {
             newComment.id = response.id;
             $scope.newCommentText = "";
         });
@@ -1422,8 +1415,8 @@ angular.module('tdb.controllers', [])
 
         var data = {id: newComment.id, _model_name: "comment", _object_id: comment.id,_content: newComment.content};
 
-        data.id = $scope.employeeId;
-        EmployeeComments.save(data, function(response) {
+        data.id = $scope.teamId;
+        TeamComments.save(data, function(response) {
             newComment.id = response.id;
             comment.newSubCommentText = "";
         });

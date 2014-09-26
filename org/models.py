@@ -235,6 +235,8 @@ class Team(models.Model):
     def __str__(self):
         return self.name
 
+blah.register(Team)
+
 class Mentorship(models.Model):
     mentor = models.ForeignKey(Employee, related_name='+')
     mentee = models.ForeignKey(Employee, related_name='+')

@@ -296,7 +296,7 @@ class TeamCommentList(APIView):
         model_name = request.DATA["_model_name"]
         content_type = ContentType.objects.get(model=model_name)
         object_id = request.DATA["_object_id"]
-        team = Employee.objects.get(id = pk)
+        team = Team.objects.get(id = pk)
         if team is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
         owner = request.user
