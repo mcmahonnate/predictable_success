@@ -1,5 +1,6 @@
 from django.db import models
 from org.models import Employee
+from django.contrib.contenttypes.models import ContentType
 
 class AssessmentType(models.Model):
     name = models.CharField(
@@ -72,3 +73,12 @@ class AssessmentComparison(models.Model):
 
     def __str__(self):
         return "%s compared to %s" % (self.this.name, self.that.name)
+
+class TeamAssessmentCluster(models.Model):
+    name = models.CharField(
+        max_length=255,
+    )
+    description = models.TextField()
+    bands =  models.ManyToManyField(AssessmentBand)
+    def __str__(self):
+        return "%s team" % (self.name)
