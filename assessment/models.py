@@ -9,14 +9,14 @@ class MBTI(models.Model):
     def __str__(self):
         return "%s is a %s" % (self.employee.full_name, self.type)
 
-class MBTIEmployeeDescriptions(models.Model):
+class MBTIEmployeeDescription(models.Model):
     type = models.CharField(choices=MBTI.TYPES)
     description = models.TextField()
 
     def __str__(self):
         return "%s" % (self.type)
 
-class MBTITeamDescriptions(models.Model):
+class MBTITeamDescription(models.Model):
     type = models.CharField(choices=MBTI.TYPES)
     description = models.TextField()
 
