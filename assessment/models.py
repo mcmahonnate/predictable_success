@@ -26,7 +26,7 @@ class MBTI(models.Model):
     type = models.CharField(choices=MBTI_TYPES, max_length=4)
 
     def __str__(self):
-        return "%s is a %s" % (self.employee.full_name, self.type)
+        return "%s is an %s" % (self.employee.full_name, self.type)
 
 class MBTIEmployeeDescription(models.Model):
     type = models.CharField(choices=MBTI_TYPES, max_length=4)
