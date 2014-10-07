@@ -15,7 +15,7 @@ from blah.models import Comment
 from todo.models import Task
 from engagement.models import Happiness
 from kpi.models import Performance, Indicator
-from assessment.models import EmployeeAssessment
+from assessment.models import EmployeeAssessment, MBTI
 import datetime
 from datetime import date, timedelta
 from django.contrib.auth.models import User
@@ -246,6 +246,18 @@ class Assessment(APIView):
         assessments = EmployeeAssessment.objects.filter(employee__id = pk)
         serializer = AssessmentSerializer(assessments, many=True)
         return Response(serializer.data)
+
+class EmployeeMBTI(APIView):
+    def get(self, request, pk, format=None):
+        employee = Employee.objects.get(id = pk)
+        if employee is None:
+            return Response(None, status=status.HTTP_404_NOT_FOUND)
+        try:
+            mbti = MBTI.objects.filter(employee__id = pk)[0]
+            serializer = MBTISerializer(mbti, many=False)
+            return Response(serializer.data)
+        except:
+            return Response(None)
 
 class EmployeeCommentList(APIView):
     def get(self, request, pk, format=None):

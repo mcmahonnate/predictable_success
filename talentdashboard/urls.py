@@ -6,7 +6,6 @@ from django.contrib.auth.views import password_reset, password_reset_confirm, pa
 from views import *
 from forms import *
 from rest_framework import routers
-from blah.models import Comment
 
 router = routers.DefaultRouter()
 router.register(r'api/v1/teams', TeamViewSet)
@@ -14,7 +13,6 @@ router.register(r'api/v1/mentorships', MentorshipViewSet)
 router.register(r'api/v1/leaderships', LeadershipsViewSet)
 router.register(r'api/v1/attributes', AttributeViewSet)
 
-admin.site.register(Comment)
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -42,6 +40,7 @@ urlpatterns = patterns('',
     url(r'^api/v1/happiness-reports/', happiness_reports),
     url(r'api/v1/engagement/employees/(?P<pk>.*)', (group_required('foolsquad')(EmployeeEngagement.as_view()))),
     url(r'api/v1/assessment/employees/(?P<pk>.*)', (group_required('foolsquad')(Assessment.as_view()))),
+    url(r'api/v1/assessment/mbti/employees/(?P<pk>.*)', (group_required('foolsquad')(EmployeeMBTI.as_view()))),
     url(r'^api/v1/team-leads/', team_leads),
     url(r'^api/v1/team-lead-employees/', team_lead_employees),
     url(r'api/v1/team-members/(?P<pk>.*)', (group_required('foolsquad')(TeamMemberList.as_view())), name='employee-list'),
