@@ -16,6 +16,7 @@ from todo.models import Task
 from engagement.models import Happiness
 from kpi.models import Performance, Indicator
 from assessment.models import EmployeeAssessment, MBTI
+from org.teamreports import get_mbti_report_for_team
 import datetime
 from datetime import date, timedelta
 from django.contrib.auth.models import User
@@ -111,6 +112,15 @@ class EmployeeCommentReportDetail(APIView):
         if report is not None:
             return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
+
+class TeamMBTIReportDetail(APIView):
+    def get(self, request, pk, format=None):
+        try:
+            report = get_mbti_report_for_team(pk)
+            serializer = MBTIReportSerializer(report)
+            return Response(serializer.data)
+        except:
+            return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 class EmployeeEngagementReportDetail(APIView):
     def get(self, request, pk, format=None):

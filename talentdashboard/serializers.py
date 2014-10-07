@@ -399,6 +399,16 @@ class SalaryReportSerializer(serializers.Serializer):
     def get_total_salaries(self, obj):
         return float(obj.total_salaries)
 
+class MBTIReportSerializer(serializers.Serializer):
+    type = serializers.SerializerMethodField('get_type')
+    description = serializers.SerializerMethodField('get_description')
+
+    def get_type(self, obj):
+        return obj.team_type.type
+
+    def get_description(self, obj):
+        return obj.team_type.description
+
 class CompensationSummarySerializer(serializers.ModelSerializer):
     employee = EmployeeSerializer()
     total_compensation = serializers.SerializerMethodField('get_total_compensation')
