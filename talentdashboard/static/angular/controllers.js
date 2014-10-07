@@ -673,7 +673,7 @@ angular.module('tdb.controllers', [])
     }
 }])
 
-.controller('TeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'TalentCategoryReport', 'SalaryReport', 'Team', 'TeamMembers', 'analytics', function($scope, $location, $routeParams, TalentCategoryReport, SalaryReport, Team, TeamMembers, analytics) {
+.controller('TeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'TalentCategoryReport', 'SalaryReport', 'Team', 'TeamMembers', 'TeamMBTI', 'analytics', function($scope, $location, $routeParams, TalentCategoryReport, SalaryReport, Team, TeamMembers, TeamMBTI, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     $scope.teamId = $routeParams.id;
     SalaryReport.getReportForTeam($routeParams.id, function(data) {
@@ -690,6 +690,14 @@ angular.module('tdb.controllers', [])
             $scope.team = data;
         }
     );
+
+    TeamMBTI.get(
+        {id: $routeParams.id},
+        function(data) {
+            $scope.mbti = data;
+        }
+    );
+
     $scope.show_discussions = true;
     $scope.show_vops = false;
     $scope.show_kolbe = false;
