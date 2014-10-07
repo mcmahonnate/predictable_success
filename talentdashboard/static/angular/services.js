@@ -14,6 +14,11 @@ angular.module('tdb.services', ['ngResource'])
     return res;
 }])
 
+.factory('EmployeeMBTI', ['$resource', '$http', function($resource, $http) {
+    var res = $resource('/api/v1/assessment/mbti/employees/:id/', {id:'@id'});
+    return res;
+}])
+
 .factory('TeamMembers', ['$resource', '$http', function($resource, $http) {
     var res = $resource('/api/v1/team-members/:id/', {id:'@id'});
     return res;
