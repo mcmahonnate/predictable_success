@@ -20,14 +20,6 @@ MBTI_TYPES = (
     ('infp', 'INFP'),
 )
 
-
-class MBTI(models.Model):
-    employee = models.ForeignKey(Employee, related_name='+')
-    type = models.CharField(choices=MBTI_TYPES, max_length=4)
-
-    def __str__(self):
-        return "%s is an %s" % (self.employee.full_name, self.type)
-
 class MBTIEmployeeDescription(models.Model):
     type = models.CharField(choices=MBTI_TYPES, max_length=4)
     description = models.TextField()
@@ -41,6 +33,24 @@ class MBTITeamDescription(models.Model):
 
     def __str__(self):
         return "%s" % (self.type)
+
+class MBTI(models.Model):
+    employee = models.ForeignKey(Employee, related_name='+')
+    type = models.CharField(choices=MBTI_TYPES, max_length=4)
+
+    def __str__(self):
+        return "%s is an %s" % (self.employee.full_name, self.type)
+
+    def _get_description(self):
+        try:
+            obj = MBTIEmployeeDescription.objects.filter(type=self.type)[0]
+            return obj.description
+        except:
+            return None
+
+    @property
+    def get_description(self):
+        return self._get_description()
 
 class AssessmentType(models.Model):
     name = models.CharField(
