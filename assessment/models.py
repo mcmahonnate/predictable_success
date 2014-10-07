@@ -1,6 +1,27 @@
 from django.db import models
 from org.models import Employee
-from django.contrib.contenttypes.models import ContentType
+
+class MBTI(models.Model):
+    TYPES = ['ISTJ', 'ESTJ', 'ISFJ', 'ESFJ', 'ISTP', 'ESTP', 'ESFP', 'ISFP', 'ENTJ', 'INTJ', 'ENTP', 'INTP', 'ENFJ', 'INFJ', 'ENFP', 'INFP']
+    employee = models.ForeignKey(Employee, related_name='+')
+    type = models.CharField(choices=TYPES)
+
+    def __str__(self):
+        return "%s is a %s" % (self.employee.full_name, self.type)
+
+class MBTIEmployeeDescriptions(models.Model):
+    type = models.CharField(choices=MBTI.TYPES)
+    description = models.TextField()
+
+    def __str__(self):
+        return "%s" % (self.type)
+
+class MBTITeamDescriptions(models.Model):
+    type = models.CharField(choices=MBTI.TYPES)
+    description = models.TextField()
+
+    def __str__(self):
+        return "%s" % (self.type)
 
 class AssessmentType(models.Model):
     name = models.CharField(
