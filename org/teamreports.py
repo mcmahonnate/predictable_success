@@ -11,11 +11,11 @@ class MBTIReport:
         self.mbtis = mbtis
 
 def build_mbti_report(employees):
+    # need to refactor this to:
+    # Team type = Most occurrences for each indicator (I's, E's, P's etc.)
+    # In the event of a tie defer to leaders type
     employee_mbtis = MBTI.objects.filter(employee__in=employees)
     employee_mbtis = employee_mbtis.values('type').annotate(c=Count('type')).order_by('-c')
-    logger.error('testing')
-    logger.error(employee_mbtis)
-    logger.error(employee_mbtis[0])
     dominant_type = employee_mbtis[0]['type']
     team_type = MBTITeamDescription.objects.filter(type=dominant_type)[0]
 
