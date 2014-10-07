@@ -1,23 +1,42 @@
 from django.db import models
 from org.models import Employee
 
+MBTI_TYPES = (
+    ('istj', 'ISTJ'),
+    ('estj', 'ESTJ'),
+    ('isfj', 'ISFJ'),
+    ('esfj', 'ESFJ'),
+    ('istp', 'ISTP'),
+    ('estp', 'ESTP'),
+    ('esfp', 'ESFP'),
+    ('isfp', 'ISFP'),
+    ('entj', 'ENTJ'),
+    ('intj', 'INTJ'),
+    ('entp', 'ENTP'),
+    ('intp', 'INTP'),
+    ('enfj', 'ENFJ'),
+    ('infj', 'INFJ'),
+    ('enfp', 'ENFP'),
+    ('infp', 'INFP'),
+)
+
+
 class MBTI(models.Model):
-    TYPES = ['ISTJ', 'ESTJ', 'ISFJ', 'ESFJ', 'ISTP', 'ESTP', 'ESFP', 'ISFP', 'ENTJ', 'INTJ', 'ENTP', 'INTP', 'ENFJ', 'INFJ', 'ENFP', 'INFP']
     employee = models.ForeignKey(Employee, related_name='+')
-    type = models.CharField(choices=TYPES)
+    type = models.CharField(choices=MBTI_TYPES, max_length=4)
 
     def __str__(self):
         return "%s is a %s" % (self.employee.full_name, self.type)
 
 class MBTIEmployeeDescription(models.Model):
-    type = models.CharField(choices=MBTI.TYPES)
+    type = models.CharField(choices=MBTI_TYPES, max_length=4)
     description = models.TextField()
 
     def __str__(self):
         return "%s" % (self.type)
 
 class MBTITeamDescription(models.Model):
-    type = models.CharField(choices=MBTI.TYPES)
+    type = models.CharField(choices=MBTI_TYPES, max_length=4)
     description = models.TextField()
 
     def __str__(self):
