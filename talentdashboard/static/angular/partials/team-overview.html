@@ -190,6 +190,31 @@
                             <div>
                                   <div style="width:600px"><span style="border-bottom: 1px solid; padding-bottom: 3px;">{{ mbti.type | uppercase}}</span></div>
                                   <div ng-bind-html-unsafe="mbti.description" style="margin:15px;width:560px"></div>
+<div class="row">
+  <div class="col-1-4">ISTJ <p>{{istj.c}}</p></div>
+  <div class="col-1-4">ISFJ <p>{{isfj.c}}</p></div>
+  <div class="col-1-4">INFJ <p>{{isfj.c}}</p></div>
+  <div class="col-1-4">INTJ <p>{{intj.c}}</p></div>
+</div><!-- /.row -->
+<div class="row">
+  <div class="col-1-4">ISTP <p>{{istp.c}}</p></div>
+  <div class="col-1-4">ISFP <p>{{isfp.c}}</p></div>
+  <div class="col-1-4">INFP <p>{{infp.c}}</p></div>
+  <div class="col-1-4">INTP <p>{{intp.c}}</p></div>
+</div><!-- /.row -->
+<div class="row">
+  <div class="col-1-4">ESTP <p>{{estp.c}}</p></div>
+  <div class="col-1-4">ESFP <p>{{esfp.c}}</p></div>
+  <div class="col-1-4">ENFP <p>{{enfp.c}}</p></div>
+  <div class="col-1-4">ENTP <p>{{entp.c}}</p></div>
+</div><!-- /.row -->
+<div class="row">
+  <div class="col-1-4">ESTJ <p>{{estj.c}}</p></div>
+  <div class="col-1-4">ESFJ <p>{{esfj.c}}</p></div>
+  <div class="col-1-4">ENFJ <p>{{enfj.c}}</p></div>
+  <div class="col-1-4">ENTJ <p>{{entj.c}}</p></div>
+</div><!-- /.row -->
+
 
                             </div>
                         </div>
@@ -198,5 +223,36 @@
                   </div>
       </div>
     </article>
-
   </div>
+  <style>
+/* grid */
+.row {
+  margin: 0 -10px;
+}
+.row:last-child {
+  margin-bottom: 0;
+}
+[class*="col-"] {
+  padding: 10px;
+}
+
+@media all and ( min-width: 600px ) {
+
+  .row {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+  }
+  [class*="col-"] {
+    display: table-cell;
+  }
+
+  .col-1-4 {
+    width: 25%;
+    text-align: center;
+      border-style: solid;
+      border-width: 1px;
+  }
+
+}
+  </style>
