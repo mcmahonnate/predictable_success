@@ -10,6 +10,9 @@ from kpi.models import Indicator, Performance
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
+from django.utils.log import getLogger
+
+logger = getLogger('talentdashboard')
 
 class TeamSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -402,12 +405,16 @@ class SalaryReportSerializer(serializers.Serializer):
 class MBTIReportSerializer(serializers.Serializer):
     type = serializers.SerializerMethodField('get_type')
     description = serializers.SerializerMethodField('get_description')
+    mbtis = serializers.SerializerMethodField('get_mbtis')
 
     def get_type(self, obj):
         return obj.team_type.type
 
     def get_description(self, obj):
         return obj.team_type.description
+
+    def get_mbtis(self, obj):
+        return obj.mbtis
 
 class CompensationSummarySerializer(serializers.ModelSerializer):
     employee = EmployeeSerializer()
