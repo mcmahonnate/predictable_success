@@ -406,6 +406,9 @@ class MBTIReportSerializer(serializers.Serializer):
     type = serializers.SerializerMethodField('get_type')
     description = serializers.SerializerMethodField('get_description')
     mbtis = serializers.SerializerMethodField('get_mbtis')
+    total = serializers.SerializerMethodField('get_total')
+    total_assessed = serializers.SerializerMethodField('get_total_assessed')
+    total_not_assessed = serializers.SerializerMethodField('get_total_not_assessed')
 
     def get_type(self, obj):
         return obj.team_type.type
@@ -415,6 +418,15 @@ class MBTIReportSerializer(serializers.Serializer):
 
     def get_mbtis(self, obj):
         return obj.mbtis
+
+    def get_total(self, obj):
+        return obj.total
+
+    def get_total_assessed(self, obj):
+        return obj.total_assessed
+
+    def get_total_not_assessed(self, obj):
+        return obj.total_not_assessed
 
 class CompensationSummarySerializer(serializers.ModelSerializer):
     employee = EmployeeSerializer()
