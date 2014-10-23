@@ -223,6 +223,36 @@
                     <section class="widget-body rag-widget">
                       <div class="widget-canvas">
                         <ol>
+                          <li show="{{addEngagement}}" ng-scroll-into-view ng-show="currentUser.employee.id!=employee.id" class="clear" style="padding-top:10px;padding-bottom:10px;">
+                            <div show="{{editEngagement}}" ng-scroll-into-view class="t-secondary" style="min-width: 35%">
+                              Engagement <a ng-show="!employeeEdit && currentUser.can_coach_employees" set-popup-position ng-click="addEngagement=true;happyIndex=0" class="glyphicon glyphicon-add" style="float:right;cursor:pointer;padding-right:10px"></a>
+                            </div>
+
+                            <div style="max-width: 65%;">
+                                <span ng-if="happys.length == 0">--</span>
+                                <ul ng-if="happys.length > 0" rn-carousel rn-carousel-watch rn-carousel-index="$parent.happyIndex">
+                                    <li ng-repeat="happy in happys" style="border-bottom:none">
+                                      <div style="width:45px">
+                                          <span style="display:inline-block; vertical-align:middle; padding-left: 1px;" class="t-size-x40" ng-class="{'veryhappy': happy.assessment==5,'happy': happy.assessment==4,'indifferent': happy.assessment==3,'unhappy': happy.assessment==2,'veryunhappy': happy.assessment==1}"></span>
+                                      </div>
+                                      <div style="margin-top: 2px;width:130px;font-size:14px">
+                                          <span style="padding:5px; display:inline-block; vertical-align:middle">{{ happy.assessed_date | date:'MM/dd/yyyy'}}</span>
+                                          <span ng-show="!employeeEdit && currentUser.can_coach_employees">
+                                              <ul class="feed-actions" style="margin-top: 0px;padding-left:5px;">
+                                                <li class="feed-action" style="padding: 0 10px 0 0;"><a set-popup-position popup-offset-top="-17" ng-click="$parent.$parent.$parent.open_edit_engagement(happy);" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
+                                              </ul>
+                                              <span style="color:#8b8b8b;"><a ng-click="delete_happy(happy, $parent.$parent.$parent);" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></span>
+                                          </span>
+                                      </div>
+                                    </li>
+                                 </ul>
+                                <div ng-show="happys.length > 1">
+                                    <a ng-repeat="happy in happys | orderBy:'assigned_date'"  ng-click="$parent.happyIndex=$index" style="cursor: pointer;">
+                                        <div class="nav" style="width: 10px; height: 10px; -webkit-border-radius: 5em; -moz-border-radius: 5em;margin-right: 10px" ng-class="{'navveryhappy': happy.assessment==5,'navhappy': happy.assessment==4,'navindifferent': happy.assessment==3,'navunhappy': happy.assessment==2,'navveryunhappy': happy.assessment==1, categoryNavHighlightSmall: $index==$parent.happyIndex,categoryNavSmall: $index!=$parent.happyIndex}"/>
+                                    </a>
+                                </div>
+                            </div>
+                          </li>
                           <li show="{{editStartDate}}" ng-scroll-into-view class="clear" style="padding-top:10px;padding-bottom:10px;">
                             <a set-popup-position ng-show="employeeEdit" ng-click="editStartDate=true;currentlyEditing=true" class="glyphicon" ng-class="{'glyphicon-edit': !currentlyEditing, 'glyphicon-edit-disable': currentlyEditing}" style="float:left;padding-right:10px"></a>
                             <div class="t-secondary" style="min-width: 35%">
@@ -279,36 +309,6 @@
                                         </span>
                                     </li>
                                  </ul>
-                            </div>
-                          </li>
-                          <li show="{{addEngagement}}" ng-scroll-into-view ng-show="currentUser.employee.id!=employee.id" class="clear" style="padding-top:10px;padding-bottom:10px;">
-                            <div show="{{editEngagement}}" ng-scroll-into-view class="t-secondary" style="min-width: 35%">
-                              Engagement <a ng-show="!employeeEdit && currentUser.can_coach_employees" set-popup-position ng-click="addEngagement=true;happyIndex=0" class="glyphicon glyphicon-add" style="float:right;cursor:pointer;padding-right:10px"></a>
-                            </div>
-
-                            <div style="max-width: 65%;">
-                                <span ng-if="happys.length == 0">--</span>
-                                <ul ng-if="happys.length > 0" rn-carousel rn-carousel-watch rn-carousel-index="$parent.happyIndex">
-                                    <li ng-repeat="happy in happys" style="border-bottom:none">
-                                      <div style="width:45px">
-                                          <span style="display:inline-block; vertical-align:middle; padding-left: 1px;" class="t-size-x40" ng-class="{'veryhappy': happy.assessment==5,'happy': happy.assessment==4,'indifferent': happy.assessment==3,'unhappy': happy.assessment==2,'veryunhappy': happy.assessment==1}"></span>
-                                      </div>
-                                      <div style="margin-top: 2px;width:130px;font-size:14px">
-                                          <span style="padding:5px; display:inline-block; vertical-align:middle">{{ happy.assessed_date | date:'MM/dd/yyyy'}}</span>
-                                          <span ng-show="!employeeEdit && currentUser.can_coach_employees">
-                                              <ul class="feed-actions" style="margin-top: 0px;padding-left:5px;">
-                                                <li class="feed-action" style="padding: 0 10px 0 0;"><a set-popup-position popup-offset-top="-17" ng-click="$parent.$parent.$parent.open_edit_engagement(happy);" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
-                                              </ul>
-                                              <span style="color:#8b8b8b;"><a ng-click="delete_happy(happy, $parent.$parent.$parent);" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></span>
-                                          </span>
-                                      </div>
-                                    </li>
-                                 </ul>
-                                <div ng-show="happys.length > 1">
-                                    <a ng-repeat="happy in happys | orderBy:'assigned_date'"  ng-click="$parent.happyIndex=$index" style="cursor: pointer;">
-                                        <div class="nav" style="width: 10px; height: 10px; -webkit-border-radius: 5em; -moz-border-radius: 5em;margin-right: 10px" ng-class="{'navveryhappy': happy.assessment==5,'navhappy': happy.assessment==4,'navindifferent': happy.assessment==3,'navunhappy': happy.assessment==2,'navveryunhappy': happy.assessment==1, categoryNavHighlightSmall: $index==$parent.happyIndex,categoryNavSmall: $index!=$parent.happyIndex}"/>
-                                    </a>
-                                </div>
                             </div>
                           </li>
                         </ol>
