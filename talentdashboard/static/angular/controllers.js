@@ -624,15 +624,57 @@ angular.module('tdb.controllers', [])
             angular.forEach($scope.evaluations, function(evaluation) {
                 var row = {};
                 row.name = evaluation.employee.full_name;
-                row.talent = evaluation.talent_category;
-                row.happy = evaluation.employee.happiness;
+                row.talent = talentToString(evaluation.talent_category);
+                row.happy = happyToString(evaluation.employee.happiness);
                 row.date = evaluation.employee.happiness_date;
                 $scope.csv.push(row);
             });
-            console.log($scope.csv);
         }
     );
-
+    var talentToString = function(talent){
+        switch (talent) {
+            case 1:
+                return 'Top';
+                break;
+            case 2:
+                return 'Strong';
+                break;
+            case 3:
+                return 'Good';
+                break;
+            case 4:
+                return 'Low Potential';
+                break;
+            case 5:
+                return 'Low Performing';
+                break;
+            case 6:
+                return 'Poor';
+                break;
+        }
+    };
+    var happyToString = function(happy){
+        switch (happy) {
+            case 1:
+                return 'Very Unhappy';
+                break;
+            case 2:
+                return 'Unhappy';
+                break;
+            case 3:
+                return 'Indifferent';
+                break;
+            case 4:
+                return 'Happy';
+                break;
+            case 5:
+                return 'Very Happy';
+                break;
+            case -1:
+                return 'No Data';
+                break;
+        }
+    };
     $scope.orderValue = '';
     $scope.order = function(orderValue){
         $scope.orderValue = orderValue;
@@ -678,7 +720,7 @@ angular.module('tdb.controllers', [])
         if (aValue === bValue) {
             return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
         } else {
-            return aValue - bValue;
+            return bValue - aValue;
         }
     }
     var orderByDate= function(a,b){
@@ -689,7 +731,7 @@ angular.module('tdb.controllers', [])
         if (aValue === bValue) {
             return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
         } else {
-            return aValue - bValue;
+            return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
         }
     }
 

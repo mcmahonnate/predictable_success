@@ -10,13 +10,7 @@
         <span class="glyphicon-regular glyphicon-export" style="cursor: pointer;float:right;display: inline-block;margin-top:2px;font-size:30px" ng-csv="csv" filename="fooldash.csv"></span>
         <div style="position: absolute;width: 100%;margin-top:15px;">
             <ul class="isotope table-like">
-                <li class="header">
-                    <div class="name">Name</div>
-                    <div class="talent">Talent</div>
-                    <div class="happy-score">Happiness</div>
-                    <div class="happy-date">Happiness Date</div>
-                </li>
-                <li ng-repeat="eval in evaluations" ng-style="{top: ((($index+1) * 55) + 'px')}">
+                <li ng-repeat="eval in evaluations" ng-style="{top: ((($index) * 55) + 'px')}">
                     <div class="name"><a href="#/employees/{{eval.employee.id}}">{{eval.employee.full_name}}</a></div>
                     <div class="talent"><canvas width="18" height="18" style="float:left;padding-left: 20px;" employee-talent-category="{{eval.talent_category}}"></canvas></div>
                     <div class="happy-score" ng-class="{'veryhappy': eval.employee.happiness==5,'happy': eval.employee.happiness==4,'indifferent': eval.employee.happiness==3,'unhappy': eval.employee.happiness==2,'veryunhappy': eval.employee.happiness==1, 'nohappydata': eval.employee.happiness==-1}"></div>
