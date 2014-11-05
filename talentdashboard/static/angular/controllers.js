@@ -662,17 +662,35 @@ angular.module('tdb.controllers', [])
     var orderByTalent= function(a,b){
         var aValue = a.talent_category;
         var bValue = b.talent_category;
-        return ((aValue < bValue) ? -1 : ((aValue > bValue) ? 1 : 0));
+        var aName = a.employee.full_name;
+        var bName = b.employee.full_name;
+        if (aValue === bValue) {
+            return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+        } else {
+            return aValue - bValue;
+        }
     }
     var orderByHappy= function(a,b){
         var aValue = a.employee.happiness;
         var bValue = b.employee.happiness;
-        return ((aValue < bValue) ? -1 : ((aValue > bValue) ? 1 : 0));
+        var aName = a.employee.full_name;
+        var bName = b.employee.full_name;
+        if (aValue === bValue) {
+            return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+        } else {
+            return aValue - bValue;
+        }
     }
     var orderByDate= function(a,b){
         var aValue = a.employee.happiness_date;
         var bValue = b.employee.happiness_date;
-        return ((aValue < bValue) ? -1 : ((aValue > bValue) ? 1 : 0));
+        var aName = a.employee.full_name;
+        var bName = b.employee.full_name;
+        if (aValue === bValue) {
+            return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+        } else {
+            return aValue - bValue;
+        }
     }
 
 }])
