@@ -618,6 +618,47 @@ angular.module('tdb.controllers', [])
 .controller('ReportsCtrl', ['$scope', '$location', '$routeParams', 'PvpEvaluation', 'analytics', function($scope, $location, $routeParams, PvpEvaluation, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     $scope.evaluations = PvpEvaluation.query({current_round: true});
+    $scope.orderValue = '';
+    $scope.order = function(orderValue){
+        $scope.orderValue = orderValue;
+        switch(orderValue) {
+            case 'name':
+                $scope.evaluations.sort(orderByName);
+                break;
+            case 'talent':
+                $scope.evaluations.sort(orderByTalent);
+                break;
+            case 'happy':
+                $scope.evaluations.sort(orderByHappy);
+                break;
+            case 'date':
+                $scope.evaluations.sort(orderByDate);
+                break;
+            default:
+                $scope.evaluations.sort(orderByName);
+                break;
+        }
+    }
+    var orderByName = function(a,b){
+        var aValue = a.employee.full_name;
+        var bValue = b.employee.full_name;
+        return ((aValue < bValue) ? -1 : ((aValue > bValue) ? 1 : 0));
+    }
+    var orderByTalent= function(a,b){
+        var aValue = a.talent_category;
+        var bValue = b.talent_category;
+        return ((aValue < bValue) ? -1 : ((aValue > bValue) ? 1 : 0));
+    }
+    var orderByHappy= function(a,b){
+        var aValue = a.employee.happiness;
+        var bValue = b.employee.happiness;
+        return ((aValue < bValue) ? -1 : ((aValue > bValue) ? 1 : 0));
+    }
+    var orderByDate= function(a,b){
+        var aValue = a.employee.happiness_date;
+        var bValue = b.employee.happiness_date;
+        return ((aValue < bValue) ? -1 : ((aValue > bValue) ? 1 : 0));
+    }
 
 }])
 
