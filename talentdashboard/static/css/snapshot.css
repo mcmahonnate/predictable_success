@@ -1012,6 +1012,11 @@ a.glyphicon-photo-disable {
     content: "\E021";
 }
 
+.glyphicon-export:before{
+    color: #cbcbcb;
+    content: "\E360";
+}
+
 .text-center {
     text-align: center;
 }

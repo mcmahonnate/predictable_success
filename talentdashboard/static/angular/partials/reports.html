@@ -1,12 +1,13 @@
   <div ng-include="'/static/angular/partials/header.html'"></div>
   <div class="dashboard-sized-el fade in" ng-class="{in:salaryReport}" id="dashboard" style="margin-top: 63px; max-width: 970px;">
     <div class="widget-inner large-screen">
-        <div id="sorts" class="button-group">
+        <div id="sorts" class="button-group" style="display: inline-block;">
           <button class="sort-button" ng-class="{'is-checked':orderValue=='name'}" ng-click="order('name')">name</button>
           <button class="sort-button" ng-class="{'is-checked':orderValue=='talent'}" ng-click="order('talent')">talent</button>
           <button class="sort-button" ng-class="{'is-checked':orderValue=='happy'}" ng-click="order('happy')">happy</button>
           <button class="sort-button" ng-class="{'is-checked':orderValue=='date'}" ng-click="order('date')">date</button>
         </div>
+        <span class="glyphicon-regular glyphicon-export" style="cursor: pointer;float:right;display: inline-block;margin-top:2px;font-size:30px" ng-csv="csv" filename="fooldash.csv"></span>
         <div style="position: absolute;width: 100%;margin-top:15px;">
             <ul class="isotope table-like">
                 <li class="header">
@@ -146,4 +147,7 @@
 .table-like .happy-score { width: 15%; text-align: center;}
 .table-like .happy-date { width: 20%; }
 .table-like .category { width: 10%; }
+.glyphicon-export:hover:before{
+    color: #8CF;
+}
 </style>

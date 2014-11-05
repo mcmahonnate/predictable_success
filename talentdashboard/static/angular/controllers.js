@@ -617,7 +617,22 @@ angular.module('tdb.controllers', [])
 
 .controller('ReportsCtrl', ['$scope', '$location', '$routeParams', 'PvpEvaluation', 'analytics', function($scope, $location, $routeParams, PvpEvaluation, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
-    $scope.evaluations = PvpEvaluation.query({current_round: true});
+
+    PvpEvaluation.query({current_round: true}).$then(function(response) {
+            $scope.evaluations = response.data;
+            $scope.csv = []
+            angular.forEach($scope.evaluations, function(evaluation) {
+                var row = {};
+                row.name = evaluation.employee.full_name;
+                row.talent = evaluation.talent_category;
+                row.happy = evaluation.employee.happiness;
+                row.date = evaluation.employee.happiness_date;
+                $scope.csv.push(row);
+            });
+            console.log($scope.csv);
+        }
+    );
+
     $scope.orderValue = '';
     $scope.order = function(orderValue){
         $scope.orderValue = orderValue;
