@@ -724,14 +724,14 @@ angular.module('tdb.controllers', [])
         }
     }
     var orderByDate= function(a,b){
-        var aValue = a.employee.happiness_date;
-        var bValue = b.employee.happiness_date;
+        var aValue = Date.parse(a.employee.happiness_date) || 0;
+        var bValue = Date.parse(b.employee.happiness_date) || 0;
         var aName = a.employee.full_name;
         var bName = b.employee.full_name;
         if (aValue === bValue) {
             return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
         } else {
-            return ((aValue < bValue) ? -1 : ((aValue > bValue) ? 1 : 0));
+            return bValue - aValue;
         }
     }
 
