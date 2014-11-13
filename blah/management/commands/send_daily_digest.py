@@ -26,7 +26,7 @@ class Command(BaseCommand):
             comments = comments.exclude(object_id=recipient.employee.id, content_type=employee_type)
             todos = Task.objects.filter(created_date__range=[start_dt,dt])
             todos = todos.exclude(employee__id=recipient.employee.id)
-            if comments.count > 0 or todos.count > 0:
+            if comments.count() > 0 or todos.count() > 0:
                 df = DateFormat(dt)
                 from_email = 'Dash<dash@dfrntlabs.com>'
                 subject = 'Daily Recap for ' +  df.format('l, d F')
