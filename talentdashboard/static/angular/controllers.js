@@ -600,6 +600,16 @@ angular.module('tdb.controllers', [])
     });
 }])
 
+.controller('CoachDetailCtrl', ['$scope', '$location', '$routeParams', 'Employee', 'Coachees', '$http', 'analytics', function($scope, $location, $routeParams, Employee, Coachees, $http, analytics) {
+    analytics.trackPage($scope, $location.absUrl(), $location.url());
+
+    Coachees.query({ id: $routeParams.id }).$then(function(response) {
+            $scope.coachees = response.data;
+        }
+    );
+}])
+
+
 .controller('EmployeeCompSummariesCtrl', ['$scope', '$routeParams', 'CompSummary', function($scope, $routeParams, CompSummary) {
     $scope.compSummaries = CompSummary.getAllSummariesForEmployee($routeParams.id);
 }])

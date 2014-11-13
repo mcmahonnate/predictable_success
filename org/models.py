@@ -47,6 +47,7 @@ class Employee(models.Model):
         default=None
     )
     user = models.OneToOneField(User,on_delete=models.SET_NULL, null=True, blank=True)
+    coach = models.ForeignKey('Employee',related_name='coachee', null=True, blank=True)
 
     def _get_kolbe_fact_finder(self):
         try:

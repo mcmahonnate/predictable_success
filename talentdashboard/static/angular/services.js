@@ -30,6 +30,11 @@ angular.module('tdb.services', ['ngResource'])
     return res;
 }])
 
+.factory('Coachees', ['$resource', '$http', function($resource, $http) {
+    var res = $resource('/api/v1/coachees/:id/', {id:'@id'});
+    return res;
+}])
+
 .factory('EmployeeLeader', ['$resource', '$http', function($resource, $http) {
     var actions = {
         'addNew': { method:'POST', data:{leader:'@leader_id'}, isArray: false }
