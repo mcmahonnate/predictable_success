@@ -31,7 +31,7 @@ angular.module('tdb.services', ['ngResource'])
 }])
 
 .factory('Coachees', ['$resource', '$http', function($resource, $http) {
-    var res = $resource('/api/v1/coachees/:id/', {id:'@id'});
+    var res = $resource('/api/v1/coachees\\/');
     return res;
 }])
 

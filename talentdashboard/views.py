@@ -95,14 +95,6 @@ class AttributeViewSet(viewsets.ReadOnlyModelViewSet):
             
         return self.queryset
 
-class CoacheeList(APIView):
-    def get(self, request, pk, format=None):
-        employees = Employee.objects.filter(coach__id=pk)
-        employees = employees.filter(display='t')
-
-        serializer = EmployeeSerializer(employees, many=True)
-        return Response(serializer.data)
-
 class EmployeeCommentReportDetail(APIView):
     def get(self, request, pk, format=None):
         report = None
@@ -619,6 +611,14 @@ class ImageUploadView(APIView):
         employee.save()
         serializer = MinimalEmployeeSerializer(employee)
         return Response(serializer.data)
+
+@api_view(['GET'])
+def coachee_list(request):
+    employee = Employee.objects.get(user__id = request.user.id)
+    employees = Employee.objects.filter(coach__id=employee.id)
+    employees = employees.filter(display='t')
+    serializer = EmployeeSerializer(employees, many=True)
+    return Response(serializer.data)
 
 @api_view(['GET'])
 def user_status(request):
