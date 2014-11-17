@@ -4,10 +4,6 @@ angular.module('tdb.controllers', [])
     $rootScope.$on("$routeChangeError", function() {
         window.location = '/login?next=' + $location.path();
     })
-   User.get(function(data) {
-            $rootScope.currentUser = data;
-       }
-   );
    Site.get(function(data) {
             $rootScope.currentSite = data;
        }

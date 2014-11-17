@@ -1,5 +1,5 @@
   <div ng-include="'/static/angular/partials/header.html'"></div>
-  <div class="dashboard-sized-el fade" ng-class="{in:salaryReport}" id="dashboard" style="margin-top: 63px; max-width: 970px;">
+  <div ng-if="currentUser.can_view_company_dashboard" class="dashboard-sized-el fade" ng-class="{in:salaryReport}" id="dashboard" style="margin-top: 63px; max-width: 970px;">
 
     <article class="widget clock loaded" id="widget-8494" style="top: 0px; left: 0px; width: auto;">
       <div class="widget-inner widget-size-1x1 large-screen">
