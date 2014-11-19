@@ -508,9 +508,18 @@ class EmployeeTaskList(APIView):
 class EmployeeDetail(APIView):
     def get(self, request, pk, format=None):
         employee = Employee.objects.get(id = pk)
+        serializer = EmployeeSerializer(employee)
         if employee is not None:
-            serializer = EmployeeSerializer(employee)
-            return Response(serializer.data)
+            if (request.user.groups.filter(name='foolsquad').exists()):
+                return Response(serializer.data)
+            elif (request.user.groups.filter(name='Coaches').exists()):
+                coach = Employee.objects.get(user__id = request.user.id)
+                if (employee.coach==coach):
+                    return Response(serializer.data)
+                else:
+                    Response(None, status=status.HTTP_404_NOT_FOUND)
+            else:
+                Response(None, status=status.HTTP_404_NOT_FOUND)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request, pk, format=None):
@@ -656,7 +665,7 @@ def get_company_salary_report(request):
 
 @api_view(['GET'])
 @cache_on_auth(60*15, 'foolsquad')
-@group_required('foolsquad')
+@group_required('foolsquad', 'Coaches')
 def compensation_summaries(request):
     compensation_summaries = CompensationSummary.objects.all()
 
@@ -676,8 +685,8 @@ def compensation_summaries(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
-@cache_on_auth(60*1440, 'foolsquad')
-@group_required('foolsquad')
+@cache_on_auth(60*1440, 'foolsquad', 'Coaches')
+@group_required('foolsquad', 'Coaches')
 def pvp_evaluations(request):
     current_round = request.QUERY_PARAMS.get('current_round', None)
     employee_id = request.QUERY_PARAMS.get('employee_id', None)
