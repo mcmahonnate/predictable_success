@@ -603,6 +603,111 @@ angular.module('tdb.controllers', [])
             $scope.coachees = response.data;
         }
     );
+
+    var talentToString = function(talent){
+        switch (talent) {
+            case 1:
+                return 'Top';
+                break;
+            case 2:
+                return 'Strong';
+                break;
+            case 3:
+                return 'Good';
+                break;
+            case 4:
+                return 'Low Potential';
+                break;
+            case 5:
+                return 'Low Performing';
+                break;
+            case 6:
+                return 'Poor';
+                break;
+        }
+    };
+    var happyToString = function(happy){
+        switch (happy) {
+            case 1:
+                return 'Very Unhappy';
+                break;
+            case 2:
+                return 'Unhappy';
+                break;
+            case 3:
+                return 'Indifferent';
+                break;
+            case 4:
+                return 'Happy';
+                break;
+            case 5:
+                return 'Very Happy';
+                break;
+            case -1:
+                return 'No Data';
+                break;
+        }
+    };
+    $scope.orderValue = '';
+    $scope.order = function(orderValue){
+        $scope.orderValue = orderValue;
+        switch(orderValue) {
+            case 'name':
+                $scope.coachees.sort(orderByName);
+                break;
+            case 'talent':
+                $scope.coachees.sort(orderByTalent);
+                break;
+            case 'happy':
+                $scope.coachees.sort(orderByHappy);
+                break;
+            case 'date':
+                $scope.coachees.sort(orderByDate);
+                break;
+            default:
+                $scope.coachees.sort(orderByName);
+                break;
+        }
+    }
+    var orderByName = function(a,b){
+        var aValue = a.full_name;
+        var bValue = b.full_name;
+        return ((aValue < bValue) ? -1 : ((aValue > bValue) ? 1 : 0));
+    }
+    var orderByTalent= function(a,b){
+        var aValue = a.talent_category;
+        var bValue = b.talent_category;
+        var aName = a.full_name;
+        var bName = b.full_name;
+        if (aValue === bValue) {
+            return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+        } else {
+            return aValue - bValue;
+        }
+    }
+    var orderByHappy= function(a,b){
+        var aValue = a.happiness;
+        var bValue = b.happiness;
+        var aName = a.full_name;
+        var bName = b.full_name;
+        if (aValue === bValue) {
+            return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+        } else {
+            return bValue - aValue;
+        }
+    }
+    var orderByDate= function(a,b){
+        var aValue = Date.parse(a.happiness_date) || 0;
+        var bValue = Date.parse(b.happiness_date) || 0;
+        var aName = a.full_name;
+        var bName = b.full_name;
+        if (aValue === bValue) {
+            return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+        } else {
+            return bValue - aValue;
+        }
+    }
+
 }])
 
 
