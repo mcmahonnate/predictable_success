@@ -19,24 +19,24 @@
           </div><!-- .widget-inner -->
         </article>
         <article class="widget clock loaded" id="widget-8494"  style="position: relative;width: 966px;margin: 0px 0px 10px 0px;min-height:446px;background-color: #101214;">
-              <div class="widget-inner large-screen" style="width:316px;background-color:#272727;float: left">
+              <div class="widget-inner large-screen" style="min-height:446px;width:316px;background-color:#272727;float: left">
                   <section class="widget-body rag-widget">
                     <nav id="cl" class="cl cl-effect-21">
                         <ul>
-                            <li><a ng-click="click_bio()">Bio</a></li>
-                            <li><a ng-click="click_discussions()">Discussions</a></li>
-                            <li><a ng-click="click_todos()">Tasks</a></li>
-                            <li><a ng-click="click_vops()">VOPS</a></li>
-                            <li><a ng-click="click_kolbe()">KOLBE</a></li>
-                            <li><a ng-click="click_myers_briggs()">Myers Briggs</a></li>
+                            <li><a ng-click="click_bio()" style="cursor: pointer;"><span class="glyphicon-regular glyphicon-bio" style="margin-right: 10px"></span>Bio</a></li>
+                            <li><a ng-click="click_discussions()" style="cursor: pointer;"><span class="glyphicon-regular glyphicon-discussions" style="margin-right: 10px"></span>Discussions</a></li>
+                            <li><a ng-click="click_todos()" style="cursor: pointer;"><span class="glyphicon-regular glyphicon-tasks" style="margin-right: 10px"></span>Tasks</a></li>
+                            <li><a ng-click="click_myers_briggs()" style="cursor: pointer;"><span class="glyphicon-regular glyphicon-compass" style="margin-right: 10px"></span>Myers Briggs</a></li>
+                            <li><a ng-click="click_kolbe()" style="cursor: pointer;">Kolbe</a></li>
+                            <li><a ng-click="click_vops()" style="cursor: pointer;">Vops</a></li>
                         </ul>
                     </nav>
                   </section>
               </div>
               <div style="position: relative;float: left;">
-                  <div ng-controller="EmployeeCommentsCtrl" class="widget-inner large-screen make_transist hideflip" ng-class="{'showflip': show_discussions}" style="width:650px;min-height: 446px;position: absolute">
-                    <header class="no-reload">
-                      <h1 style="display:inline;">Development Discussions</h1>
+                  <div ng-controller="EmployeeCommentsCtrl" class="widget-inner large-screen make_transist hideflip" ng-class="{'showflip': show_discussions}" style="width:650px;min-height: 474px;position: absolute">
+                    <header class="no-reload" style="padding: 8px 12px 8px 16px;">
+                      <span class="glyphicon-regular glyphicon-discussions" style="margin-right: 10px;vertical-align: middle;"></span><h1 style="display:inline;">Development Discussions</h1>
                     </header>
                     <section class="widget-body text-widget" style="padding: 10px;">
                         <div style="display: block; float:left;width:480px;-webkit-border-radius: 2px;moz-border-radius: 3px;-ms-border-radius: 3px;-o-border-radius: 3px;border-radius: 3px;border: 1px solid #c1c1c1;margin:10px 15px;background-color:white;">
@@ -114,8 +114,9 @@
                         </div>
                     </section>
                   </div><!-- .widget-inner -->
-                  <div ng-controller="EmployeeToDoListCtrl" ng-init="showToDo=true" class="widget-inner large-screen make_transist hideflip" ng-class="{'showflip': show_todos}" style="width:650px;min-height: 446px;position: absolute;">
-                    <header class="no-reload">
+                  <div ng-controller="EmployeeToDoListCtrl" ng-init="showToDo=true" class="widget-inner large-screen make_transist hideflip" ng-class="{'showflip': show_todos}" style="width:650px;min-height: 474px;position: absolute;">
+                    <header class="no-reload" style="padding: 8px 12px 8px 16px;">
+                      <span class="glyphicon-regular glyphicon-tasks" style="margin-right: 10px;vertical-align: middle;"></span>
                       <h1 style="display:inline;">To Do's</h1>
                     </header>
                     <div class="todo-nav" ng-class="{'todo-nav-active': showToDo}" ng-click="showToDo=true;showDone=false">To Do</div>
@@ -167,7 +168,7 @@
                         </div>
                     </section>
                   </div>
-                  <div class="widget-inner large-screen make_transist hideflip" ng-class="{'showflip': show_vops}" style="width:650px;position: absolute; min-height: 446px;">
+                  <div class="widget-inner large-screen make_transist hideflip" ng-class="{'showflip': show_vops}" style="width:650px;position: absolute; min-height: 474px;">
                     <header class="no-reload">
                       <h1 style="display:inline;">VOPS</h1>
                     </header>
@@ -183,7 +184,7 @@
                       </div>
                     </section>
                   </div>
-                  <div class="widget-inner large-screen make_transist hideflip" ng-class="{'showflip': show_kolbe}" style="width:650px;position: absolute;min-height: 446px;">
+                  <div class="widget-inner large-screen make_transist hideflip" ng-class="{'showflip': show_kolbe}" style="width:650px;position: absolute;min-height: 474px;">
                     <header class="no-reload">
                       <h1 style="display:inline;">Kolbe</h1>
                     </header>
@@ -199,24 +200,25 @@
                       </div>
                     </section>
                   </div>
-                  <div class="widget-inner large-screen make_transist hideflip" ng-class="{'showflip': show_myers_briggs}" style="width:650px;position: absolute;min-height: 446px;">
-                    <header class="no-reload">
+                  <div class="widget-inner large-screen make_transist hideflip" ng-class="{'showflip': show_myers_briggs}" style="width:650px;position: absolute;min-height: 474px;">
+                    <header class="no-reload" style="padding: 8px 12px 8px 16px;">
+                      <span class="glyphicon-regular glyphicon-compass" style="margin-right: 10px;vertical-align: middle;"></span>
                       <h1 style="display:inline;">Myers Briggs</h1>
                     </header>
-                    <section class="widget-body rag-widget" style="padding: 24px;">
+                    <section class="widget-body rag-widget" style="padding: 24px;margin-top: 20px;">
                       <div class="widget-canvas">
                         <div class="t-size-x16" style="min-width: 50%">
                             <div>
                                   <div style="width:600px"><span style="border-bottom: 1px solid; padding-bottom: 3px;">{{ mbti.type | uppercase }}</span></div>
                                   <div ng-bind-html-unsafe="mbti.description" style="margin:15px;width:560px"></div>
-
                             </div>
                         </div>
                       </div>
                     </section>
                   </div>
-                  <div class="widget-inner large-screen make_transist hideflip" ng-class="{'showflip': show_bio}" style="width:650px;position: absolute;min-height: 446px;">
-                    <header class="no-reload">
+                  <div class="widget-inner large-screen make_transist hideflip" ng-class="{'showflip': show_bio}" style="width:650px;position: absolute;min-height: 474px;">
+                      <header class="no-reload" style="padding: 8px 12px 8px 16px;">
+                        <span class="glyphicon-regular glyphicon-bio" style="margin-right: 10px;vertical-align: middle;"></span>
                       <h1 style="display:inline;">Bio</h1>
                     </header>
 

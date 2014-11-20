@@ -899,6 +899,26 @@ a.glyphicon:hover {
     text-decoration: none   !important;
 }
 
+.glyphicon-bio:before {
+    color: #8b8b8b;
+    content: "\e004";
+}
+
+.glyphicon-discussions:before {
+    color: #8b8b8b;
+    content: "\e245";
+}
+
+.glyphicon-tasks:before {
+    color: #8b8b8b;
+    content: "\e153";
+}
+
+.glyphicon-compass:before {
+    color: #8b8b8b;
+    content: "\e061";
+}
+
 .glyphicon-chevron-right:before {
     content: "\e080";
 }
