@@ -35,8 +35,8 @@
               </div>
               <div style="position: relative;float: left;">
                   <div ng-controller="EmployeeCommentsCtrl" class="widget-inner large-screen make_transist hideflip" ng-class="{'showflip': show_discussions}" style="width:650px;min-height: 474px;position: absolute">
-                    <header class="no-reload" style="padding: 8px 12px 8px 16px;">
-                      <span class="glyphicon-regular glyphicon-discussions" style="margin-right: 10px;vertical-align: middle;"></span><h1 style="display:inline;">Development Discussions</h1>
+                    <header class="no-reload">
+                      <h1 style="display:inline;">Development Discussions</h1>
                     </header>
                     <section class="widget-body text-widget" style="padding: 10px;">
                         <div style="display: block; float:left;width:480px;-webkit-border-radius: 2px;moz-border-radius: 3px;-ms-border-radius: 3px;-o-border-radius: 3px;border-radius: 3px;border: 1px solid #c1c1c1;margin:10px 15px;background-color:white;">
@@ -115,8 +115,7 @@
                     </section>
                   </div><!-- .widget-inner -->
                   <div ng-controller="EmployeeToDoListCtrl" ng-init="showToDo=true" class="widget-inner large-screen make_transist hideflip" ng-class="{'showflip': show_todos}" style="width:650px;min-height: 474px;position: absolute;">
-                    <header class="no-reload" style="padding: 8px 12px 8px 16px;">
-                      <span class="glyphicon-regular glyphicon-tasks" style="margin-right: 10px;vertical-align: middle;"></span>
+                    <header class="no-reload">
                       <h1 style="display:inline;">To Do's</h1>
                     </header>
                     <div class="todo-nav" ng-class="{'todo-nav-active': showToDo}" ng-click="showToDo=true;showDone=false">To Do</div>
@@ -201,8 +200,7 @@
                     </section>
                   </div>
                   <div class="widget-inner large-screen make_transist hideflip" ng-class="{'showflip': show_myers_briggs}" style="width:650px;position: absolute;min-height: 474px;">
-                    <header class="no-reload" style="padding: 8px 12px 8px 16px;">
-                      <span class="glyphicon-regular glyphicon-compass" style="margin-right: 10px;vertical-align: middle;"></span>
+                    <header class="no-reload">
                       <h1 style="display:inline;">Myers Briggs</h1>
                     </header>
                     <section class="widget-body rag-widget" style="padding: 24px;margin-top: 20px;">
@@ -217,8 +215,7 @@
                     </section>
                   </div>
                   <div class="widget-inner large-screen make_transist hideflip" ng-class="{'showflip': show_bio}" style="width:650px;position: absolute;min-height: 474px;">
-                      <header class="no-reload" style="padding: 8px 12px 8px 16px;">
-                        <span class="glyphicon-regular glyphicon-bio" style="margin-right: 10px;vertical-align: middle;"></span>
+                      <header class="no-reload">
                       <h1 style="display:inline;">Bio</h1>
                     </header>
 
@@ -366,8 +363,8 @@
                 <button class="button small orange" style="margin-bottom:3px;" ng-click="cancelEdit();editTeamLead=false;currentlyEditing=false">Cancel</button>
             </div>
         </div>
-        <div get-popup-position ng-show="addEngagement" style="z-index: 2; position:absolute;left:110px;top:60px;border-width: 1px;border-color:#101214;border-style: solid; padding: 10px;background-color: #434343;color: #d3d4d4;">
-            <div>
+        <div get-popup-position ng-show="addEngagement" style="z-index: 2; position:absolute;left:542px;top:60px;border-width: 1px;border-color:#101214;border-style: solid; padding: 10px;background-color: #434343;color: #d3d4d4;">
+            <div style="width: 160px;">
                 <div style="display:inline;width:8px;margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#101214 #434343 #101214 #101214;padding: 11px 5px 10px 10px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-add"></span></div>
                 <span style="padding:7px">Engagement</span>
                 <ul style="padding:5px">
