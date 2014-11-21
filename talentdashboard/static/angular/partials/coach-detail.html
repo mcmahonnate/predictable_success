@@ -65,7 +65,7 @@
         </div>
         <div style="position: absolute;width: 100%;margin-top:15px;">
             <ul class="isotope table-like">
-                <li ng-repeat="employee in coachees" ng-style="{top: ((($index) * 55) + 'px')}">
+                <li ng-repeat="employee in coachees" ng-style="{top: (((employee.index) * 55) + 'px')}">
                     <div class="name"><a href="#/employees/{{employee.id}}">{{employee.full_name}}</a></div>
                     <div class="talent"><canvas width="18" height="18" style="float:left;padding-left: 20px;" employee-talent-category="{{employee.talent_category}}"></canvas></div>
                     <div class="happy-score" ng-class="{'veryhappy': employee.happiness==5,'happy': employee.happiness==4,'indifferent': employee.happiness==3,'unhappy': employee.happiness==2,'veryunhappy': employee.happiness==1, 'nohappydata': employee.happiness==-1}"></div>
@@ -163,14 +163,13 @@
   border-color: #DDD;
   color: #DDD;
   position: absolute;
-  /* Top: 0; this will be changed for every single list item by AngularJS */
-  top:0;
+
   /* Item height; hold this in sync with template file */
   height: 40px;
   /*  Simple transition */
-  -webkit-transition: top 1s ease-in-out;
-  -moz-transition: top 1s ease-in-out;
-  transition: top 1s ease-in-out;
+  -webkit-transition-duration: 1s;
+  -moz-transition-duration: 1s;
+  transition-duration: 1s;
 }
 
 .table-like > li.header {

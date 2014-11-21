@@ -600,9 +600,14 @@ angular.module('tdb.controllers', [])
     analytics.trackPage($scope, $location.absUrl(), $location.url());
 
     Coachees.query({ id: $routeParams.id }).$then(function(response) {
-            $scope.coachees = response.data;
-        }
-    );
+        $scope.coachees = response.data;
+        var i = 0;
+        angular.forEach($scope.coachees, function (employee) {
+            employee.index = i;
+            i = i + 1;
+        })
+        $scope.coachees_sort = angular.copy($scope.coachees)
+    })
 
     var talentToString = function(talent){
         switch (talent) {
@@ -653,21 +658,26 @@ angular.module('tdb.controllers', [])
         $scope.orderValue = orderValue;
         switch(orderValue) {
             case 'name':
-                $scope.coachees.sort(orderByName);
+                $scope.coachees_sort.sort(orderByName);
                 break;
             case 'talent':
-                $scope.coachees.sort(orderByTalent);
+                $scope.coachees_sort.sort(orderByTalent);
                 break;
             case 'happy':
-                $scope.coachees.sort(orderByHappy);
+                $scope.coachees_sort.sort(orderByHappy);
                 break;
             case 'date':
-                $scope.coachees.sort(orderByDate);
+                $scope.coachees_sort.sort(orderByDate);
                 break;
             default:
-                $scope.coachees.sort(orderByName);
+                $scope.coachees_sort.sort(orderByName);
                 break;
         }
+        var i = 0;
+        angular.forEach($scope.coachees_sort, function (employee) {
+            $scope.coachees[employee.index].index = i;
+            i = i + 1;
+        })
     }
     var orderByName = function(a,b){
         var aValue = a.full_name;
