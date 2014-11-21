@@ -741,6 +741,14 @@ angular.module('tdb.controllers', [])
 
     PvpEvaluation.query({current_round: true}).$then(function(response) {
             $scope.evaluations = response.data;
+
+            var i = 0;
+            angular.forEach($scope.evaluations, function (evaluation) {
+                evaluation.index = i;
+                i = i + 1;
+            })
+            $scope.evaluations_sort = angular.copy($scope.evaluations)
+
             $scope.csv = []
             angular.forEach($scope.evaluations, function(evaluation) {
                 var row = {};
@@ -801,21 +809,28 @@ angular.module('tdb.controllers', [])
         $scope.orderValue = orderValue;
         switch(orderValue) {
             case 'name':
-                $scope.evaluations.sort(orderByName);
+                $scope.evaluations_sort.sort(orderByName);
                 break;
             case 'talent':
-                $scope.evaluations.sort(orderByTalent);
+                $scope.evaluations_sort.sort(orderByTalent);
                 break;
             case 'happy':
-                $scope.evaluations.sort(orderByHappy);
+                $scope.evaluations_sort.sort(orderByHappy);
                 break;
             case 'date':
-                $scope.evaluations.sort(orderByDate);
+                $scope.evaluations_sort.sort(orderByDate);
                 break;
             default:
-                $scope.evaluations.sort(orderByName);
+                $scope.evaluations_sort.sort(orderByName);
                 break;
         }
+
+        var i = 0;
+        angular.forEach($scope.evaluations_sort, function (evaluation) {
+            $scope.evaluations[evaluation.index].index = i;
+            i = i + 1;
+        })
+
     }
     var orderByName = function(a,b){
         var aValue = a.employee.full_name;
