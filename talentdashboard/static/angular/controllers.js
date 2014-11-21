@@ -750,14 +750,7 @@ angular.module('tdb.controllers', [])
             $scope.evaluations_sort = angular.copy($scope.evaluations)
 
             $scope.csv = []
-            angular.forEach($scope.evaluations, function(evaluation) {
-                var row = {};
-                row.name = evaluation.employee.full_name;
-                row.talent = talentToString(evaluation.talent_category);
-                row.happy = happyToString(evaluation.employee.happiness);
-                row.date = evaluation.employee.happiness_date;
-                $scope.csv.push(row);
-            });
+            buildCSV();
         }
     );
     var talentToString = function(talent){
@@ -830,7 +823,18 @@ angular.module('tdb.controllers', [])
             $scope.evaluations[evaluation.index].index = i;
             i = i + 1;
         })
-
+        buildCSV();
+    }
+    var buildCSV = function() {
+        $scope.csv = []
+        angular.forEach($scope.evaluations_sort, function(evaluation) {
+            var row = {};
+            row.name = evaluation.employee.full_name;
+            row.talent = talentToString(evaluation.talent_category);
+            row.happy = happyToString(evaluation.employee.happiness);
+            row.date = evaluation.employee.happiness_date;
+            $scope.csv.push(row);
+        });
     }
     var orderByName = function(a,b){
         var aValue = a.employee.full_name;
