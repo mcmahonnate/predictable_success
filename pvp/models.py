@@ -32,7 +32,7 @@ class PvpEvaluation(models.Model):
 
     objects = models.Manager()
     objects = PvpEvaluationManager()
-    employee = models.ForeignKey(Employee)
+    employee = models.ForeignKey(Employee, related_name='pvp')
     evaluation_round = models.ForeignKey(EvaluationRound)
     potential = models.IntegerField(choices=PVP_SCALE)
     performance = models.IntegerField(choices=PVP_SCALE)

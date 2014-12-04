@@ -136,6 +136,14 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
     vops_synergist = serializers.SerializerMethodField('get_vops_synergist')
     current_salary = serializers.SerializerMethodField('get_current_salary')
     current_bonus = serializers.SerializerMethodField('get_current_bonus')
+    talent_category = serializers.SerializerMethodField('get_current_pvp')
+
+    def get_current_pvp(self, obj):
+         try:
+            current_pvp = obj.current_pvp
+            return current_pvp
+         except:
+             return None
 
     def get_current_salary(self, obj):
          try:
@@ -216,7 +224,7 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
         return url
     class Meta:
         model = Employee
-        fields = ('id', 'full_name', 'avatar', 'avatar_small', 'job_title', 'hire_date', 'leader_id', 'happiness', 'happiness_date', 'kolbe_fact_finder','kolbe_follow_thru', 'kolbe_quick_start', 'kolbe_implementor', 'vops_visionary', 'vops_operator', 'vops_processor', 'vops_synergist', 'departure_date', 'team', 'display', 'current_salary', 'current_bonus')
+        fields = ('id', 'full_name', 'avatar', 'avatar_small', 'job_title', 'hire_date', 'leader_id', 'happiness', 'happiness_date', 'kolbe_fact_finder','kolbe_follow_thru', 'kolbe_quick_start', 'kolbe_implementor', 'vops_visionary', 'vops_operator', 'vops_processor', 'vops_synergist', 'departure_date', 'team', 'display', 'current_salary', 'current_bonus', 'talent_category')
 
 class UserSerializer(serializers.ModelSerializer):
     employee = MinimalEmployeeSerializer()

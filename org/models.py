@@ -138,8 +138,19 @@ class Employee(models.Model):
         except:
             return None
 
+    def _get_current_pvp(self):
+        try:
+            obj = self.pvp.latest('evaluation_round__date')
+            return obj.get_talent_category()
+        except:
+            return None
+
     def __str__(self):
         return self.full_name
+
+    @property
+    def current_pvp(self):
+        return self._get_current_pvp()
 
     @property
     def current_leader(self):
