@@ -665,7 +665,7 @@ def get_company_salary_report(request):
 
 @api_view(['GET'])
 @cache_on_auth(60*15, 'foolsquad')
-@group_required('foolsquad', 'Coaches')
+@group_required('foolsquad')
 def compensation_summaries(request):
     compensation_summaries = CompensationSummary.objects.all()
 
