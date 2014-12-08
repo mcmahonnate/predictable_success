@@ -22,7 +22,7 @@ from datetime import date, timedelta
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.utils.log import getLogger
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
 from django.contrib.sites.models import get_current_site
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
@@ -283,6 +283,7 @@ class EmployeeCommentList(APIView):
         return Response(serializer.data)
 
     def post(self, request, pk, format=None):
+        notify = False
         comment_type = ContentType.objects.get(model="comment")
         model_name = request.DATA["_model_name"]
         content_type = ContentType.objects.get(model=model_name)
@@ -296,11 +297,28 @@ class EmployeeCommentList(APIView):
             comment = Comment.objects.get(id = object_id)
             sub_comment = Comment.objects.add_comment(comment,content,owner)
             serializer = SubCommentSerializer(sub_comment, many=False)
-            return Response(serializer.data)
+            notify = True
+            if notify:
+                sub_commenter = Employee.objects.get(user__id = request.user.id)
+                commenter = Employee.objects.get(user__id = comment.owner_id)
+                subject = sub_commenter.full_name + ' commented on your post about ' + employee.full_name
+                text_content = 'View comment here:\r\n http://' + get_current_site(request).domain + '/#/employees/' + str(employee.id)
+                html_content = ('<h2>' + employee.full_name + '</h2><table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse; border-spacing:0; width:100%; text-align:justify; margin:0; padding:0; border-width:0"><tbody><tr>'
+                '<td valign="top" style="height:80px; width:50px"><img src="' + commenter.avatar_small + '" height="48" style="display:inline-block; margin-left:auto; margin-right:auto; height:48px; vertical-align:text-top" /></td>'
+                '<td valign="top"><p><span style="font-size:14px"></span> <span style="font-size:14px; color:#AA9C84"><b>from ' + commenter.full_name + '</b></span></p>'
+                '<table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse; border-spacing:0; width:100%; text-align:justify; margin:0; padding:0; border-width:0"><tbody><tr>'
+                '<td valign="top" style="height:80px; width:50px"><img src="' + sub_commenter.avatar_small + '" height="48" style="display:inline-block; margin-left:auto; margin-right:auto; height:48px; vertical-align:text-top"/></td><td valign="top">'
+                '<p><span style="font-size:14px"></span> <span style="font-size:14px; color:#AA9C84"><b>from ' + sub_commenter.full_name + '</b></span><br>'
+                '<a href="http://' + get_current_site(request).domain + '/#/employees/' + str(employee.id) + '" target="_blank">reply</a> </p><br></td></tr></tbody></table></td></tr></tbody></table>')
+                mail_from = sub_commenter.full_name + '<notify@dfrntlabs.com>'
+                mail_to = commenter.user.email
+                msg = EmailMultiAlternatives(subject, text_content, mail_from, [mail_to])
+                msg.attach_alternative(html_content, "text/html")
+                msg.send()
         else:
             comment = employee.comments.add_comment(content, owner)
             serializer = EmployeeCommentSerializer(comment, many=False)
-            return Response(serializer.data)
+        return Response(serializer.data)
 
 class TeamCommentList(APIView):
     def get(self, request, pk, format=None):
