@@ -25,6 +25,8 @@ from django.utils.log import getLogger
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.contrib.sites.models import get_current_site
 from django.contrib.contenttypes.models import ContentType
+from django.template.loader import get_template
+from django.template import Context
 from django.db.models import Q
 from PIL import Image, ExifTags
 import StringIO
@@ -299,17 +301,20 @@ class EmployeeCommentList(APIView):
             serializer = SubCommentSerializer(sub_comment, many=False)
             notify = True
             if notify:
+                html_template = get_template('reply_notification.html')
                 sub_commenter = Employee.objects.get(user__id = request.user.id)
                 commenter = Employee.objects.get(user__id = comment.owner_id)
+                employee_name = employee.full_name
+                commenter_avatar = commenter.avatar_small
+                commenter_full_name = commenter.full_name
+                sub_commenter_avatar = sub_commenter.avatar_small
+                sub_commenter_full_name = sub_commenter.full_name
+                dash_link = 'http://' + get_current_site(request).domain + '/#/employees/' + str(employee.id)
+                template_vars = Context({'employee_name': employee_name, 'dash_link': dash_link, 'commenter_avatar': commenter_avatar,'commenter_full_name': commenter_full_name, 'sub_commenter_avatar': sub_commenter_avatar, 'sub_commenter_full_name': sub_commenter_full_name})
+                html_content = html_template.render(template_vars)
+                logger.debug(html_content)
                 subject = sub_commenter.full_name + ' commented on your post about ' + employee.full_name
                 text_content = 'View comment here:\r\n http://' + get_current_site(request).domain + '/#/employees/' + str(employee.id)
-                html_content = ('<h2>' + employee.full_name + '</h2><table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse; border-spacing:0; width:100%; text-align:justify; margin:0; padding:0; border-width:0"><tbody><tr>'
-                '<td valign="top" style="height:80px; width:50px"><img src="' + commenter.avatar_small + '" height="48" style="display:inline-block; margin-left:auto; margin-right:auto; height:48px; vertical-align:text-top" /></td>'
-                '<td valign="top"><p><span style="font-size:14px"></span> <span style="font-size:14px; color:#AA9C84"><b>from ' + commenter.full_name + '</b></span></p>'
-                '<table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse; border-spacing:0; width:100%; text-align:justify; margin:0; padding:0; border-width:0"><tbody><tr>'
-                '<td valign="top" style="height:80px; width:50px"><img src="' + sub_commenter.avatar_small + '" height="48" style="display:inline-block; margin-left:auto; margin-right:auto; height:48px; vertical-align:text-top"/></td><td valign="top">'
-                '<p><span style="font-size:14px"></span> <span style="font-size:14px; color:#AA9C84"><b>from ' + sub_commenter.full_name + '</b></span><br>'
-                '<a href="http://' + get_current_site(request).domain + '/#/employees/' + str(employee.id) + '" target="_blank">reply</a> </p><br></td></tr></tbody></table></td></tr></tbody></table>')
                 mail_from = sub_commenter.full_name + '<notify@dfrntlabs.com>'
                 mail_to = commenter.user.email
                 msg = EmailMultiAlternatives(subject, text_content, mail_from, [mail_to])
