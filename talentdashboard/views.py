@@ -303,6 +303,8 @@ class EmployeeCommentList(APIView):
             if notify:
                 html_template = get_template('reply_notification.html')
                 sub_commenter = Employee.objects.get(user__id = request.user.id)
+                sub_comment_content = comment.content
+                comment_content = sub_comment.content
                 commenter = Employee.objects.get(user__id = comment.owner_id)
                 employee_name = employee.full_name
                 commenter_avatar = commenter.avatar_small
@@ -310,9 +312,8 @@ class EmployeeCommentList(APIView):
                 sub_commenter_avatar = sub_commenter.avatar_small
                 sub_commenter_full_name = sub_commenter.full_name
                 dash_link = 'http://' + get_current_site(request).domain + '/#/employees/' + str(employee.id)
-                template_vars = Context({'employee_name': employee_name, 'dash_link': dash_link, 'commenter_avatar': commenter_avatar,'commenter_full_name': commenter_full_name, 'sub_commenter_avatar': sub_commenter_avatar, 'sub_commenter_full_name': sub_commenter_full_name})
+                template_vars = Context({'employee_name': employee_name, 'dash_link': dash_link, 'commenter_avatar': commenter_avatar,'commenter_full_name': commenter_full_name, 'sub_commenter_avatar': sub_commenter_avatar, 'sub_commenter_full_name': sub_commenter_full_name, 'comment_content': comment_content, 'sub_comment_content': sub_comment_content})
                 html_content = html_template.render(template_vars)
-                logger.debug(html_content)
                 subject = sub_commenter.full_name + ' commented on your post about ' + employee.full_name
                 text_content = 'View comment here:\r\n http://' + get_current_site(request).domain + '/#/employees/' + str(employee.id)
                 mail_from = sub_commenter.full_name + '<notify@dfrntlabs.com>'
