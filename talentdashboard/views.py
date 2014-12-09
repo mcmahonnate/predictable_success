@@ -303,13 +303,13 @@ class EmployeeCommentList(APIView):
             if notify:
                 html_template = get_template('reply_notification.html')
                 sub_commenter = Employee.objects.get(user__id = request.user.id)
-                sub_comment_content = comment.content
-                comment_content = sub_comment.content
+                comment_content = comment.content
+                sub_comment_content = sub_comment.content
                 commenter = Employee.objects.get(user__id = comment.owner_id)
                 employee_name = employee.full_name
-                commenter_avatar = commenter.avatar_small
+                commenter_avatar = commenter.avatar_small.url
                 commenter_full_name = commenter.full_name
-                sub_commenter_avatar = sub_commenter.avatar_small
+                sub_commenter_avatar = sub_commenter.avatar_small.url
                 sub_commenter_full_name = sub_commenter.full_name
                 dash_link = 'http://' + get_current_site(request).domain + '/#/employees/' + str(employee.id)
                 template_vars = Context({'employee_name': employee_name, 'dash_link': dash_link, 'commenter_avatar': commenter_avatar,'commenter_full_name': commenter_full_name, 'sub_commenter_avatar': sub_commenter_avatar, 'sub_commenter_full_name': sub_commenter_full_name, 'comment_content': comment_content, 'sub_comment_content': sub_comment_content})
