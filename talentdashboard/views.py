@@ -649,6 +649,7 @@ class ImageUploadView(APIView):
 def coachee_list(request):
     employee = Employee.objects.get(user__id = request.user.id)
     employees = Employee.objects.filter(coach__id=employee.id)
+    employees = employees.exclude(departure_date__isnull=False)
     employees = employees.filter(display='t')
     serializer = EmployeeSerializer(employees, many=True)
     return Response(serializer.data)
