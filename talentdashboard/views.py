@@ -623,9 +623,8 @@ class ImageUploadView(APIView):
             e = image._getexif()       # returns None if no EXIF data
             if e is not None:
                 exif=dict(e.items())
-                orientation = exif[orientation]
-
-                if orientation == 3:   image = image.transpose(Image.ROTATE_180)
+                orientation = exif.get(orientation, None)
+                if orientation == 3: image = image.transpose(Image.ROTATE_180)
                 elif orientation == 6: image = image.transpose(Image.ROTATE_270)
                 elif orientation == 8: image = image.transpose(Image.ROTATE_90)
 
