@@ -12,7 +12,7 @@ python-mimeparse==0.1.4
 six==1.4.1
 static==0.4
 wsgiref==0.1.2
-pil==1.1.7
+pillow==2.7.0
 pylibmc==1.2.3
 django-pylibmc-sasl==0.2.4
 django-storages==1.1.8
