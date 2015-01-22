@@ -1,9 +1,12 @@
+from django.contrib.auth.models import User
 from django.db import models
 from org.models import Employee
+
 
 class EvaluationRoundManager(models.Manager):
     def most_recent(self):
         return self.order_by('-date')[0:1].get()
+
 
 class EvaluationRound(models.Model):
     date = models.DateField()
@@ -13,12 +16,14 @@ class EvaluationRound(models.Model):
     def __str__(self):
         return "%s" % self.date
 
+
 class PvpEvaluationManager(models.Manager):
     def get_evaluations_for_round(self, round_id):
         return self.filter(evaluation_round__id=round_id)
 
     def get_evaluations_for_team(self, team_id, round_id):
         return self.filter(evaluation_round__id=round_id, employee__team__id=team_id)
+
 
 class PvpEvaluation(models.Model):
     PVP_SCALE = [(i,i) for i in range(1,5)]
@@ -77,3 +82,23 @@ class PvpEvaluation(models.Model):
         verbose_name = "PVP Evaluation"
         verbose_name_plural = "PVP Evaluations"
         ordering =['-evaluation_round__date',]
+
+
+class PvpEvaluationAssignment(models.Model):
+    evaluator = models.ForeignKey(User)
+    employee = models.ForeignKey(Employee)
+    evaluation_round = models.ForeignKey(EvaluationRound)
+    evaluation = models.ForeignKey(PvpEvaluation, null=True)
+    is_complete = models.BooleanField()
+
+    def complete(self, evaluation):
+        self.evaluation = evaluation
+        self.is_complete = True
+
+    class Meta:
+        unique_together = ("employee", "evaluation_round")
+        verbose_name = "PVP Evaluation Assignment"
+        verbose_name_plural = "PVP Evaluation Assignments"
+
+    def __str__(self):
+        return "PVP Evaluation of %s assigned to %s for %s" % (self.evaluator.name, self.employee.full_name, self.evaluation_round.date)
