@@ -31,7 +31,7 @@ angular.module('tdb.services', ['ngResource'])
 }])
 
 .factory('Coachees', ['$resource', '$http', function($resource, $http) {
-    var res = $resource('/api/v1/coachees\\/');
+    var res = $resource('/api/v1/coachees/');
     return res;
 }])
 
@@ -44,7 +44,7 @@ angular.module('tdb.services', ['ngResource'])
 }])
 
 .factory('Coach', ['$resource', '$http', function($resource, $http) {
-    var Coach = $resource('/api/v1/coaches\\/');
+    var Coach = $resource('/api/v1/coaches/');
 
     return Coach;
 }])
@@ -68,7 +68,7 @@ angular.module('tdb.services', ['ngResource'])
 }])
 
 .factory('Attribute', ['$resource', '$http', function($resource, $http) {
-    var Attribute = $resource('/api/v1/attributes\\/');
+    var Attribute = $resource('/api/v1/attributes/');
 
     Attribute.getAttributtesForEmployee = function(employee_id, category_id) { return this.query({employee_id: employee_id, category_id: category_id}); };
 
@@ -82,7 +82,7 @@ angular.module('tdb.services', ['ngResource'])
 }])
 
 .factory('CompSummary', ['$resource', '$http', function($resource, $http) {
-    var CompSummary = $resource('/api/v1/compensation-summaries\\/');
+    var CompSummary = $resource('/api/v1/compensation-summaries/');
 
     CompSummary.getAllSummariesForEmployee = function(id) { return this.query({employee_id: id}); };
 
@@ -90,7 +90,7 @@ angular.module('tdb.services', ['ngResource'])
 }])
 
 .factory('PvpEvaluation', ['$resource', '$http', function($resource, $http) {
-    var PvpEvaluation = $resource('/api/v1/pvp-evaluations\\/');
+    var PvpEvaluation = $resource('/api/v1/pvp-evaluations/');
 
     PvpEvaluation.getAllEvaluationsForEmployee = function(id) {
         return this.query({ employee_id: id });
@@ -112,7 +112,7 @@ angular.module('tdb.services', ['ngResource'])
 }])
 
 .factory('TeamLeads', ['$resource', '$http', function($resource, $http) {
-    var TeamLeads = $resource('/api/v1/team-leads\\/');
+    var TeamLeads = $resource('/api/v1/team-leads/');
 
     TeamLeads.getCurrentEvaluationsForTeamLeads = function(team_id) {
         return this.query({team_id: team_id});
@@ -247,7 +247,7 @@ angular.module('tdb.services', ['ngResource'])
 }])
 
 .factory('MyToDos', ['$resource', '$http', function($resource, $http) {
-    var MyToDos = $resource('/api/v1/tasks\\/');
+    var MyToDos = $resource('/api/v1/tasks/');
     return MyToDos;
 }])
 
@@ -283,24 +283,24 @@ angular.module('tdb.services', ['ngResource'])
 }])
 
 .factory('User', ['$resource', '$http', function($resource, $http) {
-    var currentUser = $resource('api/v1/user-status\\/');
+    var currentUser = $resource('api/v1/user-status/');
 
     return currentUser;
 }])
 
 .factory('Site', ['$resource', '$http', function($resource, $http) {
-    var currentSite = $resource('api/v1/current_site\\/');
+    var currentSite = $resource('api/v1/current_site/');
 
     return currentSite;
 }])
 
 .factory('KPIIndicator', ['$resource', '$http', function($resource, $http) {
-    var res = $resource('/api/v1/kpi-indicator\\/');
+    var res = $resource('/api/v1/kpi-indicator/');
     return res;
 }])
 
 .factory('KPIPerformance', ['$resource', '$http', function($resource, $http) {
-    var res = $resource('/api/v1/kpi-performance\\/');
+    var res = $resource('/api/v1/kpi-performance/');
     return res;
 }])
 
