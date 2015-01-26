@@ -7,7 +7,7 @@ from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
 from .serializers import *
 from .decorators import *
-from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team
+from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team, get_talent_category_report_for_lead
 from pvp.salaryreports import get_salary_report_for_team, get_salary_report_for_all_employees
 from blah.commentreports import get_employees_with_comments
 from engagement.engagementreports import get_employees_with_happiness_scores
@@ -155,6 +155,20 @@ class TalentCategoryReportDetail(APIView):
 class TeamTalentCategoryReportDetail(APIView):
     def get(self, request, pk, format=None):
         report = get_talent_category_report_for_team(pk)
+        serializer = TalentCategoryReportSerializer(report)
+        if report is not None:
+            return Response(serializer.data)
+        return Response(None, status=status.HTTP_404_NOT_FOUND)
+
+class LeadTalentCategoryReportDetail(APIView):
+    def get(self, request, pk, format=None):
+        lead_id = pk
+        if not lead_id:
+            current_user = request.user
+            lead = Employee.objects.get(user=current_user)
+            lead_id = lead.id
+            logger.debug(lead_id)
+        report = get_talent_category_report_for_lead(lead_id)
         serializer = TalentCategoryReportSerializer(report)
         if report is not None:
             return Response(serializer.data)
@@ -797,8 +811,12 @@ def team_leads(request):
 @api_view(['GET'])
 def team_lead_employees(request):
     current_user = request.user
-    lead_id = request.QUERY_PARAMS.get('lead_id', None)    
-    lead = Employee.objects.get(id=lead_id)
+    lead_id = request.QUERY_PARAMS.get('lead_id', 0)
+    if lead_id==0:
+        lead = Employee.objects.get(user=current_user)
+        lead_id = lead.id
+    else:
+        lead = Employee.objects.get(id=lead_id)
     if lead.user == current_user or current_user.is_superuser:
         leaderships = Leadership.objects.filter(leader__id=int(lead_id))
         employees = []
