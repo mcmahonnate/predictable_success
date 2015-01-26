@@ -929,6 +929,65 @@ angular.module('tdb.controllers', [])
     }
 }])
 
+.controller('LeaderOverviewCtrl', ['$scope', '$location', '$routeParams', 'TalentCategoryReport', 'SalaryReport', 'Team', 'TeamMembers', 'TeamMBTI', 'User', 'analytics', function($scope, $location, $routeParams, TalentCategoryReport, SalaryReport, Team, TeamMembers, TeamMBTI, User, analytics) {
+    analytics.trackPage($scope, $location.absUrl(), $location.url());
+
+     User.get(
+        function(data) {
+            $scope.lead= data.employee;
+            console.log($scope.lead)
+        }
+    );
+
+    TalentCategoryReport.getReportForLead(function(data) {
+        $scope.talentCategoryReport = data;
+    });
+
+    SalaryReport.getReportForLead(function(data) {
+        $scope.salaryReport = data;
+    });
+
+    $scope.show_discussions = true;
+    $scope.show_vops = false;
+    $scope.show_kolbe = false;
+    $scope.show_myers_briggs = false;
+    $scope.click_discussions= function() {
+        $scope.show_discussions = true;
+        $scope.show_vops = false;
+        $scope.show_kolbe = false;
+        $scope.show_myers_briggs = false;
+        $scope.show_todos = false;
+    };
+    $scope.click_bio= function() {
+        $scope.show_discussions = false;
+        $scope.show_vops = false;
+        $scope.show_kolbe = false;
+        $scope.show_myers_briggs = false;
+        $scope.show_todos = false;
+    };
+    $scope.click_vops= function() {
+        $scope.show_discussions = false;
+        $scope.show_vops = true;
+        $scope.show_kolbe = false;
+        $scope.show_myers_briggs = false;
+        $scope.show_todos = false;
+    };
+    $scope.click_kolbe= function() {
+        $scope.show_discussions = false;
+        $scope.show_vops = false;
+        $scope.show_kolbe = true;
+        $scope.show_myers_briggs = false;
+        $scope.show_todos = false;
+    };
+    $scope.click_myers_briggs= function() {
+        $scope.show_discussions = false;
+        $scope.show_vops = false;
+        $scope.show_kolbe = false;
+        $scope.show_myers_briggs = true;
+        $scope.show_todos = false;
+    };
+}])
+
 .controller('TeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'TalentCategoryReport', 'SalaryReport', 'Team', 'TeamMembers', 'TeamMBTI', 'analytics', function($scope, $location, $routeParams, TalentCategoryReport, SalaryReport, Team, TeamMembers, TeamMBTI, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     $scope.teamId = $routeParams.id;

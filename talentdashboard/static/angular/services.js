@@ -124,6 +124,7 @@ angular.module('tdb.services', ['ngResource'])
     TalentCategoryReport = $resource('/api/v1/talent-category-reports/:id/:teamId');
 
     TalentCategoryReport.getReportForTeam = function(teamId, success, failure) { return this.get({ id: 'teams', teamId: teamId }, success, failure); };
+    TalentCategoryReport.getReportForLead = function(success, failure) { return this.get({ id: 'lead/' }, success, failure); };
     TalentCategoryReport.getReportForCompany = function(success, failure) { return this.get({ id: 'all-employees' }, success, failure); };
 
     return TalentCategoryReport;
@@ -206,8 +207,9 @@ angular.module('tdb.services', ['ngResource'])
 
 .factory('SalaryReport', ['$resource', '$http', function($resource, $http) {
     SalaryReport = $resource('/api/v1/salary-reports/:id/:teamId');
-
+console.log('test');
     SalaryReport.getReportForTeam = function(teamId, success, failure) { return this.get({ id: 'teams', teamId: teamId }, success, failure); };
+    SalaryReport.getReportForLead = function(success, failure) { return this.get({ id: 'lead/' }, success, failure); };
     SalaryReport.getReportForCompany = function(success, failure) { return this.get({ id: 'company' }, success, failure); };
 
     return SalaryReport;
