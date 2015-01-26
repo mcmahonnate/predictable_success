@@ -284,7 +284,7 @@ class EmployeeCommentSerializer(serializers.HyperlinkedModelSerializer):
 
 class TeamCommentSerializer(serializers.HyperlinkedModelSerializer):
     owner = UserSerializer()
-    associated_object = TeamSerializer()
+    associated_object = MinimalEmployeeSerializer()
 
     class Meta:
         model = Comment

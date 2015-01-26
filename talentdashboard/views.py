@@ -354,11 +354,12 @@ class EmployeeCommentList(APIView):
 
 class TeamCommentList(APIView):
     def get(self, request, pk, format=None):
-        team = Team.objects.get(id = pk)
-        team_type = ContentType.objects.get(model="team")
-        if team is None:
+        employee_ids = Employee.objects.filter(team__id=pk).values('pk')
+        if not employee_ids:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
-        comments = Comment.objects.filter(object_id = pk,content_type=team_type)
+        employee_type = ContentType.objects.get(model="employee")
+
+        comments = Comment.objects.filter(object_id__in = employee_ids, content_type=employee_type)
         comments = comments.extra(order_by = ['-created_date'])
         serializer = TeamCommentSerializer(comments, many=True)
         return Response(serializer.data)
