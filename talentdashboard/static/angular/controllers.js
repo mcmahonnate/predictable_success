@@ -935,7 +935,6 @@ angular.module('tdb.controllers', [])
      User.get(
         function(data) {
             $scope.lead= data.employee;
-            console.log($scope.lead)
         }
     );
 
@@ -1011,7 +1010,6 @@ angular.module('tdb.controllers', [])
         function(data) {
             $scope.mbti = data;
             angular.forEach($scope.mbti.mbtis, function(mbti_type) {
-                console.log(mbti_type);
                 if (mbti_type.type=='istj'){ $scope.istj=mbti_type }
                 if (mbti_type.type=='isfj'){ $scope.isfj=mbti_type }
                 if (mbti_type.type=='infj'){ $scope.infj=mbti_type }
@@ -1784,8 +1782,42 @@ angular.module('tdb.controllers', [])
     };
 }])
 
-.controller('LeadCommentsCtrl', ['$scope', '$filter', '$routeParams', '$window', 'Comments', 'EmployeeComments', 'SubComments','Comment', 'User',function($scope, $filter, $routeParams, $window, Comments, EmployeeComments, SubComments, Comment, User) {
-    $scope.leadId = $routeParams.id;
+.controller('LeaderCommentsCtrl', ['$scope', '$filter', '$routeParams', '$window', 'Comments', 'EmployeeComments', 'SubComments','Comment', 'User',function($scope, $filter, $routeParams, $window, Comments, EmployeeComments, SubComments, Comment, User) {
+     User.get(
+        function(data) {
+            $scope.lead= data.employee;
+            $scope.leadId = $scope.lead.id;
+
+            Comments.getLeadComments($scope.leadId, function(data) {
+                $scope.comments = data;
+                $scope.originalComments = angular.copy($scope.comments);
+                angular.forEach($scope.comments, function(comment) {
+                    var index = $scope.comments.indexOf(comment);
+                    var original_comment = $scope.originalComments[index];
+
+                    comment.subcomments = [];
+                    original_comment.subcomments = [];
+                    SubComments.query({ id: comment.id }).$then(function(response) {
+                            comment.subcomments = response.data;
+                            original_comment.subcomments = angular.copy(comment.subcomments);
+                        }
+                    );
+                    comment.newSubCommentText = "";
+                    comment.expandTextArea = false;
+                    comment.expandChildTextArea = false;
+
+                });
+
+                $scope.CreateHeader = function(date) {
+                    date=$filter('date')(date,"MM/dd/yyyy");
+                    showHeader = (date!=$scope.currentGroup);
+                    $scope.currentGroup = date;
+                    return showHeader;
+                }
+            });
+
+        }
+    );
     $scope.newCommentText = "";
     $scope.toggleCommentTextExpander = function (comment) {
         $window.onclick = function (event) {
@@ -1815,35 +1847,6 @@ angular.module('tdb.controllers', [])
             }
         };
     };
-
-
-    Comments.getLeadComments($routeParams.id, function(data) {
-        $scope.comments = data;
-        $scope.originalComments = angular.copy($scope.comments);
-        angular.forEach($scope.comments, function(comment) {
-            var index = $scope.comments.indexOf(comment);
-            var original_comment = $scope.originalComments[index];
-
-            comment.subcomments = [];
-            original_comment.subcomments = [];
-            SubComments.query({ id: comment.id }).$then(function(response) {
-                    comment.subcomments = response.data;
-                    original_comment.subcomments = angular.copy(comment.subcomments);
-                }
-            );
-            comment.newSubCommentText = "";
-            comment.expandTextArea = false;
-            comment.expandChildTextArea = false;
-
-        });
-
-        $scope.CreateHeader = function(date) {
-            date=$filter('date')(date,"MM/dd/yyyy");
-            showHeader = (date!=$scope.currentGroup);
-            $scope.currentGroup = date;
-            return showHeader;
-        }
-    });
 
     $scope.saveComment = function(comment) {
         var index = $scope.comments.indexOf(comment);

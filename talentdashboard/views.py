@@ -354,7 +354,12 @@ class EmployeeCommentList(APIView):
 
 class LeadCommentList(APIView):
     def get(self, request, pk, format=None):
-        employee_ids = Leadership.objects.filter(leader__id=pk).values('employee__id')
+        lead_id = pk
+        if not lead_id:
+            current_user = request.user
+            lead = Employee.objects.get(user=current_user)
+            lead_id = lead.id
+        employee_ids = Leadership.objects.filter(leader__id=lead_id).values('employee__id')
         if not employee_ids:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
         employee_type = ContentType.objects.get(model="employee")
