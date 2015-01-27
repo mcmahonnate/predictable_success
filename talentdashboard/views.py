@@ -739,6 +739,7 @@ def pvp_evaluations(request):
         serializer = PvpEvaluationSerializer(evaluations, many=True)
     else:
         evaluations = evaluations.filter(employee__departure_date__isnull=True)
+        evaluations = evaluations.exclude(employee__display=False)
         serializer = MinimalPvpEvaluationSerializer(evaluations, many=True)
     data = serializer.data
 
