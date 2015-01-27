@@ -5,6 +5,7 @@ var app = angular.module('tdb', ['tdb.services', 'tdb.controllers', 'tdb.directi
           when('/people-report', {templateUrl: '/static/angular/partials/people-reports.html', controller: 'PeopleReportCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
           when('/reports', {templateUrl: '/static/angular/partials/reports.html', controller: 'ReportsCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
           when('/evaluations/current', {templateUrl: '/static/angular/partials/evaluation-list.html', controller: 'EvaluationListCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
+          when('/evaluations/my-team', {templateUrl: '/static/angular/partials/evaluation-list.html', controller: 'MyTeamEvaluationListCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
           when('/teams/:id/', {templateUrl: '/static/angular/partials/team-overview.html', controller: 'TeamOverviewCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
           when('/employees', {templateUrl: '/static/angular/partials/employee-list.html', controller: 'EmployeeListCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
           when('/employees/:id', {templateUrl: '/static/angular/partials/employee-detail.html', controller: 'EmployeeDetailCtrl', resolve: {authorizeRoute: authorizeRoute}}).

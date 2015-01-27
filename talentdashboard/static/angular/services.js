@@ -111,6 +111,17 @@ angular.module('tdb.services', ['ngResource'])
     return PvpEvaluation;
 }])
 
+.factory('MyTeamPvpEvaluation', ['$resource', '$http', function($resource, $http) {
+    var MyTeamPvpEvaluation = $resource('/api/v1/my-team-pvp-evaluations/');
+
+    MyTeamPvpEvaluation.getCurrentEvaluations = function() {
+        var params = { current_round: true };
+        return this.query(params);
+    };
+
+    return MyTeamPvpEvaluation;
+}])
+
 .factory('TeamLeads', ['$resource', '$http', function($resource, $http) {
     var TeamLeads = $resource('/api/v1/team-leads/');
 

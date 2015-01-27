@@ -728,10 +728,9 @@ def compensation_summaries(request):
 def pvp_evaluations(request):
     current_round = request.QUERY_PARAMS.get('current_round', None)
     employee_id = request.QUERY_PARAMS.get('employee_id', None)
-    team_id = request.QUERY_PARAMS.get('team_id', None)    
+    team_id = request.QUERY_PARAMS.get('team_id', None)
     talent_category = request.QUERY_PARAMS.get('talent_category', None)
     evaluations = PvpEvaluation.objects.all()
-        
     if current_round is not None:
         current_round = EvaluationRound.objects.most_recent()
         evaluations = evaluations.filter(evaluation_round__id = current_round.id)
@@ -746,6 +745,22 @@ def pvp_evaluations(request):
         evaluations = evaluations.filter(employee__departure_date__isnull=True)
         evaluations = evaluations.exclude(employee__display=False)
         serializer = MinimalPvpEvaluationSerializer(evaluations, many=True)
+    data = serializer.data
+
+    return Response(data)
+
+@api_view(['GET'])
+@group_required('foolsquad', 'Coaches')
+def my_team_pvp_evaluations(request):
+    current_user = request.user
+    current_round = EvaluationRound.objects.most_recent()
+    lead = Employee.objects.get(user=current_user)
+    lead_id = lead.id
+    evaluations = PvpEvaluation.objects.filter(employee__leaderships__leader__id=lead_id)
+    evaluations = evaluations.filter(evaluation_round__id = current_round.id)
+    evaluations = evaluations.filter(employee__departure_date__isnull=True)
+    evaluations = evaluations.exclude(employee__display=False)
+    serializer = MinimalPvpEvaluationSerializer(evaluations, many=True)
     data = serializer.data
 
     return Response(data)

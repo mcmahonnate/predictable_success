@@ -105,7 +105,11 @@ angular.module('tdb.directives', [])
                         if(scope.teamId) {
                             search['team_id'] = scope.teamId;
                         }
-                        $location.path('/evaluations/current/').search(search);
+                        if(scope.lead) {
+                            $location.path('/evaluations/my-team/').search(search);
+                        } else {
+                            $location.path('/evaluations/current/').search(search);
+                        }
                         scope.$apply();
                     }
                 });
