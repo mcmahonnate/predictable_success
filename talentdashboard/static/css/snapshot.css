@@ -1319,7 +1319,7 @@ user agent stylesheettd, th {
 	-ms-transition: all .3s ease-in-out;
 	transition: all .3s ease-in-out;
 }
-header {
+#main-header{
     -moz-animation-name: drop-header;
     -moz-animation-iteration-count: 1;
     -moz-animation-timing-function: ease-in;
