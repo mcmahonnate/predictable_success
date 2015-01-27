@@ -365,7 +365,7 @@ class LeadCommentList(APIView):
         employee_type = ContentType.objects.get(model="employee")
 
         comments = Comment.objects.filter(object_id__in = employee_ids, content_type=employee_type)
-        comments = comments.extra(order_by = ['-created_date'])
+        comments = comments.extra(order_by = ['-created_date'])[:15]
         serializer = TeamCommentSerializer(comments, many=True)
         return Response(serializer.data)
 
@@ -378,7 +378,7 @@ class TeamCommentList(APIView):
         employee_type = ContentType.objects.get(model="employee")
 
         comments = Comment.objects.filter(object_id__in = employee_ids, content_type=employee_type)
-        comments = comments.extra(order_by = ['-created_date'])
+        comments = comments.extra(order_by = ['-created_date'])[:15]
         serializer = TeamCommentSerializer(comments, many=True)
         return Response(serializer.data)
 
@@ -392,7 +392,7 @@ class LeadershipDetail(APIView):
                 serializer = LeadershipSerializer(leadership, many=False)
                 return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
-    
+
     def post(self, request, pk, format=None):
         employee = Employee.objects.get(id = pk)
         leader_id = request.DATA["_leader_id"]
