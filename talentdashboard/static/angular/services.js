@@ -205,16 +205,6 @@ angular.module('tdb.services', ['ngResource'])
     return EngagementReport;
 }])
 
-.factory('SalaryReport', ['$resource', '$http', function($resource, $http) {
-    SalaryReport = $resource('/api/v1/salary-reports/:id/:teamId');
-console.log('test');
-    SalaryReport.getReportForTeam = function(teamId, success, failure) { return this.get({ id: 'teams', teamId: teamId }, success, failure); };
-    SalaryReport.getReportForLead = function(success, failure) { return this.get({ id: 'lead/' }, success, failure); };
-    SalaryReport.getReportForCompany = function(success, failure) { return this.get({ id: 'company' }, success, failure); };
-
-    return SalaryReport;
-}])
-
 .factory('TalentCategoryColors', [function() {
     var TalentCategoryColors = {
         colors: ['#008000','#00f500','#91fa00','#ffca00','#ff4600','#ff0000'],
@@ -253,19 +243,29 @@ console.log('test');
     return MyToDos;
 }])
 
+.factory('SalaryReport', ['$resource', '$http', function($resource, $http) {
+    SalaryReport = $resource('/api/v1/salary-reports/:path/:id');
+    SalaryReport.getReportForTeam = function(id, success, failure) { return this.get({ path: 'teams', id: id }, success, failure); };
+    SalaryReport.getReportForLead = function(success, failure) { return this.get({ path: 'lead/' }, success, failure); };
+    SalaryReport.getReportForCompany = function(success, failure) { return this.get({ path: 'company' }, success, failure); };
+
+    return SalaryReport;
+}])
+
+.factory('Comments', ['$resource', '$http', function($resource, $http) {
+    Comments = $resource('/api/v1/comments/:path/:id');
+    Comments.getEmployeeComments = function(id, success, failure) { return this.query({ path: 'employees', id: id}, success, failure); };
+    Comments.getTeamComments = function(id, success, failure) { return this.query({ path: 'teams', id: id }, success, failure); };
+    Comments.getLeadComments = function(success, failure) { return this.query({ path: 'leads'}, success, failure); };
+
+    return Comments;
+}])
+
 .factory('EmployeeComments', ['$resource', '$http', function($resource, $http) {
     var actions = {
         'addNew': { method:'POST' },
     }
     var res = $resource('/api/v1/comments/employees/:id', {id:'@id'}, actions);
-    return res;
-}])
-
-.factory('TeamComments', ['$resource', '$http', function($resource, $http) {
-    var actions = {
-        'addNew': { method:'POST' },
-    }
-    var res = $resource('/api/v1/comments/teams/:id', {id:'@id'}, actions);
     return res;
 }])
 
