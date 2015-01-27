@@ -120,6 +120,12 @@ angular.module('tdb.services', ['ngResource'])
     return TeamLeads;
 }])
 
+.factory('TeamLeadEmployees', ['$resource', '$http', function($resource, $http) {
+    var TeamLeadEmployees = $resource('/api/v1/team-lead-employees/:id');
+    TeamLeadEmployees.getEmployees = function(id, success, failure) { return this.query({ id: id }, success, failure); };
+    return TeamLeadEmployees;
+}])
+
 .factory('TalentCategoryReport', ['$resource', '$http', function($resource, $http) {
     TalentCategoryReport = $resource('/api/v1/talent-category-reports/:id/:teamId');
 
