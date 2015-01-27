@@ -392,6 +392,17 @@ class LeadershipDetail(APIView):
                 serializer = LeadershipSerializer(leadership, many=False)
                 return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
+    
+    def post(self, request, pk, format=None):
+        employee = Employee.objects.get(id = pk)
+        leader_id = request.DATA["_leader_id"]
+        leader = Employee.objects.get(id = leader_id)
+        leadership = Leadership()
+        leadership.employee = employee
+        leadership.leader = leader
+        leadership.save()
+        serializer = LeadershipSerializer(leadership, many=False)
+        return Response(serializer.data)
 
 class CommentList(APIView):
     def get(self, request, format=None):
