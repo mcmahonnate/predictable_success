@@ -561,7 +561,7 @@ class EmployeeDetail(APIView):
         if employee is not None:
             if (request.user.groups.filter(name='foolsquad').exists()):
                 return Response(serializer.data)
-            elif (request.user.groups.filter(name='Coaches').exists()):
+            elif (request.user.groups.filter(name='Coach').exists()):
                 coach = Employee.objects.get(user__id = request.user.id)
                 if (employee.coach==coach):
                     return Response(serializer.data)
@@ -734,8 +734,8 @@ def compensation_summaries(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
-@cache_on_auth(60*1440, 'foolsquad', 'Coaches')
-@group_required('foolsquad', 'Coaches')
+@cache_on_auth(60*1440, 'foolsquad', 'Coach')
+@group_required('foolsquad', 'Coach')
 def pvp_evaluations(request):
     current_round = request.QUERY_PARAMS.get('current_round', None)
     employee_id = request.QUERY_PARAMS.get('employee_id', None)
@@ -761,7 +761,7 @@ def pvp_evaluations(request):
     return Response(data)
 
 @api_view(['GET'])
-@group_required('foolsquad', 'Coaches')
+@group_required('foolsquad', 'Coach', 'Leader')
 def my_team_pvp_evaluations(request):
     current_user = request.user
     current_round = EvaluationRound.objects.most_recent()
