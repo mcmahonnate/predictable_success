@@ -14,7 +14,7 @@ var app = angular.module('tdb', ['tdb.services', 'tdb.controllers', 'tdb.directi
           when('/discussions/:id', {templateUrl: '/static/angular/partials/discussion-detail.html', controller: 'DiscussionDetailCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
           when('/employees/:id/discussions', {templateUrl: '/static/angular/partials/employee-discussion-overview.html', controller: 'EmployeeDetailCtrl', resolve: {authorizeRoute: authorizeRoute}}).
           when('/leaders/:id', {templateUrl: '/static/angular/partials/leader-detail.html', controller: 'LeaderDetailCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
-          when('/leader/', {templateUrl: '/static/angular/partials/leader-overview.html', controller: 'LeaderOverviewCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
+          when('/team-lead', {templateUrl: '/static/angular/partials/leader-overview.html', controller: 'LeaderOverviewCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
 
           otherwise({redirectTo: '/'});
     }])
@@ -35,6 +35,8 @@ var reRoute = function($q, $rootScope, $location, User) {
                console.log($rootScope.currentUser);
                 if ($rootScope.currentUser.can_view_company_dashboard) {
                     return true;
+                } else if ($rootScope.currentUser.is_team_lead) {
+                    $location.path('/team-lead');
                 } else if ($rootScope.currentUser.can_coach_employees) {
                     $location.path('/coach');
                 } else {

@@ -162,11 +162,9 @@ class TeamTalentCategoryReportDetail(APIView):
 
 class LeadTalentCategoryReportDetail(APIView):
     def get(self, request, pk, format=None):
-        lead_id = pk
-        if not lead_id:
-            current_user = request.user
-            lead = Employee.objects.get(user=current_user)
-            lead_id = lead.id
+        current_user = request.user
+        lead = Employee.objects.get(user=current_user)
+        lead_id = lead.id
         report = get_talent_category_report_for_lead(lead_id)
         serializer = TalentCategoryReportSerializer(report)
         if report is not None:
@@ -183,11 +181,9 @@ class TeamSalaryReportDetail(APIView):
 
 class LeadSalaryReportDetail(APIView):
     def get(self, request, pk, format=None):
-        lead_id = pk
-        if not lead_id:
-            current_user = request.user
-            lead = Employee.objects.get(user=current_user)
-            lead_id = lead.id
+        current_user = request.user
+        lead = Employee.objects.get(user=current_user)
+        lead_id = lead.id
         report = get_salary_report_for_lead(lead_id)
         serializer = SalaryReportSerializer(report)
         if report is not None:
@@ -354,11 +350,9 @@ class EmployeeCommentList(APIView):
 
 class LeadCommentList(APIView):
     def get(self, request, pk, format=None):
-        lead_id = pk
-        if not lead_id:
-            current_user = request.user
-            lead = Employee.objects.get(user=current_user)
-            lead_id = lead.id
+        current_user = request.user
+        lead = Employee.objects.get(user=current_user)
+        lead_id = lead.id
         employee_ids = Leadership.objects.filter(leader__id=lead_id).values('employee__id')
         if not employee_ids:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
@@ -559,16 +553,7 @@ class EmployeeDetail(APIView):
         employee = Employee.objects.get(id = pk)
         serializer = EmployeeSerializer(employee)
         if employee is not None:
-            if (request.user.groups.filter(name='foolsquad').exists()):
-                return Response(serializer.data)
-            elif (request.user.groups.filter(name='Coach').exists()):
-                coach = Employee.objects.get(user__id = request.user.id)
-                if (employee.coach==coach):
-                    return Response(serializer.data)
-                else:
-                    Response(None, status=status.HTTP_404_NOT_FOUND)
-            else:
-                Response(None, status=status.HTTP_404_NOT_FOUND)
+            return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request, pk, format=None):
@@ -703,8 +688,8 @@ def current_kpi_performance(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
-@cache_on_auth(60*15, 'foolsquad')
-@group_required('foolsquad')
+@auth_employee_cache(60*15, 'foolsquad')
+@auth_employee('foolsquad')
 def get_company_salary_report(request):
     report = get_salary_report_for_all_employees()
     serializer = SalaryReportSerializer(report)
@@ -713,8 +698,8 @@ def get_company_salary_report(request):
     return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
-@cache_on_auth(60*15, 'foolsquad')
-@group_required('foolsquad')
+@auth_employee_cache(60*15, 'foolsquad')
+@auth_employee('foolsquad')
 def compensation_summaries(request):
     compensation_summaries = CompensationSummary.objects.all()
 
@@ -734,14 +719,14 @@ def compensation_summaries(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
-@cache_on_auth(60*1440, 'foolsquad', 'Coach')
-@group_required('foolsquad', 'Coach')
+@auth_cache(60*1440, 'foolsquad')
+@auth('foolsquad')
 def pvp_evaluations(request):
     current_round = request.QUERY_PARAMS.get('current_round', None)
-    employee_id = request.QUERY_PARAMS.get('employee_id', None)
     team_id = request.QUERY_PARAMS.get('team_id', None)
     talent_category = request.QUERY_PARAMS.get('talent_category', None)
     evaluations = PvpEvaluation.objects.all()
+
     if current_round is not None:
         current_round = EvaluationRound.objects.most_recent()
         evaluations = evaluations.filter(evaluation_round__id = current_round.id)
@@ -749,19 +734,22 @@ def pvp_evaluations(request):
     if team_id is not None:
         evaluations = evaluations.filter(employee__team_id=int(team_id))
 
-    if employee_id is not None:
-        evaluations = evaluations.filter(employee__id=int(employee_id))
-        serializer = PvpEvaluationSerializer(evaluations, many=True)
-    else:
-        evaluations = evaluations.filter(employee__departure_date__isnull=True)
-        evaluations = evaluations.exclude(employee__display=False)
-        serializer = MinimalPvpEvaluationSerializer(evaluations, many=True)
-    data = serializer.data
+    evaluations = evaluations.filter(employee__departure_date__isnull=True)
+    evaluations = evaluations.exclude(employee__display=False)
+    serializer = MinimalPvpEvaluationSerializer(evaluations, many=True)
+    return Response(serializer.data)
 
-    return Response(data)
+class EmployeePvPEvaluations(APIView):
+    def get(self, request, pk, format=None):
+        evaluations = PvpEvaluation.objects.all()
+        evaluations = evaluations.filter(employee__id=int(pk))
+        if evaluations is not None:
+            serializer = PvpEvaluationSerializer(evaluations, many=True)
+            return Response(serializer.data)
+        return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
-@group_required('foolsquad', 'Coach', 'Leader')
+@auth_employee('foolsquad', 'Coach', 'TeamLead')
 def my_team_pvp_evaluations(request):
     current_user = request.user
     current_round = EvaluationRound.objects.most_recent()
@@ -777,7 +765,7 @@ def my_team_pvp_evaluations(request):
     return Response(data)
 
 @api_view(['GET'])
-@group_required('foolsquad')
+@auth_employee('foolsquad')
 def happiness_reports(request):
     talent_category = request.QUERY_PARAMS.get('talent_category', None)
     days_ago = request.QUERY_PARAMS.get('days_ago', None)
@@ -816,8 +804,8 @@ def happiness_reports(request):
     return Response(data)
 
 @api_view(['GET'])
-@cache_on_auth(60*15, 'foolsquad')
-@group_required('foolsquad')
+@auth_employee_cache(60*15, 'foolsquad')
+@auth_employee('foolsquad')
 def team_leads(request):
     team_id = request.QUERY_PARAMS.get('team_id', None)    
     leads = Leadership.objects.filter(leader__team_id=int(team_id))
