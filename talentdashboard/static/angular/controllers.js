@@ -425,6 +425,10 @@ angular.module('tdb.controllers', [])
        {id: $routeParams.id},
        function(data) {
             $scope.leadership = data;
+            $scope.showCompensation = false;
+            if ($scope.leadership.leader.id == $rootScope.currentUser.employee.id){
+                $scope.showCompensation = true;
+            }
             $scope.edit_leadership = angular.copy($scope.leadership);
         }
     );
