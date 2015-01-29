@@ -242,15 +242,15 @@ class UserSerializer(serializers.ModelSerializer):
                 return True
         return False
     def get_can_coach_employees(self, obj):
-        if obj.groups.filter(name='Coach').exists() | obj.is_superuser:
+        if obj.groups.filter(name='CoachAccess').exists() | obj.is_superuser:
                 return True
         return False
     def get_can_view_company_dashboard(self, obj):
-        if obj.groups.filter(name='foolsquad').exists() | obj.is_superuser:
+        if obj.groups.filter(name='AllAccess').exists() | obj.is_superuser:
                 return True
         return False
     def get_is_team_lead(self, obj):
-        if obj.groups.filter(name='TeamLead').exists() | obj.is_superuser:
+        if obj.groups.filter(name='TeamLeadAccess').exists() | obj.is_superuser:
                 return True
         return False
     class Meta:

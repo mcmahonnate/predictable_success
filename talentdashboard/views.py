@@ -688,8 +688,8 @@ def current_kpi_performance(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
-@auth_employee_cache(60*15, 'foolsquad')
-@auth_employee('foolsquad')
+@auth_employee_cache(60*15, 'AllAccess')
+@auth_employee('AllAccess')
 def get_company_salary_report(request):
     report = get_salary_report_for_all_employees()
     serializer = SalaryReportSerializer(report)
@@ -698,8 +698,8 @@ def get_company_salary_report(request):
     return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
-@auth_employee_cache(60*15, 'foolsquad')
-@auth_employee('foolsquad')
+@auth_employee_cache(60*15, 'AllAccess')
+@auth_employee('AllAccess')
 def compensation_summaries(request):
     compensation_summaries = CompensationSummary.objects.all()
 
@@ -718,9 +718,18 @@ def compensation_summaries(request):
     serializer = CompensationSummarySerializer(compensation_summaries, many=True)
     return Response(serializer.data)
 
+class EmployeeCompensationSummaries(APIView):
+    def get(self, request, pk, format=None):
+        compensation_summaries = CompensationSummary.objects.all()
+        compensation_summaries = compensation_summaries.filter(employee__id=int(pk))
+        if compensation_summaries is not None:
+            serializer = CompensationSummarySerializer(compensation_summaries, many=True)
+            return Response(serializer.data)
+        return Response(None, status=status.HTTP_404_NOT_FOUND)
+
 @api_view(['GET'])
-@auth_cache(60*1440, 'foolsquad')
-@auth('foolsquad')
+@auth_cache(60*1440, 'AllAccess')
+@auth('AllAccess')
 def pvp_evaluations(request):
     current_round = request.QUERY_PARAMS.get('current_round', None)
     team_id = request.QUERY_PARAMS.get('team_id', None)
@@ -749,7 +758,7 @@ class EmployeePvPEvaluations(APIView):
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
-@auth_employee('foolsquad', 'Coach', 'TeamLead')
+@auth_employee('AllAccess', 'CoachAccess', 'TeamLeadAccess')
 def my_team_pvp_evaluations(request):
     current_user = request.user
     current_round = EvaluationRound.objects.most_recent()
@@ -765,7 +774,7 @@ def my_team_pvp_evaluations(request):
     return Response(data)
 
 @api_view(['GET'])
-@auth_employee('foolsquad')
+@auth_employee('AllAccess')
 def happiness_reports(request):
     talent_category = request.QUERY_PARAMS.get('talent_category', None)
     days_ago = request.QUERY_PARAMS.get('days_ago', None)
@@ -804,8 +813,8 @@ def happiness_reports(request):
     return Response(data)
 
 @api_view(['GET'])
-@auth_employee_cache(60*15, 'foolsquad')
-@auth_employee('foolsquad')
+@auth_employee_cache(60*15, 'AllAccess')
+@auth_employee('AllAccess')
 def team_leads(request):
     team_id = request.QUERY_PARAMS.get('team_id', None)    
     leads = Leadership.objects.filter(leader__team_id=int(team_id))
