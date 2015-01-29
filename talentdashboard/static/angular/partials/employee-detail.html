@@ -46,7 +46,7 @@
                             <button class="comment" ng-disabled="!newCommentText" ng-click="addComment();comment.expandTextArea=false">Comment</button>
                         </div>
                         <div style="clear:both;"></div>
-                        <div ng-repeat="comment in comments | orderBy:'modified_date':true" style="margin:0 15px;padding:8px 0 8px 0px;display: block;width:580px">
+                        <div ng-repeat="comment in comments | orderBy:'created_date':true" style="margin:0 15px;padding:8px 0 8px 0px;display: block;width:580px">
                             <h2 ng-show="CreateHeader(comment.modified_date)" style="font-size: 14px;color: #8b8b8b;border-bottom: 2px solid #8b8b8b">{{comment.created_date | date:'MMM d, yyyy'}}</h2>
                             <div style="display: block;width:580px;min-height: 48px;">
                                 <div style="display: block; float: left; width: 48px;">

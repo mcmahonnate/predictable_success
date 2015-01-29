@@ -300,7 +300,12 @@ class EmployeeCommentList(APIView):
         employee_type = ContentType.objects.get(model="employee")
         if employee is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
-        comments = Comment.objects.filter(object_id = pk,content_type=employee_type)
+        comments = Comment.objects.filter(object_id = pk, content_type=employee_type)
+        allow_all_access = request.user.groups.filter(name="AllAccess").exists()
+        allow_team_lead_access = request.user.groups.filter(name="TeamLeadAccess").exists()
+        if not allow_all_access and allow_team_lead_access:
+            comments = comments.exclude(~Q(owner_id=request.user.id), visibility=2)
+        comments = comments.exclude(~Q(owner_id=request.user.id),content_type=employee_type,visibility=1)
         comments = comments.exclude(object_id=user.id,content_type=employee_type)
         comments = comments.extra(order_by = ['-created_date'])
         serializer = EmployeeCommentSerializer(comments, many=True)
@@ -359,19 +364,21 @@ class LeadCommentList(APIView):
         employee_type = ContentType.objects.get(model="employee")
 
         comments = Comment.objects.filter(object_id__in = employee_ids, content_type=employee_type)
+        comments = comments.exclude(object_id=lead.id,content_type=employee_type)
         comments = comments.extra(order_by = ['-created_date'])[:15]
         serializer = TeamCommentSerializer(comments, many=True)
         return Response(serializer.data)
 
-
 class TeamCommentList(APIView):
     def get(self, request, pk, format=None):
         employee_ids = Employee.objects.filter(team__id=pk).values('pk')
+        user = Employee.objects.get(user__id = request.user.id)
         if not employee_ids:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
         employee_type = ContentType.objects.get(model="employee")
-
         comments = Comment.objects.filter(object_id__in = employee_ids, content_type=employee_type)
+        comments = comments.exclude(~Q(owner_id=request.user.id),content_type=employee_type,visibility=1)
+        comments = comments.exclude(object_id=user.id,content_type=employee_type)
         comments = comments.extra(order_by = ['-created_date'])[:15]
         serializer = TeamCommentSerializer(comments, many=True)
         return Response(serializer.data)
@@ -404,6 +411,7 @@ class CommentList(APIView):
         employee_type = ContentType.objects.get(model='employee')
         comments = Comment.objects.filter(content_type = employee_type)
         comments = comments.exclude(object_id=employee.id)
+        comments = comments.exclude(~Q(owner_id=request.user.id),content_type=employee_type,visibility=1)
         comments = comments.extra(order_by = ['-created_date'])[:15]
         serializer = EmployeeCommentSerializer(comments, many=True)
         return Response(serializer.data)
