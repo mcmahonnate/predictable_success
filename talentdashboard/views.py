@@ -362,9 +362,12 @@ class LeadCommentList(APIView):
         if not employee_ids:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
         employee_type = ContentType.objects.get(model="employee")
-
+        allow_all_access = request.user.groups.filter(name="AllAccess").exists()
+        allow_team_lead_access = request.user.groups.filter(name="TeamLeadAccess").exists()
         comments = Comment.objects.filter(object_id__in = employee_ids, content_type=employee_type)
         comments = comments.exclude(object_id=lead.id,content_type=employee_type)
+        if not allow_all_access and allow_team_lead_access:
+            comments = comments.exclude(~Q(owner_id=request.user.id), visibility=2)
         comments = comments.extra(order_by = ['-created_date'])[:15]
         serializer = TeamCommentSerializer(comments, many=True)
         return Response(serializer.data)
