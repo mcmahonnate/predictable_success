@@ -1,16 +1,17 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models.query import QuerySet
 from org.models import Employee
 
 
 class EvaluationRoundManager(models.Manager):
-    def most_recent(self):
-        return self.order_by('-date')[0:1].get()
+    def most_recent(self, is_complete=True):
+        return self.filter(is_complete=is_complete).order_by('-date')[0:1].get()
 
 
 class EvaluationRound(models.Model):
     date = models.DateField()
-    objects = models.Manager()
+    is_complete = models.BooleanField()
     objects = EvaluationRoundManager()
 
     def __str__(self):
@@ -24,9 +25,17 @@ class PvpEvaluationManager(models.Manager):
     def get_evaluations_for_team(self, team_id, round_id):
         return self.filter(evaluation_round__id=round_id, employee__team__id=team_id)
 
+    def current_for_user(self, user):
+        current_round = EvaluationRound.objects.most_recent()
+        return self.filter(evaluation_round=current_round).filter(evaluator=user)
+
+    def todos_for_user(self, user):
+        current_round = EvaluationRound.objects.most_recent(is_complete=False)
+        return self.filter(evaluation_round=current_round).filter(evaluator=user).filter(is_complete=False)
+
 
 class PvpEvaluation(models.Model):
-    PVP_SCALE = [(i,i) for i in range(1,5)]
+    PVP_SCALE = [(i,i) for i in range(0,5)]
     TOP_PERFORMER = 1
     STRONG_PERFORMER = 2
     GOOD_PERFORMER = 3
@@ -35,12 +44,22 @@ class PvpEvaluation(models.Model):
     NEEDS_DRASTIC_CHANGE = 6
     SUMMARY_SCORE_SCALE = [TOP_PERFORMER, STRONG_PERFORMER, GOOD_PERFORMER, LACKS_POTENTIAL, WRONG_ROLE, NEEDS_DRASTIC_CHANGE]
 
-    objects = models.Manager()
     objects = PvpEvaluationManager()
     employee = models.ForeignKey(Employee, related_name='pvp')
     evaluation_round = models.ForeignKey(EvaluationRound)
-    potential = models.IntegerField(choices=PVP_SCALE)
-    performance = models.IntegerField(choices=PVP_SCALE)
+    potential = models.IntegerField(choices=PVP_SCALE, blank=True, default=0)
+    performance = models.IntegerField(choices=PVP_SCALE, blank=True, default=0)
+    evaluator = models.ForeignKey(User, null=True, blank=True)
+    is_complete = models.BooleanField()
+
+    def save(self, *args, **kwargs):
+        self.is_complete = self.performance > 0 and self.potential > 0
+        super(PvpEvaluation, self).save(*args, **kwargs)
+
+    def complete(self, potential, performance, evaluator=None):
+        self.evaluator = evaluator
+        self.potential = potential
+        self.performance = performance
 
     def get_talent_category(self):
         if self.__is_top_performer():
@@ -55,6 +74,7 @@ class PvpEvaluation(models.Model):
             return self.LACKS_POTENTIAL
         if self.__needs_drastic_change():
             return self.NEEDS_DRASTIC_CHANGE
+        return 0
 
     def __is_top_performer(self):
         return self.potential == self.performance == 4
@@ -72,7 +92,7 @@ class PvpEvaluation(models.Model):
         return self.potential < 3 and self.performance >= 3
 
     def __needs_drastic_change(self):
-        return self.potential <=2 and self.performance <= 2
+        return self.potential <=2 and self.performance <= 2 and (self.potential + self.performance) > 0
 
     def __str__(self):
         return "%s PVP Evaluation %s" % (self.employee.full_name, self.evaluation_round.date)
@@ -82,23 +102,3 @@ class PvpEvaluation(models.Model):
         verbose_name = "PVP Evaluation"
         verbose_name_plural = "PVP Evaluations"
         ordering =['-evaluation_round__date',]
-
-
-class PvpEvaluationAssignment(models.Model):
-    evaluator = models.ForeignKey(User)
-    employee = models.ForeignKey(Employee)
-    evaluation_round = models.ForeignKey(EvaluationRound)
-    evaluation = models.ForeignKey(PvpEvaluation, null=True)
-    is_complete = models.BooleanField()
-
-    def complete(self, evaluation):
-        self.evaluation = evaluation
-        self.is_complete = True
-
-    class Meta:
-        unique_together = ("employee", "evaluation_round")
-        verbose_name = "PVP Evaluation Assignment"
-        verbose_name_plural = "PVP Evaluation Assignments"
-
-    def __str__(self):
-        return "PVP Evaluation of %s assigned to %s for %s" % (self.evaluator.name, self.employee.full_name, self.evaluation_round.date)

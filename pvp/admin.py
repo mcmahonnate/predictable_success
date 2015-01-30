@@ -3,3 +3,4 @@ from pvp.models import *
 
 admin.site.register(PvpEvaluation)
 admin.site.register(EvaluationRound)
+

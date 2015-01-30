@@ -1742,4 +1742,33 @@ angular.module('tdb.controllers', [])
                 });
         }
     };
+}])
+
+.controller('PvpEvaluationTodosCtrl', ['$scope', '$filter', '$routeParams', '$window', 'PvpEvaluation', function($scope, $filter, $routeParams, $window, PvpEvaluation) {
+    PvpEvaluation.getToDos().$then(function(response) {
+		$scope.pvps = response.data;
+	});
+    $scope.currentItem = 0;
+    console.log($scope.pvps);
+
+    $scope.save = function(pvp) {
+        PvpEvaluation.update(pvp, function(){
+            if(($scope.currentItem - 1) < $scope.pvps.length) {
+                $scope.currentItem++;
+            }
+        });
+    };
+
+    $scope.forward = function() {
+        if(($scope.currentItem - 1) < $scope.pvps.length) {
+            $scope.currentItem++;
+        }
+    };
+
+    $scope.backward = function() {
+        if($scope.currentItem > 0) {
+            $scope.currentItem--;
+        }
+    };
 }]);
+

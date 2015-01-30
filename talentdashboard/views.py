@@ -25,6 +25,7 @@ from django.utils.log import getLogger
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.contrib.sites.models import get_current_site
 from django.contrib.contenttypes.models import ContentType
+from django.http import Http404
 from django.template.loader import get_template
 from django.template import Context
 from django.db.models import Q
@@ -39,21 +40,26 @@ from django.conf import settings
 
 logger = getLogger('talentdashboard')
 
+
 def parseBoolString(theString):
-  return theString[0].upper()=='T'
+    return theString[0].upper() == 'T'
+
 
 class UserList(generics.ListAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
-    queryset = queryset.extra(order_by = ['-last_login'])
+    queryset = queryset.extra(order_by=['-last_login'])
+
 
 class CoachList(generics.ListAPIView):
     serializer_class = EmployeeSerializer
     queryset = Employee.objects.filter(user__groups__id=2)
-        
+
+
 class TeamViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = TeamSerializer
     queryset = Team.objects.all()
+
 
 class MentorshipViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = MentorshipSerializer
@@ -69,6 +75,7 @@ class MentorshipViewSet(viewsets.ReadOnlyModelViewSet):
 
         return self.queryset
 
+
 class LeadershipsViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = LeadershipSerializer
     queryset = Leadership.objects.all()
@@ -82,6 +89,7 @@ class LeadershipsViewSet(viewsets.ReadOnlyModelViewSet):
             self.queryset = self.queryset.filter(leader__id=leader_id)
 
         return self.queryset
+
 
 class AttributeViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = AttributeSerializer
@@ -97,6 +105,7 @@ class AttributeViewSet(viewsets.ReadOnlyModelViewSet):
             
         return self.queryset
 
+
 class EmployeeCommentReportDetail(APIView):
     def get(self, request, pk, format=None):
         report = None
@@ -108,12 +117,13 @@ class EmployeeCommentReportDetail(APIView):
             neglected = False
         if days_ago is None:
             days_ago = 30
-        if(pk == 'all-employees'):
+        if pk == 'all-employees':
             report = get_employees_with_comments(int(days_ago), neglected)
         serializer = TalentCategoryReportSerializer(report)
         if report is not None:
             return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
+
 
 class TeamMBTIReportDetail(APIView):
     def get(self, request, pk, format=None):
@@ -123,6 +133,7 @@ class TeamMBTIReportDetail(APIView):
             return Response(serializer.data)
         except:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
+
 
 class EmployeeEngagementReportDetail(APIView):
     def get(self, request, pk, format=None):
@@ -135,22 +146,24 @@ class EmployeeEngagementReportDetail(APIView):
             neglected = False
         if days_ago is None:
             days_ago = 30
-        if(pk == 'all-employees'):
+        if pk == 'all-employees':
             report = get_employees_with_happiness_scores(int(days_ago), neglected)
         serializer = TalentCategoryReportSerializer(report)
         if report is not None:
             return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
+
 class TalentCategoryReportDetail(APIView):
     def get(self, request, pk, format=None):
         report = None
-        if(pk == 'all-employees'):
+        if pk == 'all-employees':
             report = get_talent_category_report_for_all_employees()
         serializer = TalentCategoryReportSerializer(report)
         if report is not None:
             return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
+
 
 class TeamTalentCategoryReportDetail(APIView):
     def get(self, request, pk, format=None):
@@ -175,6 +188,7 @@ class EmployeeList(APIView):
         serializer = MinimalEmployeeSerializer(employees, many=True)
         return Response(serializer.data)
 
+
 class TeamMemberList(APIView):
     def get(self, request, pk, format=None):
         employees = Employee.objects.filter(team__id=pk)
@@ -184,24 +198,48 @@ class TeamMemberList(APIView):
         serializer = EmployeeSerializer(employees, many=True)
         return Response(serializer.data)
 
+
 class SubCommentList(APIView):
     def get(self, request, pk, format=None):
         comment_type = ContentType.objects.get(model="comment")
-        comments = Comment.objects.filter(object_id = pk)
+        comments = Comment.objects.filter(object_id=pk)
         comments = comments.filter(content_type=comment_type)
         comments = comments.extra(order_by = ['-created_date'])
         serializer = SubCommentSerializer(comments, many=True)
         return Response(serializer.data)
 
+
+class PvpEvaluationDetail(APIView):
+    def get_object(self, pk):
+        try:
+            return PvpEvaluation.objects.get(pk=pk)
+        except PvpEvaluation.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        pvp = self.get_object(pk)
+        serializer = PvpEvaluationSerializer(pvp)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        pvp = self.get_object(pk)
+        input_serializer = PvpEvaluationEditSerializer(pvp, data=request.DATA)
+        if input_serializer.is_valid():
+            input_serializer.save()
+            output_serializer = PvpEvaluationSerializer(pvp)
+            return Response(output_serializer.data)
+        return Response(input_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 class EmployeeEngagement(APIView):
     def get(self, request, pk, format=None):
-        employee = Employee.objects.get(id = pk)
+        employee = Employee.objects.get(id=pk)
         current = request.QUERY_PARAMS.get('current', None)
         if employee is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
         if current is not None:
             current = parseBoolString(current)
-        happys = Happiness.objects.filter(employee__id = pk)
+        happys = Happiness.objects.filter(employee__id=pk)
         if current:
             try:
                 happy = happys.latest('assessed_date')
@@ -210,17 +248,16 @@ class EmployeeEngagement(APIView):
             except:
                 return Response(None)
         else:
-            happys = happys.extra(order_by = ['-assessed_date'])
+            happys = happys.extra(order_by=['-assessed_date'])
             serializer = HappinessSerializer(happys, many=True)
             return Response(serializer.data)
-        return Response(None)
 
     def post(self, request, pk, format=None):
-        employee = Employee.objects.get(id = pk)
+        employee = Employee.objects.get(id=pk)
         if employee is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
         assessed_by_id = request.DATA["_assessed_by_id"]
-        assessed_by = Employee.objects.get(id = assessed_by_id)
+        assessed_by = Employee.objects.get(id=assessed_by_id)
         if assessed_by is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
         assessment = request.DATA["_assessment"]
@@ -235,7 +272,7 @@ class EmployeeEngagement(APIView):
     def put(self, request, pk, format=None):
         assessment_id = request.DATA["_assessment_id"]
         assessment = request.DATA["_assessment"]
-        happy = Happiness.objects.get(id = assessment_id )
+        happy = Happiness.objects.get(id=assessment_id)
         if happy is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
         happy.assessment = int(assessment)
@@ -244,43 +281,46 @@ class EmployeeEngagement(APIView):
         return Response(serializer.data)
 
     def delete(self, request, pk, format=None):
-        happy = Happiness.objects.filter(id = pk)
+        happy = Happiness.objects.filter(id=pk)
         if happy is not None:
             happy.delete()
             return Response(None)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
+
 class Assessment(APIView):
     def get(self, request, pk, format=None):
-        employee = Employee.objects.get(id = pk)
+        employee = Employee.objects.get(id=pk)
         if employee is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
-        assessments = EmployeeAssessment.objects.filter(employee__id = pk)
+        assessments = EmployeeAssessment.objects.filter(employee__id=pk)
         serializer = AssessmentSerializer(assessments, many=True)
         return Response(serializer.data)
 
+
 class EmployeeMBTI(APIView):
     def get(self, request, pk, format=None):
-        employee = Employee.objects.get(id = pk)
+        employee = Employee.objects.get(id=pk)
         if employee is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
         try:
-            mbti = MBTI.objects.filter(employee__id = pk)[0]
+            mbti = MBTI.objects.filter(employee__id=pk)[0]
             serializer = MBTISerializer(mbti, many=False)
             return Response(serializer.data)
         except:
             return Response(None)
 
+
 class EmployeeCommentList(APIView):
     def get(self, request, pk, format=None):
-        employee = Employee.objects.get(id = pk)
-        user = Employee.objects.get(user__id = request.user.id)
+        employee = Employee.objects.get(id=pk)
+        user = Employee.objects.get(user__id=request.user.id)
         employee_type = ContentType.objects.get(model="employee")
         if employee is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
-        comments = Comment.objects.filter(object_id = pk,content_type=employee_type)
-        comments = comments.exclude(object_id=user.id,content_type=employee_type)
-        comments = comments.extra(order_by = ['-created_date'])
+        comments = Comment.objects.filter(object_id=pk, content_type=employee_type)
+        comments = comments.exclude(object_id=user.id, content_type=employee_type)
+        comments = comments.extra(order_by=['-created_date'])
         serializer = EmployeeCommentSerializer(comments, many=True)
         return Response(serializer.data)
 
@@ -290,22 +330,22 @@ class EmployeeCommentList(APIView):
         model_name = request.DATA["_model_name"]
         content_type = ContentType.objects.get(model=model_name)
         object_id = request.DATA["_object_id"]
-        employee = Employee.objects.get(id = pk)
+        employee = Employee.objects.get(id=pk)
         if employee is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
         owner = request.user
         content = request.DATA["_content"]
         if content_type == comment_type:
-            comment = Comment.objects.get(id = object_id)
-            sub_comment = Comment.objects.add_comment(comment,content,owner)
+            comment = Comment.objects.get(id=object_id)
+            sub_comment = Comment.objects.add_comment(comment, content, owner)
             serializer = SubCommentSerializer(sub_comment, many=False)
             notify = True
             if notify:
                 html_template = get_template('reply_notification.html')
-                sub_commenter = Employee.objects.get(user__id = request.user.id)
+                sub_commenter = Employee.objects.get(user__id=request.user.id)
                 comment_content = comment.content
                 sub_comment_content = sub_comment.content
-                commenter = Employee.objects.get(user__id = comment.owner_id)
+                commenter = Employee.objects.get(user__id=comment.owner_id)
                 employee_name = employee.full_name
                 commenter_avatar = commenter.avatar_small.url
                 commenter_full_name = commenter.full_name
@@ -326,14 +366,15 @@ class EmployeeCommentList(APIView):
             serializer = EmployeeCommentSerializer(comment, many=False)
         return Response(serializer.data)
 
+
 class TeamCommentList(APIView):
     def get(self, request, pk, format=None):
-        team = Team.objects.get(id = pk)
+        team = Team.objects.get(id=pk)
         team_type = ContentType.objects.get(model="team")
         if team is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
-        comments = Comment.objects.filter(object_id = pk,content_type=team_type)
-        comments = comments.extra(order_by = ['-created_date'])
+        comments = Comment.objects.filter(object_id=pk, content_type=team_type)
+        comments = comments.extra(order_by=['-created_date'])
         serializer = TeamCommentSerializer(comments, many=True)
         return Response(serializer.data)
 
@@ -342,13 +383,13 @@ class TeamCommentList(APIView):
         model_name = request.DATA["_model_name"]
         content_type = ContentType.objects.get(model=model_name)
         object_id = request.DATA["_object_id"]
-        team = Team.objects.get(id = pk)
+        team = Team.objects.get(id=pk)
         if team is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
         owner = request.user
         content = request.DATA["_content"]
         if content_type == comment_type:
-            comment = Comment.objects.get(id = object_id)
+            comment = Comment.objects.get(id=object_id)
             sub_comment = Comment.objects.add_comment(comment,content,owner)
             serializer = SubCommentSerializer(sub_comment, many=False)
             return Response(serializer.data)
@@ -357,11 +398,12 @@ class TeamCommentList(APIView):
             serializer = TeamCommentSerializer(comment, many=False)
             return Response(serializer.data)
 
+
 class LeadershipDetail(APIView):
     def get(self, request, pk, format=None):
-        employee = Employee.objects.get(id = pk)
+        employee = Employee.objects.get(id=pk)
         if employee is not None:
-            leaderships = Leadership.objects.filter(employee__id = employee.id)
+            leaderships = Leadership.objects.filter(employee__id=employee.id)
             leadership = leaderships.latest('start_date')
             if leadership is not None:
                 serializer = LeadershipSerializer(leadership, many=False)
@@ -369,7 +411,7 @@ class LeadershipDetail(APIView):
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
     def post(self, request, pk, format=None):
-        employee = Employee.objects.get(id = pk)
+        employee = Employee.objects.get(id=pk)
         leader_id = request.DATA["_leader_id"]
         leader = Employee.objects.get(id = leader_id)
         leadership = Leadership()
@@ -379,40 +421,43 @@ class LeadershipDetail(APIView):
         serializer = LeadershipSerializer(leadership, many=False)
         return Response(serializer.data)
 
+
 class CommentList(APIView):
     def get(self, request, format=None):
-        employee = Employee.objects.get(user__id = request.user.id)
+        employee = Employee.objects.get(user__id=request.user.id)
         employee_type = ContentType.objects.get(model='employee')
-        comments = Comment.objects.filter(content_type = employee_type)
+        comments = Comment.objects.filter(content_type=employee_type)
         comments = comments.exclude(object_id=employee.id)
-        comments = comments.extra(order_by = ['-created_date'])[:15]
+        comments = comments.extra(order_by=['-created_date'])[:15]
         serializer = EmployeeCommentSerializer(comments, many=True)
         return Response(serializer.data)
 
+
 class CommentDetail(APIView):
     def get(self, request, pk, format=None):
-        comment = Comment.objects.get(id = pk)
+        comment = Comment.objects.get(id=pk)
         serializer = EmployeeCommentSerializer(comment)
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
-        comment = Comment.objects.filter(id = pk)
+        comment = Comment.objects.filter(id=pk)
         if comment is not None:
-            comment.update(content = request.DATA["_content"], modified_date = datetime.datetime.now())
+            comment.update(content=request.DATA["_content"], modified_date=datetime.datetime.now())
             serializer = EmployeeCommentSerializer(comment, many=False)
             return Response(None)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
     def delete(self, request, pk, format=None):
-        comment = Comment.objects.filter(id = pk)
+        comment = Comment.objects.filter(id=pk)
         if comment is not None:
             comment.delete()
             return Response(None)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
+
 class MyTaskList(APIView):
     def get(self, request, format=None):
-        assigned_to = Employee.objects.get(user__id = request.user.id)
+        assigned_to = Employee.objects.get(user__id=request.user.id)
         if assigned_to is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
         completed = request.QUERY_PARAMS.get('completed', None)
@@ -421,14 +466,15 @@ class MyTaskList(APIView):
         else:
             completed = parseBoolString(completed)
         tasks = Task.objects.filter(assigned_to__id=assigned_to.id)
-        tasks = tasks.filter(completed = completed)
-        tasks = tasks.extra(order_by = ['-due_date'])
+        tasks = tasks.filter(completed=completed)
+        tasks = tasks.extra(order_by=['-due_date'])
         serializer = TaskSerializer(tasks, many=True)
         return Response(serializer.data)
 
+
 class TaskDetail(APIView):
     def get(self, request, pk, format=None):
-        task = Task.objects.get(id = pk)
+        task = Task.objects.get(id=pk)
         serializer = TaskSerializer(task)
         return Response(serializer.data)
 
@@ -442,8 +488,8 @@ class TaskDetail(APIView):
         due_date = request.DATA["_due_date"]
         completed = request.DATA["_completed"]
         if assigned_to_id is not None:
-            assigned_to = Employee.objects.get(id = assigned_to_id)
-            assigned_by = Employee.objects.get(user__id = request.user.id)
+            assigned_to = Employee.objects.get(id=assigned_to_id)
+            assigned_by = Employee.objects.get(user__id=request.user.id)
             if assigned_to is None:
                 return Response(None, status=status.HTTP_404_NOT_FOUND)
             else:
@@ -457,7 +503,7 @@ class TaskDetail(APIView):
                 task.assigned_to = assigned_to
         else:
             task.assigned_to = None
-        if due_date !="":
+        if due_date != "":
             task.due_date = due_date
         task.description = description
         task.completed = completed
@@ -471,16 +517,17 @@ class TaskDetail(APIView):
         return Response(None)
 
     def delete(self, request, pk, format=None):
-        task = Task.objects.filter(id = pk)
+        task = Task.objects.filter(id=pk)
         if task is not None:
             task.delete()
             return Response(None)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
+
 class EmployeeTaskList(APIView):
     def get(self, request, pk, format=None):
         if(pk == 'all-employees'):
-            employee = Employee.objects.get(user__id = request.user.id)
+            employee = Employee.objects.get(user__id=request.user.id)
             days_ahead = request.QUERY_PARAMS.get('days_ahead', None)
             if days_ahead is None:
                 days_ahead = 7
@@ -488,7 +535,7 @@ class EmployeeTaskList(APIView):
             tasks = Task.objects.filter(completed=False).filter(Q(due_date__lt=d) | Q(due_date__isnull=True))
             tasks = tasks.exclude(employee=employee)
         else:
-            employee = Employee.objects.get(id = pk)
+            employee = Employee.objects.get(id=pk)
             if employee is None:
                 return Response(None, status=status.HTTP_404_NOT_FOUND)
             completed = request.QUERY_PARAMS.get('completed', None)
@@ -496,19 +543,19 @@ class EmployeeTaskList(APIView):
                 completed = False
             else:
                 completed = parseBoolString(completed)
-            tasks = Task.objects.filter(employee__id = pk)
-            tasks = tasks.filter(completed = completed)
-            tasks = tasks.extra(order_by = ['-created_date'])
+            tasks = Task.objects.filter(employee__id=pk)
+            tasks = tasks.filter(completed=completed)
+            tasks = tasks.extra(order_by=['-created_date'])
         serializer = TaskSerializer(tasks, many=True)
         return Response(serializer.data)
 
     def post(self, request, pk, format=None):
         employee_id = request.DATA["_employee_id"]
-        employee = Employee.objects.get(id = employee_id)
+        employee = Employee.objects.get(id=employee_id)
         if employee is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
         owner_id = request.DATA["_owner_id"]
-        owner = Employee.objects.get(user__id = owner_id)
+        owner = Employee.objects.get(user__id=owner_id)
         if owner is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
         assigned_to_id = request.DATA["_assigned_to_id"]
@@ -518,7 +565,7 @@ class EmployeeTaskList(APIView):
         task.employee = employee
         task.created_by = owner
         if assigned_to_id is not None:
-            assigned_to = Employee.objects.get(id = assigned_to_id)
+            assigned_to = Employee.objects.get(id=assigned_to_id)
             if assigned_to is not None:
                  task.assigned_to = assigned_to
         if description is not None:
@@ -529,15 +576,16 @@ class EmployeeTaskList(APIView):
         serializer = TaskSerializer(task)
         return Response(serializer.data)
 
+
 class EmployeeDetail(APIView):
     def get(self, request, pk, format=None):
-        employee = Employee.objects.get(id = pk)
+        employee = Employee.objects.get(id=pk)
         serializer = EmployeeSerializer(employee)
         if employee is not None:
             if (request.user.groups.filter(name='foolsquad').exists()):
                 return Response(serializer.data)
             elif (request.user.groups.filter(name='Coaches').exists()):
-                coach = Employee.objects.get(user__id = request.user.id)
+                coach = Employee.objects.get(user__id=request.user.id)
                 if (employee.coach==coach):
                     return Response(serializer.data)
                 else:
@@ -547,7 +595,7 @@ class EmployeeDetail(APIView):
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request, pk, format=None):
-        def expire_view_cache(view_name, args=[], namespace=None, key_prefix=None, method="GET"):
+        def expire_view_cache(view_name, args=None, namespace=None, key_prefix=None, method="GET"):
             """
             This function allows you to invalidate any view-level cache.
                 view_name: view function you wish to invalidate or it's named url pattern
@@ -558,6 +606,8 @@ class EmployeeDetail(APIView):
                 from: http://stackoverflow.com/questions/2268417/expire-a-view-cache-in-django
                 added: method to request to get the key generating properly
             """
+            if args is None:
+                args = []
 
             # create a fake request object
             new_request = HttpRequest()
@@ -578,7 +628,7 @@ class EmployeeDetail(APIView):
                 return True
             return False
 
-        if int(pk)==0 and "_full_name" in request.DATA:
+        if int(pk) == 0 and "_full_name" in request.DATA:
             employee = Employee()
             employee.full_name = request.DATA["_full_name"]
             employee.display = True
@@ -587,7 +637,7 @@ class EmployeeDetail(APIView):
             serializer = EmployeeSerializer(employee, many=False)
             return Response(serializer.data)
 
-        employee = Employee.objects.get(id = pk)
+        employee = Employee.objects.get(id=pk)
         if employee is not None:
             if "_full_name" in request.DATA:
                 employee.full_name = request.DATA["_full_name"]
@@ -601,6 +651,7 @@ class EmployeeDetail(APIView):
 
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
+
 class ImageUploadView(APIView):
     parser_classes = (MultiPartParser,FormParser)
 
@@ -611,14 +662,14 @@ class ImageUploadView(APIView):
             image.save(image_io, format=extension)
             image_file = InMemoryUploadedFile(image_io, None, filename, content_type, image_io.len, None)
             return image_file
-        employee = Employee.objects.get(id = pk)
+        employee = Employee.objects.get(id=pk)
         image_obj = request.FILES['file0']
         image = Image.open(image_obj)
         extension = image.format
 
         if hasattr(image, '_getexif'): # only present in JPEGs
             for orientation in ExifTags.TAGS.keys():
-                if ExifTags.TAGS[orientation]=='Orientation':
+                if ExifTags.TAGS[orientation] == 'Orientation':
                     break
             e = image._getexif()       # returns None if no EXIF data
             if e is not None:
@@ -644,6 +695,7 @@ class ImageUploadView(APIView):
         serializer = MinimalEmployeeSerializer(employee)
         return Response(serializer.data)
 
+
 @api_view(['GET'])
 def coachee_list(request):
     employee = Employee.objects.get(user__id = request.user.id)
@@ -660,22 +712,29 @@ def user_status(request):
 
 @api_view(['GET'])
 def current_site(request):
-    site = Site.objects.get(domain = request.get_host())
+    site = Site.objects.get(domain=request.get_host())
 
     serializer = SiteSerializer(site)
     return Response(serializer.data)
 
 @api_view(['GET'])
 def current_kpi_indicator(request):
-    indicator = Indicator.objects.all()[0]
-    serializer = KPIIndicatorSerializer(indicator)
-    return Response(serializer.data)
+    try:
+        indicator = Indicator.objects.all()[0:1].get()
+        serializer = KPIIndicatorSerializer(indicator)
+        return Response(serializer.data)
+    except Indicator.DoesNotExist:
+        return Response(None, status=status.HTTP_404_NOT_FOUND)
+
 
 @api_view(['GET'])
 def current_kpi_performance(request):
-    performance = Performance.objects.latest('date')
-    serializer = KPIPerformanceSerializer(performance)
-    return Response(serializer.data)
+    try:
+        performance = Performance.objects.latest('date')
+        serializer = KPIPerformanceSerializer(performance)
+        return Response(serializer.data)
+    except Performance.DoesNotExist:
+        return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
 @cache_on_auth(60*15, 'foolsquad')
@@ -714,13 +773,13 @@ def compensation_summaries(request):
 def pvp_evaluations(request):
     current_round = request.QUERY_PARAMS.get('current_round', None)
     employee_id = request.QUERY_PARAMS.get('employee_id', None)
-    team_id = request.QUERY_PARAMS.get('team_id', None)    
-    talent_category = request.QUERY_PARAMS.get('talent_category', None)
+    team_id = request.QUERY_PARAMS.get('team_id', None)
+
     evaluations = PvpEvaluation.objects.all()
         
     if current_round is not None:
         current_round = EvaluationRound.objects.most_recent()
-        evaluations = evaluations.filter(evaluation_round__id = current_round.id)
+        evaluations = evaluations.filter(evaluation_round=current_round)
 
     if team_id is not None:
         evaluations = evaluations.filter(employee__team_id=int(team_id))
@@ -734,6 +793,14 @@ def pvp_evaluations(request):
     data = serializer.data
 
     return Response(data)
+
+@api_view(['GET'])
+@group_required('foolsquad', 'Coaches')
+def pvp_todos(request):
+    evaluations = PvpEvaluation.objects.todos_for_user(request.user)
+    serializer = MinimalPvpEvaluationSerializer(evaluations, many=True)
+    return Response(serializer.data)
+
 
 @api_view(['GET'])
 @group_required('foolsquad')
