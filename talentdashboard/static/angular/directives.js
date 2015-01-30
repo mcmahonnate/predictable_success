@@ -105,7 +105,11 @@ angular.module('tdb.directives', [])
                         if(scope.teamId) {
                             search['team_id'] = scope.teamId;
                         }
-                        $location.path('/evaluations/current/').search(search);
+                        if(scope.lead) {
+                            $location.path('/evaluations/my-team/').search(search);
+                        } else {
+                            $location.path('/evaluations/current/').search(search);
+                        }
                         scope.$apply();
                     }
                 });
@@ -486,7 +490,6 @@ angular.module('tdb.directives', [])
             var min =  $slider.slider("option", "min");
             var $sliderrange = $slider.find('.ui-slider-range');
             $sliderrange.css({'top': '50%', 'height': '50%'});
-            console.log($sliderrange);
             $('<div style="width:' + $slider.width() + 'px;text-align:center;color:white;margin: 15px 0px 0px 0px;display:inline-block">' + attrs.label + '</div>').insertBefore($slider);
             $('<div class="ui-slider-label">' + min + '-' + max + '</div>').css({'width': + $slider.width() + 'px','text-align': 'center'}).appendTo($slider);
             $('<div class="ui-slider-grad">&#160;</div>').css({'width': + $slider.width() + 'px','text-align': 'center'}).appendTo($slider);

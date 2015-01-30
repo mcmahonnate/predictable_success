@@ -31,7 +31,7 @@ angular.module('tdb.services', ['ngResource'])
 }])
 
 .factory('Coachees', ['$resource', '$http', function($resource, $http) {
-    var res = $resource('/api/v1/coachees\\/');
+    var res = $resource('/api/v1/coachees/');
     return res;
 }])
 
@@ -44,7 +44,7 @@ angular.module('tdb.services', ['ngResource'])
 }])
 
 .factory('Coach', ['$resource', '$http', function($resource, $http) {
-    var Coach = $resource('/api/v1/coaches\\/');
+    var Coach = $resource('/api/v1/coaches/');
 
     return Coach;
 }])
@@ -68,7 +68,7 @@ angular.module('tdb.services', ['ngResource'])
 }])
 
 .factory('Attribute', ['$resource', '$http', function($resource, $http) {
-    var Attribute = $resource('/api/v1/attributes\\/');
+    var Attribute = $resource('/api/v1/attributes/');
 
     Attribute.getAttributtesForEmployee = function(employee_id, category_id) { return this.query({employee_id: employee_id, category_id: category_id}); };
 
@@ -82,7 +82,7 @@ angular.module('tdb.services', ['ngResource'])
 }])
 
 .factory('CompSummary', ['$resource', '$http', function($resource, $http) {
-    var CompSummary = $resource('/api/v1/compensation-summaries\\/');
+    var CompSummary = $resource('/api/v1/compensation-summaries/employees/:employee_id');
 
     CompSummary.getAllSummariesForEmployee = function(id) { return this.query({employee_id: id}); };
 
@@ -94,10 +94,10 @@ angular.module('tdb.services', ['ngResource'])
         'update': { method: 'PUT' }
     };
 
-    var PvpEvaluation = $resource('/api/v1/pvp-evaluations/:id', { id: '@id' }, actions);
+    var PvpEvaluation = $resource('/api/v1/pvp-evaluations/:path/:employee_id');
 
     PvpEvaluation.getAllEvaluationsForEmployee = function(id) {
-        return this.query({ employee_id: id });
+        return this.query({ path:'employees', employee_id: id });
     };
 
     PvpEvaluation.getCurrentEvaluations = function() {
@@ -114,14 +114,25 @@ angular.module('tdb.services', ['ngResource'])
     };
 
     PvpEvaluation.getToDos = function() {
-        return this.query({ id: 'todo' });
+        return this.query({ path: 'todo' });
     };
 
     return PvpEvaluation;
 }])
 
+.factory('MyTeamPvpEvaluation', ['$resource', '$http', function($resource, $http) {
+    var MyTeamPvpEvaluation = $resource('/api/v1/my-team-pvp-evaluations/');
+
+    MyTeamPvpEvaluation.getCurrentEvaluations = function() {
+        var params = { current_round: true };
+        return this.query(params);
+    };
+
+    return MyTeamPvpEvaluation;
+}])
+
 .factory('TeamLeads', ['$resource', '$http', function($resource, $http) {
-    var TeamLeads = $resource('/api/v1/team-leads\\/');
+    var TeamLeads = $resource('/api/v1/team-leads/');
 
     TeamLeads.getCurrentEvaluationsForTeamLeads = function(team_id) {
         return this.query({team_id: team_id});
@@ -129,10 +140,17 @@ angular.module('tdb.services', ['ngResource'])
     return TeamLeads;
 }])
 
+.factory('TeamLeadEmployees', ['$resource', '$http', function($resource, $http) {
+    var TeamLeadEmployees = $resource('/api/v1/team-lead-employees/:id');
+    TeamLeadEmployees.getEmployees = function(id, success, failure) { return this.query({ id: id }, success, failure); };
+    return TeamLeadEmployees;
+}])
+
 .factory('TalentCategoryReport', ['$resource', '$http', function($resource, $http) {
     TalentCategoryReport = $resource('/api/v1/talent-category-reports/:id/:teamId');
 
     TalentCategoryReport.getReportForTeam = function(teamId, success, failure) { return this.get({ id: 'teams', teamId: teamId }, success, failure); };
+    TalentCategoryReport.getReportForLead = function(success, failure) { return this.get({ id: 'lead/' }, success, failure); };
     TalentCategoryReport.getReportForCompany = function(success, failure) { return this.get({ id: 'all-employees' }, success, failure); };
 
     return TalentCategoryReport;
@@ -163,7 +181,6 @@ angular.module('tdb.services', ['ngResource'])
                     //now add all of the assigned files
                     for (var i = 0; i < files.length; i++) {
                         //add each file to the form data and iteratively name them
-                        console.log(files[i]);
                         formData.append("file" + i, files[i]);
 
                     }
@@ -213,15 +230,6 @@ angular.module('tdb.services', ['ngResource'])
     return EngagementReport;
 }])
 
-.factory('SalaryReport', ['$resource', '$http', function($resource, $http) {
-    SalaryReport = $resource('/api/v1/salary-reports/:id/:teamId');
-
-    SalaryReport.getReportForTeam = function(teamId, success, failure) { return this.get({ id: 'teams', teamId: teamId }, success, failure); };
-    SalaryReport.getReportForCompany = function(success, failure) { return this.get({ id: 'company' }, success, failure); };
-
-    return SalaryReport;
-}])
-
 .factory('TalentCategoryColors', [function() {
     var TalentCategoryColors = {
         colors: ['#008000','#00f500','#91fa00','#ffca00','#ff4600','#ff0000'],
@@ -256,8 +264,26 @@ angular.module('tdb.services', ['ngResource'])
 }])
 
 .factory('MyToDos', ['$resource', '$http', function($resource, $http) {
-    var MyToDos = $resource('/api/v1/tasks\\/');
+    var MyToDos = $resource('/api/v1/tasks/');
     return MyToDos;
+}])
+
+.factory('SalaryReport', ['$resource', '$http', function($resource, $http) {
+    SalaryReport = $resource('/api/v1/salary-reports/:path/:id');
+    SalaryReport.getReportForTeam = function(id, success, failure) { return this.get({ path: 'teams', id: id }, success, failure); };
+    SalaryReport.getReportForLead = function(success, failure) { return this.get({ path: 'lead/' }, success, failure); };
+    SalaryReport.getReportForCompany = function(success, failure) { return this.get({ path: 'company' }, success, failure); };
+
+    return SalaryReport;
+}])
+
+.factory('Comments', ['$resource', '$http', function($resource, $http) {
+    Comments = $resource('/api/v1/comments/:path/:id');
+    Comments.getEmployeeComments = function(id, success, failure) { return this.query({ path: 'employees', id: id}, success, failure); };
+    Comments.getTeamComments = function(id, success, failure) { return this.query({ path: 'teams', id: id }, success, failure); };
+    Comments.getLeadComments = function(success, failure) { return this.query({ path: 'leads/'}, success, failure); };
+
+    return Comments;
 }])
 
 .factory('EmployeeComments', ['$resource', '$http', function($resource, $http) {
@@ -265,14 +291,6 @@ angular.module('tdb.services', ['ngResource'])
         'addNew': { method:'POST' },
     }
     var res = $resource('/api/v1/comments/employees/:id', {id:'@id'}, actions);
-    return res;
-}])
-
-.factory('TeamComments', ['$resource', '$http', function($resource, $http) {
-    var actions = {
-        'addNew': { method:'POST' },
-    }
-    var res = $resource('/api/v1/comments/teams/:id', {id:'@id'}, actions);
     return res;
 }])
 
@@ -292,24 +310,24 @@ angular.module('tdb.services', ['ngResource'])
 }])
 
 .factory('User', ['$resource', '$http', function($resource, $http) {
-    var currentUser = $resource('api/v1/user-status\\/');
+    var currentUser = $resource('api/v1/user-status/');
 
     return currentUser;
 }])
 
 .factory('Site', ['$resource', '$http', function($resource, $http) {
-    var currentSite = $resource('api/v1/current_site\\/');
+    var currentSite = $resource('api/v1/current_site/');
 
     return currentSite;
 }])
 
 .factory('KPIIndicator', ['$resource', '$http', function($resource, $http) {
-    var res = $resource('/api/v1/kpi-indicator\\/');
+    var res = $resource('/api/v1/kpi-indicator/');
     return res;
 }])
 
 .factory('KPIPerformance', ['$resource', '$http', function($resource, $http) {
-    var res = $resource('/api/v1/kpi-performance\\/');
+    var res = $resource('/api/v1/kpi-performance/');
     return res;
 }])
 

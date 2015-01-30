@@ -1,5 +1,8 @@
 from .models import PvpEvaluation, EvaluationRound
 from org.models import Employee
+from django.utils.log import getLogger
+
+logger = getLogger('talentdashboard')
 
 class TalentCategorySummary:
     def __init__(self, talent_category=0, count=0):
@@ -29,4 +32,8 @@ def get_talent_category_report_for_all_employees():
 
 def get_talent_category_report_for_team(team_id):
     employees = Employee.objects.filter(team_id=team_id)
+    return build_talent_category_report_for_employees(employees)
+
+def get_talent_category_report_for_lead(lead_id):
+    employees = Employee.objects.filter(leaderships__leader__id=lead_id)
     return build_talent_category_report_for_employees(employees)

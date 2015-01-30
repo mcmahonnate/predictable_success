@@ -7,8 +7,8 @@ from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
 from .serializers import *
 from .decorators import *
-from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team
-from pvp.salaryreports import get_salary_report_for_team, get_salary_report_for_all_employees
+from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team, get_talent_category_report_for_lead
+from pvp.salaryreports import get_salary_report_for_team, get_salary_report_for_all_employees, get_salary_report_for_lead
 from blah.commentreports import get_employees_with_comments
 from engagement.engagementreports import get_employees_with_happiness_scores
 from blah.models import Comment
@@ -173,9 +173,31 @@ class TeamTalentCategoryReportDetail(APIView):
             return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
+class LeadTalentCategoryReportDetail(APIView):
+    def get(self, request, pk, format=None):
+        current_user = request.user
+        lead = Employee.objects.get(user=current_user)
+        lead_id = lead.id
+        report = get_talent_category_report_for_lead(lead_id)
+        serializer = TalentCategoryReportSerializer(report)
+        if report is not None:
+            return Response(serializer.data)
+        return Response(None, status=status.HTTP_404_NOT_FOUND)
+
 class TeamSalaryReportDetail(APIView):
     def get(self, request, pk, format=None):
         report = get_salary_report_for_team(pk)
+        serializer = SalaryReportSerializer(report)
+        if report is not None:
+            return Response(serializer.data)
+        return Response(None, status=status.HTTP_404_NOT_FOUND)
+
+class LeadSalaryReportDetail(APIView):
+    def get(self, request, pk, format=None):
+        current_user = request.user
+        lead = Employee.objects.get(user=current_user)
+        lead_id = lead.id
+        report = get_salary_report_for_lead(lead_id)
         serializer = SalaryReportSerializer(report)
         if report is not None:
             return Response(serializer.data)
@@ -318,9 +340,16 @@ class EmployeeCommentList(APIView):
         employee_type = ContentType.objects.get(model="employee")
         if employee is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
-        comments = Comment.objects.filter(object_id=pk, content_type=employee_type)
-        comments = comments.exclude(object_id=user.id, content_type=employee_type)
-        comments = comments.extra(order_by=['-created_date'])
+
+        comments = Comment.objects.filter(object_id = pk, content_type=employee_type)
+        allow_all_access = request.user.groups.filter(name="AllAccess").exists()
+        allow_team_lead_access = request.user.groups.filter(name="TeamLeadAccess").exists()
+        if not allow_all_access and allow_team_lead_access:
+            comments = comments.exclude(~Q(owner_id=request.user.id), visibility=2)
+        comments = comments.exclude(~Q(owner_id=request.user.id),content_type=employee_type,visibility=1)
+        comments = comments.exclude(object_id=user.id,content_type=employee_type)
+        comments = comments.extra(order_by = ['-created_date'])
+
         serializer = EmployeeCommentSerializer(comments, many=True)
         return Response(serializer.data)
 
@@ -366,37 +395,38 @@ class EmployeeCommentList(APIView):
             serializer = EmployeeCommentSerializer(comment, many=False)
         return Response(serializer.data)
 
-
-class TeamCommentList(APIView):
+class LeadCommentList(APIView):
     def get(self, request, pk, format=None):
-        team = Team.objects.get(id=pk)
-        team_type = ContentType.objects.get(model="team")
-        if team is None:
+        current_user = request.user
+        lead = Employee.objects.get(user=current_user)
+        lead_id = lead.id
+        employee_ids = Leadership.objects.filter(leader__id=lead_id).values('employee__id')
+        if not employee_ids:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
-        comments = Comment.objects.filter(object_id=pk, content_type=team_type)
-        comments = comments.extra(order_by=['-created_date'])
+        employee_type = ContentType.objects.get(model="employee")
+        allow_all_access = request.user.groups.filter(name="AllAccess").exists()
+        allow_team_lead_access = request.user.groups.filter(name="TeamLeadAccess").exists()
+        comments = Comment.objects.filter(object_id__in = employee_ids, content_type=employee_type)
+        comments = comments.exclude(object_id=lead.id,content_type=employee_type)
+        if not allow_all_access and allow_team_lead_access:
+            comments = comments.exclude(~Q(owner_id=request.user.id), visibility=2)
+        comments = comments.extra(order_by = ['-created_date'])[:15]
         serializer = TeamCommentSerializer(comments, many=True)
         return Response(serializer.data)
 
-    def post(self, request, pk, format=None):
-        comment_type = ContentType.objects.get(model="comment")
-        model_name = request.DATA["_model_name"]
-        content_type = ContentType.objects.get(model=model_name)
-        object_id = request.DATA["_object_id"]
-        team = Team.objects.get(id=pk)
-        if team is None:
+class TeamCommentList(APIView):
+    def get(self, request, pk, format=None):
+        employee_ids = Employee.objects.filter(team__id=pk).values('pk')
+        user = Employee.objects.get(user__id = request.user.id)
+        if not employee_ids:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
-        owner = request.user
-        content = request.DATA["_content"]
-        if content_type == comment_type:
-            comment = Comment.objects.get(id=object_id)
-            sub_comment = Comment.objects.add_comment(comment,content,owner)
-            serializer = SubCommentSerializer(sub_comment, many=False)
-            return Response(serializer.data)
-        else:
-            comment = team.comments.add_comment(content, owner)
-            serializer = TeamCommentSerializer(comment, many=False)
-            return Response(serializer.data)
+        employee_type = ContentType.objects.get(model="employee")
+        comments = Comment.objects.filter(object_id__in = employee_ids, content_type=employee_type)
+        comments = comments.exclude(~Q(owner_id=request.user.id),content_type=employee_type,visibility=1)
+        comments = comments.exclude(object_id=user.id,content_type=employee_type)
+        comments = comments.extra(order_by = ['-created_date'])[:15]
+        serializer = TeamCommentSerializer(comments, many=True)
+        return Response(serializer.data)
 
 
 class LeadershipDetail(APIView):
@@ -428,7 +458,8 @@ class CommentList(APIView):
         employee_type = ContentType.objects.get(model='employee')
         comments = Comment.objects.filter(content_type=employee_type)
         comments = comments.exclude(object_id=employee.id)
-        comments = comments.extra(order_by=['-created_date'])[:15]
+        comments = comments.exclude(~Q(owner_id=request.user.id),content_type=employee_type,visibility=1)
+        comments = comments.extra(order_by = ['-created_date'])[:15]
         serializer = EmployeeCommentSerializer(comments, many=True)
         return Response(serializer.data)
 
@@ -582,16 +613,7 @@ class EmployeeDetail(APIView):
         employee = Employee.objects.get(id=pk)
         serializer = EmployeeSerializer(employee)
         if employee is not None:
-            if (request.user.groups.filter(name='foolsquad').exists()):
-                return Response(serializer.data)
-            elif (request.user.groups.filter(name='Coaches').exists()):
-                coach = Employee.objects.get(user__id=request.user.id)
-                if (employee.coach==coach):
-                    return Response(serializer.data)
-                else:
-                    Response(None, status=status.HTTP_404_NOT_FOUND)
-            else:
-                Response(None, status=status.HTTP_404_NOT_FOUND)
+            return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request, pk, format=None):
@@ -737,8 +759,8 @@ def current_kpi_performance(request):
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
-@cache_on_auth(60*15, 'foolsquad')
-@group_required('foolsquad')
+@auth_employee_cache(60*15, 'AllAccess')
+@auth_employee('AllAccess')
 def get_company_salary_report(request):
     report = get_salary_report_for_all_employees()
     serializer = SalaryReportSerializer(report)
@@ -747,8 +769,8 @@ def get_company_salary_report(request):
     return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
-@cache_on_auth(60*15, 'foolsquad')
-@group_required('foolsquad')
+@auth_employee_cache(60*15, 'AllAccess')
+@auth_employee('AllAccess')
 def compensation_summaries(request):
     compensation_summaries = CompensationSummary.objects.all()
 
@@ -767,16 +789,25 @@ def compensation_summaries(request):
     serializer = CompensationSummarySerializer(compensation_summaries, many=True)
     return Response(serializer.data)
 
+class EmployeeCompensationSummaries(APIView):
+    def get(self, request, pk, format=None):
+        compensation_summaries = CompensationSummary.objects.all()
+        compensation_summaries = compensation_summaries.filter(employee__id=int(pk))
+        if compensation_summaries is not None:
+            serializer = CompensationSummarySerializer(compensation_summaries, many=True)
+            return Response(serializer.data)
+        return Response(None, status=status.HTTP_404_NOT_FOUND)
+
 @api_view(['GET'])
-@cache_on_auth(60*1440, 'foolsquad', 'Coaches')
-@group_required('foolsquad', 'Coaches')
+@auth_cache(60*1440, 'AllAccess')
+@auth('AllAccess')
 def pvp_evaluations(request):
     current_round = request.QUERY_PARAMS.get('current_round', None)
-    employee_id = request.QUERY_PARAMS.get('employee_id', None)
     team_id = request.QUERY_PARAMS.get('team_id', None)
+    talent_category = request.QUERY_PARAMS.get('talent_category', None)
 
     evaluations = PvpEvaluation.objects.all()
-        
+
     if current_round is not None:
         current_round = EvaluationRound.objects.most_recent()
         evaluations = evaluations.filter(evaluation_round=current_round)
@@ -784,18 +815,37 @@ def pvp_evaluations(request):
     if team_id is not None:
         evaluations = evaluations.filter(employee__team_id=int(team_id))
 
-    if employee_id is not None:
-        evaluations = evaluations.filter(employee__id=int(employee_id))
-        serializer = PvpEvaluationSerializer(evaluations, many=True)
-    else:
-        evaluations = evaluations.filter(employee__departure_date__isnull=True)
-        serializer = MinimalPvpEvaluationSerializer(evaluations, many=True)
+    evaluations = evaluations.filter(employee__departure_date__isnull=True)
+    evaluations = evaluations.exclude(employee__display=False)
+    serializer = MinimalPvpEvaluationSerializer(evaluations, many=True)
+    return Response(serializer.data)
+
+class EmployeePvPEvaluations(APIView):
+    def get(self, request, pk, format=None):
+        evaluations = PvpEvaluation.objects.all()
+        evaluations = evaluations.filter(employee__id=int(pk))
+        if evaluations is not None:
+            serializer = PvpEvaluationSerializer(evaluations, many=True)
+            return Response(serializer.data)
+        return Response(None, status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['GET'])
+@auth_employee('AllAccess', 'CoachAccess', 'TeamLeadAccess')
+def my_team_pvp_evaluations(request):
+    current_user = request.user
+    current_round = EvaluationRound.objects.most_recent()
+    lead = Employee.objects.get(user=current_user)
+    lead_id = lead.id
+    evaluations = PvpEvaluation.objects.filter(employee__leaderships__leader__id=lead_id)
+    evaluations = evaluations.filter(evaluation_round__id = current_round.id)
+    evaluations = evaluations.filter(employee__departure_date__isnull=True)
+    evaluations = evaluations.exclude(employee__display=False)
+    serializer = MinimalPvpEvaluationSerializer(evaluations, many=True)
     data = serializer.data
 
     return Response(data)
 
 @api_view(['GET'])
-@group_required('foolsquad', 'Coaches')
 def pvp_todos(request):
     evaluations = PvpEvaluation.objects.todos_for_user(request.user)
     serializer = MinimalPvpEvaluationSerializer(evaluations, many=True)
@@ -803,7 +853,7 @@ def pvp_todos(request):
 
 
 @api_view(['GET'])
-@group_required('foolsquad')
+@auth_employee('AllAccess')
 def happiness_reports(request):
     talent_category = request.QUERY_PARAMS.get('talent_category', None)
     days_ago = request.QUERY_PARAMS.get('days_ago', None)
@@ -842,8 +892,8 @@ def happiness_reports(request):
     return Response(data)
 
 @api_view(['GET'])
-@cache_on_auth(60*15, 'foolsquad')
-@group_required('foolsquad')
+@auth_employee_cache(60*15, 'AllAccess')
+@auth_employee('AllAccess')
 def team_leads(request):
     team_id = request.QUERY_PARAMS.get('team_id', None)    
     leads = Leadership.objects.filter(leader__team_id=int(team_id))
@@ -864,8 +914,12 @@ def team_leads(request):
 @api_view(['GET'])
 def team_lead_employees(request):
     current_user = request.user
-    lead_id = request.QUERY_PARAMS.get('lead_id', None)    
-    lead = Employee.objects.get(id=lead_id)
+    lead_id = request.QUERY_PARAMS.get('lead_id', 0)
+    if lead_id==0:
+        lead = Employee.objects.get(user=current_user)
+        lead_id = lead.id
+    else:
+        lead = Employee.objects.get(id=lead_id)
     if lead.user == current_user or current_user.is_superuser:
         leaderships = Leadership.objects.filter(leader__id=int(lead_id))
         employees = []
