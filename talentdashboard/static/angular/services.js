@@ -172,7 +172,6 @@ angular.module('tdb.services', ['ngResource'])
                     //now add all of the assigned files
                     for (var i = 0; i < files.length; i++) {
                         //add each file to the form data and iteratively name them
-                        console.log(files[i]);
                         formData.append("file" + i, files[i]);
 
                     }

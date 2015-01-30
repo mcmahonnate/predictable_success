@@ -32,7 +32,6 @@ var authorizeRoute = function($http) {
 var reRoute = function($q, $rootScope, $location, User) {
        User.get(function(data) {
                $rootScope.currentUser = data;
-               console.log('test');
                 if ($rootScope.currentUser.can_view_company_dashboard) {
                     return true;
                 } else if ($rootScope.currentUser.is_team_lead) {

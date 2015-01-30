@@ -201,7 +201,6 @@ angular.module('tdb.controllers', [])
     //be sure to inject $scope and $location somewhere before this
     var changeLocation = function(url, force) {
       //this will mark the URL change
-      console.log(url);
       $location.path(url); //use $location.path(url).replace() if you want to replace the location instead
       $scope = $scope || angular.element(document).scope();
       if(force || !$scope.$$phase) {
@@ -467,9 +466,7 @@ angular.module('tdb.controllers', [])
     $scope.editEngagement=false;
     $scope.currentHappy=null;
     $scope.open_edit_engagement = function(happy) {
-        console.log($scope.editEngagement);
         $scope.editEngagement=true;
-        console.log($scope.editEngagement);
         $scope.selected=happy.assessment;
         $scope.currentHappy=happy;
     }
