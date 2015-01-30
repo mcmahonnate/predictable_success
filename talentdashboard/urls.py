@@ -68,7 +68,7 @@ urlpatterns = patterns('',
     url(r'api/v1/comments/(?P<pk>.*)', (auth('AllAccess','CoachAccess','TeamLeadAccess')(CommentDetail.as_view()))),
     url(r'api/v1/tasks/employees/(?P<pk>.*)', (auth_employee('AllAccess','CoachAccess')(EmployeeTaskList.as_view()))),
     url(r'api/v1/tasks/$', (MyTaskList.as_view())),
-    url(r'api/v1/tasks/(?P<pk>.*)', (auth_employee('AllAccess','CoachAccess')(TaskDetail.as_view()))),
+    url(r'api/v1/tasks/(?P<pk>.*)', (auth('AllAccess','CoachAccess','TeamLead')(TaskDetail.as_view()))),
     url(r'api/v1/image-upload/employees/(?P<pk>.*)', ImageUploadView.as_view()),
     url(r'^', include(router.urls)),
 )
