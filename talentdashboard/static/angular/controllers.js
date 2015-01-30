@@ -1951,7 +1951,6 @@ angular.module('tdb.controllers', [])
 		$scope.pvps = response.data;
 	});
     $scope.currentItem = 0;
-    console.log($scope.pvps);
 
     $scope.save = function(pvp) {
         PvpEvaluation.update(pvp, function(){

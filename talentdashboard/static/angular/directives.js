@@ -309,6 +309,78 @@ angular.module('tdb.directives', [])
     };
 }])
 
+.directive('pvpGraph', ['TalentCategoryColors', function(TalentCategoryColors) {
+    return {
+        link: function(scope, element, attrs) {
+            console.log(element);
+            var canvas = element[0];
+//            var ctx = canvas.getContext("2d");
+//            var currentSquare = null;
+//            var height = canvas.height;
+//            var width = canvas.width;
+//            var squareWidth = Math.floor(this.width / 4);
+//            var squareHeight = Math.floor(this.height / 4);
+//            var squares = [];
+//            for(var potential = 1; potential <= 4; potential++) {
+//                for(var performance = 1; performance <= 4; performance++) {
+//                    var topLeft = {};
+//                    var bottomRight = {};
+//                    topLeft.y = height - squareHeight - (((potential - 1) * squareHeight));
+//                    topLeft.x = ((performance - 1) * squareWidth);
+//                    bottomRight.y = topLeft.y + squareHeight;
+//                    bottomRight.x = topLeft.x + squareWidth;
+//                    var square = {
+//                        'potential': potential,
+//                        'performance': performance,
+//                        'topLeft': topLeft,
+//                        'bottomRight': bottomRight
+//                    };
+//                    squares.push(square);
+//                    ctx.strokeStyle = "#000";
+//                    ctx.strokeRect(square.topLeft.x, square.topLeft.y, squareWidth, squareHeight);
+//                }
+//            }
+//            var isOnSquare = function (point, square) {
+//                var inX = point.x > square.topLeft.x && point.x < square.bottomRight.x;
+//                var inY = point.y > square.topLeft.y && point.y < square.bottomRight.y;
+//                return inX && inY;
+//            };
+//            var getCursorPosition = function(e) {
+//                var x;
+//                var y;
+//                if (e.pageX != undefined && e.pageY != undefined) {
+//                    x = e.pageX;
+//                    y = e.pageY;
+//                } else {
+//                    x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+//                    y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+//                }
+//                x -= this.canvas.offsetLeft;
+//                y -= this.canvas.offsetTop;
+//                return {"x": x, "y": y};
+//            }
+//            canvas.on('click', function(e) {
+//                var point = getCursorPosition(e);
+//                for(var index = 0; index < squares.length; index++) {
+//                    var square = squares[index];
+//                    if(isOnSquare(point, square)) {
+//                        if(currentSquare) {
+//                            ctx.fillStyle = "#fff";
+//                            ctx.fillRect(currentSquare.topLeft.x, currentSquare.topLeft.y, squareWidth, squareHeight);
+//                            ctx.strokeRect(currentSquare.topLeft.x, currentSquare.topLeft.y, squareWidth, squareHeight);
+//                        }
+//                        ctx.fillStyle = "green";
+//                        ctx.fillRect(square.topLeft.x, square.topLeft.y, squareWidth, squareHeight);
+//                        ctx.strokeRect(square.topLeft.x, square.topLeft.y, squareWidth, squareHeight);
+//                        currentSquare = square;
+//                        break;
+//                    }
+//                }
+//            });
+        }
+    }
+}])
+
 .directive('sliderFollowThru', function() {
   return {
     link: function(scope, elem, attrs) {
