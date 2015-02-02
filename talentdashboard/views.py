@@ -932,3 +932,15 @@ def team_lead_employees(request):
         return Response(serializer.data)        
     else:
         return Response(None, status=status.HTTP_403_FORBIDDEN)
+
+@api_view(['GET'])
+def talent_categories(request):
+    values = {}
+    pvp = PvpEvaluation()
+    for potential in range(0, 5):
+        values[potential] = {}
+        for performance in range(0, 5):
+            pvp.potential = potential
+            pvp.performance = performance
+            values[potential][performance] = pvp.get_talent_category()
+    return Response(values)

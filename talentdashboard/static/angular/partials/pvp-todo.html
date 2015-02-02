@@ -2,30 +2,31 @@
 <div class="dashboard-sized-el" id="dashboard"  style="margin-top: 63px; max-width: 970px;">
     <article class="widget clock loaded" id="widget-8494" style="top: 0px; left: 0px; width: auto;">
       <div class="widget-inner widget-size-4x3 large-screen">
-        <header class="no-reload">
-            PVP <span data-ng-bind-html-unsafe="(currentItem + 1)"></span><span class="slide-tally"> of {{ pvps.length }}</span>
+        <header class="no-reload" style="background-color: black">
+            <h1>PVP <span data-ng-bind-html-unsafe="(currentItem + 1)"></span><span class="slide-tally"> of {{ pvps.length }}</span></h1>
         </header>
         <div>
-            <ul rn-carousel rn-carousel-index="currentItem" class="slide t-size-x24 t-main">
-                <li ng-repeat="pvp in pvps">
-            <section class="widget-body rag-widget">
-              <div class="widget-canvas">
-                <div class="outer" style="margin-left: auto; margin-right: auto;">
-                  <div class="image" style="margin-left: auto; margin-right: auto;"><img ng-src="{{ pvp.employee.avatar }}" style="padding-bottom:15px; display: block; margin-left: auto; margin-right: auto; height: 200px;"/></div>
-                </div>
-              </div>
-            </section>
-                    {{ pvp.employee.full_name }}
-                    <canvas pvp-graph height="100%" width="100%"></canvas>
-                    <form>
-                        Potential: <input type="text" name="potential" ng-model="pvp.potential"/><br>
-                        Performance: <input type="text" name="performance" ng-model="pvp.performance"/><br>
-                        <button class="button small blue" ng-click="save(pvp)">Save</button><br/>
-                        <button class="button small blue" ng-click="forward()">Next</button>
+            <div class="widget-inner widget-size-2x2 large-screen">
+                <header class="no-reload">
+                    <h1>{{ pvp.employee.full_name }}</h1>
+                </header>
+                <section class="widget-body rag-widget">
+                  <div class="widget-canvas" style="width:315px;float:left">
+                    <div class="outer" style="margin-left: auto; margin-right: auto;">
+                      <div class="image" style="margin-left: auto; margin-right: auto;"><img ng-src="{{ pvp.employee.avatar }}" style="padding-bottom:15px; display: block; margin-left: auto; margin-right: auto; height: 200px;"/></div>
+                    </div>
+                  </div>
+                  <form>
+                      <div class="widget-canvas" style="width:315px;margin-left: 325px">
+                          <canvas pvp-graph pvp="pvp" height="200" width="200"/>
+                      </div>
+                      <div style="clear: both;margin: 0 auto; width: 180px;">
                         <button class="button small blue" ng-click="backward()">Previous</button>
-                    </form>
-                </li>
-            </ul>
+                        <button class="button small blue" ng-click="forward()">Next</button>
+                      </div>
+                  </form>
+                </section>
+            </div>
         </div>
       </div>
     </article>

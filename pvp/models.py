@@ -35,7 +35,7 @@ class PvpEvaluationManager(models.Manager):
 
 
 class PvpEvaluation(models.Model):
-    PVP_SCALE = [(i,i) for i in range(0,5)]
+    PVP_SCALE = [(i, i) for i in range(0, 5)]
     TOP_PERFORMER = 1
     STRONG_PERFORMER = 2
     GOOD_PERFORMER = 3

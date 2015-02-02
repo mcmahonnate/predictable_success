@@ -94,7 +94,7 @@ angular.module('tdb.services', ['ngResource'])
         'update': { method: 'PUT' }
     };
 
-    var PvpEvaluation = $resource('/api/v1/pvp-evaluations/:path/:employee_id');
+    var PvpEvaluation = $resource('/api/v1/pvp-evaluations/:path/:employee_id', {path: '@id' }, actions);
 
     PvpEvaluation.getAllEvaluationsForEmployee = function(id) {
         return this.query({ path:'employees', employee_id: id });
@@ -239,6 +239,11 @@ angular.module('tdb.services', ['ngResource'])
     };
 
     return TalentCategoryColors;
+}])
+
+.factory('TalentCategories', ['$resource', '$http', function($resource) {
+    var TalentCategories = $resource('/api/v1/talent-categories/');
+    return TalentCategories;
 }])
 
 .factory('Engagement', ['$resource', '$http', function($resource, $http) {

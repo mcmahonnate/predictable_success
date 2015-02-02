@@ -1947,28 +1947,51 @@ angular.module('tdb.controllers', [])
 }])
 
 .controller('PvpEvaluationTodosCtrl', ['$scope', '$filter', '$routeParams', '$window', 'PvpEvaluation', function($scope, $filter, $routeParams, $window, PvpEvaluation) {
-    PvpEvaluation.getToDos().$then(function(response) {
-		$scope.pvps = response.data;
-	});
-    $scope.currentItem = 0;
+    $scope.pvps = [];
+    $scope.currentItemIndex = null;
+    $scope.pvp = null;
+    $scope.isDirty = false;
+    $scope.originalPotential = $scope.originalPerformance = 0;
 
-    $scope.save = function(pvp) {
-        PvpEvaluation.update(pvp, function(){
-            if(($scope.currentItem - 1) < $scope.pvps.length) {
-                $scope.currentItem++;
-            }
+    PvpEvaluation.getToDos().$then(function(response) {
+        $scope.currentItemIndex = 0;
+		$scope.pvps = response.data;
+        $scope.setPvp();
+	});
+
+    $scope.save = function() {
+        PvpEvaluation.update($scope.pvp, function(){
         });
     };
 
     $scope.forward = function() {
-        if(($scope.currentItem - 1) < $scope.pvps.length) {
-            $scope.currentItem++;
+        if($scope.isDirty()) {
+            $scope.save();
+        }
+
+        if(($scope.currentItemIndex - 1) < $scope.pvps.length) {
+            $scope.currentItemIndex++;
+            $scope.setPvp();
         }
     };
 
+    $scope.setPvp = function() {
+        $scope.pvp = $scope.pvps[$scope.currentItemIndex];
+        $scope.originalPotential = $scope.pvp.potential;
+        $scope.originalPerformance = $scope.pvp.performance;
+    }
+
+    $scope.isDirty = function() {
+        return $scope.originalPotential != $scope.pvp.potential || $scope.originalPerformance != $scope.pvp.performance;
+    }
+
     $scope.backward = function() {
-        if($scope.currentItem > 0) {
-            $scope.currentItem--;
+        if($scope.isDirty()) {
+            $scope.save();
+        }
+        if($scope.currentItemIndex > 0) {
+            $scope.currentItemIndex--;
+            $scope.setPvp();
         }
     };
 }]);
