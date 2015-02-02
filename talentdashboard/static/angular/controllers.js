@@ -1495,9 +1495,15 @@ angular.module('tdb.controllers', [])
     $scope.format = $scope.formats[0];
 }])
 
-.controller('EmployeeCommentsCtrl', ['$scope', '$filter', '$routeParams', '$window', 'Comments', 'EmployeeComments', 'SubComments','Comment', 'User', function($scope, $filter, $routeParams, $window, Comments, EmployeeComments, SubComments, Comment, User) {
+.controller('EmployeeCommentsCtrl', ['$scope', '$rootScope', '$filter', '$routeParams', '$window', 'Comments', 'EmployeeComments', 'SubComments','Comment', 'User', function($scope, $rootScope, $filter, $routeParams, $window, Comments, EmployeeComments, SubComments, Comment, User) {
     $scope.employeeId = $routeParams.id;
     $scope.newCommentText = "";
+    $scope.newCommentVisibility = 3;
+    $scope.showPeopleTeamVisibility = false;
+    if ($rootScope.currentUser.can_coach_employees || $rootScope.currentUser.can_view_company_dashboard) {
+        $scope.newCommentVisibility = 2;
+        $scope.showPeopleTeamVisibility = true;
+    }
     $scope.toggleCommentTextExpander = function (comment) {
         $window.onclick = function (event) {
             if (!$scope.newCommentText) {
@@ -1505,7 +1511,9 @@ angular.module('tdb.controllers', [])
                 if (!clickedElement) return;
                 var elementClasses = clickedElement.classList;
                 var clickedOnTextArea = elementClasses.contains('text');
-                if (!clickedOnTextArea) {
+                var clickedOnRadio = elementClasses.contains('radio');
+                var clickedOnIcon = elementClasses.contains('icon-checked');
+                if (!clickedOnTextArea && !clickedOnRadio && !clickedOnIcon) {
                     comment.expandTextArea=false;
                     $scope.$apply();
                 }
@@ -1592,11 +1600,12 @@ angular.module('tdb.controllers', [])
         newComment.owner = User.get();
         newComment.newSubCommentText="";
         newComment.subcomments=[];
+        newComment.visibility=$scope.newCommentVisibility;
 
         $scope.comments.push(newComment);
         $scope.originalComments.push(angular.copy(newComment));
 
-        var data = {id: newComment.id, _model_name: "employee", _object_id: 0, _content: newComment.content};
+        var data = {id: newComment.id, _model_name: "employee", _object_id: 0, _content: newComment.content, _visibility: newComment.visibility};
 
         data.id = $scope.employeeId;
         EmployeeComments.save(data, function(response) {

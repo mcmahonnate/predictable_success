@@ -793,7 +793,12 @@ button.btn[disabled], fieldset[disabled] .btn {
   font-family: 'Emoticons';
   src: url('../fonts/emoticons.eot') format('embedded-opentype'), url('../fonts/emoticons.ttf') format('truetype');
 }
+@font-face {
+    font-family: 'Flat-UI-Icons';
 
+    src: url('../fonts/flat-ui-icons-regular.eot');
+    src: url('../fonts/flat-ui-icons-regular.eot?#iefix') format('embedded-opentype'), url('../fonts/flat-ui-icons-regular.woff') format('woff'), url('../fonts/flat-ui-icons-regular.ttf') format('truetype'), url('../fonts/flat-ui-icons-regular.svg#flat-ui-icons-regular') format('svg');
+}
 .veryhappy:before {
     font-family: 'Emoticons';
     font-size: 40px;
@@ -1195,17 +1200,41 @@ user agent stylesheettd, th {
   .feed-action a:hover {
     text-decoration: none;
   }
-  .expand {
+  textarea.expand {
       transition: height .5s;
       -webkit-transition: height .5s;
       height: 132px;
   }
-  .compress {
+  textarea.compress {
       transition: height .5s;
       -webkit-transition: height .5s;
       height: 15px;
   }
+  div.expand {
+      transition: top .5s ease,opacity 1.5s ease;
+      -webkit-transition: top .5s ease,opacity 1.5s ease;
 
+      opacity: 1;
+      top: 220px;
+      z-index: 0;
+  }
+  div.compress {
+      transition: top .5s ease,opacity .25s ease;
+      -webkit-transition: top .5s ease,opacity .25s ease;
+      top: 75px;
+      opacity: 0;
+      z-index: -1;
+  }
+  div.expand-margin {
+      transition: margin-bottom .5s;
+      -webkit-transition: margin-bottom .5s;
+      margin-bottom:40px
+  }
+  div.compress-margin {
+      transition: margin-bottom .5s;
+      -webkit-transition: margin-bottom .5s;
+      margin-bottom: 15px;
+  }
   .compensation-position {
       top: 0px;
       left: 650px;

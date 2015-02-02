@@ -39,11 +39,31 @@
                       <h1 style="display:inline;">Development Discussions</h1>
                     </header>
                     <section class="widget-body text-widget" style="padding: 10px;">
-                        <div style="display: block; float:left;width:480px;-webkit-border-radius: 2px;moz-border-radius: 3px;-ms-border-radius: 3px;-o-border-radius: 3px;border-radius: 3px;border: 1px solid #c1c1c1;margin:10px 15px;background-color:white;">
+                        <div ng-class="{'expand-margin': comment.expandTextArea, 'compress-margin': !comment.expandTextArea}" style="display: block; float:left;width:480px;-webkit-border-radius: 2px;moz-border-radius: 3px;-ms-border-radius: 3px;-o-border-radius: 3px;border-radius: 3px;border: 1px solid #c1c1c1;margin-left: 15px;margin-top: 10px; margin-right:15px;background-color:white;">
                             <textarea class="text" ng-model="newCommentText" ng-class="{'expand': comment.expandTextArea, 'compress': !comment.expandTextArea}" ng-click="comment.expandTextArea=true;toggleCommentTextExpander(comment)" rows="1" cols="40" placeholder="Add a comment about {{employee.full_name}}..." style="width:468px;font-size:14px;padding:5px;border: none;resize:vertical;"></textarea>
                         </div>
                         <div>
                             <button class="comment" ng-disabled="!newCommentText" ng-click="addComment();comment.expandTextArea=false">Comment</button>
+                        </div>
+                        <div style="position: absolute;width:480px;height:25px;margin-left: 15px;margin-top:1px;" ng-class="{'expand': comment.expandTextArea, 'compress': !comment.expandTextArea}">
+                            <label class="radio " style="position: relative;padding-left: 0px">
+                            Share with:
+                            </label>
+                            <label class="radio " style="position: relative">
+                                <input class="radio custom-radio" ng-model="newCommentVisibility" name="visibilityOptions" value="3" type="radio" style="cursor: pointer;">
+                                <span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
+                                Everyone
+                            </label>
+                            <label ng-show="showPeopleTeamVisibility" class="radio" style="position: relative">
+                                <input class="radio custom-radio" ng-model="newCommentVisibility" name="visibilityOptions" value="2" type="radio" style="cursor: pointer;">
+                                <span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
+                                People Team
+                            </label>
+                            <label class="radio" style="position: relative">
+                                <input class="radio custom-radio" ng-model="newCommentVisibility" name="visibilityOptions" value="1" type="radio" style="cursor: pointer;">
+                                <span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
+                                Just Me
+                            </label>
                         </div>
                         <div style="clear:both;"></div>
                         <div ng-repeat="comment in comments | orderBy:'created_date':true" style="margin:0 15px;padding:8px 0 8px 0px;display: block;width:580px">
@@ -490,3 +510,88 @@
       </div><!-- .widget-inner -->
     </article>
   </div>
+
+  <style>
+    .radio {
+        cursor: pointer;
+        padding-top: 3px;
+        padding-right: 10px;
+        padding-left: 32px;
+        -webkit-transition: color .25s linear;
+        transition: color .25s linear;
+    }
+    .radio .icon-checked:before, .radio .icon-unchecked:before {
+        font-family: Flat-UI-Icons;
+        font-style: normal;
+        font-weight: 400;
+        font-variant: normal;
+        text-transform: none;
+        speak: none;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-shadow: 0px 0px;
+    }
+    .radio .icons .icon-checked {
+        filter: alpha(opacity=0);
+        opacity: 0;
+    }
+    .radio .icons {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: block;
+        width: 20px;
+        height: 20px;
+        font-size: 20px;
+        line-height: 20px;
+        color: #bdc3c7;
+        text-align: center;
+        cursor: pointer;
+    }
+    .radio .icon-checked, .radio .icon-unchecked {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: inline-table;
+        margin: 0;
+        background-color: transparent;
+        filter: none;
+        opacity: 1;
+        -webkit-transition: color .25s linear;
+        transition: color .25s linear;
+        -webkit-filter: none;
+    }
+    .radio .icon-unchecked:before {
+        content: "\e60b";
+    }
+    .radio .icon-checked:before {
+        content: "\e60c";
+    }
+    .radio input[type=radio].custom-radio {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 20px;
+        height: 20px;
+        padding: 0;
+        margin: 0;
+        outline: 0!important;
+        opacity: 0;
+    }
+    .radio input[type="radio"].custom-radio:hover:not(.nohover):not(:disabled) + .icons .icon-unchecked {
+        filter: alpha(opacity=0);
+        opacity: 0;
+    }
+    .radio input[type="radio"].custom-radio:hover:not(.nohover):not(:disabled) + .icons .icon-checked {
+        filter: none;
+        opacity: 1;
+        -webkit-filter: none;
+    }
+    .radio input[type=radio].custom-radio:checked+.icons .icon-checked {
+        color: #F2F1EF;
+        filter: none;
+        opacity: 1;
+        -webkit-filter: none;
+    }
+
+  </style>
