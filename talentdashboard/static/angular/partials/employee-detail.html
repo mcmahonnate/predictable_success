@@ -26,9 +26,9 @@
                             <li><a ng-click="click_bio()" style="cursor: pointer;"><span class="glyphicon-regular glyphicon-bio" style="margin-right: 10px"></span>Bio</a></li>
                             <li><a ng-click="click_discussions()" style="cursor: pointer;"><span class="glyphicon-regular glyphicon-discussions" style="margin-right: 10px"></span>Discussions</a></li>
                             <li><a ng-click="click_todos()" style="cursor: pointer;"><span class="glyphicon-regular glyphicon-tasks" style="margin-right: 10px"></span>Tasks</a></li>
-                            <li><a ng-click="click_myers_briggs()" style="cursor: pointer;"><span class="glyphicon-regular glyphicon-compass" style="margin-right: 10px"></span>Myers Briggs</a></li>
-                            <li><a ng-click="click_kolbe()" style="cursor: pointer;">Kolbe</a></li>
-                            <li><a ng-click="click_vops()" style="cursor: pointer;">Vops</a></li>
+                            <li ng-show="has_mbti"><a ng-click="click_myers_briggs()" style="cursor: pointer;"><span class="glyphicon-regular glyphicon-compass" style="margin-right: 10px"></span>Myers Briggs</a></li>
+                            <li ng-show="has_kolbe"><a ng-click="click_kolbe()" style="cursor: pointer;">Kolbe</a></li>
+                            <li ng-show="has_vops"><a ng-click="click_vops()" style="cursor: pointer;">Vops</a></li>
                         </ul>
                     </nav>
                   </section>

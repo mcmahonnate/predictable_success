@@ -350,6 +350,9 @@ angular.module('tdb.controllers', [])
     if ($routeParams.id=='add') {
         $scope.addNew = true;
     }
+    $scope.has_vops = false;
+    $scope.has_kolbe = false;
+    $scope.has_myers_briggs = false;
     $scope.show_bio = true;
     $scope.show_discussions = false;
     $scope.show_vops = false;
@@ -443,6 +446,10 @@ angular.module('tdb.controllers', [])
         {id:$routeParams.id},
         function(data) {
             $scope.assessments = data;
+            if ($scope.assessments[0]){
+                $scope.has_vops = true;
+                $scope.has_kolbe = true;
+            }
         }
     )
 
@@ -450,6 +457,9 @@ angular.module('tdb.controllers', [])
         {id: $routeParams.id},
         function(data) {
             $scope.mbti = data;
+            if ($scope.mbti.description){
+                $scope.has_mbti = true;
+            }
         }
     )
 
