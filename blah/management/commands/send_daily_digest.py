@@ -24,6 +24,7 @@ class Command(BaseCommand):
         for recipient in recipients:
             comments = Comment.objects.filter(created_date__range=[start_dt,dt])
             comments = comments.exclude(object_id=recipient.employee.id, content_type=employee_type)
+            comments = comments.exclude(content_type=employee_type, visibility=1)
             todos = Task.objects.filter(created_date__range=[start_dt,dt])
             todos = todos.exclude(employee__id=recipient.employee.id)
             if comments.count() > 0 or todos.count() > 0:
