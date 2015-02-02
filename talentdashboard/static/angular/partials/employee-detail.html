@@ -168,6 +168,10 @@
                                 </div>
                             </div>
                         </div>
+                        <div ng-if="todos.length==0" ng-click="addToDo(employee.id)" style="margin: 30px;cursor: pointer">
+                        <span style="display:block;color: #8b8b8b;">Add Your First Task</span>
+                        <span class="glyphicon-regular glyphicon-tasks" style="font-size: 100px;margin-left: 30px"></span>
+                        </div>
                         <button class="comment" ng-click="addToDo(employee.id)">Add</button>
                     </section>
                     <section ng-show="showDone" class="widget-body text-widget" style="padding:12px;margin-top:20px;">
