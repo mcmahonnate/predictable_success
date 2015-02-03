@@ -353,6 +353,15 @@ class EmployeeCommentList(APIView):
         serializer = EmployeeCommentSerializer(comments, many=True)
         return Response(serializer.data)
 
+    def put(self, request, pk, format=None):
+        object_id = request.DATA["_object_id"]
+        content = request.DATA["_content"]
+        comment = Comment.objects.get(pk=object_id);
+        comment.content = content
+        comment.save()
+        serializer = EmployeeCommentSerializer(comment, many=False)
+        return Response(serializer.data)
+
     def post(self, request, pk, format=None):
         notify = False
         comment_type = ContentType.objects.get(model="comment")

@@ -21,13 +21,18 @@
                           <canvas pvp-graph pvp="pvp" height="200" width="200"/>
                       </div>
                       <div style="clear: both;margin: 0 auto; width: 180px;">
-                        <button class="button small blue" ng-click="backward()">Previous</button>
-                        <button class="button small blue" ng-click="forward()">Next</button>
+                        <button ng-disabled="currentItemIndex == 0" class="button small blue" ng-click="backward()">Previous</button>
+                        <button ng-disabled="currentItemIndex + 1 == pvps.length" class="button small blue" ng-click="forward()">Next</button>
                       </div>
                   </form>
+                </section>
+                <section class="widget-body text-widget" style="padding: 10px;">
+                    <div style="display: block; float:left;width:480px;-webkit-border-radius: 2px;moz-border-radius: 3px;-ms-border-radius: 3px;-o-border-radius: 3px;border-radius: 3px;border: 1px solid #c1c1c1;margin-left: 15px;margin-top: 10px; margin-right:15px;background-color:white;">
+                        <textarea class="text" ng-model="pvp.comment.content" ng-click="comment.expandTextArea=true;toggleCommentTextExpander(comment)" rows="1" cols="40" placeholder="Add a comment about this evaluation." style="width:468px;font-size:14px;padding:5px;border: none;resize:vertical;"></textarea>
+                    </div>
                 </section>
             </div>
         </div>
       </div>
     </article>
-</div>
+</div><!-- .widget-inner -->

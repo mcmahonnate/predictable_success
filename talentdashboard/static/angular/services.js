@@ -294,7 +294,8 @@ angular.module('tdb.services', ['ngResource'])
 .factory('EmployeeComments', ['$resource', '$http', function($resource, $http) {
     var actions = {
         'addNew': { method:'POST' },
-    }
+        'update': { method:'PUT' }
+    };
     var res = $resource('/api/v1/comments/employees/:id', {id:'@id'}, actions);
     return res;
 }])

@@ -1496,7 +1496,9 @@ angular.module('tdb.controllers', [])
 }])
 
 .controller('EmployeeCommentsCtrl', ['$scope', '$rootScope', '$filter', '$routeParams', '$window', 'Comments', 'EmployeeComments', 'SubComments','Comment', 'User', function($scope, $rootScope, $filter, $routeParams, $window, Comments, EmployeeComments, SubComments, Comment, User) {
-    $scope.employeeId = $routeParams.id;
+    if($routeParams && $routeParams.id) {
+        $scope.employeeId = $routeParams.id;
+    }
     $scope.newCommentText = "";
     $scope.newCommentVisibility = 3;
     $scope.showPeopleTeamVisibility = false;
@@ -1955,22 +1957,44 @@ angular.module('tdb.controllers', [])
     };
 }])
 
-.controller('PvpEvaluationTodosCtrl', ['$scope', '$filter', '$routeParams', '$window', 'PvpEvaluation', function($scope, $filter, $routeParams, $window, PvpEvaluation) {
+.controller('PvpEvaluationTodosCtrl', ['$scope', '$filter', '$routeParams', '$window', 'PvpEvaluation', 'EmployeeComments', 'User', function($scope, $filter, $routeParams, $window, PvpEvaluation, EmployeeComments, User) {
     $scope.pvps = [];
     $scope.currentItemIndex = null;
-    $scope.pvp = null;
+    $scope.pvp = {potential: 0, performance: 0, comment: {originalContent: "", content: "", id: -1}};
     $scope.isDirty = false;
     $scope.originalPotential = $scope.originalPerformance = 0;
 
     PvpEvaluation.getToDos().$then(function(response) {
         $scope.currentItemIndex = 0;
-		$scope.pvps = response.data;
+        $scope.pvps = response.data.map(function(pvp) { pvp.comment = {originalContent: "", content: "", id: -1}; return pvp;});
         $scope.setPvp();
 	});
 
     $scope.save = function() {
         PvpEvaluation.update($scope.pvp, function(){
         });
+        var newComment = {};
+        newComment.id = $scope.pvp.comment.id;
+        newComment.content = $scope.pvp.comment.content;
+        newComment.modified_date = new Date().toJSON();
+        newComment.owner = User.get();
+        newComment.newSubCommentText="";
+        newComment.subcomments=[];
+        newComment.visibility=2; // People team
+
+        var data = {id: newComment.id, _model_name: "employee", _object_id: newComment.id, _content: newComment.content, _visibility: newComment.visibility};
+
+        data.id = $scope.pvp.employee.id;
+        var _pvp = $scope.pvp;
+        if(newComment.id > 0) {
+            EmployeeComments.update(data, function(response) {
+                _pvp.comment.id = response.id;
+            });
+        } else {
+            EmployeeComments.save(data, function(response) {
+                _pvp.comment.id = response.id;
+            });
+        }
     };
 
     $scope.forward = function() {
@@ -1991,7 +2015,7 @@ angular.module('tdb.controllers', [])
     }
 
     $scope.isDirty = function() {
-        return $scope.originalPotential != $scope.pvp.potential || $scope.originalPerformance != $scope.pvp.performance;
+        return $scope.originalPotential != $scope.pvp.potential || $scope.originalPerformance != $scope.pvp.performance || $scope.pvp.comment.content || $scope.pvp.comment.originalContent;
     }
 
     $scope.backward = function() {
@@ -2003,5 +2027,24 @@ angular.module('tdb.controllers', [])
             $scope.setPvp();
         }
     };
+
+    $scope.addComment = function() {
+        var newComment = {};
+        newComment.id = -1;
+        newComment.content = $scope.pvp.comment;
+        newComment.modified_date = new Date().toJSON();
+        newComment.owner = User.get();
+        newComment.newSubCommentText="";
+        newComment.subcomments=[];
+        newComment.visibility=2; // People team
+
+        var data = {id: newComment.id, _model_name: "employee", _object_id: 0, _content: newComment.content, _visibility: newComment.visibility};
+
+        data.id = $scope.pvp.employee.id;
+        EmployeeComments.save(data, function(response) {
+            newComment.id = response.id;
+            $scope.newCommentText = "";
+        });
+    }
 }]);
 
