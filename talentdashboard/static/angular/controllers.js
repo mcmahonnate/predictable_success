@@ -1188,9 +1188,15 @@ angular.module('tdb.controllers', [])
 
 }])
 
-.controller('DiscussionOverviewCtrl', ['$scope', '$location', '$filter', '$routeParams', '$window', 'EmployeeComments', 'Employee', 'Comment', 'SubComments', 'User', 'analytics', function($scope, $location, $filter, $routeParams, $window, EmployeeComments, Employee, Comment, SubComments, User, analytics) {
+.controller('DiscussionOverviewCtrl', ['$scope', '$rootScope', '$location', '$filter', '$routeParams', '$window', 'EmployeeComments', 'Employee', 'Comment', 'SubComments', 'User', 'analytics', function($scope, $rootScope, $location, $filter, $routeParams, $window, EmployeeComments, Employee, Comment, SubComments, User, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
+    $scope.showPeopleTeamVisibility = false;
+
     Comment.query().$then(function(response) {
+        if ($rootScope.currentUser.can_coach_employees || $rootScope.currentUser.can_view_company_dashboard) {
+            $scope.newCommentVisibility = 2;
+            $scope.showPeopleTeamVisibility = true;
+        }
         $scope.comments = response.data;
         $scope.originalComments = angular.copy($scope.comments);
         angular.forEach($scope.comments, function(comment) {
@@ -1231,10 +1237,10 @@ angular.module('tdb.controllers', [])
 
     $scope.saveComment = function(comment) {
         var index = $scope.comments.indexOf(comment);
-        var data = {id: comment.id, _content: comment.content};
-
+        var data = {id: comment.id, _content: comment.content, _visibility: comment.visibility};
         Comment.update(data, function() {
             $scope.originalComments[index].content = comment.content;
+            $scope.originalComments[index].visibility = comment.visibility;
         });
     }
 
@@ -1573,10 +1579,10 @@ angular.module('tdb.controllers', [])
 
     $scope.saveComment = function(comment) {
         var index = $scope.comments.indexOf(comment);
-        var data = {id: comment.id, _content: comment.content};
-
+        var data = {id: comment.id, _content: comment.content, _visibility: comment.visibility};
         Comment.update(data, function() {
             $scope.originalComments[index].content = comment.content;
+            $scope.originalComments[index].visibility = comment.visibility;
         });
     }
 
@@ -1675,9 +1681,10 @@ angular.module('tdb.controllers', [])
     };
 }])
 
-.controller('TeamCommentsCtrl', ['$scope', '$filter', '$routeParams', '$window', 'Comments', 'EmployeeComments','SubComments','Comment', 'User',function($scope, $filter, $routeParams, $window, Comments, EmployeeComments, SubComments, Comment, User) {
+.controller('TeamCommentsCtrl', ['$scope', '$rootScope', '$filter', '$routeParams', '$window', 'Comments', 'EmployeeComments','SubComments','Comment', 'User',function($scope, $rootScope, $filter, $routeParams, $window, Comments, EmployeeComments, SubComments, Comment, User) {
     $scope.teamId = $routeParams.id;
     $scope.newCommentText = "";
+    $scope.showPeopleTeamVisibility = false;
     $scope.toggleCommentTextExpander = function (comment) {
         $window.onclick = function (event) {
             if (!$scope.newCommentText) {
@@ -1710,6 +1717,10 @@ angular.module('tdb.controllers', [])
         $scope.talentCategoryReport = data;
     });
     Comments.getTeamComments($routeParams.id, function(data) {
+        if ($rootScope.currentUser.can_coach_employees || $rootScope.currentUser.can_view_company_dashboard) {
+            $scope.newCommentVisibility = 2;
+            $scope.showPeopleTeamVisibility = true;
+        }
         $scope.comments = data;
         $scope.originalComments = angular.copy($scope.comments);
         angular.forEach($scope.comments, function(comment) {
@@ -1739,10 +1750,10 @@ angular.module('tdb.controllers', [])
 
     $scope.saveComment = function(comment) {
         var index = $scope.comments.indexOf(comment);
-        var data = {id: comment.id, _content: comment.content};
-
+        var data = {id: comment.id, _content: comment.content, _visibility: comment.visibility};
         Comment.update(data, function() {
             $scope.originalComments[index].content = comment.content;
+            $scope.originalComments[index].visibility = comment.visibility;
         });
     }
 
