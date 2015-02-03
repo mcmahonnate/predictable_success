@@ -1517,11 +1517,6 @@ angular.module('tdb.controllers', [])
     }
     $scope.newCommentText = "";
     $scope.newCommentVisibility = 3;
-    $scope.showPeopleTeamVisibility = false;
-    if ($rootScope.currentUser.can_coach_employees || $rootScope.currentUser.can_view_company_dashboard) {
-        $scope.newCommentVisibility = 2;
-        $scope.showPeopleTeamVisibility = true;
-    }
     $scope.toggleCommentTextExpander = function (comment) {
         $window.onclick = function (event) {
             if (!$scope.newCommentText) {
@@ -1554,6 +1549,11 @@ angular.module('tdb.controllers', [])
     };
 
     Comments.getEmployeeComments($scope.employeeId, function(data) {
+        $scope.showPeopleTeamVisibility = false;
+        if ($rootScope.currentUser.can_coach_employees || $rootScope.currentUser.can_view_company_dashboard) {
+            $scope.newCommentVisibility = 2;
+            $scope.showPeopleTeamVisibility = true;
+        }
         $scope.comments = data;
         $scope.originalComments = angular.copy($scope.comments);
         angular.forEach($scope.comments, function(comment) {
@@ -1831,13 +1831,19 @@ angular.module('tdb.controllers', [])
     };
 }])
 
-.controller('LeaderCommentsCtrl', ['$scope', '$filter', '$routeParams', '$window', 'Comments', 'EmployeeComments', 'SubComments','Comment', 'User',function($scope, $filter, $routeParams, $window, Comments, EmployeeComments, SubComments, Comment, User) {
+.controller('LeaderCommentsCtrl', ['$scope', '$rootScope', '$filter', '$routeParams', '$window', 'Comments', 'EmployeeComments', 'SubComments','Comment', 'User',function($scope, $rootScope, $filter, $routeParams, $window, Comments, EmployeeComments, SubComments, Comment, User) {
+     $scope.newCommentText = "";
+     $scope.showPeopleTeamVisibility = false;
      User.get(
         function(data) {
             $scope.lead= data.employee;
             $scope.leadId = $scope.lead.id;
 
             Comments.getLeadComments($scope.leadId, function(data) {
+                if ($rootScope.currentUser.can_coach_employees || $rootScope.currentUser.can_view_company_dashboard) {
+                    $scope.newCommentVisibility = 2;
+                    $scope.showPeopleTeamVisibility = true;
+                }
                 $scope.comments = data;
                 $scope.originalComments = angular.copy($scope.comments);
                 angular.forEach($scope.comments, function(comment) {
@@ -1867,7 +1873,6 @@ angular.module('tdb.controllers', [])
 
         }
     );
-    $scope.newCommentText = "";
     $scope.toggleCommentTextExpander = function (comment) {
         $window.onclick = function (event) {
             if (!$scope.newCommentText) {
@@ -1899,10 +1904,10 @@ angular.module('tdb.controllers', [])
 
     $scope.saveComment = function(comment) {
         var index = $scope.comments.indexOf(comment);
-        var data = {id: comment.id, _content: comment.content};
-
+        var data = {id: comment.id, _content: comment.content, _visibility: comment.visibility};
         Comment.update(data, function() {
             $scope.originalComments[index].content = comment.content;
+            $scope.originalComments[index].visibility = comment.visibility;
         });
     }
 
