@@ -86,6 +86,26 @@
                                <div ng-show="showCommentEdit" style="position:relative">
                                   <textarea ng-model="comment.content" style="position: relative; width: 515px; height: 132px;background-color:#2a2a2a;color:#eee;resize:vertical;font-size: 14px;margin-top: 5px;">
                                   </textarea>
+                                  <div style="width:480px;height:25px;margin-top:8px;">
+                                    <label class="radio " style="position: relative;padding-left: 0px">
+                                    Share with:
+                                    </label>
+                                    <label class="radio " style="position: relative">
+                                        <input class="radio custom-radio" ng-model="comment.visibility" name="visibilitOptions{{$index}}" value="3" type="radio" style="cursor: pointer;">
+                                        <span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
+                                        Everyone
+                                    </label>
+                                    <label ng-show="showPeopleTeamVisibility" class="radio" style="position: relative">
+                                        <input class="radio custom-radio" ng-model="comment.visibility" name="visibilitOptions{{$index}}" value="2" type="radio" style="cursor: pointer;">
+                                        <span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
+                                        People Team
+                                    </label>
+                                    <label class="radio" style="position: relative">
+                                        <input class="radio custom-radio" ng-model="comment.visibility" name="visibilitOptions{{$index}}" value="1" type="radio" style="cursor: pointer;">
+                                        <span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
+                                        Just Me
+                                    </label>
+                                  </div>
                                   <div id="editActions" style="right:2px;bottom:-33px;">
                                         <button class="button small blue" ng-disabled="!comment.content" ng-click="saveComment(comment);showCommentEdit=false">Save</button>
                                         <button class="button small orange" ng-click="cancelEditComment(comment);showCommentEdit=false">Cancel</button>

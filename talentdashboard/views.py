@@ -481,9 +481,13 @@ class CommentDetail(APIView):
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
-        comment = Comment.objects.filter(id=pk)
+        comment = Comment.objects.get(id=pk)
         if comment is not None:
-            comment.update(content=request.DATA["_content"], modified_date=datetime.datetime.now())
+            comment.content = request.DATA["_content"]
+            if "_visibility" in request.DATA:
+                comment.visibility = request.DATA["_visibility"]
+            comment.modified_date = datetime.datetime.now()
+            comment.save()
             serializer = EmployeeCommentSerializer(comment, many=False)
             return Response(None)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
