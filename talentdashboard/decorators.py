@@ -34,16 +34,17 @@ def auth_employee(*group_names):
         def _wrapped_view(request, *args, **kwargs):
             u = request.user
             if u.is_authenticated():
-                pk = kwargs.get('pk', 0)
-                logger.debug(pk)
-                if int(pk) > 0:
-                    user = Employee.objects.get(user=u)
-                    logger.debug(pk)
-                    employee = Employee.objects.get(id=pk)
-                    if employee.coach==user or employee.current_leader==user:
+                pk = kwargs.get('pk', None)
+                if pk:
+                    if int(pk) == 0:
                         return view_func(request, *args, **kwargs)
-                    elif u.groups.filter(name__in=group_names).exists() | u.is_superuser:
-                        return view_func(request, *args, **kwargs)
+                    else:
+                        user = Employee.objects.get(user=u)
+                        employee = Employee.objects.get(id=pk)
+                        if employee.coach==user or employee.current_leader==user:
+                            return view_func(request, *args, **kwargs)
+                        elif u.groups.filter(name__in=group_names).exists() | u.is_superuser:
+                            return view_func(request, *args, **kwargs)
                 elif u.groups.filter(name__in=group_names).exists() | u.is_superuser:
                     return view_func(request, *args, **kwargs)
             return HttpResponse("Access Denied.")
