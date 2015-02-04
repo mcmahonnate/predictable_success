@@ -942,7 +942,11 @@ a.glyphicon:hover {
     content: "\E046";
     font-size: 12px;
 }
-
+.glyphicon-photo-big:before {
+    color: #fff;
+    content: "\E046";
+    font-size: 20px;
+}
 .glyphicon-photo-disable:before {
     color: #101214;
     content: "\E046";

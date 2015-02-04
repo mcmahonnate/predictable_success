@@ -496,12 +496,13 @@ angular.module('tdb.directives', [])
   }
 })
 
-.directive('modalEditEmployee', ['Employee', function(Employee) {
+.directive('modalEditEmployee',  ['Employee', 'fileReader', 'PhotoUpload', function(Employee, fileReader, PhotoUpload) {
   return {
     restrict: 'E',
     scope: {
       show: '=',
-      employee: '='
+      employee: '=',
+      leadership: '='
     },
     replace: true, // Replace with the template below
     transclude: true, // we want to insert custom content inside the directive
@@ -516,18 +517,43 @@ angular.module('tdb.directives', [])
       };
     },
     controller: function ($scope) {
-      $scope.$watch("employee",function(newValue,OldValue,scope){
-         if (newValue){
-             $scope.editEmployee = angular.copy($scope.employee);
-         }
-      });
-      $scope.save = function (){
-        var data = {id: $scope.employee.id, _full_name: $scope.editEmployee.full_name};
-
-        Employee.update(data, function() {
-            $scope.employee.full_name = $scope.editEmployee.full_name;
+        $scope.$watch("employee",function(newValue,OldValue,scope){
+            if (newValue){
+                $scope.editEmployee = angular.copy($scope.employee);
+                $scope.preview=$scope.employee.avatar;
+            }
         });
-      };
+        $scope.$watch("leadership",function(newValue,OldValue,scope){
+            if (newValue){
+                $scope.edit_leadership = angular.copy($scope.leadership);
+            }
+        });
+        $scope.save = function (){
+
+            if ($scope.employee.full_name != $scope.editEmployee.full_name) {
+                console.log('save name');
+                var data = {id: $scope.employee.id, _full_name: $scope.editEmployee.full_name};
+
+                Employee.update(data, function () {
+                    $scope.employee.full_name = $scope.editEmployee.full_name;
+                });
+            }
+            if ($scope.preview!=$scope.employee.avatar) {
+                console.log('save avatar');
+                var upload_data = {id: $scope.employee.id};
+                PhotoUpload($scope.model, $scope.files).update(upload_data, function(data) {
+                    $scope.employee.avatar = data.avatar;
+                });
+            }
+
+        };
+        $scope.uploadFile = function(files){
+            $scope.files = files;
+            fileReader.readAsDataUrl($scope.files[0], $scope)
+                          .then(function(result) {
+                              $scope.preview = result;
+                          });
+        };
     },
     templateUrl: "/static/angular/partials/modal-edit-employee.html"
   };
