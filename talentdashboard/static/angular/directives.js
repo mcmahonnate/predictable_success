@@ -496,11 +496,12 @@ angular.module('tdb.directives', [])
   }
 })
 
-.directive('modalEditEmployee', function() {
+.directive('modalEditEmployee', ['Employee', function(Employee) {
   return {
     restrict: 'E',
     scope: {
-      show: '='
+      show: '=',
+      employee: '='
     },
     replace: true, // Replace with the template below
     transclude: true, // we want to insert custom content inside the directive
@@ -514,9 +515,23 @@ angular.module('tdb.directives', [])
         scope.show = false;
       };
     },
+    controller: function ($scope) {
+      $scope.$watch("employee",function(newValue,OldValue,scope){
+         if (newValue){
+             $scope.editEmployee = angular.copy($scope.employee);
+         }
+      });
+      $scope.save = function (){
+        var data = {id: $scope.employee.id, _full_name: $scope.editEmployee.full_name};
+
+        Employee.update(data, function() {
+            $scope.employee.full_name = $scope.editEmployee.full_name;
+        });
+      };
+    },
     templateUrl: "/static/angular/partials/modal-edit-employee.html"
   };
-})
+}])
 
 .directive('sliderQuickStart', function() {
   return {
