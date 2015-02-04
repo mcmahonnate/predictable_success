@@ -1989,7 +1989,9 @@ angular.module('tdb.controllers', [])
     $scope.pvp = {potential: 0, performance: 0, comment: {originalContent: "", content: "", id: -1}};
     $scope.isDirty = false;
     $scope.originalPotential = $scope.originalPerformance = 0;
-    $scope.show = true;
+    $scope.show = false;
+    $scope.hide = false;
+
     var transitionTimeout = null;
     PvpEvaluation.getToDos().$then(function(response) {
         $scope.currentItemIndex = 0;
@@ -2036,11 +2038,17 @@ angular.module('tdb.controllers', [])
     };
 
     $scope.setPvp = function() {
-        $scope.show = false;
-        transitionTimeout = $timeout(function(){$scope.show = true;}, 500);
-        $scope.pvp = $scope.pvps[$scope.currentItemIndex];
-        $scope.originalPotential = $scope.pvp.potential;
-        $scope.originalPerformance = $scope.pvp.performance;
+        if($scope.show) {
+            $scope.show = false;
+            $scope.hide = true;
+        }
+        transitionTimeout = $timeout(function(){
+            $scope.pvp = $scope.pvps[$scope.currentItemIndex];
+            $scope.originalPotential = $scope.pvp.potential;
+            $scope.originalPerformance = $scope.pvp.performance;
+            $scope.show = true;
+            $scope.hide = false;
+        }, 500);
     }
 
     $scope.isDirty = function() {
