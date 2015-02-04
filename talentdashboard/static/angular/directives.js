@@ -496,13 +496,14 @@ angular.module('tdb.directives', [])
   }
 })
 
-.directive('modalEditEmployee',  ['Employee', 'fileReader', 'PhotoUpload', function(Employee, fileReader, PhotoUpload) {
+.directive('modalEditEmployee',  ['Employee', 'EmployeeLeader', 'fileReader', 'PhotoUpload', function(Employee, EmployeeLeader, fileReader, PhotoUpload) {
   return {
     restrict: 'E',
     scope: {
       show: '=',
       employee: '=',
-      leadership: '='
+      leadership: '=',
+      employees: '='
     },
     replace: true, // Replace with the template below
     transclude: true, // we want to insert custom content inside the directive
@@ -543,6 +544,14 @@ angular.module('tdb.directives', [])
                 var upload_data = {id: $scope.employee.id};
                 PhotoUpload($scope.model, $scope.files).update(upload_data, function(data) {
                     $scope.employee.avatar = data.avatar;
+                });
+            }
+            if ($scope.edit_leadership.leader.id != $scope.leadership.leader.id) {
+                console.log('save leader');
+                var data = {id: $scope.employee.id, _leader_id: $scope.edit_leadership.leader.id};
+                EmployeeLeader.addNew(data, function (response) {
+                    $scope.edit_leadership = response;
+                    $scope.leadership = angular.copy($scope.edit_leadership);
                 });
             }
 
