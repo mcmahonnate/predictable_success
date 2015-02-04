@@ -1983,13 +1983,14 @@ angular.module('tdb.controllers', [])
     };
 }])
 
-.controller('PvpEvaluationTodosCtrl', ['$scope', '$filter', '$routeParams', '$window', 'PvpEvaluation', 'EmployeeComments', 'User', function($scope, $filter, $routeParams, $window, PvpEvaluation, EmployeeComments, User) {
+.controller('PvpEvaluationTodosCtrl', ['$scope', '$filter', '$routeParams', '$window', '$timeout', 'PvpEvaluation', 'EmployeeComments', 'User', function($scope, $filter, $routeParams, $window, $timeout, PvpEvaluation, EmployeeComments, User) {
     $scope.pvps = [];
     $scope.currentItemIndex = null;
     $scope.pvp = {potential: 0, performance: 0, comment: {originalContent: "", content: "", id: -1}};
     $scope.isDirty = false;
     $scope.originalPotential = $scope.originalPerformance = 0;
-
+    $scope.show = true;
+    var transitionTimeout = null;
     PvpEvaluation.getToDos().$then(function(response) {
         $scope.currentItemIndex = 0;
         $scope.pvps = response.data.map(function(pvp) { pvp.comment = {originalContent: "", content: "", id: -1}; return pvp;});
@@ -2035,6 +2036,8 @@ angular.module('tdb.controllers', [])
     };
 
     $scope.setPvp = function() {
+        $scope.show = false;
+        transitionTimeout = $timeout(function(){$scope.show = true;}, 500);
         $scope.pvp = $scope.pvps[$scope.currentItemIndex];
         $scope.originalPotential = $scope.pvp.potential;
         $scope.originalPerformance = $scope.pvp.performance;
@@ -2072,5 +2075,9 @@ angular.module('tdb.controllers', [])
             $scope.newCommentText = "";
         });
     }
+
+    $scope.$on('destroy', function() {
+           transitionTimeout = undefined;
+    });
 }]);
 
