@@ -7,6 +7,16 @@ class Employee(models.Model):
     full_name = models.CharField(
         max_length=255,
     )
+    first_name = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+    )
+    last_name = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+    )
     avatar = models.ImageField(
 		upload_to="media/avatars/%Y/%m/%d",
         max_length=100,
