@@ -4,10 +4,8 @@
         <article class="widget clock loaded" id="widget-8494" style="position: relative;width: 315px;height:276px;margin: 0px 0px 10px 0px;">
           <div class="widget-inner widget-size-1x1 large-screen">
             <header class="no-reload">
-              <a set-popup-position ng-show="employeeEdit" ng-click="editName=true;currentlyEditing=true" class="glyphicon" ng-class="{'glyphicon-edit': !currentlyEditing, 'glyphicon-edit-disable': currentlyEditing}" style="padding-right:5px;"></a>
-              <a set-popup-position ng-show="employeeEdit" ng-click="addPhoto=true;currentlyEditing=true" class="glyphicon" ng-class="{'glyphicon-photo': !currentlyEditing, 'glyphicon-photo-disable': currentlyEditing}" style="padding-right:10px;"></a>
               <h1 style="display:inline;">{{employee.full_name}}</h1>
-              <span ng-show="currentUser.can_edit_employees" class="employee-edit" style="float:right;text-transform:lowercase;color: #8b8b8b"><a ng-show="!employeeEdit" ng-click="employeeEdit=true">edit</a><a ng-show="employeeEdit" ng-click="employeeEdit=false;">done editing</a></span>
+              <span ng-show="currentUser.can_edit_employees" class="employee-edit" style="float:right;text-transform:lowercase;color: #8b8b8b"><a ng-show="!employeeEdit" ng-click="toggleModal();">edit</a></span>
             </header>
             <section class="widget-body rag-widget">
               <div class="widget-canvas">
@@ -296,22 +294,19 @@
                                 </div>
                             </div>
                           </li>
-                          <li show="{{editStartDate}}" ng-scroll-into-view class="clear" style="padding-top:10px;padding-bottom:10px;">
-                            <a set-popup-position ng-show="employeeEdit" ng-click="editStartDate=true;currentlyEditing=true" class="glyphicon" ng-class="{'glyphicon-edit': !currentlyEditing, 'glyphicon-edit-disable': currentlyEditing}" style="float:left;padding-right:10px"></a>
+                          <li style="padding-top:10px;padding-bottom:10px;">
                             <div class="t-secondary" style="min-width: 35%">
                               Hire Date
                             </div>
                             <div class="t-size-x16" id="start_date" style="min-width: 50%">{{ employee.hire_date | date:'MM/dd/yyyy' }}</div>
                           </li>
-                          <li ng-show="employeeEdit || employee.departure_date" show="{{editDepartureDate}}" ng-scroll-into-view class="clear" style="padding-top:10px;padding-bottom:10px;">
-                            <a set-popup-position ng-show="employeeEdit" ng-click="editDepartureDate=true;currentlyEditing=true" class="glyphicon" ng-class="{'glyphicon-edit': !currentlyEditing, 'glyphicon-edit-disable': currentlyEditing}" style="float:left;padding-right:10px"></a>
+                          <li class="clear" style="padding-top:10px;padding-bottom:10px;">
                             <div class="t-secondary" style="min-width: 35%">
                               Departure Date
                             </div>
                             <div class="t-size-x16" id="start_date" style="min-width: 50%">{{ employee.departure_date | date:'MM/dd/yyyy' }}</div>
                           </li>
                           <li class="clear" style="padding-top:10px;padding-bottom:10px;">
-                            <a show="{{editTeamLead}}" ng-scroll-into-view set-popup-position ng-show="employeeEdit" ng-click="editTeamLead=true;currentlyEditing=true" class="glyphicon" ng-class="{'glyphicon-edit': !currentlyEditing, 'glyphicon-edit-disable': currentlyEditing}" style="float:left;padding-right:10px"></a>
                             <div class="t-secondary" style="min-width: 35%">
                               Team Lead
                             </div>
@@ -362,51 +357,6 @@
         </article>
 
         <!-- employee edit popups start -->
-        <div get-popup-position ng-show="editName && employeeEdit" style="z-index: 2;position:absolute;left:30px;top:5px;border-width: 1px;border-color:#101214;border-style: solid; padding: 10px;background-color: #434343;color: #d3d4d4;">
-            <div style="margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#101214 #434343 #101214 #101214;;display:inline-block;width:20px;height:25px;padding-top: 8px;padding-left: 9px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-edit"></span></div>
-            <span style="padding:7px">Name</span>
-            <textarea ng-model="editEmployee.full_name" placeholder="Employee Name" style="position: relative; width: 245px; height: 13px;background-color:#2a2a2a;color:#eee;resize:none;overflow:hidden;font-size: 13px;padding: 8px;">
-            </textarea>
-            <div id="editActions" style="right:2px;bottom:-33px;">
-                <button class="button small blue" style="margin-bottom:3px;" ng-click="saveName();editName=false;currentlyEditing=false">Save</button>
-                <button class="button small orange" style="margin-bottom:3px;" ng-click="cancelEdit();editName=false;currentlyEditing=false">Cancel</button>
-            </div>
-        </div>
-        <div get-popup-position ng-show="editStartDate && employeeEdit" style="z-index: 2; position:absolute;left:353px;top:60px;border-width: 1px;border-color:#101214;border-style: solid; padding: 10px;background-color: #434343;color: #d3d4d4;">
-            <div style="margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#101214 #434343 #101214 #101214;display:inline-block;width:20px;height:25px;padding-top: 8px;padding-left: 9px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-edit"></span></div>
-            <span style="padding:7px">Hire Date</span>
-            <div ng-model="editEmployee.hire_date">
-                <datepicker show-weeks="showWeeks"></datepicker>
-            </div>
-           <div id="editActions" style="right:2px;bottom:-33px;">
-                <button class="button small blue" style="margin-bottom:3px;" ng-click="saveStartDate();editStartDate=false;currentlyEditing=false">Save</button>
-                <button class="button small orange" style="margin-bottom:3px;" ng-click="cancelEdit();editStartDate=false;currentlyEditing=false">Cancel</button>
-                <button class="button small red" style="margin-bottom:3px;" ng-click="clearStartDate();editStartDate=false;currentlyEditing=false">Reset</button>
-           </div>
-        </div>
-        <div get-popup-position ng-show="editDepartureDate && employeeEdit" style="z-index: 2; position:absolute;left:353px;top:60px;border-width: 1px;border-color:#101214;border-style: solid; padding: 10px;background-color: #434343;color: #d3d4d4;">
-            <div style="margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#101214 #434343 #101214 #101214;display:inline-block;width:20px;height:25px;padding-top: 8px;padding-left: 9px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-edit"></span></div>
-            <span style="padding:7px">Departure Date</span>
-            <div ng-model="editEmployee.departure_date">
-                <datepicker show-weeks="showWeeks"></datepicker>
-            </div>
-           <div id="editActions" style="right:2px;bottom:-33px;">
-                <button class="button small blue" style="margin-bottom:3px;" ng-click="saveDepartureDate();editDepartureDate=false;currentlyEditing=false">Save</button>
-                <button class="button small orange" style="margin-bottom:3px;" ng-click="cancelEdit();editDepartureDate=false;currentlyEditing=false">Cancel</button>
-                <button class="button small red" style="margin-bottom:3px;" ng-click="clearDepartureDate();editDepartureDate=false;currentlyEditing=false">Reset</button>
-           </div>
-        </div>
-        <div get-popup-position ng-show="editTeamLead && employeeEdit" style="z-index: 2; position:absolute;left:353px;top:60px;border-color:#101214;border-width: 1px;border-style: solid; padding: 10px;background-color: #434343;color: #d3d4d4;">
-            <div style="margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#101214 #434343 #101214 #101214;display:inline-block;width:20px;height:25px;padding-top: 8px;padding-left: 9px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-edit"></span></div>
-            <span style="padding:7px">Team Lead</span>
-            <div style="padding-top: 5px;">
-                <input type="text" ng-model="edit_leadership.leader.full_name" typeahead-on-select="edit_leadership.leader=$item" typeahead="employee.full_name for employee in employees | filter:{full_name:$viewValue}:startsWith | orderBy:'full_name' | limitTo:8" typeahead-editable="false" class="view-value-input"/>
-            </div>
-            <div id="editActions" style="right:2px;bottom:-33px;">
-                <button class="button small blue" style="margin-bottom:3px;" ng-click="saveLeader();editTeamLead=false;currentlyEditing=false">Save</button>
-                <button class="button small orange" style="margin-bottom:3px;" ng-click="cancelEdit();editTeamLead=false;currentlyEditing=false">Cancel</button>
-            </div>
-        </div>
         <div get-popup-position ng-show="addEngagement" style="z-index: 2; position:absolute;left:542px;top:60px;border-width: 1px;border-color:#101214;border-style: solid; padding: 10px;background-color: #434343;color: #d3d4d4;">
             <div style="width: 160px;">
                 <div style="display:inline;width:8px;margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#101214 #434343 #101214 #101214;padding: 11px 5px 10px 10px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-add"></span></div>
@@ -431,27 +381,6 @@
                     <button class="button small blue" ng-disabled="disable_save_engagement()" style="margin-bottom:3px;" ng-click="update_engagement();editEngagement=false">Save</button>
                     <button class="button small orange" style="margin-bottom:3px;" ng-click="cancel_engagement();">Cancel</button>
                 </div>
-            </div>
-        </div>
-        <div get-popup-position ng-show="addPhoto" style="z-index: 2; position:absolute;left:30px;top:60px;border-width: 1px;border-style: solid; border-color:#101214;padding: 10px;background-color: #434343;color: #d3d4d4;">
-            <div>
-                <div style="display:inline;width:8px;margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#101214 #434343 #101214 #101214;padding: 11px 5px 10px 10px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-photo"></span></div>
-                <span style="padding:7px;position: relative;">Photo</span>
-                <form enctype="multipart/form-data" name="uploadForm">
-                    <div style="margin-top: 15px;min-width: 250px;">
-                        <img ng-src="{{preview}}" style="height:215px;display:block;margin-left:auto;margin-right:auto;"/>
-                    </div>
-                    <div class="image-upload" style="margin-top: 10px">
-                        <span>change photo
-                            <input onchange="angular.element(this).scope().uploadFile(this.files)" style="opacity:0;position: absolute;left:0" type="file" name="file" accept="image/*">
-                        </span>
-                    </div>
-
-                    <div id="editActions" style="right:2px;bottom:-33px;">
-                        <button class="button small blue" ng-disabled="disable_save_photo()" style="margin-bottom:3px;" ng-click="save_photo();currentlyEditing=false;addPhoto=false;">Save</button>
-                        <button class="button small orange" style="margin-bottom:3px;" ng-click="cancel_photo();currentlyEditing=false;addPhoto=false;">Cancel</button>
-                    </div>
-                </form>
             </div>
         </div>
         <!-- employee edit popups end -->
@@ -534,3 +463,5 @@
       </div><!-- .widget-inner -->
     </article>
   </div>
+  <modal-edit-employee employee='employee' leadership='leadership' employees='employees' show='modalShown' width='500px'><p>Modal Content Goes here<p>
+  </modal-edit-employee>

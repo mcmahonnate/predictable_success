@@ -517,7 +517,17 @@ angular.module('tdb.directives', [])
         scope.show = false;
       };
     },
-    controller: function ($scope) {
+    controller: function ($scope, $rootScope) {
+        $scope.$watch("editEmployee.departure_date",function(newValue,OldValue,scope) {
+            if (newValue) {
+                $scope.showDepartDatePicker = false;
+            }
+        });
+        $scope.$watch("editEmployee.hire_date",function(newValue,OldValue,scope) {
+            if (newValue) {
+                $scope.showHireDatePicker = false;
+            }
+        });
         $scope.$watch("employee",function(newValue,OldValue,scope){
             if (newValue){
                 $scope.editEmployee = angular.copy($scope.employee);
@@ -529,6 +539,10 @@ angular.module('tdb.directives', [])
                 $scope.edit_leadership = angular.copy($scope.leadership);
             }
         });
+        $scope.scrub = function (){
+            $scope.editEmployee = angular.copy($scope.employee);
+            $scope.edit_leadership = angular.copy($scope.leadership);
+        }
         $scope.save = function (){
 
             if ($scope.employee.full_name != $scope.editEmployee.full_name) {
@@ -554,7 +568,24 @@ angular.module('tdb.directives', [])
                     $scope.leadership = angular.copy($scope.edit_leadership);
                 });
             }
+            if ($scope.editEmployee.hire_date != $scope.employee.hire_date) {
+                console.log('save hire date');
+                var hire_date = $rootScope.scrubDate($scope.editEmployee.hire_date ,false);
+                var data = {id: $scope.employee.id, _hire_date: hire_date};
 
+                Employee.update(data, function () {
+                    $scope.employee.hire_date= $scope.editEmployee.hire_date;
+                });
+            }
+            if ($scope.editEmployee.departure_date != $scope.employee.departure_date) {
+                console.log('save departure date');
+                var departure_date = $rootScope.scrubDate($scope.editEmployee.departure_date ,false);
+                var data = {id: $scope.employee.id, _departure_date: departure_date};
+
+                Employee.update(data, function () {
+                    $scope.employee.departure_date= $scope.editEmployee.departure_date;
+                });
+            }
         };
         $scope.uploadFile = function(files){
             $scope.files = files;
@@ -563,6 +594,13 @@ angular.module('tdb.directives', [])
                               $scope.preview = result;
                           });
         };
+        $scope.showDatePicker = false;
+        $scope.toggleHireDatePicker = function(){
+            $scope.showHireDatePicker = !$scope.showHireDatePicker;
+        };
+        $scope.toggleDepartDatePicker = function(){
+            $scope.showDepartDatePicker = !$scope.showDepartDatePicker;
+        }
     },
     templateUrl: "/static/angular/partials/modal-edit-employee.html"
   };

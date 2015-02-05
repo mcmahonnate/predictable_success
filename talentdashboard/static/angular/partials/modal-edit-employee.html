@@ -7,25 +7,36 @@
                 <form enctype="multipart/form-data" name="uploadForm">
                     <img ng-src="{{preview}}" style="width:155px;display:block;margin-left:auto;margin-right:auto;float:left;">
                     <div style="float:left;display:block;background-color: #3498db;border-radius: 6px;width:135px;margin:10px;text-align: center;height: 30px;">
-                        <input onchange="angular.element(this).scope().uploadFile(this.files)" style="z-index:1;width:135px;opacity:0;position: absolute;left:30px;height: 30px;" type="file" name="file" accept="image/*">
+                        <input class="custom-file-upload" onchange="angular.element(this).scope().uploadFile(this.files)" style="z-index:1;width:135px;opacity:0;position: absolute;left:30px;height: 30px;" type="file" name="file" accept="image/*">
                         <span class="glyphicon glyphicon-photo-big" style="padding-top:4px"></span>
                     </div>
                 </form>
             </div>
-            <div style="margin-top: 10px;margin-left: 10px;width:40%;float:left;">
+            <div style="margin-top: 10px;margin-left: 10px;width:50%;float:left;">
                 <span style="margin:10px;">Name</span>
-                <textarea ng-model="editEmployee.full_name" placeholder="Employee Name" style="position: relative; height: 13px;background-color:#2a2a2a;color:#eee;resize:none;overflow:hidden;font-size: 13px;padding: 8px;margin:10px">
-                </textarea>
+                <input type="text" ng-model="editEmployee.full_name" placeholder="Employee Name" style="position: relative; height: 13px;background-color:#2a2a2a;color:#eee;resize:none;overflow:hidden;font-size: 12px;padding: 8px;margin:10px;padding: 6px 27px 6px 12px;" class="view-value-input" required>
                 <span style="margin:10px;">Team Lead</span>
-                <div style="margin: 10px;">
+                <div class="edit-dropdown" style="margin: 10px;">
                     <input type="text" ng-model="edit_leadership.leader.full_name" typeahead-on-select="edit_leadership.leader=$item" typeahead="employee.full_name for employee in employees | filter:{full_name:$viewValue}:startsWith | orderBy:'full_name' | limitTo:8" typeahead-editable="false" class="view-value-input"/>
+                </div>
+                <span style="margin:10px;">Hire Date</span>
+                <input type="text" style="margin:10px;display:inline-block;" value="{{editEmployee.hire_date | date:'MM/dd/yyyy'}}" class="view-value-input" style="display:inline-block" ng-disabled="true"/>
+                <span ng-click="toggleHireDatePicker();" class="glyphicon-regular glyphicon-calendar" style="margin-left: -37px;font-size: 18px;vertical-align: middle;padding-bottom: 3px;cursor:pointer;"></span>
+                <div ng-show="showHireDatePicker" style="margin-top: 0;margin-left: 10px;width:50%;float:left;" ng-model="editEmployee.hire_date">
+                    <datepicker show-weeks="showWeeks"></datepicker>
+                </div>
+                <span style="margin:20px 10px 10px 10px;">Departure Date</span>
+                <input type="text" style="margin:10px;display:inline-block;" value="{{editEmployee.departure_date | date:'MM/dd/yyyy'}}" class="view-value-input" style="display:inline-block" ng-disabled="true"/>
+                <span ng-click="toggleDepartDatePicker();" class="glyphicon-regular glyphicon-calendar" style="margin-left: -37px;font-size: 18px;vertical-align: middle;padding-bottom: 3px;cursor:pointer;"></span>
+                <div ng-show="showDepartDatePicker" style="margin-top: 0;margin-left: 10px;width:50%;float:left;" ng-model="editEmployee.departure_date">
+                    <datepicker show-weeks="showWeeks"></datepicker>
                 </div>
             </div>
         </div>
         <div style="clear:both;"></div>
-        <div style="margin-top: 10px;margin-left: 10px;">
+        <div style="margin: 40px 10px 10px 10px;text-align:center;">
             <button class='ng-modal-close' ng-click='save();hideModal()'>Save</button>
-            <button class='ng-modal-close' ng-click='hideModal()'>Close</button>
+            <button class='ng-modal-close' ng-click='scrub();hideModal()'>Close</button>
         </div>
     </div>
     <style>
@@ -48,6 +59,12 @@
       animation-fill-mode: forwards;
       -moz-animation-fill-mode: forwards;
 
+    }
+    input[type="file"]{
+        cursor: pointer;
+    }
+    input[type="button"]{
+        cursor: pointer;
     }
     @-webkit-keyframes anim-open-overlay {
         0% { opacity: 0; -webkit-transform: scale3d(1.1, 1.1, 1); }
@@ -110,71 +127,13 @@
         color: #fff;
         background: #c94e50;
         cursor: pointer;
+        margin: 10px;
     }
-    /* Juro */
-    .input--juro {
-        overflow: hidden;
-    }
-
-    .input__field--juro {
-        position: absolute;
-        z-index: 100;
-        padding: 2.15em 0.75em 0;
-        width: 100%;
-        background: transparent;
-        color: #1784cd;
-        font-size: 0.85em;
-    }
-
-    .input__label--juro {
-        padding: 0;
-        width: 100%;
-        height: 100%;
-        background: #fff;
-        text-align: left;
-    }
-
-    .input__label-content--juro {
-        padding: 2em 1em;
-        -webkit-transform-origin: 0% 50%;
-        transform-origin: 0% 50%;
-        -webkit-transition: -webkit-transform 0.3s, color 0.3s;
-        transition: transform 0.3s, color 0.3s;
-
-        text-rendering: geometricPrecision;
-    }
-
-    .input__label--juro::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        border: 0px solid transparent;
-        -webkit-transition: border-width 0.3s, border-color 0.3s;
-        transition: border-width 0.3s, border-color 0.3s;
-    }
-
-    .input__field--juro:focus + .input__label--juro::before,
-    .input--filled .input__label--juro::before {
-        border-width: 8px;
-        border-color: #1784cd;
-        border-top-width: 2em;
-    }
-
-    .input__field--juro:focus + .input__label--juro .input__label-content--juro,
-    .input--filled .input__label--juro .input__label-content--juro {
-        color: #fff;
-        -webkit-transform: translate3d(0, -1.5em, 0) scale3d(0.75, 0.75, 1);
-        transform: translate3d(0, -1.5em, 0) scale3d(0.75, 0.75, 1) translateZ(1px);
-    }
-.bgcolor-6 {
-background: #2fa8ec;
+.custom-file-upload::-webkit-file-upload-button {
+  visibility: hidden;
 }
-.content {
-font-size: 150%;
-padding: 3em 0;
+.custom-file-upload::before {
+    cursor: pointer;
 }
     </style>
 </div>

@@ -350,6 +350,10 @@ angular.module('tdb.controllers', [])
     if ($routeParams.id=='add') {
         $scope.addNew = true;
     }
+    $scope.modalShown = false;
+    $scope.toggleModal = function() {
+        $scope.modalShown = !$scope.modalShown;
+    };
     $scope.has_vops = false;
     $scope.has_kolbe = false;
     $scope.has_myers_briggs = false;
@@ -408,18 +412,12 @@ angular.module('tdb.controllers', [])
         $scope.show_todos = false;
     };
     $scope.leadership=[];
-    $scope.edit_leadership=[];
-    $scope.edit_leadership.leader=[];
-    $scope.edit_leadership.leader.full_name='';
     $scope.employees = Employee.query();
     Employee.get(
         {id: $routeParams.id},
         function(data) {
             $scope.employee = data;
-            $scope.edit_leadership.employee=data;
             $scope.employee.hire_date = $rootScope.parseDate($scope.employee.hire_date);
-            $scope.editEmployee = angular.copy($scope.employee);
-            $scope.preview=$scope.employee.avatar;
         }
     );
 
@@ -431,7 +429,6 @@ angular.module('tdb.controllers', [])
             if ($scope.leadership.leader.id == $rootScope.currentUser.employee.id){
                 $scope.showCompensation = true;
             }
-            $scope.edit_leadership = angular.copy($scope.leadership);
         }
     );
     $scope.happyIndex=0;
@@ -518,31 +515,12 @@ angular.module('tdb.controllers', [])
         $scope.currentHappy=null;
         $scope.editEngagement=false;
     };
-    $scope.cancel_photo = function(){
-        $scope.files = [];
-        $scope.preview=$scope.employee.avatar;
-    };
-    $scope.files = [];
-    $scope.uploadFile = function(files){
-        $scope.files = files;
-        fileReader.readAsDataUrl($scope.files[0], $scope)
-                      .then(function(result) {
-                          $scope.preview = result;
-                      });
-    };
 
     $scope.model = {
         name: "",
         comments: ""
     };
 
-    //the save method
-    $scope.save_photo = function() {
-        var upload_data = {id: $scope.employee.id};
-        PhotoUpload($scope.model, $scope.files).update(upload_data, function(data) {
-          $scope.employee.avatar = data.avatar;
-        });
-    };
     $scope.scrollIntoView = false;
     $scope.popup = [];
     $scope.popup.top = 0;
@@ -550,54 +528,7 @@ angular.module('tdb.controllers', [])
     $scope.super_powers = Attribute.getAttributtesForEmployee($routeParams.id, 2);
 	$scope.skills = Attribute.getAttributtesForEmployee($routeParams.id, 3);
     $scope.employeeEdit = false;
-    $scope.cancelEdit = function (){
-        $scope.editEmployee = angular.copy($scope.employee);
-        $scope.edit_leadership = angular.copy($scope.leadership);
-    };
-    $scope.saveName = function (){
-        var data = {id: $scope.employee.id, _full_name: $scope.editEmployee.full_name};
 
-        Employee.update(data, function() {
-            $scope.employee.full_name = $scope.editEmployee.full_name;
-        });
-    };
-    $scope.saveStartDate  = function (){
-        var hire_date = $rootScope.scrubDate($scope.editEmployee.hire_date ,false);
-        var data = {id: $scope.employee.id, _hire_date: hire_date};
-        Employee.update(data, function() {
-            $scope.employee.hire_date = $scope.editEmployee.hire_date;
-        });
-    };
-    $scope.clearStartDate  = function (){
-        var hire_date = null;
-        $scope.editEmployee.hire_date = hire_date;
-        var data = {id: $scope.employee.id, _hire_date: hire_date};
-        Employee.update(data, function() {
-            $scope.employee.hire_date = $scope.editEmployee.hire_date;
-        });
-    };
-    $scope.saveDepartureDate  = function (){
-        var departure_date = $rootScope.scrubDate($scope.editEmployee.departure_date, false);
-        var data = {id: $scope.employee.id, _departure_date: departure_date};
-        Employee.update(data, function() {
-            $scope.employee.departure_date = $scope.editEmployee.departure_date;
-        });
-    };
-    $scope.clearDepartureDate  = function (){
-        var departure_date = null;
-        $scope.editEmployee.departure_date = departure_date;
-        var data = {id: $scope.employee.id, _departure_date: departure_date};
-        Employee.update(data, function() {
-            $scope.employee.departure_date = $scope.editEmployee.departure_date;
-        });
-    };
-    $scope.saveLeader  = function (){
-        var data = {id: $scope.employee.id, _leader_id: $scope.edit_leadership.leader.id};
-        EmployeeLeader.addNew(data, function(response) {
-            $scope.edit_leadership = response;
-            $scope.leadership = angular.copy($scope.edit_leadership);
-        });
-    };
     $scope.today = function() {
         $scope.dt = new Date();
     };
