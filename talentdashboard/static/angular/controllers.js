@@ -1922,12 +1922,12 @@ angular.module('tdb.controllers', [])
     $scope.originalPotential = $scope.originalPerformance = 0;
     $scope.show = false;
     $scope.hide = false;
+    $scope.last_index = 0;
 
-    var transitionTimeout = null;
     PvpEvaluation.getToDos().$then(function(response) {
         $scope.currentItemIndex = 0;
         $scope.pvps = response.data.map(function(pvp) { pvp.comment = {originalContent: "", content: "", id: -1}; return pvp;});
-        $scope.setPvp();
+        $scope.last_index = $scope.pvps.length -1;
 	});
 
     $scope.save = function() {
@@ -1957,42 +1957,33 @@ angular.module('tdb.controllers', [])
         }
     };
 
+    $scope.isDirty = function() {
+        return $scope.originalPotential != $scope.pvp.potential || $scope.originalPerformance != $scope.pvp.performance || $scope.pvp.comment.content || $scope.pvp.comment.originalContent;
+    }
+
     $scope.forward = function() {
         if($scope.isDirty()) {
             $scope.save();
         }
-
-        if(($scope.currentItemIndex - 1) < $scope.pvps.length) {
+        $scope.click_prev=false;
+        $scope.click_next=true;
+        if(($scope.currentItemIndex+1) < $scope.pvps.length) {
             $scope.currentItemIndex++;
-            $scope.setPvp();
+        } else {
+            $scope.currentItemIndex=0;
         }
     };
-
-    $scope.setPvp = function() {
-        if($scope.show) {
-            $scope.show = false;
-            $scope.hide = true;
-        }
-        transitionTimeout = $timeout(function(){
-            $scope.pvp = $scope.pvps[$scope.currentItemIndex];
-            $scope.originalPotential = $scope.pvp.potential;
-            $scope.originalPerformance = $scope.pvp.performance;
-            $scope.show = true;
-            $scope.hide = false;
-        }, 500);
-    }
-
-    $scope.isDirty = function() {
-        return $scope.originalPotential != $scope.pvp.potential || $scope.originalPerformance != $scope.pvp.performance || $scope.pvp.comment.content || $scope.pvp.comment.originalContent;
-    }
 
     $scope.backward = function() {
         if($scope.isDirty()) {
             $scope.save();
         }
+        $scope.click_next=false;
+        $scope.click_prev=true;
         if($scope.currentItemIndex > 0) {
             $scope.currentItemIndex--;
-            $scope.setPvp();
+        } else {
+            $scope.currentItemIndex=$scope.pvps.length-1;
         }
     };
 
@@ -2015,8 +2006,5 @@ angular.module('tdb.controllers', [])
         });
     }
 
-    $scope.$on('destroy', function() {
-           transitionTimeout = undefined;
-    });
 }]);
 

@@ -298,6 +298,24 @@ angular.module('tdb.directives', [])
     };
 })
 
+.directive('fxTransition', function($compile) {
+  return {
+    link: function(scope, elem, attrs) {
+        if (attrs.index==0) {
+            elem.addClass('current');//'current':  currentItemIndex==$index
+        };
+        elem.bind('oanimationend animationend webkitAnimationEnd', function() {
+            console.log(attrs.index);
+            if (attrs.index==scope.currentItemIndex) {
+                elem.addClass('current');//'current':  currentItemIndex==$index
+            } else {
+               elem.removeClass('current');//'current':  currentItemIndex==$index
+            }
+        });
+    }
+  }
+})
+
 .directive('pvpChart', ['TalentCategoryColors', function(TalentCategoryColors) {
     return function(scope, element, attrs){
         var svg = element[0];
@@ -413,6 +431,8 @@ angular.module('tdb.directives', [])
 
             return {x:canvasX, y:canvasY}
         };
+
+        drawBlankGraph();
 
         scope.$watch('pvp', function(newValue, oldValue) {
             if(newValue === oldValue) return;
@@ -731,6 +751,7 @@ angular.module('tdb.directives', [])
     }
   }
 })
+
 .directive('sliderVops', function() {
   return {
     link: function(scope, elem, attrs) {
