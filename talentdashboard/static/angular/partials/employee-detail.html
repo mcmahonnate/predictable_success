@@ -294,13 +294,13 @@
                                 </div>
                             </div>
                           </li>
-                          <li style="padding-top:10px;padding-bottom:10px;">
+                          <li class="clear" style="padding-top:10px;padding-bottom:10px;">
                             <div class="t-secondary" style="min-width: 35%">
                               Hire Date
                             </div>
                             <div class="t-size-x16" id="start_date" style="min-width: 50%">{{ employee.hire_date | date:'MM/dd/yyyy' }}</div>
                           </li>
-                          <li class="clear" style="padding-top:10px;padding-bottom:10px;">
+                          <li class="clear" ng-show="employee.departure_date" style="padding-top:10px;padding-bottom:10px;">
                             <div class="t-secondary" style="min-width: 35%">
                               Departure Date
                             </div>
