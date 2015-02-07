@@ -12,6 +12,7 @@ router.register(r'api/v1/teams', TeamViewSet)
 router.register(r'api/v1/mentorships', MentorshipViewSet)
 router.register(r'api/v1/leaderships', LeadershipsViewSet)
 router.register(r'api/v1/attributes', AttributeViewSet)
+router.register(r'api/v1/pvp-descriptions', PvpDescriptionsViewSet)
 
 admin.autodiscover()
 

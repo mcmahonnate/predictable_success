@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models.query import QuerySet
 from org.models import Employee
 
+PVP_SCALE = [(i, i) for i in range(0, 5)]
 
 class EvaluationRoundManager(models.Manager):
     def most_recent(self, is_complete=True):
@@ -35,7 +36,6 @@ class PvpEvaluationManager(models.Manager):
 
 
 class PvpEvaluation(models.Model):
-    PVP_SCALE = [(i, i) for i in range(0, 5)]
     TOP_PERFORMER = 1
     STRONG_PERFORMER = 2
     GOOD_PERFORMER = 3
@@ -102,3 +102,14 @@ class PvpEvaluation(models.Model):
         verbose_name = "PVP Evaluation"
         verbose_name_plural = "PVP Evaluations"
         ordering =['-evaluation_round__date',]
+
+class PvpDescription(models.Model):
+    potential = models.IntegerField(choices=PVP_SCALE)
+    performance = models.IntegerField(choices=PVP_SCALE)
+    description = models.CharField(
+        max_length=255,
+        blank=True,
+    )
+
+    def __str__(self):
+        return "%s performance %s potential" % (self.performance, self.potential)

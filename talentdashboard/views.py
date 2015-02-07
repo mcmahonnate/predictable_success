@@ -9,6 +9,7 @@ from .serializers import *
 from .decorators import *
 from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team, get_talent_category_report_for_lead
 from pvp.salaryreports import get_salary_report_for_team, get_salary_report_for_all_employees, get_salary_report_for_lead
+from pvp.models import PvpDescription
 from blah.commentreports import get_employees_with_comments
 from engagement.engagementreports import get_employees_with_happiness_scores
 from blah.models import Comment
@@ -103,6 +104,14 @@ class AttributeViewSet(viewsets.ReadOnlyModelViewSet):
         if category_id is not None:
             self.queryset = self.queryset.filter(category__id=category_id)            
             
+        return self.queryset
+
+
+class PvpDescriptionsViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = PvpDescriptionSerializer
+    queryset = PvpDescription.objects.all()
+
+    def get_queryset(self):
         return self.queryset
 
 

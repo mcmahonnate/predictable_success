@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from pvp.models import PvpEvaluation, EvaluationRound
+from pvp.models import PvpEvaluation, EvaluationRound, PvpDescription
 from org.models import Employee, Team, Mentorship, Leadership, Attribute, AttributeCategory
 from assessment.models import EmployeeAssessment, AssessmentType, AssessmentBand, AssessmentCategory, AssessmentComparison, MBTI
 from todo.models import Task
@@ -471,6 +471,11 @@ class AttributeSerializer(serializers.HyperlinkedModelSerializer):
         model = Attribute
         fields = ['employee', 'name', 'category',]        
        
+class PvpDescriptionSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = PvpDescription
+        fields = ['performance', 'potential', 'description']
 
 class TalentCategoryReportSerializer(serializers.Serializer):
     evaluation_date = serializers.DateField()
