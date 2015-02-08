@@ -89,6 +89,11 @@ angular.module('tdb.services', ['ngResource'])
     return CompSummary;
 }])
 
+.factory('PvpDescriptions', ['$resource', '$http', function($resource, $http) {
+    var res = $resource('/api/v1/pvp-descriptions/');
+    return res;
+}])
+
 .factory('PvpEvaluation', ['$resource', '$http', function($resource, $http) {
     var actions = {
         'update': { method: 'PUT' }

@@ -377,6 +377,8 @@ angular.module('tdb.directives', [])
         var offSquareColor = "#343434";
         var squares = [];
         var squaresHash = {};
+        var pvp = scope.pvps[attrs.index];
+
         for(var potential = 1; potential <= 4; potential++) {
             squaresHash[potential] = {};
             for(var performance = 1; performance <= 4; performance++) {
@@ -432,16 +434,6 @@ angular.module('tdb.directives', [])
             return {x:canvasX, y:canvasY}
         };
 
-        drawBlankGraph();
-
-        scope.$watch('pvp', function(newValue, oldValue) {
-            if(newValue === oldValue) return;
-            drawBlankGraph();
-            if(newValue.potential > 0 && newValue.performance > 0){
-                drawSquare(findSquare(newValue));
-            }
-        });
-
         var findSquare = function(pvp) {
           return squaresHash[pvp.potential][pvp.performance];
         };
@@ -459,14 +451,24 @@ angular.module('tdb.directives', [])
             currentSquare = square;
         };
 
+        drawBlankGraph();
+        if(pvp.potential > 0 && pvp.performance > 0){
+            drawSquare(findSquare(pvp));
+        }
+
         angular.element(canvas).on('click', function(e) {
             var point = getCursorPosition(e);
             for(var index = 0; index < squares.length; index++) {
                 var square = squares[index];
                 if(isOnSquare(point, square)) {
                     drawSquare(square);
-                    scope.pvp.potential = square.potential;
-                    scope.pvp.performance = square.performance;
+                    pvp.potential = square.potential;
+                    pvp.performance = square.performance;
+                    var descriptions = scope.pvp_descriptions.filter( function(description){
+                        return (description.performance==square.performance && description.potential == square.potential);
+                    });
+                    scope.pvp_description = descriptions[0];
+                    scope.$apply();
                     break;
                 }
             }

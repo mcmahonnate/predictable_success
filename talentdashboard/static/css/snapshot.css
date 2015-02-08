@@ -905,13 +905,13 @@ a.glyphicon:hover {
 }
 
 .glyphicon-right-arrow:before {
-    color: #fff;
+    color: #585858;
     content: "\e224";
     cursor: pointer;
 }
 
 .glyphicon-left-arrow:before {
-    color: #fff;
+    color: #585858;
     content: "\e225";
     cursor: pointer;
 }

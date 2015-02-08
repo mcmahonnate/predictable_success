@@ -1914,21 +1914,28 @@ angular.module('tdb.controllers', [])
     };
 }])
 
-.controller('PvpEvaluationTodosCtrl', ['$scope', '$filter', '$routeParams', '$window', '$timeout', 'PvpEvaluation', 'EmployeeComments', 'User', function($scope, $filter, $routeParams, $window, $timeout, PvpEvaluation, EmployeeComments, User) {
+.controller('PvpEvaluationTodosCtrl', ['$scope', '$filter', '$routeParams', '$window', '$timeout', 'PvpEvaluation', 'PvpDescriptions', 'EmployeeComments', 'User', function($scope, $filter, $routeParams, $window, $timeout, PvpEvaluation, PvpDescriptions, EmployeeComments, User) {
     $scope.pvps = [];
     $scope.currentItemIndex = null;
-    $scope.pvp = {potential: 0, performance: 0, comment: {originalContent: "", content: "", id: -1}};
     $scope.isDirty = false;
     $scope.originalPotential = $scope.originalPerformance = 0;
     $scope.show = false;
     $scope.hide = false;
     $scope.last_index = 0;
+    $scope.pvp_descriptions = null;
+    $scope.pvp_description = null;
 
     PvpEvaluation.getToDos().$then(function(response) {
         $scope.currentItemIndex = 0;
         $scope.pvps = response.data.map(function(pvp) { pvp.comment = {originalContent: "", content: "", id: -1}; return pvp;});
+        $scope.currentPvP = $scope.pvps[0];
         $scope.last_index = $scope.pvps.length -1;
 	});
+
+    PvpDescriptions.query().$then(function(response) {
+            $scope.pvp_descriptions = response.data;
+        }
+    );
 
     $scope.save = function() {
         PvpEvaluation.update($scope.pvp, function(){
@@ -1958,12 +1965,13 @@ angular.module('tdb.controllers', [])
     };
 
     $scope.isDirty = function() {
-        return $scope.originalPotential != $scope.pvp.potential || $scope.originalPerformance != $scope.pvp.performance || $scope.pvp.comment.content || $scope.pvp.comment.originalContent;
+        return $scope.originalPotential != $scope.pvps[$scope.currentItemIndex].potential || $scope.originalPerformance != $scope.pvps[$scope.currentItemIndex].performance || $scope.pvps[$scope.currentItemIndex].comment.content || $scope.pvps[$scope.currentItemIndex].comment.originalContent;
     }
 
     $scope.forward = function() {
         if($scope.isDirty()) {
-            $scope.save();
+            //$scope.save();
+            console.log('save');
         }
         $scope.click_prev=false;
         $scope.click_next=true;
@@ -1976,7 +1984,8 @@ angular.module('tdb.controllers', [])
 
     $scope.backward = function() {
         if($scope.isDirty()) {
-            $scope.save();
+            //$scope.save();
+            console.log('save');
         }
         $scope.click_next=false;
         $scope.click_prev=true;
