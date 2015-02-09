@@ -438,6 +438,17 @@ angular.module('tdb.directives', [])
           return squaresHash[pvp.potential][pvp.performance];
         };
 
+        var findDescription = function(pvp) {
+            var descriptions = scope.pvp_descriptions.filter(function(description){
+                return (description.performance==pvp.performance && description.potential == pvp.potential);
+            });
+            scope.pvp_description = descriptions[0];
+        };
+        scope.$watch('pvp_descriptions', function(newVal, oldVal){
+            if (newVal != oldVal) {
+                findDescription(pvp);
+            }
+        });
         var drawSquare = function(square) {
             if(currentSquare) {
                 ctx.fillStyle = offSquareColor;
@@ -464,10 +475,7 @@ angular.module('tdb.directives', [])
                     drawSquare(square);
                     pvp.potential = square.potential;
                     pvp.performance = square.performance;
-                    var descriptions = scope.pvp_descriptions.filter( function(description){
-                        return (description.performance==square.performance && description.potential == square.potential);
-                    });
-                    scope.pvp_description = descriptions[0];
+                    findDescription(pvp);
                     scope.$apply();
                     break;
                 }

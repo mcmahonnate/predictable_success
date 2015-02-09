@@ -8,7 +8,8 @@
                     <div>
                         <div class="widget-inner widget-size-2x2 large-screen" style="height: 500px;width:520px;">
                             <header class="no-reload" style="padding-top: 10px;padding-bottom: 5px;">
-                                <h1 style="font-size:15px;">{{ pvp.employee.full_name }}</h1>
+                                <h1 style="font-size:15px;display: inline-block;">{{ pvp.employee.full_name }}</h1>
+                                <h1 style="font-size:15px;float:right;display: inline-block;">{{ $index+1 }} of {{last_index+1}}</h1>
                             </header>
                             <section class="widget-body rag-widget">
                               <div class="widget-canvas" style="height: 200px;float:left">

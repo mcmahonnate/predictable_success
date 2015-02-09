@@ -2,13 +2,13 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.query import QuerySet
 from org.models import Employee
+from blah.models import Comment
 
 PVP_SCALE = [(i, i) for i in range(0, 5)]
 
 class EvaluationRoundManager(models.Manager):
     def most_recent(self, is_complete=True):
         return self.filter(is_complete=is_complete).order_by('-date')[0:1].get()
-
 
 class EvaluationRound(models.Model):
     date = models.DateField()
@@ -17,7 +17,6 @@ class EvaluationRound(models.Model):
 
     def __str__(self):
         return "%s" % self.date
-
 
 class PvpEvaluationManager(models.Manager):
     def get_evaluations_for_round(self, round_id):
@@ -32,7 +31,7 @@ class PvpEvaluationManager(models.Manager):
 
     def todos_for_user(self, user):
         current_round = EvaluationRound.objects.most_recent(is_complete=False)
-        return self.filter(evaluation_round=current_round).filter(evaluator=user).filter(is_complete=False)
+        return self.filter(evaluation_round=current_round).filter(evaluator=user)
 
 
 class PvpEvaluation(models.Model):
@@ -49,6 +48,7 @@ class PvpEvaluation(models.Model):
     evaluation_round = models.ForeignKey(EvaluationRound)
     potential = models.IntegerField(choices=PVP_SCALE, blank=True, default=0)
     performance = models.IntegerField(choices=PVP_SCALE, blank=True, default=0)
+    comment = models.ForeignKey(Comment, related_name='+', null=True, blank=True)
     evaluator = models.ForeignKey(User, null=True, blank=True)
     is_complete = models.BooleanField()
 

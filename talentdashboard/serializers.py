@@ -418,26 +418,30 @@ class PvpEvaluationSerializer(serializers.ModelSerializer):
     employee = EmployeeSerializer()
     evaluation_round = EvaluationRoundSerializer()
     evaluator = UserSerializer()
+    comment = EmployeeCommentSerializer()
 
     class Meta:
         model = PvpEvaluation
-        fields = ('id', 'potential', 'performance', 'talent_category', 'employee', 'evaluation_round', 'evaluator')
+        fields = ('id', 'potential', 'performance', 'talent_category', 'employee', 'evaluation_round', 'evaluator', 'comment')
 
 
 class PvpEvaluationEditSerializer(serializers.ModelSerializer):
+    comment = EmployeeCommentSerializer()
+
     class Meta:
         model = PvpEvaluation
-        fields = ('id', 'potential', 'performance')
+        fields = ('id', 'potential', 'performance', 'comment')
 
 
 class MinimalPvpEvaluationSerializer(serializers.ModelSerializer):
     talent_category = serializers.IntegerField(source='get_talent_category')
     employee = PvPEmployeeSerializer()
     evaluator = UserSerializer()
+    comment = EmployeeCommentSerializer()
 
     class Meta:
         model = PvpEvaluation
-        fields = ('id', 'talent_category', 'employee', 'potential', 'performance', 'evaluator')
+        fields = ('id', 'talent_category', 'employee', 'potential', 'performance', 'evaluator', 'comment')
 
 
 class MentorshipSerializer(serializers.HyperlinkedModelSerializer):

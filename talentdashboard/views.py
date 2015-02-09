@@ -253,13 +253,21 @@ class PvpEvaluationDetail(APIView):
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
-        pvp = self.get_object(pk)
-        input_serializer = PvpEvaluationEditSerializer(pvp, data=request.DATA)
-        if input_serializer.is_valid():
-            input_serializer.save()
-            output_serializer = PvpEvaluationSerializer(pvp)
-            return Response(output_serializer.data)
-        return Response(input_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        pvp_id = request.DATA["id"]
+        pvp = PvpEvaluation.objects.get(id=pvp_id)
+        pvp.performance = request.DATA["_performance"]
+        pvp.potential = request.DATA["_potential"]
+        logger.debug("TEST")
+        if "_comment_id" in request.DATA:
+            comment_id = request.DATA["_comment_id"]
+            logger.debug(comment_id)
+            comment = Comment.objects.get(id=comment_id)
+            logger.debug(comment.content)
+            pvp.comment = comment
+            logger.debug(pvp.comment.content)
+        pvp.save()
+        serializer = PvpEvaluationSerializer(pvp)
+        return Response(serializer.data)
 
 
 class EmployeeEngagement(APIView):
