@@ -12,7 +12,6 @@ router.register(r'api/v1/teams', TeamViewSet)
 router.register(r'api/v1/mentorships', MentorshipViewSet)
 router.register(r'api/v1/leaderships', LeadershipsViewSet)
 router.register(r'api/v1/attributes', AttributeViewSet)
-router.register(r'api/v1/pvp-descriptions', PvpDescriptionsViewSet)
 
 admin.autodiscover()
 
@@ -39,6 +38,7 @@ urlpatterns = patterns('',
     url(r'api/v1/employees/$', (auth_employee_cache(60*15, 'AllAccess'))(auth_employee('AllAccess')(EmployeeList.as_view())), name='employee-list'),
     url(r'api/v1/employees/(?P<pk>.*)', (auth_employee('AllAccess')(EmployeeDetail.as_view())), name='employee-detail'),
     url(r'api/v1/leaderships/employees/(?P<pk>.*)', (auth_employee('AllAccess')(LeadershipDetail.as_view()))),
+    url(r'^api/v1/pvp-descriptions', pvp_descriptions),
     url(r'api/v1/pvp-evaluations/employees/(?P<pk>.*)', (auth_employee('AllAccess')(EmployeePvPEvaluations.as_view()))),
     url(r'^api/v1/pvp-evaluations/todo/$', pvp_todos),
     url(r'^api/v1/pvp-evaluations/(?P<pk>[0-9]+)', PvpEvaluationDetail.as_view()),

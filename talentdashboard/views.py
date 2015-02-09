@@ -106,15 +106,6 @@ class AttributeViewSet(viewsets.ReadOnlyModelViewSet):
             
         return self.queryset
 
-
-class PvpDescriptionsViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer_class = PvpDescriptionSerializer
-    queryset = PvpDescription.objects.all()
-
-    def get_queryset(self):
-        return self.queryset
-
-
 class EmployeeCommentReportDetail(APIView):
     def get(self, request, pk, format=None):
         report = None
@@ -882,6 +873,12 @@ def pvp_todos(request):
     serializer = MinimalPvpEvaluationSerializer(evaluations, many=True)
     return Response(serializer.data)
 
+
+@api_view(['GET'])
+def pvp_descriptions(request):
+    descriptions = PvpDescription.objects.all()
+    serializer = PvpDescriptionSerializer(descriptions, many=True)
+    return Response(serializer.data)
 
 @api_view(['GET'])
 @auth_employee('AllAccess')
