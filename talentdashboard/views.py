@@ -958,3 +958,32 @@ def talent_categories(request):
             pvp.performance = performance
             values[potential][performance] = pvp.get_talent_category()
     return Response(values)
+
+
+class FeedbackRequestView(APIView):
+    def get_object(self, pk):
+        try:
+            return FeedbackRequest.objects.get(pk=pk)
+        except FeedbackRequest.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        feedback_request = self.get_object(pk)
+        serializer = FeedbackRequestSerializer(feedback_request)
+        return Response(serializer.data)
+
+    def post(self, request, pk, format=None):
+        requester = Employee.objects.filter(user=request.user).get()
+        has_multiple_items = isinstance(request.DATA, list)
+        if has_multiple_items:
+            for item in request.DATA:
+                item['requester'] = requester.id
+        else:
+            request.DATA['requester'] = requester.id
+        serializer = FeedbackRequestPostSerializer(data=request.DATA, many=has_multiple_items)
+        if serializer.is_valid():
+            serializer.save()
+            response_serializer = FeedbackRequestSerializer(serializer.object, many=has_multiple_items)
+            return Response(response_serializer.data)
+        else:
+            return Response(serializer.errors, status=400)

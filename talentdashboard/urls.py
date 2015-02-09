@@ -72,5 +72,6 @@ urlpatterns = patterns('',
     url(r'api/v1/tasks/(?P<pk>.*)', (auth('AllAccess','CoachAccess','TeamLead')(TaskDetail.as_view()))),
     url(r'api/v1/image-upload/employees/(?P<pk>.*)', ImageUploadView.as_view()),
     url(r'api/v1/talent-categories/$', talent_categories),
+    url(r'api/v1/feedback-requests/(?P<pk>.*)', FeedbackRequestView.as_view()),
     url(r'^', include(router.urls)),
 )

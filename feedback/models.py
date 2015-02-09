@@ -4,7 +4,7 @@ from org.models import Employee
 
 
 class FeedbackRequest(models.Model):
-    request_date = models.DateTimeField()
+    request_date = models.DateTimeField(auto_now_add=True)
     expiration_date = models.DateField(null=True, blank=True)
     requester = models.ForeignKey(Employee, related_name='feedback_requests')
     reviewer = models.ForeignKey(Employee, related_name='requests_for_feedback')
@@ -18,3 +18,5 @@ class FeedbackSubmission(models.Model):
     reviewer = models.ForeignKey(Employee, related_name='feedback_submissions')
     excels_at = models.TextField(blank=True)
     could_improve_on = models.TextField(blank=True)
+
+

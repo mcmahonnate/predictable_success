@@ -7,6 +7,7 @@ from comp.models import CompensationSummary
 from blah.models import Comment
 from engagement.models import Happiness
 from kpi.models import Indicator, Performance
+from feedback.models import FeedbackRequest, FeedbackSubmission
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
@@ -281,7 +282,7 @@ class UserSerializer(serializers.ModelSerializer):
         return False
 
     def get_can_coach_employees(self, obj):
-        if obj.groups.filter(name='CoachAccess').exists() | obj.is_superuser:
+        if obj.is_coach() | obj.is_superuser:
                 return True
         return False
 
@@ -545,3 +546,36 @@ class CompensationSummarySerializer(serializers.ModelSerializer):
     class Meta:
         model = CompensationSummary
         fields = ('year', 'fiscal_year', 'salary', 'bonus', 'discretionary', 'writer_payments_and_royalties', 'total_compensation',)
+
+
+class FeedbackRequestSerializer(serializers.ModelSerializer):
+    request_date = serializers.DateTimeField(required=False, read_only=True)
+    expiration_date = serializers.DateField(required=False, blank=True)
+    requester = MinimalEmployeeSerializer()
+    reviewer = MinimalEmployeeSerializer()
+    response = serializers.PrimaryKeyRelatedField(null=True, read_only=True)
+    is_complete = serializers.BooleanField(required=False)
+
+    class Meta:
+        model = FeedbackRequest
+
+
+class FeedbackRequestPostSerializer(serializers.ModelSerializer):
+    request_date = serializers.DateTimeField(required=False, read_only=True)
+    expiration_date = serializers.DateField(required=False, blank=True)
+    requester = serializers.PrimaryKeyRelatedField()
+    reviewer = serializers.PrimaryKeyRelatedField()
+    response = serializers.PrimaryKeyRelatedField(null=True, read_only=True)
+    is_complete = serializers.BooleanField(required=False)
+
+    class Meta:
+        model = FeedbackRequest
+
+
+class FeedbackSubmissionSerializer(serializers.ModelSerializer):
+    feedback_date = serializers.DateTimeField()
+    subject = MinimalEmployeeSerializer()
+    reviewer = MinimalEmployeeSerializer()
+
+    class Meta:
+        model = FeedbackSubmission
