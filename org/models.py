@@ -3,7 +3,17 @@ from django.contrib.auth.models import User
 import datetime
 import blah
 
+COACHES_GROUP = 'CoachAccess'
+
+
+class EmployeeManager(models.Manager):
+    def coaches(self):
+        return self.filter(user__groups__name=COACHES_GROUP).order_by('full_name')
+
+
 class Employee(models.Model):
+    objects = EmployeeManager()
+
     full_name = models.CharField(
         max_length=255,
     )
@@ -57,8 +67,13 @@ class Employee(models.Model):
         blank=True,
         default=None
     )
-    user = models.OneToOneField(User,on_delete=models.SET_NULL, null=True, blank=True)
-    coach = models.ForeignKey('Employee',related_name='coachee', null=True, blank=True)
+    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True)
+    coach = models.ForeignKey('Employee', related_name='coachee', null=True, blank=True)
+
+    def is_coach(self):
+        if self.user is None:
+            return False
+        return any(group.name == COACHES_GROUP for group in self.user.groups.all())
 
     def _get_kolbe_fact_finder(self):
         try:
