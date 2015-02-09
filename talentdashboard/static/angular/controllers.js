@@ -1929,7 +1929,6 @@ angular.module('tdb.controllers', [])
     PvpEvaluation.getToDos().$then(function(response) {
         $scope.currentItemIndex = 0;
         $scope.pvps = response.data.map(function(pvp) {
-            console.log(pvp);
             if (!pvp.comment) {
                 pvp.comment = {originalContent: "", content: "", id: -1};
             } else {

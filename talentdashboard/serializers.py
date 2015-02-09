@@ -418,6 +418,10 @@ class EvaluationRoundSerializer(serializers.ModelSerializer):
         model = EvaluationRound
         fields = ['id', 'date',]
 
+class PvpDescriptionSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = PvpDescription
+        fields = ['performance', 'potential', 'description']
 
 class PvpEvaluationSerializer(serializers.ModelSerializer):
     talent_category = serializers.IntegerField(source='get_talent_category')
@@ -444,10 +448,11 @@ class MinimalPvpEvaluationSerializer(serializers.ModelSerializer):
     employee = PvPEmployeeSerializer()
     evaluator = UserSerializer()
     comment = EmployeeCommentSerializer()
+    description = PvpDescriptionSerializer(source='get_description', many=False)
 
     class Meta:
         model = PvpEvaluation
-        fields = ('id', 'talent_category', 'employee', 'potential', 'performance', 'evaluator', 'comment')
+        fields = ('id', 'talent_category', 'employee', 'potential', 'performance', 'evaluator', 'comment', 'description')
 
 
 class MentorshipSerializer(serializers.HyperlinkedModelSerializer):
@@ -480,12 +485,7 @@ class AttributeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Attribute
         fields = ['employee', 'name', 'category',]        
-       
-class PvpDescriptionSerializer(serializers.HyperlinkedModelSerializer):
 
-    class Meta:
-        model = PvpDescription
-        fields = ['performance', 'potential', 'description']
 
 class TalentCategoryReportSerializer(serializers.Serializer):
     evaluation_date = serializers.DateField()

@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import Q
 from django.db.models.query import QuerySet
+from django.core.exceptions import ObjectDoesNotExist
 from org.models import Employee
 from blah.models import Comment
 
@@ -60,6 +62,13 @@ class PvpEvaluation(models.Model):
         self.evaluator = evaluator
         self.potential = potential
         self.performance = performance
+
+    def get_description(self):
+        try:
+            description = PvpDescription.objects.get(Q(potential=self.potential) & Q(performance=self.performance))
+            return description
+        except ObjectDoesNotExist:
+            return None
 
     def get_talent_category(self):
         if self.__is_top_performer():

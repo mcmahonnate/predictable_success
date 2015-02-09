@@ -305,7 +305,6 @@ angular.module('tdb.directives', [])
             elem.addClass('current');//'current':  currentItemIndex==$index
         };
         elem.bind('oanimationend animationend webkitAnimationEnd', function() {
-            console.log(attrs.index);
             if (attrs.index==scope.currentItemIndex) {
                 elem.addClass('current');//'current':  currentItemIndex==$index
             } else {
@@ -434,21 +433,17 @@ angular.module('tdb.directives', [])
             return {x:canvasX, y:canvasY}
         };
 
-        var findSquare = function(pvp) {
+        var findSquare = function() {
           return squaresHash[pvp.potential][pvp.performance];
         };
 
-        var findDescription = function(pvp) {
+        var findDescription = function() {
             var descriptions = scope.pvp_descriptions.filter(function(description){
-                return (description.performance==pvp.performance && description.potential == pvp.potential);
+                return (description.performance==pvp.performance && description.potential==pvp.potential);
             });
-            scope.pvp_description = descriptions[0];
+            pvp.description = descriptions[0];
         };
-        scope.$watch('pvp_descriptions', function(newVal, oldVal){
-            if (newVal != oldVal) {
-                findDescription(pvp);
-            }
-        });
+
         var drawSquare = function(square) {
             if(currentSquare) {
                 ctx.fillStyle = offSquareColor;
@@ -464,7 +459,7 @@ angular.module('tdb.directives', [])
 
         drawBlankGraph();
         if(pvp.potential > 0 && pvp.performance > 0){
-            drawSquare(findSquare(pvp));
+            drawSquare(findSquare());
         }
 
         angular.element(canvas).on('click', function(e) {
@@ -475,7 +470,7 @@ angular.module('tdb.directives', [])
                     drawSquare(square);
                     pvp.potential = square.potential;
                     pvp.performance = square.performance;
-                    findDescription(pvp);
+                    findDescription();
                     scope.$apply();
                     break;
                 }
