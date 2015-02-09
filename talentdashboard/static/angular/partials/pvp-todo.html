@@ -15,10 +15,9 @@
                               <div class="widget-canvas" style="height: 200px;float:left">
                                   <div class="image" style="margin-left: auto; margin-right: auto;"><img ng-src="{{ pvp.employee.avatar }}" style="padding-bottom:15px; display: block; height: 200px;"/></div>
                               </div>
-                              <form>
                               <div class="vertical-text" style="width:200px;text-align: center;position: absolute;left: 190px;top: 145px;"><div style="display:inline-block;float:left">Low</div>Potential<div style="display:inline-block;float:right">High</div></div>
                               <div class="widget-canvas" style="margin-left: 285px">
-                                  <canvas pvp-graph index="{{$index}}" height="200" width="200"/>
+                                  <canvas pvp-graph index="{{$index}}" height="200" width="200" ng-click="click_canvas($event)"/>
                                   <div style="width:200px;text-align: center;"><div style="display:inline-block;float:left">Low</div>Performance<div style="display:inline-block;float:right">High</div></div>
                               </div>
 
@@ -30,7 +29,6 @@
                               <div style="display: block; float:left;width:480px;-webkit-border-radius: 2px;moz-border-radius: 3px;-ms-border-radius: 3px;-o-border-radius: 3px;border-radius: 3px;border: 1px solid #c1c1c1;margin-top: 10px; margin-right:15px;background-color:white;">
                                  <textarea class="text" ng-model="pvp.comment.content" rows="1" cols="50" placeholder="Add a comment. Provide some color to your assessment." style="width:468px;height: 132px;font-size:14px;padding:5px;border: none;resize:vertical;"></textarea>
                               </div>
-                              </form>
                             </section>
                         </div>
                     </div>

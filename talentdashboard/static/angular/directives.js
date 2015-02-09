@@ -417,10 +417,10 @@ angular.module('tdb.directives', [])
             return inX && inY;
         };
 
-        var getCursorPosition = function(e) {
+        var getCursorPosition = function(event) {
             var totalOffsetX = 0;
             var totalOffsetY = 0;
-            var currentElement = e.currentTarget;
+            var currentElement = event.currentTarget;
 
             do {
                 totalOffsetX += currentElement.offsetLeft - currentElement.scrollLeft;
@@ -462,7 +462,7 @@ angular.module('tdb.directives', [])
             drawSquare(findSquare());
         }
 
-        angular.element(canvas).on('click', function(e) {
+        scope.click_canvas = function(e) {
             var point = getCursorPosition(e);
             for(var index = 0; index < squares.length; index++) {
                 var square = squares[index];
@@ -471,11 +471,10 @@ angular.module('tdb.directives', [])
                     pvp.potential = square.potential;
                     pvp.performance = square.performance;
                     findDescription();
-                    scope.$apply();
                     break;
                 }
             }
-        });
+        };
     }
 }])
 
