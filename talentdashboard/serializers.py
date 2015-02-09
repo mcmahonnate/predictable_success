@@ -267,6 +267,7 @@ class UserSerializer(serializers.ModelSerializer):
     can_edit_employees = serializers.SerializerMethodField('get_can_edit_employees')
     can_view_comments = serializers.SerializerMethodField('get_can_view_comments')
     can_coach_employees = serializers.SerializerMethodField('get_can_coach_employees')
+    can_evaluate_employees = serializers.SerializerMethodField('get_can_evaluate_employees')
     can_view_company_dashboard = serializers.SerializerMethodField('get_can_view_company_dashboard')
     is_team_lead = serializers.SerializerMethodField('get_is_team_lead')
 
@@ -277,6 +278,11 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_can_view_comments(self, obj):
         if obj.groups.filter(name='View Comments').exists() | obj.is_superuser:
+                return True
+        return False
+
+    def get_can_evaluate_employees(self, obj):
+        if obj.groups.filter(name='EvaluateAccess').exists() | obj.is_superuser:
                 return True
         return False
 
@@ -296,7 +302,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'can_edit_employees', 'can_view_comments', 'can_coach_employees', 'can_view_company_dashboard', 'is_team_lead', 'employee', 'last_login')
+        fields = ('id', 'username', 'first_name', 'last_name', 'can_edit_employees', 'can_view_comments', 'can_coach_employees', 'can_evaluate_employees', 'can_view_company_dashboard', 'is_team_lead', 'employee', 'last_login')
 
 
 class KPIIndicatorSerializer(serializers.ModelSerializer):

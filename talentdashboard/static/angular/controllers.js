@@ -1970,7 +1970,9 @@ angular.module('tdb.controllers', [])
             } else {
                 EmployeeComments.save(data, function (response) {
                     _pvp.comment.id = response.id;
+                    console.log(response);
                     pvp_data = {id: _pvp.id, _potential: _pvp.potential, _performance: _pvp.performance, _comment_id: _pvp.comment.id};
+                    console.log(pvp_data);
                     PvpEvaluation.update(pvp_data, function(){
                     });
                 });
