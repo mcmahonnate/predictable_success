@@ -47,11 +47,7 @@ class Employee(models.Model):
         max_length=255,
         blank=True,
     )
-    base_camp = models.CharField(
-        max_length=255,
-        blank=True,
-    )
-    u_name = models.CharField(
+    email = models.CharField(
         max_length=255,
         blank=True,
     )
@@ -233,7 +229,13 @@ class Team(models.Model):
     name = models.CharField(
         max_length=255,
     )
-    leader = models.OneToOneField('Employee', related_name='+')
+    leader = models.ForeignKey(
+        'Employee',
+        related_name='+',
+        null=True,
+        blank=True,
+        default=None
+    )
 
     def __str__(self):
         return self.name

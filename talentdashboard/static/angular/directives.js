@@ -298,6 +298,25 @@ angular.module('tdb.directives', [])
     };
 })
 
+.directive('fxTransition', function($compile) {
+  return {
+    link: function(scope, elem, attrs) {
+        if (attrs.index==0) {
+            elem.addClass('current');//'current':  currentItemIndex==$index
+        };
+        elem.bind('oanimationend animationend webkitAnimationEnd', function() {
+            if (attrs.index==scope.currentItemIndex) {
+                elem.addClass('current');//'current':  currentItemIndex==$index
+            } else {
+               elem.removeClass('current');//'current':  currentItemIndex==$index
+            }
+            scope.$parent.isAnimating = false;
+            scope.$apply();
+        });
+    }
+  }
+})
+
 .directive('pvpChart', ['TalentCategoryColors', function(TalentCategoryColors) {
     return function(scope, element, attrs){
         var svg = element[0];
@@ -359,6 +378,8 @@ angular.module('tdb.directives', [])
         var offSquareColor = "#343434";
         var squares = [];
         var squaresHash = {};
+        var pvp = scope.pvps[attrs.index];
+
         for(var potential = 1; potential <= 4; potential++) {
             squaresHash[potential] = {};
             for(var performance = 1; performance <= 4; performance++) {
@@ -398,10 +419,10 @@ angular.module('tdb.directives', [])
             return inX && inY;
         };
 
-        var getCursorPosition = function(e) {
+        var getCursorPosition = function(event) {
             var totalOffsetX = 0;
             var totalOffsetY = 0;
-            var currentElement = e.currentTarget;
+            var currentElement = event.currentTarget;
 
             do {
                 totalOffsetX += currentElement.offsetLeft - currentElement.scrollLeft;
@@ -414,16 +435,15 @@ angular.module('tdb.directives', [])
             return {x:canvasX, y:canvasY}
         };
 
-        scope.$watch('pvp', function(newValue, oldValue) {
-            if(newValue === oldValue) return;
-            drawBlankGraph();
-            if(newValue.potential > 0 && newValue.performance > 0){
-                drawSquare(findSquare(newValue));
-            }
-        });
-
-        var findSquare = function(pvp) {
+        var findSquare = function() {
           return squaresHash[pvp.potential][pvp.performance];
+        };
+
+        var findDescription = function() {
+            var descriptions = scope.pvp_descriptions.filter(function(description){
+                return (description.performance==pvp.performance && description.potential==pvp.potential);
+            });
+            pvp.description = descriptions[0];
         };
 
         var drawSquare = function(square) {
@@ -439,18 +459,24 @@ angular.module('tdb.directives', [])
             currentSquare = square;
         };
 
-        angular.element(canvas).on('click', function(e) {
+        drawBlankGraph();
+        if(pvp.potential > 0 && pvp.performance > 0){
+            drawSquare(findSquare());
+        }
+
+        scope.click_canvas = function(e) {
             var point = getCursorPosition(e);
             for(var index = 0; index < squares.length; index++) {
                 var square = squares[index];
                 if(isOnSquare(point, square)) {
                     drawSquare(square);
-                    scope.pvp.potential = square.potential;
-                    scope.pvp.performance = square.performance;
+                    pvp.potential = square.potential;
+                    pvp.performance = square.performance;
+                    findDescription();
                     break;
                 }
             }
-        });
+        };
     }
 }])
 
@@ -560,7 +586,7 @@ angular.module('tdb.directives', [])
                     $scope.employee.avatar = data.avatar;
                 });
             }
-            if ($scope.edit_leadership.leader.id != $scope.leadership.leader.id) {
+            if ($scope.edit_leadership.leader != $scope.leadership.leader) {
                 console.log('save leader');
                 var data = {id: $scope.employee.id, _leader_id: $scope.edit_leadership.leader.id};
                 EmployeeLeader.addNew(data, function (response) {
@@ -731,6 +757,7 @@ angular.module('tdb.directives', [])
     }
   }
 })
+
 .directive('sliderVops', function() {
   return {
     link: function(scope, elem, attrs) {

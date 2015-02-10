@@ -9,6 +9,7 @@ from .serializers import *
 from .decorators import *
 from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team, get_talent_category_report_for_lead
 from pvp.salaryreports import get_salary_report_for_team, get_salary_report_for_all_employees, get_salary_report_for_lead
+from pvp.models import PvpDescription
 from blah.commentreports import get_employees_with_comments
 from engagement.engagementreports import get_employees_with_happiness_scores
 from blah.models import Comment
@@ -104,7 +105,6 @@ class AttributeViewSet(viewsets.ReadOnlyModelViewSet):
             self.queryset = self.queryset.filter(category__id=category_id)            
             
         return self.queryset
-
 
 class EmployeeCommentReportDetail(APIView):
     def get(self, request, pk, format=None):
@@ -244,13 +244,21 @@ class PvpEvaluationDetail(APIView):
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
-        pvp = self.get_object(pk)
-        input_serializer = PvpEvaluationEditSerializer(pvp, data=request.DATA)
-        if input_serializer.is_valid():
-            input_serializer.save()
-            output_serializer = PvpEvaluationSerializer(pvp)
-            return Response(output_serializer.data)
-        return Response(input_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        pvp_id = request.DATA["id"]
+        pvp = PvpEvaluation.objects.get(id=pvp_id)
+        pvp.performance = request.DATA["_performance"]
+        pvp.potential = request.DATA["_potential"]
+        logger.debug("TEST")
+        if "_comment_id" in request.DATA:
+            comment_id = request.DATA["_comment_id"]
+            logger.debug(comment_id)
+            comment = Comment.objects.get(id=comment_id)
+            logger.debug(comment.content)
+            pvp.comment = comment
+            logger.debug(pvp.comment.content)
+        pvp.save()
+        serializer = PvpEvaluationSerializer(pvp)
+        return Response(serializer.data)
 
 
 class EmployeeEngagement(APIView):
@@ -865,6 +873,12 @@ def pvp_todos(request):
     serializer = MinimalPvpEvaluationSerializer(evaluations, many=True)
     return Response(serializer.data)
 
+
+@api_view(['GET'])
+def pvp_descriptions(request):
+    descriptions = PvpDescription.objects.all()
+    serializer = PvpDescriptionSerializer(descriptions, many=True)
+    return Response(serializer.data)
 
 @api_view(['GET'])
 @auth_employee('AllAccess')

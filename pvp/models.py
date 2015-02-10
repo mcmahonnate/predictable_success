@@ -1,13 +1,16 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import Q
 from django.db.models.query import QuerySet
+from django.core.exceptions import ObjectDoesNotExist
 from org.models import Employee
+from blah.models import Comment
 
+PVP_SCALE = [(i, i) for i in range(0, 5)]
 
 class EvaluationRoundManager(models.Manager):
     def most_recent(self, is_complete=True):
         return self.filter(is_complete=is_complete).order_by('-date')[0:1].get()
-
 
 class EvaluationRound(models.Model):
     date = models.DateField()
@@ -16,7 +19,6 @@ class EvaluationRound(models.Model):
 
     def __str__(self):
         return "%s" % self.date
-
 
 class PvpEvaluationManager(models.Manager):
     def get_evaluations_for_round(self, round_id):
@@ -31,11 +33,10 @@ class PvpEvaluationManager(models.Manager):
 
     def todos_for_user(self, user):
         current_round = EvaluationRound.objects.most_recent(is_complete=False)
-        return self.filter(evaluation_round=current_round).filter(evaluator=user).filter(is_complete=False)
+        return self.filter(evaluation_round=current_round).filter(evaluator=user)
 
 
 class PvpEvaluation(models.Model):
-    PVP_SCALE = [(i, i) for i in range(0, 5)]
     TOP_PERFORMER = 1
     STRONG_PERFORMER = 2
     GOOD_PERFORMER = 3
@@ -49,6 +50,7 @@ class PvpEvaluation(models.Model):
     evaluation_round = models.ForeignKey(EvaluationRound)
     potential = models.IntegerField(choices=PVP_SCALE, blank=True, default=0)
     performance = models.IntegerField(choices=PVP_SCALE, blank=True, default=0)
+    comment = models.ForeignKey(Comment, related_name='+', null=True, blank=True)
     evaluator = models.ForeignKey(User, null=True, blank=True)
     is_complete = models.BooleanField()
 
@@ -60,6 +62,13 @@ class PvpEvaluation(models.Model):
         self.evaluator = evaluator
         self.potential = potential
         self.performance = performance
+
+    def get_description(self):
+        try:
+            description = PvpDescription.objects.get(Q(potential=self.potential) & Q(performance=self.performance))
+            return description
+        except ObjectDoesNotExist:
+            return None
 
     def get_talent_category(self):
         if self.__is_top_performer():
@@ -102,3 +111,14 @@ class PvpEvaluation(models.Model):
         verbose_name = "PVP Evaluation"
         verbose_name_plural = "PVP Evaluations"
         ordering =['-evaluation_round__date',]
+
+class PvpDescription(models.Model):
+    potential = models.IntegerField(choices=PVP_SCALE)
+    performance = models.IntegerField(choices=PVP_SCALE)
+    description = models.CharField(
+        max_length=255,
+        blank=True,
+    )
+
+    def __str__(self):
+        return "%s performance %s potential" % (self.performance, self.potential)

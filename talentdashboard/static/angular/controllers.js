@@ -1914,88 +1914,115 @@ angular.module('tdb.controllers', [])
     };
 }])
 
-.controller('PvpEvaluationTodosCtrl', ['$scope', '$filter', '$routeParams', '$window', '$timeout', 'PvpEvaluation', 'EmployeeComments', 'User', function($scope, $filter, $routeParams, $window, $timeout, PvpEvaluation, EmployeeComments, User) {
+.controller('PvpEvaluationTodosCtrl', ['$scope', '$filter', '$routeParams', '$window', '$timeout', 'PvpEvaluation', 'PvpDescriptions', 'EmployeeComments', 'User', function($scope, $filter, $routeParams, $window, $timeout, PvpEvaluation, PvpDescriptions, EmployeeComments, User) {
     $scope.pvps = [];
     $scope.currentItemIndex = null;
-    $scope.pvp = {potential: 0, performance: 0, comment: {originalContent: "", content: "", id: -1}};
     $scope.isDirty = false;
     $scope.originalPotential = $scope.originalPerformance = 0;
     $scope.show = false;
     $scope.hide = false;
+    $scope.last_index = 0;
+    $scope.pvp_descriptions = null;
+    $scope.pvp_description = null;
+    $scope.currentPvP = null;
+    $scope.isAnimating = false;
 
-    var transitionTimeout = null;
     PvpEvaluation.getToDos().$then(function(response) {
         $scope.currentItemIndex = 0;
-        $scope.pvps = response.data.map(function(pvp) { pvp.comment = {originalContent: "", content: "", id: -1}; return pvp;});
-        $scope.setPvp();
+        $scope.pvps = response.data.map(function(pvp) {
+            if (!pvp.comment) {
+                pvp.comment = {originalContent: "", content: "", id: -1};
+            } else {
+                pvp.comment.originalContent = pvp.comment.content;
+            }
+            return pvp;
+        });
+        $scope.last_index = $scope.pvps.length -1;
 	});
 
+    PvpDescriptions.query().$then(function(response) {
+            $scope.pvp_descriptions = response.data;
+        }
+    );
+
     $scope.save = function() {
-        PvpEvaluation.update($scope.pvp, function(){
-        });
-        var newComment = {};
-        newComment.id = $scope.pvp.comment.id;
-        newComment.content = $scope.pvp.comment.content;
-        newComment.modified_date = new Date().toJSON();
-        newComment.owner = User.get();
-        newComment.newSubCommentText="";
-        newComment.subcomments=[];
-        newComment.visibility=2; // People team
+        var pvp_data = null;
+        _pvp = $scope.currentPvP;
+        if ($scope.currentPvP.comment.content) {
+            var newComment = {};
+            newComment.id = $scope.currentPvP.comment.id;
+            newComment.content = $scope.currentPvP.comment.content;
+            newComment.modified_date = new Date().toJSON();
+            newComment.owner = User.get();
+            newComment.newSubCommentText = "";
+            newComment.subcomments = [];
+            newComment.visibility = 2; // People team
 
-        var data = {id: newComment.id, _model_name: "employee", _object_id: newComment.id, _content: newComment.content, _visibility: newComment.visibility};
-
-        data.id = $scope.pvp.employee.id;
-        var _pvp = $scope.pvp;
-        if(newComment.id > 0) {
-            EmployeeComments.update(data, function(response) {
-                _pvp.comment.id = response.id;
-            });
+            var data = {id: newComment.id, _model_name: "employee", _object_id: newComment.id, _content: newComment.content, _visibility: newComment.visibility};
+            data.id = $scope.currentPvP.employee.id;
+            if (newComment.id > 0) {
+                EmployeeComments.update(data, function (response) {
+                   _pvp.comment.id = response.id;
+                    pvp_data = {id: _pvp.id, _potential: _pvp.potential, _performance: _pvp.performance, _comment_id: _pvp.comment.id};
+                    PvpEvaluation.update(pvp_data, function(){
+                    });
+                });
+            } else {
+                EmployeeComments.save(data, function (response) {
+                    _pvp.comment.id = response.id;
+                    console.log(response);
+                    pvp_data = {id: _pvp.id, _potential: _pvp.potential, _performance: _pvp.performance, _comment_id: _pvp.comment.id};
+                    console.log(pvp_data);
+                    PvpEvaluation.update(pvp_data, function(){
+                    });
+                });
+            }
         } else {
-            EmployeeComments.save(data, function(response) {
-                _pvp.comment.id = response.id;
+            pvp_data = {id: _pvp.id, _potential: _pvp.potential, _performance: _pvp.performance};
+            PvpEvaluation.update(pvp_data, function(){
             });
         }
     };
-
-    $scope.forward = function() {
-        if($scope.isDirty()) {
-            $scope.save();
-        }
-
-        if(($scope.currentItemIndex - 1) < $scope.pvps.length) {
-            $scope.currentItemIndex++;
-            $scope.setPvp();
-        }
-    };
-
-    $scope.setPvp = function() {
-        if($scope.show) {
-            $scope.show = false;
-            $scope.hide = true;
-        }
-        transitionTimeout = $timeout(function(){
-            $scope.pvp = $scope.pvps[$scope.currentItemIndex];
-            $scope.originalPotential = $scope.pvp.potential;
-            $scope.originalPerformance = $scope.pvp.performance;
-            $scope.show = true;
-            $scope.hide = false;
-        }, 500);
-    }
 
     $scope.isDirty = function() {
-        return $scope.originalPotential != $scope.pvp.potential || $scope.originalPerformance != $scope.pvp.performance || $scope.pvp.comment.content || $scope.pvp.comment.originalContent;
+        return $scope.originalPotential != $scope.currentPvP.potential || $scope.originalPerformance != $scope.currentPvP.performance || $scope.currentPvP.comment.content || $scope.currentPvP.comment.originalContent;
     }
 
-    $scope.backward = function() {
+    $scope.forward = function() {
+        $scope.isAnimating = true;
         if($scope.isDirty()) {
             $scope.save();
+            console.log('save');
         }
-        if($scope.currentItemIndex > 0) {
-            $scope.currentItemIndex--;
-            $scope.setPvp();
+        $scope.click_prev=false;
+        $scope.click_next=true;
+        if(($scope.currentItemIndex+1) < $scope.pvps.length) {
+            $scope.currentItemIndex++;
+        } else {
+            $scope.currentItemIndex=0;
         }
     };
-
+    $scope.$watch('currentItemIndex', function(newVal, oldVal){
+        if (newVal != oldVal) {
+            $scope.currentPvP = $scope.pvps[$scope.currentItemIndex];
+            $scope.originalPotential = $scope.currentPvP.potential;
+            $scope.originalPerformance = $scope.currentPvP.performance;
+        }
+    },true);
+    $scope.backward = function() {
+        $scope.isAnimating = true;
+        if($scope.isDirty()) {
+            $scope.save();
+            console.log('save');
+        }
+        $scope.click_next=false;
+        $scope.click_prev=true;
+        if($scope.currentItemIndex > 0) {
+            $scope.currentItemIndex--;
+        } else {
+            $scope.currentItemIndex=$scope.pvps.length-1;
+        }
+    };
     $scope.addComment = function() {
         var newComment = {};
         newComment.id = -1;
@@ -2015,8 +2042,5 @@ angular.module('tdb.controllers', [])
         });
     }
 
-    $scope.$on('destroy', function() {
-           transitionTimeout = undefined;
-    });
 }]);
 

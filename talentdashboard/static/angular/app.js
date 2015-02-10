@@ -39,6 +39,8 @@ var reRoute = function($q, $rootScope, $location, User) {
                     $location.path('/team-lead');
                 } else if ($rootScope.currentUser.can_coach_employees) {
                     $location.path('/coach');
+                } else if ($rootScope.currentUser.can_evaluate_employees) {
+                    $location.path('/pvp/todo');
                 } else {
                     return false;
                 }

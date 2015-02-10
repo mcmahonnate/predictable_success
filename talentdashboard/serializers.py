@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from pvp.models import PvpEvaluation, EvaluationRound
+from pvp.models import PvpEvaluation, EvaluationRound, PvpDescription
 from org.models import Employee, Team, Mentorship, Leadership, Attribute, AttributeCategory
 from assessment.models import EmployeeAssessment, AssessmentType, AssessmentBand, AssessmentCategory, AssessmentComparison, MBTI
 from todo.models import Task
@@ -268,6 +268,7 @@ class UserSerializer(serializers.ModelSerializer):
     can_edit_employees = serializers.SerializerMethodField('get_can_edit_employees')
     can_view_comments = serializers.SerializerMethodField('get_can_view_comments')
     can_coach_employees = serializers.SerializerMethodField('get_can_coach_employees')
+    can_evaluate_employees = serializers.SerializerMethodField('get_can_evaluate_employees')
     can_view_company_dashboard = serializers.SerializerMethodField('get_can_view_company_dashboard')
     is_team_lead = serializers.SerializerMethodField('get_is_team_lead')
 
@@ -278,6 +279,11 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_can_view_comments(self, obj):
         if obj.groups.filter(name='View Comments').exists() | obj.is_superuser:
+                return True
+        return False
+
+    def get_can_evaluate_employees(self, obj):
+        if obj.groups.filter(name='EvaluateAccess').exists() | obj.is_superuser:
                 return True
         return False
 
@@ -297,7 +303,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'can_edit_employees', 'can_view_comments', 'can_coach_employees', 'can_view_company_dashboard', 'is_team_lead', 'employee', 'last_login')
+        fields = ('id', 'username', 'first_name', 'last_name', 'can_edit_employees', 'can_view_comments', 'can_coach_employees', 'can_evaluate_employees', 'can_view_company_dashboard', 'is_team_lead', 'employee', 'last_login')
 
 
 class KPIIndicatorSerializer(serializers.ModelSerializer):
@@ -413,32 +419,41 @@ class EvaluationRoundSerializer(serializers.ModelSerializer):
         model = EvaluationRound
         fields = ['id', 'date',]
 
+class PvpDescriptionSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = PvpDescription
+        fields = ['performance', 'potential', 'description']
 
 class PvpEvaluationSerializer(serializers.ModelSerializer):
     talent_category = serializers.IntegerField(source='get_talent_category')
     employee = EmployeeSerializer()
     evaluation_round = EvaluationRoundSerializer()
     evaluator = UserSerializer()
+    comment = EmployeeCommentSerializer()
 
     class Meta:
         model = PvpEvaluation
-        fields = ('id', 'potential', 'performance', 'talent_category', 'employee', 'evaluation_round', 'evaluator')
+        fields = ('id', 'potential', 'performance', 'talent_category', 'employee', 'evaluation_round', 'evaluator', 'comment')
 
 
 class PvpEvaluationEditSerializer(serializers.ModelSerializer):
+    comment = EmployeeCommentSerializer()
+
     class Meta:
         model = PvpEvaluation
-        fields = ('id', 'potential', 'performance')
+        fields = ('id', 'potential', 'performance', 'comment')
 
 
 class MinimalPvpEvaluationSerializer(serializers.ModelSerializer):
     talent_category = serializers.IntegerField(source='get_talent_category')
     employee = PvPEmployeeSerializer()
     evaluator = UserSerializer()
+    comment = EmployeeCommentSerializer()
+    description = PvpDescriptionSerializer(source='get_description', many=False)
 
     class Meta:
         model = PvpEvaluation
-        fields = ('id', 'talent_category', 'employee', 'potential', 'performance', 'evaluator')
+        fields = ('id', 'talent_category', 'employee', 'potential', 'performance', 'evaluator', 'comment', 'description')
 
 
 class MentorshipSerializer(serializers.HyperlinkedModelSerializer):
@@ -471,7 +486,7 @@ class AttributeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Attribute
         fields = ['employee', 'name', 'category',]        
-       
+
 
 class TalentCategoryReportSerializer(serializers.Serializer):
     evaluation_date = serializers.DateField()
