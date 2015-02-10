@@ -553,7 +553,6 @@ class FeedbackRequestSerializer(serializers.ModelSerializer):
     expiration_date = serializers.DateField(required=False, blank=True)
     requester = MinimalEmployeeSerializer()
     reviewer = MinimalEmployeeSerializer()
-    response = serializers.PrimaryKeyRelatedField(null=True, read_only=True)
     is_complete = serializers.BooleanField(required=False)
 
     class Meta:
@@ -565,17 +564,38 @@ class FeedbackRequestPostSerializer(serializers.ModelSerializer):
     expiration_date = serializers.DateField(required=False, blank=True)
     requester = serializers.PrimaryKeyRelatedField()
     reviewer = serializers.PrimaryKeyRelatedField()
-    response = serializers.PrimaryKeyRelatedField(null=True, read_only=True)
     is_complete = serializers.BooleanField(required=False)
 
     class Meta:
         model = FeedbackRequest
 
 
+class FeedbackSubmissionPostSerializer(serializers.ModelSerializer):
+    feedback_date = serializers.DateTimeField(required=False)
+    subject = serializers.PrimaryKeyRelatedField()
+    reviewer = serializers.PrimaryKeyRelatedField()
+    feedback_request = serializers.PrimaryKeyRelatedField(required=False)
+
+    def validate(self, attrs):
+        feedback_request = attrs['feedback_request']
+        if feedback_request:
+            subject = attrs['subject']
+            reviewer = attrs['reviewer']
+            if feedback_request.requester != subject:
+                raise serializers.ValidationError("Subject is not the same as the feedback requester.")
+            if feedback_request.reviewer != reviewer:
+                raise serializers.ValidationError("Reviewer is not the same as requested by the subject.")
+        return attrs
+
+    class Meta:
+        model = FeedbackSubmission
+
+
 class FeedbackSubmissionSerializer(serializers.ModelSerializer):
-    feedback_date = serializers.DateTimeField()
+    feedback_date = serializers.DateTimeField(required=False)
     subject = MinimalEmployeeSerializer()
     reviewer = MinimalEmployeeSerializer()
+    feedback_request = FeedbackRequestSerializer()
 
     class Meta:
         model = FeedbackSubmission

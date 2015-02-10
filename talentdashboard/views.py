@@ -960,6 +960,16 @@ def talent_categories(request):
     return Response(values)
 
 
+def add_current_employee_to_request(request, field_name):
+    employee = Employee.objects.get_from_user(request.user)
+    has_multiple_items = isinstance(request.DATA, list)
+    if has_multiple_items:
+        for item in request.DATA:
+            item[field_name] = employee.id
+    else:
+        request.DATA[field_name] = employee.id
+
+
 class FeedbackRequestView(APIView):
     def get_object(self, pk):
         try:
@@ -973,13 +983,8 @@ class FeedbackRequestView(APIView):
         return Response(serializer.data)
 
     def post(self, request, pk, format=None):
-        requester = Employee.objects.filter(user=request.user).get()
+        add_current_employee_to_request(request, 'requester')
         has_multiple_items = isinstance(request.DATA, list)
-        if has_multiple_items:
-            for item in request.DATA:
-                item['requester'] = requester.id
-        else:
-            request.DATA['requester'] = requester.id
         serializer = FeedbackRequestPostSerializer(data=request.DATA, many=has_multiple_items)
         if serializer.is_valid():
             serializer.save()
@@ -987,3 +992,34 @@ class FeedbackRequestView(APIView):
             return Response(response_serializer.data)
         else:
             return Response(serializer.errors, status=400)
+
+@api_view(['GET'])
+def incomplete_feedback_requests_for_reviewer(request):
+    reviewer = Employee.objects.get_from_user(request.user)
+    pending_requests = FeedbackRequest.objects.pending_for_reviewer(reviewer)
+    serializer = FeedbackRequestSerializer(pending_requests, many=True)
+    return Response(serializer.data)
+
+
+class FeedbackSubmissionView(APIView):
+    def get_object(self, pk):
+        try:
+            return FeedbackSubmission.objects.get(pk=pk)
+        except FeedbackSubmission.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        feedback = self.get_object(pk)
+        serializer = FeedbackSubmissionSerializer(feedback)
+        return Response(serializer.data)
+
+    def post(self, request, pk, format=None):
+        add_current_employee_to_request(request, 'reviewer')
+        serializer = FeedbackSubmissionPostSerializer(data=request.DATA)
+        if serializer.is_valid():
+            serializer.save()
+            response_serializer = FeedbackSubmissionSerializer(serializer.object)
+            return Response(response_serializer.data)
+        return Response(serializer.errors, status=400)
+
+
