@@ -37,8 +37,8 @@
             </li>
         </ul>
         <nav style="display: block;">
-            <a class="glyphicon-regular glyphicon-left-arrow prev" style="font-size: 60px;" ng-click="backward()"></a>
-            <a class="glyphicon-regular glyphicon-right-arrow next" style="font-size: 60px;" ng-click="forward()"></a>
+            <a class="glyphicon-regular glyphicon-left-arrow prev" style="font-size: 60px;" ng-click="backward()" ng-class="{'navDisable':isAnimating}"></a>
+            <a class="glyphicon-regular glyphicon-right-arrow next" style="font-size: 60px;" ng-click="forward()" ng-class="{'navDisable':isAnimating}"></a>
         </nav>
     </div>
 </div>
@@ -101,6 +101,10 @@
 	left: 0px;
 }
 
+.component-small nav a.navDisable{
+   pointer-events: none;
+   cursor: default;
+}
 .component-small nav a.next,
 .component-transparent nav a.next {
 	right: 0px;

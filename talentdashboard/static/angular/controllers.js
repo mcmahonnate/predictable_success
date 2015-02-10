@@ -1925,6 +1925,7 @@ angular.module('tdb.controllers', [])
     $scope.pvp_descriptions = null;
     $scope.pvp_description = null;
     $scope.currentPvP = null;
+    $scope.isAnimating = false;
 
     PvpEvaluation.getToDos().$then(function(response) {
         $scope.currentItemIndex = 0;
@@ -1988,6 +1989,7 @@ angular.module('tdb.controllers', [])
     }
 
     $scope.forward = function() {
+        $scope.isAnimating = true;
         if($scope.isDirty()) {
             $scope.save();
             console.log('save');
@@ -2008,6 +2010,7 @@ angular.module('tdb.controllers', [])
         }
     },true);
     $scope.backward = function() {
+        $scope.isAnimating = true;
         if($scope.isDirty()) {
             $scope.save();
             console.log('save');
@@ -2020,7 +2023,6 @@ angular.module('tdb.controllers', [])
             $scope.currentItemIndex=$scope.pvps.length-1;
         }
     };
-
     $scope.addComment = function() {
         var newComment = {};
         newComment.id = -1;

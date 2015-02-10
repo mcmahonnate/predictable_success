@@ -310,6 +310,8 @@ angular.module('tdb.directives', [])
             } else {
                elem.removeClass('current');//'current':  currentItemIndex==$index
             }
+            scope.$parent.isAnimating = false;
+            scope.$apply();
         });
     }
   }
