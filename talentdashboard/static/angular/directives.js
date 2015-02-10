@@ -586,7 +586,7 @@ angular.module('tdb.directives', [])
                     $scope.employee.avatar = data.avatar;
                 });
             }
-            if ($scope.edit_leadership.leader.id != $scope.leadership.leader.id) {
+            if ($scope.edit_leadership.leader != $scope.leadership.leader) {
                 console.log('save leader');
                 var data = {id: $scope.employee.id, _leader_id: $scope.edit_leadership.leader.id};
                 EmployeeLeader.addNew(data, function (response) {
