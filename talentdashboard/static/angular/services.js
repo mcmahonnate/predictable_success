@@ -2,8 +2,8 @@ angular.module('tdb.services', ['ngResource'])
 
 .factory('Employee', ['$resource', '$http', function($resource, $http) {
     var actions = {
-        'addNew': { method:'PUT', data:{full_name:'@full_name', hire_date: '@hire_date'}, isArray: false },
-        'update': { method:'PUT', data:{full_name:'@full_name', hire_date: '@hire_date', departure_date: '@departure_date'}, isArray: false }
+        'addNew': { method:'PUT', data:{full_name:'@full_name', hire_date: '@hire_date', coach_id: '@coach_id'}, isArray: false },
+        'update': { method:'PUT', data:{full_name:'@full_name', hire_date: '@hire_date', departure_date: '@departure_date', coach_id: '@coach_id'}, isArray: false }
     };
     var res = $resource('/api/v1/employees/:id/', {id:'@id'}, actions);
     return res;

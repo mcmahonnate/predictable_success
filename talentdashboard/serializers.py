@@ -142,6 +142,7 @@ class MBTISerializer(serializers.HyperlinkedModelSerializer):
 
 class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
     team = TeamSerializer()
+    coach = MinimalEmployeeSerializer()
     avatar = serializers.SerializerMethodField('get_avatar_url')
     avatar_small = serializers.SerializerMethodField('get_avatar_small_url')
     leader_id = serializers.SerializerMethodField('get_leader_id')
@@ -260,7 +261,7 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Employee
-        fields = ('id', 'full_name', 'avatar', 'avatar_small', 'job_title', 'hire_date', 'leader_id', 'happiness', 'happiness_date', 'kolbe_fact_finder','kolbe_follow_thru', 'kolbe_quick_start', 'kolbe_implementor', 'vops_visionary', 'vops_operator', 'vops_processor', 'vops_synergist', 'departure_date', 'team', 'display', 'current_salary', 'current_bonus', 'talent_category')
+        fields = ('id', 'full_name', 'avatar', 'avatar_small', 'job_title', 'hire_date', 'leader_id', 'happiness', 'happiness_date', 'coach', 'kolbe_fact_finder','kolbe_follow_thru', 'kolbe_quick_start', 'kolbe_implementor', 'vops_visionary', 'vops_operator', 'vops_processor', 'vops_synergist', 'departure_date', 'team', 'display', 'current_salary', 'current_bonus', 'talent_category')
 
 class SitePreferencesSerializer(serializers.ModelSerializer):
     class Meta:

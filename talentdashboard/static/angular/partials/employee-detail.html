@@ -312,7 +312,12 @@
                             </div>
                             <div class="t-size-x16" id="team_lead" style="min-width: 50%"><a ng-href="#/employees/{{leadership.leader.id}}">{{ leadership.leader.full_name }}</a></div>
                           </li>
-
+                          <li ng-if="site_preferences.show_coaches" class="clear" style="padding-top:10px;padding-bottom:10px;">
+                            <div class="t-secondary" style="min-width: 35%">
+                              Coach
+                            </div>
+                            <div class="t-size-x16" id="coach" style="min-width: 50%"><a ng-href="#/employees/{{employee.coach.id}}">{{ employee.coach.full_name }}</a></div>
+                          </li>
                           <li class="clear" style="padding-top:10px;padding-bottom:10px;">
                             <!--<a ng-show="employeeEdit && !currentlyEditing" class="glyphicon glyphicon-edit" style="float:left;cursor:pointer;padding-right:10px"></a>
                             <span ng-show="employeeEdit && currentlyEditing" class="glyphicon glyphicon-edit-disable" style="padding-right:10px;float: left;"></span>-->

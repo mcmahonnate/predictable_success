@@ -522,7 +522,7 @@ angular.module('tdb.directives', [])
   }
 })
 
-.directive('modalEditEmployee',  ['Employee', 'EmployeeLeader', 'fileReader', 'PhotoUpload', function(Employee, EmployeeLeader, fileReader, PhotoUpload) {
+.directive('modalEditEmployee',  ['Employee', 'EmployeeLeader', 'fileReader', 'PhotoUpload', 'SitePreferences', function(Employee, EmployeeLeader, fileReader, PhotoUpload, SitePreferences) {
   return {
     restrict: 'E',
     scope: {
@@ -544,6 +544,9 @@ angular.module('tdb.directives', [])
       };
     },
     controller: function ($scope, $rootScope, $location) {
+        SitePreferences.get(function (data) {
+            $scope.site_preferences = data;
+        });
         $scope.$watch("editEmployee.departure_date",function(newValue,OldValue,scope) {
             if (newValue) {
                 $scope.showDepartDatePicker = false;
@@ -597,7 +600,10 @@ angular.module('tdb.directives', [])
                 if ($scope.employee.full_name != $scope.editEmployee.full_name) {
                     data._full_name = $scope.editEmployee.full_name;
                 }
-                if ($scope.editEmployee.hire_date != $scope.employee.hire_date) {
+                if ($scope.employee.coach != $scope.editEmployee.coach) {
+                    data._coach_id = $scope.editEmployee.coach.id;
+                }
+                if (+$scope.editEmployee.hire_date != +$scope.employee.hire_date) {
                     var hire_date = $rootScope.scrubDate($scope.editEmployee.hire_date, false);
                     data._hire_date = hire_date;
                 }

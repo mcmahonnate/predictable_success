@@ -676,30 +676,26 @@ class EmployeeDetail(APIView):
 
         if int(pk) == 0 and "_full_name" in request.DATA:
             employee = Employee()
-            employee.full_name = request.DATA["_full_name"]
-            if "_hire_date" in request.DATA:
-                employee.hire_date = request.DATA["_hire_date"]
             employee.display = True
-            employee.save()
             expire_view_cache('employee-list')
-            serializer = EmployeeSerializer(employee, many=False)
-            return Response(serializer.data)
-
-        employee = Employee.objects.get(id=pk)
+        else:
+            employee = Employee.objects.get(id=pk)
         if employee is not None:
             if "_full_name" in request.DATA:
                 employee.full_name = request.DATA["_full_name"]
             if "_hire_date" in request.DATA:
                 employee.hire_date = request.DATA["_hire_date"]
+            if "_coach_id" in request.DATA:
+                coach_id = request.DATA["_coach_id"]
+                coach = Employee.objects.get(id=coach_id)
+                employee.coach = coach
             if "_departure_date" in request.DATA:
                 employee.departure_date = request.DATA["_departure_date"]
                 expire_view_cache('employee-list')
             employee.save()
             serializer = EmployeeSerializer(employee, many=False)
             return Response(serializer.data)
-
         return Response(None, status=status.HTTP_404_NOT_FOUND)
-
 
 class ImageUploadView(APIView):
     parser_classes = (MultiPartParser,FormParser)
