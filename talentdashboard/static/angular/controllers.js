@@ -953,8 +953,11 @@ angular.module('tdb.controllers', [])
     });
 }])
 
-.controller('TeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'TalentCategoryReport', 'SalaryReport', 'Team', 'TeamMembers', 'TeamMBTI', 'analytics', function($scope, $location, $routeParams, TalentCategoryReport, SalaryReport, Team, TeamMembers, TeamMBTI, analytics) {
+.controller('TeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'TalentCategoryReport', 'SalaryReport', 'Team', 'TeamMembers', 'TeamMBTI', 'SitePreferences', 'analytics', function($scope, $location, $routeParams, TalentCategoryReport, SalaryReport, Team, TeamMembers, TeamMBTI, SitePreferences, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
+    SitePreferences.get(function (data) {
+        $scope.site_preferences = data;
+    });
     $scope.teamId = $routeParams.id;
     SalaryReport.getReportForTeam($routeParams.id, function(data) {
         $scope.salaryReport = data;
