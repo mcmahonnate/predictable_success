@@ -57,8 +57,11 @@ angular.module('tdb.controllers', [])
     };
 }])
 
-.controller('MyTeamEvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'MyTeamPvpEvaluation', 'Team', 'analytics', function($scope, $rootScope, $location, $routeParams, MyTeamPvpEvaluation, Team, analytics) {
+.controller('MyTeamEvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'MyTeamPvpEvaluation', 'Team', 'SitePreferences', 'analytics', function($scope, $rootScope, $location, $routeParams, MyTeamPvpEvaluation, Team, SitePreferences, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
+    SitePreferences.get(function (data) {
+        $scope.site_preferences = data;
+    });
     $scope.hideTeamMenu = true;
     $scope.kolbe_values=[0,1,2,3];
     $scope.vops_values=[0,320,6400,960];
@@ -108,8 +111,11 @@ angular.module('tdb.controllers', [])
     }
 }])
 
-.controller('EvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'PvpEvaluation', 'Team', 'analytics', function($scope, $rootScope, $location, $routeParams, PvpEvaluation, Team, analytics) {
+.controller('EvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'PvpEvaluation', 'Team', 'SitePreferences', 'analytics', function($scope, $rootScope, $location, $routeParams, PvpEvaluation, Team, SitePreferences, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
+    SitePreferences.get(function (data) {
+        $scope.site_preferences = data;
+    });
     $scope.hideTeamMenu = false;
     $scope.kolbe_values=[0,1,2,3];
     $scope.vops_values=[0,320,6400,960];
