@@ -10,6 +10,8 @@ from .decorators import *
 from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team, get_talent_category_report_for_lead
 from pvp.salaryreports import get_salary_report_for_team, get_salary_report_for_all_employees, get_salary_report_for_lead
 from pvp.models import PvpDescription
+from preferences.models import SitePreferences
+from django.contrib.sites.models import Site
 from blah.commentreports import get_employees_with_comments
 from engagement.engagementreports import get_employees_with_happiness_scores
 from blah.models import Comment
@@ -753,6 +755,16 @@ def coachee_list(request):
 def user_status(request):
     serializer = UserSerializer(request.user)
     return Response(serializer.data)
+
+@api_view(['GET'])
+def preferences_site(request):
+    try:
+        site = Site.objects.get_current()
+        site_preferences = SitePreferences.objects.get(site=site)
+        serializer = SitePreferencesSerializer(site_preferences)
+        return Response(serializer.data)
+    except Indicator.DoesNotExist:
+        return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
 def current_site(request):
