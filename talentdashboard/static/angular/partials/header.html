@@ -43,24 +43,7 @@
                   <div id="selection-list">
                     <ul style="padding: 10px 10px;">
                         <li ng-show="!showAddEmployee">
-                            <a class="dashboard employee_menu" ng-click="showAddEmployee=true"><span class="glyphicon-regular glyphicon-add-employee employee_menu"></span><span style="margin-left:10px;" class="employee_menu">Add Employee</span></a>
-                        </li>
-                        <li ng-show="showAddEmployee">
-                            <div id="selection-list">
-                                <div style="margin: 10px">
-                                    <span style="color:#cbcbcb;margin-right:10px;font-size:15px;">Enter Employee Name</span>
-                                </div>
-                                <div style="margin:20px 10px;">
-                                    <input ng-model="addEmployee.first_name" class="employee_menu" placeholder="First Name" style="border: 0;border-radius: 7px;position: relative; width: 225px; height: 13px;overflow:hidden;font-size: 15px;color:#333;padding: 8px;"/>
-                                </div>
-                                <div style="margin:20px 10px;">
-                                    <input ng-model="addEmployee.last_name" class="employee_menu" placeholder="Last Name" style="border: 0;border-radius: 7px;position: relative; width: 225px; height: 13px;overflow:hidden;font-size: 15px;color:#333;padding: 8px;"/>
-                                </div>
-                                <div id="editActions" style="margin:20px 20px 10px 13px;">
-                                    <button class="button small blue employee_menu" ng-disabled="(!addEmployee.first_name || !addEmployee.last_name)" style="margin:5px;height:31px;width:62px;font-size:15px" ng-click="addNewEmployee(addEmployee.first_name, addEmployee.last_name)">Add</button>
-                                    <button class="button small orange employee_menu" style="margin:5px;height:31px;width:62px;font-size:15px" ng-click="cancelAddNewEmployee()">Cancel</button>
-                                </div>
-                            </div>
+                            <a class="dashboard employee_menu" ng-click="toggleModal();"><span class="glyphicon-regular glyphicon-add-employee employee_menu"></span><span style="margin-left:10px;" class="employee_menu">Add Employee</span></a>
                         </li>
                     </ul>
                   </div>
@@ -138,6 +121,7 @@
                     </div>
                 </div>
 		    </div>
+            <modal-edit-employee employee='newEmployee' leadership='newLeadership' employees='employees' show='modalShown' width='500px'></modal-edit-employee>
         </div>
     </div>
   </header>

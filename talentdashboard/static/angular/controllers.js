@@ -179,46 +179,26 @@ angular.module('tdb.controllers', [])
     SitePreferences.get(function (data) {
         $scope.site_preferences = data;
     });
+    $scope.modalShown = false;
+    $scope.newEmployee = {id:0,full_name:'',hire_date:'',departure_date:'', avatar:'https://hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg'};
+    $scope.newLeadership = {id:0,leader:{full_name:''}};
+    $scope.toggleModal = function() {
+        $scope.modalShown = !$scope.modalShown;
+    };
 	$scope.employeeMenu = {show: false};
     $scope.filterMenu = {show: false};
 	$scope.teamMenu = {show: false};
     $scope.settingsMenu = {show: false};
     $scope.showAddEmployee = false;
     $scope.addEmployee = [];
-    if ($routeParams.id=='add'){
-        $scope.showAddEmployee = true;
-    }
+
 	$scope.startsWith  = function(expected, actual){
 		if(expected && actual){
 			return expected.toLowerCase().indexOf(actual.toLowerCase()) == 0;
 		}
 		return true;
 	}
-    $scope.addNewEmployee = function(firstname, lastname) {
-        var newEmployee = {};
-        newEmployee.full_name = firstname + ' ' + lastname;
-        var data = {id: 0,_full_name: newEmployee.full_name};
 
-        Employee.addNew(data, function(response) {
-            newEmployee.id = response.id;
-            $scope.employees.push(newEmployee);
-            $scope.showAddEmployee = false;
-            changeLocation('employees/' + newEmployee.id, false);
-        });
-    }
-    //be sure to inject $scope and $location somewhere before this
-    var changeLocation = function(url, force) {
-      //this will mark the URL change
-      $location.path(url); //use $location.path(url).replace() if you want to replace the location instead
-      $scope = $scope || angular.element(document).scope();
-      if(force || !$scope.$$phase) {
-        //this will kickstart angular if to notice the change
-        $scope.$apply();
-      }
-    };
-    $scope.cancelAddNewEmployee = function() {
-        $scope.showAddEmployee= false;
-    }
     $scope.navQuery='';
     $scope.toggleNavQuery = function () {
         $scope.openFilterMenu = false;
@@ -236,7 +216,6 @@ angular.module('tdb.controllers', [])
         var clickedOnNavQuery = elementClasses.contains('nav_query');
         if (!clickedOnNavQuery) {
             $scope.navQuery='';
-            $scope.$apply();
         }
     }
     $scope.toggleFilterMenu = function () {
@@ -1981,9 +1960,7 @@ angular.module('tdb.controllers', [])
             } else {
                 EmployeeComments.save(data, function (response) {
                     _pvp.comment.id = response.id;
-                    console.log(response);
                     pvp_data = {id: _pvp.id, _potential: _pvp.potential, _performance: _pvp.performance, _comment_id: _pvp.comment.id};
-                    console.log(pvp_data);
                     PvpEvaluation.update(pvp_data, function(){
                     });
                 });
@@ -2003,7 +1980,6 @@ angular.module('tdb.controllers', [])
         $scope.isAnimating = true;
         if($scope.isDirty()) {
             $scope.save();
-            console.log('save');
         }
         $scope.click_prev=false;
         $scope.click_next=true;
@@ -2024,7 +2000,6 @@ angular.module('tdb.controllers', [])
         $scope.isAnimating = true;
         if($scope.isDirty()) {
             $scope.save();
-            console.log('save');
         }
         $scope.click_next=false;
         $scope.click_prev=true;

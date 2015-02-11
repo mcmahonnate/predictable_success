@@ -677,6 +677,8 @@ class EmployeeDetail(APIView):
         if int(pk) == 0 and "_full_name" in request.DATA:
             employee = Employee()
             employee.full_name = request.DATA["_full_name"]
+            if "_hire_date" in request.DATA:
+                employee.hire_date = request.DATA["_hire_date"]
             employee.display = True
             employee.save()
             expire_view_cache('employee-list')
@@ -693,7 +695,8 @@ class EmployeeDetail(APIView):
                 employee.departure_date = request.DATA["_departure_date"]
                 expire_view_cache('employee-list')
             employee.save()
-            return Response(None)
+            serializer = EmployeeSerializer(employee, many=False)
+            return Response(serializer.data)
 
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
