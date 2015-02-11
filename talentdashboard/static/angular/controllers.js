@@ -170,13 +170,15 @@ angular.module('tdb.controllers', [])
     $scope.teamLeads = TeamLeads.getCurrentEvaluationsForTeamLeads($scope.team_id)
 }])
 
-.controller('EmployeeListCtrl', ['$scope', '$routeParams', '$window', '$location', 'Employee', function($scope, $routeParams, $window, $location, Employee) {
+.controller('EmployeeListCtrl', ['$scope', '$routeParams', '$window', '$location', 'Employee', 'SitePreferences', function($scope, $routeParams, $window, $location, Employee, SitePreferences) {
     $scope.$window = $window;
     if (!$scope.employees)
     {
         $scope.employees = Employee.query({random:Math.floor((Math.random()*1000000000))}); //!important browser cache buster
     }
-
+    SitePreferences.get(function (data) {
+        $scope.site_preferences = data;
+    });
 	$scope.employeeMenu = {show: false};
     $scope.filterMenu = {show: false};
 	$scope.teamMenu = {show: false};

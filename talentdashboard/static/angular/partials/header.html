@@ -12,7 +12,7 @@
                     <div id="selection-title">Account</div>
                     <div id="selection-list">
                         <ul style="padding: 10px 10px;">
-                            <li ng-if="currentUser.can_coach_employees">
+                            <li ng-if="currentUser.can_coach_employees && site_preferences.show_coaches">
                                 <a class="dashboard" href="#/coach/" style="height:27px;">My Coachees</a>
                             </li>
                             <li>
