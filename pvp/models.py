@@ -50,7 +50,7 @@ class PvpEvaluation(models.Model):
     evaluation_round = models.ForeignKey(EvaluationRound)
     potential = models.IntegerField(choices=PVP_SCALE, blank=True, default=0)
     performance = models.IntegerField(choices=PVP_SCALE, blank=True, default=0)
-    comment = models.ForeignKey(Comment, related_name='+', null=True, blank=True)
+    comment = models.ForeignKey(Comment, null=True, blank=True)
     evaluator = models.ForeignKey(User, null=True, blank=True)
     is_complete = models.BooleanField()
 
