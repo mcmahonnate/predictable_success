@@ -23,6 +23,7 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class MinimalEmployeeSerializer(serializers.HyperlinkedModelSerializer):
+    avatar = serializers.SerializerMethodField('get_avatar_url')
     avatar_small = serializers.SerializerMethodField('get_avatar_small_url')
 
     def get_avatar_url(self, obj):
