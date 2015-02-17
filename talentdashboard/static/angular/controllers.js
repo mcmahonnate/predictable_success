@@ -580,8 +580,8 @@ angular.module('tdb.controllers', [])
 .controller('CoachDetailCtrl', ['$scope', '$location', '$routeParams', 'Employee', 'Coachees', '$http', 'analytics', function($scope, $location, $routeParams, Employee, Coachees, $http, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
 
-    Coachees.query({ id: $routeParams.id }).$then(function(response) {
-        $scope.coachees = response.data;
+    Coachees.query({ id: $routeParams.id }).$promise.then(function(response) {
+        $scope.coachees = response;
         var i = 0;
         angular.forEach($scope.coachees, function (employee) {
             employee.index = i;
@@ -708,8 +708,8 @@ angular.module('tdb.controllers', [])
 
 .controller('EmployeePvpEvaluationsCtrl', ['$scope', '$routeParams', 'PvpEvaluation', function($scope, $routeParams, PvpEvaluation) {
 	$scope.pvpIndex = 0;
-    PvpEvaluation.getAllEvaluationsForEmployee($routeParams.id).$then(function(response) {
-		$scope.pvps = response.data;
+    PvpEvaluation.getAllEvaluationsForEmployee($routeParams.id).$promise.then(function(response) {
+		$scope.pvps = response;
 	});
 
 	$scope.selectPvP = function(index) {
@@ -720,8 +720,8 @@ angular.module('tdb.controllers', [])
 .controller('ReportsCtrl', ['$scope', '$location', '$routeParams', 'PvpEvaluation', 'analytics', function($scope, $location, $routeParams, PvpEvaluation, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
 
-    PvpEvaluation.query({current_round: true}).$then(function(response) {
-            $scope.evaluations = response.data;
+    PvpEvaluation.query({current_round: true}).$promise.then(function(response) {
+            $scope.evaluations = response;
 
             var i = 0;
             angular.forEach($scope.evaluations, function (evaluation) {
@@ -885,8 +885,8 @@ angular.module('tdb.controllers', [])
         $scope.talentCategoryReport = data;
     });
 
-    HappinessReport.getReportForCompany($scope.days_ago, true).$then(function(response) {
-        $scope.neglectedEmployees = response.data;
+    HappinessReport.getReportForCompany($scope.days_ago, true).$promise.then(function(response) {
+        $scope.neglectedEmployees = response;
         angular.forEach($scope.neglectedEmployees, function(neglected) {
             neglected.happy = Engagement.getCurrentEngagement(neglected.employee.id);
         });
@@ -1029,11 +1029,11 @@ angular.module('tdb.controllers', [])
     $scope.originalComment.subcomments = [];
     $scope.employee=[];
 
-    Comment.get({ id: $scope.commentId }).$then(function(response) {
-        $scope.comment = response.data;
+    Comment.get({ id: $scope.commentId }).$promise.then(function(response) {
+        $scope.comment = response;
         $scope.originalComment = angular.copy($scope.comment);
         SubComments.query({ id: $scope.comment.id }).$then(function(response) {
-                $scope.comment.subcomments = response.data;
+                $scope.comment.subcomments = response;
                 $scope.originalComment.subcomments = angular.copy($scope.comment.subcomments);
             }
         );
@@ -1113,20 +1113,20 @@ angular.module('tdb.controllers', [])
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     $scope.showPeopleTeamVisibility = false;
 
-    Comment.query().$then(function(response) {
+    Comment.query().$promise.then(function(response) {
         if ($rootScope.currentUser.can_coach_employees || $rootScope.currentUser.can_view_company_dashboard) {
             $scope.newCommentVisibility = 2;
             $scope.showPeopleTeamVisibility = true;
         }
-        $scope.comments = response.data;
+        $scope.comments = response;
         $scope.originalComments = angular.copy($scope.comments);
         angular.forEach($scope.comments, function(comment) {
             var index = $scope.comments.indexOf(comment);
             var original_comment = $scope.originalComments[index];
             comment.subcomments = [];
             original_comment.subcomments = [];
-            SubComments.query({ id: comment.id }).$then(function(response) {
-                    comment.subcomments = response.data;
+            SubComments.query({ id: comment.id }).$promise.then(function(response) {
+                    comment.subcomments = response;
                     original_comment.subcomments = angular.copy(comment.subcomments);
                 }
             );
@@ -1140,7 +1140,7 @@ angular.module('tdb.controllers', [])
             $scope.currentGroup = date;
             return showHeader;
         }
-    });
+    },function ( error ) {console.log ('error')});
     $scope.toggleChildCommentTextExpander = function (comment) {
         $window.onclick = function (event) {
             if (!comment.newSubCommentText) {
@@ -1278,8 +1278,8 @@ angular.module('tdb.controllers', [])
 }])
 
 .controller('EmployeeToDoListCtrl', ['$scope', '$routeParams', '$window', 'EmployeeToDo', 'ToDo', 'User', function($scope, $routeParams, $window, EmployeeToDo, ToDo, User) {
-    EmployeeToDo.query({ id: $routeParams.id }).$then(function(response) {
-            $scope.todos = response.data;
+    EmployeeToDo.query({ id: $routeParams.id }).$promise.then(function(response) {
+            $scope.todos = response;
         }
     );
     $scope.completed_todos = EmployeeToDo.query({ id: $routeParams.id, completed: true });
@@ -1482,8 +1482,8 @@ angular.module('tdb.controllers', [])
             var original_comment = $scope.originalComments[index];
             comment.subcomments = [];
             original_comment.subcomments = [];
-            SubComments.query({ id: comment.id }).$then(function(response) {
-                    comment.subcomments = response.data;
+            SubComments.query({ id: comment.id }).$promise.then(function(response) {
+                    comment.subcomments = response;
                     original_comment.subcomments = angular.copy(comment.subcomments);
                 }
             );
@@ -1652,8 +1652,8 @@ angular.module('tdb.controllers', [])
 
             comment.subcomments = [];
             original_comment.subcomments = [];
-            SubComments.query({ id: comment.id }).$then(function(response) {
-                    comment.subcomments = response.data;
+            SubComments.query({ id: comment.id }).$promise.then(function(response) {
+                    comment.subcomments = response;
                     original_comment.subcomments = angular.copy(comment.subcomments);
                 }
             );
@@ -1773,8 +1773,8 @@ angular.module('tdb.controllers', [])
 
                     comment.subcomments = [];
                     original_comment.subcomments = [];
-                    SubComments.query({ id: comment.id }).$then(function(response) {
-                            comment.subcomments = response.data;
+                    SubComments.query({ id: comment.id }).$promise.then(function(response) {
+                            comment.subcomments = response;
                             original_comment.subcomments = angular.copy(comment.subcomments);
                         }
                     );
@@ -1917,9 +1917,9 @@ angular.module('tdb.controllers', [])
     $scope.currentPvP = null;
     $scope.isAnimating = false;
 
-    PvpEvaluation.getToDos().$then(function(response) {
+    PvpEvaluation.getToDos().$promise.then(function(response) {
         $scope.currentItemIndex = 0;
-        $scope.pvps = response.data.map(function(pvp) {
+        $scope.pvps = response.map(function(pvp) {
             if (!pvp.comment) {
                 pvp.comment = {originalContent: "", content: "", id: -1};
             } else {
@@ -1930,8 +1930,8 @@ angular.module('tdb.controllers', [])
         $scope.last_index = $scope.pvps.length -1;
 	});
 
-    PvpDescriptions.query().$then(function(response) {
-            $scope.pvp_descriptions = response.data;
+    PvpDescriptions.query().$promise.then(function(response) {
+            $scope.pvp_descriptions = response;
         }
     );
 

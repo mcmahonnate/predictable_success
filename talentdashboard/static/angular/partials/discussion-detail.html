@@ -31,7 +31,7 @@
                           </div>
                         </div>
                         <div ng-show="!showCommentEdit">
-                            <span data-ng-bind-html-unsafe="comment.content | new_line" style="line-height: 125%"></span>
+                            <span data-ng-bind-html="comment.content | new_line" style="line-height: 125%"></span>
                             <ul class="feed-actions">
                                 <li class="feed-action"><a ng-click="showCommentInput=!showCommentInput" class="feed-action" style="color: #8b8b8b;cursor: pointer;">comment</a><span ng-show="comment.subcomments.length>0"> ({{comment.subcomments.length}})</span></li>
                                 <li ng-show="comment.owner.id==currentUser.id" class="feed-action"><a ng-click="showCommentEdit=true" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
@@ -58,7 +58,7 @@
                                       </div>
                                     </div>
                                     <div ng-show="!showSubCommentEdit">
-                                        <span data-ng-bind-html-unsafe="subcomment.content | new_line" style="margin-left:5px;line-height: 115%"></span>
+                                        <span data-ng-bind-html="subcomment.content | new_line" style="margin-left:5px;line-height: 115%"></span>
                                         <ul class="feed-actions">
                                             <li ng-show="subcomment.owner.id==currentUser.id" class="feed-action"><a ng-click="showSubCommentEdit=true" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
                                             <li ng-show="subcomment.owner.id==currentUser.id" class="feed-action"><a ng-click="deleteSubComment(comment, subcomment)" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></li>

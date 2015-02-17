@@ -193,7 +193,7 @@ angular.module('tdb.services', ['ngResource'])
                 },
                 data: { model: model, files: files },
                 isArray: false,
-                headers:{'Content-Type':false}
+                headers:{'Content-Type':undefined}
             },
             'remove': { method:'DELETE' }
         };
