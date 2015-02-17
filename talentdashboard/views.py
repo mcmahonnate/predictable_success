@@ -378,7 +378,10 @@ class EmployeeCommentList(APIView):
         model_name = request.DATA["_model_name"]
         content_type = ContentType.objects.get(model=model_name)
         object_id = request.DATA["_object_id"]
-        visibility = request.DATA["_visibility"]
+        if "_visibility" in request.DATA:
+            visibility = request.DATA["_visibility"]
+        else:
+            visibility = 3
         employee = Employee.objects.get(id=pk)
         if employee is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
@@ -386,7 +389,7 @@ class EmployeeCommentList(APIView):
         content = request.DATA["_content"]
         if content_type == comment_type:
             comment = Comment.objects.get(id=object_id)
-            sub_comment = Comment.objects.add_comment(comment, content, 3, owner)
+            sub_comment = Comment.objects.add_comment(comment, content, visibility, owner)
             serializer = SubCommentSerializer(sub_comment, many=False)
             notify = True
             if notify:
