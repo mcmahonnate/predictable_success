@@ -332,7 +332,7 @@ angular.module('tdb.controllers', [])
 	}
 }])
 
-.controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', 'User', 'Employee', 'Engagement', 'EmployeeLeader', 'Attribute', 'CompSummary', 'PhotoUpload', '$http', 'SitePreferences', 'analytics', 'fileReader','Assessment','EmployeeMBTI', function($rootScope, $scope, $location, $routeParams, $window, User, Employee, Engagement, EmployeeLeader, Attribute, CompSummary, PhotoUpload, $http, SitePreferences, analytics, fileReader, Assessment, EmployeeMBTI) {
+.controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', 'User', 'Employee', 'Engagement', 'EmployeeLeader', 'Attribute', 'CompSummary', '$http', 'SitePreferences', 'analytics', 'fileReader','Assessment','EmployeeMBTI', function($rootScope, $scope, $location, $routeParams, $window, User, Employee, Engagement, EmployeeLeader, Attribute, CompSummary, $http, SitePreferences, analytics, fileReader, Assessment, EmployeeMBTI) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     SitePreferences.get(function (data) {
         $scope.site_preferences = data;
