@@ -344,8 +344,8 @@ angular.module('tdb.controllers', [])
     $scope.has_vops = false;
     $scope.has_kolbe = false;
     $scope.has_myers_briggs = false;
-    $scope.show_bio = true;
-    $scope.show_discussions = false;
+    $scope.show_bio = false;
+    $scope.show_discussions = true;
     $scope.show_vops = false;
     $scope.show_kolbe = false;
     $scope.show_myers_briggs = false;
