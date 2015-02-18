@@ -271,7 +271,7 @@
 
                             <div style="max-width: 65%;">
                                 <span ng-show="happys.length == 0">--</span>
-                                <ul ng-show="happys.length > 0" rn-carousel rn-carousel-viewport="100%" rn-carousel-watch rn-carousel-index="$parent.happyIndex" style="width:100%">
+                                <ul ng-show="happys.length > 0" style="width:100%">
                                     <li ng-repeat="happy in happys" style="border-bottom:none">
                                       <div style="display:block;width:175px;">
                                       <div style="width:45px">
@@ -289,11 +289,6 @@
                                       </div>
                                     </li>
                                  </ul>
-                                <div ng-show="happys.length > 1">
-                                    <a ng-repeat="happy in happys | orderBy:'assigned_date'"  ng-click="$parent.happyIndex=$index" style="cursor: pointer;">
-                                        <div class="nav" style="width: 10px; height: 10px; -webkit-border-radius: 5em; -moz-border-radius: 5em;margin-right: 10px" ng-class="{'navveryhappy': happy.assessment==5,'navhappy': happy.assessment==4,'navindifferent': happy.assessment==3,'navunhappy': happy.assessment==2,'navveryunhappy': happy.assessment==1, categoryNavHighlightSmall: $index==$parent.happyIndex,categoryNavSmall: $index!=$parent.happyIndex}"/>
-                                    </a>
-                                </div>
                             </div>
                           </li>
                           <li class="clear" style="padding-top:10px;padding-bottom:10px;">
