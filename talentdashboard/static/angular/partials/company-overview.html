@@ -136,7 +136,7 @@
                                     <label ng-show="showPeopleTeamVisibility" class="radio" style="position: relative">
                                         <input class="radio custom-radio" ng-model="comment.visibility" name="visibilitOptions{{$index}}" value="2" type="radio" style="cursor: pointer;">
                                         <span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
-                                        People Team
+                                        Coaches
                                     </label>
                                     <label class="radio" style="position: relative">
                                         <input class="radio custom-radio" ng-model="comment.visibility" name="visibilitOptions{{$index}}" value="1" type="radio" style="cursor: pointer;">
@@ -152,7 +152,7 @@
                             <div ng-show="!showCommentEdit">
                                 <div style="display: block;max-width: 100%;min-height: 48px;">
                                     <a ng-href="#/employees/{{comment.associated_object.id}}" style="cursor: pointer;color:#8b8b8b;"><img ng-src="{{ comment.associated_object.avatar_small }}" style="float: left; height: 48px; padding: 0 10px 0 0;"/></a>
-                                    <span ng-init="length=500" ng-bind-html-unsafe="comment.content | new_line | cut:true:length" style="line-height: 125%"></span> <span ng-show="comment.content.length>length" ng-init="showMoreButton=true"><a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a><a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a></span>
+                                    <span ng-init="length=500" ng-bind-html="comment.content | new_line | cut:true:length" style="line-height: 125%"></span> <span ng-show="comment.content.length>length" ng-init="showMoreButton=true"><a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a><a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a></span>
                                 </div>
                                 <ul class="feed-actions">
                                     <li class="feed-action"><a ng-click="showCommentInput = ! showCommentInput" class="feed-action" style="color: #8b8b8b;cursor: pointer;">comment</a><span ng-show="comment.subcomments.length>0"> ({{comment.subcomments.length}})</span></li>
@@ -182,7 +182,7 @@
                                       </div>
                                     </div>
                                     <div ng-show="!showSubCommentEdit">
-                                        <span ng-init="length=500" data-ng-bind-html-unsafe="subcomment.content | new_line | cut:true:length" style="margin-left:5px;line-height: 115%"></span> <span ng-show="subcomment.content.length>length" ng-init="showMoreButton=true"><a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a><a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a></span>
+                                        <span ng-init="length=500" data-ng-bind-html="subcomment.content | new_line | cut:true:length" style="margin-left:5px;line-height: 115%"></span> <span ng-show="subcomment.content.length>length" ng-init="showMoreButton=true"><a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a><a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a></span>
                                         <ul class="feed-actions">
                                             <li ng-show="subcomment.owner.id==currentUser.id" class="feed-action"><a ng-click="showSubCommentEdit=true" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
                                             <li ng-show="subcomment.owner.id==currentUser.id" class="feed-action"><a ng-click="deleteSubComment(comment, subcomment)" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></li>

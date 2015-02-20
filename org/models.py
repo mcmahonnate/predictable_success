@@ -229,13 +229,7 @@ class Team(models.Model):
     name = models.CharField(
         max_length=255,
     )
-    leader = models.ForeignKey(
-        'Employee',
-        related_name='+',
-        null=True,
-        blank=True,
-        default=None
-    )
+    leader = models.OneToOneField('Employee', related_name='+')
 
     def __str__(self):
         return self.name

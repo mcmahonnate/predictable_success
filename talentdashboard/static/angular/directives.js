@@ -522,7 +522,7 @@ angular.module('tdb.directives', [])
   }
 })
 
-.directive('modalEditEmployee',  ['Employee', 'EmployeeLeader', 'fileReader', 'PhotoUpload', function(Employee, EmployeeLeader, fileReader, PhotoUpload) {
+.directive('modalEditEmployee',  ['Employee', 'EmployeeLeader', 'fileReader', 'PhotoUpload', 'SitePreferences', function(Employee, EmployeeLeader, fileReader, PhotoUpload, SitePreferences) {
   return {
     restrict: 'E',
     scope: {
@@ -543,7 +543,10 @@ angular.module('tdb.directives', [])
         scope.show = false;
       };
     },
-    controller: function ($scope, $rootScope) {
+    controller: function ($scope, $rootScope, $location) {
+        SitePreferences.get(function (data) {
+            $scope.site_preferences = data;
+        });
         $scope.$watch("editEmployee.departure_date",function(newValue,OldValue,scope) {
             if (newValue) {
                 $scope.showDepartDatePicker = false;
@@ -569,50 +572,55 @@ angular.module('tdb.directives', [])
             $scope.editEmployee = angular.copy($scope.employee);
             $scope.edit_leadership = angular.copy($scope.leadership);
         }
-        $scope.save = function (){
-
-            if ($scope.employee.full_name != $scope.editEmployee.full_name) {
-                console.log('save name');
-                var data = {id: $scope.employee.id, _full_name: $scope.editEmployee.full_name};
-
-                Employee.update(data, function () {
-                    $scope.employee.full_name = $scope.editEmployee.full_name;
-                });
-            }
-            if ($scope.preview!=$scope.employee.avatar) {
-                console.log('save avatar');
-                var upload_data = {id: $scope.employee.id};
-                PhotoUpload($scope.model, $scope.files).update(upload_data, function(data) {
-                    $scope.employee.avatar = data.avatar;
-                });
-            }
-            if ($scope.edit_leadership.leader != $scope.leadership.leader) {
-                console.log('save leader');
-                var data = {id: $scope.employee.id, _leader_id: $scope.edit_leadership.leader.id};
-                EmployeeLeader.addNew(data, function (response) {
-                    $scope.edit_leadership = response;
-                    $scope.leadership = angular.copy($scope.edit_leadership);
-                });
-            }
-            if ($scope.editEmployee.hire_date != $scope.employee.hire_date) {
-                console.log('save hire date');
-                var hire_date = $rootScope.scrubDate($scope.editEmployee.hire_date ,false);
-                var data = {id: $scope.employee.id, _hire_date: hire_date};
-
-                Employee.update(data, function () {
-                    $scope.employee.hire_date= $scope.editEmployee.hire_date;
-                });
-            }
-            if ($scope.editEmployee.departure_date != $scope.employee.departure_date) {
-                console.log('save departure date');
-                var departure_date = $rootScope.scrubDate($scope.editEmployee.departure_date ,false);
-                var data = {id: $scope.employee.id, _departure_date: departure_date};
-
-                Employee.update(data, function () {
-                    $scope.employee.departure_date= $scope.editEmployee.departure_date;
-                });
-            }
+        var changeLocation = function(url, force) {
+          //this will mark the URL change
+          $location.path(url); //use $location.path(url).replace() if you want to replace the location instead
+          $scope = $scope || angular.element(document).scope();
         };
+        $scope.save = function (){
+            var saveOtherInfo = function(employee, addNew) {
+                $scope.employee = employee;
+                if ($scope.preview != $scope.employee.avatar) {
+                    var upload_data = {id: $scope.employee.id};
+                    PhotoUpload($scope.model, $scope.files).update(upload_data, function (data) {
+                        $scope.employee.avatar = data.avatar;
+                    });
+                }
+                if ($scope.edit_leadership.leader != $scope.leadership.leader) {
+                    var data = {id: $scope.employee.id, _leader_id: $scope.edit_leadership.leader.id};
+                    EmployeeLeader.addNew(data, function (response) {
+                        $scope.edit_leadership = response;
+                        $scope.leadership = angular.copy($scope.edit_leadership);
+                    });
+                }
+                if (addNew) {changeLocation('employees/' + $scope.employee.id, false);}
+            };
+            var saveEmployee = function(id) {
+                var data = {id: id};
+                if ($scope.employee.full_name != $scope.editEmployee.full_name) {
+                    data._full_name = $scope.editEmployee.full_name;
+                }
+                if ($scope.employee.coach != $scope.editEmployee.coach) {
+                    data._coach_id = $scope.editEmployee.coach.id;
+                }
+                if (+$scope.editEmployee.hire_date != +$scope.employee.hire_date) {
+                    var hire_date = $rootScope.scrubDate($scope.editEmployee.hire_date, false);
+                    data._hire_date = hire_date;
+                }
+                if ($scope.editEmployee.departure_date != $scope.employee.departure_date) {
+                    var departure_date = $rootScope.scrubDate($scope.editEmployee.departure_date, false);
+                    data._departure_date = departure_date;
+                }
+                if (id>0) {
+                    Employee.update(data, function(response){saveOtherInfo(response, false)});
+                } else {
+                    Employee.addNew(data, function(response){saveOtherInfo(response, true)});
+                }
+            };
+
+            saveEmployee($scope.employee.id);
+        };
+
         $scope.uploadFile = function(files){
             $scope.files = files;
             fileReader.readAsDataUrl($scope.files[0], $scope)

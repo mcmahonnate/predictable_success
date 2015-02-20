@@ -55,7 +55,7 @@
                             <label ng-show="showPeopleTeamVisibility" class="radio" style="position: relative">
                                 <input class="radio custom-radio" ng-model="newCommentVisibility" name="visibilityOptions" value="2" type="radio" style="cursor: pointer;">
                                 <span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
-                                People Team
+                                Coaches
                             </label>
                             <label class="radio" style="position: relative">
                                 <input class="radio custom-radio" ng-model="newCommentVisibility" name="visibilityOptions" value="1" type="radio" style="cursor: pointer;">
@@ -101,7 +101,7 @@
                                         </div>
                                     </div>
                                     <div ng-show="!showCommentEdit">
-                                        <span ng-init="length=500" data-ng-bind-html-unsafe="comment.content | new_line | cut:true:length" style="line-height: 125%"></span> <span ng-show="comment.content.length>length" ng-init="showMoreButton=true"><a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a><a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a></span>
+                                        <span ng-init="length=500" data-ng-bind-html="comment.content | new_line | cut:true:length" style="line-height: 125%"></span> <span ng-show="comment.content.length>length" ng-init="showMoreButton=true"><a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a><a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a></span>
                                         <ul class="feed-actions">
                                             <li class="feed-action"><a ng-click="showCommentInput=!showCommentInput" class="feed-action" style="color: #8b8b8b;cursor: pointer;">comment</a><span ng-show="comment.subcomments.length>0"> ({{comment.subcomments.length}})</span></li>
                                             <li ng-show="comment.owner.id==currentUser.id" class="feed-action"><a ng-click="showCommentEdit=true" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
@@ -128,7 +128,7 @@
                                                   </div>
                                                 </div>
                                                 <div ng-show="!showSubCommentEdit">
-                                                    <span ng-init="length=500" data-ng-bind-html-unsafe="subcomment.content | new_line | cut:true:length" style="margin-left:5px;line-height: 115%"></span> <span ng-show="subcomment.content.length>length" ng-init="showMoreButton=true"><a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a><a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a></span>
+                                                    <span ng-init="length=500" data-ng-bind-html="subcomment.content | new_line | cut:true:length" style="margin-left:5px;line-height: 115%"></span> <span ng-show="subcomment.content.length>length" ng-init="showMoreButton=true"><a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a><a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a></span>
                                                     <ul class="feed-actions">
                                                         <li ng-show="subcomment.owner.id==currentUser.id" class="feed-action"><a ng-click="showSubCommentEdit=true" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
                                                         <li ng-show="subcomment.owner.id==currentUser.id" class="feed-action"><a ng-click="deleteSubComment(comment, subcomment)" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></li>
@@ -216,9 +216,9 @@
                     <section class="widget-body rag-widget" style="padding: 24px;">
                       <div class="widget-canvas">
                         <div class="t-size-x16" style="min-width: 50%">
-                            <div ng-repeat="assessment in assessments | filter:{category.assessment.id:3} | greaterThan:299 | orderBy:'score': true">
+                            <div ng-repeat="assessment in assessments | filter:{category:{assessment:{id:3}}} | greaterThan:(299) | orderBy:'score': true">
                                   <div style="width:600px"><span style="border-bottom: 1px solid; padding-bottom: 3px;">{{ assessment.name }}<span style="color: #8b8b8b;"> ({{ assessment.score }})</span></span></div>
-                                  <div ng-bind-html-unsafe="assessment.description" style="margin:15px;width:560px"></div>
+                                  <div ng-bind-html="assessment.description" style="margin:15px;width:560px"></div>
 
                             </div>
                         </div>
@@ -232,9 +232,9 @@
                     <section class="widget-body rag-widget" style="padding: 24px;">
                       <div class="widget-canvas">
                         <div class="t-size-x16" style="min-width: 50%">
-                            <div ng-repeat="assessment in assessments | filter:{category.assessment.id:2} | orderBy:'category.id'">
+                            <div ng-repeat="assessment in assessments | filter:{category:{assessment:{id:2}}} | orderBy:'category.id'">
                                   <div style="width:600px"><span style="border-bottom: 1px solid; padding-bottom: 3px;">{{ assessment.name }} <span style="color: #8b8b8b;">{{ assessment.category.name }} ({{ assessment.score }})</span></span></div>
-                                  <div ng-bind-html-unsafe="assessment.description" style="margin:15px;width:560px"></div>
+                                  <div ng-bind-html="assessment.description" style="margin:15px;width:560px"></div>
 
                             </div>
                         </div>
@@ -250,7 +250,7 @@
                         <div class="t-size-x16" style="min-width: 50%">
                             <div>
                                   <div style="width:600px"><span style="border-bottom: 1px solid; padding-bottom: 3px;">{{ mbti.type | uppercase }}</span></div>
-                                  <div ng-bind-html-unsafe="mbti.description" style="margin:15px;width:560px"></div>
+                                  <div ng-bind-html="mbti.description" style="margin:15px;width:560px"></div>
                             </div>
                         </div>
                       </div>
@@ -270,9 +270,10 @@
                             </div>
 
                             <div style="max-width: 65%;">
-                                <span ng-if="happys.length == 0">--</span>
-                                <ul ng-if="happys.length > 0" rn-carousel rn-carousel-watch rn-carousel-index="$parent.happyIndex">
+                                <span ng-show="happys.length == 0">--</span>
+                                <ul ng-show="happys.length > 0" style="width:100%">
                                     <li ng-repeat="happy in happys" style="border-bottom:none">
+                                      <div style="display:block;width:175px;">
                                       <div style="width:45px">
                                           <span style="display:inline-block; vertical-align:middle; padding-left: 1px;" class="t-size-x40" ng-class="{'veryhappy': happy.assessment==5,'happy': happy.assessment==4,'indifferent': happy.assessment==3,'unhappy': happy.assessment==2,'veryunhappy': happy.assessment==1}"></span>
                                       </div>
@@ -285,13 +286,9 @@
                                               <span style="color:#8b8b8b;"><a ng-click="delete_happy(happy, $parent.$parent.$parent);" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></span>
                                           </span>
                                       </div>
+                                      </div>
                                     </li>
                                  </ul>
-                                <div ng-show="happys.length > 1">
-                                    <a ng-repeat="happy in happys | orderBy:'assigned_date'"  ng-click="$parent.happyIndex=$index" style="cursor: pointer;">
-                                        <div class="nav" style="width: 10px; height: 10px; -webkit-border-radius: 5em; -moz-border-radius: 5em;margin-right: 10px" ng-class="{'navveryhappy': happy.assessment==5,'navhappy': happy.assessment==4,'navindifferent': happy.assessment==3,'navunhappy': happy.assessment==2,'navveryunhappy': happy.assessment==1, categoryNavHighlightSmall: $index==$parent.happyIndex,categoryNavSmall: $index!=$parent.happyIndex}"/>
-                                    </a>
-                                </div>
                             </div>
                           </li>
                           <li class="clear" style="padding-top:10px;padding-bottom:10px;">
@@ -312,7 +309,12 @@
                             </div>
                             <div class="t-size-x16" id="team_lead" style="min-width: 50%"><a ng-href="#/employees/{{leadership.leader.id}}">{{ leadership.leader.full_name }}</a></div>
                           </li>
-
+                          <li ng-if="site_preferences.show_coaches" class="clear" style="padding-top:10px;padding-bottom:10px;">
+                            <div class="t-secondary" style="min-width: 35%">
+                              Coach
+                            </div>
+                            <div class="t-size-x16" id="coach" style="min-width: 50%"><a ng-href="#/employees/{{employee.coach.id}}">{{ employee.coach.full_name }}</a></div>
+                          </li>
                           <li class="clear" style="padding-top:10px;padding-bottom:10px;">
                             <!--<a ng-show="employeeEdit && !currentlyEditing" class="glyphicon glyphicon-edit" style="float:left;cursor:pointer;padding-right:10px"></a>
                             <span ng-show="employeeEdit && currentlyEditing" class="glyphicon glyphicon-edit-disable" style="padding-right:10px;float: left;"></span>-->
@@ -436,7 +438,7 @@
 
 				<div class="slide-pagination">
 					<div class="inner" id="pvp_pages">
-						<span class="slide-tally" data-ng-bind-html-unsafe="(pvpIndex + 1)"></span><span class="slide-tally"> of {{ pvps.length }}</span>
+						<span class="slide-tally" data-ng-bind-html="(pvpIndex + 1)"></span><span class="slide-tally"> of {{ pvps.length }}</span>
 						<nav>
 							<a ng-repeat="pvp in pvps" ng-class="{categoryNavHighlightSmall: $index==pvpIndex,categoryNavSmall: $index!=pvpIndex}" ng-click="selectPvP($index)" style="cursor: pointer;"><canvas employee-talent-category="{{pvp.talent_category}}"></a>
 
@@ -463,5 +465,4 @@
       </div><!-- .widget-inner -->
     </article>
   </div>
-  <modal-edit-employee employee='employee' leadership='leadership' employees='employees' show='modalShown' width='500px'><p>Modal Content Goes here<p>
-  </modal-edit-employee>
+  <modal-edit-employee employee='employee' leadership='leadership' employees='employees' show='modalShown' width='500px'></modal-edit-employee>

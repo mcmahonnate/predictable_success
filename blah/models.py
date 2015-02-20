@@ -149,7 +149,7 @@ class Comment(models.Model):
     content = models.TextField()
     created_date = models.DateTimeField(auto_now_add = True)
     modified_date = models.DateTimeField(auto_now = True)
-    visibility = models.IntegerField(choices=VISIBILITY_CHOICES, default = 2, null = False)
+    visibility = models.IntegerField(choices=VISIBILITY_CHOICES, default = 3, null = False)
 
     objects = CommentManager()
 

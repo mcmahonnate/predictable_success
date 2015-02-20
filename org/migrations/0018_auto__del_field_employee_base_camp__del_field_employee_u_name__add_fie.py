@@ -8,12 +8,6 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Removing unique constraint on 'Team', fields ['leader']
-        db.delete_unique(u'org_team', ['leader_id'])
-
-
-        # Changing field 'Team.leader'
-        db.alter_column(u'org_team', 'leader_id', self.gf('django.db.models.fields.related.ForeignKey')(null=True, to=orm['org.Employee']))
         # Deleting field 'Employee.base_camp'
         db.delete_column(u'org_employee', 'base_camp')
 
@@ -27,16 +21,6 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
-
-        # User chose to not deal with backwards NULL issues for 'Team.leader'
-        raise RuntimeError("Cannot reverse this migration. 'Team.leader' and its values cannot be restored.")
-        
-        # The following code is provided here to aid in writing a correct migration
-        # Changing field 'Team.leader'
-        db.alter_column(u'org_team', 'leader_id', self.gf('django.db.models.fields.related.OneToOneField')(unique=True, to=orm['org.Employee']))
-        # Adding unique constraint on 'Team', fields ['leader']
-        db.create_unique(u'org_team', ['leader_id'])
-
         # Adding field 'Employee.base_camp'
         db.add_column(u'org_employee', 'base_camp',
                       self.gf('django.db.models.fields.CharField')(default='', max_length=255, blank=True),
@@ -134,7 +118,7 @@ class Migration(SchemaMigration):
         u'org.team': {
             'Meta': {'object_name': 'Team'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'leader': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'+'", 'null': 'True', 'blank': 'True', 'to': u"orm['org.Employee']"}),
+            'leader': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'+'", 'unique': 'True', 'to': u"orm['org.Employee']"}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         }
     }

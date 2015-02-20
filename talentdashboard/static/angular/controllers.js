@@ -57,8 +57,11 @@ angular.module('tdb.controllers', [])
     };
 }])
 
-.controller('MyTeamEvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'MyTeamPvpEvaluation', 'Team', 'analytics', function($scope, $rootScope, $location, $routeParams, MyTeamPvpEvaluation, Team, analytics) {
+.controller('MyTeamEvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'MyTeamPvpEvaluation', 'Team', 'SitePreferences', 'analytics', function($scope, $rootScope, $location, $routeParams, MyTeamPvpEvaluation, Team, SitePreferences, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
+    SitePreferences.get(function (data) {
+        $scope.site_preferences = data;
+    });
     $scope.hideTeamMenu = true;
     $scope.kolbe_values=[0,1,2,3];
     $scope.vops_values=[0,320,6400,960];
@@ -108,8 +111,11 @@ angular.module('tdb.controllers', [])
     }
 }])
 
-.controller('EvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'PvpEvaluation', 'Team', 'analytics', function($scope, $rootScope, $location, $routeParams, PvpEvaluation, Team, analytics) {
+.controller('EvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'PvpEvaluation', 'Team', 'SitePreferences', 'analytics', function($scope, $rootScope, $location, $routeParams, PvpEvaluation, Team, SitePreferences, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
+    SitePreferences.get(function (data) {
+        $scope.site_preferences = data;
+    });
     $scope.hideTeamMenu = false;
     $scope.kolbe_values=[0,1,2,3];
     $scope.vops_values=[0,320,6400,960];
@@ -164,53 +170,35 @@ angular.module('tdb.controllers', [])
     $scope.teamLeads = TeamLeads.getCurrentEvaluationsForTeamLeads($scope.team_id)
 }])
 
-.controller('EmployeeListCtrl', ['$scope', '$routeParams', '$window', '$location', 'Employee', function($scope, $routeParams, $window, $location, Employee) {
+.controller('EmployeeListCtrl', ['$scope', '$routeParams', '$window', '$location', 'Employee', 'SitePreferences', function($scope, $routeParams, $window, $location, Employee, SitePreferences) {
     $scope.$window = $window;
     if (!$scope.employees)
     {
         $scope.employees = Employee.query({random:Math.floor((Math.random()*1000000000))}); //!important browser cache buster
     }
-
+    SitePreferences.get(function (data) {
+        $scope.site_preferences = data;
+    });
+    $scope.modalShown = false;
+    $scope.newEmployee = {id:0,full_name:'',hire_date:'',departure_date:'', avatar:'https://hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg'};
+    $scope.newLeadership = {id:0,leader:{full_name:''}};
+    $scope.toggleModal = function() {
+        $scope.modalShown = !$scope.modalShown;
+    };
 	$scope.employeeMenu = {show: false};
     $scope.filterMenu = {show: false};
 	$scope.teamMenu = {show: false};
     $scope.settingsMenu = {show: false};
     $scope.showAddEmployee = false;
     $scope.addEmployee = [];
-    if ($routeParams.id=='add'){
-        $scope.showAddEmployee = true;
-    }
+
 	$scope.startsWith  = function(expected, actual){
 		if(expected && actual){
 			return expected.toLowerCase().indexOf(actual.toLowerCase()) == 0;
 		}
 		return true;
 	}
-    $scope.addNewEmployee = function(firstname, lastname) {
-        var newEmployee = {};
-        newEmployee.full_name = firstname + ' ' + lastname;
-        var data = {id: 0,_full_name: newEmployee.full_name};
 
-        Employee.addNew(data, function(response) {
-            newEmployee.id = response.id;
-            $scope.employees.push(newEmployee);
-            $scope.showAddEmployee = false;
-            changeLocation('employees/' + newEmployee.id, false);
-        });
-    }
-    //be sure to inject $scope and $location somewhere before this
-    var changeLocation = function(url, force) {
-      //this will mark the URL change
-      $location.path(url); //use $location.path(url).replace() if you want to replace the location instead
-      $scope = $scope || angular.element(document).scope();
-      if(force || !$scope.$$phase) {
-        //this will kickstart angular if to notice the change
-        $scope.$apply();
-      }
-    };
-    $scope.cancelAddNewEmployee = function() {
-        $scope.showAddEmployee= false;
-    }
     $scope.navQuery='';
     $scope.toggleNavQuery = function () {
         $scope.openFilterMenu = false;
@@ -228,7 +216,6 @@ angular.module('tdb.controllers', [])
         var clickedOnNavQuery = elementClasses.contains('nav_query');
         if (!clickedOnNavQuery) {
             $scope.navQuery='';
-            $scope.$apply();
         }
     }
     $scope.toggleFilterMenu = function () {
@@ -345,11 +332,11 @@ angular.module('tdb.controllers', [])
 	}
 }])
 
-.controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', 'User', 'Employee', 'Engagement', 'EmployeeLeader', 'Attribute', 'CompSummary', 'PhotoUpload', '$http', 'analytics', 'fileReader','Assessment','EmployeeMBTI', function($rootScope, $scope, $location, $routeParams, $window, User, Employee, Engagement, EmployeeLeader, Attribute, CompSummary, PhotoUpload, $http, analytics, fileReader, Assessment, EmployeeMBTI) {
+.controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', 'User', 'Employee', 'Engagement', 'EmployeeLeader', 'Attribute', 'CompSummary', '$http', 'SitePreferences', 'analytics', 'fileReader','Assessment','EmployeeMBTI', function($rootScope, $scope, $location, $routeParams, $window, User, Employee, Engagement, EmployeeLeader, Attribute, CompSummary, $http, SitePreferences, analytics, fileReader, Assessment, EmployeeMBTI) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
-    if ($routeParams.id=='add') {
-        $scope.addNew = true;
-    }
+    SitePreferences.get(function (data) {
+        $scope.site_preferences = data;
+    });
     $scope.modalShown = false;
     $scope.toggleModal = function() {
         $scope.modalShown = !$scope.modalShown;
@@ -357,8 +344,8 @@ angular.module('tdb.controllers', [])
     $scope.has_vops = false;
     $scope.has_kolbe = false;
     $scope.has_myers_briggs = false;
-    $scope.show_bio = true;
-    $scope.show_discussions = false;
+    $scope.show_bio = false;
+    $scope.show_discussions = true;
     $scope.show_vops = false;
     $scope.show_kolbe = false;
     $scope.show_myers_briggs = false;
@@ -593,8 +580,8 @@ angular.module('tdb.controllers', [])
 .controller('CoachDetailCtrl', ['$scope', '$location', '$routeParams', 'Employee', 'Coachees', '$http', 'analytics', function($scope, $location, $routeParams, Employee, Coachees, $http, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
 
-    Coachees.query({ id: $routeParams.id }).$then(function(response) {
-        $scope.coachees = response.data;
+    Coachees.query({ id: $routeParams.id }).$promise.then(function(response) {
+        $scope.coachees = response;
         var i = 0;
         angular.forEach($scope.coachees, function (employee) {
             employee.index = i;
@@ -721,8 +708,8 @@ angular.module('tdb.controllers', [])
 
 .controller('EmployeePvpEvaluationsCtrl', ['$scope', '$routeParams', 'PvpEvaluation', function($scope, $routeParams, PvpEvaluation) {
 	$scope.pvpIndex = 0;
-    PvpEvaluation.getAllEvaluationsForEmployee($routeParams.id).$then(function(response) {
-		$scope.pvps = response.data;
+    PvpEvaluation.getAllEvaluationsForEmployee($routeParams.id).$promise.then(function(response) {
+		$scope.pvps = response;
 	});
 
 	$scope.selectPvP = function(index) {
@@ -733,8 +720,8 @@ angular.module('tdb.controllers', [])
 .controller('ReportsCtrl', ['$scope', '$location', '$routeParams', 'PvpEvaluation', 'analytics', function($scope, $location, $routeParams, PvpEvaluation, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
 
-    PvpEvaluation.query({current_round: true}).$then(function(response) {
-            $scope.evaluations = response.data;
+    PvpEvaluation.query({current_round: true}).$promise.then(function(response) {
+            $scope.evaluations = response;
 
             var i = 0;
             angular.forEach($scope.evaluations, function (evaluation) {
@@ -898,8 +885,8 @@ angular.module('tdb.controllers', [])
         $scope.talentCategoryReport = data;
     });
 
-    HappinessReport.getReportForCompany($scope.days_ago, true).$then(function(response) {
-        $scope.neglectedEmployees = response.data;
+    HappinessReport.getReportForCompany($scope.days_ago, true).$promise.then(function(response) {
+        $scope.neglectedEmployees = response;
         angular.forEach($scope.neglectedEmployees, function(neglected) {
             neglected.happy = Engagement.getCurrentEngagement(neglected.employee.id);
         });
@@ -945,8 +932,11 @@ angular.module('tdb.controllers', [])
     });
 }])
 
-.controller('TeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'TalentCategoryReport', 'SalaryReport', 'Team', 'TeamMembers', 'TeamMBTI', 'analytics', function($scope, $location, $routeParams, TalentCategoryReport, SalaryReport, Team, TeamMembers, TeamMBTI, analytics) {
+.controller('TeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'TalentCategoryReport', 'SalaryReport', 'Team', 'TeamMembers', 'TeamMBTI', 'SitePreferences', 'analytics', function($scope, $location, $routeParams, TalentCategoryReport, SalaryReport, Team, TeamMembers, TeamMBTI, SitePreferences, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
+    SitePreferences.get(function (data) {
+        $scope.site_preferences = data;
+    });
     $scope.teamId = $routeParams.id;
     SalaryReport.getReportForTeam($routeParams.id, function(data) {
         $scope.salaryReport = data;
@@ -1039,11 +1029,11 @@ angular.module('tdb.controllers', [])
     $scope.originalComment.subcomments = [];
     $scope.employee=[];
 
-    Comment.get({ id: $scope.commentId }).$then(function(response) {
-        $scope.comment = response.data;
+    Comment.get({ id: $scope.commentId }).$promise.then(function(response) {
+        $scope.comment = response;
         $scope.originalComment = angular.copy($scope.comment);
         SubComments.query({ id: $scope.comment.id }).$then(function(response) {
-                $scope.comment.subcomments = response.data;
+                $scope.comment.subcomments = response;
                 $scope.originalComment.subcomments = angular.copy($scope.comment.subcomments);
             }
         );
@@ -1123,20 +1113,20 @@ angular.module('tdb.controllers', [])
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     $scope.showPeopleTeamVisibility = false;
 
-    Comment.query().$then(function(response) {
+    Comment.query().$promise.then(function(response) {
         if ($rootScope.currentUser.can_coach_employees || $rootScope.currentUser.can_view_company_dashboard) {
             $scope.newCommentVisibility = 2;
             $scope.showPeopleTeamVisibility = true;
         }
-        $scope.comments = response.data;
+        $scope.comments = response;
         $scope.originalComments = angular.copy($scope.comments);
         angular.forEach($scope.comments, function(comment) {
             var index = $scope.comments.indexOf(comment);
             var original_comment = $scope.originalComments[index];
             comment.subcomments = [];
             original_comment.subcomments = [];
-            SubComments.query({ id: comment.id }).$then(function(response) {
-                    comment.subcomments = response.data;
+            SubComments.query({ id: comment.id }).$promise.then(function(response) {
+                    comment.subcomments = response;
                     original_comment.subcomments = angular.copy(comment.subcomments);
                 }
             );
@@ -1150,7 +1140,7 @@ angular.module('tdb.controllers', [])
             $scope.currentGroup = date;
             return showHeader;
         }
-    });
+    },function ( error ) {console.log ('error')});
     $scope.toggleChildCommentTextExpander = function (comment) {
         $window.onclick = function (event) {
             if (!comment.newSubCommentText) {
@@ -1288,8 +1278,8 @@ angular.module('tdb.controllers', [])
 }])
 
 .controller('EmployeeToDoListCtrl', ['$scope', '$routeParams', '$window', 'EmployeeToDo', 'ToDo', 'User', function($scope, $routeParams, $window, EmployeeToDo, ToDo, User) {
-    EmployeeToDo.query({ id: $routeParams.id }).$then(function(response) {
-            $scope.todos = response.data;
+    EmployeeToDo.query({ id: $routeParams.id }).$promise.then(function(response) {
+            $scope.todos = response;
         }
     );
     $scope.completed_todos = EmployeeToDo.query({ id: $routeParams.id, completed: true });
@@ -1492,8 +1482,8 @@ angular.module('tdb.controllers', [])
             var original_comment = $scope.originalComments[index];
             comment.subcomments = [];
             original_comment.subcomments = [];
-            SubComments.query({ id: comment.id }).$then(function(response) {
-                    comment.subcomments = response.data;
+            SubComments.query({ id: comment.id }).$promise.then(function(response) {
+                    comment.subcomments = response;
                     original_comment.subcomments = angular.copy(comment.subcomments);
                 }
             );
@@ -1662,8 +1652,8 @@ angular.module('tdb.controllers', [])
 
             comment.subcomments = [];
             original_comment.subcomments = [];
-            SubComments.query({ id: comment.id }).$then(function(response) {
-                    comment.subcomments = response.data;
+            SubComments.query({ id: comment.id }).$promise.then(function(response) {
+                    comment.subcomments = response;
                     original_comment.subcomments = angular.copy(comment.subcomments);
                 }
             );
@@ -1783,8 +1773,8 @@ angular.module('tdb.controllers', [])
 
                     comment.subcomments = [];
                     original_comment.subcomments = [];
-                    SubComments.query({ id: comment.id }).$then(function(response) {
-                            comment.subcomments = response.data;
+                    SubComments.query({ id: comment.id }).$promise.then(function(response) {
+                            comment.subcomments = response;
                             original_comment.subcomments = angular.copy(comment.subcomments);
                         }
                     );
@@ -1927,9 +1917,9 @@ angular.module('tdb.controllers', [])
     $scope.currentPvP = null;
     $scope.isAnimating = false;
 
-    PvpEvaluation.getToDos().$then(function(response) {
+    PvpEvaluation.getToDos().$promise.then(function(response) {
         $scope.currentItemIndex = 0;
-        $scope.pvps = response.data.map(function(pvp) {
+        $scope.pvps = response.map(function(pvp) {
             if (!pvp.comment) {
                 pvp.comment = {originalContent: "", content: "", id: -1};
             } else {
@@ -1940,8 +1930,8 @@ angular.module('tdb.controllers', [])
         $scope.last_index = $scope.pvps.length -1;
 	});
 
-    PvpDescriptions.query().$then(function(response) {
-            $scope.pvp_descriptions = response.data;
+    PvpDescriptions.query().$promise.then(function(response) {
+            $scope.pvp_descriptions = response;
         }
     );
 
@@ -1970,9 +1960,7 @@ angular.module('tdb.controllers', [])
             } else {
                 EmployeeComments.save(data, function (response) {
                     _pvp.comment.id = response.id;
-                    console.log(response);
                     pvp_data = {id: _pvp.id, _potential: _pvp.potential, _performance: _pvp.performance, _comment_id: _pvp.comment.id};
-                    console.log(pvp_data);
                     PvpEvaluation.update(pvp_data, function(){
                     });
                 });
@@ -1992,7 +1980,6 @@ angular.module('tdb.controllers', [])
         $scope.isAnimating = true;
         if($scope.isDirty()) {
             $scope.save();
-            console.log('save');
         }
         $scope.click_prev=false;
         $scope.click_next=true;
@@ -2013,7 +2000,6 @@ angular.module('tdb.controllers', [])
         $scope.isAnimating = true;
         if($scope.isDirty()) {
             $scope.save();
-            console.log('save');
         }
         $scope.click_next=false;
         $scope.click_prev=true;

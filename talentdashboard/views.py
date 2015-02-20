@@ -10,6 +10,8 @@ from .decorators import *
 from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team, get_talent_category_report_for_lead
 from pvp.salaryreports import get_salary_report_for_team, get_salary_report_for_all_employees, get_salary_report_for_lead
 from pvp.models import PvpDescription
+from preferences.models import SitePreferences
+from django.contrib.sites.models import Site
 from blah.commentreports import get_employees_with_comments
 from engagement.engagementreports import get_employees_with_happiness_scores
 from blah.models import Comment
@@ -376,7 +378,10 @@ class EmployeeCommentList(APIView):
         model_name = request.DATA["_model_name"]
         content_type = ContentType.objects.get(model=model_name)
         object_id = request.DATA["_object_id"]
-        visibility = request.DATA["_visibility"]
+        if "_visibility" in request.DATA:
+            visibility = request.DATA["_visibility"]
+        else:
+            visibility = 3
         employee = Employee.objects.get(id=pk)
         if employee is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
@@ -384,7 +389,7 @@ class EmployeeCommentList(APIView):
         content = request.DATA["_content"]
         if content_type == comment_type:
             comment = Comment.objects.get(id=object_id)
-            sub_comment = Comment.objects.add_comment(comment, content, 3, owner)
+            sub_comment = Comment.objects.add_comment(comment, content, visibility, owner)
             serializer = SubCommentSerializer(sub_comment, many=False)
             notify = True
             if notify:
@@ -674,27 +679,26 @@ class EmployeeDetail(APIView):
 
         if int(pk) == 0 and "_full_name" in request.DATA:
             employee = Employee()
-            employee.full_name = request.DATA["_full_name"]
             employee.display = True
-            employee.save()
             expire_view_cache('employee-list')
-            serializer = EmployeeSerializer(employee, many=False)
-            return Response(serializer.data)
-
-        employee = Employee.objects.get(id=pk)
+        else:
+            employee = Employee.objects.get(id=pk)
         if employee is not None:
             if "_full_name" in request.DATA:
                 employee.full_name = request.DATA["_full_name"]
             if "_hire_date" in request.DATA:
                 employee.hire_date = request.DATA["_hire_date"]
+            if "_coach_id" in request.DATA:
+                coach_id = request.DATA["_coach_id"]
+                coach = Employee.objects.get(id=coach_id)
+                employee.coach = coach
             if "_departure_date" in request.DATA:
                 employee.departure_date = request.DATA["_departure_date"]
                 expire_view_cache('employee-list')
             employee.save()
-            return Response(None)
-
+            serializer = EmployeeSerializer(employee, many=False)
+            return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
-
 
 class ImageUploadView(APIView):
     parser_classes = (MultiPartParser,FormParser)
@@ -753,6 +757,16 @@ def coachee_list(request):
 def user_status(request):
     serializer = UserSerializer(request.user)
     return Response(serializer.data)
+
+@api_view(['GET'])
+def preferences_site(request):
+    try:
+        site = Site.objects.get_current()
+        site_preferences = SitePreferences.objects.get(site=site)
+        serializer = SitePreferencesSerializer(site_preferences)
+        return Response(serializer.data)
+    except Indicator.DoesNotExist:
+        return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
 def current_site(request):

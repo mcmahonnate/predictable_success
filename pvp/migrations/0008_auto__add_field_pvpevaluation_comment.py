@@ -10,7 +10,7 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         # Adding field 'PvpEvaluation.comment'
         db.add_column(u'pvp_pvpevaluation', 'comment',
-                      self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='+', null=True, to=orm['blah.Comment']),
+                      self.gf('django.db.models.fields.related.ForeignKey')(blank=True, null=True, to=orm['blah.Comment']),
                       keep_default=False)
 
 

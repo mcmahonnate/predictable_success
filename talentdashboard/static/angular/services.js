@@ -2,8 +2,8 @@ angular.module('tdb.services', ['ngResource'])
 
 .factory('Employee', ['$resource', '$http', function($resource, $http) {
     var actions = {
-        'addNew': { method:'PUT', data:{full_name:'@full_name'}, isArray: false },
-        'update': { method:'PUT', data:{full_name:'@full_name', hire_date: '@hire_date', departure_date: '@departure_date'}, isArray: false },
+        'addNew': { method:'PUT', data:{full_name:'@full_name', hire_date: '@hire_date', coach_id: '@coach_id'}, isArray: false },
+        'update': { method:'PUT', data:{full_name:'@full_name', hire_date: '@hire_date', departure_date: '@departure_date', coach_id: '@coach_id'}, isArray: false },
         'potentialReviewers': { method:'GET', url: '/api/v1/employees/potential-reviewers\\/', isArray: true }
     };
     var res = $resource('/api/v1/employees/:id/', {id:'@id'}, actions);
@@ -194,7 +194,7 @@ angular.module('tdb.services', ['ngResource'])
                 },
                 data: { model: model, files: files },
                 isArray: false,
-                headers:{'Content-Type':false}
+                headers:{'Content-Type':undefined}
             },
             'remove': { method:'DELETE' }
         };
@@ -325,6 +325,11 @@ angular.module('tdb.services', ['ngResource'])
     var currentUser = $resource('api/v1/user-status/');
 
     return currentUser;
+}])
+
+.factory('SitePreferences', ['$resource', '$http', function($resource, $http) {
+    res = $resource('api/v1/preferences/site/');
+    return res;
 }])
 
 .factory('Site', ['$resource', '$http', function($resource, $http) {

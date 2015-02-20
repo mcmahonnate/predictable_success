@@ -4,15 +4,15 @@
     <div class="clear" id="dashboard-admin-bar">
 		<div ng-controller="EmployeeListCtrl" class="inner dashboard-sized-el" style="max-width: 970px;">
 			<div style="display: block; color: #cbcbcb; font-weight: 700; padding-left:10px;padding-top: 20px;font-size: 16px; width:150px; float:left">
-				<a href="/" style="color:#fff;"><span>{{currentSite.name}}</span></a>
+				<a ng-href="#/" style="color:#fff;"><span>{{currentSite.name}}</span></a>
 			</div>
             <div id="menu-item-image" ng-class="{'menu-item-active':openSettingsMenu}">
                 <img class="settings_menu" ng-src="{{currentUser.employee.avatar_small}}" ng-click="toggleSettingsMenu()" style="height:27px;"/>
-                <div id="selection-shell" ng-show="openSettingsMenu" style="display: none;margin-left:-248px">
+                <div id="selection-shell" ng-show="openSettingsMenu" style="margin-left:-248px">
                     <div id="selection-title">Account</div>
                     <div id="selection-list">
                         <ul style="padding: 10px 10px;">
-                            <li ng-if="currentUser.can_coach_employees">
+                            <li ng-if="currentUser.can_coach_employees && site_preferences.show_coaches">
                                 <a class="dashboard" href="#/coach/" style="height:27px;">My Coachees</a>
                             </li>
                             <li>
@@ -24,7 +24,7 @@
             </div>
             <div id="menu-item" ng-if="currentUser.can_view_company_dashboard" ng-class="{'menu-item-active':openEmployeeMenu}">
 			  <span class="glyphicon-regular glyphicon-employees employee_menu" ng-click="toggleEmployeeMenu()"></span>
-              <div id="selection-shell" ng-show="openEmployeeMenu" style="display: none;margin-left: -195px;">
+              <div id="selection-shell" ng-show="openEmployeeMenu" style="margin-left: -195px;">
                 <div id="selection-title">Find Employees</div>
                   <div id="selection-list">
                     <ul>
@@ -43,24 +43,7 @@
                   <div id="selection-list">
                     <ul style="padding: 10px 10px;">
                         <li ng-show="!showAddEmployee">
-                            <a class="dashboard employee_menu" ng-click="showAddEmployee=true"><span class="glyphicon-regular glyphicon-add-employee employee_menu"></span><span style="margin-left:10px;" class="employee_menu">Add Employee</span></a>
-                        </li>
-                        <li ng-show="showAddEmployee">
-                            <div id="selection-list">
-                                <div style="margin: 10px">
-                                    <span style="color:#cbcbcb;margin-right:10px;font-size:15px;">Enter Employee Name</span>
-                                </div>
-                                <div style="margin:20px 10px;">
-                                    <input ng-model="addEmployee.first_name" class="employee_menu" placeholder="First Name" style="border: 0;border-radius: 7px;position: relative; width: 225px; height: 13px;overflow:hidden;font-size: 15px;color:#333;padding: 8px;"/>
-                                </div>
-                                <div style="margin:20px 10px;">
-                                    <input ng-model="addEmployee.last_name" class="employee_menu" placeholder="Last Name" style="border: 0;border-radius: 7px;position: relative; width: 225px; height: 13px;overflow:hidden;font-size: 15px;color:#333;padding: 8px;"/>
-                                </div>
-                                <div id="editActions" style="margin:20px 20px 10px 13px;">
-                                    <button class="button small blue employee_menu" ng-disabled="(!addEmployee.first_name || !addEmployee.last_name)" style="margin:5px;height:31px;width:62px;font-size:15px" ng-click="addNewEmployee(addEmployee.first_name, addEmployee.last_name)">Add</button>
-                                    <button class="button small orange employee_menu" style="margin:5px;height:31px;width:62px;font-size:15px" ng-click="cancelAddNewEmployee()">Cancel</button>
-                                </div>
-                            </div>
+                            <a class="dashboard employee_menu" ng-click="toggleModal();"><span class="glyphicon-regular glyphicon-add-employee employee_menu"></span><span style="margin-left:10px;" class="employee_menu">Add Employee</span></a>
                         </li>
                     </ul>
                   </div>
@@ -69,7 +52,7 @@
             </div>
             <div id="menu-item" ng-if="currentUser.can_view_company_dashboard" ng-class="{'menu-item-active':openFilterMenu}">
               <span class="glyphicon-regular glyphicon-filter filter_menu" ng-click="toggleFilterMenu()"></span>
-              <div id="selection-shell" ng-show="openFilterMenu" style="display: none;margin-left: -142px;">
+              <div id="selection-shell" ng-show="openFilterMenu" style="margin-left: -142px;">
                 <div id="selection-title">Filter</div>
                 <div id="selection-list">
                     <ul>
@@ -97,12 +80,12 @@
             </div>
             <div id="menu-item" ng-if="currentUser.can_view_company_dashboard" ng-class="{'menu-item-active':openTeamMenu}" ng-controller="TeamListCtrl">
               <span class="glyphicon-regular glyphicon-chart team_menu" ng-click="toggleTeamMenu()"></span>
-			  <div id="selection-shell" ng-show="openTeamMenu" style="display: none;margin-left: -89px;">
+			  <div id="selection-shell" ng-show="openTeamMenu" style="margin-left: -89px;">
                 <div id="selection-title">Company Report</div>
                 <div id="selection-list">
                     <ul style="padding: 10px 10px;">
                         <li>
-                            <a class="dashboard" href="/">{{currentSite.name}}</a>
+                            <a class="dashboard" ng-href="#/">{{currentSite.name}}</a>
                         </li>
                     </ul>
                 </div>
@@ -117,14 +100,14 @@
 			  </div>
 			</div>
             <div id="menu-item">
-              <a href="/"><span class="glyphicon-regular glyphicon-home" ng-click="toggleTeamMenu()"></span></a>
+              <a ng-href="#/"><span class="glyphicon-regular glyphicon-home" ng-click="toggleTeamMenu()"></span></a>
             </div>
             <div ng-if="currentUser.can_view_company_dashboard" style="display: block; color: #cbcbcb; font-weight: 700; padding: 12px 145px 10px 12px;font-size: 16px; width:225px; float:right">
                 <div style="position:relative;">
                     <div class="glyphicon glyphicon-search" style="position: absolute;padding: 5px 10px;pointer-events: none;"></div>
                     <input ng-click="toggleNavQuery()" class="search-input nav_query" style="padding-left: 34px;width: 250px;background-color:#2a2a2a;height:18px;color:#cbcbcb;" ng-model="navQuery" type="text" placeholder="Search Employees..."/>
                 </div>
-                <div id="selection-shell" ng-show="navQuery!=''" style="display: none;margin-left: -30px;width:350px;">
+                <div id="selection-shell" ng-show="navQuery!=''" style="margin-left: -30px;width:350px;">
                     <div id="selection-title">Employees</div>
                       <div id="selection-list">
                         <ul style="padding:0px 10px 10px 10px;">
@@ -138,6 +121,7 @@
                     </div>
                 </div>
 		    </div>
+            <modal-edit-employee employee='newEmployee' leadership='newLeadership' employees='employees' show='modalShown' width='500px'></modal-edit-employee>
         </div>
     </div>
   </header>

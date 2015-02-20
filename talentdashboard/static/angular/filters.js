@@ -37,7 +37,9 @@ filters.filter('unique', ['$parse', function ($parse) {
 
 filters.filter('noCents', function() {
   return function(value) {
-    return value.replace(/\.\d+/, '');
+    if (value) {
+        return value.replace(/\.\d+/, '');
+    };
   };
 });
 
