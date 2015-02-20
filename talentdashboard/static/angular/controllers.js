@@ -1904,7 +1904,7 @@ angular.module('tdb.controllers', [])
     };
 }])
 
-.controller('PvpEvaluationTodosCtrl', ['$scope', '$filter', '$routeParams', '$window', '$timeout', 'PvpEvaluation', 'PvpDescriptions', 'EmployeeComments', 'User', function($scope, $filter, $routeParams, $window, $timeout, PvpEvaluation, PvpDescriptions, EmployeeComments, User) {
+.controller('PvpEvaluationTodosCtrl', ['$scope', '$filter', '$routeParams', '$window', '$interval', 'PvpEvaluation', 'PvpDescriptions', 'EmployeeComments', 'User', function($scope, $filter, $routeParams, $window, $interval, PvpEvaluation, PvpDescriptions, EmployeeComments, User) {
     $scope.pvps = [];
     $scope.currentItemIndex = null;
     $scope.isDirty = false;
@@ -1974,7 +1974,13 @@ angular.module('tdb.controllers', [])
 
     $scope.isDirty = function() {
         return $scope.originalPotential != $scope.currentPvP.potential || $scope.originalPerformance != $scope.currentPvP.performance || $scope.currentPvP.comment.content || $scope.currentPvP.comment.originalContent;
-    }
+    };
+
+    $interval(function() {
+        if ($scope.isDirty){
+            $scope.save();
+        }
+    }, 2000);
 
     $scope.forward = function() {
         $scope.isAnimating = true;

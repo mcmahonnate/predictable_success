@@ -473,6 +473,7 @@ angular.module('tdb.directives', [])
                     pvp.potential = square.potential;
                     pvp.performance = square.performance;
                     findDescription();
+                    scope.save();
                     break;
                 }
             }
