@@ -1,11 +1,13 @@
 from django.db import models
-from django.db.models.query import QuerySet
 from org.models import Employee
 
 
 class FeedbackRequestManager(models.Manager):
     def pending_for_reviewer(self, reviewer):
         return self.filter(reviewer=reviewer).filter(is_complete=False)
+
+    def pending_for_requester(self, requester):
+        return self.filter(requester=requester).filter(is_complete=False)
 
 
 class FeedbackRequest(models.Model):
@@ -24,6 +26,7 @@ class FeedbackSubmission(models.Model):
     reviewer = models.ForeignKey(Employee, related_name='feedback_submissions')
     excels_at = models.TextField(blank=True)
     could_improve_on = models.TextField(blank=True)
+    has_been_delivered = models.BooleanField()
 
     def save(self, *args, **kwargs):
         if self.feedback_request:

@@ -1,0 +1,29 @@
+<div>
+    <md-toolbar class="md-theme-light">
+        <h1 class="md-toolbar-tools">
+            <span>Submit Feedback</span>
+        </h1>
+    </md-toolbar>
+    <div layout="column" layout-margin layout-fill layout-padding>
+        <div ng-show="hasTodos === false">
+            <h3>No one has asked you for feedback.</h3>
+        </div>
+        <div ng-show="hasTodos === true">
+            <h3>These people asked you for feedback.</h3>
+        </div>
+        <md-list ng-show="hasTodos === true">
+            <md-item ng-repeat="item in todos">
+                <md-item-content>
+                    <div class="md-tile-left">
+                        <md-button ng-href="#/todo/{{ item.request_id }}"
+                                   class="md-raised md-primary">Give feedback
+                        </md-button>
+                    </div>
+                    <div class="md-tile-content">
+                        {{ item.name }}
+                    </div>
+                </md-item-content>
+            </md-item>
+        </md-list>
+    </div>
+</div>

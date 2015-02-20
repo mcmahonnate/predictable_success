@@ -288,7 +288,7 @@ class UserSerializer(serializers.ModelSerializer):
         return False
 
     def get_can_coach_employees(self, obj):
-        if obj.is_coach() | obj.is_superuser:
+        if (obj.employee is not None and obj.employee.is_coach()) | obj.is_superuser:
                 return True
         return False
 
@@ -596,6 +596,8 @@ class FeedbackSubmissionPostSerializer(serializers.ModelSerializer):
         if feedback_request:
             subject = attrs['subject']
             reviewer = attrs['reviewer']
+            if feedback_request.is_complete:
+                raise serializers.ValidationError("Request has already been completed.")
             if feedback_request.requester != subject:
                 raise serializers.ValidationError("Subject is not the same as the feedback requester.")
             if feedback_request.reviewer != reviewer:

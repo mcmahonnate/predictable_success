@@ -1014,6 +1014,13 @@ def incomplete_feedback_requests_for_reviewer(request):
     serializer = FeedbackRequestSerializer(pending_requests, many=True)
     return Response(serializer.data)
 
+@api_view(['GET'])
+def incomplete_feedback_requests_for_requester(request):
+    requester = Employee.objects.get_from_user(request.user)
+    pending_requests = FeedbackRequest.objects.pending_for_requester(requester)
+    serializer = FeedbackRequestSerializer(pending_requests, many=True)
+    return Response(serializer.data)
+
 
 class FeedbackSubmissionView(APIView):
     def get_object(self, pk):
@@ -1023,11 +1030,23 @@ class FeedbackSubmissionView(APIView):
             raise Http404
 
     def get(self, request, pk, format=None):
+        """
+        Get a FeedbackSubmission
+        ---
+        request_serializer: FeedbackSubmissionSerializer
+        response_serializer: FeedbackSubmissionSerializer
+        """
         feedback = self.get_object(pk)
         serializer = FeedbackSubmissionSerializer(feedback)
         return Response(serializer.data)
 
     def post(self, request, pk, format=None):
+        """
+        Create a FeedbackSubmission
+        ---
+        request_serializer: FeedbackSubmissionPostSerializer
+        response_serializer: FeedbackSubmissionSerializer
+        """
         add_current_employee_to_request(request, 'reviewer')
         serializer = FeedbackSubmissionPostSerializer(data=request.DATA)
         if serializer.is_valid():
@@ -1035,5 +1054,18 @@ class FeedbackSubmissionView(APIView):
             response_serializer = FeedbackSubmissionSerializer(serializer.object)
             return Response(response_serializer.data)
         return Response(serializer.errors, status=400)
+
+
+@api_view(['GET'])
+def potential_reviewers(request):
+    all_employees = set(Employee.objects.all())
+    requester = Employee.objects.get_from_user(request.user)
+    current_requests = FeedbackRequest.objects.pending_for_requester(requester)
+    current_reviewers = set([feedback_request.reviewer for feedback_request in current_requests])
+    requester = {Employee.objects.get_from_user(request.user)}
+    employee_set = all_employees - current_reviewers - requester
+    potential_reviewers = sorted(employee_set, key=lambda employee: employee.full_name)
+    serializer = MinimalEmployeeSerializer(potential_reviewers, many=True)
+    return Response(serializer.data)
 
 
