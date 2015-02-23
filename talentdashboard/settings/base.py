@@ -137,7 +137,6 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django_extensions',
     'talentdashboard',
-    'south',
     'rest_framework',
     'blah',
     'org',
