@@ -36,7 +36,7 @@ class PvpEvaluationTest(TestCase):
 
     def assert_talent_category(self, potential=0, performance=0, expected=0):
         pvp = self.create_pvp(potential=potential, performance=performance)
-        actual = pvp.get_talent_category()
+        actual = pvp.talent_category()
         self.assertEqual(actual, expected)
 
     def test_str(self):

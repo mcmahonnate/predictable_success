@@ -148,7 +148,7 @@ class Employee(models.Model):
     def _get_current_pvp(self):
         try:
             obj = self.pvp.latest('evaluation_round__date')
-            return obj.get_talent_category()
+            return obj.talent_category()
         except:
             return None
 

@@ -1362,6 +1362,7 @@ angular.module('tdb.controllers', [])
         var due_date = null;
         if ($scope.currentToDo.due_date) {
             due_date = $rootScope.scrubDate($scope.currentToDo.due_date, false);
+            console.log(due_date);
         }
 
         var data = {id: $scope.currentToDo.id, _description: $scope.currentToDo.description, _completed: $scope.currentToDo.completed, _assigned_to_id: assigned_to_id, _due_date: due_date, _employee_id: $scope.currentToDo.employee_id, _owner_id: $scope.currentToDo.created_by.id};
