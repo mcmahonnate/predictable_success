@@ -16,6 +16,7 @@ class FeedbackRequest(models.Model):
     expiration_date = models.DateField(null=True, blank=True)
     requester = models.ForeignKey(Employee, related_name='feedback_requests')
     reviewer = models.ForeignKey(Employee, related_name='requests_for_feedback')
+    message = models.TextField(blank=True)
     is_complete = models.BooleanField()
 
 
