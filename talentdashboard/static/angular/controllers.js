@@ -129,10 +129,10 @@ angular.module('tdb.controllers', [])
     $scope.talentCategory = $routeParams.talent_category;
     $scope.happy = $routeParams.happy;
     $scope.days_since_happy = $routeParams.days_since_happy;
-    $scope.fact_finder = $routeParams.fact_finder;
-    $scope.follow_thru = $routeParams.follow_thru;
-    $scope.quick_start = $routeParams.quick_start;
-    $scope.implementor = $routeParams.implementor;
+    $scope.fact_finder = angular.copy($scope.kolbe_fact_finder_labels);
+    $scope.follow_thru = angular.copy($scope.kolbe_follow_thru_labels);
+    $scope.quick_start = angular.copy($scope.kolbe_quick_start_labels);
+    $scope.implementor = angular.copy($scope.kolbe_implementor_labels);
     $scope.vops = [];
     $scope.teamName='';
     $scope.staleDays=360;
