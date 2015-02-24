@@ -1016,6 +1016,7 @@ class FeedbackRequestView(APIView):
         serializer = FeedbackRequestPostSerializer(data=request.DATA, many=has_multiple_items)
         if serializer.is_valid():
             serializer.save()
+            # TODO: Send email
             response_serializer = FeedbackRequestSerializer(serializer.object, many=has_multiple_items)
             return Response(response_serializer.data)
         else:

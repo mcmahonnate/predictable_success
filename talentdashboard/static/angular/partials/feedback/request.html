@@ -1,41 +1,46 @@
-<div ng-controller="RequestFeedbackCtrl">
-    <md-toolbar class="md-theme-light">
-        <h1 class="md-toolbar-tools">
-            <span>Ask for Feedback</span>
-        </h1>
-    </md-toolbar>
-    <div layout="column" layout-margin layout-fill layout-padding>
-        <div>
-            <section>
-                <md-subheader class="md-primary">People you've already asked for feedback:</md-subheader>
-                <div>
-                    <span ng-repeat="request in pendingRequests">
-                        {{ $last ? 'and ' : '' }}{{ request.reviewer.full_name }}{{ $last ? '' : ', ' }}
-                    </span>
-                </div>
-            </section>
-
-            <section>
-                <md-subheader class="md-primary">To:</md-subheader>
-                <md-input-container>
-                    <ui-select
-                            multiple
-                            ng-model="search.selectedReviewers"
-                            reset-search-input="true"
-                            theme="bootstrap"
-                            style="width:50%"
-                            >
-                        <ui-select-match placeholder="Select some people...">{{$item.full_name}}</ui-select-match>
-                        <ui-select-choices
-                                repeat="reviewer in potentialReviewers | propsFilter: {full_name: $select.search}">
-                            <div ng-bind-html="reviewer.full_name | highlight: $select.search"></div>
-                        </ui-select-choices>
-                    </ui-select>
-                </md-input-container>
-            </section>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="alert alert-success" ng-show="showSuccessAlert">Your feedback request was submitted.</div>
+        <div ng-show="pendingRequests.length">
+            <h2>
+                You've already asked the following
+                {{ pendingRequests.length > 1 ? "people" : "person" }}
+                for feedback
+            </h2>
+            <div>
+                <span ng-repeat="request in pendingRequests">
+                    {{ $last ? 'and ' : '' }}{{ request.reviewer.full_name }}{{ $last ? '' : ', ' }}
+                </span>
+            </div>
         </div>
         <div>
-                <md-button ng-click="submit()" class="md-raised md-primary">Ask for feedback!</md-button>
+            <h2>
+                Who
+                <span ng-show="pendingRequests.length">else</span>
+                would you like to receive feedback from?
+            </h2>
+            <ui-select
+                    id="to"
+                    multiple
+                    ng-model="search.selectedReviewers"
+                    reset-search-input="true"
+                    theme="bootstrap"
+                    style="width:50%"
+                    class="form-control"
+                    >
+                <ui-select-match placeholder="Select...">{{$item.full_name}}</ui-select-match>
+                <ui-select-choices
+                        repeat="reviewer in potentialReviewers | propsFilter: {full_name: $select.search}">
+                    <div ng-bind-html="reviewer.full_name | highlight: $select.search"></div>
+                </ui-select-choices>
+            </ui-select>
+            <textarea class="form-control" placeholder="Add a message that will be sent to your recipients (optional)."
+                      ng-model="message" style="width: 50%"
+                      rows="10"></textarea>
+
+            <div>
+                <button class="btn" type="button" ng-click="submit()">Ask for feedback!</button>
+            </div>
         </div>
     </div>
 </div>

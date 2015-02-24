@@ -10,7 +10,7 @@ var app = angular.module('feedback', [
             function ($routeProvider) {
                 $routeProvider.
                     when('/request/', {templateUrl: '/static/angular/partials/feedback/request.html', controller: 'RequestFeedbackCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
-                    when('/todo/', {templateUrl: '/static/angular/partials/feedback/feedback_todos.html', controller: 'FeedbackTodoCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
+                    when('/todo/', {templateUrl: '/static/angular/partials/feedback/todos.html', controller: 'FeedbackTodoCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
                     when('/todo/:id', {templateUrl: '/static/angular/partials/feedback/submit.html', controller: 'SubmitFeedbackCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
                     otherwise({redirectTo: '/'});
             }])

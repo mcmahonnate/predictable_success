@@ -1,0 +1,17 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div ng-show="hasTodos === false">
+            <h2>No one has asked you for feedback</h2>
+        </div>
+        <div ng-show="hasTodos === true">
+            <h2>These people have asked you for feedback</h2>
+        </div>
+    </div>
+
+    <ul class="list-group" ng-show="hasTodos === true">
+        <li class="list-group-item" ng-repeat="item in todos">
+            <a ng-href="#/todo/{{ item.id }}">{{ item.requester.full_name }}</a>
+        </li>
+    </ul>
+
+</div>
