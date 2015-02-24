@@ -1905,7 +1905,8 @@ angular.module('tdb.controllers', [])
     };
 }])
 
-.controller('PvpEvaluationTodosCtrl', ['$scope', '$filter', '$routeParams', '$window', '$interval', 'PvpEvaluation', 'PvpDescriptions', 'EmployeeComments', 'User', function($scope, $filter, $routeParams, $window, $interval, PvpEvaluation, PvpDescriptions, EmployeeComments, User) {
+.controller('PvpEvaluationTodosCtrl', ['$scope', '$filter', '$routeParams', '$window', '$interval', '$location', 'PvpEvaluation', 'PvpDescriptions', 'EmployeeComments', 'User', 'analytics', function($scope, $filter, $routeParams, $window, $interval, $location, PvpEvaluation, PvpDescriptions, EmployeeComments, User, analytics) {
+    analytics.trackPage($scope, $location.absUrl(), $location.url());
     $scope.pvps = [];
     $scope.currentItemIndex = null;
     $scope.isDirty = false;
