@@ -1,5 +1,6 @@
 from django.db import models
 from org.models import Employee
+from blah.models import Comment
 
 HAPPINESS_CHOICES = (
     (1, 'Very unhappy'),
@@ -14,6 +15,7 @@ class Happiness(models.Model):
     assessed_date = models.DateField(auto_now_add = True)
     employee = models.ForeignKey(Employee, related_name='happys')
     assessment = models.IntegerField(choices=HAPPINESS_CHOICES)
+    comment = models.ForeignKey(Comment, null=True, blank=True)
 
     def assessment_verbose(self):
         return get_display(self.assessment, HAPPINESS_CHOICES)
