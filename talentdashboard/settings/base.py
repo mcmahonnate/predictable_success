@@ -151,6 +151,7 @@ INSTALLED_APPS = (
     'kpi',
     'feedback',
     'preferences',
+    'djcelery_email',
 )
 
 REST_FRAMEWORK = {
@@ -192,6 +193,8 @@ LOGIN_EXEMPT_URLS = (
     r'^accounts/password/reset/done/$',
     r'^media/(?P<path>.*)$'
 )
+
+EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 
 def get_cache():
   import os

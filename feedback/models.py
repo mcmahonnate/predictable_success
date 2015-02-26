@@ -1,5 +1,8 @@
 from django.db import models
+from django.template.loader import render_to_string
+from django.core.mail import send_mail
 from org.models import Employee
+from django.conf import settings
 
 
 class FeedbackRequestManager(models.Manager):
@@ -18,6 +21,19 @@ class FeedbackRequest(models.Model):
     reviewer = models.ForeignKey(Employee, related_name='requests_for_feedback')
     message = models.TextField(blank=True)
     is_complete = models.BooleanField()
+
+    def send_notification_email(self):
+        recipient_email = self.requester.email
+        if not recipient_email:
+            return
+        context = {
+            'recipient_full_name': self.reviewer.full_name,
+            'requester_full_name': self.requester.full_name,
+            'custom_message': self.message,
+        }
+        subject = "Someone wants your feedback!"
+        plain_text_message = render_to_string('email/feedback_request_notification.txt', context)
+        send_mail(subject, plain_text_message, settings.DEFAULT_FROM_EMAIL, [recipient_email])
 
 
 class FeedbackSubmission(models.Model):

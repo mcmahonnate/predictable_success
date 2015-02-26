@@ -2,6 +2,7 @@
 from .base import *
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+CELERY_ALWAYS_EAGER = True
 
 DATABASES = {
     'default': {

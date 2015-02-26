@@ -40,6 +40,7 @@ from django.http import HttpRequest
 from django.utils.cache import get_cache_key
 from django.core.cache import cache
 from django.conf import settings
+from feedback.tasks import send_feedback_request_email
 
 logger = getLogger('talentdashboard')
 
@@ -1016,7 +1017,12 @@ class FeedbackRequestView(APIView):
         serializer = FeedbackRequestPostSerializer(data=request.DATA, many=has_multiple_items)
         if serializer.is_valid():
             serializer.save()
-            # TODO: Send email
+            if has_multiple_items:
+                for item in serializer.object:
+                    send_feedback_request_email.delay(item)
+            else:
+                send_feedback_request_email.delay(serializer.object)
+
             response_serializer = FeedbackRequestSerializer(serializer.object, many=has_multiple_items)
             return Response(response_serializer.data)
         else:
