@@ -586,6 +586,7 @@ class FeedbackRequestPostSerializer(serializers.ModelSerializer):
     expiration_date = serializers.DateField(required=False, blank=True)
     requester = serializers.PrimaryKeyRelatedField()
     reviewer = serializers.PrimaryKeyRelatedField()
+    message = serializers.CharField(required=False, blank=True)
     is_complete = serializers.BooleanField(required=False)
 
     class Meta:

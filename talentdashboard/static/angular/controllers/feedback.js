@@ -15,6 +15,7 @@ angular.module('feedback.controllers', [])
             function ($scope, $interval, FeedbackRequest, Employee) {
                 $scope.selectedItem = null;
                 $scope.searchText = "";
+                $scope.message = "";
                 $scope.pendingRequests = FeedbackRequest.pending();
                 $scope.potentialReviewers = Employee.potentialReviewers();
                 $scope.search = {
@@ -24,7 +25,7 @@ angular.module('feedback.controllers', [])
                     var requests = [];
                     for (var i = 0; i < $scope.search.selectedReviewers.length; i++) {
                         var reviewer = $scope.search.selectedReviewers[i];
-                        var request = { reviewer: reviewer.id };
+                        var request = { reviewer: reviewer.id, message: $scope.message };
                         requests.push(request);
                     }
                     FeedbackRequest.save(requests, function (data) {

@@ -1,4 +1,10 @@
-Hello, {{ recipient_full_name }}! {{ requester_full_name }} has asked you for feedback.
+Hello, {{ recipient_full_name }}!
 
-To leave feedback, please visit this page:
+{{ requester_full_name }} has asked you for feedback.
+{% if custom_message %}
+They included the following message in their request:
+
+{{ custom_message }}
+{% endif %}
+To leave feedback for {{ requester_full_name }}, please visit this page: {{ response_url }}
 

@@ -194,8 +194,6 @@ LOGIN_EXEMPT_URLS = (
     r'^media/(?P<path>.*)$'
 )
 
-EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
-
 def get_cache():
   import os
   try:
@@ -218,3 +216,7 @@ def get_cache():
     }
 
 CACHES = get_cache()
+
+FEEDBACK_APP_SETTINGS = {
+    'respond_to_feedback_request_url_template': '{scheme}://{host}/feedback/#/todo/{id}'
+}

@@ -7,13 +7,22 @@ from celery import shared_task
 
 @shared_task
 def send_feedback_request_email(feedback_request):
-    recipient_email = feedback_request.requester.email
+    recipient_email = feedback_request.reviewer.email
     if not recipient_email:
         return
+    response_url_params = {
+        'scheme': 'http',
+        'host': 'localhost',
+        'id': feedback_request.id,
+    }
+    response_url_template = settings.FEEDBACK_APP_SETTINGS['respond_to_feedback_request_url_template']
+    response_url = response_url_template.format(**response_url_params)
+
     context = {
         'recipient_full_name': feedback_request.reviewer.full_name,
         'requester_full_name': feedback_request.requester.full_name,
         'custom_message': feedback_request.message,
+        'response_url': response_url,
     }
     subject = "Someone wants your feedback!"
     plain_text_message = render_to_string('email/feedback_request_notification.txt', context)

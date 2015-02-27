@@ -15,7 +15,7 @@ DATABASES = {
     }
 }
 
-EMAIL_BACKEND = 'talentdashboard.backend.SSLEmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_USE_SSL = True
 EMAIL_HOST = 'mail.dfrntlabs.com'
 EMAIL_PORT = 465
