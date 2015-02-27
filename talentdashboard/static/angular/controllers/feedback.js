@@ -3,7 +3,7 @@ angular.module('feedback.controllers', [])
         'MenuCtrl',
         ['$scope', '$location',
             function ($scope, $location) {
-                $scope.menuClass = function(page) {
+                $scope.menuClass = function (page) {
                     var current = $location.path().replace(/\//g, '');
                     return page === current ? "active" : "";
                 };
@@ -13,7 +13,6 @@ angular.module('feedback.controllers', [])
         'RequestFeedbackCtrl',
         ['$scope', '$interval', 'FeedbackRequest', 'Employee',
             function ($scope, $interval, FeedbackRequest, Employee) {
-                $scope.selectedItem = null;
                 $scope.searchText = "";
                 $scope.message = "";
                 $scope.pendingRequests = FeedbackRequest.pending();
@@ -31,11 +30,10 @@ angular.module('feedback.controllers', [])
                     FeedbackRequest.save(requests, function (data) {
                         Array.prototype.unshift.apply($scope.pendingRequests, data);
                         $scope.potentialReviewers = Employee.potentialReviewers();
-                        var multiple = $scope.search.selectedReviewers.length > 1;
                         $scope.search.selectedReviewers = [];
 
                         $scope.showSuccessAlert = true;
-                        $interval(function() {
+                        $interval(function () {
                             $scope.showSuccessAlert = false;
                         }, 1000, 1);
                     });
@@ -65,7 +63,7 @@ angular.module('feedback.controllers', [])
         ]
     )
     .controller(
-        'SubmitFeedbackCtrl',
+        'ReplyToFeedbackRequestCtrl',
         ['$scope', '$routeParams', '$interval', '$location', 'FeedbackRequest', 'FeedbackSubmission',
             function ($scope, $routeParams, $interval, $location, FeedbackRequest, FeedbackSubmission) {
                 $scope.request = null;
@@ -75,7 +73,7 @@ angular.module('feedback.controllers', [])
                     $scope.request = response;
                 });
 
-                $scope.cancel = function() {
+                $scope.cancel = function () {
                     $location.path('/todo');
                 };
 
@@ -89,13 +87,36 @@ angular.module('feedback.controllers', [])
 
                     submission.$save(function (s) {
                         $scope.showSuccessAlert = true;
-                        $interval(function() {
+                        $interval(function () {
                             $scope.showSuccessAlert = false;
                         }, 1000, 1);
 
                         $location.path('/todo');
                     });
                 }
+            }
+        ]
+    )
+    .controller(
+        'SubmitFeedbackCtrl',
+        ['$scope', '$location', 'Employee', 'FeedbackSubmission',
+            function ($scope, $location, Employee, FeedbackSubmission) {
+                $scope.searchText = "";
+                $scope.feedback = new FeedbackSubmission({
+                    excels_at: "",
+                    could_improve_on: "",
+                    subject: null
+                });
+                $scope.employees = Employee.query();
+                $scope.search = {
+                    selectedEmployee: null
+                };
+                $scope.submit = function () {
+                    $scope.feedback.subject = $scope.search.selectedEmployee.id;
+                    $scope.feedback.$save(function (f) {
+                        $location.path('/todo');
+                    });
+                };
             }
         ]
     )

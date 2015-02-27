@@ -1072,6 +1072,8 @@ class FeedbackSubmissionView(APIView):
         serializer = FeedbackSubmissionPostSerializer(data=request.DATA)
         if serializer.is_valid():
             serializer.save()
+            # feedback_request = serializer.object
+            # pending_feedback_requests = FeedbackRequest.objects.pending_for_requester(feedback_request.requester).pending_for_reviewer()
             response_serializer = FeedbackSubmissionSerializer(serializer.object)
             return Response(response_serializer.data)
         return Response(serializer.errors, status=400)
