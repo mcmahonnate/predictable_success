@@ -369,13 +369,14 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
 class HappinessSerializer(serializers.HyperlinkedModelSerializer):
     assessed_by = MinimalEmployeeSerializer()
     employee = MinimalEmployeeSerializer()
+    comment = EmployeeCommentSerializer()
 
     def get_assessment_verbose(self, obj):
         return obj.assessment_verbose
 
     class Meta:
         model = Happiness
-        fields = ('id', 'employee', 'assessment', 'assessment_verbose', 'assessed_by', 'assessed_date')
+        fields = ('id', 'employee', 'assessment', 'assessment_verbose', 'assessed_by', 'assessed_date', 'comment')
 
 
 class AssessmentTypeSerializer(serializers.ModelSerializer):

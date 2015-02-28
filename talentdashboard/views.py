@@ -252,11 +252,8 @@ class PvpEvaluationDetail(APIView):
         pvp.potential = request.DATA["_potential"]
         if "_comment_id" in request.DATA:
             comment_id = request.DATA["_comment_id"]
-            logger.debug(comment_id)
             comment = Comment.objects.get(id=comment_id)
-            logger.debug(comment.content)
             pvp.comment = comment
-            logger.debug(pvp.comment.content)
         pvp.save()
         serializer = PvpEvaluationSerializer(pvp,context={'request': request})
         return Response(serializer.data)
@@ -296,6 +293,10 @@ class EmployeeEngagement(APIView):
         happy.employee = employee
         happy.assessed_by = assessed_by
         happy.assessment = int(assessment)
+        if "_comment_id" in request.DATA:
+            comment_id = request.DATA["_comment_id"]
+            comment = Comment.objects.get(id=comment_id)
+            happy.comment = comment
         happy.save()
         serializer = HappinessSerializer(happy, many=False, context={'request': request})
         return Response(serializer.data)
