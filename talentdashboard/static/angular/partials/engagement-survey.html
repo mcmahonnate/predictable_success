@@ -1,0 +1,140 @@
+<div class="container">
+    <div style="margin:50px 0 30px 0">
+        <div style="margin:20px 0;font-size:18px;font-family: Lato,Helvetica,Arial,sans-serif;color:white;">How professionally happy are you?</div>
+        <div style="width:200px;height:32px;margin: 5px 0px;font-size: 0;display:inline-block" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all">
+            <div class="ui-range-unit ui-corner-left" ng-class="{scoreVeryUnhappy: happy>=1}" ng-click="happy=1"></div>
+            <div class="ui-range-unit" ng-click="happy=2" ng-class="{scoreUnhappy: happy>=2}"></div>
+            <div class="ui-range-unit" ng-click="happy=3" ng-class="{scoreIndifferent: happy>=3}"></div>
+            <div class="ui-range-unit" ng-click="happy=4" ng-class="{scoreHappy: happy>=4}"></div>
+            <div class="ui-range-unit ui-corner-right" ng-click="happy=5" ng-class="{scoreVeryHappy: happy==5}"></div>
+        </div>
+        <div style="display:inline-block;margin-left: 20px;">
+            <span ng-class="{veryunhappy: happy==1,unhappy: happy==2,indifferent: happy==3,happy: happy==4,veryhappy: happy==5}"></span>
+        </div>
+    </div>
+    <div class="comment-area" style="display: block;margin:20px 0;-webkit-border-radius: 2px;moz-border-radius: 3px;-ms-border-radius: 3px;-o-border-radius: 3px;border-radius: 3px;border: 1px solid #c1c1c1;background-color:white;">
+        <textarea class="text" rows="1" cols="50" placeholder="What would get you to pure elation? What's getting in your way?" style="width:97.5%;height: 132px;font-size:18px;padding:5px;border: none;resize:vertical;"></textarea>
+    </div>
+    <div style="margin-top:40px">
+        <button class='ng-modal-button' ng-click=''>Submit</button>
+    </div>
+</div>
+
+<style>
+  .comment-area {
+      width:492px;
+  }
+  .container {
+      width:500px;
+      margin-left: auto;
+      margin-right: auto;
+  }
+  body {
+      background-color: #2C3E50;
+  }
+  @media only screen and (max-device-width: 480px) {
+      body {
+        max-width: 325px;
+      }
+      .comment-area {
+          width:292px;
+      }
+      .container {
+          width: 300px;
+          margin-left: auto;
+          margin-right: auto;
+      }
+  }
+
+  .ui-range-unit {
+    width: 19%;
+    height: 100%;
+    display: inline-block;
+    border-width: 1px;
+    border-color: lightgrey;
+    border-style: solid;
+    margin-top: -1px;
+    cursor: pointer;
+    -moz-transition: all 0.2s ease-out;
+    -o-transition: all 0.2s ease-out;
+    -ms-transition: all 0.2s ease-out;
+    -webkit-transition: all 0.2s ease-out;
+    transition: all 0.2s ease-out;
+  }
+  .scoreVeryUnhappy {
+      border-color: white;
+      background-color: red;
+  }
+  .scoreUnhappy {
+      border-color: white;
+      background-color: orange;
+  }
+  .scoreIndifferent {
+      border-color: white;
+      background-color: yellow;
+  }
+  .scoreHappy {
+      border-color: white;
+      background-color: limegreen;
+  }
+  .scoreVeryHappy {
+      border-color: white;
+      background-color: green;
+  }
+  .ui-widget-content {
+      border-color: lightgrey;
+      border-width: 2px;
+  }
+  .ui-slider .ui-slider-handle {
+      cursor: pointer;
+      height:38px;
+      width:38px;
+
+  }
+
+  .ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br {
+    border-bottom-right-radius: 15px;
+  }
+  .ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl {
+    border-bottom-left-radius: 15px;
+  }
+  .ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr {
+    border-top-right-radius: 15px;
+  }
+  .ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl {
+    border-top-left-radius: 15px;
+  }
+  .ui-slider-range {
+      background: #585858;
+      opacity: .9;
+      overflow: hidden;
+
+  }
+  .ui-slider-label {
+    position: absolute;
+    top: 16px;
+    color: white;
+    font-size: 13px;
+  }
+  .ng-modal-button {
+    font-size: 17px;
+    font-family: Lato,Helvetica,Arial,sans-serif;
+    padding: 1em 2em;
+    outline: none;
+    font-weight: 400;
+    border: none;
+    color: #fff;
+    background: #e74c3c;
+    cursor: pointer;
+    margin: 10px;
+    border-radius: 6px;
+    -moz-transition: all 0.2s ease-out;
+    -o-transition: all 0.2s ease-out;
+    -ms-transition: all 0.2s ease-out;
+    -webkit-transition: all 0.2s ease-out;
+    transition: all 0.2s ease-out;
+  }
+  .ng-modal-button:hover {
+    background: #ea6153;
+  }
+</style>

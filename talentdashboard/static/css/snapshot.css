@@ -804,34 +804,34 @@ button.btn[disabled], fieldset[disabled] .btn {
     font-size: 40px;
     text-shadow: none;
     color: #008000;
-    content: "\0041";
+    content: "\0044";
 }
 .happy:before {
     font-family: 'Emoticons';
     font-size: 40px;
     text-shadow: none;
-    color: #91fa00;
-    content: "\0044";
+    color: limegreen;
+    content: "\0041";
 }
 .indifferent:before {
     font-family: 'Emoticons';
     font-size: 40px;
     text-shadow: none;
-    color: #ffca00;
+    color: yellow;
     content: "\0043";
 }
 .unhappy:before {
     font-family: 'Emoticons';
     font-size: 40px;
     text-shadow: none;
-    color: #ff4600;
+    color: orange;
     content: "\0028";
 }
 .veryunhappy:before {
     font-family: 'Emoticons';
     font-size: 40px;
     text-shadow: none;
-    color: #ff0000;
+    color: red;
     content: "\0057";
 }
 .nohappydata:before {

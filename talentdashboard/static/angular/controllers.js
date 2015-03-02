@@ -1024,6 +1024,10 @@ angular.module('tdb.controllers', [])
     };
 }])
 
+.controller('EngagementSurveyCtrl', ['$scope', function($scope){
+    $scope.happy=0;
+}])
+
 .controller('DiscussionDetailCtrl', ['$scope', '$location', '$filter', '$routeParams', '$window', 'EmployeeComments', 'Employee', 'Comment', 'SubComments', 'User', 'analytics', function($scope, $location, $filter, $routeParams, $window, EmployeeComments, Employee, Comment, SubComments, User, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     $scope.commentId = $routeParams.id;
