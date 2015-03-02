@@ -2,21 +2,21 @@
     <div style="margin:50px 0 30px 0">
         <div style="margin:20px 0;font-size:18px;font-family: Lato,Helvetica,Arial,sans-serif;color:white;">How professionally happy are you?</div>
         <div style="width:200px;height:32px;margin: 5px 0px;font-size: 0;display:inline-block" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all">
-            <div class="ui-range-unit ui-corner-left" ng-class="{scoreVeryUnhappy: happy>=1}" ng-click="happy=1"></div>
-            <div class="ui-range-unit" ng-click="happy=2" ng-class="{scoreUnhappy: happy>=2}"></div>
-            <div class="ui-range-unit" ng-click="happy=3" ng-class="{scoreIndifferent: happy>=3}"></div>
-            <div class="ui-range-unit" ng-click="happy=4" ng-class="{scoreHappy: happy>=4}"></div>
-            <div class="ui-range-unit ui-corner-right" ng-click="happy=5" ng-class="{scoreVeryHappy: happy==5}"></div>
+            <div class="ui-range-unit ui-corner-left" ng-click="happy.assessment=1" ng-class="{scoreVeryUnhappy: happy.assessment>=1}"></div>
+            <div class="ui-range-unit" ng-click="happy.assessment=2" ng-class="{scoreUnhappy:happy.assessment>=2}"></div>
+            <div class="ui-range-unit" ng-click="happy.assessment=3" ng-class="{scoreIndifferent: happy.assessment>=3}"></div>
+            <div class="ui-range-unit" ng-click="happy.assessment=4" ng-class="{scoreHappy: happy.assessment>=4}"></div>
+            <div class="ui-range-unit ui-corner-right" ng-click="happy.assessment=5" ng-class="{scoreVeryHappy: happy.assessment==5}"></div>
         </div>
         <div style="display:inline-block;margin-left: 20px;">
             <span ng-class="{veryunhappy: happy==1,unhappy: happy==2,indifferent: happy==3,happy: happy==4,veryhappy: happy==5}"></span>
         </div>
     </div>
     <div class="comment-area" style="display: block;margin:20px 0;-webkit-border-radius: 2px;moz-border-radius: 3px;-ms-border-radius: 3px;-o-border-radius: 3px;border-radius: 3px;border: 1px solid #c1c1c1;background-color:white;">
-        <textarea class="text" rows="1" cols="50" placeholder="What would get you to pure elation? What's getting in your way?" style="width:97.5%;height: 132px;font-size:18px;padding:5px;border: none;resize:vertical;"></textarea>
+        <textarea class="text" ng-model="happy.comment.content" rows="1" cols="50" placeholder="What would get you to pure elation? What's getting in your way?" style="width:97.5%;height: 132px;font-size:18px;padding:5px;border: none;resize:vertical;"></textarea>
     </div>
     <div style="margin-top:40px">
-        <button class='ng-modal-button' ng-click=''>Submit</button>
+        <button class='ng-modal-button' ng-click='save_engagement()'>Submit</button>
     </div>
 </div>
 

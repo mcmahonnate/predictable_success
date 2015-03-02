@@ -1024,10 +1024,6 @@ angular.module('tdb.controllers', [])
     };
 }])
 
-.controller('EngagementSurveyCtrl', ['$scope', function($scope){
-    $scope.happy=0;
-}])
-
 .controller('DiscussionDetailCtrl', ['$scope', '$location', '$filter', '$routeParams', '$window', 'EmployeeComments', 'Employee', 'Comment', 'SubComments', 'User', 'analytics', function($scope, $location, $filter, $routeParams, $window, EmployeeComments, Employee, Comment, SubComments, User, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     $scope.commentId = $routeParams.id;
@@ -1910,6 +1906,22 @@ angular.module('tdb.controllers', [])
                     deleteSuccess();
                 });
         }
+    };
+}])
+
+.controller('EngagementSurveyCtrl', ['$scope', '$routeParams', 'Employee', 'EmployeeComments','Engagement', function($scope, $routeParams, Employee, EmployeeComments, Engagement){
+    $scope.happy = {assessment:0};
+    $scope.happy.comment = {visibility:3,content:''};
+    $scope.employee_id = $routeParams.id;
+    $scope.save_engagement = function() {
+        $scope.happy.comment.modified_date = new Date().toJSON();
+        var data = {id: $scope.employee_id, _object_id: $scope.employee_id, _content: $scope.happy.comment.content, _visibility: $scope.happy.comment.visibility, _model_name:'employee'};
+        EmployeeComments.save(data, function (response) {
+            var engagement_data = {id: $scope.employee_id, _assessment: $scope.happy.assessment, _assessed_by_id: $scope.employee_id, _comment_id:response.id};
+            Engagement.addNew(engagement_data, function() {
+
+            });
+        });
     };
 }])
 
