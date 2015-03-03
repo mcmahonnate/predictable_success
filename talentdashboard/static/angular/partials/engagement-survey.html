@@ -9,7 +9,7 @@
             <div class="ui-range-unit ui-corner-right" ng-click="happy.assessment=5" ng-class="{scoreVeryHappy: happy.assessment==5}"></div>
         </div>
         <div style="display:inline-block;margin-left: 20px;">
-            <span ng-class="{veryunhappy: happy==1,unhappy: happy==2,indifferent: happy==3,happy: happy==4,veryhappy: happy==5}"></span>
+            <span ng-class="{veryunhappy: happy.assessment==1,unhappy: happy.assessment==2,indifferent: happy.assessment==3,happy: happy.assessment==4,veryhappy: happy.assessment==5}"></span>
         </div>
     </div>
     <div class="comment-area" style="display: block;margin:20px 0;-webkit-border-radius: 2px;moz-border-radius: 3px;-ms-border-radius: 3px;-o-border-radius: 3px;border-radius: 3px;border: 1px solid #c1c1c1;background-color:white;">

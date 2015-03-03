@@ -5,6 +5,7 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.permissions import AllowAny
 from .serializers import *
 from .decorators import *
 from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team, get_talent_category_report_for_lead
@@ -258,6 +259,26 @@ class PvpEvaluationDetail(APIView):
         serializer = PvpEvaluationSerializer(pvp,context={'request': request})
         return Response(serializer.data)
 
+class EngagementSurvey(APIView):
+    permission_classes = (AllowAny,)
+    def post(self, request, pk, format=None):
+        assessment = request.DATA["_assessment"]
+        employee = Employee.objects.get(id=pk)
+        visibility = 3
+
+        if employee is None:
+            return Response(None, status=status.HTTP_404_NOT_FOUND)
+        happy = Happiness()
+        happy.employee = employee
+        happy.assessed_by = employee
+        happy.assessment = int(assessment)
+        if "_content" in request.DATA:
+            content = request.DATA["_content"]
+            comment = employee.comments.add_comment(content, visibility, employee.user)
+            happy.comment = comment
+        happy.save()
+        serializer = HappinessSerializer(happy, many=False, context={'request': request})
+        return Response(serializer.data)
 
 class EmployeeEngagement(APIView):
     def get(self, request, pk, format=None):
@@ -652,7 +673,6 @@ class EmployeeDetail(APIView):
             path = hashlib.md5(iri_to_uri(url))
             cache_key = 'views.decorators.cache.cache_page.%s.%s.%s.%s' % (
                 key_prefix, 'GET', path.hexdigest(), ctx.hexdigest())
-            logger.debug(cache_key)
             if settings.USE_I18N:
                 cache_key += '.%s' % (language or get_language())
             if cache_key:

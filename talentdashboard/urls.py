@@ -17,7 +17,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^$', TemplateView.as_view(template_name="index.html"), name='home'),
-    url(r'^logout/$', logout,{'next_page': '/login/'}),
+    url(r'^logout/$', logout,{'next_page': '/account/login/'}),
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^account/login/?$',login,{'template_name':'login.html', 'authentication_form':CustomAuthenticationForm}, name='login'),
@@ -35,7 +35,7 @@ urlpatterns = patterns('',
     url(r'api/v1/users/$', (auth_employee('AllAccess')(UserList.as_view()))),
     url(r'api/v1/coaches/$', (auth_employee_cache(60*15, 'AllAccess','CoachAccess','TeamLeadAccess')(CoachList.as_view())), name='coach-list'),
     url(r'api/v1/coachees/$', coachee_list),
-
+    url(r'api/v1/engagement-survey/(?P<pk>.*)', EngagementSurvey.as_view()),
     url(r'api/v1/employees/$', (auth_employee_cache(60*15, 'AllAccess'))(auth_employee('AllAccess')(EmployeeList.as_view())), name='employee-list'),
     url(r'api/v1/employees/(?P<pk>.*)', (auth_employee('AllAccess')(EmployeeDetail.as_view())), name='employee-detail'),
     url(r'api/v1/leaderships/employees/(?P<pk>.*)', (auth_employee('AllAccess')(LeadershipDetail.as_view()))),
