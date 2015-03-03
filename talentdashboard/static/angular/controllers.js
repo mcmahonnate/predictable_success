@@ -1912,9 +1912,11 @@ angular.module('tdb.controllers', [])
 .controller('EngagementSurveyCtrl', ['$scope', '$routeParams', 'EngagementSurvey', function($scope, $routeParams, EngagementSurvey){
     $scope.happy = {assessment:0};
     $scope.happy.comment = {visibility:3,content:''};
-    $scope.employee_id = $routeParams.id;
+    $scope.employee_id = $routeParams.employeeId;
+    $scope.survey_id = $routeParams.surveyId;
     $scope.save_engagement = function() {
-        var data = {id: $scope.employee_id, _assessment: $scope.happy.assessment, _content:$scope.happy.comment.content};
+        var data = {id: $scope.employee_id, _survey_id: $scope.survey_id, _assessment: $scope.happy.assessment, _content:$scope.happy.comment.content};
+        console.log(data);
         EngagementSurvey.save(data, function (response) {
 
         });

@@ -16,7 +16,7 @@ from blah.commentreports import get_employees_with_comments
 from engagement.engagementreports import get_employees_with_happiness_scores
 from blah.models import Comment
 from todo.models import Task
-from engagement.models import Happiness
+from engagement.models import Happiness, generate_survey_url
 from kpi.models import Performance, Indicator
 from assessment.models import EmployeeAssessment, MBTI
 from org.teamreports import get_mbti_report_for_team
@@ -24,6 +24,7 @@ import datetime
 from datetime import date, timedelta
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
+from django.core.signing import Signer
 from django.utils.log import getLogger
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.contrib.sites.models import get_current_site
@@ -259,13 +260,44 @@ class PvpEvaluationDetail(APIView):
         serializer = PvpEvaluationSerializer(pvp,context={'request': request})
         return Response(serializer.data)
 
+class SendEngagementSurvey(APIView):
+    def post(self, request, pk, format=None):
+        employee = Employee.objects.get(id=pk)
+        if employee is None:
+            return Response(None, status=status.HTTP_404_NOT_FOUND)
+        elif employee.email is None:
+            return Response(None, status=status.HTTP_404_NOT_FOUND)
+        if employee.user is None:
+            password = User.objects.make_random_password()
+            user = User.objects.create_user(employee.email, employee.email, password)
+            user.is_active = False
+            user.save()
+            employee.user = user
+            employee.save()
+        survey_url = generate_survey_url(employee)
+        html_template = get_template('engagement_survey_email.html')
+        template_vars = Context({'employee_name': employee.full_name, 'survey_url': survey_url.url})
+        html_content = html_template.render(template_vars)
+        subject = 'Fill out this survey'
+        text_content = 'Fill out this survey:\r\n' + survey_url.url
+        mail_from = 'Test<notify@dfrntlabs.com>'
+        mail_to = employee.email
+        msg = EmailMultiAlternatives(subject, text_content, mail_from, [mail_to])
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
+
+        return Response(None)
+
 class EngagementSurvey(APIView):
     permission_classes = (AllowAny,)
     def post(self, request, pk, format=None):
         assessment = request.DATA["_assessment"]
-        employee = Employee.objects.get(id=pk)
+        signer = Signer()
+        survey_id = signer.unsign(request.DATA["_survey_id"])
+        employee_id= signer.unsign(request.DATA["id"])
+        logger.debug(employee_id)
+        employee = Employee.objects.get(id=employee_id)
         visibility = 3
-
         if employee is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
         happy = Happiness()
