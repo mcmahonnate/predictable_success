@@ -67,7 +67,7 @@ class Employee(models.Model):
         default=None
     )
     user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True)
-    coach = models.ForeignKey('Employee', related_name='coachee', null=True, blank=True)
+    coach = models.ForeignKey('Employee', related_name='coachees', null=True, blank=True)
 
     def is_coach(self):
         if self.user is None:
