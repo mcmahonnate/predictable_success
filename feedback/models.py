@@ -20,7 +20,7 @@ class FeedbackRequest(models.Model):
     requester = models.ForeignKey(Employee, related_name='feedback_requests')
     reviewer = models.ForeignKey(Employee, related_name='requests_for_feedback')
     message = models.TextField(blank=True)
-    is_complete = models.BooleanField()
+    is_complete = models.BooleanField(default=False)
 
     def send_notification_email(self):
         recipient_email = self.requester.email
@@ -43,7 +43,7 @@ class FeedbackSubmission(models.Model):
     reviewer = models.ForeignKey(Employee, related_name='feedback_submissions')
     excels_at = models.TextField(blank=True)
     could_improve_on = models.TextField(blank=True)
-    has_been_delivered = models.BooleanField()
+    has_been_delivered = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         if self.feedback_request:

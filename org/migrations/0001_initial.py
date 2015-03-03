@@ -1,78 +1,116 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
+from django.db import models, migrations
+import django.db.models.deletion
 import datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+from django.conf import settings
 
 
-class Migration(SchemaMigration):
+class Migration(migrations.Migration):
 
-    def forwards(self, orm):
-        # Adding model 'Employee'
-        db.create_table(u'org_employee', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('informal_name', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('job_title', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
-            ('base_camp', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
-            ('u_name', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
-            ('hire_date', self.gf('django.db.models.fields.DateField')(null=True)),
-            ('display', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('team', self.gf('django.db.models.fields.related.ForeignKey')(default=None, to=orm['org.Team'], null=True, blank=True)),
-        ))
-        db.send_create_signal(u'org', ['Employee'])
+    dependencies = [
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+    ]
 
-        # Adding model 'Team'
-        db.create_table(u'org_team', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('leader', self.gf('django.db.models.fields.related.OneToOneField')(related_name='+', unique=True, to=orm['org.Employee'])),
-        ))
-        db.send_create_signal(u'org', ['Team'])
-
-        # Adding model 'Mentorship'
-        db.create_table(u'org_mentorship', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('mentor', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', to=orm['org.Employee'])),
-            ('mentee', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', to=orm['org.Employee'])),
-        ))
-        db.send_create_signal(u'org', ['Mentorship'])
-
-
-    def backwards(self, orm):
-        # Deleting model 'Employee'
-        db.delete_table(u'org_employee')
-
-        # Deleting model 'Team'
-        db.delete_table(u'org_team')
-
-        # Deleting model 'Mentorship'
-        db.delete_table(u'org_mentorship')
-
-
-    models = {
-        u'org.employee': {
-            'Meta': {'object_name': 'Employee'},
-            'base_camp': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
-            'display': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'hire_date': ('django.db.models.fields.DateField', [], {'null': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'informal_name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'job_title': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
-            'team': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'to': u"orm['org.Team']", 'null': 'True', 'blank': 'True'}),
-            'u_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'})
-        },
-        u'org.mentorship': {
-            'Meta': {'object_name': 'Mentorship'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'mentee': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': u"orm['org.Employee']"}),
-            'mentor': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': u"orm['org.Employee']"})
-        },
-        u'org.team': {
-            'Meta': {'object_name': 'Team'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'leader': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'+'", 'unique': 'True', 'to': u"orm['org.Employee']"}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'})
-        }
-    }
-
-    complete_apps = ['org']
+    operations = [
+        migrations.CreateModel(
+            name='Attribute',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=255, blank=True)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='AttributeCategory',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=255, blank=True)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Employee',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('full_name', models.CharField(max_length=255)),
+                ('first_name', models.CharField(max_length=255, null=True, blank=True)),
+                ('last_name', models.CharField(max_length=255, null=True, blank=True)),
+                ('avatar', models.ImageField(default=b'/media/avatars/geneRick.jpg', upload_to=b'media/avatars/%Y/%m/%d', blank=True)),
+                ('avatar_small', models.ImageField(default=b'/media/avatars/small/geneRick.jpeg', null=True, upload_to=b'media/avatars/small/%Y/%m/%d', blank=True)),
+                ('job_title', models.CharField(max_length=255, blank=True)),
+                ('email', models.CharField(max_length=255, blank=True)),
+                ('hire_date', models.DateField(null=True)),
+                ('departure_date', models.DateField(default=None, null=True, blank=True)),
+                ('display', models.BooleanField()),
+                ('coach', models.ForeignKey(related_name='coachee', blank=True, to='org.Employee', null=True)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Leadership',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('start_date', models.DateField(default=datetime.date.today)),
+                ('end_date', models.DateField(null=True, blank=True)),
+                ('employee', models.ForeignKey(related_name='leaderships', to='org.Employee')),
+                ('leader', models.ForeignKey(related_name='+', to='org.Employee')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Mentorship',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('mentee', models.ForeignKey(related_name='+', to='org.Employee')),
+                ('mentor', models.ForeignKey(related_name='+', to='org.Employee')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Team',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=255)),
+                ('leader', models.OneToOneField(related_name='+', to='org.Employee')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.AddField(
+            model_name='employee',
+            name='team',
+            field=models.ForeignKey(default=None, blank=True, to='org.Team', null=True),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='employee',
+            name='user',
+            field=models.OneToOneField(null=True, on_delete=django.db.models.deletion.SET_NULL, blank=True, to=settings.AUTH_USER_MODEL),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='attribute',
+            name='category',
+            field=models.ForeignKey(default=None, blank=True, to='org.AttributeCategory', null=True),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='attribute',
+            name='employee',
+            field=models.ForeignKey(related_name='attributes', to='org.Employee'),
+            preserve_default=True,
+        ),
+    ]

@@ -473,54 +473,13 @@ angular.module('tdb.directives', [])
                     pvp.potential = square.potential;
                     pvp.performance = square.performance;
                     findDescription();
+                    scope.save();
                     break;
                 }
             }
         };
     }
 }])
-
-.directive('sliderFollowThru', function() {
-  return {
-    link: function(scope, elem, attrs) {
-      elem.slider({
-        range: true,
-        min: scope.kolbe_values[0],
-        max: scope.kolbe_values[scope.kolbe_values.length-1],
-        step: 1,
-        create: function( event, ui ) {
-            var $slider =  $(event.target);
-            var max =  $slider.slider("option", "max");
-            var min =  $slider.slider("option", "min");
-            var spacing =  100 / (max - min);
-            var width = $slider.width() / (max - min);
-            $slider.find('.ui-slider-tick-mark').remove();
-            $('<div style="width:' + $slider.width() + 'px;text-align:center;color:white;margin: 15px 0px 0px 0px;display:inline-block">Follow Thru</div>').insertBefore($slider);
-            for (var i = 0; i < max-min ; i++) {
-                if (i<max) {
-                    $('<div class="ui-slider-label">' + scope.kolbe_follow_thru_labels[i] + '</div>').css({'left':  (spacing * i) +  '%','width': + width + 'px','text-align': 'center'}).appendTo($slider);
-                }
-                if (i != 0)
-                {
-                    $('<span class="ui-slider-tick-mark"></span>').css('left', (spacing * i) +  '%').appendTo($slider);
-                }
-            }
-        },
-        values: [scope.kolbe_values[0], scope.kolbe_values[scope.kolbe_values.length-1]],
-        slide: function( event, ui ) {
-          if(ui.values[1] - ui.values[0] < 1){
-              return false;
-          }
-          scope.follow_thru=[];
-          for (var i = ui.values[0]; i < ui.values[1] ; i++) {
-            scope.follow_thru.push(scope.kolbe_follow_thru_labels[i]);
-            scope.$apply();
-          }
-        }
-      });
-    }
-  }
-})
 
 .directive('modalEditEmployee',  ['Employee', 'EmployeeLeader', 'fileReader', 'PhotoUpload', 'SitePreferences', function(Employee, EmployeeLeader, fileReader, PhotoUpload, SitePreferences) {
   return {
@@ -640,6 +599,49 @@ angular.module('tdb.directives', [])
   };
 }])
 
+.directive('sliderFollowThru', function() {
+  return {
+    link: function(scope, elem, attrs) {
+      elem.slider({
+        range: true,
+        min: scope.kolbe_values[0],
+        max: scope.kolbe_values[scope.kolbe_values.length-1],
+        step: 1,
+        create: function( event, ui ) {
+            var $slider =  $(event.target);
+            var max =  $slider.slider("option", "max");
+            var min =  $slider.slider("option", "min");
+            var spacing =  100 / (max - min);
+            var width = $slider.width() / (max - min);
+            $slider.find('.ui-slider-tick-mark').remove();
+            $('<div style="width:' + $slider.width() + 'px;text-align:center;color:white;margin: 15px 0px 0px 0px;display:inline-block">Follow Thru</div>').insertBefore($slider);
+            for (var i = 0; i < max-min ; i++) {
+                if (i<max) {
+                    $('<div class="ui-slider-label">' + scope.kolbe_follow_thru_labels[i] + '</div>').css({'left':  (spacing * i) +  '%','width': + width + 'px','text-align': 'center'}).appendTo($slider);
+                }
+                if (i != 0)
+                {
+                    $('<span class="ui-slider-tick-mark"></span>').css('left', (spacing * i) +  '%').appendTo($slider);
+                }
+            }
+        },
+        values: [scope.kolbe_values[0], scope.kolbe_values[scope.kolbe_values.length-1]],
+        slide: function( event, ui ) {
+          if(ui.values[1] - ui.values[0] < 1){
+              return false;
+          }
+          scope.follow_thru.length=0;
+          for (var i = ui.values[0]; i < ui.values[1] ; i++) {
+             console.log('TEST');
+            scope.follow_thru.push(scope.kolbe_follow_thru_labels[i]);
+            scope.$apply();
+          }
+        }
+      });
+    }
+  }
+})
+    
 .directive('sliderQuickStart', function() {
   return {
     link: function(scope, elem, attrs) {
@@ -671,7 +673,7 @@ angular.module('tdb.directives', [])
           if(ui.values[1] - ui.values[0] < 1){
               return false;
           }
-          scope.quick_start=[];
+          scope.quick_start.length=0;
           for (var i = ui.values[0]; i < ui.values[1] ; i++) {
             scope.quick_start.push(scope.kolbe_quick_start_labels[i]);
             scope.$apply();
@@ -713,7 +715,7 @@ angular.module('tdb.directives', [])
           if(ui.values[1] - ui.values[0] < 1){
               return false;
           }
-          scope.implementor=[];
+          scope.implementor.length=0;;
           for (var i = ui.values[0]; i < ui.values[1] ; i++) {
             scope.implementor.push(scope.kolbe_implementor_labels[i]);
             scope.$apply();
@@ -755,7 +757,7 @@ angular.module('tdb.directives', [])
           if(ui.values[1] - ui.values[0] < 1){
               return false;
           }
-          scope.fact_finder=[];
+          scope.fact_finder.length=0;
           for (var i = ui.values[0]; i < ui.values[1] ; i++) {
             scope.fact_finder.push(scope.kolbe_fact_finder_labels[i]);
             scope.$apply();

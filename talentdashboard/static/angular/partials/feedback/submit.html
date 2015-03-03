@@ -4,15 +4,7 @@
             Submit Feedback
             <span ng-show="request">for {{ request.requester.full_name }}</span>
         </h2>
-
-        <div>
-            <label>What does {{ request.requester.full_name }} excel at?</label>
-            <textarea cols="30" rows="10" ng-model="feedback.excels_at"></textarea>
-        </div>
-        <div>
-            <label>What could {{ request.requester.full_name }} improve on?</label>
-            <textarea cols="30" rows="10" ng-model="feedback.could_improve_on"></textarea>
-        </div>
+        <div ng-include="'/static/angular/partials/feedback/_feedback_questions.html'"></div>
         <div>
             <button type="button" ng-click="submit()">Submit</button>
             <button type="button" ng-click="cancel()">Cancel</button>

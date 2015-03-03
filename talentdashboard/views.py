@@ -11,7 +11,6 @@ from pvp.talentreports import get_talent_category_report_for_all_employees, get_
 from pvp.salaryreports import get_salary_report_for_team, get_salary_report_for_all_employees, get_salary_report_for_lead
 from pvp.models import PvpDescription
 from preferences.models import SitePreferences
-from django.contrib.sites.models import Site
 from blah.commentreports import get_employees_with_comments
 from engagement.engagementreports import get_employees_with_happiness_scores
 from blah.models import Comment
@@ -36,11 +35,12 @@ from PIL import Image, ExifTags
 import StringIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.urlresolvers import reverse
-from django.http import HttpRequest
-from django.utils.cache import get_cache_key
 from django.core.cache import cache
 from django.conf import settings
 from feedback.tasks import send_feedback_request_email
+import hashlib
+from django.utils.encoding import iri_to_uri
+from django.utils.translation import get_language
 
 logger = getLogger('talentdashboard')
 
@@ -122,7 +122,7 @@ class EmployeeCommentReportDetail(APIView):
             days_ago = 30
         if pk == 'all-employees':
             report = get_employees_with_comments(int(days_ago), neglected)
-        serializer = TalentCategoryReportSerializer(report)
+        serializer = TalentCategoryReportSerializer(report, context={'request': request})
         if report is not None:
             return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
@@ -132,7 +132,7 @@ class TeamMBTIReportDetail(APIView):
     def get(self, request, pk, format=None):
         try:
             report = get_mbti_report_for_team(pk)
-            serializer = MBTIReportSerializer(report)
+            serializer = MBTIReportSerializer(report, context={'request': request})
             return Response(serializer.data)
         except:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
@@ -151,7 +151,7 @@ class EmployeeEngagementReportDetail(APIView):
             days_ago = 30
         if pk == 'all-employees':
             report = get_employees_with_happiness_scores(int(days_ago), neglected)
-        serializer = TalentCategoryReportSerializer(report)
+        serializer = TalentCategoryReportSerializer(report, context={'request': request})
         if report is not None:
             return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
@@ -162,7 +162,7 @@ class TalentCategoryReportDetail(APIView):
         report = None
         if pk == 'all-employees':
             report = get_talent_category_report_for_all_employees()
-        serializer = TalentCategoryReportSerializer(report)
+        serializer = TalentCategoryReportSerializer(report, context={'request': request})
         if report is not None:
             return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
@@ -171,7 +171,7 @@ class TalentCategoryReportDetail(APIView):
 class TeamTalentCategoryReportDetail(APIView):
     def get(self, request, pk, format=None):
         report = get_talent_category_report_for_team(pk)
-        serializer = TalentCategoryReportSerializer(report)
+        serializer = TalentCategoryReportSerializer(report, context={'request': request})
         if report is not None:
             return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
@@ -182,7 +182,7 @@ class LeadTalentCategoryReportDetail(APIView):
         lead = Employee.objects.get(user=current_user)
         lead_id = lead.id
         report = get_talent_category_report_for_lead(lead_id)
-        serializer = TalentCategoryReportSerializer(report)
+        serializer = TalentCategoryReportSerializer(report, context={'request': request})
         if report is not None:
             return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
@@ -190,7 +190,7 @@ class LeadTalentCategoryReportDetail(APIView):
 class TeamSalaryReportDetail(APIView):
     def get(self, request, pk, format=None):
         report = get_salary_report_for_team(pk)
-        serializer = SalaryReportSerializer(report)
+        serializer = SalaryReportSerializer(report, context={'request': request})
         if report is not None:
             return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
@@ -201,7 +201,7 @@ class LeadSalaryReportDetail(APIView):
         lead = Employee.objects.get(user=current_user)
         lead_id = lead.id
         report = get_salary_report_for_lead(lead_id)
-        serializer = SalaryReportSerializer(report)
+        serializer = SalaryReportSerializer(report, context={'request': request})
         if report is not None:
             return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
@@ -210,7 +210,7 @@ class EmployeeList(APIView):
     def get(self, request, format=None):
         employees = Employee.objects.filter(display='t')
         employees = employees.exclude(departure_date__isnull=False)
-        serializer = MinimalEmployeeSerializer(employees, many=True)
+        serializer = MinimalEmployeeSerializer(employees, many=True, context={'request': request})
         return Response(serializer.data)
 
 
@@ -220,7 +220,7 @@ class TeamMemberList(APIView):
         employees = employees.filter(display='t')
         employees = employees.exclude(departure_date__isnull=False)
 
-        serializer = EmployeeSerializer(employees, many=True)
+        serializer = EmployeeSerializer(employees, many=True, context={'request': request})
         return Response(serializer.data)
 
 
@@ -230,7 +230,7 @@ class SubCommentList(APIView):
         comments = Comment.objects.filter(object_id=pk)
         comments = comments.filter(content_type=comment_type)
         comments = comments.extra(order_by = ['-created_date'])
-        serializer = SubCommentSerializer(comments, many=True)
+        serializer = SubCommentSerializer(comments, many=True, context={'request': request})
         return Response(serializer.data)
 
 
@@ -243,7 +243,7 @@ class PvpEvaluationDetail(APIView):
 
     def get(self, request, pk, format=None):
         pvp = self.get_object(pk)
-        serializer = PvpEvaluationSerializer(pvp)
+        serializer = PvpEvaluationSerializer(pvp, context={'request': request})
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
@@ -251,7 +251,6 @@ class PvpEvaluationDetail(APIView):
         pvp = PvpEvaluation.objects.get(id=pvp_id)
         pvp.performance = request.DATA["_performance"]
         pvp.potential = request.DATA["_potential"]
-        logger.debug("TEST")
         if "_comment_id" in request.DATA:
             comment_id = request.DATA["_comment_id"]
             logger.debug(comment_id)
@@ -260,7 +259,7 @@ class PvpEvaluationDetail(APIView):
             pvp.comment = comment
             logger.debug(pvp.comment.content)
         pvp.save()
-        serializer = PvpEvaluationSerializer(pvp)
+        serializer = PvpEvaluationSerializer(pvp,context={'request': request})
         return Response(serializer.data)
 
 
@@ -276,13 +275,13 @@ class EmployeeEngagement(APIView):
         if current:
             try:
                 happy = happys.latest('assessed_date')
-                serializer = HappinessSerializer(happy, many=False)
+                serializer = HappinessSerializer(happy, many=False, context={'request': request})
                 return Response(serializer.data)
             except:
                 return Response(None)
         else:
             happys = happys.extra(order_by=['-assessed_date'])
-            serializer = HappinessSerializer(happys, many=True)
+            serializer = HappinessSerializer(happys, many=True, context={'request': request})
             return Response(serializer.data)
 
     def post(self, request, pk, format=None):
@@ -299,7 +298,7 @@ class EmployeeEngagement(APIView):
         happy.assessed_by = assessed_by
         happy.assessment = int(assessment)
         happy.save()
-        serializer = HappinessSerializer(happy, many=False)
+        serializer = HappinessSerializer(happy, many=False, context={'request': request})
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
@@ -310,7 +309,7 @@ class EmployeeEngagement(APIView):
             return Response(None, status=status.HTTP_404_NOT_FOUND)
         happy.assessment = int(assessment)
         happy.save()
-        serializer = HappinessSerializer(happy, many=False)
+        serializer = HappinessSerializer(happy, many=False, context={'request': request})
         return Response(serializer.data)
 
     def delete(self, request, pk, format=None):
@@ -327,7 +326,7 @@ class Assessment(APIView):
         if employee is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
         assessments = EmployeeAssessment.objects.filter(employee__id=pk)
-        serializer = AssessmentSerializer(assessments, many=True)
+        serializer = AssessmentSerializer(assessments, many=True, context={'request': request})
         return Response(serializer.data)
 
 
@@ -338,7 +337,7 @@ class EmployeeMBTI(APIView):
             return Response(None, status=status.HTTP_404_NOT_FOUND)
         try:
             mbti = MBTI.objects.filter(employee__id=pk)[0]
-            serializer = MBTISerializer(mbti, many=False)
+            serializer = MBTISerializer(mbti, many=False, context={'request': request})
             return Response(serializer.data)
         except:
             return Response(None)
@@ -361,7 +360,7 @@ class EmployeeCommentList(APIView):
         comments = comments.exclude(object_id=user.id,content_type=employee_type)
         comments = comments.extra(order_by = ['-created_date'])
 
-        serializer = EmployeeCommentSerializer(comments, many=True)
+        serializer = EmployeeCommentSerializer(comments, many=True,context={'request': request})
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
@@ -370,7 +369,7 @@ class EmployeeCommentList(APIView):
         comment = Comment.objects.get(pk=object_id);
         comment.content = content
         comment.save()
-        serializer = EmployeeCommentSerializer(comment, many=False)
+        serializer = EmployeeCommentSerializer(comment, many=False, context={'request': request})
         return Response(serializer.data)
 
     def post(self, request, pk, format=None):
@@ -391,7 +390,7 @@ class EmployeeCommentList(APIView):
         if content_type == comment_type:
             comment = Comment.objects.get(id=object_id)
             sub_comment = Comment.objects.add_comment(comment, content, visibility, owner)
-            serializer = SubCommentSerializer(sub_comment, many=False)
+            serializer = SubCommentSerializer(sub_comment, many=False, context={'request': request})
             notify = True
             if notify:
                 html_template = get_template('reply_notification.html')
@@ -416,7 +415,7 @@ class EmployeeCommentList(APIView):
                 msg.send()
         else:
             comment = employee.comments.add_comment(content, visibility, owner)
-            serializer = EmployeeCommentSerializer(comment, many=False)
+            serializer = EmployeeCommentSerializer(comment, many=False, context={'request': request})
         return Response(serializer.data)
 
 class LeadCommentList(APIView):
@@ -435,7 +434,7 @@ class LeadCommentList(APIView):
         if not allow_all_access and allow_team_lead_access:
             comments = comments.exclude(~Q(owner_id=request.user.id), visibility=2)
         comments = comments.extra(order_by = ['-created_date'])[:15]
-        serializer = TeamCommentSerializer(comments, many=True)
+        serializer = TeamCommentSerializer(comments, many=True, context={'request': request})
         return Response(serializer.data)
 
 class TeamCommentList(APIView):
@@ -449,7 +448,7 @@ class TeamCommentList(APIView):
         comments = comments.exclude(~Q(owner_id=request.user.id),content_type=employee_type,visibility=1)
         comments = comments.exclude(object_id=user.id,content_type=employee_type)
         comments = comments.extra(order_by = ['-created_date'])[:15]
-        serializer = TeamCommentSerializer(comments, many=True)
+        serializer = TeamCommentSerializer(comments, many=True, context={'request': request})
         return Response(serializer.data)
 
 
@@ -460,7 +459,7 @@ class LeadershipDetail(APIView):
             leaderships = Leadership.objects.filter(employee__id=employee.id)
             leadership = leaderships.latest('start_date')
             if leadership is not None:
-                serializer = LeadershipSerializer(leadership, many=False)
+                serializer = LeadershipSerializer(leadership, many=False, context={'request': request})
                 return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
@@ -472,7 +471,7 @@ class LeadershipDetail(APIView):
         leadership.employee = employee
         leadership.leader = leader
         leadership.save()
-        serializer = LeadershipSerializer(leadership, many=False)
+        serializer = LeadershipSerializer(leadership, many=False, context={'request': request})
         return Response(serializer.data)
 
 
@@ -484,14 +483,14 @@ class CommentList(APIView):
         comments = comments.exclude(object_id=employee.id)
         comments = comments.exclude(~Q(owner_id=request.user.id),content_type=employee_type,visibility=1)
         comments = comments.extra(order_by = ['-created_date'])[:15]
-        serializer = EmployeeCommentSerializer(comments, many=True)
+        serializer = EmployeeCommentSerializer(comments, many=True, context={'request': request})
         return Response(serializer.data)
 
 
 class CommentDetail(APIView):
     def get(self, request, pk, format=None):
         comment = Comment.objects.get(id=pk)
-        serializer = EmployeeCommentSerializer(comment)
+        serializer = EmployeeCommentSerializer(comment, context={'request': request})
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
@@ -502,7 +501,7 @@ class CommentDetail(APIView):
                 comment.visibility = request.DATA["_visibility"]
             comment.modified_date = datetime.datetime.now()
             comment.save()
-            serializer = EmployeeCommentSerializer(comment, many=False)
+            serializer = EmployeeCommentSerializer(comment, many=False, context={'request': request})
             return Response(None)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
@@ -527,14 +526,14 @@ class MyTaskList(APIView):
         tasks = Task.objects.filter(assigned_to__id=assigned_to.id)
         tasks = tasks.filter(completed=completed)
         tasks = tasks.extra(order_by=['-due_date'])
-        serializer = TaskSerializer(tasks, many=True)
+        serializer = TaskSerializer(tasks, many=True, context={'request': request})
         return Response(serializer.data)
 
 
 class TaskDetail(APIView):
     def get(self, request, pk, format=None):
         task = Task.objects.get(id=pk)
-        serializer = TaskSerializer(task)
+        serializer = TaskSerializer(task, context={'request': request})
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
@@ -605,7 +604,7 @@ class EmployeeTaskList(APIView):
             tasks = Task.objects.filter(employee__id=pk)
             tasks = tasks.filter(completed=completed)
             tasks = tasks.extra(order_by=['-created_date'])
-        serializer = TaskSerializer(tasks, many=True)
+        serializer = TaskSerializer(tasks, many=True, context={'request': request})
         return Response(serializer.data)
 
     def post(self, request, pk, format=None):
@@ -632,49 +631,33 @@ class EmployeeTaskList(APIView):
         if due_date is not None:
             task.due_date = due_date
         task.save()
-        serializer = TaskSerializer(task)
+        serializer = TaskSerializer(task, context={'request': request})
         return Response(serializer.data)
 
 
 class EmployeeDetail(APIView):
     def get(self, request, pk, format=None):
-        employee = Employee.objects.get(id=pk)
-        serializer = EmployeeSerializer(employee)
-        if employee is not None:
+        try:
+            employee = Employee.objects.get(id=pk)
+            serializer = EmployeeSerializer(employee,context={'request': request})
             return Response(serializer.data)
-        return Response(None, status=status.HTTP_404_NOT_FOUND)
+        except Employee.DoesNotExist:
+            return Response(None)
 
     def put(self, request, pk, format=None):
-        def expire_view_cache(view_name, args=None, namespace=None, key_prefix=None, method="GET"):
-            """
-            This function allows you to invalidate any view-level cache.
-                view_name: view function you wish to invalidate or it's named url pattern
-                args: any arguments passed to the view function
-                namepace: optioal, if an application namespace is needed
-                key prefix: for the @cache_page decorator for the function (if any)
-
-                from: http://stackoverflow.com/questions/2268417/expire-a-view-cache-in-django
-                added: method to request to get the key generating properly
-            """
-            if args is None:
-                args = []
-
-            # create a fake request object
-            new_request = HttpRequest()
-            new_request.method = method
+        def expire_view_cache(view_name, args=None, language=None, namespace=None, key_prefix=None, method="GET"):
+            url = reverse(view_name, args=args)
+            key_prefix = settings.CACHE_MIDDLEWARE_KEY_PREFIX
+            ctx = hashlib.md5()
+            path = hashlib.md5(iri_to_uri(url))
+            cache_key = 'views.decorators.cache.cache_page.%s.%s.%s.%s' % (
+                key_prefix, 'GET', path.hexdigest(), ctx.hexdigest())
+            logger.debug(cache_key)
             if settings.USE_I18N:
-                new_request.LANGUAGE_CODE = settings.LANGUAGE_CODE
-            # Loookup the request path:
-            if namespace:
-                view_name = namespace + ":" + view_name
-            new_request.path = reverse(view_name, args=args)
-            new_request.META['HTTP_ACCEPT']=request.META['HTTP_ACCEPT']
-            keyprefix = settings.CACHE_MIDDLEWARE_KEY_PREFIX
-            # get cache key, expire if the cached item exists:
-            key = get_cache_key(new_request, key_prefix=keyprefix)
-            if key:
-                if cache.get(key):
-                    cache.delete(key)
+                cache_key += '.%s' % (language or get_language())
+            if cache_key:
+                if cache.get(cache_key):
+                    cache.delete(cache_key)
                 return True
             return False
 
@@ -695,9 +678,8 @@ class EmployeeDetail(APIView):
                 employee.coach = coach
             if "_departure_date" in request.DATA:
                 employee.departure_date = request.DATA["_departure_date"]
-                expire_view_cache('employee-list')
             employee.save()
-            serializer = EmployeeSerializer(employee, many=False)
+            serializer = EmployeeSerializer(employee, many=False, context={'request': request})
             return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
@@ -741,7 +723,7 @@ class ImageUploadView(APIView):
         employee.avatar_small = avatar_small_file
 
         employee.save()
-        serializer = MinimalEmployeeSerializer(employee)
+        serializer = MinimalEmployeeSerializer(employee, context={'request': request})
         return Response(serializer.data)
 
 
@@ -751,12 +733,12 @@ def coachee_list(request):
     employees = Employee.objects.filter(coach__id=employee.id)
     employees = employees.exclude(departure_date__isnull=False)
     employees = employees.filter(display='t')
-    serializer = EmployeeSerializer(employees, many=True)
+    serializer = EmployeeSerializer(employees, many=True, context={'request': request})
     return Response(serializer.data)
 
 @api_view(['GET'])
 def user_status(request):
-    serializer = UserSerializer(request.user)
+    serializer = UserSerializer(request.user, context={'request': request})
     return Response(serializer.data)
 
 @api_view(['GET'])
@@ -764,23 +746,23 @@ def preferences_site(request):
     try:
         site = Site.objects.get_current()
         site_preferences = SitePreferences.objects.get(site=site)
-        serializer = SitePreferencesSerializer(site_preferences)
+        serializer = SitePreferencesSerializer(site_preferences, context={'request': request})
         return Response(serializer.data)
-    except Indicator.DoesNotExist:
+    except SitePreferences.DoesNotExist:
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
 def current_site(request):
     site = Site.objects.get(domain=request.get_host())
 
-    serializer = SiteSerializer(site)
+    serializer = SiteSerializer(site, context={'request': request})
     return Response(serializer.data)
 
 @api_view(['GET'])
 def current_kpi_indicator(request):
     try:
         indicator = Indicator.objects.all()[0:1].get()
-        serializer = KPIIndicatorSerializer(indicator)
+        serializer = KPIIndicatorSerializer(indicator, context={'request': request})
         return Response(serializer.data)
     except Indicator.DoesNotExist:
         return Response(None, status=status.HTTP_404_NOT_FOUND)
@@ -790,7 +772,7 @@ def current_kpi_indicator(request):
 def current_kpi_performance(request):
     try:
         performance = Performance.objects.latest('date')
-        serializer = KPIPerformanceSerializer(performance)
+        serializer = KPIPerformanceSerializer(performance, context={'request': request})
         return Response(serializer.data)
     except Performance.DoesNotExist:
         return Response(None, status=status.HTTP_404_NOT_FOUND)
@@ -800,7 +782,7 @@ def current_kpi_performance(request):
 @auth_employee('AllAccess')
 def get_company_salary_report(request):
     report = get_salary_report_for_all_employees()
-    serializer = SalaryReportSerializer(report)
+    serializer = SalaryReportSerializer(report, context={'request': request})
     if report is not None:
         return Response(serializer.data)
     return Response(None, status=status.HTTP_404_NOT_FOUND)
@@ -819,11 +801,11 @@ def compensation_summaries(request):
     if most_recent is not None:
         if len(compensation_summaries) > 0:
             most_recent_summary = compensation_summaries[0];
-            serializer = CompensationSummarySerializer(most_recent_summary, many=False)
+            serializer = CompensationSummarySerializer(most_recent_summary, many=False, context={'request': request})
             return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
-    serializer = CompensationSummarySerializer(compensation_summaries, many=True)
+    serializer = CompensationSummarySerializer(compensation_summaries, many=True, context={'request': request})
     return Response(serializer.data)
 
 class EmployeeCompensationSummaries(APIView):
@@ -831,7 +813,7 @@ class EmployeeCompensationSummaries(APIView):
         compensation_summaries = CompensationSummary.objects.all()
         compensation_summaries = compensation_summaries.filter(employee__id=int(pk))
         if compensation_summaries is not None:
-            serializer = CompensationSummarySerializer(compensation_summaries, many=True)
+            serializer = CompensationSummarySerializer(compensation_summaries, many=True, context={'request': request})
             return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
@@ -854,7 +836,7 @@ def pvp_evaluations(request):
 
     evaluations = evaluations.filter(employee__departure_date__isnull=True)
     evaluations = evaluations.exclude(employee__display=False)
-    serializer = MinimalPvpEvaluationSerializer(evaluations, many=True)
+    serializer = MinimalPvpEvaluationSerializer(evaluations, many=True, context={'request': request})
     return Response(serializer.data)
 
 class EmployeePvPEvaluations(APIView):
@@ -862,7 +844,7 @@ class EmployeePvPEvaluations(APIView):
         evaluations = PvpEvaluation.objects.all()
         evaluations = evaluations.filter(employee__id=int(pk))
         if evaluations is not None:
-            serializer = PvpEvaluationSerializer(evaluations, many=True)
+            serializer = PvpEvaluationSerializer(evaluations, many=True,context={'request': request})
             return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
@@ -877,7 +859,7 @@ def my_team_pvp_evaluations(request):
     evaluations = evaluations.filter(evaluation_round__id = current_round.id)
     evaluations = evaluations.filter(employee__departure_date__isnull=True)
     evaluations = evaluations.exclude(employee__display=False)
-    serializer = MinimalPvpEvaluationSerializer(evaluations, many=True)
+    serializer = MinimalPvpEvaluationSerializer(evaluations, many=True, context={'request': request})
     data = serializer.data
 
     return Response(data)
@@ -885,14 +867,14 @@ def my_team_pvp_evaluations(request):
 @api_view(['GET'])
 def pvp_todos(request):
     evaluations = PvpEvaluation.objects.todos_for_user(request.user)
-    serializer = MinimalPvpEvaluationSerializer(evaluations, many=True)
+    serializer = MinimalPvpEvaluationSerializer(evaluations, many=True, context={'request': request})
     return Response(serializer.data)
 
 
 @api_view(['GET'])
 def pvp_descriptions(request):
     descriptions = PvpDescription.objects.all()
-    serializer = PvpDescriptionSerializer(descriptions, many=True)
+    serializer = PvpDescriptionSerializer(descriptions, many=True, context={'request': request})
     return Response(serializer.data)
 
 @api_view(['GET'])
@@ -925,11 +907,11 @@ def happiness_reports(request):
 
     # The talent_category query executes the query, so it needs to happen after all other filters
     if talent_category is not None:
-        evaluations = [item for item in evaluations if item.get_talent_category() == int(talent_category)]
+        evaluations = [item for item in evaluations if item.talent_category() == int(talent_category)]
 
     data= [{'empty':1}]
     if len(evaluations)>0:
-        serializer = PvpEvaluationSerializer(evaluations, many=True)
+        serializer = PvpEvaluationSerializer(evaluations, many=True, context={'request': request})
         data = serializer.data
 
     return Response(data)
@@ -950,7 +932,7 @@ def team_leads(request):
             employees.append(lead.leader)
             
     evaluations = evaluations.filter(employee__in=employees)            
-    serializer = PvpEvaluationSerializer(evaluations, many=True)
+    serializer = PvpEvaluationSerializer(evaluations, many=True, context={'request': request})
     
     return Response(serializer.data)    
 
@@ -970,8 +952,8 @@ def team_lead_employees(request):
             if leadership.employee not in employees:
                 employees.append(leadership.employee)
         
-        serializer = EmployeeSerializer(employees, many=True)
-        
+        serializer = EmployeeSerializer(employees, many=True, context={'request': request})
+
         return Response(serializer.data)        
     else:
         return Response(None, status=status.HTTP_403_FORBIDDEN)
@@ -985,7 +967,7 @@ def talent_categories(request):
         for performance in range(0, 5):
             pvp.potential = potential
             pvp.performance = performance
-            values[potential][performance] = pvp.get_talent_category()
+            values[potential][performance] = pvp.talent_category()
     return Response(values)
 
 
@@ -1016,14 +998,14 @@ class FeedbackRequestView(APIView):
         has_multiple_items = isinstance(request.DATA, list)
         serializer = FeedbackRequestPostSerializer(data=request.DATA, many=has_multiple_items)
         if serializer.is_valid():
-            serializer.save()
+            feedback_request = serializer.save()
             if has_multiple_items:
-                for item in serializer.object:
+                for item in feedback_request:
                     send_feedback_request_email.delay(item)
             else:
-                send_feedback_request_email.delay(serializer.object)
+                send_feedback_request_email.delay(feedback_request)
 
-            response_serializer = FeedbackRequestSerializer(serializer.object, many=has_multiple_items)
+            response_serializer = FeedbackRequestSerializer(feedback_request, many=has_multiple_items)
             return Response(response_serializer.data)
         else:
             return Response(serializer.errors, status=400)
@@ -1071,10 +1053,10 @@ class FeedbackSubmissionView(APIView):
         add_current_employee_to_request(request, 'reviewer')
         serializer = FeedbackSubmissionPostSerializer(data=request.DATA)
         if serializer.is_valid():
-            serializer.save()
+            feedback = serializer.save()
             # feedback_request = serializer.object
             # pending_feedback_requests = FeedbackRequest.objects.pending_for_requester(feedback_request.requester).pending_for_reviewer()
-            response_serializer = FeedbackSubmissionSerializer(serializer.object)
+            response_serializer = FeedbackSubmissionSerializer(feedback)
             return Response(response_serializer.data)
         return Response(serializer.errors, status=400)
 
@@ -1090,5 +1072,3 @@ def potential_reviewers(request):
     potential_reviewers = sorted(employee_set, key=lambda employee: employee.full_name)
     serializer = MinimalEmployeeSerializer(potential_reviewers, many=True)
     return Response(serializer.data)
-
-

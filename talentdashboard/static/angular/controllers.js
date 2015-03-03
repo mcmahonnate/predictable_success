@@ -129,10 +129,10 @@ angular.module('tdb.controllers', [])
     $scope.talentCategory = $routeParams.talent_category;
     $scope.happy = $routeParams.happy;
     $scope.days_since_happy = $routeParams.days_since_happy;
-    $scope.fact_finder = $routeParams.fact_finder;
-    $scope.follow_thru = $routeParams.follow_thru;
-    $scope.quick_start = $routeParams.quick_start;
-    $scope.implementor = $routeParams.implementor;
+    $scope.fact_finder = angular.copy($scope.kolbe_fact_finder_labels);
+    $scope.follow_thru = angular.copy($scope.kolbe_follow_thru_labels);
+    $scope.quick_start = angular.copy($scope.kolbe_quick_start_labels);
+    $scope.implementor = angular.copy($scope.kolbe_implementor_labels);
     $scope.vops = [];
     $scope.teamName='';
     $scope.staleDays=360;
@@ -332,7 +332,7 @@ angular.module('tdb.controllers', [])
 	}
 }])
 
-.controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', 'User', 'Employee', 'Engagement', 'EmployeeLeader', 'Attribute', 'CompSummary', '$http', 'SitePreferences', 'analytics', 'fileReader','Assessment','EmployeeMBTI', function($rootScope, $scope, $location, $routeParams, $window, User, Employee, Engagement, EmployeeLeader, Attribute, CompSummary, $http, SitePreferences, analytics, fileReader, Assessment, EmployeeMBTI) {
+.controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', '$sce', 'User', 'Employee', 'Engagement', 'EmployeeLeader', 'Attribute', 'CompSummary', '$http', 'SitePreferences', 'analytics', 'fileReader','Assessment','EmployeeMBTI', function($rootScope, $scope, $location, $routeParams, $window, $sce, User, Employee, Engagement, EmployeeLeader, Attribute, CompSummary, $http, SitePreferences, analytics, fileReader, Assessment, EmployeeMBTI) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     SitePreferences.get(function (data) {
         $scope.site_preferences = data;
@@ -446,6 +446,10 @@ angular.module('tdb.controllers', [])
             }
         }
     )
+    $scope.getUnsantizedHTML = function() {
+        return $sce.trustAsHtml($scope.mbti.description);
+    };
+
 
     $scope.selected=0;
     $scope.set_choice = function(value) {
@@ -1362,6 +1366,7 @@ angular.module('tdb.controllers', [])
         var due_date = null;
         if ($scope.currentToDo.due_date) {
             due_date = $rootScope.scrubDate($scope.currentToDo.due_date, false);
+            console.log(due_date);
         }
 
         var data = {id: $scope.currentToDo.id, _description: $scope.currentToDo.description, _completed: $scope.currentToDo.completed, _assigned_to_id: assigned_to_id, _due_date: due_date, _employee_id: $scope.currentToDo.employee_id, _owner_id: $scope.currentToDo.created_by.id};
@@ -1904,7 +1909,8 @@ angular.module('tdb.controllers', [])
     };
 }])
 
-.controller('PvpEvaluationTodosCtrl', ['$scope', '$filter', '$routeParams', '$window', '$timeout', 'PvpEvaluation', 'PvpDescriptions', 'EmployeeComments', 'User', function($scope, $filter, $routeParams, $window, $timeout, PvpEvaluation, PvpDescriptions, EmployeeComments, User) {
+.controller('PvpEvaluationTodosCtrl', ['$scope', '$filter', '$routeParams', '$window', '$interval', '$location', 'PvpEvaluation', 'PvpDescriptions', 'EmployeeComments', 'User', 'analytics', function($scope, $filter, $routeParams, $window, $interval, $location, PvpEvaluation, PvpDescriptions, EmployeeComments, User, analytics) {
+    analytics.trackPage($scope, $location.absUrl(), $location.url());
     $scope.pvps = [];
     $scope.currentItemIndex = null;
     $scope.isDirty = false;
@@ -1974,7 +1980,13 @@ angular.module('tdb.controllers', [])
 
     $scope.isDirty = function() {
         return $scope.originalPotential != $scope.currentPvP.potential || $scope.originalPerformance != $scope.currentPvP.performance || $scope.currentPvP.comment.content || $scope.currentPvP.comment.originalContent;
-    }
+    };
+
+    $interval(function() {
+        if ($scope.isDirty){
+            $scope.save();
+        }
+    }, 2000);
 
     $scope.forward = function() {
         $scope.isAnimating = true;

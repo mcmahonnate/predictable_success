@@ -70,7 +70,7 @@ class PvpEvaluation(models.Model):
         except ObjectDoesNotExist:
             return None
 
-    def get_talent_category(self):
+    def talent_category(self):
         if self.__is_top_performer():
             return self.TOP_PERFORMER
         if self.__is_strong_performer():

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from pvp.models import PvpEvaluation, EvaluationRound, PvpDescription
 from org.models import Employee, Team, Mentorship, Leadership, Attribute, AttributeCategory
-from assessment.models import EmployeeAssessment, AssessmentType, AssessmentBand, AssessmentCategory, AssessmentComparison, MBTI
+from assessment.models import EmployeeAssessment, AssessmentType, AssessmentCategory, MBTI
 from todo.models import Task
 from comp.models import CompensationSummary
 from blah.models import Comment
@@ -9,7 +9,6 @@ from engagement.models import Happiness
 from kpi.models import Indicator, Performance
 from feedback.models import FeedbackRequest, FeedbackSubmission
 from preferences.models import SitePreferences
-from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.utils.log import getLogger
@@ -24,16 +23,16 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class MinimalEmployeeSerializer(serializers.HyperlinkedModelSerializer):
-    avatar = serializers.SerializerMethodField('get_avatar_url')
-    avatar_small = serializers.SerializerMethodField('get_avatar_small_url')
+    avatar = serializers.SerializerMethodField()
+    avatar_small = serializers.SerializerMethodField()
 
-    def get_avatar_url(self, obj):
+    def get_avatar(self, obj):
         url = ''
         if obj.avatar:
             url = obj.avatar.url
         return url
 
-    def get_avatar_small_url(self, obj):
+    def get_avatar_small(self, obj):
         url = ''
         if obj.avatar_small:
             url = obj.avatar_small.url
@@ -46,17 +45,17 @@ class MinimalEmployeeSerializer(serializers.HyperlinkedModelSerializer):
 
 class PvPEmployeeSerializer(serializers.HyperlinkedModelSerializer):
     team = TeamSerializer()
-    avatar = serializers.SerializerMethodField('get_avatar_url')
-    happiness = serializers.SerializerMethodField('get_happiness')
-    happiness_date = serializers.SerializerMethodField('get_happiness_date')
-    kolbe_fact_finder = serializers.SerializerMethodField('get_kolbe_fact_finder')
-    kolbe_follow_thru = serializers.SerializerMethodField('get_kolbe_follow_thru')
-    kolbe_quick_start = serializers.SerializerMethodField('get_kolbe_quick_start')
-    kolbe_implementor = serializers.SerializerMethodField('get_kolbe_implementor')
-    vops_visionary = serializers.SerializerMethodField('get_vops_visionary')
-    vops_operator = serializers.SerializerMethodField('get_vops_operator')
-    vops_processor = serializers.SerializerMethodField('get_vops_processor')
-    vops_synergist = serializers.SerializerMethodField('get_vops_synergist')
+    avatar = serializers.SerializerMethodField()
+    happiness = serializers.SerializerMethodField()
+    happiness_date = serializers.SerializerMethodField()
+    kolbe_fact_finder = serializers.SerializerMethodField()
+    kolbe_follow_thru = serializers.SerializerMethodField()
+    kolbe_quick_start = serializers.SerializerMethodField()
+    kolbe_implementor = serializers.SerializerMethodField()
+    vops_visionary = serializers.SerializerMethodField()
+    vops_operator = serializers.SerializerMethodField()
+    vops_processor = serializers.SerializerMethodField()
+    vops_synergist = serializers.SerializerMethodField()
 
 
     def get_happiness(self, obj):
@@ -119,7 +118,7 @@ class PvPEmployeeSerializer(serializers.HyperlinkedModelSerializer):
             vops_synergist = obj.get_vops_synergist
         return vops_synergist
 
-    def get_avatar_url(self, obj):
+    def get_avatar(self, obj):
         url = ''
         if obj.avatar:
             url = obj.avatar.url
@@ -132,7 +131,7 @@ class PvPEmployeeSerializer(serializers.HyperlinkedModelSerializer):
 
 class MBTISerializer(serializers.HyperlinkedModelSerializer):
     employee = MinimalEmployeeSerializer()
-    description = serializers.SerializerMethodField('get_description')
+    description = serializers.SerializerMethodField()
 
     def get_description(self, obj):
         return obj.get_description
@@ -145,24 +144,24 @@ class MBTISerializer(serializers.HyperlinkedModelSerializer):
 class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
     team = TeamSerializer()
     coach = MinimalEmployeeSerializer()
-    avatar = serializers.SerializerMethodField('get_avatar_url')
-    avatar_small = serializers.SerializerMethodField('get_avatar_small_url')
-    leader_id = serializers.SerializerMethodField('get_leader_id')
-    happiness = serializers.SerializerMethodField('get_happiness')
-    happiness_date = serializers.SerializerMethodField('get_happiness_date')
-    kolbe_fact_finder = serializers.SerializerMethodField('get_kolbe_fact_finder')
-    kolbe_follow_thru = serializers.SerializerMethodField('get_kolbe_follow_thru')
-    kolbe_quick_start = serializers.SerializerMethodField('get_kolbe_quick_start')
-    kolbe_implementor = serializers.SerializerMethodField('get_kolbe_implementor')
-    vops_visionary = serializers.SerializerMethodField('get_vops_visionary')
-    vops_operator = serializers.SerializerMethodField('get_vops_operator')
-    vops_processor = serializers.SerializerMethodField('get_vops_processor')
-    vops_synergist = serializers.SerializerMethodField('get_vops_synergist')
-    current_salary = serializers.SerializerMethodField('get_current_salary')
-    current_bonus = serializers.SerializerMethodField('get_current_bonus')
-    talent_category = serializers.SerializerMethodField('get_current_pvp')
+    avatar = serializers.SerializerMethodField()
+    avatar_small = serializers.SerializerMethodField()
+    leader_id = serializers.SerializerMethodField()
+    happiness = serializers.SerializerMethodField()
+    happiness_date = serializers.SerializerMethodField()
+    kolbe_fact_finder = serializers.SerializerMethodField()
+    kolbe_follow_thru = serializers.SerializerMethodField()
+    kolbe_quick_start = serializers.SerializerMethodField()
+    kolbe_implementor = serializers.SerializerMethodField()
+    vops_visionary = serializers.SerializerMethodField()
+    vops_operator = serializers.SerializerMethodField()
+    vops_processor = serializers.SerializerMethodField()
+    vops_synergist = serializers.SerializerMethodField()
+    current_salary = serializers.SerializerMethodField()
+    current_bonus = serializers.SerializerMethodField()
+    talent_category = serializers.SerializerMethodField()
 
-    def get_current_pvp(self, obj):
+    def get_talent_category(self, obj):
          try:
             current_pvp = obj.current_pvp
             return current_pvp
@@ -249,13 +248,13 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
             vops_synergist = obj.get_vops_synergist
         return vops_synergist
 
-    def get_avatar_url(self, obj):
+    def get_avatar(self, obj):
         url = ''
         if obj.avatar:
             url = obj.avatar.url
         return url
 
-    def get_avatar_small_url(self, obj):
+    def get_avatar_small(self, obj):
         url = ''
         if obj.avatar_small:
             url = obj.avatar_small.url
@@ -272,12 +271,12 @@ class SitePreferencesSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     employee = MinimalEmployeeSerializer()
-    can_edit_employees = serializers.SerializerMethodField('get_can_edit_employees')
-    can_view_comments = serializers.SerializerMethodField('get_can_view_comments')
-    can_coach_employees = serializers.SerializerMethodField('get_can_coach_employees')
-    can_evaluate_employees = serializers.SerializerMethodField('get_can_evaluate_employees')
-    can_view_company_dashboard = serializers.SerializerMethodField('get_can_view_company_dashboard')
-    is_team_lead = serializers.SerializerMethodField('get_is_team_lead')
+    can_edit_employees = serializers.SerializerMethodField()
+    can_view_comments = serializers.SerializerMethodField()
+    can_coach_employees = serializers.SerializerMethodField()
+    can_evaluate_employees = serializers.SerializerMethodField()
+    can_view_company_dashboard = serializers.SerializerMethodField()
+    is_team_lead = serializers.SerializerMethodField()
 
     def get_can_edit_employees(self, obj):
         if obj.groups.filter(name='Edit Employee').exists() | obj.is_superuser:
@@ -371,7 +370,6 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
 class HappinessSerializer(serializers.HyperlinkedModelSerializer):
     assessed_by = MinimalEmployeeSerializer()
     employee = MinimalEmployeeSerializer()
-    assessment_verbose = serializers.SerializerMethodField('get_assessment_verbose')
 
     def get_assessment_verbose(self, obj):
         return obj.assessment_verbose
@@ -399,8 +397,8 @@ class AssessmentCategorySerializer(serializers.ModelSerializer):
 class AssessmentSerializer(serializers.ModelSerializer):
     employee = MinimalEmployeeSerializer()
     category = AssessmentCategorySerializer()
-    name = serializers.SerializerMethodField('get_name')
-    description = serializers.SerializerMethodField('get_description')
+    name = serializers.SerializerMethodField()
+    description = serializers.SerializerMethodField()
 
     def get_name(self, obj):
          try:
@@ -432,7 +430,7 @@ class PvpDescriptionSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['performance', 'potential', 'description']
 
 class PvpEvaluationSerializer(serializers.ModelSerializer):
-    talent_category = serializers.IntegerField(source='get_talent_category')
+    talent_category = serializers.IntegerField()
     employee = EmployeeSerializer()
     evaluation_round = EvaluationRoundSerializer()
     evaluator = UserSerializer()
@@ -452,7 +450,7 @@ class PvpEvaluationEditSerializer(serializers.ModelSerializer):
 
 
 class MinimalPvpEvaluationSerializer(serializers.ModelSerializer):
-    talent_category = serializers.IntegerField(source='get_talent_category')
+    talent_category = serializers.IntegerField()
     employee = PvPEmployeeSerializer()
     evaluator = UserSerializer()
     comment = EmployeeCommentSerializer()
@@ -497,13 +495,13 @@ class AttributeSerializer(serializers.HyperlinkedModelSerializer):
 
 class TalentCategoryReportSerializer(serializers.Serializer):
     evaluation_date = serializers.DateField()
-    categories = serializers.Field()
-    total_evaluations = serializers.Field()
+    categories = serializers.DictField()
+    total_evaluations = serializers.IntegerField()
 
 
 class SalaryReportSerializer(serializers.Serializer):
-    categories = serializers.SerializerMethodField('get_categories')
-    total_salaries = serializers.SerializerMethodField('get_total_salaries')
+    categories = serializers.SerializerMethodField()
+    total_salaries = serializers.SerializerMethodField()
 
     def get_categories(self, obj):
         cats = {}
@@ -516,12 +514,12 @@ class SalaryReportSerializer(serializers.Serializer):
 
 
 class MBTIReportSerializer(serializers.Serializer):
-    type = serializers.SerializerMethodField('get_type')
-    description = serializers.SerializerMethodField('get_description')
-    mbtis = serializers.SerializerMethodField('get_mbtis')
-    total = serializers.SerializerMethodField('get_total')
-    total_assessed = serializers.SerializerMethodField('get_total_assessed')
-    total_not_assessed = serializers.SerializerMethodField('get_total_not_assessed')
+    type = serializers.SerializerMethodField()
+    description = serializers.SerializerMethodField()
+    mbtis = serializers.SerializerMethodField()
+    total = serializers.SerializerMethodField()
+    total_assessed = serializers.SerializerMethodField()
+    total_not_assessed = serializers.SerializerMethodField()
 
     def get_type(self, obj):
         return obj.team_type.type
@@ -543,12 +541,11 @@ class MBTIReportSerializer(serializers.Serializer):
 
 
 class CompensationSummarySerializer(serializers.ModelSerializer):
-    employee = EmployeeSerializer()
-    total_compensation = serializers.SerializerMethodField('get_total_compensation')
-    salary = serializers.SerializerMethodField('get_salary')
-    bonus = serializers.SerializerMethodField('get_bonus')
-    discretionary = serializers.SerializerMethodField('get_discretionary')
-    writer_payments_and_royalties = serializers.SerializerMethodField('get_writer_payments_and_royalties')
+    total_compensation = serializers.SerializerMethodField()
+    salary = serializers.SerializerMethodField()
+    bonus = serializers.SerializerMethodField()
+    discretionary = serializers.SerializerMethodField()
+    writer_payments_and_royalties = serializers.SerializerMethodField()
 
     def get_salary(self, obj):
         return float(obj.salary)
@@ -567,12 +564,12 @@ class CompensationSummarySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CompensationSummary
-        fields = ('year', 'fiscal_year', 'salary', 'bonus', 'discretionary', 'writer_payments_and_royalties', 'total_compensation',)
+        fields = ('year', 'salary', 'bonus', 'discretionary', 'writer_payments_and_royalties', 'total_compensation')
 
 
 class FeedbackRequestSerializer(serializers.ModelSerializer):
     request_date = serializers.DateTimeField(required=False, read_only=True)
-    expiration_date = serializers.DateField(required=False, blank=True)
+    expiration_date = serializers.DateField(required=False)
     requester = MinimalEmployeeSerializer()
     reviewer = MinimalEmployeeSerializer()
     is_complete = serializers.BooleanField(required=False)
@@ -583,10 +580,10 @@ class FeedbackRequestSerializer(serializers.ModelSerializer):
 
 class FeedbackRequestPostSerializer(serializers.ModelSerializer):
     request_date = serializers.DateTimeField(required=False, read_only=True)
-    expiration_date = serializers.DateField(required=False, blank=True)
-    requester = serializers.PrimaryKeyRelatedField()
-    reviewer = serializers.PrimaryKeyRelatedField()
-    message = serializers.CharField(required=False, blank=True)
+    expiration_date = serializers.DateField(required=False)
+    requester = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
+    reviewer = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
+    message = serializers.CharField(required=False, allow_blank=True)
     is_complete = serializers.BooleanField(required=False)
 
     class Meta:
@@ -595,13 +592,13 @@ class FeedbackRequestPostSerializer(serializers.ModelSerializer):
 
 class FeedbackSubmissionPostSerializer(serializers.ModelSerializer):
     feedback_date = serializers.DateTimeField(required=False)
-    subject = serializers.PrimaryKeyRelatedField()
-    reviewer = serializers.PrimaryKeyRelatedField()
-    feedback_request = serializers.PrimaryKeyRelatedField(required=False)
+    subject = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
+    reviewer = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
+    feedback_request = serializers.PrimaryKeyRelatedField(required=False, queryset=FeedbackRequest.objects.all())
 
     def validate(self, attrs):
-        feedback_request = attrs['feedback_request']
-        if feedback_request:
+        if 'feedback_request' in attrs:
+            feedback_request = attrs['feedback_request']
             subject = attrs['subject']
             reviewer = attrs['reviewer']
             if feedback_request.is_complete:

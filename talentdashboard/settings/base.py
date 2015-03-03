@@ -137,7 +137,6 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django_extensions',
     'talentdashboard',
-    'south',
     'rest_framework',
     'rest_framework_swagger',
     'blah',
@@ -161,6 +160,10 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
+    # Return native `Date` and `Time` objects in `serializer.data`
+    'DATETIME_FORMAT': None,
+    'DATE_FORMAT': None,
+    'TIME_FORMAT': None,
 }
 
 SWAGGER_SETTINGS = {

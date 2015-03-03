@@ -24,7 +24,7 @@ def build_talent_category_report_for_employees(employees, neglected):
     total_evaluations = 0
     categories = {}
     for talent_category in PvpEvaluation.SUMMARY_SCORE_SCALE:
-        matching_evaluations = [evaluation for evaluation in evaluations if evaluation.get_talent_category() == talent_category]
+        matching_evaluations = [evaluation for evaluation in evaluations if evaluation.talent_category() == talent_category]
         categories[talent_category] = len(matching_evaluations)
         total_evaluations += categories[talent_category]
     return TalentCategoryReport(evaluation_date=evaluation_round.date, total_evaluations=total_evaluations, categories=categories)
