@@ -16,7 +16,7 @@ from blah.commentreports import get_employees_with_comments
 from engagement.engagementreports import get_employees_with_happiness_scores
 from blah.models import Comment
 from todo.models import Task
-from engagement.models import Happiness, generate_survey_url
+from engagement.models import Happiness, SurveyUrl, generate_survey_url
 from kpi.models import Performance, Indicator
 from assessment.models import EmployeeAssessment, MBTI
 from org.teamreports import get_mbti_report_for_team
@@ -265,7 +265,7 @@ class SendEngagementSurvey(APIView):
         employee = Employee.objects.get(id=pk)
         if employee is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
-        elif employee.email is None:
+        elif not employee.email:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
         if employee.user is None:
             password = User.objects.make_random_password()
@@ -290,12 +290,23 @@ class SendEngagementSurvey(APIView):
 
 class EngagementSurvey(APIView):
     permission_classes = (AllowAny,)
-    def post(self, request, pk, format=None):
+    def get(self, request, pk, sid, format=None):
+        try:
+            signer = Signer()
+            survey_id = signer.unsign(sid)
+            employee_id = signer.unsign(pk)
+            survey = SurveyUrl.objects.get(id=survey_id)
+            serializer = SurveyUrlSerializer(survey, many=False, context={'request': request})
+            return Response(serializer.data)
+        except:
+            return Response(None, status=status.HTTP_404_NOT_FOUND)
+
+    def post(self, request, pk, sid, format=None):
         assessment = request.DATA["_assessment"]
         signer = Signer()
-        survey_id = signer.unsign(request.DATA["_survey_id"])
-        employee_id= signer.unsign(request.DATA["id"])
-        logger.debug(employee_id)
+        survey_id = signer.unsign(sid)
+        survey = SurveyUrl.objects.get(id=survey_id)
+        employee_id = signer.unsign(pk)
         employee = Employee.objects.get(id=employee_id)
         visibility = 3
         if employee is None:
@@ -309,7 +320,10 @@ class EngagementSurvey(APIView):
             comment = employee.comments.add_comment(content, visibility, employee.user)
             happy.comment = comment
         happy.save()
-        serializer = HappinessSerializer(happy, many=False, context={'request': request})
+        survey.completed = True
+        survey.active = False
+        survey.save()
+        serializer = SurveyUrlSerializer(survey, many=False, context={'request': request})
         return Response(serializer.data)
 
 class EmployeeEngagement(APIView):

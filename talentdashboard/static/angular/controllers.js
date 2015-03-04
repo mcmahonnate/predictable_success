@@ -1909,16 +1909,22 @@ angular.module('tdb.controllers', [])
     };
 }])
 
-.controller('EngagementSurveyCtrl', ['$scope', '$routeParams', 'EngagementSurvey', function($scope, $routeParams, EngagementSurvey){
-    $scope.happy = {assessment:0};
-    $scope.happy.comment = {visibility:3,content:''};
+.controller('EngagementSurveyCtrl', ['$scope', '$window', '$routeParams', 'EngagementSurvey', function($scope, $window, $routeParams, EngagementSurvey){
     $scope.employee_id = $routeParams.employeeId;
     $scope.survey_id = $routeParams.surveyId;
-    $scope.save_engagement = function() {
-        var data = {id: $scope.employee_id, _survey_id: $scope.survey_id, _assessment: $scope.happy.assessment, _content:$scope.happy.comment.content};
-        console.log(data);
-        EngagementSurvey.save(data, function (response) {
+    $scope.first_load = true;
+    EngagementSurvey.getSurvey($scope.employee_id, $scope.survey_id).$promise.then(function(response) {
+            $scope.survey = response;
+        }
+    );
+    $scope.happy = {assessment:0};
+    $scope.happy.comment = {visibility:3,content:''};
 
+    $scope.save_engagement = function() {
+        var data = {id: $scope.employee_id, survey_id: $scope.survey_id, _assessment: $scope.happy.assessment, _content:$scope.happy.comment.content};
+        EngagementSurvey.save(data, function (response) {
+            $scope.survey = response;
+            $scope.first_load = false;
         });
     };
 }])

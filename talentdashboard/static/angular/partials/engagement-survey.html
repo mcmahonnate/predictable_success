@@ -1,5 +1,5 @@
-<div class="container">
-    <div style="margin:50px 0 30px 0">
+<div class="container" ng-if="survey">
+    <div style="margin:50px 0 30px 0" >
         <div style="margin:20px 0;font-size:18px;font-family: Lato,Helvetica,Arial,sans-serif;color:white;">How professionally happy are you?</div>
         <div style="width:200px;height:32px;margin: 5px 0px;font-size: 0;display:inline-block" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all">
             <div class="ui-range-unit ui-corner-left" ng-click="happy.assessment=1" ng-class="{scoreVeryUnhappy: happy.assessment>=1}"></div>
@@ -19,20 +19,48 @@
         <button class='ng-modal-button' ng-click='save_engagement()'>Submit</button>
     </div>
 </div>
-
+<div class="container" ng-if="(!survey.active || survey.completed) && !first_load">
+    <div class="overlay overlay-slidedown">
+        <nav>
+            <ul>
+                <li>Thank you!</li>
+            </ul>
+        </nav>
+    </div>
+</div>
+<div class="container" ng-if="(!survey.active || survey.completed) && first_load && survey">
+    <div class="overlay overlay-slidedown">
+        <nav>
+            <ul>
+                <li>Sorry!</li>
+                <li>This survey is closed.</li>
+            </ul>
+        </nav>
+    </div>
+</div>
+<div class="container" ng-if="!survey">
+    <div class="overlay overlay-slidedown">
+        <nav>
+            <ul>
+                <li>Sorry!</li>
+                <li>We couldn't find your survey.</li>
+            </ul>
+        </nav>
+    </div>
+</div>
 <style>
-  .comment-area {
+    .comment-area {
       width:492px;
-  }
-  .container {
+    }
+    .container {
       width:500px;
       margin-left: auto;
       margin-right: auto;
-  }
-  body {
+    }
+    body {
       background-color: #2C3E50;
-  }
-  @media only screen and (max-device-width: 480px) {
+    }
+    @media only screen and (max-device-width: 480px) {
       body {
         max-width: 325px;
       }
@@ -44,9 +72,9 @@
           margin-left: auto;
           margin-right: auto;
       }
-  }
+    }
 
-  .ui-range-unit {
+    .ui-range-unit {
     width: 19%;
     height: 100%;
     display: inline-block;
@@ -60,81 +88,197 @@
     -ms-transition: all 0.2s ease-out;
     -webkit-transition: all 0.2s ease-out;
     transition: all 0.2s ease-out;
-  }
-  .scoreVeryUnhappy {
+    }
+    .scoreVeryUnhappy {
       border-color: white;
       background-color: red;
-  }
-  .scoreUnhappy {
+    }
+    .scoreUnhappy {
       border-color: white;
       background-color: orange;
-  }
-  .scoreIndifferent {
+    }
+    .scoreIndifferent {
       border-color: white;
       background-color: yellow;
-  }
-  .scoreHappy {
+    }
+    .scoreHappy {
       border-color: white;
       background-color: limegreen;
-  }
-  .scoreVeryHappy {
+    }
+    .scoreVeryHappy {
       border-color: white;
       background-color: green;
-  }
-  .ui-widget-content {
+    }
+    .ui-widget-content {
       border-color: lightgrey;
       border-width: 2px;
-  }
-  .ui-slider .ui-slider-handle {
+    }
+    .ui-slider .ui-slider-handle {
       cursor: pointer;
       height:38px;
       width:38px;
 
-  }
+    }
 
-  .ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br {
+    .ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br {
     border-bottom-right-radius: 15px;
-  }
-  .ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl {
+    }
+    .ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl {
     border-bottom-left-radius: 15px;
-  }
-  .ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr {
+    }
+    .ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr {
     border-top-right-radius: 15px;
-  }
-  .ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl {
+    }
+    .ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl {
     border-top-left-radius: 15px;
-  }
-  .ui-slider-range {
+    }
+    .ui-slider-range {
       background: #585858;
       opacity: .9;
       overflow: hidden;
 
-  }
-  .ui-slider-label {
-    position: absolute;
-    top: 16px;
-    color: white;
-    font-size: 13px;
-  }
-  .ng-modal-button {
-    font-size: 17px;
-    font-family: Lato,Helvetica,Arial,sans-serif;
-    padding: 1em 2em;
-    outline: none;
-    font-weight: 400;
-    border: none;
-    color: #fff;
-    background: #e74c3c;
-    cursor: pointer;
-    margin: 10px;
-    border-radius: 6px;
-    -moz-transition: all 0.2s ease-out;
-    -o-transition: all 0.2s ease-out;
-    -ms-transition: all 0.2s ease-out;
-    -webkit-transition: all 0.2s ease-out;
-    transition: all 0.2s ease-out;
-  }
-  .ng-modal-button:hover {
-    background: #ea6153;
-  }
+    }
+    .ui-slider-label {
+        position: absolute;
+        top: 16px;
+        color: white;
+        font-size: 13px;
+    }
+    .ng-modal-button {
+        font-size: 17px;
+        font-family: Lato,Helvetica,Arial,sans-serif;
+        padding: 1em 2em;
+        outline: none;
+        font-weight: 400;
+        border: none;
+        color: #fff;
+        background: #e74c3c;
+        cursor: pointer;
+        margin: 10px;
+        border-radius: 6px;
+        -moz-transition: all 0.2s ease-out;
+        -o-transition: all 0.2s ease-out;
+        -ms-transition: all 0.2s ease-out;
+        -webkit-transition: all 0.2s ease-out;
+        transition: all 0.2s ease-out;
+    }
+    .ng-modal-button:hover {
+        background: #ea6153;
+    }
+    /* Overlay style */
+    .overlay {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background: #2980b9;
+        opacity: 0.9;
+        -moz-animation-name: drop-overlay;
+        -moz-animation-iteration-count: 1;
+        -moz-animation-timing-function: ease-in;
+        -moz-animation-duration: 0.3s;
+
+        -webkit-animation-name: drop-overlay;
+        -webkit-animation-iteration-count: 1;
+        -webkit-animation-timing-function: ease-in;
+        -webkit-animation-duration: 0.3s;
+
+        animation-name: drop-overlay;
+        animation-iteration-count: 1;
+        animation-timing-function: ease-in;
+        animation-duration: 0.3s;
+    }
+
+    /* Overlay closing cross */
+    .overlay .overlay-close {
+        width: 80px;
+        height: 80px;
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        overflow: hidden;
+        border: none;
+        text-indent: 200%;
+        color: transparent;
+        outline: none;
+        z-index: 100;
+    }
+
+    /* Menu style */
+    .overlay nav {
+        text-align: center;
+        position: relative;
+        top: 50%;
+        height: 50%;
+        -webkit-transform: translateY(-50%);
+        transform: translateY(-50%);
+    }
+
+    .overlay ul {
+        list-style: none;
+        padding: 0;
+        margin: 0 auto;
+        display: inline-block;
+        height: 100%;
+        position: relative;
+    }
+
+    .overlay ul li {
+        display: block;
+        height: 20%;
+        height: calc(100% / 5);
+        min-height: 54px;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+    }
+
+    .overlay ul li {
+        font-size: 54px;
+        font-weight: 300;
+        display: block;
+        color: #fff;
+        -webkit-transition: color 0.2s;
+        transition: color 0.2s;
+    }
+
+    .overlay ul li a:hover,
+    .overlay ul li a:focus {
+        color: #f0f0f0;
+    }
+
+    @media screen and (max-height: 30.5em) {
+        .overlay nav {
+            height: 70%;
+            font-size: 34px;
+        }
+        .overlay ul li {
+            min-height: 34px;
+        }
+    }
+    @-moz-keyframes drop-overlay {
+        0% {
+            -moz-transform: translateY(-100%);
+        }
+        100% {
+            -moz-transform: translateY(0);
+        }
+    }
+    @-webkit-keyframes drop-overlay {
+        0% {
+            -webkit-transform: translateY(-100%);
+        }
+        100% {
+            -webkit-transform: translateY(0);
+        }
+    }
+    @keyframes drop-overlay {
+        0% {
+            transform: translateY(-100%);
+        }
+        100% {
+            transform: translateY(0);
+        }
+    }
+
 </style>

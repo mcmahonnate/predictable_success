@@ -5,7 +5,7 @@ from assessment.models import EmployeeAssessment, AssessmentType, AssessmentCate
 from todo.models import Task
 from comp.models import CompensationSummary
 from blah.models import Comment
-from engagement.models import Happiness
+from engagement.models import Happiness, SurveyUrl
 from kpi.models import Indicator, Performance
 from preferences.models import SitePreferences
 from django.contrib.auth.models import User
@@ -364,6 +364,15 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Task
         fields = ('id', 'description', 'assigned_to', 'assigned_by', 'created_by', 'employee', 'created_date', 'due_date', 'completed')
+
+
+class SurveyUrlSerializer(serializers.HyperlinkedModelSerializer):
+    sent_from = MinimalEmployeeSerializer()
+    sent_to = MinimalEmployeeSerializer()
+
+    class Meta:
+        model = SurveyUrl
+        fields = ('id', 'sent_from', 'sent_to', 'url', 'active', 'completed', 'sent_date')
 
 
 class HappinessSerializer(serializers.HyperlinkedModelSerializer):

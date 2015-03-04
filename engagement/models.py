@@ -26,6 +26,7 @@ class Happiness(models.Model):
         return "On %s %s was %s" % (self.assessed_date, self.employee.full_name, get_display(self.assessment, HAPPINESS_CHOICES))
 
 class SurveyUrl(models.Model):
+    sent_from = models.ForeignKey(Employee, null=True, related_name='+')
     sent_to = models.ForeignKey(Employee, related_name='+')
     url = models.CharField(
         max_length=255,
@@ -33,6 +34,7 @@ class SurveyUrl(models.Model):
         blank=True,
     )
     active = models.BooleanField(default=True)
+    completed = models.BooleanField(default=False)
     sent_date = models.DateField(auto_now_add = True)
 
     def __str__(self):
