@@ -40,9 +40,10 @@ class SurveyUrl(models.Model):
     def __str__(self):
         return "%s was sent an engagement survey on %s" % (self.sent_to, self.sent_date)
 
-def generate_survey_url(employee):
+def generate_survey(employee, sent_from):
     survey = SurveyUrl()
     survey.sent_to = employee
+    survey.sent_from = sent_from
     survey.save()
     signer = Signer()
     signed_uid = signer.sign(employee.id)
