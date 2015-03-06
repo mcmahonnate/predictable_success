@@ -447,7 +447,11 @@ angular.module('tdb.controllers', [])
         }
     )
     $scope.getUnsantizedHTML = function() {
-        return $sce.trustAsHtml($scope.mbti.description);
+        if ($scope.mbti) {
+            return $sce.trustAsHtml($scope.mbti.description);
+        } else {
+            return null;
+        }
     };
 
 
@@ -1358,28 +1362,33 @@ angular.module('tdb.controllers', [])
         }
     }
     $scope.saveToDo = function() {
-        $scope.currentToDo.edit = false;
-        var assigned_to_id = null;
-        if ($scope.currentToDo.assigned_to) {
-            assigned_to_id = $scope.currentToDo.assigned_to.id;
-        }
-        var due_date = null;
-        if ($scope.currentToDo.due_date) {
-            due_date = $rootScope.scrubDate($scope.currentToDo.due_date, false);
-            console.log(due_date);
-        }
+        if (!$scope.saving) {
+            $scope.currentToDo.edit = false;
+            $scope.saving = true;
+            var assigned_to_id = null;
+            if ($scope.currentToDo.assigned_to) {
+                assigned_to_id = $scope.currentToDo.assigned_to.id;
+            }
+            var due_date = null;
+            if ($scope.currentToDo.due_date) {
+                due_date = $rootScope.scrubDate($scope.currentToDo.due_date, false);
+            }
 
-        var data = {id: $scope.currentToDo.id, _description: $scope.currentToDo.description, _completed: $scope.currentToDo.completed, _assigned_to_id: assigned_to_id, _due_date: due_date, _employee_id: $scope.currentToDo.employee_id, _owner_id: $scope.currentToDo.created_by.id};
-        if ($scope.currentToDo.id != -1) {
-            ToDo.update(data);
-        } else {
-            if ($scope.currentToDo.description) {
-                data.id = $scope.currentToDo.employee_id;
-                EmployeeToDo.addNew(data, function(response) {
-                    $scope.currentToDo.id = response.id;
+            var data = {id: $scope.currentToDo.id, _description: $scope.currentToDo.description, _completed: $scope.currentToDo.completed, _assigned_to_id: assigned_to_id, _due_date: due_date, _employee_id: $scope.currentToDo.employee_id, _owner_id: $scope.currentToDo.created_by.id};
+            if ($scope.currentToDo.id != -1) {
+                ToDo.update(data, function (response) {
+                    $scope.saving = false;
                 });
             } else {
+                if ($scope.currentToDo.description) {
+                    data.id = $scope.currentToDo.employee_id;
+                    EmployeeToDo.addNew(data, function (response) {
+                        $scope.currentToDo.id = response.id;
+                        $scope.saving = false;
+                    });
+                } else {
 
+                }
             }
         }
     }
