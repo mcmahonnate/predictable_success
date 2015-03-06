@@ -3,6 +3,7 @@ from django.conf import settings
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from celery import shared_task
+from feedback.models import FeedbackSubmission
 
 
 @shared_task

@@ -37,10 +37,13 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.urlresolvers import reverse
 from django.core.cache import cache
 from django.conf import settings
+from feedback.models import FeedbackRequest, FeedbackSubmission, UndeliveredFeedbackReport
 from feedback.tasks import send_feedback_request_email
 import hashlib
 from django.utils.encoding import iri_to_uri
 from django.utils.translation import get_language
+from django.template.loader import render_to_string
+from django.core.mail import send_mail
 
 logger = getLogger('talentdashboard')
 
@@ -1072,3 +1075,55 @@ def potential_reviewers(request):
     potential_reviewers = sorted(employee_set, key=lambda employee: employee.full_name)
     serializer = MinimalEmployeeSerializer(potential_reviewers, many=True)
     return Response(serializer.data)
+
+
+class CoachFeedbackReports(APIView):
+    def get(self, request, format=None):
+        current_user = request.user
+        coach = Employee.objects.get(user=current_user)
+        reports = []
+        for coachee in coach.coachees.all():
+            report = UndeliveredFeedbackReport(coachee)
+            reports.append(report)
+
+        serializer = UndeliveredFeedbackReportSerializer(reports, many=True, context={'request': request})
+        return Response(serializer.data)
+
+@api_view(['PUT'])
+def mark_feedback_delivered(request):
+    coach = Employee.objects.get(user=request.user)
+    serializer = FeedbackDeliverySerializer(data=request.DATA, many=True)
+    if serializer.is_valid():
+        items = serializer.validated_data
+        feedback = FeedbackSubmission.objects.filter(id__in=[item['id'] for item in items]).filter(subject__coach=coach)
+        feedback.update(has_been_delivered=True)
+        return Response(None, status=200)
+    else:
+        return Response(serializer.errors, status=400)
+
+@api_view(['POST'])
+def email_feedback(request):
+    coach = Employee.objects.get(user=request.user)
+    serializer = FeedbackDeliverySerializer(data=request.DATA, many=True)
+    if serializer.is_valid():
+        items = serializer.validated_data
+        feedback_items = FeedbackSubmission.objects.filter(id__in=[item['id'] for item in items]).filter(subject__coach=coach)
+        if len(feedback_items) == 0:
+            return Response(None, status=200)
+
+        recipient_email = feedback_items[0].subject.email
+
+        if not recipient_email:
+            return Response(None, status=200)
+
+        context = {
+            'feedback_items': feedback_items,
+        }
+        subject = "Here's your feedback!"
+        plain_text_message = render_to_string('email/feedback_delivery.txt', context)
+        send_mail(subject, plain_text_message, settings.DEFAULT_FROM_EMAIL, [recipient_email])
+        feedback_items.update(has_been_delivered=True)
+        return Response(None, status=200)
+    else:
+        return Response(serializer.errors, status=400)
+

@@ -120,4 +120,47 @@ angular.module('feedback.controllers', [])
             }
         ]
     )
+    .controller(
+        'CoachReportCtrl',
+        ['$scope', 'CoachReport',
+            function ($scope, CoachReport) {
+                $scope.report = CoachReport.query();
+            }
+        ]
+    )
+    .controller(
+        'CompiledFeedbackCtrl',
+        ['$scope', '$routeParams', 'CoachReport',
+            function($scope, $routeParams, CoachReport) {
+                $scope.feedbackItemIds = [];
+
+                CoachReport.query({}, function(data) {
+                    for(var i = 0; i < data.length; i++) {
+                        var item = data[i];
+                        if(item.employee.id.toString() === $routeParams.id) {
+                            $scope.report = item;
+                            for(var j = 0, len = $scope.report.undelivered_feedback.length; j < len; j++) {
+                                var id = $scope.report.undelivered_feedback[j].id;
+                                $scope.feedbackItemIds.push({id: id});
+                            }
+                            break;
+                        }
+                    }
+                });
+
+                $scope.markDelivered = function() {
+                    CoachReport.markDelivered($scope.feedbackItemIds, function() {
+                        alert("Marked!");
+                    })
+                };
+
+                $scope.email = function() {
+                    CoachReport.sendEmail($scope.feedbackItemIds, function() {
+                        alert("Emailed!");
+                    })
+                };
+
+            }
+        ]
+    )
 ;

@@ -50,3 +50,14 @@ class FeedbackSubmission(models.Model):
             self.feedback_request.is_complete = True
             self.feedback_request.save()
         super(FeedbackSubmission, self).save(*args, **kwargs)
+
+
+class UndeliveredFeedbackReport:
+    def __init__(self, employee):
+        self.employee = employee
+        self.undelivered_feedback = employee.feedback_about.filter(has_been_delivered=False).all()
+        self.total_feedback_items = self.undelivered_feedback.count()
+        self.responses_by_question = {'excels_at': [], 'could_improve_on': []}
+        for item in self.undelivered_feedback:
+            self.responses_by_question['excels_at'].append(item.excels_at)
+            self.responses_by_question['could_improve_on'].append(item.could_improve_on)

@@ -13,6 +13,8 @@ var app = angular.module('feedback', [
                     when('/todo/', {templateUrl: '/static/angular/partials/feedback/todos.html', controller: 'FeedbackTodoCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
                     when('/todo/:id', {templateUrl: '/static/angular/partials/feedback/submit.html', controller: 'ReplyToFeedbackRequestCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
                     when('/submit/', {templateUrl: '/static/angular/partials/feedback/unsolicited_feedback.html', controller: 'SubmitFeedbackCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
+                    when('/deliver/', {templateUrl: '/static/angular/partials/feedback/coach_report.html', controller: 'CoachReportCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
+                    when('/deliver/:id', {templateUrl: '/static/angular/partials/feedback/compiled_feedback.html', controller: 'CompiledFeedbackCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
                     otherwise({redirectTo: '/'});
             }])
         .config(function ($mdThemingProvider) {

@@ -621,3 +621,14 @@ class FeedbackSubmissionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FeedbackSubmission
+
+
+class FeedbackDeliverySerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+
+
+class UndeliveredFeedbackReportSerializer(serializers.Serializer):
+    employee = EmployeeSerializer()
+    undelivered_feedback = serializers.ListField(child=FeedbackSubmissionSerializer())
+    responses_by_question = serializers.DictField()
+    total_feedback_items = serializers.IntegerField()
