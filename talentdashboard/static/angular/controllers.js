@@ -1918,7 +1918,8 @@ angular.module('tdb.controllers', [])
     };
 }])
 
-.controller('EngagementSurveyCtrl', ['$scope', '$window', '$routeParams', 'EngagementSurvey', function($scope, $window, $routeParams, EngagementSurvey){
+.controller('EngagementSurveyCtrl', ['$scope', '$window', '$routeParams', 'EngagementSurvey', 'analytics', function($scope, $window, $routeParams, EngagementSurvey, analytics){
+    analytics.trackPage($scope, $location.absUrl(), $location.url());
     $scope.employee_id = $routeParams.employeeId;
     $scope.survey_id = $routeParams.surveyId;
     $scope.first_load = true;
