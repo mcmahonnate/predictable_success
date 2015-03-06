@@ -1913,9 +1913,10 @@ angular.module('tdb.controllers', [])
     $scope.employee_id = $routeParams.employeeId;
     $scope.survey_id = $routeParams.surveyId;
     $scope.first_load = true;
+    $scope.error=false;
     EngagementSurvey.getSurvey($scope.employee_id, $scope.survey_id).$promise.then(function(response) {
             $scope.survey = response;
-        }
+        }, function(response){$scope.error=true}
     );
     $scope.happy = {assessment:0};
     $scope.happy.comment = {visibility:3,content:''};
