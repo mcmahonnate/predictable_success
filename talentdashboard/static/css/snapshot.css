@@ -804,34 +804,34 @@ button.btn[disabled], fieldset[disabled] .btn {
     font-size: 40px;
     text-shadow: none;
     color: #008000;
-    content: "\0041";
+    content: "\0044";
 }
 .happy:before {
     font-family: 'Emoticons';
     font-size: 40px;
     text-shadow: none;
-    color: #91fa00;
-    content: "\0044";
+    color: limegreen;
+    content: "\0041";
 }
 .indifferent:before {
     font-family: 'Emoticons';
     font-size: 40px;
     text-shadow: none;
-    color: #ffca00;
+    color: yellow;
     content: "\0043";
 }
 .unhappy:before {
     font-family: 'Emoticons';
     font-size: 40px;
     text-shadow: none;
-    color: #ff4600;
+    color: orange;
     content: "\0028";
 }
 .veryunhappy:before {
     font-family: 'Emoticons';
     font-size: 40px;
     text-shadow: none;
-    color: #ff0000;
+    color: red;
     content: "\0057";
 }
 .nohappydata:before {
@@ -939,6 +939,11 @@ a.glyphicon:hover {
 .glyphicon-compass:before {
     color: #8b8b8b;
     content: "\e061";
+}
+
+.glyphicon-timeline:before {
+    color: #8b8b8b;
+    content: "\e055";
 }
 
 .glyphicon-chevron-right:before {
@@ -1510,4 +1515,28 @@ ul.dropdown-menu li {
     filter: none;
     opacity: 1;
     -webkit-filter: none;
+}
+.annotationsContainer, .google-visualization-atl{
+    text-shadow: none;
+    background: #2a2a2a;
+}
+.google-visualization-table-table tbody{
+    background: #2a2a2a;
+}
+
+.chartControls {
+    background: #2a2a2a;
+}
+
+.chartContainer rect {
+    fill: #fff;
+}
+
+.chartContainer svg rect {
+    fill: #2a2a2a;
+}
+
+.chartContainer text {
+    fill: #fff;
+    stroke: none;
 }

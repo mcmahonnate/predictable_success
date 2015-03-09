@@ -30,6 +30,11 @@ class Employee(models.Model):
         null=True,
         blank=True,
     )
+    linkedin_id = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+    )
     avatar = models.ImageField(
         upload_to="media/avatars/%Y/%m/%d",
         max_length=100,

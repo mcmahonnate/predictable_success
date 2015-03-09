@@ -110,7 +110,6 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'talentdashboard.middleware.LoginRequiredMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -186,15 +185,6 @@ SWAGGER_SETTINGS = {
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
 LOGIN_URL = '/account/login'
-
-LOGIN_EXEMPT_URLS = (
-    r'^account/',
-    r'api/v1/user-status/',
-    r'^forgot-password/$',
-    r'^accounts/password/reset/$',
-    r'^accounts/password/reset/done/$',
-    r'^media/(?P<path>.*)$'
-)
 
 def get_cache():
   import os

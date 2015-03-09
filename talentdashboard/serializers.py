@@ -5,7 +5,7 @@ from assessment.models import EmployeeAssessment, AssessmentType, AssessmentCate
 from todo.models import Task
 from comp.models import CompensationSummary
 from blah.models import Comment
-from engagement.models import Happiness
+from engagement.models import Happiness, SurveyUrl
 from kpi.models import Indicator, Performance
 from feedback.models import FeedbackRequest, FeedbackSubmission
 from preferences.models import SitePreferences
@@ -267,7 +267,7 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
 class SitePreferencesSerializer(serializers.ModelSerializer):
     class Meta:
         model = SitePreferences
-        fields = ('id', 'show_kolbe', 'show_vops', 'show_mbti', 'show_coaches')
+        fields = ('id', 'show_kolbe', 'show_vops', 'show_mbti', 'show_coaches', 'show_timeline')
 
 class UserSerializer(serializers.ModelSerializer):
     employee = MinimalEmployeeSerializer()
@@ -367,16 +367,26 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'description', 'assigned_to', 'assigned_by', 'created_by', 'employee', 'created_date', 'due_date', 'completed')
 
 
+class SurveyUrlSerializer(serializers.HyperlinkedModelSerializer):
+    sent_from = MinimalEmployeeSerializer()
+    sent_to = MinimalEmployeeSerializer()
+
+    class Meta:
+        model = SurveyUrl
+        fields = ('id', 'sent_from', 'sent_to', 'url', 'active', 'completed', 'sent_date')
+
+
 class HappinessSerializer(serializers.HyperlinkedModelSerializer):
     assessed_by = MinimalEmployeeSerializer()
     employee = MinimalEmployeeSerializer()
+    comment = EmployeeCommentSerializer()
 
     def get_assessment_verbose(self, obj):
         return obj.assessment_verbose
 
     class Meta:
         model = Happiness
-        fields = ('id', 'employee', 'assessment', 'assessment_verbose', 'assessed_by', 'assessed_date')
+        fields = ('id', 'employee', 'assessment', 'assessment_verbose', 'assessed_by', 'assessed_date', 'comment')
 
 
 class AssessmentTypeSerializer(serializers.ModelSerializer):

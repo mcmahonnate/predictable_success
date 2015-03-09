@@ -265,6 +265,16 @@ angular.module('tdb.services', ['ngResource'])
     return Engagement;
 }])
 
+.factory('EngagementSurvey', ['$resource', '$http', function($resource, $http) {
+    var actions = {
+        'addNew': { method:'POST', data:{survey:'@survey_id', assessment: '@assessment', content: '@content'}, isArray: false },
+    }
+
+    var Engagement = $resource('/api/v1/engagement-survey/:id/:survey', {id:'@id', survey:'@survey_id'}, actions);
+    Engagement.getSurvey = function(id, survey_id, success, failure) {return this.get({ id: id, survey: survey_id }, success, failure); };
+    return Engagement;
+}])
+
 .factory('ToDo', ['$resource', '$http', function($resource, $http) {
     var actions = {
         'update': { method:'PUT', data:{description:'@description', completed: '@completed', assigned_to_id: '@assigned_to_id', due_date: '@due_date'}, isArray: false },

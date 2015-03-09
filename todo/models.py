@@ -15,7 +15,7 @@ class Task(models.Model):
         max_length=255,
         blank=True,
     )
-    completed = models.BooleanField()
+    completed = models.BooleanField(default=False)
 
     def __str__(self):
         if self.assigned_to:

@@ -5,6 +5,7 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.permissions import AllowAny
 from .serializers import *
 from .decorators import *
 from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team, get_talent_category_report_for_lead
@@ -15,7 +16,7 @@ from blah.commentreports import get_employees_with_comments
 from engagement.engagementreports import get_employees_with_happiness_scores
 from blah.models import Comment
 from todo.models import Task
-from engagement.models import Happiness
+from engagement.models import Happiness, SurveyUrl, generate_survey
 from kpi.models import Performance, Indicator
 from assessment.models import EmployeeAssessment, MBTI
 from org.teamreports import get_mbti_report_for_team
@@ -23,6 +24,7 @@ import datetime
 from datetime import date, timedelta
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
+from django.core.signing import Signer
 from django.utils.log import getLogger
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.contrib.sites.models import get_current_site
@@ -254,17 +256,96 @@ class PvpEvaluationDetail(APIView):
         pvp = PvpEvaluation.objects.get(id=pvp_id)
         pvp.performance = request.DATA["_performance"]
         pvp.potential = request.DATA["_potential"]
-        if "_comment_id" in request.DATA:
-            comment_id = request.DATA["_comment_id"]
-            logger.debug(comment_id)
-            comment = Comment.objects.get(id=comment_id)
-            logger.debug(comment.content)
-            pvp.comment = comment
-            logger.debug(pvp.comment.content)
+        if "_content" in request.DATA:
+            content = request.DATA["_content"]
+            if pvp.comment is None:
+                visibility = 3
+                comment = pvp.employee.comments.add_comment(content, visibility, pvp.evaluator)
+                pvp.comment = comment
+            else:
+                pvp.comment.content = content
+                pvp.comment.save()
         pvp.save()
         serializer = PvpEvaluationSerializer(pvp,context={'request': request})
         return Response(serializer.data)
 
+
+class SendEngagementSurvey(APIView):
+    def post(self, request, pk, format=None):
+        override = False
+        employee = Employee.objects.get(id=pk)
+        sent_from_id = request.DATA["_sent_from_id"]
+        if "_override" in request.DATA:
+            override = request.DATA["_override", False]
+        sent_from = Employee.objects.get(id=sent_from_id)
+        current_surveys = SurveyUrl.objects.filter(sent_to__id=pk, active=True)
+        if len(current_surveys) > 0 and not override:
+            serializer = SurveyUrlSerializer(current_surveys, many=True, context={'request': request})
+            return Response(serializer.data)
+        elif current_surveys:
+            current_surveys.update(active=False)
+        if employee is None:
+            return Response(None, status=status.HTTP_404_NOT_FOUND)
+        elif not employee.email:
+            return Response(None, status=status.HTTP_404_NOT_FOUND)
+        if employee.user is None:
+            password = User.objects.make_random_password()
+            user = User.objects.create_user(employee.email, employee.email, password)
+            user.is_active = False
+            user.save()
+            employee.user = user
+            employee.save()
+        survey = generate_survey(employee, sent_from)
+        html_template = get_template('engagement_survey_email.html')
+        template_vars = Context({'employee_name': employee.first_name, 'survey_url': survey.url, 'from': survey.sent_from.full_name})
+        html_content = html_template.render(template_vars)
+        subject = 'How are you?'
+        text_content = 'Fill out this survey:\r\n' + survey.url
+        mail_from = survey.sent_from.full_name + ' <notify@dfrntlabs.com>'
+        mail_to = employee.email
+        msg = EmailMultiAlternatives(subject, text_content, mail_from, [mail_to])
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
+
+        return Response(None)
+
+class EngagementSurvey(APIView):
+    permission_classes = (AllowAny,)
+    def get(self, request, pk, sid, format=None):
+        try:
+            signer = Signer()
+            survey_id = signer.unsign(sid)
+            employee_id = signer.unsign(pk)
+            survey = SurveyUrl.objects.get(id=survey_id)
+            serializer = SurveyUrlSerializer(survey, many=False, context={'request': request})
+            return Response(serializer.data)
+        except:
+            return Response(None, status=status.HTTP_404_NOT_FOUND)
+
+    def post(self, request, pk, sid, format=None):
+        assessment = request.DATA["_assessment"]
+        signer = Signer()
+        survey_id = signer.unsign(sid)
+        survey = SurveyUrl.objects.get(id=survey_id)
+        employee_id = signer.unsign(pk)
+        employee = Employee.objects.get(id=employee_id)
+        visibility = 3
+        if employee is None:
+            return Response(None, status=status.HTTP_404_NOT_FOUND)
+        happy = Happiness()
+        happy.employee = employee
+        happy.assessed_by = employee
+        happy.assessment = int(assessment)
+        if "_content" in request.DATA:
+            content = request.DATA["_content"]
+            comment = employee.comments.add_comment(content, visibility, employee.user)
+            happy.comment = comment
+        happy.save()
+        survey.completed = True
+        survey.active = False
+        survey.save()
+        serializer = SurveyUrlSerializer(survey, many=False, context={'request': request})
+        return Response(serializer.data)
 
 class EmployeeEngagement(APIView):
     def get(self, request, pk, format=None):
@@ -300,6 +381,10 @@ class EmployeeEngagement(APIView):
         happy.employee = employee
         happy.assessed_by = assessed_by
         happy.assessment = int(assessment)
+        if "_comment_id" in request.DATA:
+            comment_id = request.DATA["_comment_id"]
+            comment = Comment.objects.get(id=comment_id)
+            happy.comment = comment
         happy.save()
         serializer = HappinessSerializer(happy, many=False, context={'request': request})
         return Response(serializer.data)
@@ -392,15 +477,16 @@ class EmployeeCommentList(APIView):
         content = request.DATA["_content"]
         if content_type == comment_type:
             comment = Comment.objects.get(id=object_id)
+            commenter = Employee.objects.get(user__id=comment.owner_id)
             sub_comment = Comment.objects.add_comment(comment, content, visibility, owner)
             serializer = SubCommentSerializer(sub_comment, many=False, context={'request': request})
-            notify = True
+            if commenter.user.is_active:
+                notify = True
             if notify:
                 html_template = get_template('reply_notification.html')
                 sub_commenter = Employee.objects.get(user__id=request.user.id)
                 comment_content = comment.content
                 sub_comment_content = sub_comment.content
-                commenter = Employee.objects.get(user__id=comment.owner_id)
                 employee_name = employee.full_name
                 commenter_avatar = commenter.avatar_small.url
                 commenter_full_name = commenter.full_name
@@ -655,7 +741,6 @@ class EmployeeDetail(APIView):
             path = hashlib.md5(iri_to_uri(url))
             cache_key = 'views.decorators.cache.cache_page.%s.%s.%s.%s' % (
                 key_prefix, 'GET', path.hexdigest(), ctx.hexdigest())
-            logger.debug(cache_key)
             if settings.USE_I18N:
                 cache_key += '.%s' % (language or get_language())
             if cache_key:

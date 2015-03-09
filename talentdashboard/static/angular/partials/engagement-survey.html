@@ -1,0 +1,294 @@
+<div class="container" ng-if="survey">
+    <div style="margin:50px 0 30px 0" >
+        <div style="margin:20px 0;font-size:18px;font-family: Lato,Helvetica,Arial,sans-serif;color:white;">How professionally happy are you?</div>
+        <div style="width:200px;height:32px;margin: 5px 0px;font-size: 0;display:inline-block" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all">
+            <div class="rateVeryUnhappy ui-range-unit ui-corner-left" ng-click="happy.assessment=1" ng-class="{rated: happy.assessment>=1, default: happy.assessment==0}"></div>
+            <div class="rateUnhappy ui-range-unit" ng-click="happy.assessment=2" ng-class="{rated:happy.assessment>=2, clear: (happy.assessment<2 && happy.assessment!=0), default: happy.assessment==0}"></div>
+            <div class="rateIndifferent ui-range-unit" ng-click="happy.assessment=3" ng-class="{rated: happy.assessment>=3, clear: (happy.assessment<3 && happy.assessment!=0), default: happy.assessment==0}"></div>
+            <div class="rateHappy ui-range-unit" ng-click="happy.assessment=4" ng-class="{rated: happy.assessment>=4, clear: (happy.assessment<4 && happy.assessment!=0), default: happy.assessment==0}"></div>
+            <div class="rateVeryHappy ui-range-unit ui-corner-right" ng-click="happy.assessment=5" ng-class="{rated: happy.assessment==5, clear: (happy.assessment<5 && happy.assessment!=0), default: happy.assessment==0}"></div>
+        </div>
+        <div style="display:inline-block;margin-left: 20px;">
+            <span ng-class="{veryunhappy: happy.assessment==1,unhappy: happy.assessment==2,indifferent: happy.assessment==3,happy: happy.assessment==4,veryhappy: happy.assessment==5}"></span>
+        </div>
+    </div>
+    <div class="comment-area" style="display: block;margin:20px 0;-webkit-border-radius: 2px;moz-border-radius: 3px;-ms-border-radius: 3px;-o-border-radius: 3px;border-radius: 3px;border: 1px solid #c1c1c1;background-color:white;">
+        <textarea class="text" ng-model="happy.comment.content" rows="1" cols="50" placeholder="What would get you to pure elation? What's getting in your way?" style="width:97.5%;height: 132px;font-size:18px;padding:5px;border: none;resize:vertical;"></textarea>
+    </div>
+    <div style="margin-top:40px">
+        <button class='ng-modal-button' ng-click='save_engagement()'>Submit</button>
+    </div>
+</div>
+<div class="container" ng-if="(!survey.active || survey.completed) && !first_load">
+    <div class="overlay overlay-slidedown">
+        <nav>
+            <ul>
+                <li>Thank you!</li>
+            </ul>
+        </nav>
+    </div>
+</div>
+<div class="container" ng-if="(!survey.active || survey.completed) && first_load && survey">
+    <div class="overlay overlay-slidedown">
+        <nav>
+            <ul>
+                <li>Sorry!</li>
+                <li>This survey is closed.</li>
+            </ul>
+        </nav>
+    </div>
+</div>
+<div class="container" ng-if="error">
+    <div class="overlay overlay-slidedown">
+        <nav>
+            <ul>
+                <li>Sorry!</li>
+                <li>We couldn't find your survey.</li>
+            </ul>
+        </nav>
+    </div>
+</div>
+<style>
+    .comment-area {
+      width:492px;
+    }
+    .container {
+      width:500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    body {
+      background-color: #2C3E50;
+    }
+    @media only screen and (max-device-width: 480px) {
+      html {
+        max-width: 325px;
+      }
+      body {
+        max-width: 325px;
+      }
+      .comment-area {
+          width:292px;
+      }
+      .container {
+          width: 300px;
+          margin-left: auto;
+          margin-right: auto;
+      }
+    }
+
+    .ui-range-unit {
+    width: 19%;
+    height: 100%;
+    display: inline-block;
+    border-width: 1px;
+    border-color: lightgrey;
+    border-style: solid;
+    margin-top: -1px;
+    cursor: pointer;
+    -moz-transition: all 0.2s ease-out;
+    -o-transition: all 0.2s ease-out;
+    -ms-transition: all 0.2s ease-out;
+    -webkit-transition: all 0.2s ease-out;
+    transition: all 0.2s ease-out;
+    }
+    .rated {
+        border-color: white;
+        opacity: 1;
+    }
+    .rateVeryUnhappy {
+      background-color: red;
+    }
+    .rateUnhappy {
+      background-color: orange;
+    }
+    .rateIndifferent {
+      background-color: yellow;
+    }
+    .rateHappy {
+      background-color: limegreen;
+    }
+    .rateVeryHappy {
+      background-color: green;
+    }
+    .clear {
+        background-color: #fff;
+        border-color: none;
+    }
+    .default {
+      opacity: .4;
+      border-color: none;
+    }
+    .ui-widget-content {
+      border-color: lightgrey;
+      border-width: 2px;
+    }
+    .ui-slider .ui-slider-handle {
+      cursor: pointer;
+      height:38px;
+      width:38px;
+
+    }
+
+    .ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br {
+    border-bottom-right-radius: 15px;
+    }
+    .ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl {
+    border-bottom-left-radius: 15px;
+    }
+    .ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr {
+    border-top-right-radius: 15px;
+    }
+    .ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl {
+    border-top-left-radius: 15px;
+    }
+    .ui-slider-range {
+      background: #585858;
+      opacity: .9;
+      overflow: hidden;
+
+    }
+    .ui-slider-label {
+        position: absolute;
+        top: 16px;
+        color: white;
+        font-size: 13px;
+    }
+    .ng-modal-button {
+        font-size: 17px;
+        font-family: Lato,Helvetica,Arial,sans-serif;
+        padding: 1em 2em;
+        outline: none;
+        font-weight: 400;
+        border: none;
+        color: #fff;
+        background: #e74c3c;
+        cursor: pointer;
+        margin: 10px;
+        border-radius: 6px;
+        -moz-transition: all 0.2s ease-out;
+        -o-transition: all 0.2s ease-out;
+        -ms-transition: all 0.2s ease-out;
+        -webkit-transition: all 0.2s ease-out;
+        transition: all 0.2s ease-out;
+    }
+    .ng-modal-button:hover {
+        background: #ea6153;
+    }
+    /* Overlay style */
+    .overlay {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background: #2980b9;
+        opacity: 0.9;
+        -moz-animation-name: drop-overlay;
+        -moz-animation-iteration-count: 1;
+        -moz-animation-timing-function: ease-in;
+        -moz-animation-duration: 0.3s;
+
+        -webkit-animation-name: drop-overlay;
+        -webkit-animation-iteration-count: 1;
+        -webkit-animation-timing-function: ease-in;
+        -webkit-animation-duration: 0.3s;
+
+        animation-name: drop-overlay;
+        animation-iteration-count: 1;
+        animation-timing-function: ease-in;
+        animation-duration: 0.3s;
+    }
+
+    /* Overlay closing cross */
+    .overlay .overlay-close {
+        width: 80px;
+        height: 80px;
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        overflow: hidden;
+        border: none;
+        text-indent: 200%;
+        color: transparent;
+        outline: none;
+        z-index: 100;
+    }
+
+    /* Menu style */
+    .overlay nav {
+        text-align: center;
+        position: relative;
+        top: 50%;
+        height: 50%;
+        -webkit-transform: translateY(-50%);
+        transform: translateY(-50%);
+    }
+
+    .overlay ul {
+        list-style: none;
+        padding: 0;
+        margin: 0 auto;
+        display: inline-block;
+        height: 100%;
+        position: relative;
+    }
+
+    .overlay ul li {
+        display: block;
+        height: 20%;
+        height: calc(100% / 5);
+        min-height: 54px;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+    }
+
+    .overlay ul li {
+        font-size: 54px;
+        font-weight: 300;
+        display: block;
+        color: #fff;
+        -webkit-transition: color 0.2s;
+        transition: color 0.2s;
+    }
+
+    .overlay ul li a:hover,
+    .overlay ul li a:focus {
+        color: #f0f0f0;
+    }
+
+    @media screen and (max-height: 30.5em) {
+        .overlay nav {
+            height: 70%;
+            font-size: 34px;
+        }
+        .overlay ul li {
+            min-height: 34px;
+        }
+    }
+    @-moz-keyframes drop-overlay {
+        0% {
+            -moz-transform: translateY(-100%);
+        }
+        100% {
+            -moz-transform: translateY(0);
+        }
+    }
+    @-webkit-keyframes drop-overlay {
+        0% {
+            -webkit-transform: translateY(-100%);
+        }
+        100% {
+            -webkit-transform: translateY(0);
+        }
+    }
+    @keyframes drop-overlay {
+        0% {
+            transform: translateY(-100%);
+        }
+        100% {
+            transform: translateY(0);
+        }
+    }
+
+</style>

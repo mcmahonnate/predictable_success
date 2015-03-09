@@ -2,7 +2,7 @@ angular.module('tdb.controllers', [])
 
 .controller('BaseAppCtrl', ['$rootScope', '$location', 'User', 'Site', function($rootScope, $location, User, Site) {
     $rootScope.$on("$routeChangeError", function() {
-        window.location = '/login?next=' + $location.path();
+        window.location = '/account/login?next=' + $location.path();
     })
    Site.get(function(data) {
             $rootScope.currentSite = data;
@@ -350,6 +350,7 @@ angular.module('tdb.controllers', [])
     $scope.show_kolbe = false;
     $scope.show_myers_briggs = false;
     $scope.show_todos = false;
+    $scope.show_timeline = false;
     $scope.click_discussions= function() {
         $scope.show_bio = false;
         $scope.show_discussions = true;
@@ -357,6 +358,7 @@ angular.module('tdb.controllers', [])
         $scope.show_kolbe = false;
         $scope.show_myers_briggs = false;
         $scope.show_todos = false;
+        $scope.show_timeline = false;
     };
     $scope.click_bio= function() {
         $scope.show_bio = true;
@@ -365,6 +367,7 @@ angular.module('tdb.controllers', [])
         $scope.show_kolbe = false;
         $scope.show_myers_briggs = false;
         $scope.show_todos = false;
+        $scope.show_timeline = false;
     };
     $scope.click_todos= function() {
         $scope.show_bio = false;
@@ -373,6 +376,7 @@ angular.module('tdb.controllers', [])
         $scope.show_kolbe = false;
         $scope.show_myers_briggs = false;
         $scope.show_todos = true;
+        $scope.show_timeline = false;
     };
     $scope.click_vops= function() {
         $scope.show_bio = false;
@@ -381,6 +385,16 @@ angular.module('tdb.controllers', [])
         $scope.show_kolbe = false;
         $scope.show_myers_briggs = false;
         $scope.show_todos = false;
+        $scope.show_timeline = false;
+    };
+    $scope.click_time_line= function() {
+        $scope.show_bio = false;
+        $scope.show_discussions = false;
+        $scope.show_vops = false;
+        $scope.show_kolbe = false;
+        $scope.show_myers_briggs = false;
+        $scope.show_todos = false;
+        $scope.show_timeline = true;
     };
     $scope.click_kolbe= function() {
         $scope.show_bio = false;
@@ -389,6 +403,8 @@ angular.module('tdb.controllers', [])
         $scope.show_kolbe = true;
         $scope.show_myers_briggs = false;
         $scope.show_todos = false;
+        $scope.show_timeline = false;
+
     };
     $scope.click_myers_briggs= function() {
         $scope.show_bio = false;
@@ -397,6 +413,7 @@ angular.module('tdb.controllers', [])
         $scope.show_kolbe = false;
         $scope.show_myers_briggs = true;
         $scope.show_todos = false;
+        $scope.show_timeline = false;
     };
     $scope.leadership=[];
     $scope.employees = Employee.query();
@@ -447,7 +464,11 @@ angular.module('tdb.controllers', [])
         }
     )
     $scope.getUnsantizedHTML = function() {
-        return $sce.trustAsHtml($scope.mbti.description);
+        if ($scope.mbti) {
+            return $sce.trustAsHtml($scope.mbti.description);
+        } else {
+            return null;
+        }
     };
 
 
@@ -1358,28 +1379,33 @@ angular.module('tdb.controllers', [])
         }
     }
     $scope.saveToDo = function() {
-        $scope.currentToDo.edit = false;
-        var assigned_to_id = null;
-        if ($scope.currentToDo.assigned_to) {
-            assigned_to_id = $scope.currentToDo.assigned_to.id;
-        }
-        var due_date = null;
-        if ($scope.currentToDo.due_date) {
-            due_date = $rootScope.scrubDate($scope.currentToDo.due_date, false);
-            console.log(due_date);
-        }
+        if (!$scope.saving) {
+            $scope.currentToDo.edit = false;
+            $scope.saving = true;
+            var assigned_to_id = null;
+            if ($scope.currentToDo.assigned_to) {
+                assigned_to_id = $scope.currentToDo.assigned_to.id;
+            }
+            var due_date = null;
+            if ($scope.currentToDo.due_date) {
+                due_date = $rootScope.scrubDate($scope.currentToDo.due_date, false);
+            }
 
-        var data = {id: $scope.currentToDo.id, _description: $scope.currentToDo.description, _completed: $scope.currentToDo.completed, _assigned_to_id: assigned_to_id, _due_date: due_date, _employee_id: $scope.currentToDo.employee_id, _owner_id: $scope.currentToDo.created_by.id};
-        if ($scope.currentToDo.id != -1) {
-            ToDo.update(data);
-        } else {
-            if ($scope.currentToDo.description) {
-                data.id = $scope.currentToDo.employee_id;
-                EmployeeToDo.addNew(data, function(response) {
-                    $scope.currentToDo.id = response.id;
+            var data = {id: $scope.currentToDo.id, _description: $scope.currentToDo.description, _completed: $scope.currentToDo.completed, _assigned_to_id: assigned_to_id, _due_date: due_date, _employee_id: $scope.currentToDo.employee_id, _owner_id: $scope.currentToDo.created_by.id};
+            if ($scope.currentToDo.id != -1) {
+                ToDo.update(data, function (response) {
+                    $scope.saving = false;
                 });
             } else {
+                if ($scope.currentToDo.description) {
+                    data.id = $scope.currentToDo.employee_id;
+                    EmployeeToDo.addNew(data, function (response) {
+                        $scope.currentToDo.id = response.id;
+                        $scope.saving = false;
+                    });
+                } else {
 
+                }
             }
         }
     }
@@ -1909,12 +1935,35 @@ angular.module('tdb.controllers', [])
     };
 }])
 
+.controller('EngagementSurveyCtrl', ['$scope', '$window', '$routeParams', '$location', 'EngagementSurvey', 'analytics', function($scope, $window, $routeParams, $location, EngagementSurvey, analytics){
+    analytics.trackPage($scope, $location.absUrl(), $location.url());
+    $scope.employee_id = $routeParams.employeeId;
+    $scope.survey_id = $routeParams.surveyId;
+    $scope.first_load = true;
+    $scope.error=false;
+    EngagementSurvey.getSurvey($scope.employee_id, $scope.survey_id).$promise.then(function(response) {
+            $scope.survey = response;
+        }, function(response){$scope.error=true}
+    );
+    $scope.happy = {assessment:0};
+    $scope.happy.comment = {visibility:3,content:''};
+
+    $scope.save_engagement = function() {
+        var data = {id: $scope.employee_id, survey_id: $scope.survey_id, _assessment: $scope.happy.assessment, _content:$scope.happy.comment.content};
+        EngagementSurvey.save(data, function (response) {
+            $scope.survey = response;
+            $scope.first_load = false;
+        });
+    };
+}])
+
 .controller('PvpEvaluationTodosCtrl', ['$scope', '$filter', '$routeParams', '$window', '$interval', '$location', 'PvpEvaluation', 'PvpDescriptions', 'EmployeeComments', 'User', 'analytics', function($scope, $filter, $routeParams, $window, $interval, $location, PvpEvaluation, PvpDescriptions, EmployeeComments, User, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     $scope.pvps = [];
     $scope.currentItemIndex = null;
     $scope.isDirty = false;
-    $scope.originalPotential = $scope.originalPerformance = 0;
+    $scope.originalPotential = 0;
+    $scope.originalPerformance = 0;
     $scope.show = false;
     $scope.hide = false;
     $scope.last_index = 0;
@@ -1923,16 +1972,23 @@ angular.module('tdb.controllers', [])
     $scope.currentPvP = null;
     $scope.isAnimating = false;
 
+    setToIsClean = function(pvp) {
+         if (!pvp.comment) {
+            pvp.comment = {originalContent: "", content: "", id: -1};
+        } else {
+            pvp.comment.originalContent = pvp.comment.content;
+        }
+        pvp.originalPotential = pvp.potential;
+        pvp.originalPerformance = pvp.performance;
+        return pvp;
+    };
+
     PvpEvaluation.getToDos().$promise.then(function(response) {
         $scope.currentItemIndex = 0;
         $scope.pvps = response.map(function(pvp) {
-            if (!pvp.comment) {
-                pvp.comment = {originalContent: "", content: "", id: -1};
-            } else {
-                pvp.comment.originalContent = pvp.comment.content;
-            }
-            return pvp;
+            return setToIsClean(pvp);
         });
+
         $scope.last_index = $scope.pvps.length -1;
 	});
 
@@ -1940,50 +1996,33 @@ angular.module('tdb.controllers', [])
             $scope.pvp_descriptions = response;
         }
     );
-
+    $scope.saving = false;
     $scope.save = function() {
-        var pvp_data = null;
-        _pvp = $scope.currentPvP;
-        if ($scope.currentPvP.comment.content) {
-            var newComment = {};
-            newComment.id = $scope.currentPvP.comment.id;
-            newComment.content = $scope.currentPvP.comment.content;
-            newComment.modified_date = new Date().toJSON();
-            newComment.owner = User.get();
-            newComment.newSubCommentText = "";
-            newComment.subcomments = [];
-            newComment.visibility = 2; // People team
-
-            var data = {id: newComment.id, _model_name: "employee", _object_id: newComment.id, _content: newComment.content, _visibility: newComment.visibility};
-            data.id = $scope.currentPvP.employee.id;
-            if (newComment.id > 0) {
-                EmployeeComments.update(data, function (response) {
-                   _pvp.comment.id = response.id;
-                    pvp_data = {id: _pvp.id, _potential: _pvp.potential, _performance: _pvp.performance, _comment_id: _pvp.comment.id};
-                    PvpEvaluation.update(pvp_data, function(){
-                    });
+        if (!$scope.saving) {
+            $scope.saving = true
+            _pvp = $scope.currentPvP;
+            if ($scope.currentPvP.comment.content) {
+                var data = {id: _pvp.id, _potential: _pvp.potential, _performance: _pvp.performance, _content: _pvp.comment.content};
+                console.log(data)
+                PvpEvaluation.update(data, function () {
+                    $scope.saving = false;
                 });
             } else {
-                EmployeeComments.save(data, function (response) {
-                    _pvp.comment.id = response.id;
-                    pvp_data = {id: _pvp.id, _potential: _pvp.potential, _performance: _pvp.performance, _comment_id: _pvp.comment.id};
-                    PvpEvaluation.update(pvp_data, function(){
-                    });
+                data = {id: _pvp.id, _potential: _pvp.potential, _performance: _pvp.performance};
+                PvpEvaluation.update(data, function () {
+                    $scope.saving = false;
                 });
             }
-        } else {
-            pvp_data = {id: _pvp.id, _potential: _pvp.potential, _performance: _pvp.performance};
-            PvpEvaluation.update(pvp_data, function(){
-            });
+            $scope.currentPvP = setToIsClean($scope.currentPvP);
         }
     };
 
     $scope.isDirty = function() {
-        return $scope.originalPotential != $scope.currentPvP.potential || $scope.originalPerformance != $scope.currentPvP.performance || $scope.currentPvP.comment.content || $scope.currentPvP.comment.originalContent;
+        return $scope.currentPvP.originalPotential != $scope.currentPvP.potential || $scope.currentPvP.originalPerformance != $scope.currentPvP.performance || $scope.currentPvP.comment.originalContent != $scope.currentPvP.comment.content;
     };
 
     $interval(function() {
-        if ($scope.isDirty){
+        if ($scope.isDirty()){
             $scope.save();
         }
     }, 2000);
@@ -2004,8 +2043,6 @@ angular.module('tdb.controllers', [])
     $scope.$watch('currentItemIndex', function(newVal, oldVal){
         if (newVal != oldVal) {
             $scope.currentPvP = $scope.pvps[$scope.currentItemIndex];
-            $scope.originalPotential = $scope.currentPvP.potential;
-            $scope.originalPerformance = $scope.currentPvP.performance;
         }
     },true);
     $scope.backward = function() {
