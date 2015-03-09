@@ -1,6 +1,6 @@
 'use strict'
 
-google.load('visualization', '1', {packages: ['corechart']});
+google.load('visualization', '1', {packages: ['corechart','annotationchart']});
 
 angular.module('tdb.directives', [])
 
@@ -58,6 +58,39 @@ angular.module('tdb.directives', [])
         var chart = new google.visualization.ColumnChart(element[0]);
 
         chart.draw(table, options);
+    };
+})
+
+.directive('timelineChart', function($rootScope) {
+    return function(scope, element, attrs){
+        if (scope.pvps) {
+            var data = new google.visualization.DataTable();
+
+            data.addColumn('date', 'Date');
+            data.addColumn('number', 'Performance');
+            data.addColumn('string', undefined);
+            data.addColumn('string', undefined);
+            data.addColumn('number', 'Potential');
+            data.addColumn('string', undefined);
+            data.addColumn('string', undefined);
+
+            for (var i = 0; i < scope.pvps.length; i++) {
+                var record = scope.pvps[i];
+                console.log(record);
+                var row = [$rootScope.parseDate(record.evaluation_round.date), record.performance, undefined, undefined, record.potential, undefined, undefined];
+                data.addRow(row);
+            }
+
+            var options = {
+                displayAnnotations: true,
+                displayZoomButtons: false,
+                displayRangeSelector: false
+            };
+
+            var chart = new google.visualization.AnnotationChart(element[0]);
+
+            chart.draw(data, options);
+        }
     };
 })
 

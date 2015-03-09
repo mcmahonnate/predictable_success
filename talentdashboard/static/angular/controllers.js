@@ -350,6 +350,7 @@ angular.module('tdb.controllers', [])
     $scope.show_kolbe = false;
     $scope.show_myers_briggs = false;
     $scope.show_todos = false;
+    $scope.show_timeline = false;
     $scope.click_discussions= function() {
         $scope.show_bio = false;
         $scope.show_discussions = true;
@@ -357,6 +358,7 @@ angular.module('tdb.controllers', [])
         $scope.show_kolbe = false;
         $scope.show_myers_briggs = false;
         $scope.show_todos = false;
+        $scope.show_timeline = false;
     };
     $scope.click_bio= function() {
         $scope.show_bio = true;
@@ -365,6 +367,7 @@ angular.module('tdb.controllers', [])
         $scope.show_kolbe = false;
         $scope.show_myers_briggs = false;
         $scope.show_todos = false;
+        $scope.show_timeline = false;
     };
     $scope.click_todos= function() {
         $scope.show_bio = false;
@@ -373,6 +376,7 @@ angular.module('tdb.controllers', [])
         $scope.show_kolbe = false;
         $scope.show_myers_briggs = false;
         $scope.show_todos = true;
+        $scope.show_timeline = false;
     };
     $scope.click_vops= function() {
         $scope.show_bio = false;
@@ -381,6 +385,16 @@ angular.module('tdb.controllers', [])
         $scope.show_kolbe = false;
         $scope.show_myers_briggs = false;
         $scope.show_todos = false;
+        $scope.show_timeline = false;
+    };
+    $scope.click_time_line= function() {
+        $scope.show_bio = false;
+        $scope.show_discussions = false;
+        $scope.show_vops = false;
+        $scope.show_kolbe = false;
+        $scope.show_myers_briggs = false;
+        $scope.show_todos = false;
+        $scope.show_timeline = true;
     };
     $scope.click_kolbe= function() {
         $scope.show_bio = false;
@@ -389,6 +403,8 @@ angular.module('tdb.controllers', [])
         $scope.show_kolbe = true;
         $scope.show_myers_briggs = false;
         $scope.show_todos = false;
+        $scope.show_timeline = false;
+
     };
     $scope.click_myers_briggs= function() {
         $scope.show_bio = false;
@@ -397,6 +413,7 @@ angular.module('tdb.controllers', [])
         $scope.show_kolbe = false;
         $scope.show_myers_briggs = true;
         $scope.show_todos = false;
+        $scope.show_timeline = false;
     };
     $scope.leadership=[];
     $scope.employees = Employee.query();

@@ -941,6 +941,11 @@ a.glyphicon:hover {
     content: "\e061";
 }
 
+.glyphicon-timeline:before {
+    color: #8b8b8b;
+    content: "\e055";
+}
+
 .glyphicon-chevron-right:before {
     content: "\e080";
 }
@@ -1510,4 +1515,28 @@ ul.dropdown-menu li {
     filter: none;
     opacity: 1;
     -webkit-filter: none;
+}
+.annotationsContainer, .google-visualization-atl{
+    text-shadow: none;
+    background: #2a2a2a;
+}
+.google-visualization-table-table tbody{
+    background: #2a2a2a;
+}
+
+.chartControls {
+    background: #2a2a2a;
+}
+
+.chartContainer rect {
+    fill: #fff;
+}
+
+.chartContainer svg rect {
+    fill: #2a2a2a;
+}
+
+.chartContainer text {
+    fill: #fff;
+    stroke: none;
 }
