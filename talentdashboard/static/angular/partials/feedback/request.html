@@ -6,6 +6,7 @@
                 {{ pendingRequests.length > 1 ? "people" : "person" }}
                 for feedback
             </h2>
+
             <div>
                 <span ng-repeat="request in pendingRequests">
                     {{ $last ? 'and ' : '' }}{{ request.reviewer.full_name }}{{ $last ? '' : ', ' }}
@@ -33,10 +34,6 @@
                     <div ng-bind-html="reviewer.full_name | highlight: $select.search"></div>
                 </ui-select-choices>
             </ui-select>
-            <textarea class="form-control" placeholder="Add a message that will be sent to your recipients (optional)."
-                      ng-model="message" style="width: 50%"
-                      rows="10"></textarea>
-
             <div>
                 <button class="btn" type="button" ng-click="submit()">Ask for feedback!</button>
             </div>
