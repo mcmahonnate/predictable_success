@@ -138,7 +138,6 @@ INSTALLED_APPS = (
     'django_extensions',
     'talentdashboard',
     'rest_framework',
-    'rest_framework_swagger',
     'blah',
     'org',
     'pvp',
