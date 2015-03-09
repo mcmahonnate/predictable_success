@@ -83,6 +83,5 @@ urlpatterns = patterns('',
     url(r'api/v1/feedback/coach/$', CoachFeedbackReports.as_view()),
     url(r'api/v1/feedback/coach/deliver/$', mark_feedback_delivered),
     url(r'api/v1/feedback/coach/email/$', email_feedback),
-    url(r'^docs/', include('rest_framework_swagger.urls')),
     url(r'^', include(router.urls)),
 )
