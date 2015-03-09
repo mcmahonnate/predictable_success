@@ -15,7 +15,7 @@ var app = angular.module('feedback', [
                     when('/submit/', {templateUrl: '/static/angular/partials/feedback/unsolicited_feedback.html', controller: 'SubmitFeedbackCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
                     when('/deliver/', {templateUrl: '/static/angular/partials/feedback/coach_report.html', controller: 'CoachReportCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
                     when('/deliver/:id', {templateUrl: '/static/angular/partials/feedback/compiled_feedback.html', controller: 'CompiledFeedbackCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
-                    otherwise({redirectTo: '/'});
+                    otherwise({redirectTo: '/request'});
             }])
         .config(function ($mdThemingProvider) {
             $mdThemingProvider.theme('default')

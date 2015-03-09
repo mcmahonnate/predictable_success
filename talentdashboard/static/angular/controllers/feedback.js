@@ -66,6 +66,7 @@ angular.module('feedback.controllers', [])
         'ReplyToFeedbackRequestCtrl',
         ['$scope', '$routeParams', '$interval', '$location', 'FeedbackRequest', 'FeedbackSubmission',
             function ($scope, $routeParams, $interval, $location, FeedbackRequest, FeedbackSubmission) {
+                $scope.alerts = [];
                 $scope.request = null;
                 $scope.showSuccessAlert = false;
                 $scope.feedback = {excels_at: "", could_improve_on: ""};
@@ -86,14 +87,12 @@ angular.module('feedback.controllers', [])
                     });
 
                     submission.$save(function (s) {
-                        $scope.showSuccessAlert = true;
-                        $interval(function () {
-                            $scope.showSuccessAlert = false;
-                        }, 1000, 1);
-
-                        $location.path('/todo');
                     });
-                }
+                };
+
+                $scope.closeAlert = function(index) {
+                    $scope.alerts.splice(index, 1);
+                };
             }
         ]
     )
@@ -124,7 +123,9 @@ angular.module('feedback.controllers', [])
         'CoachReportCtrl',
         ['$scope', 'CoachReport',
             function ($scope, CoachReport) {
-                $scope.report = CoachReport.query();
+                CoachReport.query({}, function(results) {
+                    $scope.report = results;
+                });
             }
         ]
     )
@@ -159,7 +160,6 @@ angular.module('feedback.controllers', [])
                         alert("Emailed!");
                     })
                 };
-
             }
         ]
     )

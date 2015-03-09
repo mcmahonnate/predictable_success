@@ -1112,6 +1112,7 @@ def email_feedback(request):
             return Response(None, status=200)
 
         recipient_email = feedback_items[0].subject.email
+        coach_email = "{} <{}>".format(coach.full_name, coach.email)
 
         if not recipient_email:
             return Response(None, status=200)
