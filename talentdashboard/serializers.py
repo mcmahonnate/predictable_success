@@ -266,7 +266,7 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
 class SitePreferencesSerializer(serializers.ModelSerializer):
     class Meta:
         model = SitePreferences
-        fields = ('id', 'show_kolbe', 'show_vops', 'show_mbti', 'show_coaches')
+        fields = ('id', 'show_kolbe', 'show_vops', 'show_mbti', 'show_coaches', 'show_timeline')
 
 class UserSerializer(serializers.ModelSerializer):
     employee = MinimalEmployeeSerializer()

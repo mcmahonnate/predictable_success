@@ -27,7 +27,7 @@
                             <li ng-show="has_mbti"><a ng-click="click_myers_briggs()" style="cursor: pointer;"><span class="glyphicon-regular glyphicon-compass" style="margin-right: 10px"></span>Myers Briggs</a></li>
                             <li ng-show="has_kolbe"><a ng-click="click_kolbe()" style="cursor: pointer;">Kolbe</a></li>
                             <li ng-show="has_vops"><a ng-click="click_vops()" style="cursor: pointer;">Vops</a></li>
-                            <li><a ng-click="click_time_line()" style="cursor: pointer;"><span class="glyphicon-regular glyphicon-timeline" style="margin-right: 10px"></span>Timeline</a></li>
+                            <li ng-show="site_preferences.show_timeline"><a ng-click="click_time_line()" style="cursor: pointer;"><span class="glyphicon-regular glyphicon-timeline" style="margin-right: 10px"></span>Timeline</a></li>
                         </ul>
                     </nav>
                   </section>
