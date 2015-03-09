@@ -1,8 +1,9 @@
 angular.module('feedback.controllers', [])
     .controller(
         'MenuCtrl',
-        ['$scope', '$location',
-            function ($scope, $location) {
+        ['$scope', '$location', 'User',
+            function ($scope, $location, User) {
+                $scope.user = User.get();
                 $scope.menuClass = function (page) {
                     var current = $location.path().replace(/\//g, '');
                     return page === current ? "active" : "";
