@@ -1,18 +1,15 @@
 <div class="panel panel-default">
     <div class="panel-body">
-        <div ng-show="report.total_feedback_items > 0">
-            <h2>Feedback for {{ report.employee.full_name }}</h2>
-
+        <div class="panel panel-default" ng-show="report.total_feedback_items > 0">
+            <div class="panel-heading">Feedback for {{ report.employee.full_name }}</div>
             <div class="list-group">
-                <h4 class="list-group-item-heading">What does this person excel at?</h4>
-
+                <div class="list-group-item-heading">What does this person excel at?</div>
                 <div class="list-group-item" ng-repeat="response in report.responses_by_question.excels_at">
                     <p class="list-group-item-text">{{ response }}</p>
                 </div>
             </div>
             <div class="list-group">
-                <h4 class="list-group-item-heading">What could this person improve on?</h4>
-
+                <div class="list-group-item-heading">What could this person improve on?</div>
                 <div class="list-group-item" ng-repeat="response in report.responses_by_question.could_improve_on">
                     <p class="list-group-item-text">{{ response }}</p>
                 </div>
@@ -23,8 +20,8 @@
                 <button type="button" ng-click="email()">Email</button>
             </div>
         </div>
-        <div ng-show="report.total_feedback_items == 0">
-            <h2>There is no undelivered feedback for {{ report.employee.full_name }}</h2>
+        <div class="panel panel-default"  ng-show="report.total_feedback_items == 0">
+            <div class="panel-heading">There is no undelivered feedback for {{ report.employee.full_name }}</div>
         </div>
     </div>
 </div>
