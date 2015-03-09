@@ -265,6 +265,7 @@ class PvpEvaluationDetail(APIView):
         serializer = PvpEvaluationSerializer(pvp,context={'request': request})
         return Response(serializer.data)
 
+
 class SendEngagementSurvey(APIView):
     def post(self, request, pk, format=None):
         override = False
@@ -274,7 +275,7 @@ class SendEngagementSurvey(APIView):
             override = request.DATA["_override", False]
         sent_from = Employee.objects.get(id=sent_from_id)
         current_surveys = SurveyUrl.objects.filter(sent_to__id=pk, active=True)
-        if current_surveys is not None and not override:
+        if len(current_surveys) > 0 and not override:
             serializer = SurveyUrlSerializer(current_surveys, many=True, context={'request': request})
             return Response(serializer.data)
         elif current_surveys:
@@ -292,11 +293,11 @@ class SendEngagementSurvey(APIView):
             employee.save()
         survey = generate_survey(employee, sent_from)
         html_template = get_template('engagement_survey_email.html')
-        template_vars = Context({'employee_name': employee.full_name, 'survey_url': survey.url})
+        template_vars = Context({'employee_name': employee.first_name, 'survey_url': survey.url, 'from': survey.sent_from.full_name})
         html_content = html_template.render(template_vars)
-        subject = 'Fill out this survey'
+        subject = 'How are you?'
         text_content = 'Fill out this survey:\r\n' + survey.url
-        mail_from = survey.sent_from.full_name + '<notify@dfrntlabs.com>'
+        mail_from = survey.sent_from.full_name + ' Survey<notify@dfrntlabs.com>'
         mail_to = employee.email
         msg = EmailMultiAlternatives(subject, text_content, mail_from, [mail_to])
         msg.attach_alternative(html_content, "text/html")

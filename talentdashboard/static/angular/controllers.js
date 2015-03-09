@@ -1935,7 +1935,7 @@ angular.module('tdb.controllers', [])
     };
 }])
 
-.controller('EngagementSurveyCtrl', ['$scope', '$window', '$routeParams', 'EngagementSurvey', 'analytics', function($scope, $window, $routeParams, EngagementSurvey, analytics){
+.controller('EngagementSurveyCtrl', ['$scope', '$window', '$routeParams', '$location', 'EngagementSurvey', 'analytics', function($scope, $window, $routeParams, $location, EngagementSurvey, analytics){
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     $scope.employee_id = $routeParams.employeeId;
     $scope.survey_id = $routeParams.surveyId;
