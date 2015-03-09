@@ -2,11 +2,11 @@
     <div style="margin:50px 0 30px 0" >
         <div style="margin:20px 0;font-size:18px;font-family: Lato,Helvetica,Arial,sans-serif;color:white;">How professionally happy are you?</div>
         <div style="width:200px;height:32px;margin: 5px 0px;font-size: 0;display:inline-block" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all">
-            <div class="ui-range-unit ui-corner-left" ng-click="happy.assessment=1" ng-class="{scoreVeryUnhappy: happy.assessment>=1}"></div>
-            <div class="ui-range-unit" ng-click="happy.assessment=2" ng-class="{scoreUnhappy:happy.assessment>=2}"></div>
-            <div class="ui-range-unit" ng-click="happy.assessment=3" ng-class="{scoreIndifferent: happy.assessment>=3}"></div>
-            <div class="ui-range-unit" ng-click="happy.assessment=4" ng-class="{scoreHappy: happy.assessment>=4}"></div>
-            <div class="ui-range-unit ui-corner-right" ng-click="happy.assessment=5" ng-class="{scoreVeryHappy: happy.assessment==5}"></div>
+            <div class="rateVeryUnhappy ui-range-unit ui-corner-left" ng-click="happy.assessment=1" ng-class="{rated: happy.assessment>=1, default: happy.assessment==0}"></div>
+            <div class="rateUnhappy ui-range-unit" ng-click="happy.assessment=2" ng-class="{rated:happy.assessment>=2, clear: (happy.assessment<2 && happy.assessment!=0), default: happy.assessment==0}"></div>
+            <div class="rateIndifferent ui-range-unit" ng-click="happy.assessment=3" ng-class="{rated: happy.assessment>=3, clear: (happy.assessment<3 && happy.assessment!=0), default: happy.assessment==0}"></div>
+            <div class="rateHappy ui-range-unit" ng-click="happy.assessment=4" ng-class="{rated: happy.assessment>=4, clear: (happy.assessment<4 && happy.assessment!=0), default: happy.assessment==0}"></div>
+            <div class="rateVeryHappy ui-range-unit ui-corner-right" ng-click="happy.assessment=5" ng-class="{rated: happy.assessment==5, clear: (happy.assessment<5 && happy.assessment!=0), default: happy.assessment==0}"></div>
         </div>
         <div style="display:inline-block;margin-left: 20px;">
             <span ng-class="{veryunhappy: happy.assessment==1,unhappy: happy.assessment==2,indifferent: happy.assessment==3,happy: happy.assessment==4,veryhappy: happy.assessment==5}"></span>
@@ -61,6 +61,9 @@
       background-color: #2C3E50;
     }
     @media only screen and (max-device-width: 480px) {
+      html {
+        max-width: 325px;
+      }
       body {
         max-width: 325px;
       }
@@ -89,25 +92,32 @@
     -webkit-transition: all 0.2s ease-out;
     transition: all 0.2s ease-out;
     }
-    .scoreVeryUnhappy {
-      border-color: white;
+    .rated {
+        border-color: white;
+        opacity: 1;
+    }
+    .rateVeryUnhappy {
       background-color: red;
     }
-    .scoreUnhappy {
-      border-color: white;
+    .rateUnhappy {
       background-color: orange;
     }
-    .scoreIndifferent {
-      border-color: white;
+    .rateIndifferent {
       background-color: yellow;
     }
-    .scoreHappy {
-      border-color: white;
+    .rateHappy {
       background-color: limegreen;
     }
-    .scoreVeryHappy {
-      border-color: white;
+    .rateVeryHappy {
       background-color: green;
+    }
+    .clear {
+        background-color: #fff;
+        border-color: none;
+    }
+    .default {
+      opacity: .4;
+      border-color: none;
     }
     .ui-widget-content {
       border-color: lightgrey;

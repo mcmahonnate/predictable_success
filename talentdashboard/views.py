@@ -297,7 +297,7 @@ class SendEngagementSurvey(APIView):
         html_content = html_template.render(template_vars)
         subject = 'How are you?'
         text_content = 'Fill out this survey:\r\n' + survey.url
-        mail_from = survey.sent_from.full_name + ' Survey<notify@dfrntlabs.com>'
+        mail_from = survey.sent_from.full_name + ' <notify@dfrntlabs.com>'
         mail_to = employee.email
         msg = EmailMultiAlternatives(subject, text_content, mail_from, [mail_to])
         msg.attach_alternative(html_content, "text/html")
