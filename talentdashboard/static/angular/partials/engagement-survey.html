@@ -3,7 +3,7 @@
     <div style="margin:50px 0 30px 0" >
         <div style="margin:20px 0;font-size:18px;font-family: Lato,Helvetica,Arial,sans-serif;color:white;">How professionally happy are you?</div>
         <div style="width:200px;height:32px;margin: 5px 0px;font-size: 0;display:inline-block" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all">
-            <div class="rateVeryUnhappy ui-range-unit ui-corner-left" ng-click="happy.assessment=1" ng-class="{rated: happy.assessment>=1, default: happy.assessment==0}"></div>
+            <div class="rateVeryUnhappy ui-range-unit ui-corner-left" style="" ng-click="happy.assessment=1" ng-class="{rated: happy.assessment>=1, default: happy.assessment==0}"></div>
             <div class="rateUnhappy ui-range-unit" ng-click="happy.assessment=2" ng-class="{rated:happy.assessment>=2, clear: (happy.assessment<2 && happy.assessment!=0), default: happy.assessment==0}"></div>
             <div class="rateIndifferent ui-range-unit" ng-click="happy.assessment=3" ng-class="{rated: happy.assessment>=3, clear: (happy.assessment<3 && happy.assessment!=0), default: happy.assessment==0}"></div>
             <div class="rateHappy ui-range-unit" ng-click="happy.assessment=4" ng-class="{rated: happy.assessment>=4, clear: (happy.assessment<4 && happy.assessment!=0), default: happy.assessment==0}"></div>
@@ -73,38 +73,48 @@
     }
 
     .ui-range-unit {
-    width: 19%;
-    height: 100%;
-    display: inline-block;
-    border-width: 1px;
-    border-color: lightgrey;
-    border-style: solid;
-    margin-top: -1px;
-    cursor: pointer;
-    -moz-transition: all 0.2s ease-out;
-    -o-transition: all 0.2s ease-out;
-    -ms-transition: all 0.2s ease-out;
-    -webkit-transition: all 0.2s ease-out;
-    transition: all 0.2s ease-out;
+        position: absolute;
+        height: 100%;
+        display: inline-block;
+        border-color: lightgrey;
+        border-style: solid;
+        border-right-width: 1px;
+        border-left-width: 1px;
+        cursor: pointer;
+        -moz-transition: all 0.2s ease-out;
+        -o-transition: all 0.2s ease-out;
+        -ms-transition: all 0.2s ease-out;
+        -webkit-transition: all 0.2s ease-out;
+        transition: all 0.2s ease-out;
     }
     .rated {
         border-color: white;
         opacity: 1;
     }
     .rateVeryUnhappy {
+      width: 39px;
       background-color: red;
+      left: -1px;
     }
     .rateUnhappy {
+      width: 38px;
       background-color: orange;
+      left: 40px;
     }
     .rateIndifferent {
+      width: 38px;
       background-color: yellow;
+      left: 80px;
     }
     .rateHappy {
+      width: 38px;
       background-color: limegreen;
+      left: 120px;
     }
     .rateVeryHappy {
+      width: 39px;
       background-color: green;
+      left: 160px;
     }
     .clear {
         background-color: #fff;
@@ -112,7 +122,7 @@
     }
     .default {
       opacity: .4;
-      border-color: none;
+      border-color: white;
     }
     .ui-widget-content {
       border-color: lightgrey;
