@@ -1,27 +1,38 @@
-<div class="panel panel-default">
-    <div class="panel-body">
         <div class="panel panel-default" ng-show="report.total_feedback_items > 0">
             <div class="panel-heading">Feedback for {{ report.employee.full_name }}</div>
-            <div class="list-group">
-                <div class="list-group-item-heading">What does this person excel at?</div>
-                <div class="list-group-item" ng-repeat="response in report.responses_by_question.excels_at">
-                    <p class="list-group-item-text">{{ response }}</p>
+            <div class="panel-body">
+                <div class="panel panel-default">
+                    <div class="panel-heading">What does this person excel at?</div>
+                    <div class="panel-body">
+                        <div class="list-group">
+                            <div class="list-group-item"
+                                 ng-repeat="response in report.responses_by_question.excels_at track by $index">
+                                <p class="list-group-item-text">{{ response }}</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="list-group">
-                <div class="list-group-item-heading">What could this person improve on?</div>
-                <div class="list-group-item" ng-repeat="response in report.responses_by_question.could_improve_on">
-                    <p class="list-group-item-text">{{ response }}</p>
+                <div class="panel panel-default">
+                    <div class="panel-heading">What could this person improve on?</div>
+                    <div class="panel-body">
+                        <div class="list-group">
+                            <div class="list-group-item"
+                                 ng-repeat="response in report.responses_by_question.could_improve_on track by $index">
+                                <p class="list-group-item-text">{{ response }}</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div>
-                <button type="button" ng-click="markDelivered()">Mark as delivered</button>
-                <button type="button">Print</button>
-                <button type="button" ng-click="email()">Email</button>
+                <div class="form-group">
+                    <form>
+                        <button class="btn btn-primary" type="button" ng-click="markDelivered()">Mark as delivered
+                        </button>
+                        <button class="btn btn-default" type="button">Print</button>
+                        <button class="btn btn-default" type="button" ng-click="email()">Email</button>
+                    </form>
+                </div>
             </div>
         </div>
         <div class="panel panel-default" ng-show="report.total_feedback_items == 0">
             <div class="panel-heading">There is no undelivered feedback for {{ report.employee.full_name }}</div>
         </div>
-    </div>
-</div>

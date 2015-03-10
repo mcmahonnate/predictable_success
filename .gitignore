@@ -16,6 +16,7 @@ sdist
 develop-eggs
 .installed.cfg
 venv
+.pycharm-bash
 
 lib64
 __pycache__

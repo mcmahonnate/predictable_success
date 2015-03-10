@@ -35,6 +35,9 @@ class FeedbackRequest(models.Model):
         plain_text_message = render_to_string('email/feedback_request_notification.txt', context)
         send_mail(subject, plain_text_message, settings.DEFAULT_FROM_EMAIL, [recipient_email])
 
+    def __str__(self):
+        return "Feedback request from %s for %s" % (self.requester, self.reviewer)
+
 
 class FeedbackSubmission(models.Model):
     feedback_request = models.ForeignKey(FeedbackRequest, null=True, blank=True, related_name='submissions')
@@ -51,6 +54,8 @@ class FeedbackSubmission(models.Model):
             self.feedback_request.save()
         super(FeedbackSubmission, self).save(*args, **kwargs)
 
+    def __str__(self):
+        return "Feedback submission by %s for %s" % (self.reviewer, self.subject)
 
 class UndeliveredFeedbackReport:
     def __init__(self, employee):
