@@ -1,6 +1,7 @@
 # Django settings for talentdashboard project.
 import os.path
 
+CELERY_ALWAYS_EAGER = True
 DEBUG = False
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -161,24 +162,6 @@ REST_FRAMEWORK = {
     'DATETIME_FORMAT': None,
     'DATE_FORMAT': None,
     'TIME_FORMAT': None,
-}
-
-SWAGGER_SETTINGS = {
-    'exclude_namespaces': [],
-    'api_version': '1.0',
-    'api_path': '/',
-    'enabled_methods': [
-        'get',
-        'post',
-        'put',
-        'patch',
-        'delete'
-    ],
-    'api_key': '',
-    'is_authenticated': False,
-    'is_superuser': False,
-    'permission_denied_handler': None,
-    'doc_expansion': 'none',
 }
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
