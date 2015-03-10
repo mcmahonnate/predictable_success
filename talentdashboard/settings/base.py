@@ -148,7 +148,6 @@ INSTALLED_APPS = (
     'kpi',
     'feedback',
     'preferences',
-    'djcelery_email',
 )
 
 REST_FRAMEWORK = {
