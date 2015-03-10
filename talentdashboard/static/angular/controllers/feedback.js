@@ -90,10 +90,6 @@ angular.module('feedback.controllers', [])
                     submission.$save(function (s) {
                     });
                 };
-
-                $scope.closeAlert = function(index) {
-                    $scope.alerts.splice(index, 1);
-                };
             }
         ]
     )
@@ -114,8 +110,11 @@ angular.module('feedback.controllers', [])
                 $scope.submit = function () {
                     $scope.feedback.subject = $scope.search.selectedEmployee.id;
                     $scope.feedback.$save(function (f) {
-                        $location.path('/todo');
+                        $location.path('/submit');
                     });
+                };
+                $scope.cancel = function () {
+                    $location.path('/submit');
                 };
             }
         ]
