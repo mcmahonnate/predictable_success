@@ -4,7 +4,7 @@ from celery import Celery
 from django.conf import settings
 
 # Lets the celery command line program know where project settings are.
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'talentdashboard.settings')
+# os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'talentdashboard.settings')
 
 # Creates the instance of the Celery app.
 app = Celery('talentdashboard',
