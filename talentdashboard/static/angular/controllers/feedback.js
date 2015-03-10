@@ -4,9 +4,9 @@ angular.module('feedback.controllers', [])
         ['$scope', '$location', 'User',
             function ($scope, $location, User) {
                 $scope.user = User.get();
-                $scope.menuClass = function (page) {
-                    var current = $location.path().replace(/\//g, '');
-                    return page === current ? "active" : "";
+                $scope.menuClass = function (path) {
+                    var current = $location.path();
+                    return current.indexOf(path) == 0 ? "active" : "";
                 };
             }
         ])
