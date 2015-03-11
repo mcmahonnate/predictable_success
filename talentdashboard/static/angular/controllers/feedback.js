@@ -12,8 +12,8 @@ angular.module('feedback.controllers', [])
         ])
     .controller(
         'RequestFeedbackCtrl',
-        ['$scope', '$interval', 'FeedbackRequest', 'Employee',
-            function ($scope, $interval, FeedbackRequest, Employee) {
+        ['$scope', '$interval', 'FeedbackRequest', 'Employee', 'Notification',
+            function ($scope, $interval, FeedbackRequest, Employee, Notification) {
                 $scope.searchText = "";
                 $scope.message = "";
                 $scope.pendingRequests = FeedbackRequest.pending();
@@ -32,18 +32,14 @@ angular.module('feedback.controllers', [])
                         Array.prototype.unshift.apply($scope.pendingRequests, data);
                         $scope.potentialReviewers = Employee.potentialReviewers();
                         $scope.search.selectedReviewers = [];
-
-                        $scope.showSuccessAlert = true;
-                        $interval(function () {
-                            $scope.showSuccessAlert = false;
-                        }, 1000, 1);
+                        Notification.success("Your request will be delivered");
                     });
                 };
             }
         ]
     )
     .controller(
-        'FeedbackTodoCtrl',
+        'FeedbackRequestsCtrl',
         ['$scope', 'FeedbackRequest',
             function ($scope, FeedbackRequest) {
                 $scope.search = { selectedRequest: null };
@@ -57,16 +53,13 @@ angular.module('feedback.controllers', [])
                         $scope.todos.push(request);
                     }
                 });
-                $scope.select = function (id) {
-                    console.log(id);
-                };
             }
         ]
     )
     .controller(
         'ReplyToFeedbackRequestCtrl',
-        ['$scope', '$routeParams', '$interval', '$location', 'FeedbackRequest', 'FeedbackSubmission',
-            function ($scope, $routeParams, $interval, $location, FeedbackRequest, FeedbackSubmission) {
+        ['$scope', '$routeParams', '$interval', '$location', 'FeedbackRequest', 'FeedbackSubmission', 'Notification',
+            function ($scope, $routeParams, $interval, $location, FeedbackRequest, FeedbackSubmission, Notification) {
                 $scope.alerts = [];
                 $scope.request = null;
                 $scope.showSuccessAlert = false;
@@ -76,7 +69,7 @@ angular.module('feedback.controllers', [])
                 });
 
                 $scope.cancel = function () {
-                    $location.path('/todo');
+                    $location.path('/submit');
                 };
 
                 $scope.submit = function () {
@@ -87,7 +80,9 @@ angular.module('feedback.controllers', [])
                         could_improve_on: $scope.feedback.could_improve_on
                     });
 
-                    submission.$save(function (s) {
+                    submission.$save(function () {
+                        Notification.success("Your feedback was saved");
+                        $location.path('/submit');
                     });
                 };
             }
@@ -131,8 +126,8 @@ angular.module('feedback.controllers', [])
     )
     .controller(
         'CompiledFeedbackCtrl',
-        ['$scope', '$routeParams', 'CoachReport',
-            function($scope, $routeParams, CoachReport) {
+        ['$scope', '$routeParams', '$location', 'CoachReport', 'Notification',
+            function($scope, $routeParams, $location, CoachReport, Notification) {
                 $scope.feedbackItemIds = [];
 
                 CoachReport.query({}, function(data) {
@@ -151,13 +146,15 @@ angular.module('feedback.controllers', [])
 
                 $scope.markDelivered = function() {
                     CoachReport.markDelivered($scope.feedbackItemIds, function() {
-                        alert("Marked!");
+                        Notification.success($scope.report.total_feedback_items.toString() + " items were marked as delivered");
+                        $location.path('/deliver');
                     })
                 };
 
                 $scope.email = function() {
                     CoachReport.sendEmail($scope.feedbackItemIds, function() {
-                        alert("Emailed!");
+                        Notification.success($scope.report.total_feedback_items.toString() + " feedback items will be emailed to " + $scope.report.employee.full_name);
+                        $location.path('/deliver');
                     })
                 };
             }
