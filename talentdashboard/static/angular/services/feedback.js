@@ -42,4 +42,19 @@ angular.module('feedback.services', ['ngResource'])
         };
         return $resource('/api/v1/feedback/coach/', {}, actions);
     }])
+
+    .factory('alertService', function($rootScope) {
+        var alertService = {};
+        $rootScope.alerts = [];
+
+        alertService.add = function(type, msg) {
+            $rootScope.alerts.push({'type': type, 'msg': msg});
+        };
+
+        alertService.closeAlert = function(index) {
+            $rootScope.alerts.splice(index, 1);
+        };
+
+        return alertService;
+    })
 ;

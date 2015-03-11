@@ -50,6 +50,7 @@ nosetests.xml
 
 #Static
 staticfiles
+bower_components
 venv/.Python
 
 venv/include/python2.7
