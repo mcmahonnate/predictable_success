@@ -1,6 +1,7 @@
 FeedbackRequest.objects.all().delete()
 FeedbackSubmission.objects.all().delete()
-me = Employee.objects.filter(user__username='mkennedy').first()
+username = raw_input("Enter your username: ")
+me = Employee.objects.filter(user__username=username).first()
 e1 = Employee.objects.get(pk=1541)
 e2 = Employee.objects.get(pk=1540)
 e3 = Employee.objects.get(pk=1539)
