@@ -1,14 +1,22 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Q
-from django.db.models.query import QuerySet
 from django.core.exceptions import ObjectDoesNotExist
 from org.models import Employee
 from blah.models import Comment
+from django.utils.log import getLogger
 
+logger = getLogger('talentdashboard')
 PVP_SCALE = [(i, i) for i in range(0, 5)]
 
 class EvaluationRoundManager(models.Manager):
+    def get_rounds_for_employee(self, employee_id):
+        evaluations = PvpEvaluation.objects.filter(employee__id=employee_id)
+        evaluations = evaluations.filter(evaluation_round__is_complete=True)
+        evaluations = evaluations.extra(order_by=['evaluation_round__date'])
+        ids = evaluations.values('evaluation_round__id')
+        return self.filter(id__in=ids)
+
     def most_recent(self, is_complete=True):
         return self.filter(is_complete=is_complete).order_by('-date')[0:1].get()
 

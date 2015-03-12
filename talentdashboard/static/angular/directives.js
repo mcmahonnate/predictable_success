@@ -21,6 +21,57 @@ angular.module('tdb.directives', [])
     };
 })
 
+.directive('timelineChart', ['$routeParams', '$rootScope', 'AnnotationChart', function($routeParams, $rootScope, AnnotationChart) {
+    return {
+        restrict: 'E',
+        link: function(scope, element, attrs) {
+            scope.employee_id = $routeParams.id;
+            AnnotationChart.getData(scope.employee_id).$promise.then(function(response) {
+                scope.chart_data = response;
+                if (scope.chart_data) {
+                    var data = new google.visualization.DataTable();
+
+                    data.addColumn('date', 'Date');
+                    data.addColumn('number', 'Performance');
+                    data.addColumn('string', undefined);
+                    data.addColumn('string', undefined);
+                    data.addColumn('number', 'Potential');
+                    data.addColumn('string', undefined);
+                    data.addColumn('string', undefined);
+                    data.addColumn('number', 'Comment');
+                    data.addColumn('string', undefined);
+                    data.addColumn('string', undefined);
+                    data.addColumn('number', 'Happy');
+                    data.addColumn('string', undefined);
+                    data.addColumn('string', undefined);
+                    var record;
+                    angular.forEach(scope.chart_data, function(value, key) {
+                        console.log(value);
+                        record = value;
+                        var happy = parseInt(record[10]);
+                        if (happy==0) {happy=undefined}
+                        var row = [$rootScope.parseDate(record[0]), parseFloat(record[1]), undefined, undefined, parseFloat(record[4]), undefined, undefined, parseInt(record[7]), record[8], record[9], happy, undefined, undefined];
+                        data.addRow(row);
+                    });
+
+                    var options = {
+                        displayAnnotations: true,
+                        displayZoomButtons: false,
+                        displayRangeSelector: false,
+                        thickness: 2,
+                        max: 5,
+                        min: 0
+                    };
+
+                    var chart = new google.visualization.AnnotationChart(element[0]);
+
+                    chart.draw(data, options);
+                }
+            })
+        }
+    };
+}])
+
 .directive('compensationHistoryChart', function() {
     return function(scope, element, attrs){
         var table = new google.visualization.DataTable();
@@ -58,39 +109,6 @@ angular.module('tdb.directives', [])
         var chart = new google.visualization.ColumnChart(element[0]);
 
         chart.draw(table, options);
-    };
-})
-
-.directive('timelineChart', function($rootScope) {
-    return function(scope, element, attrs){
-        if (scope.pvps) {
-            var data = new google.visualization.DataTable();
-
-            data.addColumn('date', 'Date');
-            data.addColumn('number', 'Performance');
-            data.addColumn('string', undefined);
-            data.addColumn('string', undefined);
-            data.addColumn('number', 'Potential');
-            data.addColumn('string', undefined);
-            data.addColumn('string', undefined);
-
-            for (var i = 0; i < scope.pvps.length; i++) {
-                var record = scope.pvps[i];
-                console.log(record);
-                var row = [$rootScope.parseDate(record.evaluation_round.date), record.performance, undefined, undefined, record.potential, undefined, undefined];
-                data.addRow(row);
-            }
-
-            var options = {
-                displayAnnotations: true,
-                displayZoomButtons: false,
-                displayRangeSelector: false
-            };
-
-            var chart = new google.visualization.AnnotationChart(element[0]);
-
-            chart.draw(data, options);
-        }
     };
 })
 

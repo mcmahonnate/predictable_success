@@ -94,6 +94,16 @@ angular.module('tdb.services', ['ngResource'])
     return res;
 }])
 
+.factory('AnnotationChart', ['$resource', '$http', function($resource, $http) {
+    var AnnotationChart = $resource('/api/v1/annotation-chart/:id');
+
+    AnnotationChart.getData = function(id) {
+        return this.get({id: id});
+    };
+
+    return AnnotationChart;
+}])
+
 .factory('PvpEvaluation', ['$resource', '$http', function($resource, $http) {
     var actions = {
         'update': { method: 'PUT' }
