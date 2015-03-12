@@ -16,6 +16,7 @@ sdist
 develop-eggs
 .installed.cfg
 venv
+.pycharm-bash
 
 lib64
 __pycache__
@@ -49,6 +50,7 @@ nosetests.xml
 
 #Static
 staticfiles
+bower_components
 venv/.Python
 
 venv/include/python2.7

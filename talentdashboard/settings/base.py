@@ -1,6 +1,7 @@
 # Django settings for talentdashboard project.
 import os.path
 
+CELERY_ALWAYS_EAGER = True
 DEBUG = False
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -146,6 +147,7 @@ INSTALLED_APPS = (
     'assessment',
     'storages',
     'kpi',
+    'feedback',
     'preferences',
 )
 
@@ -188,3 +190,7 @@ def get_cache():
     }
 
 CACHES = get_cache()
+
+FEEDBACK_APP_SETTINGS = {
+    'respond_to_feedback_request_url_template': '{scheme}://{host}/feedback/#/todo/{id}'
+}

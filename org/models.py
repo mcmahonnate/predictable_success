@@ -3,7 +3,20 @@ from django.contrib.auth.models import User
 import datetime
 import blah
 
+COACHES_GROUP = 'CoachAccess'
+
+
+class EmployeeManager(models.Manager):
+    def coaches(self):
+        return self.filter(user__groups__name=COACHES_GROUP).order_by('full_name')
+
+    def get_from_user(self, user):
+        return self.filter(user=user).get()
+
+
 class Employee(models.Model):
+    objects = EmployeeManager()
+
     full_name = models.CharField(
         max_length=255,
     )
@@ -23,13 +36,13 @@ class Employee(models.Model):
         blank=True,
     )
     avatar = models.ImageField(
-		upload_to="media/avatars/%Y/%m/%d",
+        upload_to="media/avatars/%Y/%m/%d",
         max_length=100,
         blank=True,
         default="/media/avatars/geneRick.jpg"
     )
     avatar_small = models.ImageField(
-		upload_to="media/avatars/small/%Y/%m/%d",
+        upload_to="media/avatars/small/%Y/%m/%d",
         max_length=100,
         null=True,
         blank=True,
@@ -58,57 +71,62 @@ class Employee(models.Model):
         blank=True,
         default=None
     )
-    user = models.OneToOneField(User,on_delete=models.SET_NULL, null=True, blank=True)
-    coach = models.ForeignKey('Employee',related_name='coachee', null=True, blank=True)
+    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True)
+    coach = models.ForeignKey('Employee', related_name='coachees', null=True, blank=True)
+
+    def is_coach(self):
+        if self.user is None:
+            return False
+        return any(group.name == COACHES_GROUP for group in self.user.groups.all())
 
     def _get_kolbe_fact_finder(self):
         try:
-            value=int(self.attributes.get(category__id=8).name)
-            if value<4:
-                description='simplify'
-            elif value>6:
-                description='specify'
+            value = int(self.attributes.get(category__id=8).name)
+            if value < 4:
+                description = 'simplify'
+            elif value > 6:
+                description = 'specify'
             else:
-                description='explain'
+                description = 'explain'
             return description
         except:
             return None
 
     def _get_kolbe_follow_thru(self):
         try:
-            value=int(self.attributes.get(category__id=9).name)
-            if value<4:
-                description='adapt'
-            elif value>6:
-                description='systemize'
+            value = int(self.attributes.get(category__id=9).name)
+            if value < 4:
+                description = 'adapt'
+            elif value > 6:
+                description = 'systemize'
             else:
-                description='maintain'
+                description = 'maintain'
             return description
         except:
             return None
 
     def _get_kolbe_quick_start(self):
         try:
-            value=int(self.attributes.get(category__id=10).name)
-            if value<5:
-                description='stabilize'
-            elif value>6:
-                description='improvise'
+            value = int(self.attributes.get(category__id=10).name)
+            if value < 5:
+                description = 'stabilize'
+            elif value > 6:
+                description = 'improvise'
             else:
-                description='modify'
+                description = 'modify'
             return description
         except:
             return None
 
     def _get_kolbe_implementor(self):
         try:
-            value=int(self.attributes.get(category__id=11).name)
-            if value<4:
-                description='imagine'
-            elif value>6:
-                description='build'
+            value = int(self.attributes.get(category__id=11).name)
+            if value < 4:
+                description = 'imagine'
+            elif value > 6:
+                description = 'build'
             else:
-                description='restore'
+                description = 'restore'
             return description
         except:
             return None
@@ -208,7 +226,9 @@ class Employee(models.Model):
     def get_comp(self):
         return self._get_comp()
 
+
 blah.register(Employee)
+
 
 class Team(models.Model):
     name = models.CharField(
@@ -219,7 +239,9 @@ class Team(models.Model):
     def __str__(self):
         return self.name
 
+
 blah.register(Team)
+
 
 class Mentorship(models.Model):
     mentor = models.ForeignKey(Employee, related_name='+')
@@ -228,13 +250,16 @@ class Mentorship(models.Model):
     def __str__(self):
         return "%s mentor of %s" % (self.mentor.full_name, self.mentee.full_name)
 
+
 class Leadership(models.Model):
     leader = models.ForeignKey(Employee, related_name='+')
     employee = models.ForeignKey(Employee, related_name='leaderships')
     start_date = models.DateField(null=False, blank=False, default=datetime.date.today)
     end_date = models.DateField(null=True, blank=True)
+
     def __str__(self):
         return "%s leader of %s" % (self.leader.full_name, self.employee.full_name)
+
 
 class Attribute(models.Model):
     employee = models.ForeignKey(Employee, related_name='attributes')
@@ -251,6 +276,7 @@ class Attribute(models.Model):
 
     def __str__(self):
         return "%s is a %s for %s" % (self.employee.full_name, self.name, self.category.name)
+
 
 class AttributeCategory(models.Model):
     name = models.CharField(

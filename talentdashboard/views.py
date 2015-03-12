@@ -39,6 +39,8 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.urlresolvers import reverse
 from django.core.cache import cache
 from django.conf import settings
+from feedback.models import FeedbackRequest, FeedbackSubmission, UndeliveredFeedbackReport
+from feedback.tasks import send_feedback_request_email
 import hashlib
 from collections import defaultdict
 from django.utils.encoding import iri_to_uri
@@ -46,6 +48,8 @@ from django.utils.translation import get_language
 import json
 import collections
 import dateutil.parser, copy
+from django.template.loader import render_to_string
+from django.core.mail import send_mail
 
 logger = getLogger('talentdashboard')
 
@@ -1109,3 +1113,159 @@ def talent_categories(request):
             pvp.performance = performance
             values[potential][performance] = pvp.talent_category()
     return Response(values)
+
+
+def add_current_employee_to_request(request, field_name):
+    employee = Employee.objects.get_from_user(request.user)
+    has_multiple_items = isinstance(request.DATA, list)
+    if has_multiple_items:
+        for item in request.DATA:
+            item[field_name] = employee.id
+    else:
+        request.DATA[field_name] = employee.id
+
+
+class FeedbackRequestView(APIView):
+    def get_object(self, pk):
+        try:
+            return FeedbackRequest.objects.get(pk=pk)
+        except FeedbackRequest.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        feedback_request = self.get_object(pk)
+        serializer = FeedbackRequestSerializer(feedback_request)
+        return Response(serializer.data)
+
+    def post(self, request, pk, format=None):
+        add_current_employee_to_request(request, 'requester')
+        has_multiple_items = isinstance(request.DATA, list)
+        serializer = FeedbackRequestPostSerializer(data=request.DATA, many=has_multiple_items)
+        if serializer.is_valid():
+            feedback_request = serializer.save()
+            if has_multiple_items:
+                for item in feedback_request:
+                    send_feedback_request_email.delay(item)
+            else:
+                send_feedback_request_email.delay(feedback_request)
+
+            response_serializer = FeedbackRequestSerializer(feedback_request, many=has_multiple_items)
+            return Response(response_serializer.data)
+        else:
+            return Response(serializer.errors, status=400)
+
+@api_view(['GET'])
+def incomplete_feedback_requests_for_reviewer(request):
+    reviewer = Employee.objects.get_from_user(request.user)
+    pending_requests = FeedbackRequest.objects.pending_for_reviewer(reviewer)
+    serializer = FeedbackRequestSerializer(pending_requests, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def incomplete_feedback_requests_for_requester(request):
+    requester = Employee.objects.get_from_user(request.user)
+    pending_requests = FeedbackRequest.objects.pending_for_requester(requester)
+    serializer = FeedbackRequestSerializer(pending_requests, many=True)
+    return Response(serializer.data)
+
+
+class FeedbackSubmissionView(APIView):
+    def get_object(self, pk):
+        try:
+            return FeedbackSubmission.objects.get(pk=pk)
+        except FeedbackSubmission.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        """
+        Get a FeedbackSubmission
+        ---
+        request_serializer: FeedbackSubmissionSerializer
+        response_serializer: FeedbackSubmissionSerializer
+        """
+        feedback = self.get_object(pk)
+        serializer = FeedbackSubmissionSerializer(feedback)
+        return Response(serializer.data)
+
+    def post(self, request, pk, format=None):
+        """
+        Create a FeedbackSubmission
+        ---
+        request_serializer: FeedbackSubmissionPostSerializer
+        response_serializer: FeedbackSubmissionSerializer
+        """
+        add_current_employee_to_request(request, 'reviewer')
+        serializer = FeedbackSubmissionPostSerializer(data=request.DATA)
+        if serializer.is_valid():
+            feedback = serializer.save()
+            # feedback_request = serializer.object
+            # pending_feedback_requests = FeedbackRequest.objects.pending_for_requester(feedback_request.requester).pending_for_reviewer()
+            response_serializer = FeedbackSubmissionSerializer(feedback)
+            return Response(response_serializer.data)
+        return Response(serializer.errors, status=400)
+
+
+@api_view(['GET'])
+def potential_reviewers(request):
+    all_employees = set(Employee.objects.all())
+    requester = Employee.objects.get_from_user(request.user)
+    current_requests = FeedbackRequest.objects.pending_for_requester(requester)
+    current_reviewers = set([feedback_request.reviewer for feedback_request in current_requests])
+    requester = {Employee.objects.get_from_user(request.user)}
+    employee_set = all_employees - current_reviewers - requester
+    potential_reviewers = sorted(employee_set, key=lambda employee: employee.full_name)
+    serializer = MinimalEmployeeSerializer(potential_reviewers, many=True)
+    return Response(serializer.data)
+
+
+class CoachFeedbackReports(APIView):
+    def get(self, request, format=None):
+        current_user = request.user
+        coach = Employee.objects.get(user=current_user)
+        reports = []
+        for coachee in coach.coachees.all():
+            report = UndeliveredFeedbackReport(coachee)
+            reports.append(report)
+
+        serializer = UndeliveredFeedbackReportSerializer(reports, many=True, context={'request': request})
+        return Response(serializer.data)
+
+@api_view(['PUT'])
+def mark_feedback_delivered(request):
+    coach = Employee.objects.get(user=request.user)
+    serializer = FeedbackDeliverySerializer(data=request.DATA, many=True)
+    if serializer.is_valid():
+        items = serializer.validated_data
+        feedback = FeedbackSubmission.objects.filter(id__in=[item['id'] for item in items]).filter(subject__coach=coach)
+        feedback.update(has_been_delivered=True)
+        return Response(None, status=200)
+    else:
+        return Response(serializer.errors, status=400)
+
+@api_view(['POST'])
+def email_feedback(request):
+    coach = Employee.objects.get(user=request.user)
+    serializer = FeedbackDeliverySerializer(data=request.DATA, many=True)
+    if serializer.is_valid():
+        items = serializer.validated_data
+        feedback_items = FeedbackSubmission.objects.filter(id__in=[item['id'] for item in items]).filter(subject__coach=coach)
+        if len(feedback_items) == 0:
+            return Response(None, status=200)
+
+        recipient_email = feedback_items[0].subject.email
+        coach_email = "{} <{}>".format(coach.full_name, coach.email)
+
+        if not recipient_email:
+            return Response(None, status=200)
+
+        context = {
+            'feedback_items': feedback_items,
+        }
+        subject = "Here's your feedback!"
+        plain_text_message = render_to_string('email/feedback_delivery.txt', context)
+        send_mail(subject, plain_text_message, settings.DEFAULT_FROM_EMAIL, [recipient_email])
+        feedback_items.update(has_been_delivered=True)
+        return Response(None, status=200)
+    else:
+        return Response(serializer.errors, status=400)
+

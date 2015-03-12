@@ -48,7 +48,7 @@ class Migration(migrations.Migration):
                 ('hire_date', models.DateField(null=True)),
                 ('departure_date', models.DateField(default=None, null=True, blank=True)),
                 ('display', models.BooleanField()),
-                ('coach', models.ForeignKey(related_name='coachee', blank=True, to='org.Employee', null=True)),
+                ('coach', models.ForeignKey(related_name='coachees', blank=True, to='org.Employee', null=True)),
             ],
             options={
             },

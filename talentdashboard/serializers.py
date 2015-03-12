@@ -7,6 +7,7 @@ from comp.models import CompensationSummary
 from blah.models import Comment
 from engagement.models import Happiness, SurveyUrl
 from kpi.models import Indicator, Performance
+from feedback.models import FeedbackRequest, FeedbackSubmission
 from preferences.models import SitePreferences
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
@@ -293,7 +294,7 @@ class UserSerializer(serializers.ModelSerializer):
         return False
 
     def get_can_coach_employees(self, obj):
-        if obj.groups.filter(name='CoachAccess').exists() | obj.is_superuser:
+        if (obj.employee is not None and obj.employee.is_coach()) | obj.is_superuser:
                 return True
         return False
 
@@ -574,3 +575,70 @@ class CompensationSummarySerializer(serializers.ModelSerializer):
     class Meta:
         model = CompensationSummary
         fields = ('year', 'salary', 'bonus', 'discretionary', 'writer_payments_and_royalties', 'total_compensation')
+
+
+class FeedbackRequestSerializer(serializers.ModelSerializer):
+    request_date = serializers.DateTimeField(required=False, read_only=True)
+    expiration_date = serializers.DateField(required=False)
+    requester = MinimalEmployeeSerializer()
+    reviewer = MinimalEmployeeSerializer()
+    is_complete = serializers.BooleanField(required=False)
+
+    class Meta:
+        model = FeedbackRequest
+
+
+class FeedbackRequestPostSerializer(serializers.ModelSerializer):
+    request_date = serializers.DateTimeField(required=False, read_only=True)
+    expiration_date = serializers.DateField(required=False)
+    requester = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
+    reviewer = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
+    message = serializers.CharField(required=False, allow_blank=True)
+    is_complete = serializers.BooleanField(required=False)
+
+    class Meta:
+        model = FeedbackRequest
+
+
+class FeedbackSubmissionPostSerializer(serializers.ModelSerializer):
+    feedback_date = serializers.DateTimeField(required=False)
+    subject = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
+    reviewer = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
+    feedback_request = serializers.PrimaryKeyRelatedField(required=False, queryset=FeedbackRequest.objects.all())
+
+    def validate(self, attrs):
+        if 'feedback_request' in attrs:
+            feedback_request = attrs['feedback_request']
+            subject = attrs['subject']
+            reviewer = attrs['reviewer']
+            if feedback_request.is_complete:
+                raise serializers.ValidationError("Request has already been completed.")
+            if feedback_request.requester != subject:
+                raise serializers.ValidationError("Subject is not the same as the feedback requester.")
+            if feedback_request.reviewer != reviewer:
+                raise serializers.ValidationError("Reviewer is not the same as requested by the subject.")
+        return attrs
+
+    class Meta:
+        model = FeedbackSubmission
+
+
+class FeedbackSubmissionSerializer(serializers.ModelSerializer):
+    feedback_date = serializers.DateTimeField(required=False)
+    subject = MinimalEmployeeSerializer()
+    reviewer = MinimalEmployeeSerializer()
+    feedback_request = FeedbackRequestSerializer()
+
+    class Meta:
+        model = FeedbackSubmission
+
+
+class FeedbackDeliverySerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+
+
+class UndeliveredFeedbackReportSerializer(serializers.Serializer):
+    employee = EmployeeSerializer()
+    undelivered_feedback = serializers.ListField(child=FeedbackSubmissionSerializer())
+    responses_by_question = serializers.DictField()
+    total_feedback_items = serializers.IntegerField()
