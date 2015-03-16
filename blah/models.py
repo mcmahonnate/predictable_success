@@ -154,7 +154,7 @@ class Comment(models.Model):
     objects = CommentManager()
 
     def __unicode__(self):
-        return u"%s %s\n%s" % (self.modified_date, self.owner, self.content)
+        return u"%s \n%s" % (self.modified_date, self.content)
 
     def _get_associated_object(self):
         if self.content_type != None and self.object_id != None:

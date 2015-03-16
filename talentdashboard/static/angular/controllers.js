@@ -179,11 +179,11 @@ angular.module('tdb.controllers', [])
     SitePreferences.get(function (data) {
         $scope.site_preferences = data;
     });
-    $scope.modalShown = false;
+    $scope.modalEmployeeShown = false;
     $scope.newEmployee = {id:0,full_name:'',hire_date:'',departure_date:'', avatar:'https://hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg'};
     $scope.newLeadership = {id:0,leader:{full_name:''}};
-    $scope.toggleModal = function() {
-        $scope.modalShown = !$scope.modalShown;
+    $scope.toggleEmployeeModal = function() {
+        $scope.modalEmployeeShown = !$scope.modalEmployeeShown;
     };
 	$scope.employeeMenu = {show: false};
     $scope.filterMenu = {show: false};
@@ -332,14 +332,18 @@ angular.module('tdb.controllers', [])
 	}
 }])
 
-.controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', '$sce', 'User', 'Employee', 'Engagement', 'EmployeeLeader', 'Attribute', 'CompSummary', '$http', 'SitePreferences', 'analytics', 'fileReader','Assessment','EmployeeMBTI', function($rootScope, $scope, $location, $routeParams, $window, $sce, User, Employee, Engagement, EmployeeLeader, Attribute, CompSummary, $http, SitePreferences, analytics, fileReader, Assessment, EmployeeMBTI) {
+.controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', '$sce', 'User', 'Employee', 'Engagement', 'SendEngagementSurvey', 'EmployeeLeader', 'Attribute', 'CompSummary', '$http', 'SitePreferences', 'analytics', 'fileReader','Assessment','EmployeeMBTI', 'Notification', function($rootScope, $scope, $location, $routeParams, $window, $sce, User, Employee, Engagement, SendEngagementSurvey, EmployeeLeader, Attribute, CompSummary, $http, SitePreferences, analytics, fileReader, Assessment, EmployeeMBTI, Notification) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     SitePreferences.get(function (data) {
         $scope.site_preferences = data;
     });
-    $scope.modalShown = false;
-    $scope.toggleModal = function() {
-        $scope.modalShown = !$scope.modalShown;
+    $scope.modalEmployeeShown = false;
+    $scope.toggleEmployeeModal = function() {
+        $scope.modalEmployeeShown = !$scope.modalEmployeeShown;
+    };
+    $scope.modalHappyShown = false;
+    $scope.toggleHappyModal = function() {
+        $scope.modalHappyShown = !$scope.modalHappyShown;
     };
     $scope.has_vops = false;
     $scope.has_kolbe = false;
@@ -350,7 +354,7 @@ angular.module('tdb.controllers', [])
     $scope.show_kolbe = false;
     $scope.show_myers_briggs = false;
     $scope.show_todos = false;
-    $scope.show_timeline = false;
+    $scope.show_engagement = false;
     $scope.click_discussions= function() {
         $scope.show_bio = false;
         $scope.show_discussions = true;
@@ -358,7 +362,7 @@ angular.module('tdb.controllers', [])
         $scope.show_kolbe = false;
         $scope.show_myers_briggs = false;
         $scope.show_todos = false;
-        $scope.show_timeline = false;
+        $scope.show_engagement = false;
     };
     $scope.click_bio= function() {
         $scope.show_bio = true;
@@ -367,7 +371,7 @@ angular.module('tdb.controllers', [])
         $scope.show_kolbe = false;
         $scope.show_myers_briggs = false;
         $scope.show_todos = false;
-        $scope.show_timeline = false;
+        $scope.show_engagement = false;
     };
     $scope.click_todos= function() {
         $scope.show_bio = false;
@@ -376,7 +380,7 @@ angular.module('tdb.controllers', [])
         $scope.show_kolbe = false;
         $scope.show_myers_briggs = false;
         $scope.show_todos = true;
-        $scope.show_timeline = false;
+        $scope.show_engagement = false;
     };
     $scope.click_vops= function() {
         $scope.show_bio = false;
@@ -385,16 +389,16 @@ angular.module('tdb.controllers', [])
         $scope.show_kolbe = false;
         $scope.show_myers_briggs = false;
         $scope.show_todos = false;
-        $scope.show_timeline = false;
+        $scope.show_engagement = false;
     };
-    $scope.click_time_line= function() {
+    $scope.click_engagement= function() {
         $scope.show_bio = false;
         $scope.show_discussions = false;
         $scope.show_vops = false;
         $scope.show_kolbe = false;
         $scope.show_myers_briggs = false;
         $scope.show_todos = false;
-        $scope.show_timeline = true;
+        $scope.show_engagement = true;
     };
     $scope.click_kolbe= function() {
         $scope.show_bio = false;
@@ -403,7 +407,7 @@ angular.module('tdb.controllers', [])
         $scope.show_kolbe = true;
         $scope.show_myers_briggs = false;
         $scope.show_todos = false;
-        $scope.show_timeline = false;
+        $scope.show_engagement = false;
 
     };
     $scope.click_myers_briggs= function() {
@@ -413,7 +417,7 @@ angular.module('tdb.controllers', [])
         $scope.show_kolbe = false;
         $scope.show_myers_briggs = true;
         $scope.show_todos = false;
-        $scope.show_timeline = false;
+        $scope.show_engagement = false;
     };
     $scope.leadership=[];
     $scope.employees = Employee.query();
@@ -442,7 +446,16 @@ angular.module('tdb.controllers', [])
             $scope.happys = data;
         }
     );
+    $scope.sendSurvey = function(){
+      var data = {id: $routeParams.id, _sent_from_id: $rootScope.currentUser.employee.id};
 
+      SendEngagementSurvey.addNew(data, function() {
+          console.log('sent');
+          Notification.success("Your survey was sent.");
+      });
+    };
+
+    $scope.clicked_happy;
     Assessment.query(
         {id:$routeParams.id},
         function(data) {

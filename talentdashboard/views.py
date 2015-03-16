@@ -385,9 +385,10 @@ class EmployeeEngagement(APIView):
         happy.employee = employee
         happy.assessed_by = assessed_by
         happy.assessment = int(assessment)
-        if "_comment_id" in request.DATA:
-            comment_id = request.DATA["_comment_id"]
-            comment = Comment.objects.get(id=comment_id)
+        if "_content" in request.DATA:
+            content = request.DATA["_content"]
+            visibility = 3
+            comment = employee.comments.add_comment(content, visibility, request.user)
             happy.comment = comment
         happy.save()
         serializer = HappinessSerializer(happy, many=False, context={'request': request})
@@ -446,6 +447,7 @@ class EmployeeCommentList(APIView):
         comments = Comment.objects.filter(object_id = pk, content_type=employee_type)
         allow_all_access = request.user.groups.filter(name="AllAccess").exists()
         allow_team_lead_access = request.user.groups.filter(name="TeamLeadAccess").exists()
+        allow_coach_access = request.user.groups.filter(name="CoachAccess").exists()
         if not allow_all_access and allow_team_lead_access:
             comments = comments.exclude(~Q(owner_id=request.user.id), visibility=2)
         comments = comments.exclude(~Q(owner_id=request.user.id),content_type=employee_type,visibility=1)

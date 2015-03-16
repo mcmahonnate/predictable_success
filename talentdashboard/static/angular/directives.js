@@ -20,7 +20,85 @@ angular.module('tdb.directives', [])
         }
     };
 })
+.directive('happinessChart', ['$rootScope', 'AnnotationChart', function($rootScope) {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attrs) {
+            scope.$watch("happys", function (newValue) {
+                var data = new google.visualization.DataTable();
+                data.addColumn('date', 'Date');
+                data.addColumn('number', 'Engagement');
+                data.addColumn({type:'string', role: 'annotation'});
+                data.addColumn({type:'string', role: 'style'});
+                data.addColumn('number', 'CommentIndex');
+                angular.forEach(scope.happys, function(happy, index) {
+                    var annotation;
+                    var color;
+                    switch (happy.assessment) {
+                        case 1:
+                            annotation = 'W';
+                            color = 'red';
+                            break;
+                        case 2:
+                            annotation = '(';
+                            color = 'orange';
+                            break;
+                        case 3:
+                            annotation = 'C';
+                            color = 'yellow';
+                            break;
+                        case 4:
+                            annotation = 'A';
+                            color = 'limegreen';
+                            break;
+                        case 5:
+                            annotation = 'D';
+                            color = '#008000';
+                            break;
+                    }
+                    var row = [$rootScope.parseDate(happy.assessed_date), happy.assessment, annotation, color, index];
+                    data.addRow(row);
+                });
+                var options = {
+                    vAxes: {0: {format: '#,###', textStyle:{color: '#fff'}, titleTextStyle:{color: '#fff'}}},
+                    vAxis: { ticks: [0, 1,2,3,4,5] },
+                    hAxis: { format: 'MMM d, y', textStyle:{color: '#fff'}, titleTextStyle:{color: '#fff'}},
+                    series: {
+                        0:{ type: "line", targetAxisIndex: 0, pointSize: 5 },
+                        1:{ type: "line", targetAxisIndex: 0,color: '#2a2a2a',lineWidth:0, pointSize: 0}
+                    },
+                    annotations: {
+                        textStyle: {
+                            fontName: 'Emoticons',
+                            fontSize: 28
+                        }
+                    },
 
+                    legend: {position: 'none'},
+                    backgroundColor: '#2a2a2a',
+                    chartArea:{top:5, left: 48, height:'80%'}
+                };
+
+                var chart = new google.visualization.ComboChart(element[0]);
+                google.visualization.events.addListener(chart, 'select', function(args) {
+                   if (chart.getSelection().length>0) {
+                     var selection = chart.getSelection()[0];
+                     var index=data.getValue(selection.row, 4);
+                     scope.clicked_happy = scope.happys[index];
+                     if (scope.happys[index].comment) {
+                         scope.showComment=true;
+                     } else {
+                         scope.showComment=false;
+                     }
+
+                     scope.$apply();
+                   }
+                });
+                chart.draw(data, options);
+            }, true);
+        }
+    }
+}])
 .directive('timelineChart', ['$routeParams', '$rootScope', 'AnnotationChart', function($routeParams, $rootScope, AnnotationChart) {
     return {
         restrict: 'E',
@@ -46,7 +124,6 @@ angular.module('tdb.directives', [])
                     data.addColumn('string', undefined);
                     var record;
                     angular.forEach(scope.chart_data, function(value, key) {
-                        console.log(value);
                         record = value;
                         var happy = parseInt(record[10]);
                         if (happy==0) {happy=undefined}
@@ -532,7 +609,7 @@ angular.module('tdb.directives', [])
     }
 }])
 
-.directive('modalEditEmployee',  ['Employee', 'EmployeeLeader', 'fileReader', 'PhotoUpload', 'SitePreferences', function(Employee, EmployeeLeader, fileReader, PhotoUpload, SitePreferences) {
+.directive('modalEmployee',  ['Employee', 'EmployeeLeader', 'fileReader', 'PhotoUpload', 'SitePreferences', function(Employee, EmployeeLeader, fileReader, PhotoUpload, SitePreferences) {
   return {
     restrict: 'E',
     scope: {
@@ -646,7 +723,46 @@ angular.module('tdb.directives', [])
             $scope.showDepartDatePicker = !$scope.showDepartDatePicker;
         }
     },
-    templateUrl: "/static/angular/partials/modal-edit-employee.html"
+    templateUrl: "/static/angular/partials/modal-employee.html"
+  };
+}])
+
+.directive('modalHappy',  ['Engagement', function(Engagement) {
+  return {
+    restrict: 'E',
+    scope: {
+      show: '=',
+      employee: '=',
+      happys: '='
+    },
+    replace: true, // Replace with the template below
+    transclude: true, // we want to insert custom content inside the directive
+    link: function(scope, element, attrs) {
+      scope.dialogStyle = {};
+      if (attrs.width)
+        scope.dialogStyle.width = attrs.width;
+      if (attrs.height)
+        scope.dialogStyle.height = attrs.height;
+      scope.hideModal = function() {
+        scope.show = false;
+      };
+    },
+    controller: function ($scope, $rootScope, $location) {
+        $scope.happy = {assessment:0, comment:{content:''}};
+        $scope.scrub = function (){
+            $scope.happy.assessment = 0;
+            $scope.happy.comment.content = '';
+        }
+        $scope.save = function (){
+            var data = {id: $scope.employee.id, _assessed_by_id: $rootScope.currentUser.employee.id, _assessment: $scope.happy.assessment, _content:$scope.happy.comment.content};
+            Engagement.addNew(data, function(response) {
+                var newHappy = response;
+                $scope.happys.unshift(newHappy);
+            });
+        };
+
+    },
+    templateUrl: "/static/angular/partials/modal-happy.html"
   };
 }])
 
@@ -683,7 +799,6 @@ angular.module('tdb.directives', [])
           }
           scope.follow_thru.length=0;
           for (var i = ui.values[0]; i < ui.values[1] ; i++) {
-             console.log('TEST');
             scope.follow_thru.push(scope.kolbe_follow_thru_labels[i]);
             scope.$apply();
           }
