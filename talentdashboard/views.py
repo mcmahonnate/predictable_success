@@ -280,7 +280,7 @@ class SendEngagementSurvey(APIView):
         employee = Employee.objects.get(id=pk)
         sent_from_id = request.DATA["_sent_from_id"]
         if "_override" in request.DATA:
-            override = request.DATA["_override", False]
+            override = request.DATA["_override"]
         sent_from = Employee.objects.get(id=sent_from_id)
         current_surveys = SurveyUrl.objects.filter(sent_to__id=pk, active=True)
         if len(current_surveys) > 0 and not override:

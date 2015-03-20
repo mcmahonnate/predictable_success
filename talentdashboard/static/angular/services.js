@@ -277,7 +277,7 @@ angular.module('tdb.services', ['ngResource'])
 
 .factory('SendEngagementSurvey', ['$resource', '$http', function($resource, $http) {
     var actions = {
-        'addNew': { method:'POST', data:{id: '@id', _sent_from_id: '@sent_from_id'}, isArray: false }
+        'addNew': { method:'POST', data:{id: '@id', _sent_from_id: '@sent_from_id', _override: '@override'}, isArray: false }
     }
     var SendEngagementSurvey = $resource('/api/v1/send-engagement-survey/:id', {id:'@id'}, actions);
 

@@ -332,7 +332,7 @@ angular.module('tdb.controllers', [])
 	}
 }])
 
-.controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', '$sce', 'User', 'Employee', 'Engagement', 'SendEngagementSurvey', 'EmployeeLeader', 'Attribute', 'CompSummary', '$http', 'SitePreferences', 'analytics', 'fileReader','Assessment','EmployeeMBTI', 'Notification', function($rootScope, $scope, $location, $routeParams, $window, $sce, User, Employee, Engagement, SendEngagementSurvey, EmployeeLeader, Attribute, CompSummary, $http, SitePreferences, analytics, fileReader, Assessment, EmployeeMBTI, Notification) {
+.controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', '$sce', 'User', 'Employee', 'Team', 'Engagement', 'SendEngagementSurvey', 'EmployeeLeader', 'Attribute', 'CompSummary', '$http', 'SitePreferences', 'analytics', 'fileReader','Assessment','EmployeeMBTI', 'Notification', function($rootScope, $scope, $location, $routeParams, $window, $sce, User, Employee, Team, Engagement, SendEngagementSurvey, EmployeeLeader, Attribute, CompSummary, $http, SitePreferences, analytics, fileReader, Assessment, EmployeeMBTI, Notification) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     SitePreferences.get(function (data) {
         $scope.site_preferences = data;
@@ -420,6 +420,9 @@ angular.module('tdb.controllers', [])
         $scope.show_engagement = false;
     };
     $scope.leadership=[];
+    Team.query(function(data) {
+        $scope.teams = data;
+    });
     $scope.employees = Employee.query();
     Employee.get(
         {id: $routeParams.id},
@@ -446,12 +449,17 @@ angular.module('tdb.controllers', [])
             $scope.happys = data;
         }
     );
+    $scope.isSurveySending=false;
     $scope.sendSurvey = function(){
-      var data = {id: $routeParams.id, _sent_from_id: $rootScope.currentUser.employee.id};
+      $scope.isSurveySending=true;
+      var data = {id: $routeParams.id, _sent_from_id: $rootScope.currentUser.employee.id, _override:true};
 
       SendEngagementSurvey.addNew(data, function() {
-          console.log('sent');
+          $scope.isSurveySending=false;
           Notification.success("Your survey was sent.");
+      },function(){
+          $scope.isSurveySending=false;
+          Notification.error("There was an error sending your survey.");
       });
     };
 

@@ -49,8 +49,8 @@ sub{top:0.5ex}
 .loading-overlay{background:center 40px no-repeat}
 .success{background-color:#6db64c;padding-left:54px}
 .success:before{top:4px;left:16px;content:'';display:block;position:absolute;width:26px;height:26px;background-position:0 -2160px}
-.error{background-color:#c84d40}
-.error:before{top:14px;left:16px;content:'';display:block;position:absolute;width:31px;height:31px;background-position:0 -1799px}
+.error{background-color:#c84d40;padding-left:54px}
+.error:before{top:4px;left:16px;content:'';display:block;position:absolute;width:26px;height:26px;background-position:0 -2160px}
 .help-icon{width:13px;height:13px;text-indent:-1000px;overflow:hidden;background-position:0 -2413px}
 .col-1{float:left;width:100%}
 .col-2{float:left;width:50%}
