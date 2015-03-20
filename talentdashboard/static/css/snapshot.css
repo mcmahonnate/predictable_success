@@ -1549,3 +1549,31 @@ ul.dropdown-menu li {
 .hide {
     opacity:0;
 }
+
+button.survey {
+    border: 1px solid #434343;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    height: 28px;
+    background-color: #434343;
+    font-size: 14px;
+    color: #d3d4d4;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+button.survey:hover:enabled {
+    background-color:#272727;
+}
+button.init {
+    width: 110px;
+}
+
+
+button.loading {
+    background: url('ajax-loader.gif') left center no-repeat;
+    padding-left: 20px;
+    width: 130px;
+}
+
