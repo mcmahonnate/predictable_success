@@ -493,6 +493,8 @@ class EmployeeCommentList(APIView):
             mail_to = mail_to.values_list('email', flat=True)
 
             if commenter.user.is_active:
+                if len(mail_to) == 0:
+                    mail_to = list()
                 mail_to.append(commenter.user.email)
 
             if len(mail_to) > 0:
