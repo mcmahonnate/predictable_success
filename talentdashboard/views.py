@@ -487,9 +487,16 @@ class EmployeeCommentList(APIView):
             sub_comment = Comment.objects.add_comment(comment, content, visibility, owner)
             serializer = SubCommentSerializer(sub_comment, many=False, context={'request': request})
 
+            sub_commenters = Comment.objects.get_for_object(comment)
+            sub_commenters = sub_commenters.values('owner_id')
+            mail_to = User.objects.filter(id__in=sub_commenters, is_active=True)
+            mail_to = mail_to.exclude(id=owner.id)
+            mail_to = mail_to.values_list('email', flat=True)
+
             if commenter.user.is_active:
-                notify = True
-            if notify:
+                mail_to.append(commenter.user.email)
+
+            if len(mail_to) > 0:
                 html_template = get_template('reply_notification.html')
                 sub_commenter = Employee.objects.get(user__id=request.user.id)
                 comment_content = comment.content
@@ -502,11 +509,10 @@ class EmployeeCommentList(APIView):
                 dash_link = 'http://' + get_current_site(request).domain + '/#/employees/' + str(employee.id)
                 template_vars = Context({'employee_name': employee_name, 'dash_link': dash_link, 'commenter_avatar': commenter_avatar,'commenter_full_name': commenter_full_name, 'sub_commenter_avatar': sub_commenter_avatar, 'sub_commenter_full_name': sub_commenter_full_name, 'comment_content': comment_content, 'sub_comment_content': sub_comment_content})
                 html_content = html_template.render(template_vars)
-                subject = sub_commenter.full_name + ' commented on your post about ' + employee.full_name
+                subject = sub_commenter.full_name + ' commented on a post about ' + employee.full_name
                 text_content = 'View comment here:\r\n http://' + get_current_site(request).domain + '/#/employees/' + str(employee.id)
                 mail_from = sub_commenter.full_name + '<notify@dfrntlabs.com>'
-                mail_to = commenter.user.email
-                msg = EmailMultiAlternatives(subject, text_content, mail_from, [mail_to])
+                msg = EmailMultiAlternatives(subject, text_content, mail_from, mail_to)
                 msg.attach_alternative(html_content, "text/html")
                 msg.send()
         else:
