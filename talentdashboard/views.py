@@ -467,7 +467,6 @@ class EmployeeCommentList(APIView):
         return Response(serializer.data)
 
     def post(self, request, pk, format=None):
-        notify = False
         comment_type = ContentType.objects.get(model="comment")
         model_name = request.DATA["_model_name"]
         content_type = ContentType.objects.get(model=model_name)
