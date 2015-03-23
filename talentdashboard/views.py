@@ -486,6 +486,7 @@ class EmployeeCommentList(APIView):
             commenter = Employee.objects.get(user__id=comment.owner_id)
             sub_comment = Comment.objects.add_comment(comment, content, visibility, owner)
             serializer = SubCommentSerializer(sub_comment, many=False, context={'request': request})
+
             if commenter.user.is_active:
                 notify = True
             if notify:
@@ -755,7 +756,7 @@ class EmployeeDetail(APIView):
                 return True
             return False
 
-        if int(pk) == 0 and "_full_name" in request.DATA:
+        if int(pk) == 0 and "_first_name" in request.DATA:
             employee = Employee()
             employee.display = True
             expire_view_cache('employee-list')
@@ -764,8 +765,18 @@ class EmployeeDetail(APIView):
         if employee is not None:
             if "_full_name" in request.DATA:
                 employee.full_name = request.DATA["_full_name"]
+            if "_first_name" in request.DATA:
+                employee.first_name = request.DATA["_first_name"]
+            if "_last_name" in request.DATA:
+                employee.last_name = request.DATA["_last_name"]
+            if "_email" in request.DATA:
+                employee.email = request.DATA["_email"]
             if "_hire_date" in request.DATA:
                 employee.hire_date = request.DATA["_hire_date"]
+            if "_team_id" in request.DATA:
+                team_id = request.DATA["_team_id"]
+                team = Team.objects.get(id=team_id)
+                employee.team = team
             if "_coach_id" in request.DATA:
                 coach_id = request.DATA["_coach_id"]
                 coach = Employee.objects.get(id=coach_id)

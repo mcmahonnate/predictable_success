@@ -616,7 +616,8 @@ angular.module('tdb.directives', [])
       show: '=',
       employee: '=',
       leadership: '=',
-      employees: '='
+      employees: '=',
+      teams: '='
     },
     replace: true, // Replace with the template below
     transclude: true, // we want to insert custom content inside the directive
@@ -673,7 +674,7 @@ angular.module('tdb.directives', [])
                         $scope.employee.avatar = data.avatar;
                     });
                 }
-                if ($scope.edit_leadership.leader != $scope.leadership.leader) {
+                if ($scope.edit_leadership.leader.id != $scope.leadership.leader.id) {
                     var data = {id: $scope.employee.id, _leader_id: $scope.edit_leadership.leader.id};
                     EmployeeLeader.addNew(data, function (response) {
                         $scope.edit_leadership = response;
@@ -684,8 +685,17 @@ angular.module('tdb.directives', [])
             };
             var saveEmployee = function(id) {
                 var data = {id: id};
-                if ($scope.employee.full_name != $scope.editEmployee.full_name) {
-                    data._full_name = $scope.editEmployee.full_name;
+                if ($scope.employee.first_name != $scope.editEmployee.first_name) {
+                    data._first_name = $scope.editEmployee.first_name;
+                }
+                if ($scope.employee.last_name != $scope.editEmployee.last_name) {
+                    data._last_name = $scope.editEmployee.last_name;
+                }
+                if ($scope.employee.email != $scope.editEmployee.email) {
+                    data._email = $scope.editEmployee.email;
+                }
+                if ($scope.employee.team.id != $scope.editEmployee.team.id) {
+                    data._team_id = $scope.editEmployee.team.id;
                 }
                 if ($scope.employee.coach != $scope.editEmployee.coach) {
                     data._coach_id = $scope.editEmployee.coach.id;

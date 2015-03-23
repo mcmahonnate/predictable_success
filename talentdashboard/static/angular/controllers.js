@@ -180,7 +180,7 @@ angular.module('tdb.controllers', [])
         $scope.site_preferences = data;
     });
     $scope.modalEmployeeShown = false;
-    $scope.newEmployee = {id:0,full_name:'',hire_date:'',departure_date:'', avatar:'https://hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg'};
+    $scope.newEmployee = {id:0,full_name:'',first_name:'',last_name:'', email:'', team:{id:0}, hire_date:'',departure_date:'', avatar:'https://hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg'};
     $scope.newLeadership = {id:0,leader:{full_name:''}};
     $scope.toggleEmployeeModal = function() {
         $scope.modalEmployeeShown = !$scope.modalEmployeeShown;
