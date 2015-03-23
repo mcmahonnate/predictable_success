@@ -490,10 +490,10 @@ class EmployeeCommentList(APIView):
             sub_commenters = sub_commenters.values('owner_id')
             mail_to = User.objects.filter(id__in=sub_commenters, is_active=True)
             mail_to = mail_to.exclude(id=owner.id)
-            mail_to = mail_to.values_list('email', flat=True)
+            mail_to = list(mail_to.values_list('email', flat=True))
 
             if commenter.user.is_active:
-                if mail_to.exists():
+                if len(mail_to) > 0:
                     mail_to.append(commenter.user.email)
                 else:
                     mail_to = [commenter.user.email]
