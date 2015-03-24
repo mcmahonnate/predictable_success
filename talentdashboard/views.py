@@ -448,8 +448,8 @@ class EmployeeCommentList(APIView):
         allow_all_access = request.user.groups.filter(name="AllAccess").exists()
         allow_team_lead_access = request.user.groups.filter(name="TeamLeadAccess").exists()
         allow_coach_access = request.user.groups.filter(name="CoachAccess").exists()
-        if not allow_all_access and allow_team_lead_access:
-            comments = comments.exclude(~Q(owner_id=request.user.id), visibility=2)
+        if not allow_all_access and (allow_team_lead_access and not allow_coach_access):
+            comments = comments.exclude(~Q(owner_id=request.user.id),visibility=2)
         comments = comments.exclude(~Q(owner_id=request.user.id),content_type=employee_type,visibility=1)
         comments = comments.exclude(object_id=user.id,content_type=employee_type)
         comments = comments.extra(order_by = ['-created_date'])
@@ -533,10 +533,12 @@ class LeadCommentList(APIView):
         employee_type = ContentType.objects.get(model="employee")
         allow_all_access = request.user.groups.filter(name="AllAccess").exists()
         allow_team_lead_access = request.user.groups.filter(name="TeamLeadAccess").exists()
+        allow_coach_access = request.user.groups.filter(name="CoachAccess").exists()
         comments = Comment.objects.filter(object_id__in = employee_ids, content_type=employee_type)
         comments = comments.exclude(object_id=lead.id,content_type=employee_type)
-        if not allow_all_access and allow_team_lead_access:
+        if not allow_all_access and (allow_team_lead_access and not allow_coach_access):
             comments = comments.exclude(~Q(owner_id=request.user.id), visibility=2)
+        comments = comments.exclude(~Q(owner_id=request.user.id), visibility=1)
         comments = comments.extra(order_by = ['-created_date'])[:15]
         serializer = TeamCommentSerializer(comments, many=True, context={'request': request})
         return Response(serializer.data)
