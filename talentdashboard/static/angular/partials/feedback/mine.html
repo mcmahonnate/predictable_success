@@ -1,0 +1,20 @@
+<style type="text/css">
+    .unread {
+        font-weight: bold;
+    }
+</style>
+
+<div class="panel panel-default" ng-show="items.length > 0">
+    <div class="panel-body">
+        <div class="list-group">
+            <a class="list-group-item" ng-repeat="feedback in items" href="#/my/{{ feedback.id }}">
+                <h5 class="list-group-item-text">{{ feedback.feedback_date | date: 'longDate' }}</h5>
+                <div class="list-group-item-heading" ng-class="{'unread': feedback.unread}">{{ feedback.reviewer }}</div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-default" ng-show="noResults">
+    <div class="panel-heading">You don't have any feedback. Why don't you <a href="#/request/">ask for some?</a></div>
+</div>

@@ -4,7 +4,7 @@
 
     <div class="list-group">
         <a ng-repeat="item in report" ng-href="#/deliver/{{ item.employee.id }}" class="list-group-item">
-            <span class="badge">{{ item.total_feedback_items }}</span>
+            <span class="badge" ng-bind="item.undelivered_feedback ? item.undelivered_feedback : ''"></span>
             {{ item.employee.full_name }}
         </a>
     </div>

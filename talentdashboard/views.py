@@ -39,12 +39,11 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.urlresolvers import reverse
 from django.core.cache import cache
 from django.conf import settings
-from feedback.models import FeedbackRequest, FeedbackSubmission, UndeliveredFeedbackReport
+from feedback.models import FeedbackRequest, FeedbackSubmission, UndeliveredFeedbackReport, CoacheeFeedbackReport
 from feedback.tasks import send_feedback_request_email
 import hashlib
 from django.utils.encoding import iri_to_uri
 from django.utils.translation import get_language
-from django.template.loader import render_to_string
 from django.core.mail import send_mail
 
 logger = getLogger('talentdashboard')
@@ -1121,31 +1120,26 @@ class FeedbackSubmissionView(APIView):
             raise Http404
 
     def get(self, request, pk, format=None):
-        """
-        Get a FeedbackSubmission
-        ---
-        request_serializer: FeedbackSubmissionSerializer
-        response_serializer: FeedbackSubmissionSerializer
-        """
         feedback = self.get_object(pk)
-        serializer = FeedbackSubmissionSerializer(feedback)
-        return Response(serializer.data)
+        employee = Employee.objects.get_from_user(request.user)
+        if employee == feedback.subject:
+            serializer = FeedbackSubmissionSerializerForEmployees(feedback)
+            return Response(serializer.data)
+        if employee == feedback.subject.coach:
+            serializer = FeedbackSubmissionSerializerForCoaches(feedback)
+            return Response(serializer.data)
+        return Response(status=401) # Unauthorized
 
     def post(self, request, pk, format=None):
-        """
-        Create a FeedbackSubmission
-        ---
-        request_serializer: FeedbackSubmissionPostSerializer
-        response_serializer: FeedbackSubmissionSerializer
-        """
         add_current_employee_to_request(request, 'reviewer')
-        serializer = FeedbackSubmissionPostSerializer(data=request.DATA)
+        serializer = WriteableFeedbackSubmissionSerializer(data=request.DATA)
         if serializer.is_valid():
             feedback = serializer.save()
-            # feedback_request = serializer.object
-            # pending_feedback_requests = FeedbackRequest.objects.pending_for_requester(feedback_request.requester).pending_for_reviewer()
-            response_serializer = FeedbackSubmissionSerializer(feedback)
-            return Response(response_serializer.data)
+            if feedback.confidentiality == FeedbackSubmission.NOT_CONFIDENTIAL:
+                feedback.has_been_delivered = True
+                feedback.save()
+            serializer = AnonymizedFeedbackSubmissionSerializer(feedback)
+            return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
 
 
@@ -1161,23 +1155,21 @@ def potential_reviewers(request):
     serializer = MinimalEmployeeSerializer(potential_reviewers, many=True)
     return Response(serializer.data)
 
-
-class CoachFeedbackReports(APIView):
-    def get(self, request, format=None):
-        current_user = request.user
-        coach = Employee.objects.get(user=current_user)
-        reports = []
-        for coachee in coach.coachees.all():
-            report = UndeliveredFeedbackReport(coachee)
-            reports.append(report)
-
-        serializer = UndeliveredFeedbackReportSerializer(reports, many=True, context={'request': request})
-        return Response(serializer.data)
+@api_view(['GET'])
+def get_coachees_feedback_report(request):
+    current_user = request.user
+    coach = Employee.objects.get(user=current_user)
+    reports = []
+    for coachee in coach.coachees.all():
+        report = UndeliveredFeedbackReport(coachee)
+        reports.append(report)
+    serializer = UndeliveredFeedbackReportSerializer(reports, many=True)
+    return Response(serializer.data)
 
 @api_view(['PUT'])
 def mark_feedback_delivered(request):
     coach = Employee.objects.get(user=request.user)
-    serializer = FeedbackDeliverySerializer(data=request.DATA, many=True)
+    serializer = IdSerializer(data=request.DATA, many=True)
     if serializer.is_valid():
         items = serializer.validated_data
         feedback = FeedbackSubmission.objects.filter(id__in=[item['id'] for item in items]).filter(subject__coach=coach)
@@ -1186,30 +1178,61 @@ def mark_feedback_delivered(request):
     else:
         return Response(serializer.errors, status=400)
 
-@api_view(['POST'])
-def email_feedback(request):
-    coach = Employee.objects.get(user=request.user)
-    serializer = FeedbackDeliverySerializer(data=request.DATA, many=True)
+@api_view(['PUT'])
+def mark_feedback_read(request):
+    employee = Employee.objects.get(user=request.user)
+    serializer = IdSerializer(data=request.DATA, many=True)
     if serializer.is_valid():
         items = serializer.validated_data
-        feedback_items = FeedbackSubmission.objects.filter(id__in=[item['id'] for item in items]).filter(subject__coach=coach)
-        if len(feedback_items) == 0:
-            return Response(None, status=200)
-
-        recipient_email = feedback_items[0].subject.email
-        coach_email = "{} <{}>".format(coach.full_name, coach.email)
-
-        if not recipient_email:
-            return Response(None, status=200)
-
-        context = {
-            'feedback_items': feedback_items,
-        }
-        subject = "Here's your feedback!"
-        plain_text_message = render_to_string('email/feedback_delivery.txt', context)
-        send_mail(subject, plain_text_message, settings.DEFAULT_FROM_EMAIL, [recipient_email])
-        feedback_items.update(has_been_delivered=True)
+        feedback = FeedbackSubmission.objects.filter(id__in=[item['id'] for item in items]).filter(subject=employee)
+        feedback.update(unread=False)
         return Response(None, status=200)
     else:
         return Response(serializer.errors, status=400)
+
+@api_view(['GET'])
+def confidentiality_options(request):
+    return Response(FeedbackSubmission.CONFIDENTIALITY_CHOICES)
+
+@api_view(['GET'])
+def my_feedback(request):
+    employee = Employee.objects.get(user=request.user)
+    feedback = employee.feedback_about.filter(has_been_delivered=True)
+    serializer = FeedbackSubmissionSerializerForEmployees(feedback, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def view_feedback(request):
+    current_user = request.user
+    employee = Employee.objects.get(user=current_user)
+    feedback = employee.feedback_about.filter(has_been_delivered=True)
+    serializer = FeedbackSubmissionSerializerForEmployees(feedback, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def view_coachee_feedback(request, pk):
+    coach = Employee.objects.get(user=request.user)
+    employee = Employee.objects.get(pk=pk)
+    if coach != employee.coach:
+        return Response(status=401)
+    report = CoacheeFeedbackReport(employee)
+    serializer = CoacheeFeedbackReportSerializer(report)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def menu_counts(request):
+    employee = Employee.objects.get(user=request.user)
+    unreadFeedback = employee.feedback_about.filter(has_been_delivered=True).filter(unread=True).count()
+    unansweredRequests = FeedbackRequest.objects.pending_for_reviewer(employee).count()
+    toBeDelivered = 0
+    for coachee in employee.coachees.all():
+        if coachee.feedback_about.filter(has_been_delivered=False).count() > 0:
+            toBeDelivered = toBeDelivered + 1
+    result = {
+        'unreadFeedback': unreadFeedback,
+        'unansweredRequests': unansweredRequests,
+        'toBeDelivered': toBeDelivered
+    }
+    return Response(result)
+
 

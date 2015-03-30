@@ -600,7 +600,7 @@ class FeedbackRequestPostSerializer(serializers.ModelSerializer):
         model = FeedbackRequest
 
 
-class FeedbackSubmissionPostSerializer(serializers.ModelSerializer):
+class WriteableFeedbackSubmissionSerializer(serializers.ModelSerializer):
     feedback_date = serializers.DateTimeField(required=False)
     subject = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
     reviewer = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
@@ -623,22 +623,63 @@ class FeedbackSubmissionPostSerializer(serializers.ModelSerializer):
         model = FeedbackSubmission
 
 
-class FeedbackSubmissionSerializer(serializers.ModelSerializer):
+class AnonymizedFeedbackSubmissionSerializer(serializers.ModelSerializer):
     feedback_date = serializers.DateTimeField(required=False)
     subject = MinimalEmployeeSerializer()
-    reviewer = MinimalEmployeeSerializer()
-    feedback_request = FeedbackRequestSerializer()
 
     class Meta:
         model = FeedbackSubmission
+        fields = ('id', 'feedback_date', 'subject',
+                  'excels_at', 'could_improve_on', 'unread',
+                  'has_been_delivered', 'confidentiality', 'was_unsolicited')
 
 
-class FeedbackDeliverySerializer(serializers.Serializer):
+class FeedbackSubmissionSerializerForCoaches(serializers.ModelSerializer):
+    feedback_date = serializers.DateTimeField(required=False)
+    subject = MinimalEmployeeSerializer()
+    reviewer = serializers.SerializerMethodField()
+
+    def get_reviewer(self, obj):
+        reviewer = obj.get_reviewer_for_viewing_by_coach()
+        if reviewer:
+            return reviewer.full_name
+        return "Anonymous"
+
+    class Meta:
+        model = FeedbackSubmission
+        fields = ('id', 'feedback_date', 'subject', 'reviewer',
+                  'excels_at', 'could_improve_on', 'unread',
+                  'has_been_delivered', 'confidentiality', 'was_unsolicited')
+
+
+class FeedbackSubmissionSerializerForEmployees(serializers.ModelSerializer):
+    feedback_date = serializers.DateTimeField(required=False)
+    subject = MinimalEmployeeSerializer()
+    reviewer = serializers.SerializerMethodField()
+
+    def get_reviewer(self, obj):
+        reviewer = obj.get_reviewer_for_viewing_by_subject()
+        if reviewer:
+            return reviewer.full_name
+        return "Anonymous"
+
+    class Meta:
+        model = FeedbackSubmission
+        fields = ('id', 'feedback_date', 'subject', 'reviewer',
+                  'excels_at', 'could_improve_on', 'unread',
+                  'has_been_delivered', 'confidentiality', 'was_unsolicited')
+
+
+class IdSerializer(serializers.Serializer):
     id = serializers.IntegerField()
 
 
 class UndeliveredFeedbackReportSerializer(serializers.Serializer):
-    employee = EmployeeSerializer()
-    undelivered_feedback = serializers.ListField(child=FeedbackSubmissionSerializer())
-    responses_by_question = serializers.DictField()
-    total_feedback_items = serializers.IntegerField()
+    employee = MinimalEmployeeSerializer()
+    undelivered_feedback = serializers.IntegerField()
+
+
+class CoacheeFeedbackReportSerializer(serializers.Serializer):
+    employee = MinimalEmployeeSerializer()
+    undelivered_feedback = serializers.ListField(child=FeedbackSubmissionSerializerForCoaches())
+    delivered_feedback = serializers.ListField(child=FeedbackSubmissionSerializerForCoaches())

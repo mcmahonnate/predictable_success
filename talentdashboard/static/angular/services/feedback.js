@@ -25,7 +25,12 @@ angular.module('feedback.services', ['ngResource'])
     }])
 
     .factory('FeedbackSubmission', ['$resource', function ($resource) {
-        return $resource('/api/v1/feedback/submissions/:id/', { id: '@id' });
+        var actions = {
+            'mine': { method: 'GET', url: '/api/v1/feedback/submissions/mine/', isArray: true },
+            'markRead': { method: 'PUT', url: '/api/v1/feedback/submissions/read/', isArray: true },
+            'markDelivered': { method: 'PUT', url: '/api/v1/feedback/submissions/deliver/', isArray: true },
+        };
+        return $resource('/api/v1/feedback/submissions/:id/', { id: '@id' }, actions);
     }])
 
     .factory('Employee', ['$resource', function ($resource) {
@@ -35,26 +40,7 @@ angular.module('feedback.services', ['ngResource'])
         return $resource('/api/v1/employees/:id/', {id: '@id'}, actions);
     }])
 
-    .factory('CoachReport', ['$resource', function ($resource) {
-        var actions = {
-            'markDelivered': { method: 'PUT', url: '/api/v1/feedback/coach/deliver/', isArray: true },
-            'sendEmail': { method: 'POST', url: '/api/v1/feedback/coach/email/', isArray: true }
-        };
-        return $resource('/api/v1/feedback/coach/', {}, actions);
+    .factory('CoacheeReport', ['$resource', function ($resource) {
+        return $resource('/api/v1/feedback/coachees/:id/', {});
     }])
-
-    .factory('alertService', function($rootScope) {
-        var alertService = {};
-        $rootScope.alerts = [];
-
-        alertService.add = function(type, msg) {
-            $rootScope.alerts.push({'type': type, 'msg': msg});
-        };
-
-        alertService.closeAlert = function(index) {
-            $rootScope.alerts.splice(index, 1);
-        };
-
-        return alertService;
-    })
 ;
