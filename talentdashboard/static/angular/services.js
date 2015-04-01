@@ -95,6 +95,16 @@ angular.module('tdb.services', ['ngResource'])
     return res;
 }])
 
+.factory('AnnotationChart', ['$resource', '$http', function($resource, $http) {
+    var AnnotationChart = $resource('/api/v1/annotation-chart/:id');
+
+    AnnotationChart.getData = function(id) {
+        return this.get({id: id});
+    };
+
+    return AnnotationChart;
+}])
+
 .factory('PvpEvaluation', ['$resource', '$http', function($resource, $http) {
     var actions = {
         'update': { method: 'PUT' }
@@ -265,13 +275,23 @@ angular.module('tdb.services', ['ngResource'])
     return Engagement;
 }])
 
+.factory('SendEngagementSurvey', ['$resource', '$http', function($resource, $http) {
+    var actions = {
+        'addNew': { method:'POST', data:{id: '@id', _sent_from_id: '@sent_from_id', _override: '@override'}, isArray: false }
+    }
+    var SendEngagementSurvey = $resource('/api/v1/send-engagement-survey/:id', {id:'@id'}, actions);
+
+    return SendEngagementSurvey;
+}])
+
 .factory('EngagementSurvey', ['$resource', '$http', function($resource, $http) {
     var actions = {
         'addNew': { method:'POST', data:{survey:'@survey_id', assessment: '@assessment', content: '@content'}, isArray: false },
     }
 
-    var Engagement = $resource('/api/v1/engagement-survey/:id/:survey', {id:'@id', survey:'@survey_id'}, actions);
+    var Engagement = $resource('/api/v1/engagement-survey/:id/:survey/', {id:'@id', survey:'@survey_id'}, actions);
     Engagement.getSurvey = function(id, survey_id, success, failure) {return this.get({ id: id, survey: survey_id }, success, failure); };
+
     return Engagement;
 }])
 

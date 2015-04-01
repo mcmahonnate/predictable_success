@@ -43,7 +43,7 @@
                   <div id="selection-list">
                     <ul style="padding: 10px 10px;">
                         <li ng-show="!showAddEmployee">
-                            <a class="dashboard employee_menu" ng-click="toggleModal();"><span class="glyphicon-regular glyphicon-add-employee employee_menu"></span><span style="margin-left:10px;" class="employee_menu">Add Employee</span></a>
+                            <a class="dashboard employee_menu" ng-click="toggleEmployeeModal();"><span class="glyphicon-regular glyphicon-add-employee employee_menu"></span><span style="margin-left:10px;" class="employee_menu">Add Employee</span></a>
                         </li>
                     </ul>
                   </div>
@@ -121,7 +121,7 @@
                     </div>
                 </div>
 		    </div>
-            <modal-edit-employee employee='newEmployee' leadership='newLeadership' employees='employees' show='modalShown' width='500px'></modal-edit-employee>
+            <modal-employee employee='newEmployee' leadership='newLeadership' employees='employees' teams='teams' show='modalEmployeeShown' width='700px'></modal-employee>
         </div>
     </div>
   </header>

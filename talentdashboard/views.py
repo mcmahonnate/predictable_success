@@ -42,8 +42,12 @@ from django.conf import settings
 from feedback.models import FeedbackRequest, FeedbackSubmission, UndeliveredFeedbackReport, CoacheeFeedbackReport
 from feedback.tasks import send_feedback_request_email
 import hashlib
+from collections import defaultdict
 from django.utils.encoding import iri_to_uri
 from django.utils.translation import get_language
+import json
+import collections
+import dateutil.parser, copy
 from django.core.mail import send_mail
 
 logger = getLogger('talentdashboard')
@@ -275,7 +279,7 @@ class SendEngagementSurvey(APIView):
         employee = Employee.objects.get(id=pk)
         sent_from_id = request.DATA["_sent_from_id"]
         if "_override" in request.DATA:
-            override = request.DATA["_override", False]
+            override = request.DATA["_override"]
         sent_from = Employee.objects.get(id=sent_from_id)
         current_surveys = SurveyUrl.objects.filter(sent_to__id=pk, active=True)
         if len(current_surveys) > 0 and not override:
@@ -380,9 +384,10 @@ class EmployeeEngagement(APIView):
         happy.employee = employee
         happy.assessed_by = assessed_by
         happy.assessment = int(assessment)
-        if "_comment_id" in request.DATA:
-            comment_id = request.DATA["_comment_id"]
-            comment = Comment.objects.get(id=comment_id)
+        if "_content" in request.DATA:
+            content = request.DATA["_content"]
+            visibility = 3
+            comment = employee.comments.add_comment(content, visibility, request.user)
             happy.comment = comment
         happy.save()
         serializer = HappinessSerializer(happy, many=False, context={'request': request})
@@ -441,8 +446,9 @@ class EmployeeCommentList(APIView):
         comments = Comment.objects.filter(object_id = pk, content_type=employee_type)
         allow_all_access = request.user.groups.filter(name="AllAccess").exists()
         allow_team_lead_access = request.user.groups.filter(name="TeamLeadAccess").exists()
-        if not allow_all_access and allow_team_lead_access:
-            comments = comments.exclude(~Q(owner_id=request.user.id), visibility=2)
+        allow_coach_access = request.user.groups.filter(name="CoachAccess").exists()
+        if not allow_all_access and (allow_team_lead_access and not allow_coach_access):
+            comments = comments.exclude(~Q(owner_id=request.user.id),visibility=2)
         comments = comments.exclude(~Q(owner_id=request.user.id),content_type=employee_type,visibility=1)
         comments = comments.exclude(object_id=user.id,content_type=employee_type)
         comments = comments.extra(order_by = ['-created_date'])
@@ -460,7 +466,6 @@ class EmployeeCommentList(APIView):
         return Response(serializer.data)
 
     def post(self, request, pk, format=None):
-        notify = False
         comment_type = ContentType.objects.get(model="comment")
         model_name = request.DATA["_model_name"]
         content_type = ContentType.objects.get(model=model_name)
@@ -479,9 +484,20 @@ class EmployeeCommentList(APIView):
             commenter = Employee.objects.get(user__id=comment.owner_id)
             sub_comment = Comment.objects.add_comment(comment, content, visibility, owner)
             serializer = SubCommentSerializer(sub_comment, many=False, context={'request': request})
+
+            sub_commenters = Comment.objects.get_for_object(comment)
+            sub_commenters = sub_commenters.values('owner_id')
+            mail_to = User.objects.filter(id__in=sub_commenters, is_active=True)
+            mail_to = mail_to.exclude(id=owner.id)
+            mail_to = list(mail_to.values_list('email', flat=True))
+
             if commenter.user.is_active:
-                notify = True
-            if notify:
+                if len(mail_to) > 0:
+                    mail_to.append(commenter.user.email)
+                else:
+                    mail_to = [commenter.user.email]
+
+            if len(mail_to) > 0:
                 html_template = get_template('reply_notification.html')
                 sub_commenter = Employee.objects.get(user__id=request.user.id)
                 comment_content = comment.content
@@ -494,11 +510,10 @@ class EmployeeCommentList(APIView):
                 dash_link = 'http://' + get_current_site(request).domain + '/#/employees/' + str(employee.id)
                 template_vars = Context({'employee_name': employee_name, 'dash_link': dash_link, 'commenter_avatar': commenter_avatar,'commenter_full_name': commenter_full_name, 'sub_commenter_avatar': sub_commenter_avatar, 'sub_commenter_full_name': sub_commenter_full_name, 'comment_content': comment_content, 'sub_comment_content': sub_comment_content})
                 html_content = html_template.render(template_vars)
-                subject = sub_commenter.full_name + ' commented on your post about ' + employee.full_name
+                subject = sub_commenter.full_name + ' commented on a post about ' + employee.full_name
                 text_content = 'View comment here:\r\n http://' + get_current_site(request).domain + '/#/employees/' + str(employee.id)
                 mail_from = sub_commenter.full_name + '<notify@dfrntlabs.com>'
-                mail_to = commenter.user.email
-                msg = EmailMultiAlternatives(subject, text_content, mail_from, [mail_to])
+                msg = EmailMultiAlternatives(subject, text_content, mail_from, mail_to)
                 msg.attach_alternative(html_content, "text/html")
                 msg.send()
         else:
@@ -517,10 +532,12 @@ class LeadCommentList(APIView):
         employee_type = ContentType.objects.get(model="employee")
         allow_all_access = request.user.groups.filter(name="AllAccess").exists()
         allow_team_lead_access = request.user.groups.filter(name="TeamLeadAccess").exists()
+        allow_coach_access = request.user.groups.filter(name="CoachAccess").exists()
         comments = Comment.objects.filter(object_id__in = employee_ids, content_type=employee_type)
         comments = comments.exclude(object_id=lead.id,content_type=employee_type)
-        if not allow_all_access and allow_team_lead_access:
+        if not allow_all_access and (allow_team_lead_access and not allow_coach_access):
             comments = comments.exclude(~Q(owner_id=request.user.id), visibility=2)
+        comments = comments.exclude(~Q(owner_id=request.user.id), visibility=1)
         comments = comments.extra(order_by = ['-created_date'])[:15]
         serializer = TeamCommentSerializer(comments, many=True, context={'request': request})
         return Response(serializer.data)
@@ -748,7 +765,7 @@ class EmployeeDetail(APIView):
                 return True
             return False
 
-        if int(pk) == 0 and "_full_name" in request.DATA:
+        if int(pk) == 0 and "_first_name" in request.DATA:
             employee = Employee()
             employee.display = True
             expire_view_cache('employee-list')
@@ -757,8 +774,18 @@ class EmployeeDetail(APIView):
         if employee is not None:
             if "_full_name" in request.DATA:
                 employee.full_name = request.DATA["_full_name"]
+            if "_first_name" in request.DATA:
+                employee.first_name = request.DATA["_first_name"]
+            if "_last_name" in request.DATA:
+                employee.last_name = request.DATA["_last_name"]
+            if "_email" in request.DATA:
+                employee.email = request.DATA["_email"]
             if "_hire_date" in request.DATA:
                 employee.hire_date = request.DATA["_hire_date"]
+            if "_team_id" in request.DATA:
+                team_id = request.DATA["_team_id"]
+                team = Team.objects.get(id=team_id)
+                employee.team = team
             if "_coach_id" in request.DATA:
                 coach_id = request.DATA["_coach_id"]
                 coach = Employee.objects.get(id=coach_id)
@@ -930,10 +957,62 @@ class EmployeePvPEvaluations(APIView):
     def get(self, request, pk, format=None):
         evaluations = PvpEvaluation.objects.all()
         evaluations = evaluations.filter(employee__id=int(pk))
+        evaluations = evaluations.filter(evaluation_round__is_complete=True)
         if evaluations is not None:
             serializer = PvpEvaluationSerializer(evaluations, many=True,context={'request': request})
             return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
+
+class AnnotationChartData(APIView):
+    def get(self, request, pk, format=None):
+        chart_data = defaultdict(list)
+        eval_rounds = EvaluationRound.objects.get_rounds_for_employee(pk)
+        for index, this_round in enumerate(eval_rounds):
+            if index < len(eval_rounds)-1:
+                next_round = eval_rounds[index+1]
+                dt = next_round.date - this_round.date
+                days = dt.days
+                this_eval = PvpEvaluation.objects.get(employee__id=int(pk), evaluation_round__id=this_round.id)
+                next_eval = PvpEvaluation.objects.get(employee__id=int(pk), evaluation_round__id=next_round.id)
+                performance_step = (next_eval.performance - this_eval.performance) / float(days)
+                potential_step = (next_eval.potential - this_eval.potential) / float(days)
+                for i in range(0, days):
+                    dt = timedelta(days=i)
+                    key = this_round.date + dt
+                    performance = this_eval.performance + (performance_step*i)
+                    potential = this_eval.potential + (potential_step*i)
+                    chart_data[key.strftime('%Y-%m-%d')].extend([key.strftime('%Y-%m-%d'),performance, None, None, potential, None, None])
+            else:
+                dt = datetime.date.today() - this_round.date
+                days = dt.days
+                for i in range(0, days):
+                    dt = timedelta(days=i)
+                    key = this_round.date + dt
+                    chart_data[key.strftime('%Y-%m-%d')].extend([key.strftime('%Y-%m-%d'),this_eval.performance, None, None, this_eval.potential, None, None])
+        employee_type = ContentType.objects.get(model='employee')
+        comments = Comment.objects.filter(content_type=employee_type)
+        comments = comments.filter(object_id=pk)
+        comments = comments.exclude(~Q(owner_id=request.user.id),content_type=employee_type,visibility=1)
+        happys = Happiness.objects.filter(employee__id=pk)
+
+        iterate_chart_data = copy.deepcopy(chart_data)
+        for key in iterate_chart_data:
+            date_parsed = dateutil.parser.parse(key)
+            comment = comments.filter(created_date__year=date_parsed.year,created_date__month=date_parsed.month,created_date__day=date_parsed.day).first()
+            if comment:
+                chart_data[key].extend([0, None, comment.content])
+            else:
+                chart_data[key].extend([0, None, None])
+            last_happy = copy.copy(happy)
+            happy = happys.filter(assessed_date=date_parsed).first()
+            if happy:
+                chart_data[key].extend([happy.assessment, None, None])
+            else:
+                chart_data[key].extend([0, None, None])
+
+        chart_data = collections.OrderedDict(sorted(chart_data.items()))
+
+        return HttpResponse(json.dumps(chart_data), content_type='application/json')
 
 @api_view(['GET'])
 @auth_employee('AllAccess', 'CoachAccess', 'TeamLeadAccess')

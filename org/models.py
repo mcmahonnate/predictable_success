@@ -74,6 +74,11 @@ class Employee(models.Model):
     user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True)
     coach = models.ForeignKey('Employee', related_name='coachees', null=True, blank=True)
 
+    def save(self, *args, **kwargs):
+        if self.first_name and self.last_name:
+            self.full_name = self.first_name + " " + self.last_name
+        super(Employee, self).save(*args, **kwargs)
+
     def is_coach(self):
         if self.user is None:
             return False

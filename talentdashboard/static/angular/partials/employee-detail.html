@@ -5,7 +5,7 @@
           <div class="widget-inner widget-size-1x1 large-screen">
             <header class="no-reload">
               <h1 style="display:inline;">{{employee.full_name}}</h1>
-              <span ng-show="currentUser.can_edit_employees" class="employee-edit" style="float:right;text-transform:lowercase;color: #8b8b8b"><a ng-show="!employeeEdit" ng-click="toggleModal();">edit</a></span>
+              <span ng-show="currentUser.can_edit_employees" class="employee-edit" style="float:right;text-transform:lowercase;color: #8b8b8b"><a ng-show="!employeeEdit" ng-click="toggleEmployeeModal();">edit</a></span>
             </header>
             <section class="widget-body rag-widget">
               <div class="widget-canvas">
@@ -23,11 +23,11 @@
                         <ul>
                             <li><a ng-click="click_bio()" style="cursor: pointer;"><span class="glyphicon-regular glyphicon-bio" style="margin-right: 10px"></span>Bio</a></li>
                             <li><a ng-click="click_discussions()" style="cursor: pointer;"><span class="glyphicon-regular glyphicon-discussions" style="margin-right: 10px"></span>Discussions</a></li>
+                            <li><a ng-click="click_engagement()" style="cursor: pointer;"><span class="happy-nav" style="margin-right: 10px;"></span>Engagement</a></li>
                             <li><a ng-click="click_todos()" style="cursor: pointer;"><span class="glyphicon-regular glyphicon-tasks" style="margin-right: 10px"></span>Tasks</a></li>
                             <li ng-show="has_mbti"><a ng-click="click_myers_briggs()" style="cursor: pointer;"><span class="glyphicon-regular glyphicon-compass" style="margin-right: 10px"></span>Myers Briggs</a></li>
                             <li ng-show="has_kolbe"><a ng-click="click_kolbe()" style="cursor: pointer;">Kolbe</a></li>
                             <li ng-show="has_vops"><a ng-click="click_vops()" style="cursor: pointer;">Vops</a></li>
-                            <li ng-show="site_preferences.show_timeline"><a ng-click="click_time_line()" style="cursor: pointer;"><span class="glyphicon-regular glyphicon-timeline" style="margin-right: 10px"></span>Timeline</a></li>
                         </ul>
                     </nav>
                   </section>
@@ -262,14 +262,40 @@
                       </div>
                     </section>
                   </div>
-                  <div class="widget-inner large-screen make_transist hideflip" ng-class="{'showflip': show_timeline}" style="width:650px;position: absolute; min-height: 474px;">
+                  <div class="widget-inner large-screen make_transist hideflip" ng-class="{'showflip': show_engagement}" style="width:650px;position: absolute; min-height: 474px;">
                     <header class="no-reload">
-                      <h1 style="display:inline;">Timeline</h1>
+                      <h1 style="display:inline;">Engagement</h1>
                     </header>
                     <section class="widget-body rag-widget" style="padding: 24px;">
                       <div class="widget-canvas">
                         <div class="t-size-x16" style="min-width: 50%">
-                            <div style="height:300px" timeline-chart pvps="{{pvps}}"></div>
+                            <div style="margin: 0 0 20px 0;" ng-if="happys.length>0">
+                              <span style="padding:5px; display:inline-block; vertical-align:middle">{{employee.full_name}} was</span>
+                              <span style="vertical-align:middle; padding-left: 1px;" class="t-size-x40" ng-class="{'veryhappy': employee.happiness==5,'happy': employee.happiness==4,'indifferent': employee.happiness==3,'unhappy': employee.happiness==2,'veryunhappy': employee.happiness==1}"></span>
+                              <span style="padding:5px; display:inline-block; vertical-align:middle">as of {{ employee.happiness_date | date:'MM/dd/yyyy'}}</span>
+                            </div>
+                            <div ng-if="happys.length>0" style="margin: 10px">
+                                <div style="text-shadow: none" happiness-chart data="{{happys}}" showComment="{{showComment}}" style="width: 90%;"></div>
+                                <div ng-show="showComment" style="margin:20px 15px;padding:8px 0 8px 0px;display: block;width:580px;min-height:180px">
+                                    <h2 style="font-size: 14px;color: #8b8b8b;border-bottom: 2px solid #8b8b8b">{{clicked_happy.comment.created_date | date:'MMM d, yyyy'}}</h2>
+                                    <div style="display: block;width:580px;min-height: 48px;">
+                                        <div style="display: block; float: left; width: 48px;">
+                                            <a ng-href="#/employees/{{clicked_happy.comment.owner.employee.id}}" style="cursor: pointer;color:#8b8b8b;"><img ng-src="{{ clicked_happy.comment.owner.employee.avatar_small }}" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;"/></a>
+                                        </div>
+                                        <div style="display: block; float: left;padding-left:10px;width: 500px;min-height: 48px;">
+                                            <div>
+                                                <span ng-init="length=500" data-ng-bind-html="clicked_happy.comment.content | new_line | cut:true:length" style="line-height: 125%"></span> <span ng-show="clicked_happy.comment.content.length>length" ng-init="showMoreButton=true"><a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a><a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a></span>
+                                                <span style="color:#8b8b8b;display:block;margin: 5px 0">{{clicked_happy.comment.created_date | date:'MMM d, yyyy h:mma'}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="margin: 10px 0 35px 0;">
+                                <p style="margin-bottom:0;">Add an Engagement Score:</p>
+                                <button class="survey init" style="margin-bottom:3px;width:110px;margin-right: 10px;" ng-click="toggleHappyModal()">Manually</button>
+                                <button class="survey make_transist" ng-class="{'loading': isSurveySending, 'init': !isSurveySending}" style="margin-bottom:3px;" ng-click="sendSurvey()">Send Survey</button>
+                            </div>
                         </div>
                       </div>
                     </section>
@@ -282,33 +308,6 @@
                     <section class="widget-body rag-widget">
                       <div class="widget-canvas">
                         <ol>
-                          <li show="{{addEngagement}}" ng-scroll-into-view ng-show="currentUser.employee.id!=employee.id" class="clear" style="padding-top:10px;padding-bottom:10px;">
-                            <div show="{{editEngagement}}" ng-scroll-into-view class="t-secondary" style="min-width: 35%">
-                              Engagement <a ng-show="!employeeEdit && currentUser.can_coach_employees" set-popup-position ng-click="addEngagement=true;happyIndex=0" class="glyphicon glyphicon-add" style="float:right;cursor:pointer;padding-right:10px"></a>
-                            </div>
-
-                            <div style="max-width: 65%;">
-                                <span ng-show="happys.length == 0">--</span>
-                                <ul ng-show="happys.length > 0" style="width:100%">
-                                    <li ng-repeat="happy in happys" style="border-bottom:none">
-                                      <div style="display:block;width:175px;">
-                                      <div style="width:45px">
-                                          <span style="display:inline-block; vertical-align:middle; padding-left: 1px;" class="t-size-x40" ng-class="{'veryhappy': happy.assessment==5,'happy': happy.assessment==4,'indifferent': happy.assessment==3,'unhappy': happy.assessment==2,'veryunhappy': happy.assessment==1}"></span>
-                                      </div>
-                                      <div style="margin-top: 2px;width:130px;font-size:14px">
-                                          <span style="padding:5px; display:inline-block; vertical-align:middle">{{ happy.assessed_date | date:'MM/dd/yyyy'}}</span>
-                                          <span ng-show="!employeeEdit && currentUser.can_coach_employees">
-                                              <ul class="feed-actions" style="margin-top: 0px;padding-left:5px;">
-                                                <li class="feed-action" style="padding: 0 10px 0 0;"><a set-popup-position popup-offset-top="-17" ng-click="$parent.$parent.$parent.open_edit_engagement(happy);" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
-                                              </ul>
-                                              <span style="color:#8b8b8b;"><a ng-click="delete_happy(happy, $parent.$parent.$parent);" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></span>
-                                          </span>
-                                      </div>
-                                      </div>
-                                    </li>
-                                 </ul>
-                            </div>
-                          </li>
                           <li class="clear" style="padding-top:10px;padding-bottom:10px;">
                             <div class="t-secondary" style="min-width: 35%">
                               Hire Date
@@ -337,14 +336,14 @@
                             <!--<a ng-show="employeeEdit && !currentlyEditing" class="glyphicon glyphicon-edit" style="float:left;cursor:pointer;padding-right:10px"></a>
                             <span ng-show="employeeEdit && currentlyEditing" class="glyphicon glyphicon-edit-disable" style="padding-right:10px;float: left;"></span>-->
                             <div class="t-secondary" style="min-width: 35%">
-                              Super Power
+                              Team
                             </div>
 
                             <div class="t-size-x16" style="min-width: 50%">
-                                <span ng-if="super_powers.length == 0">--</span>
-                                <ul ng-if="super_powers.length > 0">
-                                    <li ng-repeat="super_power in super_powers">
-                                      {{ super_power.name }}
+                                <span ng-if="!employee.team">--</span>
+                                <ul ng-if="employee.team">
+                                    <li>
+                                      <a ng-href="#/teams/{{employee.team.id}}">{{ employee.team.name }}</a>
                                     </li>
                                  </ul>
                             </div>
@@ -483,4 +482,5 @@
       </div><!-- .widget-inner -->
     </article>
   </div>
-  <modal-edit-employee employee='employee' leadership='leadership' employees='employees' show='modalShown' width='500px'></modal-edit-employee>
+  <modal-employee employee='employee' leadership='leadership' employees='employees' teams='teams' show='modalEmployeeShown' width='700px'></modal-employee>
+  <modal-happy employee="employee" happys='happys' comments='comments' show='modalHappyShown' width='492px'></modal-happy>

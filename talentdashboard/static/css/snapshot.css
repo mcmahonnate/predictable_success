@@ -47,11 +47,10 @@ sub{top:0.5ex}
 .action:hover{background-color:#818181;border-color:#818181}
 .loading-overlay,.disabled-overlay{position:absolute;top:0;right:0;bottom:0;left:0;opacity:.85;z-index:2}
 .loading-overlay{background:center 40px no-repeat}
-.error,.success{padding:20px 20px 20px 61px;color:white;position:relative;border-radius:3px;line-height:1.4;display:none}
 .success{background-color:#6db64c;padding-left:54px}
-.success:before{top:17px;left:16px;content:'';display:block;position:absolute;width:26px;height:26px;background-position:0 -2160px}
-.error{background-color:#c84d40}
-.error:before{top:14px;left:16px;content:'';display:block;position:absolute;width:31px;height:31px;background-position:0 -1799px}
+.success:before{top:4px;left:16px;content:'';display:block;position:absolute;width:26px;height:26px;background-position:0 -2160px}
+.error{background-color:#c84d40;padding-left:54px}
+.error:before{top:4px;left:16px;content:'';display:block;position:absolute;width:26px;height:26px;background-position:0 -2160px}
 .help-icon{width:13px;height:13px;text-indent:-1000px;overflow:hidden;background-position:0 -2413px}
 .col-1{float:left;width:100%}
 .col-2{float:left;width:50%}
@@ -799,6 +798,13 @@ button.btn[disabled], fieldset[disabled] .btn {
     src: url('../fonts/flat-ui-icons-regular.eot');
     src: url('../fonts/flat-ui-icons-regular.eot?#iefix') format('embedded-opentype'), url('../fonts/flat-ui-icons-regular.woff') format('woff'), url('../fonts/flat-ui-icons-regular.ttf') format('truetype'), url('../fonts/flat-ui-icons-regular.svg#flat-ui-icons-regular') format('svg');
 }
+.happy-nav:before {
+    font-family: 'Emoticons';
+    font-size: 23px;
+    text-shadow: none;
+    color: #8b8b8b;
+    content: "\0041";
+}
 .veryhappy:before {
     font-family: 'Emoticons';
     font-size: 40px;
@@ -1540,3 +1546,34 @@ ul.dropdown-menu li {
     fill: #fff;
     stroke: none;
 }
+.hide {
+    opacity:0;
+}
+
+button.survey {
+    border: 1px solid #434343;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    height: 28px;
+    background-color: #434343;
+    font-size: 14px;
+    color: #d3d4d4;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+button.survey:hover:enabled {
+    background-color:#272727;
+}
+button.init {
+    width: 110px;
+}
+
+
+button.loading {
+    background: url('ajax-loader.gif') left center no-repeat;
+    padding-left: 20px;
+    width: 130px;
+}
+
