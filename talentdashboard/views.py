@@ -278,6 +278,8 @@ class SendEngagementSurvey(APIView):
         override = False
         employee = Employee.objects.get(id=pk)
         sent_from_id = request.DATA["_sent_from_id"]
+        subject = request.DATA["_subject"]
+        body = request.DATA["_body"]
         if "_override" in request.DATA:
             override = request.DATA["_override"]
         sent_from = Employee.objects.get(id=sent_from_id)
@@ -300,9 +302,9 @@ class SendEngagementSurvey(APIView):
             employee.save()
         survey = generate_survey(employee, sent_from)
         html_template = get_template('engagement_survey_email.html')
-        template_vars = Context({'employee_name': employee.first_name, 'survey_url': survey.url, 'from': survey.sent_from.full_name})
+        template_vars = Context({'employee_name': employee.first_name, 'body': body, 'survey_url': survey.url, 'from': survey.sent_from.full_name})
         html_content = html_template.render(template_vars)
-        subject = 'How are you?'
+        subject = subject
         text_content = 'Fill out this survey:\r\n' + survey.url
         mail_from = survey.sent_from.full_name + ' <notify@dfrntlabs.com>'
         mail_to = employee.email

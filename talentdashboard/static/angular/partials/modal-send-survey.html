@@ -1,0 +1,38 @@
+<div class='ng-modal' ng-show="show">
+    <!-- survey popups start -->
+    <div class='ng-modal-overlay'></div>
+    <form enctype="multipart/form-data" name="happyForm">
+        <div class='ng-modal-send-survey-dialog' ng-style='dialogStyle'>
+            <div class='ng-modal-dialog-content'>
+                <div class="container">
+                    <div style="margin-bottom: 15px">
+                        <span>From: {{from.employee.full_name}}</span>
+                    </div>
+                    <div>
+                        <input type="text" name="subject" ng-model="subject" placeholder="Add a catchy subject line here."  class="view-value-input" style="width: 85.5%;margin: 0px;"required tabindex="1" ng-disabled="isSurveySending">
+                    </div>
+                    <div style="margin: 15px 0">
+                        <span>{{employee.first_name}},</span>
+                    </div>
+                    <div class="comment-area" style="display: block;margin:20px 0;-webkit-border-radius: 6px;moz-border-radius: 6px;-ms-border-radius: 6px;-o-border-radius: 6px;border-radius: 6px;border: 2px solid #c1c1c1;background-color:white;">
+                        <textarea class="text" ng-model="body" rows="1" cols="50" placeholder="Personalize your email here." style="margin: 1px;width:94.5%;height: 132px;font-size:18px;padding:10px;border: none;resize:vertical;" required tabindex="2" ng-disabled="isSurveySending"></textarea>
+                    </div>
+                    <div style="margin-bottom: 15px">
+                        <span>Click here to take your ONE-QUESTION survey.</span>
+                    </div>
+                    <div style="margin-bottom: 15px">
+                        <span>Thanks,</span>
+                    </div>
+                    <div style="margin-bottom: 15px">
+                        <span>{{from.employee.first_name}}</span>
+                    </div>
+                    <div style="text-align:center;width: 90%;">
+                        <button class='ng-modal-button' ng-click='send();hideModal()' ng-disabled="!subject || !body || isSurveySending">Send</button>
+                        <button class='ng-modal-button' ng-click='hideModal()' ng-disabled="isSurveySending">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+<!-- survey popups ends -->
+</div>

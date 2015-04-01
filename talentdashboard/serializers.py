@@ -40,7 +40,7 @@ class MinimalEmployeeSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Employee
-        fields = ('id', 'full_name', 'display', 'avatar', 'avatar_small')
+        fields = ('id', 'full_name', 'first_name', 'display', 'avatar', 'avatar_small')
 
 
 class PvPEmployeeSerializer(serializers.HyperlinkedModelSerializer):
@@ -267,7 +267,7 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
 class SitePreferencesSerializer(serializers.ModelSerializer):
     class Meta:
         model = SitePreferences
-        fields = ('id', 'show_kolbe', 'show_vops', 'show_mbti', 'show_coaches', 'show_timeline')
+        fields = ('id', 'show_kolbe', 'show_vops', 'show_mbti', 'show_coaches', 'show_timeline', 'survey_email_subject', 'survey_email_body')
 
 class UserSerializer(serializers.ModelSerializer):
     employee = MinimalEmployeeSerializer()
