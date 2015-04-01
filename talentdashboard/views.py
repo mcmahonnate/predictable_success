@@ -1097,6 +1097,15 @@ class FeedbackRequestView(APIView):
         else:
             return Response(serializer.errors, status=400)
 
+    def put(self, request, pk, format=None):
+        serializer = FeedbackRequestPostSerializer(data=request.DATA)
+        if serializer.is_valid():
+            feedback_request = serializer.save()
+            response_serializer = FeedbackRequestSerializer(feedback_request)
+            return Response(response_serializer.data)
+        else:
+            return Response(serializer.errors, status=400)
+
 @api_view(['GET'])
 def incomplete_feedback_requests_for_reviewer(request):
     reviewer = Employee.objects.get_from_user(request.user)

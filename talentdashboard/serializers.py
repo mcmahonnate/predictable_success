@@ -681,5 +681,4 @@ class UndeliveredFeedbackReportSerializer(serializers.Serializer):
 
 class CoacheeFeedbackReportSerializer(serializers.Serializer):
     employee = MinimalEmployeeSerializer()
-    undelivered_feedback = serializers.ListField(child=FeedbackSubmissionSerializerForCoaches())
-    delivered_feedback = serializers.ListField(child=FeedbackSubmissionSerializerForCoaches())
+    feedback = serializers.ListField(child=FeedbackSubmissionSerializerForCoaches())

@@ -19,6 +19,11 @@ angular.module('feedback.services', ['ngResource'])
             'save': {
                 method: 'POST',
                 isArray: true
+            },
+            'decline': {
+                method: 'PUT',
+                isArray: false,
+                params: {decline:true}
             }
         };
         return $resource('/api/v1/feedback/requests/:id/', { id: '@id' }, actions);

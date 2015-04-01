@@ -5,8 +5,17 @@
     </div>
     <div class="panel-body">
         <div class="list-group" ng-show="hasTodos === true">
-            <a class="list-group-item" ng-repeat="item in todos" ng-href="#/submit/{{ item.id }}">
-                {{ item.requester.full_name }}
+            <a class="list-group-item clearfix" ng-repeat="request in todos" ng-href="#/submit/{{ request.id }}">
+                <p class="list-group-item-text">{{ request.request_date | date: 'longDate' }}</p>
+                <h4 class="list-group-item-heading pull-left">
+                    {{ request.requester.full_name }}
+                </h4>
+
+                <div class="btn-group-sm pull-right">
+                    <button class="btn btn-default" type="button" ng-click="decline(request)">
+                        Decline
+                    </button>
+                </div>
             </a>
         </div>
         <a class="btn btn-primary" href="#/submit/unsolicited/">Submit unsolicited feedback</a>

@@ -22,6 +22,11 @@ reviewers = [e1, e2, e3, e4, e5]
 for subject in subjects:
     FeedbackRequest(requester=subject, reviewer=me).save()
 
+    submission = FeedbackSubmission(subject=me, reviewer=subject)
+    submission.excels_at = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur porta, sapien sit amet blandit tempor, dui leo porttitor arcu, eu consectetur dui purus non velit."
+    submission.could_improve_on = "Vestibulum accumsan leo vel viverra efficitur. Donec in velit id quam tempus suscipit. Nam et augue consequat, aliquet leo vel, vestibulum erat. Proin euismod id odio et placerat. Suspendisse potenti."
+    submission.save()
+
     for reviewer in reviewers:
         if subject == reviewer:
             continue

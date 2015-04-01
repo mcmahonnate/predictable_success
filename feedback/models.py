@@ -21,6 +21,7 @@ class FeedbackRequest(models.Model):
     reviewer = models.ForeignKey(Employee, related_name='requests_for_feedback')
     message = models.TextField(blank=True)
     is_complete = models.BooleanField(default=False)
+    was_declined = models.BooleanField(default=False)
 
     def send_notification_email(self):
         recipient_email = self.requester.email
@@ -94,11 +95,6 @@ class UndeliveredFeedbackReport:
 class CoacheeFeedbackReport:
     def __init__(self, employee):
         self.employee = employee
-        self.undelivered_feedback = employee.feedback_about\
-            .filter(has_been_delivered=False)\
-            .order_by('-feedback_date')\
-            .all()
-        self.delivered_feedback = employee.feedback_about\
-            .filter(has_been_delivered=True)\
+        self.feedback = employee.feedback_about\
             .order_by('-feedback_date')\
             .all()

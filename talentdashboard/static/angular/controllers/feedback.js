@@ -57,7 +57,7 @@ angular.module('feedback.controllers', [])
                             Array.prototype.unshift.apply($scope.pendingRequests, value);
                             $scope.potentialReviewers = Employee.potentialReviewers();
                             $scope.search.selectedReviewers = [];
-                            Notification.success("Your request will be delivered");
+                            Notification.success("Your request will be delivered.");
                         },
                         function(httpResponse) {
                             Notification.error("Your feedback request failed. Please try again.");
@@ -69,8 +69,8 @@ angular.module('feedback.controllers', [])
     )
     .controller(
         'FeedbackRequestsCtrl',
-        ['$scope', 'FeedbackRequest',
-            function ($scope, FeedbackRequest) {
+        ['$scope', 'FeedbackRequest', 'Notification',
+            function ($scope, FeedbackRequest, Notification) {
                 $scope.search = { selectedRequest: null };
                 $scope.todos = null;
                 $scope.hasTodos = null;
@@ -82,6 +82,12 @@ angular.module('feedback.controllers', [])
                         $scope.todos.push(request);
                     }
                 });
+                $scope.decline = function (request) {
+                    request.$decline({}, function(value) {
+                        request.was_declined = true;
+                        Notification.success("You successfully declined the request.");
+                    });
+                };
             }
         ]
     )
@@ -188,19 +194,36 @@ angular.module('feedback.controllers', [])
     )
     .controller(
         'CoacheeFeedbackCtrl',
-        ['$scope', '$rootScope', '$routeParams', '$location', 'CoacheeReport', 'FeedbackSubmission', 'Notification',
-            function($scope, $rootScope, $routeParams, $location, CoacheeReport, FeedbackSubmission, Notification) {
+        ['$scope', '$rootScope', '$routeParams', '$filter', 'CoacheeReport', 'FeedbackSubmission', 'Notification',
+            function($scope, $rootScope, $routeParams, $filter, CoacheeReport, FeedbackSubmission, Notification) {
                 CoacheeReport.get({id: $routeParams.id}, function(data) {
                     $scope.report = data;
                 });
+                $scope.activeItems = [];
+
+                $scope.toggleActive = function(feedback) {
+                    if(feedback.active) {
+                        feedback.active = false;
+                    } else {
+                        feedback.active = true;
+                        FeedbackSubmission.markRead(
+                            [{id: feedback.id}],
+                            function() {
+                                $rootScope.$broadcast("feedbackRead", feedback.id);
+                                feedback.unread = false;
+                            }
+                        );
+                    }
+                    $scope.activeItems = $filter('filter')($scope.report.feedback, {active: true});
+                };
 
                 $scope.markDelivered = function(feedback) {
                     FeedbackSubmission.markDelivered(
                         [{id: feedback.id}],
                         function(value) {
-                            Notification.success(feedback.subject.full_name + " will receive this feedback.");
+                            feedback.has_been_delivered = true;
+                            Notification.success(feedback.subject.full_name + " can now see the feedback");
                             $rootScope.$broadcast("feedbackDelivered", feedback.id);
-                            $location.path('/deliver');
                         },
                         function(httpResponse) {
                             Notification.error("An error occurred while processing your request. Please try again.");
@@ -211,16 +234,30 @@ angular.module('feedback.controllers', [])
     )
     .controller(
         'MyFeedbackCtrl',
-        ['$scope', '$location', 'FeedbackSubmission',
-            function($scope, $location, FeedbackSubmission) {
+        ['$scope', '$rootScope', '$location', '$filter', 'FeedbackSubmission',
+            function($scope, $rootScope, $location, $filter, FeedbackSubmission) {
                 $scope.items = [];
-                $scope.noResults = false;
+                $scope.activeItems = [];
 
+                $scope.toggleActive = function(feedback) {
+                    if(feedback.active) {
+                        feedback.active = false;
+                    } else {
+                        feedback.active = true;
+                        FeedbackSubmission.markRead(
+                            [{id: feedback.id}],
+                            function() {
+                                $rootScope.$broadcast("feedbackRead", feedback.id);
+                                feedback.unread = false;
+                            }
+                        );
+                    }
+                    $scope.activeItems = $filter('filter')($scope.items, {active: true});
+                };
                 FeedbackSubmission.mine(
                     {},
                     function(value) {
                         $scope.items = value;
-                        $scope.noResults = value.length === 0;
                     }
                 );
             }
@@ -231,15 +268,16 @@ angular.module('feedback.controllers', [])
         ['$scope', '$rootScope', '$routeParams', '$location', 'FeedbackSubmission',
             function($scope, $rootScope, $routeParams, $location, FeedbackSubmission) {
 
-                var broadcastItemRead = function() {
-                    $rootScope.$broadcast("feedbackRead", data.id);
-                };
-
                 FeedbackSubmission.get(
                     {id: $routeParams.id},
                     function(value) {
                         $scope.feedback = value;
-                        FeedbackSubmission.markRead([{id: value.id}], broadcastItemRead);
+                        FeedbackSubmission.markRead(
+                            [{id: value.id}],
+                            function() {
+                                $rootScope.$broadcast("feedbackRead", value.id);
+                            }
+                        );
                     }
                 );
             }
