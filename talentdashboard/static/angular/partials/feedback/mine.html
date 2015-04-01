@@ -9,6 +9,9 @@
         <h3 class="panel-title">Your feedback</h3>
     </div>
     <div class="panel-body">
+        <div ng-if="items.length === 0">
+            You don't have any feedback yet. Why don't you <a href="#/request">ask for some</a>?
+        </div>
         <div class="list-group" ng-repeat="feedback in items">
             <a class="list-group-item" ng-click="toggleActive(feedback)" ng-class="{active: feedback.active}">
                 <p class="list-group-item-text">{{ feedback.feedback_date | date: 'longDate' }}</p>

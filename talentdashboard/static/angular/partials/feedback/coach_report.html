@@ -1,15 +1,14 @@
-<div class="panel panel-default" ng-show="report.length > 0">
-    <div class="panel-heading">Your Coachees</div>
-        <div class="panel-body">
-
-    <div class="list-group">
-        <a ng-repeat="item in report" ng-href="#/deliver/{{ item.employee.id }}" class="list-group-item">
-            <span class="badge" ng-bind="item.undelivered_feedback ? item.undelivered_feedback : ''"></span>
-            {{ item.employee.full_name }}
-        </a>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Your coachees</h3>
     </div>
-</div>
-</div>
-<div class="panel panel-default" ng-show="report.length == 0">
-    <div class="panel-heading">You don't have any coachees</div>
+    <div class="panel-body">
+        <div ng-if="report.length == 0">Aww, a coach without any coachees, how sad!</div>
+        <div class="list-group">
+            <a ng-repeat="item in report" ng-href="#/deliver/{{ item.employee.id }}" class="list-group-item">
+                <span class="badge" ng-bind="item.undelivered_feedback ? item.undelivered_feedback : ''"></span>
+                {{ item.employee.full_name }}
+            </a>
+        </div>
+    </div>
 </div>

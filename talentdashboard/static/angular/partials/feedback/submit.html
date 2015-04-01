@@ -1,9 +1,10 @@
 <div class="panel panel-default">
     <div class="panel-heading">
-        <span ng-show="hasTodos === false">No one has asked you for feedback</span>
-        <span ng-show="hasTodos === true">These people have asked you for feedback</span>
+        <h3 class="panel-title">Submit feedback</h3>
     </div>
     <div class="panel-body">
+        <div ng-if="hasTodos === false">No one has asked you for feedback</div>
+        <div ng-if="hasTodos === true">These people have asked you for feedback</div>
         <div class="list-group" ng-show="hasTodos === true">
             <a class="list-group-item clearfix" ng-repeat="request in todos" ng-href="#/submit/{{ request.id }}">
                 <p class="list-group-item-text">{{ request.request_date | date: 'longDate' }}</p>
