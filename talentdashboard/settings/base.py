@@ -106,6 +106,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'tenant_schemas.middleware.TenantMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -127,9 +128,15 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
 )
 
-INSTALLED_APPS = (
-    'django.contrib.auth',
+SHARED_APPS = (
+    'tenant_schemas',  # mandatory
+    'customers',
     'django.contrib.contenttypes',
+)
+
+TENANT_APPS = (
+    'django.contrib.contenttypes',
+    'django.contrib.auth',
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
@@ -150,6 +157,10 @@ INSTALLED_APPS = (
     'feedback',
     'preferences',
 )
+
+INSTALLED_APPS = list(set(SHARED_APPS + TENANT_APPS))
+
+TENANT_MODEL = "customers.Client"
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

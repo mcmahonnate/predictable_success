@@ -3,17 +3,24 @@ from .base import *
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 CELERY_ALWAYS_EAGER = True
+import dj_database_url
+
+# DATABASES = { 'default': dj_database_url.config(default='postgres:///tdb-test') }
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'talentdashboard',
-        'USER': 'djangotalentdashboard',
+        'ENGINE': 'tenant_schemas.postgresql_backend',
+        'NAME': 'multitenant',
+        'USER': 'tdbuser',
         'PASSWORD': 'F00lF00l!',
-        'HOST': '127.0.0.1',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+        'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': '',                      # Set to empty string for default.
     }
 }
+
+DATABASE_ROUTERS = (
+    'tenant_schemas.routers.TenantSyncRouter',
+)
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_USE_SSL = True
