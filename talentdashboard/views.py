@@ -39,6 +39,7 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.urlresolvers import reverse
 from django.core.cache import cache
 from django.conf import settings
+from django.shortcuts import render, render_to_response
 from feedback.models import FeedbackRequest, FeedbackSubmission, UndeliveredFeedbackReport, CoacheeFeedbackReport
 from feedback.tasks import send_feedback_request_email
 import hashlib
@@ -873,6 +874,11 @@ def current_site(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
+def customer(request):
+    serializer = CustomerSerializer(request.tenant)
+    return Response(serializer.data)
+
+@api_view(['GET'])
 def current_kpi_indicator(request):
     try:
         indicator = Indicator.objects.all()[0:1].get()
@@ -1322,5 +1328,12 @@ def menu_counts(request):
         'toBeDelivered': toBeDelivered
     }
     return Response(result)
+
+
+def index(request):
+    if request.tenant.is_public_tenant():
+        return render(request, 'welcome.html')
+    else:
+        return render(request, 'index.html')
 
 

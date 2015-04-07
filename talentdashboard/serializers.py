@@ -9,6 +9,7 @@ from engagement.models import Happiness, SurveyUrl
 from kpi.models import Indicator, Performance
 from feedback.models import FeedbackRequest, FeedbackSubmission
 from preferences.models import SitePreferences
+from customers.models import Customer
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.utils.log import getLogger
@@ -328,6 +329,12 @@ class SiteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Site
         fields = ('id', 'domain', 'name')
+
+
+class CustomerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Customer
+        fields = ('id', 'name', 'domain_url', 'show_kolbe', 'show_vops', 'show_mbti', 'show_coaches', 'show_timeline')
 
 
 class SubCommentSerializer(serializers.HyperlinkedModelSerializer):

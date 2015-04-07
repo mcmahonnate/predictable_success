@@ -16,7 +16,7 @@ router.register(r'api/v1/attributes', AttributeViewSet)
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', TemplateView.as_view(template_name="index.html"), name='home'),
+    url(r'^$', index),#TemplateView.as_view(template_name="index.html"), name='home'),
     url(r'^feedback/$', TemplateView.as_view(template_name="feedback.html"), name='feedback_home'),
     url(r'^logout/$', logout,{'next_page': '/account/login/'}),
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
@@ -29,7 +29,7 @@ urlpatterns = patterns('',
     url(r'^account/', include('django.contrib.auth.urls')),
     url(r'^accounts/password/reset/$', password_reset, {'template_name': 'password_reset_form.html', 'email_template_name': 'password_reset_email.html'}),
     url(r'^api/v1/annotation-chart/(?P<pk>[0-9]+)', AnnotationChartData.as_view()),
-    url(r'api/v1/current_site/$', current_site),
+    url(r'api/v1/customer/$', customer),
     url(r'api/v1/kpi-performance/$', current_kpi_performance),
     url(r'api/v1/kpi-indicator/$', current_kpi_indicator),
     url(r'api/v1/user-status/$', user_status),

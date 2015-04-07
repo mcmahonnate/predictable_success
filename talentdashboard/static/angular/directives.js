@@ -609,7 +609,7 @@ angular.module('tdb.directives', [])
     }
 }])
 
-.directive('modalEmployee',  ['Employee', 'EmployeeLeader', 'fileReader', 'PhotoUpload', 'SitePreferences', function(Employee, EmployeeLeader, fileReader, PhotoUpload, SitePreferences) {
+.directive('modalEmployee',  ['Employee', 'EmployeeLeader', 'fileReader', 'PhotoUpload', 'Customers', function(Employee, EmployeeLeader, fileReader, PhotoUpload, Customers) {
   return {
     restrict: 'E',
     scope: {
@@ -632,8 +632,8 @@ angular.module('tdb.directives', [])
       };
     },
     controller: function ($scope, $rootScope, $location) {
-        SitePreferences.get(function (data) {
-            $scope.site_preferences = data;
+        Customers.get(function (data) {
+            $scope.customer = data;
         });
         $scope.$watch("editEmployee.departure_date",function(newValue,OldValue,scope) {
             if (newValue) {
