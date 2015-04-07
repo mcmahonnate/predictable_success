@@ -132,13 +132,13 @@ SHARED_APPS = (
     'tenant_schemas',  # mandatory
     'customers',
     'django.contrib.contenttypes',
+    'django.contrib.sites',
 )
 
 TENANT_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.auth',
     'django.contrib.sessions',
-    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
@@ -160,7 +160,7 @@ TENANT_APPS = (
 
 INSTALLED_APPS = list(set(SHARED_APPS + TENANT_APPS))
 
-TENANT_MODEL = "customers.Client"
+TENANT_MODEL = "customers.Customer"
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
