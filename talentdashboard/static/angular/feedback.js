@@ -4,8 +4,7 @@ var app = angular.module('feedback', [
             'ui.select',
             'feedback.services',
             'feedback.controllers',
-            'ui-notification',
-            'ngTable'
+            'ui-notification'
         ])
         .config(['$routeProvider',
             function ($routeProvider) {

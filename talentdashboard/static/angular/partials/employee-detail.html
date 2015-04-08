@@ -294,7 +294,7 @@
                             <div style="margin: 10px 0 35px 0;">
                                 <p style="margin-bottom:0;">Add an Engagement Score:</p>
                                 <button class="survey init" style="margin-bottom:3px;width:110px;margin-right: 10px;" ng-click="toggleHappyModal()">Manually</button>
-                                <button class="survey make_transist" ng-class="{'loading': isSurveySending, 'init': !isSurveySending}" style="margin-bottom:3px;" ng-click="sendSurvey()">Send Survey</button>
+                                <button class="survey make_transist" ng-class="{'loading': isSurveySending, 'init': !isSurveySending}" style="margin-bottom:3px;" ng-click="toggleSurveyModal()">Send Survey</button>
                             </div>
                         </div>
                       </div>
@@ -484,3 +484,4 @@
   </div>
   <modal-employee employee='employee' leadership='leadership' employees='employees' teams='teams' show='modalEmployeeShown' width='700px'></modal-employee>
   <modal-happy employee="employee" happys='happys' comments='comments' show='modalHappyShown' width='492px'></modal-happy>
+  <modal-send-survey employee="employee" show='modalSurveyShown' from='currentUser' subject='site_preferences.survey_email_subject' body='site_preferences.survey_email_body' width='492px'></modal-send-survey>

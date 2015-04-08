@@ -725,11 +725,14 @@ angular.module('tdb.directives', [])
                               $scope.preview = result;
                           });
         };
-        $scope.showDatePicker = false;
+        $scope.showHireDatePicker = false;
+        $scope.showDepartDatePicker = false;
         $scope.toggleHireDatePicker = function(){
+            $scope.showDepartDatePicker = false;
             $scope.showHireDatePicker = !$scope.showHireDatePicker;
         };
         $scope.toggleDepartDatePicker = function(){
+            $scope.showHireDatePicker = false;
             $scope.showDepartDatePicker = !$scope.showDepartDatePicker;
         }
     },
@@ -775,6 +778,56 @@ angular.module('tdb.directives', [])
     templateUrl: "/static/angular/partials/modal-happy.html"
   };
 }])
+
+.directive('modalSendSurvey',  ['Engagement', function(Engagement) {
+  return {
+    restrict: 'E',
+    scope: {
+      show: '=',
+      from: '=',
+      subject: '=',
+      body: '=',
+      employee: '='
+    },
+    replace: true, // Replace with the template below
+    transclude: true, // we want to insert custom content inside the directive
+    link: function(scope, element, attrs) {
+    scope.dialogStyle = {};
+    if (attrs.width)
+        scope.dialogStyle.width = attrs.width;
+    if (attrs.height)
+        scope.dialogStyle.height = attrs.height;
+    scope.hideModal = function() {
+    scope.show = false;
+    };
+    $('textarea').focus(
+        function(){
+            $(this).parent('div').css('border-color','#1abc9c');
+        }).blur(
+        function(){
+            $(this).parent('div').css('border-color','#c1c1c1');
+        });
+    },
+    controller: function ($scope, $rootScope, $routeParams, SendEngagementSurvey, Notification) {
+        $scope.send = function (){
+            $scope.isSurveySending=true;
+            var data = {id: $routeParams.id, _sent_from_id: $rootScope.currentUser.employee.id, _subject: $scope.subject, _body: $scope.body, _override:true};
+
+            SendEngagementSurvey.addNew(data, function() {
+              $scope.isSurveySending=false;
+              Notification.success("Your survey was sent.");
+              $scope.hideModal();
+            },function(){
+              $scope.isSurveySending=false;
+              Notification.error("There was an error sending your survey.");
+            });
+        };
+
+    },
+    templateUrl: "/static/angular/partials/modal-send-survey.html"
+  };
+}])
+
 
 .directive('sliderFollowThru', function() {
   return {

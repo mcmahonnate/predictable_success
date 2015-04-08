@@ -337,6 +337,11 @@ angular.module('tdb.controllers', [])
     Customers.get(function (data) {
         $scope.customer = data;
     });
+    $rootScope.$watch('currentUser', function(newVal, oldVal){
+        if (newVal != oldVal) {
+            $scope.currentUser = $rootScope.currentUser;
+        }
+    },true);
     $scope.modalEmployeeShown = false;
     $scope.toggleEmployeeModal = function() {
         $scope.modalEmployeeShown = !$scope.modalEmployeeShown;
@@ -344,6 +349,10 @@ angular.module('tdb.controllers', [])
     $scope.modalHappyShown = false;
     $scope.toggleHappyModal = function() {
         $scope.modalHappyShown = !$scope.modalHappyShown;
+    };
+    $scope.modalSurveyShown = false;
+    $scope.toggleSurveyModal = function() {
+        $scope.modalSurveyShown = !$scope.modalSurveyShown;
     };
     $scope.has_vops = false;
     $scope.has_kolbe = false;

@@ -8,6 +8,11 @@ class SitePreferences(models.Model):
     show_mbti = models.BooleanField(default=False)
     show_coaches = models.BooleanField(default=False)
     show_timeline = models.BooleanField(default=False)
+    survey_email_subject = models.CharField(
+        max_length=255,
+        blank=True,
+    )
+    survey_email_body = models.TextField()
 
     def __str__(self):
         return "show kolbe: %s, show vops: %s, show mbti: %s" % (self.show_kolbe, self.show_vops, self.show_mbti)
