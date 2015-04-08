@@ -3,6 +3,9 @@ from .base import *
 import dj_database_url
 
 DATABASES = { 'default': dj_database_url.config(default=os.environ.get('HEROKU_POSTGRESQL_ORANGE_URL')) }
+DATABASE_ROUTERS = (
+    'tenant_schemas.routers.TenantSyncRouter',
+)
 DEBUG = os.environ.get("DEBUG", False)
 EMAIL_BACKEND = 'talentdashboard.backend.SSLEmailBackend'
 EMAIL_USE_SSL = True
