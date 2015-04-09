@@ -132,7 +132,10 @@ SHARED_APPS = (
     'tenant_schemas',  # mandatory
     'customers',
     'django.contrib.contenttypes',
-    'django.contrib.sites',
+    'django.contrib.auth',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.admin',
 )
 
 TENANT_APPS = (
