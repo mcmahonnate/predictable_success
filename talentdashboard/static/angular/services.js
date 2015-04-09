@@ -275,6 +275,15 @@ angular.module('tdb.services', ['ngResource'])
     return Engagement;
 }])
 
+.factory('ImportData', ['$resource', '$http', function($resource, $http) {
+    var actions = {
+        'addNew': { method:'POST', isArray: true}
+    }
+    var ImportData = $resource('/api/v1/import-data/', {id:'@id'}, actions);
+
+    return ImportData;
+}])
+
 .factory('SendEngagementSurvey', ['$resource', '$http', function($resource, $http) {
     var actions = {
         'addNew': { method:'POST', data:{id: '@id', _sent_from_id: '@sent_from_id', _override: '@override'}, isArray: false }

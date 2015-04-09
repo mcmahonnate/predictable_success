@@ -456,6 +456,161 @@ angular.module('tdb.directives', [])
     };
 }])
 
+.directive('handsOnTable', function() {
+    return {
+        restrict: 'E',
+        link: function (scope, element, attrs) {
+            var hot;
+            var renderTable = function(){
+                scope.importData = angular.copy(scope.data);
+
+                var colHeaders = true;
+                if (scope.$eval(attrs.hasColumnHeaders) && scope.data) {
+                    colHeaders = scope.data[0];
+                    scope.columns = scope.data[0];
+                    scope.importData.shift();
+                }
+
+                var el = element[0];
+                if (hot) {hot.destroy();}
+
+                hot = new Handsontable(el, {
+                    data: scope.importData,
+                    minSpareRows: 0,
+                    colHeaders: colHeaders,
+                    contextMenu: true
+                });
+            }
+            attrs.$observe("hasColumnHeaders", function() {
+                renderTable();
+            })
+            scope.$watch("data", function (newValue) {
+                renderTable();
+            })
+
+        }
+    }
+})
+
+.directive('dragDropFile', function() {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            var CSVToArray = function( strData, strDelimiter ){
+                strDelimiter = (strDelimiter || ",");
+                var objPattern = new RegExp(
+                    (
+                        // Delimiters.
+                        "(\\" + strDelimiter + "|\\r?\\n|\\r|^)" +
+                        // Quoted fields.
+                        "(?:\"([^\"]*(?:\"\"[^\"]*)*)\"|" +
+                        // Standard fields.
+                        "([^\"\\" + strDelimiter + "\\r\\n]*))"
+                    ),
+                    "gi"
+                    );
+                var arrData = [[]];
+                var arrMatches = null;
+                while (arrMatches = objPattern.exec( strData )){
+
+                    var strMatchedDelimiter = arrMatches[ 1 ];
+                    if (
+                        strMatchedDelimiter.length &&
+                        strMatchedDelimiter !== strDelimiter
+                        ){
+                        arrData.push( [] );
+                    }
+
+                    var strMatchedValue;
+                    if (arrMatches[ 2 ]){
+                        strMatchedValue = arrMatches[ 2 ].replace(
+                            new RegExp( "\"\"", "g" ),
+                            "\""
+                            );
+                    } else {
+                        strMatchedValue = arrMatches[ 3 ];
+                    }
+                    arrData[ arrData.length - 1 ].push( strMatchedValue );
+                }
+
+                return( arrData );
+            };
+            var CSVToJSON = function(csv) {
+                var array = CSVToArray(csv);
+                var objArray = [];
+                for (var i = 1; i < array.length; i++) {
+                    objArray[i - 1] = {};
+                    for (var k = 0; k < array[0].length && k < array[i].length; k++) {
+                        var key = array[0][k];
+                        objArray[i - 1][key] = array[i][k]
+                    }
+                }
+
+                var json = JSON.stringify(objArray);
+                var str = json.replace(/},/g, "},\r\n");
+
+                return str;
+            };
+
+
+            var el = element[0];
+            el.addEventListener(
+                'dragover',
+                function(e) {
+                    e.dataTransfer.dropEffect = 'move';
+                    // allows us to drop
+                    if (e.preventDefault) e.preventDefault();
+                    this.classList.add('over');
+                    return false;
+                },
+                false
+            );
+            el.addEventListener(
+                'dragenter',
+                function(e) {
+                    this.classList.add('over');
+                    return false;
+                },
+                false
+            );
+
+            el.addEventListener(
+                'dragleave',
+                function(e) {
+                    this.classList.remove('over');
+                    return false;
+                },
+                false
+            );
+            el.addEventListener(
+                'drop',
+                function(e) {
+                    // Stops some browsers from redirecting.
+                    if (e.stopPropagation) e.stopPropagation();
+                    if (e.preventDefault) e.preventDefault();
+
+                    this.classList.remove('over');
+
+                    var files = e.dataTransfer.files;
+                    var i, f;
+                    for (i = 0, f = files[i]; i != files.length; ++i) {
+                        var reader = new FileReader();
+                        var name = f.name;
+
+                        reader.onload = function (e) {
+                            var raw_data = e.target.result;
+                            scope.data = CSVToArray(raw_data);
+                            scope.$apply();
+                        };
+                        reader.readAsBinaryString(f);
+                    }
+                },
+                false
+            );
+        }
+    };
+})
+
 .directive('pvpGraph', ['TalentCategories', 'TalentCategoryColors', function(TalentCategories, TalentCategoryColors) {
     return function(scope, element, attrs, controller) {
         var talentCategories = {
@@ -1032,3 +1187,4 @@ angular.module('tdb.directives', [])
     }
   }
 });
+

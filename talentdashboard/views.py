@@ -4,7 +4,7 @@ from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework.permissions import AllowAny
 from .serializers import *
 from .decorators import *
@@ -21,6 +21,7 @@ from kpi.models import Performance, Indicator
 from assessment.models import EmployeeAssessment, MBTI
 from org.teamreports import get_mbti_report_for_team
 import datetime
+import json
 from datetime import date, timedelta
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
@@ -45,7 +46,6 @@ import hashlib
 from collections import defaultdict
 from django.utils.encoding import iri_to_uri
 from django.utils.translation import get_language
-import json
 import collections
 import dateutil.parser, copy
 from django.core.mail import send_mail
@@ -272,6 +272,66 @@ class PvpEvaluationDetail(APIView):
         serializer = PvpEvaluationSerializer(pvp,context={'request': request})
         return Response(serializer.data)
 
+class ImportData(APIView):
+    def post(self, request, format=None):
+        logger.debug('test')
+        items = json.loads(request.body)
+        error_items = []
+        teams = []
+        for item in items:
+            first_name = item['First name']
+            last_name = item['Last name']
+            try:
+                employee = Employee.objects.get(first_name=first_name,last_name=last_name)
+            except Employee.DoesNotExist:
+                employee = Employee()
+                employee.first_name = item['First name']
+                employee.last_name = item['Last name']
+                employee.email = item['Email']
+                employee.job_title = item['Job Title']
+                date_string = item['Hire Date']
+                date_parsed = dateutil.parser.parse(date_string)
+                employee.hire_date = date_parsed.date()
+                employee.display = True
+                employee.save()
+            item['id'] = employee.id
+            teams.append(item['Department'])
+        trim_teams = set(teams)
+        for trim_team in trim_teams:
+            try:
+                team = Team.objects.get(name=trim_team)
+            except Team.DoesNotExist:
+                team = None
+                team = Team()
+                team.name = trim_team
+                team.save()
+
+        for item in items:
+            employee = Employee.objects.get(id=item['id'])
+            leader_full_name = item['Manager']
+            team_name = item['Department']
+
+            try:
+                team = Team.objects.get(name=team_name)
+                employee.team = team
+                employee.save()
+            except Team.DoesNotExist:
+                error_items.append(item)
+
+            try:
+                leader = Employee.objects.get(full_name=leader_full_name)
+                leadership = Leadership()
+                leadership.employee = employee
+                leadership.leader = leader
+                leadership.save()
+            except Employee.DoesNotExist:
+                leaders = Employee.objects.filter(last_name__in=leader_full_name.split(" ")).values('full_name')
+                if not leaders:
+                    leaders = []
+                item['Manager Suggestions'] = list(leaders)
+                error_items.append(item)
+
+        return HttpResponse(json.dumps(error_items), content_type='application/json')
 
 class SendEngagementSurvey(APIView):
     def post(self, request, pk, format=None):
