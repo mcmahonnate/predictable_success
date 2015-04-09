@@ -1,6 +1,12 @@
 # Django settings for talentdashboard project.
 import os.path
+import dj_database_url
 
+DATABASES = { 'default': dj_database_url.config(default=os.environ.get('DATABASE_URL')) }
+DATABASES['default']['ENGINE'] = 'tenant_schemas.postgresql_backend'
+DATABASE_ROUTERS = (
+    'tenant_schemas.routers.TenantSyncRouter',
+)
 CELERY_ALWAYS_EAGER = True
 DEBUG = False
 ADMINS = (
