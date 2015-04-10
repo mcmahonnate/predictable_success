@@ -459,37 +459,58 @@ angular.module('tdb.directives', [])
 .directive('handsOnTable', function() {
     return {
         restrict: 'E',
+        template: "<div></div>",
+        replace: true,
         link: function (scope, element, attrs) {
-            var hot;
-            var renderTable = function(){
-                scope.importData = angular.copy(scope.data);
-
-                var colHeaders = true;
-                if (scope.$eval(attrs.hasColumnHeaders) && scope.data) {
-                    colHeaders = scope.data[0];
-                    scope.columns = scope.data[0];
-                    scope.importData.shift();
+            scope.hot;
+            var validManager = function(instance, td, row, col, prop, value, cellProperties) {
+                Handsontable.renderers.TextRenderer.apply(this, arguments);
+                if (!scope.autocomplete_values) {
+                    td.style.background = '';
+                } else if (scope.autocomplete_values.indexOf(value)>-1) {
+                    td.style.background = '#cec';
+                } else {
+                    td.style.background = '#ff4c42';
                 }
+            }
+            var columns = [
+                {data: "First name", renderer: "html"},
+                {data: "Last name", renderer: "html"},
+                {data: "Email", renderer: "html"},
+                {data: "Hire Date", renderer: "html"},
+                {data: "Job Title", renderer: "html"},
+                {data: "Department", renderer: "html"},
+                {data: "Manager", renderer:validManager},
+                {data: "Salary", renderer: "html"}
+            ];
+            var renderTable = function(){
+                scope.importData = angular.copy(scope.data)
+                var colHeaders = ["First name","Last name","Email","Hire Date","Job Title","Department","Manager","Salary"]
 
                 var el = element[0];
-                if (hot) {hot.destroy();}
+                if (scope.hot) {scope.hot.destroy();}
 
-                hot = new Handsontable(el, {
+                scope.hot = new Handsontable(el, {
                     data: scope.importData,
-                    minSpareRows: 0,
                     colHeaders: colHeaders,
-                    contextMenu: true
+                    columns: columns
                 });
             }
-            attrs.$observe("hasColumnHeaders", function() {
-                renderTable();
-            })
             scope.$watch("data", function (newValue) {
-                renderTable();
+                if (newValue) {
+                    renderTable();
+                }
+            })
+            scope.$watch("autocomplete_values", function (newValue) {
+                if (newValue) {
+                    columns[6].type = "autocomplete";
+                    columns[6].source = scope.autocomplete_values;
+                    renderTable();
+                }
             })
 
         }
-    }
+    };
 })
 
 .directive('dragDropFile', function() {
@@ -547,9 +568,11 @@ angular.module('tdb.directives', [])
                 }
 
                 var json = JSON.stringify(objArray);
-                var str = json.replace(/},/g, "},\r\n");
+                json = json.replace(/},/g, "},\r\n");
+                json = JSON.parse(json);
 
-                return str;
+
+                return json;
             };
 
 
@@ -599,7 +622,7 @@ angular.module('tdb.directives', [])
 
                         reader.onload = function (e) {
                             var raw_data = e.target.result;
-                            scope.data = CSVToArray(raw_data);
+                            scope.data = CSVToJSON(raw_data);
                             scope.$apply();
                         };
                         reader.readAsBinaryString(f);

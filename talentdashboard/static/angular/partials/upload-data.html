@@ -2,20 +2,9 @@
 <div ng-controller="UploadDataCtrl" ng-if="currentUser.can_view_company_dashboard" class="dashboard-sized-el" id="dashboard" style="margin-top: 63px; max-width: 970px;">
     <div class="drop" drag-drop-file>Drag Files here</div>
 
-    <div style="width:480px;height:25px;margin: 15px;color:#fff;">
-        <label class="radio " style="position: relative">
-            <input class="radio custom-radio" name="hasHeaders" data-ng-value="true" data-ng-model="hasColumnHeaders" type="radio" style="cursor: pointer;">
-            <span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
-            Has Headers
-        </label>
-        <label class="radio" style="position: relative">
-            <input class="radio custom-radio" name="hasHeaders" ng-value="false" ng-model="hasColumnHeaders" type="radio" style="cursor: pointer;">
-            <span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
-            No Headers
-        </label>
-    </div>
+
     <div style="margin: 15px">
-        <button class="ng-modal-button" ng-click="import();" ng-show="data.length>0">Import</button>
+        <button class="ng-modal-button" ng-click="import();" ng-disabled="importing" ng-show="data.length>0">Import</button>
     </div>
     <hands-on-table has-column-headers='{{hasColumnHeaders}}'></hands-on-table>
 

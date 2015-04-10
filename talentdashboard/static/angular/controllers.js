@@ -332,45 +332,31 @@ angular.module('tdb.controllers', [])
 	}
 }])
 
-.controller('UploadDataCtrl', ['$scope', 'ImportData','Notification', function($scope, ImportData, Notification) {
-    $scope.data = [];
-    $scope.error_data = [];
+.controller('UploadDataCtrl', ['$scope', 'ImportData','Notification','EmployeeNames', function($scope, ImportData, Notification, EmployeeNames) {
+    $scope.data;
     $scope.importData = [];
     $scope.hasColumnHeaders=true;
+    $scope.hot;
     $scope.columns = [];
-
-    var toJSON = function(array) {
-        var objArray = [];
-        for (var i = 1; i < array.length; i++) {
-            objArray[i - 1] = {};
-            for (var k = 0; k < $scope.columns.length && k < array[i].length; k++) {
-                var key = $scope.columns[k];
-                var json = JSON.stringify(array[i][k]);
-                var str = json.replace(/},/g, "},\r\n");
-                str = str.replace(/"/g, '');
-                objArray[i - 1][key] = str;
-            }
-        }
-        return objArray;
-    };
+    $scope.importing = false;
     $scope.import = function() {
-        ImportData.addNew(toJSON($scope.data)).$promise.then(function(data) {
-            $scope.error_data = angular.copy(data);
-            $scope.data = formatReturnData(data);
-            Notification.success("Your data imported successfully.");
+        $scope.importing =true
+        ImportData.addNew($scope.hot.getData()).$promise.then(function(data) {
+            EmployeeNames.query(function(data) {
+                $scope.autocomplete_values = data;
+            });
+            $scope.data = data;
+            $scope.importing = false;
+            if (data) {
+                Notification.warning("Awesome but we ran into some errors. Make your corrections below.");
+            } else {
+                Notification.success("Your data imported successfully.");
+            }
         },function(){
             $scope.isSurveySending=false;
             Notification.error("There was an error importing your data.");
         });
     };
-    var formatReturnData = function(items) {
-        var formattedData = [["First name","Last name","Email","Hire Date","Job Title","Department","Manager","Salary"]];
-        angular.forEach(items, function(item, key){
-            console.log(item);
-            formattedData.push([item["First name"],item["Last name"],item["Email"],item["Hire Date"],item["Job Title"],item["Department"],item["Manager"],item["Salary"]])
-        });
-        return formattedData
-    }
 }])
 
 .controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', '$sce', 'User', 'Employee', 'Team', 'Engagement', 'SendEngagementSurvey', 'EmployeeLeader', 'Attribute', 'CompSummary', '$http', 'SitePreferences', 'analytics', 'fileReader','Assessment','EmployeeMBTI', 'Notification', function($rootScope, $scope, $location, $routeParams, $window, $sce, User, Employee, Team, Engagement, SendEngagementSurvey, EmployeeLeader, Attribute, CompSummary, $http, SitePreferences, analytics, fileReader, Assessment, EmployeeMBTI, Notification) {

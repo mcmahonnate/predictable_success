@@ -274,7 +274,6 @@ class PvpEvaluationDetail(APIView):
 
 class ImportData(APIView):
     def post(self, request, format=None):
-        logger.debug('test')
         items = json.loads(request.body)
         error_items = []
         teams = []
@@ -332,6 +331,12 @@ class ImportData(APIView):
                 error_items.append(item)
 
         return HttpResponse(json.dumps(error_items), content_type='application/json')
+
+class EmployeeNames(APIView):
+    def get(self, request, format=None):
+        employees = Employee.objects.filter(display=True).values_list('full_name',flat=True)
+        employees_list = list(employees)
+        return HttpResponse(json.dumps(employees_list), content_type='application/json')
 
 class SendEngagementSurvey(APIView):
     def post(self, request, pk, format=None):

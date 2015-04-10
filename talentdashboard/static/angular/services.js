@@ -262,6 +262,11 @@ angular.module('tdb.services', ['ngResource'])
     return TalentCategories;
 }])
 
+.factory('EmployeeNames', ['$resource', '$http', function($resource) {
+    var res = $resource('/api/v1/employee-names/');
+    return res;
+}])
+
 .factory('Engagement', ['$resource', '$http', function($resource, $http) {
     var actions = {
         'addNew': { method:'POST', data:{assessed_by_id: '@assessed_by_id', assessment: '@assessment'}, isArray: false },
