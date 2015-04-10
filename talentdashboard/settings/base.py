@@ -13,6 +13,15 @@ ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
 
+REQUIRED_GROUPS = (
+    'AllAccess',
+    'CoachAccess',
+    'Daily Digest Subscribers',
+    'Edit Employee',
+    'TeamLeadAccess',
+    'View Comments',
+)
+
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 MANAGERS = ADMINS
