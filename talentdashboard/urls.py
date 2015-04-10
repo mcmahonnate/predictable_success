@@ -16,7 +16,7 @@ router.register(r'api/v1/attributes', AttributeViewSet)
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', index),#TemplateView.as_view(template_name="index.html"), name='home'),
+    url(r'^$', index),
     url(r'^feedback/$', TemplateView.as_view(template_name="feedback.html"), name='feedback_home'),
     url(r'^logout/$', logout,{'next_page': '/account/login/'}),
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
@@ -33,7 +33,6 @@ urlpatterns = patterns('',
     url(r'api/v1/kpi-performance/$', current_kpi_performance),
     url(r'api/v1/kpi-indicator/$', current_kpi_indicator),
     url(r'api/v1/user-status/$', user_status),
-    url(r'api/v1/preferences/site/', preferences_site),
     url(r'api/v1/users/$', (auth_employee('AllAccess')(UserList.as_view()))),
     url(r'api/v1/coaches/$', (auth_employee_cache(60*15, 'AllAccess','CoachAccess','TeamLeadAccess')(CoachList.as_view())), name='coach-list'),
     url(r'api/v1/coachees/$', coachee_list),

@@ -1,18 +1,23 @@
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from django.core.mail import EmailMultiAlternatives
 from datetime import datetime, timedelta
 from django.utils.dateformat import DateFormat
 from django.contrib.auth.models import User
 from django.template.loader import get_template
 from django.template import Context
-from django.contrib.sites.models import get_current_site
 from django.contrib.contenttypes.models import ContentType
 from blah.models import Comment
 from todo.models import Task
+from django.db import connection
+from customers.models import Customer
+
 
 class Command(BaseCommand):
-
     def handle(self, *args, **options):
+        tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
+        if tenant.is_public_tenant():
+            return
+
         dt = datetime.now()
         comment_type = ContentType.objects.get(model="comment")
         employee_type = ContentType.objects.get(model="employee")
@@ -30,10 +35,20 @@ class Command(BaseCommand):
             if comments.count() > 0 or todos.count() > 0:
                 df = DateFormat(dt)
                 from_email = 'Dash<dash@dfrntlabs.com>'
-                subject = 'Daily Recap for ' +  df.format('l, d F')
-                site = get_current_site(None).domain
+                subject = 'Daily Recap for ' + df.format('l, d F')
                 date = df.format('l, d F')
-                data = Context({ 'date': date, 'comments': comments, 'todos': todos, 'site': site, 'employee_type': employee_type, 'team_type': team_type, 'comment_type': comment_type, 'recipient': recipient})
+                data = Context(
+                    {
+                        'date': date,
+                        'comments': comments,
+                        'todos': todos,
+                        'site': tenant.domain_url,
+                        'employee_type': employee_type,
+                        'team_type': team_type,
+                        'comment_type': comment_type,
+                        'recipient': recipient
+                    }
+                )
                 text_content = plaintext.render(data)
                 html_content = htmly.render(data)
                 msg = EmailMultiAlternatives(subject, text_content, from_email, [recipient.email])
