@@ -24,6 +24,15 @@ MANAGERS = ADMINS = (
     ('Nate McMahon', 'nmcmahon@fool.com'),
 )
 
+REQUIRED_GROUPS = (
+    'AllAccess',
+    'CoachAccess',
+    'Daily Digest Subscribers',
+    'Edit Employee',
+    'TeamLeadAccess',
+    'View Comments',
+)
+
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Email settings
