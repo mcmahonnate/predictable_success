@@ -262,6 +262,11 @@ angular.module('tdb.services', ['ngResource'])
     return TalentCategories;
 }])
 
+.factory('EmployeeNames', ['$resource', '$http', function($resource) {
+    var res = $resource('/api/v1/employee-names/');
+    return res;
+}])
+
 .factory('Engagement', ['$resource', '$http', function($resource, $http) {
     var actions = {
         'addNew': { method:'POST', data:{assessed_by_id: '@assessed_by_id', assessment: '@assessment'}, isArray: false },
@@ -273,6 +278,15 @@ angular.module('tdb.services', ['ngResource'])
     Engagement.getCurrentEngagement = function(id, success, failure) { return this.get({ id: id, current: true }, success, failure); };
 
     return Engagement;
+}])
+
+.factory('ImportData', ['$resource', '$http', function($resource, $http) {
+    var actions = {
+        'addNew': { method:'POST', isArray: true}
+    }
+    var ImportData = $resource('/api/v1/import-data/', {id:'@id'}, actions);
+
+    return ImportData;
 }])
 
 .factory('SendEngagementSurvey', ['$resource', '$http', function($resource, $http) {
@@ -357,15 +371,9 @@ angular.module('tdb.services', ['ngResource'])
     return currentUser;
 }])
 
-.factory('SitePreferences', ['$resource', '$http', function($resource, $http) {
-    res = $resource('api/v1/preferences/site/');
+.factory('Customers', ['$resource', '$http', function($resource, $http) {
+    res = $resource('api/v1/customer/');
     return res;
-}])
-
-.factory('Site', ['$resource', '$http', function($resource, $http) {
-    var currentSite = $resource('api/v1/current_site/');
-
-    return currentSite;
 }])
 
 .factory('KPIIndicator', ['$resource', '$http', function($resource, $http) {

@@ -1,0 +1,23 @@
+<div ng-include="'/static/angular/partials/header.html'"></div>
+<div ng-controller="UploadDataCtrl" ng-if="currentUser.can_view_company_dashboard" class="dashboard-sized-el" id="dashboard" style="margin-top: 63px; max-width: 970px;">
+    <div class="drop" drag-drop-file>Drag Files here</div>
+
+
+    <div style="margin: 15px">
+        <button class="ng-modal-button" ng-click="import();" ng-disabled="importing" ng-show="data.length>0">Import</button>
+    </div>
+    <hands-on-table has-column-headers='{{hasColumnHeaders}}'></hands-on-table>
+
+    <style>
+        .drop {
+            border: 2px dashed #bbb;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            border-radius: 5px;
+            padding: 25px;
+            text-align: center;
+            font: 20pt bold,"Vollkorn";
+            color: #bbb;
+        }
+    </style>
+</div>

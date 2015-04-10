@@ -4,7 +4,7 @@
     <div class="clear" id="dashboard-admin-bar">
 		<div ng-controller="EmployeeListCtrl" class="inner dashboard-sized-el" style="max-width: 970px;">
 			<div style="display: block; color: #cbcbcb; font-weight: 700; padding-left:10px;padding-top: 20px;font-size: 16px; width:150px; float:left">
-				<a ng-href="#/" style="color:#fff;"><span>{{currentSite.name}}</span></a>
+				<a ng-href="#/" style="color:#fff;"><span>{{customer.name}}</span></a>
 			</div>
             <div id="menu-item-image" ng-class="{'menu-item-active':openSettingsMenu}">
                 <img class="settings_menu" ng-src="{{currentUser.employee.avatar_small}}" ng-click="toggleSettingsMenu()" style="height:27px;"/>
@@ -12,7 +12,7 @@
                     <div id="selection-title">Account</div>
                     <div id="selection-list">
                         <ul style="padding: 10px 10px;">
-                            <li ng-if="currentUser.can_coach_employees && site_preferences.show_coaches">
+                            <li ng-if="currentUser.can_coach_employees && customer.show_coaches">
                                 <a class="dashboard" href="#/coach/" style="height:27px;">My Coachees</a>
                             </li>
                             <li>

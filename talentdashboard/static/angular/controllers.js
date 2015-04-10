@@ -1,11 +1,11 @@
 angular.module('tdb.controllers', [])
 
-.controller('BaseAppCtrl', ['$rootScope', '$location', 'User', 'Site', function($rootScope, $location, User, Site) {
+.controller('BaseAppCtrl', ['$rootScope', '$location', 'User', 'Customers', function($rootScope, $location, User, Customers) {
     $rootScope.$on("$routeChangeError", function() {
         window.location = '/account/login?next=' + $location.path();
-    })
-   Site.get(function(data) {
-            $rootScope.currentSite = data;
+    });
+   Customers.get(function(data) {
+            $rootScope.customer = data;
        }
    );
    // parse a date in yyyy-mm-dd format
@@ -37,7 +37,7 @@ angular.module('tdb.controllers', [])
         {id: 4, title: 'Happy', css: 'happy'},
         {id: 3, title: 'Indifferent', css: 'indifferent'},
         {id: 2, title: 'Unhappy', css: 'unhappy'},
-        {id: 1, title: 'Very Unhappy', css: 'veryunhappy'},
+        {id: 1, title: 'Very Unhappy', css: 'veryunhappy'}
     ];
     $rootScope.lazyround = function (num) {
         return Math.abs(Number(num)) >= 1.0e+9
@@ -57,10 +57,10 @@ angular.module('tdb.controllers', [])
     };
 }])
 
-.controller('MyTeamEvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'MyTeamPvpEvaluation', 'Team', 'SitePreferences', 'analytics', function($scope, $rootScope, $location, $routeParams, MyTeamPvpEvaluation, Team, SitePreferences, analytics) {
+.controller('MyTeamEvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'MyTeamPvpEvaluation', 'Team', 'Customers', 'analytics', function($scope, $rootScope, $location, $routeParams, MyTeamPvpEvaluation, Team, Customers, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
-    SitePreferences.get(function (data) {
-        $scope.site_preferences = data;
+    Customers.get(function (data) {
+        $scope.customer = data;
     });
     $scope.hideTeamMenu = true;
     $scope.kolbe_values=[0,1,2,3];
@@ -111,10 +111,10 @@ angular.module('tdb.controllers', [])
     }
 }])
 
-.controller('EvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'PvpEvaluation', 'Team', 'SitePreferences', 'analytics', function($scope, $rootScope, $location, $routeParams, PvpEvaluation, Team, SitePreferences, analytics) {
+.controller('EvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'PvpEvaluation', 'Team', 'Customers', 'analytics', function($scope, $rootScope, $location, $routeParams, PvpEvaluation, Team, Customers, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
-    SitePreferences.get(function (data) {
-        $scope.site_preferences = data;
+    Customers.get(function (data) {
+        $scope.customer = data;
     });
     $scope.hideTeamMenu = false;
     $scope.kolbe_values=[0,1,2,3];
@@ -170,14 +170,14 @@ angular.module('tdb.controllers', [])
     $scope.teamLeads = TeamLeads.getCurrentEvaluationsForTeamLeads($scope.team_id)
 }])
 
-.controller('EmployeeListCtrl', ['$scope', '$routeParams', '$window', '$location', 'Employee', 'SitePreferences', function($scope, $routeParams, $window, $location, Employee, SitePreferences) {
+.controller('EmployeeListCtrl', ['$scope', '$routeParams', '$window', '$location', 'Employee', 'Customers', function($scope, $routeParams, $window, $location, Employee, Customers) {
     $scope.$window = $window;
     if (!$scope.employees)
     {
         $scope.employees = Employee.query({random:Math.floor((Math.random()*1000000000))}); //!important browser cache buster
     }
-    SitePreferences.get(function (data) {
-        $scope.site_preferences = data;
+    Customers.get(function (data) {
+        $scope.customer = data;
     });
     $scope.modalEmployeeShown = false;
     $scope.newEmployee = {id:0,full_name:'',first_name:'',last_name:'', email:'', team:{id:0}, hire_date:'',departure_date:'', avatar:'https://hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg'};
@@ -332,10 +332,10 @@ angular.module('tdb.controllers', [])
 	}
 }])
 
-.controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', '$sce', 'User', 'Employee', 'Team', 'Engagement', 'SendEngagementSurvey', 'EmployeeLeader', 'Attribute', 'CompSummary', '$http', 'SitePreferences', 'analytics', 'fileReader','Assessment','EmployeeMBTI', 'Notification', function($rootScope, $scope, $location, $routeParams, $window, $sce, User, Employee, Team, Engagement, SendEngagementSurvey, EmployeeLeader, Attribute, CompSummary, $http, SitePreferences, analytics, fileReader, Assessment, EmployeeMBTI, Notification) {
+.controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', '$sce', 'User', 'Employee', 'Team', 'Engagement', 'SendEngagementSurvey', 'EmployeeLeader', 'Attribute', 'CompSummary', '$http', 'Customers', 'analytics', 'fileReader','Assessment','EmployeeMBTI', 'Notification', function($rootScope, $scope, $location, $routeParams, $window, $sce, User, Employee, Team, Engagement, SendEngagementSurvey, EmployeeLeader, Attribute, CompSummary, $http, Customers, analytics, fileReader, Assessment, EmployeeMBTI, Notification) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
-    SitePreferences.get(function (data) {
-        $scope.site_preferences = data;
+    Customers.get(function (data) {
+        $scope.customer = data;
     });
     $rootScope.$watch('currentUser', function(newVal, oldVal){
         if (newVal != oldVal) {
@@ -501,7 +501,6 @@ angular.module('tdb.controllers', [])
         }
     };
 
-
     $scope.selected=0;
     $scope.set_choice = function(value) {
         $scope.selected=value;
@@ -611,6 +610,33 @@ angular.module('tdb.controllers', [])
 
     $scope.formats = ['yyyy-mm-dd', 'mm/dd/yyyy', 'shortDate'];
     $scope.format = $scope.formats[0];
+}])
+
+.controller('UploadDataCtrl', ['$scope', 'ImportData','Notification','EmployeeNames', function($scope, ImportData, Notification, EmployeeNames) {
+    $scope.data;
+    $scope.importData = [];
+    $scope.hasColumnHeaders=true;
+    $scope.hot;
+    $scope.columns = [];
+    $scope.importing = false;
+    $scope.import = function() {
+        $scope.importing =true
+        ImportData.addNew($scope.hot.getData()).$promise.then(function(data) {
+            EmployeeNames.query(function(data) {
+                $scope.autocomplete_values = data;
+            });
+            $scope.data = data;
+            $scope.importing = false;
+            if (data) {
+                Notification.warning("Awesome but we ran into some errors. Make your corrections below.");
+            } else {
+                Notification.success("Your data imported successfully.");
+            }
+        },function(){
+            $scope.isSurveySending=false;
+            Notification.error("There was an error importing your data.");
+        });
+    };
 }])
 
 .controller('LeaderDetailCtrl', ['$scope', '$location', '$routeParams', 'Employee', 'Leadership', 'TalentCategoryReport', '$http', 'analytics', function($scope, $location, $routeParams, Employee, Leadership, TalentCategoryReport, $http, analytics) {
@@ -987,10 +1013,10 @@ angular.module('tdb.controllers', [])
     });
 }])
 
-.controller('TeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'TalentCategoryReport', 'SalaryReport', 'Team', 'TeamMembers', 'TeamMBTI', 'SitePreferences', 'analytics', function($scope, $location, $routeParams, TalentCategoryReport, SalaryReport, Team, TeamMembers, TeamMBTI, SitePreferences, analytics) {
+.controller('TeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'TalentCategoryReport', 'SalaryReport', 'Team', 'TeamMembers', 'TeamMBTI', 'Customers', 'analytics', function($scope, $location, $routeParams, TalentCategoryReport, SalaryReport, Team, TeamMembers, TeamMBTI, Customers, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
-    SitePreferences.get(function (data) {
-        $scope.site_preferences = data;
+    Customers.get(function (data) {
+        $scope.customer = data;
     });
     $scope.teamId = $routeParams.id;
     SalaryReport.getReportForTeam($routeParams.id, function(data) {

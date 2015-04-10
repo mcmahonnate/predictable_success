@@ -2,7 +2,6 @@ from django.db import models
 from org.models import Employee
 from blah.models import Comment
 from django.core.signing import Signer
-from django.contrib.sites.models import get_current_site
 
 HAPPINESS_CHOICES = (
     (1, 'Very unhappy'),
@@ -40,7 +39,7 @@ class SurveyUrl(models.Model):
     def __str__(self):
         return "%s was sent an engagement survey on %s" % (self.sent_to, self.sent_date)
 
-def generate_survey(employee, sent_from):
+def generate_survey(employee, sent_from, customer):
     survey = SurveyUrl()
     survey.sent_to = employee
     survey.sent_from = sent_from
@@ -48,7 +47,7 @@ def generate_survey(employee, sent_from):
     signer = Signer()
     signed_uid = signer.sign(employee.id)
     signed_id = signer.sign(survey.id)
-    site = get_current_site(None).domain
+    site = customer.domain_url
     url = 'http://' + site + '/#/engagement-survey/' + signed_uid + '/' + signed_id
     survey.url = url
     survey.save()
