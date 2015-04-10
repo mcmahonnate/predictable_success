@@ -456,6 +456,184 @@ angular.module('tdb.directives', [])
     };
 }])
 
+.directive('handsOnTable', function() {
+    return {
+        restrict: 'E',
+        template: "<div></div>",
+        replace: true,
+        link: function (scope, element, attrs) {
+            scope.hot;
+            var validManager = function(instance, td, row, col, prop, value, cellProperties) {
+                Handsontable.renderers.TextRenderer.apply(this, arguments);
+                if (!scope.autocomplete_values) {
+                    td.style.background = '';
+                } else if (scope.autocomplete_values.indexOf(value)>-1) {
+                    td.style.background = '#cec';
+                } else {
+                    td.style.background = '#ff4c42';
+                }
+            }
+            var columns = [
+                {data: "First name", renderer: "html"},
+                {data: "Last name", renderer: "html"},
+                {data: "Email", renderer: "html"},
+                {data: "Hire Date", renderer: "html"},
+                {data: "Job Title", renderer: "html"},
+                {data: "Department", renderer: "html"},
+                {data: "Manager", renderer:validManager},
+                {data: "Salary", renderer: "html"}
+            ];
+            var renderTable = function(){
+                scope.importData = angular.copy(scope.data)
+                var colHeaders = ["First name","Last name","Email","Hire Date","Job Title","Department","Manager","Salary"]
+
+                var el = element[0];
+                if (scope.hot) {scope.hot.destroy();}
+
+                scope.hot = new Handsontable(el, {
+                    data: scope.importData,
+                    colHeaders: colHeaders,
+                    columns: columns
+                });
+            }
+            scope.$watch("data", function (newValue) {
+                if (newValue) {
+                    renderTable();
+                }
+            })
+            scope.$watch("autocomplete_values", function (newValue) {
+                if (newValue) {
+                    columns[6].type = "autocomplete";
+                    columns[6].source = scope.autocomplete_values;
+                    renderTable();
+                }
+            })
+
+        }
+    };
+})
+
+.directive('dragDropFile', function() {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            var CSVToArray = function( strData, strDelimiter ){
+                strDelimiter = (strDelimiter || ",");
+                var objPattern = new RegExp(
+                    (
+                        // Delimiters.
+                        "(\\" + strDelimiter + "|\\r?\\n|\\r|^)" +
+                        // Quoted fields.
+                        "(?:\"([^\"]*(?:\"\"[^\"]*)*)\"|" +
+                        // Standard fields.
+                        "([^\"\\" + strDelimiter + "\\r\\n]*))"
+                    ),
+                    "gi"
+                    );
+                var arrData = [[]];
+                var arrMatches = null;
+                while (arrMatches = objPattern.exec( strData )){
+
+                    var strMatchedDelimiter = arrMatches[ 1 ];
+                    if (
+                        strMatchedDelimiter.length &&
+                        strMatchedDelimiter !== strDelimiter
+                        ){
+                        arrData.push( [] );
+                    }
+
+                    var strMatchedValue;
+                    if (arrMatches[ 2 ]){
+                        strMatchedValue = arrMatches[ 2 ].replace(
+                            new RegExp( "\"\"", "g" ),
+                            "\""
+                            );
+                    } else {
+                        strMatchedValue = arrMatches[ 3 ];
+                    }
+                    arrData[ arrData.length - 1 ].push( strMatchedValue );
+                }
+
+                return( arrData );
+            };
+            var CSVToJSON = function(csv) {
+                var array = CSVToArray(csv);
+                var objArray = [];
+                for (var i = 1; i < array.length; i++) {
+                    objArray[i - 1] = {};
+                    for (var k = 0; k < array[0].length && k < array[i].length; k++) {
+                        var key = array[0][k];
+                        objArray[i - 1][key] = array[i][k]
+                    }
+                }
+
+                var json = JSON.stringify(objArray);
+                json = json.replace(/},/g, "},\r\n");
+                json = JSON.parse(json);
+
+
+                return json;
+            };
+
+
+            var el = element[0];
+            el.addEventListener(
+                'dragover',
+                function(e) {
+                    e.dataTransfer.dropEffect = 'move';
+                    // allows us to drop
+                    if (e.preventDefault) e.preventDefault();
+                    this.classList.add('over');
+                    return false;
+                },
+                false
+            );
+            el.addEventListener(
+                'dragenter',
+                function(e) {
+                    this.classList.add('over');
+                    return false;
+                },
+                false
+            );
+
+            el.addEventListener(
+                'dragleave',
+                function(e) {
+                    this.classList.remove('over');
+                    return false;
+                },
+                false
+            );
+            el.addEventListener(
+                'drop',
+                function(e) {
+                    // Stops some browsers from redirecting.
+                    if (e.stopPropagation) e.stopPropagation();
+                    if (e.preventDefault) e.preventDefault();
+
+                    this.classList.remove('over');
+
+                    var files = e.dataTransfer.files;
+                    var i, f;
+                    for (i = 0, f = files[i]; i != files.length; ++i) {
+                        var reader = new FileReader();
+                        var name = f.name;
+
+                        reader.onload = function (e) {
+                            var raw_data = e.target.result;
+                            scope.data = CSVToJSON(raw_data);
+                            scope.$apply();
+                        };
+                        reader.readAsBinaryString(f);
+                    }
+                },
+                false
+            );
+        }
+    };
+})
+
 .directive('pvpGraph', ['TalentCategories', 'TalentCategoryColors', function(TalentCategories, TalentCategoryColors) {
     return function(scope, element, attrs, controller) {
         var talentCategories = {
@@ -1032,3 +1210,4 @@ angular.module('tdb.directives', [])
     }
   }
 });
+

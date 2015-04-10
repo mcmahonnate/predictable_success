@@ -3,7 +3,7 @@ angular.module('tdb.controllers', [])
 .controller('BaseAppCtrl', ['$rootScope', '$location', 'User', 'Customers', function($rootScope, $location, User, Customers) {
     $rootScope.$on("$routeChangeError", function() {
         window.location = '/account/login?next=' + $location.path();
-    })
+    });
    Customers.get(function(data) {
             $rootScope.customer = data;
        }
@@ -37,7 +37,7 @@ angular.module('tdb.controllers', [])
         {id: 4, title: 'Happy', css: 'happy'},
         {id: 3, title: 'Indifferent', css: 'indifferent'},
         {id: 2, title: 'Unhappy', css: 'unhappy'},
-        {id: 1, title: 'Very Unhappy', css: 'veryunhappy'},
+        {id: 1, title: 'Very Unhappy', css: 'veryunhappy'}
     ];
     $rootScope.lazyround = function (num) {
         return Math.abs(Number(num)) >= 1.0e+9
@@ -501,7 +501,6 @@ angular.module('tdb.controllers', [])
         }
     };
 
-
     $scope.selected=0;
     $scope.set_choice = function(value) {
         $scope.selected=value;
@@ -611,6 +610,33 @@ angular.module('tdb.controllers', [])
 
     $scope.formats = ['yyyy-mm-dd', 'mm/dd/yyyy', 'shortDate'];
     $scope.format = $scope.formats[0];
+}])
+
+.controller('UploadDataCtrl', ['$scope', 'ImportData','Notification','EmployeeNames', function($scope, ImportData, Notification, EmployeeNames) {
+    $scope.data;
+    $scope.importData = [];
+    $scope.hasColumnHeaders=true;
+    $scope.hot;
+    $scope.columns = [];
+    $scope.importing = false;
+    $scope.import = function() {
+        $scope.importing =true
+        ImportData.addNew($scope.hot.getData()).$promise.then(function(data) {
+            EmployeeNames.query(function(data) {
+                $scope.autocomplete_values = data;
+            });
+            $scope.data = data;
+            $scope.importing = false;
+            if (data) {
+                Notification.warning("Awesome but we ran into some errors. Make your corrections below.");
+            } else {
+                Notification.success("Your data imported successfully.");
+            }
+        },function(){
+            $scope.isSurveySending=false;
+            Notification.error("There was an error importing your data.");
+        });
+    };
 }])
 
 .controller('LeaderDetailCtrl', ['$scope', '$location', '$routeParams', 'Employee', 'Leadership', 'TalentCategoryReport', '$http', 'analytics', function($scope, $location, $routeParams, Employee, Leadership, TalentCategoryReport, $http, analytics) {
