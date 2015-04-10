@@ -183,7 +183,6 @@ TENANT_APPS = (
     'storages',
     'kpi',
     'feedback',
-    'preferences',
     'static_precompiler',
     'pipeline',
 )
