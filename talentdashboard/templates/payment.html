@@ -1,0 +1,153 @@
+{% extends "layout.html" %}
+{% block title %}Payment{% endblock title %}
+
+{% block css %}
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+{% endblock css %}
+
+{% block content %}
+    <div class="container">
+        <form action="{% url 'charge' %}" method="POST">
+            {% csrf_token %}
+
+            <div class="row">
+                <div class="pricing col-md-8">
+                    <h1>Pricing</h1>
+                    <div class="company-details">
+                        <h3>Enter company name:</h3>
+                        <input class="form-control input-md" name="company" />
+                    </div>    
+                    <div class="plans">
+                        <h3>Select your plan:</h3>
+                        <div class="row">
+                            <div class="col-xs-12 col-md-6">
+                                <div class="plan panel panel-default">
+                                    <h1>$5<span class="duration">/month</span></h1>
+                                    <div class="byline">per employee</div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-6">
+                                <div class="plan panel panel-default">
+                                    <h1>$60<span class="duration">/year</span></h1>
+                                    <div class="byline">per employee</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="employees">
+                        <h3>How many employees?</h3>
+                        <div class="row">
+                            <form class="total-employees-slider col-md-12" role="form">
+                                <div id="slider"></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="summary">
+                            <h2>Summary</h2>
+                            <p><span id="plan">Monthly</span> Plan</p>
+                            <p><span id="employees"></span> Employees</p>
+                            
+                            <input type="hidden" id="employees" name="employees" value="420">
+                            <input type="hidden" id="amount" name="amount" value="">
+                            <input type="hidden" id="plan" name="plan" value="Yearly Plan">
+
+                            <div class="form-group total row">
+                                <label for="total" class="col-sm-6 control-label"><strong>Total: </strong></label>
+                                <div class="col-sm-6">
+                                    <input type="hidden" id="total" class="form-control">
+                                    <p class="price lead" id="total-label"></p>
+                                </div>
+                            </div>
+                            <input
+                                class="btn btn-primary btn-lg btn-block pay-button"
+                                type="submit"
+                                value="Pay with Card"
+                                data-key="pk_test_UNXbpUo3QIZyN5IYMfPj38O7"
+                                data-amount="500"
+                                data-currency="us"
+                                data-name="ScoutMap"
+                                data-description="Payment for $5"
+                                />  
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock content %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            //Submit form to stripe
+            $(':submit').on('click', function(event) {
+                event.preventDefault();
+
+                var $button = $(this),
+                        $form = $button.parents('form');
+      
+                var opts = $.extend({}, $button.data(), {
+                    token: function(result) {
+
+                        var token = $('<input>').attr({ type: 'hidden', name: 'stripeToken', value: result.id }); 
+                        var email = $('<input>').attr({ type: 'hidden', name: 'stripeEmail', value: result.email });  
+                        $form.append(token, email).submit();
+                    }
+                });
+
+                StripeCheckout.open(opts);
+            });
+
+
+            //Create slider range
+            $("#slider").slider({
+                range: "min",
+                animate: true,
+                value:1,
+                min: 0,
+                max: 1000,
+                step: 1,
+                slide: function(event, ui) {
+                    update(1,ui.value); //changed
+                }
+            });
+
+
+            //Set initial value.
+            $("#amount").val(0);
+            $("#amount-label").text(0);
+            $("#duration-label").text(0);
+
+
+            //Select plan
+            $('.plan').on('click', function(){
+                $('.plan').removeClass('selected');
+                $(this).addClass('selected');
+            });
+
+
+            update();
+        });
+
+
+        //Slider
+        function update(slider,val) {
+
+            var $amount = slider == 1?val:$("#amount").val();
+
+            $total = "$" + ($amount);
+            $('#amount').val($amount);
+            $('#employees').text($amount);
+            $('#total').val($total);
+            $('#total-label').text($total);
+            $('input.pay-button').attr('data-amount', $amount * 100);
+            $('input.pay-button').attr('data-description', 'Payment for $' + $amount);
+
+            $('#slider a').html('<label><span class="glyphicon glyphicon-chevron-left"></span> '+$amount+' <span class="glyphicon glyphicon-chevron-right"></span></label>');
+        }
+
+    </script>
+{% endblock javascript %}
+

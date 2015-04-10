@@ -1,6 +1,6 @@
 {% load staticfiles %}<!DOCTYPE html>
 <html lang="en" ng-app="tdb" ng-controller="BaseAppCtrl">
-  <head>
+    <head>
     <meta charset="utf-8">
     <title>{% block title %}Dash{% endblock %}</title>
     <link href="//fonts.googleapis.com/css?family=Raleway:100,200,300,400,500,600,700,800,900" rel="stylesheet" type="text/css">
@@ -10,6 +10,10 @@
     <link href="{% static 'lib/angular-carousel/angular-carousel.min.css' %}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="{% static 'bower_components/angular-ui-notification/dist/angular-ui-notification.min.css' %}">
     <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
+    <link rel="stylesheet" type="text/less" href="{% static 'css/less/bootstrap.less' %}">
+    {% block css %}{% endblock %}
+
+    
     <script type="text/javascript">
 
       var _gaq = _gaq || [];
@@ -21,7 +25,7 @@
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
       })();
 
-    </script>    
+    </script>
   </head>
   <body>
     <div ng-view></div>
