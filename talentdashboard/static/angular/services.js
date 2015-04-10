@@ -357,15 +357,9 @@ angular.module('tdb.services', ['ngResource'])
     return currentUser;
 }])
 
-.factory('SitePreferences', ['$resource', '$http', function($resource, $http) {
-    res = $resource('api/v1/preferences/site/');
+.factory('Customers', ['$resource', '$http', function($resource, $http) {
+    res = $resource('api/v1/customer/');
     return res;
-}])
-
-.factory('Site', ['$resource', '$http', function($resource, $http) {
-    var currentSite = $resource('api/v1/current_site/');
-
-    return currentSite;
 }])
 
 .factory('KPIIndicator', ['$resource', '$http', function($resource, $http) {

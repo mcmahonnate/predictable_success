@@ -49,8 +49,8 @@
                     <div class="edit-dropdown">
                         <input type="text" ng-model="edit_leadership.leader.full_name" placeholder="optional" typeahead-on-select="edit_leadership.leader=$item" typeahead="employee.full_name for employee in employees | filter:{full_name:$viewValue}:startsWith | orderBy:'full_name' | limitTo:8" typeahead-editable="false" class="view-value-input" tabindex="6"/>
                     </div>
-                    <span ng-if="site_preferences.show_coaches" style="margin:10px;">Coach</span>
-                    <div ng-if="site_preferences.show_coaches" class="edit-dropdown">
+                    <span ng-if="customer.show_coaches" style="margin:10px;">Coach</span>
+                    <div ng-if="customer.show_coaches" class="edit-dropdown" style="margin: 10px;">
                         <input type="text" ng-model="editEmployee.coach.full_name" placeholder="optional" typeahead-on-select="editEmployee.coach=$item" typeahead="employee.full_name for employee in employees | filter:{full_name:$viewValue}:startsWith | orderBy:'full_name' | limitTo:8" typeahead-editable="false" class="view-value-input" tabindex="8"/>
                     </div>
                 </div>

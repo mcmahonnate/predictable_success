@@ -8,9 +8,8 @@ from blah.models import Comment
 from engagement.models import Happiness, SurveyUrl
 from kpi.models import Indicator, Performance
 from feedback.models import FeedbackRequest, FeedbackSubmission
-from preferences.models import SitePreferences
+from customers.models import Customer
 from django.contrib.auth.models import User
-from django.contrib.sites.models import Site
 from django.utils.log import getLogger
 
 logger = getLogger('talentdashboard')
@@ -264,10 +263,6 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
         model = Employee
         fields = ('id', 'full_name', 'first_name', 'last_name', 'email', 'avatar', 'avatar_small', 'job_title', 'hire_date', 'leader_id', 'happiness', 'happiness_date', 'coach', 'kolbe_fact_finder','kolbe_follow_thru', 'kolbe_quick_start', 'kolbe_implementor', 'vops_visionary', 'vops_operator', 'vops_processor', 'vops_synergist', 'departure_date', 'team', 'display', 'current_salary', 'current_bonus', 'talent_category')
 
-class SitePreferencesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SitePreferences
-        fields = ('id', 'show_kolbe', 'show_vops', 'show_mbti', 'show_coaches', 'show_timeline', 'survey_email_subject', 'survey_email_body')
 
 class UserSerializer(serializers.ModelSerializer):
     employee = MinimalEmployeeSerializer()
@@ -324,10 +319,10 @@ class KPIPerformanceSerializer(serializers.ModelSerializer):
         fields = ('id', 'value', 'date')
 
 
-class SiteSerializer(serializers.ModelSerializer):
+class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Site
-        fields = ('id', 'domain', 'name')
+        model = Customer
+        fields = ('id', 'name', 'domain_url', 'show_kolbe', 'show_vops', 'show_mbti', 'show_coaches', 'show_timeline')
 
 
 class SubCommentSerializer(serializers.HyperlinkedModelSerializer):

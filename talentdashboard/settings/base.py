@@ -1,6 +1,12 @@
 # Django settings for talentdashboard project.
 import os.path
+import dj_database_url
 
+DATABASES = { 'default': dj_database_url.config(default=os.environ.get('DATABASE_URL')) }
+DATABASES['default']['ENGINE'] = 'tenant_schemas.postgresql_backend'
+DATABASE_ROUTERS = (
+    'tenant_schemas.routers.TenantSyncRouter',
+)
 CELERY_ALWAYS_EAGER = True
 DEBUG = False
 ADMINS = (
@@ -106,6 +112,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'tenant_schemas.middleware.TenantMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -127,13 +134,22 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
 )
 
-INSTALLED_APPS = (
-    'django.contrib.auth',
+SHARED_APPS = (
+    'tenant_schemas',  # mandatory
+    'customers',
     'django.contrib.contenttypes',
+    'django.contrib.auth',
     'django.contrib.sessions',
-    'django.contrib.sites',
     'django.contrib.messages',
+    'django.contrib.admin',
     'django.contrib.staticfiles',
+)
+
+TENANT_APPS = (
+    'django.contrib.contenttypes',
+    'django.contrib.auth',
+    'django.contrib.sessions',
+    'django.contrib.messages',
     'django.contrib.admin',
     'django_extensions',
     'talentdashboard',
@@ -148,8 +164,11 @@ INSTALLED_APPS = (
     'storages',
     'kpi',
     'feedback',
-    'preferences',
 )
+
+INSTALLED_APPS = list(set(SHARED_APPS + TENANT_APPS))
+
+TENANT_MODEL = "customers.Customer"
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

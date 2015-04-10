@@ -11,7 +11,6 @@ from .decorators import *
 from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team, get_talent_category_report_for_lead
 from pvp.salaryreports import get_salary_report_for_team, get_salary_report_for_all_employees, get_salary_report_for_lead
 from pvp.models import PvpDescription
-from preferences.models import SitePreferences
 from blah.commentreports import get_employees_with_comments
 from engagement.engagementreports import get_employees_with_happiness_scores
 from blah.models import Comment
@@ -23,11 +22,9 @@ from org.teamreports import get_mbti_report_for_team
 import datetime
 from datetime import date, timedelta
 from django.contrib.auth.models import User
-from django.contrib.sites.models import Site
 from django.core.signing import Signer
 from django.utils.log import getLogger
 from django.core.mail import send_mail, EmailMultiAlternatives
-from django.contrib.sites.models import get_current_site
 from django.contrib.contenttypes.models import ContentType
 from django.http import Http404
 from django.template.loader import get_template
@@ -39,6 +36,7 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.urlresolvers import reverse
 from django.core.cache import cache
 from django.conf import settings
+from django.shortcuts import render
 from feedback.models import FeedbackRequest, FeedbackSubmission, UndeliveredFeedbackReport, CoacheeFeedbackReport
 from feedback.tasks import send_feedback_request_email
 import hashlib
@@ -300,7 +298,7 @@ class SendEngagementSurvey(APIView):
             user.save()
             employee.user = user
             employee.save()
-        survey = generate_survey(employee, sent_from)
+        survey = generate_survey(employee, sent_from, request.tenant)
         html_template = get_template('engagement_survey_email.html')
         template_vars = Context({'employee_name': employee.first_name, 'body': body, 'survey_url': survey.url, 'from': survey.sent_from.full_name})
         html_content = html_template.render(template_vars)
@@ -509,11 +507,11 @@ class EmployeeCommentList(APIView):
                 commenter_full_name = commenter.full_name
                 sub_commenter_avatar = sub_commenter.avatar_small.url
                 sub_commenter_full_name = sub_commenter.full_name
-                dash_link = 'http://' + get_current_site(request).domain + '/#/employees/' + str(employee.id)
+                dash_link = 'http://' + request.tenant.domain_url + '/#/employees/' + str(employee.id)
                 template_vars = Context({'employee_name': employee_name, 'dash_link': dash_link, 'commenter_avatar': commenter_avatar,'commenter_full_name': commenter_full_name, 'sub_commenter_avatar': sub_commenter_avatar, 'sub_commenter_full_name': sub_commenter_full_name, 'comment_content': comment_content, 'sub_comment_content': sub_comment_content})
                 html_content = html_template.render(template_vars)
                 subject = sub_commenter.full_name + ' commented on a post about ' + employee.full_name
-                text_content = 'View comment here:\r\n http://' + get_current_site(request).domain + '/#/employees/' + str(employee.id)
+                text_content = 'View comment here:\r\n http://' + request.tenant.domain_url + '/#/employees/' + str(employee.id)
                 mail_from = sub_commenter.full_name + '<notify@dfrntlabs.com>'
                 msg = EmailMultiAlternatives(subject, text_content, mail_from, mail_to)
                 msg.attach_alternative(html_content, "text/html")
@@ -675,7 +673,7 @@ class TaskDetail(APIView):
         task.save()
         if notify:
             subject = '(' + task.employee.full_name + ') To-do assigned to you: ' + task.description
-            message = task.assigned_by.full_name + ' just assigned this to you: \r\n' + task.description + '\r\n http://' + get_current_site(request).domain + '/#/employees/' + str(task.employee.id)
+            message = task.assigned_by.full_name + ' just assigned this to you: \r\n' + task.description + '\r\n http://' + request.tenant.domain_url + '/#/employees/' + str(task.employee.id)
             mail_from = task.assigned_by.full_name + '<notify@dfrntlabs.com>'
             send_mail(subject, message, mail_from, [task.assigned_to.user.email], fail_silently=False)
 
@@ -857,21 +855,10 @@ def user_status(request):
     serializer = UserSerializer(request.user, context={'request': request})
     return Response(serializer.data)
 
-@api_view(['GET'])
-def preferences_site(request):
-    try:
-        site = Site.objects.get_current()
-        site_preferences = SitePreferences.objects.get(site=site)
-        serializer = SitePreferencesSerializer(site_preferences, context={'request': request})
-        return Response(serializer.data)
-    except SitePreferences.DoesNotExist:
-        return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
-def current_site(request):
-    site = Site.objects.get(domain=request.get_host())
-
-    serializer = SiteSerializer(site, context={'request': request})
+def customer(request):
+    serializer = CustomerSerializer(request.tenant)
     return Response(serializer.data)
 
 @api_view(['GET'])
@@ -1324,5 +1311,12 @@ def menu_counts(request):
         'toBeDelivered': toBeDelivered
     }
     return Response(result)
+
+
+def index(request):
+    if request.tenant.is_public_tenant():
+        return render(request, 'welcome.html')
+    else:
+        return render(request, 'index.html')
 
 
