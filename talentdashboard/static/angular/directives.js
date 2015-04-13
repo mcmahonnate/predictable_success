@@ -484,17 +484,24 @@ angular.module('tdb.directives', [])
                 {data: "Salary", renderer: "html"}
             ];
             var renderTable = function(){
-                scope.importData = angular.copy(scope.data)
-                var colHeaders = ["First name","Last name","Email","Hire Date","Job Title","Department","Manager","Salary"]
+                if (scope.data.length > 0) {
+                    scope.importData = angular.copy(scope.data)
+                    var colHeaders = ["First name", "Last name", "Email", "Hire Date", "Job Title", "Department", "Manager", "Salary"]
 
-                var el = element[0];
-                if (scope.hot) {scope.hot.destroy();}
+                    var el = element[0];
+                    if (scope.hot) {
+                        if (scope.hot.rootElement) {
+                            console.log(scope.hot);
+                            scope.hot.destroy();
+                        }
+                    }
 
-                scope.hot = new Handsontable(el, {
-                    data: scope.importData,
-                    colHeaders: colHeaders,
-                    columns: columns
-                });
+                    scope.hot = new Handsontable(el, {
+                        data: scope.importData,
+                        colHeaders: colHeaders,
+                        columns: columns
+                    });
+                }
             }
             scope.$watch("data", function (newValue) {
                 if (newValue) {

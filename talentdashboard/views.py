@@ -33,6 +33,8 @@ from django.template import Context
 from django.db.models import Q
 from PIL import Image, ExifTags
 import StringIO
+from decimal import Decimal
+from re import sub
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.urlresolvers import reverse
 from django.core.cache import cache
@@ -281,15 +283,9 @@ class ImportData(APIView):
             try:
                 employee = Employee.objects.get(first_name=first_name,last_name=last_name)
             except Employee.DoesNotExist:
-                employee = Employee()
-                employee.first_name = item['First name']
-                employee.last_name = item['Last name']
-                employee.email = item['Email']
-                employee.job_title = item['Job Title']
                 date_string = item['Hire Date']
                 date_parsed = dateutil.parser.parse(date_string)
-                employee.hire_date = date_parsed.date()
-                employee.display = True
+                employee = Employee(first_name=first_name,last_name=last_name,email=item['Email'],job_title=item['Job Title'],hire_date=date_parsed.date(),display=True)
                 employee.save()
             item['id'] = employee.id
             teams.append(item['Department'])
@@ -298,15 +294,25 @@ class ImportData(APIView):
             try:
                 team = Team.objects.get(name=trim_team)
             except Team.DoesNotExist:
-                team = None
-                team = Team()
-                team.name = trim_team
+                team = Team(name=trim_team)
                 team.save()
 
         for item in items:
             employee = Employee.objects.get(id=item['id'])
             leader_full_name = item['Manager']
             team_name = item['Department']
+            salary = Decimal(sub(r'[^\d\-.]', '', item['Salary']))
+            now = datetime.datetime.now()
+            year = int(now.year)
+            if item['Salary']:
+                try:
+                    comp = CompensationSummary.objects.get(employee_id=employee.id, year=year)
+                except CompensationSummary.DoesNotExist:
+                    comp = CompensationSummary(employee=employee,fiscal_year=year,year=year)
+                comp.salary = salary
+                comp.save()
+            else:
+                error_items.append(item)
 
             try:
                 team = Team.objects.get(name=team_name)
@@ -317,9 +323,7 @@ class ImportData(APIView):
 
             try:
                 leader = Employee.objects.get(full_name=leader_full_name)
-                leadership = Leadership()
-                leadership.employee = employee
-                leadership.leader = leader
+                leadership = Leadership(employee=employee,leader=leader)
                 leadership.save()
             except Employee.DoesNotExist:
                 leaders = Employee.objects.filter(last_name__in=leader_full_name.split(" ")).values('full_name')
