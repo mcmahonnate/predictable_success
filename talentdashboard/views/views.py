@@ -595,7 +595,7 @@ class LeadCommentList(APIView):
         current_user = request.user
         lead = Employee.objects.get(user=current_user)
         lead_id = lead.id
-        employee_ids = Leadership.objects.filter(leader__id=lead_id).values('employee__id')
+        employee_ids = Leadership.objects.filter(leader__id=lead_id,employee__departure_date__isnull=True).values('employee__id')
         if not employee_ids:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
         employee_type = ContentType.objects.get(model="employee")
@@ -1170,7 +1170,7 @@ def team_lead_employees(request):
     else:
         lead = Employee.objects.get(id=lead_id)
     if lead.user == current_user or current_user.is_superuser:
-        leaderships = Leadership.objects.filter(leader__id=int(lead_id))
+        leaderships = Leadership.objects.filter(leader__id=int(lead_id),employee__departure_date__isnull=True)
         employees = []
         for leadership in leaderships:
             if leadership.employee not in employees:
