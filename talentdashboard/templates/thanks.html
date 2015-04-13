@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% load humanize %}
+{% block title %}Thank you!{% endblock title %}
+
+{% block content %}
+	<div class="container">
+		<div class="row">
+    		<div class="confirmation col-sm-8 col-sm-offset-2">
+    			<h1>Your Order Confirmation</h1>
+    			<p class="confirmation-message">Thank you for your order! We’ve received your payment of 
+    				<span id="total" class="bold">${{ total|intcomma }}</span> for the <span id="plan" class="bold">{{ plan }}</span> with <span id="employees" class="bold">{{ employees }}</span> employees. You’ll receive a receipt at <span class="bold">{{ email }}</span> that you can print for your records. After we receive your amazing employee data, we’ll be off to the races unleashing your talent.</p>
+    			<p class="confirmation-thanks">Thank you! <br />The ScoutMap Team</p>
+    		</div>
+    	</div>	
+    </div>		
+{% endblock %}

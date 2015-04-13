@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% load staticfiles %}
 {% block title %}Payment{% endblock title %}
 
 {% block css %}
@@ -11,23 +12,25 @@
             {% csrf_token %}
 
             <div class="row">
-                <div class="pricing col-md-8">
-                    <h1>Pricing</h1>
+                <div class="pricing col-sm-7 col-sm-offset-1">
+                    <h1>Checkout</h1>
                     <div class="company-details">
+                        <div class="arrow">1</div>
                         <h3>Enter company name:</h3>
-                        <input class="form-control input-md" name="company" />
+                        <input class="form-control input-md" id="companyName" name="company" />
                     </div>    
                     <div class="plans">
+                        <div class="arrow">2</div>
                         <h3>Select your plan:</h3>
                         <div class="row">
                             <div class="col-xs-12 col-md-6">
-                                <div class="plan panel panel-default">
+                                <div class="plan panel panel-default" data-plan="Monthly Plan" data-price="5">
                                     <h1>$5<span class="duration">/month</span></h1>
                                     <div class="byline">per employee</div>
                                 </div>
                             </div>
                             <div class="col-xs-12 col-md-6">
-                                <div class="plan panel panel-default">
+                                <div class="plan panel panel-default" data-plan="Yearly Plan" data-price="60">
                                     <h1>$60<span class="duration">/year</span></h1>
                                     <div class="byline">per employee</div>
                                 </div>
@@ -35,29 +38,27 @@
                         </div>
                     </div>
                     <div class="employees">
+                        <div class="arrow">3</div>
                         <h3>How many employees?</h3>
-                        <div class="row">
-                            <form class="total-employees-slider col-md-12" role="form">
-                                <div id="slider"></div>
-                            </form>
-                        </div>
+                        <small class="help-text">Use arrow keys to adjust employee count</small>
+                        <form class="total-employees-slider col-md-12" role="form">
+                            <div id="slider"></div>
+                        </form>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-sm-4">
                     <div class="summary">
                             <h2>Summary</h2>
-                            <p><span id="plan">Monthly</span> Plan</p>
-                            <p><span id="employees"></span> Employees</p>
-                            
-                            <input type="hidden" id="employees" name="employees" value="420">
+                            <p><span>Select your plan</span></p>
+                            <p><span id="employees-label">0</span> Employees</p>
+                            <input type="hidden" id="employees" name="employees" value="0">
                             <input type="hidden" id="amount" name="amount" value="">
                             <input type="hidden" id="plan" name="plan" value="Yearly Plan">
-
+                            <input type="hidden" id="total" name="total" value="0">
                             <div class="form-group total row">
-                                <label for="total" class="col-sm-6 control-label"><strong>Total: </strong></label>
-                                <div class="col-sm-6">
-                                    <input type="hidden" id="total" class="form-control">
-                                    <p class="price lead" id="total-label"></p>
+                                <label for="total" class="col-sm-4 control-label total-label"><strong>Total: </strong></label>
+                                <div class="col-sm-8">
+                                    <p class="grand-total">$<span id="grand-total-amount"></span></p>
                                 </div>
                             </div>
                             <input
@@ -69,6 +70,7 @@
                                 data-currency="us"
                                 data-name="ScoutMap"
                                 data-description="Payment for $5"
+                                disabled
                                 />  
                     </div>
                 </div>
@@ -78,76 +80,5 @@
 {% endblock content %}
 
 {% block javascript %}
-    <script type="text/javascript">
-        $(document).ready(function() {
-
-            //Submit form to stripe
-            $(':submit').on('click', function(event) {
-                event.preventDefault();
-
-                var $button = $(this),
-                        $form = $button.parents('form');
-      
-                var opts = $.extend({}, $button.data(), {
-                    token: function(result) {
-
-                        var token = $('<input>').attr({ type: 'hidden', name: 'stripeToken', value: result.id }); 
-                        var email = $('<input>').attr({ type: 'hidden', name: 'stripeEmail', value: result.email });  
-                        $form.append(token, email).submit();
-                    }
-                });
-
-                StripeCheckout.open(opts);
-            });
-
-
-            //Create slider range
-            $("#slider").slider({
-                range: "min",
-                animate: true,
-                value:1,
-                min: 0,
-                max: 1000,
-                step: 1,
-                slide: function(event, ui) {
-                    update(1,ui.value); //changed
-                }
-            });
-
-
-            //Set initial value.
-            $("#amount").val(0);
-            $("#amount-label").text(0);
-            $("#duration-label").text(0);
-
-
-            //Select plan
-            $('.plan').on('click', function(){
-                $('.plan').removeClass('selected');
-                $(this).addClass('selected');
-            });
-
-
-            update();
-        });
-
-
-        //Slider
-        function update(slider,val) {
-
-            var $amount = slider == 1?val:$("#amount").val();
-
-            $total = "$" + ($amount);
-            $('#amount').val($amount);
-            $('#employees').text($amount);
-            $('#total').val($total);
-            $('#total-label').text($total);
-            $('input.pay-button').attr('data-amount', $amount * 100);
-            $('input.pay-button').attr('data-description', 'Payment for $' + $amount);
-
-            $('#slider a').html('<label><span class="glyphicon glyphicon-chevron-left"></span> '+$amount+' <span class="glyphicon glyphicon-chevron-right"></span></label>');
-        }
-
-    </script>
+    <script src="{% static 'javascript/payment.js' %}"></script>
 {% endblock javascript %}
-

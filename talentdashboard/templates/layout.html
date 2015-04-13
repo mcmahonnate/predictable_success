@@ -6,8 +6,6 @@
     <link href="{% static 'css/favicon.ico' %}" rel="shortcut icon" type="image/x-icon" />
     {% block css %}{% endblock css %}
     <link href="{% static 'css/scoutmap/style.less' %}" rel="stylesheet" type="text/less">
-
-
     <script>
         less = {
             env: "development",
@@ -36,6 +34,8 @@
     </script>
 </head>
 <body>
+    <a href="mailto:scoutmap@fool.com" class="questions-link">Questions or Comment?</a>
+    <img src="{% static 'images/logo.png' %}" alt="ScoutMap" class="logo" />
     {% block content %}{% endblock content%}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.min.js"></script>
