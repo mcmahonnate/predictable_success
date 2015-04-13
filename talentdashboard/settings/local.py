@@ -4,11 +4,6 @@ from .base import *
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
-    'talentdashboard.settings.context_processors.debug'
-)
-
 CELERY_ALWAYS_EAGER = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

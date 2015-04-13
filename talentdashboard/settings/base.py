@@ -121,6 +121,7 @@ TEMPLATE_DIRS = (
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
+    'talentdashboard.settings.context_processors.debug'
 )
 
 AUTHENTICATION_BACKENDS = (
