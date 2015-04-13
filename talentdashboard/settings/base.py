@@ -9,8 +9,9 @@ DATABASE_ROUTERS = (
 )
 CELERY_ALWAYS_EAGER = True
 DEBUG = False
+
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+    ('Doug Dosberg', 'ddosberg@fool.com'),
 )
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
@@ -61,6 +62,7 @@ MEDIA_URL = '/media/'
 # Example: "/var/www/example.com/static/"
 STATIC_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'staticfiles')
 
+
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
 AWS_STORAGE_BUCKET_NAME = os.environ['AWS_STORAGE_BUCKET_NAME']
@@ -85,26 +87,23 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
-    'pipeline.finders.PipelineFinder',
+    'compressor.finders.CompressorFinder',
 )
 
-#STATICFILES_STORAGE = 'pipeline.storage.PipelineStorage'
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
-PIPELINE_CSS = {
-    'main': {
-        'source_filenames': (
-            'css/less/test.css',
-        )
-    },
-    'output_filename': 'css/main.css'
-}
-
-PIPELINE_COMPILERS = (
-  'pipeline.compilers.less.LessCompiler',
+COMPRESS_ENABLED = True
+COMPRESS_OFFLINE = True
+COMPRESS_PRECOMPILERS = (
+    ('text/less', 'lessc {infile} {outfile}'),
 )
 
-PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
+COMPRESS_JS_FILTERS = [
+    'compressor.filters.jsmin.SlimItFilter',
+]
+
+COMPRESS_CSS_HASHING_METHOD = 'content'
+
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '^n2)5q^gdc%5du_tivgasukok(2jx8olj!_y&qvh(l7%48hh@1'
@@ -138,8 +137,9 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'pipeline.middleware.MinifyHTMLMiddleware',
 )
+
+SETTINGS_IN_CONTEXT = ['DEBUG']
 
 
 ROOT_URLCONF = 'talentdashboard.urls'
@@ -185,7 +185,7 @@ TENANT_APPS = (
     'kpi',
     'feedback',
     'static_precompiler',
-    'pipeline',
+    'compressor'
 )
 
 INSTALLED_APPS = list(set(SHARED_APPS + TENANT_APPS))

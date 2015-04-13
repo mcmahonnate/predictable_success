@@ -10,8 +10,10 @@ class ChargeView(TemplateView):
     fail_url = "payment"
     
     def get(self, request, **kwargs):
-        #return redirect(self.fail_url)
-        return render_to_response(self.success_url, {}, context_instance=RequestContext(request))
+        return redirect(self.fail_url)
+
+        # For testing page without posting
+        #return render_to_response(self.success_url, {}, context_instance=RequestContext(request))
 
     def post(self, request, *args, **kwargs):
         stripe_test_api_key = "sk_test_4seBLkeRNSVS4NAcRsTQb1MC"
