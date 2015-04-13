@@ -4,6 +4,9 @@ body {
 h1 {
     margin: 0;
 }
+h2 {
+  font-size: 24px;
+}
 h3 {
     font-size: 18px;
 }
@@ -25,7 +28,13 @@ h3 {
     position: absolute;
     right: 40px;
     top: 25px;
+
+    @media only screen and (max-width : 900px) {
+      display: none;
+    }
 }
+
+
 .pricing {
     background-color: #fff;
     padding: 45px;
@@ -45,7 +54,7 @@ h3 {
 }
 
 .stripe-logo {
-  width: 150px;
+  width: 140px;
   margin: 20px 0;
 }
 .stripe-security-msg {

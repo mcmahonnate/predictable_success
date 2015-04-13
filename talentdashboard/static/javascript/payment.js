@@ -28,6 +28,7 @@ $(document).ready(function() {
 
         var plan = $(this).attr('data-plan');
         $('#plan').val(plan);
+        $('.plan-label').text(plan);
 
         updateSummary();
     });
@@ -89,7 +90,7 @@ var updateSlider = function(slider,val) {
 
     //Set summary totals
     $('#employees').val($amount);
-    $('#employees-label').text($amount);
+    $('.employees-label').text($amount);
 
     //Update text on Stripe widget
     $('input.pay-button').attr('data-amount', $amount * 100 * planPrice);

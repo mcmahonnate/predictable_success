@@ -48,9 +48,9 @@
                 </div>
                 <div class="col-sm-4">
                     <div class="summary">
-                            <h2>Summary</h2>
-                            <p><span>Select your plan</span></p>
-                            <p><span id="employees-label">0</span> Employees</p>
+                            <h2>Order Summary</h2>
+                            <p><span class="plan-label">Select your plan</span></p>
+                            <p><span class="employees-label">0</span> Employees</p>
                             <input type="hidden" id="employees" name="employees" value="0">
                             <input type="hidden" id="amount" name="amount" value="">
                             <input type="hidden" id="plan" name="plan" value="Yearly Plan">
@@ -74,7 +74,7 @@
                                 />
                     </div>
                     <img src="{% static 'images/stripe.png' %}" alt="Stripe logo" class="stripe-logo" />
-                    <p class="stripe-security-msg">*Stripe uses an advanced 256-bit encryption system. For more information please click here</p>
+                    <p class="stripe-security-msg">*Stripe uses an advanced 256-bit encryption system. For more information please <a href="http://www.stripe.com/help/security" target="_blank">click here</a>.</p>
                 </div>
             </div>
         </form>
