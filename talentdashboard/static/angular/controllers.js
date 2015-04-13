@@ -627,9 +627,10 @@ angular.module('tdb.controllers', [])
             });
             $scope.data = data;
             $scope.importing = false;
-            if (data) {
+            if (data.length > 0) {
                 Notification.warning("Awesome but we ran into some errors. Make your corrections below.");
             } else {
+                $scope.hot.destroy();
                 Notification.success("Your data imported successfully.");
             }
         },function(){
