@@ -40,7 +40,7 @@
                     <div class="employees">
                         <div class="arrow">3</div>
                         <h3>How many employees?</h3>
-                        <small class="help-text">Use arrow keys to adjust employee count</small>
+                        <small class="help-text">Use slider and arrow keys to adjust employee count</small>
                         <form class="total-employees-slider col-md-12" role="form">
                             <div id="slider"></div>
                         </form>
@@ -71,8 +71,10 @@
                                 data-name="ScoutMap"
                                 data-description="Payment for $5"
                                 disabled
-                                />  
+                                />
                     </div>
+                    <img src="{% static 'images/stripe.png' %}" alt="Stripe logo" class="stripe-logo" />
+                    <p class="stripe-security-msg">*Stripe uses an advanced 256-bit encryption system. For more information please click here</p>
                 </div>
             </div>
         </form>
