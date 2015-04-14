@@ -1380,7 +1380,7 @@ def menu_counts(request):
 
 def index(request):
     if request.tenant.is_public_tenant():
-        return render(request, 'welcome.html')
+        return HttpResponseNotFound()
     else:
         return render(request, 'index.html')
 
