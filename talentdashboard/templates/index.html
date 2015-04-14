@@ -1,17 +1,23 @@
-{% load staticfiles %}<!DOCTYPE html>
+{% load staticfiles %}
+{% load compress %}
+<!DOCTYPE html>
 <html lang="en" ng-app="tdb" ng-controller="BaseAppCtrl">
     <head>
     <meta charset="utf-8">
     <title>{% block title %}Dash{% endblock %}</title>
     <link href="//fonts.googleapis.com/css?family=Raleway:100,200,300,400,500,600,700,800,900" rel="stylesheet" type="text/css">
+    
+    {% compress css %}
     <link href="{% static 'css/favicon.ico' %}" rel="shortcut icon" type="image/x-icon" />
     <link href="{% static 'css/snapshot.css' %}" media="screen" rel="stylesheet" type="text/css" />
-    <link href="{% static 'css/component.css' %}" media="screen" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/component.css' %}" media="screen" rel="stylesheet" type="text/css" />  
     <link href="{% static 'bower_components/handsontable/dist/handsontable.full.min.css' %}" media="screen" rel="stylesheet" type="text/css" />
     <link href="{% static 'lib/angular-carousel/angular-carousel.min.css' %}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="{% static 'bower_components/angular-ui-notification/dist/angular-ui-notification.min.css' %}">
     <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
     <link rel="stylesheet" type="text/less" href="{% static 'css/less/bootstrap.less' %}">
+    {% endcompress %}
+    
     {% block css %}{% endblock %}
 
     
