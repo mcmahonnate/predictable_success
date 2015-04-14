@@ -61,7 +61,8 @@ MEDIA_URL = '/media/'
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
 STATIC_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'assets')
-COMPRESS_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static')
+STATIC_URL = '/static/'
+#COMPRESS_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static')
 
 
 # URL prefix for static files.
@@ -72,7 +73,7 @@ AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
 AWS_QUERYSTRING_AUTH = False
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 S3_URL = 'http://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
-STATIC_URL = '/static/'
+
 
 
 # Additional locations of static files
@@ -94,9 +95,7 @@ STATICFILES_FINDERS = (
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 COMPRESS_ENABLED=True
-if not 'COMPRESS_OFFLINE' in os.environ:
-#if not os.environ.has_key('COMPRESS_OFFLINE'):
-    COMPRESS_OFFLINE=True #this is so that compress_offline is set to true during deployment to Heroku
+COMPRESS_OFFLINE=True
 
 COMPRESS_PRECOMPILERS = (
     ('text/less','lessc {infile} {outfile}'),
@@ -105,6 +104,7 @@ COMPRESS_PRECOMPILERS = (
 COMPRESS_JS_FILTERS = [
     'compressor.filters.jsmin.SlimItFilter',
 ]
+
 COMPRESS_CSS_HASHING_METHOD = 'content'
 
 
@@ -144,6 +144,7 @@ MIDDLEWARE_CLASSES = (
 )
 
 SETTINGS_IN_CONTEXT = ['DEBUG']
+
 
 ROOT_URLCONF = 'talentdashboard.urls'
 
