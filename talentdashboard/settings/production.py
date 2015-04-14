@@ -2,7 +2,9 @@
 from .base import *
 import dj_database_url
 
-DEBUG = os.environ.get("DEBUG", False)
+#DEBUG = os.environ.get("DEBUG", False)
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
 EMAIL_BACKEND = 'talentdashboard.backend.SSLEmailBackend'
 EMAIL_USE_SSL = True
 EMAIL_HOST = 'mail.dfrntlabs.com'
