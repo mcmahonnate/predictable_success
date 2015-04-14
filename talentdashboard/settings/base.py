@@ -60,7 +60,7 @@ MEDIA_URL = '/media/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'staticfiles')
+STATIC_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'assets')
 COMPRESS_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static')
 
 
@@ -105,7 +105,6 @@ COMPRESS_PRECOMPILERS = (
 COMPRESS_JS_FILTERS = [
     'compressor.filters.jsmin.SlimItFilter',
 ]
-
 COMPRESS_CSS_HASHING_METHOD = 'content'
 
 
@@ -145,7 +144,6 @@ MIDDLEWARE_CLASSES = (
 )
 
 SETTINGS_IN_CONTEXT = ['DEBUG']
-
 
 ROOT_URLCONF = 'talentdashboard.urls'
 

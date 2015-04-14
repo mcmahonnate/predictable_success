@@ -7,24 +7,20 @@
     <link href="{% static 'css/favicon.ico' %}" rel="shortcut icon" type="image/x-icon" />
 
     {% block css %}{% endblock css %}
-    
+
     {% compress css %}
         <link href="{% static 'css/scoutmap/style.less' %}" rel="stylesheet" type="text/less">
     {% endcompress %}
 
-    
-
     {% if DEBUG %}
     <script>
         less = {
-            env: "development",
+            env: 'development', // "development" or "production"
             async: false,
             fileAsync: false,
             poll: 1000,
-            functions: {},
-            dumpLineNumbers: "comments",
+            dumpLineNumbers: 'comments',
             relativeUrls: false
-            //rootpath: ":/a.com/"
         };
     </script>
     <script src="{% static 'javascript/less.js' %}"></script>
