@@ -1,0 +1,9 @@
+
+<span style="color: #cbcbcb;">Search by name:</span> <input ng-model="query">
+<div ng-if="!query" style="color: #cbcbcb;">Please enter text above to search for employees</div>
+<ol class="employees">
+  <li ng-controller="EvaluationListCtrl" ng-repeat="employee in employees | filter:{full_name:query}">
+    <a href="#/employees/{{employee.id}}" style="color: #cbcbcb;">{{employee.full_name}}</a>
+  </li>
+</ol>
+

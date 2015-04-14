@@ -9,8 +9,9 @@ DATABASE_ROUTERS = (
 )
 CELERY_ALWAYS_EAGER = True
 DEBUG = False
+
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+    ('Doug Dosberg', 'ddosberg@fool.com'),
 )
 
 REQUIRED_GROUPS = (
@@ -68,7 +69,10 @@ MEDIA_URL = '/media/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'staticfiles')
+STATIC_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'assets')
+STATIC_URL = '/static/'
+#COMPRESS_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static')
+
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
@@ -78,7 +82,7 @@ AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
 AWS_QUERYSTRING_AUTH = False
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 S3_URL = 'http://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
-STATIC_URL = '/static/'
+
 
 
 # Additional locations of static files
@@ -92,28 +96,26 @@ STATICFILES_DIRS = (
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
+    #'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
-    'pipeline.finders.PipelineFinder',
+    'compressor.finders.CompressorFinder',
 )
 
-#STATICFILES_STORAGE = 'pipeline.storage.PipelineStorage'
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
-PIPELINE_CSS = {
-    'main': {
-        'source_filenames': (
-            'css/less/test.css',
-        )
-    },
-    'output_filename': 'css/main.css'
-}
+COMPRESS_ENABLED=True
+COMPRESS_OFFLINE=True
 
-PIPELINE_COMPILERS = (
-  'pipeline.compilers.less.LessCompiler',
+COMPRESS_PRECOMPILERS = (
+    ('text/less','lessc {infile} {outfile}'),
 )
 
-PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
+COMPRESS_JS_FILTERS = [
+    'compressor.filters.jsmin.SlimItFilter',
+]
+
+COMPRESS_CSS_HASHING_METHOD = 'content'
+
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '^n2)5q^gdc%5du_tivgasukok(2jx8olj!_y&qvh(l7%48hh@1'
@@ -131,6 +133,7 @@ TEMPLATE_DIRS = (
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
+    'talentdashboard.settings.context_processors.debug'
 )
 
 AUTHENTICATION_BACKENDS = (
@@ -147,8 +150,9 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'pipeline.middleware.MinifyHTMLMiddleware',
 )
+
+SETTINGS_IN_CONTEXT = ['DEBUG']
 
 
 ROOT_URLCONF = 'talentdashboard.urls'
@@ -175,6 +179,7 @@ SHARED_APPS = (
 
 TENANT_APPS = (
     'django.contrib.contenttypes',
+    'django.contrib.humanize',
     'django.contrib.auth',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -193,7 +198,7 @@ TENANT_APPS = (
     'kpi',
     'feedback',
     'static_precompiler',
-    'pipeline',
+    'compressor'
 )
 
 INSTALLED_APPS = list(set(SHARED_APPS + TENANT_APPS))

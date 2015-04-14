@@ -1,7 +1,14 @@
 # Local settings
 from .base import *
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+
+COMPRESS_ENABLED = False
+COMPRESS_PRECOMPILERS = ()
+
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
 CELERY_ALWAYS_EAGER = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
