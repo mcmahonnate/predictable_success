@@ -1,0 +1,96 @@
+{% extends "layouts/blank.html" %}
+{% load staticfiles %}
+{% block title %}ScoutMap{% endblock title %}
+
+{% block content %}
+    <section class="billboard">
+        <a href="{% url 'login' %}" class="login-link">Customer Login</a>
+        <img src="{% static 'images/logo-light.png' %}" alt="ScoutMap" class="logo" />
+        <h1 class="tagline">Unleash your talent</h1>
+        <p class="byline">Talent management shouldn't be complex. With ScoutMap, we help leadership focus their effort on their best talent with actionable advice and intuitive software.</p>
+
+        <div class="shaded">
+            <button type="button" class="btn btn-lg btn-success btn-start" data-toggle="modal" data-target="#modal">
+              Request Invitation
+            </button>
+            <blockquote>
+                <p>"We are the best place to work in America not because of perks, but because we built a performance culture using ScoutMap."</p>
+                <footer>
+                    <cite>Lee Burbage, Chief People Officer at The Motley Fool</cite>
+                </footer>
+            </blockquote>
+        </div>    
+    </section>
+    <section class="engagement">
+        <h2>Understand Your Talent Portfolio</h2>
+        <p>Quickly evaluate your total workforce and discover your best performaers</p>
+        <img src="{% static 'images/screenshot.png' %}" alt="Screenshot" class="screenshot" />
+    </section> 
+    <section class="features">   
+    </section>    
+
+    <div id="modal" class="modal modal-get-started fade">
+        <div class="modal-dialog">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <div class="arrow-right"></div>
+            <div class="headshot-box">
+                <img class="headshot" src="{% static 'images/ariana.jpg' %}" alt="Ariana" />
+                <span class="headshot-name">Ariana</span> Customer Happiness
+            </div>    
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h3>Hey there!</h3>
+                    <p>Interested in unleashing your talent? Enter your details below and you'll be on your way.</p>
+                    <form class="request-form">
+                        <input class="form-control input-lg stroked" name="name" placeholder="Your name" />
+                        <input class="form-control input-lg stroked" name="email" placeholder="Email Address" />
+                        <input class="form-control input-lg stroked" name="company" placeholder="Company" />
+                        <button type="submit" class="btn btn-success btn-send">Send</button>
+                    </form>    
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block javascript %}
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="http://engagexl.com/assets/js/jquery.easing.1.3.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
+
+<script type="text/javascript">
+
+$(function() {
+    setupFormValidation();
+
+
+
+});
+
+
+var setupFormValidation = function()
+{
+    //form validation rules
+    $(".request-form").validate({
+        rules: {
+            name: "required",
+            email: {
+                required: true,
+                email: true
+            },
+            company: "required",
+        },
+        messages: {
+            name: "Please enter your name",
+            email: "Please enter a valid email address",
+            company: "Please enter your company name"
+        },
+        submitHandler: function(form) {
+            form.submit();
+        }
+    });
+}
+</script>
+
+{% endblock javascript %}

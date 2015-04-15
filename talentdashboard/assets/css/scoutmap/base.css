@@ -1,0 +1,31 @@
+input[type=text],[type=password], [type=email]
+{
+	line-height: 15px;
+	width: 280px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	margin-right: 10px;
+	padding: 4px;
+}
+.login-button, .reset-button
+{
+	font-size: 16.996px;
+	padding: 8px 18px 8px;
+	border: none;
+	background: #585858;
+	color: #ffffff;
+	cursor: pointer;
+}
+.login-button:hover
+{
+	background: #656565;
+}
+.error-message
+{
+    text-shadow: none;
+    color: white;
+    border-color: red;
+    border-style: solid;
+    border-width: 1px;
+    padding: 8;
+}

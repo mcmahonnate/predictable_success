@@ -14,6 +14,12 @@ ADMINS = (
     ('Doug Dosberg', 'ddosberg@fool.com'),
 )
 
+# Stripes API key
+STRIPE_KEY = 'pk_test_UNXbpUo3QIZyN5IYMfPj38O7'
+MONTHLY_PLAN_PRICE = '5'
+YEARLY_PLAN_PRICE = '60'
+
+
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 MANAGERS = ADMINS
@@ -143,7 +149,7 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-SETTINGS_IN_CONTEXT = ['DEBUG']
+SETTINGS_IN_CONTEXT = ['DEBUG', 'MONTHLY_PLAN_PRICE']
 
 
 ROOT_URLCONF = 'talentdashboard.urls'

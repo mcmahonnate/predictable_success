@@ -1,70 +1,40 @@
+{% load staticfiles %}
+{% load compress %}
 <html>
 <head>
-	<title>{% block title %}{% endblock title %}</title>
-    <link href="//fonts.googleapis.com/css?family=Raleway:100,200,300,400,500,600,700,800,900" rel="stylesheet" type="text/css">
-    <link href="/static/css/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-    <link href="/static/css/snapshot.css" media="screen" rel="stylesheet" type="text/css" />
-	<style>
-		input[type=text],[type=password], [type=email]
-		{
-			line-height: 15px;
-			width: 280px;
-			border: 1px solid #ccc;
-			border-radius: 3px;
-			margin-right: 10px;
-			padding: 4px;
-		}
-		.login-button, .reset-button
-		{
-			font-size: 16.996px;
-			padding: 8px 18px 8px;
-			border: none;
-			background: #585858;
-			color: #ffffff;
-			cursor: pointer;
-		}
-		.login-button:hover
-		{
-			background: #656565;
-		}
-        .error-message
-        {
-            text-shadow: none;
-            color: white;
-            border-color: red;
-            border-style: solid;
-            border-width: 1px;
-            padding: 8;
-        }
-	</style>
+    <title>{% block title %}{% endblock title %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="{% static 'css/favicon.ico' %}" rel="shortcut icon" type="image/x-icon" />
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600' rel='stylesheet' type='text/css'>
+    
+    {% block css %}{% endblock css %}
+
+    {% compress css %}
+        <link href="{% static 'css/scoutmap/style.less' %}" rel="stylesheet" type="text/less">
+    {% endcompress %}
+
+    {% if DEBUG %}
     <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-      ga('create', 'UA-45570095-1', 'talent-dashboard.herokuapp.com');
-      if (window.location.host != "localhost:8000" && window.location.host != "0.0.0.0:8000") {
-        ga('send', 'pageview');
-      } else {
-          console.log('not tracked ' + window.location.pathname)
-      }
-
+        less = {
+            env: 'development', // "development" or "production"
+            async: false,
+            fileAsync: false,
+            poll: 1000,
+            dumpLineNumbers: 'comments',
+            relativeUrls: false
+        };
     </script>
+    <script src="{% static 'javascript/less.js' %}"></script>
+    {% endif %}
 </head>
 <body>
+    {% block navigation %}{% endblock navigation %}
+    {% block content %}{% endblock content%}
 
-  <div class="dashboard-sized-el" id="dashboard" style="margin-top: 75px; max-width: 970px;">
-
-    <article class="widget clock loaded" id="widget-8494" style="border-radius: 6px; width: 500px;margin: auto;position: static">
-		<div class="widget-inner large-screen" style="border-radius: 6px; width:450px; margin: auto">
-			<section class="widget-body">
-				{% block content %}{% endblock content%}
-		   </section>
-         </div>
-    </article>
-
-   </div>
+    <div class="javascripts">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script src="{% static 'javascript/analytics.js' %}"></script>
+        {% block javascript %}{% endblock javascript%}
+    </div>    
 </body>
 </html>
-

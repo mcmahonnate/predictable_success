@@ -16,6 +16,7 @@ sdist
 develop-eggs
 .installed.cfg
 venv
+.venv
 .pycharm-bash
 node_modules
 
