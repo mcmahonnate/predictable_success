@@ -27,7 +27,7 @@ from django.core.signing import Signer
 from django.utils.log import getLogger
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.contrib.contenttypes.models import ContentType
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponseNotFound
 from django.template.loader import get_template
 from django.template import Context
 from django.db.models import Q
@@ -1380,7 +1380,3 @@ def menu_counts(request):
         'toBeDelivered': toBeDelivered
     }
     return Response(result)
-
-
-
-

@@ -14,11 +14,19 @@ ADMINS = (
     ('Doug Dosberg', 'ddosberg@fool.com'),
 )
 
-# Stripes API key
+# Stripes API key and pricing
 STRIPE_KEY = 'pk_test_UNXbpUo3QIZyN5IYMfPj38O7'
 MONTHLY_PLAN_PRICE = '5'
 YEARLY_PLAN_PRICE = '60'
 
+REQUIRED_GROUPS = (
+    'AllAccess',
+    'CoachAccess',
+    'Daily Digest Subscribers',
+    'Edit Employee',
+    'TeamLeadAccess',
+    'View Comments',
+)
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 

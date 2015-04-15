@@ -322,7 +322,7 @@ class KPIPerformanceSerializer(serializers.ModelSerializer):
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
-        fields = ('id', 'name', 'domain_url', 'show_kolbe', 'show_vops', 'show_mbti', 'show_coaches', 'show_timeline')
+        fields = ('id', 'name', 'domain_url', 'show_kolbe', 'show_vops', 'show_mbti', 'show_coaches', 'show_timeline', 'survey_email_subject', 'survey_email_body')
 
 
 class SubCommentSerializer(serializers.HyperlinkedModelSerializer):
