@@ -10,7 +10,7 @@ dist
 build
 eggs
 parts
-bin
+# bin need this for Heroku
 var
 sdist
 develop-eggs
