@@ -14,7 +14,7 @@ ADMINS = (
     ('Doug Dosberg', 'ddosberg@fool.com'),
 )
 
-# Stripes API key and pricing
+# Stripes API key
 STRIPE_KEY = 'pk_test_UNXbpUo3QIZyN5IYMfPj38O7'
 MONTHLY_PLAN_PRICE = '5'
 YEARLY_PLAN_PRICE = '60'
@@ -109,8 +109,7 @@ STATICFILES_FINDERS = (
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 COMPRESS_ENABLED = True
-COMPRESS_OFFLINE = False #this is so that compress_offline is set to true during deployment to Heroku
-
+COMPRESS_OFFLINE = True
 
 COMPRESS_PRECOMPILERS = (
     ('text/less','lessc {infile} {outfile}'),
