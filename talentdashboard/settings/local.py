@@ -4,7 +4,8 @@ from .base import *
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-COMPRESS_OFFLINE = True
+COMPRESS_ENABLED = False
+COMPRESS_OFFLINE = False
 COMPRESS_PRECOMPILERS = ()
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
