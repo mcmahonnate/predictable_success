@@ -1,0 +1,98 @@
+<style type="text/css">
+    .bottom-nav {
+        padding: 10px;
+    }
+</style>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Undelivered feedback for {{ report.employee.full_name }}</h3></div>
+    <div class="panel-body">
+        <div class="list-group"
+             ng-repeat="feedback in undeliveredFeedback = (report.feedback | filter: {has_been_delivered: false})">
+            <a class="list-group-item clearfix" ng-click="toggleActive(feedback)" ng-class="{active: feedback.active}">
+                <p class="list-group-item-text">{{ feedback.feedback_date | date: 'longDate' }}</p>
+                <h4 class="list-group-item-heading pull-left"
+                    ng-class="{unread: feedback.unread, read: !feedback.unread}">
+                    {{ feedback.reviewer }} <span class="badge">{{ feedback.unread ? "New" : "" }}</span>
+                </h4>
+
+                <div class="btn-group-sm pull-right">
+                    <button class="btn btn-default" type="button" ng-click="markDelivered(feedback)">
+                        Deliver it!
+                    </button>
+                </div>
+            </a>
+
+            <div class="panel panel-default" ng-show="feedback.active">
+                <div class="panel-body">
+                    <div>
+                        <h4>How is {{ feedback.subject.full_name }} awesome?</h4>
+
+                        <div>
+                            {{ feedback.excels_at }}
+                        </div>
+                    </div>
+                    <div>
+                        <h4>Where can {{ feedback.subject.full_name }} be more awesome?</h4>
+
+                        <div>
+                            {{ feedback.could_improve_on }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default" ng-if="undeliveredFeedback.length === 0">
+            <div class="panel-heading">There is no undelivered feedback for {{ report.employee.full_name }}</div>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Delivered feedback for {{ report.employee.full_name }} </h3></div>
+    <div class="panel-body">
+        <div class="list-group"
+             ng-repeat="feedback in deliveredFeedback = (report.feedback | filter: {has_been_delivered: true})">
+            <a class="list-group-item clearfix" ng-click="toggleActive(feedback)" ng-class="{active: feedback.active}">
+                <p class="list-group-item-text">{{ feedback.feedback_date | date: 'longDate' }}</p>
+                <h4 class="list-group-item-heading pull-left"
+                    ng-class="{unread: feedback.unread, read: !feedback.unread}">
+                    {{ feedback.reviewer }} <span class="badge">{{ feedback.unread ? "New" : "" }}</span>
+                </h4>
+            </a>
+
+            <div class="panel panel-default" ng-show="feedback.active">
+                <div class="panel-body">
+                    <div>
+                        <h4>How is {{ feedback.subject.full_name }} awesome?</h4>
+
+                        <div>
+                            {{ feedback.excels_at }}
+                        </div>
+                    </div>
+                    <div>
+                        <h4>Where can {{ feedback.subject.full_name }} be more awesome?</h4>
+
+                        <div>
+                            {{ feedback.could_improve_on }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default" ng-if="deliveredFeedback.length === 0">
+            <div class="panel-heading">There is no delivered feedback for {{ report.employee.full_name }}</div>
+        </div>
+    </div>
+</div>
+
+<nav class="navbar navbar-default navbar-fixed-bottom bottom-nav">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <div class="nav navbar-nav">
+                <button class="btn btn-primary" ng-disabled="activeItems.length === 0">Print selected items</button>
+            </div>
+        </div>
+    </div>
+</nav>

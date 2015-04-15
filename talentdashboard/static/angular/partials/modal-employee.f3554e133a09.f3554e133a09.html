@@ -1,0 +1,66 @@
+<div class='ng-modal' ng-show="show">
+    <!-- employee popups start -->
+    <div class='ng-modal-overlay'></div>
+    <form enctype="multipart/form-data" name="uploadForm">
+        <div class='ng-modal-edit-employee' ng-style='dialogStyle'>
+            <div class='ng-modal-dialog-content' style="padding-right: 0">
+                <div style="margin-top: 10px;margin-left: 10px;width:25%;float:left;">
+                    <img ng-src="{{preview}}" style="width:155px;display:block;margin-left:auto;margin-right:auto;float:left;">
+                    <div style="float:left;display:block;background-color: #3498db;border-radius: 6px;width:135px;margin:10px;text-align: center;height: 30px;">
+                        <input class="custom-file-upload" onchange="angular.element(this).scope().uploadFile(this.files)" style="z-index:1;width:135px;opacity:0;position: absolute;left:30px;height: 30px;" type="file" name="file" accept="image/*" tabindex="9">
+                        <span class="glyphicon glyphicon-photo-big" style="padding-top:4px"></span>
+                    </div>
+                </div>
+                <div style="margin-top: 10px;margin-left: 10px;width:36%;float:left;">
+                    <span style="margin:10px;">First Name</span>
+                    <span style="color:red;" ng-show="uploadForm.first_name.$dirty && uploadForm.first_name.$invalid">
+                        <span ng-show="uploadForm.first_name.$error.required">*First name is required.</span>
+                    </span>
+                    <input type="text" name="first_name" ng-model="editEmployee.first_name" placeholder="required" class="view-value-input" required tabindex="1">
+                    <span style="margin:10px;">Hire Date</span>
+                    <input type="text" name="hire_date" value="{{editEmployee.hire_date | date:'MM/dd/yyyy'}}" placeholder="optional"  class="view-value-input" style="display:inline-block" ng-disabled="true"/>
+                    <span ng-click="toggleHireDatePicker();" class="glyphicon-regular glyphicon-calendar" style="margin-left: -42px;font-size: 18px;height: 18px;padding-bottom: 3px;cursor:pointer;" tabindex="3"></span>
+                    <div ng-show="showHireDatePicker" style="background-color: #fff;margin-top: -5px;margin-left: -19px;width:45%;float:left;position: absolute" ng-model="editEmployee.hire_date">
+                        <datepicker show-weeks="showWeeks"></datepicker>
+                    </div>
+                    <span style="margin:10px;">Team</span>
+                    <div class="edit-dropdown">
+                        <input type="text" ng-model="editEmployee.team.name" placeholder="optional" typeahead-on-select="editEmployee.team=$item" typeahead="team.name for team in teams | filter:{name:$viewValue}:startsWith | orderBy:'name' | limitTo:8" typeahead-editable="false" class="view-value-input" tabindex="5"/>
+                    </div>
+                    <span style="margin:10px;">Email</span>
+                    <span style="color:red;" ng-show="uploadForm.email.$dirty && uploadForm.email.$invalid">
+                        <span ng-show="uploadForm.email.$error.required">*Email is required.</span>
+                    </span>
+                    <input type="email" name="email" ng-model="editEmployee.email" placeholder="required" class="view-value-input" required tabindex="7">
+                </div>
+                <div style="margin-top: 10px;width:35%;float:left;">
+                    <span style="margin:10px;">Last Name</span>
+                    <span style="color:red;" ng-show="uploadForm.last_name.$dirty && uploadForm.last_name.$invalid">
+                        <span ng-show="uploadForm.last_name.$error.required">*Last name is required.</span>
+                    </span>
+                    <input type="text" name="last_name" ng-model="editEmployee.last_name" placeholder="required" class="view-value-input" required tabindex="2">
+                    <span style="margin:10px;">Departure Date</span>
+                    <input type="text" value="{{editEmployee.departure_date | date:'MM/dd/yyyy'}}" style="display: inline-block;" placeholder="optional" class="view-value-input" ng-disabled="true"/>
+                    <span ng-click="toggleDepartDatePicker();" class="glyphicon-regular glyphicon-calendar" style="margin-left: -42px;font-size: 18px;height: 18px;padding-bottom: 3px;cursor:pointer;" tabindex="4"></span>
+                    <div ng-show="showDepartDatePicker" style="background-color: #fff;margin-top: -5px;margin-left: -19px;width:45%;float:left;position: absolute" ng-model="editEmployee.departure_date">
+                        <datepicker show-weeks="showWeeks"></datepicker>
+                    </div>
+                    <span style="margin:10px;">Team Lead</span>
+                    <div class="edit-dropdown">
+                        <input type="text" ng-model="edit_leadership.leader.full_name" placeholder="optional" typeahead-on-select="edit_leadership.leader=$item" typeahead="employee.full_name for employee in employees | filter:{full_name:$viewValue}:startsWith | orderBy:'full_name' | limitTo:8" typeahead-editable="false" class="view-value-input" tabindex="6"/>
+                    </div>
+                    <span ng-if="customer.show_coaches" style="margin:10px;">Coach</span>
+                    <div ng-if="customer.show_coaches" class="edit-dropdown" style="margin: 10px;">
+                        <input type="text" ng-model="editEmployee.coach.full_name" placeholder="optional" typeahead-on-select="editEmployee.coach=$item" typeahead="employee.full_name for employee in employees | filter:{full_name:$viewValue}:startsWith | orderBy:'full_name' | limitTo:8" typeahead-editable="false" class="view-value-input" tabindex="8"/>
+                    </div>
+                </div>
+            </div>
+            <div style="clear:both;"></div>
+            <div style="margin: 40px 10px 10px 10px;text-align:center;">
+                <button class='ng-modal-button' ng-click='save();hideModal()' ng-disabled="uploadForm.first_name.$invalid || uploadForm.last_name.$invalid || uploadForm.email.$invalid" tabindex="10">Save</button>
+                <button class='ng-modal-button' ng-click='scrub();hideModal()' tabindex="11">Cancel</button>
+            </div>
+        </div>
+    </form>
+<!-- employee popups start -->
+</div>
