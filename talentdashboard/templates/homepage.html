@@ -22,8 +22,8 @@
         </div>    
     </section>
     <section class="engagement">
-        <h2>Understand Your Talent Portfolio</h2>
-        <p>Quickly evaluate your total workforce and discover your best performaers</p>
+        <h2>A Simple Way to Build Great Teams</h2>
+        <p>Quickly build project teams and evaluate your workforce.</p>
         <img src="{% static 'images/screenshot.png' %}" alt="Screenshot" class="screenshot" />
     </section> 
     <section class="features">   
@@ -51,46 +51,4 @@
             </div>
         </div>
     </div>
-
 {% endblock content %}
-
-{% block javascript %}
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <script src="http://engagexl.com/assets/js/jquery.easing.1.3.js"></script>
-    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
-
-<script type="text/javascript">
-
-$(function() {
-    setupFormValidation();
-
-
-
-});
-
-
-var setupFormValidation = function()
-{
-    //form validation rules
-    $(".request-form").validate({
-        rules: {
-            name: "required",
-            email: {
-                required: true,
-                email: true
-            },
-            company: "required",
-        },
-        messages: {
-            name: "Please enter your name",
-            email: "Please enter a valid email address",
-            company: "Please enter your company name"
-        },
-        submitHandler: function(form) {
-            form.submit();
-        }
-    });
-}
-</script>
-
-{% endblock javascript %}

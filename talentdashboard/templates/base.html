@@ -1,40 +1,47 @@
 {% load staticfiles %}
 {% load compress %}
+
+<!DOCTYPE html>
 <html>
-<head>
-    <title>{% block title %}{% endblock title %}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="{% static 'css/favicon.ico' %}" rel="shortcut icon" type="image/x-icon" />
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600' rel='stylesheet' type='text/css'>
-    
-    {% block css %}{% endblock css %}
+    <head>
+        <title>{% block title %}{% endblock title %}</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="{% static 'css/favicon.ico' %}" rel="shortcut icon" type="image/x-icon" />
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600' rel='stylesheet' type='text/css'>
+        <link href="//fonts.googleapis.com/css?family=Raleway:100,200,300,400,500,600,700,800,900" rel="stylesheet" type="text/css">
+        
+        {% block css %}{% endblock css %}
 
-    {% compress css %}
-        <link href="{% static 'css/scoutmap/style.less' %}" rel="stylesheet" type="text/less">
-    {% endcompress %}
+        {% compress css %}
+            <link href="{% static 'css/scoutmap/style.less' %}" rel="stylesheet" type="text/less">
+        {% endcompress %}
 
-    {% if DEBUG %}
-    <script>
-        less = {
-            env: 'development', // "development" or "production"
-            async: false,
-            fileAsync: false,
-            poll: 1000,
-            dumpLineNumbers: 'comments',
-            relativeUrls: false
-        };
-    </script>
-    <script src="{% static 'javascript/less.js' %}"></script>
-    {% endif %}
-</head>
-<body>
-    {% block navigation %}{% endblock navigation %}
-    {% block content %}{% endblock content%}
-
-    <div class="javascripts">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-        <script src="{% static 'javascript/analytics.js' %}"></script>
-        {% block javascript %}{% endblock javascript%}
-    </div>    
-</body>
+        {% if DEBUG %}
+        <script>
+            less = {
+                env: 'development', // "development" or "production"
+                async: false,
+                fileAsync: false,
+                poll: 1000,
+                dumpLineNumbers: 'comments',
+                relativeUrls: false
+            };
+        </script>
+        <script src="{% static 'javascript/less.js' %}"></script>
+        {% endif %}
+    </head>
+    <body>
+        {% block navigation %}{% endblock navigation %}
+        {% block content %}{% endblock content%}
+        <div class="javascripts">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+            <script src="http://engagexl.com/assets/js/jquery.easing.1.3.js"></script>
+            <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
+            <script src="{% static 'javascript/main.js' %}"></script> 
+            <script src="{% static 'javascript/analytics.js' %}"></script>           
+            {% block javascript %}{% endblock javascript%}
+        </div>    
+    </body>
 </html>
