@@ -18,7 +18,6 @@ $(document).ready(function() {
 
     //Update summary when editing company name
     $("#companyName").on("keyup", function(event) {
-        updateSlider();
         updateSummary();
     });
 

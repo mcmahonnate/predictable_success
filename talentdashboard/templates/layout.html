@@ -1,0 +1,59 @@
+{% load staticfiles %}
+{% load compress %}
+<html>
+<head>
+    <title>{% block title %}{% endblock title %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="{% static 'css/favicon.ico' %}" rel="shortcut icon" type="image/x-icon" />
+
+    {% block css %}{% endblock css %}
+    
+    {% compress css %}
+        <link href="{% static 'css/scoutmap/style.less' %}" rel="stylesheet" type="text/less">
+    {% endcompress %}
+
+    
+
+    {% if DEBUG %}
+    <script>
+        less = {
+            env: "development",
+            async: false,
+            fileAsync: false,
+            poll: 1000,
+            functions: {},
+            dumpLineNumbers: "comments",
+            relativeUrls: false
+            //rootpath: ":/a.com/"
+        };
+    </script>
+    <script src="{% static 'javascript/less.js' %}"></script>
+    {% endif %}
+
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-45570095-1', 'talent-dashboard.herokuapp.com');
+        if (window.location.host != "localhost:8000" && window.location.host != "0.0.0.0:8000") {
+            ga('send', 'pageview');
+        } else {
+            console.log('not tracked ' + window.location.pathname)
+        }
+    </script>
+</head>
+<body>
+    <a href="mailto:scoutmap@fool.com" class="questions-link">Questions or Comment?</a>
+    <img src="{% static 'images/logo.png' %}" alt="ScoutMap" class="logo" />
+    {% block content %}{% endblock content%}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.8.1/jquery.validate.min.js" type="text/javascript" ></script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="https://checkout.stripe.com/v2/checkout.js"></script>
+    {% block javascript %}{% endblock javascript%}
+</body>
+</html>
+

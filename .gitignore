@@ -10,15 +10,14 @@ dist
 build
 eggs
 parts
-# bin need this for Heroku
+bin
 var
 sdist
 develop-eggs
 .installed.cfg
 venv
-.venv
 .pycharm-bash
-#node_modules
+node_modules
 
 lib64
 __pycache__

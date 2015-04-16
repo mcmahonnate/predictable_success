@@ -14,23 +14,6 @@ ADMINS = (
     ('Doug Dosberg', 'ddosberg@fool.com'),
 )
 
-
-# Stripes API key
-STRIPE_KEY = 'pk_test_UNXbpUo3QIZyN5IYMfPj38O7'
-MONTHLY_PLAN_PRICE = '5'
-YEARLY_PLAN_PRICE = '60'
-
-
-REQUIRED_GROUPS = (
-    'AllAccess',
-    'CoachAccess',
-    'Daily Digest Subscribers',
-    'Edit Employee',
-    'TeamLeadAccess',
-    'View Comments',
-)
-
-
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 MANAGERS = ADMINS
@@ -77,9 +60,7 @@ MEDIA_URL = '/media/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'assets')
-STATIC_URL = '/static/'
-COMPRESS_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static')
+STATIC_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'staticfiles')
 
 
 # URL prefix for static files.
@@ -90,7 +71,7 @@ AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
 AWS_QUERYSTRING_AUTH = False
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 S3_URL = 'http://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
-
+STATIC_URL = '/static/'
 
 
 # Additional locations of static files
@@ -104,15 +85,16 @@ STATICFILES_DIRS = (
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
-    #'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
 )
 
-# STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 COMPRESS_ENABLED=True
-COMPRESS_OFFLINE=True
+if not os.environ.has_key('COMPRESS_OFFLINE'):
+    COMPRESS_OFFLINE=True #this is so that compress_offline is set to true during deployment to Heroku
 
 COMPRESS_PRECOMPILERS = (
     ('text/less','lessc {infile} {outfile}'),
@@ -160,7 +142,7 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-SETTINGS_IN_CONTEXT = ['DEBUG', 'MONTHLY_PLAN_PRICE']
+SETTINGS_IN_CONTEXT = ['DEBUG']
 
 
 ROOT_URLCONF = 'talentdashboard.urls'

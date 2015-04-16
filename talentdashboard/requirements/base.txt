@@ -1,7 +1,4 @@
---allow-all-external
-#--allow-unverified pil
 Django==1.7.4
-South==0.8.2
 argparse==1.2.1
 dj-database-url==0.2.2
 dj-static==0.0.6
@@ -15,17 +12,9 @@ six==1.4.1
 static==0.4
 wsgiref==0.1.2
 pillow==2.7.0
-pytz==2014.10
 pylibmc==1.2.3
+pytz==2014.10
 django-pylibmc-sasl==0.2.4
 django-storages==1.1.8
 boto==2.27.0
-django-extensions
 django-celery==3.1.16
-django-tenant-schemas==1.5.2
-lesscss==0.1.4
-django_compressor==1.4
-django-static-precompiler==0.9
-django-stripe-payments==2.0.0
-whitenoise==1.0.6
-
