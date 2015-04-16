@@ -18,17 +18,24 @@
             <!-- Todo's -->
             <div class="panel clock loaded" ng-if="currentUser.can_view_comments" ng-init="showToDo=true">
                 <div ng-controller="MyToDoListCtrl" class="widget-inner large-screen">
+                    
                     <h2 class="panel-title">My To Do's</h2> 
 
-
-                    <ul class="nav nav-tabs">
-                        <li role="presentation" ng-class="{'active': showToDo}"><a href="javascript:void(0);" ng-click="showToDo=true;showDone=false">To Do</a></li>
-                        <li role="presentation" ng-class="{'active': showDone}"><a href="javascript:void(0);" ng-click="showToDo=false;showDone=true">Done</a></li>
-                    </ul>
+                    <div ng-if="todos.length > 0">
+                        <ul class="nav nav-tabs">
+                            <li role="presentation" ng-class="{'active': showToDo}"><a href="javascript:void(0);" ng-click="showToDo=true;showDone=false">To Do</a></li>
+                            <li role="presentation" ng-class="{'active': showDone}"><a href="javascript:void(0);" ng-click="showToDo=false;showDone=true">Done</a></li>
+                        </ul>
+                    </div>
 
                 
-                    <section ng-show="showToDo" class="widget-body text-widget" style="padding:12px;margin-top:20px;">
-                        <span ng-show="todos.length==0">You currently don't have any tasks.</span>
+                    <section ng-show="showToDo" class="todos">
+                        <div ng-show="todos.length==0" class="todos-empty">
+
+                            <i class="fa fa-check-square-o todos-empty-icon"></i>
+                            <p>You currently don't have any tasks. Add Todos on employee profile pages.</p>
+                        </div>
+
                         <div ng-if="todos.length > 0">
                             <div ng-repeat="todo in todos" ng-controller="EmployeeToDoCtrl" ng-init="currentToDo=todo">
                                 <input show="{{scrollIntoView}}" ng-scroll-into-view type="checkbox" ng-click="saveToDo(todo)" ng-model="todo.completed" style="padding: 5px;float: left;">
@@ -52,6 +59,34 @@
                                                 <a class="assignee-select-link" ng-click="assigneeMenu.show=false;todo.assigned_to=assignee;saveToDo()" style="cursor: pointer;">{{assignee.full_name}}</a>
                                             </li>
                                         </ul>
+                        <div style="display: block; width: 500px;margin-left:15px;">
+                            <div ng-show="showCommentEdit" style="position:relative">
+                                <textarea ng-model="comment.content" style="position: relative; width: 515px; height: 132px;background-color:#2a2a2a;color:#eee;resize:vertical;font-size: 14px;margin-top: 5px;">
+                                </textarea>
+                                <div style="width:480px;height:25px;margin-top:8px;">
+                                    <label class="radio " style="position: relative;padding-left: 0px">
+                                    Share with:
+                                    </label>
+                                    <label class="radio " style="position: relative">
+                                        <input class="radio custom-radio" ng-model="comment.visibility" name="visibilitOptions{{$index}}" value="3" type="radio" style="cursor: pointer;">
+                                        <span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
+                                        Everyone
+                                    </label>
+                                    <label ng-show="showPeopleTeamVisibility" class="radio" style="position: relative">
+                                        <input class="radio custom-radio" ng-model="comment.visibility" name="visibilitOptions{{$index}}" value="2" type="radio" style="cursor: pointer;">
+                                        <span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
+                                        Hide from Manager
+                                    </label>
+                                    <label class="radio" style="position: relative">
+                                        <input class="radio custom-radio" ng-model="comment.visibility" name="visibilitOptions{{$index}}" value="1" type="radio" style="cursor: pointer;">
+                                        <span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
+                                        Just Me
+                                    </label>
+                                </div>
+                                <happiness show="true" happy="comment.happiness"></happiness>
+                                <div id="editActions" style="right:2px;bottom:-33px;">
+                                    <button class="button small blue" ng-disabled="!comment.content" ng-click="saveComment(comment);showCommentEdit=false">Save</button>
+                                    <button class="button small orange" ng-click="cancelEditComment(comment);showCommentEdit=false">Cancel</button>
                                 </div>
                             </div>
                         </div>

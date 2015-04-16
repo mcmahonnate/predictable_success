@@ -444,6 +444,7 @@ class EmployeeEngagement(APIView):
         employee = Employee.objects.get(id=pk)
         if employee is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
+        visibility = int(request.DATA["_visibility"])
         assessed_by_id = request.DATA["_assessed_by_id"]
         assessed_by = Employee.objects.get(id=assessed_by_id)
         if assessed_by is None:
@@ -455,7 +456,6 @@ class EmployeeEngagement(APIView):
         happy.assessment = int(assessment)
         if "_content" in request.DATA:
             content = request.DATA["_content"]
-            visibility = 3
             comment = employee.comments.add_comment(content, visibility, request.user)
             happy.comment = comment
         happy.save()
@@ -465,9 +465,20 @@ class EmployeeEngagement(APIView):
     def put(self, request, pk, format=None):
         assessment_id = request.DATA["_assessment_id"]
         assessment = request.DATA["_assessment"]
+        visibility = int(request.DATA["_visibility"])
         happy = Happiness.objects.get(id=assessment_id)
+        employee = happy.employee
         if happy is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
+        if "_content" in request.DATA:
+            content = request.DATA["_content"]
+            if happy.comment is None:
+                comment = employee.comments.add_comment(content, visibility, request.user)
+                happy.comment = comment
+            else:
+                happy.comment.visibility = visibility
+                happy.comment.content = content
+            happy.comment.save()
         happy.assessment = int(assessment)
         happy.save()
         serializer = HappinessSerializer(happy, many=False, context={'request': request})
