@@ -1281,7 +1281,7 @@ angular.module('tdb.controllers', [])
     $scope.format = $scope.formats[0];
 }])
 
-.controller('DiscussionOverviewCtrl', ['$scope', '$rootScope', '$location', '$filter', '$routeParams', '$window', 'EmployeeComments', 'Employee', 'Comment', 'SubComments', 'User', 'analytics', function($scope, $rootScope, $location, $filter, $routeParams, $window, EmployeeComments, Employee, Comment, SubComments, User, analytics) {
+.controller('DiscussionOverviewCtrl', ['$scope', '$rootScope', '$location', '$filter', '$routeParams', '$window', 'EmployeeComments', 'Employee', 'Engagement', 'Comment', 'SubComments', 'User', 'analytics', function($scope, $rootScope, $location, $filter, $routeParams, $window, EmployeeComments, Employee, Engagement, Comment, SubComments, User, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     $scope.showPeopleTeamVisibility = false;
 
@@ -1330,12 +1330,22 @@ angular.module('tdb.controllers', [])
 
     $scope.saveComment = function(comment) {
         var index = $scope.comments.indexOf(comment);
-        var data = {id: comment.id, _content: comment.content, _visibility: comment.visibility};
-        Comment.update(data, function() {
-            $scope.originalComments[index].content = comment.content;
-            $scope.originalComments[index].visibility = comment.visibility;
-        });
+        if (comment.happiness.assessment>0) {
+            var data = {_assessment_id:comment.happiness.id,_assessed_by_id: $rootScope.currentUser.employee.id, _assessment: comment.happiness.assessment, _content:comment.content,_visibility: comment.visibility};
+            Engagement.update(data, function(response) {
+                $scope.originalComments[index].content = comment.content;
+                $scope.originalComments[index].visibility = comment.visibility;
+                $scope.originalComments[index].happiness = comment.happiness;
+            });
+        } else {
+            var data = {id: comment.id, _content: comment.content, _visibility: comment.visibility};
+            Comment.update(data, function() {
+                $scope.originalComments[index].content = comment.content;
+                $scope.originalComments[index].visibility = comment.visibility;
+            });
+        };
     }
+
 
     $scope.cancelEditComment = function(comment) {
         var index = $scope.comments.indexOf(comment);
