@@ -4,20 +4,16 @@
 
 {% block content %}{% endblock content%}
 
-
 {% block css %}
-    <link href="{% static 'css/favicon.ico' %}" rel="shortcut icon" type="image/x-icon" />
-    <link href="{% static 'css/snapshot.css' %}" media="screen" rel="stylesheet" type="text/css" />
-    <link href="{% static 'css/component.css' %}" media="screen" rel="stylesheet" type="text/css" />  
-    <link href="{% static 'bower_components/handsontable/dist/handsontable.full.min.css' %}" media="screen" rel="stylesheet" type="text/css" />
-    <link href="{% static 'lib/angular-carousel/angular-carousel.min.css' %}" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="{% static 'bower_components/angular-ui-notification/dist/angular-ui-notification.min.css' %}">
-    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
-    <link rel="stylesheet" type="text/less" href="{% static 'css/less/bootstrap.less' %}">
+    <link href="{% static 'css/scoutmap/app/snapshot.less' %}" rel="stylesheet" type="text/less" />
+    <link href="{% static 'css/scoutmap/app/component.less' %}" rel="stylesheet" type="text/less" />  
+    <link href="{% static 'css/scoutmap/app/confirmation.less' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/libs/handsontable.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/libs/angular-ui-notification.css' %}" rel="stylesheet"  type="text/css">
+    <link href="{% static 'css/libs/jquery-ui.css' %}" rel="stylesheet" type="text/css" />
 {% endblock css %}
 
 {% block javascript %}
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="//www.google.com/jsapi" type="text/javascript"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular-route.min.js"></script>

@@ -14,10 +14,12 @@ ADMINS = (
     ('Doug Dosberg', 'ddosberg@fool.com'),
 )
 
+
 # Stripes API key
 STRIPE_KEY = 'pk_test_UNXbpUo3QIZyN5IYMfPj38O7'
 MONTHLY_PLAN_PRICE = '5'
 YEARLY_PLAN_PRICE = '60'
+
 
 REQUIRED_GROUPS = (
     'AllAccess',
@@ -27,6 +29,7 @@ REQUIRED_GROUPS = (
     'TeamLeadAccess',
     'View Comments',
 )
+
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
@@ -76,7 +79,7 @@ MEDIA_URL = '/media/'
 # Example: "/var/www/example.com/static/"
 STATIC_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'assets')
 STATIC_URL = '/static/'
-#COMPRESS_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static')
+COMPRESS_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static')
 
 
 # URL prefix for static files.
@@ -106,13 +109,10 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+# STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
-COMPRESS_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'assets')
 COMPRESS_ENABLED=True
-if not 'COMPRESS_OFFLINE' in os.environ:
-#if not os.environ.has_key('COMPRESS_OFFLINE'):
-    COMPRESS_OFFLINE=True #this is so that compress_offline is set to true during deployment to Heroku
+COMPRESS_OFFLINE=True
 
 COMPRESS_PRECOMPILERS = (
     ('text/less','lessc {infile} {outfile}'),

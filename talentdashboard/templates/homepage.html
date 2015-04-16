@@ -1,5 +1,6 @@
 {% extends "layouts/blank.html" %}
 {% load staticfiles %}
+
 {% block title %}ScoutMap{% endblock title %}
 
 {% block content %}
@@ -11,7 +12,7 @@
 
         <div class="shaded">
             <button type="button" class="btn btn-lg btn-success btn-start" data-toggle="modal" data-target="#modal">
-              Request Invitation
+              Request a Demo
             </button>
             <blockquote>
                 <p>"We are the best place to work in America not because of perks, but because we built a performance culture using ScoutMap."</p>
@@ -26,7 +27,10 @@
         <p>Quickly build project teams and evaluate your workforce.</p>
         <img src="{% static 'images/screenshot.png' %}" alt="Screenshot" class="screenshot" />
     </section> 
-    <section class="features">   
+    <section class="features"> 
+        <h2>Know How You're Investing in Talent</h2>
+        <p>Better strategize by understanding how you're investing in talent</p>
+
     </section>    
 
     <div id="modal" class="modal modal-get-started fade">
@@ -52,3 +56,8 @@
         </div>
     </div>
 {% endblock content %}
+
+{% block javascript %}
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
+    <script src="{% static 'javascript/main.js' %}"></script> 
+{% endblock javascript %}

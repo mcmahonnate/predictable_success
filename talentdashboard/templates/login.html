@@ -7,7 +7,7 @@
         <form method="post" action="{% url 'django.contrib.auth.views.login' %}">
             {% csrf_token %}
 
-            <a href="{% url 'index' %}"><img class="logo" src="{% static 'images/logo-new.png' %}" /></a>
+            <a href="{% url 'index' %}"><img class="logo" src="{% static 'images/logo-dark.png' %}" /></a>
 
             {% if form.errors %}
                 <p>Your username and password didn't match. Please try again.</p>
