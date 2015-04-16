@@ -964,6 +964,23 @@ angular.module('tdb.directives', [])
   };
 }])
 
+.directive('happiness',  function() {
+  return {
+    restrict: 'E',
+    scope: {
+      show: '=show',
+      happy: '=happy'
+    },
+    replace: true, // Replace with the template below
+    link: function(scope, element, attrs) {
+        if (!scope.happy) {
+            scope.happy = {assessment: 0};
+        }
+    },
+    templateUrl: "/static/angular/partials/happiness-directive.html"
+  };
+})
+
 .directive('modalSendSurvey',  ['Engagement', function(Engagement) {
   return {
     restrict: 'E',
