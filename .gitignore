@@ -17,7 +17,6 @@ develop-eggs
 .installed.cfg
 venv
 .pycharm-bash
-node_modules
 
 lib64
 __pycache__
