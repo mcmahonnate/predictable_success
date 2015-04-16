@@ -10,6 +10,8 @@ DATABASE_ROUTERS = (
 CELERY_ALWAYS_EAGER = True
 DEBUG = False
 
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
+
 ADMINS = (
     ('Doug Dosberg', 'ddosberg@fool.com'),
 )
@@ -61,7 +63,7 @@ MEDIA_URL = '/media/'
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
 STATIC_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'staticfiles')
-
+STATIC_URL = '/static/'
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
@@ -92,12 +94,12 @@ STATICFILES_FINDERS = (
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
-COMPRESS_ENABLED=False
+COMPRESS_ENABLED=True
 if not os.environ.has_key('COMPRESS_OFFLINE'):
     COMPRESS_OFFLINE=True #this is so that compress_offline is set to true during deployment to Heroku
 
 COMPRESS_PRECOMPILERS = (
-    ('text/less','lessc {infile} {outfile}'),
+    ('text/less', '%s {infile} {outfile}' % (os.path.join(BASE_DIR, 'node_modules/less/bin/lessc'), )),
 )
 
 COMPRESS_JS_FILTERS = [

@@ -4,6 +4,8 @@ from .base import *
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+COMPRESS_ENABLED=False
+
 CELERY_ALWAYS_EAGER = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -13,6 +15,7 @@ EMAIL_PORT = 465
 EMAIL_HOST_USER = os.environ.get("EMAIL_ADDRESS", '')
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD", '')
 DEFAULT_FROM_EMAIL = 'Dash Team <' + EMAIL_HOST_USER + '>'
+
 
 LOGGING = {
     'version': 1,
