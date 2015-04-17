@@ -74,6 +74,7 @@ AWS_QUERYSTRING_AUTH = False
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 S3_URL = 'http://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
 COMPRESS_URL = STATIC_URL
+COMPRESS_ROOT = STATIC_ROOT
 
 
 # Additional locations of static files
@@ -109,7 +110,6 @@ COMPRESS_JS_FILTERS = [
 
 COMPRESS_CSS_HASHING_METHOD = 'content'
 
-COMPRESS_ROOT = 'staticfiles'
 
 
 # Make this unique, and don't share it with anybody.
