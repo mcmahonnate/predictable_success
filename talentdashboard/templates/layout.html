@@ -1,5 +1,6 @@
 {% load staticfiles %}
 {% load compress %}
+{% compress css %}
 <html>
 <head>
     <title>{% block title %}{% endblock title %}</title>
@@ -56,4 +57,4 @@
     {% block javascript %}{% endblock javascript%}
 </body>
 </html>
-
+{% endcompress %}
