@@ -77,6 +77,9 @@ COMPRESS_URL = STATIC_URL
 COMPRESS_ROOT = STATIC_ROOT
 
 
+STRIPE_KEY = 'pk_test_UNXbpUo3QIZyN5IYMfPj38O7'
+
+
 # Additional locations of static files
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
