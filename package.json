@@ -1,9 +1,10 @@
 {
-    "private": true,
-    "dependencies": {
-        "bower": "*"
-    },
-    "scripts": {
-        "postinstall": "./node_modules/bower/bin/bower install"
-    }
+  "private": true,
+  "dependencies": {
+    "bower": "*",
+    "less": "^2.5.0"
+  },
+  "scripts": {
+    "postinstall": "./node_modules/bower/bin/bower install"
+  }
 }

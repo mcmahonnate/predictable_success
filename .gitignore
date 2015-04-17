@@ -12,7 +12,7 @@ eggs
 var
 parts
 sdist
-node_modules
+node_modules/
 develop-eggs
 .installed.cfg
 .venv
