@@ -74,6 +74,7 @@ AWS_QUERYSTRING_AUTH = False
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 S3_URL = 'http://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
 STATIC_URL = '/static/'
+COMPRESS_URL = '/staticfiles/'
 
 
 # Additional locations of static files
@@ -95,9 +96,9 @@ STATICFILES_FINDERS = (
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
-COMPRESS_ENABLED=True
-if not os.environ.has_key('COMPRESS_OFFLINE'):
-    COMPRESS_OFFLINE=True #this is so that compress_offline is set to true during deployment to Heroku
+
+COMPRESS_ENABLED=os.environ.get("COMPRESS_ENABLED", False)
+COMPRESS_OFFLINE=os.environ.get("COMPRESS_OFFLINE", False)
 
 COMPRESS_PRECOMPILERS = (
     ('text/less', '%s {infile} {outfile}' % (os.path.join(BASE_DIR, 'node_modules/less/bin/lessc'), )),
