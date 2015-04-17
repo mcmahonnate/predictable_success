@@ -16,7 +16,7 @@ class Happiness(models.Model):
     assessed_date = models.DateField(auto_now_add = True)
     employee = models.ForeignKey(Employee, related_name='happys')
     assessment = models.IntegerField(choices=HAPPINESS_CHOICES)
-    comment = models.OneToOneField(Comment, null=True, blank=True, related_name='happiness')
+    comment = models.ForeignKey(Comment, null=True, blank=True)
 
     def assessment_verbose(self):
         return get_display(self.assessment, HAPPINESS_CHOICES)

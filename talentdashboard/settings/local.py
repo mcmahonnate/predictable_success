@@ -4,11 +4,7 @@ from .base import *
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-COMPRESS_ENABLED = False
-COMPRESS_OFFLINE = False
-COMPRESS_PRECOMPILERS = ()
-
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+COMPRESS_ENABLED=False
 
 CELERY_ALWAYS_EAGER = True
 
@@ -19,6 +15,7 @@ EMAIL_PORT = 465
 EMAIL_HOST_USER = os.environ.get("EMAIL_ADDRESS", '')
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD", '')
 DEFAULT_FROM_EMAIL = 'Dash Team <' + EMAIL_HOST_USER + '>'
+
 
 LOGGING = {
     'version': 1,

@@ -20,6 +20,7 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
         model = Team
         fields = ('id', 'name', 'leader')
 
+
 class MinimalEmployeeSerializer(serializers.HyperlinkedModelSerializer):
     avatar = serializers.SerializerMethodField()
     avatar_small = serializers.SerializerMethodField()
@@ -39,6 +40,7 @@ class MinimalEmployeeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Employee
         fields = ('id', 'full_name', 'first_name', 'display', 'avatar', 'avatar_small')
+
 
 class PvPEmployeeSerializer(serializers.HyperlinkedModelSerializer):
     team = TeamSerializer()
@@ -320,7 +322,7 @@ class KPIPerformanceSerializer(serializers.ModelSerializer):
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
-        fields = ('id', 'name', 'domain_url', 'show_kolbe', 'show_vops', 'show_mbti', 'show_coaches', 'show_timeline', 'survey_email_subject', 'survey_email_body')
+        fields = ('id', 'name', 'domain_url', 'show_kolbe', 'show_vops', 'show_mbti', 'show_coaches', 'show_timeline')
 
 
 class SubCommentSerializer(serializers.HyperlinkedModelSerializer):
@@ -330,36 +332,15 @@ class SubCommentSerializer(serializers.HyperlinkedModelSerializer):
         model = Comment
         fields = ('id', 'content', 'owner', 'object_id',  'visibility', 'created_date', 'modified_date')
 
-class MinimalHappinessSerializer(serializers.HyperlinkedModelSerializer):
-    assessed_by = MinimalEmployeeSerializer()
-    employee = MinimalEmployeeSerializer()
-
-    def get_assessment_verbose(self, obj):
-        return obj.assessment_verbose
-
-    class Meta:
-        model = Happiness
-        fields = ('id', 'employee', 'assessment', 'assessment_verbose', 'assessed_by', 'assessed_date')
 
 class EmployeeCommentSerializer(serializers.HyperlinkedModelSerializer):
     owner = UserSerializer()
     associated_object = MinimalEmployeeSerializer()
-    happiness = MinimalHappinessSerializer()
+
     class Meta:
         model = Comment
-        fields = ('id', 'content', 'owner', 'object_id', 'visibility', 'created_date', 'modified_date', 'associated_object', 'happiness')
+        fields = ('id', 'content', 'owner', 'object_id', 'visibility', 'created_date', 'modified_date', 'associated_object')
 
-class HappinessSerializer(serializers.HyperlinkedModelSerializer):
-    assessed_by = MinimalEmployeeSerializer()
-    employee = MinimalEmployeeSerializer()
-    comment = EmployeeCommentSerializer()
-
-    def get_assessment_verbose(self, obj):
-        return obj.assessment_verbose
-
-    class Meta:
-        model = Happiness
-        fields = ('id', 'employee', 'assessment', 'assessment_verbose', 'assessed_by', 'assessed_date', 'comment')
 
 class TeamCommentSerializer(serializers.HyperlinkedModelSerializer):
     owner = UserSerializer()
@@ -388,6 +369,19 @@ class SurveyUrlSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = SurveyUrl
         fields = ('id', 'sent_from', 'sent_to', 'url', 'active', 'completed', 'sent_date')
+
+
+class HappinessSerializer(serializers.HyperlinkedModelSerializer):
+    assessed_by = MinimalEmployeeSerializer()
+    employee = MinimalEmployeeSerializer()
+    comment = EmployeeCommentSerializer()
+
+    def get_assessment_verbose(self, obj):
+        return obj.assessment_verbose
+
+    class Meta:
+        model = Happiness
+        fields = ('id', 'employee', 'assessment', 'assessment_verbose', 'assessed_by', 'assessed_date', 'comment')
 
 
 class AssessmentTypeSerializer(serializers.ModelSerializer):

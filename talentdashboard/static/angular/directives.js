@@ -200,31 +200,16 @@ angular.module('tdb.directives', [])
                 var wrongrole = scope.talentCategoryReport.categories[5];
                 var needschange = scope.talentCategoryReport.categories[6];
 
-                var data = new Array(['PvP', 'Employees', 'Talent Category'],['Top', top, 1],['Strong', strong, 2],['Good', good, 3],['Low Potential', lackspotential, 4],['Low Performance', wrongrole, 5],['Poor', needschange, 6]);
+                var data = new Array(['PvP', 'Employees', 'Talent Category'],['Top', top, 1],['Strong', strong, 2],['Good', good, 3],['Low Pot', lackspotential, 4],['Low Perf', wrongrole, 5],['Poor', needschange, 6]);
                 var table = new google.visualization.arrayToDataTable(data);
                 var options;
-                var value = value + 'hi';
                 if (attrs.size=='small'){
                     options = {
                         pieSliceText: 'label',
-                        pieSliceTextStyle: {fontSize:18},
-                        backgroundColor: '#fff',
-                        tooltip:{
-                            text:'value',
-                            isHtml: true
-                        },
-                        pieSliceBorderColor: '#efefef',
-                        tooltipFontSize:'24',
-                        legend:'none',
-                        width: '100%',
-                        height: '100%',
-                        chartArea: {
-                            left: "0",
-                            top: "0",
-                            height: "100%",
-                            width: "100%"
-                        },
-                        pieHole: 0.4,
+                        backgroundColor: '#2a2a2a',
+                        tooltip:{text:'value'},
+                        legend:{textStyle:{color: 'white'}},
+                        chartArea:{left:0,top:4,height: 205,width: 620},
                         colors: TalentCategoryColors.colors
                     };                    
                 } else {
@@ -232,23 +217,13 @@ angular.module('tdb.directives', [])
                         pieSliceText: 'label',
                         backgroundColor: '#2a2a2a',
                         tooltip:{text:'value'},
-                        width: '100%',
-                        height: '100%',
                         legend:{textStyle:{color: 'white'}},
-                        chartArea:{left:0,top:0,width: 620},
+                        chartArea:{left:40,top:40,width: 620},
                         colors: TalentCategoryColors.colors
                     };
                 }
 
-
                 var chart = new google.visualization.PieChart(element[0]);
-
-                google.visualization.events.addListener(chart, 'onmouseover', function(hover){
-                    if(hover){
-                        var total = $('.google-visualization-tooltip-item:eq(1)').text(); // remove the other info
-                        $('.google-visualization-tooltip-item:eq(1)').html('<span class="total-employees">'+ total + ' Employees</span>');
-                    }
-                });
 
                 google.visualization.events.addListener(chart, 'select', function(){
                     var selectedItem = chart.getSelection()[0];
@@ -988,23 +963,6 @@ angular.module('tdb.directives', [])
     templateUrl: "/static/angular/partials/modal-happy.html"
   };
 }])
-
-.directive('happiness',  function() {
-  return {
-    restrict: 'E',
-    scope: {
-      show: '=show',
-      happy: '=happy'
-    },
-    replace: true, // Replace with the template below
-    link: function(scope, element, attrs) {
-        if (!scope.happy) {
-            scope.happy = {assessment: 0};
-        }
-    },
-    templateUrl: "/static/angular/partials/happiness-directive.html"
-  };
-})
 
 .directive('modalSendSurvey',  ['Engagement', function(Engagement) {
   return {

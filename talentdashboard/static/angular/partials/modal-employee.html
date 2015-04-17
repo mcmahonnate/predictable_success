@@ -31,7 +31,7 @@
                     <span style="color:red;" ng-show="uploadForm.email.$dirty && uploadForm.email.$invalid">
                         <span ng-show="uploadForm.email.$error.required">*Email is required.</span>
                     </span>
-                    <input type="email" name="email" ng-model="editEmployee.email" placeholder="required" class="view-value-input" required tabindex="7">
+                    <input type="email" name="email" ng-model="editEmployee.email" placeholder="required" class="view-value-input" required tabindex="4">
                 </div>
                 <div style="margin-top: 10px;width:35%;float:left;">
                     <span style="margin:10px;">Last Name</span>
@@ -41,7 +41,7 @@
                     <input type="text" name="last_name" ng-model="editEmployee.last_name" placeholder="required" class="view-value-input" required tabindex="2">
                     <span style="margin:10px;">Departure Date</span>
                     <input type="text" value="{{editEmployee.departure_date | date:'MM/dd/yyyy'}}" style="display: inline-block;" placeholder="optional" class="view-value-input" ng-disabled="true"/>
-                    <span ng-click="toggleDepartDatePicker();" class="glyphicon-regular glyphicon-calendar" style="margin-left: -42px;font-size: 18px;height: 18px;padding-bottom: 3px;cursor:pointer;" tabindex="4"></span>
+                    <span ng-click="toggleDepartDatePicker();" class="glyphicon-regular glyphicon-calendar" style="margin-left: -42px;font-size: 18px;height: 18px;padding-bottom: 3px;cursor:pointer;" tabindex="7"></span>
                     <div ng-show="showDepartDatePicker" style="background-color: #fff;margin-top: -5px;margin-left: -19px;width:45%;float:left;position: absolute" ng-model="editEmployee.departure_date">
                         <datepicker show-weeks="showWeeks"></datepicker>
                     </div>
