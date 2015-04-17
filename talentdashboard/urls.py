@@ -6,7 +6,7 @@ from django.contrib.auth.views import password_reset, password_reset_confirm, pa
 from views.views import *
 from forms import *
 from rest_framework import routers
-from views.payment import ChargeView
+from views.payment import ChargeView, PaymentView
 
 router = routers.DefaultRouter()
 router.register(r'api/v1/teams', TeamViewSet)
@@ -22,7 +22,7 @@ urlpatterns = patterns('',
     url(r'^logout/$', logout,{'next_page': '/account/login/'}),
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^account/payment/?$',TemplateView.as_view(template_name="payment.html"), name='payment'),
+    url(r'^account/payment/?$', PaymentView.as_view(), name='payment'),
     url(r'^account/thanks/?$',ChargeView.as_view(), name='charge'),
     url(r'^account/login/?$',login,{'template_name':'login.html', 'authentication_form':CustomAuthenticationForm}, name='login'),
     url(r'^account/password_reset/done/$', password_reset_done, {'template_name': 'password_reset_done.html'}),
