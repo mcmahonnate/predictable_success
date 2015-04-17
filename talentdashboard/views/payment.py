@@ -26,10 +26,7 @@ class ChargeView(TemplateView):
         #return render_to_response(self.success_url, {}, context_instance=RequestContext(request))
 
     def post(self, request, *args, **kwargs):
-        stripe_test_api_key = "sk_test_4seBLkeRNSVS4NAcRsTQb1MC"
-        stripe_live_api_key = "sk_test_4seBLkeRNSVS4NAcRsTQb1MC"
-
-        stripe.api_key = stripe_test_api_key
+        stripe.api_key = settings.STRIPE_KEY
         token = request.POST.get('stripeToken', '')
         email = request.POST.get('stripeEmail', '')
         employees = request.POST.get('employees', '')
