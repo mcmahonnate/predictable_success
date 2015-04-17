@@ -110,6 +110,8 @@ COMPRESS_JS_FILTERS = [
 
 COMPRESS_CSS_HASHING_METHOD = 'content'
 
+COMPRESS_URL = '/staticfiles/'
+
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '^n2)5q^gdc%5du_tivgasukok(2jx8olj!_y&qvh(l7%48hh@1'
