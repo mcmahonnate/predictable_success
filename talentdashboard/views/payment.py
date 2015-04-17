@@ -10,7 +10,6 @@ class PaymentView(TemplateView):
 
    def get(self, request, **kwargs):
        return render_to_response(self.template, {
-           'stripe_key': settings.STRIPE_KEY,
            'monthly_price': settings.MONTHLY_PLAN_PRICE,
            'yearly_price': settings.YEARLY_PLAN_PRICE
        }, context_instance=RequestContext(request))
