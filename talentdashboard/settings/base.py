@@ -72,6 +72,7 @@ AWS_QUERYSTRING_AUTH = False
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 S3_URL = 'http://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
 STATIC_URL = '/static/'
+COMPRESS_URL = '/staticfiles/'
 
 
 # Additional locations of static files
