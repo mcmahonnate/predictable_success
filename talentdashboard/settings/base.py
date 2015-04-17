@@ -110,7 +110,7 @@ COMPRESS_JS_FILTERS = [
 
 COMPRESS_CSS_HASHING_METHOD = 'content'
 
-COMPRESS_URL = '/staticfiles/'
+COMPRESS_ROOT = 'staticfiles'
 
 
 # Make this unique, and don't share it with anybody.
