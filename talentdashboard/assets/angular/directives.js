@@ -203,7 +203,6 @@ angular.module('tdb.directives', [])
                 var data = new Array(['PvP', 'Employees', 'Talent Category'],['Top', top, 1],['Strong', strong, 2],['Good', good, 3],['Low Potential', lackspotential, 4],['Low Performance', wrongrole, 5],['Poor', needschange, 6]);
                 var table = new google.visualization.arrayToDataTable(data);
                 var options;
-                var value = value + 'hi';
                 if (attrs.size=='small'){
                     options = {
                         pieSliceText: 'label',
@@ -268,6 +267,10 @@ angular.module('tdb.directives', [])
                 });
 
                 chart.draw(table, options);
+
+                $(window).resize(function(){
+                    chart.draw(table, options)
+                });
             }
         }, true);
     };

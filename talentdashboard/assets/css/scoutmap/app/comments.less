@@ -34,22 +34,25 @@
 		}		
 	}
 
-	.comment {
+	.comment-item {
 		display: block; 
 		margin-left:35px; 
-		padding-left:10px;
+		padding-left:25px;
 		min-width: 80%;
 		min-height: 28px;
 
 		.comment-title {
 			display: block; 
-			padding-left:10px;
 			min-width: 90%;
 			height: 22px;
 		}
 		.comment-title-employee-name {
-			cursor: pointer;
-			color: #8b8b8b;
+		  color: #1a7f7e;
+		  font-weight: bold;
+		}
+
+		.comment-copy {
+  			margin: 15px 0;
 		}
 
 
@@ -58,5 +61,37 @@
 			background: #fff;
 		}
 	}
+
+	.comment-replies {
+		margin: 0 0 0 60px;
+		
+
+		.comment-reply {
+			margin-bottom: 5px;
+			padding: 10px;
+			background-color: #efefef;
+		}
+		.comment-reply-avatar-container {
+			display: block; 
+			float: left; 
+			width: 48px;
+
+			.comment-reply-avatar {
+				display: inline-block; 
+				margin-left: auto; 
+				margin-right: auto; 
+				height: 48px;
+				vertical-align:text-top;
+			}
+		}
+		.comment-reply-name {
+		  	color: #1a7f7e;
+		  	font-weight: bold;			
+		}
+		.comment-reply-copy {
+			margin-left: 60px;
+		}
+	}
+
 
 }
