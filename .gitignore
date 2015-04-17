@@ -9,13 +9,13 @@
 dist
 build
 eggs
-parts
-bin
 var
+parts
 sdist
+node_modules
 develop-eggs
 .installed.cfg
-venv
+.venv
 .pycharm-bash
 
 lib64
