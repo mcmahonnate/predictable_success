@@ -93,8 +93,7 @@ STATICFILES_FINDERS = (
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 COMPRESS_ENABLED=os.environ.get("COMPRESS_ENABLED", False)
-if not os.environ.has_key('COMPRESS_OFFLINE'):
-    COMPRESS_OFFLINE=True #this is so that compress_offline is set to true during deployment to Heroku
+COMPRESS_OFFLINE=os.environ.get("COMPRESS_OFFLINE", False)
 
 COMPRESS_PRECOMPILERS = (
     ('text/less','lessc {infile} {outfile}'),
