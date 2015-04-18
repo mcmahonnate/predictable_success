@@ -56,14 +56,16 @@
                             <label ng-show="showPeopleTeamVisibility" class="radio" style="position: relative">
                                 <input class="radio custom-radio" ng-model="newCommentVisibility" name="visibilityOptions" value="2" type="radio" style="cursor: pointer;">
                                 <span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
-                                Coaches
+                                Hide from Manager
                             </label>
                             <label class="radio" style="position: relative">
                                 <input class="radio custom-radio" ng-model="newCommentVisibility" name="visibilityOptions" value="1" type="radio" style="cursor: pointer;">
                                 <span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
                                 Just Me
                             </label>
+                            <happiness show="true" happy="newCommentHappy"></happiness>
                         </div>
+
                         <div style="clear:both;"></div>
                         <div ng-repeat="comment in comments | orderBy:'created_date':true" style="margin:0 15px;padding:8px 0 8px 0px;display: block;width:580px">
                             <h2 ng-show="CreateHeader(comment.modified_date)" style="font-size: 14px;color: #8b8b8b;border-bottom: 2px solid #8b8b8b">{{comment.created_date | date:'MMM d, yyyy'}}</h2>
@@ -88,7 +90,7 @@
                                             <label ng-show="showPeopleTeamVisibility" class="radio" style="position: relative">
                                                 <input class="radio custom-radio" ng-model="comment.visibility" name="visibilitOptions{{$index}}" value="2" type="radio" style="cursor: pointer;">
                                                 <span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
-                                                People Team
+                                                Hide from Manager
                                             </label>
                                             <label class="radio" style="position: relative">
                                                 <input class="radio custom-radio" ng-model="comment.visibility" name="visibilitOptions{{$index}}" value="1" type="radio" style="cursor: pointer;">
@@ -96,6 +98,7 @@
                                                 Just Me
                                             </label>
                                         </div>
+                                        <happiness show="true" happy="comment.happiness"></happiness>
                                         <div id="editActions" style="right:2px;bottom:-33px;">
                                             <button class="button small blue" ng-disabled="!comment.content" ng-click="saveComment(comment);showCommentEdit=false">Save</button>
                                             <button class="button small orange" ng-click="cancelEditComment(comment);showCommentEdit=false">Cancel</button>
