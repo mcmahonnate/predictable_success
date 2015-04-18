@@ -1,4 +1,4 @@
-{% extends "layouts/main.html" %}
+{% extends "layout.html" %}
 {% load staticfiles %}
 {% block title %}Payment{% endblock title %}
 
@@ -24,14 +24,14 @@
                         <h3>Select your plan:</h3>
                         <div class="row">
                             <div class="col-xs-12 col-md-6">
-                                <div class="plan panel panel-default" data-plan="Monthly Plan" data-price="{{ monthly_price }}">
-                                    <h1>${{ monthly_price }}<span class="duration">/month</span></h1>
+                                <div class="plan panel panel-default" data-plan="Monthly Plan" data-price="5">
+                                    <h1>$5<span class="duration">/month</span></h1>
                                     <div class="byline">per employee</div>
                                 </div>
                             </div>
                             <div class="col-xs-12 col-md-6">
-                                <div class="plan panel panel-default" data-plan="Yearly Plan" data-price="{{ yearly_price }}">
-                                    <h1>${{ yearly_price }}<span class="duration">/year</span></h1>
+                                <div class="plan panel panel-default" data-plan="Yearly Plan" data-price="60">
+                                    <h1>$60<span class="duration">/year</span></h1>
                                     <div class="byline">per employee</div>
                                 </div>
                             </div>
@@ -69,7 +69,7 @@
                                 data-amount="0"
                                 data-currency="us"
                                 data-name="ScoutMap"
-                                data-description=""
+                                data-description="Payment for $5"
                                 disabled
                                 />
                     </div>
@@ -81,3 +81,6 @@
     </div>
 {% endblock content %}
 
+{% block javascript %}
+    <script src="{% static 'javascript/payment.js' %}"></script>
+{% endblock javascript %}

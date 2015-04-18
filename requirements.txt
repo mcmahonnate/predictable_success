@@ -28,3 +28,4 @@ django_compressor==1.4
 django-static-precompiler==0.9
 django-stripe-payments==2.0.0
 whitenoise==1.0.6
+

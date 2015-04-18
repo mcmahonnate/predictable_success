@@ -11,7 +11,7 @@ elif [ ! -z "$ENVIRONMENT" ]; then
     exit 1
 else
     python manage.py collectstatic --noinput --settings=talentdashboard.settings.local;
-    python manage.py migrate_schemas
+    #gunicorn talentdashboard.wsgi_local --settings=talentdashboard.settings.local
     python manage.py runserver 0.0.0.0:8000
 fi
 

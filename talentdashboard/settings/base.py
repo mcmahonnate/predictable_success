@@ -10,26 +10,11 @@ DATABASE_ROUTERS = (
 CELERY_ALWAYS_EAGER = True
 DEBUG = False
 
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
+
 ADMINS = (
     ('Doug Dosberg', 'ddosberg@fool.com'),
 )
-
-
-# Stripes API key
-STRIPE_KEY = 'pk_test_UNXbpUo3QIZyN5IYMfPj38O7'
-MONTHLY_PLAN_PRICE = '5'
-YEARLY_PLAN_PRICE = '60'
-
-
-REQUIRED_GROUPS = (
-    'AllAccess',
-    'CoachAccess',
-    'Daily Digest Subscribers',
-    'Edit Employee',
-    'TeamLeadAccess',
-    'View Comments',
-)
-
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
@@ -77,10 +62,8 @@ MEDIA_URL = '/media/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'assets')
+STATIC_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'staticfiles')
 STATIC_URL = '/static/'
-COMPRESS_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static')
-
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
@@ -91,6 +74,13 @@ AWS_QUERYSTRING_AUTH = False
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 S3_URL = 'http://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
 
+STRIPE_PUBLISHABLE_KEY = os.environ['STRIPE_PUBLISHABLE_KEY']
+STRIPE_SECRET_KEY = os.environ['STRIPE_SECRET_KEY']
+MONTHLY_PLAN_PRICE = '5'
+YEARLY_PLAN_PRICE = '60'
+
+COMPRESS_URL = STATIC_URL
+COMPRESS_ROOT = STATIC_ROOT
 
 
 # Additional locations of static files
@@ -104,18 +94,20 @@ STATICFILES_DIRS = (
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
-    #'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
 )
 
-# STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
-COMPRESS_ENABLED=True
-COMPRESS_OFFLINE=True
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
+
+COMPRESS_ENABLED=os.environ.get("COMPRESS_ENABLED", False)
+COMPRESS_OFFLINE=os.environ.get("COMPRESS_OFFLINE", False)
 
 COMPRESS_PRECOMPILERS = (
-    ('text/less','lessc {infile} {outfile}'),
+    ('text/less', '%s {infile} {outfile}' % (os.path.join(BASE_DIR, 'node_modules/less/bin/lessc'), )),
 )
 
 COMPRESS_JS_FILTERS = [
@@ -123,6 +115,7 @@ COMPRESS_JS_FILTERS = [
 ]
 
 COMPRESS_CSS_HASHING_METHOD = 'content'
+
 
 
 # Make this unique, and don't share it with anybody.
@@ -160,7 +153,7 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-SETTINGS_IN_CONTEXT = ['DEBUG', 'MONTHLY_PLAN_PRICE']
+SETTINGS_IN_CONTEXT = ['DEBUG']
 
 
 ROOT_URLCONF = 'talentdashboard.urls'
