@@ -15,9 +15,9 @@
         
         {% block css %}{% endblock css %}
 
-        
+        {% compress css %}
             <link href="{% static 'css/scoutmap/style.less' %}" rel="stylesheet" type="text/less">
-        
+        {% endcompress %}
 
         {% if DEBUG %}
         <script>
