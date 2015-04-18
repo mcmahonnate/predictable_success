@@ -253,6 +253,7 @@ def get_cache():
 
 CACHES = get_cache()
 
+
 FEEDBACK_APP_SETTINGS = {
     'respond_to_feedback_request_url_template': '{scheme}://{host}/feedback/#/todo/{id}'
 }

@@ -20,10 +20,16 @@
 		border:1px solid #ccc;
 	}
 
+	.timestamp {
+		color: #8b8b8b;
+		font-size: 13px;
+	}
+
 	.comment-owner-avatar-container {
 		display: block; 
 		float: left; 
 		width: 48px;
+		border-radius: 70px;
 
 		.comment-owner-avatar {
 			display: inline-block; 
@@ -32,6 +38,13 @@
 			height: 48px; 
 			vertical-align:text-top;
 		}		
+	}
+
+	.comment-associated-avatar {
+		float: right;
+		height: 90px;
+		padding: 0;
+		border-radius: 50px;
 	}
 
 	.comment-item {
@@ -67,7 +80,7 @@
 		
 
 		.comment-reply {
-			margin-bottom: 5px;
+			margin-bottom: 2px;
 			padding: 10px;
 			background-color: #efefef;
 		}
@@ -86,7 +99,8 @@
 		}
 		.comment-reply-name {
 		  	color: #1a7f7e;
-		  	font-weight: bold;			
+		  	font-weight: bold;	
+		  	margin-left: 12px;		
 		}
 		.comment-reply-copy {
 			margin-left: 60px;

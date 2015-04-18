@@ -20,6 +20,14 @@ EMAIL_HOST_USER = os.environ.get("EMAIL_ADDRESS", '')
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD", '')
 DEFAULT_FROM_EMAIL = 'Dash Team <' + EMAIL_HOST_USER + '>'
 
+
+# Turns caching off on local dev
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+}
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
