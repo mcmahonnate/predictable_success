@@ -10,7 +10,9 @@
     {% block css %}{% endblock css %}
 
    
-        <link href="{% static 'css/scoutmap/style.less' %}" rel="stylesheet" type="text/less">
+	{% compress css %}
+		<link href="{% static 'css/scoutmap/style.less' %}" rel="stylesheet" type="text/less">
+	{% endcompress %}
    
 
 
