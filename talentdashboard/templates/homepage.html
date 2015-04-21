@@ -45,7 +45,8 @@
                 <div class="modal-body">
                     <h3>Hey there!</h3>
                     <p>Interested in unleashing your talent? Enter your details below and you'll be on your way.</p>
-                    <form class="request-form">
+                    <form class="request-form" method="post">
+                        {% csrf_token %}
                         <input class="form-control input-lg stroked" name="name" placeholder="Your name" />
                         <input class="form-control input-lg stroked" name="email" placeholder="Email Address" />
                         <input class="form-control input-lg stroked" name="company" placeholder="Company" />
