@@ -1,34 +1,31 @@
-{% extends "base.html" %}
-
+{% extends "layouts/blank.html" %}
+{% load staticfiles %}
 {% block title %}Sign in{% endblock title %}
 
 {% block content %}
-    <div style="width:300px; margin-left: auto; margin-right: auto;">
-        <h1 style="padding: 25px 0 20px 0;font-size: 22px;font-weight: bold;">Sign in to Dash</h1>
-        <div class="widget-canvas">
-
-        {% if form.errors %}
-            <p>Your username and password didn't match. Please try again.</p>
-        {% endif %}
-
+    <div class="login-form">
         <form method="post" action="{% url 'django.contrib.auth.views.login' %}">
             {% csrf_token %}
-                <div style="position:relative;margin-bottom: 20px;">
-                    {{ form.username }}
-                </div>
-                <div style="position:relative;margin-bottom:2px;">
-                    {{ form.password }}
-                </div>
-                <div style="margin-bottom: 15px;">
-                <a href="{% url 'django.contrib.auth.views.password_reset' %}" style="font-size: 12px;color: #585858;text-shadow: none;">Forgot your password?</a>
-                    </div>
-            <input class="login-button" type="submit" value="Sign in" />
-            <input type="hidden" name="next" id="next" />
-            <script>
-                var elem = document.getElementById("next");
-                elem.value = "/" + location.hash;
-            </script>
-       </form>
-       </div>
-   </div>
+
+            <a href="{% url 'index' %}"><img class="logo" src="{% static 'images/logo-dark.png' %}" /></a>
+
+            {% if form.errors %}
+                <p>Your username and password didn't match. Please try again.</p>
+            {% endif %}
+
+            <form class="form-signin">
+                <input autofocus autocomplete="off" class="form-control input-lg" id="id_username" name="username" placeholder="Username or Email" type="text">
+                <input id="id_password" class="form-control input-lg" name="password" placeholder="Password" type="password">
+                <button class="btn btn-lg btn-success btn-block" type="submit">Sign in</button>
+                <input type="hidden" name="next" id="next" />
+                <script>
+                    var elem = document.getElementById("next");
+                    elem.value = "/" + location.hash;
+                </script>
+            </form>
+            <a href="{% url 'django.contrib.auth.views.password_reset' %}" class="forgot-password">
+                Forgot your password?
+            </a>
+        </form>    
+    </div>
 {% endblock %}
