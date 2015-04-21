@@ -1,4 +1,8 @@
 # Local settings
+from . import load_local_env_vars
+import os
+
+load_local_env_vars(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 from .base import *
 
 DEBUG = True
