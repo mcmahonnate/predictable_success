@@ -17,7 +17,8 @@ develop-eggs
 .installed.cfg
 .venv
 .pycharm-bash
-
+.env
+venv/
 lib64
 __pycache__
 
