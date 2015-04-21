@@ -1380,12 +1380,3 @@ def menu_counts(request):
         'toBeDelivered': toBeDelivered
     }
     return Response(result)
-
-
-def index(request):
-    if request.tenant.is_public_tenant():
-        return render(request, 'welcome.html')
-    else:
-        return render(request, 'index.html')
-
-
