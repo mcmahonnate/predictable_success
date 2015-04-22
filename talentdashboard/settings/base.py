@@ -124,7 +124,7 @@ COMPRESS_CSS_HASHING_METHOD = 'content'
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '^n2)5q^gdc%5du_tivgasukok(2jx8olj!_y&qvh(l7%48hh@1'
 
-DEMO_REQUEST_EMAIL_TO = 'scoutmap@fool.com'
+DEMO_REQUEST_EMAIL_TO = 'nate@fool.com'
 DEMO_REQUEST_EMAIL_SUBJECT = ' requested a demo'
 
 
