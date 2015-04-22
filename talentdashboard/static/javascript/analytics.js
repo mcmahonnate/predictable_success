@@ -3,7 +3,7 @@
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-  ga('create', 'UA-45570095-1', 'talent-dashboard.herokuapp.com');
+  ga('create', 'UA-45570095-1', 'auto');
   if (window.location.host != "localhost:8000" && window.location.host != "0.0.0.0:8000") {
     ga('send', 'pageview');
   } else {

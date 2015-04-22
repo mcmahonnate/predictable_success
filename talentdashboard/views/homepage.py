@@ -41,6 +41,4 @@ class IndexView(TemplateView):
         msg.attach_alternative(html_content, "text/html")
         msg.send()
 
-        return render_to_response(self.template, {
-            'success': 'success'
-        }, context_instance=RequestContext(request))
+        return HttpResponseRedirect("/confirmation")

@@ -4,6 +4,10 @@
     right: 20px;
     font-size: 15px;
 
+    @media only screen and (max-width : 420px) {
+        display: none;
+    } 
+
     a {
         color: #fff;
     }
@@ -179,40 +183,68 @@
     }
 
     h2 {
-        font-size: 38px;
+        font-size: 42px;
         font-family: 'Open Sans', sans-serif;
+
+        @media only screen and (max-width : 420px) {
+            font-size: 34px;
+        } 
     }
 
     .screenshot {
         margin-top: 45px;
-        max-width: 900px;
-    }
-    @media only screen and (max-width : 990px) {
-        width: 100%;
-        padding: 40px;
-    }
+        max-width: 902px;
+    
+        @media only screen and (max-width : 990px) {
+            width: 100%;
+            padding: 40px 40px 0;
+        }
+    }    
 }
 
 .features {
     background-color: #2cb28b;
-    padding: 45px;
+    padding: 75px 45px;
     color: #fff;
 
     h2 {
-        font-size: 30px;
+      font-size: 26px;
+      margin: 0 0 10px;
+      line-height: 32px;
     }
     p {
-        font-size: 16px;
+        font-size: 18px;
         opacity: 0.8;
     }
 
+    .feature-text {
+        padding-left: 75px;
+
+        @media only screen and (max-width : 420px) {
+            text-align: center;
+        }        
+    }
+
+    .fa {
+        font-size: 50px;
+        float: left;
+
+        @media only screen and (max-width : 420px) {
+            float: none;
+            margin: 0 auto 20px;
+            display: block;
+            text-align: center;
+            font-size: 70px;
+            padding-left: 0;
+        } 
+    }
+
     .col-md-8 {
-        padding: 20px;
+        padding: 20px 20px 60px;
     }
 
 
 }
-
 
 
 /*== REQUEST MODAL ===================================================== */
@@ -221,6 +253,10 @@
     .modal-dialog { 
         width: 450px;
         margin: 10% auto;
+
+        @media only screen and (max-width : 420px) {
+            width: 100%;
+        }   
     }  
     .close {
         margin: 8px 15px;
