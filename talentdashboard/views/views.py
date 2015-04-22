@@ -48,7 +48,6 @@ from django.utils.encoding import iri_to_uri
 from django.utils.translation import get_language
 import collections
 import dateutil.parser, copy
-from django.core.mail import send_mail
 
 logger = getLogger('talentdashboard')
 
@@ -1380,12 +1379,3 @@ def menu_counts(request):
         'toBeDelivered': toBeDelivered
     }
     return Response(result)
-
-
-def index(request):
-    if request.tenant.is_public_tenant():
-        return render(request, 'welcome.html')
-    else:
-        return render(request, 'index.html')
-
-

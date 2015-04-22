@@ -12,12 +12,13 @@ eggs
 var
 parts
 sdist
-node_modules/
+node_modules
 develop-eggs
 .installed.cfg
 .venv
 .pycharm-bash
-
+.env
+venv/
 lib64
 __pycache__
 

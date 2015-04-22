@@ -74,12 +74,16 @@ AWS_QUERYSTRING_AUTH = False
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 S3_URL = 'http://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
 
-STRIPE_KEY = os.environ['STRIPE_KEY']
+STRIPE_PUBLISHABLE_KEY = os.environ['STRIPE_PUBLISHABLE_KEY']
+STRIPE_SECRET_KEY = os.environ['STRIPE_SECRET_KEY']
 MONTHLY_PLAN_PRICE = '5'
 YEARLY_PLAN_PRICE = '60'
 
 COMPRESS_URL = STATIC_URL
 COMPRESS_ROOT = STATIC_ROOT
+
+
+STRIPE_KEY = 'pk_test_UNXbpUo3QIZyN5IYMfPj38O7'
 
 
 # Additional locations of static files
@@ -119,6 +123,10 @@ COMPRESS_CSS_HASHING_METHOD = 'content'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '^n2)5q^gdc%5du_tivgasukok(2jx8olj!_y&qvh(l7%48hh@1'
+
+DEMO_REQUEST_EMAIL_TO = 'nate@fool.com'
+DEMO_REQUEST_EMAIL_SUBJECT = ' requested a demo'
+
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (

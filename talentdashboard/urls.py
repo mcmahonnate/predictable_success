@@ -7,6 +7,7 @@ from views.views import *
 from forms import *
 from rest_framework import routers
 from views.payment import ChargeView, PaymentView
+from views.homepage import IndexView
 
 router = routers.DefaultRouter()
 router.register(r'api/v1/teams', TeamViewSet)
@@ -17,7 +18,7 @@ router.register(r'api/v1/attributes', AttributeViewSet)
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', index),
+    url(r'^$', IndexView.as_view(), name='index'),
     url(r'^feedback/$', TemplateView.as_view(template_name="feedback.html"), name='feedback_home'),
     url(r'^logout/$', logout,{'next_page': '/account/login/'}),
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
