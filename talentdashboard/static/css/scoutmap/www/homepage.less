@@ -8,7 +8,26 @@
         color: #fff;
     }
 }
+.flyover {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    opacity: 1;
+    z-index: 1050;
+    transition: all 1s ease;
+    text-align: center;
+    font-size: 16px;
+    padding: 20px;
+    border-radius: 0;
 
+    .close {
+        right: -3px;
+    }
+}
+ 
+.flyover.in {
+    margin-top: 0;
+}
 
 /*== BILLBOARD ===================================================== */
 .billboard {
