@@ -4,6 +4,9 @@
 {% block title %}Scoutmap - Unleash your talent{% endblock title %}
 
 {% block content %}
+
+    {% if success %}Yay!{% endif %}
+
     <section class="billboard">
         <div class="builtby">Built and used by <a href="http://www.fool.com">The Motley Fool</a></div>
         <img src="{% static 'images/logo-light.png' %}" alt="ScoutMap" class="logo" />
@@ -24,8 +27,8 @@
         </div>    
     </section>
     <section class="engagement">
-        <h2>A Simple Way to Build Great Teams</h2>
-        <p>Quickly build project teams and evaluate your workforce.</p>
+        <h2>Only the features that matter</h2>
+        <p>Our platform keeps you focussed on talent develpment.</p>
         <img src="{% static 'images/screenshot.png' %}" alt="Screenshot" class="screenshot" />
     </section> 
     <section class="features">
@@ -44,7 +47,7 @@
             </div>  
             <div class="row">
                 <div class="col-md-8 col-md-offset-2">
-                    <h2>Our employee screener helps you easily drill down into your workforce.</h2>
+                    <h2>Our employee screener helps you easily drill down into your workforce data.</h2>
                     <p>The ability to quickly build great project teams and to make sure current teams are thriving.</p>
                 </div>
             </div>
@@ -75,7 +78,7 @@
                 <div class="modal-body">
                     <h3>Hey there!</h3>
                     <p>Interested in unleashing your talent? Enter your details below and you'll be on your way.</p>
-                    <form class="request-form" method="post">
+                    <form id="contact" class="request-form" method="post">
                         {% csrf_token %}
                         <input class="form-control input-lg stroked" name="name" placeholder="Your name" />
                         <input class="form-control input-lg stroked" name="email" placeholder="Email Address" />
@@ -91,4 +94,16 @@
 {% block javascript %}
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
     <script src="{% static 'javascript/main.js' %}"></script> 
+
+    <script type="text/javascript">
+
+        /* Acquisition Tracking */
+        campaign = '84889792988067024907';
+        key = '96708570543772986562';
+        form = 'contact'; /* Id of form to track */
+
+        var acq = document.createElement("script"); acq.type = "text/javascript"; acq.async = true;
+        acq.src = "http://fool.acquisition.io/api/ecap/v1/js/ecap.js"; referrer = document.referrer;
+        document.getElementsByTagName("head")[0].appendChild(acq);
+    </script>
 {% endblock javascript %}

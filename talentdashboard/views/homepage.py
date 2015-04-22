@@ -42,4 +42,5 @@ class IndexView(TemplateView):
         msg.send()
 
         return render_to_response(self.template, {
+            'success': 'success'
         }, context_instance=RequestContext(request))
