@@ -92,7 +92,20 @@
             </div>
         </div>
     </div>
+	{% block footer %}
+	<section class="footer">
+	<footer>
+		<div align="center">
+				<p>Want to learn more?</p>
+				<p><a href="mailto:scoutmap@fool.com?Subject=I'm%20Interested">Email us now!</a></p>
+				<img src="{% static 'images/logo-light.png' %}" alt="ScoutMap" class="logo" />
+				<p class="copyright">© Copyright 2015, TMF Works, LLC. All rights reserved.</p>
+		</div>
+	</footer>
+	</section>
+	{% endblock footer %}
 {% endblock content %}
+
 
 {% block javascript %}
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
