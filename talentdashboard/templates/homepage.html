@@ -8,10 +8,11 @@
         <div class="builtby">Built and used by <a href="http://www.fool.com">The Motley Fool</a></div>
         <img src="{% static 'images/logo-light.png' %}" alt="ScoutMap" class="logo" />
         <h1 class="tagline">Unleash your talent</h1>
-        <p class="byline">Talent management shouldn't be complex. With ScoutMap, we help leadership focus their effort on their best talent with actionable advice and intuitive software.</p>
+        <p class="byline">Talent management shouldn't be complex. With Scoutmap, you have the tools to focus your effort on continually developing & retaining your company's most talented employees.</p>
         <button type="button" class="btn btn-lg btn-success btn-start" data-toggle="modal" data-target="#modal">
-          Reserve you spot
+          Request Beta Invite
         </button>
+        <p class="join-msg">Join the beta--it's free & simple</p>
         <div class="shaded">
             <blockquote>
                 <p>"We are the best place to work in America not because of perks, but because we built a performance culture using ScoutMap."</p>
@@ -22,60 +23,9 @@
         </div>    
     </section>
     <section class="engagement">
-        <h2>Only the features that matter</h2>
-        <p>Our platform keeps you focused on talent development.</p>
+        <h2>Scoutmap is about creating a culture where your high performers can thrive</h2>
+        <p>Our platform focus's your team on its most valuable resource, your most talented employees. We'll show you a breakdown of your talent, how you're investing in that talent, and the discussions you need to have to develop it.</p>
         <img src="{% static 'images/screenshot.png' %}" alt="Screenshot" class="screenshot" />
-    </section> 
-    <section class="features">
-        <div class="container"> 
-            <div class="row">
-                <div class="col-md-9 col-md-offset-1">
-                    <h2>5 simple ways Scoutmap helps you unleash talent</h2>
-                    <i class="fa fa-money"></i>
-                    <div class="feature-text">
-                        <h3>Know how you're investing in talent.</h3>
-                        <p>What portion of your organization is performing at a high level, and who’s making contributions outside of their role?</p>
-                    </div>
-                </div>
-            </div>  
-            <div class="row">  
-                <div class="col-md-9 col-md-offset-1">
-                    <i class="fa fa-pie-chart"></i>
-                    <div class="feature-text">
-                        <h3>See how you’re investing in talent with easy-to-understand visualizations.</h3>
-                        <p>Scoutmap allocates your payroll by talent level to make sure you’re investing capital at the right talent levels.</p>
-                    </div>
-                </div>                    
-            </div>  
-            <div class="row">
-                <div class="col-md-9 col-md-offset-1">
-                    <i class="fa fa-search"></i>
-                    <div class="feature-text">
-                        <h3>Our employee screener helps you easily drill down into your workforce data.</h3>
-                        <p>Scoutmap gives you the ability to quickly build great project teams and to make sure current teams are thriving.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row">    
-                <div class="col-md-9 col-md-offset-1">
-                    <i class="fa fa-users"></i>
-                    <div class="feature-text">
-                        <h3>Scoutmap employee profiles encourage talent development through collaboration.</h3>
-                        <p>Development discussions, automatic and assignable action items, happiness surveys: We have the key tools necessary to efficiently develop talent.</p>
-                    </div>
-                </div>                    
-            </div>  
-
-            <div class="row">    
-                <div class="col-md-9 col-md-offset-1">
-                    <i class="fa fa-file-text-o"></i>
-                    <div class="feature-text">
-                        <h3>Daily summaries keep talent development top of mind at your organization.</h3>
-                        <p>Key stakeholders get a daily review of important talent discussions, action items, and more.</p>
-                    </div>
-                </div>                    
-            </div>              
-        </div>      
     </section>    
     <div id="modal" class="modal modal-get-started fade">
         <div class="modal-dialog">
@@ -88,7 +38,7 @@
             <div class="modal-content">
                 <div class="modal-body">
                     <h3>Hey there!</h3>
-                    <p>Interested in learning more about the Fool and Scoutmap? Enter your details below, and we’ll reserve a spot for you at one our upcoming Fool culture and Scoutmap webinar.</p>
+                    <p>Be among the first to access the same tool used by the Motley Fool to build America's best place to work. Enter your details, and we'll contact you soon about our beta program.</p>
                     <form id="contact" class="request-form" method="post">
                         {% csrf_token %}
                         <input class="form-control input-lg stroked" name="name" placeholder="Your name" />
@@ -104,15 +54,13 @@
 	<section class="footer">
 		<footer>
 			<div align="center">
-				<img src="{% static 'images/logo-light.png' %}" alt="ScoutMap" class="logo" />
+				<img src="{% static 'images/logo-light.png' %}" alt="ScoutMap" class="logo footer-logo" />
 				<p class="copyright">© Copyright 2015, TMF Works, LLC. All rights reserved. | Questions? <a href="mailto:scoutmap@fool.com?Subject=I'm%20Interested!">Contact us!</a></p>
 			</div>
 		</footer>
 	</section>
 	{% endblock footer %}
 {% endblock content %}
-
-
 
 
 {% block javascript %}
