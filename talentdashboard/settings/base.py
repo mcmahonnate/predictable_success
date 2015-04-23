@@ -217,7 +217,7 @@ FEEDBACK_APP_SETTINGS = {
 
 RAVEN_CONFIG = {
     'dsn': 'https://f1a18dde65b54d21978a126d6f6e907c:3a723d634f8a45629cfbba4034bce984@app.getsentry.com/42421',
-    'release': os.environ.get('SOURCE_VERSION', ''),
+    'release': raven.fetch_git_sha(os.path.dirname(__file__)),
     'tags': {},
 }
 
