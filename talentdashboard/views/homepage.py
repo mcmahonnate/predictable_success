@@ -14,7 +14,6 @@ class IndexView(TemplateView):
     template = "homepage.html"
 
     def get(self, request, **kwargs):
-        raise Exception("Test")
         if request.tenant.is_public_tenant():
             return render(request, 'homepage.html')
         else:
