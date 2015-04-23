@@ -17,7 +17,6 @@ DATABASE_ROUTERS = (
 # Celery settings
 CELERY_ALWAYS_EAGER = True
 
-
 MANAGERS = ADMINS = (
     ('Doug Dosberg', 'ddosberg@fool.com'),
     ('Mark Kennedy', 'mkennedy@fool.com'),
@@ -218,7 +217,7 @@ FEEDBACK_APP_SETTINGS = {
 
 RAVEN_CONFIG = {
     'dsn': 'https://f1a18dde65b54d21978a126d6f6e907c:3a723d634f8a45629cfbba4034bce984@app.getsentry.com/42421',
-    'release': raven.fetch_git_sha(BASE_DIR),
+    'release': raven.fetch_git_sha(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
     'tags': {},
 }
 
