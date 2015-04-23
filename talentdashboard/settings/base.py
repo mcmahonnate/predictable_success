@@ -1,6 +1,7 @@
 # Django settings for talentdashboard project.
 import os.path
 import dj_database_url
+import raven
 
 SECRET_KEY = os.environ['SECRET_KEY']
 TEMPLATE_DEBUG = DEBUG = os.environ.get("DEBUG", False)
@@ -142,7 +143,8 @@ SHARED_APPS = (
     'django.contrib.admin',
     'django.contrib.staticfiles',
     'static_precompiler',
-    'compressor'
+    'compressor',
+    'raven.contrib.django.raven_compat'
 )
 
 TENANT_APPS = (
@@ -188,7 +190,6 @@ SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
 LOGIN_URL = '/account/login'
 
-
 def get_cache():
     import os
     try:
@@ -213,4 +214,52 @@ CACHES = get_cache()
 
 FEEDBACK_APP_SETTINGS = {
     'respond_to_feedback_request_url_template': '{scheme}://{host}/feedback/#/todo/{id}'
+}
+
+RAVEN_CONFIG = {
+    'dsn': 'https://f1a18dde65b54d21978a126d6f6e907c:3a723d634f8a45629cfbba4034bce984@app.getsentry.com/42421',
+    'release': raven.fetch_git_sha(BASE_DIR),
+    'tags': {},
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'root': {
+        'level': 'WARNING',
+        'handlers': ['sentry'],
+    },
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+    },
+    'handlers': {
+        'sentry': {
+            'level': 'ERROR',
+            'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        }
+    },
+    'loggers': {
+        'django.db.backends': {
+            'level': 'ERROR',
+            'handlers': ['console'],
+            'propagate': False,
+        },
+        'raven': {
+            'level': 'DEBUG',
+            'handlers': ['console'],
+            'propagate': False,
+        },
+        'sentry.errors': {
+            'level': 'DEBUG',
+            'handlers': ['console'],
+            'propagate': False,
+        },
+    },
 }
