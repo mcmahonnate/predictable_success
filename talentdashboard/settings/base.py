@@ -76,8 +76,8 @@ STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 # Compress settings
 COMPRESS_URL = STATIC_URL
 COMPRESS_ROOT = STATIC_ROOT
-COMPRESS_ENABLED=os.environ.get("COMPRESS_ENABLED", False)
-COMPRESS_OFFLINE=os.environ.get("COMPRESS_OFFLINE", False)
+COMPRESS_ENABLED = os.environ.get("COMPRESS_ENABLED", False)
+COMPRESS_OFFLINE = os.environ.get("COMPRESS_OFFLINE", False)
 COMPRESS_PRECOMPILERS = (
     ('text/less', '%s {infile} {outfile}' % (os.path.join(BASE_DIR, 'node_modules/less/bin/lessc'), )),
 )
