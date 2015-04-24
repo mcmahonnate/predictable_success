@@ -232,6 +232,9 @@ LOGGING = {
         'verbose': {
             'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
         },
+        'simple': {
+            'format': '%(levelname)s %(module)s %(message)s'
+        },
     },
     'handlers': {
         'sentry': {
@@ -241,7 +244,7 @@ LOGGING = {
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
-            'formatter': 'verbose'
+            'formatter': 'simple'
         }
     },
     'loggers': {
