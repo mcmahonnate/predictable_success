@@ -14,7 +14,7 @@ DATABASE_ROUTERS = (
     'tenant_schemas.routers.TenantSyncRouter',
 )
 
-# Celery settings
+# Celery settings 
 CELERY_ALWAYS_EAGER = True
 
 MANAGERS = ADMINS = (
