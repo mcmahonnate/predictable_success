@@ -8,12 +8,13 @@ from django.conf import settings
 from django.template.loader import get_template
 from django.template import Context
 
-logger = getLogger('talentdashboard')
+logger = getLogger(__name__)
 
 class IndexView(TemplateView):
     template = "homepage.html"
 
     def get(self, request, **kwargs):
+        logger.error('Loaded home page!')
         if request.tenant.is_public_tenant():
             return render(request, 'homepage.html')
         else:
