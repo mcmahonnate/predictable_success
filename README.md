@@ -1,16 +1,20 @@
-Feedback App
+ScoutMap
 =========
-
-The **Feedback App** repository contains a Django application.  
 
 Local Development Setup
 ---------------------
+You need to have virtualenv, virtualenvwrapper, and heroku toolbelt installed.
+
 1. `git clone git@github.com:mcmahonnate/django-talentdashboard.git`
 1. `cd django-talentdashboard/`
-1. `pip install virtualenvwrapper`
-1. `pip install -r talentdashboard/requirements/local.txt`
-1. `python manage.py runserver --settings=talentdashboard.settings.local`
-
+1. `mkvirtualenv scoutmap`
+1. `pip install -r requirements.txt`
+1. `pip install nodeenv`
+1. `nodeenv -p` (takes awhile)
+1. `npm install`
+1. `cat .env.requirements > .env` (This prepares your .env file for the step below)
+1. Edit the .env file to include the appropriate environment variable settings. See a team member for details.
+1. 
 Local database setup
 --------------------
 1. Install Postgres
