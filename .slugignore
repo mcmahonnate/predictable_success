@@ -1,0 +1,4 @@
+# Things that should not be included when the build slug is generated
+*.sql
+up.sh
+Vagrantfile
