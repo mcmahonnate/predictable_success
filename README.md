@@ -1,48 +1,73 @@
-Feedback App
+ScoutMap
 =========
-
-The **Feedback App** repository contains a Django application.  
 
 Local Development Setup
 ---------------------
-1. `git clone git@github.com:mcmahonnate/django-talentdashboard.git`
-1. `cd django-talentdashboard/`
-1. `pip install virtualenvwrapper`
-1. `pip install -r talentdashboard/requirements/local.txt`
-1. `python manage.py runserver --settings=talentdashboard.settings.local`
+Pre-requisites:
+  1. Postgres
+  1. virtualenv
+  1. virtualenvwrapper
+  1. Heroku account
+  1. heroku toolbelt (https://toolbelt.heroku.com/)
+  1. Someone will have to give you access to the apps in Heroku
 
-Local database setup
---------------------
-1. Install Postgres
-1. run `createdb djangotalentdashboard`
-1. run `createuser talentdashboard -P`
-1. Enter the password `F00lF00l!` twice
-1. Run `psql`
-1. Run `GRANT ALL PRIVILEGES ON DATABASE talentdashboard TO djangotalentdashboard;`
-1. Run `psql --set ON_ERROR_STOP=on talentdashboard < demo.dump`
-
-Multi-tenant setup notes
-------------------------
+Clone the repo:
 ```
-Get Dump file:
-pg_dump postgres://ycuvxprfoscqrp:plpRQtWmJa7PGXBSJ2iKbsWdxx@ec2-23-21-231-14.compute-1.amazonaws.com:5432/d5a7vqln543vlb > staging.sql
-Alter dump file:
-Add: CREATE SCHEMA IF NOT EXISTS demo;
-Find/Replace: s/public./demo./
-Find/Replace: s/OldRole/NewRole/
-Alter: SET search_path = demo, pg_catalog
-Load dump file:
-heroku pg:psql HEROKU_POSTGRESQL_COPPER_URL --app staging-talent-dashboard < staging.sql
-Promote new database:
-heroku pg:promote HEROKU_POSTGRESQL_COPPER_URL --app staging-talent-dashboard
-Push new code:
-git push staging-talent-dashboard features/multi-tenant:master
-Migrate schemas:
-heroku run python manage.py migrate_schemas --shared --settings=talentdashboard.settings.production --app staging-talent-dashboard
-Create tenants:
-heroku run python manage.py shell_plus --settings=talentdashboard.settings.production --app staging-talent-dashboard
-Customer(domain_url='staging.scoutmap.com', schema_name='public', name='Public').save()
-Customer(domain_url='demo.staging.scoutmap.com', schema_name='demo', name='Demo, Inc.').save()
-Create superuser:
-heroku run python manage.py createsuperuser --settings=talentdashboard.settings.production --app staging-talent-dashboard
+git clone git@github.com:mcmahonnate/django-talentdashboard.git
+cd django-talentdashboard/
+```
+
+Create and populate the database:
+```
+createdb scoutmap
+psql -d scoutmap -f scoutmap.sql
+```
+
+Set up your virtual environments (python and node):
+```
+mkvirtualenv scoutmap
+pip install -r requirements.txt
+pip install nodeenv
+nodeenv -p
+npm install
+```
+
+Next, you'll need to configure your environment variables. Copy the contents of the `.env.requirements` file into a new `.env` file:
+```
+cat .env.requirements > .env
+```
+
+Edit the .env file to include the appropriate environment variable settings. See a team member for details.
+
+You should now be able to run the server with:
+```
+./up.sh
+```
+
+Set up your Heroku remotes:
+```
+git remote add test git@heroku.com:test-scoutmap.git
+git remote add staging git@heroku.com:staging-scoutmap.git
+git remote add live git@heroku.com:live-scoutmap.git
+```
+
+Enable pipelines in heroku:
+```
+heroku labs:enable pipelines
+heroku plugins:install git://github.com/heroku/heroku-pipeline.git
+```
+
+Deploy to test:
+```
+git push test
+```
+
+Deploy to staging:
+```
+git push staging
+```
+
+Promote staging to live:
+```
+heroku pipeline:promote --app staging-scoutmap
 ```
