@@ -7,7 +7,9 @@ Pre-requisites:
   1. Postgres
   1. virtualenv
   1. virtualenvwrapper
-  1. heroku toolbelt
+  1. Heroku account
+  1. heroku toolbelt (https://toolbelt.heroku.com/)
+  1. Someone will have to give you access to the apps in Heroku
 
 Clone the repo:
 ```
