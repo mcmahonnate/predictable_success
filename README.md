@@ -43,9 +43,29 @@ You should now be able to run the server with:
 ```
 
 Set up your Heroku remotes:
-
 ```
 git remote add test git@heroku.com:test-scoutmap.git
 git remote add staging git@heroku.com:staging-scoutmap.git
 git remote add live git@heroku.com:live-scoutmap.git
+```
+
+Enable pipelines in heroku:
+```
+heroku labs:enable pipelines
+heroku plugins:install git://github.com/heroku/heroku-pipeline.git
+```
+
+Deploy to test:
+```
+git push test
+```
+
+Deploy to staging:
+```
+git push staging
+```
+
+Promote staging to live:
+```
+heroku pipeline:promote --app staging-scoutmap
 ```
