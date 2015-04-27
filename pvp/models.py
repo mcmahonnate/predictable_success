@@ -20,9 +20,10 @@ class EvaluationRoundManager(models.Manager):
     def most_recent(self, is_complete=True):
         return self.filter(is_complete=is_complete).order_by('-date')[0:1].get()
 
+
 class EvaluationRound(models.Model):
     date = models.DateField()
-    is_complete = models.BooleanField()
+    is_complete = models.BooleanField(default=False)
     objects = EvaluationRoundManager()
 
     def __str__(self):
@@ -60,7 +61,7 @@ class PvpEvaluation(models.Model):
     performance = models.IntegerField(choices=PVP_SCALE, blank=True, default=0)
     comment = models.ForeignKey(Comment, null=True, blank=True)
     evaluator = models.ForeignKey(User, null=True, blank=True)
-    is_complete = models.BooleanField()
+    is_complete = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         self.is_complete = self.performance > 0 and self.potential > 0

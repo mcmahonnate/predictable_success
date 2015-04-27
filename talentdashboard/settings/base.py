@@ -6,6 +6,7 @@ import raven
 SECRET_KEY = os.environ['SECRET_KEY']
 TEMPLATE_DEBUG = DEBUG = os.environ.get("DEBUG", False)
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 # Database settings
 DATABASES = { 'default': dj_database_url.config(default=os.environ.get('DATABASE_URL')) }
@@ -14,7 +15,7 @@ DATABASE_ROUTERS = (
     'tenant_schemas.routers.TenantSyncRouter',
 )
 
-# Celery settings 
+# Celery settings
 CELERY_ALWAYS_EAGER = True
 
 MANAGERS = ADMINS = (
@@ -144,7 +145,8 @@ SHARED_APPS = (
     'django.contrib.staticfiles',
     'static_precompiler',
     'compressor',
-    'raven.contrib.django.raven_compat'
+    'raven.contrib.django.raven_compat',
+    'test_without_migrations',
 )
 
 TENANT_APPS = (

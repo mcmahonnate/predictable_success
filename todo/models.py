@@ -1,6 +1,7 @@
 from django.db import models
 from org.models import Employee
 
+
 class Task(models.Model):
     created_by = models.ForeignKey(Employee, related_name='+')
     assigned_to = models.ForeignKey(Employee, related_name='+',null=True, blank=True)

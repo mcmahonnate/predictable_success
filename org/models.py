@@ -64,7 +64,7 @@ class Employee(models.Model):
         blank=True,
         default=None
     )
-    display = models.BooleanField()
+    display = models.BooleanField(default=False)
     team = models.ForeignKey(
         'Team',
         null=True,
