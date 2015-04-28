@@ -49,6 +49,9 @@ class PvpEvaluationManager(models.Manager):
         current_round = EvaluationRound.objects.most_recent(is_complete=False)
         return self.filter(evaluation_round=current_round).filter(evaluator=user)
 
+    def get_most_recent_for_employees(self, employees):
+        return []
+
 
 class PvpEvaluation(models.Model):
     TOP_PERFORMER = 1
