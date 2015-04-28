@@ -1,3 +1,4 @@
+import os
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.shortcuts import redirect, render, render_to_response, HttpResponseRedirect
@@ -18,7 +19,8 @@ class IndexView(TemplateView):
             return render(request, 'homepage.html')
         else:
             if request.user.is_authenticated():
-                return render(request, 'index.html') # Go to application
+                release = os.environ.get('HEROKU_RELEASE_NAME', None)
+                return render(request, 'index.html', {'release': release}) # Go to application
             else:
                 return HttpResponseRedirect("/account/login") # Go to login
 

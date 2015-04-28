@@ -218,8 +218,16 @@ FEEDBACK_APP_SETTINGS = {
     'respond_to_feedback_request_url_template': '{scheme}://{host}/feedback/#/todo/{id}'
 }
 
+if os.environ.get("HEROKU_APP_NAME", False):
+    import heroku
+    api = heroku.from_key(os.environ['HEROKU_API_KEY'])
+    app = api.apps[os.environ.get("HEROKU_APP_NAME")]
+    release = app.releases[-1]
+    os.environ['HEROKU_RELEASE_NAME'] = release.name
+
 RAVEN_CONFIG = {
     'dsn': 'https://f1a18dde65b54d21978a126d6f6e907c:3a723d634f8a45629cfbba4034bce984@app.getsentry.com/42421',
+    'release': os.environ.get('HEROKU_RELEASE_NAME', None),
     'tags': {},
 }
 
@@ -267,11 +275,4 @@ LOGGING = {
         },
     },
 }
-
-if os.environ.get("HEROKU_APP_NAME", False):
-    import heroku
-    api = heroku.from_key(os.environ['HEROKU_API_KEY'])
-    app = api.apps[os.environ.get("HEROKU_APP_NAME")]
-    release = app.releases[-1]
-    os.environ['HEROKU_RELEASE_NAME'] = release.name
 
