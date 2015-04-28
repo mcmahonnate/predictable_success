@@ -7,19 +7,18 @@
     <head>
         <title>{% block title %}{% endblock title %}</title>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="{% static 'css/favicon.ico' %}" rel="shortcut icon" type="image/x-icon" />
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+        <link href="{% static 'images/favicon.ico' %}" rel="shortcut icon" type="image/x-icon" />
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600' rel='stylesheet' type='text/css'>
         <link href="//fonts.googleapis.com/css?family=Raleway:100,200,300,400,500,600,700,800,900" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
         
         {% block css %}{% endblock css %}
-
-        {% compress css %}
-            <link href="{% static 'css/scoutmap/style.less' %}" rel="stylesheet" type="text/less">
+        {% compress css%}
+            <link href="{% static 'css/scoutmap/style.less' %}" rel="stylesheet" type="text/less">        
         {% endcompress %}
 
-        {% if DEBUG %}
+        {% if debug %}
         <script>
             less = {
                 env: 'development', // "development" or "production"
@@ -31,6 +30,7 @@
             };
         </script>
         <script src="{% static 'javascript/less.js' %}"></script>
+        <script>less.watch();</script>
         {% endif %}
     </head>
     <body>

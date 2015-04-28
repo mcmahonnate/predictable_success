@@ -73,7 +73,7 @@
 
 <div class="container">
     <div class="row">    
-        <div class="col-lg-3 panel" on-filter index="{{$index}}" stale-days="90" ng-repeat="evaluation in filteredEvaluations = (evaluations | filterEvaluations:talentCategory:teamId:happy:days_since_happy:fact_finder:follow_thru:quick_start:implementor:vops[0]:vops[1]:vops[2]:vops[3]) | orderBy:['employee.full_name']">
+        <div class="col-xs-2 col-sm-2 col-md-4 col-lg-3 panel" on-filter index="{{$index}}" stale-days="90" ng-repeat="evaluation in filteredEvaluations = (evaluations | filterEvaluations:talentCategory:teamId:happy:days_since_happy:fact_finder:follow_thru:quick_start:implementor:vops[0]:vops[1]:vops[2]:vops[3]) | orderBy:['employee.full_name']">
         <canvas width="12" height="12" style="float:left;margin-right: 8px;" employee-talent-category="{{evaluation.talent_category}}"></canvas>
         <span class="small" style="float:left;margin-top: -8px;" ng-class="{'veryhappy': evaluation.employee.happiness==5,'happy': evaluation.employee.happiness==4,'indifferent': evaluation.employee.happiness==3,'unhappy': evaluation.employee.happiness==2,'veryunhappy': evaluation.employee.happiness==1, 'nohappydata': (evaluation.employee.happiness==-1 || staleHappy(evaluation.employee.happiness_date))}"></span>
         

@@ -2,7 +2,7 @@
 <div ng-if="currentUser.can_view_company_dashboard" ng-class="{in:salaryReport}" id="dashboard">
 <div class="container narrow-gutter" style="margin-top:85px">    
     <div class="row">
-        <div class="col col-sm-5 col-md-6 col-lg-5">
+        <div class="col col-sm-5 col-md-4 col-lg-5">
 
             <!-- Pie Chart -->
             <div class="panel talent-portfolio row">      
@@ -12,35 +12,9 @@
                 </div>
             </div>
 
-            <!-- Salary Totals -->
-            <div class="panel salary-totals row">
-                <h2 class="panel-title">Salaries by Talent</h2> 
-                <div class="salary-total-type" ng-repeat="(category, salaries) in salaryReport.categories track by $index">
-                    <canvas style="float:left" width="35" height="35" employee-talent-category="{{category}}"></canvas>
-                    <span class="salary-total-amount">{{salaries | currency | noCents}}</span>
-                </div>
-            </div>
-
-            <!-- Total Salaries -->
-            <div class="panel align-left row"> 
-                <h2 class="panel-title">Total Salaries</h2>
-                <div class="big-number">{{salaryReport.total_salaries | currency | noCents }}</div>
-            </div>
-
-            <!-- RPE -->
-            <div class="panel row">
-                <h2 class="panel-title">{{ indicator.name }}</h2> 
-                <div class="big-number">${{ performance.value }}</div>
-                <span>As of {{ performance.date }}</span>
-            </div>
-        </div>
-        
-        <div class="col col-sm-7 col-md-6 col-lg-7">    
-       
             <!-- Todo's -->
-            <div class="panel clock loaded" ng-if="currentUser.can_view_comments" ng-init="showToDo=true">
+            <div class="panel clock loaded row" ng-if="currentUser.can_view_comments" ng-init="showToDo=true">
                 <div ng-controller="MyToDoListCtrl" class="widget-inner large-screen">
-                
                     <h2 class="panel-title">My To Do's</h2> 
                     <div ng-if="todos.length > 0">
                         <ul class="nav nav-tabs">
@@ -55,7 +29,6 @@
                         <div ng-if="todos.length > 0">
                             <div ng-repeat="todo in todos" ng-controller="EmployeeToDoCtrl" ng-init="currentToDo=todo">
                                 <input show="{{scrollIntoView}}" ng-scroll-into-view type="checkbox" ng-click="saveToDo(todo)" ng-model="todo.completed" style="padding: 5px;float: left;">
-
                                 <textarea ng-model="todo.description" focus-me="todo.edit" ng-enter="saveToDo();scrubToDo(todo);" ng-blur="saveToDo();scrubToDo(todo);" ng-show="todo.edit"  placeholder="Add a To Do..." style="position: relative; width: 265px; height: 13px;background-color:#2a2a2a;color:#eee;resize:none;overflow:hidden;font-size: 13px;"></textarea>
                                 <div ng-show="!todo.edit" ng-class="{'todo-completed': todo.completed}" style="display:inline-block;width: 260px;float:left;margin-top: 3px;margin-left: 2px;padding-bottom: 3px;"><a ng-href="/#/employees/{{todo.employee.id}}">({{todo.employee.full_name}}) {{todo.description}}</a></div>
                                 <ul class="feed-actions" style="margin-left: 2px;margin-top:0px;">
@@ -67,14 +40,14 @@
                                 <span type="text" class="form-control" datepicker-popup="{{format}}" ng-model="todo.due_date" is-open="opened" min="minDate" datepicker-options="" date-disabled="disabled(date, mode)" show-weeks="false" ng-required="true" close-text="Close"/>
                                 <div style="clear:both;"></div>
                                 <div ng-show="openAssigneeMenu" style="border: 1px solid #ccc;padding: 8px 3px;border-radius: 4px;background-color:#efefef;margin-bottom:10px;">
-                                        <div class="assignee-arrow-border"></div>
-                                        <div class="assignee-arrow"></div>
-                                        <ul style="margin-top: -30px;">
-                                            <li class="assignee-select"><a class="assignee-select-link" ng-click="assigneeMenu.show=false;todo.assigned_to=null;saveToDo()">Unassigned</a></li>
-                                            <li class="assignee-select" ng-repeat="assignee in assignees | orderBy:'full_name'">
-                                                <a class="assignee-select-link" ng-click="assigneeMenu.show=false;todo.assigned_to=assignee;saveToDo()" style="cursor: pointer;">{{assignee.full_name}}</a>
-                                            </li>
-                                        </ul>
+                                    <div class="assignee-arrow-border"></div>
+                                    <div class="assignee-arrow"></div>
+                                    <ul style="margin-top: -30px;">
+                                        <li class="assignee-select"><a class="assignee-select-link" ng-click="assigneeMenu.show=false;todo.assigned_to=null;saveToDo()">Unassigned</a></li>
+                                        <li class="assignee-select" ng-repeat="assignee in assignees | orderBy:'full_name'">
+                                            <a class="assignee-select-link" ng-click="assigneeMenu.show=false;todo.assigned_to=assignee;saveToDo()" style="cursor: pointer;">{{assignee.full_name}}</a>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>        
@@ -97,6 +70,38 @@
                     </section>
                 </div>
             </div>
+        </div>
+        
+        <div class="col col-sm-7 col-md-8 col-lg-7">    
+            <div class="row">
+                <div class="col-sm-6">
+
+                    <!-- Salary Totals -->
+                    <div class="panel salary-totals">
+                        <h2 class="panel-title">Salaries by Talent</h2> 
+                        <div class="salary-total-type" ng-repeat="(category, salaries) in salaryReport.categories track by $index">
+                            <canvas style="float:left" width="30" height="30" employee-talent-category="{{category}}"></canvas>
+                            <span class="salary-total-amount">{{salaries | currency | noCents}}</span>
+                        </div>
+                    </div>
+                </div>    
+                <div class="col-sm-6">
+                
+                    <!-- Total Salaries -->
+                    <div class="panel align-left"> 
+                        <h2 class="panel-title">Total Salaries</h2>
+                        <div class="big-number">{{salaryReport.total_salaries | currency | noCents }}</div>
+                    </div>
+
+                    <!-- RPE -->
+                    <div class="panel">
+                        <h2 class="panel-title">{{ indicator.name }}</h2> 
+                        <div class="big-number">${{ performance.value }}</div>
+                        <span>As of {{ performance.date }}</span>
+                    </div>
+                </div>
+            </div>        
+
 
             <!-- Comments -->
             <div class="panel" ng-if="currentUser.can_view_comments" ng-controller="DiscussionOverviewCtrl">
@@ -174,7 +179,7 @@
                             <a class="comment-reply-name" ng-href="#/employees/{{subcomment.owner.employee.id}}">{{subcomment.owner.employee.full_name}}</a> 
                             <span class="timestamp" title="{{subcomment.created_date | date:'MMM d, yyyy h:mma' }}">{{subcomment.created_date | fromNow }}</span>     
                             <div class="comment-reply-copy" ng-show="showSubCommentEdit">
-                                <textarea ng-model="subcomment.content"></textarea>
+                                <textarea ng-model="subcomment.content" ></textarea>
                                 <div id="editActions" style="right:2px;bottom:-33px;">
                                     <button class="button small blue" ng-disabled="!subcomment.content" ng-click="saveSubComment(subcomment, comment);showSubCommentEdit=false">Save</button>
                                     <button class="button small orange" ng-click="cancelEditSubComment(subcomment, comment);showSubCommentEdit=false">Cancel</button>
@@ -192,7 +197,7 @@
                                 </ul>
                             </div>
                         </div>
-                        <div ng-show="showCommentInput || comment.subcomments" style="padding:5px;">
+                        <div ng-show="showCommentInput || comment.subcomments" class="comment-reply-textarea">
                             <textarea class="text" 
                                 ng-model="comment.newSubCommentText" 
                                 ng-class="{'expand': comment.expandTextArea, 'compress': !comment.expandTextArea}" 

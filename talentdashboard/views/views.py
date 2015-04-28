@@ -48,7 +48,6 @@ from django.utils.encoding import iri_to_uri
 from django.utils.translation import get_language
 import collections
 import dateutil.parser, copy
-from django.core.mail import send_mail
 
 logger = getLogger('talentdashboard')
 
@@ -630,11 +629,13 @@ class LeadershipDetail(APIView):
     def get(self, request, pk, format=None):
         employee = Employee.objects.get(id=pk)
         if employee is not None:
-            leaderships = Leadership.objects.filter(employee__id=employee.id)
-            leadership = leaderships.latest('start_date')
-            if leadership is not None:
+            try:
+                leaderships = Leadership.objects.filter(employee__id=employee.id)
+                leadership = leaderships.latest('start_date')
                 serializer = LeadershipSerializer(leadership, many=False, context={'request': request})
                 return Response(serializer.data)
+            except Leadership.DoesNotExist:
+                pass
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
     def post(self, request, pk, format=None):
@@ -1380,4 +1381,3 @@ def menu_counts(request):
         'toBeDelivered': toBeDelivered
     }
     return Response(result)
-

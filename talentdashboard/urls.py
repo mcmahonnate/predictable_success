@@ -19,6 +19,9 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^$', IndexView.as_view(), name='index'),
+	url(r'^404/?$', TemplateView.as_view(template_name="404.html"), name='404'),
+	url(r'^error/?$', TemplateView.as_view(template_name="error.html"), name='error'),
+    url(r'^confirmation/?$', TemplateView.as_view(template_name="confirmation.html"), name='confirmation'),
     url(r'^feedback/$', TemplateView.as_view(template_name="feedback.html"), name='feedback_home'),
     url(r'^logout/$', logout,{'next_page': '/account/login/'}),
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),

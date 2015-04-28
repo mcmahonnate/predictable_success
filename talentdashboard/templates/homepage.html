@@ -1,19 +1,19 @@
 {% extends "layouts/blank.html" %}
 {% load staticfiles %}
 
-{% block title %}ScoutMap{% endblock title %}
+{% block title %}Scoutmap - Unleash your talent{% endblock title %}
 
 {% block content %}
     <section class="billboard">
-        <a href="{% url 'login' %}" class="login-link">Customer Login</a>
+        <div class="builtby">Built and used by <a href="http://www.fool.com">The Motley Fool</a></div>
         <img src="{% static 'images/logo-light.png' %}" alt="ScoutMap" class="logo" />
         <h1 class="tagline">Unleash your talent</h1>
-        <p class="byline">Talent management shouldn't be complex. With ScoutMap, we help leadership focus their effort on their best talent with actionable advice and intuitive software.</p>
-
+        <p class="byline">Talent management shouldn't be complex. With Scoutmap, you have the tools to focus your effort on continually developing & retaining your company's most talented employees.</p>
+        <button type="button" class="btn btn-lg btn-success btn-start" data-toggle="modal" data-target="#modal">
+          Request Beta Access
+        </button>
+        <p class="join-msg">Apply for the beta&mdash;it's free & simple</p>
         <div class="shaded">
-            <button type="button" class="btn btn-lg btn-success btn-start" data-toggle="modal" data-target="#modal">
-              Request a Demo
-            </button>
             <blockquote>
                 <p>"We are the best place to work in America not because of perks, but because we built a performance culture using ScoutMap."</p>
                 <footer>
@@ -23,29 +23,24 @@
         </div>    
     </section>
     <section class="engagement">
-        <h2>A Simple Way to Build Great Teams</h2>
-        <p>Quickly build project teams and evaluate your workforce.</p>
+        <h2>Scoutmap is about creating a culture where your high performers can thrive</h2>
+        <p>Our platform focuses your team on its most valuable resource, your most talented employees. We'll show you a breakdown of your talent, how you're investing in that talent, and the discussions you need to have to develop it.</p>
         <img src="{% static 'images/screenshot.png' %}" alt="Screenshot" class="screenshot" />
-    </section> 
-    <section class="features"> 
-        <h2>Know How You're Investing in Talent</h2>
-        <p>Better strategize by understanding how you're investing in talent</p>
-
     </section>    
-
     <div id="modal" class="modal modal-get-started fade">
         <div class="modal-dialog">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <div class="arrow-right"></div>
             <div class="headshot-box">
                 <img class="headshot" src="{% static 'images/ariana.jpg' %}" alt="Ariana" />
-                <span class="headshot-name">Ariana</span> Customer Happiness
+                <span class="headshot-name">Ariana</span> Customer Delight
             </div>    
             <div class="modal-content">
                 <div class="modal-body">
                     <h3>Hey there!</h3>
-                    <p>Interested in unleashing your talent? Enter your details below and you'll be on your way.</p>
-                    <form class="request-form">
+                    <p>Be among the first to access the same tool used by the Motley Fool to build America's best place to work. Enter your details, and we'll contact you soon about our beta program.</p>
+                    <form id="contact" class="request-form" method="post">
+                        {% csrf_token %}
                         <input class="form-control input-lg stroked" name="name" placeholder="Your name" />
                         <input class="form-control input-lg stroked" name="email" placeholder="Email Address" />
                         <input class="form-control input-lg stroked" name="company" placeholder="Company" />
@@ -55,9 +50,40 @@
             </div>
         </div>
     </div>
+    {% block footer %}
+    <section class="footer">
+        <footer>
+            <div align="center">
+                <img src="{% static 'images/logo-light.png' %}" alt="ScoutMap" class="logo footer-logo" />
+                <p class="copyright">© Copyright 2015, TMF Works, LLC. All rights reserved. | Questions? <a href="mailto:scoutmap@fool.com?Subject=I'm%20Interested!">Contact us!</a></p>
+            </div>
+        </footer>
+    </section>
+    {% endblock footer %}
 {% endblock content %}
+
 
 {% block javascript %}
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
     <script src="{% static 'javascript/main.js' %}"></script> 
+
+    <script type="text/javascript">
+        $(function() {
+
+            /* If successfully sent contact mesage */
+            $('.flyover').toggleClass('in');
+        });
+    </script>
+
+    <script type="text/javascript">
+
+        /* Acquisition Tracking */
+        campaign = '84889792988067024907';
+        key = '96708570543772986562';
+        form = 'contact'; /* Id of form to track */
+
+        var acq = document.createElement("script"); acq.type = "text/javascript"; acq.async = true;
+        acq.src = "http://fool.acquisition.io/api/ecap/v1/js/ecap.js"; referrer = document.referrer;
+        document.getElementsByTagName("head")[0].appendChild(acq);
+    </script>
 {% endblock javascript %}

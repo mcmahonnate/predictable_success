@@ -1,0 +1,16 @@
+/* == Salary Totals ==================================== */
+.salary-totals .panel-title {
+  margin-bottom: 30px;
+}
+.salary-totals .salary-total-type {
+  overflow: hidden;
+  margin-bottom: 5px;
+}
+.salary-totals .salary-total-amount {
+  margin-top: 8px;
+  font-size: 16px;
+  margin-left: 16px;
+  text-align: right;
+  float: left;
+  font-family: sans-serif;
+}

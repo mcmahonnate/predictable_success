@@ -1,5 +1,4 @@
 #!/bin/bash
-
 set -e
 
 # if no .venv, diaf
@@ -11,7 +10,7 @@ elif [ ! -z "$ENVIRONMENT" ]; then
     exit 1
 else
     python manage.py collectstatic --noinput --settings=talentdashboard.settings.local;
-    #gunicorn talentdashboard.wsgi_local --settings=talentdashboard.settings.local
+    pip install -r requirements.txt;
     python manage.py runserver 0.0.0.0:8000
 fi
 

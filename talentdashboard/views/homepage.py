@@ -3,6 +3,16 @@ from django.core.mail import send_mail
 from django.shortcuts import redirect, render, render_to_response, HttpResponseRedirect
 from django.views.generic import TemplateView
 from django.template import RequestContext
+from django.core.mail import EmailMultiAlternatives
+from django.shortcuts import redirect, render, render_to_response, HttpResponseRedirect
+from django.views.generic import TemplateView
+from django.template import RequestContext
+from django.utils.log import getLogger
+from django.conf import settings
+from django.template.loader import get_template
+from django.template import Context
+
+logger = getLogger(__name__)
 
 class IndexView(TemplateView):
     template = "homepage.html"
@@ -16,9 +26,3 @@ class IndexView(TemplateView):
 	        else:
 	            return HttpResponseRedirect("/account/login") # Go to login
 
-
-    def post(self, request, *args, **kwargs):
-        send_mail('Subject here', 'Here is the message.', settings.DEFAULT_FROM_EMAIL, ['dosberg@gmail.com'], fail_silently=False)
-
-        return render_to_response(self.template, {
-        }, context_instance=RequestContext(request))

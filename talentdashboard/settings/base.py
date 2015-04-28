@@ -1,88 +1,63 @@
 # Django settings for talentdashboard project.
 import os.path
 import dj_database_url
+import raven
 
+SECRET_KEY = os.environ['SECRET_KEY']
+TEMPLATE_DEBUG = DEBUG = os.environ.get("DEBUG", False)
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
+# Database settings
 DATABASES = { 'default': dj_database_url.config(default=os.environ.get('DATABASE_URL')) }
 DATABASES['default']['ENGINE'] = 'tenant_schemas.postgresql_backend'
 DATABASE_ROUTERS = (
     'tenant_schemas.routers.TenantSyncRouter',
 )
+
+# Celery settings
 CELERY_ALWAYS_EAGER = True
-DEBUG = False
 
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
-
-ADMINS = (
+MANAGERS = ADMINS = (
     ('Doug Dosberg', 'ddosberg@fool.com'),
+    ('Mark Kennedy', 'mkennedy@fool.com'),
+    ('Nate McMahon', 'nmcmahon@fool.com'),
 )
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
-MANAGERS = ADMINS
+# Email settings
+EMAIL_USE_SSL = True
+EMAIL_HOST = 'mail.dfrntlabs.com'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = os.environ.get("EMAIL_ADDRESS", '')
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD", '')
+DEFAULT_FROM_EMAIL = 'Dash Team <' + EMAIL_HOST_USER + '>'
+DEMO_REQUEST_EMAIL_TO = 'nate@fool.com'
+DEMO_REQUEST_EMAIL_SUBJECT = ' requested a demo'
 
-# Hosts/domain names that are valid for this site; required if DEBUG is False
-# See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = []
-
-# Local time zone for this installation. Choices can be found here:
-# http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
-# although not all choices may be available on all operating systems.
-# In a Windows environment this must be set to your system time zone.
+ALLOWED_HOSTS = ['.scoutmap.com']
+INTERNAL_IPS = (
+    '0.0.0.0',
+    '127.0.0.1',
+)
 TIME_ZONE = 'America/New_York'
-
-# Language code for this installation. All choices can be found here:
-# http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
-
-SITE_ID = 1
-
-# If you set this to False, Django will make some optimizations so as not
-# to load the internationalization machinery.
 USE_I18N = True
-
-# If you set this to False, Django will not format dates, numbers and
-# calendars according to the current locale.
 USE_L10N = True
-
-# If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
 
-AWS_STORAGE_BUCKET_NAME = os.environ['AWS_STORAGE_BUCKET_NAME']
-
-# Absolute filesystem path to the directory that will hold user-uploaded files.
-# Example: "/var/www/example.com/media/"
+# Media settings
 MEDIA_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'media')
-
-# URL that handles the media served from MEDIA_ROOT. Make sure to use a
-# trailing slash.
-# Examples: "http://example.com/media/", "http://media.example.com/"
 MEDIA_URL = '/media/'
 
+# Static settings
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
 STATIC_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'staticfiles')
 STATIC_URL = '/static/'
-
-# URL prefix for static files.
-# Example: "http://example.com/static/", "http://static.example.com/"
-AWS_STORAGE_BUCKET_NAME = os.environ['AWS_STORAGE_BUCKET_NAME']
-AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
-AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
-AWS_QUERYSTRING_AUTH = False
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-S3_URL = 'http://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
-
-STRIPE_PUBLISHABLE_KEY = os.environ['STRIPE_PUBLISHABLE_KEY']
-STRIPE_SECRET_KEY = os.environ['STRIPE_SECRET_KEY']
-MONTHLY_PLAN_PRICE = '5'
-YEARLY_PLAN_PRICE = '60'
-
-COMPRESS_URL = STATIC_URL
-COMPRESS_ROOT = STATIC_ROOT
-
-
 # Additional locations of static files
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
@@ -90,7 +65,6 @@ STATICFILES_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static'),
 )
-
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
@@ -98,43 +72,45 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
 )
-
-
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
-
-COMPRESS_ENABLED=os.environ.get("COMPRESS_ENABLED", False)
-COMPRESS_OFFLINE=os.environ.get("COMPRESS_OFFLINE", False)
-
+# Compress settings
+COMPRESS_URL = STATIC_URL
+COMPRESS_ROOT = STATIC_ROOT
+COMPRESS_ENABLED = os.environ.get("COMPRESS_ENABLED", False)
+COMPRESS_OFFLINE = os.environ.get("COMPRESS_OFFLINE", False)
 COMPRESS_PRECOMPILERS = (
     ('text/less', '%s {infile} {outfile}' % (os.path.join(BASE_DIR, 'node_modules/less/bin/lessc'), )),
 )
-
 COMPRESS_JS_FILTERS = [
     'compressor.filters.jsmin.SlimItFilter',
 ]
-
 COMPRESS_CSS_HASHING_METHOD = 'content'
 
+# AWS Settings
+AWS_STORAGE_BUCKET_NAME = os.environ['AWS_STORAGE_BUCKET_NAME']
+AWS_STORAGE_BUCKET_NAME = os.environ['AWS_STORAGE_BUCKET_NAME']
+AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
+AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
+AWS_QUERYSTRING_AUTH = False
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+S3_URL = 'http://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
 
+# Stripe settings
+STRIPE_PUBLISHABLE_KEY = os.environ['STRIPE_PUBLISHABLE_KEY']
+STRIPE_SECRET_KEY = os.environ['STRIPE_SECRET_KEY']
+MONTHLY_PLAN_PRICE = '5'
+YEARLY_PLAN_PRICE = '60'
 
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = '^n2)5q^gdc%5du_tivgasukok(2jx8olj!_y&qvh(l7%48hh@1'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
 )
 
 TEMPLATE_DIRS = (
     "/django-talentdashboard/talentdashboard/templates",
-)
-
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
-    'talentdashboard.settings.context_processors.debug'
 )
 
 AUTHENTICATION_BACKENDS = (
@@ -153,19 +129,10 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-SETTINGS_IN_CONTEXT = ['DEBUG']
-
-
 ROOT_URLCONF = 'talentdashboard.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'talentdashboard.wsgi.application'
-
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-)
 
 SHARED_APPS = (
     'tenant_schemas',  # mandatory
@@ -176,6 +143,10 @@ SHARED_APPS = (
     'django.contrib.messages',
     'django.contrib.admin',
     'django.contrib.staticfiles',
+    'static_precompiler',
+    'compressor',
+    'raven.contrib.django.raven_compat',
+    'test_without_migrations',
 )
 
 TENANT_APPS = (
@@ -198,8 +169,6 @@ TENANT_APPS = (
     'storages',
     'kpi',
     'feedback',
-    'static_precompiler',
-    'compressor'
 )
 
 INSTALLED_APPS = list(set(SHARED_APPS + TENANT_APPS))
@@ -224,29 +193,78 @@ SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 LOGIN_URL = '/account/login'
 
 def get_cache():
-  import os
-  try:
-    os.environ['MEMCACHE_SERVERS'] = os.environ['MEMCACHIER_SERVERS'].replace(',', ';')
-    os.environ['MEMCACHE_USERNAME'] = os.environ['MEMCACHIER_USERNAME']
-    os.environ['MEMCACHE_PASSWORD'] = os.environ['MEMCACHIER_PASSWORD']
-    return {
-      'default': {
-        'BACKEND': 'django_pylibmc.memcached.PyLibMCCache',
-        'TIMEOUT': 500,
-        'BINARY': True,
-        'OPTIONS': { 'tcp_nodelay': True }
-      }
-    }
-  except:
-    return {
-      'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'
-      }
-    }
-
+    import os
+    try:
+        os.environ['MEMCACHE_SERVERS'] = os.environ['MEMCACHIER_SERVERS'].replace(',', ';')
+        os.environ['MEMCACHE_USERNAME'] = os.environ['MEMCACHIER_USERNAME']
+        os.environ['MEMCACHE_PASSWORD'] = os.environ['MEMCACHIER_PASSWORD']
+        return {
+            'default': {
+                'BACKEND': 'django_pylibmc.memcached.PyLibMCCache',
+                'TIMEOUT': 500,
+                'BINARY': True,
+                'OPTIONS': { 'tcp_nodelay': True }
+            }
+        }
+    except:
+        return {
+            'default': {
+                'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'
+            }
+        }
 CACHES = get_cache()
 
 
 FEEDBACK_APP_SETTINGS = {
     'respond_to_feedback_request_url_template': '{scheme}://{host}/feedback/#/todo/{id}'
+}
+
+RAVEN_CONFIG = {
+    'dsn': 'https://f1a18dde65b54d21978a126d6f6e907c:3a723d634f8a45629cfbba4034bce984@app.getsentry.com/42421',
+    'tags': {},
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'root': {
+        'level': 'WARNING',
+        'handlers': ['sentry', 'console'],
+    },
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(module)s %(message)s'
+        },
+    },
+    'handlers': {
+        'sentry': {
+            'level': 'ERROR',
+            'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        }
+    },
+    'loggers': {
+        'django.db.backends': {
+            'level': 'ERROR',
+            'handlers': ['console'],
+            'propagate': False,
+        },
+        'raven': {
+            'level': 'DEBUG',
+            'handlers': ['console'],
+            'propagate': False,
+        },
+        'sentry.errors': {
+            'level': 'DEBUG',
+            'handlers': ['console'],
+            'propagate': False,
+        },
+    },
 }

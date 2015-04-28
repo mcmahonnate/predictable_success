@@ -1,6 +1,6 @@
 <header id="main-header">
-	<div ng-controller="EmployeeListCtrl">
-		<a ng-href="#/" class="customer-name">{{customer.name}}</a>
+    <div ng-controller="EmployeeListCtrl">
+        <a ng-href="#/" class="customer-name">{{customer.name}}</a>
 
         <!-- Account/logout -->
         <div class="nav-item" ng-class="{'menu-item-active':openSettingsMenu}">
@@ -22,7 +22,7 @@
 
         <!-- Add Employee -->
         <div class="nav-item" ng-if="currentUser.can_view_company_dashboard" ng-class="{'menu-item-active':openEmployeeMenu}">
-		  <span class="fa fa-plus employee_menu" ng-click="toggleEmployeeMenu()"></span>
+          <span class="fa fa-plus employee_menu" ng-click="toggleEmployeeMenu()"></span>
           <div id="selection-shell" ng-show="openEmployeeMenu" style="margin-left: -195px;">
 
             <div ng-show="currentUser.can_edit_employees">
@@ -35,7 +35,7 @@
                 </ul>
               </div>
             </div>
-		  </div>
+          </div>
         </div>
 
         <!-- Filter Employee -->
@@ -71,7 +71,7 @@
         <!-- Reports -->
         <div class="nav-item" ng-if="currentUser.can_view_company_dashboard" ng-class="{'menu-item-active':openTeamMenu}" ng-controller="TeamListCtrl">
           <span class="fa fa-pie-chart team_menu" ng-click="toggleTeamMenu()"></span>
-		  <div id="selection-shell" ng-show="openTeamMenu" style="margin-left: -89px;">
+          <div id="selection-shell" ng-show="openTeamMenu" style="margin-left: -89px;">
             <div id="selection-title">Company Report</div>
             <div id="selection-list">
                 <ul style="padding: 10px 10px;">
@@ -88,8 +88,8 @@
                     </li>
                 </ul>
             </div>
-		  </div>
-		</div>
+          </div>
+        </div>
 
         <!-- Home -->
         <div class="nav-item">
@@ -115,7 +115,7 @@
                     </ul>
                 </div>
             </div>
-	    </div>
+        </div>
         <modal-employee employee='newEmployee' leadership='newLeadership' employees='employees' teams='teams' show='modalEmployeeShown' width='700px'></modal-employee>
     </div>
 

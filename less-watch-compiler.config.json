@@ -1,0 +1,7 @@
+{
+    "allowedExtensions":["less"],
+    "defaults": {
+        "watchFolder": "talentdashboard/static/css/scoutmap",
+        "outputFolder": "static/CACHE/css/"
+    }
+}
