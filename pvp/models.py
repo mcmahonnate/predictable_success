@@ -9,6 +9,7 @@ from django.utils.log import getLogger
 logger = getLogger('talentdashboard')
 PVP_SCALE = [(i, i) for i in range(0, 5)]
 
+
 class EvaluationRoundManager(models.Manager):
     def get_rounds_for_employee(self, employee_id):
         evaluations = PvpEvaluation.objects.filter(employee__id=employee_id)
@@ -18,7 +19,7 @@ class EvaluationRoundManager(models.Manager):
         return self.filter(id__in=ids)
 
     def most_recent(self, is_complete=True):
-        return self.filter(is_complete=is_complete).order_by('-date')[0:1].get()
+        return self.filter(is_complete=is_complete).latest()
 
 
 class EvaluationRound(models.Model):
@@ -28,6 +29,10 @@ class EvaluationRound(models.Model):
 
     def __str__(self):
         return "%s" % self.date
+
+    class Meta:
+        get_latest_by = 'date'
+
 
 class PvpEvaluationManager(models.Manager):
     def get_evaluations_for_round(self, round_id):
@@ -120,6 +125,7 @@ class PvpEvaluation(models.Model):
         verbose_name = "PVP Evaluation"
         verbose_name_plural = "PVP Evaluations"
         ordering =['-evaluation_round__date',]
+
 
 class PvpDescription(models.Model):
     potential = models.IntegerField(choices=PVP_SCALE)
