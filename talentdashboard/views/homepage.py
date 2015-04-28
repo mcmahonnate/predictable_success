@@ -1,3 +1,4 @@
+import os
 from django.conf import settings
 from django.core.mail import send_mail
 from django.shortcuts import redirect, render, render_to_response, HttpResponseRedirect
@@ -25,4 +26,5 @@ class IndexView(TemplateView):
 	            return render(request, 'index.html') # Go to application
 	        else:
 	            return HttpResponseRedirect("/account/login") # Go to login
+
 
