@@ -58,10 +58,7 @@
     }]);
 
     Raven.config('https://f1a18dde65b54d21978a126d6f6e907c@app.getsentry.com/42421', {
-        // pass along the version of your application
         release: '{{ release }}',
-
-        // we highly recommend restricting exceptions to a domain in order to filter out clutter
         whitelistUrls: [/scoutmap\.com/]
     }).install();
     </script>
