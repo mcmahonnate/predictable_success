@@ -28,3 +28,4 @@ django-stripe-payments==2.0.0
 whitenoise==1.0.6
 raven==5.2.0
 django-test-without-migrations==0.2
+heroku==0.1.4

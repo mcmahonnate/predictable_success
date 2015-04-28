@@ -267,3 +267,11 @@ LOGGING = {
         },
     },
 }
+
+if os.environ.get("HEROKU_APP_NAME", False):
+    import heroku
+    api = heroku.from_key(os.environ['HEROKU_API_KEY'])
+    app = api.apps[os.environ.get("HEROKU_APP_NAME")]
+    release = app.releases[-1]
+    os.environ['HEROKU_RELEASE_NAME'] = release.name
+
