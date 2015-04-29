@@ -15,7 +15,7 @@
         
         {% block css %}{% endblock css %}
         {% compress css%}
-            <link href="{% static 'css/scoutmap/style.less' %}" rel="stylesheet" type="text/less">        
+            <link href="{% static 'css/scoutmap/style.less' %}" rel="stylesheet" type="text/less">  
         {% endcompress %}
 
         {% if debug %}
@@ -30,7 +30,7 @@
             };
         </script>
         <script src="{% static 'javascript/less.js' %}"></script>
-        <script>less.watch();</script>
+        <script>//less.watch();</script>
         {% endif %}
     </head>
     <body>

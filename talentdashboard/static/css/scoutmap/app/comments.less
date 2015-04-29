@@ -1,19 +1,19 @@
 .comments {
-	margin-top:30px;
+	min-height: 900px;
 
+	.comment {
+		margin-bottom: 35px;
+	}
 	.comments-date {
 	 	font-size: 13px;
 	  	color: #8b8b8b;
 	  	border-bottom: 2px solid #efefef;
 	  	padding-bottom: 2px;
 	}
-
-
 	.timestamp {
 		color: #8b8b8b;
 		font-size: 13px;
 	}
-
 	.comment-owner-avatar-container {
 		display: block; 
 		float: left; 
@@ -25,7 +25,14 @@
 			margin-right: auto; 
 			height: 48px; 
 			vertical-align:text-top;
+			border-radius: 90px;
 		}		
+	}
+
+	.total-replies {
+		display: block;
+	  	margin-top: 20px;
+		font-weight: block;
 	}
 
 	.comment-item {
@@ -46,7 +53,7 @@
 		}
 
 		.comment-copy {
-  			margin: 15px 0;
+  			margin: 15px 0 0;
 		}
 
 		.comment-associated-avatar {
@@ -61,9 +68,28 @@
 			position: relative;
 			background: #fff;
 		}
-
-
 	}
+
+
+	ul.feed-actions {
+	    list-style: none;
+	    font-size: 12px;
+	}
+	.feed-actions li {
+	    background: url('/static/css/icon_bullet_grey2_4x4.png') no-repeat scroll 100% 6px transparent;
+	    float: left;
+	    margin: 0 10px 8px 0;
+	    padding: 0 10px 0 0;
+	    color: #8b8b8b;
+	}
+	.feed-action a {
+	    color: #ccc;
+	}	
+	.feed-action a:hover {
+	    text-decoration: none;
+	}
+
+
 
 	.comment-replies {
 		margin: 0 0 0 60px;
@@ -73,6 +99,7 @@
 			margin-bottom: 2px;
 			padding: 10px;
 			background-color: #efefef;
+			overflow: hidden;
 		}
 		.comment-reply-avatar-container {
 			display: block; 
@@ -85,6 +112,7 @@
 				margin-right: auto; 
 				height: 48px;
 				vertical-align:text-top;
+				border-radius: 90px;
 			}
 		}
 		.comment-reply-textarea {
@@ -102,7 +130,8 @@
 				padding: 6px;
 				border:1px solid #ccc;
 				display: inline;
-				  vertical-align: top;
+				vertical-align: top;
+				width: 68%;
 			}
 		}
 		.comment-reply-name {

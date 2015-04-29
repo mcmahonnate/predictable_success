@@ -2,8 +2,8 @@
 <div class="container narrow-gutter" style="margin-top:85px">    
 
     <div class="row">
-
-        <h1>{{ team.name }} Report</h1>
+        <a href="" class="pull-right download-report-link"><i class="fa fa-download"></i> Download Report</a>
+        <h1>{{ team_name }} </h1>
         <div class="col col-sm-5 col-md-4 col-lg-5">
 
             <!-- Pie Chart -->
@@ -11,15 +11,20 @@
                 <h2 class="panel-title">Talent Portfolio</h2>
                 <div class="talent-pie-chart-container"> 
                     <div x-talent-category-chart size="small" style="width: 100%; height: 100%;"></div>
-                    {{salaryReport.total_salaries | currency | noCents }}
                 </div>
             </div>
 
-            <!-- Salary Totals -->
-            <div class="panel salary-totals row">
+            <!-- Total Salary -->
+            <div class="panel row">
+                <h2 class="panel-title">Total Salaries</h2>    
+                <span class="total">{{salaryReport.total_salaries | currency | noCents }}</span>
+            </div>
+
+            <!-- Salary totals by segment -->
+            <div class="panel salary-totals row stripes">
                 <h2 class="panel-title">Salaries by Talent</h2>
-                <div class="salary-total-type" ng-repeat="(category, salaries) in salaryReport.categories track by $index">
-                    <canvas style="float:left"  width="30" height="30" employee-talent-category="{{category}}"></canvas>
+                <div class="salary-total-type" ng-repeat="(category, salaries) in salaryReport.categories track by $index">       
+                    <i class="glyphicon glyphicon-user pull-left user-segment user-segment-color-{{category}}"></i>
                     <span class="salary-total-amount">{{salaries | currency | noCents }}</span>
                 </div>
             </div>
@@ -28,24 +33,16 @@
             <div class="panel talent-portfolio row">
                 <h2 class="panel-title">Team Leads</h2>
                 <div ng-controller="TeamLeadsCtrl" ng-init="init(teamId)">
-                    <div ng-repeat="evaluation in teamLeads | orderBy:'talent_category'">
-                        <canvas employee-talent-category="{{evaluation.talent_category}}" width="12" height="12"></canvas>
-                        <span>
-                            <a ng-if="evaluation.employee.display" href="#/employees/{{evaluation.employee.id}}">{{evaluation.employee.full_name}}</a>
-                            <span ng-if="!evaluation.employee.display">{{evaluation.employee.full_name}}</span>
-                        </span>
+                    <div class="team-lead" ng-repeat="evaluation in teamLeads | orderBy:'talent_category'">
+                        <a class="avatar-container" ng-if="evaluation.employee.display" href="#/employees/{{evaluation.employee.id}}">
+                            <img ng-src="{{ evaluation.employee.avatar_small }}" class="medium-round-avatar" />
+                            <span title="{{evaluation.talent_category}}" class="team-lead-segment user-segment-background-color-{{evaluation.talent_category}}"></span>
+                        </a>
+                        <a class="team-lead-name" ng-if="evaluation.employee.display" href="#/employees/{{evaluation.employee.id}}">
+                            {{evaluation.employee.full_name}}
+                        </a>    
                     </div>
                 </div>
-            </div>
-
-            <!-- Navigation -->
-            <div class="panel row">
-                <ul>
-                    <li><a ng-click="click_discussions()"><span class="glyphicon-regular glyphicon-discussions" style="margin-right: 10px"></span>Discussions</a></li>
-                    <li ng-if="customer.show_mbti"><a ng-click="click_myers_briggs()"><span class="glyphicon-regular glyphicon-compass" style="margin-right: 10px"></span>Myers Briggs</a></li>
-                    <li ng-if="customer.show_vops"><a ng-click="click_vops()">VOPS</a></li>
-                    <li ng-if="customer.show_kolbe"><a ng-click="click_kolbe()">KOLBE</a></li>
-                </ul>
             </div>
         </div> 
 
@@ -54,10 +51,9 @@
             <div ng-controller="TeamCommentsCtrl" ng-class="{'showflip': show_discussions}">
  
                 <!-- Comments -->
-                <div class="panel" ng-if="currentUser.can_view_comments" >
-                    <h2 class="panel-title">Discussions</h2>
-                    <div class="comments" ng-repeat="comment in comments | orderBy:'created_date':true">
-                        
+                <div class="comments" ng-if="currentUser.can_view_comments" >
+                    <div class="comment panel" ng-repeat="comment in comments | orderBy:'created_date':true">
+                        <h2 class="panel-title" ng-show="$first">Discussions</h2>
                         <h3 ng-show="CreateHeader(comment.created_date)" class="comments-date">{{comment.created_date | date:'MMM d, yyyy'}}</h3>      
                         <div class="comment-owner-avatar-container">
                             <a ng-href="#/employees/{{comment.owner.employee.id}}">
@@ -102,12 +98,12 @@
                                 <a ng-href="#/employees/{{comment.associated_object.id}}" style="cursor: pointer;color:#8b8b8b;">
                                     <img ng-src="{{ comment.associated_object.avatar_small }}" class="comment-associated-avatar"/>
                                 </a>
-                                <span ng-init="length=500" ng-bind-html="comment.content | new_line | cut:true:length" style="line-height: 125%"></span> <span ng-show="comment.content.length>length" ng-init="showMoreButton=true"><a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a><a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a></span>
+                                <span ng-init="length=500" ng-bind-html="comment.content | new_line | cut:true:length" style="line-height: 125%"></span> <span ng-show="comment.content.length>length" ng-init="showMoreButton=true"><a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a><a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a></span>   
+                                <span class="total-replies" ng-show="comment.subcomments.length>0">
+                                    {{comment.subcomments.length}} reply
+                                </span>
+
                                 <ul class="comment-actions">
-                                    <li class="comment-action">
-                                        <a ng-click="showCommentInput = ! showCommentInput" class="feed-action" style="color: #8b8b8b;cursor: pointer;">comment</a>
-                                        <span ng-show="comment.subcomments.length>0"> ({{comment.subcomments.length}})</span>
-                                    </li>
                                     <li ng-show="comment.owner.id==currentUser.id" class="feed-action">
                                         <a ng-click="showCommentEdit=true">edit</a>
                                     </li>
@@ -115,11 +111,16 @@
                                         <a ng-click="deleteComment(comment)">delete</a>
                                     </li>
                                 </ul>
+
                             </div>
                         </div>
        
                         <div class="comment-replies" ng-show="showCommentInput || comment.subcomments">
                             <div class="comment-reply" ng-repeat="subcomment in comment.subcomments | orderBy:'created_date'">
+                                <ul class="feed-actions pull-right">
+                                    <li ng-show="subcomment.owner.id==currentUser.id" class="feed-action"><a ng-click="showSubCommentEdit=true" class="feed-action">Edit</a></li>
+                                    <li ng-show="subcomment.owner.id==currentUser.id" class="feed-action"><a ng-click="deleteSubComment(comment, subcomment)" class="feed-action">Delete</a></li>
+                                </ul>                            
                                 <div class="comment-reply-avatar-container">
                                     <a ng-href="#/employees/{{subcomment.owner.employee.id}}">
                                         <img class="comment-reply-avatar" ng-src="{{ subcomment.owner.employee.avatar_small }}"/>
@@ -140,10 +141,6 @@
                                         <a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a>
                                         <a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a>
                                     </span>
-                                    <ul class="feed-actions">
-                                        <li ng-show="subcomment.owner.id==currentUser.id" class="feed-action"><a ng-click="showSubCommentEdit=true" class="feed-action" style="color: #8b8b8b;cursor: pointer;">edit</a></li>
-                                        <li ng-show="subcomment.owner.id==currentUser.id" class="feed-action"><a ng-click="deleteSubComment(comment, subcomment)" class="feed-action" style="color: #8b8b8b;cursor: pointer;">delete</a></li>
-                                    </ul>
                                 </div>
                             </div>
                             <div ng-show="showCommentInput || comment.subcomments" class="comment-reply-textarea">
@@ -161,83 +158,25 @@
                 </div>
             </div>     
         </div>
-
-
-                  <div class="widget-inner large-screen make_transist hideflip" ng-class="{'showflip': show_vops}" style="width:650px;position: absolute; min-height: 446px;">
-                    <header class="no-reload">
-                      <h1 style="display:inline;">VOPS</h1>
-                    </header>
-                    <section class="widget-body rag-widget" style="padding: 24px;">
-                      <div class="widget-canvas">
-                        <div class="t-size-x16" style="min-width: 50%">
-                            <div ng-repeat="assessment in assessments | filter:{category:{assessment:{id:3}}} | greaterThan:299 | orderBy:'score': true">
-                                  <div style="width:600px"><span style="border-bottom: 1px solid; padding-bottom: 3px;">{{ assessment.name }}<span style="color: #8b8b8b;"> ({{ assessment.score }})</span></span></div>
-                                  <div ng-bind-html="assessment.description" style="margin:15px;width:560px"></div>
-
-                            </div>
-                            Coming Soon!
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                  <div class="widget-inner large-screen make_transist hideflip" ng-class="{'showflip': show_kolbe}" style="width:650px;position: absolute;min-height: 446px;">
-                    <header class="no-reload">
-                      <h1 style="display:inline;">Kolbe</h1>
-                    </header>
-                    <section class="widget-body rag-widget" style="padding: 24px;">
-                      <div class="widget-canvas">
-                        <div class="t-size-x16" style="min-width: 50%">
-                            <div ng-repeat="assessment in assessments | filter:{category:{assessment:{id:2}}} | orderBy:'category.id'">
-                                  <div style="width:600px"><span style="border-bottom: 1px solid; padding-bottom: 3px;">{{ assessment.name }} <span style="color: #8b8b8b;">{{ assessment.category.name }} ({{ assessment.score }})</span></span></div>
-                                  <div ng-bind-html="assessment.description" style="margin:15px;width:560px"></div>
-
-                            </div>
-                            Coming Soon!
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                  <div class="widget-inner large-screen make_transist hideflip" ng-class="{'showflip': show_myers_briggs}" style="width:650px;position: absolute;min-height: 446px;">
-                    <header class="no-reload">
-                      <h1 style="display:inline;">Myers Briggs</h1>
-                    </header>
-                    <div ng-show="mbti.total_assessed<=mbti.total_not_assessed" style="width:100%;background-color:red;padding:5px;color:white;">Only {{mbti.total_assessed}} out of {{mbti.total}} team members have shared their Myers Briggs type.</div>
-                    <div ng-show="mbti.total_assessed>mbti.total_not_assessed" style="width:100%;background-color:#58588D;padding:5px;color:white;">{{mbti.total_assessed}} out of {{mbti.total}} team members have shared their Myers Briggs type.</div>
-                    <section class="widget-body rag-widget" style="padding: 24px;">
-                      <div class="widget-canvas">
-                        <div class="t-size-x16" style="min-width: 50%">
-                            <div>
-                                <div style="width:600px"><span style="border-bottom: 1px solid; padding-bottom: 3px;">Team Type: {{ mbti.type | uppercase}}</span></div>
-                                <div ng-bind-html="mbti.description" style="margin:15px;width:560px"></div>
-                                <div class="row">
-                                  <div class="col-1-4">ISTJ <p><h1>{{istj.c}}</h1></p></div>
-                                  <div class="col-1-4">ISFJ <p><h1>{{isfj.c}}</h1></p></div>
-                                  <div class="col-1-4">INFJ <p><h1>{{infj.c}}</h1></p></div>
-                                  <div class="col-1-4">INTJ <p><h1>{{intj.c}}</h1></p></div>
-                                </div><!-- /.row -->
-                                <div class="row">
-                                  <div class="col-1-4">ISTP <p><h1>{{istp.c}}</h1></p></div>
-                                  <div class="col-1-4">ISFP <p><h1>{{isfp.c}}</h1></p></div>
-                                  <div class="col-1-4">INFP <p><h1>{{infp.c}}</h1></p></div>
-                                  <div class="col-1-4">INTP <p><h1>{{intp.c}}</h1></p></div>
-                                </div><!-- /.row -->
-                                <div class="row">
-                                  <div class="col-1-4">ESTP <p><h1>{{estp.c}}</h1></p></div>
-                                  <div class="col-1-4">ESFP <p><h1>{{esfp.c}}</h1></p></div>
-                                  <div class="col-1-4">ENFP <p><h1>{{enfp.c}}</h1></p></div>
-                                  <div class="col-1-4">ENTP <p><h1>{{entp.c}}</h1></p></div>
-                                </div><!-- /.row -->
-                                <div class="row">
-                                  <div class="col-1-4">ESTJ <p><h1>{{estj.c}}</h1></p></div>
-                                  <div class="col-1-4">ESFJ <p><h1>{{esfj.c}}</h1></p></div>
-                                  <div class="col-1-4">ENFJ <p><h1>{{enfj.c}}</h1></p></div>
-                                  <div class="col-1-4">ENTJ <p><h1>{{entj.c}}</h1></p></div>
-                                </div><!-- /.row -->
-                            </div>
-                        </div>
-                      </div>
-                    </section>
-                  </div>
       </div>
-    </article>
   </div>
+
+    <a class="feedback-button" data-toggle="modal" data-target="#feedback">
+        Feedback
+    </a>
+
+    <!-- Modal -->
+    <div class="modal feedback-modal fade" id="feedback" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <img class="headshot" src="../static/images/doug.jpg" alt="Doug Dosberg" />
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <div class="modal-body">
+                    <h4 class="modal-title">Hey! It's Doug. </h4>
+                    <p class="modal-subtext">Your feedback is very important to us. Help us improve Scoutmap by dropping a note below. Thanks! </p>
+                    <textarea class="form-control modal-textarea"></textarea> 
+                </div>
+                <button type="button" class="btn btn-success modal-btn">Send Feedback</button>
+            </div>
+        </div>
+    </div>

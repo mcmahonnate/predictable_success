@@ -1,4 +1,7 @@
 /* == Salary Totals ==================================== */
+.salary-totals {
+  min-height: 314px;
+}
 .salary-totals .panel-title {
   margin-bottom: 30px;
 }

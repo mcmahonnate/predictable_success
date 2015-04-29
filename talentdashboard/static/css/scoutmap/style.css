@@ -7204,6 +7204,9 @@ h1 {
   margin: 0 0 20px;
   font-size: 30px;
 }
+.fadein > * {
+  display: none;
+}
 .widget {
   position: absolute;
   top: 0;
@@ -7943,8 +7946,8 @@ header .float-fix span {
   color: inherit;
   font-weight: bold;
 }
-.comments {
-  margin-top: 30px;
+.comments .comment {
+  margin-bottom: 35px;
 }
 .comments .comments-date {
   font-size: 13px;
@@ -8134,6 +8137,9 @@ header .float-fix span {
   margin: 0;
 }
 /* == Salary Totals ==================================== */
+.salary-totals {
+  min-height: 314px;
+}
 .salary-totals .panel-title {
   margin-bottom: 30px;
 }

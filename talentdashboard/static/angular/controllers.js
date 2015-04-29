@@ -1032,6 +1032,7 @@ angular.module('tdb.controllers', [])
         {id: $routeParams.id},
         function(data) {
             $scope.team = data;
+            $scope.team_name = data.name + ' Report';
         }
     );
 
@@ -1671,6 +1672,8 @@ angular.module('tdb.controllers', [])
     TalentCategoryReport.getReportForTeam($routeParams.id, function(data) {
         $scope.talentCategoryReport = data;
     });
+
+
     Comments.getTeamComments($routeParams.id, function(data) {
         if ($rootScope.currentUser.can_coach_employees || $rootScope.currentUser.can_view_company_dashboard) {
             $scope.newCommentVisibility = 2;
@@ -1701,6 +1704,8 @@ angular.module('tdb.controllers', [])
             $scope.currentGroup = date;
             return showHeader;
         }
+
+
     });
 
     $scope.saveComment = function(comment) {
