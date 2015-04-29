@@ -17,7 +17,7 @@ class PvpEvaluationTest(TestCase):
         pvp.performance = performance
         return pvp
 
-    def test_get_most_recent_for_all_employees(self):
+    def test_get_most_recent(self):
         old_round = EvaluationRound(date=datetime.date(2012, 12, 31))
         new_round = EvaluationRound(date=datetime.date(2013, 12, 31))
         old_round.save()
@@ -41,14 +41,14 @@ class PvpEvaluationTest(TestCase):
         self.assertTrue(pvp3 in pvps)
         self.assertFalse(pvp4 in pvps)
         self.assertFalse(pvp5 in pvps)
-        pvps = PvpEvaluation.objects.get_most_recent()
+        pvps = PvpEvaluation.objects.get_most_recent_for_all()
         self.assertFalse(pvp1 in pvps)
         self.assertTrue(pvp2 in pvps)
         self.assertTrue(pvp3 in pvps)
         self.assertTrue(pvp4 in pvps)
         self.assertFalse(pvp5 in pvps)
 
-    def test_get_most_recent_for_all_employees(self):
+    def test_get_all_employees(self):
         round_1 = EvaluationRound(date=datetime.date(2012, 12, 31))
         round_2 = EvaluationRound(date=datetime.date(2013, 12, 31))
         round_3 = EvaluationRound(date=datetime.date(2014, 12, 31))

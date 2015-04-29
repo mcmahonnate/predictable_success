@@ -995,7 +995,7 @@ class EmployeeCompensationSummaries(APIView):
 @auth('AllAccess')
 def pvp_evaluations(request):
     team_id = request.QUERY_PARAMS.get('team_id', None)
-    evaluations = PvpEvaluation.objects.get_most_recent()
+    evaluations = PvpEvaluation.objects.get_most_recent_for_all()
     if team_id is not None:
         evaluations = evaluations.filter(employee__team_id=int(team_id))
 
