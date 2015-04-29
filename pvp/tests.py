@@ -48,6 +48,23 @@ class PvpEvaluationTest(TestCase):
         self.assertTrue(pvp4 in pvps)
         self.assertFalse(pvp5 in pvps)
 
+    def test_get_most_recent_for_all_employees(self):
+        round_1 = EvaluationRound(date=datetime.date(2012, 12, 31))
+        round_2 = EvaluationRound(date=datetime.date(2013, 12, 31))
+        round_3 = EvaluationRound(date=datetime.date(2014, 12, 31))
+        round_1.save()
+        round_2.save()
+        round_3.save()
+        john = Employee(full_name='John Doe', display=True)
+        john.save()
+        pvp1 = PvpEvaluation(employee=john, evaluation_round=round_1, potential=1, performance=1).save()
+        pvp2 = PvpEvaluation(employee=john, evaluation_round=round_2, potential=1, performance=1).save()
+        pvp3 = PvpEvaluation(employee=john, evaluation_round=round_3).save()
+        pvps = PvpEvaluation.objects.get_evaluations_for_employee(john.id)
+        self.assertTrue(pvp1 in pvps)
+        self.assertTrue(pvp2 in pvps)
+        self.assertFalse(pvp3 in pvps)
+
     def test_get_talent_category(self):
         self.assert_talent_category(potential=4, performance=4, expected=PvpEvaluation.TOP_PERFORMER)
         self.assert_talent_category(potential=4, performance=3, expected=PvpEvaluation.STRONG_PERFORMER)

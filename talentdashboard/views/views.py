@@ -1004,11 +1004,9 @@ def pvp_evaluations(request):
 
 class EmployeePvPEvaluations(APIView):
     def get(self, request, pk, format=None):
-        evaluations = PvpEvaluation.objects.all()
-        evaluations = evaluations.filter(employee__id=int(pk))
-        evaluations = evaluations.filter(evaluation_round__is_complete=True)
+        evaluations = PvpEvaluation.objects.get_evaluations_for_employee(int(pk))
         if evaluations is not None:
-            serializer = PvpEvaluationSerializer(evaluations, many=True,context={'request': request})
+            serializer = PvpEvaluationSerializer(evaluations, many=True, context={'request': request})
             return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
