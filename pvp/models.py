@@ -44,7 +44,8 @@ class PvpEvaluationManager(models.Manager):
         return evaluations.filter(Q(is_complete=True) | Q(evaluation_round__is_complete=True))
 
     def get_evaluations_for_team(self, team_id, round_id):
-        return self.filter(evaluation_round__id=round_id, employee__team__id=team_id)
+        evaluations = self.filter(evaluation_round__id=round_id, employee__team__id=team_id)
+        return evaluations.filter(Q(is_complete=True) | Q(evaluation_round__is_complete=True))
 
     def current_for_user(self, user):
         current_round = EvaluationRound.objects.most_recent()
@@ -59,6 +60,7 @@ class PvpEvaluationManager(models.Manager):
         evaluations = evaluations.exclude(employee__display=False)
         evaluations = evaluations.annotate(max_evaluation_date=Max('employee__pvp__evaluation_round__date'))
         evaluations = evaluations.filter(evaluation_round__date=F('max_evaluation_date'))
+        evaluations = evaluations.filter(Q(is_complete=True) | Q(evaluation_round__is_complete=True))
         return evaluations
 
     def get_most_recent_for_employees(self, employees):
@@ -66,6 +68,7 @@ class PvpEvaluationManager(models.Manager):
         evaluations = evaluations.exclude(employee__display=False)
         evaluations = evaluations.annotate(max_evaluation_date=Max('employee__pvp__evaluation_round__date'))
         evaluations = evaluations.filter(evaluation_round__date=F('max_evaluation_date'))
+        evaluations = evaluations.filter(Q(is_complete=True) | Q(evaluation_round__is_complete=True))
         return evaluations
 
 
