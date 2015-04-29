@@ -5,6 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from org.models import Employee
 from blah.models import Comment
 from django.utils.log import getLogger
+from django.db.models import Max, F
 
 logger = getLogger('talentdashboard')
 PVP_SCALE = [(i, i) for i in range(0, 5)]
@@ -49,8 +50,19 @@ class PvpEvaluationManager(models.Manager):
         current_round = EvaluationRound.objects.most_recent(is_complete=False)
         return self.filter(evaluation_round=current_round).filter(evaluator=user)
 
+    def get_most_recent(self):
+        evaluations = self.filter(employee__departure_date__isnull=True)
+        evaluations = evaluations.exclude(employee__display=False)
+        evaluations = evaluations.annotate(max_evaluation_date=Max('employee__pvp__evaluation_round__date'))
+        evaluations = evaluations.filter(evaluation_round__date=F('max_evaluation_date'))
+        return evaluations
+
     def get_most_recent_for_employees(self, employees):
-        return []
+        evaluations = self.filter(employee__in=employees).filter(employee__departure_date__isnull=True)
+        evaluations = evaluations.exclude(employee__display=False)
+        evaluations = evaluations.annotate(max_evaluation_date=Max('employee__pvp__evaluation_round__date'))
+        evaluations = evaluations.filter(evaluation_round__date=F('max_evaluation_date'))
+        return evaluations
 
 
 class PvpEvaluation(models.Model):
@@ -74,6 +86,7 @@ class PvpEvaluation(models.Model):
     def save(self, *args, **kwargs):
         self.is_complete = self.performance > 0 and self.potential > 0
         super(PvpEvaluation, self).save(*args, **kwargs)
+        return self
 
     def complete(self, potential, performance, evaluator=None):
         self.evaluator = evaluator
