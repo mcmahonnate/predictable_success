@@ -994,21 +994,11 @@ class EmployeeCompensationSummaries(APIView):
 @auth_cache(60*1440, 'AllAccess')
 @auth('AllAccess')
 def pvp_evaluations(request):
-    current_round = request.QUERY_PARAMS.get('current_round', None)
     team_id = request.QUERY_PARAMS.get('team_id', None)
-    talent_category = request.QUERY_PARAMS.get('talent_category', None)
-
-    evaluations = PvpEvaluation.objects.all()
-
-    if current_round is not None:
-        current_round = EvaluationRound.objects.most_recent()
-        evaluations = evaluations.filter(evaluation_round=current_round)
-
+    evaluations = PvpEvaluation.objects.get_most_recent()
     if team_id is not None:
         evaluations = evaluations.filter(employee__team_id=int(team_id))
 
-    evaluations = evaluations.filter(employee__departure_date__isnull=True)
-    evaluations = evaluations.exclude(employee__display=False)
     serializer = MinimalPvpEvaluationSerializer(evaluations, many=True, context={'request': request})
     return Response(serializer.data)
 
