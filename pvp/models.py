@@ -58,17 +58,17 @@ class PvpEvaluationManager(models.Manager):
     def get_most_recent_for_all(self):
         evaluations = self.filter(employee__departure_date__isnull=True)
         evaluations = evaluations.exclude(employee__display=False)
+        evaluations = evaluations.filter(Q(is_complete=True) | Q(evaluation_round__is_complete=True))
         evaluations = evaluations.annotate(max_evaluation_date=Max('employee__pvp__evaluation_round__date'))
         evaluations = evaluations.filter(evaluation_round__date=F('max_evaluation_date'))
-        evaluations = evaluations.filter(Q(is_complete=True) | Q(evaluation_round__is_complete=True))
         return evaluations
 
     def get_most_recent_for_employees(self, employees):
         evaluations = self.filter(employee__in=employees).filter(employee__departure_date__isnull=True)
         evaluations = evaluations.exclude(employee__display=False)
+        evaluations = evaluations.filter(Q(is_complete=True) | Q(evaluation_round__is_complete=True))
         evaluations = evaluations.annotate(max_evaluation_date=Max('employee__pvp__evaluation_round__date'))
         evaluations = evaluations.filter(evaluation_round__date=F('max_evaluation_date'))
-        evaluations = evaluations.filter(Q(is_complete=True) | Q(evaluation_round__is_complete=True))
         return evaluations
 
 
