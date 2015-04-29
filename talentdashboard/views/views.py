@@ -1080,7 +1080,7 @@ def my_team_pvp_evaluations(request):
 @api_view(['GET'])
 def pvp_todos(request):
     evaluations = PvpEvaluation.objects.todos_for_user(request.user)
-    serializer = MinimalPvpEvaluationSerializer(evaluations, many=True, context={'request': request})
+    serializer = PvpToDoSerializer(evaluations, many=True, context={'request': request})
     return Response(serializer.data)
 
 

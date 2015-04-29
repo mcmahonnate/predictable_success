@@ -457,6 +457,14 @@ class PvpEvaluationEditSerializer(serializers.ModelSerializer):
 class MinimalPvpEvaluationSerializer(serializers.ModelSerializer):
     talent_category = serializers.IntegerField()
     employee = PvPEmployeeSerializer()
+
+    class Meta:
+        model = PvpEvaluation
+        fields = ('id', 'talent_category', 'employee')
+
+class PvpToDoSerializer(serializers.ModelSerializer):
+    talent_category = serializers.IntegerField()
+    employee = PvPEmployeeSerializer()
     evaluator = UserSerializer()
     comment = EmployeeCommentSerializer()
     description = PvpDescriptionSerializer(source='get_description', many=False)
@@ -464,7 +472,6 @@ class MinimalPvpEvaluationSerializer(serializers.ModelSerializer):
     class Meta:
         model = PvpEvaluation
         fields = ('id', 'talent_category', 'employee', 'potential', 'performance', 'evaluator', 'comment', 'description')
-
 
 class MentorshipSerializer(serializers.HyperlinkedModelSerializer):
     mentor = MinimalEmployeeSerializer()
