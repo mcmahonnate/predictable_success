@@ -239,7 +239,7 @@ class Team(models.Model):
     name = models.CharField(
         max_length=255,
     )
-    leader = models.OneToOneField('Employee', related_name='+', null=True)
+    leader = models.OneToOneField('Employee', related_name='+', null=True, blank=True)
 
     def __str__(self):
         return self.name
