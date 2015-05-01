@@ -43,6 +43,20 @@
             <script src="http://engagexl.com/assets/js/jquery.easing.1.3.js"></script>
             <script src="{% static 'javascript/analytics.js' %}"></script>           
             {% block javascript %}{% endblock javascript%}
+
+            <script type="text/javascript">
+            
+                $(function() {
+                    $('[data-toggle="popover"]').popover();
+
+                    $('body').on('focus', '.new-comment textarea', function() {
+                        $(this).height('150px');
+                        $('.visibility').show();
+                    });
+
+
+                });  
+            </script>
         </div>    
     </body>
 </html>

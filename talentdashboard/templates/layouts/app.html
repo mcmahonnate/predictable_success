@@ -35,11 +35,7 @@
     <script src="{% static 'angular/filters.js' %}"></script>
     <script src="{% static 'angular/app.js' %}"></script>
     <script>
-
-        $(function() {
-            $('[data-toggle="popover"]').popover();
-        });      
-
+    
         // Add the CSRF Token to all http requests.
         app.config(['$httpProvider', function($httpProvider) {
             $httpProvider.defaults.headers.common['X-CSRFToken'] = '{{ csrf_token|escapejs }}';

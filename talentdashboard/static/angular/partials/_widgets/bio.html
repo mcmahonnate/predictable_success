@@ -1,0 +1,40 @@
+<div class="panel">
+    <h2 class="panel-title">Bio</h2>
+    <ol class="stripes">
+        <li class="clear" style="padding-top:10px;padding-bottom:10px;">
+            Hire date: {{ employee.hire_date | date:'MM/dd/yyyy' }}
+        </li>
+        <li ng-show="employee.departure_date">
+            Departure Date: {{ employee.departure_date | date:'MM/dd/yyyy' }}
+        </li>
+        <li>
+            Team Lead: <a ng-href="#/employees/{{leadership.leader.id}}">{{ leadership.leader.full_name }}</a>
+        </li>
+        <li ng-if="customer.show_coaches" class="clear" style="padding-top:10px;padding-bottom:10px;">
+            Coach: <a ng-href="#/employees/{{employee.coach.id}}">{{ employee.coach.full_name }}</a>
+        </li>
+        <li>
+        <!--<a ng-show="employeeEdit && !currentlyEditing" class="glyphicon glyphicon-edit" style="float:left;cursor:pointer;padding-right:10px"></a>
+        <span ng-show="employeeEdit && currentlyEditing" class="glyphicon glyphicon-edit-disable" style="padding-right:10px;float: left;"></span>-->
+            Team: <span ng-if="!employee.team">--</span>
+            <ul ng-if="employee.team">
+                <li>
+                    <a ng-href="#/teams/{{employee.team.id}}">{{ employee.team.name }}</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+        <!--<a ng-show="employeeEdit && !currentlyEditing" class="glyphicon glyphicon-edit" style="float:left;cursor:pointer;padding-right:10px"></a>
+        <span ng-show="employeeEdit && currentlyEditing" class="glyphicon glyphicon-edit-disable" style="padding-right:10px;float: left;"></span>-->
+        Skills: <span ng-if="skills.length == 0">--</span>
+            <ul ng-if="skills.length > 0">
+                <li>
+                    <span ng-repeat="skill in skills | limitTo:4">
+                      <text ng-if="!$last">{{ skill.name }},</text>
+                      <text ng-if="$last">{{ skill.name }}</text>
+                    </span>
+                </li>
+            </ul>
+        </li>
+    </ol>
+</div>

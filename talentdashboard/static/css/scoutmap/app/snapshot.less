@@ -88,7 +88,7 @@ sub{top:0.5ex}
 .file-field.with-delete .delete{display:block}
 .file-field.with-delete label{border-right:solid 1px #cfcfcf;margin:0 44px 0 0}
 .light-ui input[type=text],.light-ui input[type=email],.light-ui input[type=password],.light-ui .sneaky-select,.light-ui .sneaky-select label,.light-ui input[type=radio]+label{border-color:#cfcfcf}
-#main-header{position:fixed;top:0;left:0;width:100%;z-index:5}
+#main-header{position:fixed;top:0;left:0;z-index:5}
 #main-header .inner{min-width:600px}
 #top-bar{background-color:#313131;color:#969696;padding:12px 0}
 #top-bar .inner{padding:0 20px}
@@ -609,13 +609,19 @@ button.btn[disabled], fieldset[disabled] .btn {
 }
 @font-face {
   font-family: 'Emoticons';
-  src: url('../fonts/emoticons.eot') format('embedded-opentype'), url('../fonts/emoticons.ttf') format('truetype');
+  src: url('/static/fonts/emoticons.eot') format('embedded-opentype'), url('/static/fonts/emoticons.ttf') format('truetype');
 }
 @font-face {
     font-family: 'Flat-UI-Icons';
 
-    src: url('../fonts/flat-ui-icons-regular.eot');
-    src: url('../fonts/flat-ui-icons-regular.eot?#iefix') format('embedded-opentype'), url('../fonts/flat-ui-icons-regular.woff') format('woff'), url('../fonts/flat-ui-icons-regular.ttf') format('truetype'), url('../fonts/flat-ui-icons-regular.svg#flat-ui-icons-regular') format('svg');
+    src: url('/static/fonts/flat-ui-icons-regular.eot');
+    src: url('/static/fonts/flat-ui-icons-regular.eot?#iefix') format('embedded-opentype'), url('/static/fonts/flat-ui-icons-regular.woff') format('woff'), url('/static/fonts/flat-ui-icons-regular.ttf') format('truetype'), url('/static/fonts/flat-ui-icons-regular.svg#flat-ui-icons-regular') format('svg');
+}
+.happiness {
+	vertical-align: middle;
+  	padding-left: 5px;
+  	position: absolute;
+  	bottom: -11px;
 }
 .happy-nav:before {
     font-family: 'Emoticons';
@@ -626,44 +632,44 @@ button.btn[disabled], fieldset[disabled] .btn {
 }
 .veryhappy:before {
     font-family: 'Emoticons';
-    font-size: 40px;
+    font-size: 60px;
     text-shadow: none;
-    color: #008000;
+    color: #ffffff;
     content: "\0044";
 }
 .happy:before {
     font-family: 'Emoticons';
-    font-size: 40px;
+    font-size: 60px;
     text-shadow: none;
-    color: limegreen;
+    color: #ffffff;
     content: "\0041";
 }
 .indifferent:before {
     font-family: 'Emoticons';
-    font-size: 40px;
+    font-size: 60px;
     text-shadow: none;
-    color: yellow;
+    color: #ffffff;
     content: "\0043";
 }
 .unhappy:before {
     font-family: 'Emoticons';
-    font-size: 40px;
+    font-size: 60px;
     text-shadow: none;
-    color: orange;
+    color: #ffffff;
     content: "\0028";
 }
 .veryunhappy:before {
     font-family: 'Emoticons';
-    font-size: 40px;
+    font-size: 60px;
     text-shadow: none;
-    color: red;
+    color: #ffffff;
     content: "\0057";
 }
 .nohappydata:before {
     font-family: 'Emoticons';
-    font-size: 40px;
+    font-size: 60px;
     text-shadow: none;
-    color: #434343;
+    color: #ffffff;
     content: "\002C";
 }
 .small.veryhappy:before { font-size: 25px;}
@@ -1002,7 +1008,7 @@ ul.dropdown-menu li {
     text-decoration: underline !important;
 }
 
-#selection-shell{position:absolute;top:90%;width:280px;background-color: #272727;border-radius:3px 0 3px 3px;z-index:5;padding: 5px}
+
 #selection-title{color:#cbcbcb;padding: 8px 10px 10px 10px;}
 #menu-item{float: right;padding:12px 15px;cursor:pointer}
 .menu-item-active{background-color: #272727;}
@@ -1238,26 +1244,26 @@ ul.dropdown-menu li {
 }
 @-moz-keyframes drop-header {
     0% {
-        -moz-transform: translateY(-54px);
+        -moz-transform: translateX(-54px);
     }
     100% {
-        -moz-transform: translateY(0);
+        -moz-transform: translateX(0);
     }
 }
 @-webkit-keyframes drop-header {
     0% {
-        -webkit-transform: translateY(-54px);
+        -webkit-transform: translateX(-54px);
     }
     100% {
-        -webkit-transform: translateY(0);
+        -webkit-transform: translateX(0);
     }
 }
 @keyframes drop-header {
     0% {
-        transform: translateY(-54px);
+        transform: translateX(-54px);
     }
     100% {
-        transform: translateY(0);
+        transform: translateX(0);
     }
 }
 .radio {

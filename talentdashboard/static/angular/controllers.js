@@ -1564,6 +1564,9 @@ angular.module('tdb.controllers', [])
         newComment.visibility=$scope.newCommentVisibility;
         newComment.happy = $scope.newCommentHappy;
 
+        console.log(newComment.content);
+        console.log(newComment.visibility);
+
         if ($scope.newCommentHappy.assessment>0) {
             var data = {id: $scope.employee.id, _assessed_by_id: $rootScope.currentUser.employee.id, _assessment: newComment.happy.assessment, _content:newComment.content, _visibility: newComment.visibility};
             Engagement.addNew(data, function(response) {
@@ -1576,7 +1579,7 @@ angular.module('tdb.controllers', [])
             data.id = $scope.employeeId;
             EmployeeComments.save(data, function (response) {
                 newComment.id = response.id;
-                newComment.visibility = response.comment.visibility;
+                //newComment.visibility = response.comment.visibility;
             });
         };
         $scope.comments.push(newComment);

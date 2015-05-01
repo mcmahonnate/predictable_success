@@ -1,3 +1,25 @@
+.new-comment {
+	textarea {
+		height: 35px;
+	}
+
+	.visibility {
+		h3, label {
+			float: left;
+			margin: 0;
+		}
+	}
+
+	.expand {
+		height: 120px;
+	}
+}
+
+.no-comments {
+	height: 600px;
+	color: #aaa;
+}
+
 .comments {
 	min-height: 900px;
 
@@ -32,7 +54,7 @@
 	.total-replies {
 		display: block;
 	  	margin-top: 20px;
-		font-weight: block;
+		font-weight: bold;
 	}
 
 	.comment-item {
@@ -78,21 +100,26 @@
 	.feed-actions li {
 	    background: url('/static/css/icon_bullet_grey2_4x4.png') no-repeat scroll 100% 6px transparent;
 	    float: left;
-	    margin: 0 10px 8px 0;
-	    padding: 0 10px 0 0;
-	    color: #8b8b8b;
+		margin: 0 0px 0 7px;
+		padding: 0 10px 0 0px;
+	    cursor: pointer;
+	}
+	.feed-actions li:last-child {
+		background: none;
 	}
 	.feed-action a {
-	    color: #ccc;
+	    color: #888;
 	}	
 	.feed-action a:hover {
 	    text-decoration: none;
+	    color: #333;
 	}
 
 
 
 	.comment-replies {
-		margin: 0 0 0 60px;
+		margin: 5px 60px 0 60px;
+		overflow: hidden;
 		
 
 		.comment-reply {
@@ -123,15 +150,22 @@
 				position: relative; 
 				max-width: 515px; 
 				min-height: 27px;
+				height: 60px;
 				background-color:#fff;
-				color:#eee;
+				color:#333;
 				resize:vertical;
-				font-size: 12px;
+				font-size: 15px;
 				padding: 6px;
 				border:1px solid #ccc;
 				display: inline;
 				vertical-align: top;
-				width: 68%;
+				width: 77%;
+				height: 36px;
+				transition: height .3s ease-out;
+			}
+
+			textarea:focus {
+				height: 200px;
 			}
 		}
 		.comment-reply-name {
@@ -162,11 +196,11 @@
 		    -moz-border-radius: 3px;
 		    -webkit-border-radius: 3px;
 		    border-radius: 3px;
-		    height:26px;
-		    width: 70px;
+			height: 36px;
+			width: 90px;
 		    background-color:#434343;
 		    font-size:12px;
-		    color:#d3d4d4;
+		    color:#fff;
 		    cursor: pointer;
 		    display: inline;
 		    vertical-align: top;

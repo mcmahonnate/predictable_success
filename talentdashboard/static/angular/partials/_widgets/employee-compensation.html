@@ -1,0 +1,6 @@
+<div class="panel" ng-if="currentUser.can_view_company_dashboard || showCompensation">
+    <h2 class="panel-title">Compensation</h2>
+    <div ng-if="compSummaries.length > 0">
+        <div style="width: 315px; height: 300px;" compensation-history-chart></div>
+    </div>
+</div> 

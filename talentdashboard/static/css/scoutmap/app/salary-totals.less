@@ -9,15 +9,22 @@
 		margin-bottom:30px;
 	}
 
-	.salary-total-type {
+	.salary-total-type a {
 		overflow: hidden;
 		border-bottom: 1px solid #efefef;
 		padding: 8px;
+		display: block;
+		transition: 0.2s;
 
 		&:last-child {
 			border: none;
 		}
 	}
+
+	.salary-total-type a:hover {
+		background: #f1f1f1;
+	}
+
 
 	.salary-total-amount {
 		margin-top: 5px;
