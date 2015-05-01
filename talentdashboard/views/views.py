@@ -854,7 +854,10 @@ class EmployeeDetail(APIView):
                 employee.hire_date = request.DATA["_hire_date"]
             if "_team_id" in request.DATA:
                 team_id = request.DATA["_team_id"]
-                team = Team.objects.get(id=team_id)
+                if team_id is None:
+                    team = None
+                else:
+                    team = Team.objects.get(id=team_id)
                 employee.team = team
             if "_coach_id" in request.DATA:
                 coach_id = request.DATA["_coach_id"]
