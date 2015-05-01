@@ -5,6 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from org.models import Employee
 from blah.models import Comment
 from django.utils.log import getLogger
+from django.db.models import Max, F, Q
 
 logger = getLogger('talentdashboard')
 PVP_SCALE = [(i, i) for i in range(0, 5)]
@@ -38,8 +39,13 @@ class PvpEvaluationManager(models.Manager):
     def get_evaluations_for_round(self, round_id):
         return self.filter(evaluation_round__id=round_id)
 
+    def get_evaluations_for_employee(self, employee_id):
+        evaluations = self.filter(employee__id=employee_id)
+        return evaluations.filter(Q(is_complete=True) | Q(evaluation_round__is_complete=True))
+
     def get_evaluations_for_team(self, team_id, round_id):
-        return self.filter(evaluation_round__id=round_id, employee__team__id=team_id)
+        evaluations = self.filter(evaluation_round__id=round_id, employee__team__id=team_id)
+        return evaluations.filter(Q(is_complete=True) | Q(evaluation_round__is_complete=True))
 
     def current_for_user(self, user):
         current_round = EvaluationRound.objects.most_recent()
@@ -49,8 +55,21 @@ class PvpEvaluationManager(models.Manager):
         current_round = EvaluationRound.objects.most_recent(is_complete=False)
         return self.filter(evaluation_round=current_round).filter(evaluator=user)
 
+    def get_most_recent_for_all(self):
+        evaluations = self.filter(employee__departure_date__isnull=True)
+        evaluations = evaluations.exclude(employee__display=False)
+        evaluations = evaluations.filter(Q(is_complete=True) | Q(evaluation_round__is_complete=True))
+        evaluations = evaluations.annotate(max_evaluation_date=Max('employee__pvp__evaluation_round__date'))
+        evaluations = evaluations.filter(evaluation_round__date=F('max_evaluation_date'))
+        return evaluations
+
     def get_most_recent_for_employees(self, employees):
-        return []
+        evaluations = self.filter(employee__in=employees).filter(employee__departure_date__isnull=True)
+        evaluations = evaluations.exclude(employee__display=False)
+        evaluations = evaluations.filter(Q(is_complete=True) | Q(evaluation_round__is_complete=True))
+        evaluations = evaluations.annotate(max_evaluation_date=Max('employee__pvp__evaluation_round__date'))
+        evaluations = evaluations.filter(evaluation_round__date=F('max_evaluation_date'))
+        return evaluations
 
 
 class PvpEvaluation(models.Model):
@@ -74,6 +93,7 @@ class PvpEvaluation(models.Model):
     def save(self, *args, **kwargs):
         self.is_complete = self.performance > 0 and self.potential > 0
         super(PvpEvaluation, self).save(*args, **kwargs)
+        return self
 
     def complete(self, potential, performance, evaluator=None):
         self.evaluator = evaluator

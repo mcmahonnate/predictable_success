@@ -994,31 +994,19 @@ class EmployeeCompensationSummaries(APIView):
 @auth_cache(60*1440, 'AllAccess')
 @auth('AllAccess')
 def pvp_evaluations(request):
-    current_round = request.QUERY_PARAMS.get('current_round', None)
     team_id = request.QUERY_PARAMS.get('team_id', None)
-    talent_category = request.QUERY_PARAMS.get('talent_category', None)
-
-    evaluations = PvpEvaluation.objects.all()
-
-    if current_round is not None:
-        current_round = EvaluationRound.objects.most_recent()
-        evaluations = evaluations.filter(evaluation_round=current_round)
-
+    evaluations = PvpEvaluation.objects.get_most_recent_for_all()
     if team_id is not None:
         evaluations = evaluations.filter(employee__team_id=int(team_id))
 
-    evaluations = evaluations.filter(employee__departure_date__isnull=True)
-    evaluations = evaluations.exclude(employee__display=False)
     serializer = MinimalPvpEvaluationSerializer(evaluations, many=True, context={'request': request})
     return Response(serializer.data)
 
 class EmployeePvPEvaluations(APIView):
     def get(self, request, pk, format=None):
-        evaluations = PvpEvaluation.objects.all()
-        evaluations = evaluations.filter(employee__id=int(pk))
-        evaluations = evaluations.filter(evaluation_round__is_complete=True)
+        evaluations = PvpEvaluation.objects.get_evaluations_for_employee(int(pk))
         if evaluations is not None:
-            serializer = PvpEvaluationSerializer(evaluations, many=True,context={'request': request})
+            serializer = PvpEvaluationSerializer(evaluations, many=True, context={'request': request})
             return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
@@ -1092,7 +1080,7 @@ def my_team_pvp_evaluations(request):
 @api_view(['GET'])
 def pvp_todos(request):
     evaluations = PvpEvaluation.objects.todos_for_user(request.user)
-    serializer = MinimalPvpEvaluationSerializer(evaluations, many=True, context={'request': request})
+    serializer = PvpToDoSerializer(evaluations, many=True, context={'request': request})
     return Response(serializer.data)
 
 

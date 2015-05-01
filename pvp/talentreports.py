@@ -21,7 +21,7 @@ class TalentCategoryReport:
 def build_talent_category_report_for_employees(employees):
     try:
         evaluation_round = EvaluationRound.objects.most_recent()
-        evaluations = PvpEvaluation.objects.filter(evaluation_round_id=evaluation_round.id).filter(employee__in=employees).filter(employee__departure_date__isnull=True)
+        evaluations = PvpEvaluation.objects.get_most_recent_for_employees(employees)
         total_evaluations = 0
         categories = {}
         for talent_category in PvpEvaluation.SUMMARY_SCORE_SCALE:
