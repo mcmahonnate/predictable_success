@@ -1,5 +1,4 @@
-<div style="position:absolute; top:0; right:0; display:none">
-    <a ng-href="#/" class="customer-name">{{customer.name}}</a>
+<div style="position:absolute; top:0; right:0">
     
     <!-- Account/logout -->
     <div class="nav-item" ng-class="{'menu-item-active':openSettingsMenu}">
@@ -21,22 +20,21 @@
 </div>
 
 
-
 <header id="main-header">
     <div class="logo-container">
-        <img src="../static/images/brand/compass-logo-medium.png" class="logo"/>
+        <a href="#/"><img src="../static/images/brand/compass-logo-medium.png" class="logo"/></a>
     </div>    
     <div ng-controller="EmployeeListCtrl">
     
     <!-- Home -->
-    <div class="nav-item">
+    <div class="nav-item hide">
         <a ng-href="#/"><span class="fa fa-tachometer" ng-click="toggleTeamMenu()"></span></a>
     </div>
 
     <!-- Filter Employee -->
     <div class="nav-item" ng-if="currentUser.can_view_company_dashboard" ng-class="{'menu-item-active':openFilterMenu}">
       <span class="fa fa-users filter_menu" ng-click="toggleFilterMenu()"></span>
-      <div id="selection-shell" ng-show="openFilterMenu">
+      <div class="subnav" ng-show="openFilterMenu">
         <div id="selection-title">Filter</div>
         <div id="selection-list">
             <ul>
@@ -63,12 +61,10 @@
       </div>
     </div>
 
-
-        <!-- Reports -->
-        <div class="nav-item" ng-if="currentUser.can_view_company_dashboard" ng-class="{'menu-item-active':openTeamMenu}" ng-controller="TeamListCtrl">
-          <span class="fa fa-file-text team_menu" ng-click="toggleTeamMenu()"></span>
-          <div id="selection-shell" ng-show="openTeamMenu">
-            <div id="selection-title">Company Report</div>
+    <div class="nav-item" ng-if="currentUser.can_view_company_dashboard" ng-class="{'menu-item-active':openTeamMenu}" ng-controller="TeamListCtrl">
+        <span class="fa fa-file-text team_menu" ng-click="toggleTeamMenu()"></span>
+        <div class="subnav subnav-reports" ng-show="openTeamMenu">
+            <div class="selection-title">Company Report</div>
             <div id="selection-list">
                 <ul style="padding: 10px 10px;">
                     <li>

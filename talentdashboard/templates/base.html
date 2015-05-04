@@ -47,13 +47,37 @@
             <script type="text/javascript">
             
                 $(function() {
-                    $('[data-toggle="popover"]').popover();
+
+
+                    $('body').popover({
+                        placement: 'bottom',
+                        container: 'body',
+                        html: true,
+                        selector: '[rel="popover"]', //Sepcify the selector here
+                        content: function() {
+                            return $('.comment-action-items').html();
+                        }
+                    });
+
+
+                    $('body').on('click', function (e) {
+                        $('[data-toggle="popover"]').each(function () {
+                            //the 'is' for buttons that trigger popups
+                            //the 'has' for icons within a button that triggers a popup
+                            if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+                                $(this).popover('hide');
+                            }
+                        });
+                    });
+
+
+                    // $('body').tooltip({ selector: '[data-toggle="tooltip"]' });
+
 
                     $('body').on('focus', '.new-comment textarea', function() {
                         $(this).height('150px');
                         $('.visibility').show();
                     });
-
 
                 });  
             </script>

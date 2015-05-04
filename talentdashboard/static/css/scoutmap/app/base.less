@@ -6,6 +6,16 @@ h1 {
 	margin: 0 0 20px;
   	font-size: 30px;
 }  	
+
+a {
+	color: #1a7f7e;
+}
+a:hover {
+	color: #135d5c;
+	text-decoration: none;
+}
+
+
 .download-report-link {
 	margin: 20px 10px 0;
 	color: #1a7f7e;
@@ -32,6 +42,8 @@ textarea.expandable:focus {
 	height: 200px;
 }
 
+
+
 #main-header {
   position: fixed !important;
   top: 0 !important;
@@ -40,3 +52,27 @@ textarea.expandable:focus {
   width: 70px !important;
   height: 100% !important;
 }
+
+
+
+/* Bootstrap Overrides */
+.modal-body {
+  position: relative;
+  padding: 30px;
+}
+
+.nav-tabs {
+    margin: 45px 0 0;
+
+    .nav {
+        cursor: pointer;
+    }
+}
+
+
+.nav > li > a {
+	@media only screen and (max-width : 1280px) {
+		padding: 6px 10px;
+		font-size: 13px;
+	}
+}	

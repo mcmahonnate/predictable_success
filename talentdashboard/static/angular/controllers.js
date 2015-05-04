@@ -1564,7 +1564,9 @@ angular.module('tdb.controllers', [])
         newComment.visibility=$scope.newCommentVisibility;
         newComment.happy = $scope.newCommentHappy;
 
-        console.log(newComment.content);
+        console.log($scope.newCommentText);
+        console.log(newComment.id);
+        console.log(newComment.owner);
         console.log(newComment.visibility);
 
         if ($scope.newCommentHappy.assessment>0) {

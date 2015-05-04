@@ -1,7 +1,6 @@
 <div ng-include="'/static/angular/partials/_widgets/navigation.html'"></div>
 <div class="container narrow-gutter">    
     <div class="row">
-        <a href="" class="pull-right download-report-link"><i class="fa fa-download"></i> Download Report</a>
         <h1>{{ team_name }} </h1>
         <div class="col col-sm-5 col-md-4 col-lg-5">
             <div ng-include="'/static/angular/partials/_widgets/chart-talent-portfolio.html'"></div> 
@@ -10,7 +9,7 @@
             <div ng-include="'/static/angular/partials/_widgets/team-leads.html'"></div> 
         </div> 
         <div class="col-sm-7 col-md-8 col-lg-7">     
-            <div ng-include="'/static/angular/partials/_widgets/comments.html'" ng-controller="TeamCommentsCtrl"></div>  
+            <div ng-include="'/static/angular/partials/_widgets/comments.html'" ng-init="view='team-view'" ng-controller="TeamCommentsCtrl"></div>  
         </div>
       </div>
   </div>

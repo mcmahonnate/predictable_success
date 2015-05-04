@@ -1,12 +1,14 @@
 <div ng-include="'/static/angular/partials/_widgets/navigation.html'"></div>
 <div ng-if="employee.display" class="container narrow-gutter employee-view" ng-class="{in:employee}">   
     <div class="row">
-        <div class="col-sm-5 col-md-4 col-lg-5">
+        <div class="col-sm-5 col-md-5 col-lg-5">
             <div class="panel">
                 <div class="large-avatar-container">
                     <img ng-src="{{ employee.avatar }}" class="large-headshot" />  
-                    <span title="{{evaluation.talent_category}}" class="segment user-segment-background-color-{{employee.talent_category}}"></span>
-                    <span class="happiness" ng-class="{'veryhappy': employee.happiness==5,'happy': employee.happiness==4,'indifferent': employee.happiness==3,'unhappy': employee.happiness==2,'veryunhappy': employee.happiness==1}"></span>
+                    <div rel="tooltip" data-toggle="tooltip" data-placement="top" data-original-title="Default tooltip">
+                        <span title="{{evaluation.talent_category}}" class="segment user-segment-background-color-{{employee.talent_category}}"></span>
+                        <span class="happiness" ng-class="{'veryhappy': employee.happiness==5,'happy': employee.happiness==4,'indifferent': employee.happiness==3,'unhappy': employee.happiness==2,'veryunhappy': employee.happiness==1}"></span>
+                    </div>
                 </div>   
                 <h1 class="centered">{{employee.full_name}}</h1> 
                 <ul class="nav nav-tabs" ng-init="tab=1">
@@ -22,25 +24,28 @@
                             <div ng-include="'/static/angular/partials/_widgets/bio.html'"></div>  
                         </div>
                         <div class="tab-pane fade in active" ng-show="tab == 2">
-                            <div ng-include="'/static/angular/partials/_widgets/compass.html'" ng-controller="EmployeePvpEvaluationsCtrl"></div>
+                            <div ng-include="'/static/angular/partials/_widgets/pvp.html'" ng-controller="EmployeePvpEvaluationsCtrl"></div>
                         </div>
                         <div class="tab-pane fade in active" ng-show="tab == 3">
-                            <div ng-include="'/static/angular/partials/_widgets/chart-happiness.html'"></div>  
+                            <div ng-include="'/static/angular/partials/_widgets/happiness.html'"></div>  
                         </div>
                         <div class="tab-pane fade in active" ng-show="tab == 4">
                             <div ng-include="'/static/angular/partials/_widgets/employee-compensation.html'" ng-controller="EmployeeCompSummariesCtrl"></div>
                         </div>
-                        <div class="tab-pane fade in active" ng-show="tab == 5">Tasks</div>
+                        <div class="tab-pane fade in active" ng-show="tab == 5">
+                            <div ng-include="'/static/angular/partials/_widgets/tasks.html'" ng-controller="EmployeeCompSummariesCtrl"></div>
+                        </div>
                     </div>
                 </div>
             </div>    
         </div>    
-        <div class="col-sm-7 col-md-8 col-lg-7">  
-            <div ng-include="'/static/angular/partials/_widgets/new-comment.html'" ng-controller="EmployeeCommentsCtrl"></div>
-            <div ng-include="'/static/angular/partials/_widgets/comments.html'" ng-init="view='employee-view'" ng-controller="EmployeeCommentsCtrl"></div>            
+        <div class="col-sm-7 col-md-7 col-lg-7" ng-controller="EmployeeCommentsCtrl" ng-init="view='employee-view'">  
+            <div ng-include="'/static/angular/partials/_widgets/add-comment.html'"></div>
+            <div ng-include="'/static/angular/partials/_widgets/comments.html'"></div>            
         </div>
     </div>
 </div>        
+
 
 
 
@@ -60,10 +65,8 @@
     </div>
 </div>
 
-      
 
-        
-
-  <modal-employee employee='employee' leadership='leadership' employees='employees' teams='teams' show='modalEmployeeShown' width='700px'></modal-employee>
-  <modal-happy employee="employee" happys='happys' comments='comments' show='modalHappyShown' width='492px'></modal-happy>
-  <modal-send-survey employee="employee" show='modalSurveyShown' from='currentUser' subject='customer.survey_email_subject' body='customer.survey_email_body' width='492px'></modal-send-survey>
+<modal-employee employee='employee' leadership='leadership' employees='employees' teams='teams' show='modalEmployeeShown'></modal-employee>
+<modal-happy employee="employee" happys='happys' comments='comments' show='modalHappyShown' width='492px'></modal-happy>
+<modal-send-survey employee="employee" show='modalSurveyShown' from='currentUser' subject='customer.survey_email_subject' body='customer.survey_email_body' width='492px'></modal-send-survey>
+<div ng-include="'/static/angular/partials/_widgets/footer.html'"></div>

@@ -2,29 +2,60 @@
 	textarea {
 		height: 35px;
 	}
-
 	.visibility {
+		overflow: hidden;
+
 		h3, label {
 			float: left;
-			margin: 0;
+			margin: 12px 0;
+		}
+		h3 {
+			margin-right: 20px;
+		}
+
+		label {
+			padding: 0 16px;
 		}
 	}
-
 	.expand {
 		height: 120px;
 	}
 }
 
+/* No Comments */
 .no-comments {
 	height: 600px;
 	color: #aaa;
 }
 
+
+/* Popover Content */
+.comment-action-item {
+	list-style: none;
+	color: #777;
+
+	.fa {
+		width: 16px;
+	}
+}
+
+
+
 .comments {
 	min-height: 900px;
 
+	.panel-title {
+		margin-bottom: 20px; 
+	}
+
 	.comment {
-		margin-bottom: 35px;
+		margin-bottom: 25px;
+		border-bottom: 1px solid #ebedf3;
+		padding-bottom: 25px;
+
+		h2 {
+			margin-bottom: 15px;
+		}
 	}
 	.comments-date {
 	 	font-size: 13px;
@@ -35,7 +66,39 @@
 	.timestamp {
 		color: #8b8b8b;
 		font-size: 13px;
+
+		@media only screen and (max-width : 1280px) {
+			display: block;
+		  	line-height: 16px;
+		  	margin: 1px 0px 18px;
+		}
 	}
+
+
+	.comment-actions {
+		position: relative;
+		color: #ccc;
+
+		ul {
+			position: absolute;
+		}
+	}
+
+
+
+	.show-comment-actions {
+		cursor: pointer;
+    	-webkit-transition: -webkit-transform .3s ease-in-out;
+    	-ms-transition: -ms-transform .3s ease-in-out;
+    	transition: transform .3s ease-in-out;		
+	}
+	.show-comment-actions:hover {
+		color: #1a7f7e;
+    	transform:rotate(90deg);
+    	-ms-transform:rotate(90deg);
+    	-webkit-transform:rotate(90deg);		
+	}
+
 	.comment-owner-avatar-container {
 		display: block; 
 		float: left; 
@@ -127,6 +190,15 @@
 			padding: 10px;
 			background-color: #efefef;
 			overflow: hidden;
+
+			.timestamp {
+				@media only screen and (max-width : 1280px) {
+					display: block;
+				  	line-height: 16px;
+				  	padding-left: 12px;
+				  	margin: 1px 48px 15px;
+				}
+			}
 		}
 		.comment-reply-avatar-container {
 			display: block; 
@@ -159,9 +231,13 @@
 				border:1px solid #ccc;
 				display: inline;
 				vertical-align: top;
-				width: 77%;
+				width: 75%;
 				height: 36px;
 				transition: height .3s ease-out;
+
+				@media only screen and (max-width : 1280px) {
+					width: 70%;
+				}
 			}
 
 			textarea:focus {
@@ -182,8 +258,8 @@
 		    -moz-border-radius: 3px;
 		    -webkit-border-radius: 3px;
 		    border-radius: 3px;
-		    height: 28px;
-		    width: 80px;
+		    height: 35px;
+		    width: 110px;
 		    background-color:#434343;
 		    font-size:14px;
 		    color:#d3d4d4;
@@ -199,7 +275,7 @@
 			height: 36px;
 			width: 90px;
 		    background-color:#434343;
-		    font-size:12px;
+		    font-size:14px;
 		    color:#fff;
 		    cursor: pointer;
 		    display: inline;

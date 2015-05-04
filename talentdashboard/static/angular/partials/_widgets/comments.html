@@ -1,11 +1,17 @@
-<div ng-show="comments.length==0" class="panel no-comments">
-    <i class="fa fa-comment"></i>
-    Start the discussion by entering your comments above.
-</div>
 
-<div class="comments" ng-if="currentUser.can_view_comments" >
-    <div class="comment panel" ng-repeat="comment in comments | orderBy:'created_date':true">
-        <h2 class="panel-title" ng-show="$first">Discussions</h2>     
+
+<div class="comments panel" ng-if="currentUser.can_view_comments" >
+    <h2 class="panel-title">Discussions</h2>   
+
+    <!-- Empty discussion messages -->
+    <div ng-show="comments.length==0" class="no-comments">
+        <p>
+            <span ng-show="view == 'employee-view'">Start the discussion by entering your comments above.</span>
+            <span ng-show="view == 'team-view'">There are not any discussions yet.</span>
+        </p>  
+    </div>
+
+    <div class="comment" ng-repeat="comment in comments | orderBy:'created_date':true">  
         <div class="comment-owner-avatar-container">
             <a ng-href="#/employees/{{comment.owner.employee.id}}">
                 <img ng-src="{{ comment.owner.employee.avatar_small }}" class="comment-owner-avatar" />
@@ -13,14 +19,19 @@
         </div>
         <div class="comment-item">
             <div class="comment-title">
-                <ul class="comment-actions pull-right">
-                    <li ng-show="comment.owner.id==currentUser.id" class="feed-action pull-right">
-                        <a ng-click="showCommentEdit=true">Edit</a>
-                    </li>
-                    <li ng-show="comment.owner.id==currentUser.id" class="feed-action pull-right">
-                        <a ng-click="deleteComment(comment)">Delete</a>
-                    </li>
-                </ul>
+                <div class="comment-actions pull-right" ng-show="comment.owner.id==currentUser.id">
+                    <i class="fa fa-cog show-comment-actions" 
+                        data-toggle="popover" 
+                        rel="popover"></i>
+                    <ul class="comment-action-items" style="display:none">
+                        <li class="comment-action-item" ng-show="comment.owner.id==currentUser.id">
+                            <i class="fa fa-pencil-square-o"></i> <a ng-click="showCommentEdit=true">Edit</a>
+                        </li>
+                        <li class="comment-action-item" ng-show="comment.owner.id==currentUser.id">
+                            <i class="fa fa-trash-o"></i> <a ng-click="deleteComment(comment)">Delete</a>
+                        </li>
+                    </ul>
+                </div>    
                 <a ng-href="#/employees/{{comment.owner.employee.id}}" class="comment-title-employee-name">{{comment.owner.employee.full_name}}</a> 
                 commented on 
                 <a ng-href="#/employees/{{comment.associated_object.id}}" class="comment-title-employee-name">{{comment.associated_object.full_name}}</a>
