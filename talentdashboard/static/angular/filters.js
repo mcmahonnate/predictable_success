@@ -92,7 +92,7 @@ filters.filter('greaterThan', function() {
   };
 });
 
-filters.filter('filterEvaluations', function () {
+filters.filter('filterEmployees', function () {
   return function( items, talentCategory, teamId, happy, days_since_happy, fact_finder, follow_thru, quick_start, implementor, visionary, operator, processor, synergist) {
 
     parseDate = function (input) {
@@ -107,79 +107,79 @@ filters.filter('filterEvaluations', function () {
     angular.forEach(items, function(item) {
       push=true;
       if (talentCategory && push) {
-          if (talentCategory!=item.talent_category) {push=false}
+          if (talentCategory!=item.current_talent_category) {push=false}
       }
       if (teamId && push) {
-          if(teamId!=item.employee.team.id) {push=false}
+          if(teamId!=item.team.id) {push=false}
       }
       if (happy && push) {
-          if(happy!=item.employee.happiness) {push=false}
+          if(happy!=item.happiness) {push=false}
       }
       if (teamId && push) {
-          if(teamId!=item.employee.team.id) {push=false}
+          if(teamId!=item.team.id) {push=false}
       }
       if (fact_finder && push) {
           if (fact_finder.length <3) {
-            if(fact_finder.indexOf(item.employee.kolbe_fact_finder)==-1) {push=false}
+            if(fact_finder.indexOf(item.kolbe_fact_finder)==-1) {push=false}
           }
       }
       if (follow_thru && push) {
           if (follow_thru.length <3) {
-            if(follow_thru.indexOf(item.employee.kolbe_follow_thru)==-1) {push=false}
+            if(follow_thru.indexOf(item.kolbe_follow_thru)==-1) {push=false}
           }
       }
       if (quick_start && push) {
           if (quick_start.length <3) {
-            if(quick_start.indexOf(item.employee.kolbe_quick_start)==-1) {push=false}
+            if(quick_start.indexOf(item.kolbe_quick_start)==-1) {push=false}
           }
       }
       if (implementor && push) {
           if (implementor.length <3) {
-            if(implementor.indexOf(item.employee.kolbe_implementor)==-1) {push=false}
+            if(implementor.indexOf(item.kolbe_implementor)==-1) {push=false}
           }
       }
       if (visionary && push) {
-          if (!item.employee.vops_visionary) {
+          if (!item.vops_visionary) {
               if (visionary[1]-visionary[0] < 960) {
                 push=false;
               }
-          } else if (visionary[0]>item.employee.vops_visionary || visionary[1]<item.employee.vops_visionary) {
+          } else if (visionary[0]>item.vops_visionary || visionary[1]<item.vops_visionary) {
               push=false;
           }
       }
       if (operator && push) {
-         if (!item.employee.vops_operator) {
+         if (!item.vops_operator) {
               if (operator[1]-operator[0] < 960) {
                 push=false;
               }
-          } else if (operator[0]>item.employee.vops_operator || operator[1]<item.employee.vops_operator) {
+          } else if (operator[0]>item.vops_operator || operator[1]<item.vops_operator) {
               push=false;
           }
       }
       if (processor && push) {
-         if (!item.employee.vops_processor) {
+         if (!item.vops_processor) {
               if (processor[1]-processor[0] < 960) {
                 push=false;
               }
-          } else if (processor[0]>item.employee.vops_processor || processor[1]<item.employee.vops_processor) {
+          } else if (processor[0]>item.vops_processor || processor[1]<item.vops_processor) {
               push=false;
           }
       }
       if (synergist && push) {
-         if (!item.employee.vops_synergist) {
+         if (!item.vops_synergist) {
               if (synergist[1]-synergist[0] < 960) {
                 push=false;
               }
-          } else if (synergist[0]>item.employee.vops_synergist || synergist[1]<item.employee.vops_synergist) {
+          } else if (synergist[0]>item.vops_synergist || synergist[1]<item.vops_synergist) {
               push=false;
           }
       }
       if (days_since_happy && push) {
-          if (item.employee.happiness_date)
+          if (item.happiness_date)
           {
               var d = new Date();
               d.setDate(d.getDate() - days_since_happy);
-              if (d>parseDate(item.employee.happiness_date))
+              if (d>parseDate(item.happiness_date))
               {push=false}
           } else {
               push=false

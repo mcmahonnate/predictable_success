@@ -55,7 +55,13 @@ class PvPEmployeeSerializer(serializers.HyperlinkedModelSerializer):
     vops_operator = serializers.SerializerMethodField()
     vops_processor = serializers.SerializerMethodField()
     vops_synergist = serializers.SerializerMethodField()
+    current_talent_category = serializers.SerializerMethodField()
 
+    def get_current_talent_category(self, obj):
+        current_talent_category = None
+        if obj.current_talent_category:
+            current_talent_category = obj.current_talent_category()
+        return current_talent_category
 
     def get_happiness(self, obj):
         happiness = -1
@@ -125,7 +131,7 @@ class PvPEmployeeSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Employee
-        fields = ('id', 'full_name', 'avatar', 'happiness', 'happiness_date', 'kolbe_fact_finder','kolbe_follow_thru', 'kolbe_quick_start', 'kolbe_implementor', 'vops_visionary', 'vops_operator', 'vops_processor', 'vops_synergist', 'team', 'display')
+        fields = ('id', 'full_name', 'avatar', 'happiness', 'happiness_date', 'kolbe_fact_finder','kolbe_follow_thru', 'kolbe_quick_start', 'kolbe_implementor', 'vops_visionary', 'vops_operator', 'vops_processor', 'vops_synergist', 'team', 'display', 'current_talent_category')
 
 
 class MBTISerializer(serializers.HyperlinkedModelSerializer):
@@ -162,8 +168,8 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
 
     def get_talent_category(self, obj):
          try:
-            current_pvp = obj.current_pvp
-            return current_pvp
+            current_talent_category = obj.current_talent_category()
+            return current_talent_category
          except:
              return None
 

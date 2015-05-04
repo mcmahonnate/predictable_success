@@ -993,18 +993,6 @@ class EmployeeCompensationSummaries(APIView):
             return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
-@api_view(['GET'])
-@auth_cache(60*1440, 'AllAccess')
-@auth('AllAccess')
-def pvp_evaluations(request):
-    team_id = request.QUERY_PARAMS.get('team_id', None)
-    evaluations = PvpEvaluation.objects.get_most_recent_for_all()
-    if team_id is not None:
-        evaluations = evaluations.filter(employee__team_id=int(team_id))
-
-    serializer = MinimalPvpEvaluationSerializer(evaluations, many=True, context={'request': request})
-    return Response(serializer.data)
-
 class EmployeePvPEvaluations(APIView):
     def get(self, request, pk, format=None):
         evaluations = PvpEvaluation.objects.get_evaluations_for_employee(int(pk))
@@ -1065,20 +1053,27 @@ class AnnotationChartData(APIView):
         return HttpResponse(json.dumps(chart_data), content_type='application/json')
 
 @api_view(['GET'])
+@auth_cache(60*1440, 'AllAccess')
+@auth('AllAccess')
+def pvp_evaluations(request):
+    team_id = request.QUERY_PARAMS.get('team_id', None)
+    if team_id is not None:
+        team_id = int(team_id)
+    employees = Employee.objects.get_current_employees(team_id)
+
+    serializer = PvPEmployeeSerializer(employees, many=True, context={'request': request})
+    return Response(serializer.data)
+
+@api_view(['GET'])
 @auth_employee('AllAccess', 'CoachAccess', 'TeamLeadAccess')
 def my_team_pvp_evaluations(request):
     current_user = request.user
-    current_round = EvaluationRound.objects.most_recent()
     lead = Employee.objects.get(user=current_user)
     lead_id = lead.id
-    evaluations = PvpEvaluation.objects.filter(employee__leaderships__leader__id=lead_id)
-    evaluations = evaluations.filter(evaluation_round__id = current_round.id)
-    evaluations = evaluations.filter(employee__departure_date__isnull=True)
-    evaluations = evaluations.exclude(employee__display=False)
-    serializer = MinimalPvpEvaluationSerializer(evaluations, many=True, context={'request': request})
-    data = serializer.data
+    employees = Employee.objects.get_current_employees_by_team_lead(lead_id)
 
-    return Response(data)
+    serializer = PvPEmployeeSerializer(employees, many=True, context={'request': request})
+    return Response(serializer.data)
 
 @api_view(['GET'])
 def pvp_todos(request):

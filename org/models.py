@@ -1,7 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import Q
 import datetime
 import blah
+from django.utils.log import getLogger
+
+logger = getLogger('talentdashboard')
 
 COACHES_GROUP = 'CoachAccess'
 
@@ -9,6 +13,17 @@ COACHES_GROUP = 'CoachAccess'
 class EmployeeManager(models.Manager):
     def coaches(self):
         return self.filter(user__groups__name=COACHES_GROUP).order_by('full_name')
+
+    def get_current_employees(self, show_hidden=False, team_id=None):
+        employees = self.filter(departure_date__isnull=True)
+        if team_id is not None:
+            employees = employees.filter(team_id=team_id)
+        return employees.exclude(display=show_hidden)
+
+    def get_current_employees_by_team_lead(self, lead_id, show_hidden=False):
+        employees = self.filter(departure_date__isnull=True)
+        employees = employees.filter(leaderships__leader__id=lead_id)
+        return employees.exclude(display=show_hidden)
 
     def get_from_user(self, user):
         return self.filter(user=user).get()
@@ -175,13 +190,21 @@ class Employee(models.Model):
 
     def _get_current_pvp(self):
         try:
-            obj = self.pvp.latest('evaluation_round__date')
-            return obj.talent_category()
+            pvps = self.pvp.exclude(Q(is_complete=False) & Q(evaluation_round__is_complete=False))
+            obj = pvps.latest('evaluation_round__date')
+            return obj
         except:
             return None
 
     def __str__(self):
         return self.full_name
+
+    def current_talent_category(self):
+        pvp = self._get_current_pvp()
+        talent_category = 0
+        if pvp is not None:
+            talent_category = pvp.talent_category()
+        return talent_category
 
     @property
     def current_pvp(self):
