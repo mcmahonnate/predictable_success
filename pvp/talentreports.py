@@ -21,12 +21,15 @@ class TalentCategoryReport:
 def build_talent_category_report_for_employees(employees):
     try:
         evaluation_round = EvaluationRound.objects.most_recent()
-        evaluations = PvpEvaluation.objects.get_most_recent_for_employees(employees)
         total_evaluations = 0
         categories = {}
         for talent_category in PvpEvaluation.SUMMARY_SCORE_SCALE:
-            matching_evaluations = [evaluation for evaluation in evaluations if evaluation.talent_category() == talent_category]
-            categories[talent_category] = len(matching_evaluations)
+            matching_evaluations = 0
+            for employee in employees:
+                current_talent_category = employee.current_talent_category()
+                if current_talent_category == talent_category:
+                    matching_evaluations += 1
+            categories[talent_category] = matching_evaluations
             total_evaluations += categories[talent_category]
         return TalentCategoryReport(evaluation_date=evaluation_round.date, total_evaluations=total_evaluations, categories=categories)
     except EvaluationRound.DoesNotExist:

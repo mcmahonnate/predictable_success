@@ -13,15 +13,13 @@ class SalaryReport():
 
 def build_salary_report(employees):
     try:
-        evaluation_round = EvaluationRound.objects.most_recent()
         compensation_summaries = CompensationSummary.objects.get_most_recent().filter(employee__in=employees)
-        pvp_evaluations = PvpEvaluation.objects.get_evaluations_for_round(evaluation_round.id).filter(employee__in=employees)
         categories = {}
         total_salaries = sum([item.salary for item in compensation_summaries])
         employee_salaries = dict([(summary.employee.id, summary.salary) for summary in compensation_summaries])
-        for evaluation in pvp_evaluations:
-            talent_category = evaluation.talent_category()
-            salary = employee_salaries.get(evaluation.employee.id, 0)
+        for employee in employees:
+            talent_category = employee.current_talent_category()
+            salary = employee_salaries.get(employee.id, 0)
             if talent_category in categories:
                  categories[talent_category] += salary
             else:

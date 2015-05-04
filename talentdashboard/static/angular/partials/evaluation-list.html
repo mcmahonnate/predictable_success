@@ -1,9 +1,8 @@
 <div ng-include="'/static/angular/partials/_widgets/navigation.html'"></div>
 
 <div class="fade" ng-class="{in:evaluations}" style="padding-top:55px">
-
+    <div class="clear" style="background-color: #101214;padding-top: 10px;">
         <div class="inner dashboard-sized-el" style="max-width: 970px;">
-            
             <div ng-show="!hideTeamMenu" class="btn" ng-mouseover="menu.show=true" ng-mouseleave="menu.show=false" style="border-style:solid; border-width: 1px;border-color: #cbcbcb;" id="switch-dashboard">
                 <span ng-if="!teamName" id="selected-dashboard-title" style="font-weight: 700; color: white;">Filter By Team</span>
                 <span ng-if="teamName" id="selected-dashboard-title" style="font-weight: 700; color: white;">{{ teamName }}</span>
@@ -19,7 +18,6 @@
                     </div>
                 </div>
             </div>
-
             <div style="display:inline-block;margin-top: 3px;">
                 <a ng-click="talentCategory=1" style="cursor:pointer"><canvas ng-class="{categoryNavHighlightBig: talentCategory==1,categoryNavBig: talentCategory!=1}" width="24" height="24" employee-talent-category="1"></canvas></a>
                 <a ng-click="talentCategory=2" style="cursor:pointer"><canvas ng-class="{categoryNavHighlightBig: talentCategory==2,categoryNavBig: talentCategory!=2}" width="24" height="24" employee-talent-category="2"></canvas></a>
@@ -69,48 +67,29 @@
                 </div>
             </div>
         </div>
+    </div>
 
-
-<div class="container">
-    <div class="row">    
-        <div class="col-xs-2 col-sm-2 col-md-4 col-lg-3 panel" on-filter index="{{$index}}" stale-days="90" ng-repeat="evaluation in filteredEvaluations = (evaluations | filterEvaluations:talentCategory:teamId:happy:days_since_happy:fact_finder:follow_thru:quick_start:implementor:vops[0]:vops[1]:vops[2]:vops[3]) | orderBy:['employee.full_name']">
-        <canvas width="12" height="12" style="float:left;margin-right: 8px;" employee-talent-category="{{evaluation.talent_category}}"></canvas>
-        <span class="small" style="float:left;margin-top: -8px;" ng-class="{'veryhappy': evaluation.employee.happiness==5,'happy': evaluation.employee.happiness==4,'indifferent': evaluation.employee.happiness==3,'unhappy': evaluation.employee.happiness==2,'veryunhappy': evaluation.employee.happiness==1, 'nohappydata': (evaluation.employee.happiness==-1 || staleHappy(evaluation.employee.happiness_date))}"></span>
-        
-        <a href="#/employees/{{evaluation.employee.id}}">{{evaluation.employee.full_name}}</a>
-        <a href="#/employees/{{evaluation.employee.id}}">
-            <img class="employee-image" ng-src="{{evaluation.employee.avatar}}">
-        </a>
-
-
-    </div>    
-</div>
-
-
-    <div class="dashboard-sized-el employees" id="dashboard" style="display:none">
-        
-        <div id="widget-14808658" class="widget" style="" on-filter columns="4" index="{{$index}}" stale-days="90" ng-repeat="evaluation in filteredEvaluations = (evaluations | filterEvaluations:talentCategory:teamId:happy:days_since_happy:fact_finder:follow_thru:quick_start:implementor:vops[0]:vops[1]:vops[2]:vops[3]) | orderBy:['employee.full_name']">
+    <div class="dashboard-sized-el employees"id="dashboard" style="max-width: 970px; height: 804px;">
+        <div id="widget-14808658" class="widget" style="position: absolute; margin: 5px; left: 0px; top: 0px; width: 230px; height: 230px;" on-filter columns="4" index="{{$index}}" stale-days="90" ng-repeat="employee in filteredEmployees = (evaluations | filterEmployees:talentCategory:teamId:happy:days_since_happy:fact_finder:follow_thru:quick_start:implementor:vops[0]:vops[1]:vops[2]:vops[3]) | orderBy:['full_name']">
           <div class="widget-inner widget-size-1x1 large-screen" style="width: 230px; height: 230px;">
               <header class="no-reload">
-                <canvas width="12" height="12" style="float:left;margin-right: 8px;" employee-talent-category="{{evaluation.talent_category}}"></canvas>
-                <span class="small" style="float:left;margin-top: -8px;" ng-class="{'veryhappy': evaluation.employee.happiness==5,'happy': evaluation.employee.happiness==4,'indifferent': evaluation.employee.happiness==3,'unhappy': evaluation.employee.happiness==2,'veryunhappy': evaluation.employee.happiness==1, 'nohappydata': (evaluation.employee.happiness==-1 || staleHappy(evaluation.employee.happiness_date))}"></span>
-                <span style="margin-left:4px;"><h1 style="display:inline;"><a href="#/employees/{{evaluation.employee.id}}">{{evaluation.employee.full_name}}</a></h1></span>
+                <canvas width="12" height="12" style="float:left;margin-right: 8px;" employee-talent-category="{{employee.current_talent_category}}"></canvas>
+                <span class="small" style="float:left;margin-top: -8px;" ng-class="{'veryhappy': employee.happiness==5,'happy': employee.happiness==4,'indifferent': employee.happiness==3,'unhappy': employee.happiness==2,'veryunhappy': employee.happiness==1, 'nohappydata': (employee.happiness==-1 || staleHappy(employee.happiness_date))}"></span>
+                <span style="margin-left:4px;"><h1 style="display:inline;"><a href="#/employees/{{employee.id}}">{{employee.full_name}}</a></h1></span>
               </header>
               <section class="widget-body rag-widget">
                   <div class="widget-canvas">
                       <div class="outer" style="margin-left: auto; margin-right: auto;">
                           <div class="image" style="margin-left: auto; margin-right: auto;">
-                            <a href="#/employees/{{evaluation.employee.id}}"><img ng-src="{{evaluation.employee.avatar}}" style="padding-bottom:15px; display: block; margin-left: auto; margin-right: auto; height: 150px;"></a>
+                            <a href="#/employees/{{employee.id}}"><img ng-src="{{employee.avatar}}" style="padding-bottom:15px; display: block; margin-left: auto; margin-right: auto; height: 150px;"></a>
                         </div>
                       </div>
                   </div>
               </section>
           </div>
         </div>
-        <div ng-show="!filteredEvaluations.length" style="text-align:center; font-size:2.5em; font-weight:bold; color: #585858;position: absolute; margin: 5px; left: 0px; top: 150px; width: 970px;">No Results</div>
+        <div ng-show="!filteredEmployees.length" style="text-align:center; font-size:2.5em; font-weight:bold; color: #585858;position: absolute; margin: 5px; left: 0px; top: 150px; width: 970px;">No Results</div>
     </div>
-
-
 </div>
 <style>
   .ui-slider .ui-slider-handle {

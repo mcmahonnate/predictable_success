@@ -907,7 +907,10 @@ angular.module('tdb.directives', [])
                 if ($scope.employee.email != $scope.editEmployee.email) {
                     data._email = $scope.editEmployee.email;
                 }
-                if ($scope.employee.team.id != $scope.editEmployee.team.id) {
+                if ($scope.employee.team != $scope.editEmployee.team) {
+                    if ($scope.editEmployee.team.name.length===0) {
+                        $scope.editEmployee.team.id=null;
+                    }
                     data._team_id = $scope.editEmployee.team.id;
                 }
                 if ($scope.employee.coach != $scope.editEmployee.coach) {
