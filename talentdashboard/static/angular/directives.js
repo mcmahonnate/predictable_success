@@ -895,7 +895,7 @@ angular.module('tdb.directives', [])
                 if ($scope.employee.email != $scope.editEmployee.email) {
                     data._email = $scope.editEmployee.email;
                 }
-                if ($scope.employee.team != $scope.editEmployee.team) {
+                if ($scope.employee.team.name != $scope.editEmployee.team.name) {
                     if ($scope.editEmployee.team.name.length===0) {
                         $scope.editEmployee.team.id=null;
                     }
@@ -918,7 +918,6 @@ angular.module('tdb.directives', [])
                     Employee.addNew(data, function(response){saveOtherInfo(response, true)});
                 }
             };
-
             saveEmployee($scope.employee.id);
         };
 
