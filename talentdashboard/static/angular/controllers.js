@@ -195,6 +195,7 @@ angular.module('tdb.controllers', [])
         $scope.modalEmployeeShown = !$scope.modalEmployeeShown;
     };
 	$scope.employeeMenu = {show: false};
+    $scope.searchMenu = {show: false};
     $scope.filterMenu = {show: false};
 	$scope.teamMenu = {show: false};
     $scope.settingsMenu = {show: false};
@@ -213,6 +214,7 @@ angular.module('tdb.controllers', [])
         $scope.openFilterMenu = false;
         $scope.openEmployeeMenu  = false;
         $scope.openTeamMenu = false;
+        $scope.openSearchMenu = false;
         $scope.openSettingsMenu  = false;
         $scope.$window.onclick = function (event) {
             closeNavQuery(event);
@@ -233,6 +235,7 @@ angular.module('tdb.controllers', [])
             $scope.navQuery='';
             $scope.openEmployeeMenu  = false;
             $scope.openTeamMenu = false;
+            $scope.openSearchMenu = false;
             $scope.openSettingsMenu  = false;
             $scope.$window.onclick = function (event) {
                 closeFilterMenu(event, $scope.toggleFilterMenu);
@@ -258,6 +261,7 @@ angular.module('tdb.controllers', [])
             $scope.navQuery='';
             $scope.openFilterMenu = false;
             $scope.openTeamMenu = false;
+            $scope.openSearchMenu = false;
             $scope.openSettingsMenu  = false;
             $scope.$window.onclick = function (event) {
                 closeEmployeeMenu(event, $scope.toggleEmployeeMenu);
@@ -274,6 +278,31 @@ angular.module('tdb.controllers', [])
         var elementClasses = clickedElement.classList;
         var clickedOnEmployeeMenu = elementClasses.contains('employee_menu');
         if (!clickedOnEmployeeMenu) {
+            callbackOnClose();
+        }
+    }    
+    $scope.toggleSearchMenu = function () {
+        $scope.openSearchMenu = !$scope.openSearchMenu;
+        if ($scope.openSearchMenu ) {
+            $scope.navQuery='';
+            $scope.openFilterMenu = false;
+            $scope.openTeamMenu = false;
+            $scope.openSettingsMenu  = false;
+            // $scope.$window.onclick = function (event) {
+            //     closeSearchMenu(event, $scope.toggleSearchMenu);
+            // };
+        } else {
+            $scope.openSearchMenu  = false;
+            $scope.$window.onclick = null;
+            $scope.$$phase || $scope.$apply(); //--> trigger digest cycle and make angular aware.
+        }
+    };
+    function closeSearchMenu(event, callbackOnClose) {
+        var clickedElement = event.target;
+        if (!clickedElement) return;
+        var elementClasses = clickedElement.classList;
+        var clickedOnSearchMenu = elementClasses.contains('search_menu');
+        if (!clickedOnSearchMenu) {
             callbackOnClose();
         }
     }
@@ -309,6 +338,7 @@ angular.module('tdb.controllers', [])
             $scope.openFilterMenu = false;
             $scope.openEmployeeMenu  = false;
             $scope.openTeamMenu  = false;
+            $scope.openSearchMenu  = false;
             $scope.$window.onclick = function (event) {
                 closeSettingsMenu(event, $scope.toggleSettingsMenu);
             };

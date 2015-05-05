@@ -202,16 +202,30 @@ angular.module('tdb.directives', [])
                 var needschange = scope.talentCategoryReport.categories[6];
                 var toonew = scope.talentCategoryReport.categories[7];
 
-                var data = new Array(['PvP', 'Employees', 'Talent Category'],['Top', top, 1],['Strong', strong, 2],['Good', good, 3],['Low Pot', lackspotential, 4],['Low Perf', wrongrole, 5],['Poor', needschange, 6],['Too New', toonew, 7], ['No Data', nodata, 0]);
+                var data = new Array(['PvP', 'Employees', 'Talent Category'],['Top', top, 1],['Strong', strong, 2],['Good', good, 3],['Low Pot', lackspotential, 4],['Low Per', wrongrole, 5],['Poor', needschange, 6],['Too New', toonew, 7], ['No Data', nodata, 0]);
                 var table = new google.visualization.arrayToDataTable(data);
                 var options;
                 if (attrs.size=='small'){
                     options = {
                         pieSliceText: 'label',
-                        backgroundColor: '#2a2a2a',
-                        tooltip:{text:'value'},
-                        legend:{textStyle:{color: 'white'}},
-                        chartArea:{left:0,top:4,height: 205,width: 620},
+                        pieSliceTextStyle: {fontSize:18},
+                        backgroundColor: '#fff',
+                        tooltip:{
+                            text:'value',
+                            isHtml: false
+                        },
+                        pieSliceBorderColor: '#efefef',
+                        tooltipFontSize:'18',
+                        legend:'none',
+                        width:'100%',
+                        height:'100%',
+                        chartArea:{
+                            left:"4px",
+                            top:"0",
+                            height: "100%",
+                            width: "96%"
+                        },
+                        pieHole: 0.4,
                         colors: TalentCategoryColors.pieChartColors
                     };                    
                 } else {

@@ -46,11 +46,13 @@ header .float-fix span{display:block;padding:12px;color:#444;text-transform:uppe
 .subnav-reports {
 	top: 136px;
 }
-
+.subnav-settings {
+	top: 202px;
+}
 
 .selection-title {
 	color: #fff;
-	padding: 5px 15px;
+	padding: 5px 15px 10px;
 	font-size: 20px;
 	margin: 15px 15px 0;
 	border-radius: 5px;
@@ -110,20 +112,29 @@ header .float-fix span{display:block;padding:12px;color:#444;text-transform:uppe
   cursor: pointer;
   text-align: center;
 }
-.nav-item .fa, .nav-item .glyphicon {
+.nav-item .nav-item-icon {
   color: #ccc;
   font-size: 34px;
   margin: 6px 2px;
   opacity: .8;
 }
-.nav-item .fa:hover {
+.nav-item .nav-item-icon:hover {
 	opacity: 1;
 	color: #fff;
 }
 
-.talent-group li {
+.talent-groups li {
 	overflow: hidden;
+
+	a{
+		padding: 8px 12px;
+	}
+	span {
+		padding: 3px 15px;
+  		display: inline-block;
+	}
 }
+
 
 
 #selection-list{background-color: #303941;border-radius:3px 0 3px 3px;z-index:2}
