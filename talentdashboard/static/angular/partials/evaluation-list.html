@@ -1,77 +1,94 @@
 <div ng-include="'/static/angular/partials/_widgets/navigation.html'"></div>
 
 <div class="container">
-    <div class="dropdown btn-group">
-        <a class="btn btn-current dropdown-toggle" data-toggle="dropdown">
-            <h1>
-                {{categoryName}} {{teamName}} <span class="caret-container"><span class="caret" style="margin-left:3px"></span></span>
-            </h1> 
-        </a>
-        <ul ng-controller="TeamListCtrl" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-            <li ng-repeat="team in teams | orderBy:'name'">
-                <a ng-click="setTeamFilter(team.id, team.name);menu.show=false;">{{team.name}}</a>
-            </li>
-            <li class="divider"></li>
-            <li><a ng-click="menu.show=false;setTeamFilter('','')">All Teams</a></li>
-        </ul>
-    </div>
 
+    <div class="row">
+        <div class="dropdown btn-group">
+            <a class="btn btn-current dropdown-toggle" data-toggle="dropdown">
+                <h1>{{categoryName}} <span class="caret-container"><span class="caret" style="margin-left:3px"></span></span></h1> 
+            </a>
+            <ul ng-controller="TeamListCtrl" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                <li ng-repeat="team in teams | orderBy:'name'">
+                    <a ng-click="setTeamFilter(team.id, team.name);menu.show=false;">{{team.name}}</a>
+                </li>
+                <li class="divider"></li>
+                <li><a ng-click="menu.show=false;setTeamFilter('','')">All Teams</a></li>
+            </ul>
+        </div>
+        <div class="dropdown pull-right">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                All Moods
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                <li ng-click="happy=5" role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)"><span class="veryhappy"></span> <span class="text">Very Happy</span></a></li>
+                <li ng-click="happy=4" role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)"><span class="happy"></span> <span class="text">Happy</span></a></li>
+                <li ng-click="happy=3" role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)"><span class="indifferent"></span> <span class="text">Indifferent</span></a></li>
+                <li ng-click="happy=2" role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)"><span class="unhappy"></span> <span class="text">Unhappy</span></a></li>
+                <li ng-click="happy=1" role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)"><span class="veryunhappy"></span> <span class="text">Very Unhappy</span></a></li>
+                <li ng-click="happy=-1" role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)"><span class="nohappydata"></span> <span class="text">No Happiness</span></a></li>
+                <li ng-click="happy=null" role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)">All Moods</a></li>
+            </ul>
+        </div>
 
+        <div class="dropdown pull-right" style="margin-right:5px">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                All Teams
+                <span class="caret"></span>
+            </button>
+            <ul ng-controller="TeamListCtrl" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                <li ng-repeat="team in teams | orderBy:'name'">
+                    <a ng-click="setTeamFilter(team.id, team.name);menu.show=false;">{{team.name}}</a>
+                </li>
+                <li class="divider"></li>
+                <li><a ng-click="menu.show=false;setTeamFilter('','')">All Teams</a></li>
+            </ul>
+        </div>
 
+        <div style="display:none">
+            <div ng-click="happy=5" ng-class="{happyNavHighlight: happy==5}" class="veryhappy happyNav" style="display:inline-block;margin:0 1px;"></div>
+            <div ng-click="happy=4" ng-class="{happyNavHighlight: happy==4}" class="happy happyNav" style="display:inline-block;margin:0 1px;"></div>
+            <div ng-click="happy=3" ng-class="{happyNavHighlight: happy==3}" class="indifferent happyNav" style="display:inline-block;margin:0 1px;"></div>
+            <div ng-click="happy=2" ng-class="{happyNavHighlight: happy==2}" class="unhappy happyNav" style="display:inline-block;margin:0 1px;"></div>
+            <div ng-click="happy=1" ng-class="{happyNavHighlight: happy==1}" class="veryunhappy happyNav" style="display:inline-block;margin:0 1px;"></div>
+            <div ng-click="happy=-1" ng-class="{happyNavHighlight: happy==-1}" class="nohappydata happyNav" style="display:inline-block;margin:0 1px;"></div>
+            <div ng-click="happy=null" class="glyphicon glyphicon-clear happyNav" style="display:inline-block;margin:0 1px;font-size:18px"></div>
+        </div> 
 
+        <div ng-if="customer.show_kolbe">
+            <div style="width:200px;display:inline-block;margin: 5px 18px;">
+                <div slider-fact-finder style="width:200px;display:inline-block;margin: 5px 0px;"></div>
+            </div>
+            <div style="width:200px;display:inline-block;margin: 5px 18px;">
+                <div slider-follow-thru style="width:200px;display:inline-block;margin: 5px 0px;"></div>
+            </div>
+            <div style="width:200px;display:inline-block;margin: 5px 18px;">
+                <div slider-quick-start style="width:200px;display:inline-block;margin: 5px 0px;"></div>
+            </div>
+            <div style="width:200px;display:inline-block;margin: 5px 18px;">
+                <div slider-implementor style="width:200px;display:inline-block;margin: 5px 0px;"></div>
+            </div>
+        </div>
+        <div ng-if="customer.show_vops">
+            <div style="width:200px;display:inline-block;margin: 5px 18px;">
+                <div slider-vops label="Visionary" type="0" style="width:200px;display:inline-block;margin: 5px 0px;"></div>
+            </div>
+            <div style="width:200px;display:inline-block;margin: 5px 18px;">
+                <div slider-vops label="Operator" type="1" style="width:200px;display:inline-block;margin: 5px 0px;"></div>
+            </div>
+            <div style="width:200px;display:inline-block;margin: 5px 18px;">
+                <div slider-vops label="Processor" type="2" style="width:200px;display:inline-block;margin: 5px 0px;"></div>
+            </div>
+            <div style="width:200px;display:inline-block;margin: 5px 18px;">
+                <div slider-vops label="Synergist" type="3" style="width:200px;display:inline-block;margin: 5px 0px;"></div>
+            </div>
+        </div>
+    </div>    
 
-    <div style="display:inline-block;margin-top: 3px;">
-        <a ng-click="talentCategory=1" style="cursor:pointer"><canvas ng-class="{categoryNavHighlightBig: talentCategory==1,categoryNavBig: talentCategory!=1}" width="24" height="24" employee-talent-category="1"></canvas></a>
-        <a ng-click="talentCategory=2" style="cursor:pointer"><canvas ng-class="{categoryNavHighlightBig: talentCategory==2,categoryNavBig: talentCategory!=2}" width="24" height="24" employee-talent-category="2"></canvas></a>
-        <a ng-click="talentCategory=3" style="cursor:pointer"><canvas ng-class="{categoryNavHighlightBig: talentCategory==3,categoryNavBig: talentCategory!=3}" width="24" height="24" employee-talent-category="3"></canvas></a>
-        <a ng-click="talentCategory=4" style="cursor:pointer"><canvas ng-class="{categoryNavHighlightBig: talentCategory==4,categoryNavBig: talentCategory!=4}" width="24" height="24" employee-talent-category="4"></canvas></a>
-        <a ng-click="talentCategory=5" style="cursor:pointer"><canvas ng-class="{categoryNavHighlightBig: talentCategory==5,categoryNavBig: talentCategory!=5}" width="24" height="24" employee-talent-category="5"></canvas></a>
-        <a ng-click="talentCategory=6" style="cursor:pointer"><canvas ng-class="{categoryNavHighlightBig: talentCategory==6,categoryNavBig: talentCategory!=6}" width="24" height="24" employee-talent-category="6"></canvas></a>
-        <div ng-click="talentCategory=null" class="glyphicon glyphicon-clear happyNav" style="display:inline-block;font-size:18px;vertical-align: top"></div>
-    </div>
-    <div style="float:right;display:inline-block;margin-top: 2px;">
-        <div ng-click="happy=5" ng-class="{happyNavHighlight: happy==5}" class="veryhappy happyNav" style="display:inline-block;margin:0 1px;"></div>
-        <div ng-click="happy=4" ng-class="{happyNavHighlight: happy==4}" class="happy happyNav" style="display:inline-block;margin:0 1px;"></div>
-        <div ng-click="happy=3" ng-class="{happyNavHighlight: happy==3}" class="indifferent happyNav" style="display:inline-block;margin:0 1px;"></div>
-        <div ng-click="happy=2" ng-class="{happyNavHighlight: happy==2}" class="unhappy happyNav" style="display:inline-block;margin:0 1px;"></div>
-        <div ng-click="happy=1" ng-class="{happyNavHighlight: happy==1}" class="veryunhappy happyNav" style="display:inline-block;margin:0 1px;"></div>
-        <div ng-click="happy=-1" ng-class="{happyNavHighlight: happy==-1}" class="nohappydata happyNav" style="display:inline-block;margin:0 1px;"></div>
-        <div ng-click="happy=null" class="glyphicon glyphicon-clear happyNav" style="display:inline-block;margin:0 1px;font-size:18px"></div>
-    </div> 
-    <div ng-if="customer.show_kolbe">
-        <div style="width:200px;display:inline-block;margin: 5px 18px;">
-            <div slider-fact-finder style="width:200px;display:inline-block;margin: 5px 0px;"></div>
-        </div>
-        <div style="width:200px;display:inline-block;margin: 5px 18px;">
-            <div slider-follow-thru style="width:200px;display:inline-block;margin: 5px 0px;"></div>
-        </div>
-        <div style="width:200px;display:inline-block;margin: 5px 18px;">
-            <div slider-quick-start style="width:200px;display:inline-block;margin: 5px 0px;"></div>
-        </div>
-        <div style="width:200px;display:inline-block;margin: 5px 18px;">
-            <div slider-implementor style="width:200px;display:inline-block;margin: 5px 0px;"></div>
-        </div>
-    </div>
-    <div ng-if="customer.show_vops">
-        <div style="width:200px;display:inline-block;margin: 5px 18px;">
-            <div slider-vops label="Visionary" type="0" style="width:200px;display:inline-block;margin: 5px 0px;"></div>
-        </div>
-        <div style="width:200px;display:inline-block;margin: 5px 18px;">
-            <div slider-vops label="Operator" type="1" style="width:200px;display:inline-block;margin: 5px 0px;"></div>
-        </div>
-        <div style="width:200px;display:inline-block;margin: 5px 18px;">
-            <div slider-vops label="Processor" type="2" style="width:200px;display:inline-block;margin: 5px 0px;"></div>
-        </div>
-        <div style="width:200px;display:inline-block;margin: 5px 18px;">
-            <div slider-vops label="Synergist" type="3" style="width:200px;display:inline-block;margin: 5px 0px;"></div>
-        </div>
-    </div>
-
-
-    <div class="row filled-light rounded">
+    <div class="row filled-light rounded" style="padding:25px">
         <div class="col-md-3" on-filter index="{{$index}}" stale-days="90" ng-repeat="employee in filteredEmployees = (evaluations | filterEmployees:talentCategory:teamId:happy:days_since_happy:fact_finder:follow_thru:quick_start:implementor:vops[0]:vops[1]:vops[2]:vops[3]) | orderBy:['full_name']">
             <div class="large-avatar-container">
-                <a href="#/employees/{{employee.id}}"><img ng-src="{{ employee.avatar }}" class="large-headshot" /></a>  
+                <a href="#/employees/{{employee.id}}"><img ng-src="{{ employee.avatar }}" class="large-headshot large-headshot-active" /></a>  
                 <div rel="tooltip" data-toggle="tooltip" data-placement="top" data-original-title="Default tooltip">
                     <span title="{{evaluation.talent_category}}" class="segment segment-large user-segment-background-color-{{employee.current_talent_category}}"></span>
                     <span class="happiness" ng-class="{'veryhappy': employee.happiness==5,'happy': employee.happiness==4,'indifferent': employee.happiness==3,'unhappy': employee.happiness==2,'veryunhappy': employee.happiness==1}"></span>
@@ -79,6 +96,6 @@
             </div> 
             <h3 class="centered">{{employee.full_name}}</h3> 
         </div>
+        <div ng-show="!filteredEmployees.length" class="no-results ng-cloak" ng-cloak>No Results</div> 
     </div>
-    <div ng-show="!filteredEmployees.length" style="text-align:center; font-size:2.5em; font-weight:bold; color: #585858;position: absolute; margin: 5px; left: 0px; top: 150px; width: 970px;">No Results</div> 
 </div>
