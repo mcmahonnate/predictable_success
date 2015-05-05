@@ -193,14 +193,16 @@ angular.module('tdb.directives', [])
     return function(scope, element, attrs){
         scope.$watch("talentCategoryReport", function() {
             if(scope.talentCategoryReport) {
+                var nodata = scope.talentCategoryReport.categories[0];
                 var top = scope.talentCategoryReport.categories[1];
                 var strong = scope.talentCategoryReport.categories[2];
                 var good = scope.talentCategoryReport.categories[3];
                 var lackspotential = scope.talentCategoryReport.categories[4];
                 var wrongrole = scope.talentCategoryReport.categories[5];
                 var needschange = scope.talentCategoryReport.categories[6];
+                var toonew = scope.talentCategoryReport.categories[7];
 
-                var data = new Array(['PvP', 'Employees', 'Talent Category'],['Top', top, 1],['Strong', strong, 2],['Good', good, 3],['Low Pot', lackspotential, 4],['Low Perf', wrongrole, 5],['Poor', needschange, 6]);
+                var data = new Array(['PvP', 'Employees', 'Talent Category'],['Top', top, 1],['Strong', strong, 2],['Good', good, 3],['Low Pot', lackspotential, 4],['Low Perf', wrongrole, 5],['Poor', needschange, 6],['Too New', toonew, 7], ['No Data', nodata, 0]);
                 var table = new google.visualization.arrayToDataTable(data);
                 var options;
                 if (attrs.size=='small'){
@@ -210,7 +212,7 @@ angular.module('tdb.directives', [])
                         tooltip:{text:'value'},
                         legend:{textStyle:{color: 'white'}},
                         chartArea:{left:0,top:4,height: 205,width: 620},
-                        colors: TalentCategoryColors.colors
+                        colors: TalentCategoryColors.pieChartColors
                     };                    
                 } else {
                     options = {
@@ -219,7 +221,7 @@ angular.module('tdb.directives', [])
                         tooltip:{text:'value'},
                         legend:{textStyle:{color: 'white'}},
                         chartArea:{left:40,top:40,width: 620},
-                        colors: TalentCategoryColors.colors
+                        colors: TalentCategoryColors.pieChartColors
                     };
                 }
 

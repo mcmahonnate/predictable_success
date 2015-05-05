@@ -24,9 +24,17 @@
             {{salaryReport.total_salaries | currency | noCents }}
             </div><!-- .widget-canvas -->
             <div style="display:block;padding-bottom:10px;">Totals by Talent</div>
-            <div style="main-stat t-size-x12;margin-bottom:5px;" ng-repeat="(category, salaries) in salaryReport.categories track by $index">
-              <canvas width="12" height="12" employee-talent-category="{{category}}"></canvas>
-              <span style="margin-left:10px;width:80px;text-align:right;display:inline-block;">{{salaries | currency | noCents }}</span>
+            <div style="height: 110px;width:120px;display:inline-block;vertical-align: top">
+                <div style="main-stat t-size-x12;margin-bottom:5px;width: 130px;" ng-repeat="(category, salaries) in salaryReport.categories track by $index" ng-if="category>0 && category<7">
+                  <canvas width="12" height="12" employee-talent-category="{{category}}"></canvas>
+                  <span style="margin-left:10px;width:80px;text-align:right;display:inline-block;font-family: sans-serif;">{{salaries | currency | noCents}}</span>
+                </div>
+            </div>
+            <div style="height: 110px;width:120px;display:inline-block;">
+                <div style="main-stat t-size-x12;margin-bottom:5px;width: 130px;" ng-repeat="(category, salaries) in salaryReport.categories track by $index" ng-if="category==0 || category>6">
+                  <canvas width="12" height="12" employee-talent-category="{{category}}"></canvas>
+                  <span style="margin-left:10px;width:80px;text-align:right;display:inline-block;font-family: sans-serif;">{{salaries | currency | noCents}}</span>
+                </div>
             </div>
         </section>
         <div id="salary_visualization" style="width: 315px; height: 300px;"></div>
