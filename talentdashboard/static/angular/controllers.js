@@ -127,6 +127,15 @@ angular.module('tdb.controllers', [])
     $scope.evaluations = PvpEvaluation.getCurrentEvaluations();
 	$scope.teamId = $routeParams.team_id;
     $scope.talentCategory = $routeParams.talent_category;
+
+    /* TODO: move to model */
+    if ($scope.talentCategory == 1){ $scope.categoryName = 'Top Talent'};
+    if ($scope.talentCategory == 2){ $scope.categoryName = 'Strong Talent'};
+    if ($scope.talentCategory == 3){ $scope.categoryName = 'Good Talent'};
+    if ($scope.talentCategory == 4){ $scope.categoryName = 'Low Potential'};
+    if ($scope.talentCategory == 5){ $scope.categoryName = 'Low Performing'};
+    if ($scope.talentCategory == 6){ $scope.categoryName = 'Poor'};
+
     $scope.happy = $routeParams.happy;
     $scope.days_since_happy = $routeParams.days_since_happy;
     $scope.fact_finder = angular.copy($scope.kolbe_fact_finder_labels);

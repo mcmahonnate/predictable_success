@@ -25,85 +25,82 @@
         <a href="#/"><img src="../static/images/brand/compass-logo-medium.png" class="logo"/></a>
     </div>    
     <div ng-controller="EmployeeListCtrl">
-    
-    <!-- Home -->
-    <div class="nav-item hide">
-        <a ng-href="#/"><span class="fa fa-tachometer" ng-click="toggleTeamMenu()"></span></a>
-    </div>
-
-    <!-- Filter Employee -->
-    <div class="nav-item" ng-if="currentUser.can_view_company_dashboard" ng-class="{'menu-item-active':openFilterMenu}">
-      <span class="fa fa-users filter_menu" ng-click="toggleFilterMenu()"></span>
-      <div class="subnav" ng-show="openFilterMenu">
-        <div id="selection-title">Filter</div>
-        <div id="selection-list">
-            <ul>
-                <li>
-                    <a class="dashboard" href="#/evaluations/current?talent_category=1"><canvas width="12" height="12" employee-talent-category="1"></canvas><span style="margin-left: 10px;">Top Talent</span></a>
-                </li>
-                <li>
-                    <a class="dashboard" href="#/evaluations/current?talent_category=2"><canvas width="12" height="12" employee-talent-category="2"></canvas><span style="margin-left: 10px;">Strong Talent</span></a>
-                </li>
-                <li>
-                    <a class="dashboard" href="#/evaluations/current?talent_category=3"><canvas width="12" height="12" employee-talent-category="3"></canvas><span style="margin-left: 10px;">Good Talent</span></a>
-                </li>
-                <li>
-                    <a class="dashboard" href="#/evaluations/current?talent_category=4"><canvas width="12" height="12" employee-talent-category="4"></canvas><span style="margin-left: 10px;">Low Potential</span></a>
-                </li>
-                <li>
-                    <a class="dashboard" href="#/evaluations/current?talent_category=5"><canvas width="12" height="12" employee-talent-category="5"></canvas><span style="margin-left: 10px;">Low Performing</span></a>
-                </li>
-                <li>
-                    <a class="dashboard" href="#/evaluations/current?talent_category=6"><canvas width="12" height="12" employee-talent-category="6"></canvas><span style="margin-left: 10px;">Poor</span></a>
-                </li>
-            </ul>
+        <div class="nav-item hide">
+            <a ng-href="#/"><span class="fa fa-tachometer"></span></a>
         </div>
-      </div>
-    </div>
-
-    <div class="nav-item" ng-if="currentUser.can_view_company_dashboard" ng-class="{'menu-item-active':openTeamMenu}" ng-controller="TeamListCtrl">
-        <span class="fa fa-file-text team_menu" ng-click="toggleTeamMenu()"></span>
-        <div class="subnav subnav-reports" ng-show="openTeamMenu">
-            <div class="selection-title">Company Report</div>
-            <div id="selection-list">
-                <ul style="padding: 10px 10px;">
+        <div class="nav-item" ng-if="currentUser.can_view_company_dashboard" ng-class="{'menu-item-active':openFilterMenu}">
+            <span class="glyphicon glyphicon-user filter_menu" ng-mouseover="toggleFilterMenu()"></span>
+            <div class="subnav" ng-show="openFilterMenu">
+                <div class="selection-title">Employees</div>
+                <ul class="talent-groups">
                     <li>
-                        <a class="dashboard" ng-href="#/">{{customer.name}}</a>
+                        <a class="dashboard" href="#/evaluations/current?talent_category=1">
+                            <i class="glyphicon glyphicon-user pull-left user-segment user-segment-color-1"></i>
+                            <span>Top Talent</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dashboard" href="#/evaluations/current?talent_category=2">
+                            <i class="glyphicon glyphicon-user pull-left user-segment user-segment-color-2"></i>
+                            Strong Talent
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dashboard" href="#/evaluations/current?talent_category=3">
+                            <i class="glyphicon glyphicon-user pull-left user-segment user-segment-color-3"></i>
+                            <span>Good Talent</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dashboard" href="#/evaluations/current?talent_category=4">
+                            <i class="glyphicon glyphicon-user pull-left user-segment user-segment-color-4"></i>
+                            <span>Low Potential</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dashboard" href="#/evaluations/current?talent_category=5">
+                            <i class="glyphicon glyphicon-user pull-left user-segment user-segment-color-5"></i>
+                            <span>Low Performing</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dashboard" href="#/evaluations/current?talent_category=6">
+                            <i class="glyphicon glyphicon-user pull-left user-segment user-segment-color-6"></i>
+                            <span>Poor</span>
+                        </a>
                     </li>
                 </ul>
             </div>
-            <div id="selection-title">Team Reports</div>
-            <div id="selection-list">
-                <ul style="padding: 10px 10px;">
+        </div>
+
+        <div class="nav-item" ng-if="currentUser.can_view_company_dashboard" ng-class="{'menu-item-active':openTeamMenu}" ng-controller="TeamListCtrl">
+            <span class="fa fa-file-text team_menu" ng-mouseover="toggleTeamMenu()"></span>
+            <div class="subnav subnav-reports" ng-show="openTeamMenu">
+                <div class="selection-title">Team Reports</div>
+                <ul>
                     <li ng-repeat="team in teams | filter:{name:teamQuery}:startsWith | orderBy:'name'">
                         <a class="dashboard" href="#/teams/{{team.id}}">{{team.name}}</a>
                     </li>
                 </ul>
             </div>
-          </div>
         </div>
 
         <!-- Add Employee -->
         <div class="nav-item" ng-if="currentUser.can_view_company_dashboard" ng-class="{'menu-item-active':openEmployeeMenu}">
-          <span class="fa fa-gear employee_menu" ng-click="toggleEmployeeMenu()"></span>
-          <div id="selection-shell" ng-show="openEmployeeMenu">
-
-            <div ng-show="currentUser.can_edit_employees">
-              <div id="selection-title">Add Employees</div>
-              <div id="selection-list">
-                <ul style="padding: 10px 10px;">
-                    <li ng-show="!showAddEmployee">
-                        <a class="dashboard employee_menu" ng-click="toggleEmployeeModal();"><span class="glyphicon-regular glyphicon-add-employee employee_menu"></span><span style="margin-left:10px;" class="employee_menu">Add Employee</span></a>
-                    </li>
-                </ul>
-              </div>
+            <span class="fa fa-gear employee_menu" ng-click="toggleEmployeeMenu()"></span>
+            <div class="subnav" ng-show="openEmployeeMenu">
+                <div ng-show="currentUser.can_edit_employees">
+                    <div id="selection-title">Add Employees</div>
+                    <div id="selection-list">
+                        <ul>
+                            <li ng-show="!showAddEmployee">
+                                <a class="dashboard employee_menu" ng-click="toggleEmployeeModal();"><span class="glyphicon-regular glyphicon-add-employee employee_menu"></span><span style="margin-left:10px;" class="employee_menu">Add Employee</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-
-
-
-
 
 
         <!-- Find Employee -->
