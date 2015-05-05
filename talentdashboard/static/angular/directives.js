@@ -193,61 +193,39 @@ angular.module('tdb.directives', [])
     return function(scope, element, attrs){
         scope.$watch("talentCategoryReport", function() {
             if(scope.talentCategoryReport) {
+                var nodata = scope.talentCategoryReport.categories[0];
                 var top = scope.talentCategoryReport.categories[1];
                 var strong = scope.talentCategoryReport.categories[2];
                 var good = scope.talentCategoryReport.categories[3];
                 var lackspotential = scope.talentCategoryReport.categories[4];
                 var wrongrole = scope.talentCategoryReport.categories[5];
                 var needschange = scope.talentCategoryReport.categories[6];
+                var toonew = scope.talentCategoryReport.categories[7];
 
-                var data = new Array(['PvP', 'Employees', 'Talent Category'],['Top', top, 1],['Strong', strong, 2],['Good', good, 3],['Low Potential', lackspotential, 4],['Low Performance', wrongrole, 5],['Poor', needschange, 6]);
+                var data = new Array(['PvP', 'Employees', 'Talent Category'],['Top', top, 1],['Strong', strong, 2],['Good', good, 3],['Low Pot', lackspotential, 4],['Low Perf', wrongrole, 5],['Poor', needschange, 6],['Too New', toonew, 7], ['No Data', nodata, 0]);
                 var table = new google.visualization.arrayToDataTable(data);
                 var options;
                 if (attrs.size=='small'){
                     options = {
                         pieSliceText: 'label',
-                        pieSliceTextStyle: {fontSize:18},
-                        backgroundColor: '#fff',
-                        tooltip:{
-                            text:'value',
-                            isHtml: true
-                        },
-                        pieSliceBorderColor: '#efefef',
-                        tooltipFontSize:'24',
-                        legend:'none',
-                        width: '100%',
-                        height: '100%',
-                        chartArea: {
-                            left: "0",
-                            top: "0",
-                            height: "100%",
-                            width: "100%"
-                        },
-                        pieHole: 0.4,
-                        colors: TalentCategoryColors.colors
+                        backgroundColor: '#2a2a2a',
+                        tooltip:{text:'value'},
+                        legend:{textStyle:{color: 'white'}},
+                        chartArea:{left:0,top:4,height: 205,width: 620},
+                        colors: TalentCategoryColors.pieChartColors
                     };                    
                 } else {
                     options = {
                         pieSliceText: 'label',
                         backgroundColor: '#2a2a2a',
                         tooltip:{text:'value'},
-                        width: '100%',
-                        height: '100%',
                         legend:{textStyle:{color: 'white'}},
-                        chartArea:{left:0,top:0,width: 620},
-                        colors: TalentCategoryColors.colors
+                        chartArea:{left:40,top:40,width: 620},
+                        colors: TalentCategoryColors.pieChartColors
                     };
                 }
 
-
                 var chart = new google.visualization.PieChart(element[0]);
-
-                google.visualization.events.addListener(chart, 'onmouseover', function(hover){
-                    if(hover){
-                        var total = $('.google-visualization-tooltip-item:eq(1)').text(); // remove the other info
-                        $('.google-visualization-tooltip-item:eq(1)').html('<span class="total-employees">'+ total + ' Employees</span>');
-                    }
-                });
 
                 google.visualization.events.addListener(chart, 'select', function(){
                     var selectedItem = chart.getSelection()[0];
@@ -267,10 +245,6 @@ angular.module('tdb.directives', [])
                 });
 
                 chart.draw(table, options);
-
-                $(window).resize(function(){
-                    chart.draw(table, options)
-                });
             }
         }, true);
     };
@@ -995,23 +969,6 @@ angular.module('tdb.directives', [])
   };
 }])
 
-.directive('happiness',  function() {
-  return {
-    restrict: 'E',
-    scope: {
-      show: '=show',
-      happy: '=happy'
-    },
-    replace: true, // Replace with the template below
-    link: function(scope, element, attrs) {
-        if (!scope.happy) {
-            scope.happy = {assessment: 0};
-        }
-    },
-    templateUrl: "/static/angular/partials/happiness-directive.html"
-  };
-})
-
 .directive('modalSendSurvey',  ['Engagement', function(Engagement) {
   return {
     restrict: 'E',
@@ -1265,4 +1222,3 @@ angular.module('tdb.directives', [])
     }
   }
 });
-

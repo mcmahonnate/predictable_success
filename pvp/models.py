@@ -71,13 +71,15 @@ class PvpEvaluationManager(models.Manager):
 
 
 class PvpEvaluation(models.Model):
+    NO_DATA = 0
     TOP_PERFORMER = 1
     STRONG_PERFORMER = 2
     GOOD_PERFORMER = 3
     LACKS_POTENTIAL = 4
     WRONG_ROLE = 5
     NEEDS_DRASTIC_CHANGE = 6
-    SUMMARY_SCORE_SCALE = [TOP_PERFORMER, STRONG_PERFORMER, GOOD_PERFORMER, LACKS_POTENTIAL, WRONG_ROLE, NEEDS_DRASTIC_CHANGE]
+    TOO_NEW = 7
+    SUMMARY_SCORE_SCALE = [NO_DATA, TOP_PERFORMER, STRONG_PERFORMER, GOOD_PERFORMER, LACKS_POTENTIAL, WRONG_ROLE, NEEDS_DRASTIC_CHANGE, TOO_NEW]
 
     objects = PvpEvaluationManager()
     employee = models.ForeignKey(Employee, related_name='pvp')
@@ -86,6 +88,7 @@ class PvpEvaluation(models.Model):
     performance = models.IntegerField(choices=PVP_SCALE, blank=True, default=0)
     comment = models.ForeignKey(Comment, null=True, blank=True)
     evaluator = models.ForeignKey(User, null=True, blank=True)
+    too_new = models.BooleanField(default=False)
     is_complete = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
@@ -106,6 +109,8 @@ class PvpEvaluation(models.Model):
             return None
 
     def talent_category(self):
+        if self.too_new:
+            return self.TOO_NEW
         if self.__is_top_performer():
             return self.TOP_PERFORMER
         if self.__is_strong_performer():
@@ -118,7 +123,7 @@ class PvpEvaluation(models.Model):
             return self.LACKS_POTENTIAL
         if self.__needs_drastic_change():
             return self.NEEDS_DRASTIC_CHANGE
-        return 0
+        return self.NO_DATA
 
     def __is_top_performer(self):
         return self.potential == self.performance == 4
