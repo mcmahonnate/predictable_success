@@ -30,9 +30,23 @@
 
 
 /* Popover Content */
+
+.comment-action-items {
+	background: #fff;
+  	border: 1px solid #ccc;
+  	padding: 10px;
+  	width: 100px;
+  	z-index: 9;
+  	left: -87px;
+  	top: 17px;
+  	border-radius: 3px;
+  	box-shadow: 3px 3px 5px -3px #444;
+}
+
 .comment-action-item {
 	list-style: none;
 	color: #777;
+	cursor: pointer;
 
 	.fa {
 		width: 16px;
@@ -138,7 +152,7 @@
 		}
 
 		.comment-copy {
-  			margin: 15px 0 0;
+  			margin: 15px 0 5px;
 		}
 
 		.comment-associated-avatar {
@@ -181,7 +195,7 @@
 
 
 	.comment-replies {
-		margin: 5px 60px 0 60px;
+		margin: 0 60px 0 60px;
 		overflow: hidden;
 		
 

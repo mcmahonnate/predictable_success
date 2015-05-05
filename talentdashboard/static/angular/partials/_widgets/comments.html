@@ -1,5 +1,3 @@
-
-
 <div class="comments panel" ng-if="currentUser.can_view_comments" >
     <h2 class="panel-title">Discussions</h2>   
 
@@ -20,9 +18,7 @@
         <div class="comment-item">
             <div class="comment-title">
                 <div class="comment-actions pull-right" ng-show="comment.owner.id==currentUser.id">
-                    <i class="fa fa-cog show-comment-actions" 
-                        data-toggle="popover" 
-                        rel="popover"></i>
+                    <i class="fa fa-cog show-comment-actions"></i>
                     <ul class="comment-action-items" style="display:none">
                         <li class="comment-action-item" ng-show="comment.owner.id==currentUser.id">
                             <i class="fa fa-pencil-square-o"></i> <a ng-click="showCommentEdit=true">Edit</a>

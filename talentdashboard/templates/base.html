@@ -70,8 +70,13 @@
                         });
                     });
 
-
-                    // $('body').tooltip({ selector: '[data-toggle="tooltip"]' });
+                    /* Comment edit/delete */
+                    $('body').on('click', '.show-comment-actions', function() {
+                        $(this).next('.comment-action-items').toggle();
+                    });
+                    $('body').on('click', '.comment-action-item a', function() {
+                        $('.comment-action-items').hide();
+                    });
 
 
                     $('body').on('focus', '.new-comment textarea', function() {

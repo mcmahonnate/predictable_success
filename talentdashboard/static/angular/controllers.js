@@ -1451,6 +1451,9 @@ angular.module('tdb.controllers', [])
     }
 
     $scope.deleteComment = function(comment) {
+
+        console.log('clicked');
+
         if ($window.confirm('Are you sure you want to delete this comment?')) {
             var data = {id: comment.id};
             var index = $scope.comments.indexOf(comment);
