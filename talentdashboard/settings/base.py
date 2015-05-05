@@ -41,7 +41,7 @@ EMAIL_HOST = 'mail.dfrntlabs.com'
 EMAIL_PORT = 465
 EMAIL_HOST_USER = os.environ.get("EMAIL_ADDRESS", '')
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD", '')
-DEFAULT_FROM_EMAIL = 'Dash Team <' + EMAIL_HOST_USER + '>'
+DEFAULT_FROM_EMAIL = 'Scoutmap Team <' + EMAIL_HOST_USER + '>'
 DEMO_REQUEST_EMAIL_TO = 'nate@fool.com'
 DEMO_REQUEST_EMAIL_SUBJECT = ' requested a demo'
 
