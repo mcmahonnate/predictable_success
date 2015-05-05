@@ -1,0 +1,12 @@
+<div ng-show="show">
+    <div style="width:200px;height:32px;margin: 5px 0px;font-size: 0;display:inline-block" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all">
+        <div class="rateVeryUnhappy ui-range-unit ui-corner-left" style="" ng-click="happy.assessment=1" ng-class="{rated: happy.assessment>=1, defaultColor: happy.assessment==0}"></div>
+        <div class="rateUnhappy ui-range-unit" ng-click="happy.assessment=2" ng-class="{rated:happy.assessment>=2, clearColor: (happy.assessment<2 && happy.assessment!=0), defaultColor: happy.assessment==0}"></div>
+        <div class="rateIndifferent ui-range-unit" ng-click="happy.assessment=3" ng-class="{rated: happy.assessment>=3, clearColor: (happy.assessment<3 && happy.assessment!=0), defaultColor: happy.assessment==0}"></div>
+        <div class="rateHappy ui-range-unit" ng-click="happy.assessment=4" ng-class="{rated: happy.assessment>=4, clearColor: (happy.assessment<4 && happy.assessment!=0), defaultColor: happy.assessment==0}"></div>
+        <div class="rateVeryHappy ui-range-unit ui-corner-right" ng-click="happy.assessment=5" ng-class="{rated: happy.assessment==5, clearColor: (happy.assessment<5 && happy.assessment!=0), defaultColor: happy.assessment==0}"></div>
+    </div>
+    <div style="display:inline-block;margin-left: 20px;vertical-align: top">
+        <span ng-class="{veryunhappy: happy.assessment==1,unhappy: happy.assessment==2,indifferent: happy.assessment==3,happy: happy.assessment==4,veryhappy: happy.assessment==5}"></span>
+    </div>
+</div>

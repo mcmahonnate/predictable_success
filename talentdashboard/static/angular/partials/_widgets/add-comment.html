@@ -1,0 +1,34 @@
+<div class="panel new-comment">
+    <h2 class="panel-title">Add Comment</h2>
+    <textarea class="form-control" ng-model="newCommentText" ng-class="{'expand': comment.expandTextArea, 'compress': !comment.expandTextArea}" ng-click="comment.expandTextArea=true;toggleCommentTextExpander(comment)" rows="1" cols="40" placeholder="Add a comment about {{employee.full_name}}..."></textarea>
+    <div class="visibility" style="display:none;">  
+        <h3>Share with:</h3>
+        <label class="radio inline control-label">
+            <input class="radio" ng-model="newCommentVisibility" name="visibilityOptions" value="3" type="radio">
+            Everyone
+        </label>
+        <label ng-show="showPeopleTeamVisibility" class="radio inline control-label">
+            <input class="radio" ng-model="newCommentVisibility" name="visibilityOptions" value="2" type="radio">
+            Coaches
+        </label>
+        <label class="radio inline control-label">
+            <input class="radio" ng-model="newCommentVisibility" name="visibilityOptions" value="1" type="radio">
+            Just Me
+        </label>
+        <button class="comment pull-right" ng-disabled="!newCommentText" ng-click="addComment();">Comment</button>
+    
+        <div class="hide">
+        <!-- NOTE: figure out how to work this in according to new spec -->
+
+            <div><span class="glyphicon glyphicon-edit"></span></div>
+            <span style="padding:7px">Engagement</span>
+            <ul style="padding:5px">
+                <li ng-repeat="choice in engagement_choices" ng-click="set_choice(choice.id)" class="engage-select" style="padding:5px"><span ng-class="{'glyphicon-check': is_selected(choice.id)}" class="glyphicon" style="padding-right:5px"></span><span class="{{choice.css}} small"> {{choice.title}}</span></li>
+            </ul>
+            <div id="editActions" style="right:2px;bottom:-33px;">
+                <button class="button small blue" ng-disabled="disable_save_engagement()" style="margin-bottom:3px;" ng-click="update_engagement();editEngagement=false">Save</button>
+                <button class="button small orange" style="margin-bottom:3px;" ng-click="cancel_engagement();">Cancel</button>
+            </div>
+        </div>
+    </div>     
+</div>    

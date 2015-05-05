@@ -1,0 +1,121 @@
+
+
+<div class="comments panel" ng-if="currentUser.can_view_comments" >
+    <h2 class="panel-title">Discussions</h2>   
+
+    <!-- Empty discussion messages -->
+    <div ng-show="comments.length==0" class="no-comments">
+        <p>
+            <span ng-show="view == 'employee-view'">Start the discussion by entering a comment above.</span>
+            <span ng-show="view == 'team-view'">There are not any discussions yet.</span>
+        </p>  
+    </div>
+
+    <div class="comment" ng-repeat="comment in comments | orderBy:'created_date':true">  
+        <div class="comment-owner-avatar-container">
+            <a ng-href="#/employees/{{comment.owner.employee.id}}">
+                <img ng-src="{{ comment.owner.employee.avatar_small }}" class="comment-owner-avatar" />
+            </a>
+        </div>
+        <div class="comment-item">
+            <div class="comment-title">
+                <div class="comment-actions pull-right" ng-show="comment.owner.id==currentUser.id">
+                    <i class="fa fa-cog show-comment-actions" 
+                        data-toggle="popover" 
+                        rel="popover"></i>
+                    <ul class="comment-action-items" style="display:none">
+                        <li class="comment-action-item" ng-show="comment.owner.id==currentUser.id">
+                            <i class="fa fa-pencil-square-o"></i> <a ng-click="showCommentEdit=true">Edit</a>
+                        </li>
+                        <li class="comment-action-item" ng-show="comment.owner.id==currentUser.id">
+                            <i class="fa fa-trash-o"></i> <a ng-click="deleteComment(comment)">Delete</a>
+                        </li>
+                    </ul>
+                </div>    
+                <a ng-href="#/employees/{{comment.owner.employee.id}}" class="comment-title-employee-name">{{comment.owner.employee.full_name}}</a> 
+                commented on 
+                <a ng-href="#/employees/{{comment.associated_object.id}}" class="comment-title-employee-name">{{comment.associated_object.full_name}}</a>
+                <span class="timestamp" title="{{comment.created_date | date:'MMM d, yyyy h:mma'}}">{{comment.created_date | fromNow }}</span>
+            </div>
+            <div ng-show="showCommentEdit" class="comment-editor">
+                <textarea ng-model="comment.content" class="form-control expandable"></textarea>
+                <label class="radio " style="position: relative;padding-left: 0px">
+                    Share with:
+                </label>
+                <label class="radio " style="position: relative">
+                    <input class="radio custom-radio" ng-model="comment.visibility" name="visibilitOptions{{$index}}" value="3" type="radio" style="cursor: pointer;">
+                    <span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
+                    Everyone
+                </label>
+                <label ng-show="showPeopleTeamVisibility" class="radio" style="position: relative">
+                    <input class="radio custom-radio" ng-model="comment.visibility" name="visibilitOptions{{$index}}" value="2" type="radio" style="cursor: pointer;">
+                    <span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
+                    Hide from Manager
+                </label>
+                <label class="radio" style="position: relative">
+                    <input class="radio custom-radio" ng-model="comment.visibility" name="visibilitOptions{{$index}}" value="1" type="radio" style="cursor: pointer;">
+                    <span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
+                    Just Me
+                </label>
+                <happiness show="true" happy="comment.happiness"></happiness>
+                <div id="editActions" style="right:2px;bottom:-33px;">
+                    <button class="button small blue" ng-disabled="!comment.content" ng-click="saveComment(comment);showCommentEdit=false">Save</button>
+                    <button class="button small orange" ng-click="cancelEditComment(comment);showCommentEdit=false">Cancel</button>
+                </div>
+            </div>
+
+            <div class="comment-copy" ng-show="!showCommentEdit">
+                <a class="avatar-container pull-right" ng-show="view != 'employee-view'" ng-href="#/employees/{{comment.associated_object.id}}">
+                    <img ng-src="{{ comment.associated_object.avatar_small }}" class="medium-round-avatar"/>
+                    <span title="{{evaluation.talent_category}}" class="segment user-segment-background-color-{{comment.associated_object.talent_category}}1"></span>
+                </a>
+                <span ng-init="length=500" ng-bind-html="comment.content | new_line | cut:true:length" style="line-height: 125%"></span> <span ng-show="comment.content.length>length" ng-init="showMoreButton=true"><a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a><a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a></span>   
+                <span class="total-replies" ng-show="comment.subcomments.length == 1">
+                    {{comment.subcomments.length}} reply
+                </span>
+                <span class="total-replies" ng-show="comment.subcomments.length > 1">
+                    {{comment.subcomments.length}} replies
+                </span>    
+            </div>
+        </div>
+
+        <div class="comment-replies" ng-show="showCommentInput || comment.subcomments">
+            <div class="comment-reply" ng-repeat="subcomment in comment.subcomments | orderBy:'created_date'">
+                <ul class="feed-actions pull-right">
+                    <li ng-show="subcomment.owner.id==currentUser.id" class="feed-action"><a ng-click="showSubCommentEdit=true" class="feed-action">Edit</a></li>
+                    <li ng-show="subcomment.owner.id==currentUser.id" class="feed-action"><a ng-click="deleteSubComment(comment, subcomment)" class="feed-action">Delete</a></li>
+                </ul>                            
+                <div class="comment-reply-avatar-container">
+                    <a ng-href="#/employees/{{subcomment.owner.employee.id}}">
+                        <img class="comment-reply-avatar" ng-src="{{ subcomment.owner.employee.avatar_small }}"/>
+                    </a>
+                </div>
+                <a class="comment-reply-name" ng-href="#/employees/{{subcomment.owner.employee.id}}">{{subcomment.owner.employee.full_name}}</a> 
+                <span class="timestamp" title="{{subcomment.created_date | date:'MMM d, yyyy h:mma' }}">{{subcomment.created_date | fromNow }}</span>     
+                <div class="comment-reply-copy" ng-show="showSubCommentEdit">
+                    <textarea ng-model="subcomment.content" class="expandable"></textarea>
+                    <div id="editActions" style="right:2px;bottom:-33px;">
+                        <button class="button small blue" ng-disabled="!subcomment.content" ng-click="saveSubComment(subcomment, comment);showSubCommentEdit=false">Save</button>
+                        <button class="button small orange" ng-click="cancelEditSubComment(subcomment, comment);showSubCommentEdit=false">Cancel</button>
+                    </div>
+                </div>
+                <div class="comment-reply-copy" ng-show="!showSubCommentEdit">
+                    <span ng-init="length=500" data-ng-bind-html="subcomment.content | new_line | cut:true:length"></span> 
+                    <span ng-show="subcomment.content.length>length" ng-init="showMoreButton=true">
+                        <a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a>
+                        <a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a>
+                    </span>
+                </div>
+            </div>
+            <div ng-show="showCommentInput || comment.subcomments" class="comment-reply-textarea">
+                <textarea class="text expandable" 
+                    ng-model="comment.newSubCommentText" 
+                    ng-click="toggleChildCommentTextExpander(comment)" 
+                    rows="1" cols="40" 
+                    placeholder="Add a reply..." >
+                </textarea>
+                <button class="small-comment" ng-disabled="!comment.newSubCommentText" ng-click="addSubComment(comment);expandTextArea=false">Comment</button>
+            </div>
+        </div>
+    </div>
+</div>

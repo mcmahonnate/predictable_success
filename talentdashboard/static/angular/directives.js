@@ -1222,4 +1222,3 @@ angular.module('tdb.directives', [])
     }
   }
 });
-

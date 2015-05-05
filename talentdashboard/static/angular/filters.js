@@ -1,5 +1,13 @@
 var filters = angular.module('tdb.filters', []);
 
+
+filters.filter('fromNow', function() {
+  return function(date) {
+    return moment(date).fromNow();
+  }
+});
+
+
 filters.filter('unique', ['$parse', function ($parse) {
   return function (items, filterOn) {
 
