@@ -249,14 +249,14 @@ angular.module('tdb.services', ['ngResource'])
 .factory('TalentCategories', [function() {
     var TalentCategories = {
         categories: {
-            "0":{color:'#585858',label:'No Data',description:''},
+            "0":{color:'#2c3e50',label:'No Data',description:''},
             "1":{color:'#32d0a2',label:'Unleash',description:''},
             "2":{color:'#5ed032',label:'On the Verge',description:''},
             "3":{color:'#bcd032',label:'Strong',description:''},
             "4":{color:'#9b59b6',label:'Discover',description:''},
             "5":{color:'#ffca00',label:'New Role',description:''},
             "6":{color:'#ff0000',label:'Worried',description:''},
-            "7":{color:'#cbcbcb',label:'Onboard',description:''}
+            "7":{color:'#95a5a6',label:'Onboard',description:''}
         },
         pieChartColors: ['#32d0a2','#5ed032','#bcd032','#9b59b6','#ffca00','#ff0000','#cbcbcb','#585858'],
         getColorByTalentCategory: function(category) {
