@@ -2,7 +2,7 @@
 <div class="container">
     <div class="row">
         <div class="dropdown btn-group">
-            <h1>{{categoryName}}</h1> 
+            <h1><span ng-if="!categoryName">All Employees</span>{{categoryName}}</h1> 
         </div>
         <div class="dropdown pull-right">
             <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
@@ -78,13 +78,13 @@
         <div class="col-sm-6 col-md-4 col-md-3 animate employee" on-filter index="{{$index}}" stale-days="90" ng-repeat="employee in filteredEmployees = (evaluations | filterEmployees:talentCategory:teamId:happy:days_since_happy:fact_finder:follow_thru:quick_start:implementor:vops[0]:vops[1]:vops[2]:vops[3]) | orderBy:['full_name']">
             <div class="large-avatar-container">
                 <a href="#/employees/{{employee.id}}"><img ng-src="{{ employee.avatar }}" class="large-headshot large-headshot-active" /></a>  
-                <div rel="tooltip" data-toggle="tooltip" data-placement="top" data-original-title="Default tooltip">
-                    <span title="{{evaluation.talent_category}}" class="segment segment-large user-segment-background-color-{{employee.current_talent_category}}"></span>
+                <div class="employee-attribute employee-attribute-large" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{employee.current_talent_category}}">
+                    <span class="segment user-segment-background-color-{{employee.current_talent_category}}"></span>
                     <span class="happiness" ng-class="{'veryhappy': employee.happiness==5,'happy': employee.happiness==4,'indifferent': employee.happiness==3,'unhappy': employee.happiness==2,'veryunhappy': employee.happiness==1}"></span>
                 </div>
             </div> 
-            <h3 class="centered">{{employee.full_name}}</h3> 
-            <div class="centered team-name">{{employee.team.name}}</div>
+            <h3 class="employee-name centered"><a href="#/employees/{{employee.id}}">{{employee.full_name}}</a></h3> 
+            <div class="team-name centered "><a ng-click="setTeamFilter(employee.team.id, employee.team.name);menu.show=false;">{{employee.team.name}}</a></div>
         </div>
         <div ng-show="!filteredEmployees.length" class="no-results ng-cloak" ng-cloak>No Results</div> 
     </div>

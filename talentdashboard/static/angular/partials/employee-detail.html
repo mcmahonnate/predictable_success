@@ -5,8 +5,8 @@
             <div class="panel">
                 <div class="large-avatar-container">
                     <img ng-src="{{ employee.avatar }}" class="large-headshot" />  
-                    <div rel="tooltip" data-toggle="tooltip" data-placement="top" data-original-title="Default tooltip">
-                        <span title="{{evaluation.talent_category}}" class="segment segment-large user-segment-background-color-{{employee.talent_category}}"></span>
+                    <div class="employee-attribute employee-attribute-large" rel="tooltip" data-toggle="tooltip" data-placement="top" data-original-title="Default tooltip">
+                        <span title="{{evaluation.talent_category}}" class="segment user-segment-background-color-{{employee.talent_category}}"></span>
                         <span class="happiness" ng-class="{'veryhappy': employee.happiness==5,'happy': employee.happiness==4,'indifferent': employee.happiness==3,'unhappy': employee.happiness==2,'veryunhappy': employee.happiness==1}"></span>
                     </div>
                 </div>   

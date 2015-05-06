@@ -382,6 +382,11 @@ angular.module('tdb.controllers', [])
             $scope.currentUser = $rootScope.currentUser;
         }
     },true);
+
+
+    $scope.dynamicTooltipText = "LOGOUT";
+
+
     $scope.modalEmployeeShown = false;
     $scope.toggleEmployeeModal = function() {
         $scope.modalEmployeeShown = !$scope.modalEmployeeShown;
