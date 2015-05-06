@@ -40,26 +40,22 @@
                         msd-elastic
                         class="form-control edit-textarea">
                     </textarea>
+                </div> 
+                <div class="visibility"> 
+                    <h3>Share with:</h3>
+                    <label class="radio inline control-label">
+                        <input class="radio" ng-model="comment.visibility" name="visibilitOptions{{$index}}" value="3" type="radio">
+                        Everyone
+                    </label>
+                    <label ng-show="showPeopleTeamVisibility" class="radio inline control-label">
+                        <input class="radio" ng-model="comment.visibility" name="visibilitOptions{{$index}}" value="2" type="radio">
+                        Coaches
+                    </label>
+                    <label class="radio inline control-label">
+                        <input class="radio" ng-model="comment.visibility" name="visibilitOptions{{$index}}" value="1" type="radio">
+                        Just Me
+                    </label>
                 </div>    
-                <label class="radio " style="position: relative;padding-left: 0px">
-                    Share with:
-                </label>
-                <label class="radio " style="position: relative">
-                    <input class="radio custom-radio" ng-model="comment.visibility" name="visibilitOptions{{$index}}" value="3" type="radio" style="cursor: pointer;">
-                    <span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
-                    Everyone
-                </label>
-                <label ng-show="showPeopleTeamVisibility" class="radio" style="position: relative">
-                    <input class="radio custom-radio" ng-model="comment.visibility" name="visibilitOptions{{$index}}" value="2" type="radio" style="cursor: pointer;">
-                    <span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
-                    Hide from Manager
-                </label>
-                <label class="radio" style="position: relative">
-                    <input class="radio custom-radio" ng-model="comment.visibility" name="visibilitOptions{{$index}}" value="1" type="radio" style="cursor: pointer;">
-                    <span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
-                    Just Me
-                </label>
-
                 <happiness show="true" happy="comment.happiness"></happiness>
                 <button class="btn btn-primary btn-sm" ng-disabled="!comment.content" ng-click="saveComment(comment);showCommentEdit=false">Save Edits</button>
                 <button class="btn btn-link btn-sm" ng-click="cancelEditComment(comment);showCommentEdit=false">Cancel</button>
