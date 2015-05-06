@@ -78,6 +78,10 @@
                         $('.comment-action-items').hide();
                     });
 
+                    $('body').on('click', 'body', function() {
+                        dropdown('toggle');
+                    });
+
 
                     $('body').on('focus', '.new-comment textarea', function() {
                         $(this).height('150px');

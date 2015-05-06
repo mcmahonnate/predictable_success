@@ -1071,7 +1071,7 @@ angular.module('tdb.controllers', [])
         {id: $routeParams.id},
         function(data) {
             $scope.team = data;
-            $scope.team_name = data.name + ' Report';
+            $scope.team_name = data.name;
         }
     );
 

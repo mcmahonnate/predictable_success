@@ -62,7 +62,7 @@
 
             <div class="comment-copy" ng-show="!showCommentEdit">
                 <a class="avatar-container pull-right" ng-show="view != 'employee-view'" ng-href="#/employees/{{comment.associated_object.id}}">
-                    <img ng-src="{{ comment.associated_object.avatar_small }}" class="medium-round-avatar"/>
+                    <img ng-src="{{ comment.associated_object.avatar_small }}" class="medium-headshot"/>
                     <span title="{{evaluation.talent_category}}" class="segment user-segment-background-color-{{comment.associated_object.talent_category}}1"></span>
                 </a>
                 <span ng-init="length=500" ng-bind-html="comment.content | new_line | cut:true:length" style="line-height: 125%"></span> <span ng-show="comment.content.length>length" ng-init="showMoreButton=true"><a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a><a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a></span>   
