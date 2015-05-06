@@ -6,5 +6,8 @@
   },
   "scripts": {
     "postinstall": "./node_modules/bower/bin/bower install"
+  },
+  "devDependencies": {
+    "karma": "^0.12.31"
   }
 }
