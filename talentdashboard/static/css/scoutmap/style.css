@@ -8155,3 +8155,12 @@ header .float-fix span {
   float: left;
   font-family: sans-serif;
 }
+
+.salary-totals .salary-segment-label {
+  margin-top: 8px;
+  font-size: 16px;
+  margin-left: 16px;
+  text-align: right;
+  float: right;
+  font-family: sans-serif;
+}

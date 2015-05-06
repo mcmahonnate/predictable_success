@@ -156,6 +156,8 @@ class TalentCategoryReportTest(TestCase):
         e5.save()
         e6 = Employee(full_name='Employee 6', display=True)
         e6.save()
+        e7 = Employee(full_name='Employee 7', display=True)
+        e7.save()
 
         PvpEvaluation(employee=e1, evaluation_round=r1, potential=4, performance=4).save()
         PvpEvaluation(employee=e2, evaluation_round=r1, potential=4, performance=3).save()
@@ -163,12 +165,13 @@ class TalentCategoryReportTest(TestCase):
         PvpEvaluation(employee=e4, evaluation_round=r1, potential=3, performance=2).save()
         PvpEvaluation(employee=e5, evaluation_round=r1, potential=2, performance=3).save()
         PvpEvaluation(employee=e6, evaluation_round=r1, potential=1, performance=1).save()
+        PvpEvaluation(employee=e7, evaluation_round=r1, too_new=True).save()
 
         report = get_talent_category_report_for_all_employees()
 
-        expected_categories = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1}
+        expected_categories = {0: 0, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1}
         self.assertEqual(report.evaluation_date, evaluation_date)
-        self.assertEqual(report.total_evaluations, 6)
+        self.assertEqual(report.total_evaluations, 7)
         self.assertEqual(report.categories, expected_categories)
 
 

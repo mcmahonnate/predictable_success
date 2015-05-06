@@ -246,25 +246,30 @@ angular.module('tdb.services', ['ngResource'])
     return EngagementReport;
 }])
 
-.factory('TalentCategoryColors', [function() {
-    var TalentCategoryColors = {
-        pieChartColors: ['#32d0a2','#5ed032','#bcd032','#ffca00','#ff4600','#ff0000','#cbcbcb','#585858'],
-        colors: ['#32d0a2','#5ed032','#bcd032','#ffca00','#ff4600','#ff0000','#cbcbcb','#585858'],
+.factory('TalentCategories', [function() {
+    var TalentCategories = {
+        categories: {
+            "0":{color:'#2c3e50',label:'No Data',description:''},
+            "1":{color:'#32d0a2',label:'Unleash',description:''},
+            "2":{color:'#5ed032',label:'On the Verge',description:''},
+            "3":{color:'#bcd032',label:'Strong',description:''},
+            "4":{color:'#9b59b6',label:'Discover',description:''},
+            "5":{color:'#ffca00',label:'New Role',description:''},
+            "6":{color:'#ff0000',label:'Worried',description:''},
+            "7":{color:'#95a5a6',label:'Onboard',description:''}
+        },
+        pieChartColors: ['#32d0a2','#5ed032','#bcd032','#9b59b6','#ffca00','#ff0000','#cbcbcb','#585858'],
         getColorByTalentCategory: function(category) {
-            if (category==0) {
-                return this.colors[7]
-            } else {
-                return this.colors[category - 1];
-            }
+            return this.categories[category].color;
         }
     };
 
-    return TalentCategoryColors;
+    return TalentCategories;
 }])
 
-.factory('TalentCategories', ['$resource', '$http', function($resource) {
-    var TalentCategories = $resource('/api/v1/talent-categories/');
-    return TalentCategories;
+.factory('TalentCategoryDefinitions', ['$resource', '$http', function($resource) {
+    var TalentCategoryDefinitions = $resource('/api/v1/talent-categories/');
+    return TalentCategoryDefinitions;
 }])
 
 .factory('EmployeeNames', ['$resource', '$http', function($resource) {
