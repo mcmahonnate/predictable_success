@@ -1,21 +1,21 @@
 <div class="panel new-comment">
     <h2 class="panel-title">Add Comment</h2>
-    <textarea class="form-control" ng-model="newCommentText" ng-class="{'expand': comment.expandTextArea, 'compress': !comment.expandTextArea}" ng-click="comment.expandTextArea=true;toggleCommentTextExpander(comment)" rows="1" cols="40" placeholder="Add a comment about {{employee.full_name}}..."></textarea>
+    <textarea class="form-control" ng-model="newComment.text" ng-class="{'expand': comment.expandTextArea, 'compress': !comment.expandTextArea}" ng-click="comment.expandTextArea=true;toggleCommentTextExpander(comment)" rows="1" cols="40" placeholder="Add a comment about {{employee.full_name}}..."></textarea>
     <div class="visibility" style="display:none;">  
         <h3>Share with:</h3>
         <label class="radio inline control-label">
-            <input class="radio" ng-model="newCommentVisibility" name="visibilityOptions" value="3" type="radio">
+            <input class="radio" ng-model="newComment.visibility" name="visibilityOptions" value="3" type="radio">
             Everyone
         </label>
         <label ng-show="showPeopleTeamVisibility" class="radio inline control-label">
-            <input class="radio" ng-model="newCommentVisibility" name="visibilityOptions" value="2" type="radio">
+            <input class="radio" ng-model="newComment.visibility" name="visibilityOptions" value="2" type="radio">
             Coaches
         </label>
         <label class="radio inline control-label">
-            <input class="radio" ng-model="newCommentVisibility" name="visibilityOptions" value="1" type="radio">
+            <input class="radio" ng-model="newComment.visibility" name="visibilityOptions" value="1" type="radio">
             Just Me
         </label>
-        <button class="comment pull-right" ng-disabled="!newCommentText" ng-click="addComment();">Comment</button>
+        <button class="comment pull-right" ng-disabled="!newComment.text" ng-click="addComment();">Comment</button>
     
         <div class="hide">
         <!-- NOTE: figure out how to work this in according to new spec -->

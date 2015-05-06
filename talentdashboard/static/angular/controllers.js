@@ -1326,6 +1326,10 @@ angular.module('tdb.controllers', [])
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     $scope.showPeopleTeamVisibility = false;
 
+    var getBlankComment = function() {
+        return {text: ''}
+    };
+
     Comment.query().$promise.then(function(response) {
         if ($rootScope.currentUser.can_coach_employees || $rootScope.currentUser.can_view_company_dashboard) {
             $scope.newCommentVisibility = 2;
@@ -1409,11 +1413,12 @@ angular.module('tdb.controllers', [])
         subcomment.content = $scope.originalComments[parent_index].subcomments[subcomment_index].content;
     }
 
+    $scope.newComment = getBlankComment();
 
     $scope.addComment = function(equals) {
         var newComment = {};
         newComment.id = -1;
-        newComment.content = $scope.newCommentText;
+        newComment.content = $scope.newComment.text;
         newComment.modified_date = new Date().toJSON();
         newComment.owner = User.get();
         newComment.newSubCommentText="";
@@ -1427,7 +1432,7 @@ angular.module('tdb.controllers', [])
         data.id = $scope.employeeId;
         EmployeeComments.save(data, function(response) {
             newComment.id = response.id;
-            $scope.newCommentText = "";
+            $scope.newComment = getBlankComment();
         });
     }
 
@@ -1489,12 +1494,13 @@ angular.module('tdb.controllers', [])
     if($routeParams && $routeParams.id) {
         $scope.employeeId = $routeParams.id;
     }
-    $scope.newCommentText = "";
-    $scope.newCommentVisibility = 3;
-    $scope.newCommentHappy = {assessment: 0};
+    var getBlankComment = function() {
+        return {text: '', visibility: 3, happy: {assessment: 0}}
+    };
+    $scope.newComment = getBlankComment();
     $scope.toggleCommentTextExpander = function (comment) {
         $window.onclick = function (event) {
-            if (!$scope.newCommentText) {
+            if (!$scope.newComment.text) {
                 var clickedElement = event.target;
                 if (!clickedElement) return;
                 var elementClasses = clickedElement.classList;
@@ -1526,7 +1532,7 @@ angular.module('tdb.controllers', [])
     Comments.getEmployeeComments($scope.employeeId, function(data) {
         $scope.showPeopleTeamVisibility = false;
         if ($rootScope.currentUser.can_coach_employees || $rootScope.currentUser.can_view_company_dashboard) {
-            $scope.newCommentVisibility = 2;
+            $scope.newComment.visibility = 2;
             $scope.showPeopleTeamVisibility = true;
         }
         $scope.comments = data;
@@ -1599,20 +1605,15 @@ angular.module('tdb.controllers', [])
     $scope.addComment = function(equals) {
         var newComment = {};
         newComment.id = -1;
-        newComment.content = $scope.newCommentText;
+        newComment.content = $scope.newComment.text;
         newComment.modified_date = new Date().toJSON();
         newComment.owner = User.get();
         newComment.newSubCommentText="";
         newComment.subcomments=[];
-        newComment.visibility=$scope.newCommentVisibility;
-        newComment.happy = $scope.newCommentHappy;
+        newComment.visibility=$scope.newComment.visibility;
+        newComment.happy = $scope.newComment.happy;
 
-        console.log($scope.newCommentText);
-        console.log(newComment.id);
-        console.log(newComment.owner);
-        console.log(newComment.visibility);
-
-        if ($scope.newCommentHappy.assessment>0) {
+        if ($scope.newComment.happy.assessment>0) {
             var data = {id: $scope.employee.id, _assessed_by_id: $rootScope.currentUser.employee.id, _assessment: newComment.happy.assessment, _content:newComment.content, _visibility: newComment.visibility};
             Engagement.addNew(data, function(response) {
                 newComment.id = response.comment.id;
@@ -1624,14 +1625,11 @@ angular.module('tdb.controllers', [])
             data.id = $scope.employeeId;
             EmployeeComments.save(data, function (response) {
                 newComment.id = response.id;
-                //newComment.visibility = response.comment.visibility;
             });
         };
         $scope.comments.push(newComment);
         $scope.originalComments.push(angular.copy(newComment));
-        $scope.newCommentText = "";
-        $scope.newCommentVisibility = 3;
-        $scope.newCommentHappy = {assessment: 0};
+        $scope.newComment = getBlankComment();
     }
 
     $scope.addSubComment = function(comment) {
