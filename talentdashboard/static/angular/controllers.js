@@ -116,6 +116,7 @@ angular.module('tdb.controllers', [])
     Customers.get(function (data) {
         $scope.customer = data;
     });
+    $scope.happiness = '';
     $scope.hideTeamMenu = false;
     $scope.kolbe_values=[0,1,2,3];
     $scope.vops_values=[0,320,6400,960];
@@ -128,7 +129,7 @@ angular.module('tdb.controllers', [])
 	$scope.teamId = $routeParams.team_id;
     $scope.talentCategory = $routeParams.talent_category;
 
-    /* TODO: move to model */
+    /* TODO: move */
     if ($scope.talentCategory == 1){ $scope.categoryName = 'Top Talent'};
     if ($scope.talentCategory == 2){ $scope.categoryName = 'Strong Talent'};
     if ($scope.talentCategory == 3){ $scope.categoryName = 'Good Talent'};
@@ -136,7 +137,6 @@ angular.module('tdb.controllers', [])
     if ($scope.talentCategory == 5){ $scope.categoryName = 'Low Performing'};
     if ($scope.talentCategory == 6){ $scope.categoryName = 'Poor'};
 
-    $scope.happy = $routeParams.happy;
     $scope.days_since_happy = $routeParams.days_since_happy;
     $scope.fact_finder = angular.copy($scope.kolbe_fact_finder_labels);
     $scope.follow_thru = angular.copy($scope.kolbe_follow_thru_labels);
@@ -156,6 +156,7 @@ angular.module('tdb.controllers', [])
 			}
 		);
 	}
+
 	$scope.menu = {show: false};
     $scope.setTeamFilter = function(id, name) {
         $scope.teamId=id;

@@ -939,7 +939,7 @@ angular.module('tdb.directives', [])
             $scope.showDepartDatePicker = !$scope.showDepartDatePicker;
         }
     },
-    templateUrl: "/static/angular/partials/modal-employee.html"
+    templateUrl: "/static/angular/partials/_modals/edit-bio-modal.html"
   };
 }])
 
@@ -978,7 +978,7 @@ angular.module('tdb.directives', [])
         };
 
     },
-    templateUrl: "/static/angular/partials/modal-happy.html"
+    templateUrl: "/static/angular/partials/_modals/happy-modal.html"
   };
 }])
 
@@ -1027,7 +1027,7 @@ angular.module('tdb.directives', [])
         };
 
     },
-    templateUrl: "/static/angular/partials/modal-send-survey.html"
+    templateUrl: "/static/angular/partials/_modals/send-survey-modal.html"
   };
 }])
 
