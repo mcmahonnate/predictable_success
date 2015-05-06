@@ -130,12 +130,14 @@ angular.module('tdb.controllers', [])
     $scope.talentCategory = $routeParams.talent_category;
 
     /* TODO: move */
-    if ($scope.talentCategory == 1){ $scope.categoryName = 'Top Talent'};
-    if ($scope.talentCategory == 2){ $scope.categoryName = 'Strong Talent'};
-    if ($scope.talentCategory == 3){ $scope.categoryName = 'Good Talent'};
-    if ($scope.talentCategory == 4){ $scope.categoryName = 'Low Potential'};
-    if ($scope.talentCategory == 5){ $scope.categoryName = 'Low Performing'};
-    if ($scope.talentCategory == 6){ $scope.categoryName = 'Poor'};
+    if ($scope.talentCategory == 0){ $scope.categoryName = 'No Data'};
+    if ($scope.talentCategory == 1){ $scope.categoryName = 'Unleash'};
+    if ($scope.talentCategory == 2){ $scope.categoryName = 'On the Verge'};
+    if ($scope.talentCategory == 3){ $scope.categoryName = 'Solid'};
+    if ($scope.talentCategory == 4){ $scope.categoryName = 'Discover'};
+    if ($scope.talentCategory == 5){ $scope.categoryName = 'Pivot'};
+    if ($scope.talentCategory == 6){ $scope.categoryName = 'Worried'};
+    if ($scope.talentCategory == 6){ $scope.categoryName = 'Onboard'};
 
     $scope.days_since_happy = $routeParams.days_since_happy;
     $scope.fact_finder = angular.copy($scope.kolbe_fact_finder_labels);
@@ -180,7 +182,8 @@ angular.module('tdb.controllers', [])
     $scope.teamLeads = TeamLeads.getCurrentEvaluationsForTeamLeads($scope.team_id)
 }])
 
-.controller('EmployeeListCtrl', ['$scope', '$routeParams', '$window', '$location', 'Employee', 'Customers', function($scope, $routeParams, $window, $location, Employee, Customers) {
+.controller('EmployeeListCtrl', ['$scope', '$routeParams', '$window', '$location', 'Employee', 'Customers', 'TalentCategories', function($scope, $routeParams, $window, $location, Employee, Customers, TalentCategories) {
+    $scope.talentCategories = TalentCategories.categories;
     $scope.$window = $window;
     if (!$scope.employees)
     {
@@ -985,7 +988,7 @@ angular.module('tdb.controllers', [])
 
 }])
 
-.controller('CompanyOverviewCtrl', ['$rootScope', '$scope', '$location', '$routeParams', 'TalentCategoryReport', 'SalaryReport', 'KPIIndicator', 'KPIPerformance', 'analytics', function($rootScope, $scope, $location, $routeParams, TalentCategoryReport, SalaryReport, KPIIndicator, KPIPerformance, analytics) {
+.controller('CompanyOverviewCtrl', ['$rootScope', '$scope', '$location', '$routeParams', 'TalentCategoryReport', 'SalaryReport', 'KPIIndicator', 'KPIPerformance', 'TalentCategories', 'analytics', function($rootScope, $scope, $location, $routeParams, TalentCategoryReport, SalaryReport, KPIIndicator, KPIPerformance, TalentCategories, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     KPIIndicator.get(function(data) {
             $scope.indicator = data;
@@ -1000,6 +1003,7 @@ angular.module('tdb.controllers', [])
     TalentCategoryReport.getReportForCompany(function(data) {
         $scope.talentCategoryReport = data;
     });
+    $scope.talentCategories = TalentCategories.categories;
     SalaryReport.getReportForCompany(function(data) {
         $scope.salaryReport = data;
     });

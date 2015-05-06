@@ -189,7 +189,7 @@ angular.module('tdb.directives', [])
     };
 })
 
-.directive('talentCategoryChart', ['$location', 'TalentCategoryColors', function($location, TalentCategoryColors) {
+.directive('talentCategoryChart', ['$location', 'TalentCategories', function($location, TalentCategories) {
     return function(scope, element, attrs){
         scope.$watch("talentCategoryReport", function() {
             if(scope.talentCategoryReport) {
@@ -201,8 +201,16 @@ angular.module('tdb.directives', [])
                 var wrongrole = scope.talentCategoryReport.categories[5];
                 var needschange = scope.talentCategoryReport.categories[6];
                 var toonew = scope.talentCategoryReport.categories[7];
-
-                var data = new Array(['PvP', 'Employees', 'Talent Category'],['Top', top, 1],['Strong', strong, 2],['Good', good, 3],['Low Pot', lackspotential, 4],['Low Per', wrongrole, 5],['Poor', needschange, 6],['Too New', toonew, 7], ['No Data', nodata, 0]);
+                var chart_colors = [TalentCategories.categories[1].color,TalentCategories.categories[2].color,TalentCategories.categories[3].color,TalentCategories.categories[4].color,TalentCategories.categories[5].color,TalentCategories.categories[6].color,TalentCategories.categories[7].color,TalentCategories.categories[0].color];
+                var data = [['PvP', 'Employees', 'Talent Category'],
+                    [TalentCategories.categories[1].label, top, 1],
+                    [TalentCategories.categories[2].label, strong, 2],
+                    [TalentCategories.categories[3].label, good, 3],
+                    [TalentCategories.categories[4].label, lackspotential, 4],
+                    [TalentCategories.categories[5].label, wrongrole, 5],
+                    [TalentCategories.categories[6].label, needschange, 6],
+                    [TalentCategories.categories[7].label, toonew, 7],
+                    [TalentCategories.categories[0].label, nodata, 0]];
                 var table = new google.visualization.arrayToDataTable(data);
                 var options;
                 if (attrs.size=='small'){
@@ -226,7 +234,7 @@ angular.module('tdb.directives', [])
                             width: "96%"
                         },
                         pieHole: 0.4,
-                        colors: TalentCategoryColors.pieChartColors
+                        colors: chart_colors
                     };                    
                 } else {
                     options = {
@@ -235,7 +243,7 @@ angular.module('tdb.directives', [])
                         tooltip:{text:'value'},
                         legend:{textStyle:{color: 'white'}},
                         chartArea:{left:40,top:40,width: 620},
-                        colors: TalentCategoryColors.pieChartColors
+                        colors: chart_colors
                     };
                 }
 
@@ -264,9 +272,9 @@ angular.module('tdb.directives', [])
     };
 }])
 
-.directive('employeeTalentCategory', ['TalentCategoryColors', function(TalentCategoryColors) {
+.directive('employeeTalentCategory', ['TalentCategories', function(TalentCategories) {
     return function(scope, element, attrs){
-        var color = TalentCategoryColors.getColorByTalentCategory(attrs.employeeTalentCategory);
+        var color = TalentCategories.getColorByTalentCategory(attrs.employeeTalentCategory);
         var canvas=element[0];
         var ctx=canvas.getContext("2d");
         ctx.fillStyle=color;
@@ -461,13 +469,13 @@ angular.module('tdb.directives', [])
   }
 })
 
-.directive('pvpChart', ['TalentCategoryColors', function(TalentCategoryColors) {
+.directive('pvpChart', ['TalentCategories', function(TalentCategories) {
     return function(scope, element, attrs){
         var svg = element[0];
         var potential = parseInt(attrs.potential, 10);
         var performance = parseInt(attrs.performance, 10);
         var talentCategory = parseInt(attrs.talentCategory, 10);
-        var squareColor = TalentCategoryColors.getColorByTalentCategory(talentCategory);
+        var squareColor = TalentCategories.getColorByTalentCategory(talentCategory);
         angular.element(svg.querySelector('.pvp-square-' + performance + '-' + potential)).attr('fill', squareColor);
     };
 }])
@@ -657,7 +665,7 @@ angular.module('tdb.directives', [])
     };
 })
 
-.directive('pvpGraph', ['TalentCategories', 'TalentCategoryColors', function(TalentCategories, TalentCategoryColors) {
+.directive('pvpGraph', ['TalentCategories', function(TalentCategories) {
     return function(scope, element, attrs, controller) {
         var talentCategories = {
             "0": {
@@ -715,7 +723,7 @@ angular.module('tdb.directives', [])
                 var topLeft = {};
                 var bottomRight = {};
                 var talentCategory = talentCategories[potential][performance];
-                var color = TalentCategoryColors.getColorByTalentCategory(talentCategory);
+                var color = TalentCategories.getColorByTalentCategory(talentCategory);
                 topLeft.y = height - squareHeight - (((potential - 1) * squareHeight));
                 topLeft.x = ((performance - 1) * squareWidth);
                 bottomRight.y = topLeft.y + squareHeight;
