@@ -40,14 +40,16 @@
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
             <script src="http://engagexl.com/assets/js/jquery.easing.1.3.js"></script>
-            <script src="{% static 'javascript/analytics.js' %}"></script>           
+            <script src="{% static 'javascript/analytics.js' %}"></script>
+            <script src="{% static 'javascript/main.js' %}"></script>  
+            <script src="{% static 'javascript/jquery.autogrowtextarea.min.js' %}"></script>           
             {% block javascript %}{% endblock javascript%}
 
             <script type="text/javascript">
             
                 $(function() {
 
-
+                    /* Bind Bootstrap popovers */
                     $('body').popover({
                         placement: 'bottom',
                         container: 'body',
@@ -65,12 +67,12 @@
                         });
                     });
 
+                    /* Bind Bootstrap tooltips */
                     $("body").tooltip({ 
                         selector: '[data-toggle="tooltip"]',
                     });
 
-
-                    /* Comment edit/delete */
+                    /* Bind comment edit/delete */
                     $('body').on('click', '.show-comment-actions', function() {
                         $(this).next('.comment-action-items').toggle();
                     });
@@ -78,6 +80,7 @@
                         $('.comment-action-items').hide();
                     });
 
+                    /* Bind Bootstrap dropdown */
                     $('body').on('click', 'body', function() {
                         dropdown('toggle');
                     });

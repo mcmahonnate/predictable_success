@@ -1448,7 +1448,7 @@ angular.module('tdb.controllers', [])
         newComment.modified_date = new Date().toJSON();
         newComment.owner = User.get();
 
-        comment.subcomments.push(newComment);
+        //comment.subcomments.push(newComment);
         var index = $scope.comments.indexOf(comment);
         $scope.originalComments[index].subcomments.push(angular.copy(newComment));
 
