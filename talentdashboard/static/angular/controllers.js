@@ -1384,7 +1384,7 @@ angular.module('tdb.controllers', [])
 
     $scope.saveComment = function(comment) {
         var index = $scope.comments.indexOf(comment);
-        if (comment.happiness.assessment>0) {
+        if (comment.happiness && comment.happiness.assessment>0) {
             var data = {_assessment_id:comment.happiness.id,_assessed_by_id: $rootScope.currentUser.employee.id, _assessment: comment.happiness.assessment, _content:comment.content,_visibility: comment.visibility};
             Engagement.update(data, function(response) {
                 $scope.originalComments[index].content = comment.content;
