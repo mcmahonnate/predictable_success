@@ -1,5 +1,4 @@
-<div ng-include="'/static/angular/partials/_widgets/navigation.html'"></div>
-<div class="container narrow-gutter {in:salaryReport}" ng-if="currentUser.can_view_company_dashboard">    
+<div class="container narrow-gutter {in:salaryReport}" ng-if="currentUser.can_view_company_dashboard">
     <div class="row">
     <div ng-include="'/static/angular/partials/_widgets/search.html'"></div>
         <h1>{{customer.name}} Dashboard</h1>
@@ -13,6 +12,6 @@
             <div ng-include="'/static/angular/partials/_widgets/todos.html'"></div> 
             <div ng-include="'/static/angular/partials/_widgets/comments.html'" ng-controller="DiscussionOverviewCtrl" ng-init="view='company-view'"></div>
         </div>
-    </div> 
+    </div>
 </div>       
 <div ng-include="'/static/angular/partials/_widgets/footer.html'"></div>
