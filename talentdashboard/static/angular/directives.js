@@ -1,7 +1,5 @@
 'use strict'
 
-google.load('visualization', '1', {packages: ['corechart','annotationchart']});
-
 angular.module('tdb.directives', [])
 
 .directive('ngChart', function () {
