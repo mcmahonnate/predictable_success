@@ -42,5 +42,9 @@
         app.config(['$httpProvider', function($httpProvider) {
             $httpProvider.defaults.headers.common['X-CSRFToken'] = '{{ csrf_token|escapejs }}';
         }]);
+        Raven.config('https://f1a18dde65b54d21978a126d6f6e907c@app.getsentry.com/42421', {
+            release: '{{ release }}',
+            whitelistUrls: [/scoutmap\.com/]
+        }).install();
     </script>
 {% endblock javascript%}
