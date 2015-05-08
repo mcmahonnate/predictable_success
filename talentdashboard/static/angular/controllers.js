@@ -317,6 +317,7 @@ angular.module('tdb.controllers', [])
             $scope.openFilterMenu = false;
             $scope.openEmployeeMenu  = false;
             $scope.openSettingsMenu  = false;
+            $scope.openSearchMenu = false;
             $scope.$window.onclick = function (event) {
                 closeTeamMenu(event, $scope.toggleTeamMenu);
             };
@@ -342,7 +343,7 @@ angular.module('tdb.controllers', [])
             $scope.openFilterMenu = false;
             $scope.openEmployeeMenu  = false;
             $scope.openTeamMenu  = false;
-            $scope.openSearchMenu  = false;
+            $scope.openSearchMenu = false;
             $scope.$window.onclick = function (event) {
                 closeSettingsMenu(event, $scope.toggleSettingsMenu);
             };

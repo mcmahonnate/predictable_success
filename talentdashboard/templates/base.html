@@ -12,23 +12,14 @@
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600' rel='stylesheet' type='text/css'>
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" >
         
-        {% block css %}{% endblock css %}
+        
         {% compress css%}
+            {% block css %}{% endblock css %}
             <link href="{% static 'css/scoutmap/style.less' %}" rel="stylesheet" type="text/less">  
         {% endcompress %}
 
         {% if debug %}
-        <script>
-            less = {
-                env: 'development', // "development" or "production"
-                async: false,
-                fileAsync: false,
-                poll: 1000,
-                dumpLineNumbers: 'comments',
-                relativeUrls: false
-            };
-        </script>
-        <script src="{% static 'javascript/less.js' %}"></script>
+
         <script>//less.watch();</script>
         {% endif %}
     </head>
@@ -67,8 +58,13 @@
                         });
                     });
 
+                    /* Bind and show navigation */
+                    $('.nav-item').hover(function() {
+                        $(this).find('.subnav').show();
+                    });
+
                     /* Bind Bootstrap tooltips */
-                    $("body").tooltip({ 
+                    $('body').tooltip({ 
                         selector: '[data-toggle="tooltip"]',
                     });
 
