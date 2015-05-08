@@ -454,7 +454,7 @@ angular.module('analytics', ['ng'])
 
           if (absoluteUrl.indexOf("0.0.0.0") < 0 && absoluteUrl.indexOf("localhost") < 0) {
             scope.$on('$viewContentLoaded', function(event) {
-              $window._gaq.push(['_trackPageview', locationPath]);
+              $window.ga('send', 'pageview', locationPath);
             });
           } else {
             console.log('not tracked', locationPath);
