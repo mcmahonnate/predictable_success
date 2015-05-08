@@ -233,7 +233,7 @@ angular.module('tdb.directives', [])
                             height: "100%",
                             width: "96%"
                         },
-                        pieHole: 0.4,
+                        pieHole: 0.3,
                         colors: chart_colors
                     };                    
                 } else {
