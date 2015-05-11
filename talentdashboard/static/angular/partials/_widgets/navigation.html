@@ -24,14 +24,14 @@
     <div class="logo-container">
         <a href="#/"><img src="../static/images/brand/compass-logo-medium.png" class="logo"/></a>
     </div>    
-    <div ng-controller="EmployeeListCtrl">
+    <div ng-controller="NavigationCtrl">
         <div class="nav-item hide">
             <a ng-href="#/"><span class="fa fa-tachometer nav-item-icon"></span></a>
         </div>
-        <div class="nav-item" ng-if="currentUser.can_view_company_dashboard" ng-class="{'menu-item-active':openFilterMenu}">
+        <div class="nav-item" ng-if="currentUser.can_view_company_dashboard" ng-class="{'nav-item-active':openFilterMenu}">
             <span class="nav-item-icon glyphicon glyphicon-user filter_menu" ng-mouseover="toggleFilterMenu()"></span>
             <div class="subnav" ng-show="openFilterMenu">
-                <div class="selection-title">Employee Segments</div>
+                <div class="subnav-title">Employee Segments</div>
                 <ul class="talent-groups">
                     <li>
                         <a class="dashboard" href="#/evaluations/current?talent_category=1">
@@ -85,10 +85,10 @@
             </div>
         </div>
 
-        <div class="nav-item" ng-if="currentUser.can_view_company_dashboard" ng-class="{'menu-item-active':openTeamMenu}" ng-controller="TeamListCtrl">
+        <div class="nav-item" ng-if="currentUser.can_view_company_dashboard" ng-class="{'nav-item-active':openTeamMenu}" ng-controller="TeamListCtrl">
             <span class="fa fa-file-text team_menu nav-item-icon" ng-mouseover="toggleTeamMenu()"></span>
             <div class="subnav subnav-reports" ng-show="openTeamMenu">
-                <div class="selection-title">Teams</div>
+                <div class="subnav-title">Teams</div>
                 <ul>
                     <li ng-repeat="team in teams | filter:{name:teamQuery}:startsWith | orderBy:'name'">
                         <a class="dashboard" href="#/teams/{{team.id}}">{{team.name}}</a>
@@ -97,45 +97,45 @@
             </div>
         </div>
 
-        <!-- Add Employee -->
-        <div class="nav-item" ng-if="currentUser.can_view_company_dashboard" ng-class="{'menu-item-active':openEmployeeMenu}">
-            <span class="fa fa-gear employee_menu nav-item-icon" ng-mouseover="toggleEmployeeMenu()"></span>
-            <div class="subnav subnav-settings" ng-show="openEmployeeMenu">
-                <div ng-show="currentUser.can_edit_employees">
-                    <div class="selection-title">Settings</div>
-                    <ul>
-                        <li ng-show="!showAddEmployee">
-                            <a class="dashboard employee_menu" ng-click="toggleEmployeeModal();">
-                                <span class="glyphicon glyphicon-user"></span>
-                                <span>Add Employee</span>
+    <!-- Add Employee -->
+    <div class="nav-item" ng-if="currentUser.can_view_company_dashboard" ng-class="{'nav-item-active':openEmployeeMenu}">
+        <span class="fa fa-gear employee_menu nav-item-icon" ng-mouseover="toggleEmployeeMenu()"></span>
+        <div class="subnav subnav-settings" ng-show="openEmployeeMenu">
+            <div ng-show="currentUser.can_edit_employees">
+                <div class="subnav-title">Settings</div>
+                <ul>
+                    <li ng-show="!showAddEmployee">
+                        <a class="dashboard employee_menu" ng-click="toggleEmployeeModal();">
+                            <span class="glyphicon glyphicon-user"></span>
+                            <span>Add Employee</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <modal-employee employee='newEmployee' leadership='newLeadership' employees='employees' teams='teams' show='modalEmployeeShown' width='700px'></modal-employee>
+    </div>
+
+
+    <!-- Search -->
+    <div class="nav-item" ng-if="currentUser.can_view_company_dashboard" ng-class="{'nav-item-active':openSearchMenu}">
+        <div class="fa fa-search nav-item-icon" ng-mouseover="toggleSearchMenu()"></div>
+        <div class="subnav subnav-search" ng-show="openSearchMenu">
+            <div class="subnav-title">Search</div>
+            <div class="subnav-search-input">
+                <input ng-click="toggleNavQuery()" ng-model="navQuery" type="text" placeholder="Search Employees..." class="form-control" />
+                <div class="search-results" ng-show="navQuery!=''">
+                    <ul ng-if="navQuery!=''">
+                        <li ng-repeat="employee in filteredEmployees = (employees |filter:{full_name:navQuery}:startsWith) | orderBy:'full_name'">
+                            <a class="search-result" href="#/employees/{{employee.id}}">
+                                <img class="small-headshot" ng-src="{{employee.avatar_small}}" alt="{{employee.full_name}}'s Picture" />
+                                {{employee.full_name}}
                             </a>
                         </li>
+                        <li ng-show="!filteredEmployees.length">No Results</li>
                     </ul>
                 </div>
             </div>
         </div>
-
-
-        <!-- Find Employee -->
-        <div class="nav-item" ng-if="currentUser.can_view_company_dashboard">
-            <div class="fa fa-search nav-item-icon" ng-mouseover="toggleSearchMenu()"></div>
-            <div class="subnav subnav-settings" ng-show="openSearchMenu">
-                <input ng-click="toggleNavQuery()" class="search-input nav_query" ng-model="navQuery" type="text" placeholder="Search Employees..."/>
-                <div id="selection-shell" ng-show="navQuery!=''" style="width:350px;">
-                    <div id="selection-title">Employees</div>
-                      <div id="selection-list">
-                        <ul style="padding:0px 10px 10px 10px;">
-                            <div ng-if="navQuery!=''" style="margin-top:12px">
-                                <li ng-repeat="employee in filteredEmployees = (employees |filter:{full_name:navQuery}:startsWith) | orderBy:'full_name'">
-                                    <a class="dashboard" href="#/employees/{{employee.id}}"><img class="settings_menu" ng-src="{{employee.avatar_small}}" style="padding-right:10px;height:27px;vertical-align:middle"/>{{employee.full_name}}</a>
-                                </li>
-                                <li ng-show="!filteredEmployees.length" style="padding: 13px 20px;">No Results</li>
-                            </div>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <modal-employee employee='newEmployee' leadership='newLeadership' employees='employees' teams='teams' show='modalEmployeeShown' width='700px'></modal-employee>
     </div>    
 </header>
