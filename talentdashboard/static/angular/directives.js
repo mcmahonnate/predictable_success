@@ -58,9 +58,9 @@ angular.module('tdb.directives', [])
                     data.addRow(row);
                 });
                 var options = {
-                    vAxes: {0: {format: '#,###', textStyle:{color: '#fff'}, titleTextStyle:{color: '#fff'}}},
+                    vAxes: {0: {format: '#,###', textStyle:{color: '#2a2a2a'}, titleTextStyle:{color: '#2a2a2a'}}},
                     vAxis: { ticks: [0, 1,2,3,4,5] },
-                    hAxis: { format: 'MMM d, y', textStyle:{color: '#fff'}, titleTextStyle:{color: '#fff'}},
+                    hAxis: { format: 'MMM d, y', textStyle:{color: '#2a2a2a'}, titleTextStyle:{color: '#2a2a2a'}, showTextEvery: 2},
                     series: {
                         0:{ type: "line", targetAxisIndex: 0, pointSize: 5 },
                         1:{ type: "line", targetAxisIndex: 0,color: '#2a2a2a',lineWidth:0, pointSize: 0}
@@ -73,8 +73,8 @@ angular.module('tdb.directives', [])
                     },
 
                     legend: {position: 'none'},
-                    backgroundColor: '#2a2a2a',
-                    chartArea:{top:5, left: 48, height:'80%'}
+                    backgroundColor: '#fff',
+                    chartArea:{top:15, left: 28, height:'80%'}
                 };
 
                 var chart = new google.visualization.ComboChart(element[0]);

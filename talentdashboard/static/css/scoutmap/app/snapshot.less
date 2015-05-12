@@ -641,6 +641,22 @@ button.btn[disabled], fieldset[disabled] .btn {
     color: #ffffff;
     content: "\0057";
 }
+#happiness .veryhappy:before {
+    color: #008000;
+}
+#happiness .happy:before {
+    color: limegreen;
+}
+#happiness .indifferent:before {
+    color: yellow;
+}
+#happiness .unhappy:before {
+    color: orange;
+}
+#happiness .veryunhappy:before {
+    color: red;
+}
+
 .nohappydata:before {
     font-family: 'Emoticons';
     font-size: 60px;
@@ -1547,8 +1563,7 @@ input[type="button"]{
 }
 
 .ui-range-unit {
-    position: absolute;
-    height: 100%;
+    height: 32px;
     display: inline-block;
     border-color: lightgrey;
     border-style: solid;
