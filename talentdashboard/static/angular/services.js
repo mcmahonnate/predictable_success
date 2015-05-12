@@ -382,8 +382,12 @@ angular.module('tdb.services', ['ngResource'])
 }])
 
 .factory('Customers', ['$resource', '$http', function($resource, $http) {
-    res = $resource('api/v1/customer/');
-    return res;
+    return $resource('api/v1/customer/', {}, {
+        get: {
+            cache: true,
+            method: 'get'
+        }
+    });
 }])
 
 .factory('KPIIndicator', ['$resource', '$http', function($resource, $http) {

@@ -25,7 +25,11 @@ var app = angular.module('tdb', ['tdb.services', 'tdb.controllers', 'tdb.directi
            }
        );
     });
-    
+
+app.config(function($resourceProvider) {
+  $resourceProvider.defaults.stripTrailingSlashes = false;
+});
+
 var authorizeRoute = function($http) {
     return $http.get("/api/v1/user-status/");
 }
