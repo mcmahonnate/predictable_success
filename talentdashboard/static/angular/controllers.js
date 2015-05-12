@@ -182,7 +182,7 @@ angular.module('tdb.controllers', [])
     $scope.teamLeads = TeamLeads.getCurrentEvaluationsForTeamLeads($scope.team_id)
 }])
 
-.controller('EmployeeListCtrl', ['$scope', '$routeParams', '$window', '$location', 'Employee', 'Customers', 'TalentCategories', function($scope, $routeParams, $window, $location, Employee, Customers, TalentCategories) {
+.controller('NavigationCtrl', ['$scope', '$routeParams', '$window', '$location', 'Employee', 'Customers', 'TalentCategories', function($scope, $routeParams, $window, $location, Employee, Customers, TalentCategories) {
     $scope.talentCategories = TalentCategories.categories;
     $scope.$window = $window;
     if (!$scope.employees)
@@ -218,7 +218,6 @@ angular.module('tdb.controllers', [])
         $scope.openFilterMenu = false;
         $scope.openEmployeeMenu  = false;
         $scope.openTeamMenu = false;
-        $scope.openSearchMenu = false;
         $scope.openSettingsMenu  = false;
         $scope.$window.onclick = function (event) {
             closeNavQuery(event);
@@ -292,9 +291,9 @@ angular.module('tdb.controllers', [])
             $scope.openFilterMenu = false;
             $scope.openTeamMenu = false;
             $scope.openSettingsMenu  = false;
-            // $scope.$window.onclick = function (event) {
-            //     closeSearchMenu(event, $scope.toggleSearchMenu);
-            // };
+            $scope.$window.onclick = function (event) {
+                closeSearchMenu(event, $scope.toggleSearchMenu);
+            };
         } else {
             $scope.openSearchMenu  = false;
             $scope.$window.onclick = null;

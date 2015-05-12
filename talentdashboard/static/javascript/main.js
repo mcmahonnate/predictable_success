@@ -96,3 +96,55 @@
     }
 })(jQuery);
 $('textarea').autogrow({onInitialize: true});
+
+
+
+/* ODR */
+$(function() {
+
+    /* Bind Bootstrap popovers */
+    $('body').popover({
+        placement: 'bottom',
+        container: 'body',
+        html: true,
+        selector: '[rel="popover"]'
+    });
+    $('body').on('click', function(e) {
+        $('[data-toggle="popover"]').each(function() {
+            if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+                $(this).popover('hide');
+            }
+        });
+    });
+
+    /* Bind and show navigation */
+    $('.nav-item').hover(function() {
+        $(this).find('.subnav').show();
+    });
+
+    /* Bind Bootstrap tooltips */
+    $('body').tooltip({ 
+        selector: '[data-toggle="tooltip"]',
+        html: 'true'
+    });
+
+
+    /* Bind comment edit/delete */
+    $('body').on('click', '.show-comment-actions', function() {
+        $(this).next('.comment-action-items').toggle();
+    });
+    $('body').on('click', '.comment-action-item a', function() {
+        $('.comment-action-items').hide();
+    });
+
+    /* Bind Bootstrap dropdown */
+    $('body').on('click', 'body', function() {
+        dropdown('toggle');
+    });
+
+    $('body').on('focus', '.new-comment textarea', function() {
+        $(this).height('150px');
+        $('.visibility').show();
+    });
+
+}); 
