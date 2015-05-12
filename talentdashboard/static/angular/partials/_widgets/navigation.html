@@ -1,20 +1,13 @@
-<div style="position:absolute; top:0; right:0">
-    
-    <!-- Account/logout -->
-    <div class="nav-item" ng-class="{'menu-item-active':openSettingsMenu}">
-        <img class="settings_menu" ng-src="{{currentUser.employee.avatar_small}}" ng-click="toggleSettingsMenu()" style="height:27px;"/>
-        <div class="subnav subnav-settings" ng-show="openSettingsMenu">
-            <div class="subnav-title">Account</div>
-            <ul>
-                <li ng-if="currentUser.can_coach_employees && customer.show_coaches">
-                    <a class="dashboard" href="#/coach/">My Coachees</a>
-                </li>
-                <li>
-                    <a class="dashboard" href="/logout"><div style="float:left;margin-right: 5px;"><img class="settings_menu" ng-src="{{currentUser.employee.avatar_small}}" style="height:27px;"/></div><div style="float:left;margin-top:5px;">{{currentUser.employee.full_name}}</div><div style="float:right;margin-top:5px;">Sign Out</div></a>
-                </li>
-            </ul>
-        </div>
-    </div>
+<div class="account-menu">
+    <img class="show-account-menu small-headshot" ng-src="{{currentUser.employee.avatar_small}}" alt="User Image" />
+    <ul class="account-action-items">
+        <li ng-if="currentUser.can_coach_employees && customer.show_coaches">
+            <a class="dashboard" href="#/coach/">My Coachees</a>
+        </li>
+        <li>
+            <i class="fa fa-sign-out"></i> <a class="dashboard" href="/logout">Sign Out</a>
+        </li>
+    </ul>
 </div>
 
 

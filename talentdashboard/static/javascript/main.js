@@ -107,10 +107,7 @@ $(function() {
         placement: 'bottom',
         container: 'body',
         html: true,
-        selector: '[rel="popover"]', //Sepcify the selector here
-        content: function() {
-            return 'foo';
-        }
+        selector: '[rel="popover"]'
     });
     $('body').on('click', function(e) {
         $('[data-toggle="popover"]').each(function() {
@@ -130,6 +127,7 @@ $(function() {
         selector: '[data-toggle="tooltip"]',
         html: 'true'
     });
+
 
     /* Bind comment edit/delete */
     $('body').on('click', '.show-comment-actions', function() {

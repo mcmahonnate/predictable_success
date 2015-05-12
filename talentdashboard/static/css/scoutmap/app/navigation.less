@@ -8,6 +8,39 @@ header{
 	background-color: #282f34;
 }
 
+.account-menu {
+	position:absolute; 
+	top:10px; 
+	right:5px;
+
+	.small-headshot {
+		width:30px;
+		border-radius: 90px;
+	}
+
+	.account-action-items {
+		background: #fff;
+	  	border: 1px solid #ccc;
+	  	padding: 10px;
+	  	width: 100px;
+	  	z-index: 9;
+	  	left: -100px;
+	  	border-radius: 3px;
+	  	box-shadow: 3px 3px 5px -3px #444444;
+		position: absolute;
+	  	top: -8px; 
+	  	display: none; 	
+	}
+
+	.fa {
+		color: #777;
+	}
+}
+.account-menu:hover, .account-action-items:hover {
+	.account-action-items {
+		display: block;
+	}
+}
 
 /* Navigation Logo */
 .logo-container {
