@@ -1,12 +1,13 @@
 <div id="happiness" class="modal fade">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content" style="background-color: #edeff1;">
             <div class="modal-body">
                 <form enctype="multipart/form-data" name="happyForm">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h3 class="modal-title">How professionally happy is {{employee.full_name}}?</h3>                
-                    <div style="width:200px;height:32px;margin: 5px 0px;font-size: 0;display:inline-block" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all">
+                    <div style="width:200px;height:32px;margin: 25px 0px;font-size: 0;display:inline-block" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all">
                         <div class="rateVeryUnhappy ui-range-unit ui-corner-left" style="" ng-click="happy.assessment=1" ng-class="{rated: happy.assessment>=1, defaultColor: happy.assessment==0}"></div>
+                        <div class="rateUnhappy ui-range-unit" ng-click="happy.assessment=2" ng-class="{rated: happy.assessment>=2, clearColor: (happy.assessment<2 && happy.assessment!=0), defaultColor: happy.assessment==0}"></div>
                         <div class="rateIndifferent ui-range-unit" ng-click="happy.assessment=3" ng-class="{rated: happy.assessment>=3, clearColor: (happy.assessment<3 && happy.assessment!=0), defaultColor: happy.assessment==0}"></div>
                         <div class="rateHappy ui-range-unit" ng-click="happy.assessment=4" ng-class="{rated: happy.assessment>=4, clearColor: (happy.assessment<4 && happy.assessment!=0), defaultColor: happy.assessment==0}"></div>
                         <div class="rateVeryHappy ui-range-unit ui-corner-right" ng-click="happy.assessment=5" ng-class="{rated: happy.assessment==5, clearColor: (happy.assessment<5 && happy.assessment!=0), defaultColor: happy.assessment==0}"></div>
