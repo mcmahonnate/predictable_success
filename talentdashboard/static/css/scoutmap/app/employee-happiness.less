@@ -1,0 +1,99 @@
+@font-face {
+  font-family: 'Emoticons';
+  src: url('/static/fonts/emoticons.eot') format('embedded-opentype'), url('/static/fonts/emoticons.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Flat-UI-Icons';
+    src: url('/static/fonts/flat-ui-icons-regular.eot');
+    src: url('/static/fonts/flat-ui-icons-regular.eot?#iefix') format('embedded-opentype'), url('/static/fonts/flat-ui-icons-regular.woff') format('woff'), url('/static/fonts/flat-ui-icons-regular.ttf') format('truetype'), url('/static/fonts/flat-ui-icons-regular.svg#flat-ui-icons-regular') format('svg');
+}
+
+
+/* == User Attribute Bubble ========================================== */
+.employee-attribute-happiness .segment{
+	background: none;
+}
+.happiness {
+	vertical-align: middle;
+  	padding-left: 2px;
+  	position: absolute;
+}
+.employee-happiness-list span:before { /* Dropdown */
+	margin-right: 6px;
+	font-family: 'Emoticons';
+  	font-size: 26px;
+  	text-shadow: none;
+  	color: #666;
+}
+.employee-happiness-large span:before { /* Headshot bubble */
+	font-family: 'Emoticons';
+  	font-size: 60px;
+  	text-shadow: none;
+  	color: #fff;
+  	top: -23px;
+  	position: absolute;
+  	right: -3px;
+}
+
+
+/* Stand alone faces */
+.employee-happiness-container {
+	overflow: hidden;
+}	
+.employee-happiness{
+	display: block;
+	width: 46px;
+	height: 48px;
+	border-radius: 90px;
+	position: relative;
+	float: left;
+  	margin-right: 5px;
+}
+.employee-happiness span:before {
+	font-family: 'Emoticons';
+  	font-size: 60px;
+  	text-shadow: none;
+  	color: #fff;
+  	top: -23px;
+  	position: absolute;
+  	right: -6px;
+}	
+.employee-happiness-5 { /* Very happy */
+	background: #32d0a2;
+}
+.employee-happiness-4 { /* Happy */
+	background: #5ed032;
+}
+.employee-happiness-3 { /* Indifferent */
+	background: #bcd032;
+}
+.employee-happiness-2 { /* Unhappy */
+	background: #ffca00;
+}
+.employee-happiness-1 { /* Very Unhappy */
+	background: #ff0000;
+}
+
+
+/* Smiley faces */
+.happy-nav:before {
+    content: "\0041"; /* Not sure if this is still being used */
+}
+.veryhappy:before {
+  	content: "\0044";
+}
+.happy:before {
+  	content: "\0041";
+}
+.indifferent:before {
+  	content: "\0043";
+}
+.unhappy:before {
+  	content: "\0028";
+}
+.veryunhappy:before {
+  	content: "\0057";
+}
+.nohappydata:before {
+  	content: "\002C";
+}

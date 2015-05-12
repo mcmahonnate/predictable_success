@@ -8,7 +8,7 @@
                 All Moods
                 <span class="caret"></span>
             </button>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+            <ul class="dropdown-menu employee-happiness-list" role="menu" aria-labelledby="dropdownMenu1">
                 <li ng-click="happy=5" role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)"><span class="veryhappy"></span> <span class="text">Very Happy</span></a></li>
                 <li ng-click="happy=4" role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)"><span class="happy"></span> <span class="text">Happy</span></a></li>
                 <li ng-click="happy=3" role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)"><span class="indifferent"></span> <span class="text">Indifferent</span></a></li>
@@ -68,11 +68,11 @@
                     <div class="large-avatar-container">
                         <a href="#/employees/{{employee.id}}"><img ng-src="{{ employee.avatar }}" class="large-headshot large-headshot-active" /></a>  
                         <div class="employee-attribute employee-attribute-large" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{employee.current_talent_category}}">
-                            <span class="segment user-segment-background-color-{{employee.current_talent_category}}"></span>
+                            <span class="segment employee-segment-background-color-{{employee.current_talent_category}}"></span>
                         </div>
-                        <div class="employee-attribute employee-attribute-large employee-attribute-happiness" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{employee.current_talent_category}}">
-                            <span class="segment user-happiness user-happiness-background-color-{{employee.happiness}}" ng-class="{'veryhappy': employee.happiness==5,'happy': employee.happiness==4,'indifferent': employee.happiness==3,'unhappy': employee.happiness==2,'veryunhappy': employee.happiness==1}"></span>
-                        </div>                        
+                        <div class="employee-attribute employee-attribute-large employee-happiness-large" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{employee.current_talent_category}}">
+                            <span class="employee-happiness-background-color-{{employee.happiness}}" ng-class="{'veryhappy': employee.happiness==5,'happy': employee.happiness==4,'indifferent': employee.happiness==3,'unhappy': employee.happiness==2,'veryunhappy': employee.happiness==1}"></span>
+                        </div>      
                     </div> 
                     <h3 class="employee-name centered"><a href="#/employees/{{employee.id}}">{{employee.full_name}}</a></h3> 
                     <div class="team-name centered "><a ng-click="setTeamFilter(employee.team.id, employee.team.name);menu.show=false;">{{employee.team.name}}</a></div>
