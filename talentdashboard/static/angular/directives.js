@@ -171,9 +171,9 @@ angular.module('tdb.directives', [])
         formatter.format(table, 4);
 
         var options = {
-          hAxis: {textStyle: {color: 'white'}},
-          vAxis: {textStyle: {color: 'white'}, format: '$#,###'},
-          backgroundColor: '#2a2a2a',
+          hAxis: {textStyle: {color: '#2a2a2a'}},
+          vAxis: {textStyle: {color: '#2a2a2a'}, format: '$#,###'},
+          backgroundColor: '#fff',
           legend: {position: 'none'},
           chartArea: {top: 10},
           isStacked: true,
