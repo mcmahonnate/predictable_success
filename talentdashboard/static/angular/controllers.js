@@ -291,9 +291,9 @@ angular.module('tdb.controllers', [])
             $scope.openFilterMenu = false;
             $scope.openTeamMenu = false;
             $scope.openSettingsMenu  = false;
-            // $scope.$window.onclick = function (event) {
-            //     closeSearchMenu(event, $scope.toggleSearchMenu);
-            // };
+            $scope.$window.onclick = function (event) {
+                closeSearchMenu(event, $scope.toggleSearchMenu);
+            };
         } else {
             $scope.openSearchMenu  = false;
             $scope.$window.onclick = null;

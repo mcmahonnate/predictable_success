@@ -3,18 +3,16 @@
     <!-- Account/logout -->
     <div class="nav-item" ng-class="{'menu-item-active':openSettingsMenu}">
         <img class="settings_menu" ng-src="{{currentUser.employee.avatar_small}}" ng-click="toggleSettingsMenu()" style="height:27px;"/>
-        <div id="selection-shell" ng-show="openSettingsMenu" style="margin-left:-248px">
-            <div id="selection-title">Account</div>
-            <div id="selection-list">
-                <ul style="padding: 10px 10px;">
-                    <li ng-if="currentUser.can_coach_employees && customer.show_coaches">
-                        <a class="dashboard" href="#/coach/" style="height:27px;">My Coachees</a>
-                    </li>
-                    <li>
-                        <a class="dashboard" href="/logout" style="height:27px;"><div style="float:left;margin-right: 5px;"><img class="settings_menu" ng-src="{{currentUser.employee.avatar_small}}" style="height:27px;"/></div><div style="float:left;margin-top:5px;">{{currentUser.employee.full_name}}</div><div style="float:right;margin-top:5px;">Sign Out</div></a>
-                    </li>
-                </ul>
-            </div>
+        <div class="subnav subnav-settings" ng-show="openSettingsMenu">
+            <div class="subnav-title">Account</div>
+            <ul>
+                <li ng-if="currentUser.can_coach_employees && customer.show_coaches">
+                    <a class="dashboard" href="#/coach/">My Coachees</a>
+                </li>
+                <li>
+                    <a class="dashboard" href="/logout"><div style="float:left;margin-right: 5px;"><img class="settings_menu" ng-src="{{currentUser.employee.avatar_small}}" style="height:27px;"/></div><div style="float:left;margin-top:5px;">{{currentUser.employee.full_name}}</div><div style="float:right;margin-top:5px;">Sign Out</div></a>
+                </li>
+            </ul>
         </div>
     </div>
 </div>
@@ -127,7 +125,7 @@
                 <div class="search-results" ng-show="navQuery!=''">
                     <ul ng-if="navQuery!=''">
                         <li ng-repeat="employee in filteredEmployees = (employees |filter:{full_name:navQuery}:startsWith) | orderBy:'full_name'">
-                            <a class="search-result" href="#/employees/{{employee.id}}">
+                            <a ng-click="toggleSearchMenu()" class="search-result" href="#/employees/{{employee.id}}">
                                 <img class="small-headshot" ng-src="{{employee.avatar_small}}" alt="{{employee.full_name}}'s Picture" />
                                 {{employee.full_name}}
                             </a>
