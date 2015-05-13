@@ -348,7 +348,7 @@ angular.module('tdb.services', ['ngResource'])
 .factory('SalaryReport', ['$resource', '$http', function($resource, $http) {
     SalaryReport = $resource('/api/v1/salary-reports/:path/:id/');
     SalaryReport.getReportForTeam = function(id, success, failure) { return this.get({ path: 'teams', id: id }, success, failure); };
-    SalaryReport.getReportForLead = function(success, failure) { return this.get({ path: 'lead/' }, success, failure); };
+    SalaryReport.getReportForLead = function(success, failure) { return this.get({ path: 'lead' }, success, failure); };
     SalaryReport.getReportForCompany = function(success, failure) { return this.get({ path: 'company' }, success, failure); };
 
     return SalaryReport;
@@ -358,7 +358,7 @@ angular.module('tdb.services', ['ngResource'])
     Comments = $resource('/api/v1/comments/:path/:id/');
     Comments.getEmployeeComments = function(id, success, failure) { return this.query({ path: 'employees', id: id}, success, failure); };
     Comments.getTeamComments = function(id, success, failure) { return this.query({ path: 'teams', id: id }, success, failure); };
-    Comments.getLeadComments = function(success, failure) { return this.query({ path: 'leads/'}, success, failure); };
+    Comments.getLeadComments = function(success, failure) { return this.query({ path: 'leads'}, success, failure); };
     Comments.getCoachComments = function(success, failure) { return this.query({ path: 'coaches'}, success, failure); };
 
     return Comments;
