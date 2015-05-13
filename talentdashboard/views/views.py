@@ -116,10 +116,10 @@ class AttributeViewSet(viewsets.ReadOnlyModelViewSet):
             
         return self.queryset
 
-class EmployeeCommentReportDetail(APIView):
-    def get(self, request, pk, format=None):
+@api_view(['GET'])
+def all_employee_comment_report(request):
         report = None
-        days_ago = self.request.QUERY_PARAMS.get('days_ago', None)
+        days_ago = request.QUERY_PARAMS.get('days_ago', None)
         neglected = request.QUERY_PARAMS.get('neglected', None)
         if neglected is not None:
             neglected = parseBoolString(neglected)
@@ -127,13 +127,9 @@ class EmployeeCommentReportDetail(APIView):
             neglected = False
         if days_ago is None:
             days_ago = 30
-        if pk == 'all-employees':
-            report = get_employees_with_comments(int(days_ago), neglected)
+        report = get_employees_with_comments(int(days_ago), neglected)
         serializer = TalentCategoryReportSerializer(report, context={'request': request})
-        if report is not None:
-            return Response(serializer.data)
-        return Response(None, status=status.HTTP_404_NOT_FOUND)
-
+        return Response(serializer.data)
 
 class TeamMBTIReportDetail(APIView):
     def get(self, request, pk, format=None):
@@ -145,10 +141,9 @@ class TeamMBTIReportDetail(APIView):
             return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 
-class EmployeeEngagementReportDetail(APIView):
-    def get(self, request, pk, format=None):
-        report = None
-        days_ago = self.request.QUERY_PARAMS.get('days_ago', None)
+@api_view(['GET'])
+def all_employee_engagement_report(request):
+        days_ago = request.QUERY_PARAMS.get('days_ago', None)
         neglected = request.QUERY_PARAMS.get('neglected', None)
         if neglected is not None:
             neglected = parseBoolString(neglected)
@@ -156,12 +151,9 @@ class EmployeeEngagementReportDetail(APIView):
             neglected = False
         if days_ago is None:
             days_ago = 30
-        if pk == 'all-employees':
-            report = get_employees_with_happiness_scores(int(days_ago), neglected)
+        report = get_employees_with_happiness_scores(int(days_ago), neglected)
         serializer = TalentCategoryReportSerializer(report, context={'request': request})
-        if report is not None:
-            return Response(serializer.data)
-        return Response(None, status=status.HTTP_404_NOT_FOUND)
+        return Response(serializer.data)
 
 
 class TalentCategoryReportDetail(APIView):
