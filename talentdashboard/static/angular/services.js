@@ -147,6 +147,17 @@ angular.module('tdb.services', ['ngResource'])
     return MyTeamPvpEvaluation;
 }])
 
+.factory('MyCoacheesPvpEvaluation', ['$resource', '$http', function($resource, $http) {
+    var MyCoacheesPvpEvaluation = $resource('/api/v1/my-coachees-pvp-evaluations/');
+
+    MyCoacheesPvpEvaluation.getCurrentEvaluations = function() {
+        var params = { current_round: true };
+        return this.query(params);
+    };
+
+    return MyCoacheesPvpEvaluation;
+}])
+
 .factory('TeamLeads', ['$resource', '$http', function($resource, $http) {
     var TeamLeads = $resource('/api/v1/team-leads/');
 
@@ -167,6 +178,7 @@ angular.module('tdb.services', ['ngResource'])
 
     TalentCategoryReport.getReportForTeam = function(teamId, success, failure) { return this.get({ id: 'teams', teamId: teamId }, success, failure); };
     TalentCategoryReport.getReportForLead = function(success, failure) { return this.get({ id: 'lead/' }, success, failure); };
+    TalentCategoryReport.getReportForCoach = function(success, failure) { return this.get({ id: 'coach' }, success, failure); };
     TalentCategoryReport.getReportForCompany = function(success, failure) { return this.get({ id: 'all-employees' }, success, failure); };
 
     return TalentCategoryReport;
@@ -246,7 +258,7 @@ angular.module('tdb.services', ['ngResource'])
     return EngagementReport;
 }])
 
-.factory('TalentCategories', [function() {
+    .factory('TalentCategories', [function() {
     var TalentCategories = {
         categories: {
             "0":{color:'#2c3e50',label:'No Data',description:''},
@@ -347,6 +359,7 @@ angular.module('tdb.services', ['ngResource'])
     Comments.getEmployeeComments = function(id, success, failure) { return this.query({ path: 'employees', id: id}, success, failure); };
     Comments.getTeamComments = function(id, success, failure) { return this.query({ path: 'teams', id: id }, success, failure); };
     Comments.getLeadComments = function(success, failure) { return this.query({ path: 'leads/'}, success, failure); };
+    Comments.getCoachComments = function(success, failure) { return this.query({ path: 'coaches'}, success, failure); };
 
     return Comments;
 }])
@@ -382,8 +395,12 @@ angular.module('tdb.services', ['ngResource'])
 }])
 
 .factory('Customers', ['$resource', '$http', function($resource, $http) {
-    res = $resource('api/v1/customer/');
-    return res;
+    return $resource('api/v1/customer/', {}, {
+        get: {
+            cache: true,
+            method: 'get'
+        }
+    });
 }])
 
 .factory('KPIIndicator', ['$resource', '$http', function($resource, $http) {

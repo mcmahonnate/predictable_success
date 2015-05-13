@@ -6,16 +6,15 @@
                   <div class="widget-inner widget-size-2x2 large-screen" style="height: 520px;width:520px;">
                     <div>
                         <div class="widget-inner widget-size-2x2 large-screen" style="height: 500px;width:520px;">
-                            <header class="no-reload" style="padding-top: 10px;padding-bottom: 5px;">
-                                <h1 style="font-size:15px;display: inline-block;">{{ pvp.employee.full_name }}</h1>
-                                <h1 style="font-size:15px;float:right;display: inline-block;">{{ $index+1 }} of {{last_index+1}}</h1>
-                            </header>
                             <section class="widget-body rag-widget">
+                                                             <div style="width: 100%">
+                                  <h1 class="centered ng-binding" style="text-align:left">{{ pvp.employee.full_name }}</h1>
+                              </div>
                               <div class="widget-canvas" style="height: 200px;float:left">
-                                  <div class="image" style="margin-left: auto; margin-right: auto;"><img ng-src="{{ pvp.employee.avatar }}" style="padding-bottom:15px; display: block; height: 200px;"/></div>
+                                  <div class="large-avatar-container"><img class="large-headshot" ng-src="{{ pvp.employee.avatar }}"/></div>
                               </div>
                               <div class="vertical-text" style="width:200px;text-align: center;position: absolute;left: 190px;top: 145px;"><div style="display:inline-block;float:left">Low</div>Potential<div style="display:inline-block;float:right">High</div></div>
-                              <div class="widget-canvas" style="margin-left: 285px">
+                              <div class="widget-canvas" style="margin-left: 285px;margin-top: 41px;">
                                   <canvas pvp-graph index="{{$index}}" height="200" width="200" ng-click="click_canvas($event)"/>
                                   <div style="width:200px;text-align: center;"><div style="display:inline-block;float:left">Low</div>Performance<div style="display:inline-block;float:right">High</div></div>
                               </div>

@@ -1,0 +1,17 @@
+<div class="panel talent-portfolio row">
+    <h2 class="panel-title" ng-show="view == 'team-view'">Team Members</h2>
+    <h2 class="panel-title" ng-show="view == 'coach-view'">People I Coach</h2>
+    <div>
+        <div class="team-lead" ng-repeat="employee in employees | orderBy:'talent_category'">
+            <a class="avatar-container" ng-if="employee.display" href="#/employees/{{employee.id}}">
+                <img ng-src="{{ employee.avatar_small }}" class="medium-headshot" />
+                <div class="employee-attribute">
+                    <span title="{{employee.talent_category}}" class="segment user-segment-background-color-{{employee.talent_category}}"></span>
+                </div>
+            </a>
+            <a class="team-lead-name" ng-if="evaluation.employee.display" href="#/employees/{{employee.id}}">
+                {{employee.full_name}}
+            </a>    
+        </div>
+    </div>
+</div>

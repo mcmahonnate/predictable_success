@@ -7,6 +7,7 @@ var app = angular.module('tdb', ['tdb.services', 'tdb.controllers', 'tdb.directi
           when('/engagement-survey/:employeeId/:surveyId', {templateUrl: '/static/angular/partials/engagement-survey.html', controller: 'EngagementSurveyCtrl'}).
           when('/reports', {templateUrl: '/static/angular/partials/reports.html', controller: 'ReportsCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
           when('/evaluations/my-team', {templateUrl: '/static/angular/partials/evaluation-list.html', controller: 'MyTeamEvaluationListCtrl', resolve: {authorizeRoute: authorizeRoute}}).
+          when('/evaluations/my-coachees', {templateUrl: '/static/angular/partials/evaluation-list.html', controller: 'MyCoacheesEvaluationListCtrl', resolve: {authorizeRoute: authorizeRoute}}).
           when('/evaluations/current', {templateUrl: '/static/angular/partials/evaluation-list.html', controller: 'EvaluationListCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
           when('/teams/:id/', {templateUrl: '/static/angular/partials/team-overview.html', controller: 'TeamOverviewCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
           when('/employees', {templateUrl: '/static/angular/partials/employee-list.html', controller: 'EmployeeListCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
@@ -25,7 +26,11 @@ var app = angular.module('tdb', ['tdb.services', 'tdb.controllers', 'tdb.directi
            }
        );
     });
-    
+
+app.config(function($resourceProvider) {
+  $resourceProvider.defaults.stripTrailingSlashes = false;
+});
+
 var authorizeRoute = function($http) {
     return $http.get("/api/v1/user-status/");
 }

@@ -25,6 +25,11 @@ class EmployeeManager(models.Manager):
         employees = employees.filter(leaderships__leader__id=lead_id)
         return employees.exclude(display=show_hidden)
 
+    def get_current_employees_by_coach(self, coach_id, show_hidden=False):
+        employees = self.filter(departure_date__isnull=True)
+        employees = employees.filter(coach_id=coach_id)
+        return employees.exclude(display=show_hidden)
+
     def get_from_user(self, user):
         return self.filter(user=user).get()
 
