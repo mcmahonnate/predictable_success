@@ -8,7 +8,7 @@ from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework.permissions import AllowAny
 from .serializers import *
 from .decorators import *
-from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team, get_talent_category_report_for_lead
+from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team, get_talent_category_report_for_lead, get_talent_category_report_for_coach
 from pvp.salaryreports import get_salary_report_for_team, get_salary_report_for_all_employees, get_salary_report_for_lead
 from pvp.models import PvpDescription
 from blah.commentreports import get_employees_with_comments
@@ -181,6 +181,17 @@ class LeadTalentCategoryReportDetail(APIView):
         lead = Employee.objects.get(user=current_user)
         lead_id = lead.id
         report = get_talent_category_report_for_lead(lead_id)
+        serializer = TalentCategoryReportSerializer(report, context={'request': request})
+        if report is not None:
+            return Response(serializer.data)
+        return Response(None, status=status.HTTP_404_NOT_FOUND)
+
+class CoachTalentCategoryReportDetail(APIView):
+    def get(self, request, pk, format=None):
+        current_user = request.user
+        coach = Employee.objects.get(user=current_user)
+        coach_id = coach.id
+        report = get_talent_category_report_for_coach(coach_id)
         serializer = TalentCategoryReportSerializer(report, context={'request': request})
         if report is not None:
             return Response(serializer.data)
@@ -595,6 +606,27 @@ class LeadCommentList(APIView):
         allow_coach_access = request.user.groups.filter(name="CoachAccess").exists()
         comments = Comment.objects.filter(object_id__in = employee_ids, content_type=employee_type)
         comments = comments.exclude(object_id=lead.id,content_type=employee_type)
+        if not allow_all_access and (allow_team_lead_access and not allow_coach_access):
+            comments = comments.exclude(~Q(owner_id=request.user.id), visibility=2)
+        comments = comments.exclude(~Q(owner_id=request.user.id), visibility=1)
+        comments = comments.extra(order_by = ['-created_date'])[:15]
+        serializer = TeamCommentSerializer(comments, many=True, context={'request': request})
+        return Response(serializer.data)
+
+class CoachCommentList(APIView):
+    def get(self, request, pk, format=None):
+        current_user = request.user
+        coach = Employee.objects.get(user=current_user)
+        coach_id = coach.id
+        employee_ids = Employee.objects.filter(coach_id=coach_id).values('id')
+        if not employee_ids:
+            return Response(None, status=status.HTTP_404_NOT_FOUND)
+        employee_type = ContentType.objects.get(model="employee")
+        allow_all_access = request.user.groups.filter(name="AllAccess").exists()
+        allow_team_lead_access = request.user.groups.filter(name="TeamLeadAccess").exists()
+        allow_coach_access = request.user.groups.filter(name="CoachAccess").exists()
+        comments = Comment.objects.filter(object_id__in = employee_ids, content_type=employee_type)
+        comments = comments.exclude(object_id=coach.id,content_type=employee_type)
         if not allow_all_access and (allow_team_lead_access and not allow_coach_access):
             comments = comments.exclude(~Q(owner_id=request.user.id), visibility=2)
         comments = comments.exclude(~Q(owner_id=request.user.id), visibility=1)
@@ -1063,6 +1095,17 @@ def my_team_pvp_evaluations(request):
     lead = Employee.objects.get(user=current_user)
     lead_id = lead.id
     employees = Employee.objects.get_current_employees_by_team_lead(lead_id)
+
+    serializer = PvPEmployeeSerializer(employees, many=True, context={'request': request})
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@auth_employee('AllAccess', 'CoachAccess', 'TeamLeadAccess')
+def my_coachees_pvp_evaluations(request):
+    current_user = request.user
+    coach = Employee.objects.get(user=current_user)
+    coach_id = coach.id
+    employees = Employee.objects.get_current_employees_by_coach(coach_id)
 
     serializer = PvPEmployeeSerializer(employees, many=True, context={'request': request})
     return Response(serializer.data)
