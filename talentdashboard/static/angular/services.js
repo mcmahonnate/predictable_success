@@ -348,6 +348,7 @@ angular.module('tdb.services', ['ngResource'])
     Comments.getEmployeeComments = function(id, success, failure) { return this.query({ path: 'employees', id: id}, success, failure); };
     Comments.getTeamComments = function(id, success, failure) { return this.query({ path: 'teams', id: id }, success, failure); };
     Comments.getLeadComments = function(success, failure) { return this.query({ path: 'leads/'}, success, failure); };
+    Comments.getCoachComments = function(success, failure) { return this.query({ path: 'coaches/'}, success, failure); };
 
     return Comments;
 }])

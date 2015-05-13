@@ -1886,6 +1886,158 @@ angular.module('tdb.controllers', [])
     };
 }])
 
+.controller('CoachCommentsCtrl', ['$scope', '$rootScope', '$filter', '$routeParams', '$window', 'Comments', 'EmployeeComments', 'SubComments','Comment', 'User',function($scope, $rootScope, $filter, $routeParams, $window, Comments, EmployeeComments, SubComments, Comment, User) {
+     $scope.newCommentText = "";
+     $scope.showPeopleTeamVisibility = false;
+     User.get(
+        function(data) {
+            $scope.coach= data.employee;
+            $scope.coachId = $scope.coach.id;
+
+            Comments.getCoachComments($scope.coachId, function(data) {
+                if ($rootScope.currentUser.can_coach_employees || $rootScope.currentUser.can_view_company_dashboard) {
+                    $scope.newCommentVisibility = 2;
+                    $scope.showPeopleTeamVisibility = true;
+                }
+                $scope.comments = data;
+                $scope.originalComments = angular.copy($scope.comments);
+                angular.forEach($scope.comments, function(comment) {
+                    var index = $scope.comments.indexOf(comment);
+                    var original_comment = $scope.originalComments[index];
+
+                    comment.subcomments = [];
+                    original_comment.subcomments = [];
+                    SubComments.query({ id: comment.id }).$promise.then(function(response) {
+                            comment.subcomments = response;
+                            original_comment.subcomments = angular.copy(comment.subcomments);
+                        }
+                    );
+                    comment.newSubCommentText = "";
+                    comment.expandTextArea = false;
+                    comment.expandChildTextArea = false;
+
+                });
+
+                $scope.CreateHeader = function(date) {
+                    date=$filter('date')(date,"MM/dd/yyyy");
+                    showHeader = (date!=$scope.currentGroup);
+                    $scope.currentGroup = date;
+                    return showHeader;
+                }
+            });
+
+        }
+    );
+    $scope.toggleCommentTextExpander = function (comment) {
+        $window.onclick = function (event) {
+            if (!$scope.newCommentText) {
+                var clickedElement = event.target;
+                if (!clickedElement) return;
+                var elementClasses = clickedElement.classList;
+                var clickedOnTextArea = elementClasses.contains('text');
+                if (!clickedOnTextArea) {
+                    comment.expandTextArea=false;
+                    $scope.$apply();
+                }
+            }
+        };
+    };
+    $scope.toggleChildCommentTextExpander = function (comment) {
+        $window.onclick = function (event) {
+            if (!comment.newSubCommentText) {
+                var clickedElement = event.target;
+                if (!clickedElement) return;
+                var elementClasses = clickedElement.classList;
+                var clickedOnTextArea = elementClasses.contains('text');
+                if (!clickedOnTextArea) {
+                    comment.expandChildTextArea=false;
+                    $scope.$apply();
+                }
+            }
+        };
+    };
+
+    $scope.saveComment = function(comment) {
+        var index = $scope.comments.indexOf(comment);
+        var data = {id: comment.id, _content: comment.content, _visibility: comment.visibility};
+        Comment.update(data, function() {
+            $scope.originalComments[index].content = comment.content;
+            $scope.originalComments[index].visibility = comment.visibility;
+        });
+    }
+
+    $scope.cancelEditComment = function(comment) {
+        var index = $scope.comments.indexOf(comment);
+        comment.content = $scope.originalComments[index].content;
+    }
+
+     $scope.saveSubComment = function(subcomment, comment) {
+        var parent_index = $scope.comments.indexOf(comment);
+        var subcomment_index = $scope.comments[parent_index].subcomments.indexOf(subcomment);
+        var data = {id: subcomment.id, _content: subcomment.content};
+
+        EmployeeComment.update(data, function() {
+            $scope.originalComments[parent_index].subcomments[subcomment_index].content = subcomment.content;
+        });
+    }
+
+    $scope.cancelEditSubComment = function(subcomment, comment) {
+        var parent_index = $scope.comments.indexOf(comment);
+        var subcomment_index = $scope.comments[parent_index].subcomments.indexOf(subcomment);
+        subcomment.content = $scope.originalComments[parent_index].subcomments[subcomment_index].content;
+    }
+
+    $scope.addSubComment = function(comment) {
+        var newComment = {};
+        newComment.id = -1;
+        newComment.content = comment.newSubCommentText;
+        newComment.modified_date = new Date().toJSON();
+        newComment.owner = User.get();
+
+        comment.subcomments.push(newComment);
+        var index = $scope.comments.indexOf(comment);
+        $scope.originalComments[index].subcomments.push(angular.copy(newComment));
+
+        var data = {id: newComment.id, _model_name: "comment", _object_id: comment.id,_content: newComment.content};
+
+        data.id = comment.associated_object.id;
+        EmployeeComments.save(data, function(response) {
+            newComment.id = response.id;
+            comment.newSubCommentText = "";
+        });
+    }
+
+    $scope.deleteComment = function(comment) {
+        if ($window.confirm('Are you sure you want to delete this comment?')) {
+            var data = {id: comment.id};
+            var index = $scope.comments.indexOf(comment);
+            var deleteSuccess = function() {
+                $scope.comments.splice(index, 1);
+            };
+
+            Comment.remove(data, function() {
+                    deleteSuccess();
+                });
+        }
+    };
+
+    $scope.deleteSubComment = function(comment, subcomment) {
+        if ($window.confirm('Are you sure you want to delete this comment?')) {
+            var data = {id: subcomment.id};
+            var comment_index = $scope.comments.indexOf(comment);
+            var subcomment_index = $scope.comments[comment_index].subcomments.indexOf(subcomment);
+            var deleteSuccess = function() {
+                $scope.comments[comment_index].subcomments.splice(subcomment_index, 1);
+                $scope.originalComments[comment_index].subcomments.splice(subcomment_index, 1);
+            };
+
+            Comment.remove(data, function() {
+                    deleteSuccess();
+                });
+        }
+    };
+}])
+
 .controller('EngagementSurveyCtrl', ['$scope', '$window', '$routeParams', '$location', 'EngagementSurvey', 'analytics', function($scope, $window, $routeParams, $location, EngagementSurvey, analytics){
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     $scope.employee_id = $routeParams.employeeId;

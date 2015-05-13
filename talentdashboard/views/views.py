@@ -621,6 +621,27 @@ class LeadCommentList(APIView):
         serializer = TeamCommentSerializer(comments, many=True, context={'request': request})
         return Response(serializer.data)
 
+class CoachCommentList(APIView):
+    def get(self, request, pk, format=None):
+        current_user = request.user
+        coach = Employee.objects.get(user=current_user)
+        coach_id = coach.id
+        employee_ids = Employee.objects.filter(coach_id=coach_id).values('id')
+        if not employee_ids:
+            return Response(None, status=status.HTTP_404_NOT_FOUND)
+        employee_type = ContentType.objects.get(model="employee")
+        allow_all_access = request.user.groups.filter(name="AllAccess").exists()
+        allow_team_lead_access = request.user.groups.filter(name="TeamLeadAccess").exists()
+        allow_coach_access = request.user.groups.filter(name="CoachAccess").exists()
+        comments = Comment.objects.filter(object_id__in = employee_ids, content_type=employee_type)
+        comments = comments.exclude(object_id=coach.id,content_type=employee_type)
+        if not allow_all_access and (allow_team_lead_access and not allow_coach_access):
+            comments = comments.exclude(~Q(owner_id=request.user.id), visibility=2)
+        comments = comments.exclude(~Q(owner_id=request.user.id), visibility=1)
+        comments = comments.extra(order_by = ['-created_date'])[:15]
+        serializer = TeamCommentSerializer(comments, many=True, context={'request': request})
+        return Response(serializer.data)
+
 class TeamCommentList(APIView):
     def get(self, request, pk, format=None):
         employee_ids = Employee.objects.filter(team__id=pk).values('pk')
