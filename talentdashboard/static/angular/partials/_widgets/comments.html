@@ -18,12 +18,12 @@
         <div class="comment-item">
             <div class="comment-title">
                 <div class="comment-actions pull-right" ng-show="comment.owner.id==currentUser.id">
-                    <i class="fa fa-cog show-comment-actions"></i>
-                    <ul class="comment-action-items" style="display:none">
-                        <li class="comment-action-item" ng-show="comment.owner.id==currentUser.id">
+                    <i class="fa fa-cog show-popover"></i>
+                    <ul class="popover-items" style="display:none">
+                        <li class="popover-item" ng-show="comment.owner.id==currentUser.id">
                             <i class="fa fa-pencil-square-o"></i> <a ng-click="showCommentEdit=true">Edit</a>
                         </li>
-                        <li class="comment-action-item" ng-show="comment.owner.id==currentUser.id">
+                        <li class="popover-item" ng-show="comment.owner.id==currentUser.id">
                             <i class="fa fa-trash-o"></i> <a ng-click="deleteComment(comment)">Delete</a>
                         </li>
                     </ul>
@@ -77,16 +77,15 @@
                 </span>    
             </div>
         </div>
-
         <div class="comment-replies" ng-show="showCommentInput || comment.subcomments">
             <div class="comment-reply" ng-repeat="subcomment in comment.subcomments | orderBy:'created_date'">
                 <div class="comment-actions pull-right" ng-show="subcomment.owner.id==currentUser.id">
-                    <i class="fa fa-cog show-comment-actions"></i>
-                    <ul class="comment-action-items" style="display:none">
-                        <li class="comment-action-item" ng-show="subcomment.owner.id==currentUser.id">
+                    <i class="fa fa-cog show-popover"></i>
+                    <ul class="popover-items" style="display:none">
+                        <li class="popover-item" ng-show="subcomment.owner.id==currentUser.id">
                             <i class="fa fa-pencil-square-o"></i> <a ng-click="showSubCommentEdit=true">Edit</a>
                         </li>
-                        <li class="comment-action-item" ng-show="subcomment.owner.id==currentUser.id">
+                        <li class="popover-item" ng-show="subcomment.owner.id==currentUser.id">
                             <i class="fa fa-trash-o"></i> <a ng-click="deleteSubComment(comment, subcomment)">Delete</a>
                         </li>
                     </ul>

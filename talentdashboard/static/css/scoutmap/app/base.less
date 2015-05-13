@@ -1,19 +1,42 @@
+/* Base style rules for the Scoutmap
+
+** Foundation ==================================== */   
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font:inherit;font-size:100%;vertical-align:baseline}
+html{line-height:1}
+ol,ul{list-style:none}
+table{border-collapse:collapse;border-spacing:0}
+caption,th,td{text-align:left;font-weight:normal;vertical-align:middle}
+q,blockquote{quotes:none}
+q:before,q:after,blockquote:before,blockquote:after{content:"";content:none}
+a img{border:none}
+article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section,summary{display:block}
+
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 13.5px;
+    line-height: 18px;
+}
+a {color: #1a7f7e;}
+a:hover {color: #135d5c; text-decoration: none;}
+p {line-height: 18px;font-size: 14px;}
+
+
+/* Layout ==================================== */
 .container {
 	margin-top:40px;
 	padding-left: 70px;
 }
-h1 {
-	margin: 0 0 20px;
-  	font-size: 30px;
-}  	
 
-a {
-	color: #1a7f7e;
+/* Typeography ==================================== */
+h1 {
+    margin: 0 0 20px;
+    font-size: 30px;
+    font-family: 'Open Sans', sans-serif;
+} 
+h2 {
+    font-family: 'Open Sans', sans-serif;
 }
-a:hover {
-	color: #135d5c;
-	text-decoration: none;
-}
+
 
 .caret {
  	border-left: 6px solid transparent;
@@ -26,14 +49,45 @@ ul, ol {
 }
 
 
-.download-report-link {
-	margin: 20px 10px 0;
-	color: #1a7f7e;
+
+/* Popover Edit/Delete ==================================== */
+.popover-items {
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 100px;
+    z-index: 9;
+    left: 8px;
+    top: 17px;
+    border-radius: 3px;
+    box-shadow: 3px 3px 5px -3px #444;
+    position: absolute;
+}
+.popover-item {
+    list-style: none;
+    color: #777;
+    cursor: pointer;
+
+    .fa {
+        width: 16px;
+    }
+}
+.show-popover {
+    color: #ccc;
+    cursor: pointer;
+    -webkit-transition: -webkit-transform .3s ease-in-out;
+    -ms-transition: -ms-transform .3s ease-in-out;
+    transition: transform .3s ease-in-out;      
+}
+.show-popover:hover {
+    color: #1a7f7e;
+    transform:rotate(90deg);
+    -ms-transform:rotate(90deg);
+    -webkit-transform:rotate(90deg);        
 }
 
 
-
-/**** Transitions ****/
+/* Transitions ============================================= */
 .masonry,
 .masonry li { /* apply before masonry add class */
     position: absolute; /* important to add it before enter animation start */

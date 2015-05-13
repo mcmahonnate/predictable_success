@@ -130,11 +130,11 @@ $(function() {
 
 
     /* Bind comment edit/delete */
-    $('body').on('click', '.show-comment-actions', function() {
-        $(this).next('.comment-action-items').toggle();
+    $('body').on('click', '.show-popover', function() {
+        $(this).next('.popover-items').toggle();
     });
-    $('body').on('click', '.comment-action-item a', function() {
-        $('.comment-action-items').hide();
+    $('body').on('click', '.popover-item a', function() {
+        $('.popover-items').hide();
     });
 
     /* Bind Bootstrap dropdown */

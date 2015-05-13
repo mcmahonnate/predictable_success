@@ -1,5 +1,16 @@
 .todos {
 
+		
+	.shaded {
+		margin: 0;
+
+	  & > div {
+		  padding: 6px;
+		  font-size: 11px;
+		  color: #999;
+	  }
+	}
+
 	.todos-empty {
 		text-align: center;
 		color: #999;
@@ -23,9 +34,9 @@
 	}
 
 	.todo {
-		margin-top: 12px;
-  		border-bottom: 1px solid #ddd;
-  		padding-bottom: 12px;
+		margin: 2px 0 0;
+  		padding: 10px 0;
+  		background: #efefef;
 
   		.small-headshot {
   			float:left;
