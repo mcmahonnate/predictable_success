@@ -77,7 +77,8 @@
                     <h3 class="employee-name centered"><a href="#/employees/{{employee.id}}">{{employee.full_name}}</a></h3> 
                     <div class="team-name centered "><a ng-click="setTeamFilter(employee.team.id, employee.team.name);menu.show=false;">{{employee.team.name}}</a></div>
                 </li>
-                <li ng-show="!filteredEmployees.length" class="no-results ng-cloak" ng-cloak>No Results</li>
+                <li ng-if="evaluations.length > 0 && filteredEmployees.length === 0" class="no-results">No Results</li>
+                <li ng-if="evaluations.length === 0" class="no-results">Loading</li>
             </ul>
         </div>
     </div> 
