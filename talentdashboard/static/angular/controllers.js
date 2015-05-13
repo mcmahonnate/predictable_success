@@ -1396,14 +1396,12 @@ angular.module('tdb.controllers', [])
         newComment.owner = User.get();
 
         //comment.subcomments.push(newComment);
-        var index = $scope.comments.indexOf(comment);
-        $scope.originalComments[index].subcomments.push(angular.copy(newComment));
 
         var data = {id: newComment.id, _model_name: "comment", _object_id: comment.id,_content: newComment.content};
 
         data.id = comment.associated_object.id;
         EmployeeComments.save(data, function(response) {
-            newComment.id = response.id;
+            comment.subcomments.push(response);
             comment.newSubCommentText = "";
         });
     }
@@ -1591,15 +1589,11 @@ angular.module('tdb.controllers', [])
         newComment.modified_date = new Date().toJSON();
         newComment.owner = User.get();
 
-        comment.subcomments.push(newComment);
-        var index = $scope.comments.indexOf(comment);
-        $scope.originalComments[index].subcomments.push(angular.copy(newComment));
-
         var data = {id: newComment.id, _model_name: "comment", _object_id: comment.id,_content: newComment.content};
 
         data.id = $scope.employeeId;
         EmployeeComments.save(data, function(response) {
-            newComment.id = response.id;
+            comment.subcomments.push(response);
             comment.newSubCommentText = "";
         });
     }
@@ -1743,15 +1737,11 @@ angular.module('tdb.controllers', [])
         newComment.modified_date = new Date().toJSON();
         newComment.owner = User.get();
 
-        comment.subcomments.push(newComment);
-        var index = $scope.comments.indexOf(comment);
-        $scope.originalComments[index].subcomments.push(angular.copy(newComment));
-
         var data = {id: newComment.id, _model_name: "comment", _object_id: comment.id,_content: newComment.content};
 
         data.id = comment.associated_object.id;
         EmployeeComments.save(data, function(response) {
-            newComment.id = response.id;
+            comment.subcomments.push(response);
             comment.newSubCommentText = "";
         });
     }
@@ -1895,15 +1885,11 @@ angular.module('tdb.controllers', [])
         newComment.modified_date = new Date().toJSON();
         newComment.owner = User.get();
 
-        comment.subcomments.push(newComment);
-        var index = $scope.comments.indexOf(comment);
-        $scope.originalComments[index].subcomments.push(angular.copy(newComment));
-
         var data = {id: newComment.id, _model_name: "comment", _object_id: comment.id,_content: newComment.content};
 
         data.id = comment.associated_object.id;
         EmployeeComments.save(data, function(response) {
-            newComment.id = response.id;
+            comment.subcomments.push(response);
             comment.newSubCommentText = "";
         });
     }
@@ -2047,15 +2033,11 @@ angular.module('tdb.controllers', [])
         newComment.modified_date = new Date().toJSON();
         newComment.owner = User.get();
 
-        comment.subcomments.push(newComment);
-        var index = $scope.comments.indexOf(comment);
-        $scope.originalComments[index].subcomments.push(angular.copy(newComment));
-
         var data = {id: newComment.id, _model_name: "comment", _object_id: comment.id,_content: newComment.content};
 
         data.id = comment.associated_object.id;
         EmployeeComments.save(data, function(response) {
-            newComment.id = response.id;
+            comment.subcomments.push(response);
             comment.newSubCommentText = "";
         });
     }
