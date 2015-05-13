@@ -39,39 +39,51 @@
 /* Stand alone faces */
 .employee-happiness-container {
 	overflow: hidden;
-}	
-.employee-happiness{
-	display: block;
-	width: 46px;
-	height: 48px;
-	border-radius: 90px;
-	position: relative;
-	float: left;
-  	margin-right: 5px;
-}
-.employee-happiness span:before {
-	font-family: 'Emoticons';
-  	font-size: 60px;
-  	text-shadow: none;
-  	color: #fff;
-  	top: -23px;
-  	position: absolute;
-  	right: -6px;
-}	
-.employee-happiness-5 { /* Very happy */
-	background: #32d0a2;
-}
-.employee-happiness-4 { /* Happy */
-	background: #5ed032;
-}
-.employee-happiness-3 { /* Indifferent */
-	background: #bcd032;
-}
-.employee-happiness-2 { /* Unhappy */
-	background: #ffca00;
-}
-.employee-happiness-1 { /* Very Unhappy */
-	background: #ff0000;
+	margin: 20px 0;
+
+	.selected {
+		opacity: 1 !important;
+	}
+
+	.employee-happiness{
+		display: block;
+		width: 46px;
+		height: 48px;
+		border-radius: 90px;
+		position: relative;
+		float: left;
+	  	margin-right: 5px;
+	  	cursor: pointer;
+	  	opacity: .5;
+	}
+	.employee-happiness span:before {
+		font-family: 'Emoticons';
+	  	font-size: 60px;
+	  	text-shadow: none;
+	  	color: #fff;
+	  	top: -23px;
+	  	position: absolute;
+	  	right: -6px;
+	}	
+	.employee-happiness:hover {
+		opacity: 1;
+	}
+	.employee-happiness-5 { /* Very happy */
+		background: #32d0a2;
+	}
+	.employee-happiness-4 { /* Happy */
+		background: #5ed032;
+	}
+	.employee-happiness-3 { /* Indifferent */
+		background: #bcd032;
+	}
+	.employee-happiness-2 { /* Unhappy */
+		background: #ffca00;
+	}
+	.employee-happiness-1 { /* Very Unhappy */
+		background: #ff0000;
+	}
+
 }
 
 
