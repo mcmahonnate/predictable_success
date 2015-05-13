@@ -882,25 +882,25 @@ angular.module('tdb.controllers', [])
     }
     var buildCSV = function() {
         $scope.csv = []
-        angular.forEach($scope.evaluations_sort, function(evaluation) {
+        angular.forEach($scope.evaluations_sort, function(employee) {
             var row = {};
-            row.name = evaluation.employee.full_name;
-            row.talent = talentToString(evaluation.talent_category);
-            row.happy = happyToString(evaluation.employee.happiness);
-            row.date = evaluation.employee.happiness_date;
+            row.name = employee.full_name;
+            row.talent = talentToString(employee.current_talent_category);
+            row.happy = happyToString(employee.happiness);
+            row.date = employee.happiness_date;
             $scope.csv.push(row);
         });
     }
     var orderByName = function(a,b){
-        var aValue = a.employee.full_name;
-        var bValue = b.employee.full_name;
+        var aValue = a.full_name;
+        var bValue = b.full_name;
         return ((aValue < bValue) ? -1 : ((aValue > bValue) ? 1 : 0));
     }
     var orderByTalent= function(a,b){
-        var aValue = a.talent_category;
-        var bValue = b.talent_category;
-        var aName = a.employee.full_name;
-        var bName = b.employee.full_name;
+        var aValue = a.current_talent_category;
+        var bValue = b.current_talent_category;
+        var aName = a.full_name;
+        var bName = b.full_name;
         if (aValue === bValue) {
             return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
         } else {
@@ -908,10 +908,10 @@ angular.module('tdb.controllers', [])
         }
     }
     var orderByHappy= function(a,b){
-        var aValue = a.employee.happiness;
-        var bValue = b.employee.happiness;
-        var aName = a.employee.full_name;
-        var bName = b.employee.full_name;
+        var aValue = a.happiness;
+        var bValue = b.happiness;
+        var aName = a.full_name;
+        var bName = b.full_name;
         if (aValue === bValue) {
             return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
         } else {
@@ -919,10 +919,10 @@ angular.module('tdb.controllers', [])
         }
     }
     var orderByDate= function(a,b){
-        var aValue = Date.parse(a.employee.happiness_date) || 0;
-        var bValue = Date.parse(b.employee.happiness_date) || 0;
-        var aName = a.employee.full_name;
-        var bName = b.employee.full_name;
+        var aValue = Date.parse(a.happiness_date) || 0;
+        var bValue = Date.parse(b.happiness_date) || 0;
+        var aName = a.full_name;
+        var bName = b.full_name;
         if (aValue === bValue) {
             return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
         } else {
