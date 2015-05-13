@@ -167,6 +167,7 @@ angular.module('tdb.services', ['ngResource'])
 
     TalentCategoryReport.getReportForTeam = function(teamId, success, failure) { return this.get({ id: 'teams', teamId: teamId }, success, failure); };
     TalentCategoryReport.getReportForLead = function(success, failure) { return this.get({ id: 'lead/' }, success, failure); };
+    TalentCategoryReport.getReportForCoach = function(success, failure) { return this.get({ id: 'coach/' }, success, failure); };
     TalentCategoryReport.getReportForCompany = function(success, failure) { return this.get({ id: 'all-employees' }, success, failure); };
 
     return TalentCategoryReport;

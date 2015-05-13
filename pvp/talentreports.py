@@ -49,3 +49,7 @@ def get_talent_category_report_for_team(team_id):
 def get_talent_category_report_for_lead(lead_id):
     employees = Employee.objects.filter(leaderships__leader__id=lead_id)
     return build_talent_category_report_for_employees(employees)
+
+def get_talent_category_report_for_coach(coach_id):
+    employees = Employee.objects.filter(coach_id=coach_id)
+    return build_talent_category_report_for_employees(employees)

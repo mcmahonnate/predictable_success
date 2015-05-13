@@ -8,7 +8,7 @@ from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework.permissions import AllowAny
 from .serializers import *
 from .decorators import *
-from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team, get_talent_category_report_for_lead
+from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team, get_talent_category_report_for_lead, get_talent_category_report_for_coach
 from pvp.salaryreports import get_salary_report_for_team, get_salary_report_for_all_employees, get_salary_report_for_lead
 from pvp.models import PvpDescription
 from blah.commentreports import get_employees_with_comments
@@ -189,6 +189,17 @@ class LeadTalentCategoryReportDetail(APIView):
         lead = Employee.objects.get(user=current_user)
         lead_id = lead.id
         report = get_talent_category_report_for_lead(lead_id)
+        serializer = TalentCategoryReportSerializer(report, context={'request': request})
+        if report is not None:
+            return Response(serializer.data)
+        return Response(None, status=status.HTTP_404_NOT_FOUND)
+
+class CoachTalentCategoryReportDetail(APIView):
+    def get(self, request, pk, format=None):
+        current_user = request.user
+        coach = Employee.objects.get(user=current_user)
+        coach_id = coach.id
+        report = get_talent_category_report_for_coach(coach_id)
         serializer = TalentCategoryReportSerializer(report, context={'request': request})
         if report is not None:
             return Response(serializer.data)
