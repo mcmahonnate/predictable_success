@@ -73,7 +73,7 @@ angular.module('tdb.controllers', [])
     $scope.evaluations = MyCoacheesPvpEvaluation.getCurrentEvaluations();
 	$scope.teamId = $routeParams.team_id;
     $scope.talentCategory = $routeParams.talent_category;
-    $scope.categoryName  = TalentCategories.getTalentCategory($scope.talentCategory).label
+    $scope.categoryName  = TalentCategories.getLabelByTalentCategory($scope.talentCategory)
     $scope.happy = $routeParams.happy;
     $scope.days_since_happy = $routeParams.days_since_happy;
     $scope.fact_finder = $routeParams.fact_finder;
@@ -128,7 +128,7 @@ angular.module('tdb.controllers', [])
     $scope.evaluations = MyTeamPvpEvaluation.getCurrentEvaluations();
 	$scope.teamId = $routeParams.team_id;
     $scope.talentCategory = $routeParams.talent_category;
-    $scope.categoryName  = TalentCategories.getTalentCategory($scope.talentCategory).label
+    $scope.categoryName  = TalentCategories.getLabelByTalentCategory($scope.talentCategory)
     $scope.happy = $routeParams.happy;
     $scope.days_since_happy = $routeParams.days_since_happy;
     $scope.fact_finder = $routeParams.fact_finder;
@@ -185,7 +185,7 @@ angular.module('tdb.controllers', [])
 	$scope.teamId = $routeParams.team_id;
     $scope.talentCategory = $routeParams.talent_category;
 
-    $scope.categoryName  = TalentCategories.getTalentCategory($scope.talentCategory).label
+    $scope.categoryName  = TalentCategories.getLabelByTalentCategory($scope.talentCategory)
 
     $scope.days_since_happy = $routeParams.days_since_happy;
     $scope.fact_finder = angular.copy($scope.kolbe_fact_finder_labels);
