@@ -235,7 +235,7 @@ angular.module('tdb.controllers', [])
     $scope.teamLeads = TeamLeads.getCurrentEvaluationsForTeamLeads($scope.team_id)
 }])
 
-.controller('NavigationCtrl', ['$scope', '$routeParams', '$window', '$location', 'Employee', 'Customers', function($scope, $routeParams, $window, $location, Employee, Customers) {
+.controller('NavigationCtrl', ['$scope', '$routeParams', '$window', '$location', 'Employee', 'Customers', 'Team', function($scope, $routeParams, $window, $location, Employee, Customers, Team) {
     $scope.$window = $window;
     if (!$scope.employees)
     {
@@ -244,6 +244,7 @@ angular.module('tdb.controllers', [])
     Customers.get(function (data) {
         $scope.customer = data;
     });
+    $scope.teams = Team.query();
     $scope.modalEmployeeShown = false;
     $scope.newEmployee = {id:0,full_name:'',first_name:'',last_name:'', email:'', team:{id:0, name:''}, hire_date:'',departure_date:'', avatar:'https://hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg'};
     $scope.newLeadership = {id:0,leader:{full_name:''}};
@@ -1394,8 +1395,6 @@ angular.module('tdb.controllers', [])
         newComment.content = comment.newSubCommentText;
         newComment.modified_date = new Date().toJSON();
         newComment.owner = User.get();
-
-        //comment.subcomments.push(newComment);
 
         var data = {id: newComment.id, _model_name: "comment", _object_id: comment.id,_content: newComment.content};
 
