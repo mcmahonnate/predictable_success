@@ -57,7 +57,7 @@ angular.module('tdb.controllers', [])
     };
 }])
 
-.controller('MyCoacheesEvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'MyCoacheesPvpEvaluation', 'Team', 'Customers', 'analytics', function($scope, $rootScope, $location, $routeParams, MyCoacheesPvpEvaluation, Team, Customers, analytics) {
+.controller('MyCoacheesEvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'MyCoacheesPvpEvaluation', 'Team', 'Customers', 'TalentCategories', 'analytics', function($scope, $rootScope, $location, $routeParams, MyCoacheesPvpEvaluation, Team, Customers, TalentCategories, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     Customers.get(function (data) {
         $scope.customer = data;
@@ -73,6 +73,7 @@ angular.module('tdb.controllers', [])
     $scope.evaluations = MyCoacheesPvpEvaluation.getCurrentEvaluations();
 	$scope.teamId = $routeParams.team_id;
     $scope.talentCategory = $routeParams.talent_category;
+    $scope.categoryName  = TalentCategories.getTalentCategory($scope.talentCategory).label
     $scope.happy = $routeParams.happy;
     $scope.days_since_happy = $routeParams.days_since_happy;
     $scope.fact_finder = $routeParams.fact_finder;
@@ -111,7 +112,7 @@ angular.module('tdb.controllers', [])
     }
 }])
 
-.controller('MyTeamEvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'MyTeamPvpEvaluation', 'Team', 'Customers', 'analytics', function($scope, $rootScope, $location, $routeParams, MyTeamPvpEvaluation, Team, Customers, analytics) {
+.controller('MyTeamEvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'MyTeamPvpEvaluation', 'Team', 'Customers', 'TalentCategories', 'analytics', function($scope, $rootScope, $location, $routeParams, MyTeamPvpEvaluation, Team, Customers, TalentCategories, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     Customers.get(function (data) {
         $scope.customer = data;
@@ -127,6 +128,7 @@ angular.module('tdb.controllers', [])
     $scope.evaluations = MyTeamPvpEvaluation.getCurrentEvaluations();
 	$scope.teamId = $routeParams.team_id;
     $scope.talentCategory = $routeParams.talent_category;
+    $scope.categoryName  = TalentCategories.getTalentCategory($scope.talentCategory).label
     $scope.happy = $routeParams.happy;
     $scope.days_since_happy = $routeParams.days_since_happy;
     $scope.fact_finder = $routeParams.fact_finder;
@@ -165,7 +167,7 @@ angular.module('tdb.controllers', [])
     }
 }])
 
-.controller('EvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'PvpEvaluation', 'Team', 'Customers', 'analytics', function($scope, $rootScope, $location, $routeParams, PvpEvaluation, Team, Customers, analytics) {
+.controller('EvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'PvpEvaluation', 'Team', 'Customers', 'TalentCategories', 'analytics', function($scope, $rootScope, $location, $routeParams, PvpEvaluation, Team, Customers, TalentCategories, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     Customers.get(function (data) {
         $scope.customer = data;
@@ -183,15 +185,7 @@ angular.module('tdb.controllers', [])
 	$scope.teamId = $routeParams.team_id;
     $scope.talentCategory = $routeParams.talent_category;
 
-    /* TODO: move */
-    if ($scope.talentCategory == 0){ $scope.categoryName = 'No Data'};
-    if ($scope.talentCategory == 1){ $scope.categoryName = 'Unleash'};
-    if ($scope.talentCategory == 2){ $scope.categoryName = 'On the Verge'};
-    if ($scope.talentCategory == 3){ $scope.categoryName = 'Solid'};
-    if ($scope.talentCategory == 4){ $scope.categoryName = 'Discover'};
-    if ($scope.talentCategory == 5){ $scope.categoryName = 'Pivot'};
-    if ($scope.talentCategory == 6){ $scope.categoryName = 'Worried'};
-    if ($scope.talentCategory == 6){ $scope.categoryName = 'Onboard'};
+    $scope.categoryName  = TalentCategories.getTalentCategory($scope.talentCategory).label
 
     $scope.days_since_happy = $routeParams.days_since_happy;
     $scope.fact_finder = angular.copy($scope.kolbe_fact_finder_labels);

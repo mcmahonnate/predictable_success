@@ -258,7 +258,7 @@ angular.module('tdb.services', ['ngResource'])
     return EngagementReport;
 }])
 
-    .factory('TalentCategories', [function() {
+.factory('TalentCategories', [function() {
     var TalentCategories = {
         categories: {
             "0":{color:'#2c3e50',label:'No Data',description:''},
@@ -272,6 +272,9 @@ angular.module('tdb.services', ['ngResource'])
         },
         getColorByTalentCategory: function(category) {
             return this.categories[category].color;
+        },
+        getTalentCategory: function(category) {
+            return this.categories[category];
         }
     };
 
