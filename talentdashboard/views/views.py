@@ -176,7 +176,7 @@ class TeamTalentCategoryReportDetail(APIView):
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 class LeadTalentCategoryReportDetail(APIView):
-    def get(self, request, pk, format=None):
+    def get(self, request, format=None):
         current_user = request.user
         lead = Employee.objects.get(user=current_user)
         lead_id = lead.id
@@ -187,7 +187,7 @@ class LeadTalentCategoryReportDetail(APIView):
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 class CoachTalentCategoryReportDetail(APIView):
-    def get(self, request, pk, format=None):
+    def get(self, request, format=None):
         current_user = request.user
         coach = Employee.objects.get(user=current_user)
         coach_id = coach.id
@@ -206,7 +206,7 @@ class TeamSalaryReportDetail(APIView):
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 class LeadSalaryReportDetail(APIView):
-    def get(self, request, pk, format=None):
+    def get(self, request, format=None):
         current_user = request.user
         lead = Employee.objects.get(user=current_user)
         lead_id = lead.id
@@ -593,7 +593,7 @@ class EmployeeCommentList(APIView):
         return Response(serializer.data)
 
 class LeadCommentList(APIView):
-    def get(self, request, pk, format=None):
+    def get(self, request, format=None):
         current_user = request.user
         lead = Employee.objects.get(user=current_user)
         lead_id = lead.id
@@ -614,7 +614,7 @@ class LeadCommentList(APIView):
         return Response(serializer.data)
 
 class CoachCommentList(APIView):
-    def get(self, request, pk, format=None):
+    def get(self, request, format=None):
         current_user = request.user
         coach = Employee.objects.get(user=current_user)
         coach_id = coach.id
