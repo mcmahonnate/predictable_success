@@ -257,6 +257,8 @@ angular.module('tdb.directives', [])
                         }
                         if(scope.lead) {
                             $location.path('/evaluations/my-team/').search(search);
+                        } else if(scope.coach){
+                            $location.path('/evaluations/my-coachees/').search(search);
                         } else {
                             $location.path('/evaluations/current/').search(search);
                         }

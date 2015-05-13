@@ -1108,6 +1108,17 @@ def my_team_pvp_evaluations(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
+@auth_employee('AllAccess', 'CoachAccess', 'TeamLeadAccess')
+def my_coachees_pvp_evaluations(request):
+    current_user = request.user
+    coach = Employee.objects.get(user=current_user)
+    coach_id = coach.id
+    employees = Employee.objects.get_current_employees_by_coach(coach_id)
+
+    serializer = PvPEmployeeSerializer(employees, many=True, context={'request': request})
+    return Response(serializer.data)
+
+@api_view(['GET'])
 def pvp_todos(request):
     evaluations = PvpEvaluation.objects.todos_for_user(request.user)
     serializer = PvpToDoSerializer(evaluations, many=True, context={'request': request})

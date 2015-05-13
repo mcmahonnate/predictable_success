@@ -57,6 +57,60 @@ angular.module('tdb.controllers', [])
     };
 }])
 
+.controller('MyCoacheesEvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'MyCoacheesPvpEvaluation', 'Team', 'Customers', 'analytics', function($scope, $rootScope, $location, $routeParams, MyCoacheesPvpEvaluation, Team, Customers, analytics) {
+    analytics.trackPage($scope, $location.absUrl(), $location.url());
+    Customers.get(function (data) {
+        $scope.customer = data;
+    });
+    $scope.hideTeamMenu = true;
+    $scope.kolbe_values=[0,1,2,3];
+    $scope.vops_values=[0,320,6400,960];
+    $scope.kolbe_fact_finder_labels=['simplify','explain','specify'];
+    $scope.kolbe_follow_thru_labels=['adapt','maintain','systemize'];
+    $scope.kolbe_quick_start_labels=['improvise','modify','stabilize'];
+    $scope.kolbe_implementor_labels=['imagine','restore','build'];
+    $scope.vops_labels=['low','medium','high'];
+    $scope.evaluations = MyCoacheesPvpEvaluation.getCurrentEvaluations();
+	$scope.teamId = $routeParams.team_id;
+    $scope.talentCategory = $routeParams.talent_category;
+    $scope.happy = $routeParams.happy;
+    $scope.days_since_happy = $routeParams.days_since_happy;
+    $scope.fact_finder = $routeParams.fact_finder;
+    $scope.follow_thru = $routeParams.follow_thru;
+    $scope.quick_start = $routeParams.quick_start;
+    $scope.implementor = $routeParams.implementor;
+    $scope.vops = [];
+    $scope.teamName='';
+    $scope.staleDays=360;
+    $scope.staleDate = new Date();
+    $scope.staleDate.setDate($scope.staleDate.getDate() - $scope.staleDays);
+	if ($routeParams.team_id){
+		Team.get(
+			{id: $routeParams.team_id},
+			function(data) {
+				$scope.teamName = data.name
+				$scope.teamId = data.id
+			}
+		);
+	}
+	$scope.menu = {show: false};
+    $scope.setTeamFilter = function(id, name) {
+        $scope.teamId=id;
+        $scope.teamName=name;
+    };
+
+    $scope.staleHappy = function(date) {
+        return ($rootScope.parseDate(date) < $scope.staleDate)
+    };
+    $scope.sortHappy = function(evaluation) {
+        if (evaluation.employee.happiness && $rootScope.parseDate(evaluation.employee.happiness_date) > $scope.staleDate) {
+            return -evaluation.employee.happiness;
+        } else {
+            return -1;
+        }
+    }
+}])
+
 .controller('MyTeamEvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'MyTeamPvpEvaluation', 'Team', 'Customers', 'analytics', function($scope, $rootScope, $location, $routeParams, MyTeamPvpEvaluation, Team, Customers, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     Customers.get(function (data) {
@@ -710,8 +764,13 @@ angular.module('tdb.controllers', [])
     });
 }])
 
-.controller('CoachDetailCtrl', ['$scope', '$location', '$routeParams', 'Employee', 'Coachees', 'TalentCategoryReport', '$http', 'analytics', function($scope, $location, $routeParams, Employee, Coachees, TalentCategoryReport, $http, analytics) {
+.controller('CoachDetailCtrl', ['$scope', '$location', '$routeParams', 'User', 'Employee', 'Coachees', 'TalentCategoryReport', '$http', 'analytics', function($scope, $location, $routeParams, User, Employee, Coachees, TalentCategoryReport, $http, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
+    User.get(
+        function(data) {
+            $scope.coach= data.employee;
+        }
+    );
 
     Coachees.query({ id: $routeParams.id }).$promise.then(function(response) {
         $scope.employees = response;
