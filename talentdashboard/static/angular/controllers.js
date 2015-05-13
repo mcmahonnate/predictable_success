@@ -111,11 +111,12 @@ angular.module('tdb.controllers', [])
     }
 }])
 
-.controller('EvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'PvpEvaluation', 'Team', 'Customers', 'analytics', function($scope, $rootScope, $location, $routeParams, PvpEvaluation, Team, Customers, analytics) {
+.controller('EvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'PvpEvaluation', 'Team', 'Customers', 'TalentCategories', 'analytics', function($scope, $rootScope, $location, $routeParams, PvpEvaluation, Team, Customers, TalentCategories, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     Customers.get(function (data) {
         $scope.customer = data;
     });
+    $scope.talentCategories = TalentCategories.categories;
     $scope.happiness = '';
     $scope.hideTeamMenu = false;
     $scope.kolbe_values=[0,1,2,3];
@@ -164,7 +165,9 @@ angular.module('tdb.controllers', [])
         $scope.teamId=id;
         $scope.teamName=name;
     };
-
+    $scope.getTalentCategoryLabel = function(category) {
+        return $scope.talentCategories[category].label;
+    };
     $scope.staleHappy = function(date) {
         return ($rootScope.parseDate(date) < $scope.staleDate)
     };
