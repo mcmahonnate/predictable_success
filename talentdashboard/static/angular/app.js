@@ -20,12 +20,15 @@ var app = angular.module('tdb', ['tdb.services', 'tdb.controllers', 'tdb.directi
           when('/feedback/', {templateUrl: '/static/angular/partials/feedback/index.html', controller: 'RequestFeedbackCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
           otherwise({redirectTo: '/'});
     }])
-    .run(function($rootScope, User) {
-       User.get(function(data) {
-               $rootScope.currentUser = data;
-           }
-       );
-    });
+    .run(['$rootScope', 'User', 'TalentCategories', 'Customers', function($rootScope, User, TalentCategories, Customers) {
+        User.get(function(data) {
+            $rootScope.currentUser = data;
+        });
+        Customers.get(function(data) {
+            $rootScope.customer = data;
+        });
+        $rootScope.talentCategories = TalentCategories.categories;
+    }]);
 
 app.config(function($resourceProvider) {
   $resourceProvider.defaults.stripTrailingSlashes = false;
