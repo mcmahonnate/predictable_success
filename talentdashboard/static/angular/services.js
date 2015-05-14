@@ -168,7 +168,7 @@ angular.module('tdb.services', ['ngResource'])
 }])
 
 .factory('TeamLeadEmployees', ['$resource', '$http', function($resource, $http) {
-    var TeamLeadEmployees = $resource('/api/v1/team-lead-employees/:id/');
+    var TeamLeadEmployees = $resource('/api/v1/team-lead-employees/');
     TeamLeadEmployees.getEmployees = function(id, success, failure) { return this.query({ id: id }, success, failure); };
     return TeamLeadEmployees;
 }])
@@ -258,7 +258,7 @@ angular.module('tdb.services', ['ngResource'])
     return EngagementReport;
 }])
 
-    .factory('TalentCategories', [function() {
+.factory('TalentCategories', [function() {
     var TalentCategories = {
         categories: {
             "0":{color:'#2c3e50',label:'No Data',description:''},
@@ -270,9 +270,15 @@ angular.module('tdb.services', ['ngResource'])
             "6":{color:'#ff0000',label:'Worry',description:''},
             "7":{color:'#95a5a6',label:'Onboard',description:''}
         },
-        pieChartColors: ['#32d0a2','#5ed032','#bcd032','#9b59b6','#ffca00','#ff0000','#cbcbcb','#585858'],
         getColorByTalentCategory: function(category) {
             return this.categories[category].color;
+        },
+        getLabelByTalentCategory: function(category) {
+            if (category) {
+                return this.categories[category].label;
+            } else {
+                return null;
+            }
         }
     };
 
