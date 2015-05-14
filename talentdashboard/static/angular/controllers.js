@@ -214,6 +214,10 @@ angular.module('tdb.controllers', [])
         $scope.teamId=id;
         $scope.teamName=name;
     };
+    $scope.setHappyFilter = function(id, name) {
+        $scope.happy=id;
+        $scope.happyName=name;
+    };
     $scope.staleHappy = function(date) {
         return ($rootScope.parseDate(date) < $scope.staleDate)
     };
