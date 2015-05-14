@@ -1,0 +1,177 @@
+header{
+	background-color:#323940;
+	position:relative;
+	width: 70px;
+  	height: 100%;
+}
+.nav-item-active{
+	background-color: #282f34;
+}
+
+.account-menu {
+	position:absolute; 
+	top:10px; 
+	right:5px;
+
+	.small-headshot {
+		width:30px;
+		border-radius: 90px;
+	}
+
+	.account-action-items {
+		background: #fff;
+	  	border: 1px solid #ccc;
+	  	padding: 10px;
+	  	width: 100px;
+	  	z-index: 9;
+	  	left: -100px;
+	  	border-radius: 3px;
+	  	box-shadow: 3px 3px 5px -3px #444444;
+		position: absolute;
+	  	top: -8px; 
+	  	display: none; 	
+	}
+
+	.fa {
+		color: #777;
+	}
+}
+.account-menu:hover, .account-action-items:hover {
+	.account-action-items {
+		display: block;
+	}
+}
+
+/* Navigation Logo */
+.logo-container {
+	width: 70px;
+	height: 70px;
+	background-color: #2cb28b;
+
+	.logo {
+		width: 100%;
+		padding: 12px;
+    	-webkit-transition: -webkit-transform .3s ease-in-out;
+    	-ms-transition: -ms-transform .3s ease-in-out;
+    	transition: transform .3s ease-in-out;	
+	}
+	.logo:hover {
+    	transform:rotate(360deg);
+    	-ms-transform:rotate(360deg);
+    	-webkit-transform:rotate(360deg);	
+	}
+}
+
+
+
+
+
+/* Sub navigation */
+.subnav{
+	width: 280px;
+  	top: 70px;
+  	position: absolute;
+  	left: 70px;
+  	background: #282f34;
+  	text-align: left;
+  	box-shadow: 7px 3px 20px -4px #555;
+  	padding-bottom: 15px;
+}
+.subnav-reports {
+	top: 136px;
+}
+.subnav-settings {
+	top: 202px;
+}
+.subnav-search {
+	top: 268px;
+}
+
+
+.subnav-title {
+	color: #fff;
+	padding: 5px 15px 10px;
+	font-size: 20px;
+	margin: 15px 15px 0;
+	border-radius: 5px;
+
+	ul {
+		padding: 5px 20px;
+	}
+}
+
+/* Search */
+.subnav-search-input {
+	padding: 0 30px 10px;
+}
+.subnav .search-results {
+	margin-top: 10px;
+  	height: 200px;
+  	overflow: scroll;
+}
+.subnav .search-result {
+	margin: 0;
+}
+
+
+/*== BRANDING ===================================================== */
+.customer-name {
+	color: #cbcbcb;
+  	font-weight: bold;
+  	font-size: 18px;
+  	margin: 10px 20px;
+  	display: block;
+  	float: left;
+}
+.customer-name:hover {
+	color: #fff;
+	text-decoration: none;
+}
+
+
+/*== NAVIGATION ===================================================== */
+.nav-item {
+  padding: 10px 15px;
+  cursor: pointer;
+  text-align: center;
+}
+.nav-item .nav-item-icon {
+  color: #ccc;
+  font-size: 34px;
+  margin: 6px 2px;
+  opacity: .8;
+}
+.nav-item .nav-item-icon:hover {
+	opacity: 1;
+	color: #fff;
+}
+
+.talent-groups li {
+	overflow: hidden;
+
+	a{
+		padding: 8px 12px;
+	}
+	span {
+		padding: 3px 15px;
+  		display: inline-block;
+	}
+}
+
+
+.subnav a{
+	text-transform:none;
+	display:block;
+	color:#cbcbcb;
+	padding:6px 10px;
+	font-weight:400;
+	-webkit-transition:background-color 0.2s ease-out;
+	-moz-transition:background-color 0.2s ease-out;
+	-o-transition:background-color 0.2s ease-out;
+	transition:background-color 0.2s ease-out;
+	margin: 0 20px;
+}
+.subnav a:hover{
+	background-color:#56616a;
+	border-radius: 3px;
+}

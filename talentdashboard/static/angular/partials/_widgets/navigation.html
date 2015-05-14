@@ -1,0 +1,131 @@
+<div class="account-menu">
+    <img class="show-account-menu small-headshot" ng-src="{{currentUser.employee.avatar_small}}" alt="User Image" />
+    <ul class="account-action-items">
+        <li ng-if="currentUser.can_coach_employees && customer.show_coaches">
+            <a class="dashboard" href="#/coach/">My Coachees</a>
+        </li>
+        <li>
+            <i class="fa fa-sign-out"></i> <a class="dashboard" href="/logout">Sign Out</a>
+        </li>
+    </ul>
+</div>
+
+
+<header id="main-header">
+    <div class="logo-container">
+        <a href="#/"><img src="../static/images/brand/compass-logo-medium.png" class="logo"/></a>
+    </div>    
+    <div ng-controller="NavigationCtrl">
+        <div class="nav-item hide">
+            <a ng-href="#/"><span class="fa fa-tachometer nav-item-icon"></span></a>
+        </div>
+        <div class="nav-item" ng-if="currentUser.can_view_company_dashboard" ng-class="{'nav-item-active':openFilterMenu}">
+            <span class="nav-item-icon glyphicon glyphicon-user filter_menu" ng-mouseover="toggleFilterMenu()"></span>
+            <div class="subnav" ng-show="openFilterMenu">
+                <div class="subnav-title">Employee Segments</div>
+                <ul class="talent-groups">
+                    <li>
+                        <a class="dashboard" href="#/evaluations/current?talent_category=1">
+                            <i class="glyphicon glyphicon-user pull-left employee-segment employee-segment-color-1"></i>
+                            <span>{{talentCategories["1"].label}}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dashboard" href="#/evaluations/current?talent_category=2">
+                            <i class="glyphicon glyphicon-user pull-left employee-segment employee-segment-color-2"></i>
+                            <span>{{talentCategories["2"].label}}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dashboard" href="#/evaluations/current?talent_category=3">
+                            <i class="glyphicon glyphicon-user pull-left employee-segment employee-segment-color-3"></i>
+                            <span>{{talentCategories["3"].label}}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dashboard" href="#/evaluations/current?talent_category=4">
+                            <i class="glyphicon glyphicon-user pull-left employee-segment employee-segment-color-4"></i>
+                            <span>{{talentCategories["4"].label}}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dashboard" href="#/evaluations/current?talent_category=5">
+                            <i class="glyphicon glyphicon-user pull-left employee-segment employee-segment-color-5"></i>
+                            <span>{{talentCategories["5"].label}}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dashboard" href="#/evaluations/current?talent_category=6">
+                            <i class="glyphicon glyphicon-user pull-left employee-segment employee-segment-color-6"></i>
+                            <span>{{talentCategories["6"].label}}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dashboard" href="#/evaluations/current?talent_category=7">
+                            <i class="glyphicon glyphicon-user pull-left employee-segment employee-segment-color-7"></i>
+                            <span>{{talentCategories["7"].label}}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dashboard" href="#/evaluations/current">
+                            <i class="glyphicon glyphicon-user pull-left employee-segment employee-segment-color-all"></i>
+                            <span>All Employees</span>
+                        </a>
+                    </li>    
+                </ul>
+            </div>
+        </div>
+
+        <div class="nav-item" ng-if="currentUser.can_view_company_dashboard" ng-class="{'nav-item-active':openTeamMenu}" ng-controller="TeamListCtrl">
+            <span class="fa fa-file-text team_menu nav-item-icon" ng-mouseover="toggleTeamMenu()"></span>
+            <div class="subnav subnav-reports" ng-show="openTeamMenu">
+                <div class="subnav-title">Teams</div>
+                <ul>
+                    <li ng-repeat="team in teams | filter:{name:teamQuery}:startsWith | orderBy:'name'">
+                        <a class="dashboard" href="#/teams/{{team.id}}">{{team.name}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    <!-- Add Employee -->
+    <div class="nav-item" ng-if="currentUser.can_view_company_dashboard" ng-class="{'nav-item-active':openEmployeeMenu}">
+        <span class="fa fa-gear employee_menu nav-item-icon" ng-mouseover="toggleEmployeeMenu()"></span>
+        <div class="subnav subnav-settings" ng-show="openEmployeeMenu">
+            <div ng-show="currentUser.can_edit_employees">
+                <div class="subnav-title">Settings</div>
+                <ul>
+                    <li ng-show="!showAddEmployee">
+                        <a class="dashboard employee_menu" ng-click="toggleEmployeeModal();">
+                            <span class="glyphicon glyphicon-user"></span>
+                            <span>Add Employee</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <modal-employee employee='newEmployee' leadership='newLeadership' employees='employees' teams='teams' show='modalEmployeeShown' width='700px'></modal-employee> 
+
+    <!-- Search -->
+    <div class="nav-item" ng-if="currentUser.can_view_company_dashboard" ng-class="{'nav-item-active':openSearchMenu}">
+        <div class="fa fa-search nav-item-icon" ng-mouseover="toggleSearchMenu()"></div>
+        <div class="subnav subnav-search" ng-show="openSearchMenu">
+            <div class="subnav-title">Search</div>
+            <div class="subnav-search-input">
+                <input ng-click="toggleNavQuery()" ng-model="navQuery" type="text" placeholder="Search Employees..." class="form-control" />
+                <div class="search-results" ng-show="navQuery!=''">
+                    <ul ng-if="navQuery!=''">
+                        <li ng-repeat="employee in filteredEmployees = (employees |filter:{full_name:navQuery}:startsWith) | orderBy:'full_name'">
+                            <a ng-click="toggleSearchMenu()" class="search-result" href="#/employees/{{employee.id}}">
+                                <img class="tiny-headshot" ng-src="{{employee.avatar_small}}" alt="{{employee.full_name}}'s Picture" />
+                                {{employee.full_name}}
+                            </a>
+                        </li>
+                        <li ng-show="!filteredEmployees.length">No Results</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>   
+</header>

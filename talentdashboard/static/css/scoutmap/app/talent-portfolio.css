@@ -1,0 +1,23 @@
+/* == Talent Portfolio Pie Chart ==================================== */
+.talent-portfolio {
+  padding-bottom: 0;
+}
+.talent-portfolio .talent-pie-chart-container {
+  height: 435px;
+  margin-bottom: 20px;
+}
+@media only screen and (max-width: 1080px) {
+  .talent-portfolio .talent-pie-chart-container {
+    height: 340px;
+  }
+}
+.talent-portfolio .google-visualization-tooltip {
+  width: 200px;
+  font-size: 16px !important;
+}
+.talent-portfolio .google-visualization-tooltip .total-employees {
+  font-size: 22px !important;
+}
+.talent-portfolio .google-visualization-tooltip li {
+  margin: 0;
+}

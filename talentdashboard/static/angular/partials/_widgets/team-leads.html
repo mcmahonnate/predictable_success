@@ -1,0 +1,16 @@
+<div class="panel talent-portfolio row">
+    <h2 class="panel-title">Team Leads</h2>
+    <div ng-controller="TeamLeadsCtrl" ng-init="init(teamId)">
+        <div class="team-lead" ng-repeat="evaluation in teamLeads | orderBy:'talent_category'">
+            <a class="avatar-container" ng-if="evaluation.employee.display" href="#/employees/{{evaluation.employee.id}}">
+                <img ng-src="{{ evaluation.employee.avatar_small }}" class="medium-headshot" />
+                <div class="employee-attribute" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{ talentCategories[evaluation.talent_category].label }}">
+                    <span title="{{evaluation.talent_category}}" class="segment employee-segment-background-color-{{evaluation.talent_category}}"></span>
+                </div>
+            </a>
+            <a class="team-lead-name" ng-if="evaluation.employee.display" href="#/employees/{{evaluation.employee.id}}">
+                {{evaluation.employee.full_name}}
+            </a>    
+        </div>
+    </div>
+</div>

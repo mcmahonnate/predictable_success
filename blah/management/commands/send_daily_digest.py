@@ -34,7 +34,7 @@ class Command(BaseCommand):
             todos = todos.exclude(employee__id=recipient.employee.id)
             if comments.count() > 0 or todos.count() > 0:
                 df = DateFormat(dt)
-                from_email = 'Dash<dash@dfrntlabs.com>'
+                from_email = 'Scoutmap<scoutmap@dfrntlabs.com>'
                 subject = 'Daily Recap for ' + df.format('l, d F')
                 date = df.format('l, d F')
                 data = Context(

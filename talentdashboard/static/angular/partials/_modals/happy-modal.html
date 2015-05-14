@@ -1,0 +1,34 @@
+<div id="happiness" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content" style="background-color: #edeff1;">
+            <div class="modal-body">
+                <form enctype="multipart/form-data" name="happyForm">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h3 class="modal-title">How professionally happy is {{employee.full_name}}?</h3>                
+                    <div class="employee-happiness-container">
+                        <div class="employee-happiness employee-happiness-5" ng-click="happy.assessment=5" ng-class="{selected: happy.assessment==5}">
+                            <span class="veryhappy"></span>
+                        </div>
+                        <div class="employee-happiness employee-happiness-4" ng-click="happy.assessment=4" ng-class="{selected: happy.assessment==4}">
+                            <span class="happy"></span>
+                        </div> 
+                        <div class="employee-happiness employee-happiness-3" ng-click="happy.assessment=3" ng-class="{selected: happy.assessment==3}">
+                            <span class="indifferent"></span>
+                        </div>   
+                        <div class="employee-happiness employee-happiness-2" ng-click="happy.assessment=2" ng-class="{selected: happy.assessment==2}">
+                            <span class="unhappy"></span>
+                        </div> 
+                        <div class="employee-happiness employee-happiness-1" ng-click="happy.assessment=1" ng-class="{selected: happy.assessment==1}">
+                            <span class="unhappy"></span>
+                        </div> 
+                    </div>                                                                                                                       
+                    <textarea class="form-control" ng-model="happy.comment.content" rows="6" cols="50" placeholder="Add your notes here."></textarea>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click='scrub();hideModal()'>Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click='save();hideModal()' ng-disabled="!happy.comment.content">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
