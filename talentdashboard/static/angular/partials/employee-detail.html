@@ -14,7 +14,7 @@
                 <h1 class="centered">{{employee.full_name}}</h1> 
                 <ul class="nav nav-tabs" ng-init="tab=1">
                     <li class="nav" ng-class="{active: tab==1}"><a ng-click="tab = 1">Bio</a></li>
-                    <li class="nav" ng-class="{active: tab==2}"><a ng-click="tab = 2">Growth</a></li>
+                    <li class="nav" ng-show="currentUser.employee.id!=employee.id" ng-class="{active: tab==2}"><a ng-click="tab = 2">Growth</a></li>
                     <li class="nav" ng-class="{active: tab==3}"><a ng-click="tab = 3">Happiness</a></li>
                     <li class="nav" ng-class="{active: tab==4}"><a ng-click="tab = 4">Comp</a></li>
                 </ul>
@@ -38,7 +38,7 @@
         </div>    
         <div class="col-sm-7 col-md-7 col-lg-7">  
             <div ng-include="'/static/angular/partials/_widgets/todos.html'" ng-controller="EmployeeToDoListCtrl"></div> 
-            <div ng-include="'/static/angular/partials/_widgets/add-todo.html'"></div>
+            <div ng-include="'/static/angular/partials/_widgets/add-todo.html'" class="ng-hide"></div>
             <div ng-controller="EmployeeCommentsCtrl" ng-init="view='employee-view'">
                 <div ng-include="'/static/angular/partials/_widgets/add-comment.html'"></div>
                 <div ng-include="'/static/angular/partials/_widgets/comments.html'"></div>      

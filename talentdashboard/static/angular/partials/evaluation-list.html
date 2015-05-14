@@ -77,9 +77,9 @@
                     <h3 class="employee-name centered"><a href="#/employees/{{employee.id}}">{{employee.full_name}}</a></h3> 
                     <div class="team-name centered "><a ng-click="setTeamFilter(employee.team.id, employee.team.name);menu.show=false;">{{employee.team.name}}</a></div>
                 </li>
-                <li ng-if="evaluations.length > 0 && filteredEmployees.length === 0" class="no-results">No Results</li>
-                <li ng-if="evaluations.length === 0" class="no-results">Loading</li>
             </ul>
+            <div ng-if="evaluations.length > 0 && filteredEmployees.length === 0" class="no-results">No Results</div>
+            <div ng-if="evaluations.length === 0" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
         </div>
     </div> 
 </div>

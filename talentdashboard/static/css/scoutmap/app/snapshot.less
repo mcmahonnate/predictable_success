@@ -820,11 +820,10 @@ div.edit-dropdown ul.dropdown-menu {
     display: none;
     float: left;
     min-width: 160px;
-    padding: 10px 27px 10px 12px;
     margin: 0;
     font-size: 14px;
     list-style: none;
-    background-color: #272727;
+    background-color: #fff;
     border: 1px solid #ccc;
     -webkit-box-shadow: 0 6px 12px rgba(0,0,0,0.175);
     box-shadow: 0 6px 12px rgba(0,0,0,0.175);
@@ -1299,7 +1298,6 @@ input[type="button"]{
     height: 42px;
     padding: 0px;
     font-size:18px;
-    padding:5px;
     line-height: 1.467;
 }
 .ng-modal input[type="text"],
@@ -1307,9 +1305,9 @@ input[type="button"]{
 {
     width: 185px;
     height: 42px;
-    margin: 10px;
+    margin: 0 10px 20px;
     padding: 0px 12px;
-    font-size:18px;
+    font-size:15px;
     padding:5px;
     line-height: 1.467;
     color: #34495e;
@@ -1386,12 +1384,14 @@ input[type="button"]{
 .ng-modal-edit-employee {
   /* A centered div above the overlay with a box shadow. */
   z-index:10000;
-  position: absolute;
+  position: fixed;
   width: 50%; /* Default */
 
   /* Center the dialog */
   top: 10%;
-  left: 26%;
+  left: 50%;
+
+  margin-left: -350px;
 
   -moz-animation-name: anim-open-dialog;
   -webkit-animation-name: anim-open-dialog;

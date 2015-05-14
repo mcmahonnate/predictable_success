@@ -104,9 +104,8 @@
                 </ul>
             </div>
         </div>
-        <modal-employee employee='newEmployee' leadership='newLeadership' employees='employees' teams='teams' show='modalEmployeeShown' width='700px'></modal-employee>
     </div>
-
+    <modal-employee employee='newEmployee' leadership='newLeadership' employees='employees' teams='teams' show='modalEmployeeShown' width='700px'></modal-employee> 
 
     <!-- Search -->
     <div class="nav-item" ng-if="currentUser.can_view_company_dashboard" ng-class="{'nav-item-active':openSearchMenu}">
@@ -119,7 +118,7 @@
                     <ul ng-if="navQuery!=''">
                         <li ng-repeat="employee in filteredEmployees = (employees |filter:{full_name:navQuery}:startsWith) | orderBy:'full_name'">
                             <a ng-click="toggleSearchMenu()" class="search-result" href="#/employees/{{employee.id}}">
-                                <img class="small-headshot" ng-src="{{employee.avatar_small}}" alt="{{employee.full_name}}'s Picture" />
+                                <img class="tiny-headshot" ng-src="{{employee.avatar_small}}" alt="{{employee.full_name}}'s Picture" />
                                 {{employee.full_name}}
                             </a>
                         </li>
@@ -128,5 +127,5 @@
                 </div>
             </div>
         </div>
-    </div>    
+    </div>   
 </header>

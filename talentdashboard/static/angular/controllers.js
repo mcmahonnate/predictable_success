@@ -244,6 +244,7 @@ angular.module('tdb.controllers', [])
     Customers.get(function (data) {
         $scope.customer = data;
     });
+
     $scope.teams = Team.query();
     $scope.modalEmployeeShown = false;
     $scope.newEmployee = {id:0,full_name:'',first_name:'',last_name:'', email:'', team:{id:0, name:''}, hire_date:'',departure_date:'', avatar:'https://hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg'};
