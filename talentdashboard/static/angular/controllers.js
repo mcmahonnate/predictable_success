@@ -1162,7 +1162,9 @@ angular.module('tdb.controllers', [])
     },true);
     $scope.offsetTop=0;
     $scope.scrollIntoView=false;
+
     $scope.toggleAssigneeMenu = function () {
+
         $scope.openAssigneeMenu = !$scope.openAssigneeMenu;
         $scope.scrollIntoView = $scope.openAssigneeMenu;
         if ($scope.openAssigneeMenu ) {
@@ -1170,7 +1172,7 @@ angular.module('tdb.controllers', [])
                 closeAssigneeWindow(event, $scope.toggleAssigneeMenu);
             };
         } else {
-            $scope.openAssigneeMenu = false;
+            $scope.openAssigneeMenu = true;
             $scope.$window.onclick = null;
             $scope.$$phase || $scope.$apply(); //--> trigger digest cycle and make angular aware.
         }

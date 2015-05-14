@@ -20,6 +20,7 @@ a {color: #1a7f7e;}
 a:hover {color: #135d5c; text-decoration: none;}
 p {line-height: 18px;font-size: 14px;}
 
+strong {font-weight: bold;}
 
 /* Layout ==================================== */
 .container {
@@ -32,14 +33,14 @@ h1,h2,h3 {
     font-family: 'Open Sans', sans-serif;
 }
 h1 {
-    margin: 0 0 20px;
+    margin: 0 0 25px;
     font-size: 30px;
 } 
 h2 {
     font-size: 26px;
 }
 h3 {
-    font-size: 22px;
+    font-size: 18px;
 }
 
 
@@ -59,7 +60,6 @@ ul, ol {
 .popover-items {
     background: #fff;
     border: 1px solid #ccc;
-    padding: 10px;
     width: 100px;
     z-index: 9;
     left: 8px;
@@ -67,7 +67,11 @@ ul, ol {
     border-radius: 3px;
     box-shadow: 3px 3px 5px -3px #444;
     position: absolute;
+    padding: 10px;
 }
+.popover-items-wide {
+    width: 175px;
+} 
 .popover-item {
     list-style: none;
     color: #777;
@@ -89,6 +93,20 @@ ul, ol {
     transform:rotate(90deg);
     -ms-transform:rotate(90deg);
     -webkit-transform:rotate(90deg);        
+}
+
+.dropdown-menu li a {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
+    color: #222;
+}
+.dropdown-menu li a:hover {
+    background: #f1f1f1;
 }
 
 

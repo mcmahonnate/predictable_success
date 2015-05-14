@@ -128,7 +128,6 @@ $(function() {
         html: 'true'
     });
 
-
     /* Bind comment edit/delete */
     $('body').on('click', '.show-popover', function() {
         $(this).next('.popover-items').toggle();
