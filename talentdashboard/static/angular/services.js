@@ -168,7 +168,7 @@ angular.module('tdb.services', ['ngResource'])
 }])
 
 .factory('TeamLeadEmployees', ['$resource', '$http', function($resource, $http) {
-    var TeamLeadEmployees = $resource('/api/v1/team-lead-employees/:id/');
+    var TeamLeadEmployees = $resource('/api/v1/team-lead-employees/');
     TeamLeadEmployees.getEmployees = function(id, success, failure) { return this.query({ id: id }, success, failure); };
     return TeamLeadEmployees;
 }])
@@ -258,21 +258,27 @@ angular.module('tdb.services', ['ngResource'])
     return EngagementReport;
 }])
 
-    .factory('TalentCategories', [function() {
+.factory('TalentCategories', [function() {
     var TalentCategories = {
         categories: {
             "0":{color:'#2c3e50',label:'No Data',description:''},
             "1":{color:'#32d0a2',label:'Unleash',description:''},
-            "2":{color:'#5ed032',label:'On the Verge',description:''},
-            "3":{color:'#bcd032',label:'Strong',description:''},
+            "2":{color:'#5ed032',label:'Encourage',description:''},
+            "3":{color:'#bcd032',label:'Challenge',description:''},
             "4":{color:'#5bc0de',label:'Discover',description:''},
-            "5":{color:'#ffca00',label:'New Role',description:''},
-            "6":{color:'#ff0000',label:'Worried',description:''},
+            "5":{color:'#ffca00',label:'Change',description:''},
+            "6":{color:'#ff0000',label:'Worry',description:''},
             "7":{color:'#95a5a6',label:'Onboard',description:''}
         },
-        pieChartColors: ['#32d0a2','#5ed032','#bcd032','#9b59b6','#ffca00','#ff0000','#cbcbcb','#585858'],
         getColorByTalentCategory: function(category) {
             return this.categories[category].color;
+        },
+        getLabelByTalentCategory: function(category) {
+            if (category) {
+                return this.categories[category].label;
+            } else {
+                return null;
+            }
         }
     };
 
@@ -348,7 +354,7 @@ angular.module('tdb.services', ['ngResource'])
 .factory('SalaryReport', ['$resource', '$http', function($resource, $http) {
     SalaryReport = $resource('/api/v1/salary-reports/:path/:id/');
     SalaryReport.getReportForTeam = function(id, success, failure) { return this.get({ path: 'teams', id: id }, success, failure); };
-    SalaryReport.getReportForLead = function(success, failure) { return this.get({ path: 'lead/' }, success, failure); };
+    SalaryReport.getReportForLead = function(success, failure) { return this.get({ path: 'lead' }, success, failure); };
     SalaryReport.getReportForCompany = function(success, failure) { return this.get({ path: 'company' }, success, failure); };
 
     return SalaryReport;
@@ -358,7 +364,7 @@ angular.module('tdb.services', ['ngResource'])
     Comments = $resource('/api/v1/comments/:path/:id/');
     Comments.getEmployeeComments = function(id, success, failure) { return this.query({ path: 'employees', id: id}, success, failure); };
     Comments.getTeamComments = function(id, success, failure) { return this.query({ path: 'teams', id: id }, success, failure); };
-    Comments.getLeadComments = function(success, failure) { return this.query({ path: 'leads/'}, success, failure); };
+    Comments.getLeadComments = function(success, failure) { return this.query({ path: 'leads'}, success, failure); };
     Comments.getCoachComments = function(success, failure) { return this.query({ path: 'coaches'}, success, failure); };
 
     return Comments;

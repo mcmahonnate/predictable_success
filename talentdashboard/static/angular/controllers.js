@@ -57,7 +57,7 @@ angular.module('tdb.controllers', [])
     };
 }])
 
-.controller('MyCoacheesEvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'MyCoacheesPvpEvaluation', 'Team', 'Customers', 'analytics', function($scope, $rootScope, $location, $routeParams, MyCoacheesPvpEvaluation, Team, Customers, analytics) {
+.controller('MyCoacheesEvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'MyCoacheesPvpEvaluation', 'Team', 'Customers', 'TalentCategories', 'analytics', function($scope, $rootScope, $location, $routeParams, MyCoacheesPvpEvaluation, Team, Customers, TalentCategories, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     Customers.get(function (data) {
         $scope.customer = data;
@@ -73,6 +73,7 @@ angular.module('tdb.controllers', [])
     $scope.evaluations = MyCoacheesPvpEvaluation.getCurrentEvaluations();
 	$scope.teamId = $routeParams.team_id;
     $scope.talentCategory = $routeParams.talent_category;
+    $scope.categoryName  = TalentCategories.getLabelByTalentCategory($scope.talentCategory)
     $scope.happy = $routeParams.happy;
     $scope.days_since_happy = $routeParams.days_since_happy;
     $scope.fact_finder = $routeParams.fact_finder;
@@ -111,7 +112,7 @@ angular.module('tdb.controllers', [])
     }
 }])
 
-.controller('MyTeamEvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'MyTeamPvpEvaluation', 'Team', 'Customers', 'analytics', function($scope, $rootScope, $location, $routeParams, MyTeamPvpEvaluation, Team, Customers, analytics) {
+.controller('MyTeamEvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'MyTeamPvpEvaluation', 'Team', 'Customers', 'TalentCategories', 'analytics', function($scope, $rootScope, $location, $routeParams, MyTeamPvpEvaluation, Team, Customers, TalentCategories, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     Customers.get(function (data) {
         $scope.customer = data;
@@ -124,9 +125,12 @@ angular.module('tdb.controllers', [])
     $scope.kolbe_quick_start_labels=['improvise','modify','stabilize'];
     $scope.kolbe_implementor_labels=['imagine','restore','build'];
     $scope.vops_labels=['low','medium','high'];
-    $scope.evaluations = MyTeamPvpEvaluation.getCurrentEvaluations();
+    MyTeamPvpEvaluation.getCurrentEvaluations(function(results) {
+        $scope.evaluations = results;
+    });
 	$scope.teamId = $routeParams.team_id;
     $scope.talentCategory = $routeParams.talent_category;
+    $scope.categoryName  = TalentCategories.getLabelByTalentCategory($scope.talentCategory)
     $scope.happy = $routeParams.happy;
     $scope.days_since_happy = $routeParams.days_since_happy;
     $scope.fact_finder = $routeParams.fact_finder;
@@ -165,7 +169,7 @@ angular.module('tdb.controllers', [])
     }
 }])
 
-.controller('EvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'PvpEvaluation', 'Team', 'Customers', 'analytics', function($scope, $rootScope, $location, $routeParams, PvpEvaluation, Team, Customers, analytics) {
+.controller('EvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'PvpEvaluation', 'Team', 'Customers', 'TalentCategories', 'analytics', function($scope, $rootScope, $location, $routeParams, PvpEvaluation, Team, Customers, TalentCategories, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     Customers.get(function (data) {
         $scope.customer = data;
@@ -183,15 +187,7 @@ angular.module('tdb.controllers', [])
 	$scope.teamId = $routeParams.team_id;
     $scope.talentCategory = $routeParams.talent_category;
 
-    /* TODO: move */
-    if ($scope.talentCategory == 0){ $scope.categoryName = 'No Data'};
-    if ($scope.talentCategory == 1){ $scope.categoryName = 'Unleash'};
-    if ($scope.talentCategory == 2){ $scope.categoryName = 'On the Verge'};
-    if ($scope.talentCategory == 3){ $scope.categoryName = 'Solid'};
-    if ($scope.talentCategory == 4){ $scope.categoryName = 'Discover'};
-    if ($scope.talentCategory == 5){ $scope.categoryName = 'Pivot'};
-    if ($scope.talentCategory == 6){ $scope.categoryName = 'Worried'};
-    if ($scope.talentCategory == 6){ $scope.categoryName = 'Onboard'};
+    $scope.categoryName  = TalentCategories.getLabelByTalentCategory($scope.talentCategory)
 
     $scope.days_since_happy = $routeParams.days_since_happy;
     $scope.fact_finder = angular.copy($scope.kolbe_fact_finder_labels);
@@ -218,6 +214,10 @@ angular.module('tdb.controllers', [])
         $scope.teamId=id;
         $scope.teamName=name;
     };
+    $scope.setHappyFilter = function(id, name) {
+        $scope.happy=id;
+        $scope.happyName=name;
+    };
     $scope.staleHappy = function(date) {
         return ($rootScope.parseDate(date) < $scope.staleDate)
     };
@@ -235,7 +235,7 @@ angular.module('tdb.controllers', [])
     $scope.teamLeads = TeamLeads.getCurrentEvaluationsForTeamLeads($scope.team_id)
 }])
 
-.controller('NavigationCtrl', ['$scope', '$routeParams', '$window', '$location', 'Employee', 'Customers', function($scope, $routeParams, $window, $location, Employee, Customers) {
+.controller('NavigationCtrl', ['$scope', '$routeParams', '$window', '$location', 'Employee', 'Customers', 'Team', function($scope, $routeParams, $window, $location, Employee, Customers, Team) {
     $scope.$window = $window;
     if (!$scope.employees)
     {
@@ -244,6 +244,7 @@ angular.module('tdb.controllers', [])
     Customers.get(function (data) {
         $scope.customer = data;
     });
+    $scope.teams = Team.query();
     $scope.modalEmployeeShown = false;
     $scope.newEmployee = {id:0,full_name:'',first_name:'',last_name:'', email:'', team:{id:0, name:''}, hire_date:'',departure_date:'', avatar:'https://hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg'};
     $scope.newLeadership = {id:0,leader:{full_name:''}};
@@ -882,25 +883,25 @@ angular.module('tdb.controllers', [])
     }
     var buildCSV = function() {
         $scope.csv = []
-        angular.forEach($scope.evaluations_sort, function(evaluation) {
+        angular.forEach($scope.evaluations_sort, function(employee) {
             var row = {};
-            row.name = evaluation.employee.full_name;
-            row.talent = talentToString(evaluation.talent_category);
-            row.happy = happyToString(evaluation.employee.happiness);
-            row.date = evaluation.employee.happiness_date;
+            row.name = employee.full_name;
+            row.talent = talentToString(employee.current_talent_category);
+            row.happy = happyToString(employee.happiness);
+            row.date = employee.happiness_date;
             $scope.csv.push(row);
         });
     }
     var orderByName = function(a,b){
-        var aValue = a.employee.full_name;
-        var bValue = b.employee.full_name;
+        var aValue = a.full_name;
+        var bValue = b.full_name;
         return ((aValue < bValue) ? -1 : ((aValue > bValue) ? 1 : 0));
     }
     var orderByTalent= function(a,b){
-        var aValue = a.talent_category;
-        var bValue = b.talent_category;
-        var aName = a.employee.full_name;
-        var bName = b.employee.full_name;
+        var aValue = a.current_talent_category;
+        var bValue = b.current_talent_category;
+        var aName = a.full_name;
+        var bName = b.full_name;
         if (aValue === bValue) {
             return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
         } else {
@@ -908,10 +909,10 @@ angular.module('tdb.controllers', [])
         }
     }
     var orderByHappy= function(a,b){
-        var aValue = a.employee.happiness;
-        var bValue = b.employee.happiness;
-        var aName = a.employee.full_name;
-        var bName = b.employee.full_name;
+        var aValue = a.happiness;
+        var bValue = b.happiness;
+        var aName = a.full_name;
+        var bName = b.full_name;
         if (aValue === bValue) {
             return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
         } else {
@@ -919,10 +920,10 @@ angular.module('tdb.controllers', [])
         }
     }
     var orderByDate= function(a,b){
-        var aValue = Date.parse(a.employee.happiness_date) || 0;
-        var bValue = Date.parse(b.employee.happiness_date) || 0;
-        var aName = a.employee.full_name;
-        var bName = b.employee.full_name;
+        var aValue = Date.parse(a.happiness_date) || 0;
+        var bValue = Date.parse(b.happiness_date) || 0;
+        var aName = a.full_name;
+        var bName = b.full_name;
         if (aValue === bValue) {
             return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
         } else {
@@ -1397,15 +1398,11 @@ angular.module('tdb.controllers', [])
         newComment.modified_date = new Date().toJSON();
         newComment.owner = User.get();
 
-        //comment.subcomments.push(newComment);
-        var index = $scope.comments.indexOf(comment);
-        $scope.originalComments[index].subcomments.push(angular.copy(newComment));
-
         var data = {id: newComment.id, _model_name: "comment", _object_id: comment.id,_content: newComment.content};
 
         data.id = comment.associated_object.id;
         EmployeeComments.save(data, function(response) {
-            newComment.id = response.id;
+            comment.subcomments.push(response);
             comment.newSubCommentText = "";
         });
     }
@@ -1593,15 +1590,11 @@ angular.module('tdb.controllers', [])
         newComment.modified_date = new Date().toJSON();
         newComment.owner = User.get();
 
-        comment.subcomments.push(newComment);
-        var index = $scope.comments.indexOf(comment);
-        $scope.originalComments[index].subcomments.push(angular.copy(newComment));
-
         var data = {id: newComment.id, _model_name: "comment", _object_id: comment.id,_content: newComment.content};
 
         data.id = $scope.employeeId;
         EmployeeComments.save(data, function(response) {
-            newComment.id = response.id;
+            comment.subcomments.push(response);
             comment.newSubCommentText = "";
         });
     }
@@ -1745,15 +1738,11 @@ angular.module('tdb.controllers', [])
         newComment.modified_date = new Date().toJSON();
         newComment.owner = User.get();
 
-        comment.subcomments.push(newComment);
-        var index = $scope.comments.indexOf(comment);
-        $scope.originalComments[index].subcomments.push(angular.copy(newComment));
-
         var data = {id: newComment.id, _model_name: "comment", _object_id: comment.id,_content: newComment.content};
 
         data.id = comment.associated_object.id;
         EmployeeComments.save(data, function(response) {
-            newComment.id = response.id;
+            comment.subcomments.push(response);
             comment.newSubCommentText = "";
         });
     }
@@ -1897,15 +1886,11 @@ angular.module('tdb.controllers', [])
         newComment.modified_date = new Date().toJSON();
         newComment.owner = User.get();
 
-        comment.subcomments.push(newComment);
-        var index = $scope.comments.indexOf(comment);
-        $scope.originalComments[index].subcomments.push(angular.copy(newComment));
-
         var data = {id: newComment.id, _model_name: "comment", _object_id: comment.id,_content: newComment.content};
 
         data.id = comment.associated_object.id;
         EmployeeComments.save(data, function(response) {
-            newComment.id = response.id;
+            comment.subcomments.push(response);
             comment.newSubCommentText = "";
         });
     }
@@ -2049,15 +2034,11 @@ angular.module('tdb.controllers', [])
         newComment.modified_date = new Date().toJSON();
         newComment.owner = User.get();
 
-        comment.subcomments.push(newComment);
-        var index = $scope.comments.indexOf(comment);
-        $scope.originalComments[index].subcomments.push(angular.copy(newComment));
-
         var data = {id: newComment.id, _model_name: "comment", _object_id: comment.id,_content: newComment.content};
 
         data.id = comment.associated_object.id;
         EmployeeComments.save(data, function(response) {
-            newComment.id = response.id;
+            comment.subcomments.push(response);
             comment.newSubCommentText = "";
         });
     }

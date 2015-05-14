@@ -9,11 +9,15 @@
         <span class="glyphicon-regular glyphicon-export" style="cursor: pointer;float:right;display: inline-block;margin-top:2px;font-size:30px" ng-csv="csv" filename="fooldash.csv"></span>
         <div style="position: absolute;width: 100%;margin-top:15px;">
             <ul class="isotope table-like">
-                <li ng-repeat="eval in evaluations" ng-style="{top: (((eval.index) * 55) + 'px')}">
-                    <div class="name"><a href="#/employees/{{eval.employee.id}}">{{eval.employee.full_name}}</a></div>
-                    <div class="talent"><canvas width="18" height="18" style="float:left;padding-left: 20px;" employee-talent-category="{{eval.talent_category}}"></canvas></div>
-                    <div class="happy-score" ng-class="{'veryhappy': eval.employee.happiness==5,'happy': eval.employee.happiness==4,'indifferent': eval.employee.happiness==3,'unhappy': eval.employee.happiness==2,'veryunhappy': eval.employee.happiness==1, 'nohappydata': eval.employee.happiness==-1}"></div>
-                    <div class="happy-date">{{eval.employee.happiness_date}}</div>
+                <li ng-repeat="employee in evaluations" ng-style="{top: (((employee.index) * 55) + 'px')}">
+                    <div class="name"><a href="#/employees/{{employee.id}}">{{employee.full_name}}</a></div>
+                    <div class="talent"><canvas width="18" height="18" style="float:left;padding-left: 20px;" employee-talent-category="{{employee.current_talent_category}}"></canvas></div>
+                    <div class="employee-happiness-container happy-score" style="margin: 0;">
+                        <div class="employee-happiness employee-happiness-{{employee.happiness}} selected">
+                            <span ng-class="{'veryhappy': employee.happiness==5,'happy': employee.happiness==4,'indifferent': employee.happiness==3,'unhappy': employee.happiness==2,'veryunhappy': employee.happiness==1, 'nohappydata': employee.happiness==-1}"></span>
+                        </div>
+                    </div>
+                    <div class="happy-date" style="color: #333333;">{{employee.happiness_date}}</div>
                  </li>
             </ul>
         </div>
