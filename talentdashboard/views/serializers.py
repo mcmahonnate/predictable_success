@@ -24,6 +24,7 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
 class MinimalEmployeeSerializer(serializers.HyperlinkedModelSerializer):
     avatar = serializers.SerializerMethodField()
     avatar_small = serializers.SerializerMethodField()
+    current_talent_category = serializers.SerializerMethodField()
 
     def get_avatar(self, obj):
         url = ''
@@ -37,9 +38,12 @@ class MinimalEmployeeSerializer(serializers.HyperlinkedModelSerializer):
             url = obj.avatar_small.url
         return url
 
+    def get_current_talent_category(self, obj):
+        return obj.current_talent_category()
+
     class Meta:
         model = Employee
-        fields = ('id', 'full_name', 'first_name', 'display', 'avatar', 'avatar_small')
+        fields = ('id', 'full_name', 'first_name', 'display', 'avatar', 'avatar_small', 'current_talent_category')
 
 
 class PvPEmployeeSerializer(serializers.HyperlinkedModelSerializer):
