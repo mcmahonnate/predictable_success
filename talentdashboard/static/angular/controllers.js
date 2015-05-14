@@ -124,7 +124,9 @@ angular.module('tdb.controllers', [])
     $scope.kolbe_quick_start_labels=['improvise','modify','stabilize'];
     $scope.kolbe_implementor_labels=['imagine','restore','build'];
     $scope.vops_labels=['low','medium','high'];
-    $scope.evaluations = MyTeamPvpEvaluation.getCurrentEvaluations();
+    MyTeamPvpEvaluation.getCurrentEvaluations(function(results) {
+        $scope.evaluations = results;
+    });
 	$scope.teamId = $routeParams.team_id;
     $scope.talentCategory = $routeParams.talent_category;
     $scope.happy = $routeParams.happy;
