@@ -230,11 +230,6 @@ angular.module('tdb.controllers', [])
     }
 }])
 
-.controller('TeamLeadsCtrl', ['$scope', '$routeParams', 'TeamLeads', function($scope, $routeParams, TeamLeads) {
-    $scope.team_id = $routeParams.id;
-    $scope.teamLeads = TeamLeads.getCurrentEvaluationsForTeamLeads($scope.team_id)
-}])
-
 .controller('NavigationCtrl', ['$scope', '$routeParams', '$window', '$location', 'Employee', 'Customers', 'Team', function($scope, $routeParams, $window, $location, Employee, Customers, Team) {
     $scope.$window = $window;
     if (!$scope.employees)
@@ -1008,12 +1003,14 @@ angular.module('tdb.controllers', [])
     });
 }])
 
-.controller('TeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'TalentCategoryReport', 'SalaryReport', 'Team', 'TeamMembers', 'TeamMBTI', 'Customers', 'analytics', function($scope, $location, $routeParams, TalentCategoryReport, SalaryReport, Team, TeamMembers, TeamMBTI, Customers, analytics) {
+.controller('TeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'TalentCategoryReport', 'SalaryReport', 'Team', 'TeamMembers', 'TeamMBTI', 'Customers', 'TeamLeads', 'analytics', function($scope, $location, $routeParams, TalentCategoryReport, SalaryReport, Team, TeamMembers, TeamMBTI, Customers, TeamLeads, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
+
     Customers.get(function (data) {
         $scope.customer = data;
     });
     $scope.teamId = $routeParams.id;
+    $scope.employees = TeamLeads.getCurrentEvaluationsForTeamLeads($scope.teamId)
     SalaryReport.getReportForTeam($routeParams.id, function(data) {
         $scope.salaryReport = data;
     });
