@@ -57,7 +57,7 @@ angular.module('tdb.controllers', [])
     };
 }])
 
-.controller('MyTeamEvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'MyTeamPvpEvaluation', 'Team', 'Customers', 'analytics', function($scope, $rootScope, $location, $routeParams, MyTeamPvpEvaluation, Team, Customers, analytics) {
+.controller('MyCoacheesEvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'MyCoacheesPvpEvaluation', 'Team', 'Customers', 'TalentCategories', 'analytics', function($scope, $rootScope, $location, $routeParams, MyCoacheesPvpEvaluation, Team, Customers, TalentCategories, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     Customers.get(function (data) {
         $scope.customer = data;
@@ -70,9 +70,10 @@ angular.module('tdb.controllers', [])
     $scope.kolbe_quick_start_labels=['improvise','modify','stabilize'];
     $scope.kolbe_implementor_labels=['imagine','restore','build'];
     $scope.vops_labels=['low','medium','high'];
-    $scope.evaluations = MyTeamPvpEvaluation.getCurrentEvaluations();
+    $scope.evaluations = MyCoacheesPvpEvaluation.getCurrentEvaluations();
 	$scope.teamId = $routeParams.team_id;
     $scope.talentCategory = $routeParams.talent_category;
+    $scope.categoryName  = TalentCategories.getLabelByTalentCategory($scope.talentCategory)
     $scope.happy = $routeParams.happy;
     $scope.days_since_happy = $routeParams.days_since_happy;
     $scope.fact_finder = $routeParams.fact_finder;
@@ -111,12 +112,12 @@ angular.module('tdb.controllers', [])
     }
 }])
 
-.controller('EvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'PvpEvaluation', 'Team', 'Customers', 'analytics', function($scope, $rootScope, $location, $routeParams, PvpEvaluation, Team, Customers, analytics) {
+.controller('MyTeamEvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'MyTeamPvpEvaluation', 'Team', 'Customers', 'TalentCategories', 'analytics', function($scope, $rootScope, $location, $routeParams, MyTeamPvpEvaluation, Team, Customers, TalentCategories, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     Customers.get(function (data) {
         $scope.customer = data;
     });
-    $scope.hideTeamMenu = false;
+    $scope.hideTeamMenu = true;
     $scope.kolbe_values=[0,1,2,3];
     $scope.vops_values=[0,320,6400,960];
     $scope.kolbe_fact_finder_labels=['simplify','explain','specify'];
@@ -124,24 +125,18 @@ angular.module('tdb.controllers', [])
     $scope.kolbe_quick_start_labels=['improvise','modify','stabilize'];
     $scope.kolbe_implementor_labels=['imagine','restore','build'];
     $scope.vops_labels=['low','medium','high'];
-    $scope.evaluations = PvpEvaluation.getCurrentEvaluations();
+    MyTeamPvpEvaluation.getCurrentEvaluations(function(results) {
+        $scope.evaluations = results;
+    });
 	$scope.teamId = $routeParams.team_id;
     $scope.talentCategory = $routeParams.talent_category;
-
-    /* TODO: move to model */
-    if ($scope.talentCategory == 1){ $scope.categoryName = 'Top Talent'};
-    if ($scope.talentCategory == 2){ $scope.categoryName = 'Strong Talent'};
-    if ($scope.talentCategory == 3){ $scope.categoryName = 'Good Talent'};
-    if ($scope.talentCategory == 4){ $scope.categoryName = 'Low Potential'};
-    if ($scope.talentCategory == 5){ $scope.categoryName = 'Low Performing'};
-    if ($scope.talentCategory == 6){ $scope.categoryName = 'Poor'};
-
+    $scope.categoryName  = TalentCategories.getLabelByTalentCategory($scope.talentCategory)
     $scope.happy = $routeParams.happy;
     $scope.days_since_happy = $routeParams.days_since_happy;
-    $scope.fact_finder = angular.copy($scope.kolbe_fact_finder_labels);
-    $scope.follow_thru = angular.copy($scope.kolbe_follow_thru_labels);
-    $scope.quick_start = angular.copy($scope.kolbe_quick_start_labels);
-    $scope.implementor = angular.copy($scope.kolbe_implementor_labels);
+    $scope.fact_finder = $routeParams.fact_finder;
+    $scope.follow_thru = $routeParams.follow_thru;
+    $scope.quick_start = $routeParams.quick_start;
+    $scope.implementor = $routeParams.implementor;
     $scope.vops = [];
     $scope.teamName='';
     $scope.staleDays=360;
@@ -174,12 +169,68 @@ angular.module('tdb.controllers', [])
     }
 }])
 
-.controller('TeamLeadsCtrl', ['$scope', '$routeParams', 'TeamLeads', function($scope, $routeParams, TeamLeads) {
-    $scope.team_id = $routeParams.id;
-    $scope.teamLeads = TeamLeads.getCurrentEvaluationsForTeamLeads($scope.team_id)
+.controller('EvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'PvpEvaluation', 'Team', 'Customers', 'TalentCategories', 'analytics', function($scope, $rootScope, $location, $routeParams, PvpEvaluation, Team, Customers, TalentCategories, analytics) {
+    analytics.trackPage($scope, $location.absUrl(), $location.url());
+    Customers.get(function (data) {
+        $scope.customer = data;
+    });
+    $scope.happiness = '';
+    $scope.hideTeamMenu = false;
+    $scope.kolbe_values=[0,1,2,3];
+    $scope.vops_values=[0,320,6400,960];
+    $scope.kolbe_fact_finder_labels=['simplify','explain','specify'];
+    $scope.kolbe_follow_thru_labels=['adapt','maintain','systemize'];
+    $scope.kolbe_quick_start_labels=['improvise','modify','stabilize'];
+    $scope.kolbe_implementor_labels=['imagine','restore','build'];
+    $scope.vops_labels=['low','medium','high'];
+    $scope.evaluations = PvpEvaluation.getCurrentEvaluations();
+	$scope.teamId = $routeParams.team_id;
+    $scope.talentCategory = $routeParams.talent_category;
+
+    $scope.categoryName  = TalentCategories.getLabelByTalentCategory($scope.talentCategory)
+
+    $scope.days_since_happy = $routeParams.days_since_happy;
+    $scope.fact_finder = angular.copy($scope.kolbe_fact_finder_labels);
+    $scope.follow_thru = angular.copy($scope.kolbe_follow_thru_labels);
+    $scope.quick_start = angular.copy($scope.kolbe_quick_start_labels);
+    $scope.implementor = angular.copy($scope.kolbe_implementor_labels);
+    $scope.vops = [];
+    $scope.teamName='';
+    $scope.staleDays=360;
+    $scope.staleDate = new Date();
+    $scope.staleDate.setDate($scope.staleDate.getDate() - $scope.staleDays);
+	if ($routeParams.team_id){
+		Team.get(
+			{id: $routeParams.team_id},
+			function(data) {
+				$scope.teamName = data.name
+				$scope.teamId = data.id
+			}
+		);
+	}
+
+	$scope.menu = {show: false};
+    $scope.setTeamFilter = function(id, name) {
+        $scope.teamId=id;
+        $scope.teamName=name;
+    };
+    $scope.setHappyFilter = function(id, name) {
+        $scope.happy=id;
+        $scope.happyName=name;
+    };
+    $scope.staleHappy = function(date) {
+        return ($rootScope.parseDate(date) < $scope.staleDate)
+    };
+    $scope.sortHappy = function(evaluation) {
+        if (evaluation.employee.happiness && $rootScope.parseDate(evaluation.employee.happiness_date) > $scope.staleDate) {
+            return -evaluation.employee.happiness;
+        } else {
+            return -1;
+        }
+    }
 }])
 
-.controller('EmployeeListCtrl', ['$scope', '$routeParams', '$window', '$location', 'Employee', 'Customers', function($scope, $routeParams, $window, $location, Employee, Customers) {
+.controller('NavigationCtrl', ['$scope', '$routeParams', '$window', '$location', 'Employee', 'Customers', 'Team', function($scope, $routeParams, $window, $location, Employee, Customers, Team) {
     $scope.$window = $window;
     if (!$scope.employees)
     {
@@ -188,13 +239,16 @@ angular.module('tdb.controllers', [])
     Customers.get(function (data) {
         $scope.customer = data;
     });
+
+    $scope.teams = Team.query();
     $scope.modalEmployeeShown = false;
-    $scope.newEmployee = {id:0,full_name:'',first_name:'',last_name:'', email:'', team:{id:0}, hire_date:'',departure_date:'', avatar:'https://hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg'};
+    $scope.newEmployee = {id:0,full_name:'',first_name:'',last_name:'', email:'', team:{id:0, name:''}, hire_date:'',departure_date:'', avatar:'https://hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg'};
     $scope.newLeadership = {id:0,leader:{full_name:''}};
     $scope.toggleEmployeeModal = function() {
         $scope.modalEmployeeShown = !$scope.modalEmployeeShown;
     };
 	$scope.employeeMenu = {show: false};
+    $scope.searchMenu = {show: false};
     $scope.filterMenu = {show: false};
 	$scope.teamMenu = {show: false};
     $scope.settingsMenu = {show: false};
@@ -233,6 +287,7 @@ angular.module('tdb.controllers', [])
             $scope.navQuery='';
             $scope.openEmployeeMenu  = false;
             $scope.openTeamMenu = false;
+            $scope.openSearchMenu = false;
             $scope.openSettingsMenu  = false;
             $scope.$window.onclick = function (event) {
                 closeFilterMenu(event, $scope.toggleFilterMenu);
@@ -258,6 +313,7 @@ angular.module('tdb.controllers', [])
             $scope.navQuery='';
             $scope.openFilterMenu = false;
             $scope.openTeamMenu = false;
+            $scope.openSearchMenu = false;
             $scope.openSettingsMenu  = false;
             $scope.$window.onclick = function (event) {
                 closeEmployeeMenu(event, $scope.toggleEmployeeMenu);
@@ -276,6 +332,31 @@ angular.module('tdb.controllers', [])
         if (!clickedOnEmployeeMenu) {
             callbackOnClose();
         }
+    }    
+    $scope.toggleSearchMenu = function () {
+        $scope.openSearchMenu = !$scope.openSearchMenu;
+        if ($scope.openSearchMenu ) {
+            $scope.navQuery='';
+            $scope.openFilterMenu = false;
+            $scope.openTeamMenu = false;
+            $scope.openSettingsMenu  = false;
+            $scope.$window.onclick = function (event) {
+                closeSearchMenu(event, $scope.toggleSearchMenu);
+            };
+        } else {
+            $scope.openSearchMenu  = false;
+            $scope.$window.onclick = null;
+            $scope.$$phase || $scope.$apply(); //--> trigger digest cycle and make angular aware.
+        }
+    };
+    function closeSearchMenu(event, callbackOnClose) {
+        var clickedElement = event.target;
+        if (!clickedElement) return;
+        var elementClasses = clickedElement.classList;
+        var clickedOnSearchMenu = elementClasses.contains('search_menu');
+        if (!clickedOnSearchMenu) {
+            callbackOnClose();
+        }
     }
     $scope.toggleTeamMenu = function () {
         $scope.openTeamMenu = !$scope.openTeamMenu;
@@ -284,6 +365,7 @@ angular.module('tdb.controllers', [])
             $scope.openFilterMenu = false;
             $scope.openEmployeeMenu  = false;
             $scope.openSettingsMenu  = false;
+            $scope.openSearchMenu = false;
             $scope.$window.onclick = function (event) {
                 closeTeamMenu(event, $scope.toggleTeamMenu);
             };
@@ -309,6 +391,7 @@ angular.module('tdb.controllers', [])
             $scope.openFilterMenu = false;
             $scope.openEmployeeMenu  = false;
             $scope.openTeamMenu  = false;
+            $scope.openSearchMenu = false;
             $scope.$window.onclick = function (event) {
                 closeSettingsMenu(event, $scope.toggleSettingsMenu);
             };
@@ -351,6 +434,11 @@ angular.module('tdb.controllers', [])
             $scope.currentUser = $rootScope.currentUser;
         }
     },true);
+
+
+    $scope.dynamicTooltipText = "LOGOUT";
+
+
     $scope.modalEmployeeShown = false;
     $scope.toggleEmployeeModal = function() {
         $scope.modalEmployeeShown = !$scope.modalEmployeeShown;
@@ -668,128 +756,20 @@ angular.module('tdb.controllers', [])
     });
 }])
 
-.controller('CoachDetailCtrl', ['$scope', '$location', '$routeParams', 'Employee', 'Coachees', '$http', 'analytics', function($scope, $location, $routeParams, Employee, Coachees, $http, analytics) {
+.controller('CoachDetailCtrl', ['$scope', '$location', '$routeParams', 'User', 'Employee', 'Coachees', 'TalentCategoryReport', '$http', 'analytics', function($scope, $location, $routeParams, User, Employee, Coachees, TalentCategoryReport, $http, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
+    User.get(
+        function(data) {
+            $scope.coach= data.employee;
+        }
+    );
 
     Coachees.query({ id: $routeParams.id }).$promise.then(function(response) {
-        $scope.coachees = response;
-        var i = 0;
-        angular.forEach($scope.coachees, function (employee) {
-            employee.index = i;
-            i = i + 1;
-        })
-        $scope.coachees_sort = angular.copy($scope.coachees)
-    })
-
-    var talentToString = function(talent){
-        switch (talent) {
-            case 1:
-                return 'Top';
-                break;
-            case 2:
-                return 'Strong';
-                break;
-            case 3:
-                return 'Good';
-                break;
-            case 4:
-                return 'Low Potential';
-                break;
-            case 5:
-                return 'Low Performing';
-                break;
-            case 6:
-                return 'Poor';
-                break;
-        }
-    };
-    var happyToString = function(happy){
-        switch (happy) {
-            case 1:
-                return 'Very Unhappy';
-                break;
-            case 2:
-                return 'Unhappy';
-                break;
-            case 3:
-                return 'Indifferent';
-                break;
-            case 4:
-                return 'Happy';
-                break;
-            case 5:
-                return 'Very Happy';
-                break;
-            case -1:
-                return 'No Data';
-                break;
-        }
-    };
-    $scope.orderValue = '';
-    $scope.order = function(orderValue){
-        $scope.orderValue = orderValue;
-        switch(orderValue) {
-            case 'name':
-                $scope.coachees_sort.sort(orderByName);
-                break;
-            case 'talent':
-                $scope.coachees_sort.sort(orderByTalent);
-                break;
-            case 'happy':
-                $scope.coachees_sort.sort(orderByHappy);
-                break;
-            case 'date':
-                $scope.coachees_sort.sort(orderByDate);
-                break;
-            default:
-                $scope.coachees_sort.sort(orderByName);
-                break;
-        }
-        var i = 0;
-        angular.forEach($scope.coachees_sort, function (employee) {
-            $scope.coachees[employee.index].index = i;
-            i = i + 1;
-        })
-    }
-    var orderByName = function(a,b){
-        var aValue = a.full_name;
-        var bValue = b.full_name;
-        return ((aValue < bValue) ? -1 : ((aValue > bValue) ? 1 : 0));
-    }
-    var orderByTalent= function(a,b){
-        var aValue = a.talent_category;
-        var bValue = b.talent_category;
-        var aName = a.full_name;
-        var bName = b.full_name;
-        if (aValue === bValue) {
-            return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
-        } else {
-            return aValue - bValue;
-        }
-    }
-    var orderByHappy= function(a,b){
-        var aValue = a.happiness;
-        var bValue = b.happiness;
-        var aName = a.full_name;
-        var bName = b.full_name;
-        if (aValue === bValue) {
-            return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
-        } else {
-            return bValue - aValue;
-        }
-    }
-    var orderByDate= function(a,b){
-        var aValue = Date.parse(a.happiness_date) || 0;
-        var bValue = Date.parse(b.happiness_date) || 0;
-        var aName = a.full_name;
-        var bName = b.full_name;
-        if (aValue === bValue) {
-            return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
-        } else {
-            return bValue - aValue;
-        }
-    }
-
+        $scope.employees = response;
+    });
+    TalentCategoryReport.getReportForCoach(function(data) {
+        $scope.talentCategoryReport = data;
+    });
 }])
 
 
@@ -899,25 +879,25 @@ angular.module('tdb.controllers', [])
     }
     var buildCSV = function() {
         $scope.csv = []
-        angular.forEach($scope.evaluations_sort, function(evaluation) {
+        angular.forEach($scope.evaluations_sort, function(employee) {
             var row = {};
-            row.name = evaluation.employee.full_name;
-            row.talent = talentToString(evaluation.talent_category);
-            row.happy = happyToString(evaluation.employee.happiness);
-            row.date = evaluation.employee.happiness_date;
+            row.name = employee.full_name;
+            row.talent = talentToString(employee.current_talent_category);
+            row.happy = happyToString(employee.happiness);
+            row.date = employee.happiness_date;
             $scope.csv.push(row);
         });
     }
     var orderByName = function(a,b){
-        var aValue = a.employee.full_name;
-        var bValue = b.employee.full_name;
+        var aValue = a.full_name;
+        var bValue = b.full_name;
         return ((aValue < bValue) ? -1 : ((aValue > bValue) ? 1 : 0));
     }
     var orderByTalent= function(a,b){
-        var aValue = a.talent_category;
-        var bValue = b.talent_category;
-        var aName = a.employee.full_name;
-        var bName = b.employee.full_name;
+        var aValue = a.current_talent_category;
+        var bValue = b.current_talent_category;
+        var aName = a.full_name;
+        var bName = b.full_name;
         if (aValue === bValue) {
             return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
         } else {
@@ -925,10 +905,10 @@ angular.module('tdb.controllers', [])
         }
     }
     var orderByHappy= function(a,b){
-        var aValue = a.employee.happiness;
-        var bValue = b.employee.happiness;
-        var aName = a.employee.full_name;
-        var bName = b.employee.full_name;
+        var aValue = a.happiness;
+        var bValue = b.happiness;
+        var aName = a.full_name;
+        var bName = b.full_name;
         if (aValue === bValue) {
             return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
         } else {
@@ -936,10 +916,10 @@ angular.module('tdb.controllers', [])
         }
     }
     var orderByDate= function(a,b){
-        var aValue = Date.parse(a.employee.happiness_date) || 0;
-        var bValue = Date.parse(b.employee.happiness_date) || 0;
-        var aName = a.employee.full_name;
-        var bName = b.employee.full_name;
+        var aValue = Date.parse(a.happiness_date) || 0;
+        var bValue = Date.parse(b.happiness_date) || 0;
+        var aName = a.full_name;
+        var bName = b.full_name;
         if (aValue === bValue) {
             return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
         } else {
@@ -1023,12 +1003,14 @@ angular.module('tdb.controllers', [])
     });
 }])
 
-.controller('TeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'TalentCategoryReport', 'SalaryReport', 'Team', 'TeamMembers', 'TeamMBTI', 'Customers', 'analytics', function($scope, $location, $routeParams, TalentCategoryReport, SalaryReport, Team, TeamMembers, TeamMBTI, Customers, analytics) {
+.controller('TeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'TalentCategoryReport', 'SalaryReport', 'Team', 'TeamMembers', 'TeamMBTI', 'Customers', 'TeamLeads', 'analytics', function($scope, $location, $routeParams, TalentCategoryReport, SalaryReport, Team, TeamMembers, TeamMBTI, Customers, TeamLeads, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
+
     Customers.get(function (data) {
         $scope.customer = data;
     });
     $scope.teamId = $routeParams.id;
+    $scope.employees = TeamLeads.getCurrentEvaluationsForTeamLeads($scope.teamId)
     SalaryReport.getReportForTeam($routeParams.id, function(data) {
         $scope.salaryReport = data;
     });
@@ -1041,7 +1023,7 @@ angular.module('tdb.controllers', [])
         {id: $routeParams.id},
         function(data) {
             $scope.team = data;
-            $scope.team_name = data.name + ' Report';
+            $scope.team_name = data.name;
         }
     );
 
@@ -1179,7 +1161,9 @@ angular.module('tdb.controllers', [])
     },true);
     $scope.offsetTop=0;
     $scope.scrollIntoView=false;
+
     $scope.toggleAssigneeMenu = function () {
+
         $scope.openAssigneeMenu = !$scope.openAssigneeMenu;
         $scope.scrollIntoView = $scope.openAssigneeMenu;
         if ($scope.openAssigneeMenu ) {
@@ -1187,7 +1171,7 @@ angular.module('tdb.controllers', [])
                 closeAssigneeWindow(event, $scope.toggleAssigneeMenu);
             };
         } else {
-            $scope.openAssigneeMenu = false;
+            $scope.openAssigneeMenu = true;
             $scope.$window.onclick = null;
             $scope.$$phase || $scope.$apply(); //--> trigger digest cycle and make angular aware.
         }
@@ -1295,6 +1279,10 @@ angular.module('tdb.controllers', [])
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     $scope.showPeopleTeamVisibility = false;
 
+    var getBlankComment = function() {
+        return {text: ''}
+    };
+
     Comment.query().$promise.then(function(response) {
         if ($rootScope.currentUser.can_coach_employees || $rootScope.currentUser.can_view_company_dashboard) {
             $scope.newCommentVisibility = 2;
@@ -1340,7 +1328,7 @@ angular.module('tdb.controllers', [])
 
     $scope.saveComment = function(comment) {
         var index = $scope.comments.indexOf(comment);
-        if (comment.happiness.assessment>0) {
+        if (comment.happiness && comment.happiness.assessment>0) {
             var data = {_assessment_id:comment.happiness.id,_assessed_by_id: $rootScope.currentUser.employee.id, _assessment: comment.happiness.assessment, _content:comment.content,_visibility: comment.visibility};
             Engagement.update(data, function(response) {
                 $scope.originalComments[index].content = comment.content;
@@ -1378,11 +1366,12 @@ angular.module('tdb.controllers', [])
         subcomment.content = $scope.originalComments[parent_index].subcomments[subcomment_index].content;
     }
 
+    $scope.newComment = getBlankComment();
 
     $scope.addComment = function(equals) {
         var newComment = {};
         newComment.id = -1;
-        newComment.content = $scope.newCommentText;
+        newComment.content = $scope.newComment.text;
         newComment.modified_date = new Date().toJSON();
         newComment.owner = User.get();
         newComment.newSubCommentText="";
@@ -1396,7 +1385,7 @@ angular.module('tdb.controllers', [])
         data.id = $scope.employeeId;
         EmployeeComments.save(data, function(response) {
             newComment.id = response.id;
-            $scope.newCommentText = "";
+            $scope.newComment = getBlankComment();
         });
     }
 
@@ -1407,20 +1396,19 @@ angular.module('tdb.controllers', [])
         newComment.modified_date = new Date().toJSON();
         newComment.owner = User.get();
 
-        comment.subcomments.push(newComment);
-        var index = $scope.comments.indexOf(comment);
-        $scope.originalComments[index].subcomments.push(angular.copy(newComment));
-
         var data = {id: newComment.id, _model_name: "comment", _object_id: comment.id,_content: newComment.content};
 
         data.id = comment.associated_object.id;
         EmployeeComments.save(data, function(response) {
-            newComment.id = response.id;
+            comment.subcomments.push(response);
             comment.newSubCommentText = "";
         });
     }
 
     $scope.deleteComment = function(comment) {
+
+        console.log('clicked');
+
         if ($window.confirm('Are you sure you want to delete this comment?')) {
             var data = {id: comment.id};
             var index = $scope.comments.indexOf(comment);
@@ -1455,12 +1443,13 @@ angular.module('tdb.controllers', [])
     if($routeParams && $routeParams.id) {
         $scope.employeeId = $routeParams.id;
     }
-    $scope.newCommentText = "";
-    $scope.newCommentVisibility = 3;
-    $scope.newCommentHappy = {assessment: 0};
+    var getBlankComment = function() {
+        return {text: '', visibility: 3, happy: {assessment: 0}}
+    };
+    $scope.newComment = getBlankComment();
     $scope.toggleCommentTextExpander = function (comment) {
         $window.onclick = function (event) {
-            if (!$scope.newCommentText) {
+            if (!$scope.newComment.text) {
                 var clickedElement = event.target;
                 if (!clickedElement) return;
                 var elementClasses = clickedElement.classList;
@@ -1492,7 +1481,7 @@ angular.module('tdb.controllers', [])
     Comments.getEmployeeComments($scope.employeeId, function(data) {
         $scope.showPeopleTeamVisibility = false;
         if ($rootScope.currentUser.can_coach_employees || $rootScope.currentUser.can_view_company_dashboard) {
-            $scope.newCommentVisibility = 2;
+            $scope.newComment.visibility = 2;
             $scope.showPeopleTeamVisibility = true;
         }
         $scope.comments = data;
@@ -1523,7 +1512,7 @@ angular.module('tdb.controllers', [])
     $scope.saveComment = function(comment) {
 
         var index = $scope.comments.indexOf(comment);
-        if (comment.happiness.assessment>0) {
+        if (comment.happiness && comment.happiness.assessment > 0) {
             var data = {id: $scope.employee.id, _assessment_id:comment.happiness.id,_assessed_by_id: $rootScope.currentUser.employee.id, _assessment: comment.happiness.assessment, _content:comment.content,_visibility: comment.visibility};
             console.log(data);
             Engagement.update(data, function(response) {
@@ -1565,20 +1554,15 @@ angular.module('tdb.controllers', [])
     $scope.addComment = function(equals) {
         var newComment = {};
         newComment.id = -1;
-        newComment.content = $scope.newCommentText;
+        newComment.content = $scope.newComment.text;
         newComment.modified_date = new Date().toJSON();
         newComment.owner = User.get();
         newComment.newSubCommentText="";
         newComment.subcomments=[];
-        newComment.visibility=$scope.newCommentVisibility;
-        newComment.happy = $scope.newCommentHappy;
+        newComment.visibility=$scope.newComment.visibility;
+        newComment.happy = $scope.newComment.happy;
 
-        console.log($scope.newCommentText);
-        console.log(newComment.id);
-        console.log(newComment.owner);
-        console.log(newComment.visibility);
-
-        if ($scope.newCommentHappy.assessment>0) {
+        if ($scope.newComment.happy.assessment>0) {
             var data = {id: $scope.employee.id, _assessed_by_id: $rootScope.currentUser.employee.id, _assessment: newComment.happy.assessment, _content:newComment.content, _visibility: newComment.visibility};
             Engagement.addNew(data, function(response) {
                 newComment.id = response.comment.id;
@@ -1590,14 +1574,11 @@ angular.module('tdb.controllers', [])
             data.id = $scope.employeeId;
             EmployeeComments.save(data, function (response) {
                 newComment.id = response.id;
-                //newComment.visibility = response.comment.visibility;
             });
         };
         $scope.comments.push(newComment);
         $scope.originalComments.push(angular.copy(newComment));
-        $scope.newCommentText = "";
-        $scope.newCommentVisibility = 3;
-        $scope.newCommentHappy = {assessment: 0};
+        $scope.newComment = getBlankComment();
     }
 
     $scope.addSubComment = function(comment) {
@@ -1607,15 +1588,11 @@ angular.module('tdb.controllers', [])
         newComment.modified_date = new Date().toJSON();
         newComment.owner = User.get();
 
-        comment.subcomments.push(newComment);
-        var index = $scope.comments.indexOf(comment);
-        $scope.originalComments[index].subcomments.push(angular.copy(newComment));
-
         var data = {id: newComment.id, _model_name: "comment", _object_id: comment.id,_content: newComment.content};
 
         data.id = $scope.employeeId;
         EmployeeComments.save(data, function(response) {
-            newComment.id = response.id;
+            comment.subcomments.push(response);
             comment.newSubCommentText = "";
         });
     }
@@ -1759,15 +1736,11 @@ angular.module('tdb.controllers', [])
         newComment.modified_date = new Date().toJSON();
         newComment.owner = User.get();
 
-        comment.subcomments.push(newComment);
-        var index = $scope.comments.indexOf(comment);
-        $scope.originalComments[index].subcomments.push(angular.copy(newComment));
-
         var data = {id: newComment.id, _model_name: "comment", _object_id: comment.id,_content: newComment.content};
 
         data.id = comment.associated_object.id;
         EmployeeComments.save(data, function(response) {
-            newComment.id = response.id;
+            comment.subcomments.push(response);
             comment.newSubCommentText = "";
         });
     }
@@ -1911,15 +1884,159 @@ angular.module('tdb.controllers', [])
         newComment.modified_date = new Date().toJSON();
         newComment.owner = User.get();
 
-        comment.subcomments.push(newComment);
+        var data = {id: newComment.id, _model_name: "comment", _object_id: comment.id,_content: newComment.content};
+
+        data.id = comment.associated_object.id;
+        EmployeeComments.save(data, function(response) {
+            comment.subcomments.push(response);
+            comment.newSubCommentText = "";
+        });
+    }
+
+    $scope.deleteComment = function(comment) {
+        if ($window.confirm('Are you sure you want to delete this comment?')) {
+            var data = {id: comment.id};
+            var index = $scope.comments.indexOf(comment);
+            var deleteSuccess = function() {
+                $scope.comments.splice(index, 1);
+            };
+
+            Comment.remove(data, function() {
+                    deleteSuccess();
+                });
+        }
+    };
+
+    $scope.deleteSubComment = function(comment, subcomment) {
+        if ($window.confirm('Are you sure you want to delete this comment?')) {
+            var data = {id: subcomment.id};
+            var comment_index = $scope.comments.indexOf(comment);
+            var subcomment_index = $scope.comments[comment_index].subcomments.indexOf(subcomment);
+            var deleteSuccess = function() {
+                $scope.comments[comment_index].subcomments.splice(subcomment_index, 1);
+                $scope.originalComments[comment_index].subcomments.splice(subcomment_index, 1);
+            };
+
+            Comment.remove(data, function() {
+                    deleteSuccess();
+                });
+        }
+    };
+}])
+
+.controller('CoachCommentsCtrl', ['$scope', '$rootScope', '$filter', '$routeParams', '$window', 'Comments', 'EmployeeComments', 'SubComments','Comment', 'User',function($scope, $rootScope, $filter, $routeParams, $window, Comments, EmployeeComments, SubComments, Comment, User) {
+     $scope.newCommentText = "";
+     $scope.showPeopleTeamVisibility = false;
+     User.get(
+        function(data) {
+            $scope.coach= data.employee;
+            $scope.coachId = $scope.coach.id;
+
+            Comments.getCoachComments($scope.coachId, function(data) {
+                if ($rootScope.currentUser.can_coach_employees || $rootScope.currentUser.can_view_company_dashboard) {
+                    $scope.newCommentVisibility = 2;
+                    $scope.showPeopleTeamVisibility = true;
+                }
+                $scope.comments = data;
+                $scope.originalComments = angular.copy($scope.comments);
+                angular.forEach($scope.comments, function(comment) {
+                    var index = $scope.comments.indexOf(comment);
+                    var original_comment = $scope.originalComments[index];
+
+                    comment.subcomments = [];
+                    original_comment.subcomments = [];
+                    SubComments.query({ id: comment.id }).$promise.then(function(response) {
+                            comment.subcomments = response;
+                            original_comment.subcomments = angular.copy(comment.subcomments);
+                        }
+                    );
+                    comment.newSubCommentText = "";
+                    comment.expandTextArea = false;
+                    comment.expandChildTextArea = false;
+
+                });
+
+                $scope.CreateHeader = function(date) {
+                    date=$filter('date')(date,"MM/dd/yyyy");
+                    showHeader = (date!=$scope.currentGroup);
+                    $scope.currentGroup = date;
+                    return showHeader;
+                }
+            });
+
+        }
+    );
+    $scope.toggleCommentTextExpander = function (comment) {
+        $window.onclick = function (event) {
+            if (!$scope.newCommentText) {
+                var clickedElement = event.target;
+                if (!clickedElement) return;
+                var elementClasses = clickedElement.classList;
+                var clickedOnTextArea = elementClasses.contains('text');
+                if (!clickedOnTextArea) {
+                    comment.expandTextArea=false;
+                    $scope.$apply();
+                }
+            }
+        };
+    };
+    $scope.toggleChildCommentTextExpander = function (comment) {
+        $window.onclick = function (event) {
+            if (!comment.newSubCommentText) {
+                var clickedElement = event.target;
+                if (!clickedElement) return;
+                var elementClasses = clickedElement.classList;
+                var clickedOnTextArea = elementClasses.contains('text');
+                if (!clickedOnTextArea) {
+                    comment.expandChildTextArea=false;
+                    $scope.$apply();
+                }
+            }
+        };
+    };
+
+    $scope.saveComment = function(comment) {
         var index = $scope.comments.indexOf(comment);
-        $scope.originalComments[index].subcomments.push(angular.copy(newComment));
+        var data = {id: comment.id, _content: comment.content, _visibility: comment.visibility};
+        Comment.update(data, function() {
+            $scope.originalComments[index].content = comment.content;
+            $scope.originalComments[index].visibility = comment.visibility;
+        });
+    }
+
+    $scope.cancelEditComment = function(comment) {
+        var index = $scope.comments.indexOf(comment);
+        comment.content = $scope.originalComments[index].content;
+    }
+
+     $scope.saveSubComment = function(subcomment, comment) {
+        var parent_index = $scope.comments.indexOf(comment);
+        var subcomment_index = $scope.comments[parent_index].subcomments.indexOf(subcomment);
+        var data = {id: subcomment.id, _content: subcomment.content};
+
+        EmployeeComment.update(data, function() {
+            $scope.originalComments[parent_index].subcomments[subcomment_index].content = subcomment.content;
+        });
+    }
+
+    $scope.cancelEditSubComment = function(subcomment, comment) {
+        var parent_index = $scope.comments.indexOf(comment);
+        var subcomment_index = $scope.comments[parent_index].subcomments.indexOf(subcomment);
+        subcomment.content = $scope.originalComments[parent_index].subcomments[subcomment_index].content;
+    }
+
+    $scope.addSubComment = function(comment) {
+        var newComment = {};
+        newComment.id = -1;
+        newComment.content = comment.newSubCommentText;
+        newComment.modified_date = new Date().toJSON();
+        newComment.owner = User.get();
 
         var data = {id: newComment.id, _model_name: "comment", _object_id: comment.id,_content: newComment.content};
 
         data.id = comment.associated_object.id;
         EmployeeComments.save(data, function(response) {
-            newComment.id = response.id;
+            comment.subcomments.push(response);
             comment.newSubCommentText = "";
         });
     }

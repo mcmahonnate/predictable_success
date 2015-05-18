@@ -1,0 +1,14 @@
+<div class="container narrow-gutter">
+    <div class="row">
+        <div ng-include="'/static/angular/partials/_widgets/search.html'"></div>
+        <h1>Coaching</h1>
+        <div class="col col-sm-5 col-md-4 col-lg-5">
+            <div ng-include="'/static/angular/partials/_widgets/chart-talent-portfolio.html'"></div>
+            <div ng-init="view='coach-view'" ng-include="'/static/angular/partials/_widgets/members.html'"></div>
+        </div>
+        <div class="col-sm-7 col-md-8 col-lg-7">
+            <div ng-include="'/static/angular/partials/_widgets/todos.html'"></div>
+            <div ng-include="'/static/angular/partials/_widgets/comments.html'" ng-init="view='team-view'" ng-controller="CoachCommentsCtrl"></div>
+        </div>
+      </div>
+</div>

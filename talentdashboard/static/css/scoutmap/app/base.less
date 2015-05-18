@@ -1,19 +1,48 @@
+/* Base style rules for the Scoutmap
+
+** Foundation ==================================== */   
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font:inherit;font-size:100%;vertical-align:baseline}
+html{line-height:1}
+ol,ul{list-style:none}
+table{border-collapse:collapse;border-spacing:0}
+caption,th,td{text-align:left;font-weight:normal;vertical-align:middle}
+q,blockquote{quotes:none}
+q:before,q:after,blockquote:before,blockquote:after{content:"";content:none}
+a img{border:none}
+article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section,summary{display:block}
+
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 13.5px;
+    line-height: 18px;
+}
+a {color: #1a7f7e;}
+a:hover {color: #135d5c; text-decoration: none;}
+p {line-height: 18px;font-size: 14px;}
+
+strong {font-weight: bold;}
+
+/* Layout ==================================== */
 .container {
 	margin-top:40px;
 	padding-left: 70px;
 }
-h1 {
-	margin: 0 0 20px;
-  	font-size: 30px;
-}  	
 
-a {
-	color: #1a7f7e;
+/* Typeography ==================================== */
+h1,h2,h3 {
+    font-family: 'Open Sans', sans-serif;
 }
-a:hover {
-	color: #135d5c;
-	text-decoration: none;
+h1 {
+    margin: 0 0 25px;
+    font-size: 30px;
+} 
+h2 {
+    font-size: 26px;
 }
+h3 {
+    font-size: 18px;
+}
+
 
 .caret {
  	border-left: 6px solid transparent;
@@ -21,11 +50,108 @@ a:hover {
   	border-top: 6px solid #000000;
 }
 
+ul, ol {
+	padding: 0;
+}
 
 
-.download-report-link {
-	margin: 20px 10px 0;
-	color: #1a7f7e;
+
+/* Popover Edit/Delete ==================================== */
+.popover-items {
+    background: #fff;
+    border: 1px solid #ccc;
+    width: 100px;
+    z-index: 9;
+    left: 8px;
+    top: 17px;
+    border-radius: 3px;
+    box-shadow: 3px 3px 5px -3px #444;
+    position: absolute;
+    padding: 10px;
+}
+.popover-items-wide {
+    width: 175px;
+} 
+.popover-item {
+    list-style: none;
+    color: #777;
+    cursor: pointer;
+
+    .fa {
+        width: 16px;
+    }
+}
+.show-popover {
+    color: #ccc;
+    cursor: pointer;
+    -webkit-transition: -webkit-transform .3s ease-in-out;
+    -ms-transition: -ms-transform .3s ease-in-out;
+    transition: transform .3s ease-in-out;      
+}
+.show-popover:hover {
+    color: #1a7f7e;
+    transform:rotate(90deg);
+    -ms-transform:rotate(90deg);
+    -webkit-transform:rotate(90deg);        
+}
+
+.dropdown-menu li a {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
+    color: #222;
+}
+.dropdown-menu li a:hover {
+    background: #f1f1f1;
+}
+
+
+/* Transitions ============================================= */
+.masonry,
+.masonry li { /* apply before masonry add class */
+    position: absolute; /* important to add it before enter animation start */
+    
+    -webkit-transition-duration: .7s;
+    transition-duration: .7s;
+    
+    -webkit-transition-property: all;
+    transition-property: all;
+}
+
+.masonry .masonry-enter { /* limit animated properties for entering elements */
+    -webkit-transition-property: -webkit-transform, opacity;
+    transition-property: transform, opacity;
+}
+
+.masonry-enter,
+.masonry-leave.masonry-leave-active {
+    opacity: 0;
+    -webkit-transform: scale(0.1);
+    transform: scale(0.1);
+}
+
+.masonry-leave,
+.masonry-enter.masonry-enter-active {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+}
+
+
+
+
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0,0,0,.5);
+    -webkit-box-shadow: 0 0 1px rgba(0,0,0,.5);
 }
 
 
@@ -59,12 +185,23 @@ textarea.expandable:focus {
   padding: 30px;
 }
 
+.radio + .radio, .checkbox + .checkbox {
+ 	margin-top: 5px;
+}
+
 .nav-tabs {
     margin: 45px 0 0;
 
     .nav {
         cursor: pointer;
     }
+}
+.nav-tabs > li.active > a {
+    font-weight: bold;
+}
+
+.dropdown a {
+	cursor: pointer;
 }
 
 .dropdown-menu .divider {

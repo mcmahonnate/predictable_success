@@ -1,4 +1,4 @@
-<h2 class="panel-title">PvP</h2>   
+<h2 class="panel-title">Growth</h2>
 <article ng-show="currentUser.employee.id!=employee.id">
     
       <div ng-controller="EmployeePvpEvaluationsCtrl">
@@ -38,8 +38,8 @@
                  <line class="grid-line" stroke="#ffffff" stroke-width="2" x1="27" y1="82" x2="187" y2="82"/>
                  <line class="grid-line" stroke="#ffffff" stroke-width="1" x1="27" y1="122" x2="187" y2="122"/>
 
-                 <text class="potential-lablel" fill="rgb(139, 139, 139)" stroke="rgb(139, 139, 139)" stroke-width="0" x="12" y="90" font-size="12" font-family="'Proxima Nova', Helvetica, sans-serif" text-anchor="middle" xml:space="preserve" transform="rotate(-90 12 83.5)">POTENTIAL</text>
-                 <text class="performance-label" fill="rgb(139, 139, 139)" stroke="rgb(139, 139, 139)" stroke-width="0" x="107" y="175" font-size="12" font-family="'Proxima Nova', Helvetica, sans-serif" text-anchor="middle" xml:space="preserve">PERFORMANCE - {{ pvp.evaluation_round.date | date:'MM/yyyy' }}</text>
+                 <text class="potential-lablel" fill="rgb(139, 139, 139)" stroke="rgb(139, 139, 139)" stroke-width="0" x="12" y="90" font-size="12" font-family="'Proxima Nova', Helvetica, sans-serif" text-anchor="middle" xml:space="preserve" transform="rotate(-90 12 83.5)">Known Potential</text>
+                 <text class="performance-label" fill="rgb(139, 139, 139)" stroke="rgb(139, 139, 139)" stroke-width="0" x="107" y="175" font-size="12" font-family="'Proxima Nova', Helvetica, sans-serif" text-anchor="middle" xml:space="preserve">Contribution - {{ pvp.evaluation_round.date | date:'MM/yyyy' }}</text>
                </g>
               </svg>
                         </li>

@@ -1,31 +1,16 @@
-<div ng-include="'/static/angular/partials/_widgets/navigation.html'"></div>
-<div class="container narrow-gutter {in:salaryReport}" ng-if="currentUser.can_view_company_dashboard">    
+<div class="container narrow-gutter {in:salaryReport}" ng-if="currentUser.can_view_company_dashboard">
     <div class="row">
-        <div ng-controller="EmployeeListCtrl" ng-if="currentUser.can_view_company_dashboard" ng-class="{open: navQuery!=''}" class="search dropdown">
-            <div style="position:relative;">
-                <div class="glyphicon glyphicon-search search-icon"></div>
-                <input ng-click="toggleNavQuery()" class="search-input nav_query" ng-model="navQuery" type="text" placeholder="Search Employees..."/>
-            </div>
-            <ul class="dropdown-menu" ng-show="navQuery!=''" role="menu" aria-labelledby="dLabel">
-                <div ng-if="navQuery!=''">
-                    <li ng-repeat="employee in filteredEmployees = (employees |filter:{full_name:navQuery}:startsWith) | orderBy:'full_name'">
-                        <a class="dashboard" href="#/employees/{{employee.id}}"><img class="settings_menu" ng-src="{{employee.avatar_small}}" style="padding-right:10px;height:27px;vertical-align:middle"/>{{employee.full_name}}</a>
-                    </li>
-                    <li ng-show="!filteredEmployees.length" style="padding: 13px 20px;">No Results</li>
-                </div>
-            </ul>
-        </div>
+    <div ng-include="'/static/angular/partials/_widgets/search.html'"></div>
         <h1>{{customer.name}} Dashboard</h1>
         <div class="col col-sm-5 col-md-4 col-lg-5">
             <div ng-include="'/static/angular/partials/_widgets/chart-talent-portfolio.html'"></div> 
             <div ng-include="'/static/angular/partials/_widgets/talent-salary-totals.html'"></div> 
             <div ng-include="'/static/angular/partials/_widgets/salary-total.html'"></div> 
-            <div ng-include="'/static/angular/partials/_widgets/revenue-per-employee.html'"></div> 
+            <div ng-if="customer.show_kpi" ng-include="'/static/angular/partials/_widgets/revenue-per-employee.html'"></div>
         </div>
         <div class="col col-sm-7 col-md-8 col-lg-7">    
-            <div ng-include="'/static/angular/partials/_widgets/todos.html'"></div> 
+            <div ng-include="'/static/angular/partials/_widgets/todos.html'" ng-controller="MyToDoListCtrl"></div>
             <div ng-include="'/static/angular/partials/_widgets/comments.html'" ng-controller="DiscussionOverviewCtrl" ng-init="view='company-view'"></div>
         </div>
-    </div> 
-</div>       
-<div ng-include="'/static/angular/partials/_widgets/footer.html'"></div>
+    </div>
+</div>

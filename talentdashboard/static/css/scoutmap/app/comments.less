@@ -2,47 +2,38 @@
 	textarea {
 		height: 35px;
 	}
-	.visibility {
-		overflow: hidden;
-
-		h3, label {
-			float: left;
-			margin: 12px 0;
-		}
-		h3 {
-			margin-right: 20px;
-		}
-
-		label {
-			padding: 0 16px;
-		}
-	}
 	.expand {
 		height: 120px;
 	}
 }
 
-/* No Comments */
-.no-comments {
-	height: 600px;
-	color: #aaa;
-}
+.visibility {
+	overflow: hidden;
+	margin: 15px 0;
 
+	h3, label {
+		float: left;
+		margin: 5px 0;
+	}
+	h3 {
+		margin: 5px 20px 0 0;
+	}
 
-/* Popover Content */
-.comment-action-item {
-	list-style: none;
-	color: #777;
-
-	.fa {
-		width: 16px;
+	label {
+		padding: 0 16px;
 	}
 }
 
+/* No Comments */
+.no-comments {
+	color: #aaa;
+	margin-top: -15px;
+}
 
 
+/* Comments */
 .comments {
-	min-height: 900px;
+	min-height: 600px;
 
 	.panel-title {
 		margin-bottom: 20px; 
@@ -68,9 +59,9 @@
 		font-size: 13px;
 
 		@media only screen and (max-width : 1280px) {
-			display: block;
 		  	line-height: 16px;
 		  	margin: 1px 0px 18px;
+		  	white-space: nowrap;
 		}
 	}
 
@@ -78,25 +69,6 @@
 	.comment-actions {
 		position: relative;
 		color: #ccc;
-
-		ul {
-			position: absolute;
-		}
-	}
-
-
-
-	.show-comment-actions {
-		cursor: pointer;
-    	-webkit-transition: -webkit-transform .3s ease-in-out;
-    	-ms-transition: -ms-transform .3s ease-in-out;
-    	transition: transform .3s ease-in-out;		
-	}
-	.show-comment-actions:hover {
-		color: #1a7f7e;
-    	transform:rotate(90deg);
-    	-ms-transform:rotate(90deg);
-    	-webkit-transform:rotate(90deg);		
 	}
 
 	.comment-owner-avatar-container {
@@ -138,7 +110,7 @@
 		}
 
 		.comment-copy {
-  			margin: 15px 0 0;
+  			margin: 15px 0 5px;
 		}
 
 		.comment-associated-avatar {
@@ -152,9 +124,16 @@
 		.comment-editor {
 			position: relative;
 			background: #fff;
+			margin-bottom: 35px;
 		}
+
 	}
 
+	.edit-textarea {
+		margin: 12px 0 8px;
+		width: 95%;
+	}
+	
 
 	ul.feed-actions {
 	    list-style: none;
@@ -178,18 +157,15 @@
 	    color: #333;
 	}
 
-
-
 	.comment-replies {
-		margin: 5px 60px 0 60px;
+		margin: 10px 60px 0 60px;
 		overflow: hidden;
 		
 
 		.comment-reply {
 			margin-bottom: 2px;
-			padding: 10px;
+			padding: 15px 15px 20px;
 			background-color: #efefef;
-			overflow: hidden;
 
 			.timestamp {
 				@media only screen and (max-width : 1280px) {
@@ -238,10 +214,6 @@
 				@media only screen and (max-width : 1280px) {
 					width: 70%;
 				}
-			}
-
-			textarea:focus {
-				height: 200px;
 			}
 		}
 		.comment-reply-name {

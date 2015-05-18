@@ -13,7 +13,7 @@ HAPPINESS_CHOICES = (
 
 class Happiness(models.Model):
     assessed_by = models.ForeignKey(Employee, related_name='+')
-    assessed_date = models.DateField(auto_now_add = True)
+    assessed_date = models.DateTimeField(auto_now_add = True)
     employee = models.ForeignKey(Employee, related_name='happys')
     assessment = models.IntegerField(choices=HAPPINESS_CHOICES)
     comment = models.ForeignKey(Comment, null=True, blank=True)

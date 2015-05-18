@@ -1,21 +1,51 @@
 header{
-	background-color:#3e474f;
+	background-color:#323940;
 	position:relative;
 	width: 70px;
   	height: 100%;
 }
-header .inner{padding:0 20px}
-header .inner>span{text-transform:uppercase;display:block;padding:12px 0}
-header .inner .btn{background-color:#434343}
-header .inner .btn:hover{background-color:#202020}
-header {float:right}
-header .float-fix span{display:block;padding:12px;color:#444;text-transform:uppercase;font-weight:700;font-size:1.2em;text-shadow:1px 1px #626262}
+.nav-item-active{
+	background-color: #282f34;
+}
 
+.account-menu {
+	position:absolute; 
+	top:10px; 
+	right:5px;
 
+	.small-headshot {
+		width:30px;
+		border-radius: 90px;
+	}
 
+	.account-action-items {
+		background: #fff;
+	  	border: 1px solid #ccc;
+	  	padding: 10px;
+	  	width: 100px;
+	  	z-index: 9;
+	  	left: -100px;
+	  	border-radius: 3px;
+	  	box-shadow: 3px 3px 5px -3px #444444;
+		position: absolute;
+	  	top: -8px; 
+	  	display: none; 	
+	}
 
+	.fa {
+		color: #777;
+	}
+}
+.account-menu:hover, .account-action-items:hover {
+	.account-action-items {
+		display: block;
+	}
+}
+
+/* Navigation Logo */
 .logo-container {
 	width: 70px;
+	height: 70px;
 	background-color: #2cb28b;
 
 	.logo {
@@ -34,23 +64,33 @@ header .float-fix span{display:block;padding:12px;color:#444;text-transform:uppe
 
 
 
+
+
+/* Sub navigation */
 .subnav{
 	width: 280px;
   	top: 70px;
   	position: absolute;
   	left: 70px;
-  	background: #303941;
+  	background: #282f34;
   	text-align: left;
   	box-shadow: 7px 3px 20px -4px #555;
+  	padding-bottom: 15px;
 }
 .subnav-reports {
 	top: 136px;
 }
+.subnav-settings {
+	top: 202px;
+}
+.subnav-search {
+	top: 268px;
+}
 
 
-.selection-title {
+.subnav-title {
 	color: #fff;
-	padding: 5px 15px;
+	padding: 5px 15px 10px;
 	font-size: 20px;
 	margin: 15px 15px 0;
 	border-radius: 5px;
@@ -60,9 +100,19 @@ header .float-fix span{display:block;padding:12px;color:#444;text-transform:uppe
 	}
 }
 
-.menu-item-active{
-	background-color: #303941;
+/* Search */
+.subnav-search-input {
+	padding: 0 30px 10px;
 }
+.subnav .search-results {
+	margin-top: 10px;
+  	height: 200px;
+  	overflow: scroll;
+}
+.subnav .search-result {
+	margin: 0;
+}
+
 
 /*== BRANDING ===================================================== */
 .customer-name {
@@ -79,58 +129,36 @@ header .float-fix span{display:block;padding:12px;color:#444;text-transform:uppe
 }
 
 
-/*== SEARCH ===================================================== */
-.search {
-	display: block; 
-	color: #cbcbcb; 
-	font-weight: 700; 
-	padding: 7px 145px 6px 12px;
-	font-size: 16px; 
-	width:325px; 
-	float:right;
-
-	.search-icon {
-		position: absolute;
-		padding: 5px 10px;
-		pointer-events: none;
-	}
-	.search-input {
-		padding-left: 34px;
-		width: 290px;
-		background-color:#2a2a2a;
-		height:32px;
-		color:#cbcbcb;
-	}
-}
-
-
 /*== NAVIGATION ===================================================== */
 .nav-item {
   padding: 10px 15px;
   cursor: pointer;
   text-align: center;
 }
-.nav-item .fa, .nav-item .glyphicon {
+.nav-item .nav-item-icon {
   color: #ccc;
   font-size: 34px;
   margin: 6px 2px;
   opacity: .8;
 }
-.nav-item .fa:hover {
+.nav-item .nav-item-icon:hover {
 	opacity: 1;
 	color: #fff;
 }
 
-.talent-group li {
+.talent-groups li {
 	overflow: hidden;
+
+	a{
+		padding: 8px 12px;
+	}
+	span {
+		padding: 3px 15px;
+  		display: inline-block;
+	}
 }
 
 
-#selection-list{background-color: #303941;border-radius:3px 0 3px 3px;z-index:2}
-#selection-list .group{border-top:solid 1px #6e6e6e;margin:10px 0 0}
-#selection-list .group>span{color:#5d5d5d;text-shadow:1px 1px #878787;display:block;padding:6px 10px}
-#selection-list .group:last-child{padding-bottom:0}
-#selection-list .group:first-child{margin-top:0;border-top:none}
 .subnav a{
 	text-transform:none;
 	display:block;
@@ -143,8 +171,7 @@ header .float-fix span{display:block;padding:12px;color:#444;text-transform:uppe
 	transition:background-color 0.2s ease-out;
 	margin: 0 20px;
 }
-.subnav a:hover{background-color:#56616a;border-radius: 3px}
-#selection-list #add-new-dashboard{background-color:#686868;text-transform:uppercase;color:#c8c8c8;display:block;text-align:center;font-weight:700;padding:0;border-radius:0 0 3px 3px}
-#selection-list #add-new-dashboard span{position:relative;display:inline-block;padding:20px 0 20px 20px}
-#selection-list #add-new-dashboard span:before{top:19px;left:0;content:'';display:block;position:absolute;width:16px;height:16px;background-position:0 -2186px}
-#selection-list #add-new-dashboard:hover{background-color:#3a3a3a}
+.subnav a:hover{
+	background-color:#56616a;
+	border-radius: 3px;
+}

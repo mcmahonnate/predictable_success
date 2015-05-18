@@ -1,22 +1,22 @@
-<div ng-include="'/static/angular/partials/_widgets/navigation.html'"></div>
-<div ng-if="employee.display" class="container narrow-gutter employee-view" ng-class="{in:employee}">   
+<div ng-if="employee.display" class="container narrow-gutter employee-view" ng-class="{in:employee}">
     <div class="row">
         <div class="col-sm-5 col-md-5 col-lg-5">
             <div class="panel">
                 <div class="large-avatar-container">
                     <img ng-src="{{ employee.avatar }}" class="large-headshot" />  
-                    <div rel="tooltip" data-toggle="tooltip" data-placement="top" data-original-title="Default tooltip">
-                        <span title="{{evaluation.talent_category}}" class="segment segment-large user-segment-background-color-{{employee.talent_category}}"></span>
-                        <span class="happiness" ng-class="{'veryhappy': employee.happiness==5,'happy': employee.happiness==4,'indifferent': employee.happiness==3,'unhappy': employee.happiness==2,'veryunhappy': employee.happiness==1}"></span>
+                    <div class="employee-attribute employee-attribute-large" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{employee.current_talent_category}}">
+                        <span class="segment employee-segment-background-color-{{employee.talent_category}}"></span>
                     </div>
+                    <div class="employee-attribute employee-attribute-large employee-happiness-large" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{employee.current_talent_category}}">
+                        <span class="employee-happiness-background-color-{{employee.happiness}}" ng-class="{'veryhappy': employee.happiness==5,'happy': employee.happiness==4,'indifferent': employee.happiness==3,'unhappy': employee.happiness==2,'veryunhappy': employee.happiness==1}"></span>
+                    </div> 
                 </div>   
                 <h1 class="centered">{{employee.full_name}}</h1> 
                 <ul class="nav nav-tabs" ng-init="tab=1">
                     <li class="nav" ng-class="{active: tab==1}"><a ng-click="tab = 1">Bio</a></li>
-                    <li class="nav" ng-class="{active: tab==2}"><a ng-click="tab = 2">PvP</a></li>
+                    <li class="nav" ng-show="currentUser.employee.id!=employee.id" ng-class="{active: tab==2}"><a ng-click="tab = 2">Growth</a></li>
                     <li class="nav" ng-class="{active: tab==3}"><a ng-click="tab = 3">Happiness</a></li>
                     <li class="nav" ng-class="{active: tab==4}"><a ng-click="tab = 4">Comp</a></li>
-                    <li class="nav" ng-class="{active: tab==5}"><a ng-click="tab = 5">Tasks</a></li>
                 </ul>
                 <div class="panel-body">
                     <div class="tab-content">
@@ -32,24 +32,20 @@
                         <div class="tab-pane fade in active" ng-show="tab == 4">
                             <div ng-include="'/static/angular/partials/_widgets/employee-compensation.html'" ng-controller="EmployeeCompSummariesCtrl"></div>
                         </div>
-                        <div class="tab-pane fade in active" ng-show="tab == 5">
-                            <div ng-include="'/static/angular/partials/_widgets/tasks.html'" ng-controller="EmployeeCompSummariesCtrl"></div>
-                        </div>
                     </div>
                 </div>
             </div>    
         </div>    
-        <div class="col-sm-7 col-md-7 col-lg-7" ng-controller="EmployeeCommentsCtrl" ng-init="view='employee-view'">  
-            <div ng-include="'/static/angular/partials/_widgets/add-comment.html'"></div>
-            <div ng-include="'/static/angular/partials/_widgets/comments.html'"></div>            
+        <div class="col-sm-7 col-md-7 col-lg-7">  
+            <div ng-include="'/static/angular/partials/_widgets/todos.html'" ng-controller="EmployeeToDoListCtrl"></div> 
+            <div ng-include="'/static/angular/partials/_widgets/add-todo.html'" class="ng-hide"></div>
+            <div ng-controller="EmployeeCommentsCtrl" ng-init="view='employee-view'">
+                <div ng-include="'/static/angular/partials/_widgets/add-comment.html'"></div>
+                <div ng-include="'/static/angular/partials/_widgets/comments.html'"></div>      
+            </div>          
         </div>
     </div>
 </div>        
-
-
-
-
-
 
 <div get-popup-position ng-show="addEngagement">
     <div style="width: 160px;">
@@ -69,4 +65,3 @@
 <modal-employee employee='employee' leadership='leadership' employees='employees' teams='teams' show='modalEmployeeShown'></modal-employee>
 <modal-happy employee="employee" happys='happys' comments='comments' show='modalHappyShown' width='492px'></modal-happy>
 <modal-send-survey employee="employee" show='modalSurveyShown' from='currentUser' subject='customer.survey_email_subject' body='customer.survey_email_body' width='492px'></modal-send-survey>
-<div ng-include="'/static/angular/partials/_widgets/footer.html'"></div>

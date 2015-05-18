@@ -1,7 +1,5 @@
 'use strict'
 
-google.load('visualization', '1', {packages: ['corechart','annotationchart']});
-
 angular.module('tdb.directives', [])
 
 .directive('ngChart', function () {
@@ -60,9 +58,9 @@ angular.module('tdb.directives', [])
                     data.addRow(row);
                 });
                 var options = {
-                    vAxes: {0: {format: '#,###', textStyle:{color: '#fff'}, titleTextStyle:{color: '#fff'}}},
+                    vAxes: {0: {format: '#,###', textStyle:{color: '#2a2a2a'}, titleTextStyle:{color: '#2a2a2a'}}},
                     vAxis: { ticks: [0, 1,2,3,4,5] },
-                    hAxis: { format: 'MMM d, y', textStyle:{color: '#fff'}, titleTextStyle:{color: '#fff'}},
+                    hAxis: { format: 'MMM d, y', textStyle:{color: '#2a2a2a'}, titleTextStyle:{color: '#2a2a2a'}, showTextEvery: 2},
                     series: {
                         0:{ type: "line", targetAxisIndex: 0, pointSize: 5 },
                         1:{ type: "line", targetAxisIndex: 0,color: '#2a2a2a',lineWidth:0, pointSize: 0}
@@ -75,8 +73,8 @@ angular.module('tdb.directives', [])
                     },
 
                     legend: {position: 'none'},
-                    backgroundColor: '#2a2a2a',
-                    chartArea:{top:5, left: 48, height:'80%'}
+                    backgroundColor: '#fff',
+                    chartArea:{top:15, left: 28, height:'80%'}
                 };
 
                 var chart = new google.visualization.ComboChart(element[0]);
@@ -173,9 +171,9 @@ angular.module('tdb.directives', [])
         formatter.format(table, 4);
 
         var options = {
-          hAxis: {textStyle: {color: 'white'}},
-          vAxis: {textStyle: {color: 'white'}, format: '$#,###'},
-          backgroundColor: '#2a2a2a',
+          hAxis: {textStyle: {color: '#2a2a2a'}},
+          vAxis: {textStyle: {color: '#2a2a2a'}, format: '$#,###'},
+          backgroundColor: '#fff',
           legend: {position: 'none'},
           chartArea: {top: 10},
           isStacked: true,
@@ -189,7 +187,7 @@ angular.module('tdb.directives', [])
     };
 })
 
-.directive('talentCategoryChart', ['$location', 'TalentCategoryColors', function($location, TalentCategoryColors) {
+.directive('talentCategoryChart', ['$location', 'TalentCategories', function($location, TalentCategories) {
     return function(scope, element, attrs){
         scope.$watch("talentCategoryReport", function() {
             if(scope.talentCategoryReport) {
@@ -201,18 +199,40 @@ angular.module('tdb.directives', [])
                 var wrongrole = scope.talentCategoryReport.categories[5];
                 var needschange = scope.talentCategoryReport.categories[6];
                 var toonew = scope.talentCategoryReport.categories[7];
-
-                var data = new Array(['PvP', 'Employees', 'Talent Category'],['Top', top, 1],['Strong', strong, 2],['Good', good, 3],['Low Pot', lackspotential, 4],['Low Perf', wrongrole, 5],['Poor', needschange, 6],['Too New', toonew, 7], ['No Data', nodata, 0]);
+                var chart_colors = [TalentCategories.categories[1].color,TalentCategories.categories[2].color,TalentCategories.categories[3].color,TalentCategories.categories[4].color,TalentCategories.categories[5].color,TalentCategories.categories[6].color,TalentCategories.categories[7].color,TalentCategories.categories[0].color];
+                var data = [['PvP', 'Employees', 'Talent Category'],
+                    [TalentCategories.categories[1].label, top, 1],
+                    [TalentCategories.categories[2].label, strong, 2],
+                    [TalentCategories.categories[3].label, good, 3],
+                    [TalentCategories.categories[4].label, lackspotential, 4],
+                    [TalentCategories.categories[5].label, wrongrole, 5],
+                    [TalentCategories.categories[6].label, needschange, 6],
+                    [TalentCategories.categories[7].label, toonew, 7],
+                    [TalentCategories.categories[0].label, nodata, 0]];
                 var table = new google.visualization.arrayToDataTable(data);
                 var options;
                 if (attrs.size=='small'){
                     options = {
                         pieSliceText: 'label',
-                        backgroundColor: '#2a2a2a',
-                        tooltip:{text:'value'},
-                        legend:{textStyle:{color: 'white'}},
-                        chartArea:{left:0,top:4,height: 205,width: 620},
-                        colors: TalentCategoryColors.pieChartColors
+                        pieSliceTextStyle: {fontSize:18},
+                        backgroundColor: '#fff',
+                        tooltip:{
+                            text:'value',
+                            isHtml: false
+                        },
+                        pieSliceBorderColor: '#efefef',
+                        tooltipFontSize:'18',
+                        legend:'none',
+                        width:'100%',
+                        height:'100%',
+                        chartArea:{
+                            left:"4px",
+                            top:"0",
+                            height: "100%",
+                            width: "96%"
+                        },
+                        pieHole: 0.3,
+                        colors: chart_colors
                     };                    
                 } else {
                     options = {
@@ -221,7 +241,7 @@ angular.module('tdb.directives', [])
                         tooltip:{text:'value'},
                         legend:{textStyle:{color: 'white'}},
                         chartArea:{left:40,top:40,width: 620},
-                        colors: TalentCategoryColors.pieChartColors
+                        colors: chart_colors
                     };
                 }
 
@@ -237,6 +257,8 @@ angular.module('tdb.directives', [])
                         }
                         if(scope.lead) {
                             $location.path('/evaluations/my-team/').search(search);
+                        } else if(scope.coach){
+                            $location.path('/evaluations/my-coachees/').search(search);
                         } else {
                             $location.path('/evaluations/current/').search(search);
                         }
@@ -250,9 +272,9 @@ angular.module('tdb.directives', [])
     };
 }])
 
-.directive('employeeTalentCategory', ['TalentCategoryColors', function(TalentCategoryColors) {
+.directive('employeeTalentCategory', ['TalentCategories', function(TalentCategories) {
     return function(scope, element, attrs){
-        var color = TalentCategoryColors.getColorByTalentCategory(attrs.employeeTalentCategory);
+        var color = TalentCategories.getColorByTalentCategory(attrs.employeeTalentCategory);
         var canvas=element[0];
         var ctx=canvas.getContext("2d");
         ctx.fillStyle=color;
@@ -447,13 +469,13 @@ angular.module('tdb.directives', [])
   }
 })
 
-.directive('pvpChart', ['TalentCategoryColors', function(TalentCategoryColors) {
+.directive('pvpChart', ['TalentCategories', function(TalentCategories) {
     return function(scope, element, attrs){
         var svg = element[0];
         var potential = parseInt(attrs.potential, 10);
         var performance = parseInt(attrs.performance, 10);
         var talentCategory = parseInt(attrs.talentCategory, 10);
-        var squareColor = TalentCategoryColors.getColorByTalentCategory(talentCategory);
+        var squareColor = TalentCategories.getColorByTalentCategory(talentCategory);
         angular.element(svg.querySelector('.pvp-square-' + performance + '-' + potential)).attr('fill', squareColor);
     };
 }])
@@ -643,7 +665,7 @@ angular.module('tdb.directives', [])
     };
 })
 
-.directive('pvpGraph', ['TalentCategories', 'TalentCategoryColors', function(TalentCategories, TalentCategoryColors) {
+.directive('pvpGraph', ['TalentCategories', function(TalentCategories) {
     return function(scope, element, attrs, controller) {
         var talentCategories = {
             "0": {
@@ -701,7 +723,7 @@ angular.module('tdb.directives', [])
                 var topLeft = {};
                 var bottomRight = {};
                 var talentCategory = talentCategories[potential][performance];
-                var color = TalentCategoryColors.getColorByTalentCategory(talentCategory);
+                var color = TalentCategories.getColorByTalentCategory(talentCategory);
                 topLeft.y = height - squareHeight - (((potential - 1) * squareHeight));
                 topLeft.x = ((performance - 1) * squareWidth);
                 bottomRight.y = topLeft.y + squareHeight;
@@ -834,6 +856,9 @@ angular.module('tdb.directives', [])
         });
         $scope.$watch("employee",function(newValue,OldValue,scope){
             if (newValue){
+                if (!$scope.employee.team) {
+                    $scope.employee.team = {name:''};
+                }
                 $scope.editEmployee = angular.copy($scope.employee);
                 $scope.preview=$scope.employee.avatar;
             }
@@ -881,7 +906,7 @@ angular.module('tdb.directives', [])
                 if ($scope.employee.email != $scope.editEmployee.email) {
                     data._email = $scope.editEmployee.email;
                 }
-                if ($scope.employee.team != $scope.editEmployee.team) {
+                if ($scope.employee.team.name != $scope.editEmployee.team.name) {
                     if ($scope.editEmployee.team.name.length===0) {
                         $scope.editEmployee.team.id=null;
                     }
@@ -904,7 +929,6 @@ angular.module('tdb.directives', [])
                     Employee.addNew(data, function(response){saveOtherInfo(response, true)});
                 }
             };
-
             saveEmployee($scope.employee.id);
         };
 
@@ -926,7 +950,7 @@ angular.module('tdb.directives', [])
             $scope.showDepartDatePicker = !$scope.showDepartDatePicker;
         }
     },
-    templateUrl: "/static/angular/partials/modal-employee.html"
+    templateUrl: "/static/angular/partials/_modals/edit-bio-modal.html"
   };
 }])
 
@@ -965,7 +989,7 @@ angular.module('tdb.directives', [])
         };
 
     },
-    templateUrl: "/static/angular/partials/modal-happy.html"
+    templateUrl: "/static/angular/partials/_modals/happy-modal.html"
   };
 }])
 
@@ -1014,7 +1038,7 @@ angular.module('tdb.directives', [])
         };
 
     },
-    templateUrl: "/static/angular/partials/modal-send-survey.html"
+    templateUrl: "/static/angular/partials/_modals/send-survey-modal.html"
   };
 }])
 
@@ -1221,4 +1245,58 @@ angular.module('tdb.directives', [])
       });
     }
   }
+})
+.directive("masonry", function () {
+    var NGREPEAT_SOURCE_RE = '<!-- ngRepeat: ((.*) in ((.*?)( track by (.*))?)) -->';
+    return {
+        compile: function(element, attrs) {
+            // auto add animation to brick element
+            var animation = attrs.ngAnimate || "'masonry'";
+            var $brick = element.children();
+            $brick.attr("ng-animate", animation);
+            
+            // generate item selector (exclude leaving items)
+            var type = $brick.prop('tagName');
+            var itemSelector = type+":not([class$='-leave-active'])";
+            
+            return function (scope, element, attrs) {
+                var options = angular.extend({
+                    itemSelector: itemSelector
+                }, scope.$eval(attrs.masonry));
+                
+                // try to infer model from ngRepeat
+                if (!options.model) { 
+                    var ngRepeatMatch = element.html().match(NGREPEAT_SOURCE_RE);
+                    if (ngRepeatMatch) {
+                        options.model = ngRepeatMatch[4];
+                    }
+                }
+                
+                // initial animation
+                element.addClass('masonry');
+                
+                // Wait inside directives to render
+                setTimeout(function () {
+                    element.masonry(options);
+                    
+                    element.on("$destroy", function () {
+                        element.masonry('destroy')
+                    });
+                    
+                    if (options.model) {
+                        scope.$apply(function() {
+                            scope.$watchCollection(options.model, function (_new, _old) {
+                                if(_new == _old) return;
+                                
+                                // Wait inside directives to render
+                                setTimeout(function () {
+                                    element.masonry("reload");
+                                });
+                            });
+                        });
+                    }
+                });
+            };
+        }
+    };
 });

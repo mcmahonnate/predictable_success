@@ -1,11 +1,7 @@
 <h2 class="panel-title">Happiness</h2>
-<div style="margin: 0 0 20px 0;" ng-if="happys.length>0">
-  <span style="padding:5px; display:inline-block; vertical-align:middle">{{employee.full_name}} was</span>
-  <span style="vertical-align:middle; padding-left: 1px;" class="t-size-x40" ng-class="{'veryhappy': employee.happiness==5,'happy': employee.happiness==4,'indifferent': employee.happiness==3,'unhappy': employee.happiness==2,'veryunhappy': employee.happiness==1}"></span>
-  <span style="padding:5px; display:inline-block; vertical-align:middle">as of {{ employee.happiness_date | date:'MM/dd/yyyy'}}</span>
-</div>
-<div ng-if="happys.length>0" style="margin: 10px">
-    <div style="text-shadow: none" happiness-chart data="{{happys}}" showComment="{{showComment}}" style="width: 90%;"></div>
+
+<div ng-if="happys.length>0" style="margin: 10px;">
+    <div happiness-chart data="{{happys}}" showComment="{{showComment}}" style="height: 80%;text-shadow: none"></div>
     <div ng-show="showComment" style="margin:20px 15px;padding:8px 0 8px 0px;display: block;width:365px;min-height:180px">
         <h2 style="font-size: 14px;color: #8b8b8b;border-bottom: 2px solid #8b8b8b">{{clicked_happy.comment.created_date | date:'MMM d, yyyy'}}</h2>
         <div style="display: block;width:365px;min-height: 48px;">
