@@ -76,6 +76,7 @@
         margin-top: 90px;
         font-weight: bold;
         letter-spacing: -1.5px;
+        line-height: 80px;
 
         @media only screen and (min-width : 1600px) {
             font-size: 80px;
@@ -89,6 +90,7 @@
         @media only screen and (max-width : 420px) {
             font-size: 34px;
             margin-top: 40px;
+            line-height: 24px;
         }    
     }
     .byline {
@@ -97,15 +99,17 @@
             margin: 25px auto 70px;
             text-shadow: 2px 2px #333;
             font-family: 'Open Sans', sans-serif;
+            line-height: 30px;
 
             @media only screen and (max-width : 420px) {
                 font-size: 16px;
                 padding: 0 30px;
+                line-height: 21px;
             } 
             @media only screen and (min-width : 1600px) {
                 font-size: 22px;
-                width: 900px;
                 text-shadow: 2px 2px 2px #444;
+                line-height: 30px;
             }
     }
 
@@ -157,10 +161,15 @@
     blockquote {
         padding: 10px 20px;
         margin: 0 auto;
-        font-size: 19px;
+        font-size: 16px;
         border-left: none;
-        max-width: 800px;
+        max-width: 600px;
         color: #ccc;
+
+        p {
+            line-height: 22px;
+            font-size: 16px;
+        }
 
         @media only screen and (max-width : 420px) {
             padding: 30px;
@@ -216,7 +225,15 @@
         color: #999;
         font-size: 18px;
         max-width: 940px;
-        margin: 30px auto;        
+        margin: 30px auto;  
+        line-height: 26px;    
+
+        @media only screen and (max-width : 420px) {
+            font-size: 15px;
+            max-width: 940px;
+            margin: 15px auto 0;
+            line-height: 20px; 
+        }  
     }
 
     h2 {
@@ -227,7 +244,8 @@
         line-height: 50px;
 
         @media only screen and (max-width : 420px) {
-            font-size: 34px;
+            font-size: 25px;
+            line-height: 32px;
         } 
     }
 
@@ -309,7 +327,7 @@
         margin: 0 0 10px;
     }
     p {
-        font-size: 16px;
+        font-size: 14px;
         margin-bottom: 25px;
         color: #777;
     }
