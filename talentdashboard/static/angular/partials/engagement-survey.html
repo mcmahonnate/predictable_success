@@ -1,23 +1,47 @@
 <meta name="viewport" content="initial-scale=1.0">
 <div class="container" ng-if="survey">
     <div style="margin:50px 0 30px 0" >
-        <div style="margin:20px 0;font-size:18px;font-family: Lato,Helvetica,Arial,sans-serif;color:white;">How professionally happy are you?</div>
-        <div style="width:200px;height:32px;margin: 5px 0px;font-size: 0;display:inline-block" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all">
-            <div class="rateVeryUnhappy ui-range-unit ui-corner-left" style="" ng-click="happy.assessment=1" ng-class="{rated: happy.assessment>=1, default: happy.assessment==0}"></div>
-            <div class="rateUnhappy ui-range-unit" ng-click="happy.assessment=2" ng-class="{rated:happy.assessment>=2, clear: (happy.assessment<2 && happy.assessment!=0), default: happy.assessment==0}"></div>
-            <div class="rateIndifferent ui-range-unit" ng-click="happy.assessment=3" ng-class="{rated: happy.assessment>=3, clear: (happy.assessment<3 && happy.assessment!=0), default: happy.assessment==0}"></div>
-            <div class="rateHappy ui-range-unit" ng-click="happy.assessment=4" ng-class="{rated: happy.assessment>=4, clear: (happy.assessment<4 && happy.assessment!=0), default: happy.assessment==0}"></div>
-            <div class="rateVeryHappy ui-range-unit ui-corner-right" ng-click="happy.assessment=5" ng-class="{rated: happy.assessment==5, clear: (happy.assessment<5 && happy.assessment!=0), default: happy.assessment==0}"></div>
-        </div>
-        <div style="display:inline-block;margin-left: 20px;">
-            <span ng-class="{veryunhappy: happy.assessment==1,unhappy: happy.assessment==2,indifferent: happy.assessment==3,happy: happy.assessment==4,veryhappy: happy.assessment==5}"></span>
+        <h3>Which of these statements best describes how happy you are at work?</h3>
+
+        <div class="radio-box">
+            <div class="radio">
+              <label>
+                <input type="radio" name="happyRating" ng-model="happy.assessment" id="happyRating5" value="5" checked>
+                Never been happier! I love coming to work every day
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="happyRating" ng-model="happy.assessment" id="happyRating4" value="4" checked>
+                I'm happy! I like my job, enjoy what I do, but could be happier.
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="happyRating" ng-model="happy.assessment" id="happyRating3" value="3" checked>
+                I am mixed: I am happy with some things but unhappy with others, so it's hard to answer this question.
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="happyRating" ng-model="happy.assessment" id="happyRating2" value="2" checked>
+                I'm unhappy, I'm not fired up about my job.
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="happyRating" ng-model="happy.assessment" id="happyRating1" value="1" checked>
+                I'm really unhappy. I don't look forward to coming to work.
+              </label>
+            </div>
         </div>
     </div>
-    <div class="comment-area" style="display: block;margin:20px 0;-webkit-border-radius: 2px;moz-border-radius: 3px;-ms-border-radius: 3px;-o-border-radius: 3px;border-radius: 3px;border: 1px solid #c1c1c1;background-color:white;">
-        <textarea class="text" ng-model="happy.comment.content" rows="1" cols="50" placeholder="What would get you to pure elation?" style="width:99%;height: 132px;font-size:18px;padding:5px;border: none;resize:vertical;"></textarea>
+
+    <div style="display: block;margin:20px 0;-webkit-border-radius: 2px;moz-border-radius: 3px;-ms-border-radius: 3px;-o-border-radius: 3px;border-radius: 3px;border: 1px solid #c1c1c1;background-color:white;">
+        <textarea class="text" ng-model="happy.comment.content" rows="1" cols="50" placeholder="Provide some context to your answer." style="width:99%;min-height: 132px;font-size:18px;padding:5px;border: none;resize:vertical;"></textarea>
     </div>
     <div style="margin-top:40px">
-        <button class='ng-modal-button' ng-click='save_engagement()'>Submit</button>
+        <button class='ng-modal-button' ng-disabled='!happy.comment.content.length>0 || !happy.assessment' ng-click='save_engagement()'>Submit</button>
     </div>
 </div>
 <div class="container" ng-if="(!survey.active || survey.completed) && !first_load">
@@ -58,8 +82,8 @@
       margin-left: auto;
       margin-right: auto;
     }
-    body {
-      background-color: #2C3E50;
+    .radio-box{
+        margin: 20px 0
     }
     @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
       .comment-area {
@@ -72,92 +96,6 @@
       }
     }
 
-    .ui-range-unit {
-        height: 100%;
-        display: inline-block;
-        border-color: lightgrey;
-        border-style: solid;
-        border-right-width: 1px;
-        border-left-width: 1px;
-        cursor: pointer;
-        -moz-transition: all 0.2s ease-out;
-        -o-transition: all 0.2s ease-out;
-        -ms-transition: all 0.2s ease-out;
-        -webkit-transition: all 0.2s ease-out;
-        transition: all 0.2s ease-out;
-    }
-    .rated {
-        border-color: white;
-        opacity: 1;
-    }
-    .rateVeryUnhappy {
-      width: 39px;
-      background-color: red;
-      left: -1px;
-    }
-    .rateUnhappy {
-      width: 38px;
-      background-color: orange;
-      left: 40px;
-    }
-    .rateIndifferent {
-      width: 38px;
-      background-color: yellow;
-      left: 80px;
-    }
-    .rateHappy {
-      width: 38px;
-      background-color: limegreen;
-      left: 120px;
-    }
-    .rateVeryHappy {
-      width: 39px;
-      background-color: green;
-      left: 160px;
-    }
-    .clear {
-        background-color: #fff;
-        border-color: none;
-    }
-    .default {
-      opacity: .4;
-      border-color: white;
-    }
-    .ui-widget-content {
-      border-color: lightgrey;
-      border-width: 2px;
-    }
-    .ui-slider .ui-slider-handle {
-      cursor: pointer;
-      height:38px;
-      width:38px;
-
-    }
-
-    .ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br {
-    border-bottom-right-radius: 15px;
-    }
-    .ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl {
-    border-bottom-left-radius: 15px;
-    }
-    .ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr {
-    border-top-right-radius: 15px;
-    }
-    .ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl {
-    border-top-left-radius: 15px;
-    }
-    .ui-slider-range {
-      background: #585858;
-      opacity: .9;
-      overflow: hidden;
-
-    }
-    .ui-slider-label {
-        position: absolute;
-        top: 16px;
-        color: white;
-        font-size: 13px;
-    }
     .ng-modal-button {
         font-size: 17px;
         font-family: Lato,Helvetica,Arial,sans-serif;
