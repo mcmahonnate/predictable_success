@@ -66,7 +66,7 @@
             <ul masonry="true">
                 <li data-category="{{employee.team.name}}" class="employee" on-filter index="{{$index}}" stale-days="90" ng-repeat="employee in filteredEmployees = (evaluations | filterEmployees:talentCategory:teamId:happy:days_since_happy:fact_finder:follow_thru:quick_start:implementor:vops[0]:vops[1]:vops[2]:vops[3]) | orderBy:['full_name']">
                     <div class="large-avatar-container">
-                        <div class="xlarge-headshot xlarge-headshot-active">
+                        <div class="xxxlarge-headshot xxxlarge-headshot-active">
                             <a href="#/employees/{{employee.id}}">
                                 <img ng-src="{{ employee.avatar }}" />
                             </a>  
