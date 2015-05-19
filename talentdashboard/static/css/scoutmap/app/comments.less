@@ -157,6 +157,11 @@
 	    color: #333;
 	}
 
+    .comment-reply-avatar-container {
+        float: left; 
+    }
+
+
 	.comment-replies {
 		margin: 10px 60px 0 60px;
 
@@ -170,22 +175,8 @@
 					display: block;
 				  	line-height: 16px;
 				  	padding-left: 12px;
-				  	margin: 1px 48px 15px;
+				  	margin: 1px 38px 15px;
 				}
-			}
-		}
-		.comment-reply-avatar-container {
-			display: block; 
-			float: left; 
-			width: 48px;
-
-			.comment-reply-avatar {
-				display: inline-block; 
-				margin-left: auto; 
-				margin-right: auto; 
-				height: 48px;
-				vertical-align:text-top;
-				border-radius: 90px;
 			}
 		}
 		.comment-reply-textarea {
@@ -217,10 +208,10 @@
 		.comment-reply-name {
 		  	color: #1a7f7e;
 		  	font-weight: bold;	
-		  	margin-left: 12px;		
+		  	margin-left: 1px;		
 		}
 		.comment-reply-copy {
-			margin-left: 60px;
+			margin-left: 52px;
 		}
 
 		button.comment {
@@ -265,6 +256,9 @@
 		      cursor: default;opacity:0.4;
 		  }
 	}
+}
 
-
+/* We don't need to show "about" avatars on employee pages */ 
+.employee-view .avatar-container {
+	display: none;
 }

@@ -217,7 +217,6 @@ angular.module('tdb.directives', [])
                         pieSliceTextStyle: {fontSize:18},
                         backgroundColor: '#fff',
                         tooltip:{
-                            text:'value',
                             isHtml: false
                         },
                         pieSliceBorderColor: '#efefef',
