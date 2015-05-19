@@ -855,6 +855,9 @@ angular.module('tdb.directives', [])
         });
         $scope.$watch("employee",function(newValue,OldValue,scope){
             if (newValue){
+                if (!$scope.employee.team) {
+                    $scope.employee.team = {name:''};
+                }
                 $scope.editEmployee = angular.copy($scope.employee);
                 $scope.preview=$scope.employee.avatar;
             }

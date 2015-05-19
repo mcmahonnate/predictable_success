@@ -15,6 +15,7 @@ class Customer(TenantMixin):
     show_mbti = models.BooleanField(default=False)
     show_coaches = models.BooleanField(default=False)
     show_timeline = models.BooleanField(default=False)
+    show_kpi = models.BooleanField(default=False)
     survey_email_subject = models.CharField(
         max_length=255,
         blank=True,
