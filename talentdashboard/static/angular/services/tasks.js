@@ -7,18 +7,27 @@ angular.module('tdb.services.tasks', ['ngResource'])
     .factory('Task', ['$resource', function ($resource) {
         var forEditing = function (task) {
             var copy = angular.copy(task);
-            return {
-                    id: copy.id,
-                    employee: copy.employee.id,
-                    assigned_to: copy.assigned_to ? copy.assigned_to.id : null,
-                    assigned_by: copy.assigned_by ? copy.assigned_by.id : null,
-                    due_date: copy.due_date,
-                    completed: copy.completed,
-                    description: copy.description
-                };
+            copy.employee = copy.employee.id;
+            copy.assigned_to = copy.assigned_to ? copy.assigned_to.id : null;
+            copy.assigned_by = copy.assigned_by ? copy.assigned_by.id : null;
+            return copy;
         };
 
-        var extraMethods = {
+        var forCreating = function (task) {
+            var copy = angular.copy(task);
+            copy.assigned_to = copy.assigned_to ? copy.assigned_to.id : null;
+            copy.assigned_by = copy.assigned_by ? copy.assigned_by.id : null;
+            return copy;
+        };
+
+        var actions = {
+            'save': {
+                method: 'POST',
+                transformRequest: [
+                    forCreating,
+                    angular.toJson
+                ]
+            },
             'update': {
                 method: 'PUT',
                 transformRequest: [
@@ -28,7 +37,7 @@ angular.module('tdb.services.tasks', ['ngResource'])
             }
         };
 
-        var Task = $resource('/api/v1/tasks/:id/', {id: '@id'}, extraMethods);
+        var Task = $resource('/api/v1/tasks/:id/', {id: '@id'}, actions);
 
         return Task;
     }])
