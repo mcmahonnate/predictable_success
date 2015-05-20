@@ -1,6 +1,6 @@
 angular.module('tdb.controllers.tasks', [])
 
-    .controller('CreateTaskCtrl', ['$scope', '$modalInstance', '$routeParams', 'Task', 'employeeId', function($scope, $modalInstance, $routeParams, Task, employeeId) {
+    .controller('CreateTaskCtrl', ['$scope', '$modalInstance', '$routeParams', 'Coach', 'Task', 'employeeId', function($scope, $modalInstance, $routeParams, Coach, Task, employeeId) {
         $scope.task = new Task(
             {
                 employee: employeeId,
@@ -9,6 +9,7 @@ angular.module('tdb.controllers.tasks', [])
                 due_date: null
             }
         );
+        $scope.coaches = Coach.query();
         $scope.save = function () {
             if(!$scope.task.description) return;
 
@@ -22,7 +23,7 @@ angular.module('tdb.controllers.tasks', [])
         }
     }])
 
-    .controller('EditTaskCtrl', ['$scope', '$modalInstance', 'Task', 'task', function($scope, $modalInstance, Task, task) {
+    .controller('EditTaskCtrl', ['$scope', '$modalInstance', 'Coach', 'Task', 'task', function($scope, $modalInstance, Coach, Task, task) {
         $scope.task = new Task(
             {
                 id: task.id,
@@ -34,6 +35,7 @@ angular.module('tdb.controllers.tasks', [])
                 description: task.description
             }
         );
+        $scope.coaches = Coach.query();
 
         $scope.save = function () {
             if(!$scope.task.description) return;
@@ -47,10 +49,21 @@ angular.module('tdb.controllers.tasks', [])
         }
     }])
 
-    .controller('EmployeeTaskListCtrl', ['$scope', '$routeParams', '$modal', 'Task', function ($scope, $routeParams, $modal, Task) {
-        var employee_id = $routeParams.id;
-        $scope.todos = Task.query({ employee_id: employee_id, completed: false });
-        $scope.done = Task.query({ employee_id: employee_id, completed: true });
+    .controller('TaskListCtrl', ['$scope', '$attrs', '$modal', 'Task', function ($scope, $attrs, $modal, Task) {
+        var employee_id = $scope.employee ? $scope.employee.id : null;
+        $scope.canAddNew = false;
+
+        if(employee_id) {
+            // Employee view
+            $scope.canAddNew = true;
+            $scope.todos = Task.query({ employee_id: employee_id, completed: false });
+            $scope.done = Task.query({ employee_id: employee_id, completed: true });
+        } else {
+            // "My" view
+            $scope.todos = Task.query({completed: false, filter: 'mine'});
+            $scope.done = Task.query({completed: true, filter: 'mine'});
+        }
+
         $scope.todoTab = 'todo';
         $scope.doneTab = 'done';
         $scope.activeTab = $scope.todoTab;
@@ -60,6 +73,7 @@ angular.module('tdb.controllers.tasks', [])
         };
 
         $scope.newTask = function() {
+            if(!$scope.canAddNew) return;
             var modalInstance = $modal.open({
                 animation: true,
                 templateUrl: '/static/angular/partials/_widgets/add-edit-task.html',
@@ -99,9 +113,18 @@ angular.module('tdb.controllers.tasks', [])
             removeItemFromList($scope.todos, task);
         };
 
-        $scope.completeTask = function(task) {
-            task.completed = true;
-            Task.update(task);
+        $scope.toggleCompleted = function(task) {
+            task.completed = !task.completed;
+            Task.update(new Task(
+            {
+                id: task.id,
+                employee: task.employee.id,
+                assigned_to: task.assigned_to ? task.assigned_to.id : null,
+                assigned_by: task.assigned_by ? task.assigned_by.id : null,
+                due_date: task.due_date,
+                completed: task.completed,
+                description: task.description
+            }));
         };
 
         var removeItemFromList = function(list, item) {

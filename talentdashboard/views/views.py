@@ -730,6 +730,9 @@ class MyTaskList(APIView):
 
 
 class TaskDetail(APIView):
+    def get_current_employee(self, request):
+        return Employee.objects.get_from_user(request.user)
+
     def get_object(self, pk):
         try:
             return Task.objects.get(pk=pk)
@@ -738,10 +741,19 @@ class TaskDetail(APIView):
 
     def get(self, request, pk=None):
         if pk is None:
-            employee_id = request.QUERY_PARAMS.get('employee_id', None)
-            completed = request.QUERY_PARAMS.get('completed', '').lower() == 'true'
-            tasks = Task.objects.filter(employee_id=employee_id).filter(completed=completed).all()
-            serializer = TaskSerializer(tasks, many=True)
+            tasks = Task.objects
+            if 'filter' in request.QUERY_PARAMS:
+                value = request.QUERY_PARAMS.get('filter')
+                if value == 'mine':
+                    current_employee = self.get_current_employee(request)
+                    tasks = tasks.filter(assigned_to=current_employee)
+            if 'completed' in request.QUERY_PARAMS:
+                completed = request.QUERY_PARAMS.get('completed', '').lower() == 'true'
+                tasks = tasks.filter(completed=completed)
+            if 'employee_id' in request.QUERY_PARAMS:
+                employee_id = request.QUERY_PARAMS.get('employee_id')
+                tasks = tasks.filter(employee_id=employee_id)
+            serializer = TaskSerializer(tasks.all(), many=True)
         else:
             task = self.get_object(pk)
             serializer = TaskSerializer(task)
@@ -754,7 +766,7 @@ class TaskDetail(APIView):
         if serializer.is_valid():
             task = serializer.save()
             if task.assigned_to is not None:
-                task.assigned_by = Employee.objects.get_from_user(request.user)
+                task.assigned_by = self.get_current_employee(request)
                 task.save()
                 self.notify(task)
             serializer = TaskSerializer(task)
@@ -794,6 +806,7 @@ class TaskDetail(APIView):
             message = task.assigned_by.full_name + ' just assigned this to you: \r\n' + task.description + '\r\n http://' + request.tenant.domain_url + '/#/employees/' + str(task.employee.id)
             mail_from = task.assigned_by.full_name + '<notify@dfrntlabs.com>'
             send_mail(subject, message, mail_from, [task.assigned_to.user.email], fail_silently=False)
+
 
 class EmployeeTaskList(APIView):
     def get(self, request, pk, format=None):

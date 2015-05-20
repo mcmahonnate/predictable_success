@@ -19,7 +19,7 @@
                 <div class="col-xs-2">
                     <button ng-click="editTask(task)">Edit</button>
                     <button ng-click="deleteTask(task)">Delete</button>
-                    <button ng-click="completeTask(task)">Mark Completed</button>
+                    <button ng-click="toggleCompleted(task)">Toggle Completed</button>
                     <a ng-href="/#/employees/{{task.employee.id}}">
                         <img alt="{{task.employee.full_name}}" title="{{task.employee.full_name}}" ng-src="{{ task.employee.avatar_small }}" class="small-headshot" />
                     </a>
@@ -71,5 +71,5 @@
             </div>
         </div>
     </div>
-    <button ng-click="newTask()">New Task</button>
+    <button ng-show="canAddNew" ng-click="newTask()">New Task</button>
 </div>
