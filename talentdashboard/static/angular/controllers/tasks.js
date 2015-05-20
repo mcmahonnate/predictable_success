@@ -3,13 +3,11 @@ angular.module('tdb.controllers.tasks', [])
     .controller('CreateTaskCtrl', ['$scope', '$modalInstance', '$routeParams', 'Coach', 'Task', 'employeeId', function($scope, $modalInstance, $routeParams, Coach, Task, employeeId) {
         $scope.task = new Task(
             {
-                employee: employeeId,
-                description: '',
-                assigned_to: null,
-                due_date: null
+                employee: employeeId
             }
         );
         $scope.coaches = Coach.query();
+
         $scope.save = function () {
             if(!$scope.task.description) return;
 
@@ -24,7 +22,7 @@ angular.module('tdb.controllers.tasks', [])
     }])
 
     .controller('EditTaskCtrl', ['$scope', '$modalInstance', 'Coach', 'Task', 'task', function($scope, $modalInstance, Coach, Task, task) {
-        $scope.task = task;
+        $scope.task = angular.copy(task);
         $scope.coaches = Coach.query();
 
         $scope.save = function () {
@@ -44,12 +42,10 @@ angular.module('tdb.controllers.tasks', [])
         $scope.canAddNew = false;
 
         if(employee_id) {
-            // Employee-centric view
             $scope.canAddNew = true;
             $scope.todos = Task.query({ employee_id: employee_id, completed: false });
             $scope.done = Task.query({ employee_id: employee_id, completed: true });
         } else {
-            // Me-centric view
             $scope.todos = Task.query({completed: false, filter: 'mine'});
             $scope.done = Task.query({completed: true, filter: 'mine'});
         }

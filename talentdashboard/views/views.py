@@ -768,7 +768,7 @@ class TaskDetail(APIView):
             if task.assigned_to is not None:
                 task.assigned_by = self.get_current_employee(request)
                 task.save()
-                self.notify(task)
+                self.notify(request, task)
             serializer = TaskSerializer(task)
             return Response(serializer.data)
         else:
@@ -788,7 +788,7 @@ class TaskDetail(APIView):
                 notify = True
 
             if notify:
-                self.notify(task)
+                self.notify(request, task)
             serializer = TaskSerializer(task)
             return Response(serializer.data)
         else:
@@ -801,7 +801,7 @@ class TaskDetail(APIView):
             return Response(None)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
-    def notify(self, task):
+    def notify(self, request, task):
             subject = '(' + task.employee.full_name + ') To-do assigned to you: ' + task.description
             message = task.assigned_by.full_name + ' just assigned this to you: \r\n' + task.description + '\r\n http://' + request.tenant.domain_url + '/#/employees/' + str(task.employee.id)
             mail_from = task.assigned_by.full_name + '<notify@dfrntlabs.com>'
