@@ -9,6 +9,7 @@ angular.module('tdb.controllers.tasks', [])
                 due_date: null
             }
         );
+
         $scope.coaches = Coach.query();
         $scope.save = function () {
             if(!$scope.task.description) return;

@@ -1,24 +1,35 @@
-<div>
-	<div class="modal-header">
-    	<h4 class="modal-title">Add New Task</h4>
-    </div>	
+<div>	
     <div class="modal-body">
-	    <textarea class="form-control" ng-model="task.description"></textarea>
+    	<h3 class="modal-title">Add New Task</h3>
+	    <textarea placeholder="Enter task here..." class="form-control" ng-model="task.description" style="min-height:80px;margin-bottom:20px"></textarea>
 
-	    <div class="dropdown">
-		    <a href="javascript:void(0);" id="assigneeMenu" data-toggle="dropdown" aria-expanded="true">{{task.assigned_to.full_name||"Unassigned"}}</a>
-		    <div class="dropdown-menu" role="menu" aria-labelledby="assigneeMenu">
-		        <ul>
-		            <li role="presentation" class="popover-item" ng-repeat="coach in coaches | orderBy:'full_name'" ng-model="task.assigned_to">
-		                <a href="javascript:void(0);" role="menuitem" tabindex="-1" ng-click="task.assigned_to=coach">{{coach.full_name}}</a>
-		            </li>
-		            <li class="divider"></li>
-		            <li role="presentation" class="popover-item">
-		                <a role="menuitem" tabindex="-1" ng-click="task.assigned_to=null">Unassigned</a>
-		            </li>                            
-		        </ul>
-		    </div> 
-		</div>    
+	    <div class="row">
+		    <div class="dropdown col-sm-6">
+		    	<span class="glyphicon glyphicon-user"></span> Assigned To:
+			    <a href="javascript:void(0);" id="assigneeMenu" data-toggle="dropdown" aria-expanded="true"><strong>{{task.assigned_to.full_name||"Unassigned"}}</strong></a>
+			    <div class="dropdown-menu" role="menu" aria-labelledby="assigneeMenu">
+			        <ul ng-model="task.assigned_to">
+			            <li role="presentation" class="popover-item" ng-repeat="coach in coaches | orderBy:'full_name'">
+			                <a href="javascript:void(0);" role="menuitem" tabindex="-1" ng-click="task.assigned_to=coach">
+			                <div class="tiny-headshot pull-left">
+			                	<img ng-src="{{coach.avatar_small}}"/>
+			                </div>	
+			                <span class="employee-name">{{coach.full_name}}</span>
+			                </a>
+			            </li>
+			            <li class="divider"></li>
+			            <li role="presentation" class="popover-item">
+			                <a role="menuitem" tabindex="-1" ng-click="task.assigned_to=null">Unassigned</a>
+			            </li>                            
+			        </ul>
+			    </div> 
+			</div> 
+			<div class="col-sm-5">
+				<span class="glyphicon glyphicon-calendar"></span> Due Date:
+				<a href="javascript:void(0);"><strong ng-click="open($event)">{{(task.due_date | date:'MMM d') || "None"}}</strong></a>
+				<div datepicker-popup="{{format}}" ng-model="task.due_date" is-open="opened" min="minDate" datepicker-options="" date-disabled="disabled(date, mode)" show-weeks="false" ng-required="true" close-text="Close"></div>
+	        </div>	  
+	    </div>                        
 	</div>	
 	<div class="modal-footer">
     	<button ng-click="save()" class="btn btn-success">Save</button>
