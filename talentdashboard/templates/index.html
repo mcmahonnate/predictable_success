@@ -4,7 +4,7 @@
 
 {% block content %}
     <div ng-app="tdb" ng-controller="BaseAppCtrl">
-        <div ng-include="'/static/angular/partials/_widgets/navigation.html'"></div>
+        <div ng-if="currentUser" ng-include="'/static/angular/partials/_widgets/navigation.html'"></div>
         <div ng-view></div>
     </div>
 {% endblock content%}

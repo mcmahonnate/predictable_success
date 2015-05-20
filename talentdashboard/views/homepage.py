@@ -19,12 +19,8 @@ class IndexView(TemplateView):
     template = "homepage.html"
 
     def get(self, request, **kwargs):
-	    if request.tenant.is_public_tenant():
-	    	return render(request, 'homepage.html')
-	    else:
-	        if request.user.is_authenticated():
-	            return render(request, 'index.html') # Go to application
-	        else:
-	            return HttpResponseRedirect("/account/login") # Go to login
-
+        if request.tenant.is_public_tenant():
+            return render(request, 'homepage.html')
+        else:
+            return render(request, 'index.html') # Go to application
 
