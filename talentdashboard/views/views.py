@@ -730,48 +730,69 @@ class MyTaskList(APIView):
 
 
 class TaskDetail(APIView):
-    def get(self, request, pk, format=None):
-        task = Task.objects.get(id=pk)
-        serializer = TaskSerializer(task, context={'request': request})
+    def get_current_employee(self, request):
+        return Employee.objects.get_from_user(request.user)
+
+    def get_object(self, pk):
+        try:
+            return Task.objects.get(pk=pk)
+        except FeedbackRequest.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk=None):
+        if pk is None:
+            tasks = Task.objects
+            if 'filter' in request.QUERY_PARAMS:
+                value = request.QUERY_PARAMS.get('filter')
+                if value == 'mine':
+                    current_employee = self.get_current_employee(request)
+                    tasks = tasks.filter(assigned_to=current_employee)
+            if 'completed' in request.QUERY_PARAMS:
+                completed = request.QUERY_PARAMS.get('completed', '').lower() == 'true'
+                tasks = tasks.filter(completed=completed)
+            if 'employee_id' in request.QUERY_PARAMS:
+                employee_id = request.QUERY_PARAMS.get('employee_id')
+                tasks = tasks.filter(employee_id=employee_id)
+            serializer = TaskSerializer(tasks.all(), many=True)
+        else:
+            task = self.get_object(pk)
+            serializer = TaskSerializer(task)
         return Response(serializer.data)
 
-    def put(self, request, pk, format=None):
-        task = Task.objects.get(id=pk)
-        notify = False
-        if task is None:
-            return Response(None, status=status.HTTP_404_NOT_FOUND)
-        assigned_to_id = request.DATA["_assigned_to_id"]
-        description = request.DATA["_description"]
-        due_date = request.DATA["_due_date"]
-        completed = request.DATA["_completed"]
-        if assigned_to_id is not None:
-            assigned_to = Employee.objects.get(id=assigned_to_id)
-            assigned_by = Employee.objects.get(user__id=request.user.id)
-            if assigned_to is None:
-                return Response(None, status=status.HTTP_404_NOT_FOUND)
-            else:
-                if task.assigned_to is not None:
-                    if task.assigned_to.id != assigned_to.id:
-                        task.assigned_by = assigned_by
-                        notify = True
-                else:
-                    task.assigned_by = assigned_by
-                    notify = True
-                task.assigned_to = assigned_to
-        else:
-            task.assigned_to = None
-        if due_date != "":
-            task.due_date = due_date
-        task.description = description
-        task.completed = completed
-        task.save()
-        if notify:
-            subject = '(' + task.employee.full_name + ') To-do assigned to you: ' + task.description
-            message = task.assigned_by.full_name + ' just assigned this to you: \r\n' + task.description + '\r\n http://' + request.tenant.domain_url + '/#/employees/' + str(task.employee.id)
-            mail_from = task.assigned_by.full_name + '<notify@dfrntlabs.com>'
-            send_mail(subject, message, mail_from, [task.assigned_to.user.email], fail_silently=False)
+    def post(self, request):
+        add_current_employee_to_request(request, 'created_by')
+        serializer = CreateTaskSerializer(data=request.DATA)
 
-        return Response(None)
+        if serializer.is_valid():
+            task = serializer.save()
+            if task.assigned_to is not None:
+                task.assigned_by = self.get_current_employee(request)
+                task.save()
+                self.notify(task)
+            serializer = TaskSerializer(task)
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=400)
+
+    def put(self, request, pk):
+        notify = False
+        task = self.get_object(pk)
+        current_assigned_to = task.assigned_to
+        serializer = EditTaskSerializer(data=request.DATA)
+
+        if serializer.is_valid():
+            task = serializer.update(task, serializer.validated_data)
+            if current_assigned_to is None and task.assigned_to is not None:
+                notify = True
+            elif task.assigned_to is not None and task.assigned_to != current_assigned_to:
+                notify = True
+
+            if notify:
+                self.notify(task)
+            serializer = TaskSerializer(task)
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=400)
 
     def delete(self, request, pk, format=None):
         task = Task.objects.filter(id=pk)
@@ -779,6 +800,12 @@ class TaskDetail(APIView):
             task.delete()
             return Response(None)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
+
+    def notify(self, task):
+            subject = '(' + task.employee.full_name + ') To-do assigned to you: ' + task.description
+            message = task.assigned_by.full_name + ' just assigned this to you: \r\n' + task.description + '\r\n http://' + request.tenant.domain_url + '/#/employees/' + str(task.employee.id)
+            mail_from = task.assigned_by.full_name + '<notify@dfrntlabs.com>'
+            send_mail(subject, message, mail_from, [task.assigned_to.user.email], fail_silently=False)
 
 
 class EmployeeTaskList(APIView):
