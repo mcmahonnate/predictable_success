@@ -24,17 +24,7 @@ angular.module('tdb.controllers.tasks', [])
     }])
 
     .controller('EditTaskCtrl', ['$scope', '$modalInstance', 'Coach', 'Task', 'task', function($scope, $modalInstance, Coach, Task, task) {
-        $scope.task = new Task(
-            {
-                id: task.id,
-                employee: task.employee.id,
-                assigned_to: task.assigned_to ? task.assigned_to.id : null,
-                assigned_by: task.assigned_by ? task.assigned_by.id : null,
-                due_date: task.due_date,
-                completed: task.completed,
-                description: task.description
-            }
-        );
+        $scope.task = task;
         $scope.coaches = Coach.query();
 
         $scope.save = function () {
@@ -54,12 +44,12 @@ angular.module('tdb.controllers.tasks', [])
         $scope.canAddNew = false;
 
         if(employee_id) {
-            // Employee view
+            // Employee-centric view
             $scope.canAddNew = true;
             $scope.todos = Task.query({ employee_id: employee_id, completed: false });
             $scope.done = Task.query({ employee_id: employee_id, completed: true });
         } else {
-            // "My" view
+            // Me-centric view
             $scope.todos = Task.query({completed: false, filter: 'mine'});
             $scope.done = Task.query({completed: true, filter: 'mine'});
         }
@@ -115,16 +105,7 @@ angular.module('tdb.controllers.tasks', [])
 
         $scope.toggleCompleted = function(task) {
             task.completed = !task.completed;
-            Task.update(new Task(
-            {
-                id: task.id,
-                employee: task.employee.id,
-                assigned_to: task.assigned_to ? task.assigned_to.id : null,
-                assigned_by: task.assigned_by ? task.assigned_by.id : null,
-                due_date: task.due_date,
-                completed: task.completed,
-                description: task.description
-            }));
+            Task.update(task);
         };
 
         var removeItemFromList = function(list, item) {
