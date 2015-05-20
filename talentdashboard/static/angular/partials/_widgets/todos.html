@@ -1,4 +1,5 @@
 <div class="panel todos" ng-if="currentUser.can_view_comments">
+    <button ng-show="canAddNew" ng-click="newTask()" class="pull-right btn btn-sm btn-success">Add New Task</button>
     <h2 class="panel-title">To Do's</h2> 
     <ul class="nav nav-tabs">
         <li role="presentation" ng-class="{'active': activeTab == todoTab}"><a ng-click="setActiveTab(todoTab)">To Do</a></li>
@@ -17,9 +18,7 @@
             </div>    
             <div class="row todo" ng-repeat="task in todos">
                 <div class="col-xs-2">
-                    <button ng-click="editTask(task)">Edit</button>
-                    <button ng-click="deleteTask(task)">Delete</button>
-                    <button ng-click="toggleCompleted(task)">Toggle Completed</button>
+                    <input type="checkbox" class="todo-checkbox" ng-click="toggleCompleted(task)">
                     <a ng-href="/#/employees/{{task.employee.id}}">
                         <img alt="{{task.employee.full_name}}" title="{{task.employee.full_name}}" ng-src="{{ task.employee.avatar_small }}" class="small-headshot" />
                     </a>
@@ -35,6 +34,18 @@
                 </div>
                 <div class="col-xs-2 date">    
                     {{(task.due_date | date:'MMM d') || "None"}}
+
+                    <i class="fa fa-cog show-popover pull-right"></i>
+                    <ul class="popover-items" style="display:none">
+                        <li class="popover-item">
+                            <i class="fa fa-pencil-square-o"></i> 
+                            <a ng-click="editTask(task)">Edit</a>
+                        </li>
+                        <li class="popover-item">
+                            <i class="fa fa-trash-o"></i> 
+                            <a ng-click="deleteTask(task)">Delete</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>        
@@ -71,5 +82,4 @@
             </div>
         </div>
     </div>
-    <button ng-show="canAddNew" ng-click="newTask()">New Task</button>
 </div>

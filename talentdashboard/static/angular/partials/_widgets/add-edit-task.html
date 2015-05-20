@@ -1,6 +1,27 @@
 <div>
-    New Task
-    <input type="text" ng-model="task.description"/>
-    <button ng-click="save()">Save</button>
-    <button ng-click="cancel()">Cancel</button>
+	<div class="modal-header">
+    	<h4 class="modal-title">Add New Task</h4>
+    </div>	
+    <div class="modal-body">
+	    <textarea class="form-control" ng-model="task.description"></textarea>
+
+	    <div class="dropdown">
+		    <a href="javascript:void(0);" id="assigneeMenu" data-toggle="dropdown" aria-expanded="true">{{task.assigned_to.full_name||"Unassigned"}}</a>
+		    <div class="dropdown-menu" role="menu" aria-labelledby="assigneeMenu">
+		        <ul>
+		            <li role="presentation" class="popover-item" ng-repeat="coach in coaches | orderBy:'full_name'" ng-model="task.assigned_to">
+		                <a href="javascript:void(0);" role="menuitem" tabindex="-1" ng-click="task.assigned_to=coach">{{coach.full_name}}</a>
+		            </li>
+		            <li class="divider"></li>
+		            <li role="presentation" class="popover-item">
+		                <a role="menuitem" tabindex="-1" ng-click="task.assigned_to=null">Unassigned</a>
+		            </li>                            
+		        </ul>
+		    </div> 
+		</div>    
+	</div>	
+	<div class="modal-footer">
+    	<button ng-click="save()" class="btn btn-success">Save</button>
+    	<button ng-click="cancel()" class="btn btn-default">Cancel</button>
+    </div>	
 </div>
