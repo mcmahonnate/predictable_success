@@ -7,7 +7,7 @@ class Task(models.Model):
     assigned_to = models.ForeignKey(Employee, related_name='+',null=True, blank=True)
     assigned_by = models.ForeignKey(Employee, related_name='+',null=True, blank=True)
     employee = models.ForeignKey(Employee, related_name='+')
-    created_date = models.DateField(auto_now_add = True)
+    created_date = models.DateTimeField(auto_now_add=True)
     due_date = models.DateField(
         null=True,
         blank=True,

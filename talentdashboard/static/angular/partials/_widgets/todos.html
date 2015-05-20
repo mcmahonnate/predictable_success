@@ -1,11 +1,11 @@
-<div class="panel todos" ng-if="currentUser.can_view_comments" ng-init="showToDo=true">
+<div class="panel todos" ng-if="currentUser.can_view_comments">
     <h2 class="panel-title">To Do's</h2> 
     <ul class="nav nav-tabs">
-        <li role="presentation" ng-class="{'active': showToDo}"><a href="javascript:void(0);" ng-click="showToDo=true;showDone=false">To Do</a></li>
-        <li role="presentation" ng-class="{'active': showDone}"><a href="javascript:void(0);" ng-click="showToDo=false;showDone=true">Done</a></li>
+        <li role="presentation" ng-class="{'active': activeTab == todoTab}"><a ng-click="setActiveTab(todoTab)">To Do</a></li>
+        <li role="presentation" ng-class="{'active': activeTab == doneTab}"><a ng-click="setActiveTab(doneTab)">Done</a></li>
     </ul>
-    <div ng-show="showToDo">
-        <div ng-show="todos.length==0" class="todos-empty">
+    <div ng-show="activeTab == todoTab">
+        <div ng-show="todos.length === 0" class="todos-empty">
             <p>You currently don't have any tasks. Add Todos on employee profile pages.</p>
         </div>
         <div ng-if="todos.length > 0">
@@ -15,111 +15,61 @@
                 <div class="col-xs-3">Assigned To</div>
                 <div class="col-xs-2">Due Date</div>
             </div>    
-            <div class="row todo" ng-repeat="todo in todos">
+            <div class="row todo" ng-repeat="task in todos">
                 <div class="col-xs-2">
-                    <input class="todo-checkbox" show="{{scrollIntoView}}" ng-scroll-into-view type="checkbox" ng-click="saveToDo(todo)" ng-model="todo.completed">
-                    <a ng-href="/#/employees/{{todo.employee.id}}">
-                        <img alt="{{todo.employee.full_name}}" title="{{todo.employee.full_name}}" ng-src="{{ todo.employee.avatar_small }}" class="small-headshot" /> 
+                    <button ng-click="editTask(task)">Edit</button>
+                    <button ng-click="deleteTask(task)">Delete</button>
+                    <button ng-click="completeTask(task)">Mark Completed</button>
+                    <a ng-href="/#/employees/{{task.employee.id}}">
+                        <img alt="{{task.employee.full_name}}" title="{{task.employee.full_name}}" ng-src="{{ task.employee.avatar_small }}" class="small-headshot" />
                     </a>
                 </div>
                 <div class="col-xs-5 todo-description-container">     
-                    <textarea ng-model="todo.description" focus-me="todo.edit" ng-enter="saveToDo();scrubToDo(todo);" ng-blur="saveToDo();scrubToDo(todo);" ng-show="todo.edit"  placeholder="Add a To Do..."></textarea>
-                    <div ng-show="!todo.edit" ng-class="{'todo-completed': todo.completed}">
-                        <p><strong><a href="javascript:void(0);" ng-href="/#/employees/{{todo.employee.id}}">{{todo.employee.full_name}}</a></strong> <span class="timestamp">{{ todo.created_date | fromNow }}</span></p>
-                        <p class="todo-description">{{todo.description}}</p>
+                    <div ng-class="{'todo-completed': task.completed}">
+                        <p><strong><a ng-href="/#/employees/{{task.employee.id}}">{{task.employee.full_name}}</a></strong> <span class="timestamp">{{ task.created_date | fromNow }}</span></p>
+                        <p class="todo-description">{{task.description}}</p>
                     </div>
                 </div>  
                 <div class="col-xs-3">  
-                    <a href="javascript:void(0);" id="assigneeMenu" data-toggle="dropdown" aria-expanded="true" ng-click="toggleAssigneeMenu()">{{todo.assigned_to.full_name||"Unassigned"}}</a>
-                    <div ng-show="openAssigneeMenu" class="dropdown-menu" role="menu" aria-labelledby="assigneeMenu">
-                        <ul>
-                            <li role="presentation" class="popover-item" ng-repeat="assignee in assignees | orderBy:'full_name'">
-                                <a href="javascript:void(0);" role="menuitem" tabindex="-1" ng-click="assigneeMenu.show=false;todo.assigned_to=assignee;saveToDo()">{{assignee.full_name}}</a>
-                            </li>
-                            <li class="divider"></li>
-                            <li role="presentation" class="popover-item">
-                                <a role="menuitem" tabindex="-1" ng-click="assigneeMenu.show=false;todo.assigned_to=null;saveToDo()">Unassigned</a>
-                            </li>                            
-                        </ul>
-                    </div> 
+                    {{task.assigned_to.full_name||"Unassigned"}}
                 </div>
                 <div class="col-xs-2 date">    
-                    <a href="javascript:void(0);" ng-click="open($event);closeAssigneeMenu()">{{(todo.due_date | date:'MMM d') || "None"}}</a>
-                    <span type="text" datepicker-popup="{{format}}" ng-model="todo.due_date" is-open="opened" min="minDate" datepicker-options="" date-disabled="disabled(date, mode)" show-weeks="false" ng-required="true" close-text="Close"/>
-                    
-                    <i class="fa fa-cog show-popover pull-right"></i>
-                    <ul class="popover-items" style="display:none">
-                        <li class="popover-item">
-                            <i class="fa fa-pencil-square-o"></i> 
-                            <a ng-show="!todo.edit" ng-click="todo.edit=true">Edit</a>
-                            <a ng-show="todo.edit" ng-click="todo.edit=false">Edit</a>
-                        </li>
-                        <li class="popover-item">
-                            <i class="fa fa-trash-o"></i> 
-                            <a ng-click="deleteToDo(todo)">Delete</a>
-                        </li>
-                    </ul>
-                </div>      
+                    {{(task.due_date | date:'MMM d') || "None"}}
+                </div>
             </div>
         </div>        
     </div>
-    <div ng-show="showDone">
-        <div ng-show="completed_todos.length==0" class="todos-empty">
+    <div ng-show="activeTab == doneTab">
+        <div ng-show="done.length === 0" class="todos-empty">
             <p>You don't have any completed tasks.</p>
         </div>
-        <div ng-if="completed_todos.length > 0">
+        <div ng-if="done.length > 0">
             <div class="row shaded">
                 <div class="col-xs-2"></div>
                 <div class="col-xs-5">Tasks</div>
                 <div class="col-xs-3">Assigned To</div>
                 <div class="col-xs-2">Due Date</div>
             </div>    
-            <div class="row todo" ng-repeat="todo in completed_todos" ng-init="currentToDo=todo">
+            <div class="row todo" ng-repeat="task in done">
                 <div class="col-xs-2">
-                    <input class="todo-checkbox" show="{{scrollIntoView}}" ng-scroll-into-view type="checkbox" ng-click="saveToDo(todo)" ng-model="todo.completed">
-                    <a ng-href="/#/employees/{{todo.employee.id}}">
-                        <img alt="{{todo.employee.full_name}}" title="{{todo.employee.full_name}}" ng-src="{{ todo.employee.avatar_small }}" class="small-headshot" /> 
+                    <a ng-href="/#/employees/{{task.employee.id}}">
+                        <img alt="{{task.employee.full_name}}" title="{{task.employee.full_name}}" ng-src="{{ task.employee.avatar_small }}" class="small-headshot" />
                     </a>
                 </div>
-                <div class="col-xs-5 todo-description-container">     
-                    <textarea ng-model="todo.description" focus-me="todo.edit" ng-enter="saveToDo();scrubToDo(todo);" ng-blur="saveToDo();scrubToDo(todo);" ng-show="todo.edit"  placeholder="Add a To Do..."></textarea>
-                    <div ng-show="!todo.edit" ng-class="{'todo-completed': todo.completed}">
-                        <p><strong><a href="javascript:void(0);" ng-href="/#/employees/{{todo.employee.id}}">{{todo.employee.full_name}}</a></strong> <span class="timestamp">{{ todo.created_date | fromNow }}</span></p>
-                        <p class="todo-description">{{todo.description}}</p>
+                <div class="col-xs-5 todo-description-container">
+                    <div ng-class="{'todo-completed': task.completed}">
+                        <p><strong><a ng-href="/#/employees/{{task.employee.id}}">{{task.employee.full_name}}</a></strong> <span class="timestamp">{{ task.created_date | fromNow }}</span></p>
+                        <p class="todo-description">{{task.description}}</p>
                     </div>
-                </div>  
-                <div class="col-xs-3">  
-                    <a href="javascript:void(0);" id="assigneeMenu" data-toggle="dropdown" aria-expanded="true" ng-click="toggleAssigneeMenu()">{{todo.assigned_to.full_name||"Unassigned"}}</a>
-                    <div ng-show="openAssigneeMenu" class="dropdown-menu" role="menu" aria-labelledby="assigneeMenu">
-                        <ul>
-                            <li role="presentation" class="popover-item" ng-repeat="assignee in assignees | orderBy:'full_name'">
-                                <a href="javascript:void(0);" role="menuitem" tabindex="-1" ng-click="assigneeMenu.show=false;todo.assigned_to=assignee;saveToDo()">{{assignee.full_name}}</a>
-                            </li>
-                            <li class="divider"></li>
-                            <li role="presentation" class="popover-item">
-                                <a role="menuitem" tabindex="-1" ng-click="assigneeMenu.show=false;todo.assigned_to=null;saveToDo()">Unassigned</a>
-                            </li>                            
-                        </ul>
-                    </div> 
                 </div>
-                <div class="col-xs-2 date">    
-                    <a href="javascript:void(0);" ng-click="open($event);closeAssigneeMenu()">{{(todo.due_date | date:'MMM d') || "None"}}</a>
-                    <span type="text" datepicker-popup="{{format}}" ng-model="todo.due_date" is-open="opened" min="minDate" datepicker-options="" date-disabled="disabled(date, mode)" show-weeks="false" ng-required="true" close-text="Close"/>
-                    
-                    <i class="fa fa-cog show-popover pull-right"></i>
-                    <ul class="popover-items" style="display:none">
-                        <li class="popover-item">
-                            <i class="fa fa-pencil-square-o"></i> 
-                            <a ng-show="!todo.edit" ng-click="todo.edit=true">Edit</a>
-                            <a ng-show="todo.edit" ng-click="todo.edit=false">Edit</a>
-                        </li>
-                        <li class="popover-item">
-                            <i class="fa fa-trash-o"></i> 
-                            <a ng-click="deleteToDo(todo)">Delete</a>
-                        </li>
-                    </ul>
-                </div>      
+                <div class="col-xs-3">
+                    {{task.assigned_to.full_name||"Unassigned"}}
+                </div>
+                <div class="col-xs-2 date">
+                    {{(task.due_date | date:'MMM d') || "None"}}
+                </div>
             </div>
-        </div>         
+        </div>
     </div>
+    <button ng-click="newTask()">New Task</button>
 </div>
