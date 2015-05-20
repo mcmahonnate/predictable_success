@@ -20,7 +20,7 @@ angular.module('tdb.services.tasks', ['ngResource'])
             return copy;
         };
 
-        var extraMethods = {
+        var actions = {
             'save': {
                 method: 'POST',
                 transformRequest: [
@@ -37,7 +37,7 @@ angular.module('tdb.services.tasks', ['ngResource'])
             }
         };
 
-        var Task = $resource('/api/v1/tasks/:id/', {id: '@id'}, extraMethods);
+        var Task = $resource('/api/v1/tasks/:id/', {id: '@id'}, actions);
 
         return Task;
     }])
