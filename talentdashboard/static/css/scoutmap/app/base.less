@@ -19,14 +19,21 @@ body {
 a {color: #1a7f7e;}
 a:hover {color: #135d5c; text-decoration: none;}
 p {line-height: 18px;font-size: 14px;}
-
 strong {font-weight: bold;}
+
 
 /* Layout ==================================== */
 .container {
 	margin-top:40px;
 	padding-left: 70px;
+
+    /* For mobile experiences we move the navigation bar to the top of the viewport */
+    @media only screen and (max-width : 640px) {
+        margin-top: 50px;
+        padding: 25px;
+    }
 }
+
 
 /* Typeography ==================================== */
 h1,h2,h3 {
@@ -35,6 +42,10 @@ h1,h2,h3 {
 h1 {
     margin: 0 0 25px;
     font-size: 30px;
+
+    @media only screen and (max-width : 640px) {
+        font-size: 25px;
+    }
 } 
 h2 {
     font-size: 26px;
@@ -110,14 +121,15 @@ ul, ol {
 }
 
 
-/* Transitions ============================================= */
+/* Layout on Employees page ============================================= */
+.masonry {
+    margin: 0px auto;
+}
 .masonry,
 .masonry li { /* apply before masonry add class */
     position: absolute; /* important to add it before enter animation start */
-    
     -webkit-transition-duration: .7s;
     transition-duration: .7s;
-    
     -webkit-transition-property: all;
     transition-property: all;
 }
@@ -164,17 +176,6 @@ texarea.expandable {
 
 textarea.expandable:focus {
 	height: 200px;
-}
-
-
-
-#main-header {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  z-index: 5;
-  width: 70px !important;
-  height: 100% !important;
 }
 
 
