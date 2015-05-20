@@ -1,5 +1,7 @@
 <div class="account-menu">
-    <img class="show-account-menu small-headshot" ng-src="{{currentUser.employee.avatar_small}}" alt="User Image" />
+    <div class="show-account-menu tiny-headshot">
+        <img ng-src="{{currentUser.employee.avatar_small}}" alt="User Image" />
+    </div>    
     <ul class="account-action-items">
         <li ng-if="currentUser.can_coach_employees && customer.show_coaches">
             <a class="dashboard" href="#/coach/">My Coachees</a>
@@ -22,7 +24,7 @@
         <div class="nav-item" ng-if="currentUser.can_view_company_dashboard" ng-class="{'nav-item-active':openFilterMenu}">
             <span class="nav-item-icon glyphicon glyphicon-user filter_menu" ng-mouseover="toggleFilterMenu()"></span>
             <div class="subnav" ng-show="openFilterMenu">
-                <div class="subnav-title">Employee Segments</div>
+                <div class="subnav-title">Employee Zones</div>
                 <ul class="talent-groups">
                     <li>
                         <a class="dashboard" href="#/evaluations/current?talent_category=1">
@@ -118,8 +120,10 @@
                     <ul ng-if="navQuery!=''">
                         <li ng-repeat="employee in filteredEmployees = (employees |filter:{full_name:navQuery}:startsWith) | orderBy:'full_name'">
                             <a ng-click="toggleSearchMenu()" class="search-result" href="#/employees/{{employee.id}}">
-                                <img class="tiny-headshot" ng-src="{{employee.avatar_small}}" alt="{{employee.full_name}}'s Picture" />
-                                {{employee.full_name}}
+                                <span class="tiny-headshot">
+                                    <img ng-src="{{employee.avatar_small}}" alt="{{employee.full_name}}'s Picture" />
+                                </span>
+                                <span class="employee-name">{{employee.full_name}}</span>
                             </a>
                         </li>
                         <li ng-show="!filteredEmployees.length">No Results</li>

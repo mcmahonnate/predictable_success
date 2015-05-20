@@ -118,7 +118,8 @@ filters.filter('filterEmployees', function () {
           if (talentCategory!=item.current_talent_category) {push=false}
       }
       if (teamId && push) {
-          if(teamId!=item.team.id) {push=false}
+          if (!item.team){push=false}
+          else{if(teamId!=item.team.id){push=false}}
       }
       if (happy && push) {
           if(happy!=item.happiness) {push=false}

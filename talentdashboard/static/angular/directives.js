@@ -217,7 +217,6 @@ angular.module('tdb.directives', [])
                         pieSliceTextStyle: {fontSize:18},
                         backgroundColor: '#fff',
                         tooltip:{
-                            text:'value',
                             isHtml: false
                         },
                         pieSliceBorderColor: '#efefef',
@@ -856,6 +855,9 @@ angular.module('tdb.directives', [])
         });
         $scope.$watch("employee",function(newValue,OldValue,scope){
             if (newValue){
+                if (!$scope.employee.team) {
+                    $scope.employee.team = {name:''};
+                }
                 $scope.editEmployee = angular.copy($scope.employee);
                 $scope.preview=$scope.employee.avatar;
             }
@@ -1258,7 +1260,8 @@ angular.module('tdb.directives', [])
             
             return function (scope, element, attrs) {
                 var options = angular.extend({
-                    itemSelector: itemSelector
+                    itemSelector: itemSelector,
+                    isFitWidth: true
                 }, scope.$eval(attrs.masonry));
                 
                 // try to infer model from ngRepeat

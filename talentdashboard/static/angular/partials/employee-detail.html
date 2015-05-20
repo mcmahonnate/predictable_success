@@ -3,7 +3,9 @@
         <div class="col-sm-5 col-md-5 col-lg-5">
             <div class="panel">
                 <div class="large-avatar-container">
-                    <img ng-src="{{ employee.avatar }}" class="large-headshot" />  
+                    <div class="xxxlarge-headshot">
+                        <img ng-src="{{ employee.avatar }}" />  
+                    </div>    
                     <div class="employee-attribute employee-attribute-large" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{employee.current_talent_category}}">
                         <span class="segment employee-segment-background-color-{{employee.talent_category}}"></span>
                     </div>

@@ -1,4 +1,4 @@
-/* Tiny Headshot */
+/* Tiny / 30px */
 .tiny-headshot {
     border-radius: 90px;
     width: 30px;
@@ -6,6 +6,8 @@
     margin-right: 10px;
     vertical-align: middle;
     overflow: hidden;
+    display: block;
+    float: left;
 }
 .tiny-headshot img {
     width: 100%;
@@ -13,36 +15,85 @@
 
 
 
-
-/* Small Headshot */
+/* Small / 40px */
 .small-headshot {
     border-radius: 90px;
     width: 40px;
-    height: 40px;
+    height: 40px;    
     transition: .3s;
     margin-right: 10px;
+    overflow: hidden;
+    display: block;
 }
 .small-headshot:hover {
     border-color: #ccc;
     opacity: .8;
 }
+.small-headshot img {
+    width: 100%;
+}
 
 
-/* Medium Headshot */
+/* Medium / 50px */
 .medium-headshot {
     border-radius: 90px;
-    width: 90px;
-    border: 5px solid #f1f1f1;
+    width: 50px;
+    height: 50px;    
+    border: 2px solid #f1f1f1;
     transition: .3s;
+    overflow: hidden;
+    display: block;
 }
 .medium-headshot:hover {
     border-color: #ccc;
     opacity: .8;
 }
+.medium-headshot img {
+    width: 100%;
+}
 
 
-/* Large Headshot */
+/* Large / 75px */
 .large-headshot {
+    border-radius: 90px;
+    width: 75px;
+    height: 75px;    
+    border: 5px solid #f1f1f1;
+    transition: .3s;
+    overflow: hidden;
+    display: block;
+}
+.large-headshot:hover {
+    border-color: #ccc;
+    opacity: .8;
+}
+.large-headshot img {
+    width: 100%;
+}
+
+
+/* X-Large / 95px */
+.xlarge-headshot {
+    border-radius: 90px;
+    width: 95px;
+    height: 95px;    
+    border: 5px solid #f1f1f1;
+    transition: .3s;
+    overflow: hidden;
+    display: block;
+}
+.xlarge-headshot:hover {
+    border-color: #ccc;
+    opacity: .8;
+}
+.xlarge-headshot img {
+    width: 100%;
+}
+
+
+
+/* XXX-large / 200px */
+.xxxlarge-headshot {
     border-radius: 90%;
     margin: 20px auto;
     display: block;
@@ -52,15 +103,14 @@
     transition:.2s;
     overflow: hidden;
 }
-.large-headshot-active:hover {
+.xxxlarge-headshot-active:hover {
     border: 8px solid #888;
     opacity: .8;
 }
-.large-headshot img {
+.xxxlarge-headshot img {
     width: 100%;
 }
 
-    
 .avatar-container {
     position: relative;
     display: block;

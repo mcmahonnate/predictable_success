@@ -1,5 +1,3 @@
-
-
 (function($){    
     $.fn.autogrow = function(opts) {
         var that = $(this).css({overflow: 'hidden', resize: 'none'}) //prevent scrollies

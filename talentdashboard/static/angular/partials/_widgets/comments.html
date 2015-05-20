@@ -11,8 +11,8 @@
 
     <div class="comment" ng-repeat="comment in comments | orderBy:'created_date':true">  
         <div class="comment-owner-avatar-container">
-            <a ng-href="#/employees/{{comment.owner.employee.id}}">
-                <img ng-src="{{ comment.owner.employee.avatar_small }}" class="comment-owner-avatar" />
+            <a ng-href="#/employees/{{comment.owner.employee.id}}" class="medium-headshot">
+                <img ng-src="{{ comment.owner.employee.avatar_small }}" />
             </a>
         </div>
         <div class="comment-item">
@@ -21,7 +21,7 @@
                     <i class="fa fa-cog show-popover"></i>
                     <ul class="popover-items" style="display:none">
                         <li class="popover-item" ng-show="comment.owner.id==currentUser.id">
-                            <i class="fa fa-pencil-square-o"></i> <a ng-click="showCommentEdit=true">Edit</a>
+                            <i class="fa fa-pencil-square-o"></i> <a ng-click="showCommentEdit=true" class="edit">Edit</a>
                         </li>
                         <li class="popover-item" ng-show="comment.owner.id==currentUser.id">
                             <i class="fa fa-trash-o"></i> <a ng-click="deleteComment(comment)">Delete</a>
@@ -62,12 +62,14 @@
             </div>
 
             <div class="comment-copy" ng-show="!showCommentEdit">
-                <a class="avatar-container pull-right" ng-show="view != 'employee-view'" ng-href="#/employees/{{comment.associated_object.id}}">
-                    <img ng-src="{{ comment.associated_object.avatar_small }}" class="medium-headshot"/>
+                <div class="avatar-container pull-right" >
+                    <a class="large-headshot" ng-show="view != 'employee-view'" ng-href="#/employees/{{comment.associated_object.id}}">
+                        <img ng-src="{{ comment.associated_object.avatar_small }}"/>
+                    </a>
                     <div class="employee-attribute">
                         <span class="segment employee-segment-background-color-{{comment.associated_object.current_talent_category}}"></span>
                     </div>
-                </a>
+                </div>    
                 <span ng-init="length=500" ng-bind-html="comment.content | new_line | cut:true:length" style="line-height: 125%"></span> <span ng-show="comment.content.length>length" ng-init="showMoreButton=true"><a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a><a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a></span>   
                 <span class="total-replies" ng-show="comment.subcomments.length == 1">
                     {{comment.subcomments.length}} reply
@@ -83,16 +85,16 @@
                     <i class="fa fa-cog show-popover"></i>
                     <ul class="popover-items" style="display:none">
                         <li class="popover-item" ng-show="subcomment.owner.id==currentUser.id">
-                            <i class="fa fa-pencil-square-o"></i> <a ng-click="showSubCommentEdit=true">Edit</a>
+                            <i class="fa fa-pencil-square-o"></i> <a ng-click="showSubCommentEdit=true" class="edit">Edit</a>
                         </li>
                         <li class="popover-item" ng-show="subcomment.owner.id==currentUser.id">
                             <i class="fa fa-trash-o"></i> <a ng-click="deleteSubComment(comment, subcomment)">Delete</a>
                         </li>
                     </ul>
                 </div>                            
-                <div class="comment-reply-avatar-container">
-                    <a ng-href="#/employees/{{subcomment.owner.employee.id}}">
-                        <img class="comment-reply-avatar" ng-src="{{ subcomment.owner.employee.avatar_small }}"/>
+                <div class="comment-reply-avatar-container"> 
+                    <a ng-href="#/employees/{{subcomment.owner.employee.id}}" class="small-headshot">
+                        <img ng-src="{{ subcomment.owner.employee.avatar_small }}"/>
                     </a>
                 </div>
                 <a class="comment-reply-name" ng-href="#/employees/{{subcomment.owner.employee.id}}">{{subcomment.owner.employee.full_name}}</a> 

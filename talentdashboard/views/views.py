@@ -1193,19 +1193,10 @@ def happiness_reports(request):
 @auth_employee_cache(60*15, 'AllAccess')
 @auth_employee('AllAccess')
 def team_leads(request):
-    team_id = request.QUERY_PARAMS.get('team_id', None)    
-    leads = Leadership.objects.filter(leader__team_id=int(team_id))
-    current_round = EvaluationRound.objects.most_recent()
-    evaluations = PvpEvaluation.objects.filter(employee__team_id=int(team_id))
-    evaluations = evaluations.filter(evaluation_round__id = current_round.id)
-       
-    employees = []
-    for lead in leads:
-        if lead.leader not in employees:
-            employees.append(lead.leader)
-            
-    evaluations = evaluations.filter(employee__in=employees)            
-    serializer = PvpEvaluationSerializer(evaluations, many=True, context={'request': request})
+    team_id = request.QUERY_PARAMS.get('team_id', None)
+    leaders = Leadership.objects.filter(leader__team_id=int(team_id)).values('leader_id')
+    employees = Employee.objects.filter(id__in=leaders)
+    serializer = EmployeeSerializer(employees, many=True, context={'request': request})
     
     return Response(serializer.data)    
 

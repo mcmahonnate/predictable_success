@@ -11,22 +11,23 @@
         </div>
         <div ng-if="todos.length > 0">
             <div class="row shaded">
-                <div class="col-xs-2"></div>
-                <div class="col-xs-5">Tasks</div>
+                <div class="col-md-3 col-lg-2"></div>
+                <div class="col-md-4 col-lg-5">Tasks</div>
                 <div class="col-xs-3">Assigned To</div>
                 <div class="col-xs-2">Due Date</div>
             </div>    
-            <div class="row todo" ng-repeat="task in todos">
-                <div class="col-xs-2">
-                    <input type="checkbox" class="todo-checkbox" ng-click="toggleCompleted(task)">
-                    <a ng-href="/#/employees/{{task.employee.id}}">
-                        <img alt="{{task.employee.full_name}}" title="{{task.employee.full_name}}" ng-src="{{ task.employee.avatar_small }}" class="small-headshot" />
+            <div class="row todo" ng-repeat="todo in todos">
+                <div class="col-md-3 col-lg-2">
+                    <input class="todo-checkbox" show="{{scrollIntoView}}" ng-scroll-into-view type="checkbox" ng-click="saveToDo(todo)" ng-model="todo.completed">
+                    <a ng-href="/#/employees/{{todo.employee.id}}" class="small-headshot">
+                        <img alt="{{todo.employee.full_name}}" title="{{todo.employee.full_name}}" ng-src="{{ todo.employee.avatar_small }}" /> 
                     </a>
                 </div>
-                <div class="col-xs-5 todo-description-container">     
-                    <div ng-class="{'todo-completed': task.completed}">
-                        <p><strong><a ng-href="/#/employees/{{task.employee.id}}">{{task.employee.full_name}}</a></strong> <span class="timestamp">{{ task.created_date | fromNow }}</span></p>
-                        <p class="todo-description">{{task.description}}</p>
+                <div class="col-md-4 col-lg-5 todo-description-container">     
+                    <textarea ng-model="todo.description" focus-me="todo.edit" ng-enter="saveToDo();scrubToDo(todo);" ng-blur="saveToDo();scrubToDo(todo);" ng-show="todo.edit"  placeholder="Add a To Do..."></textarea>
+                    <div ng-show="!todo.edit" ng-class="{'todo-completed': todo.completed}">
+                        <p><strong><a href="javascript:void(0);" ng-href="/#/employees/{{todo.employee.id}}">{{todo.employee.full_name}}</a></strong> <span class="timestamp">{{ todo.created_date | fromNow }}</span></p>
+                        <p class="todo-description">{{todo.description}}</p>
                     </div>
                 </div>  
                 <div class="col-xs-3">  
@@ -56,21 +57,23 @@
         </div>
         <div ng-if="done.length > 0">
             <div class="row shaded">
-                <div class="col-xs-2"></div>
-                <div class="col-xs-5">Tasks</div>
+                <div class="col-md-3 col-lg-2"></div>
+                <div class="col-md-4 col-lg-5">Tasks</div>
                 <div class="col-xs-3">Assigned To</div>
                 <div class="col-xs-2">Due Date</div>
             </div>    
-            <div class="row todo" ng-repeat="task in done">
-                <div class="col-xs-2">
-                    <a ng-href="/#/employees/{{task.employee.id}}">
-                        <img alt="{{task.employee.full_name}}" title="{{task.employee.full_name}}" ng-src="{{ task.employee.avatar_small }}" class="small-headshot" />
+            <div class="row todo" ng-repeat="todo in completed_todos" ng-init="currentToDo=todo">
+                <div class="col-md-3 col-lg-2">
+                    <input class="todo-checkbox" show="{{scrollIntoView}}" ng-scroll-into-view type="checkbox" ng-click="saveToDo(todo)" ng-model="todo.completed">
+                    <a ng-href="/#/employees/{{todo.employee.id}}" class="small-headshot">
+                        <img alt="{{todo.employee.full_name}}" title="{{todo.employee.full_name}}" ng-src="{{ todo.employee.avatar_small }}" /> 
                     </a>
                 </div>
-                <div class="col-xs-5 todo-description-container">
-                    <div ng-class="{'todo-completed': task.completed}">
-                        <p><strong><a ng-href="/#/employees/{{task.employee.id}}">{{task.employee.full_name}}</a></strong> <span class="timestamp">{{ task.created_date | fromNow }}</span></p>
-                        <p class="todo-description">{{task.description}}</p>
+                <div class="col-md-4 col-lg-5 todo-description-container">     
+                    <textarea ng-model="todo.description" focus-me="todo.edit" ng-enter="saveToDo();scrubToDo(todo);" ng-blur="saveToDo();scrubToDo(todo);" ng-show="todo.edit"  placeholder="Add a To Do..."></textarea>
+                    <div ng-show="!todo.edit" ng-class="{'todo-completed': todo.completed}">
+                        <p><strong><a href="javascript:void(0);" ng-href="/#/employees/{{todo.employee.id}}">{{todo.employee.full_name}}</a></strong> <span class="timestamp">{{ todo.created_date | fromNow }}</span></p>
+                        <p class="todo-description">{{todo.description}}</p>
                     </div>
                 </div>
                 <div class="col-xs-3">

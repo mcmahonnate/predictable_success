@@ -1,8 +1,17 @@
 header{
-	background-color:#323940;
-	position:relative;
-	width: 70px;
-  	height: 100%;
+  	position: fixed !important;
+  	top: 0 !important;
+  	left: 0 !important;
+  	z-index: 5;
+  	width: 70px !important;
+  	height: 100% !important;
+  	background-color:#323940;
+
+    /* For mobile experiences we move the navigation bar to the top of the viewport */
+    @media only screen and (max-width : 640px) {
+        width: 100% !important;
+        height: 44px !important;
+    }	
 }
 .nav-item-active{
 	background-color: #282f34;
@@ -12,6 +21,11 @@ header{
 	position:absolute; 
 	top:10px; 
 	right:5px;
+
+    @media only screen and (max-width : 640px) {
+        z-index: 99;
+        top: 7px;
+    }	
 
 	.small-headshot {
 		width:30px;
@@ -28,7 +42,7 @@ header{
 	  	border-radius: 3px;
 	  	box-shadow: 3px 3px 5px -3px #444444;
 		position: absolute;
-	  	top: -8px; 
+	  	top: -5px; 
 	  	display: none; 	
 	}
 
@@ -48,12 +62,25 @@ header{
 	height: 70px;
 	background-color: #2cb28b;
 
+
+    /* For mobile experiences we move the navigation bar to the top of the viewport */
+    @media only screen and (max-width : 640px) {
+        height: 44px;
+        width: 44px;
+        float: left;
+    }
+
 	.logo {
 		width: 100%;
 		padding: 12px;
     	-webkit-transition: -webkit-transform .3s ease-in-out;
     	-ms-transition: -ms-transform .3s ease-in-out;
     	transition: transform .3s ease-in-out;	
+
+	    @media only screen and (max-width : 640px) {
+	        padding: 5px;
+	    }
+
 	}
 	.logo:hover {
     	transform:rotate(360deg);
@@ -76,15 +103,34 @@ header{
   	text-align: left;
   	box-shadow: 7px 3px 20px -4px #555;
   	padding-bottom: 15px;
+
+
+    @media only screen and (max-width : 640px) {
+        top: 43px;
+        left: 0;
+        width: 100%;
+    }	
 }
 .subnav-reports {
 	top: 136px;
+
+    @media only screen and (max-width : 640px) {
+        top: 43px;
+    }	
 }
 .subnav-settings {
 	top: 202px;
+
+    @media only screen and (max-width : 640px) {
+        top: 43px;
+    }		
 }
 .subnav-search {
 	top: 268px;
+
+    @media only screen and (max-width : 640px) {
+        top: 43px;
+    }		
 }
 
 
@@ -111,6 +157,11 @@ header{
 }
 .subnav .search-result {
 	margin: 0;
+	overflow: hidden;
+}
+.subnav .employee-name {
+	margin-top: 6px;
+  	display: block;
 }
 
 
@@ -134,12 +185,21 @@ header{
   padding: 10px 15px;
   cursor: pointer;
   text-align: center;
+
+    @media only screen and (max-width : 640px) {
+    	padding: 3px 10px;
+    	float: left;
+    }	    
 }
 .nav-item .nav-item-icon {
   color: #ccc;
   font-size: 34px;
   margin: 6px 2px;
   opacity: .8;
+
+    @media only screen and (max-width : 640px) {
+    	font-size: 25px;
+    }	  
 }
 .nav-item .nav-item-icon:hover {
 	opacity: 1;
