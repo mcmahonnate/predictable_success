@@ -5,22 +5,10 @@ angular.module('tdb.services.tasks', ['ngResource'])
     }])
 
     .factory('Task', ['$resource', '$filter', function ($resource, $filter) {
-        var getStringFromDate = function (date) {
-            return $filter('date')(date, 'yyyy-MM-dd');
-        };
-
-        var getDateFromString = function (dateString) {
-            var parts = dateString.split('-');
-            var year = parseInt(parts[0]);
-            var month = parseInt(parts[1]) - 1;
-            var date = parseInt(parts[2]);
-            return new Date(year, month, date);
-        };
-
         var fromServer = function(task) {
             var copy = angular.copy(task);
             copy.due_date = copy.due_date ? new Date(copy.due_date) : null;
-            copy.created_date = copy.created_date ? getDateFromString(copy.created_date) : null;
+            copy.created_date = copy.created_date ? new Date(copy.created_date) : null;
             return copy
         };
 
@@ -37,7 +25,7 @@ angular.module('tdb.services.tasks', ['ngResource'])
             copy.employee = copy.employee.id;
             copy.assigned_to = copy.assigned_to ? copy.assigned_to.id : null;
             copy.assigned_by = copy.assigned_by ? copy.assigned_by.id : null;
-            copy.due_date = copy.due_date ? getStringFromDate(copy.due_date) : null;
+            copy.due_date = copy.due_date ? copy.due_date.toISOString() : null;
             return copy;
         };
 
@@ -45,7 +33,7 @@ angular.module('tdb.services.tasks', ['ngResource'])
             var copy = angular.copy(task);
             copy.assigned_to = copy.assigned_to ? copy.assigned_to.id : null;
             copy.assigned_by = copy.assigned_by ? copy.assigned_by.id : null;
-            copy.due_date = copy.due_date ? getStringFromDate(copy.due_date) : null;
+            copy.due_date = copy.due_date ? copy.due_date.toISOString() : null;
             return copy;
         };
 

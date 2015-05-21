@@ -106,7 +106,6 @@ angular.module('tdb.controllers.tasks', [])
         };
 
         $scope.toggleCompleted = function (task) {
-            task.completed = !task.completed;
             Task.update(task);
         };
 
