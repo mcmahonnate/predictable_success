@@ -39,8 +39,7 @@
             </div>    
         </div>    
         <div class="col-sm-7 col-md-7 col-lg-7">  
-            <div ng-include="'/static/angular/partials/_widgets/todos.html'" ng-controller="EmployeeToDoListCtrl"></div> 
-            <div ng-include="'/static/angular/partials/_widgets/add-todo.html'" class="ng-hide"></div>
+            <div ng-include="'/static/angular/partials/_widgets/todos.html'" ng-controller="TaskListCtrl"></div>
             <div ng-controller="EmployeeCommentsCtrl" ng-init="view='employee-view'">
                 <div ng-include="'/static/angular/partials/_widgets/add-comment.html'"></div>
                 <div ng-include="'/static/angular/partials/_widgets/comments.html'"></div>      

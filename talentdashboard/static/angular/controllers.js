@@ -1192,7 +1192,7 @@ angular.module('tdb.controllers', [])
     }
     $scope.saveToDo = function() {
         if (!$scope.saving) {
-            $scope.currentToDo.edit = false;
+            //$scope.currentToDo.edit = false;
             $scope.saving = true;
             var assigned_to_id = null;
             if ($scope.currentToDo.assigned_to) {
@@ -1275,13 +1275,9 @@ angular.module('tdb.controllers', [])
     $scope.format = $scope.formats[0];
 }])
 
-.controller('DiscussionOverviewCtrl', ['$scope', '$rootScope', '$location', '$filter', '$routeParams', '$window', 'EmployeeComments', 'Employee', 'Engagement', 'Comment', 'SubComments', 'User', 'analytics', 'TalentCategories', function($scope, $rootScope, $location, $filter, $routeParams, $window, EmployeeComments, Employee, Engagement, Comment, SubComments, User, analytics, TalentCategories) {
+.controller('DiscussionOverviewCtrl', ['$scope', '$rootScope', '$location', '$filter', '$routeParams', '$window', 'EmployeeComments', 'Employee', 'Engagement', 'Comment', 'SubComments', 'User', 'analytics', function($scope, $rootScope, $location, $filter, $routeParams, $window, EmployeeComments, Employee, Engagement, Comment, SubComments, User, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     $scope.showPeopleTeamVisibility = false;
-
-
-    $scope.talentCategory = $routeParams.talent_category;
-    $scope.categoryName  = TalentCategories.getLabelByTalentCategory($scope.talentCategory)
 
     var getBlankComment = function() {
         return {text: ''}

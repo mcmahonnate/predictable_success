@@ -372,6 +372,34 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'description', 'assigned_to', 'assigned_by', 'created_by', 'employee', 'created_date', 'due_date', 'completed')
 
 
+class CreateTaskSerializer(serializers.HyperlinkedModelSerializer):
+    created_by = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
+    assigned_to = serializers.PrimaryKeyRelatedField(allow_null=True, queryset=Employee.objects.all())
+    employee = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
+
+    class Meta:
+        model = Task
+        fields = ('description', 'assigned_to', 'employee', 'due_date', 'created_by')
+
+
+class EditTaskSerializer(serializers.HyperlinkedModelSerializer):
+    assigned_to = serializers.PrimaryKeyRelatedField(allow_null=True, queryset=Employee.objects.all())
+    assigned_by = serializers.PrimaryKeyRelatedField(allow_null=True, queryset=Employee.objects.all())
+
+    def update(self, instance, validated_data):
+            instance.description = validated_data.get('description', instance.description)
+            instance.assigned_to = validated_data.get('assigned_to', instance.assigned_to)
+            instance.assigned_by = validated_data.get('assigned_by', instance.assigned_by)
+            instance.due_date = validated_data.get('due_date', instance.due_date)
+            instance.completed = validated_data.get('completed', instance.completed)
+            instance.save()
+            return instance
+
+    class Meta:
+        model = Task
+        fields = ('id', 'description', 'assigned_to', 'assigned_by', 'due_date', 'completed')
+
+
 class SurveyUrlSerializer(serializers.HyperlinkedModelSerializer):
     sent_from = MinimalEmployeeSerializer()
     sent_to = MinimalEmployeeSerializer()
