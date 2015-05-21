@@ -1,50 +1,40 @@
 angular.module('tdb.controllers.tasks', [])
 
-    .controller('CreateTaskCtrl', ['$scope', '$modalInstance', '$routeParams', 'Coach', 'Task', 'employeeId', function($scope, $modalInstance, $routeParams, Coach, Task, employeeId) {
-        $scope.task = new Task(
-            {
-                employee: employeeId,
-                description: '',
-                assigned_to: null,
-                due_date: null
-            }
-        );
-        $scope.coaches = Coach.query();
-        $scope.save = function () {
-            if(!$scope.task.description) return;
+    .controller('AddEditTaskCtrl', ['$scope', '$modalInstance', '$routeParams', 'Coach', 'Task', 'task', function ($scope, $modalInstance, $routeParams, Coach, Task, task) {
+        $scope.task = angular.copy(task);
 
-            $scope.task.$save(function (result) {
-                $modalInstance.close(result);
-            });
+        $scope.datePicker = {
+            isOpen: false,
+            dateFormat: 'mediumDate'
         };
 
-        $scope.cancel = function() {
-            $modalInstance.dismiss();
-        }
-    }])
-
-    .controller('EditTaskCtrl', ['$scope', '$modalInstance', 'Coach', 'Task', 'task', function($scope, $modalInstance, Coach, Task, task) {
-        $scope.task = new Task(
-            {
-                id: task.id,
-                employee: task.employee.id,
-                assigned_to: task.assigned_to ? task.assigned_to.id : null,
-                assigned_by: task.assigned_by ? task.assigned_by.id : null,
-                due_date: task.due_date,
-                completed: task.completed,
-                description: task.description
-            }
-        );
         $scope.coaches = Coach.query();
 
-        $scope.save = function () {
-            if(!$scope.task.description) return;
-            Task.update($scope.task, (function (value) {
-                $modalInstance.close(value);
-            }));
+        $scope.taskIsBeingEdited = function() {
+            return $scope.task.id && $scope.task.id > 0;
         };
 
-        $scope.cancel = function() {
+        $scope.save = function () {
+            if (!$scope.task.description) return;
+
+            if($scope.taskIsBeingEdited()) {
+                Task.update($scope.task, (function (value) {
+                    $modalInstance.close(value);
+                }));
+            } else {
+                $scope.task.$save(function (value) {
+                    $modalInstance.close(value);
+                });
+            }
+        };
+
+        $scope.openDatePicker = function ($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.datePicker.isOpen = true;
+        };
+
+        $scope.cancel = function () {
             $modalInstance.dismiss();
         }
     }])
@@ -53,13 +43,11 @@ angular.module('tdb.controllers.tasks', [])
         var employee_id = $scope.employee ? $scope.employee.id : null;
         $scope.canAddNew = false;
 
-        if(employee_id) {
-            // Employee view
+        if (employee_id) {
             $scope.canAddNew = true;
             $scope.todos = Task.query({ employee_id: employee_id, completed: false });
             $scope.done = Task.query({ employee_id: employee_id, completed: true });
         } else {
-            // "My" view
             $scope.todos = Task.query({completed: false, filter: 'mine'});
             $scope.done = Task.query({completed: true, filter: 'mine'});
         }
@@ -68,18 +56,20 @@ angular.module('tdb.controllers.tasks', [])
         $scope.doneTab = 'done';
         $scope.activeTab = $scope.todoTab;
 
-        $scope.setActiveTab = function(tab) {
+        $scope.setActiveTab = function (tab) {
             $scope.activeTab = tab;
         };
 
-        $scope.newTask = function() {
-            if(!$scope.canAddNew) return;
+        $scope.newTask = function () {
+            if (!$scope.canAddNew) return;
             var modalInstance = $modal.open({
                 animation: true,
                 templateUrl: '/static/angular/partials/_widgets/add-edit-task.html',
-                controller: 'CreateTaskCtrl',
+                controller: 'AddEditTaskCtrl',
                 resolve: {
-                    employeeId: function() { return employee_id }
+                    task: function () {
+                        return new Task({employee: employee_id});
+                    }
                 }
             });
 
@@ -91,13 +81,15 @@ angular.module('tdb.controllers.tasks', [])
             );
         };
 
-        $scope.editTask = function(task) {
+        $scope.editTask = function (task) {
             var modalInstance = $modal.open({
                 animation: true,
                 templateUrl: '/static/angular/partials/_widgets/add-edit-task.html',
-                controller: 'EditTaskCtrl',
+                controller: 'AddEditTaskCtrl',
                 resolve: {
-                    task: function() { return task }
+                    task: function () {
+                        return task
+                    }
                 }
             });
 
@@ -108,31 +100,21 @@ angular.module('tdb.controllers.tasks', [])
             );
         };
 
-        $scope.deleteTask = function(task) {
+        $scope.deleteTask = function (task) {
             task.$delete();
             removeItemFromList($scope.todos, task);
         };
 
-        $scope.toggleCompleted = function(task) {
-            task.completed = !task.completed;
-            Task.update(new Task(
-            {
-                id: task.id,
-                employee: task.employee.id,
-                assigned_to: task.assigned_to ? task.assigned_to.id : null,
-                assigned_by: task.assigned_by ? task.assigned_by.id : null,
-                due_date: task.due_date,
-                completed: task.completed,
-                description: task.description
-            }));
+        $scope.toggleCompleted = function (task) {
+            Task.update(task);
         };
 
-        var removeItemFromList = function(list, item) {
+        var removeItemFromList = function (list, item) {
             var index = list.indexOf(item);
             list.splice(index, 1);
         };
 
-        var replaceItemInList = function(list, currentItem, newItem) {
+        var replaceItemInList = function (list, currentItem, newItem) {
             var index = list.indexOf(currentItem);
             list.splice(index, 1);
             list.splice(index, 0, newItem);

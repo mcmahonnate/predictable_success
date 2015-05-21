@@ -31,15 +31,15 @@ def build_salary_report(employees):
 
 
 def get_salary_report_for_all_employees():
-    employees = Employee.objects.all()
+    employees = Employee.objects.get_current_employees()
     return build_salary_report(employees)
 
 
 def get_salary_report_for_team(team_id):
-    employees = Employee.objects.filter(team_id = team_id)
+    employees = Employee.objects.get_current_employees(team_id=team_id)
     return build_salary_report(employees)
 
 
 def get_salary_report_for_lead(lead_id):
-    employees = Employee.objects.filter(leaderships__leader__id=lead_id)
+    employees = Employee.objects.get_current_employees_by_team_lead(lead_id=lead_id)
     return build_salary_report(employees)

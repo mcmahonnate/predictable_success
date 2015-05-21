@@ -18,7 +18,7 @@ http://{{site}}/#/discussions/{{comment.id}}
 No Discussions
 {% endfor %}
 
-To-dos
+Tasks
 --------------------
 {% for todo in todos %}
 {{todo.employee.full_name}}
