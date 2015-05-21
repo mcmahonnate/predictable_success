@@ -956,7 +956,7 @@ class ImageUploadView(APIView):
         employee.avatar = avatar_file
 
         #resize to small avatar size
-        avatar_small_size = (48, 48)
+        avatar_small_size = (75, 75)
         avatar_small_file = resize(image, avatar_small_size, filename, extension, content_type)
         employee.avatar_small = avatar_small_file
 
