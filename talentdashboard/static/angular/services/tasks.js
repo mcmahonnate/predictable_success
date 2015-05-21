@@ -4,12 +4,40 @@ angular.module('tdb.services.tasks', ['ngResource'])
         return $resource('/api/v1/tasks/mine/');
     }])
 
-    .factory('Task', ['$resource', function ($resource) {
+    .factory('Task', ['$resource', '$filter', function ($resource, $filter) {
+        var getStringFromDate = function (date) {
+            return $filter('date')(date, 'yyyy-MM-dd');
+        };
+
+        var getDateFromString = function (dateString) {
+            var parts = dateString.split('-');
+            var year = parseInt(parts[0]);
+            var month = parseInt(parts[1]) - 1;
+            var date = parseInt(parts[2]);
+            return new Date(year, month, date);
+        };
+
+        var fromServer = function(task) {
+            var copy = angular.copy(task);
+            copy.due_date = copy.due_date ? new Date(copy.due_date) : null;
+            copy.created_date = copy.created_date ? getDateFromString(copy.created_date) : null;
+            return copy
+        };
+
+        var manyFromServer = function(taskList) {
+            var newList = [];
+            for(var index = 0; index < taskList.length; index++) {
+                newList.push(fromServer(taskList[index]));
+            }
+            return newList;
+        };
+
         var forEditing = function (task) {
             var copy = angular.copy(task);
             copy.employee = copy.employee.id;
             copy.assigned_to = copy.assigned_to ? copy.assigned_to.id : null;
             copy.assigned_by = copy.assigned_by ? copy.assigned_by.id : null;
+            copy.due_date = copy.due_date ? getStringFromDate(copy.due_date) : null;
             return copy;
         };
 
@@ -17,10 +45,26 @@ angular.module('tdb.services.tasks', ['ngResource'])
             var copy = angular.copy(task);
             copy.assigned_to = copy.assigned_to ? copy.assigned_to.id : null;
             copy.assigned_by = copy.assigned_by ? copy.assigned_by.id : null;
+            copy.due_date = copy.due_date ? getStringFromDate(copy.due_date) : null;
             return copy;
         };
 
         var actions = {
+            'get': {
+                method: 'GET',
+                transformResponse: [
+                    angular.fromJson,
+                    fromServer
+                ]
+            },
+            'query': {
+                method: 'GET',
+                isArray: true,
+                transformResponse: [
+                    angular.fromJson,
+                    manyFromServer
+                ]
+            },
             'save': {
                 method: 'POST',
                 transformRequest: [
