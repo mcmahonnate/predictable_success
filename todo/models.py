@@ -12,8 +12,7 @@ class Task(models.Model):
         null=True,
         blank=True,
     )
-    description = models.CharField(
-        max_length=255,
+    description = models.TextField(
         blank=True,
     )
     completed = models.BooleanField(default=False)
