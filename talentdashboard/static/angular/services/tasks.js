@@ -4,7 +4,7 @@ angular.module('tdb.services.tasks', ['ngResource'])
         return $resource('/api/v1/tasks/mine/');
     }])
 
-    .factory('Task', ['$resource', '$filter', function ($resource, $filter) {
+    .factory('Task', ['$resource', function ($resource) {
         var fromServer = function(task) {
             var copy = angular.copy(task);
             copy.due_date = copy.due_date ? new Date(copy.due_date) : null;
