@@ -25,7 +25,11 @@ LOGGING = {
             'class': 'logging.FileHandler',
             'filename': 'debug.log',
             'formatter': 'simple'
-        }
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
     },
     'loggers': {
         'django': {
@@ -41,5 +45,9 @@ LOGGING = {
             'handlers': ['file'],
             'level': 'DEBUG',
         },
+        # 'django.db.backends': {
+        #     'level': 'DEBUG',
+        #     'handlers': ['console'],
+        # },
     }
 }
