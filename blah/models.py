@@ -15,7 +15,7 @@ class ModelCommentManager(models.Manager):
         ctype = ContentType.objects.get_for_model(self.model)
         return Comment.objects.filter(content_type__pk = ctype.pk).distinct()
 
-    def add_comment(self, content, visibility, owner = None):
+    def add_comment(self, content, visibility, daily_digest, owner = None):
         """
         Creates and associate a comment with the calling instance.
         If the owner is not null, it will be associated with the comment.
@@ -26,7 +26,7 @@ class ModelCommentManager(models.Manager):
         Returns:
         An instance of the created blah.Comment object.
         """
-        return Comment.objects.add_comment(self.instance, content, visibility, owner)
+        return Comment.objects.add_comment(self.instance, content, visibility, daily_digest, owner)
 
     def get_owned_by(self, owner):
         """
@@ -50,7 +50,7 @@ class CommentManager(models.Manager):
     """
     A manager that retrieves comments for a particular model.
     """
-    def add_comment(self, obj, content, visibility, owner = None):
+    def add_comment(self, obj, content, visibility, daily_digest, owner = None):
         """
         Creates and associate a comment with the given object instance.
         If the owner is not null, it will be associated with the comment.
@@ -149,7 +149,7 @@ class Comment(models.Model):
     content = models.TextField()
     created_date = models.DateTimeField(auto_now_add = True)
     modified_date = models.DateTimeField(auto_now = True)
-    include_in_daily_digest = models.BooleanField(default=False)
+    include_in_daily_digest = models.BooleanField(default=True)
     visibility = models.IntegerField(choices=VISIBILITY_CHOICES, default = 3, null = False)
 
     objects = CommentManager()

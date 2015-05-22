@@ -21,14 +21,18 @@ class EmployeeManager(models.Manager):
             employees = employees.filter(team_id=team_id)
         return employees
 
+    def get_current_employees_by_group_name(self, name):
+        employees = self.get_current_employees()
+        employees = employees.filter(user__groups__name=name)
+        return employees
+
     def get_current_employees_by_team_lead(self, lead_id):
-        employees = self.filter(departure_date__isnull=True)
-        employees = employees.filter(display=True)
+        employees = self.get_current_employees()
         employees = employees.filter(leaderships__leader__id=lead_id)
         return employees
 
     def get_current_employees_by_coach(self, coach_id, show_hidden=False):
-        employees = self.filter(departure_date__isnull=True)
+        employees = self.get_current_employees()
         employees = employees.filter(coach_id=coach_id)
         return employees.exclude(display=show_hidden)
 

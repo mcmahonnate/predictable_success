@@ -218,17 +218,19 @@ class LeadSalaryReportDetail(APIView):
 
 class EmployeeList(APIView):
     def get(self, request, format=None):
-        employees = Employee.objects.filter(display='t')
-        employees = employees.exclude(departure_date__isnull=False)
+        group_name = request.QUERY_PARAMS.get('group_name', None)
+        if group_name:
+            employees = Employee.objects.get_current_employees_by_group_name(group_name)
+        else:
+            employees = Employee.objects.get_current_employees()
         serializer = MinimalEmployeeSerializer(employees, many=True, context={'request': request})
         return Response(serializer.data)
 
 
 class TeamMemberList(APIView):
     def get(self, request, pk, format=None):
-        employees = Employee.objects.filter(team__id=pk)
-        employees = employees.filter(display='t')
-        employees = employees.exclude(departure_date__isnull=False)
+        employees = Employee.objects.get_current_employees()
+        employees = employees.filter(team__id=pk)
 
         serializer = EmployeeSerializer(employees, many=True, context={'request': request})
         return Response(serializer.data)
@@ -338,7 +340,8 @@ class ImportData(APIView):
 
 class EmployeeNames(APIView):
     def get(self, request, format=None):
-        employees = Employee.objects.filter(display=True).values_list('full_name',flat=True)
+        employees = Employee.objects.get_current_employees()
+        employees = employees.values_list('full_name',flat=True)
         employees_list = list(employees)
         return HttpResponse(json.dumps(employees_list), content_type='application/json')
 
@@ -541,6 +544,10 @@ class EmployeeCommentList(APIView):
         model_name = request.DATA["_model_name"]
         content_type = ContentType.objects.get(model=model_name)
         object_id = request.DATA["_object_id"]
+        if "_daily_digest" in request.DATA:
+            daily_digest = request.DATA["_daily_digest"]
+        else:
+            daily_digest = True
         if "_visibility" in request.DATA:
             visibility = request.DATA["_visibility"]
         else:
@@ -553,7 +560,7 @@ class EmployeeCommentList(APIView):
         if content_type == comment_type:
             comment = Comment.objects.get(id=object_id)
             commenter = Employee.objects.get(user__id=comment.owner_id)
-            sub_comment = Comment.objects.add_comment(comment, content, visibility, owner)
+            sub_comment = Comment.objects.add_comment(comment, content, visibility, daily_digest, owner)
             serializer = SubCommentSerializer(sub_comment, many=False, context={'request': request})
 
             sub_commenters = Comment.objects.get_for_object(comment)
@@ -588,7 +595,7 @@ class EmployeeCommentList(APIView):
                 msg.attach_alternative(html_content, "text/html")
                 msg.send()
         else:
-            comment = employee.comments.add_comment(content, visibility, owner)
+            comment = employee.comments.add_comment(content, visibility, daily_digest, owner)
             serializer = EmployeeCommentSerializer(comment, many=False, context={'request': request})
         return Response(serializer.data)
 
@@ -968,9 +975,8 @@ class ImageUploadView(APIView):
 @api_view(['GET'])
 def coachee_list(request):
     employee = Employee.objects.get(user__id = request.user.id)
-    employees = Employee.objects.filter(coach__id=employee.id)
-    employees = employees.exclude(departure_date__isnull=False)
-    employees = employees.filter(display='t')
+    employees = Employee.objects.get_current_employees()
+    employees = employees.filter(coach__id=employee.id)
     serializer = EmployeeSerializer(employees, many=True, context={'request': request})
     return Response(serializer.data)
 
