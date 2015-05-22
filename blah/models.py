@@ -71,7 +71,7 @@ class CommentManager(models.Manager):
         elif owner != None:
             raise AttributeError ('The owner must be an instance of Django.db.model.Models')
         owner_id = None if owner == None else owner.pk
-        return self.create(content_type = ctype, object_id = obj.pk, content = content, owner_content_type = owner_ctype, owner_id = owner_id, visibility = visibility)
+        return self.create(content_type = ctype, object_id = obj.pk, content = content, owner_content_type = owner_ctype, owner_id = owner_id, visibility = visibility, include_in_daily_digest = daily_digest)
 
     def delete_all_comments(self, obj):
         """

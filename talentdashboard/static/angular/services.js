@@ -387,7 +387,7 @@ angular.module('tdb.services', ['ngResource'])
 
 .factory('Comment', ['$resource', '$http', function($resource, $http) {
     var actions = {                   
-        'update': { method:'PUT', data:{content:'@content',visibility:'@visibility'}, isArray: false },
+        'update': { method:'PUT', isArray: false },
         'remove': { method:'DELETE' },  
     };
     var res = $resource('/api/v1/comments/:id/', {id:'@id'}, actions);

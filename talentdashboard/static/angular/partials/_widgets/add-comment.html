@@ -4,7 +4,7 @@
     <div class="visibility" style="display:none;">
 
             <label>
-                <input ng-model="newComment.include_in_daily_digest" type="checkbox"> Include in Daily Digest Email
+                <input ng-model="newComment.include_in_daily_digest" ng-checked="newComment.include_in_daily_digest" type="checkbox"> Include in Daily Digest Email
             </label>
 
         <button class="btn btn-primary pull-right" ng-disabled="!newComment.text" ng-click="addComment();">Comment</button>

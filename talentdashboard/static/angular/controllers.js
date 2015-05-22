@@ -1444,7 +1444,7 @@ angular.module('tdb.controllers', [])
         $scope.employeeId = $routeParams.id;
     }
     var getBlankComment = function() {
-        return {text: '', visibility: 3, happy: {assessment: 0}}
+        return {text: '', visibility: 3, include_in_daily_digest: true, happy: {assessment: 0}}
     };
     $scope.newComment = getBlankComment();
     $scope.toggleCommentTextExpander = function (comment) {
@@ -1510,21 +1510,21 @@ angular.module('tdb.controllers', [])
     });
 
     $scope.saveComment = function(comment) {
-
         var index = $scope.comments.indexOf(comment);
         if (comment.happiness && comment.happiness.assessment > 0) {
-            var data = {id: $scope.employee.id, _assessment_id:comment.happiness.id,_assessed_by_id: $rootScope.currentUser.employee.id, _assessment: comment.happiness.assessment, _content:comment.content,_visibility: comment.visibility};
-            console.log(data);
+            var data = {id: $scope.employee.id, _assessment_id:comment.happiness.id,_assessed_by_id: $rootScope.currentUser.employee.id, _assessment: comment.happiness.assessment, _content:comment.content,_visibility: comment.visibility,_include_in_daily_digest: comment.include_in_daily_digest};
             Engagement.update(data, function(response) {
                 $scope.originalComments[index].content = comment.content;
                 $scope.originalComments[index].visibility = comment.visibility;
                 $scope.originalComments[index].happiness = comment.happiness;
             });
         } else {
-            var data = {id: comment.id, _content: comment.content, _visibility: comment.visibility};
+            var data = {id: comment.id, _content: comment.content, _visibility: comment.visibility, _include_in_daily_digest: comment.include_in_daily_digest};
+            console.log(data);
             Comment.update(data, function() {
                 $scope.originalComments[index].content = comment.content;
                 $scope.originalComments[index].visibility = comment.visibility;
+                $scope.originalComments[index].daily_digest = comment.daily_digest;
             });
         };
     }
@@ -1561,16 +1561,17 @@ angular.module('tdb.controllers', [])
         newComment.subcomments=[];
         newComment.visibility=$scope.newComment.visibility;
         newComment.happy = $scope.newComment.happy;
+        newComment.include_in_daily_digest = $scope.newComment.include_in_daily_digest;
 
         if ($scope.newComment.happy.assessment>0) {
-            var data = {id: $scope.employee.id, _assessed_by_id: $rootScope.currentUser.employee.id, _assessment: newComment.happy.assessment, _content:newComment.content, _visibility: newComment.visibility};
+            var data = {id: $scope.employee.id, _assessed_by_id: $rootScope.currentUser.employee.id, _assessment: newComment.happy.assessment, _content:newComment.content, _visibility: newComment.visibility, _include_in_daily_digest: newComment.include_in_daily_digest};
             Engagement.addNew(data, function(response) {
                 newComment.id = response.comment.id;
                 newComment.happiness = response.comment.happiness;
                 newComment.visibility = response.comment.visibility;
             });
         } else {
-            var data = {id: newComment.id, _model_name: "employee", _object_id: 0, _content: newComment.content, _visibility: newComment.visibility};
+            var data = {id: newComment.id, _model_name: "employee", _object_id: 0, _content: newComment.content, _visibility: newComment.visibility, _include_in_daily_digest: newComment.include_in_daily_digest};
             data.id = $scope.employeeId;
             EmployeeComments.save(data, function (response) {
                 newComment.id = response.id;

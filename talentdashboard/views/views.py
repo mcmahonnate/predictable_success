@@ -533,8 +533,11 @@ class EmployeeCommentList(APIView):
     def put(self, request, pk, format=None):
         object_id = request.DATA["_object_id"]
         content = request.DATA["_content"]
-        comment = Comment.objects.get(pk=object_id);
+        comment = Comment.objects.get(pk=object_id)
         comment.content = content
+        if "_include_in_daily_digest" in request.DATA:
+            daily_digest = request.DATA["_include_in_daily_digest"]
+            comment.include_in_daily_digest = daily_digest
         comment.save()
         serializer = EmployeeCommentSerializer(comment, many=False, context={'request': request})
         return Response(serializer.data)
@@ -544,8 +547,8 @@ class EmployeeCommentList(APIView):
         model_name = request.DATA["_model_name"]
         content_type = ContentType.objects.get(model=model_name)
         object_id = request.DATA["_object_id"]
-        if "_daily_digest" in request.DATA:
-            daily_digest = request.DATA["_daily_digest"]
+        if "_include_in_daily_digest" in request.DATA:
+            daily_digest = request.DATA["_include_in_daily_digest"]
         else:
             daily_digest = True
         if "_visibility" in request.DATA:
@@ -560,6 +563,8 @@ class EmployeeCommentList(APIView):
         if content_type == comment_type:
             comment = Comment.objects.get(id=object_id)
             commenter = Employee.objects.get(user__id=comment.owner_id)
+            if not "_include_in_daily_digest" in request.DATA:
+                daily_digest = comment.include_in_daily_digest
             sub_comment = Comment.objects.add_comment(comment, content, visibility, daily_digest, owner)
             serializer = SubCommentSerializer(sub_comment, many=False, context={'request': request})
 
@@ -705,6 +710,8 @@ class CommentDetail(APIView):
             comment.content = request.DATA["_content"]
             if "_visibility" in request.DATA:
                 comment.visibility = request.DATA["_visibility"]
+            if "_include_in_daily_digest" in request.DATA:
+                comment.include_in_daily_digest = request.DATA["_include_in_daily_digest"]
             comment.modified_date = datetime.datetime.now()
             comment.save()
             serializer = EmployeeCommentSerializer(comment, many=False, context={'request': request})
