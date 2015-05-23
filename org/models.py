@@ -164,25 +164,25 @@ class Employee(models.Model):
 
     def _get_vops_visionary(self):
         try:
-            return int(self.attributes.get(category__id=13).name)
+            return self.assessments.get(category__name='Visionary').score
         except:
             return None
 
     def _get_vops_operator(self):
         try:
-            return int(self.attributes.get(category__id=14).name)
+            return self.assessments.get(category__name='Operator').score
         except:
             return None
 
     def _get_vops_processor(self):
         try:
-            return int(self.attributes.get(category__id=15).name)
+            return self.assessments.get(category__name='Processor').score
         except:
             return None
 
     def _get_vops_synergist(self):
         try:
-            return int(self.attributes.get(category__id=16).name)
+            return self.assessments.get(category__name='Synergist').score
         except:
             return None
 

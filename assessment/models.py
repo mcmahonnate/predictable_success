@@ -82,7 +82,7 @@ class AssessmentBand(models.Model):
         return "%s" % (self.name)
 
 class EmployeeAssessment(models.Model):
-    employee = models.ForeignKey(Employee, related_name='+')
+    employee = models.ForeignKey(Employee, related_name='assessments')
     category = models.ForeignKey(AssessmentCategory, related_name='+')
     score = models.IntegerField()
 

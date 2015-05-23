@@ -177,12 +177,10 @@ angular.module('tdb.controllers', [])
     $scope.happiness = '';
     $scope.hideTeamMenu = false;
     $scope.kolbe_values=[0,1,2,3];
-    $scope.vops_values=[0,320,6400,960];
     $scope.kolbe_fact_finder_labels=['simplify','explain','specify'];
     $scope.kolbe_follow_thru_labels=['adapt','maintain','systemize'];
     $scope.kolbe_quick_start_labels=['improvise','modify','stabilize'];
     $scope.kolbe_implementor_labels=['imagine','restore','build'];
-    $scope.vops_labels=['low','medium','high'];
     $scope.evaluations = PvpEvaluation.getCurrentEvaluations();
 	$scope.teamId = $routeParams.team_id;
     $scope.talentCategory = $routeParams.talent_category;
@@ -194,7 +192,7 @@ angular.module('tdb.controllers', [])
     $scope.follow_thru = angular.copy($scope.kolbe_follow_thru_labels);
     $scope.quick_start = angular.copy($scope.kolbe_quick_start_labels);
     $scope.implementor = angular.copy($scope.kolbe_implementor_labels);
-    $scope.vops = [];
+    $scope.vops={visionary:false,operator:false,processor:false,synergist:false};
     $scope.teamName='';
     $scope.staleDays=360;
     $scope.staleDate = new Date();
@@ -210,7 +208,11 @@ angular.module('tdb.controllers', [])
 	}
 
 	$scope.menu = {show: false};
+    $scope.clearSynegistStyle = function() {
+        $scope.vops={visionary:false,operator:false,processor:false,synergist:false};
+    };
     $scope.setTeamFilter = function(id, name) {
+        console.log($scope.vops.visionary);
         $scope.teamId=id;
         $scope.teamName=name;
     };
