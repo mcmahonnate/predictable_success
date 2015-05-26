@@ -1018,7 +1018,7 @@ def current_kpi_performance(request):
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
-@auth_employee_cache(60*15, 'AllAccess')
+@auth_employee_cache(60*1440, 'AllAccess')
 @auth_employee('AllAccess')
 def get_company_salary_report(request):
     report = get_salary_report_for_all_employees()
@@ -1028,7 +1028,7 @@ def get_company_salary_report(request):
     return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
-@auth_employee_cache(60*15, 'AllAccess')
+@auth_employee_cache(60*1440, 'AllAccess')
 @auth_employee('AllAccess')
 def compensation_summaries(request):
     compensation_summaries = CompensationSummary.objects.all()
@@ -1203,7 +1203,7 @@ def happiness_reports(request):
     return Response(data)
 
 @api_view(['GET'])
-@auth_employee_cache(60*15, 'AllAccess')
+@auth_employee_cache(60*1440, 'AllAccess')
 @auth_employee('AllAccess')
 def team_leads(request):
     team_id = request.QUERY_PARAMS.get('team_id', None)
