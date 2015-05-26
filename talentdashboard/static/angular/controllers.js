@@ -1441,10 +1441,24 @@ angular.module('tdb.controllers', [])
     };
 }])
 
-.controller('EmployeeCommentsCtrl', ['$scope', '$rootScope', '$filter', '$routeParams', '$window', 'Comments', 'EmployeeComments', 'SubComments','Comment', 'Engagement', 'User', function($scope, $rootScope, $filter, $routeParams, $window, Comments, EmployeeComments, SubComments, Comment, Engagement, User) {
+.controller('DailyDigestCtrl', ['$scope', '$modalInstance', function($scope, $modalInstance) {
+    $scope.cancel = function () {
+        $modalInstance.dismiss();
+    }
+}])
+
+.controller('EmployeeCommentsCtrl', ['$scope', '$rootScope', '$filter', '$routeParams', '$window', '$modal', 'Comments', 'EmployeeComments', 'SubComments','Comment', 'Engagement', 'User', function($scope, $rootScope, $filter, $routeParams, $window, $modal, Comments, EmployeeComments, SubComments, Comment, Engagement, User) {
     if($routeParams && $routeParams.id) {
         $scope.employeeId = $routeParams.id;
     }
+
+    $scope.showMembers = function () {
+        var modalInstance = $modal.open({
+            animation: true,
+            templateUrl: '/static/angular/partials/_widgets/show-members.html',
+            controller: 'DailyDigestCtrl'
+        });
+    };
     var getBlankComment = function() {
         return {text: '', visibility: 3, include_in_daily_digest: true, happy: {assessment: 0}}
     };
