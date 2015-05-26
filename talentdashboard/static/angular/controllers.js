@@ -1441,8 +1441,10 @@ angular.module('tdb.controllers', [])
     };
 }])
 
-.controller('DailyDigestCtrl', ['$scope', '$modalInstance', function($scope, $modalInstance) {
+.controller('DailyDigestCtrl', ['$scope', '$modalInstance', 'Employee', function($scope, $modalInstance, Employee) {
+    $scope.members = Employee.query({group_name:'Daily Digest Subscribers'});
     $scope.cancel = function () {
+        console.log($scope.members);
         $modalInstance.dismiss();
     }
 }])
