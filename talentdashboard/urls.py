@@ -86,9 +86,9 @@ urlpatterns = patterns('',
     url(r'^api/v1/comments/(?P<pk>[0-9]+)/$', (auth('AllAccess','CoachAccess','TeamLeadAccess')(CommentDetail.as_view()))),
 
     url(r'^api/v1/tasks/mine/$', (MyTaskList.as_view())),
-    url(r'^api/v1/tasks/employees/(?P<pk>[0-9]+)/$', (auth_employee('AllAccess','CoachAccess')(EmployeeTaskList.as_view()))),
-    url(r'^api/v1/tasks/(?P<pk>[0-9]+)?/$', (auth('AllAccess','CoachAccess','TeamLead')(TaskDetail.as_view()))),
-    url(r'^api/v1/tasks/$', (auth('AllAccess','CoachAccess','TeamLead')(TaskDetail.as_view()))),
+    url(r'^api/v1/tasks/employees/(?P<pk>[0-9]+)/$', (auth_employee('AllAccess','CoachAccess','TeamLeadAccess')(EmployeeTaskList.as_view()))),
+    url(r'^api/v1/tasks/(?P<pk>[0-9]+)?/$', (auth('AllAccess','CoachAccess','TeamLeadAccess')(TaskDetail.as_view()))),
+    url(r'^api/v1/tasks/$', (auth('AllAccess','CoachAccess','TeamLeadAccess')(TaskDetail.as_view()))),
 
     url(r'^api/v1/image-upload/employees/(?P<pk>[0-9]+)/$', ImageUploadView.as_view()),
     url(r'^api/v1/talent-categories/$', talent_categories),
