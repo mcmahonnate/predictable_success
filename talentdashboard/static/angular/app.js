@@ -1,5 +1,5 @@
 var app = angular.module('tdb', [
-        'tdb.services', 'tdb.services.tasks', 'tdb.controllers', 'tdb.controllers.tasks', 'tdb.directives', 'tdb.filters', 'angular-carousel', 'analytics', 'ui.bootstrap', 'ngCsv','ngRoute','ui-notification'])
+        'tdb.services', 'tdb.search.controllers', 'tdb.search.services', 'tdb.services.tasks', 'tdb.controllers', 'tdb.controllers.tasks', 'tdb.directives', 'tdb.filters', 'angular-carousel', 'analytics', 'ui.bootstrap', 'ngCsv','ngRoute','ui-notification'])
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.
           when('/', {templateUrl: '/static/angular/partials/company-overview.html', controller: 'CompanyOverviewCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
@@ -10,6 +10,7 @@ var app = angular.module('tdb', [
           when('/evaluations/my-team', {templateUrl: '/static/angular/partials/evaluation-list.html', controller: 'MyTeamEvaluationListCtrl', resolve: {authorizeRoute: authorizeRoute}}).
           when('/evaluations/my-coachees', {templateUrl: '/static/angular/partials/evaluation-list.html', controller: 'MyCoacheesEvaluationListCtrl', resolve: {authorizeRoute: authorizeRoute}}).
           when('/evaluations/current', {templateUrl: '/static/angular/partials/evaluation-list.html', controller: 'EvaluationListCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
+          when('/search/employees', {templateUrl: '/static/angular/partials/employee-search.html', controller: 'EmployeeSearchCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
           when('/teams/:id/', {templateUrl: '/static/angular/partials/team-overview.html', controller: 'TeamOverviewCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
           when('/employees/:id', {templateUrl: '/static/angular/partials/employee-detail.html', controller: 'EmployeeDetailCtrl', resolve: {authorizeRoute: authorizeRoute}}).
           when('/coach', {templateUrl: '/static/angular/partials/coach-overview.html', controller: 'CoachDetailCtrl', resolve: {authorizeRoute: authorizeRoute}}).

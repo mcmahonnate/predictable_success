@@ -882,7 +882,7 @@ angular.module('tdb.controllers', [])
         angular.forEach($scope.evaluations_sort, function(employee) {
             var row = {};
             row.name = employee.full_name;
-            row.talent = talentToString(employee.current_talent_category);
+            row.talent = talentToString(employee.current_setHappyFiltergory);
             row.happy = happyToString(employee.happiness);
             row.date = employee.happiness_date;
             $scope.csv.push(row);
