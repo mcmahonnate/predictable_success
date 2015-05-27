@@ -219,10 +219,11 @@ class LeadSalaryReportDetail(APIView):
 class EmployeeList(APIView):
     def get(self, request, format=None):
         group_name = request.QUERY_PARAMS.get('group_name', None)
+        show_hidden = request.QUERY_PARAMS.get('show_hidden', False)
         if group_name:
             employees = Employee.objects.get_current_employees_by_group_name(group_name)
         else:
-            employees = Employee.objects.get_current_employees()
+            employees = Employee.objects.get_current_employees(show_hidden=show_hidden)
         serializer = MinimalEmployeeSerializer(employees, many=True, context={'request': request})
         return Response(serializer.data)
 
