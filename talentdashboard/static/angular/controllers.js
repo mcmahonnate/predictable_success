@@ -69,7 +69,6 @@ angular.module('tdb.controllers', [])
     $scope.kolbe_follow_thru_labels=['adapt','maintain','systemize'];
     $scope.kolbe_quick_start_labels=['improvise','modify','stabilize'];
     $scope.kolbe_implementor_labels=['imagine','restore','build'];
-    $scope.vops_labels=['low','medium','high'];
     $scope.evaluations = MyCoacheesPvpEvaluation.getCurrentEvaluations();
 	$scope.teamId = $routeParams.team_id;
     $scope.talentCategory = $routeParams.talent_category;
@@ -80,7 +79,7 @@ angular.module('tdb.controllers', [])
     $scope.follow_thru = $routeParams.follow_thru;
     $scope.quick_start = $routeParams.quick_start;
     $scope.implementor = $routeParams.implementor;
-    $scope.vops = [];
+    $scope.vops={visionary:false,operator:false,processor:false,synergist:false};
     $scope.teamName='';
     $scope.staleDays=360;
     $scope.staleDate = new Date();
@@ -95,6 +94,9 @@ angular.module('tdb.controllers', [])
 		);
 	}
 	$scope.menu = {show: false};
+    $scope.clearSynegistStyle = function() {
+        $scope.vops={visionary:false,operator:false,processor:false,synergist:false};
+    };
     $scope.setTeamFilter = function(id, name) {
         $scope.teamId=id;
         $scope.teamName=name;
@@ -119,15 +121,11 @@ angular.module('tdb.controllers', [])
     });
     $scope.hideTeamMenu = true;
     $scope.kolbe_values=[0,1,2,3];
-    $scope.vops_values=[0,320,6400,960];
     $scope.kolbe_fact_finder_labels=['simplify','explain','specify'];
     $scope.kolbe_follow_thru_labels=['adapt','maintain','systemize'];
     $scope.kolbe_quick_start_labels=['improvise','modify','stabilize'];
     $scope.kolbe_implementor_labels=['imagine','restore','build'];
-    $scope.vops_labels=['low','medium','high'];
-    MyTeamPvpEvaluation.getCurrentEvaluations(function(results) {
-        $scope.evaluations = results;
-    });
+    $scope.evaluations = MyTeamPvpEvaluation.getCurrentEvaluations();
 	$scope.teamId = $routeParams.team_id;
     $scope.talentCategory = $routeParams.talent_category;
     $scope.categoryName  = TalentCategories.getLabelByTalentCategory($scope.talentCategory)
@@ -137,7 +135,7 @@ angular.module('tdb.controllers', [])
     $scope.follow_thru = $routeParams.follow_thru;
     $scope.quick_start = $routeParams.quick_start;
     $scope.implementor = $routeParams.implementor;
-    $scope.vops = [];
+    $scope.vops={visionary:false,operator:false,processor:false,synergist:false};
     $scope.teamName='';
     $scope.staleDays=360;
     $scope.staleDate = new Date();
@@ -152,6 +150,9 @@ angular.module('tdb.controllers', [])
 		);
 	}
 	$scope.menu = {show: false};
+    $scope.clearSynegistStyle = function() {
+        $scope.vops={visionary:false,operator:false,processor:false,synergist:false};
+    };
     $scope.setTeamFilter = function(id, name) {
         $scope.teamId=id;
         $scope.teamName=name;
@@ -232,11 +233,10 @@ angular.module('tdb.controllers', [])
     }
 }])
 
-.controller('NavigationCtrl', ['$scope', '$routeParams', '$window', '$location', 'Employee', 'Customers', 'Team', function($scope, $routeParams, $window, $location, Employee, Customers, Team) {
+.controller('NavigationCtrl', ['$scope', '$rootScope', '$routeParams', '$window', '$location', 'Employee', 'Customers', 'Team', function($scope, $rootScope, $routeParams, $window, $location, Employee, Customers, Team) {
     $scope.$window = $window;
-    if (!$scope.employees)
-    {
-        $scope.employees = Employee.query({random:Math.floor((Math.random()*1000000000))}); //!important browser cache buster
+    if (!$scope.employees && $rootScope.currentUser.can_view_company_dashboard) {
+        $scope.employees = Employee.query({random: Math.floor((Math.random() * 1000000000))}); //!important browser cache buster
     }
     Customers.get(function (data) {
         $scope.customer = data;
@@ -244,32 +244,32 @@ angular.module('tdb.controllers', [])
 
     $scope.teams = Team.query();
     $scope.modalEmployeeShown = false;
-    $scope.newEmployee = {id:0,full_name:'',first_name:'',last_name:'', email:'', team:{id:0, name:''}, hire_date:'',departure_date:'', avatar:'https://hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg'};
-    $scope.newLeadership = {id:0,leader:{full_name:''}};
-    $scope.toggleEmployeeModal = function() {
+    $scope.newEmployee = {id: 0, full_name: '', first_name: '', last_name: '', email: '', team: {id: 0, name: ''}, hire_date: '', departure_date: '', avatar: 'https://hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg'};
+    $scope.newLeadership = {id: 0, leader: {full_name: ''}};
+    $scope.toggleEmployeeModal = function () {
         $scope.modalEmployeeShown = !$scope.modalEmployeeShown;
     };
-	$scope.employeeMenu = {show: false};
+    $scope.employeeMenu = {show: false};
     $scope.searchMenu = {show: false};
     $scope.filterMenu = {show: false};
-	$scope.teamMenu = {show: false};
+    $scope.teamMenu = {show: false};
     $scope.settingsMenu = {show: false};
     $scope.showAddEmployee = false;
     $scope.addEmployee = [];
 
-	$scope.startsWith  = function(expected, actual){
-		if(expected && actual){
-			return expected.toLowerCase().indexOf(actual.toLowerCase()) == 0;
-		}
-		return true;
-	}
+    $scope.startsWith = function (expected, actual) {
+        if (expected && actual) {
+            return expected.toLowerCase().indexOf(actual.toLowerCase()) == 0;
+        }
+        return true;
+    }
 
-    $scope.navQuery='';
+    $scope.navQuery = '';
     $scope.toggleNavQuery = function () {
         $scope.openFilterMenu = false;
-        $scope.openEmployeeMenu  = false;
+        $scope.openEmployeeMenu = false;
         $scope.openTeamMenu = false;
-        $scope.openSettingsMenu  = false;
+        $scope.openSettingsMenu = false;
         $scope.$window.onclick = function (event) {
             closeNavQuery(event);
         };
@@ -280,22 +280,23 @@ angular.module('tdb.controllers', [])
         var elementClasses = clickedElement.classList;
         var clickedOnNavQuery = elementClasses.contains('nav_query');
         if (!clickedOnNavQuery) {
-            $scope.navQuery='';
+            $scope.navQuery = '';
         }
     }
+
     $scope.toggleFilterMenu = function () {
         $scope.openFilterMenu = !$scope.openFilterMenu;
         if ($scope.openFilterMenu) {
-            $scope.navQuery='';
-            $scope.openEmployeeMenu  = false;
+            $scope.navQuery = '';
+            $scope.openEmployeeMenu = false;
             $scope.openTeamMenu = false;
             $scope.openSearchMenu = false;
-            $scope.openSettingsMenu  = false;
+            $scope.openSettingsMenu = false;
             $scope.$window.onclick = function (event) {
                 closeFilterMenu(event, $scope.toggleFilterMenu);
             };
         } else {
-            $scope.openFilterMenu  = false;
+            $scope.openFilterMenu = false;
             $scope.$window.onclick = null;
             $scope.$$phase || $scope.$apply(); //--> trigger digest cycle and make angular aware.
         }
@@ -309,19 +310,20 @@ angular.module('tdb.controllers', [])
             callbackOnClose();
         }
     }
+
     $scope.toggleEmployeeMenu = function () {
         $scope.openEmployeeMenu = !$scope.openEmployeeMenu;
-        if ($scope.openEmployeeMenu ) {
-            $scope.navQuery='';
+        if ($scope.openEmployeeMenu) {
+            $scope.navQuery = '';
             $scope.openFilterMenu = false;
             $scope.openTeamMenu = false;
             $scope.openSearchMenu = false;
-            $scope.openSettingsMenu  = false;
+            $scope.openSettingsMenu = false;
             $scope.$window.onclick = function (event) {
                 closeEmployeeMenu(event, $scope.toggleEmployeeMenu);
             };
         } else {
-            $scope.openEmployeeMenu  = false;
+            $scope.openEmployeeMenu = false;
             $scope.$window.onclick = null;
             $scope.$$phase || $scope.$apply(); //--> trigger digest cycle and make angular aware.
         }
@@ -334,19 +336,20 @@ angular.module('tdb.controllers', [])
         if (!clickedOnEmployeeMenu) {
             callbackOnClose();
         }
-    }    
+    }
+
     $scope.toggleSearchMenu = function () {
         $scope.openSearchMenu = !$scope.openSearchMenu;
-        if ($scope.openSearchMenu ) {
-            $scope.navQuery='';
+        if ($scope.openSearchMenu) {
+            $scope.navQuery = '';
             $scope.openFilterMenu = false;
             $scope.openTeamMenu = false;
-            $scope.openSettingsMenu  = false;
+            $scope.openSettingsMenu = false;
             $scope.$window.onclick = function (event) {
                 closeSearchMenu(event, $scope.toggleSearchMenu);
             };
         } else {
-            $scope.openSearchMenu  = false;
+            $scope.openSearchMenu = false;
             $scope.$window.onclick = null;
             $scope.$$phase || $scope.$apply(); //--> trigger digest cycle and make angular aware.
         }
@@ -360,19 +363,20 @@ angular.module('tdb.controllers', [])
             callbackOnClose();
         }
     }
+
     $scope.toggleTeamMenu = function () {
         $scope.openTeamMenu = !$scope.openTeamMenu;
-        if ($scope.openTeamMenu ) {
-            $scope.navQuery='';
+        if ($scope.openTeamMenu) {
+            $scope.navQuery = '';
             $scope.openFilterMenu = false;
-            $scope.openEmployeeMenu  = false;
-            $scope.openSettingsMenu  = false;
+            $scope.openEmployeeMenu = false;
+            $scope.openSettingsMenu = false;
             $scope.openSearchMenu = false;
             $scope.$window.onclick = function (event) {
                 closeTeamMenu(event, $scope.toggleTeamMenu);
             };
         } else {
-            $scope.openTeamMenu  = false;
+            $scope.openTeamMenu = false;
             $scope.$window.onclick = null;
             $scope.$$phase || $scope.$apply(); //--> trigger digest cycle and make angular aware.
         }
@@ -386,19 +390,20 @@ angular.module('tdb.controllers', [])
             callbackOnClose();
         }
     }
+
     $scope.toggleSettingsMenu = function () {
         $scope.openSettingsMenu = !$scope.openSettingsMenu;
-        if ($scope.openSettingsMenu ) {
-            $scope.navQuery='';
+        if ($scope.openSettingsMenu) {
+            $scope.navQuery = '';
             $scope.openFilterMenu = false;
-            $scope.openEmployeeMenu  = false;
-            $scope.openTeamMenu  = false;
+            $scope.openEmployeeMenu = false;
+            $scope.openTeamMenu = false;
             $scope.openSearchMenu = false;
             $scope.$window.onclick = function (event) {
                 closeSettingsMenu(event, $scope.toggleSettingsMenu);
             };
         } else {
-            $scope.openSettingsMenu  = false;
+            $scope.openSettingsMenu = false;
             $scope.$window.onclick = null;
             $scope.$$phase || $scope.$apply(); //--> trigger digest cycle and make angular aware.
         }
@@ -531,7 +536,9 @@ angular.module('tdb.controllers', [])
     Team.query(function(data) {
         $scope.teams = data;
     });
-    $scope.employees = Employee.query();
+    if (!$scope.employees && $rootScope.currentUser.can_view_company_dashboard) {
+        $scope.employees = Employee.query();
+    }
     Employee.get(
         {id: $routeParams.id},
         function(data) {
@@ -1094,24 +1101,6 @@ angular.module('tdb.controllers', [])
         $scope.show_myers_briggs = true;
         $scope.show_todos = false;
     };
-}])
-
-.controller('MyToDoListCtrl', ['$scope', '$rootScope', '$routeParams', '$window', 'ToDo', 'MyToDos', 'User', function($scope, $rootScope, $routeParams, $window, ToDo, MyToDos, User) {
-    $scope.todos = MyToDos.query();
-    $scope.completed_todos = MyToDos.query({ completed: true });
-    $scope.deleteToDo = function(todo) {
-        if ($window.confirm('Are you sure you want to delete this To Do?')) {
-            var data = {id: todo.id};
-            var todo_index = $scope.todos.indexOf(todo);
-            var deleteSuccess = function() {
-                $scope.todos.splice(todo_index, 1);
-            };
-
-            ToDo.remove(data, function() {
-                    deleteSuccess();
-                });
-        }
-    }
 }])
 
 .controller('EmployeeToDoListCtrl', ['$scope', '$routeParams', '$window', 'EmployeeToDo', 'ToDo', 'User', function($scope, $routeParams, $window, EmployeeToDo, ToDo, User) {
