@@ -115,11 +115,6 @@ $(function() {
         });
     });
 
-    /* Bind and show navigation */
-    $('.nav-item').hover(function() {
-        $(this).find('.subnav').show();
-    });
-
     /* Bind Bootstrap tooltips */
     $('body').tooltip({ 
         selector: '[data-toggle="tooltip"]',

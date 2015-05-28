@@ -233,29 +233,38 @@ angular.module('tdb.controllers', [])
 }])
 
 .controller('NavigationCtrl', ['$scope', '$routeParams', '$window', '$location', 'Employee', 'Customers', 'Team', function($scope, $routeParams, $window, $location, Employee, Customers, Team) {
+    
     $scope.$window = $window;
-    if (!$scope.employees)
-    {
-        $scope.employees = Employee.query({random:Math.floor((Math.random()*1000000000))}); //!important browser cache buster
+
+    //search
+    if (!$scope.employees) {
+        $scope.employees = Employee.query({
+        random:Math.floor((Math.random()*1000000000))
+        }); //!important browser cache buster
     }
     Customers.get(function (data) {
         $scope.customer = data;
     });
 
+
+    //teams
     $scope.teams = Team.query();
     $scope.modalEmployeeShown = false;
-    $scope.newEmployee = {id:0,full_name:'',first_name:'',last_name:'', email:'', team:{id:0, name:''}, hire_date:'',departure_date:'', avatar:'https://hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg'};
-    $scope.newLeadership = {id:0,leader:{full_name:''}};
-    $scope.toggleEmployeeModal = function() {
-        $scope.modalEmployeeShown = !$scope.modalEmployeeShown;
+    $scope.newEmployee = {
+        id:0,full_name:'',
+        first_name:'',
+        last_name:'', 
+        email:'', 
+        team:{id:0, name:''}, 
+        hire_date:'',
+        departure_date:'', 
+        avatar:'https://hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg'
     };
-	$scope.employeeMenu = {show: false};
-    $scope.searchMenu = {show: false};
-    $scope.filterMenu = {show: false};
-	$scope.teamMenu = {show: false};
-    $scope.settingsMenu = {show: false};
-    $scope.showAddEmployee = false;
-    $scope.addEmployee = [];
+
+    $scope.newLeadership = {
+        id:0,
+        leader:{full_name:''}
+    };  
 
 	$scope.startsWith  = function(expected, actual){
 		if(expected && actual){
@@ -264,154 +273,30 @@ angular.module('tdb.controllers', [])
 		return true;
 	}
 
-    $scope.navQuery='';
-    $scope.toggleNavQuery = function () {
-        $scope.openFilterMenu = false;
-        $scope.openEmployeeMenu  = false;
-        $scope.openTeamMenu = false;
-        $scope.openSettingsMenu  = false;
-        $scope.$window.onclick = function (event) {
-            closeNavQuery(event);
-        };
-    };
-    function closeNavQuery(event) {
-        var clickedElement = event.target;
-        if (!clickedElement) return;
-        var elementClasses = clickedElement.classList;
-        var clickedOnNavQuery = elementClasses.contains('nav_query');
-        if (!clickedOnNavQuery) {
-            $scope.navQuery='';
-        }
-    }
-    $scope.toggleFilterMenu = function () {
-        $scope.openFilterMenu = !$scope.openFilterMenu;
-        if ($scope.openFilterMenu) {
-            $scope.navQuery='';
-            $scope.openEmployeeMenu  = false;
-            $scope.openTeamMenu = false;
-            $scope.openSearchMenu = false;
-            $scope.openSettingsMenu  = false;
-            $scope.$window.onclick = function (event) {
-                closeFilterMenu(event, $scope.toggleFilterMenu);
-            };
+    //show add employee modal 
+    $scope.toggleEmployeeModal = function() {
+        $scope.modalEmployeeShown = !$scope.modalEmployeeShown;
+    };  
+
+    //clear search
+    $scope.navQuery = '';
+
+    //set active tab
+    $scope.activeTab = null; 
+
+    //tabs
+    $scope.zonesTab = 'zones';
+    $scope.teamsTab = 'teams';
+    $scope.settingsTab = 'settings';
+    $scope.searchTab = 'search';
+
+    $scope.setActiveTab = function (tab) {
+        if ($scope.activeTab == tab) {
+            $scope.activeTab = null;
         } else {
-            $scope.openFilterMenu  = false;
-            $scope.$window.onclick = null;
-            $scope.$$phase || $scope.$apply(); //--> trigger digest cycle and make angular aware.
-        }
+            $scope.activeTab = tab;
+        }    
     };
-    function closeFilterMenu(event, callbackOnClose) {
-        var clickedElement = event.target;
-        if (!clickedElement) return;
-        var elementClasses = clickedElement.classList;
-        var clickedOnFilterMenu = elementClasses.contains('filter_menu');
-        if (!clickedOnFilterMenu) {
-            callbackOnClose();
-        }
-    }
-    $scope.toggleEmployeeMenu = function () {
-        $scope.openEmployeeMenu = !$scope.openEmployeeMenu;
-        if ($scope.openEmployeeMenu ) {
-            $scope.navQuery='';
-            $scope.openFilterMenu = false;
-            $scope.openTeamMenu = false;
-            $scope.openSearchMenu = false;
-            $scope.openSettingsMenu  = false;
-            $scope.$window.onclick = function (event) {
-                closeEmployeeMenu(event, $scope.toggleEmployeeMenu);
-            };
-        } else {
-            $scope.openEmployeeMenu  = false;
-            $scope.$window.onclick = null;
-            $scope.$$phase || $scope.$apply(); //--> trigger digest cycle and make angular aware.
-        }
-    };
-    function closeEmployeeMenu(event, callbackOnClose) {
-        var clickedElement = event.target;
-        if (!clickedElement) return;
-        var elementClasses = clickedElement.classList;
-        var clickedOnEmployeeMenu = elementClasses.contains('employee_menu');
-        if (!clickedOnEmployeeMenu) {
-            callbackOnClose();
-        }
-    }    
-    $scope.toggleSearchMenu = function () {
-        $scope.openSearchMenu = !$scope.openSearchMenu;
-        if ($scope.openSearchMenu ) {
-            $scope.navQuery='';
-            $scope.openFilterMenu = false;
-            $scope.openTeamMenu = false;
-            $scope.openSettingsMenu  = false;
-            $scope.$window.onclick = function (event) {
-                closeSearchMenu(event, $scope.toggleSearchMenu);
-            };
-        } else {
-            $scope.openSearchMenu  = false;
-            $scope.$window.onclick = null;
-            $scope.$$phase || $scope.$apply(); //--> trigger digest cycle and make angular aware.
-        }
-    };
-    function closeSearchMenu(event, callbackOnClose) {
-        var clickedElement = event.target;
-        if (!clickedElement) return;
-        var elementClasses = clickedElement.classList;
-        var clickedOnSearchMenu = elementClasses.contains('search_menu');
-        if (!clickedOnSearchMenu) {
-            callbackOnClose();
-        }
-    }
-    $scope.toggleTeamMenu = function () {
-        $scope.openTeamMenu = !$scope.openTeamMenu;
-        if ($scope.openTeamMenu ) {
-            $scope.navQuery='';
-            $scope.openFilterMenu = false;
-            $scope.openEmployeeMenu  = false;
-            $scope.openSettingsMenu  = false;
-            $scope.openSearchMenu = false;
-            $scope.$window.onclick = function (event) {
-                closeTeamMenu(event, $scope.toggleTeamMenu);
-            };
-        } else {
-            $scope.openTeamMenu  = false;
-            $scope.$window.onclick = null;
-            $scope.$$phase || $scope.$apply(); //--> trigger digest cycle and make angular aware.
-        }
-    };
-    function closeTeamMenu(event, callbackOnClose) {
-        var clickedElement = event.target;
-        if (!clickedElement) return;
-        var elementClasses = clickedElement.classList;
-        var clickedOnTeamMenu = elementClasses.contains('team_menu');
-        if (!clickedOnTeamMenu) {
-            callbackOnClose();
-        }
-    }
-    $scope.toggleSettingsMenu = function () {
-        $scope.openSettingsMenu = !$scope.openSettingsMenu;
-        if ($scope.openSettingsMenu ) {
-            $scope.navQuery='';
-            $scope.openFilterMenu = false;
-            $scope.openEmployeeMenu  = false;
-            $scope.openTeamMenu  = false;
-            $scope.openSearchMenu = false;
-            $scope.$window.onclick = function (event) {
-                closeSettingsMenu(event, $scope.toggleSettingsMenu);
-            };
-        } else {
-            $scope.openSettingsMenu  = false;
-            $scope.$window.onclick = null;
-            $scope.$$phase || $scope.$apply(); //--> trigger digest cycle and make angular aware.
-        }
-    };
-    function closeSettingsMenu(event, callbackOnClose) {
-        var clickedElement = event.target;
-        if (!clickedElement) return;
-        var elementClasses = clickedElement.classList;
-        var clickedOnSettingsMenu = elementClasses.contains('settings_menu');
-        if (!clickedOnSettingsMenu) {
-            callbackOnClose();
-        }
-    }
 }])
 
 .controller('TeamListCtrl', ['$scope', 'Team', function($scope, Team) {
