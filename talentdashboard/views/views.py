@@ -518,6 +518,7 @@ class StandardResultsSetPagination(PageNumberPagination):
     def get_paginated_response(self, data):
         return Response({'count': self.page.paginator.count,
                          'has_next': self.page.has_next(),
+                         'page' : self.page.number,
                          'results': data})
 
 class CommentList(APIView):

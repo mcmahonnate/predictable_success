@@ -362,10 +362,10 @@ angular.module('tdb.services', ['ngResource'])
 
 .factory('Comments', ['$resource', '$http', function($resource, $http) {
     Comments = $resource('/api/v1/comments/:path/:id/');
-    Comments.getEmployeeComments = function(id, success, failure) { return this.get({ path: 'employees', id: id}, success, failure); };
-    Comments.getTeamComments = function(id, success, failure) { return this.get({ path: 'teams', id: id }, success, failure); };
-    Comments.getLeadComments = function(success, failure) { return this.get({ path: 'leads'}, success, failure); };
-    Comments.getCoachComments = function(success, failure) { return this.get({ path: 'coaches'}, success, failure); };
+    Comments.getEmployeeComments = function(id, page, success, failure) { return this.get({ path: 'employees', id: id, page: page}, success, failure); };
+    Comments.getTeamComments = function(id, page, success, failure) { return this.get({ path: 'teams', id: id, page: page }, success, failure); };
+    Comments.getLeadComments = function(page, success, failure) { return this.get({ path: 'leads', page: page}, success, failure); };
+    Comments.getCoachComments = function(page, success, failure) { return this.get({ path: 'coaches', page: page}, success, failure); };
 
     return Comments;
 }])

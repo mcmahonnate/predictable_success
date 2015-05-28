@@ -1274,34 +1274,49 @@ angular.module('tdb.controllers', [])
         return {text: ''}
     };
 
-    Comment.get().$promise.then(function(response) {
-        if ($rootScope.currentUser.can_coach_employees || $rootScope.currentUser.can_view_company_dashboard) {
-            $scope.newCommentVisibility = 2;
-            $scope.showPeopleTeamVisibility = true;
-        }
-        $scope.comments = response.results;
-        $scope.originalComments = angular.copy($scope.comments);
-        angular.forEach($scope.comments, function(comment) {
-            var index = $scope.comments.indexOf(comment);
-            var original_comment = $scope.originalComments[index];
-            comment.subcomments = [];
-            original_comment.subcomments = [];
-            SubComments.query({ id: comment.id }).$promise.then(function(response) {
-                    comment.subcomments = response;
-                    original_comment.subcomments = angular.copy(comment.subcomments);
-                }
-            );
-            comment.newSubCommentText = "";
-            comment.expandChildTextArea=false;
-        });
+    $scope.CreateHeader = function(date) {
+        date=$filter('date')(date,"MM/dd/yyyy");
+        showHeader = (date!=$scope.currentGroup);
+        $scope.currentGroup = date;
+        return showHeader;
+    }
+    if ($rootScope.currentUser.can_coach_employees || $rootScope.currentUser.can_view_company_dashboard) {
+        $scope.newCommentVisibility = 2;
+        $scope.showPeopleTeamVisibility = true;
+    }
+    $scope.comments = [];
+    $scope.originalComments = [];
+    $scope.loadComments = function() {
+        $scope.busy = true;
+        Comment.get({page:$scope.page + 1}).$promise.then(function(data) {
+            $scope.has_next = data.has_next;
+            $scope.page = data.page;
+            $scope.new_comments = data.results;
+            $scope.new_originalComments = angular.copy($scope.new_comments);
+            angular.forEach($scope.new_comments, function (comment) {
+                var index = $scope.new_comments.indexOf(comment);
+                var original_comment = $scope.new_originalComments[index];
+                comment.subcomments = [];
+                original_comment.subcomments = [];
+                SubComments.query({ id: comment.id }).$promise.then(function (response) {
+                        comment.subcomments = response;
+                        original_comment.subcomments = angular.copy(comment.subcomments);
+                    }
+                );
+                comment.newSubCommentText = "";
+                comment.expandTextArea = false;
+                comment.expandChildTextArea = false;
+                $scope.comments.push(comment)
+                $scope.originalComments.push(original_comment);
+            });
+            $scope.busy = false;
+        },function ( error ) {console.log ('error')});
+    };
+    $scope.page = 0;
+    $scope.busy = false;
+    $scope.has_next = true;
+    $scope.loadComments();
 
-        $scope.CreateHeader = function(date) {
-            date=$filter('date')(date,"MM/dd/yyyy");
-            showHeader = (date!=$scope.currentGroup);
-            $scope.currentGroup = date;
-            return showHeader;
-        }
-    },function ( error ) {console.log ('error')});
     $scope.toggleChildCommentTextExpander = function (comment) {
         $window.onclick = function (event) {
             if (!comment.newSubCommentText) {
@@ -1484,37 +1499,49 @@ angular.module('tdb.controllers', [])
         };
     };
 
-    Comments.getEmployeeComments($scope.employeeId, function(data) {
-        $scope.showPeopleTeamVisibility = false;
-        if ($rootScope.currentUser.can_coach_employees || $rootScope.currentUser.can_view_company_dashboard) {
-            $scope.newComment.visibility = 2;
-            $scope.showPeopleTeamVisibility = true;
-        }
-        $scope.comments = data.results;
-        $scope.originalComments = angular.copy($scope.comments);
-        angular.forEach($scope.comments, function(comment) {
-            var index = $scope.comments.indexOf(comment);
-            var original_comment = $scope.originalComments[index];
-            comment.subcomments = [];
-            original_comment.subcomments = [];
-            SubComments.query({ id: comment.id }).$promise.then(function(response) {
-                    comment.subcomments = response;
-                    original_comment.subcomments = angular.copy(comment.subcomments);
-                }
-            );
-            comment.newSubCommentText = "";
-            comment.expandTextArea = false;
-            comment.expandChildTextArea = false;
+    $scope.showPeopleTeamVisibility = false;
+    if ($rootScope.currentUser.can_coach_employees || $rootScope.currentUser.can_view_company_dashboard) {
+        $scope.newComment.visibility = 2;
+        $scope.showPeopleTeamVisibility = true;
+    }
+    $scope.CreateHeader = function(date) {
+        date=$filter('date')(date,"MM/dd/yyyy");
+        showHeader = (date!=$scope.currentGroup);
+        $scope.currentGroup = date;
+        return showHeader;
+    }
+    $scope.comments = [];
+    $scope.originalComments = [];
+    $scope.loadComments = function() {
+        $scope.busy = true;
+        Comments.getEmployeeComments($scope.employeeId, $scope.page + 1, function (data) {
+            $scope.has_next = data.has_next;
+            $scope.page = data.page;
+            $scope.new_comments = data.results;
+            $scope.new_originalComments = angular.copy($scope.new_comments);
+            angular.forEach($scope.new_comments, function (comment) {
+                var index = $scope.new_comments.indexOf(comment);
+                var original_comment = $scope.new_originalComments[index];
+                comment.subcomments = [];
+                original_comment.subcomments = [];
+                SubComments.query({ id: comment.id }).$promise.then(function (response) {
+                        comment.subcomments = response;
+                        original_comment.subcomments = angular.copy(comment.subcomments);
+                    }
+                );
+                comment.newSubCommentText = "";
+                comment.expandTextArea = false;
+                comment.expandChildTextArea = false;
+                $scope.comments.push(comment)
+                $scope.originalComments.push(original_comment);
+            });
+            $scope.busy = false;
         });
-
-        $scope.CreateHeader = function(date) {
-            date=$filter('date')(date,"MM/dd/yyyy");
-            showHeader = (date!=$scope.currentGroup);
-            $scope.currentGroup = date;
-            return showHeader;
-        }
-    });
-
+    };
+    $scope.page = 0;
+    $scope.busy = false;
+    $scope.has_next = true;
+    $scope.loadComments();
     $scope.saveComment = function(comment) {
         var index = $scope.comments.indexOf(comment);
         if (comment.happiness && comment.happiness.assessment > 0) {
@@ -1671,40 +1698,48 @@ angular.module('tdb.controllers', [])
         $scope.talentCategoryReport = data;
     });
 
-
-    Comments.getTeamComments($routeParams.id, function(data) {
-        if ($rootScope.currentUser.can_coach_employees || $rootScope.currentUser.can_view_company_dashboard) {
+    $scope.CreateHeader = function(date) {
+        date=$filter('date')(date,"MM/dd/yyyy");
+        showHeader = (date!=$scope.currentGroup);
+        $scope.currentGroup = date;
+        return showHeader;
+    }
+    if ($rootScope.currentUser.can_coach_employees || $rootScope.currentUser.can_view_company_dashboard) {
             $scope.newCommentVisibility = 2;
             $scope.showPeopleTeamVisibility = true;
-        }
-        $scope.comments = data.results;
-        $scope.originalComments = angular.copy($scope.comments);
-        angular.forEach($scope.comments, function(comment) {
-            var index = $scope.comments.indexOf(comment);
-            var original_comment = $scope.originalComments[index];
-
-            comment.subcomments = [];
-            original_comment.subcomments = [];
-            SubComments.query({ id: comment.id }).$promise.then(function(response) {
-                    comment.subcomments = response;
-                    original_comment.subcomments = angular.copy(comment.subcomments);
-                }
-            );
-            comment.newSubCommentText = "";
-            comment.expandTextArea = false;
-            comment.expandChildTextArea = false;
-
+    }
+    $scope.comments = [];
+    $scope.originalComments = [];
+    $scope.loadComments = function() {
+        $scope.busy = true;
+        Comments.getTeamComments($routeParams.id, $scope.page + 1, function(data) {
+            $scope.has_next = data.has_next;
+            $scope.page = data.page;
+            $scope.new_comments = data.results;
+            $scope.new_originalComments = angular.copy($scope.new_comments);
+            angular.forEach($scope.new_comments, function (comment) {
+                var index = $scope.new_comments.indexOf(comment);
+                var original_comment = $scope.new_originalComments[index];
+                comment.subcomments = [];
+                original_comment.subcomments = [];
+                SubComments.query({ id: comment.id }).$promise.then(function (response) {
+                        comment.subcomments = response;
+                        original_comment.subcomments = angular.copy(comment.subcomments);
+                    }
+                );
+                comment.newSubCommentText = "";
+                comment.expandTextArea = false;
+                comment.expandChildTextArea = false;
+                $scope.comments.push(comment)
+                $scope.originalComments.push(original_comment);
+            });
+            $scope.busy = false;
         });
-
-        $scope.CreateHeader = function(date) {
-            date=$filter('date')(date,"MM/dd/yyyy");
-            showHeader = (date!=$scope.currentGroup);
-            $scope.currentGroup = date;
-            return showHeader;
-        }
-
-
-    });
+    };
+    $scope.page = 0;
+    $scope.busy = false;
+    $scope.has_next = true;
+    $scope.loadComments();
 
     $scope.saveComment = function(comment) {
         var index = $scope.comments.indexOf(comment);
@@ -1784,47 +1819,49 @@ angular.module('tdb.controllers', [])
 }])
 
 .controller('LeaderCommentsCtrl', ['$scope', '$rootScope', '$filter', '$routeParams', '$window', 'Comments', 'EmployeeComments', 'SubComments','Comment', 'User',function($scope, $rootScope, $filter, $routeParams, $window, Comments, EmployeeComments, SubComments, Comment, User) {
-     $scope.newCommentText = "";
-     $scope.showPeopleTeamVisibility = false;
-     User.get(
-        function(data) {
-            $scope.lead= data.employee;
-            $scope.leadId = $scope.lead.id;
-
-            Comments.getLeadComments($scope.leadId, function(data) {
-                if ($rootScope.currentUser.can_coach_employees || $rootScope.currentUser.can_view_company_dashboard) {
-                    $scope.newCommentVisibility = 2;
-                    $scope.showPeopleTeamVisibility = true;
-                }
-                $scope.comments = data.results;
-                $scope.originalComments = angular.copy($scope.comments);
-                angular.forEach($scope.comments, function(comment) {
-                    var index = $scope.comments.indexOf(comment);
-                    var original_comment = $scope.originalComments[index];
-
-                    comment.subcomments = [];
-                    original_comment.subcomments = [];
-                    SubComments.query({ id: comment.id }).$promise.then(function(response) {
-                            comment.subcomments = response;
-                            original_comment.subcomments = angular.copy(comment.subcomments);
-                        }
-                    );
-                    comment.newSubCommentText = "";
-                    comment.expandTextArea = false;
-                    comment.expandChildTextArea = false;
-
-                });
-
-                $scope.CreateHeader = function(date) {
-                    date=$filter('date')(date,"MM/dd/yyyy");
-                    showHeader = (date!=$scope.currentGroup);
-                    $scope.currentGroup = date;
-                    return showHeader;
-                }
+    $scope.newCommentText = "";
+    $scope.showPeopleTeamVisibility = false;
+    $scope.CreateHeader = function(date) {
+        date=$filter('date')(date,"MM/dd/yyyy");
+        showHeader = (date!=$scope.currentGroup);
+        $scope.currentGroup = date;
+        return showHeader;
+    }
+    $scope.lead= $rootScope.currentUser;
+    $scope.leadId = $scope.lead.id;
+    $scope.comments = [];
+    $scope.originalComments = [];
+    $scope.loadComments = function() {
+        $scope.busy = true;
+        Comments.getLeadComments($scope.leadId, $scope.page + 1, function(data) {
+            $scope.has_next = data.has_next;
+            $scope.page = data.page;
+            $scope.new_comments = data.results;
+            $scope.new_originalComments = angular.copy($scope.new_comments);
+            angular.forEach($scope.new_comments, function (comment) {
+                var index = $scope.new_comments.indexOf(comment);
+                var original_comment = $scope.new_originalComments[index];
+                comment.subcomments = [];
+                original_comment.subcomments = [];
+                SubComments.query({ id: comment.id }).$promise.then(function (response) {
+                        comment.subcomments = response;
+                        original_comment.subcomments = angular.copy(comment.subcomments);
+                    }
+                );
+                comment.newSubCommentText = "";
+                comment.expandTextArea = false;
+                comment.expandChildTextArea = false;
+                $scope.comments.push(comment)
+                $scope.originalComments.push(original_comment);
             });
+            $scope.busy = false;
+        });
+    };
+    $scope.page = 0;
+    $scope.busy = false;
+    $scope.has_next = true;
+    $scope.loadComments();
 
-        }
-    );
     $scope.toggleCommentTextExpander = function (comment) {
         $window.onclick = function (event) {
             if (!$scope.newCommentText) {
@@ -1932,47 +1969,48 @@ angular.module('tdb.controllers', [])
 }])
 
 .controller('CoachCommentsCtrl', ['$scope', '$rootScope', '$filter', '$routeParams', '$window', 'Comments', 'EmployeeComments', 'SubComments','Comment', 'User',function($scope, $rootScope, $filter, $routeParams, $window, Comments, EmployeeComments, SubComments, Comment, User) {
-     $scope.newCommentText = "";
-     $scope.showPeopleTeamVisibility = false;
-     User.get(
-        function(data) {
-            $scope.coach= data.employee;
-            $scope.coachId = $scope.coach.id;
-
-            Comments.getCoachComments($scope.coachId, function(data) {
-                if ($rootScope.currentUser.can_coach_employees || $rootScope.currentUser.can_view_company_dashboard) {
-                    $scope.newCommentVisibility = 2;
-                    $scope.showPeopleTeamVisibility = true;
-                }
-                $scope.comments = data.results;
-                $scope.originalComments = angular.copy($scope.comments);
-                angular.forEach($scope.comments, function(comment) {
-                    var index = $scope.comments.indexOf(comment);
-                    var original_comment = $scope.originalComments[index];
-
-                    comment.subcomments = [];
-                    original_comment.subcomments = [];
-                    SubComments.query({ id: comment.id }).$promise.then(function(response) {
-                            comment.subcomments = response;
-                            original_comment.subcomments = angular.copy(comment.subcomments);
-                        }
-                    );
-                    comment.newSubCommentText = "";
-                    comment.expandTextArea = false;
-                    comment.expandChildTextArea = false;
-
-                });
-
-                $scope.CreateHeader = function(date) {
-                    date=$filter('date')(date,"MM/dd/yyyy");
-                    showHeader = (date!=$scope.currentGroup);
-                    $scope.currentGroup = date;
-                    return showHeader;
-                }
+    $scope.newCommentText = "";
+    $scope.showPeopleTeamVisibility = false;
+    $scope.coach= $rootScope.currentUser;
+    $scope.coachId = $scope.coach.id;
+    $scope.CreateHeader = function(date) {
+        date=$filter('date')(date,"MM/dd/yyyy");
+        showHeader = (date!=$scope.currentGroup);
+        $scope.currentGroup = date;
+        return showHeader;
+    }
+    $scope.comments = [];
+    $scope.originalComments = [];
+    $scope.loadComments = function() {
+        $scope.busy = true;
+        Comments.getCoachComments($scope.coachId, $scope.page + 1, function(data) {
+            $scope.has_next = data.has_next;
+            $scope.page = data.page;
+            $scope.new_comments = data.results;
+            $scope.new_originalComments = angular.copy($scope.new_comments);
+            angular.forEach($scope.new_comments, function (comment) {
+                var index = $scope.new_comments.indexOf(comment);
+                var original_comment = $scope.new_originalComments[index];
+                comment.subcomments = [];
+                original_comment.subcomments = [];
+                SubComments.query({ id: comment.id }).$promise.then(function (response) {
+                        comment.subcomments = response;
+                        original_comment.subcomments = angular.copy(comment.subcomments);
+                    }
+                );
+                comment.newSubCommentText = "";
+                comment.expandTextArea = false;
+                comment.expandChildTextArea = false;
+                $scope.comments.push(comment)
+                $scope.originalComments.push(original_comment);
             });
-
-        }
-    );
+            $scope.busy = false;
+        });
+    };
+    $scope.page = 0;
+    $scope.busy = false;
+    $scope.has_next = true;
+    $scope.loadComments();
     $scope.toggleCommentTextExpander = function (comment) {
         $window.onclick = function (event) {
             if (!$scope.newCommentText) {
