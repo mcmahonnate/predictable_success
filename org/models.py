@@ -14,9 +14,10 @@ class EmployeeManager(models.Manager):
     def coaches(self):
         return self.filter(user__groups__name=COACHES_GROUP).order_by('full_name')
 
-    def get_current_employees(self, team_id=None):
+    def get_current_employees(self, team_id=None, show_hidden=False):
         employees = self.filter(departure_date__isnull=True)
-        employees = employees.filter(display=True)
+        if not show_hidden:
+            employees = employees.filter(display=True)
         if team_id is not None:
             employees = employees.filter(team_id=team_id)
         return employees
