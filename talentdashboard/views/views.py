@@ -4,8 +4,9 @@ from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import AllowAny
+from rest_framework.pagination import PageNumberPagination
 from .serializers import *
 from .decorators import *
 from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team, get_talent_category_report_for_lead, get_talent_category_report_for_coach
@@ -510,6 +511,29 @@ class EmployeeMBTI(APIView):
             return Response(None)
 
 
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 5
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+    def get_paginated_response(self, data):
+        return Response({'count': self.page.paginator.count,
+                         'has_next': self.page.has_next(),
+                         'results': data})
+
+class CommentList(APIView):
+    def get(self, request, format=None):
+        employee = Employee.objects.get(user__id=request.user.id)
+        employee_type = ContentType.objects.get(model='employee')
+        comments = Comment.objects.filter(content_type=employee_type)
+        comments = comments.exclude(object_id=employee.id)
+        comments = comments.exclude(~Q(owner_id=request.user.id),content_type=employee_type,visibility=1)
+
+        comments = comments.extra(order_by = ['-created_date'])
+        paginator = StandardResultsSetPagination()
+        result_page = paginator.paginate_queryset(comments, request)
+        serializer = EmployeeCommentSerializer(result_page, many=True, context={'request': request})
+        return paginator.get_paginated_response(serializer.data)
+
 class EmployeeCommentList(APIView):
     def get(self, request, pk, format=None):
         employee = Employee.objects.get(id=pk)
@@ -527,8 +551,9 @@ class EmployeeCommentList(APIView):
         comments = comments.exclude(~Q(owner_id=request.user.id),content_type=employee_type,visibility=1)
         comments = comments.exclude(object_id=user.id,content_type=employee_type)
         comments = comments.extra(order_by = ['-created_date'])
-
-        serializer = EmployeeCommentSerializer(comments, many=True,context={'request': request})
+        paginator = StandardResultsSetPagination()
+        result_page = paginator.paginate_queryset(comments, request)
+        serializer = EmployeeCommentSerializer(result_page, many=True,context={'request': request})
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
@@ -622,8 +647,10 @@ class LeadCommentList(APIView):
         if not allow_all_access and (allow_team_lead_access and not allow_coach_access):
             comments = comments.exclude(~Q(owner_id=request.user.id), visibility=2)
         comments = comments.exclude(~Q(owner_id=request.user.id), visibility=1)
-        comments = comments.extra(order_by = ['-created_date'])[:15]
-        serializer = TeamCommentSerializer(comments, many=True, context={'request': request})
+        comments = comments.extra(order_by = ['-created_date'])
+        paginator = StandardResultsSetPagination()
+        result_page = paginator.paginate_queryset(comments, request)
+        serializer = TeamCommentSerializer(result_page, many=True, context={'request': request})
         return Response(serializer.data)
 
 class CoachCommentList(APIView):
@@ -643,8 +670,10 @@ class CoachCommentList(APIView):
         if not allow_all_access and (allow_team_lead_access and not allow_coach_access):
             comments = comments.exclude(~Q(owner_id=request.user.id), visibility=2)
         comments = comments.exclude(~Q(owner_id=request.user.id), visibility=1)
-        comments = comments.extra(order_by = ['-created_date'])[:15]
-        serializer = TeamCommentSerializer(comments, many=True, context={'request': request})
+        comments = comments.extra(order_by = ['-created_date'])
+        paginator = StandardResultsSetPagination()
+        result_page = paginator.paginate_queryset(comments, request)
+        serializer = TeamCommentSerializer(result_page, many=True, context={'request': request})
         return Response(serializer.data)
 
 class TeamCommentList(APIView):
@@ -657,8 +686,10 @@ class TeamCommentList(APIView):
         comments = Comment.objects.filter(object_id__in = employee_ids, content_type=employee_type)
         comments = comments.exclude(~Q(owner_id=request.user.id),content_type=employee_type,visibility=1)
         comments = comments.exclude(object_id=user.id,content_type=employee_type)
-        comments = comments.extra(order_by = ['-created_date'])[:15]
-        serializer = TeamCommentSerializer(comments, many=True, context={'request': request})
+        comments = comments.extra(order_by = ['-created_date'])
+        paginator = StandardResultsSetPagination()
+        result_page = paginator.paginate_queryset(comments, request)
+        serializer = TeamCommentSerializer(result_page, many=True, context={'request': request})
         return Response(serializer.data)
 
 
@@ -685,19 +716,6 @@ class LeadershipDetail(APIView):
         leadership.save()
         serializer = LeadershipSerializer(leadership, many=False, context={'request': request})
         return Response(serializer.data)
-
-
-class CommentList(APIView):
-    def get(self, request, format=None):
-        employee = Employee.objects.get(user__id=request.user.id)
-        employee_type = ContentType.objects.get(model='employee')
-        comments = Comment.objects.filter(content_type=employee_type)
-        comments = comments.exclude(object_id=employee.id)
-        comments = comments.exclude(~Q(owner_id=request.user.id),content_type=employee_type,visibility=1)
-        comments = comments.extra(order_by = ['-created_date'])[:15]
-        serializer = EmployeeCommentSerializer(comments, many=True, context={'request': request})
-        return Response(serializer.data)
-
 
 class CommentDetail(APIView):
     def get(self, request, pk, format=None):

@@ -1274,12 +1274,12 @@ angular.module('tdb.controllers', [])
         return {text: ''}
     };
 
-    Comment.query().$promise.then(function(response) {
+    Comment.get().$promise.then(function(response) {
         if ($rootScope.currentUser.can_coach_employees || $rootScope.currentUser.can_view_company_dashboard) {
             $scope.newCommentVisibility = 2;
             $scope.showPeopleTeamVisibility = true;
         }
-        $scope.comments = response;
+        $scope.comments = response.results;
         $scope.originalComments = angular.copy($scope.comments);
         angular.forEach($scope.comments, function(comment) {
             var index = $scope.comments.indexOf(comment);
