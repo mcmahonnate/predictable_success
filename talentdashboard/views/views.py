@@ -554,7 +554,7 @@ class EmployeeCommentList(APIView):
         paginator = StandardResultsSetPagination()
         result_page = paginator.paginate_queryset(comments, request)
         serializer = EmployeeCommentSerializer(result_page, many=True,context={'request': request})
-        return Response(serializer.data)
+        return paginator.get_paginated_response(serializer.data)
 
     def put(self, request, pk, format=None):
         object_id = request.DATA["_object_id"]
@@ -651,7 +651,7 @@ class LeadCommentList(APIView):
         paginator = StandardResultsSetPagination()
         result_page = paginator.paginate_queryset(comments, request)
         serializer = TeamCommentSerializer(result_page, many=True, context={'request': request})
-        return Response(serializer.data)
+        return paginator.get_paginated_response(serializer.data)
 
 class CoachCommentList(APIView):
     def get(self, request, format=None):
@@ -674,7 +674,7 @@ class CoachCommentList(APIView):
         paginator = StandardResultsSetPagination()
         result_page = paginator.paginate_queryset(comments, request)
         serializer = TeamCommentSerializer(result_page, many=True, context={'request': request})
-        return Response(serializer.data)
+        return paginator.get_paginated_response(serializer.data)
 
 class TeamCommentList(APIView):
     def get(self, request, pk, format=None):
@@ -690,7 +690,7 @@ class TeamCommentList(APIView):
         paginator = StandardResultsSetPagination()
         result_page = paginator.paginate_queryset(comments, request)
         serializer = TeamCommentSerializer(result_page, many=True, context={'request': request})
-        return Response(serializer.data)
+        return paginator.get_paginated_response(serializer.data)
 
 
 class LeadershipDetail(APIView):

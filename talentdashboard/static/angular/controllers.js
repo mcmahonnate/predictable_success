@@ -1490,7 +1490,7 @@ angular.module('tdb.controllers', [])
             $scope.newComment.visibility = 2;
             $scope.showPeopleTeamVisibility = true;
         }
-        $scope.comments = data;
+        $scope.comments = data.results;
         $scope.originalComments = angular.copy($scope.comments);
         angular.forEach($scope.comments, function(comment) {
             var index = $scope.comments.indexOf(comment);
@@ -1677,7 +1677,7 @@ angular.module('tdb.controllers', [])
             $scope.newCommentVisibility = 2;
             $scope.showPeopleTeamVisibility = true;
         }
-        $scope.comments = data;
+        $scope.comments = data.results;
         $scope.originalComments = angular.copy($scope.comments);
         angular.forEach($scope.comments, function(comment) {
             var index = $scope.comments.indexOf(comment);
@@ -1796,7 +1796,7 @@ angular.module('tdb.controllers', [])
                     $scope.newCommentVisibility = 2;
                     $scope.showPeopleTeamVisibility = true;
                 }
-                $scope.comments = data;
+                $scope.comments = data.results;
                 $scope.originalComments = angular.copy($scope.comments);
                 angular.forEach($scope.comments, function(comment) {
                     var index = $scope.comments.indexOf(comment);
@@ -1944,7 +1944,7 @@ angular.module('tdb.controllers', [])
                     $scope.newCommentVisibility = 2;
                     $scope.showPeopleTeamVisibility = true;
                 }
-                $scope.comments = data;
+                $scope.comments = data.results;
                 $scope.originalComments = angular.copy($scope.comments);
                 angular.forEach($scope.comments, function(comment) {
                     var index = $scope.comments.indexOf(comment);
