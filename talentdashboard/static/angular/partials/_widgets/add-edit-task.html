@@ -35,7 +35,7 @@
 	    </div>                        
 	</div>	
 	<div class="modal-footer">
-    	<button ng-click="save()" ng-disabled="!task.description" class="btn btn-success">Save</button>
-    	<button ng-click="cancel()" class="btn btn-default">Cancel</button>
+    	<button ng-click="save();disable=true" ng-disabled="!task.description || disable" class="btn btn-success">Save</button>
+    	<button ng-click="cancel()" ng-disabled="disable" class="btn btn-default">Cancel</button>
     </div>	
 </div>
