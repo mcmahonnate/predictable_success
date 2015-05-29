@@ -6,7 +6,7 @@
         <li role="presentation" ng-class="{'active': activeTab == doneTab}"><a ng-click="setActiveTab(doneTab)">Done</a></li>
     </ul>
     <div ng-show="activeTab == todoTab">
-        <div ng-show="todos.length === 0 || busy" class="todos-empty">
+        <div ng-show="todos.length === 0 && !busy" class="todos-empty">
             <p ng-show="view == 'my-view'">You currently don't have any tasks. Add tasks on employee profile pages.</p>
             <p ng-show="view == 'employee-view'">There are no tasks yet for {{ employee.first_name }}.</p>
         </div>
@@ -50,11 +50,11 @@
                 </div>
             </div>
             <button class="btn btn-link btn-sm" ng-show="todo_has_next && !busy" ng-click="loadTasks(false)">Load More Tasks</button>
-            <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
-        </div>        
+        </div>
+        <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
     </div>
     <div ng-show="activeTab == doneTab">
-        <div ng-show="done.length === 0 || busy" class="todos-empty">
+        <div ng-show="done.length === 0 && !busy" class="todos-empty">
             <p>You don't have any completed tasks.</p>
         </div>
         <div ng-if="done.length > 0">
@@ -85,7 +85,7 @@
                 </div>
             </div>
             <button class="btn btn-link btn-sm" ng-show="done_has_next && !busy" ng-click="loadTasks(true)">Load More Tasks</button>
-            <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
         </div>
+        <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
     </div>
 </div>
