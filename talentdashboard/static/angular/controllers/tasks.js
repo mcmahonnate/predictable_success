@@ -19,10 +19,12 @@ angular.module('tdb.controllers.tasks', [])
 
             if($scope.taskIsBeingEdited()) {
                 Task.update($scope.task, (function (value) {
+                    value.due_date = value.due_date ? new Date(value.due_date) :null;
                     $modalInstance.close(value);
                 }));
             } else {
                 $scope.task.$save(function (value) {
+                    value.due_date = value.due_date ? new Date(value.due_date) :null;
                     $modalInstance.close(value);
                 });
             }
@@ -58,7 +60,6 @@ angular.module('tdb.controllers.tasks', [])
             }
 
             Task.get(query, function(data) {
-                console.log(query);
                 $scope.new_todos = data.results;
                 angular.forEach($scope.new_todos, function (todo) {
                     if (completed) {
