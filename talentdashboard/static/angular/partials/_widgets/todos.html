@@ -49,6 +49,8 @@
                     </ul>
                 </div>
             </div>
+            <button class="btn btn-link btn-sm" ng-show="todo_has_next && !busy" ng-click="loadTasks(false)">Load More Tasks</button>
+            <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
         </div>        
     </div>
     <div ng-show="activeTab == doneTab">

@@ -5,7 +5,19 @@ angular.module('tdb.services.tasks', ['ngResource'])
     }])
 
     .factory('Task', ['$resource', function ($resource) {
+        var checkedPaged  = function(response) {
+            console.log(response);
+            if (response.page) {
+                console.log('is paged');
+                response.results = manyFromServer(response.results);
+                return response;
+            } else {
+                console.log('not paged');
+                return fromServer(response);
+            }
+        }
         var fromServer = function(task) {
+            console.log('fromServer');
             var copy = angular.copy(task);
             copy.due_date = copy.due_date ? new Date(copy.due_date) : null;
             copy.created_date = copy.created_date ? new Date(copy.created_date) : null;
@@ -13,6 +25,7 @@ angular.module('tdb.services.tasks', ['ngResource'])
         };
 
         var manyFromServer = function(taskList) {
+            console.log('manyFromServer');
             var newList = [];
             for(var index = 0; index < taskList.length; index++) {
                 newList.push(fromServer(taskList[index]));
@@ -42,12 +55,11 @@ angular.module('tdb.services.tasks', ['ngResource'])
                 method: 'GET',
                 transformResponse: [
                     angular.fromJson,
-                    fromServer
+                    checkedPaged
                 ]
             },
             'query': {
                 method: 'GET',
-                isArray: true,
                 transformResponse: [
                     angular.fromJson,
                     manyFromServer
@@ -70,7 +82,6 @@ angular.module('tdb.services.tasks', ['ngResource'])
         };
 
         var Task = $resource('/api/v1/tasks/:id/', {id: '@id'}, actions);
-
         return Task;
     }])
 ;

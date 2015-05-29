@@ -1,8 +1,8 @@
 angular.module('tdb.controllers.tasks', [])
 
-    .controller('AddEditTaskCtrl', ['$scope', '$modalInstance', '$routeParams', 'Coach', 'Task', 'task', function ($scope, $modalInstance, $routeParams, Coach, Task, task) {
+    .controller('AddEditTaskCtrl', ['$scope', '$rootScope', '$modalInstance', '$routeParams', 'Coach', 'Task', 'task', function ($scope, $rootScope, $modalInstance, $routeParams, Coach, Task, task) {
         $scope.task = angular.copy(task);
-
+        $scope.task.assigned_by = $rootScope.currentUser.employee;
         $scope.datePicker = {
             isOpen: false,
             dateFormat: 'mediumDate'
@@ -42,15 +42,45 @@ angular.module('tdb.controllers.tasks', [])
     .controller('TaskListCtrl', ['$scope', '$attrs', '$modal', 'Task', function ($scope, $attrs, $modal, Task) {
         var employee_id = $scope.employee ? $scope.employee.id : null;
         $scope.canAddNew = false;
+        $scope.todos = [];
+        $scope.done = [];
+        $scope.loadTasks = function(completed) {
+            $scope.busy = true;
 
-        if (employee_id) {
-            $scope.canAddNew = true;
-            $scope.todos = Task.query({ employee_id: employee_id, completed: false });
-            $scope.done = Task.query({ employee_id: employee_id, completed: true });
-        } else {
-            $scope.todos = Task.query({completed: false, filter: 'mine'});
-            $scope.done = Task.query({completed: true, filter: 'mine'});
-        }
+            var page;
+            if (completed) {page = $scope.done_page + 1}
+            else {page = $scope.todo_page + 1}
+
+            var query = {completed: completed, filter: 'mine', page: page};
+            if (employee_id) {
+                $scope.canAddNew = true;
+                query = {employee_id: employee_id, completed: completed, page: page};
+            }
+
+            Task.get(query, function(data) {
+                console.log(query);
+                $scope.new_todos = data.results;
+                angular.forEach($scope.new_todos, function (todo) {
+                    if (completed) {
+                        $scope.done_has_next = data.has_next;
+                        $scope.done_page = data.page;
+                        $scope.done.push(todo);
+                    } else {
+                        $scope.todo_has_next = data.has_next;
+                        $scope.todo_page = data.page;
+                        $scope.todos.push(todo);
+                    }
+                });
+                $scope.busy = false;
+            });
+        };
+        $scope.busy = false;
+        $scope.done_has_next = true;
+        $scope.todo_has_next = true;
+        $scope.done_page = 0;
+        $scope.todo_page = 0;
+        $scope.loadTasks(false); //load todos
+        $scope.loadTasks(true); //load done todos
 
         $scope.todoTab = 'todo';
         $scope.doneTab = 'done';

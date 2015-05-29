@@ -759,8 +759,10 @@ class MyTaskList(APIView):
         tasks = Task.objects.filter(assigned_to__id=assigned_to.id)
         tasks = tasks.filter(completed=completed)
         tasks = tasks.extra(order_by=['-due_date'])
-        serializer = TaskSerializer(tasks, many=True, context={'request': request})
-        return Response(serializer.data)
+        paginator = StandardResultsSetPagination()
+        result_page = paginator.paginate_queryset(tasks, request)
+        serializer = TaskSerializer(result_page, many=True, context={'request': request})
+        return paginator.get_paginated_response(serializer.data)
 
 
 class TaskDetail(APIView):
@@ -787,11 +789,15 @@ class TaskDetail(APIView):
             if 'employee_id' in request.QUERY_PARAMS:
                 employee_id = request.QUERY_PARAMS.get('employee_id')
                 tasks = tasks.filter(employee_id=employee_id)
-            serializer = TaskSerializer(tasks.all(), many=True)
+            tasks = tasks.extra(order_by=['-due_date'])
+            paginator = StandardResultsSetPagination()
+            result_page = paginator.paginate_queryset(tasks.all(), request)
+            serializer = TaskSerializer(result_page, many=True, context={'request': request})
+            return paginator.get_paginated_response(serializer.data)
         else:
             task = self.get_object(pk)
             serializer = TaskSerializer(task)
-        return Response(serializer.data)
+            return Response(serializer.data)
 
     def post(self, request):
         add_current_employee_to_request(request, 'created_by')
@@ -864,8 +870,11 @@ class EmployeeTaskList(APIView):
             tasks = Task.objects.filter(employee__id=pk)
             tasks = tasks.filter(completed=completed)
             tasks = tasks.extra(order_by=['-created_date'])
-        serializer = TaskSerializer(tasks, many=True, context={'request': request})
-        return Response(serializer.data)
+
+        paginator = StandardResultsSetPagination()
+        result_page = paginator.paginate_queryset(tasks, request)
+        serializer = TaskSerializer(result_page, many=True, context={'request': request})
+        return paginator.get_paginated_response(serializer.data)
 
     def post(self, request, pk, format=None):
         employee_id = request.DATA["_employee_id"]
