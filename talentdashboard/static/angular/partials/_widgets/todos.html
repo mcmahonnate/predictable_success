@@ -8,7 +8,7 @@
     <div ng-show="activeTab == todoTab">
         <div ng-show="todos.length === 0 && !busy" class="todos-empty">
             <p ng-show="view == 'my-view'">You currently don't have any tasks. Add tasks on employee profile pages.</p>
-            <p ng-show="view == 'employee-view'">There are no tasks yet for {{ employee.first_name }}.</p>
+            <p ng-show="view == 'employee-view'">There are no tasks for {{ employee.first_name }}.</p>
         </div>
         <div ng-if="todos.length > 0">
             <div class="row shaded">
@@ -54,8 +54,9 @@
         <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
     </div>
     <div ng-show="activeTab == doneTab">
-        <div ng-show="done.length === 0 && !busy" class="todos-empty">
-            <p>You don't have any completed tasks.</p>
+        <div ng-show="todos.length === 0 && !busy" class="todos-empty">
+            <p ng-show="view == 'my-view'">You don't have any completed tasks.</p>
+            <p ng-show="view == 'employee-view'">There are no completed tasks for {{ employee.first_name }}.</p>
         </div>
         <div ng-if="done.length > 0">
             <div class="row shaded">
