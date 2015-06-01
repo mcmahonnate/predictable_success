@@ -221,8 +221,10 @@ class EmployeeList(APIView):
     def get(self, request, format=None):
         group_name = request.QUERY_PARAMS.get('group_name', None)
         show_hidden = request.QUERY_PARAMS.get('show_hidden', False)
+        logger.debug(group_name)
+        logger.debug(show_hidden)
         if group_name:
-            employees = Employee.objects.get_current_employees_by_group_name(group_name)
+            employees = Employee.objects.get_current_employees_by_group_name(name=group_name,show_hidden=show_hidden)
         else:
             employees = Employee.objects.get_current_employees(show_hidden=show_hidden)
         serializer = MinimalEmployeeSerializer(employees, many=True, context={'request': request})
