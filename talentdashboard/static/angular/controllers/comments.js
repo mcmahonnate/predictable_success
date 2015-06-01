@@ -1,6 +1,6 @@
 angular.module('tdb.controllers.comments', [])
 
-    .controller('CommentsCtrl', ['$scope', '$rootScope', '$filter', '$routeParams', '$window', 'Comments', 'EmployeeComments', 'SubComments','Comment', 'Engagement', function($scope, $rootScope, $filter, $routeParams, $window, Comments, EmployeeComments, SubComments, Comment, Engagement) {
+    .controller('CommentsCtrl', ['$scope', '$rootScope', '$filter', '$window', '$modal', 'Comments', 'EmployeeComments', 'SubComments','Comment', 'Engagement', function($scope, $rootScope, $filter, $window, $modal, Comments, EmployeeComments, SubComments, Comment, Engagement) {
         $scope.init = function(view, path, id) {
             $scope.view = view;
             $scope.path = path;
@@ -33,11 +33,6 @@ angular.module('tdb.controllers.comments', [])
         $scope.originalComments = [];
         $scope.loadComments = function() {
             $scope.busy = true;
-            //Comment.get({page:$scope.page + 1}).$promise.then(function(data) {
-            //Comments.getEmployeeComments($scope.employeeId, $scope.page + 1, function (data) {
-            //Comments.getLeadComments($scope.leadId, $scope.page + 1, function(data) {
-            //Comments.getTeamComments($routeParams.id, $scope.page + 1, function(data) {
-            //Comments.getCoachComments($rootScope.currentUser.id, $scope.page + 1, function(data) {
             var query = $scope.path ? { path: $scope.path, id: $scope.id, page: $scope.page + 1 } : { page: $scope.page + 1 };
             Comments.get(query, function(data) {
                 $scope.has_next = data.has_next;
