@@ -247,6 +247,10 @@ angular.module('tdb.controllers', [])
         $scope.customer = data;
     });
 
+    if (!$scope.employees && $rootScope.currentUser.can_view_company_dashboard) {
+        $scope.employees = Employee.query();
+    }
+
 
     //teams
     $scope.teams = Team.query();
@@ -298,6 +302,19 @@ angular.module('tdb.controllers', [])
             $scope.activeTab = tab;
         }    
     };
+
+    // $scope.$window.onclick = function() {
+    //     if ($scope.activeTab != null) {
+    //         $scope.activeTab = null;
+    //         //$scope.$apply();
+
+    //         console.log('not null')
+    //     } else {
+    //         console.log('is null')
+    //     }
+    // };
+
+
 }])
 
 .controller('TeamListCtrl', ['$scope', 'Team', function($scope, Team) {
