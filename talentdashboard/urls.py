@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 from django.contrib.auth.views import password_reset, password_reset_confirm, password_reset_done, password_reset_complete, login, logout
 from views.views import *
-from search.views import employee_search
+from search.views import employee_search, talent_report
 from forms import *
 from rest_framework import routers
 from views.payment import ChargeView, PaymentView
@@ -72,6 +72,7 @@ urlpatterns = patterns('',
     url(r'^api/v1/talent-category-reports/teams/(?P<pk>[0-9]+)/$', (auth_cache(60*15, 'AllAccess'))(auth('AllAccess')(TeamTalentCategoryReportDetail.as_view()))),
     url(r'^api/v1/talent-category-reports/lead/$', (auth_employee('AllAccess','TeamLeadAccess')(LeadTalentCategoryReportDetail.as_view()))),
     url(r'^api/v1/talent-category-reports/coach/$', (auth_employee('AllAccess','CoachAccess')(CoachTalentCategoryReportDetail.as_view()))),
+    url(r'^api/v1/talent-category-reports/all-employees/$', (auth_cache(60*15, 'AllAccess'))(auth('AllAccess')(talent_report))),
     url(r'^api/v1/talent-category-reports/(?P<pk>[\w\-]+)/$', (auth_cache(60*15, 'AllAccess'))(auth('AllAccess')(TalentCategoryReportDetail.as_view()))),
     url(r'^api/v1/employee-comment-reports/all-employees/$', (auth_employee('AllAccess')(all_employee_comment_report))),
     url(r'^api/v1/employee-engagement-reports/all-employees/$', (auth_employee('AllAccess')(all_employee_engagement_report))),
@@ -105,6 +106,8 @@ urlpatterns = patterns('',
     url(r'^api/v1/feedback/coachees/(?P<pk>[0-9]*)/$', view_coachee_feedback),
     url(r'^api/v1/feedback/submissions/mine/$', my_feedback),
     url(r'^api/v1/feedback/menu/$', menu_counts),
+
+    url(r'^api/v1/reports/talent/$', talent_report),
 
     url(r'^api/v1/search/employees/$', employee_search),
     url(r'^', include(router.urls)),

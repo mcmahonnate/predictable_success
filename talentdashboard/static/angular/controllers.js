@@ -929,7 +929,7 @@ angular.module('tdb.controllers', [])
 
 }])
 
-.controller('CompanyOverviewCtrl', ['$rootScope', '$scope', '$location', '$routeParams', 'TalentCategoryReport', 'SalaryReport', 'KPIIndicator', 'KPIPerformance', 'analytics', function($rootScope, $scope, $location, $routeParams, TalentCategoryReport, SalaryReport, KPIIndicator, KPIPerformance, analytics) {
+.controller('CompanyOverviewCtrl', ['$rootScope', '$scope', '$location', '$routeParams', 'KPIIndicator', 'KPIPerformance', 'analytics', 'TalentReport', function($rootScope, $scope, $location, $routeParams, KPIIndicator, KPIPerformance, analytics, TalentReport) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     KPIIndicator.get(function(data) {
             $scope.indicator = data;
@@ -941,12 +941,7 @@ angular.module('tdb.controllers', [])
             $scope.performance.date = $rootScope.scrubDate($scope.performance.date, true);
        }
     );
-    TalentCategoryReport.getReportForCompany(function(data) {
-        $scope.talentCategoryReport = data;
-    });
-    SalaryReport.getReportForCompany(function(data) {
-        $scope.salaryReport = data;
-    });
+    $scope.talentReport = TalentReport.query();
 }])
 
 .controller('PeopleReportCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'HappinessReport', 'EngagementReport', 'TalentCategoryReport', 'Engagement', 'analytics', function($scope, $rootScope, $location, $routeParams, HappinessReport, EngagementReport, TalentCategoryReport, Engagement, analytics) {
@@ -981,29 +976,19 @@ angular.module('tdb.controllers', [])
     }
 }])
 
-.controller('LeaderOverviewCtrl', ['$scope', '$location', '$routeParams', 'TalentCategoryReport', 'SalaryReport', 'TeamLeadEmployees', 'User', 'analytics', function($scope, $location, $routeParams, TalentCategoryReport, SalaryReport, TeamLeadEmployees, User, analytics) {
+.controller('LeaderOverviewCtrl', ['$scope', '$location', '$routeParams', 'TalentReport', 'TeamLeadEmployees', 'User', 'analytics', function($scope, $location, $routeParams, TalentReport, TeamLeadEmployees, User, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
 
     User.get(
         function(data) {
-            $scope.lead= data.employee;
-            TeamLeadEmployees.getEmployees($scope.lead.id, function(data) {
-                    $scope.employees = data;
-                }
-            );
+            $scope.lead = data.employee;
+            $scope.talentReport = TalentReport.query({lead_id: $scope.lead.id});
+            $scope.employees = TeamLeadEmployees.getEmployees($scope.lead.id);
         }
     );
-
-    TalentCategoryReport.getReportForLead(function(data) {
-        $scope.talentCategoryReport = data;
-    });
-
-    SalaryReport.getReportForLead(function(data) {
-        $scope.salaryReport = data;
-    });
 }])
 
-.controller('TeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'TalentCategoryReport', 'SalaryReport', 'Team', 'TeamMembers', 'TeamMBTI', 'Customers', 'TeamLeads', 'analytics', function($scope, $location, $routeParams, TalentCategoryReport, SalaryReport, Team, TeamMembers, TeamMBTI, Customers, TeamLeads, analytics) {
+.controller('TeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'Team', 'TeamMembers', 'TeamMBTI', 'Customers', 'TeamLeads', 'analytics', 'TalentReport', function($scope, $location, $routeParams, Team, TeamMembers, TeamMBTI, Customers, TeamLeads, analytics, TalentReport) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
 
     Customers.get(function (data) {
@@ -1011,14 +996,9 @@ angular.module('tdb.controllers', [])
     });
     $scope.teamId = $routeParams.id;
     $scope.employees = TeamLeads.getCurrentEvaluationsForTeamLeads($scope.teamId)
-    SalaryReport.getReportForTeam($routeParams.id, function(data) {
-        $scope.salaryReport = data;
-    });
 
-    TalentCategoryReport.getReportForTeam($routeParams.id, function(data) {
-        $scope.talentCategoryReport = data;
-    });
-	
+    $scope.talentReport = TalentReport.query({team_id: $routeParams.id});
+
     Team.get(
         {id: $routeParams.id},
         function(data) {
@@ -1660,9 +1640,6 @@ angular.module('tdb.controllers', [])
             }
         };
     };
-    TalentCategoryReport.getReportForTeam($routeParams.id, function(data) {
-        $scope.talentCategoryReport = data;
-    });
 
 
     Comments.getTeamComments($routeParams.id, function(data) {

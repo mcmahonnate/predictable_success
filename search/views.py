@@ -1,30 +1,43 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-import pysolr
-
+from indexes import EmployeeIndex
 
 @api_view(['GET'])
 def employee_search(request):
-    solr = pysolr.Solr("http://localhost:8983/solr/employees/", timeout=10)
+    index = EmployeeIndex()
+    results = index.find_employees(
+        request.tenant,
+        talent_categories=request.QUERY_PARAMS.getlist('talent_category', None),
+        team_ids=request.QUERY_PARAMS.getlist('team_id', None),
+        happiness=request.QUERY_PARAMS.getlist('happiness', None)
+    )
+    return Response(results)
 
-    query = {
-        'tenant': request.tenant.schema_name,
-        'sort': 'full_name asc',
-        'rows': 100,
-        'fq': []
+
+@api_view(['GET'])
+def talent_report(request):
+    index = EmployeeIndex()
+    results = index.get_talent_report(
+        request.tenant,
+        talent_categories=request.QUERY_PARAMS.getlist('talent_category', None),
+        team_ids=request.QUERY_PARAMS.getlist('team_id', None),
+        happiness=request.QUERY_PARAMS.getlist('happiness', None),
+        leader_ids=request.QUERY_PARAMS.getlist('leader_id', None),
+        coach_ids=request.QUERY_PARAMS.getlist('coach_id', None),
+    )
+    report = {
+        'count': results['count'],
+        'total_salaries': results['sum'],
+        'categories': {},
     }
 
-    talent_category = request.QUERY_PARAMS.get('talent_category', None)
-    if talent_category:
-        query['fq'].append('talent_category:%s' % talent_category)
+    for key in results['facets']['talent_category']:
+        category = results['facets']['talent_category'][key]
 
-    happiness = request.QUERY_PARAMS.get('happiness', None)
-    if happiness:
-        query['fq'].append('happiness:%s' % happiness)
+        value = {
+            'count': category['count'],
+            'salaries': category['sum']
+        }
+        report['categories'][key] = value
 
-    team_id = request.QUERY_PARAMS.get('team_id', None)
-    if team_id:
-        query['fq'].append('team_id:%s' % team_id)
-
-    results = solr.search('*:*', **query)
-    return Response(results)
+    return Response(report)

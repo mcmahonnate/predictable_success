@@ -178,6 +178,7 @@ TENANT_APPS = (
     'storages',
     'kpi',
     'feedback',
+    'search',
 )
 
 INSTALLED_APPS = list(set(SHARED_APPS + TENANT_APPS))
