@@ -974,13 +974,15 @@ angular.module('tdb.directives', [])
       };
     },
     controller: function ($scope, $rootScope, $location) {
-        $scope.happy = {assessment:0, comment:{content:''}};
+        $scope.happy = {assessment:0, comment:{content:'', include_in_daily_digest: true}};
         $scope.scrub = function (){
             $scope.happy.assessment = 0;
             $scope.happy.comment.content = '';
+            $scope.happy.comment.include_in_daily_digest = true;
         }
         $scope.save = function (){
-            var data = {id: $scope.employee.id, _assessed_by_id: $rootScope.currentUser.employee.id, _assessment: $scope.happy.assessment, _content:$scope.happy.comment.content};
+            var data = {id: $scope.employee.id, _assessed_by_id: $rootScope.currentUser.employee.id, _assessment: $scope.happy.assessment, _content:$scope.happy.comment.content, _include_in_daily_digest: $scope.happy.comment.include_in_daily_digest};
+            console.log(data);
             Engagement.addNew(data, function(response) {
                 var newHappy = response;
                 $scope.happys.unshift(newHappy);
