@@ -1,0 +1,43 @@
+    <div>
+        <h3>Which of these statements best describes how happy you are at work?</h3>
+
+        <div class="radio-box">
+            <div class="radio">
+              <label>
+                <input type="radio" name="happyRating" ng-model="happy.assessment" id="happyRating5" value="5" checked>
+                Never been happier! I love coming to work every day
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="happyRating" ng-model="happy.assessment" id="happyRating4" value="4" checked>
+                I'm happy! I like my job, enjoy what I do, but could be happier.
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="happyRating" ng-model="happy.assessment" id="happyRating3" value="3" checked>
+                I am mixed: I am happy with some things but unhappy with others, so it's hard to answer this question.
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="happyRating" ng-model="happy.assessment" id="happyRating2" value="2" checked>
+                I'm unhappy, I'm not fired up about my job.
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="happyRating" ng-model="happy.assessment" id="happyRating1" value="1" checked>
+                I'm really unhappy. I don't look forward to coming to work.
+              </label>
+            </div>
+        </div>
+    </div>
+
+    <div ng-if="view == 'engagement-view'" style="display: block;margin:20px 0;-webkit-border-radius: 2px;moz-border-radius: 3px;-ms-border-radius: 3px;-o-border-radius: 3px;border-radius: 3px;border: 1px solid #c1c1c1;background-color:white;">
+        <textarea class="text" ng-model="happy.comment.content" rows="1" cols="50" placeholder="Provide some context to your answer." style="width:99%;min-height: 132px;font-size:18px;padding:5px;border: none;resize:vertical;"></textarea>
+    </div>
+    <div ng-if="view == 'engagement-view'" style="margin-top:40px">
+        <button class='ng-modal-button' ng-disabled='!happy.comment.content.length>0 || !happy.assessment' ng-click='save_engagement()'>Submit</button>
+    </div>
