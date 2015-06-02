@@ -462,10 +462,14 @@ class EmployeeEngagement(APIView):
         happy.employee = employee
         happy.assessed_by = assessed_by
         happy.assessment = int(assessment)
+        if "_include_in_daily_digest" in request.DATA:
+            daily_digest = request.DATA["_include_in_daily_digest"]
+        else:
+            daily_digest = True
         if "_content" in request.DATA:
             content = request.DATA["_content"]
             visibility = 3
-            comment = employee.comments.add_comment(content, visibility, request.user)
+            comment = employee.comments.add_comment(content, visibility, daily_digest, assessed_by.user)
             happy.comment = comment
         happy.save()
         serializer = HappinessSerializer(happy, many=False, context={'request': request})

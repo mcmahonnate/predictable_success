@@ -213,7 +213,6 @@ angular.module('tdb.controllers', [])
         $scope.vops={visionary:false,operator:false,processor:false,synergist:false};
     };
     $scope.setTeamFilter = function(id, name) {
-        console.log($scope.vops.visionary);
         $scope.teamId=id;
         $scope.teamName=name;
     };
@@ -642,25 +641,6 @@ angular.module('tdb.controllers', [])
             Notification.error("There was an error importing your data.");
         });
     };
-}])
-
-.controller('LeaderDetailCtrl', ['$scope', '$location', '$routeParams', 'Employee', 'Leadership', 'TalentCategoryReport', '$http', 'analytics', function($scope, $location, $routeParams, Employee, Leadership, TalentCategoryReport, $http, analytics) {
-    analytics.trackPage($scope, $location.absUrl(), $location.url());
-    Employee.get(
-        {id: $routeParams.id},
-        function(data) {
-            $scope.employee = data;
-            if(data.team && data.team.leader) {
-                $http.get(data.team.leader).success(function(data) {
-                    $scope.team_lead = data;
-                });
-            }
-        }
-    );
-    $scope.leaderships = Leadership.getLeadershipsForLeader($routeParams.id);
-    TalentCategoryReport.getReportForCompany(function(data) {
-        $scope.talentCategoryReport = data;
-    });
 }])
 
 .controller('CoachDetailCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'User', 'Employee', 'Coachees', 'TalentCategoryReport', '$http', 'analytics', function($scope, $rootScope, $location, $routeParams, User, Employee, Coachees, TalentCategoryReport, $http, analytics) {
@@ -1231,7 +1211,6 @@ angular.module('tdb.controllers', [])
             _pvp = $scope.currentPvP;
             if ($scope.currentPvP.comment.content) {
                 var data = {id: _pvp.id, _potential: _pvp.potential, _performance: _pvp.performance, _content: _pvp.comment.content};
-                console.log(data)
                 PvpEvaluation.update(data, function () {
                     $scope.saving = false;
                 });
