@@ -1,13 +1,13 @@
 import pysolr
+from django.conf import settings
 from comp.models import CompensationSummary
 from urllib import urlencode
-from . import get_solr_url
 import requests
 
 
 class EmployeeIndex(object):
     def __init__(self):
-        self.solr = pysolr.Solr(get_solr_url('employees'), timeout=10)
+        self.solr = pysolr.Solr(settings.EMPLOYEES_SOLR_URL, timeout=10)
 
     def delete(self, employee, tenant):
         document_id = self._generate_document_id(tenant, employee)
@@ -83,10 +83,10 @@ class EmployeeIndex(object):
             'stats': 'true',
             'stats.facet': 'talent_category',
             "stats.field": "current_salary",
-            'fq': self.get_filters(tenant, talent_categories=talent_categories, team_ids=team_ids, happiness=happiness, leader_ids=leader_ids, coach_ids=coach_ids),
+            'fq': self._get_filters(tenant, talent_categories=talent_categories, team_ids=team_ids, happiness=happiness, leader_ids=leader_ids, coach_ids=coach_ids),
         }
         query_string = urlencode(query, doseq=True)
-        url = "%s/select?%s" % (get_solr_url('employees'), query_string)
+        url = "%s/select?%s" % (settings.EMPLOYEES_SOLR_URL, query_string)
         results = requests.get(url).json()
         return results['stats']['stats_fields']['current_salary']
 

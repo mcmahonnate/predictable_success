@@ -9,7 +9,6 @@ TEMPLATE_DEBUG = DEBUG = True
 COMPRESS_ENABLED = False
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 ALLOWED_HOSTS = ['*']
-SOLR_ROOT = 'http://localhost:8983/solr/'
 RAVEN_CONFIG = {}
 LOGGING = {
     'version': 1,

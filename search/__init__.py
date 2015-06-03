@@ -2,8 +2,9 @@ from django.conf import settings
 
 default_app_config = 'search.apps.SearchConfig'
 
+
 def get_solr_url(core_name):
     if core_name is 'employees':
-        #return 'https://index.websolr.com/solr/d608f324f69'
-        return "%s%s" % (settings.SOLR_ROOT, core_name)
+        return settings.EMPLOYEES_SOLR_URL
+
     raise Exception('Invalid Solr core requested: %s' % core_name)

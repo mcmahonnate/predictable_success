@@ -111,6 +111,8 @@ STRIPE_SECRET_KEY = os.environ['STRIPE_SECRET_KEY']
 MONTHLY_PLAN_PRICE = '5'
 YEARLY_PLAN_PRICE = '60'
 
+# Solr settings
+EMPLOYEES_SOLR_URL = os.environ['EMPLOYEES_SOLR_URL']
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
