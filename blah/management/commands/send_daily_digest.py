@@ -28,6 +28,7 @@ class Command(BaseCommand):
         recipients = User.objects.filter(groups__id=3)
         for recipient in recipients:
             comments = Comment.objects.filter(created_date__range=[start_dt,dt])
+            comments = comments.exclude(include_in_daily_digest=False)
             comments = comments.exclude(object_id=recipient.employee.id, content_type=employee_type)
             comments = comments.exclude(content_type=employee_type, visibility=1)
             todos = Task.objects.filter(created_date__range=[start_dt,dt])

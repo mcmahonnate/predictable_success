@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
+from django.db.models import Q
 
 VISIBILITY_CHOICES = (
     (1, 'Myself'),
@@ -15,7 +16,7 @@ class ModelCommentManager(models.Manager):
         ctype = ContentType.objects.get_for_model(self.model)
         return Comment.objects.filter(content_type__pk = ctype.pk).distinct()
 
-    def add_comment(self, content, visibility, owner = None):
+    def add_comment(self, content, visibility, daily_digest, owner = None):
         """
         Creates and associate a comment with the calling instance.
         If the owner is not null, it will be associated with the comment.
@@ -26,7 +27,7 @@ class ModelCommentManager(models.Manager):
         Returns:
         An instance of the created blah.Comment object.
         """
-        return Comment.objects.add_comment(self.instance, content, visibility, owner)
+        return Comment.objects.add_comment(self.instance, content, visibility, daily_digest, owner)
 
     def get_owned_by(self, owner):
         """
@@ -50,7 +51,31 @@ class CommentManager(models.Manager):
     """
     A manager that retrieves comments for a particular model.
     """
-    def add_comment(self, obj, content, visibility, owner = None):
+    def get_comments_for_all_employees(self, requester):
+        employee_type = ContentType.objects.get(model='employee')
+        comments = self.filter(content_type=employee_type)
+        comments = comments.exclude(object_id=requester.id)
+        daily_digest_subscriber = requester.user.groups.filter(name="Daily Digest Subscribers").exists()
+        admin_access = requester.user.groups.filter(name="AdminAccess").exists()
+        if not daily_digest_subscriber or not admin_access:
+            comments = comments.exclude(~Q(owner_id=requester.user.id), include_in_daily_digest=False)
+        comments = comments.extra(order_by = ['-created_date'])
+
+        return comments
+
+    def get_comments_for_employee(self, requester, employee):
+        comments = self.get_comments_for_all_employees(requester)
+        comments = comments.filter(object_id = employee.id)
+
+        return comments
+
+    def get_comments_for_employees(self, requester, employee_ids):
+        comments = self.get_comments_for_all_employees(requester)
+        comments = comments.filter(object_id__in = employee_ids)
+
+        return comments
+
+    def add_comment(self, obj, content, visibility, daily_digest, owner = None):
         """
         Creates and associate a comment with the given object instance.
         If the owner is not null, it will be associated with the comment.
@@ -71,7 +96,7 @@ class CommentManager(models.Manager):
         elif owner != None:
             raise AttributeError ('The owner must be an instance of Django.db.model.Models')
         owner_id = None if owner == None else owner.pk
-        return self.create(content_type = ctype, object_id = obj.pk, content = content, owner_content_type = owner_ctype, owner_id = owner_id, visibility = visibility)
+        return self.create(content_type = ctype, object_id = obj.pk, content = content, owner_content_type = owner_ctype, owner_id = owner_id, visibility = visibility, include_in_daily_digest = daily_digest)
 
     def delete_all_comments(self, obj):
         """
@@ -149,7 +174,7 @@ class Comment(models.Model):
     content = models.TextField()
     created_date = models.DateTimeField(auto_now_add = True)
     modified_date = models.DateTimeField(auto_now = True)
-    include_in_daily_digest = models.BooleanField(default=False)
+    include_in_daily_digest = models.BooleanField(default=True)
     visibility = models.IntegerField(choices=VISIBILITY_CHOICES, default = 3, null = False)
 
     objects = CommentManager()

@@ -23,6 +23,11 @@
                         </div> 
                     </div>                                                                                                                       
                     <textarea class="form-control" ng-model="happy.comment.content" rows="6" cols="50" placeholder="Add your notes here."></textarea>
+                    <div class="visibility">
+                        <label>
+                            <input ng-model="happy.comment.include_in_daily_digest" ng-checked="happy.comment.include_in_daily_digest" type="checkbox"> Include in Daily Digest Email
+                        </label>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">

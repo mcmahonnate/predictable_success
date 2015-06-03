@@ -974,13 +974,15 @@ angular.module('tdb.directives', [])
       };
     },
     controller: function ($scope, $rootScope, $location) {
-        $scope.happy = {assessment:0, comment:{content:''}};
+        $scope.happy = {assessment:0, comment:{content:'', include_in_daily_digest: true}};
         $scope.scrub = function (){
             $scope.happy.assessment = 0;
             $scope.happy.comment.content = '';
+            $scope.happy.comment.include_in_daily_digest = true;
         }
         $scope.save = function (){
-            var data = {id: $scope.employee.id, _assessed_by_id: $rootScope.currentUser.employee.id, _assessment: $scope.happy.assessment, _content:$scope.happy.comment.content};
+            var data = {id: $scope.employee.id, _assessed_by_id: $rootScope.currentUser.employee.id, _assessment: $scope.happy.assessment, _content:$scope.happy.comment.content, _include_in_daily_digest: $scope.happy.comment.include_in_daily_digest};
+            console.log(data);
             Engagement.addNew(data, function(response) {
                 var newHappy = response;
                 $scope.happys.unshift(newHappy);
@@ -1210,41 +1212,6 @@ angular.module('tdb.directives', [])
   }
 })
 
-.directive('sliderVops', function() {
-  return {
-    link: function(scope, elem, attrs) {
-      elem.slider({
-        range: true,
-        min: scope.vops_values[0],
-        max: scope.vops_values[scope.vops_values.length-1],
-        step: 1,
-        create: function( event, ui ) {
-            var $slider =  $(event.target);
-            var max =  $slider.slider("option", "max");
-            var min =  $slider.slider("option", "min");
-            var $sliderrange = $slider.find('.ui-slider-range');
-            $sliderrange.css({'top': '50%', 'height': '50%'});
-            $('<div style="width:' + $slider.width() + 'px;text-align:center;color:white;margin: 15px 0px 0px 0px;display:inline-block">' + attrs.label + '</div>').insertBefore($slider);
-            $('<div class="ui-slider-label">' + min + '-' + max + '</div>').css({'width': + $slider.width() + 'px','text-align': 'center'}).appendTo($slider);
-            $('<div class="ui-slider-grad">&#160;</div>').css({'width': + $slider.width() + 'px','text-align': 'center'}).appendTo($slider);
-        },
-        values: [scope.vops_values[0], scope.vops_values[scope.vops_values.length-1]],
-        slide: function( event, ui ) {
-          if(ui.values[1] - ui.values[0] < 1){
-              return false;
-          } else {
-            var $slider =  $(event.target);
-            $slider.find('.ui-slider-label').text(ui.values[0] + " - " + ui.values[1]);
-          }
-        },
-        stop: function( event, ui ) {
-            scope.vops[attrs.type]=ui.values;
-            scope.$apply();
-        }
-      });
-    }
-  }
-})
 .directive("masonry", function () {
     var NGREPEAT_SOURCE_RE = '<!-- ngRepeat: ((.*) in ((.*?)( track by (.*))?)) -->';
     return {

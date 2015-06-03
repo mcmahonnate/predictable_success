@@ -362,12 +362,21 @@ angular.module('tdb.services', ['ngResource'])
 
 .factory('Comments', ['$resource', '$http', function($resource, $http) {
     Comments = $resource('/api/v1/comments/:path/:id/');
-    Comments.getEmployeeComments = function(id, success, failure) { return this.query({ path: 'employees', id: id}, success, failure); };
-    Comments.getTeamComments = function(id, success, failure) { return this.query({ path: 'teams', id: id }, success, failure); };
-    Comments.getLeadComments = function(success, failure) { return this.query({ path: 'leads'}, success, failure); };
-    Comments.getCoachComments = function(success, failure) { return this.query({ path: 'coaches'}, success, failure); };
+    Comments.getEmployeeComments = function(id, page, success, failure) { return this.get({ path: 'employees', id: id, page: page}, success, failure); };
+    Comments.getTeamComments = function(id, page, success, failure) { return this.get({ path: 'teams', id: id, page: page }, success, failure); };
+    Comments.getLeadComments = function(page, success, failure) { return this.get({ path: 'leads', page: page}, success, failure); };
+    Comments.getCoachComments = function(page, success, failure) { return this.get({ path: 'coaches', page: page}, success, failure); };
 
     return Comments;
+}])
+
+.factory('Comment', ['$resource', '$http', function($resource, $http) {
+    var actions = {
+        'update': { method:'PUT', isArray: false },
+        'remove': { method:'DELETE' },
+    };
+    var res = $resource('/api/v1/comments/:id/', {id:'@id'}, actions);
+    return res;
 }])
 
 .factory('EmployeeComments', ['$resource', '$http', function($resource, $http) {
@@ -383,15 +392,6 @@ angular.module('tdb.services', ['ngResource'])
     var subComments = $resource('/api/v1/comments/subcomments/:id/');
 
     return subComments;
-}])
-
-.factory('Comment', ['$resource', '$http', function($resource, $http) {
-    var actions = {                   
-        'update': { method:'PUT', data:{content:'@content',visibility:'@visibility'}, isArray: false },
-        'remove': { method:'DELETE' },  
-    };
-    var res = $resource('/api/v1/comments/:id/', {id:'@id'}, actions);
-    return res;
 }])
 
 .factory('User', ['$resource', '$http', function($resource, $http) {

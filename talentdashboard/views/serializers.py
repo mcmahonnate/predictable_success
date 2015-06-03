@@ -340,7 +340,7 @@ class SubCommentSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ('id', 'content', 'owner', 'object_id',  'visibility', 'created_date', 'modified_date')
+        fields = ('id', 'content', 'owner', 'object_id', 'visibility', 'include_in_daily_digest', 'created_date', 'modified_date')
 
 
 class EmployeeCommentSerializer(serializers.HyperlinkedModelSerializer):
@@ -349,7 +349,7 @@ class EmployeeCommentSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ('id', 'content', 'owner', 'object_id', 'visibility', 'created_date', 'modified_date', 'associated_object')
+        fields = ('id', 'content', 'owner', 'object_id', 'visibility', 'include_in_daily_digest', 'created_date', 'modified_date', 'associated_object')
 
 
 class TeamCommentSerializer(serializers.HyperlinkedModelSerializer):
@@ -358,7 +358,7 @@ class TeamCommentSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ('id', 'content', 'owner', 'object_id', 'visibility', 'created_date', 'modified_date', 'associated_object')
+        fields = ('id', 'content', 'owner', 'object_id', 'visibility', 'include_in_daily_digest', 'created_date', 'modified_date', 'associated_object')
 
 
 class TaskSerializer(serializers.HyperlinkedModelSerializer):

@@ -4,8 +4,9 @@ from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import AllowAny
+from rest_framework.pagination import PageNumberPagination
 from .serializers import *
 from .decorators import *
 from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team, get_talent_category_report_for_lead, get_talent_category_report_for_coach
@@ -218,17 +219,22 @@ class LeadSalaryReportDetail(APIView):
 
 class EmployeeList(APIView):
     def get(self, request, format=None):
-        employees = Employee.objects.filter(display='t')
-        employees = employees.exclude(departure_date__isnull=False)
+        group_name = request.QUERY_PARAMS.get('group_name', None)
+        show_hidden = request.QUERY_PARAMS.get('show_hidden', False)
+        logger.debug(group_name)
+        logger.debug(show_hidden)
+        if group_name:
+            employees = Employee.objects.get_current_employees_by_group_name(name=group_name,show_hidden=show_hidden)
+        else:
+            employees = Employee.objects.get_current_employees(show_hidden=show_hidden)
         serializer = MinimalEmployeeSerializer(employees, many=True, context={'request': request})
         return Response(serializer.data)
 
 
 class TeamMemberList(APIView):
     def get(self, request, pk, format=None):
-        employees = Employee.objects.filter(team__id=pk)
-        employees = employees.filter(display='t')
-        employees = employees.exclude(departure_date__isnull=False)
+        employees = Employee.objects.get_current_employees()
+        employees = employees.filter(team__id=pk)
 
         serializer = EmployeeSerializer(employees, many=True, context={'request': request})
         return Response(serializer.data)
@@ -338,7 +344,8 @@ class ImportData(APIView):
 
 class EmployeeNames(APIView):
     def get(self, request, format=None):
-        employees = Employee.objects.filter(display=True).values_list('full_name',flat=True)
+        employees = Employee.objects.get_current_employees()
+        employees = employees.values_list('full_name',flat=True)
         employees_list = list(employees)
         return HttpResponse(json.dumps(employees_list), content_type='application/json')
 
@@ -455,10 +462,14 @@ class EmployeeEngagement(APIView):
         happy.employee = employee
         happy.assessed_by = assessed_by
         happy.assessment = int(assessment)
+        if "_include_in_daily_digest" in request.DATA:
+            daily_digest = request.DATA["_include_in_daily_digest"]
+        else:
+            daily_digest = True
         if "_content" in request.DATA:
             content = request.DATA["_content"]
             visibility = 3
-            comment = employee.comments.add_comment(content, visibility, request.user)
+            comment = employee.comments.add_comment(content, visibility, daily_digest, assessed_by.user)
             happy.comment = comment
         happy.save()
         serializer = HappinessSerializer(happy, many=False, context={'request': request})
@@ -506,32 +517,45 @@ class EmployeeMBTI(APIView):
             return Response(None)
 
 
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 5
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+    def get_paginated_response(self, data):
+        return Response({'count': self.page.paginator.count,
+                         'has_next': self.page.has_next(),
+                         'page' : self.page.number,
+                         'results': data})
+
+class CommentList(APIView):
+    def get(self, request, format=None):
+        requester = Employee.objects.get(user__id=request.user.id)
+        comments = Comment.objects.get_comments_for_all_employees(requester)
+        paginator = StandardResultsSetPagination()
+        result_page = paginator.paginate_queryset(comments, request)
+        serializer = EmployeeCommentSerializer(result_page, many=True, context={'request': request})
+        return paginator.get_paginated_response(serializer.data)
+
 class EmployeeCommentList(APIView):
     def get(self, request, pk, format=None):
         employee = Employee.objects.get(id=pk)
-        user = Employee.objects.get(user__id=request.user.id)
-        employee_type = ContentType.objects.get(model="employee")
         if employee is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
-
-        comments = Comment.objects.filter(object_id = pk, content_type=employee_type)
-        allow_all_access = request.user.groups.filter(name="AllAccess").exists()
-        allow_team_lead_access = request.user.groups.filter(name="TeamLeadAccess").exists()
-        allow_coach_access = request.user.groups.filter(name="CoachAccess").exists()
-        if not allow_all_access and (allow_team_lead_access and not allow_coach_access):
-            comments = comments.exclude(~Q(owner_id=request.user.id),visibility=2)
-        comments = comments.exclude(~Q(owner_id=request.user.id),content_type=employee_type,visibility=1)
-        comments = comments.exclude(object_id=user.id,content_type=employee_type)
-        comments = comments.extra(order_by = ['-created_date'])
-
-        serializer = EmployeeCommentSerializer(comments, many=True,context={'request': request})
-        return Response(serializer.data)
+        requester = Employee.objects.get(user__id=request.user.id)
+        comments = Comment.objects.get_comments_for_employee(requester=requester,employee=employee)
+        paginator = StandardResultsSetPagination()
+        result_page = paginator.paginate_queryset(comments, request)
+        serializer = EmployeeCommentSerializer(result_page, many=True,context={'request': request})
+        return paginator.get_paginated_response(serializer.data)
 
     def put(self, request, pk, format=None):
         object_id = request.DATA["_object_id"]
         content = request.DATA["_content"]
-        comment = Comment.objects.get(pk=object_id);
+        comment = Comment.objects.get(pk=object_id)
         comment.content = content
+        if "_include_in_daily_digest" in request.DATA:
+            daily_digest = request.DATA["_include_in_daily_digest"]
+            comment.include_in_daily_digest = daily_digest
         comment.save()
         serializer = EmployeeCommentSerializer(comment, many=False, context={'request': request})
         return Response(serializer.data)
@@ -541,6 +565,10 @@ class EmployeeCommentList(APIView):
         model_name = request.DATA["_model_name"]
         content_type = ContentType.objects.get(model=model_name)
         object_id = request.DATA["_object_id"]
+        if "_include_in_daily_digest" in request.DATA:
+            daily_digest = request.DATA["_include_in_daily_digest"]
+        else:
+            daily_digest = True
         if "_visibility" in request.DATA:
             visibility = request.DATA["_visibility"]
         else:
@@ -553,7 +581,9 @@ class EmployeeCommentList(APIView):
         if content_type == comment_type:
             comment = Comment.objects.get(id=object_id)
             commenter = Employee.objects.get(user__id=comment.owner_id)
-            sub_comment = Comment.objects.add_comment(comment, content, visibility, owner)
+            if not "_include_in_daily_digest" in request.DATA:
+                daily_digest = comment.include_in_daily_digest
+            sub_comment = Comment.objects.add_comment(comment, content, visibility, daily_digest, owner)
             serializer = SubCommentSerializer(sub_comment, many=False, context={'request': request})
 
             sub_commenters = Comment.objects.get_for_object(comment)
@@ -588,65 +618,45 @@ class EmployeeCommentList(APIView):
                 msg.attach_alternative(html_content, "text/html")
                 msg.send()
         else:
-            comment = employee.comments.add_comment(content, visibility, owner)
+            comment = employee.comments.add_comment(content, visibility, daily_digest, owner)
             serializer = EmployeeCommentSerializer(comment, many=False, context={'request': request})
         return Response(serializer.data)
 
 class LeadCommentList(APIView):
     def get(self, request, format=None):
-        current_user = request.user
-        lead = Employee.objects.get(user=current_user)
-        lead_id = lead.id
-        employee_ids = Leadership.objects.filter(leader__id=lead_id).values('employee__id')
+        requester = Employee.objects.get(user__id=request.user.id)
+        employee_ids = Employee.objects.get_current_employees_by_team_lead(lead_id=requester.id).values('id')
         if not employee_ids:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
-        employee_type = ContentType.objects.get(model="employee")
-        allow_all_access = request.user.groups.filter(name="AllAccess").exists()
-        allow_team_lead_access = request.user.groups.filter(name="TeamLeadAccess").exists()
-        allow_coach_access = request.user.groups.filter(name="CoachAccess").exists()
-        comments = Comment.objects.filter(object_id__in = employee_ids, content_type=employee_type)
-        comments = comments.exclude(object_id=lead.id,content_type=employee_type)
-        if not allow_all_access and (allow_team_lead_access and not allow_coach_access):
-            comments = comments.exclude(~Q(owner_id=request.user.id), visibility=2)
-        comments = comments.exclude(~Q(owner_id=request.user.id), visibility=1)
-        comments = comments.extra(order_by = ['-created_date'])[:15]
-        serializer = TeamCommentSerializer(comments, many=True, context={'request': request})
-        return Response(serializer.data)
+        comments = Comment.objects.get_comments_for_employees(requester=requester, employee_ids=employee_ids)
+        paginator = StandardResultsSetPagination()
+        result_page = paginator.paginate_queryset(comments, request)
+        serializer = TeamCommentSerializer(result_page, many=True, context={'request': request})
+        return paginator.get_paginated_response(serializer.data)
 
 class CoachCommentList(APIView):
     def get(self, request, format=None):
-        current_user = request.user
-        coach = Employee.objects.get(user=current_user)
-        coach_id = coach.id
-        employee_ids = Employee.objects.filter(coach_id=coach_id).values('id')
+        requester = Employee.objects.get(user__id=request.user.id)
+        employee_ids = Employee.objects.get_current_employees_by_coach(coach_id=requester.id).values('id')
         if not employee_ids:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
-        employee_type = ContentType.objects.get(model="employee")
-        allow_all_access = request.user.groups.filter(name="AllAccess").exists()
-        allow_team_lead_access = request.user.groups.filter(name="TeamLeadAccess").exists()
-        allow_coach_access = request.user.groups.filter(name="CoachAccess").exists()
-        comments = Comment.objects.filter(object_id__in = employee_ids, content_type=employee_type)
-        comments = comments.exclude(object_id=coach.id,content_type=employee_type)
-        if not allow_all_access and (allow_team_lead_access and not allow_coach_access):
-            comments = comments.exclude(~Q(owner_id=request.user.id), visibility=2)
-        comments = comments.exclude(~Q(owner_id=request.user.id), visibility=1)
-        comments = comments.extra(order_by = ['-created_date'])[:15]
-        serializer = TeamCommentSerializer(comments, many=True, context={'request': request})
-        return Response(serializer.data)
+        comments = Comment.objects.get_comments_for_employees(requester=requester, employee_ids=employee_ids)
+        paginator = StandardResultsSetPagination()
+        result_page = paginator.paginate_queryset(comments, request)
+        serializer = TeamCommentSerializer(result_page, many=True, context={'request': request})
+        return paginator.get_paginated_response(serializer.data)
 
 class TeamCommentList(APIView):
     def get(self, request, pk, format=None):
-        employee_ids = Employee.objects.filter(team__id=pk).values('pk')
-        user = Employee.objects.get(user__id = request.user.id)
+        requester = Employee.objects.get(user__id=request.user.id)
+        employee_ids = Employee.objects.get_current_employees_by_team(team_id=pk).values('id')
         if not employee_ids:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
-        employee_type = ContentType.objects.get(model="employee")
-        comments = Comment.objects.filter(object_id__in = employee_ids, content_type=employee_type)
-        comments = comments.exclude(~Q(owner_id=request.user.id),content_type=employee_type,visibility=1)
-        comments = comments.exclude(object_id=user.id,content_type=employee_type)
-        comments = comments.extra(order_by = ['-created_date'])[:15]
-        serializer = TeamCommentSerializer(comments, many=True, context={'request': request})
-        return Response(serializer.data)
+        comments = Comment.objects.get_comments_for_employees(requester=requester, employee_ids=employee_ids)
+        paginator = StandardResultsSetPagination()
+        result_page = paginator.paginate_queryset(comments, request)
+        serializer = TeamCommentSerializer(result_page, many=True, context={'request': request})
+        return paginator.get_paginated_response(serializer.data)
 
 
 class LeadershipDetail(APIView):
@@ -673,19 +683,6 @@ class LeadershipDetail(APIView):
         serializer = LeadershipSerializer(leadership, many=False, context={'request': request})
         return Response(serializer.data)
 
-
-class CommentList(APIView):
-    def get(self, request, format=None):
-        employee = Employee.objects.get(user__id=request.user.id)
-        employee_type = ContentType.objects.get(model='employee')
-        comments = Comment.objects.filter(content_type=employee_type)
-        comments = comments.exclude(object_id=employee.id)
-        comments = comments.exclude(~Q(owner_id=request.user.id),content_type=employee_type,visibility=1)
-        comments = comments.extra(order_by = ['-created_date'])[:15]
-        serializer = EmployeeCommentSerializer(comments, many=True, context={'request': request})
-        return Response(serializer.data)
-
-
 class CommentDetail(APIView):
     def get(self, request, pk, format=None):
         comment = Comment.objects.get(id=pk)
@@ -698,6 +695,8 @@ class CommentDetail(APIView):
             comment.content = request.DATA["_content"]
             if "_visibility" in request.DATA:
                 comment.visibility = request.DATA["_visibility"]
+            if "_include_in_daily_digest" in request.DATA:
+                comment.include_in_daily_digest = request.DATA["_include_in_daily_digest"]
             comment.modified_date = datetime.datetime.now()
             comment.save()
             serializer = EmployeeCommentSerializer(comment, many=False, context={'request': request})
@@ -725,8 +724,10 @@ class MyTaskList(APIView):
         tasks = Task.objects.filter(assigned_to__id=assigned_to.id)
         tasks = tasks.filter(completed=completed)
         tasks = tasks.extra(order_by=['-due_date'])
-        serializer = TaskSerializer(tasks, many=True, context={'request': request})
-        return Response(serializer.data)
+        paginator = StandardResultsSetPagination()
+        result_page = paginator.paginate_queryset(tasks, request)
+        serializer = TaskSerializer(result_page, many=True, context={'request': request})
+        return paginator.get_paginated_response(serializer.data)
 
 
 class TaskDetail(APIView):
@@ -753,11 +754,15 @@ class TaskDetail(APIView):
             if 'employee_id' in request.QUERY_PARAMS:
                 employee_id = request.QUERY_PARAMS.get('employee_id')
                 tasks = tasks.filter(employee_id=employee_id)
-            serializer = TaskSerializer(tasks.all(), many=True)
+            tasks = tasks.extra(order_by=['-due_date'])
+            paginator = StandardResultsSetPagination()
+            result_page = paginator.paginate_queryset(tasks.all(), request)
+            serializer = TaskSerializer(result_page, many=True, context={'request': request})
+            return paginator.get_paginated_response(serializer.data)
         else:
             task = self.get_object(pk)
             serializer = TaskSerializer(task)
-        return Response(serializer.data)
+            return Response(serializer.data)
 
     def post(self, request):
         add_current_employee_to_request(request, 'created_by')
@@ -830,8 +835,11 @@ class EmployeeTaskList(APIView):
             tasks = Task.objects.filter(employee__id=pk)
             tasks = tasks.filter(completed=completed)
             tasks = tasks.extra(order_by=['-created_date'])
-        serializer = TaskSerializer(tasks, many=True, context={'request': request})
-        return Response(serializer.data)
+
+        paginator = StandardResultsSetPagination()
+        result_page = paginator.paginate_queryset(tasks, request)
+        serializer = TaskSerializer(result_page, many=True, context={'request': request})
+        return paginator.get_paginated_response(serializer.data)
 
     def post(self, request, pk, format=None):
         employee_id = request.DATA["_employee_id"]
@@ -968,9 +976,8 @@ class ImageUploadView(APIView):
 @api_view(['GET'])
 def coachee_list(request):
     employee = Employee.objects.get(user__id = request.user.id)
-    employees = Employee.objects.filter(coach__id=employee.id)
-    employees = employees.exclude(departure_date__isnull=False)
-    employees = employees.filter(display='t')
+    employees = Employee.objects.get_current_employees()
+    employees = employees.filter(coach__id=employee.id)
     serializer = EmployeeSerializer(employees, many=True, context={'request': request})
     return Response(serializer.data)
 
@@ -1005,7 +1012,7 @@ def current_kpi_performance(request):
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
-@auth_employee_cache(60*15, 'AllAccess')
+@auth_employee_cache(60*1440, 'AllAccess')
 @auth_employee('AllAccess')
 def get_company_salary_report(request):
     report = get_salary_report_for_all_employees()
@@ -1015,7 +1022,7 @@ def get_company_salary_report(request):
     return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
-@auth_employee_cache(60*15, 'AllAccess')
+@auth_employee_cache(60*1440, 'AllAccess')
 @auth_employee('AllAccess')
 def compensation_summaries(request):
     compensation_summaries = CompensationSummary.objects.all()
@@ -1190,7 +1197,7 @@ def happiness_reports(request):
     return Response(data)
 
 @api_view(['GET'])
-@auth_employee_cache(60*15, 'AllAccess')
+@auth_employee_cache(60*1440, 'AllAccess')
 @auth_employee('AllAccess')
 def team_leads(request):
     team_id = request.QUERY_PARAMS.get('team_id', None)
