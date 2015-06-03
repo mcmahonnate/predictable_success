@@ -24,9 +24,12 @@ class EmployeeManager(models.Manager):
 
     def get_current_employees_by_group_name(self, name, show_hidden=False):
         employees = self.get_current_employees(show_hidden=show_hidden)
-        logger.debug(name)
-        logger.debug(show_hidden)
         employees = employees.filter(user__groups__name=name)
+        return employees
+
+    def get_current_employees_by_team(self, team_id):
+        employees = self.get_current_employees()
+        employees = employees.filter(team__id=team_id)
         return employees
 
     def get_current_employees_by_team_lead(self, lead_id):
