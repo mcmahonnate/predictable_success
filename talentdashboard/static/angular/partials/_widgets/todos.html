@@ -54,7 +54,7 @@
         <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
     </div>
     <div ng-show="activeTab == doneTab">
-        <div ng-show="todos.length === 0 && !busy" class="todos-empty">
+        <div ng-show="done.length === 0 && !busy" class="todos-empty">
             <p ng-show="view == 'my-view'">You don't have any completed tasks.</p>
             <p ng-show="view == 'employee-view'">There are no completed tasks for {{ employee.first_name }}.</p>
         </div>
