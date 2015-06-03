@@ -148,40 +148,33 @@ filters.filter('filterEmployees', function () {
           }
       }
       if (visionary && push) {
+          console.log('visionary');
           if (!item.vops_visionary) {
-              if (visionary[1]-visionary[0] < 960) {
-                push=false;
-              }
-          } else if (visionary[0]>item.vops_visionary || visionary[1]<item.vops_visionary) {
-              push=false;
+            push=false;
+          } else if (item.vops_visionary<260) {
+             push=false;
           }
       }
       if (operator && push) {
          if (!item.vops_operator) {
-              if (operator[1]-operator[0] < 960) {
-                push=false;
-              }
-          } else if (operator[0]>item.vops_operator || operator[1]<item.vops_operator) {
-              push=false;
-          }
+            push=false;
+         } else if (item.vops_operator<260) {
+            push=false;
+         }
       }
       if (processor && push) {
          if (!item.vops_processor) {
-              if (processor[1]-processor[0] < 960) {
-                push=false;
-              }
-          } else if (processor[0]>item.vops_processor || processor[1]<item.vops_processor) {
+            push=false;
+         } else if (item.vops_processor<260) {
               push=false;
-          }
+         }
       }
       if (synergist && push) {
          if (!item.vops_synergist) {
-              if (synergist[1]-synergist[0] < 960) {
-                push=false;
-              }
-          } else if (synergist[0]>item.vops_synergist || synergist[1]<item.vops_synergist) {
-              push=false;
-          }
+            push=false;
+         } else if (item.vops_synergist<260) {
+            push=false;
+         }
       }
       if (days_since_happy && push) {
           if (item.happiness_date)

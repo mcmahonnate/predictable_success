@@ -69,9 +69,8 @@ angular.module('tdb.controllers', [])
     $scope.kolbe_follow_thru_labels=['adapt','maintain','systemize'];
     $scope.kolbe_quick_start_labels=['improvise','modify','stabilize'];
     $scope.kolbe_implementor_labels=['imagine','restore','build'];
-    $scope.vops_labels=['low','medium','high'];
     $scope.evaluations = MyCoacheesPvpEvaluation.getCurrentEvaluations();
-	$scope.teamId = $routeParams.team_id;
+    $scope.teamId = $routeParams.team_id;
     $scope.talentCategory = $routeParams.talent_category;
     $scope.categoryName  = TalentCategories.getLabelByTalentCategory($scope.talentCategory)
     $scope.happy = $routeParams.happy;
@@ -80,21 +79,24 @@ angular.module('tdb.controllers', [])
     $scope.follow_thru = $routeParams.follow_thru;
     $scope.quick_start = $routeParams.quick_start;
     $scope.implementor = $routeParams.implementor;
-    $scope.vops = [];
+    $scope.vops={visionary:false,operator:false,processor:false,synergist:false};
     $scope.teamName='';
     $scope.staleDays=360;
     $scope.staleDate = new Date();
     $scope.staleDate.setDate($scope.staleDate.getDate() - $scope.staleDays);
-	if ($routeParams.team_id){
-		Team.get(
-			{id: $routeParams.team_id},
-			function(data) {
-				$scope.teamName = data.name
-				$scope.teamId = data.id
-			}
-		);
-	}
-	$scope.menu = {show: false};
+    if ($routeParams.team_id){
+        Team.get(
+            {id: $routeParams.team_id},
+            function(data) {
+                $scope.teamName = data.name
+                $scope.teamId = data.id
+            }
+        );
+    }
+    $scope.menu = {show: false};
+    $scope.clearSynegistStyle = function() {
+        $scope.vops={visionary:false,operator:false,processor:false,synergist:false};
+    };
     $scope.setTeamFilter = function(id, name) {
         $scope.teamId=id;
         $scope.teamName=name;
@@ -119,16 +121,12 @@ angular.module('tdb.controllers', [])
     });
     $scope.hideTeamMenu = true;
     $scope.kolbe_values=[0,1,2,3];
-    $scope.vops_values=[0,320,6400,960];
     $scope.kolbe_fact_finder_labels=['simplify','explain','specify'];
     $scope.kolbe_follow_thru_labels=['adapt','maintain','systemize'];
     $scope.kolbe_quick_start_labels=['improvise','modify','stabilize'];
     $scope.kolbe_implementor_labels=['imagine','restore','build'];
-    $scope.vops_labels=['low','medium','high'];
-    MyTeamPvpEvaluation.getCurrentEvaluations(function(results) {
-        $scope.evaluations = results;
-    });
-	$scope.teamId = $routeParams.team_id;
+    $scope.evaluations = MyTeamPvpEvaluation.getCurrentEvaluations();
+    $scope.teamId = $routeParams.team_id;
     $scope.talentCategory = $routeParams.talent_category;
     $scope.categoryName  = TalentCategories.getLabelByTalentCategory($scope.talentCategory)
     $scope.happy = $routeParams.happy;
@@ -137,21 +135,24 @@ angular.module('tdb.controllers', [])
     $scope.follow_thru = $routeParams.follow_thru;
     $scope.quick_start = $routeParams.quick_start;
     $scope.implementor = $routeParams.implementor;
-    $scope.vops = [];
+    $scope.vops={visionary:false,operator:false,processor:false,synergist:false};
     $scope.teamName='';
     $scope.staleDays=360;
     $scope.staleDate = new Date();
     $scope.staleDate.setDate($scope.staleDate.getDate() - $scope.staleDays);
-	if ($routeParams.team_id){
-		Team.get(
-			{id: $routeParams.team_id},
-			function(data) {
-				$scope.teamName = data.name
-				$scope.teamId = data.id
-			}
-		);
-	}
-	$scope.menu = {show: false};
+    if ($routeParams.team_id){
+        Team.get(
+            {id: $routeParams.team_id},
+            function(data) {
+                $scope.teamName = data.name
+                $scope.teamId = data.id
+            }
+        );
+    }
+    $scope.menu = {show: false};
+    $scope.clearSynegistStyle = function() {
+        $scope.vops={visionary:false,operator:false,processor:false,synergist:false};
+    };
     $scope.setTeamFilter = function(id, name) {
         $scope.teamId=id;
         $scope.teamName=name;
@@ -177,14 +178,12 @@ angular.module('tdb.controllers', [])
     $scope.happiness = '';
     $scope.hideTeamMenu = false;
     $scope.kolbe_values=[0,1,2,3];
-    $scope.vops_values=[0,320,6400,960];
     $scope.kolbe_fact_finder_labels=['simplify','explain','specify'];
     $scope.kolbe_follow_thru_labels=['adapt','maintain','systemize'];
     $scope.kolbe_quick_start_labels=['improvise','modify','stabilize'];
     $scope.kolbe_implementor_labels=['imagine','restore','build'];
-    $scope.vops_labels=['low','medium','high'];
     $scope.evaluations = PvpEvaluation.getCurrentEvaluations();
-	$scope.teamId = $routeParams.team_id;
+    $scope.teamId = $routeParams.team_id;
     $scope.talentCategory = $routeParams.talent_category;
 
     $scope.categoryName  = TalentCategories.getLabelByTalentCategory($scope.talentCategory)
@@ -194,22 +193,25 @@ angular.module('tdb.controllers', [])
     $scope.follow_thru = angular.copy($scope.kolbe_follow_thru_labels);
     $scope.quick_start = angular.copy($scope.kolbe_quick_start_labels);
     $scope.implementor = angular.copy($scope.kolbe_implementor_labels);
-    $scope.vops = [];
+    $scope.vops={visionary:false,operator:false,processor:false,synergist:false};
     $scope.teamName='';
     $scope.staleDays=360;
     $scope.staleDate = new Date();
     $scope.staleDate.setDate($scope.staleDate.getDate() - $scope.staleDays);
-	if ($routeParams.team_id){
-		Team.get(
-			{id: $routeParams.team_id},
-			function(data) {
-				$scope.teamName = data.name
-				$scope.teamId = data.id
-			}
-		);
-	}
+    if ($routeParams.team_id){
+        Team.get(
+            {id: $routeParams.team_id},
+            function(data) {
+                $scope.teamName = data.name
+                $scope.teamId = data.id
+            }
+        );
+    }
 
-	$scope.menu = {show: false};
+    $scope.menu = {show: false};
+    $scope.clearSynegistStyle = function() {
+        $scope.vops={visionary:false,operator:false,processor:false,synergist:false};
+    };
     $scope.setTeamFilter = function(id, name) {
         $scope.teamId=id;
         $scope.teamName=name;
@@ -231,197 +233,82 @@ angular.module('tdb.controllers', [])
 }])
 
 .controller('NavigationCtrl', ['$scope', '$routeParams', '$window', '$location', 'Employee', 'Customers', 'Team', function($scope, $routeParams, $window, $location, Employee, Customers, Team) {
+    
     $scope.$window = $window;
-    if (!$scope.employees)
-    {
-        $scope.employees = Employee.query({random:Math.floor((Math.random()*1000000000))}); //!important browser cache buster
+
+    //search
+    if (!$scope.employees) {
+        $scope.employees = Employee.query({
+        random:Math.floor((Math.random()*1000000000))
+        }); //!important browser cache buster
     }
     Customers.get(function (data) {
         $scope.customer = data;
     });
 
+
+    //teams
     $scope.teams = Team.query();
     $scope.modalEmployeeShown = false;
-    $scope.newEmployee = {id:0,full_name:'',first_name:'',last_name:'', email:'', team:{id:0, name:''}, hire_date:'',departure_date:'', avatar:'https://hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg'};
-    $scope.newLeadership = {id:0,leader:{full_name:''}};
+    $scope.newEmployee = {
+        id:0,full_name:'',
+        first_name:'',
+        last_name:'', 
+        email:'', 
+        team:{id:0, name:''}, 
+        hire_date:'',
+        departure_date:'', 
+        avatar:'https://hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg'
+    };
+
+    $scope.newLeadership = {
+        id:0,
+        leader:{full_name:''}
+    };  
+
+    $scope.startsWith  = function(expected, actual){
+        if(expected && actual){
+            return expected.toLowerCase().indexOf(actual.toLowerCase()) == 0;
+        }
+        return true;
+    }
+
+    //show add employee modal 
     $scope.toggleEmployeeModal = function() {
         $scope.modalEmployeeShown = !$scope.modalEmployeeShown;
-    };
-	$scope.employeeMenu = {show: false};
-    $scope.searchMenu = {show: false};
-    $scope.filterMenu = {show: false};
-	$scope.teamMenu = {show: false};
-    $scope.settingsMenu = {show: false};
-    $scope.showAddEmployee = false;
-    $scope.addEmployee = [];
+    };  
 
-	$scope.startsWith  = function(expected, actual){
-		if(expected && actual){
-			return expected.toLowerCase().indexOf(actual.toLowerCase()) == 0;
-		}
-		return true;
-	}
+    //clear search
+    $scope.navQuery = '';
 
-    $scope.navQuery='';
-    $scope.toggleNavQuery = function () {
-        $scope.openFilterMenu = false;
-        $scope.openEmployeeMenu  = false;
-        $scope.openTeamMenu = false;
-        $scope.openSettingsMenu  = false;
-        $scope.$window.onclick = function (event) {
-            closeNavQuery(event);
-        };
-    };
-    function closeNavQuery(event) {
-        var clickedElement = event.target;
-        if (!clickedElement) return;
-        var elementClasses = clickedElement.classList;
-        var clickedOnNavQuery = elementClasses.contains('nav_query');
-        if (!clickedOnNavQuery) {
-            $scope.navQuery='';
-        }
-    }
-    $scope.toggleFilterMenu = function () {
-        $scope.openFilterMenu = !$scope.openFilterMenu;
-        if ($scope.openFilterMenu) {
-            $scope.navQuery='';
-            $scope.openEmployeeMenu  = false;
-            $scope.openTeamMenu = false;
-            $scope.openSearchMenu = false;
-            $scope.openSettingsMenu  = false;
-            $scope.$window.onclick = function (event) {
-                closeFilterMenu(event, $scope.toggleFilterMenu);
-            };
+    //set active tab
+    $scope.activeTab = null; 
+
+    //tabs
+    $scope.zonesTab = 'zones';
+    $scope.teamsTab = 'teams';
+    $scope.settingsTab = 'settings';
+    $scope.searchTab = 'search';
+
+    $scope.setActiveTab = function (tab) {
+        if ($scope.activeTab == tab) {
+            $scope.activeTab = null;
         } else {
-            $scope.openFilterMenu  = false;
-            $scope.$window.onclick = null;
-            $scope.$$phase || $scope.$apply(); //--> trigger digest cycle and make angular aware.
-        }
+            $scope.activeTab = tab;
+        }    
     };
-    function closeFilterMenu(event, callbackOnClose) {
-        var clickedElement = event.target;
-        if (!clickedElement) return;
-        var elementClasses = clickedElement.classList;
-        var clickedOnFilterMenu = elementClasses.contains('filter_menu');
-        if (!clickedOnFilterMenu) {
-            callbackOnClose();
-        }
-    }
-    $scope.toggleEmployeeMenu = function () {
-        $scope.openEmployeeMenu = !$scope.openEmployeeMenu;
-        if ($scope.openEmployeeMenu ) {
-            $scope.navQuery='';
-            $scope.openFilterMenu = false;
-            $scope.openTeamMenu = false;
-            $scope.openSearchMenu = false;
-            $scope.openSettingsMenu  = false;
-            $scope.$window.onclick = function (event) {
-                closeEmployeeMenu(event, $scope.toggleEmployeeMenu);
-            };
-        } else {
-            $scope.openEmployeeMenu  = false;
-            $scope.$window.onclick = null;
-            $scope.$$phase || $scope.$apply(); //--> trigger digest cycle and make angular aware.
-        }
-    };
-    function closeEmployeeMenu(event, callbackOnClose) {
-        var clickedElement = event.target;
-        if (!clickedElement) return;
-        var elementClasses = clickedElement.classList;
-        var clickedOnEmployeeMenu = elementClasses.contains('employee_menu');
-        if (!clickedOnEmployeeMenu) {
-            callbackOnClose();
-        }
-    }    
-    $scope.toggleSearchMenu = function () {
-        $scope.openSearchMenu = !$scope.openSearchMenu;
-        if ($scope.openSearchMenu ) {
-            $scope.navQuery='';
-            $scope.openFilterMenu = false;
-            $scope.openTeamMenu = false;
-            $scope.openSettingsMenu  = false;
-            $scope.$window.onclick = function (event) {
-                closeSearchMenu(event, $scope.toggleSearchMenu);
-            };
-        } else {
-            $scope.openSearchMenu  = false;
-            $scope.$window.onclick = null;
-            $scope.$$phase || $scope.$apply(); //--> trigger digest cycle and make angular aware.
-        }
-    };
-    function closeSearchMenu(event, callbackOnClose) {
-        var clickedElement = event.target;
-        if (!clickedElement) return;
-        var elementClasses = clickedElement.classList;
-        var clickedOnSearchMenu = elementClasses.contains('search_menu');
-        if (!clickedOnSearchMenu) {
-            callbackOnClose();
-        }
-    }
-    $scope.toggleTeamMenu = function () {
-        $scope.openTeamMenu = !$scope.openTeamMenu;
-        if ($scope.openTeamMenu ) {
-            $scope.navQuery='';
-            $scope.openFilterMenu = false;
-            $scope.openEmployeeMenu  = false;
-            $scope.openSettingsMenu  = false;
-            $scope.openSearchMenu = false;
-            $scope.$window.onclick = function (event) {
-                closeTeamMenu(event, $scope.toggleTeamMenu);
-            };
-        } else {
-            $scope.openTeamMenu  = false;
-            $scope.$window.onclick = null;
-            $scope.$$phase || $scope.$apply(); //--> trigger digest cycle and make angular aware.
-        }
-    };
-    function closeTeamMenu(event, callbackOnClose) {
-        var clickedElement = event.target;
-        if (!clickedElement) return;
-        var elementClasses = clickedElement.classList;
-        var clickedOnTeamMenu = elementClasses.contains('team_menu');
-        if (!clickedOnTeamMenu) {
-            callbackOnClose();
-        }
-    }
-    $scope.toggleSettingsMenu = function () {
-        $scope.openSettingsMenu = !$scope.openSettingsMenu;
-        if ($scope.openSettingsMenu ) {
-            $scope.navQuery='';
-            $scope.openFilterMenu = false;
-            $scope.openEmployeeMenu  = false;
-            $scope.openTeamMenu  = false;
-            $scope.openSearchMenu = false;
-            $scope.$window.onclick = function (event) {
-                closeSettingsMenu(event, $scope.toggleSettingsMenu);
-            };
-        } else {
-            $scope.openSettingsMenu  = false;
-            $scope.$window.onclick = null;
-            $scope.$$phase || $scope.$apply(); //--> trigger digest cycle and make angular aware.
-        }
-    };
-    function closeSettingsMenu(event, callbackOnClose) {
-        var clickedElement = event.target;
-        if (!clickedElement) return;
-        var elementClasses = clickedElement.classList;
-        var clickedOnSettingsMenu = elementClasses.contains('settings_menu');
-        if (!clickedOnSettingsMenu) {
-            callbackOnClose();
-        }
-    }
 }])
 
 .controller('TeamListCtrl', ['$scope', 'Team', function($scope, Team) {
     $scope.teams = Team.query();
     $scope.teamQuery = $scope.teams[0];
-	$scope.teamMenu = {show: false};
-	$scope.startsWith  = function(expected, actual){
-		if(expected && actual){
-			return expected.toLowerCase().indexOf(actual.toLowerCase()) == 0;
-		}
-		return true;
-	}
+    $scope.teamMenu = {show: false};
+    $scope.startsWith  = function(expected, actual){
+        if(expected && actual){
+            return expected.toLowerCase().indexOf(actual.toLowerCase()) == 0;
+        }
+        return true;
+    }
 }])
 
 .controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', '$sce', 'User', 'Employee', 'Team', 'Engagement', 'SendEngagementSurvey', 'EmployeeLeader', 'Attribute', 'CompSummary', '$http', 'Customers', 'analytics', 'fileReader','Assessment','EmployeeMBTI', 'Notification', function($rootScope, $scope, $location, $routeParams, $window, $sce, User, Employee, Team, Engagement, SendEngagementSurvey, EmployeeLeader, Attribute, CompSummary, $http, Customers, analytics, fileReader, Assessment, EmployeeMBTI, Notification) {
@@ -529,7 +416,9 @@ angular.module('tdb.controllers', [])
     Team.query(function(data) {
         $scope.teams = data;
     });
-    $scope.employees = Employee.query();
+    if (!$scope.employees && $rootScope.currentUser.can_view_company_dashboard) {
+        $scope.employees = Employee.query();
+    }
     Employee.get(
         {id: $routeParams.id},
         function(data) {
@@ -664,7 +553,7 @@ angular.module('tdb.controllers', [])
     $scope.popup.top = 0;
     $scope.popup.left = 0;
     $scope.super_powers = Attribute.getAttributtesForEmployee($routeParams.id, 2);
-	$scope.skills = Attribute.getAttributtesForEmployee($routeParams.id, 3);
+    $scope.skills = Attribute.getAttributtesForEmployee($routeParams.id, 3);
     $scope.employeeEdit = false;
 
     $scope.today = function() {
@@ -737,32 +626,9 @@ angular.module('tdb.controllers', [])
     };
 }])
 
-.controller('LeaderDetailCtrl', ['$scope', '$location', '$routeParams', 'Employee', 'Leadership', 'TalentCategoryReport', '$http', 'analytics', function($scope, $location, $routeParams, Employee, Leadership, TalentCategoryReport, $http, analytics) {
+.controller('CoachDetailCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'User', 'Employee', 'Coachees', 'TalentCategoryReport', '$http', 'analytics', function($scope, $rootScope, $location, $routeParams, User, Employee, Coachees, TalentCategoryReport, $http, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
-    Employee.get(
-        {id: $routeParams.id},
-        function(data) {
-            $scope.employee = data;
-            if(data.team && data.team.leader) {
-                $http.get(data.team.leader).success(function(data) {
-                    $scope.team_lead = data;
-                });
-            }
-        }
-    );
-    $scope.leaderships = Leadership.getLeadershipsForLeader($routeParams.id);
-    TalentCategoryReport.getReportForCompany(function(data) {
-        $scope.talentCategoryReport = data;
-    });
-}])
-
-.controller('CoachDetailCtrl', ['$scope', '$location', '$routeParams', 'User', 'Employee', 'Coachees', 'TalentCategoryReport', '$http', 'analytics', function($scope, $location, $routeParams, User, Employee, Coachees, TalentCategoryReport, $http, analytics) {
-    analytics.trackPage($scope, $location.absUrl(), $location.url());
-    User.get(
-        function(data) {
-            $scope.coach= data.employee;
-        }
-    );
+    $scope.coach= $rootScope.currentUser.employee;
 
     Coachees.query({ id: $routeParams.id }).$promise.then(function(response) {
         $scope.employees = response;
@@ -778,12 +644,12 @@ angular.module('tdb.controllers', [])
 }])
 
 .controller('EmployeePvpEvaluationsCtrl', ['$scope', '$routeParams', 'PvpEvaluation', function($scope, $routeParams, PvpEvaluation) {
-	$scope.pvpIndex = 0;
+    $scope.pvpIndex = 0;
     PvpEvaluation.getAllEvaluationsForEmployee($routeParams.id).$promise.then(function(response) {
-		$scope.pvps = response;
-	});
+        $scope.pvps = response;
+    });
 
-	$scope.selectPvP = function(index) {
+    $scope.selectPvP = function(index) {
         $scope.pvpIndex = index;
     }
 }])
@@ -1074,24 +940,6 @@ angular.module('tdb.controllers', [])
     };
 }])
 
-.controller('MyToDoListCtrl', ['$scope', '$rootScope', '$routeParams', '$window', 'ToDo', 'MyToDos', 'User', function($scope, $rootScope, $routeParams, $window, ToDo, MyToDos, User) {
-    $scope.todos = MyToDos.query();
-    $scope.completed_todos = MyToDos.query({ completed: true });
-    $scope.deleteToDo = function(todo) {
-        if ($window.confirm('Are you sure you want to delete this To Do?')) {
-            var data = {id: todo.id};
-            var todo_index = $scope.todos.indexOf(todo);
-            var deleteSuccess = function() {
-                $scope.todos.splice(todo_index, 1);
-            };
-
-            ToDo.remove(data, function() {
-                    deleteSuccess();
-                });
-        }
-    }
-}])
-
 .controller('EmployeeToDoListCtrl', ['$scope', '$routeParams', '$window', 'EmployeeToDo', 'ToDo', 'User', function($scope, $routeParams, $window, EmployeeToDo, ToDo, User) {
     EmployeeToDo.query({ id: $routeParams.id }).$promise.then(function(response) {
             $scope.todos = response;
@@ -1203,12 +1051,12 @@ angular.module('tdb.controllers', [])
     }
     $scope.assigneeMenu = {show: false};
     $scope.assignees = Coach.query();
-	$scope.startsWith  = function(expected, actual){
-		if(expected && actual){
-			return expected.toLowerCase().indexOf(actual.toLowerCase()) == 0;
-		}
-		return true;
-	}
+    $scope.startsWith  = function(expected, actual){
+        if(expected && actual){
+            return expected.toLowerCase().indexOf(actual.toLowerCase()) == 0;
+        }
+        return true;
+    }
 
     $scope.today = function() {
         $scope.dt = new Date();
@@ -1255,798 +1103,11 @@ angular.module('tdb.controllers', [])
     $scope.format = $scope.formats[0];
 }])
 
-.controller('DiscussionOverviewCtrl', ['$scope', '$rootScope', '$location', '$filter', '$routeParams', '$window', 'EmployeeComments', 'Employee', 'Engagement', 'Comment', 'SubComments', 'User', 'analytics', function($scope, $rootScope, $location, $filter, $routeParams, $window, EmployeeComments, Employee, Engagement, Comment, SubComments, User, analytics) {
-    analytics.trackPage($scope, $location.absUrl(), $location.url());
-    $scope.showPeopleTeamVisibility = false;
-
-    var getBlankComment = function() {
-        return {text: ''}
-    };
-
-    Comment.query().$promise.then(function(response) {
-        if ($rootScope.currentUser.can_coach_employees || $rootScope.currentUser.can_view_company_dashboard) {
-            $scope.newCommentVisibility = 2;
-            $scope.showPeopleTeamVisibility = true;
-        }
-        $scope.comments = response;
-        $scope.originalComments = angular.copy($scope.comments);
-        angular.forEach($scope.comments, function(comment) {
-            var index = $scope.comments.indexOf(comment);
-            var original_comment = $scope.originalComments[index];
-            comment.subcomments = [];
-            original_comment.subcomments = [];
-            SubComments.query({ id: comment.id }).$promise.then(function(response) {
-                    comment.subcomments = response;
-                    original_comment.subcomments = angular.copy(comment.subcomments);
-                }
-            );
-            comment.newSubCommentText = "";
-            comment.expandChildTextArea=false;
-        });
-
-        $scope.CreateHeader = function(date) {
-            date=$filter('date')(date,"MM/dd/yyyy");
-            showHeader = (date!=$scope.currentGroup);
-            $scope.currentGroup = date;
-            return showHeader;
-        }
-    },function ( error ) {console.log ('error')});
-    $scope.toggleChildCommentTextExpander = function (comment) {
-        $window.onclick = function (event) {
-            if (!comment.newSubCommentText) {
-                var clickedElement = event.target;
-                if (!clickedElement) return;
-                var elementClasses = clickedElement.classList;
-                var clickedOnTextArea = elementClasses.contains('text');
-                if (!clickedOnTextArea) {
-                    comment.expandTextArea=false;
-                    $scope.$apply();
-                }
-            }
-        };
-    };
-
-    $scope.saveComment = function(comment) {
-        var index = $scope.comments.indexOf(comment);
-        if (comment.happiness && comment.happiness.assessment>0) {
-            var data = {_assessment_id:comment.happiness.id,_assessed_by_id: $rootScope.currentUser.employee.id, _assessment: comment.happiness.assessment, _content:comment.content,_visibility: comment.visibility};
-            Engagement.update(data, function(response) {
-                $scope.originalComments[index].content = comment.content;
-                $scope.originalComments[index].visibility = comment.visibility;
-                $scope.originalComments[index].happiness = comment.happiness;
-            });
-        } else {
-            var data = {id: comment.id, _content: comment.content, _visibility: comment.visibility};
-            Comment.update(data, function() {
-                $scope.originalComments[index].content = comment.content;
-                $scope.originalComments[index].visibility = comment.visibility;
-            });
-        };
+.controller('DailyDigestCtrl', ['$scope', '$modalInstance', 'Employee', function($scope, $modalInstance, Employee) {
+    $scope.members = Employee.query({group_name:'Daily Digest Subscribers',show_hidden:true});
+    $scope.cancel = function () {
+        $modalInstance.dismiss();
     }
-
-
-    $scope.cancelEditComment = function(comment) {
-        var index = $scope.comments.indexOf(comment);
-        comment.content = $scope.originalComments[index].content;
-    }
-
-     $scope.saveSubComment = function(subcomment, comment) {
-        var parent_index = $scope.comments.indexOf(comment);
-        var subcomment_index = $scope.comments[parent_index].subcomments.indexOf(subcomment);
-        var data = {id: subcomment.id, _content: subcomment.content};
-
-        Comment.update(data, function() {
-            $scope.originalComments[parent_index].subcomments[subcomment_index].content = subcomment.content;
-        });
-    }
-
-    $scope.cancelEditSubComment = function(subcomment, comment) {
-        var parent_index = $scope.comments.indexOf(comment);
-        var subcomment_index = $scope.comments[parent_index].subcomments.indexOf(subcomment);
-        subcomment.content = $scope.originalComments[parent_index].subcomments[subcomment_index].content;
-    }
-
-    $scope.newComment = getBlankComment();
-
-    $scope.addComment = function(equals) {
-        var newComment = {};
-        newComment.id = -1;
-        newComment.content = $scope.newComment.text;
-        newComment.modified_date = new Date().toJSON();
-        newComment.owner = User.get();
-        newComment.newSubCommentText="";
-        newComment.subcomments=[];
-
-        $scope.comments.push(newComment);
-        $scope.originalComments.push(angular.copy(newComment));
-
-        var data = {id: newComment.id, _model_name: "employee", _object_id: 0, _content: newComment.content};
-
-        data.id = $scope.employeeId;
-        EmployeeComments.save(data, function(response) {
-            newComment.id = response.id;
-            $scope.newComment = getBlankComment();
-        });
-    }
-
-    $scope.addSubComment = function(comment) {
-        var newComment = {};
-        newComment.id = -1;
-        newComment.content = comment.newSubCommentText;
-        newComment.modified_date = new Date().toJSON();
-        newComment.owner = User.get();
-
-        var data = {id: newComment.id, _model_name: "comment", _object_id: comment.id,_content: newComment.content};
-
-        data.id = comment.associated_object.id;
-        EmployeeComments.save(data, function(response) {
-            comment.subcomments.push(response);
-            comment.newSubCommentText = "";
-        });
-    }
-
-    $scope.deleteComment = function(comment) {
-
-        console.log('clicked');
-
-        if ($window.confirm('Are you sure you want to delete this comment?')) {
-            var data = {id: comment.id};
-            var index = $scope.comments.indexOf(comment);
-            var deleteSuccess = function() {
-                $scope.comments.splice(index, 1);
-            };
-
-            Comment.remove(data, function() {
-                    deleteSuccess();
-                });
-        }
-    };
-
-    $scope.deleteSubComment = function(comment, subcomment) {
-        if ($window.confirm('Are you sure you want to delete this comment?')) {
-            var data = {id: subcomment.id};
-            var comment_index = $scope.comments.indexOf(comment);
-            var subcomment_index = $scope.comments[comment_index].subcomments.indexOf(subcomment);
-            var deleteSuccess = function() {
-                $scope.comments[comment_index].subcomments.splice(subcomment_index, 1);
-                $scope.originalComments[comment_index].subcomments.splice(subcomment_index, 1);
-            };
-
-            Comment.remove(data, function() {
-                    deleteSuccess();
-                });
-        }
-    };
-}])
-
-.controller('EmployeeCommentsCtrl', ['$scope', '$rootScope', '$filter', '$routeParams', '$window', 'Comments', 'EmployeeComments', 'SubComments','Comment', 'Engagement', 'User', function($scope, $rootScope, $filter, $routeParams, $window, Comments, EmployeeComments, SubComments, Comment, Engagement, User) {
-    if($routeParams && $routeParams.id) {
-        $scope.employeeId = $routeParams.id;
-    }
-    var getBlankComment = function() {
-        return {text: '', visibility: 3, happy: {assessment: 0}}
-    };
-    $scope.newComment = getBlankComment();
-    $scope.toggleCommentTextExpander = function (comment) {
-        $window.onclick = function (event) {
-            if (!$scope.newComment.text) {
-                var clickedElement = event.target;
-                if (!clickedElement) return;
-                var elementClasses = clickedElement.classList;
-                var clickedOnTextArea = elementClasses.contains('text');
-                var clickedOnRadio = elementClasses.contains('radio');
-                var clickedOnIcon = elementClasses.contains('icon-checked');
-                if (!clickedOnTextArea && !clickedOnRadio && !clickedOnIcon) {
-                    comment.expandTextArea=false;
-                    $scope.$apply();
-                }
-            }
-        };
-    };
-    $scope.toggleChildCommentTextExpander = function (comment) {
-        $window.onclick = function (event) {
-            if (!comment.newSubCommentText) {
-                var clickedElement = event.target;
-                if (!clickedElement) return;
-                var elementClasses = clickedElement.classList;
-                var clickedOnTextArea = elementClasses.contains('text');
-                if (!clickedOnTextArea) {
-                    comment.expandChildTextArea=false;
-                    $scope.$apply();
-                }
-            }
-        };
-    };
-
-    Comments.getEmployeeComments($scope.employeeId, function(data) {
-        $scope.showPeopleTeamVisibility = false;
-        if ($rootScope.currentUser.can_coach_employees || $rootScope.currentUser.can_view_company_dashboard) {
-            $scope.newComment.visibility = 2;
-            $scope.showPeopleTeamVisibility = true;
-        }
-        $scope.comments = data;
-        $scope.originalComments = angular.copy($scope.comments);
-        angular.forEach($scope.comments, function(comment) {
-            var index = $scope.comments.indexOf(comment);
-            var original_comment = $scope.originalComments[index];
-            comment.subcomments = [];
-            original_comment.subcomments = [];
-            SubComments.query({ id: comment.id }).$promise.then(function(response) {
-                    comment.subcomments = response;
-                    original_comment.subcomments = angular.copy(comment.subcomments);
-                }
-            );
-            comment.newSubCommentText = "";
-            comment.expandTextArea = false;
-            comment.expandChildTextArea = false;
-        });
-
-        $scope.CreateHeader = function(date) {
-            date=$filter('date')(date,"MM/dd/yyyy");
-            showHeader = (date!=$scope.currentGroup);
-            $scope.currentGroup = date;
-            return showHeader;
-        }
-    });
-
-    $scope.saveComment = function(comment) {
-
-        var index = $scope.comments.indexOf(comment);
-        if (comment.happiness && comment.happiness.assessment > 0) {
-            var data = {id: $scope.employee.id, _assessment_id:comment.happiness.id,_assessed_by_id: $rootScope.currentUser.employee.id, _assessment: comment.happiness.assessment, _content:comment.content,_visibility: comment.visibility};
-            console.log(data);
-            Engagement.update(data, function(response) {
-                $scope.originalComments[index].content = comment.content;
-                $scope.originalComments[index].visibility = comment.visibility;
-                $scope.originalComments[index].happiness = comment.happiness;
-            });
-        } else {
-            var data = {id: comment.id, _content: comment.content, _visibility: comment.visibility};
-            Comment.update(data, function() {
-                $scope.originalComments[index].content = comment.content;
-                $scope.originalComments[index].visibility = comment.visibility;
-            });
-        };
-    }
-
-    $scope.cancelEditComment = function(comment) {
-        var index = $scope.comments.indexOf(comment);
-        comment.content = $scope.originalComments[index].content;
-    }
-
-     $scope.saveSubComment = function(subcomment, comment) {
-        var parent_index = $scope.comments.indexOf(comment);
-        var subcomment_index = $scope.comments[parent_index].subcomments.indexOf(subcomment);
-        var data = {id: subcomment.id, _content: subcomment.content};
-
-        Comment.update(data, function() {
-            $scope.originalComments[parent_index].subcomments[subcomment_index].content = subcomment.content;
-        });
-    }
-
-    $scope.cancelEditSubComment = function(subcomment, comment) {
-        var parent_index = $scope.comments.indexOf(comment);
-        var subcomment_index = $scope.comments[parent_index].subcomments.indexOf(subcomment);
-        subcomment.content = $scope.originalComments[parent_index].subcomments[subcomment_index].content;
-    }
-
-
-    $scope.addComment = function(equals) {
-        var newComment = {};
-        newComment.id = -1;
-        newComment.content = $scope.newComment.text;
-        newComment.modified_date = new Date().toJSON();
-        newComment.owner = User.get();
-        newComment.newSubCommentText="";
-        newComment.subcomments=[];
-        newComment.visibility=$scope.newComment.visibility;
-        newComment.happy = $scope.newComment.happy;
-
-        if ($scope.newComment.happy.assessment>0) {
-            var data = {id: $scope.employee.id, _assessed_by_id: $rootScope.currentUser.employee.id, _assessment: newComment.happy.assessment, _content:newComment.content, _visibility: newComment.visibility};
-            Engagement.addNew(data, function(response) {
-                newComment.id = response.comment.id;
-                newComment.happiness = response.comment.happiness;
-                newComment.visibility = response.comment.visibility;
-            });
-        } else {
-            var data = {id: newComment.id, _model_name: "employee", _object_id: 0, _content: newComment.content, _visibility: newComment.visibility};
-            data.id = $scope.employeeId;
-            EmployeeComments.save(data, function (response) {
-                newComment.id = response.id;
-            });
-        };
-        $scope.comments.push(newComment);
-        $scope.originalComments.push(angular.copy(newComment));
-        $scope.newComment = getBlankComment();
-    }
-
-    $scope.addSubComment = function(comment) {
-        var newComment = {};
-        newComment.id = -1;
-        newComment.content = comment.newSubCommentText;
-        newComment.modified_date = new Date().toJSON();
-        newComment.owner = User.get();
-
-        var data = {id: newComment.id, _model_name: "comment", _object_id: comment.id,_content: newComment.content};
-
-        data.id = $scope.employeeId;
-        EmployeeComments.save(data, function(response) {
-            comment.subcomments.push(response);
-            comment.newSubCommentText = "";
-        });
-    }
-
-    $scope.deleteComment = function(comment) {
-        if ($window.confirm('Are you sure you want to delete this comment?')) {
-            var data = {id: comment.id};
-            var index = $scope.comments.indexOf(comment);
-            var deleteSuccess = function() {
-                $scope.comments.splice(index, 1);
-            };
-
-            Comment.remove(data, function() {
-                    deleteSuccess();
-                });
-        }
-    };
-
-    $scope.deleteSubComment = function(comment, subcomment) {
-        if ($window.confirm('Are you sure you want to delete this comment?')) {
-            var data = {id: subcomment.id};
-            var comment_index = $scope.comments.indexOf(comment);
-            var subcomment_index = $scope.comments[comment_index].subcomments.indexOf(subcomment);
-            var deleteSuccess = function() {
-                $scope.comments[comment_index].subcomments.splice(subcomment_index, 1);
-                $scope.originalComments[comment_index].subcomments.splice(subcomment_index, 1);
-            };
-
-            Comment.remove(data, function() {
-                    deleteSuccess();
-                });
-        }
-    };
-}])
-
-.controller('TeamCommentsCtrl', ['$scope', '$rootScope', '$filter', '$routeParams', '$window', 'Comments', 'EmployeeComments','SubComments','Comment', 'User',function($scope, $rootScope, $filter, $routeParams, $window, Comments, EmployeeComments, SubComments, Comment, User) {
-    $scope.teamId = $routeParams.id;
-    $scope.newCommentText = "";
-    $scope.showPeopleTeamVisibility = false;
-    $scope.toggleCommentTextExpander = function (comment) {
-        $window.onclick = function (event) {
-            if (!$scope.newCommentText) {
-                var clickedElement = event.target;
-                if (!clickedElement) return;
-                var elementClasses = clickedElement.classList;
-                var clickedOnTextArea = elementClasses.contains('text');
-                if (!clickedOnTextArea) {
-                    comment.expandTextArea=false;
-                    $scope.$apply();
-                }
-            }
-        };
-    };
-    $scope.toggleChildCommentTextExpander = function (comment) {
-        $window.onclick = function (event) {
-            if (!comment.newSubCommentText) {
-                var clickedElement = event.target;
-                if (!clickedElement) return;
-                var elementClasses = clickedElement.classList;
-                var clickedOnTextArea = elementClasses.contains('text');
-                if (!clickedOnTextArea) {
-                    comment.expandChildTextArea=false;
-                    $scope.$apply();
-                }
-            }
-        };
-    };
-
-
-    Comments.getTeamComments($routeParams.id, function(data) {
-        if ($rootScope.currentUser.can_coach_employees || $rootScope.currentUser.can_view_company_dashboard) {
-            $scope.newCommentVisibility = 2;
-            $scope.showPeopleTeamVisibility = true;
-        }
-        $scope.comments = data;
-        $scope.originalComments = angular.copy($scope.comments);
-        angular.forEach($scope.comments, function(comment) {
-            var index = $scope.comments.indexOf(comment);
-            var original_comment = $scope.originalComments[index];
-
-            comment.subcomments = [];
-            original_comment.subcomments = [];
-            SubComments.query({ id: comment.id }).$promise.then(function(response) {
-                    comment.subcomments = response;
-                    original_comment.subcomments = angular.copy(comment.subcomments);
-                }
-            );
-            comment.newSubCommentText = "";
-            comment.expandTextArea = false;
-            comment.expandChildTextArea = false;
-
-        });
-
-        $scope.CreateHeader = function(date) {
-            date=$filter('date')(date,"MM/dd/yyyy");
-            showHeader = (date!=$scope.currentGroup);
-            $scope.currentGroup = date;
-            return showHeader;
-        }
-
-
-    });
-
-    $scope.saveComment = function(comment) {
-        var index = $scope.comments.indexOf(comment);
-        var data = {id: comment.id, _content: comment.content, _visibility: comment.visibility};
-        Comment.update(data, function() {
-            $scope.originalComments[index].content = comment.content;
-            $scope.originalComments[index].visibility = comment.visibility;
-        });
-    }
-
-    $scope.cancelEditComment = function(comment) {
-        var index = $scope.comments.indexOf(comment);
-        comment.content = $scope.originalComments[index].content;
-    }
-
-     $scope.saveSubComment = function(subcomment, comment) {
-        var parent_index = $scope.comments.indexOf(comment);
-        var subcomment_index = $scope.comments[parent_index].subcomments.indexOf(subcomment);
-        var data = {id: subcomment.id, _content: subcomment.content};
-
-        Comment.update(data, function() {
-            $scope.originalComments[parent_index].subcomments[subcomment_index].content = subcomment.content;
-        });
-    }
-
-    $scope.cancelEditSubComment = function(subcomment, comment) {
-        var parent_index = $scope.comments.indexOf(comment);
-        var subcomment_index = $scope.comments[parent_index].subcomments.indexOf(subcomment);
-        subcomment.content = $scope.originalComments[parent_index].subcomments[subcomment_index].content;
-    }
-
-    $scope.addSubComment = function(comment) {
-        var newComment = {};
-        newComment.id = -1;
-        newComment.content = comment.newSubCommentText;
-        newComment.modified_date = new Date().toJSON();
-        newComment.owner = User.get();
-
-        var data = {id: newComment.id, _model_name: "comment", _object_id: comment.id,_content: newComment.content};
-
-        data.id = comment.associated_object.id;
-        EmployeeComments.save(data, function(response) {
-            comment.subcomments.push(response);
-            comment.newSubCommentText = "";
-        });
-    }
-
-    $scope.deleteComment = function(comment) {
-        if ($window.confirm('Are you sure you want to delete this comment?')) {
-            var data = {id: comment.id};
-            var index = $scope.comments.indexOf(comment);
-            var deleteSuccess = function() {
-                $scope.comments.splice(index, 1);
-            };
-
-            Comment.remove(data, function() {
-                    deleteSuccess();
-                });
-        }
-    };
-
-    $scope.deleteSubComment = function(comment, subcomment) {
-        if ($window.confirm('Are you sure you want to delete this comment?')) {
-            var data = {id: subcomment.id};
-            var comment_index = $scope.comments.indexOf(comment);
-            var subcomment_index = $scope.comments[comment_index].subcomments.indexOf(subcomment);
-            var deleteSuccess = function() {
-                $scope.comments[comment_index].subcomments.splice(subcomment_index, 1);
-                $scope.originalComments[comment_index].subcomments.splice(subcomment_index, 1);
-            };
-
-            Comment.remove(data, function() {
-                    deleteSuccess();
-                });
-        }
-    };
-}])
-
-.controller('LeaderCommentsCtrl', ['$scope', '$rootScope', '$filter', '$routeParams', '$window', 'Comments', 'EmployeeComments', 'SubComments','Comment', 'User',function($scope, $rootScope, $filter, $routeParams, $window, Comments, EmployeeComments, SubComments, Comment, User) {
-     $scope.newCommentText = "";
-     $scope.showPeopleTeamVisibility = false;
-     User.get(
-        function(data) {
-            $scope.lead= data.employee;
-            $scope.leadId = $scope.lead.id;
-
-            Comments.getLeadComments($scope.leadId, function(data) {
-                if ($rootScope.currentUser.can_coach_employees || $rootScope.currentUser.can_view_company_dashboard) {
-                    $scope.newCommentVisibility = 2;
-                    $scope.showPeopleTeamVisibility = true;
-                }
-                $scope.comments = data;
-                $scope.originalComments = angular.copy($scope.comments);
-                angular.forEach($scope.comments, function(comment) {
-                    var index = $scope.comments.indexOf(comment);
-                    var original_comment = $scope.originalComments[index];
-
-                    comment.subcomments = [];
-                    original_comment.subcomments = [];
-                    SubComments.query({ id: comment.id }).$promise.then(function(response) {
-                            comment.subcomments = response;
-                            original_comment.subcomments = angular.copy(comment.subcomments);
-                        }
-                    );
-                    comment.newSubCommentText = "";
-                    comment.expandTextArea = false;
-                    comment.expandChildTextArea = false;
-
-                });
-
-                $scope.CreateHeader = function(date) {
-                    date=$filter('date')(date,"MM/dd/yyyy");
-                    showHeader = (date!=$scope.currentGroup);
-                    $scope.currentGroup = date;
-                    return showHeader;
-                }
-            });
-
-        }
-    );
-    $scope.toggleCommentTextExpander = function (comment) {
-        $window.onclick = function (event) {
-            if (!$scope.newCommentText) {
-                var clickedElement = event.target;
-                if (!clickedElement) return;
-                var elementClasses = clickedElement.classList;
-                var clickedOnTextArea = elementClasses.contains('text');
-                if (!clickedOnTextArea) {
-                    comment.expandTextArea=false;
-                    $scope.$apply();
-                }
-            }
-        };
-    };
-    $scope.toggleChildCommentTextExpander = function (comment) {
-        $window.onclick = function (event) {
-            if (!comment.newSubCommentText) {
-                var clickedElement = event.target;
-                if (!clickedElement) return;
-                var elementClasses = clickedElement.classList;
-                var clickedOnTextArea = elementClasses.contains('text');
-                if (!clickedOnTextArea) {
-                    comment.expandChildTextArea=false;
-                    $scope.$apply();
-                }
-            }
-        };
-    };
-
-    $scope.saveComment = function(comment) {
-        var index = $scope.comments.indexOf(comment);
-        var data = {id: comment.id, _content: comment.content, _visibility: comment.visibility};
-        Comment.update(data, function() {
-            $scope.originalComments[index].content = comment.content;
-            $scope.originalComments[index].visibility = comment.visibility;
-        });
-    }
-
-    $scope.cancelEditComment = function(comment) {
-        var index = $scope.comments.indexOf(comment);
-        comment.content = $scope.originalComments[index].content;
-    }
-
-     $scope.saveSubComment = function(subcomment, comment) {
-        var parent_index = $scope.comments.indexOf(comment);
-        var subcomment_index = $scope.comments[parent_index].subcomments.indexOf(subcomment);
-        var data = {id: subcomment.id, _content: subcomment.content};
-
-        EmployeeComment.update(data, function() {
-            $scope.originalComments[parent_index].subcomments[subcomment_index].content = subcomment.content;
-        });
-    }
-
-    $scope.cancelEditSubComment = function(subcomment, comment) {
-        var parent_index = $scope.comments.indexOf(comment);
-        var subcomment_index = $scope.comments[parent_index].subcomments.indexOf(subcomment);
-        subcomment.content = $scope.originalComments[parent_index].subcomments[subcomment_index].content;
-    }
-
-    $scope.addSubComment = function(comment) {
-        var newComment = {};
-        newComment.id = -1;
-        newComment.content = comment.newSubCommentText;
-        newComment.modified_date = new Date().toJSON();
-        newComment.owner = User.get();
-
-        var data = {id: newComment.id, _model_name: "comment", _object_id: comment.id,_content: newComment.content};
-
-        data.id = comment.associated_object.id;
-        EmployeeComments.save(data, function(response) {
-            comment.subcomments.push(response);
-            comment.newSubCommentText = "";
-        });
-    }
-
-    $scope.deleteComment = function(comment) {
-        if ($window.confirm('Are you sure you want to delete this comment?')) {
-            var data = {id: comment.id};
-            var index = $scope.comments.indexOf(comment);
-            var deleteSuccess = function() {
-                $scope.comments.splice(index, 1);
-            };
-
-            Comment.remove(data, function() {
-                    deleteSuccess();
-                });
-        }
-    };
-
-    $scope.deleteSubComment = function(comment, subcomment) {
-        if ($window.confirm('Are you sure you want to delete this comment?')) {
-            var data = {id: subcomment.id};
-            var comment_index = $scope.comments.indexOf(comment);
-            var subcomment_index = $scope.comments[comment_index].subcomments.indexOf(subcomment);
-            var deleteSuccess = function() {
-                $scope.comments[comment_index].subcomments.splice(subcomment_index, 1);
-                $scope.originalComments[comment_index].subcomments.splice(subcomment_index, 1);
-            };
-
-            Comment.remove(data, function() {
-                    deleteSuccess();
-                });
-        }
-    };
-}])
-
-.controller('CoachCommentsCtrl', ['$scope', '$rootScope', '$filter', '$routeParams', '$window', 'Comments', 'EmployeeComments', 'SubComments','Comment', 'User',function($scope, $rootScope, $filter, $routeParams, $window, Comments, EmployeeComments, SubComments, Comment, User) {
-     $scope.newCommentText = "";
-     $scope.showPeopleTeamVisibility = false;
-     User.get(
-        function(data) {
-            $scope.coach= data.employee;
-            $scope.coachId = $scope.coach.id;
-
-            Comments.getCoachComments($scope.coachId, function(data) {
-                if ($rootScope.currentUser.can_coach_employees || $rootScope.currentUser.can_view_company_dashboard) {
-                    $scope.newCommentVisibility = 2;
-                    $scope.showPeopleTeamVisibility = true;
-                }
-                $scope.comments = data;
-                $scope.originalComments = angular.copy($scope.comments);
-                angular.forEach($scope.comments, function(comment) {
-                    var index = $scope.comments.indexOf(comment);
-                    var original_comment = $scope.originalComments[index];
-
-                    comment.subcomments = [];
-                    original_comment.subcomments = [];
-                    SubComments.query({ id: comment.id }).$promise.then(function(response) {
-                            comment.subcomments = response;
-                            original_comment.subcomments = angular.copy(comment.subcomments);
-                        }
-                    );
-                    comment.newSubCommentText = "";
-                    comment.expandTextArea = false;
-                    comment.expandChildTextArea = false;
-
-                });
-
-                $scope.CreateHeader = function(date) {
-                    date=$filter('date')(date,"MM/dd/yyyy");
-                    showHeader = (date!=$scope.currentGroup);
-                    $scope.currentGroup = date;
-                    return showHeader;
-                }
-            });
-
-        }
-    );
-    $scope.toggleCommentTextExpander = function (comment) {
-        $window.onclick = function (event) {
-            if (!$scope.newCommentText) {
-                var clickedElement = event.target;
-                if (!clickedElement) return;
-                var elementClasses = clickedElement.classList;
-                var clickedOnTextArea = elementClasses.contains('text');
-                if (!clickedOnTextArea) {
-                    comment.expandTextArea=false;
-                    $scope.$apply();
-                }
-            }
-        };
-    };
-    $scope.toggleChildCommentTextExpander = function (comment) {
-        $window.onclick = function (event) {
-            if (!comment.newSubCommentText) {
-                var clickedElement = event.target;
-                if (!clickedElement) return;
-                var elementClasses = clickedElement.classList;
-                var clickedOnTextArea = elementClasses.contains('text');
-                if (!clickedOnTextArea) {
-                    comment.expandChildTextArea=false;
-                    $scope.$apply();
-                }
-            }
-        };
-    };
-
-    $scope.saveComment = function(comment) {
-        var index = $scope.comments.indexOf(comment);
-        var data = {id: comment.id, _content: comment.content, _visibility: comment.visibility};
-        Comment.update(data, function() {
-            $scope.originalComments[index].content = comment.content;
-            $scope.originalComments[index].visibility = comment.visibility;
-        });
-    }
-
-    $scope.cancelEditComment = function(comment) {
-        var index = $scope.comments.indexOf(comment);
-        comment.content = $scope.originalComments[index].content;
-    }
-
-     $scope.saveSubComment = function(subcomment, comment) {
-        var parent_index = $scope.comments.indexOf(comment);
-        var subcomment_index = $scope.comments[parent_index].subcomments.indexOf(subcomment);
-        var data = {id: subcomment.id, _content: subcomment.content};
-
-        EmployeeComment.update(data, function() {
-            $scope.originalComments[parent_index].subcomments[subcomment_index].content = subcomment.content;
-        });
-    }
-
-    $scope.cancelEditSubComment = function(subcomment, comment) {
-        var parent_index = $scope.comments.indexOf(comment);
-        var subcomment_index = $scope.comments[parent_index].subcomments.indexOf(subcomment);
-        subcomment.content = $scope.originalComments[parent_index].subcomments[subcomment_index].content;
-    }
-
-    $scope.addSubComment = function(comment) {
-        var newComment = {};
-        newComment.id = -1;
-        newComment.content = comment.newSubCommentText;
-        newComment.modified_date = new Date().toJSON();
-        newComment.owner = User.get();
-
-        var data = {id: newComment.id, _model_name: "comment", _object_id: comment.id,_content: newComment.content};
-
-        data.id = comment.associated_object.id;
-        EmployeeComments.save(data, function(response) {
-            comment.subcomments.push(response);
-            comment.newSubCommentText = "";
-        });
-    }
-
-    $scope.deleteComment = function(comment) {
-        if ($window.confirm('Are you sure you want to delete this comment?')) {
-            var data = {id: comment.id};
-            var index = $scope.comments.indexOf(comment);
-            var deleteSuccess = function() {
-                $scope.comments.splice(index, 1);
-            };
-
-            Comment.remove(data, function() {
-                    deleteSuccess();
-                });
-        }
-    };
-
-    $scope.deleteSubComment = function(comment, subcomment) {
-        if ($window.confirm('Are you sure you want to delete this comment?')) {
-            var data = {id: subcomment.id};
-            var comment_index = $scope.comments.indexOf(comment);
-            var subcomment_index = $scope.comments[comment_index].subcomments.indexOf(subcomment);
-            var deleteSuccess = function() {
-                $scope.comments[comment_index].subcomments.splice(subcomment_index, 1);
-                $scope.originalComments[comment_index].subcomments.splice(subcomment_index, 1);
-            };
-
-            Comment.remove(data, function() {
-                    deleteSuccess();
-                });
-        }
-    };
 }])
 
 .controller('EngagementSurveyCtrl', ['$scope', '$window', '$routeParams', '$location', 'EngagementSurvey', 'analytics', function($scope, $window, $routeParams, $location, EngagementSurvey, analytics){
@@ -2104,7 +1165,7 @@ angular.module('tdb.controllers', [])
         });
 
         $scope.last_index = $scope.pvps.length -1;
-	});
+    });
 
     PvpDescriptions.query().$promise.then(function(response) {
             $scope.pvp_descriptions = response;
@@ -2117,7 +1178,6 @@ angular.module('tdb.controllers', [])
             _pvp = $scope.currentPvP;
             if ($scope.currentPvP.comment.content) {
                 var data = {id: _pvp.id, _potential: _pvp.potential, _performance: _pvp.performance, _content: _pvp.comment.content};
-                console.log(data)
                 PvpEvaluation.update(data, function () {
                     $scope.saving = false;
                 });
@@ -2192,4 +1252,3 @@ angular.module('tdb.controllers', [])
     }
 
 }]);
-

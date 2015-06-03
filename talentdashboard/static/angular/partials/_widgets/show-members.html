@@ -1,0 +1,22 @@
+<div>	
+    <div class="modal-body">
+        <button ng-click="cancel()" class="close">&times;</button>
+    	<h3 class="modal-title">
+            <span>Daily Digest Email</span>
+        </h3>
+        <h3>What is it?</h3>
+        <p>Once a day Scoutmap sends an email summary of the development discussions that have happened in the last 24 hours. </p>
+        <h3 ng-show="members.length>0">Who gets it?</h3>
+        <div class="team-leads">
+            <div class="team-lead" ng-repeat="employee in members">
+                    <div class="xlarge-headshot">
+                        <img ng-src="{{ employee.avatar_small }}" />
+                    </div>
+                <span class="team-lead-name">
+                    {{employee.full_name}}
+                </span>
+            </div>
+        </div>
+	</div>	
+
+</div>

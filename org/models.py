@@ -14,21 +14,31 @@ class EmployeeManager(models.Manager):
     def coaches(self):
         return self.filter(user__groups__name=COACHES_GROUP).order_by('full_name')
 
-    def get_current_employees(self, team_id=None):
+    def get_current_employees(self, team_id=None, show_hidden=False):
         employees = self.filter(departure_date__isnull=True)
-        employees = employees.filter(display=True)
+        if not show_hidden:
+            employees = employees.filter(display=True)
         if team_id is not None:
             employees = employees.filter(team_id=team_id)
         return employees
 
+    def get_current_employees_by_group_name(self, name, show_hidden=False):
+        employees = self.get_current_employees(show_hidden=show_hidden)
+        employees = employees.filter(user__groups__name=name)
+        return employees
+
+    def get_current_employees_by_team(self, team_id):
+        employees = self.get_current_employees()
+        employees = employees.filter(team__id=team_id)
+        return employees
+
     def get_current_employees_by_team_lead(self, lead_id):
-        employees = self.filter(departure_date__isnull=True)
-        employees = employees.filter(display=True)
+        employees = self.get_current_employees()
         employees = employees.filter(leaderships__leader__id=lead_id)
         return employees
 
     def get_current_employees_by_coach(self, coach_id, show_hidden=False):
-        employees = self.filter(departure_date__isnull=True)
+        employees = self.get_current_employees()
         employees = employees.filter(coach_id=coach_id)
         return employees.exclude(display=show_hidden)
 
@@ -160,25 +170,25 @@ class Employee(models.Model):
 
     def _get_vops_visionary(self):
         try:
-            return int(self.attributes.get(category__id=13).name)
+            return self.assessments.get(category__name='Visionary').score
         except:
             return None
 
     def _get_vops_operator(self):
         try:
-            return int(self.attributes.get(category__id=14).name)
+            return self.assessments.get(category__name='Operator').score
         except:
             return None
 
     def _get_vops_processor(self):
         try:
-            return int(self.attributes.get(category__id=15).name)
+            return self.assessments.get(category__name='Processor').score
         except:
             return None
 
     def _get_vops_synergist(self):
         try:
-            return int(self.attributes.get(category__id=16).name)
+            return self.assessments.get(category__name='Synergist').score
         except:
             return None
 

@@ -39,29 +39,14 @@
             </div>    
         </div>    
         <div class="col-sm-7 col-md-7 col-lg-7">  
-            <div ng-include="'/static/angular/partials/_widgets/todos.html'" ng-controller="TaskListCtrl"></div>
-            <div ng-controller="EmployeeCommentsCtrl" ng-init="view='employee-view'">
+            <div ng-include="'/static/angular/partials/_widgets/todos.html'" ng-init="view='employee-view'" ng-controller="TaskListCtrl"></div>
+            <div ng-controller="CommentsCtrl" ng-init="init(view='employee-view', path='employees', id=employee.id)">
                 <div ng-include="'/static/angular/partials/_widgets/add-comment.html'"></div>
-                <div ng-include="'/static/angular/partials/_widgets/comments.html'"></div>      
+                <div ng-include="'/static/angular/partials/_widgets/comments.html'"></div>
             </div>          
         </div>
     </div>
-</div>        
-
-<div get-popup-position ng-show="addEngagement">
-    <div style="width: 160px;">
-        <div style="display:inline;width:8px;margin-left:-40px;margin-top:-11px;border-width: 1px;border-style: solid; border-color:#101214 #434343 #101214 #101214;padding: 11px 5px 10px 10px;background-color: #434343;color: #d3d4d4;"><span class="glyphicon glyphicon-add"></span></div>
-        <span style="padding:7px">Engagement</span>
-        <ul style="padding:5px">
-            <li ng-repeat="choice in engagement_choices" ng-click="set_choice(choice.id)" class="engage-select" style="padding:5px"><span ng-class="{'glyphicon-check': is_selected(choice.id)}" class="glyphicon" style="padding-right:5px"></span><span class="{{choice.css}} small"> {{choice.title}}</span></li>
-        </ul>
-        <div id="editActions" style="right:2px;bottom:-33px;">
-            <button class="button small blue" ng-disabled="disable_save_engagement()" style="margin-bottom:3px;" ng-click="save_engagement();addEngagement=false">Save</button>
-            <button class="button small orange" style="margin-bottom:3px;" ng-click="cancel_engagement();addEngagement=false">Cancel</button>
-        </div>
-    </div>
 </div>
-
 
 <modal-employee employee='employee' leadership='leadership' employees='employees' teams='teams' show='modalEmployeeShown'></modal-employee>
 <modal-happy employee="employee" happys='happys' comments='comments' show='modalHappyShown' width='492px'></modal-happy>

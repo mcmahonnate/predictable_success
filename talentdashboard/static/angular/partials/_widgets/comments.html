@@ -41,19 +41,9 @@
                         class="form-control edit-textarea">
                     </textarea>
                 </div> 
-                <div class="visibility"> 
-                    <h3>Share with:</h3>
-                    <label class="radio inline control-label">
-                        <input class="radio" ng-model="comment.visibility" name="visibilitOptions{{$index}}" value="3" type="radio">
-                        Everyone
-                    </label>
-                    <label ng-show="showPeopleTeamVisibility" class="radio inline control-label">
-                        <input class="radio" ng-model="comment.visibility" name="visibilitOptions{{$index}}" value="2" type="radio">
-                        Coaches
-                    </label>
-                    <label class="radio inline control-label">
-                        <input class="radio" ng-model="comment.visibility" name="visibilitOptions{{$index}}" value="1" type="radio">
-                        Just Me
+                <div class="visibility">
+                    <label>
+                        <input ng-model="comment.include_in_daily_digest" ng-checked="comment.include_in_daily_digest" type="checkbox"> Include in <a ng-click="showMembers()">Daily Digest Email</a>
                     </label>
                 </div>    
                 <happiness show="true" happy="comment.happiness"></happiness>
@@ -127,4 +117,6 @@
             </div>
         </div>
     </div>
+    <button class="btn btn-link btn-sm" ng-show="has_next && !busy" ng-click="loadComments()">Load More Discussions</button>
+    <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
 </div>

@@ -3,6 +3,20 @@
         <div class="dropdown btn-group">
             <h1><span ng-if="!categoryName">All Employees</span>{{categoryName}}</h1> 
         </div>
+        <div class="dropdown pull-right" ng-if="customer.show_vops" style="margin-left:5px">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                <span ng-if="!synergistStyle">Synergist Style</span> {{synergistStyle}}
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                <li><a ng-click="clearSynegistStyle();synergistStyle='Visionary';vops.visionary=!vops.visionary">Visionary</a></li>
+                <li><a ng-click="clearSynegistStyle();synergistStyle='Operator';vops.operator=!vops.operator">Operator</a></li>
+                <li><a ng-click="clearSynegistStyle();synergistStyle='Processor';vops.processor=!vops.processor">Processor</a></li>
+                <li><a ng-click="clearSynegistStyle();synergistStyle='Synergist';vops.synergist=!vops.synergist">Synergist</a></li>
+                <li class="divider"></li>
+                <li><a ng-click="clearSynegistStyle();synergistStyle=null">Clear</a></li>
+            </ul>
+        </div>
         <div class="dropdown pull-right">
             <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
                 <span ng-if="!happyName">All Moods</span> {{happyName}}
@@ -32,7 +46,6 @@
                 <li><a ng-click="menu.show=false;setTeamFilter('','')">All Teams</a></li>
             </ul>
         </div>
-
         <div ng-if="customer.show_kolbe">
             <div style="width:200px;display:inline-block;margin: 5px 18px;">
                 <div slider-fact-finder style="width:200px;display:inline-block;margin: 5px 0px;"></div>
@@ -47,24 +60,9 @@
                 <div slider-implementor style="width:200px;display:inline-block;margin: 5px 0px;"></div>
             </div>
         </div>
-        <div ng-if="customer.show_vops">
-            <div style="width:200px;display:inline-block;margin: 5px 18px;">
-                <div slider-vops label="Visionary" type="0" style="width:200px;display:inline-block;margin: 5px 0px;"></div>
-            </div>
-            <div style="width:200px;display:inline-block;margin: 5px 18px;">
-                <div slider-vops label="Operator" type="1" style="width:200px;display:inline-block;margin: 5px 0px;"></div>
-            </div>
-            <div style="width:200px;display:inline-block;margin: 5px 18px;">
-                <div slider-vops label="Processor" type="2" style="width:200px;display:inline-block;margin: 5px 0px;"></div>
-            </div>
-            <div style="width:200px;display:inline-block;margin: 5px 18px;">
-                <div slider-vops label="Synergist" type="3" style="width:200px;display:inline-block;margin: 5px 0px;"></div>
-            </div>
-        </div>
-       
         <div class="grid filled-light rounded">    
             <ul masonry="true">
-                <li data-category="{{employee.team.name}}" class="employee" on-filter index="{{$index}}" stale-days="90" ng-repeat="employee in filteredEmployees = (evaluations | filterEmployees:talentCategory:teamId:happy:days_since_happy:fact_finder:follow_thru:quick_start:implementor:vops[0]:vops[1]:vops[2]:vops[3]) | orderBy:['full_name']">
+                <li data-category="{{employee.team.name}}" class="employee" on-filter index="{{$index}}" stale-days="90" ng-repeat="employee in filteredEmployees = (evaluations | filterEmployees:talentCategory:teamId:happy:days_since_happy:fact_finder:follow_thru:quick_start:implementor:vops.visionary:vops.operator:vops.processor:vops.synergist) | orderBy:['full_name']">
                     <div class="large-avatar-container">
                         <div class="xxxlarge-headshot xxxlarge-headshot-active">
                             <a href="#/employees/{{employee.id}}">
