@@ -56,7 +56,8 @@ class CommentManager(models.Manager):
         comments = self.filter(content_type=employee_type)
         comments = comments.exclude(object_id=requester.id)
         daily_digest_subscriber = requester.user.groups.filter(name="Daily Digest Subscribers").exists()
-        if not daily_digest_subscriber:
+        admin_access = requester.user.groups.filter(name="AdminAccess").exists()
+        if not daily_digest_subscriber or not admin_access:
             comments = comments.exclude(~Q(owner_id=requester.user.id), include_in_daily_digest=False)
         comments = comments.extra(order_by = ['-created_date'])
 
