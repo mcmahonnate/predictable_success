@@ -17,8 +17,6 @@ class Command(BaseCommand):
 
         document_count = 0
 
-        for e in employees:
-            indexer.index_employee(e, tenant)
-            document_count += 1
+        indexer.process(employees, tenant)
 
-        print 'Indexed %s employees' % document_count
+        print 'Indexed %s employees' % len(employees)
