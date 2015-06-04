@@ -44,7 +44,6 @@ angular.module('tdb.search.controllers', [])
             }
             $scope.employees = EmployeeSearch.query(query);
         };
-
         $scope.search();
     }])
 ;

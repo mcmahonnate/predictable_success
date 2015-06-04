@@ -1,7 +1,7 @@
 <div class="container">
     <div class="row sorts">
         <div class="dropdown btn-group">
-            <h1><span ng-if="!categoryName">All Employees</span>{{categoryName}}</h1> 
+            <h1><span ng-if="!categoryName">All Employees</span>{{categoryName}}</h1>
         </div>
         <div class="dropdown pull-right">
             <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
@@ -56,29 +56,29 @@
                 <div slider-vops label="Synergist" type="3" style="width:200px;display:inline-block;margin: 5px 0px;"></div>
             </div>
         </div>
-       
-        <div class="grid filled-light rounded">    
+
+        <div class="grid filled-light rounded">
             <ul masonry="true">
                 <li data-category="{{employee.team.name}}" class="employee" on-filter index="{{$index}}" stale-days="90" ng-repeat="employee in employees">
                     <div class="large-avatar-container">
                         <div class="xxxlarge-headshot xxxlarge-headshot-active">
                             <a href="#/employees/{{employee.pk}}">
                                 <img ng-src="https://hippoculture.s3.amazonaws.com{{ employee.avatar }}" />
-                            </a>  
-                        </div>    
+                            </a>
+                        </div>
                         <div class="employee-attribute employee-attribute-large" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{ talentCategories[employee.talent_category].label }}">
                             <span class="segment employee-segment-background-color-{{employee.talent_category}}"></span>
                         </div>
                         <div class="employee-attribute employee-attribute-large employee-happiness-large" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{ talentCategories[employee.talent_category].label }}">
                             <span class="employee-happiness-background-color-{{employee.happiness}} happiness-{{ employee.happiness }}"></span>
-                        </div>      
+                        </div>
                     </div>
                     <h3 class="employee-name centered"><a href="#/employees/{{employee.pk}}">{{employee.full_name}}</a></h3>
                     <div class="team-name centered "><a ng-click="setTeamFilter(employee.team.id, employee.team.name);menu.show=false;">{{employee.team_name}}</a></div>
                 </li>
             </ul>
-            <div ng-if="evaluations.length > 0 && filteredEmployees.length === 0" class="no-results">No Results</div>
-            <div ng-if="evaluations.length === 0" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
+            <div ng-if="employees.$resolved && employees.length === 0" class="no-results">No Results</div>
+            <div ng-if="!employees.$resolved" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
         </div>
-    </div> 
+    </div>
 </div>
