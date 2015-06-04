@@ -1,9 +1,84 @@
+<div class="container">
+    <div class="row sorts">
+        <div class="dropdown btn-group">
+            <h1><span ng-if="!categoryName">All Employees</span>{{categoryName}}</h1> 
+        </div>
+        <div class="dropdown pull-right">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                <span ng-if="!currentHappiness">All Moods</span> {{ currentHappiness.name }}
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu employee-happiness-list" role="menu" aria-labelledby="dropdownMenu1">
+                <li ng-repeat="happiness in happinessOptions | orderBy:'-id'" ng-click="setHappyFilter(happiness.id)" role="presentation"><a role="menuitem" tabindex="-1"><span class="happiness-{{ happiness.id }}"></span> <span class="text">{{ happiness.name }}</span></a></li>
+                <li class="divider"></li>
+                <li ng-click="setHappyFilter(null)" role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)">All Moods</a></li>
+            </ul>
+        </div>
+        <div class="dropdown pull-right" style="margin-right:5px">
+            <button class="btn btn-default dropdown-toggle" type="button" id="teamList" data-toggle="dropdown" aria-expanded="true">
+                <span ng-if="!currentTeam">All Teams</span> {{currentTeam.name}}
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-teams" role="menu" aria-labelledby="teamList">
+                <li ng-repeat="team in teams | orderBy:'name'">
+                    <a ng-click="setTeamFilter(team.id);">{{team.name}}</a>
+                </li>
+                <li class="divider"></li>
+                <li><a ng-click="setTeamFilter(null)">All Teams</a></li>
+            </ul>
+        </div>
 
-<span style="color: #cbcbcb;">Search by name:</span> <input ng-model="query">
-<div ng-if="!query" style="color: #cbcbcb;">Please enter text above to search for employees</div>
-<ol class="employees">
-  <li ng-controller="EvaluationListCtrl" ng-repeat="employee in employees | filter:{full_name:query}">
-    <a href="#/employees/{{employee.id}}" style="color: #cbcbcb;">{{employee.full_name}}</a>
-  </li>
-</ol>
-
+        <div ng-if="customer.show_kolbe">
+            <div style="width:200px;display:inline-block;margin: 5px 18px;">
+                <div slider-fact-finder style="width:200px;display:inline-block;margin: 5px 0px;"></div>
+            </div>
+            <div style="width:200px;display:inline-block;margin: 5px 18px;">
+                <div slider-follow-thru style="width:200px;display:inline-block;margin: 5px 0px;"></div>
+            </div>
+            <div style="width:200px;display:inline-block;margin: 5px 18px;">
+                <div slider-quick-start style="width:200px;display:inline-block;margin: 5px 0px;"></div>
+            </div>
+            <div style="width:200px;display:inline-block;margin: 5px 18px;">
+                <div slider-implementor style="width:200px;display:inline-block;margin: 5px 0px;"></div>
+            </div>
+        </div>
+        <div ng-if="customer.show_vops">
+            <div style="width:200px;display:inline-block;margin: 5px 18px;">
+                <div slider-vops label="Visionary" type="0" style="width:200px;display:inline-block;margin: 5px 0px;"></div>
+            </div>
+            <div style="width:200px;display:inline-block;margin: 5px 18px;">
+                <div slider-vops label="Operator" type="1" style="width:200px;display:inline-block;margin: 5px 0px;"></div>
+            </div>
+            <div style="width:200px;display:inline-block;margin: 5px 18px;">
+                <div slider-vops label="Processor" type="2" style="width:200px;display:inline-block;margin: 5px 0px;"></div>
+            </div>
+            <div style="width:200px;display:inline-block;margin: 5px 18px;">
+                <div slider-vops label="Synergist" type="3" style="width:200px;display:inline-block;margin: 5px 0px;"></div>
+            </div>
+        </div>
+       
+        <div class="grid filled-light rounded">    
+            <ul masonry="true">
+                <li data-category="{{employee.team.name}}" class="employee" on-filter index="{{$index}}" stale-days="90" ng-repeat="employee in employees">
+                    <div class="large-avatar-container">
+                        <div class="xxxlarge-headshot xxxlarge-headshot-active">
+                            <a href="#/employees/{{employee.pk}}">
+                                <img ng-src="https://hippoculture.s3.amazonaws.com{{ employee.avatar }}" />
+                            </a>  
+                        </div>    
+                        <div class="employee-attribute employee-attribute-large" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{ talentCategories[employee.talent_category].label }}">
+                            <span class="segment employee-segment-background-color-{{employee.talent_category}}"></span>
+                        </div>
+                        <div class="employee-attribute employee-attribute-large employee-happiness-large" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{ talentCategories[employee.talent_category].label }}">
+                            <span class="employee-happiness-background-color-{{employee.happiness}} happiness-{{ employee.happiness }}"></span>
+                        </div>      
+                    </div>
+                    <h3 class="employee-name centered"><a href="#/employees/{{employee.pk}}">{{employee.full_name}}</a></h3>
+                    <div class="team-name centered "><a ng-click="setTeamFilter(employee.team.id, employee.team.name);menu.show=false;">{{employee.team_name}}</a></div>
+                </li>
+            </ul>
+            <div ng-if="evaluations.length > 0 && filteredEmployees.length === 0" class="no-results">No Results</div>
+            <div ng-if="evaluations.length === 0" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
+        </div>
+    </div> 
+</div>
