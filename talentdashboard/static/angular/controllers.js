@@ -184,10 +184,8 @@ angular.module('tdb.controllers', [])
     $scope.kolbe_implementor_labels=['imagine','restore','build'];
     $scope.evaluations = PvpEvaluation.getCurrentEvaluations();
     $scope.teamId = $routeParams.team_id;
-    $scope.talentCategory = $routeParams.talent_category;
-
-    $scope.categoryName  = TalentCategories.getLabelByTalentCategory($scope.talentCategory)
-
+    $scope.talentCategory = $routeParams.talent_category.toString();
+    $scope.categoryName  = TalentCategories.getLabelByTalentCategory($scope.talentCategory);
     $scope.days_since_happy = $routeParams.days_since_happy;
     $scope.fact_finder = angular.copy($scope.kolbe_fact_finder_labels);
     $scope.follow_thru = angular.copy($scope.kolbe_follow_thru_labels);
