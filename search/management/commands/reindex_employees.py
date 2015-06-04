@@ -12,11 +12,5 @@ class Command(BaseCommand):
         tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
         if tenant.is_public_tenant():
             return
-
         employees = Employee.objects.all()
-
-        document_count = 0
-
         indexer.process(employees, tenant)
-
-        print 'Indexed %s employees' % len(employees)
