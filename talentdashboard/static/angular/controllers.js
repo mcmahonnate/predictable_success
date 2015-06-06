@@ -1,14 +1,18 @@
 angular.module('tdb.controllers', [])
 
-.controller('BaseAppCtrl', ['$rootScope', '$location', 'User', 'Customers', function($rootScope, $location, User, Customers) {
+.controller('BaseAppCtrl', ['$rootScope', '$location', '$document', 'User', 'Customers', function($rootScope, $location, $document, User, Customers) {
     $rootScope.$on("$routeChangeError", function() {
         window.location = '/account/login?next=' + $location.path();
     });
-   Customers.get(function(data) {
+    Customers.get(function(data) {
             $rootScope.customer = data;
        }
-   );
-   // parse a date in yyyy-mm-dd format
+    );
+    $document.on('click',function(event){
+        $rootScope.activeTab = angular.element(event.target).hasClass('nav-item-icon') ? $rootScope.activeTab : null;
+        $rootScope.$apply();
+    });
+    // parse a date in yyyy-mm-dd format
     $rootScope.parseDate = function (input) {
       if (input) {
           var parts = input.match(/(\d+)/g);
@@ -230,7 +234,7 @@ angular.module('tdb.controllers', [])
     }
 }])
 
-.controller('NavigationCtrl', ['$scope', '$routeParams', '$window', '$location', 'Employee', 'Customers', 'Team', function($scope, $routeParams, $window, $location, Employee, Customers, Team) {
+.controller('NavigationCtrl', ['$scope', '$rootScope', '$routeParams', '$window', '$location', 'Employee', 'Customers', 'Team', function($scope, $rootScope, $routeParams, $window, $location, Employee, Customers, Team) {
     
     $scope.$window = $window;
 
@@ -280,7 +284,7 @@ angular.module('tdb.controllers', [])
     $scope.navQuery = '';
 
     //set active tab
-    $scope.activeTab = null; 
+    $rootScope.activeTab = null;
 
     //tabs
     $scope.zonesTab = 'zones';
@@ -289,10 +293,10 @@ angular.module('tdb.controllers', [])
     $scope.searchTab = 'search';
 
     $scope.setActiveTab = function (tab) {
-        if ($scope.activeTab == tab) {
-            $scope.activeTab = null;
+        if ($rootScope.activeTab == tab) {
+            $rootScope.activeTab = null;
         } else {
-            $scope.activeTab = tab;
+            $rootScope.activeTab = tab;
         }    
     };
 }])
