@@ -122,7 +122,7 @@
    <field name="happiness" type="string" indexed="true" stored="true" required="false" multiValued="false" />
    <field name="happiness_date" type="date" indexed="true" stored="true" required="false" multiValued="false" />
    <field name="kolbe_fact_finder" type="string" indexed="true" stored="true" required="false" multiValued="false" />
-   <field name="kolbe_follow_through" type="string" indexed="true" stored="true" required="false" multiValued="false" />
+   <field name="kolbe_follow_thru" type="string" indexed="true" stored="true" required="false" multiValued="false" />
    <field name="kolbe_quick_start" type="string" indexed="true" stored="true" required="false" multiValued="false" />
    <field name="kolbe_implementor" type="string" indexed="true" stored="true" required="false" multiValued="false" />
    <field name="vops_visionary" type="int" indexed="true" stored="true" required="false" multiValued="false" />
