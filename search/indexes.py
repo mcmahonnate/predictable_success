@@ -87,7 +87,7 @@ class EmployeeIndex(object):
                                     happiness=happiness),
         }
         if vops:
-            self._add_vops_filter(query, vops)
+            query['fq'].append('vops_%s:[260 TO *]' % vops.lower())
 
         results = self.solr.search('*:*', headers=self._get_auth_headers(), **query)
         return results
@@ -109,9 +109,6 @@ class EmployeeIndex(object):
         url = "%s/select?%s" % (settings.EMPLOYEES_SOLR_URL, query_string)
         results = requests.get(url, headers=self._get_auth_headers()).json()
         return results['stats']['stats_fields']['current_salary']
-
-    def _add_vops_filter(self, query, key):
-        query['fq'].append('vops_%s:[260 TO *]' % key.lower())
 
     def _get_start(self, page, rows):
         return rows * (page - 1)
