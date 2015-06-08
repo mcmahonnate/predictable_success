@@ -14,6 +14,7 @@ class EmployeeIndex(object):
         self.solr = pysolr.Solr(settings.EMPLOYEES_SOLR_URL, timeout=10)
 
     def delete(self, employee, tenant):
+        """ Removes the Employee from the index."""
         document_id = self._generate_document_id(tenant, employee)
         self.solr.delete(id=document_id, headers=self._get_auth_headers())
 
@@ -77,8 +78,7 @@ class EmployeeIndex(object):
                        happiness=None,
                        vops=None,
                        page=1,
-                       rows=10
-    ):
+                       rows=10):
         query = {
             'sort': 'full_name asc',
             'rows': rows,
