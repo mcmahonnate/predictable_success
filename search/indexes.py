@@ -111,7 +111,7 @@ class EmployeeIndex(object):
         return results['stats']['stats_fields']['current_salary']
 
     def _add_vops_filter(self, query, key):
-        query['fq'].append('vops_%s:[260 TO *]' % key)
+        query['fq'].append('vops_%s:[260 TO *]' % key.lower())
 
     def _get_start(self, page, rows):
         return rows * (page - 1)
