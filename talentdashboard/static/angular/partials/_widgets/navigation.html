@@ -22,7 +22,7 @@
             <a ng-href="#/"><span class="fa fa-tachometer nav-item-icon"></span></a>
         </div>
 
-        <div class="nav-item" ng-class="{'nav-item-active': activeTab == zonesTab}" ng-click="setActiveTab(zonesTab)">
+        <div class="nav-item" ng-class="{'nav-item-active': $root.activeTab == zonesTab}" ng-click="setActiveTab(zonesTab)">
             <span class="nav-item-icon glyphicon glyphicon-user filter_menu"></span>
             <div class="subnav">
                 <div class="subnav-title">Employee Zones</div>
@@ -79,7 +79,7 @@
             </div>
         </div>
 
-        <div class="nav-item" ng-class="{'nav-item-active': activeTab == teamsTab}" ng-click="setActiveTab(teamsTab)" ng-controller="TeamListCtrl">
+        <div class="nav-item" ng-class="{'nav-item-active': $root.activeTab == teamsTab}" ng-click="setActiveTab(teamsTab)" ng-controller="TeamListCtrl">
             <span class="fa fa-file-text team_menu nav-item-icon"></span>
             <div class="subnav subnav-reports">
                 <div class="subnav-title">Teams</div>
@@ -92,7 +92,7 @@
         </div>
 
     <!-- Add Employee -->
-    <div class="nav-item"  ng-if="currentUser.can_view_company_dashboard" ng-class="{'nav-item-active': activeTab == settingsTab}" ng-click="setActiveTab(settingsTab)">
+    <div class="nav-item"  ng-if="currentUser.can_view_company_dashboard" ng-class="{'nav-item-active': $root.activeTab == settingsTab}" ng-click="setActiveTab(settingsTab)">
         <span class="fa fa-gear employee_menu nav-item-icon"></span>
         <div class="subnav subnav-settings">
             <div ng-show="currentUser.can_edit_employees">
@@ -111,12 +111,12 @@
     <modal-employee employee='newEmployee' leadership='newLeadership' employees='employees' teams='teams' show='modalEmployeeShown' width='700px'></modal-employee> 
 
     <!-- Search -->
-    <div class="nav-item"  ng-if="currentUser.can_view_company_dashboard" ng-class="{'nav-item-active': activeTab == searchTab}" ng-click="setActiveTab(searchTab); clearSearch();">
+    <div class="nav-item"  ng-if="currentUser.can_view_company_dashboard" ng-class="{'nav-item-active': $root.activeTab == searchTab}" ng-click="setActiveTab(searchTab); clearSearch();">
         <div class="fa fa-search nav-item-icon"></div>
         <div class="subnav subnav-search" ng-click="setActiveTab(searchTab);">
             <div class="subnav-title">Search</div>
             <div class="subnav-search-input">
-                <input ng-model="navQuery" type="text" placeholder="Search Employees..." class="form-control" />
+                <input ng-model="navQuery" type="text" placeholder="Search Employees..." class="form-control nav-input" />
                 <div class="search-results" ng-show="navQuery != ''">
                     <ul ng-if="navQuery!=''">
                         <li ng-repeat="employee in filteredEmployees = (employees |filter:{full_name:navQuery}:startsWith) | orderBy:'full_name'">
