@@ -79,7 +79,7 @@
             </div>
         </div>
 
-        <div class="nav-item" ng-class="{'nav-item-active': $root.activeTab == teamsTab}" ng-click="setActiveTab(teamsTab)" ng-controller="TeamListCtrl">
+        <div class="nav-item" ng-if="currentUser.can_view_company_dashboard" ng-class="{'nav-item-active': $root.activeTab == teamsTab}" ng-click="setActiveTab(teamsTab)" ng-controller="TeamListCtrl">
             <span class="fa fa-file-text team_menu nav-item-icon"></span>
             <div class="subnav subnav-reports">
                 <div class="subnav-title">Teams</div>
