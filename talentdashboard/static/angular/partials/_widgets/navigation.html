@@ -116,7 +116,7 @@
         <div class="subnav subnav-search" ng-click="setActiveTab(searchTab);">
             <div class="subnav-title">Search</div>
             <div class="subnav-search-input">
-                <input ng-model="navQuery" type="text" placeholder="Search Employees..." class="form-control" />
+                <input ng-model="navQuery" type="text" placeholder="Search Employees..." class="form-control nav-input" />
                 <div class="search-results" ng-show="navQuery != ''">
                     <ul ng-if="navQuery!=''">
                         <li ng-repeat="employee in filteredEmployees = (employees |filter:{full_name:navQuery}:startsWith) | orderBy:'full_name'">

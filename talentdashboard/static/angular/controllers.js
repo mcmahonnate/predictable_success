@@ -9,8 +9,11 @@ angular.module('tdb.controllers', [])
        }
     );
     $document.on('click',function(event){
-        $rootScope.activeTab = angular.element(event.target).hasClass('nav-item-icon') ? $rootScope.activeTab : null;
-        $rootScope.$apply();
+        element = angular.element(event.target);
+        if ((!element.hasClass('nav-item-icon') && !element.hasClass('nav-input')) && $rootScope.activeTab) {
+            $rootScope.activeTab = null
+            $rootScope.$apply();
+        }
     });
     // parse a date in yyyy-mm-dd format
     $rootScope.parseDate = function (input) {
