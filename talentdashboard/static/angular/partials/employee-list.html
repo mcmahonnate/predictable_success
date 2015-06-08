@@ -3,6 +3,20 @@
         <div class="dropdown btn-group">
             <h1><span ng-if="!categoryName">All Employees</span>{{categoryName}}</h1>
         </div>
+        <div class="dropdown pull-right" ng-if="customer.show_vops" style="margin-left:5px">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                <span ng-if="!synergistStyle">Synergist Style</span> {{synergistStyle}}
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                <li><a ng-click="setSynergistStyle('Visionary')">Visionary</a></li>
+                <li><a ng-click="setSynergistStyle('Operator')">Operator</a></li>
+                <li><a ng-click="setSynergistStyle('Processor')">Processor</a></li>
+                <li><a ng-click="setSynergistStyle('Synergist')">Synergist</a></li>
+                <li class="divider"></li>
+                <li><a ng-click="setSynergistStyle(null)">Clear</a></li>
+            </ul>
+        </div>
         <div class="dropdown pull-right">
             <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
                 <span ng-if="!currentHappiness">All Moods</span> {{ currentHappiness.name }}

@@ -4,7 +4,8 @@ angular.module('tdb.search.controllers', [])
         $scope.filters = {
             talentCategory: $routeParams.talent_category,
             happiness: $routeParams.happiness,
-            teamId: $routeParams.team_id
+            team_id: $routeParams.team_id,
+            vops: $routeParams.vops
         };
 
         $scope.happinessOptions = Happiness.query();
@@ -15,13 +16,17 @@ angular.module('tdb.search.controllers', [])
 
         Team.query({}, function(results) {
             $scope.teams = results;
-            if($scope.filters.teamId) {
-                var filteredTeams = $filter('filter')($scope.teams, {id: $scope.filters.teamId});
+            if($scope.filters.team_id) {
+                var filteredTeams = $filter('filter')($scope.teams, {id: $scope.filters.team_id});
                 $scope.currentTeam = filteredTeams.length ? filteredTeams[0] : null;
             }
         });
 
         $scope.categoryName  = TalentCategories.getLabelByTalentCategory($scope.filters.talentCategory);
+        $scope.setSynergistStyle = function(style) {
+            $scope.synergistStyle = style;
+            $location.search('vops', style);
+        };
 
         $scope.setTeamFilter = function(teamId) {
             $location.search('team_id', teamId);
@@ -36,11 +41,15 @@ angular.module('tdb.search.controllers', [])
             if($scope.filters.talentCategory) {
                 query['talent_category'] = $scope.filters.talentCategory;
             }
-            if($scope.filters.teamId) {
-                query['team_id'] = $scope.filters.teamId;
+            if($scope.filters.team_id) {
+                query['team_id'] = $scope.filters.team_id;
             }
             if($scope.filters.happiness) {
                 query['happiness'] = $scope.filters.happiness;
+            }
+            if($scope.filters.vops) {
+                query['vops'] = $scope.filters.vops;
+                $scope.synergistStyle = $scope.filters.vops;
             }
             $scope.employees = EmployeeSearch.query(query);
         };
