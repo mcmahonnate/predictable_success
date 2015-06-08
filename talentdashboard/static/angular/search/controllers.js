@@ -25,7 +25,7 @@ angular.module('tdb.search.controllers', [])
         $scope.categoryName  = TalentCategories.getLabelByTalentCategory($scope.filters.talentCategory);
         $scope.setSynergistStyle = function(style) {
             $scope.synergistStyle = style;
-            $location.search('vops', style);
+            $location.search('vops', style.toLowerCase());
         };
 
         $scope.setTeamFilter = function(teamId) {
@@ -48,7 +48,7 @@ angular.module('tdb.search.controllers', [])
                 query['happiness'] = $scope.filters.happiness;
             }
             if($scope.filters.vops) {
-                query['vops'] = $scope.filters.vops;
+                query['vops'] = $scope.filters.vops.toLowerCase();
                 $scope.synergistStyle = $scope.filters.vops;
             }
             $scope.employees = EmployeeSearch.query(query);
