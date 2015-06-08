@@ -75,10 +75,7 @@ class EmployeeIndex(object):
                        talent_categories=None,
                        team_ids=None,
                        happiness=None,
-                       vops_visionary=None,
-                       vops_operator=None,
-                       vops_processor=None,
-                       vops_synergist=None,
+                       vops=None,
                        page=1,
                        rows=10
     ):
@@ -89,14 +86,8 @@ class EmployeeIndex(object):
             'fq': self._get_filters(tenant, talent_categories=talent_categories, team_ids=team_ids,
                                     happiness=happiness),
         }
-        if vops_operator:
-            self._add_vops_filter(query, 'vops_operator')
-        if vops_visionary:
-            self._add_vops_filter(query, 'vops_visionary')
-        if vops_processor:
-            self._add_vops_filter(query, 'vops_processor')
-        if vops_synergist:
-            self._add_vops_filter(query, 'vops_synergist')
+        if vops:
+            self._add_vops_filter(query, vops)
 
         results = self.solr.search('*:*', headers=self._get_auth_headers(), **query)
         return results
@@ -120,7 +111,7 @@ class EmployeeIndex(object):
         return results['stats']['stats_fields']['current_salary']
 
     def _add_vops_filter(self, query, key):
-        query['fq'].append('%s:[260 TO *]' % key)
+        query['fq'].append('vops_%s:[260 TO *]' % key)
 
     def _get_start(self, page, rows):
         return rows * (page - 1)

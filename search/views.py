@@ -10,10 +10,7 @@ def employee_search(request):
         talent_categories=request.QUERY_PARAMS.getlist('talent_category', None),
         team_ids=request.QUERY_PARAMS.getlist('team_id', None),
         happiness=request.QUERY_PARAMS.getlist('happiness', None),
-        vops_synergist=request.QUERY_PARAMS.get('vops_synergist', None),
-        vops_operator=request.QUERY_PARAMS.get('vops_operator', None),
-        vops_processor=request.QUERY_PARAMS.get('vops_processor', None),
-        vops_visionary=request.QUERY_PARAMS.get('vops_visionary', None),
+        vops=request.QUERY_PARAMS.get('vops', None),
         page=1,
         rows=500
     )
