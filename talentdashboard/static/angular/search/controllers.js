@@ -52,7 +52,7 @@ angular.module('tdb.search.controllers', [])
                 query['happiness'] = $scope.filters.happiness;
             }
             if($scope.filters.vops) {
-                query['vops'] = $scope.filters.vops.toLowerCase();
+                query['vops'] = $scope.filters.vops;
                 $scope.synergistStyle = $scope.filters.vops;
             }
             $scope.employees = EmployeeSearch.query(query);
