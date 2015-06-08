@@ -1,6 +1,6 @@
 angular.module('tdb.services', ['ngResource'])
 
-.factory('Employee', ['$resource', '$http', function($resource, $http) {
+.factory('Employee', ['$resource', function($resource) {
     var actions = {
         'addNew': { method:'PUT', data:{full_name:'@full_name', hire_date: '@hire_date', coach_id: '@coach_id'}, isArray: false },
         'update': { method:'PUT', data:{full_name:'@full_name', hire_date: '@hire_date', departure_date: '@departure_date', coach_id: '@coach_id'}, isArray: false },
@@ -258,7 +258,24 @@ angular.module('tdb.services', ['ngResource'])
     return EngagementReport;
 }])
 
-.factory('TalentCategories', [function() {
+.factory('Happiness', [function() {
+    var Happiness = {
+        options: [
+            {id: 0, name: 'No Happiness'},
+            {id: 1, name: 'Very Unhappy'},
+            {id: 2, name: 'Unhappy'},
+            {id: 3, name: 'Indifferent'},
+            {id: 4, name: 'Happy'},
+            {id: 5, name: 'Very Happy'}
+        ],
+        query: function() {
+            return this.options;
+        }
+    };
+    return Happiness;
+}])
+
+    .factory('TalentCategories', [function() {
     var TalentCategories = {
         categories: {
             "0":{color:'#2c3e50',label:'No Data',description:''},

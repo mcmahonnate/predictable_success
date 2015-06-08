@@ -10,7 +10,9 @@ class TalentCategorySummary:
         self.count = count
 
 class TalentCategoryReport:
-    def __init__(self, evaluation_date=None, total_evaluations=0, categories={}):
+    def __init__(self, evaluation_date=None, total_evaluations=0, categories=None):
+        if categories is None:
+            categories = {}
         self.evaluation_date = evaluation_date
         self.total_evaluations = total_evaluations
         self.categories = categories

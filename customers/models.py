@@ -29,6 +29,10 @@ class Customer(TenantMixin):
         return "%s, %s" % (self.name, self.domain_url)
 
 
+def current_customer():
+    return Customer.objects.filter(schema_name=connection.schema_name).first()
+
+
 @receiver(post_schema_sync)
 def create_initial_user(sender, **kwargs):
     tenant = kwargs['tenant']

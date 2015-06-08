@@ -189,16 +189,16 @@ angular.module('tdb.directives', [])
 
 .directive('talentCategoryChart', ['$location', 'TalentCategories', function($location, TalentCategories) {
     return function(scope, element, attrs){
-        scope.$watch("talentCategoryReport", function() {
-            if(scope.talentCategoryReport) {
-                var nodata = scope.talentCategoryReport.categories[0];
-                var top = scope.talentCategoryReport.categories[1];
-                var strong = scope.talentCategoryReport.categories[2];
-                var good = scope.talentCategoryReport.categories[3];
-                var lackspotential = scope.talentCategoryReport.categories[4];
-                var wrongrole = scope.talentCategoryReport.categories[5];
-                var needschange = scope.talentCategoryReport.categories[6];
-                var toonew = scope.talentCategoryReport.categories[7];
+        scope.$watch("talentReport", function() {
+            if(scope.talentReport && scope.talentReport.categories) {
+                var nodata = scope.talentReport.categories[0] ? scope.talentReport.categories[0].count : 0;
+                var top = scope.talentReport.categories[1] ? scope.talentReport.categories[1].count : 0;
+                var strong = scope.talentReport.categories[2] ? scope.talentReport.categories[2].count : 0;
+                var good = scope.talentReport.categories[3] ? scope.talentReport.categories[3].count : 0;
+                var lackspotential = scope.talentReport.categories[4] ? scope.talentReport.categories[4].count : 0;
+                var wrongrole = scope.talentReport.categories[5] ? scope.talentReport.categories[5].count : 0;
+                var needschange = scope.talentReport.categories[6] ? scope.talentReport.categories[6].count : 0;
+                var toonew = scope.talentReport.categories[7] ? scope.talentReport.categories[7].count : 0;
                 var chart_colors = [TalentCategories.categories[1].color,TalentCategories.categories[2].color,TalentCategories.categories[3].color,TalentCategories.categories[4].color,TalentCategories.categories[5].color,TalentCategories.categories[6].color,TalentCategories.categories[7].color,TalentCategories.categories[0].color];
                 var data = [['PvP', 'Employees', 'Talent Category'],
                     [TalentCategories.categories[1].label, top, 1],
@@ -255,12 +255,12 @@ angular.module('tdb.directives', [])
                             search['team_id'] = scope.teamId;
                         }
                         if(scope.lead) {
-                            $location.path('/evaluations/my-team/').search(search);
-                        } else if(scope.coach){
-                            $location.path('/evaluations/my-coachees/').search(search);
-                        } else {
-                            $location.path('/evaluations/current/').search(search);
+                            search['lead_id'] = scope.lead.id;
                         }
+                        if(scope.coach) {
+                            search['coach_id'] = scope.coach.id;
+                        }
+                        $location.path('/employees/').search(search);
                         scope.$apply();
                     }
                 });

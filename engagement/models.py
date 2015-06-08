@@ -4,6 +4,7 @@ from blah.models import Comment
 from django.core.signing import Signer
 
 HAPPINESS_CHOICES = (
+    (0, 'Not assessed'),
     (1, 'Very unhappy'),
     (2, 'Unhappy'),
     (3, 'Indifferent'),
@@ -15,7 +16,7 @@ class Happiness(models.Model):
     assessed_by = models.ForeignKey(Employee, related_name='+')
     assessed_date = models.DateTimeField(auto_now_add = True)
     employee = models.ForeignKey(Employee, related_name='happys')
-    assessment = models.IntegerField(choices=HAPPINESS_CHOICES)
+    assessment = models.IntegerField(choices=HAPPINESS_CHOICES, default=0)
     comment = models.ForeignKey(Comment, null=True, blank=True)
 
     def assessment_verbose(self):
