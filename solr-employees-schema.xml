@@ -125,10 +125,10 @@
    <field name="kolbe_follow_through" type="string" indexed="true" stored="true" required="false" multiValued="false" />
    <field name="kolbe_quick_start" type="string" indexed="true" stored="true" required="false" multiValued="false" />
    <field name="kolbe_implementor" type="string" indexed="true" stored="true" required="false" multiValued="false" />
-   <field name="vops_visionary" type="string" indexed="true" stored="true" required="false" multiValued="false" />
-   <field name="vops_operator" type="string" indexed="true" stored="true" required="false" multiValued="false" />
-   <field name="vops_processor" type="string" indexed="true" stored="true" required="false" multiValued="false" />
-   <field name="vops_synergist" type="string" indexed="true" stored="true" required="false" multiValued="false" />
+   <field name="vops_visionary" type="int" indexed="true" stored="true" required="false" multiValued="false" />
+   <field name="vops_operator" type="int" indexed="true" stored="true" required="false" multiValued="false" />
+   <field name="vops_processor" type="int" indexed="true" stored="true" required="false" multiValued="false" />
+   <field name="vops_synergist" type="int" indexed="true" stored="true" required="false" multiValued="false" />
    <field name="team_id" type="int" indexed="true" stored="true" required="false" multiValued="false" />
    <field name="team_name" type="string" indexed="true" stored="true" required="false" multiValued="false" />
    <field name="talent_category" type="int" indexed="true" stored="true" required="false" multiValued="false" />

@@ -3,6 +3,10 @@ from django.conf import settings
 from comp.models import CompensationSummary
 from urllib import urlencode
 import requests
+import time
+import uuid
+from hashlib import sha1
+import hmac
 
 
 class EmployeeIndex(object):
@@ -11,7 +15,7 @@ class EmployeeIndex(object):
 
     def delete(self, employee, tenant):
         document_id = self._generate_document_id(tenant, employee)
-        self.solr.delete(id=document_id)
+        self.solr.delete(id=document_id, headers=self._get_auth_headers())
 
     def process(self, employees, tenant):
         """Adds or removes the Employees from the index."""
@@ -67,15 +71,38 @@ class EmployeeIndex(object):
 
         self._index_documents(documents)
 
-    def find_employees(self, tenant, talent_categories=None, team_ids=None, happiness=None):
+    def find_employees(self, tenant,
+                       talent_categories=None,
+                       team_ids=None,
+                       happiness=None,
+                       vops_visionary=None,
+                       vops_operator=None,
+                       vops_processor=None,
+                       vops_synergist=None,
+                       page=1,
+                       rows=10
+    ):
         query = {
             'sort': 'full_name asc',
-            'rows': 500,
-            'fq': self._get_filters(tenant, talent_categories=talent_categories, team_ids=team_ids, happiness=happiness),
+            'rows': rows,
+            'start': self._get_start(page, rows),
+            'fq': self._get_filters(tenant, talent_categories=talent_categories, team_ids=team_ids,
+                                    happiness=happiness),
         }
-        return self.solr.search('*:*', **query)
+        if vops_operator:
+            self._add_vops_filter(query, 'vops_operator')
+        if vops_visionary:
+            self._add_vops_filter(query, 'vops_visionary')
+        if vops_processor:
+            self._add_vops_filter(query, 'vops_processor')
+        if vops_synergist:
+            self._add_vops_filter(query, 'vops_synergist')
 
-    def get_talent_report(self, tenant, talent_categories=None, team_ids=None, happiness=None, leader_ids=None, coach_ids=None):
+        results = self.solr.search('*:*', headers=self._get_auth_headers(), **query)
+        return results
+
+    def get_talent_report(self, tenant, talent_categories=None, team_ids=None, happiness=None, leader_ids=None,
+                          coach_ids=None):
         query = {
             'q': '*:*',
             'wt': 'json',
@@ -83,18 +110,41 @@ class EmployeeIndex(object):
             'stats': 'true',
             'stats.facet': 'talent_category',
             "stats.field": "current_salary",
-            'fq': self._get_filters(tenant, talent_categories=talent_categories, team_ids=team_ids, happiness=happiness, leader_ids=leader_ids, coach_ids=coach_ids),
+            'fq': self._get_filters(tenant, talent_categories=talent_categories, team_ids=team_ids, happiness=happiness,
+                                    leader_ids=leader_ids, coach_ids=coach_ids),
         }
+
         query_string = urlencode(query, doseq=True)
         url = "%s/select?%s" % (settings.EMPLOYEES_SOLR_URL, query_string)
-        results = requests.get(url).json()
+        results = requests.get(url, headers=self._get_auth_headers()).json()
         return results['stats']['stats_fields']['current_salary']
+
+    def _add_vops_filter(self, query, key):
+        query['fq'].append('%s:[260 TO *]' % key)
+
+    def _get_start(self, page, rows):
+        return rows * (page - 1)
+
+    def _get_auth_headers(self):
+        timestamp = int(time.time())
+        nonce = str(uuid.uuid4())
+        auth = hmac.new(
+            settings.WEBSOLR_SECRET,
+            '%s%s' % (timestamp, nonce),
+            sha1
+        ).hexdigest()
+
+        return {
+            'X-Websolr-Time': timestamp,
+            'X-Websolr-Nonce': nonce,
+            'X-Websolr-Auth': auth
+        }
 
     def _index_documents(self, documents):
         step = 100
         for i in range(0, len(documents), step):
-            documents = documents[i:i+step]
-            self.solr.add(documents)
+            batch = documents[i:i + step]
+            self.solr.add(batch, headers=self._get_auth_headers())
 
     def _generate_document_id(self, tenant, employee):
         return '%s-%s' % (tenant.schema_name, employee.id)
@@ -113,7 +163,8 @@ class EmployeeIndex(object):
             return
         filters.append(self._get_filter_string(field_name, values, operator=operator))
 
-    def _get_filters(self, tenant, talent_categories=None, team_ids=None, happiness=None, leader_ids=None, coach_ids=None):
+    def _get_filters(self, tenant, talent_categories=None, team_ids=None, happiness=None, leader_ids=None,
+                     coach_ids=None):
         filters = ['tenant:%s' % tenant.schema_name]
         self._add_filters(filters, 'talent_category', talent_categories)
         self._add_filters(filters, 'team_id', team_ids)
