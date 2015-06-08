@@ -853,7 +853,7 @@ angular.module('tdb.controllers', [])
     User.get(
         function(data) {
             $scope.lead = data.employee;
-            $scope.talentReport = TalentReport.query({lead_id: $scope.lead.id});
+            $scope.talentReport = TalentReport.query({leader_id: $scope.lead.id});
             $scope.employees = TeamLeadEmployees.getEmployees($scope.lead.id);
         }
     );
