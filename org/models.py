@@ -302,6 +302,11 @@ class Leadership(models.Model):
     start_date = models.DateField(null=False, blank=False, default=datetime.date.today)
     end_date = models.DateField(null=True, blank=True)
 
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            Leadership.objects.filter(employee__id=self.employee.id).update(end_date=datetime.date.today())
+        super(Leadership, self).save(*args, **kwargs)
+
     def __str__(self):
         return "%s leader of %s" % (self.leader.full_name, self.employee.full_name)
 

@@ -1218,6 +1218,7 @@ def team_lead_employees(request):
         lead = Employee.objects.get(id=lead_id)
     if lead.user == current_user or current_user.is_superuser:
         leaderships = Leadership.objects.filter(leader__id=int(lead_id))
+        leaderships = leaderships.filter(end_date__isnull=True)
         employees = []
         for leadership in leaderships:
             if leadership.employee not in employees:
