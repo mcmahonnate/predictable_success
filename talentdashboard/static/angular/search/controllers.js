@@ -25,7 +25,11 @@ angular.module('tdb.search.controllers', [])
         $scope.categoryName  = TalentCategories.getLabelByTalentCategory($scope.filters.talentCategory);
         $scope.setSynergistStyle = function(style) {
             $scope.synergistStyle = style;
-            $location.search('vops', style.toLowerCase());
+            if (style) {
+                $location.search('vops', style.toLowerCase());
+            } else {
+                $location.search('vops', null);
+            }
         };
 
         $scope.setTeamFilter = function(teamId) {
