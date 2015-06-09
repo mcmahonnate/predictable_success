@@ -2,3 +2,6 @@
 *.sql
 up.sh
 Vagrantfile
+install_solr.sh
+employees.zip
+solr-employees-schema.xml
