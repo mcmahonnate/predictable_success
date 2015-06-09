@@ -174,11 +174,12 @@ class EmployeeIndex(object):
         filters.append(self._get_filter_string(field_name, values, operator=operator))
 
     def _get_filters(self, tenant, talent_categories=None, team_ids=None, happiness=None, leader_ids=None,
-                     coach_ids=None):
+                     coach_ids=None, display=True):
         filters = ['tenant:%s' % tenant.schema_name]
         self._add_filters(filters, 'talent_category', talent_categories)
         self._add_filters(filters, 'team_id', team_ids)
         self._add_filters(filters, 'happiness', happiness)
         self._add_filters(filters, 'leader_id', leader_ids)
         self._add_filters(filters, 'coach_id', coach_ids)
+        self._add_filters(filters, 'display', ['true'] if display else ['false'])
         return filters
