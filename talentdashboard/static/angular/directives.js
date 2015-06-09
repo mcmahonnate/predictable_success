@@ -251,16 +251,17 @@ angular.module('tdb.directives', [])
                     if(selectedItem) {
                         var talent_category = table.getValue(selectedItem.row, 2);
                         var search = {talent_category: talent_category};
+                        var path = '/employees/';
                         if(scope.teamId) {
                             search['team_id'] = scope.teamId;
                         }
                         if(scope.lead) {
-                            search['lead_id'] = scope.lead.id;
+                            path = '/employees/my-team/';
                         }
                         if(scope.coach) {
-                            search['coach_id'] = scope.coach.id;
+                            path = '/employees/my-coachees/';
                         }
-                        $location.path('/employees/').search(search);
+                        $location.path(path).search(search);
                         scope.$apply();
                     }
                 });

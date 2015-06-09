@@ -631,16 +631,14 @@ angular.module('tdb.controllers', [])
     };
 }])
 
-.controller('CoachDetailCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'User', 'Employee', 'Coachees', 'TalentCategoryReport', '$http', 'analytics', function($scope, $rootScope, $location, $routeParams, User, Employee, Coachees, TalentCategoryReport, $http, analytics) {
+.controller('CoachDetailCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'User', 'Employee', 'Coachees', 'TalentReport', '$http', 'analytics', function($scope, $rootScope, $location, $routeParams, User, Employee, Coachees, TalentReport, $http, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     $scope.coach= $rootScope.currentUser.employee;
 
     Coachees.query({ id: $routeParams.id }).$promise.then(function(response) {
         $scope.employees = response;
     });
-    TalentCategoryReport.getReportForCoach(function(data) {
-        $scope.talentCategoryReport = data;
-    });
+    $scope.talentReport = TalentReport.myCoachees();
 }])
 
 
@@ -850,10 +848,11 @@ angular.module('tdb.controllers', [])
 .controller('LeaderOverviewCtrl', ['$scope', '$location', '$routeParams', 'TalentReport', 'TeamLeadEmployees', 'User', 'analytics', function($scope, $location, $routeParams, TalentReport, TeamLeadEmployees, User, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
 
+    $scope.talentReport = TalentReport.myTeam();
+
     User.get(
         function(data) {
             $scope.lead = data.employee;
-            $scope.talentReport = TalentReport.query({leader_id: $scope.lead.id});
             $scope.employees = TeamLeadEmployees.getEmployees($scope.lead.id);
         }
     );

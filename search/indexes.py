@@ -77,6 +77,8 @@ class EmployeeIndex(object):
                        team_ids=None,
                        happiness=None,
                        vops=None,
+                       coach_ids=None,
+                       leader_ids=None,
                        page=1,
                        rows=10):
         query = {
@@ -84,7 +86,7 @@ class EmployeeIndex(object):
             'rows': rows,
             'start': self._get_start(page, rows),
             'fq': self._get_filters(tenant, talent_categories=talent_categories, team_ids=team_ids,
-                                    happiness=happiness),
+                                    happiness=happiness, coach_ids=coach_ids, leader_ids=leader_ids),
         }
         if vops:
             query['fq'].append('vops_%s:[260 TO *]' % vops.lower())
@@ -108,7 +110,27 @@ class EmployeeIndex(object):
         query_string = urlencode(query, doseq=True)
         url = "%s/select?%s" % (settings.EMPLOYEES_SOLR_URL, query_string)
         results = requests.get(url, headers=self._get_auth_headers()).json()
-        return results['stats']['stats_fields']['current_salary']
+
+        results = results['stats']['stats_fields']['current_salary']
+
+        if results is None:
+            return results
+
+        report = {
+            'count': results['count'],
+            'total_salaries': results['sum'],
+            'categories': {},
+        }
+
+        for key in results['facets']['talent_category']:
+            category = results['facets']['talent_category'][key]
+
+            value = {
+                'count': category['count'],
+                'salaries': category['sum']
+            }
+            report['categories'][key] = value
+        return report
 
     def _get_start(self, page, rows):
         return rows * (page - 1)
