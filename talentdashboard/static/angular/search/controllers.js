@@ -2,7 +2,7 @@ angular.module('tdb.search.controllers', [])
 
     .controller('EmployeeSearchCtrl', ['$scope', '$routeParams', '$location', '$filter', 'Happiness', 'EmployeeSearch', 'TalentCategories', 'Team', 'view', function ($scope, $routeParams, $location, $filter, Happiness, EmployeeSearch, TalentCategories, Team, view) {
         $scope.filters = {
-            talentCategory: $routeParams.talent_category,
+            talentCategory: $routeParams.talent_category.toString(),
             happiness: $routeParams.happiness,
             team_id: $routeParams.team_id,
             vops: $routeParams.vops
