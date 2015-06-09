@@ -1,7 +1,12 @@
 angular.module('tdb.search.services', ['ngResource'])
 
     .factory('EmployeeSearch', ['$resource', function ($resource) {
-        var EmployeeSearch = $resource('/api/v1/search/employees/');
+        var actions = {
+            myTeam: {method: 'GET', isArray: true, url: '/api/v1/search/employees/my-team/'},
+            myCoachees: {method: 'GET', isArray: true, url: '/api/v1/search/employees/my-coachees/'}
+        };
+
+        var EmployeeSearch = $resource('/api/v1/search/employees/', null, actions);
         return EmployeeSearch;
     }])
 
