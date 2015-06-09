@@ -1,6 +1,6 @@
 angular.module('tdb.search.controllers', [])
 
-    .controller('EmployeeSearchCtrl', ['$scope', '$routeParams', '$location', '$filter', 'Happiness', 'EmployeeSearch', 'TalentCategories', 'Team', function ($scope, $routeParams, $location, $filter, Happiness, EmployeeSearch, TalentCategories, Team) {
+    .controller('EmployeeSearchCtrl', ['$scope', '$routeParams', '$location', '$filter', 'Happiness', 'EmployeeSearch', 'TalentCategories', 'Team', 'view', function ($scope, $routeParams, $location, $filter, Happiness, EmployeeSearch, TalentCategories, Team, view) {
         $scope.filters = {
             talentCategory: $routeParams.talent_category,
             happiness: $routeParams.happiness,
@@ -55,7 +55,16 @@ angular.module('tdb.search.controllers', [])
                 query['vops'] = $scope.filters.vops;
                 $scope.synergistStyle = $scope.filters.vops;
             }
-            $scope.employees = EmployeeSearch.query(query);
+            switch(view) {
+                case 'my-coachees':
+                    $scope.employees = EmployeeSearch.myCoachees(query);
+                    break;
+                case 'my-team':
+                    $scope.employees = EmployeeSearch.myTeam(query);
+                    break;
+                default:
+                    $scope.employees = EmployeeSearch.query(query);
+            }
         };
         $scope.search();
     }])
