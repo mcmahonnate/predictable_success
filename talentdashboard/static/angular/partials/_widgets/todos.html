@@ -2,10 +2,10 @@
     <button ng-show="canAddNew" ng-click="newTask()" class="pull-right btn btn-sm btn-success">Add New Task</button>
     <h2 class="panel-title">Tasks</h2>
     <ul class="nav nav-tabs">
-        <li role="presentation" ng-class="{'active': activeTab == todoTab}"><a ng-click="setActiveTab(todoTab)">To Do</a></li>
-        <li role="presentation" ng-class="{'active': activeTab == doneTab}"><a ng-click="setActiveTab(doneTab)">Done</a></li>
+        <li role="presentation" ng-class="{'active': tabs.activeTab == tabs.todoTab}"><a ng-click="setActiveTab(tabs.todoTab)">To Do</a></li>
+        <li role="presentation" ng-class="{'active': tabs.activeTab == tabs.doneTab}"><a ng-click="setActiveTab(tabs.doneTab)">Done</a></li>
     </ul>
-    <div ng-show="activeTab == todoTab">
+    <div ng-show="tabs.activeTab == tabs.todoTab">
         <div ng-show="todos.length === 0 && !busy" class="todos-empty">
             <p ng-show="view == 'my-view'">You currently don't have any tasks. Add tasks on employee profile pages.</p>
             <p ng-show="view == 'employee-view'">There are no tasks for {{ employee.first_name }}.</p>
@@ -53,8 +53,8 @@
         </div>
         <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
     </div>
-    <div ng-show="activeTab == doneTab">
-        <div ng-show="todos.length === 0 && !busy" class="todos-empty">
+    <div ng-show="tabs.activeTab == tabs.doneTab">
+        <div ng-show="done.length === 0 && !busy" class="todos-empty">
             <p ng-show="view == 'my-view'">You don't have any completed tasks.</p>
             <p ng-show="view == 'employee-view'">There are no completed tasks for {{ employee.first_name }}.</p>
         </div>

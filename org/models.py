@@ -24,9 +24,12 @@ class EmployeeManager(models.Manager):
 
     def get_current_employees_by_group_name(self, name, show_hidden=False):
         employees = self.get_current_employees(show_hidden=show_hidden)
-        logger.debug(name)
-        logger.debug(show_hidden)
         employees = employees.filter(user__groups__name=name)
+        return employees
+
+    def get_current_employees_by_team(self, team_id):
+        employees = self.get_current_employees()
+        employees = employees.filter(team__id=team_id)
         return employees
 
     def get_current_employees_by_team_lead(self, lead_id):
@@ -298,6 +301,11 @@ class Leadership(models.Model):
     employee = models.ForeignKey(Employee, related_name='leaderships')
     start_date = models.DateField(null=False, blank=False, default=datetime.date.today)
     end_date = models.DateField(null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            Leadership.objects.filter(employee__id=self.employee.id).update(end_date=datetime.date.today())
+        super(Leadership, self).save(*args, **kwargs)
 
     def __str__(self):
         return "%s leader of %s" % (self.leader.full_name, self.employee.full_name)

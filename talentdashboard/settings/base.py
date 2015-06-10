@@ -111,6 +111,9 @@ STRIPE_SECRET_KEY = os.environ['STRIPE_SECRET_KEY']
 MONTHLY_PLAN_PRICE = '5'
 YEARLY_PLAN_PRICE = '60'
 
+# Solr settings
+EMPLOYEES_SOLR_URL = os.environ['EMPLOYEES_SOLR_URL']
+WEBSOLR_SECRET = os.environ['WEBSOLR_SECRET']
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -178,6 +181,7 @@ TENANT_APPS = (
     'storages',
     'kpi',
     'feedback',
+    'search',
 )
 
 INSTALLED_APPS = list(set(SHARED_APPS + TENANT_APPS))
