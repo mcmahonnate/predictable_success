@@ -146,6 +146,7 @@ WSGI_APPLICATION = 'talentdashboard.wsgi.application'
 SHARED_APPS = (
     'tenant_schemas',  # mandatory
     'customers',
+    'insights',
     'django.contrib.contenttypes',
     'django.contrib.auth',
     'django.contrib.sessions',

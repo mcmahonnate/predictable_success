@@ -1,0 +1,128 @@
+{% extends "layouts/blank.html" %}
+{% load humanize %}
+{% load staticfiles %}
+
+{% block title %}Team Insight Survey{% endblock title %}
+
+{% block content %}
+<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+<style type="text/css">
+
+body {
+	background: #f1f1f1;
+}
+.container-fluid {
+  padding-left: 45px;
+  padding-right: 0;
+  background-color: #fff;
+}
+.container-fluid  .row {
+	margin-left: 0;
+	margin-right: 0;
+}
+.container-fluid .container-inner {
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+.get-started {
+	padding: 30px;
+}
+.insights-logo {
+  width: 150px;
+  margin-top: 75px;
+}
+
+.screenshot img {
+	width:100%; 
+	padding-left: 30px;
+	margin-top:40px;	
+}
+
+h1 {
+font-size: 50px;
+  line-height: 52px;
+  font-family: 'Lato', sans-serif;
+  font-weight: 700;
+  margin-top: 85px;
+}
+}
+.modal-title {
+  font-size: 26px;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+.subhead {
+font-size: 17px;
+  max-width: 700px;
+  margin: 0 auto;
+  color: #666;
+  margin-bottom: 45px;
+  line-height: 22px;
+}
+
+.btn, .btn:active, .btn:focus {
+	font-size: 20px;
+  	border-radius: 90px;
+  	padding: 15px 30px;
+  	background-color: #2ab58c;
+  	border: none;
+}
+.btn:hover {
+  	background-color: #2ab58c;
+  	opacity: .8;
+  	bo
+}
+
+.text-align-right {
+	text-align: right;
+	margin: 0;
+  	padding: 0;
+}
+
+
+
+</style>
+	<div class="container-fluid insights">
+		<div class="container-inner">
+			<a class="pull-right" href="mailto:scoutmap@fool.com">Comments or questions?</a>
+			<div class="row">
+				<div class="col-lg-4 get-started">
+					<img src="{% static 'images/logo-dark.png' %}" alt="Insights logo" class="insights-logo" />
+					<h1>See how <br />your team <br />measures up</h1>
+					<p class="subhead">
+						Over half of the US workforce is disengaged and chances are someone on your team is too. 
+						With our free team survey, we'll show you your teams' engagement level.
+					</p>
+				    <a href="javascript:void(0)" data-toggle="modal" data-target="#modal" class="btn btn-primary btn-lg">Get My Team Survey <i class="fa fa-arrow-right"></i></a>
+				</div>
+				<div class="col-lg-8 text-align-right screenshot">	
+					<img src="{% static 'images/insights/screenshot.jpg' %}" alt="Screenshot" />
+				</div>		
+			</div>	
+		</div>	
+	</div>   
+
+
+
+<div class="modal fade in" id="modal" data-keyboard="true" >
+	<div class="modal-dialog">
+    	<div class="modal-content">
+        	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <div class="modal-body">
+	            <h2 class="modal-title">First, tell us a little about yourself...</h2>
+	            <p>We love to know who's using are tool, also we'll be able to...</p>
+			    <form method="POST" style="max-width:300px">
+			      {% csrf_token %}
+			      {{ form.as_p }}	
+			      <button type="submit" class="btn btn-primary">Next <i class="fa fa-arrow-right"></i></button>
+			    </form>
+	        </div>
+    	</div>
+  	</div>
+</div>
+
+
+
+
+{% endblock %}

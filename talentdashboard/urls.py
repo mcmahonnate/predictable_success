@@ -8,6 +8,7 @@ from forms import *
 from rest_framework import routers
 from views.payment import ChargeView, PaymentView
 from views.homepage import IndexView
+from insights.views import Signup, Report, Survey, Confirmation
 
 router = routers.DefaultRouter()
 router.register(r'^api/v1/teams', TeamViewSet)
@@ -104,5 +105,11 @@ urlpatterns = patterns('',
     url(r'^api/v1/feedback/coachees/(?P<pk>[0-9]*)/$', view_coachee_feedback),
     url(r'^api/v1/feedback/submissions/mine/$', my_feedback),
     url(r'^api/v1/feedback/menu/$', menu_counts),
+    
+    url(r'^insights/$', Signup.as_view(), name="signup"),
+    url(r'^insights/report/(?P<access_token>[\w.@+-]+)/(?P<uid>[\w.@+-]+)/$', Report.as_view(), name="insights_survey_report"),
+    url(r'^insights/survey/(?P<access_token>[\w.@+-]+)/$', Survey.as_view(), name="insights_survey"),
+    url(r'^insights/thanks/$', Confirmation.as_view(), name="insights_confirmation"),
+    
     url(r'^', include(router.urls)),
 )

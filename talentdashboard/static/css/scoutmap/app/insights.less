@@ -1,0 +1,212 @@
+.insights{
+
+	.underline {
+		text-decoration: underline;
+	}
+
+	.header {
+	  position: fixed;
+	  top: 0;
+	  left: 0;
+	  z-index: 5;
+	  width: 250px;
+	  height: 100%;
+	  background-color: #323940;
+	}
+
+
+	.container {
+  margin-top: 40px;
+  padding-left: 70px;
+}
+	
+
+	.responses {
+		min-height: 1065px;
+
+		h2 {
+			margin-bottom: 35px;
+		}
+
+		h3 {
+			font-size: 14px;
+	  		font-weight: bold;
+	  		margin-top: 5px;
+		}
+
+		ul {
+			list-style: none;
+
+			li {
+				overflow: hidden;
+				margin-bottom: 20px;
+			}
+		}
+		.avatar {
+			width: 50px;
+			border-radius: 90px;
+			height: 50px;
+			float: left;
+			margin-right: 10px;
+		}
+		.timestamp {
+			color: #999;
+  			font-size: 13px;
+		}
+	}
+
+
+	.team-engagement {
+		position: relative;
+
+		.moods {
+			color: #abb0c1;
+			font-size: 11px;
+			margin: 30px 0 0;
+			position: relative;
+
+			li {
+				  overflow: hidden;
+			}
+			.legend {
+				border-right: 1px solid #cfd2dc;
+				  float: left;
+				  text-align: center;
+				  width: 95px;
+				  margin-right: 15px;
+				  padding: 8px;
+			}
+			.user {
+			  font-size: 38px;
+			    margin: 20px 0 15px 5px;
+			}
+
+			.fill {
+				background-color: #f1f1f1;
+			}
+		}
+	}	
+
+	.face {
+	  width: 46px;
+	  height: 46px;
+	  margin: 0 auto;
+	}
+	.veryhappy-face {
+		background: transparent url(/static/images/insights/faces.png) no-repeat;
+	}
+	.happy-face {
+		background: transparent url(/static/images/insights/faces.png) no-repeat -48px;
+	}
+	.indifferent-face {
+		background: transparent url(/static/images/insights/faces.png) no-repeat -96px;
+	}
+	.unhappy-face {
+		background: transparent url(/static/images/insights/faces.png) no-repeat -144px;
+	}
+	.veryunhappy-face {
+		background: transparent url(/static/images/insights/faces.png) no-repeat -192px;
+	}
+
+
+	.no-data {
+		.no-data-banner {
+			  position: absolute;
+			  background-color: #fff;
+			  left: 50%;
+			  width: 140px;
+			  background-color: #eee;
+			  text-align: center;
+			  top: 22%;
+			  z-index: 9;
+			  margin-left: -70px;
+			  color: #aaa;
+			  padding: 15px;
+			  font-size: 18px;
+			  border-radius: 5px;
+		}
+
+		#columnchart_values, .moods {
+			opacity: .3;
+		}
+	}	
+
+}
+
+.survey {
+	font-size: 14px;
+	padding-bottom: 45px;
+
+	h1 {
+		margin: 0 0 10px;
+		font-size: 30px;
+		line-height: 35px;
+		font-weight: bold;
+	}
+
+	.subhead {
+	  font-size: 16px;
+	  color: #888;
+	  margin-bottom: 55px;
+	  line-height: 21px;
+	}
+
+	label {
+		font-weight: bold;
+		font-size: 16px;
+	}
+
+	ul {
+		position: relative;
+		margin-top: 10px;
+
+		label {
+			padding-left: 28px;
+			font-weight: normal;
+			font-size: 14px;
+		}
+
+		li {
+			  margin-bottom: 8px;
+		}
+	}
+
+	input[type="radio"] {
+		margin-right: 10px;
+		position: absolute;
+  		left: 0;
+	}
+	.container {
+		max-width: 700px;
+		background-color: #fff;
+		padding: 45px;
+  		margin-top: 30px;
+  		border-radius: 10px;
+	}
+
+	.errorlist {
+		  border: 1px solid #f00;
+		  padding: 10px 10px 0;
+		  margin-bottom: 10px;
+		  color: #f00;
+		  font-size: 13px;
+		  border-radius: 5px;
+	}
+
+
+	.form-control {
+		width: 200px;
+		margin: 5px 0 15px;
+	}
+
+	#id_engagement, #id_talent_category {
+		margin-bottom: 45px;
+	}
+
+	.logo {
+		  margin: 0 auto;
+	  display: block;
+	  width: 130px;
+	  margin-top: 24px;
+	}
+}
