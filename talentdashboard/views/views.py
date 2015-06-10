@@ -271,7 +271,8 @@ class PvpEvaluationDetail(APIView):
             content = request.DATA["_content"]
             if pvp.comment is None:
                 visibility = 3
-                comment = pvp.employee.comments.add_comment(content, visibility, pvp.evaluator)
+                include_in_daily_digest = False
+                comment = pvp.employee.comments.add_comment(content, visibility, include_in_daily_digest, pvp.evaluator)
                 pvp.comment = comment
             else:
                 pvp.comment.content = content
