@@ -3,11 +3,18 @@ from insights.models import Employee
 
 
 class SignupForm(forms.ModelForm):
-	first_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
-	last_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
-	company = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
-	email = forms.EmailField(widget=forms.TextInput(attrs={'class':'form-control'}))
+	first_name = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'First name', 'class': 'form-control input-lg'}))
+	last_name = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Last name', 'class': 'form-control input-lg'}))
+	company = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Company', 'class': 'form-control input-lg'}))
+	email = forms.EmailField(widget=forms.TextInput(attrs={'placeholder': 'Email Address', 'class':'form-control input-lg'}))
 	team_lead = forms.BooleanField(widget=forms.HiddenInput(), initial=True)
+
+	def __init__(self, *args, **kwargs):
+		super(SignupForm, self).__init__(*args, **kwargs)
+		self.fields.pop('company')
+		self.fields.pop('first_name')
+		self.fields.pop('last_name')
+
 
 	class Meta:
 		model = Employee

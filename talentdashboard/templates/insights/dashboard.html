@@ -1,0 +1,258 @@
+{% extends "layouts/blank.html" %}
+{% load humanize %}
+{% load staticfiles %}
+{% block mainclass %}generic insights{% endblock %}
+{% block title %}Insights Dashboard{% endblock title %}
+
+{% block content %}
+    <header id="main-header" class="ng-scope">
+        <div class="logo-container">
+            <a href="/"><img src="/static/images/brand/compass-logo-medium.png" class="logo"></a>
+        </div>   
+    </header>
+    <div class="container {% if responses.count < threshold %}no-data{% endif %}">
+        <h1>Insights Dashboard</h1>
+        {% if responses.count < threshold %}
+            <div class="alert alert-warning" role="alert"><i class="fa fa-exclamation-triangle"></i> You have <strong>{{ responses.count }}</strong> responses. You need  at least two responses!</div>
+        {% endif %}
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="panel responses">
+                    <a href="javascript:void(0)" data-toggle="modal" data-target="#modal" class="pull-right btn btn-success">Send Survey</a>
+                    <h2 class="panel-title">{{ responses.count }} Responses</h2>
+                    <ul>
+                    {% for employee in responses %}
+                        <li>
+                            <img class="avatar" src="https://hippoculture.s3.amazonaws.com/media/avatars/2013/10/25/male.jpg" />
+                            <h3>{{ employee.first_name }} {{ employee.last_name }}</h3> 
+                            <p class="timestamp">{{ employee.created_at | timesince }}</p> 
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </div> 
+            </div>
+            <div class="col-sm-8">
+                <div class="panel">
+                    {% if responses.count < threshold %}
+                        <div class="no-data-banner">No Data</div>
+                    {% endif %}
+                    <a href="javascript:void(0)" data-toggle="modal" data-target="#distributions-modal" class="pull-right underline">Development Zones Explaination</a>
+                    <h2 class="panel-title">Team Development Zones</h2>
+                    <div id="columnchart_values" ></div>
+                </div>    
+                <div class="panel team-engagement">
+                    <h2 class="panel-title">Team Engagement</h2>
+                    {% if responses.count < threshold %}
+                        <div class="no-data-banner">No Data</div>
+                    {% endif %}
+                    <ul class="moods">
+                        <li class="fill">
+                            <div class="legend">
+                                <div class="face veryhappy-face"></div>
+                                Very Happy
+                            </div>  
+                            {% if responses.count >= threshold %}
+                                {% for employee in responses %}  
+                                    {% if employee.engagement == 1 %}<div class="user glyphicon glyphicon-user employee-segment-color-{{ employee.talent_category }}" data-toggle="tooltip" data-placement="right" title="{{ employee.get_talent_category_display }}"></div>{% endif %}
+                                {% endfor %}   
+                            {% endif %}     
+                        </li>
+                        <li>
+                            <div class="legend">
+                                <div class="face happy-face"></div>
+                                Happy
+                            </div> 
+                            {% if responses.count >= threshold %}  
+                                {% for employee in responses %}  
+                                    {% if employee.engagement == 2 %}<div class="user glyphicon glyphicon-user employee-segment-color-{{ employee.talent_category }}" data-toggle="tooltip" data-placement="right" title="{{ employee.get_talent_category_display }}"></div>{% endif %}
+                                {% endfor %} 
+                            {% endif %}    
+                        </li>
+                        <li class="fill">
+                            <div class="legend">
+                                <div class="face indifferent-face"></div>
+                                Indifferent
+                            </div>    
+                            {% if responses.count >= threshold %}
+                                {% for employee in responses %}  
+                                    {% if employee.engagement == 3 %}<div class="user glyphicon glyphicon-user employee-segment-color-{{ employee.talent_category }}" data-toggle="tooltip" data-placement="right" title="{{ employee.get_talent_category_display }}"></div>{% endif %}
+                                {% endfor %} 
+                            {% endif %}    
+                        </li>
+                        <li>
+                            <div class="legend">
+                                <div class="face unhappy-face"></div>
+                                Unhappy
+                            </div>  
+                            {% if responses.count >= threshold %}
+                             {% for employee in responses %}  
+                                {% if employee.engagement == 4 %}<div class="user glyphicon glyphicon-user employee-segment-color-{{ employee.talent_category }}" data-toggle="tooltip" data-placement="right" title="{{ employee.get_talent_category_display }}"></div>{% endif %}
+                             {% endfor %}   
+                            {% endif %} 
+                        </li>
+                        <li class="fill">
+                            <div class="legend">
+                                <div class="face veryunhappy-face"></div>
+                                Very Unhappy
+                            </div>    
+                            {% if responses.count >= threshold %}
+                             {% for employee in responses %}  
+                                {% if employee.engagement == 5 %}<div class="user glyphicon glyphicon-user employee-segment-color-{{ employee.talent_category }}" data-toggle="tooltip" data-placement="right" title="{{ employee.get_talent_category_display }}"></div>{% endif %}
+                             {% endfor %} 
+                            {% endif %} 
+                        </li>                                                                        
+                    </ul>   
+                </div>  
+            </div>
+        </div>        
+    </div>
+    <div class="modal fade in" id="modal" data-keyboard="true" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h4 class="modal-title">Share this quick survey with each member of your team</h4>
+                    <p style="margin-bottom:45px;">Our survey asks your team members two questions that will show you how engaged they are and what development zones they think they’re in.</p>
+                    <p>
+                        <label for="url" style="margin-bottom:3px"><strong>Link to share</strong></label>
+                        <input name="url" class="form-control input-lg access-token-link" value="{{ url }}" autocorrect="off"/>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade in" id="distributions-modal" data-keyboard="true" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <div class="modal-body">
+                    <h4 class="modal-title">Development Zones Explaination</h4>
+                    <div class="distributions">
+                        <!-- TODO: get these from model -->
+                        <p class="distribution"><span class="tag employee-segment-background-color-1">Unleash</span> I'm crushing it, and I have the freedom to pick work that excites me.</p>
+                        <p class="distribution"><span class="tag employee-segment-background-color-2">Encourage</span> I'm crushing it and want to focus on developing skills outside of my current role.</p>
+                        <p class="distribution"><span class="tag employee-segment-background-color-3">Challenge</span> I'm doing a good job, but would like more direction.</p>
+                        <p class="distribution"><span class="tag employee-segment-background-color-4">Discover</span> I'm crushing it and want to continue focusing on developing skills for this role.</p>
+                        <p class="distribution"><span class="tag employee-segment-background-color-5">Change</span> I feel like my expertise and responsibilities are misaligned.</p>
+                        <p class="distribution"><span class="tag employee-segment-background-color-6">Worry</span> I'm not sure what my future looks like, or if people know about my current contributions.</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+
+    {% if responses.count < 3 %} 
+        <script type="text/javascript">var show_modal = True;</script>
+    {% endif %}  
+
+    <script type="text/javascript">
+        $(function() {
+            if (show_modal) {
+                $('#modal').modal('show');
+            }    
+            $('#modal').modal({
+              backdrop: 'static',
+              keyboard: true
+            })
+            $('.access-token-link').click(function() {
+                $(this).select();
+            });
+        });
+    </script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+        google.load("visualization", "1", {packages:["corechart"]});
+        google.setOnLoadCallback(drawChart);
+        
+        function drawChart() {
+
+            var labels = {
+                '1': 'Unleash',
+                '2': 'Encourage',
+                '3': 'Challenge',
+                '4': 'Discover',
+                '5': 'Change',
+                '6': 'Worry'
+            };
+            var colors = {
+                '1': '#32d0a2',
+                '2': '#5ed032',
+                '3': '#bcd032',
+                '4': '#5bc0de',
+                '5': '#ffca00',
+                '6': '#ff0000'
+            };
+            var no_data_colors = {
+                '1': '#fafafa',
+                '2': '#fafafa',
+                '3': '#fafafa',
+                '4': '#fafafa',
+                '5': '#fafafa',
+                '6': '#fafafa'
+            };
+
+            {% if responses.count < threshold %}
+                var data = google.visualization.arrayToDataTable([
+                    ["", "People", { role: "style" }],
+                    {% for key, value in category_counts.items %}
+                        [labels['{{key}}'], 0, no_data_colors['{{key}}']],
+                    {% endfor %}
+                ]);            
+            {% else %}
+                var data = google.visualization.arrayToDataTable([
+                    ["", "People", { role: "style" }],
+                    {% for key, value in category_counts.items %}
+                        [labels['{{key}}'], {% if value %}{{value}}{% else %}0{% endif %}, colors['{{key}}']],
+                    {% endfor %}
+                ]);
+            {% endif %}
+      
+
+          var view = new google.visualization.DataView(data);
+          view.setColumns([0, 1,
+                           { calc: "stringify",
+                             sourceColumn: 1,
+                             type: "string",
+                             role: "annotation" },
+                           2]);
+
+          var options = {
+            title: "",
+            chartArea: {'width': '100%', 'height': '80%'},
+            height: 450,
+            bar: {groupWidth: "95%"},
+            legend: { position: "none" },
+            hAxis: {textStyle: {
+                color: 'black', 
+                fontName: 'Arial', 
+                fontSize: 14
+              }
+            },  
+            vAxis: {
+                textPosition: 'none',
+                gridlines: {
+                    color: 'transparent'
+                },
+                viewWindowMode: 'maximized' 
+            },
+            annotations: {
+                alwaysOutside: true,
+                textStyle: {
+                    fontSize: 18,
+                    bold: true,
+                }
+            }
+          };
+          var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
+          chart.draw(view, options);
+      }
+    </script>
+{% endblock %}

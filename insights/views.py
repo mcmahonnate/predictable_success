@@ -19,20 +19,27 @@ class Signup(CreateView):
 
 class Report(FormView):
     model = Employee
-    template = 'insights/report.html'
+    template = 'insights/dashboard.html'
 
     def get(self, request, **kwargs):
-        url = self.request.META['HTTP_HOST'] +'/insights/survey/'+ self.kwargs['access_token']
-        responses =  Employee.objects.filter(access_token=self.kwargs['access_token']).exclude(team_lead=True).order_by('-created_at')
-        team_leads =  Employee.objects.filter(access_token=self.kwargs['access_token']).filter(team_lead=True)
         threshold = 2
+        url = self.request.META['HTTP_HOST'] +'/insights/survey/'+ self.kwargs['access_token'] #get the query token and build survey link 
+        responses =  Employee.objects.filter(access_token=self.kwargs['access_token']).exclude(team_lead=True).order_by('-created_at')
 
-        for team_lead in team_leads:
-            company = team_lead.company
+        category_counts = {1:0,2:0,3:0,4:0,5:0,6:0}
+        for employee in responses:
+            talent_category = employee.talent_category 
+
+            if talent_category in category_counts:
+                category_counts[talent_category] += 1
+
+            else:
+                category_counts[talent_category] = 1     
+
 
         return render_to_response(self.template, {
             'url': url,
-            'company': company,
+            'category_counts': category_counts,
             'responses': responses,
             'threshold': threshold,
         }, context_instance=RequestContext(request)) 
