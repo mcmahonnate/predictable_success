@@ -1227,10 +1227,10 @@ angular.module('tdb.directives', [])
             var itemSelector = type+":not([class$='-leave-active'])";
             
             return function (scope, element, attrs) {
-                var options = angular.extend({
+                var options = {
                     itemSelector: itemSelector,
                     isFitWidth: true
-                }, scope.$eval(attrs.masonry));
+                };
                 
                 // try to infer model from ngRepeat
                 if (!options.model) { 
