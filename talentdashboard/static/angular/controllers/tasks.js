@@ -41,7 +41,7 @@ angular.module('tdb.controllers.tasks', [])
         }
     }])
 
-    .controller('TaskListCtrl', ['$scope', '$attrs', '$modal', 'Task', function ($scope, $attrs, $modal, Task) {
+    .controller('TaskListCtrl', ['$scope', '$modal', 'Task', function ($scope, $modal, Task) {
         var employee_id = $scope.employee ? $scope.employee.id : null;
         $scope.canAddNew = false;
         $scope.todos = [];
@@ -83,12 +83,14 @@ angular.module('tdb.controllers.tasks', [])
         $scope.loadTasks(false); //load todos
         $scope.loadTasks(true); //load done todos
 
-        $scope.todoTab = 'todo';
-        $scope.doneTab = 'done';
-        $scope.activeTab = $scope.todoTab;
+        $scope.tabs = {
+            todoTab: 'todo',
+            doneTab: 'done',
+            activeTab: 'todo'
+        };
 
         $scope.setActiveTab = function (tab) {
-            $scope.activeTab = tab;
+            $scope.tabs.activeTab = tab;
         };
 
         $scope.newTask = function () {

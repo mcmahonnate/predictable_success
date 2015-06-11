@@ -271,7 +271,8 @@ class PvpEvaluationDetail(APIView):
             content = request.DATA["_content"]
             if pvp.comment is None:
                 visibility = 3
-                comment = pvp.employee.comments.add_comment(content, visibility, pvp.evaluator)
+                include_in_daily_digest = False
+                comment = pvp.employee.comments.add_comment(content, visibility, include_in_daily_digest, pvp.evaluator)
                 pvp.comment = comment
             else:
                 pvp.comment.content = content
@@ -529,13 +530,8 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 class CommentList(APIView):
     def get(self, request, format=None):
-        employee = Employee.objects.get(user__id=request.user.id)
-        employee_type = ContentType.objects.get(model='employee')
-        comments = Comment.objects.filter(content_type=employee_type)
-        comments = comments.exclude(object_id=employee.id)
-        comments = comments.exclude(~Q(owner_id=request.user.id),content_type=employee_type,visibility=1)
-
-        comments = comments.extra(order_by = ['-created_date'])
+        requester = Employee.objects.get(user__id=request.user.id)
+        comments = Comment.objects.get_comments_for_all_employees(requester)
         paginator = StandardResultsSetPagination()
         result_page = paginator.paginate_queryset(comments, request)
         serializer = EmployeeCommentSerializer(result_page, many=True, context={'request': request})
@@ -544,20 +540,10 @@ class CommentList(APIView):
 class EmployeeCommentList(APIView):
     def get(self, request, pk, format=None):
         employee = Employee.objects.get(id=pk)
-        user = Employee.objects.get(user__id=request.user.id)
-        employee_type = ContentType.objects.get(model="employee")
         if employee is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
-
-        comments = Comment.objects.filter(object_id = pk, content_type=employee_type)
-        allow_all_access = request.user.groups.filter(name="AllAccess").exists()
-        allow_team_lead_access = request.user.groups.filter(name="TeamLeadAccess").exists()
-        allow_coach_access = request.user.groups.filter(name="CoachAccess").exists()
-        if not allow_all_access and (allow_team_lead_access and not allow_coach_access):
-            comments = comments.exclude(~Q(owner_id=request.user.id),visibility=2)
-        comments = comments.exclude(~Q(owner_id=request.user.id),content_type=employee_type,visibility=1)
-        comments = comments.exclude(object_id=user.id,content_type=employee_type)
-        comments = comments.extra(order_by = ['-created_date'])
+        requester = Employee.objects.get(user__id=request.user.id)
+        comments = Comment.objects.get_comments_for_employee(requester=requester,employee=employee)
         paginator = StandardResultsSetPagination()
         result_page = paginator.paginate_queryset(comments, request)
         serializer = EmployeeCommentSerializer(result_page, many=True,context={'request': request})
@@ -639,22 +625,11 @@ class EmployeeCommentList(APIView):
 
 class LeadCommentList(APIView):
     def get(self, request, format=None):
-        current_user = request.user
-        lead = Employee.objects.get(user=current_user)
-        lead_id = lead.id
-        employee_ids = Leadership.objects.filter(leader__id=lead_id).values('employee__id')
+        requester = Employee.objects.get(user__id=request.user.id)
+        employee_ids = Employee.objects.get_current_employees_by_team_lead(lead_id=requester.id).values('id')
         if not employee_ids:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
-        employee_type = ContentType.objects.get(model="employee")
-        allow_all_access = request.user.groups.filter(name="AllAccess").exists()
-        allow_team_lead_access = request.user.groups.filter(name="TeamLeadAccess").exists()
-        allow_coach_access = request.user.groups.filter(name="CoachAccess").exists()
-        comments = Comment.objects.filter(object_id__in = employee_ids, content_type=employee_type)
-        comments = comments.exclude(object_id=lead.id,content_type=employee_type)
-        if not allow_all_access and (allow_team_lead_access and not allow_coach_access):
-            comments = comments.exclude(~Q(owner_id=request.user.id), visibility=2)
-        comments = comments.exclude(~Q(owner_id=request.user.id), visibility=1)
-        comments = comments.extra(order_by = ['-created_date'])
+        comments = Comment.objects.get_comments_for_employees(requester=requester, employee_ids=employee_ids)
         paginator = StandardResultsSetPagination()
         result_page = paginator.paginate_queryset(comments, request)
         serializer = TeamCommentSerializer(result_page, many=True, context={'request': request})
@@ -662,22 +637,11 @@ class LeadCommentList(APIView):
 
 class CoachCommentList(APIView):
     def get(self, request, format=None):
-        current_user = request.user
-        coach = Employee.objects.get(user=current_user)
-        coach_id = coach.id
-        employee_ids = Employee.objects.filter(coach_id=coach_id).values('id')
+        requester = Employee.objects.get(user__id=request.user.id)
+        employee_ids = Employee.objects.get_current_employees_by_coach(coach_id=requester.id).values('id')
         if not employee_ids:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
-        employee_type = ContentType.objects.get(model="employee")
-        allow_all_access = request.user.groups.filter(name="AllAccess").exists()
-        allow_team_lead_access = request.user.groups.filter(name="TeamLeadAccess").exists()
-        allow_coach_access = request.user.groups.filter(name="CoachAccess").exists()
-        comments = Comment.objects.filter(object_id__in = employee_ids, content_type=employee_type)
-        comments = comments.exclude(object_id=coach.id,content_type=employee_type)
-        if not allow_all_access and (allow_team_lead_access and not allow_coach_access):
-            comments = comments.exclude(~Q(owner_id=request.user.id), visibility=2)
-        comments = comments.exclude(~Q(owner_id=request.user.id), visibility=1)
-        comments = comments.extra(order_by = ['-created_date'])
+        comments = Comment.objects.get_comments_for_employees(requester=requester, employee_ids=employee_ids)
         paginator = StandardResultsSetPagination()
         result_page = paginator.paginate_queryset(comments, request)
         serializer = TeamCommentSerializer(result_page, many=True, context={'request': request})
@@ -685,15 +649,11 @@ class CoachCommentList(APIView):
 
 class TeamCommentList(APIView):
     def get(self, request, pk, format=None):
-        employee_ids = Employee.objects.filter(team__id=pk).values('pk')
-        user = Employee.objects.get(user__id = request.user.id)
+        requester = Employee.objects.get(user__id=request.user.id)
+        employee_ids = Employee.objects.get_current_employees_by_team(team_id=pk).values('id')
         if not employee_ids:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
-        employee_type = ContentType.objects.get(model="employee")
-        comments = Comment.objects.filter(object_id__in = employee_ids, content_type=employee_type)
-        comments = comments.exclude(~Q(owner_id=request.user.id),content_type=employee_type,visibility=1)
-        comments = comments.exclude(object_id=user.id,content_type=employee_type)
-        comments = comments.extra(order_by = ['-created_date'])
+        comments = Comment.objects.get_comments_for_employees(requester=requester, employee_ids=employee_ids)
         paginator = StandardResultsSetPagination()
         result_page = paginator.paginate_queryset(comments, request)
         serializer = TeamCommentSerializer(result_page, many=True, context={'request': request})
@@ -1259,6 +1219,7 @@ def team_lead_employees(request):
         lead = Employee.objects.get(id=lead_id)
     if lead.user == current_user or current_user.is_superuser:
         leaderships = Leadership.objects.filter(leader__id=int(lead_id))
+        leaderships = leaderships.filter(end_date__isnull=True)
         employees = []
         for leadership in leaderships:
             if leadership.employee not in employees:

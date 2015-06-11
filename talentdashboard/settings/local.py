@@ -9,7 +9,6 @@ TEMPLATE_DEBUG = DEBUG = True
 COMPRESS_ENABLED = False
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 ALLOWED_HOSTS = ['*']
-
 RAVEN_CONFIG = {}
 LOGGING = {
     'version': 1,
@@ -25,7 +24,11 @@ LOGGING = {
             'class': 'logging.FileHandler',
             'filename': 'debug.log',
             'formatter': 'simple'
-        }
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
     },
     'loggers': {
         'django': {
@@ -41,5 +44,9 @@ LOGGING = {
             'handlers': ['file'],
             'level': 'DEBUG',
         },
+        # 'django.db.backends': {
+        #     'level': 'DEBUG',
+        #     'handlers': ['console'],
+        # },
     }
 }

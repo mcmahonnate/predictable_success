@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 from django.contrib.auth.views import password_reset, password_reset_confirm, password_reset_done, password_reset_complete, login, logout
 from views.views import *
+from search.views import employee_search, talent_report, my_team_report, my_coachees_report, my_team_employee_search, my_coachees_employee_search
 from forms import *
 from rest_framework import routers
 from views.payment import ChargeView, PaymentView
@@ -105,11 +106,22 @@ urlpatterns = patterns('',
     url(r'^api/v1/feedback/coachees/(?P<pk>[0-9]*)/$', view_coachee_feedback),
     url(r'^api/v1/feedback/submissions/mine/$', my_feedback),
     url(r'^api/v1/feedback/menu/$', menu_counts),
+<<<<<<< HEAD
     
     url(r'^insights/$', Signup.as_view(), name="signup"),
     url(r'^insights/report/(?P<access_token>[\w.@+-]+)/(?P<uid>[\w.@+-]+)/$', Report.as_view(), name="insights_survey_report"),
     url(r'^insights/survey/(?P<access_token>[\w.@+-]+)/$', Survey.as_view(), name="insights_survey"),
     url(r'^insights/thanks/$', Confirmation.as_view(), name="insights_confirmation"),
     
+=======
+
+    url(r'^api/v1/reports/talent/my-team/$', my_team_report),
+    url(r'^api/v1/reports/talent/my-coachees/$', my_coachees_report),
+    url(r'^api/v1/reports/talent/$', talent_report),
+
+    url(r'^api/v1/search/employees/$', employee_search),
+    url(r'^api/v1/search/employees/my-team/$', my_team_employee_search),
+    url(r'^api/v1/search/employees/my-coachees/$', my_coachees_employee_search),
+>>>>>>> 74b56d69d956645b343ad41b8717109940cfefe5
     url(r'^', include(router.urls)),
 )
