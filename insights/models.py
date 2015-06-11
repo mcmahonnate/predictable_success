@@ -50,7 +50,7 @@ class Prospect(models.Model):
 			self.access_token = _get_random_string(20)
 			self.uid = _get_random_string(8)
 
-		super(Employee, self).save(*args, **kwargs)
+		super(Prospect, self).save(*args, **kwargs)
 
 
 
