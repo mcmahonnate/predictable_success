@@ -4,7 +4,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 import uuid
 
-class Employee(models.Model):
+class Prospect(models.Model):
 	
 	TALENT_CATEGORY_CHOICES = (
         (6, 'I\'m not sure what my future looks like, or if people know about my current contributions.'), # Worried
