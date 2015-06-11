@@ -1,10 +1,17 @@
 <div class="panel salary-totals row stripes">
     <h2 class="panel-title">Salaries by Talent</h2>
-    <div class="salary-total-type" ng-repeat="(category, report) in talentReport.categories track by $index">
+    <div class="salary-total-type" ng-repeat="(category, report) in talentReport.categories track by $index" ng-if="category>0">
         <a href="#/employees/?talent_category={{category}}&team_id={{team.id}}">
             <i class="glyphicon glyphicon-user pull-left employee-segment employee-segment-color-{{category}}"></i>
             <span class="salary-total-amount">{{report.salaries | currency | noCents }}</span>
             <span class="salary-segment-label">{{talentCategories[category].label}}</span>
+        </a>
+    </div>
+    <div class="salary-total-type" ng-if="talentReport.categories['0']">
+        <a href="#/employees/?talent_category={{category}}&team_id={{team.id}}">
+            <i class="glyphicon glyphicon-user pull-left employee-segment employee-segment-color-0"></i>
+            <span class="salary-total-amount">{{talentReport.categories['0'].salaries | currency | noCents }}</span>
+            <span class="salary-segment-label">{{talentCategories[0].label}}</span>
         </a>
     </div>
 </div>
