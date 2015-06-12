@@ -110,12 +110,13 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">
-                    <h4 class="modal-title">Share this quick survey with each member of your team</h4>
+                    <h4 class="modal-title">Send this survey link to your team</h4>
                     <p style="margin-bottom:45px;">Our survey asks your team members two questions that will show you how engaged they are and what development zones they think they’re in.</p>
                     <p>
-                        <label for="url" style="margin-bottom:3px"><strong>Link to share</strong></label>
+                        <label for="url" style="margin-bottom:3px"><strong>Your team's survey link</strong></label>
                         <input name="url" class="form-control input-lg access-token-link" value="{{ url }}" autocorrect="off"/>
                     </p>
+                    <p>You'll receive an email once we get your first survey response.</p> 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -128,15 +129,15 @@
             <div class="modal-content">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <div class="modal-body">
-                    <h4 class="modal-title">Development Zones Explaination</h4>
+                    <h4 class="modal-title">Development Zones Explanation</h4>
                     <div class="distributions">
                         <!-- TODO: get these from model -->
-                        <p class="distribution"><span class="tag employee-segment-background-color-1">Unleash</span> I'm crushing it, and I have the freedom to pick work that excites me.</p>
-                        <p class="distribution"><span class="tag employee-segment-background-color-2">Encourage</span> I'm crushing it and want to focus on developing skills outside of my current role.</p>
-                        <p class="distribution"><span class="tag employee-segment-background-color-3">Challenge</span> I'm doing a good job, but would like more direction.</p>
-                        <p class="distribution"><span class="tag employee-segment-background-color-4">Discover</span> I'm crushing it and want to continue focusing on developing skills for this role.</p>
-                        <p class="distribution"><span class="tag employee-segment-background-color-5">Change</span> I feel like my expertise and responsibilities are misaligned.</p>
-                        <p class="distribution"><span class="tag employee-segment-background-color-6">Worry</span> I'm not sure what my future looks like, or if people know about my current contributions.</p>
+                        <p class="distribution"><span class="tag employee-segment-background-color-1">Unleash</span> This person is crushing it, and has the freedom to pick work that excites them.</p>
+                        <p class="distribution"><span class="tag employee-segment-background-color-2">Encourage</span> This person is crushing it and wants to focus on developing skills outside of my their current role.</p>
+                        <p class="distribution"><span class="tag employee-segment-background-color-3">Challenge</span> This person is doing a good job, but would like more direction.</p>
+                        <p class="distribution"><span class="tag employee-segment-background-color-4">Discover</span> This person is crushing it and wants to continue focusing on developing skills for their role.</p>
+                        <p class="distribution"><span class="tag employee-segment-background-color-5">Change</span> This person feels like their expertise and responsibilities are misaligned.</p>
+                        <p class="distribution"><span class="tag employee-segment-background-color-6">Worry</span> This person isn't sure what their future looks like, or if people know about their current contributions.</p>
                     </div>
                 </div>
                 <div class="modal-footer">
