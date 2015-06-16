@@ -31,7 +31,7 @@ class SurveyForm(forms.ModelForm):
 	first_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
 	last_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
 	email = forms.EmailField(widget=forms.TextInput(attrs={'class':'form-control'}))
-	talent_category = forms.ChoiceField(label='Which statement best describes how you think you\'re doing at work?', widget=forms.RadioSelect(), choices=Prospect.TALENT_CATEGORY_CHOICES)
+	talent_category = forms.ChoiceField(label='What can we do to help you further develop your skills or career?', widget=forms.RadioSelect(), choices=Prospect.TALENT_CATEGORY_CHOICES)
 	engagement = forms.ChoiceField(label='Which of these statements best describes how you feel at work?', widget=forms.RadioSelect(), choices=Prospect.ENGAGEMENT_CHOICES)
 
 	class Meta:

@@ -8,11 +8,10 @@ class Prospect(models.Model):
 	
 	TALENT_CATEGORY_CHOICES = (
         (6, 'I\'m not sure what my future looks like, or if people know about my current contributions.'), # Worried
-        (5, 'I feel like my expertise and responsibilities are misaligned.'), # Change
-        (4, 'I\'m crushing it and want to continue focusing on developing skills for this role.'), # Discover
-        (3, 'I\'m doing a good job, but would like more direction.'), # Challenge 
-        (2, 'I\'m crushing it and want to focus on developing skills outside of my current role.'), # Encourage
-        (1, 'I\'m crushing it, and I have the freedom to pick work that excites me.'), # Unleash           
+        (5, 'I want to focus on developing skills outside of my current role.'), # Change
+        (2, 'I could use a coach or mentor.'), # Encourage
+        (3, 'I\'d like a challenge.'), # Challenge         
+        (1, 'I\'d like the freedom to pick work that excites me.'), # Unleash           
     )
 
 
