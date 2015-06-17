@@ -7,7 +7,7 @@ angular.module('tdb.search.controllers', [])
             team_id: $routeParams.team_id,
             vops: $routeParams.vops
         };
-
+        $scope.talentCategories = TalentCategories.categories;
         $scope.happinessOptions = Happiness.query();
         if($scope.filters.happiness) {
             var filtered = $filter('filter')($scope.happinessOptions, {id: $scope.filters.happiness});
@@ -30,6 +30,11 @@ angular.module('tdb.search.controllers', [])
             } else {
                 $location.search('vops', null);
             }
+        };
+
+        $scope.setZoneFilter = function(categoryId) {
+            console.log(categoryId);
+            $location.search('talent_category', categoryId);
         };
 
         $scope.setTeamFilter = function(teamId) {
