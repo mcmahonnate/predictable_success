@@ -25,7 +25,8 @@ angular.module('tdb.controllers', [])
       return input;
     };
     $rootScope.scrubDate = function (input, display) {
-        date = new Date(input);
+        var date = new Date(input);
+        if (isNaN(date)) { return null};
         var day = date.getDate();
         var month = date.getMonth() + 1; //Months are zero based
         var year = date.getFullYear();
@@ -657,63 +658,39 @@ angular.module('tdb.controllers', [])
     }
 }])
 
-.controller('ReportsCtrl', ['$scope', '$location', '$routeParams', 'PvpEvaluation', 'analytics', function($scope, $location, $routeParams, PvpEvaluation, analytics) {
+.controller('ReportsCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'EmployeeSearch', 'TalentCategories', 'analytics', function($scope, $rootScope, $location, $routeParams, EmployeeSearch, TalentCategories, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
-
-    PvpEvaluation.query({current_round: true}).$promise.then(function(response) {
+    $scope.busy = true;
+    EmployeeSearch.query().$promise.then(function(response) {
             $scope.evaluations = response;
-
             var i = 0;
             angular.forEach($scope.evaluations, function (evaluation) {
                 evaluation.index = i;
                 i = i + 1;
             })
             $scope.evaluations_sort = angular.copy($scope.evaluations)
-
             $scope.csv = []
             buildCSV();
-        }
-    );
-    var talentToString = function(talent){
-        switch (talent) {
-            case 1:
-                return 'Top';
-                break;
-            case 2:
-                return 'Strong';
-                break;
-            case 3:
-                return 'Good';
-                break;
-            case 4:
-                return 'Low Potential';
-                break;
-            case 5:
-                return 'Low Performing';
-                break;
-            case 6:
-                return 'Poor';
-                break;
-        }
-    };
+            $scope.busy = false;
+    });
     var happyToString = function(happy){
         switch (happy) {
-            case 1:
+            case '1':
                 return 'Very Unhappy';
                 break;
-            case 2:
+            case '2':
                 return 'Unhappy';
                 break;
-            case 3:
+            case '3':
                 return 'Indifferent';
                 break;
-            case 4:
+            case '4':
                 return 'Happy';
                 break;
-            case 5:
+            case '5':
                 return 'Very Happy';
                 break;
-            case -1:
+            case '0':
                 return 'No Data';
                 break;
         }
@@ -751,9 +728,9 @@ angular.module('tdb.controllers', [])
         angular.forEach($scope.evaluations_sort, function(employee) {
             var row = {};
             row.name = employee.full_name;
-            row.talent = talentToString(employee.current_setHappyFiltergory);
+            row.talent = TalentCategories.getLabelByTalentCategory(employee.talent_category);
             row.happy = happyToString(employee.happiness);
-            row.date = employee.happiness_date;
+            row.date = $rootScope.scrubDate(employee.happiness_date);
             $scope.csv.push(row);
         });
     }
@@ -763,8 +740,8 @@ angular.module('tdb.controllers', [])
         return ((aValue < bValue) ? -1 : ((aValue > bValue) ? 1 : 0));
     }
     var orderByTalent= function(a,b){
-        var aValue = a.current_talent_category;
-        var bValue = b.current_talent_category;
+        var aValue = a.talent_category;
+        var bValue = b.talent_category;
         var aName = a.full_name;
         var bName = b.full_name;
         if (aValue === bValue) {
