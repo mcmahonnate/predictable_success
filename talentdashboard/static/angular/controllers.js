@@ -740,8 +740,9 @@ angular.module('tdb.controllers', [])
         return ((aValue < bValue) ? -1 : ((aValue > bValue) ? 1 : 0));
     }
     var orderByTalent= function(a,b){
-        var aValue = a.talent_category;
-        var bValue = b.talent_category;
+        var noDataValue=8;
+        var aValue = (a.talent_category===0) ? noDataValue : a.talent_category;
+        var bValue = (b.talent_category===0) ? noDataValue : b.talent_category;
         var aName = a.full_name;
         var bName = b.full_name;
         if (aValue === bValue) {
