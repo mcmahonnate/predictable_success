@@ -41,7 +41,22 @@
                 <li><a ng-click="setTeamFilter(null)">All Teams</a></li>
             </ul>
         </div>
-
+        <div class="dropdown pull-right" style="margin-right:5px">
+            <button class="btn btn-default dropdown-toggle" type="button" id="teamList" data-toggle="dropdown" aria-expanded="true">
+                <span ng-if="!categoryName">All Zones</span> {{categoryName}}
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-teams" role="menu" aria-labelledby="teamList">
+                <li ng-repeat="(category_id, category)  in talentCategories" ng-if="category_id>0">
+                    <a ng-click="setZoneFilter(category_id);">{{category.label}}</a>
+                </li>
+                <li>
+                    <a ng-click="setZoneFilter('0');">{{talentCategories[0].label}}</a>
+                </li>
+                <li class="divider"></li>
+                <li><a ng-click="setZoneFilter(null)">All Zones</a></li>
+            </ul>
+        </div>
         <div ng-if="customer.show_kolbe">
             <div style="width:200px;display:inline-block;margin: 5px 18px;">
                 <div slider-fact-finder style="width:200px;display:inline-block;margin: 5px 0px;"></div>
