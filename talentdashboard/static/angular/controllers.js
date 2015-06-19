@@ -256,7 +256,7 @@ angular.module('tdb.controllers', [])
     //teams
     $scope.teams = Team.query();
     $scope.modalEmployeeShown = false;
-    $scope.newEmployee = {
+    $scope.newEmployeeBlank = {
         id:0,full_name:'',
         first_name:'',
         last_name:'', 
@@ -266,6 +266,7 @@ angular.module('tdb.controllers', [])
         departure_date:'', 
         avatar:'https://hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg'
     };
+    $scope.newEmployee = $scope.newEmployeeBlank;
 
     $scope.newLeadership = {
         id:0,
@@ -280,7 +281,8 @@ angular.module('tdb.controllers', [])
     }
 
     //show add employee modal 
-    $scope.toggleEmployeeModal = function() {
+    $scope.toggleAddEmployeeModal = function() {
+        $scope.newEmployee = $scope.newEmployeeBlank;
         $scope.modalEmployeeShown = !$scope.modalEmployeeShown;
     };  
 
@@ -333,7 +335,7 @@ angular.module('tdb.controllers', [])
 
 
     $scope.modalEmployeeShown = false;
-    $scope.toggleEmployeeModal = function() {
+    $scope.toggleEditEmployeeModal = function() {
         $scope.modalEmployeeShown = !$scope.modalEmployeeShown;
     };
     $scope.modalHappyShown = false;

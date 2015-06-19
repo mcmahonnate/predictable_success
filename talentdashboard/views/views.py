@@ -230,6 +230,38 @@ class EmployeeList(APIView):
         serializer = MinimalEmployeeSerializer(employees, many=True, context={'request': request})
         return Response(serializer.data)
 
+    # def post(self, request, format=None):
+    #     employee = Employee()
+    #     if employee is not None:
+    #         if "_full_name" in request.DATA:
+    #             employee.full_name = request.DATA["_full_name"]
+    #         if "_first_name" in request.DATA:
+    #             employee.first_name = request.DATA["_first_name"]
+    #         if "_last_name" in request.DATA:
+    #             employee.last_name = request.DATA["_last_name"]
+    #         if "_email" in request.DATA:
+    #             employee.email = request.DATA["_email"]
+    #         if "_hire_date" in request.DATA:
+    #             employee.hire_date = request.DATA["_hire_date"]
+    #         if "_team_id" in request.DATA:
+    #             team_id = request.DATA["_team_id"]
+    #             if team_id is None:
+    #                 team = None
+    #             else:
+    #                 team = Team.objects.get(id=team_id)
+    #             employee.team = team
+    #         if "_coach_id" in request.DATA:
+    #             coach_id = request.DATA["_coach_id"]
+    #             coach = Employee.objects.get(id=coach_id)
+    #             employee.coach = coach
+    #         if "_departure_date" in request.DATA:
+    #             employee.departure_date = request.DATA["_departure_date"]
+    #         employee.save()
+    #         serializer = EmployeeSerializer(employee, many=False, context={'request': request})
+    #         return Response(serializer.data)
+    #     return Response(None, status=status.HTTP_404_NOT_FOUND)
+    #     employee.save();
+    #     return HttpResponse(item, content_type='application/json')
 
 class TeamMemberList(APIView):
     def get(self, request, pk, format=None):
@@ -297,7 +329,7 @@ class ImportData(APIView):
                 employee = Employee(first_name=first_name,last_name=last_name,email=item['Email'],job_title=item['Job Title'],hire_date=date_parsed.date(),display=True)
                 employee.save()
             item['id'] = employee.id
-            teams.append(item['Department'])
+            # teams.append(item['Department'])
         trim_teams = set(teams)
         for trim_team in trim_teams:
             try:
@@ -869,7 +901,6 @@ class EmployeeTaskList(APIView):
         serializer = TaskSerializer(task, context={'request': request})
         return Response(serializer.data)
 
-
 class EmployeeDetail(APIView):
     def get(self, request, pk, format=None):
         try:
@@ -878,8 +909,8 @@ class EmployeeDetail(APIView):
             return Response(serializer.data)
         except Employee.DoesNotExist:
             return Response(None)
-
-    def put(self, request, pk, format=None):
+        
+    def post(self, request, pk, format=None):
         def expire_view_cache(view_name, args=None, language=None, namespace=None, key_prefix=None, method="GET"):
             url = reverse(view_name, args=args)
             key_prefix = settings.CACHE_MIDDLEWARE_KEY_PREFIX
@@ -895,12 +926,42 @@ class EmployeeDetail(APIView):
                 return True
             return False
 
-        if int(pk) == 0 and "_first_name" in request.DATA:
-            employee = Employee()
-            employee.display = True
-            expire_view_cache('employee-list')
-        else:
-            employee = Employee.objects.get(id=pk)
+        employee = Employee()
+        employee.display = True
+        expire_view_cache('employee-list')
+
+        if employee is not None:
+            if "_full_name" in request.DATA:
+                employee.full_name = request.DATA["_full_name"]
+            if "_first_name" in request.DATA:
+                employee.first_name = request.DATA["_first_name"]
+            if "_last_name" in request.DATA:
+                employee.last_name = request.DATA["_last_name"]
+            if "_email" in request.DATA:
+                employee.email = request.DATA["_email"]
+            if "_hire_date" in request.DATA:
+                employee.hire_date = request.DATA["_hire_date"]
+            if "_team_id" in request.DATA:
+                team_id = request.DATA["_team_id"]
+                if team_id is None:
+                    team = None
+                else:
+                    team = Team.objects.get(id=team_id)
+                employee.team = team
+            if "_coach_id" in request.DATA:
+                coach_id = request.DATA["_coach_id"]
+                coach = Employee.objects.get(id=coach_id)
+                employee.coach = coach
+            if "_departure_date" in request.DATA:
+                employee.departure_date = request.DATA["_departure_date"]
+            employee.save()
+            serializer = EmployeeSerializer(employee, many=False, context={'request': request})
+            return Response(serializer.data)
+        return Response(None, status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, pk, format=None):
+        employee = Employee.objects.get(id=pk)
+
         if employee is not None:
             if "_full_name" in request.DATA:
                 employee.full_name = request.DATA["_full_name"]
