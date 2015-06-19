@@ -808,7 +808,9 @@ class TaskDetail(APIView):
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
     def notify(self, request, task):
-            subject = '(' + task.employee.full_name + ') To-do assigned to you: ' + task.description
+            description_summary = task.description.replace('\n', ' ').replace('\r', '')
+            description_summary = (description_summary[:25] + '...') if len(description_summary) > 25 else description_summary
+            subject = '(' + task.employee.full_name + ') To-do assigned to you: ' + description_summary
             message = task.assigned_by.full_name + ' just assigned this to you: \r\n' + task.description + '\r\n http://' + request.tenant.domain_url + '/#/employees/' + str(task.employee.id)
             mail_from = task.assigned_by.full_name + '<notify@dfrntlabs.com>'
             send_mail(subject, message, mail_from, [task.assigned_to.user.email], fail_silently=False)
