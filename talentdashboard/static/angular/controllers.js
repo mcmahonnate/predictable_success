@@ -288,7 +288,6 @@ angular.module('tdb.controllers', [])
     //show add employee modal 
     $scope.toggleAddEmployeeModal = function() {
         console.log("toggled")
-        // $scope.newEmployee = angular.copy($scope.newEmployeeBlank);
         $scope.modalEmployeeShown = !$scope.modalEmployeeShown;
     };  
 

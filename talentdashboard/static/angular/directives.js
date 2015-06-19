@@ -872,6 +872,8 @@ angular.module('tdb.directives', [])
         $scope.scrub = function (){
             $scope.editEmployee = angular.copy($scope.employee);
             $scope.edit_leadership = angular.copy($scope.leadership);
+            $scope.uploadForm.$setUntouched();
+            $scope.uploadForm.$setPristine();
         }
         var changeLocation = function(url, force) {
           //this will mark the URL change

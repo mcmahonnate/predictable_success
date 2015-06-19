@@ -57,8 +57,8 @@
             </div>
             <div style="clear:both;"></div>
             <div style="margin: 20px;padding-left: 193px;">
-                <button class='ng-modal-button' ng-click='save();hideModal()' ng-disabled="uploadForm.first_name.$invalid || uploadForm.last_name.$invalid || uploadForm.email.$invalid" tabindex="10">Save</button>
-                <button class='ng-modal-button' ng-click='scrub();hideModal()' tabindex="11">Cancel</button>
+                <button class='ng-modal-button' ng-click='save();scrub();hideModal()' ng-disabled="uploadForm.first_name.$invalid || uploadForm.last_name.$invalid || uploadForm.email.$invalid" tabindex="10">Save</button>
+                <button type="button" class='ng-modal-button' ng-click='scrub();hideModal()' tabindex="11">Cancel</button>
             </div>
         </div>
     </form>
