@@ -280,9 +280,15 @@ angular.module('tdb.controllers', [])
         return true;
     }
 
+    $scope.clearAddModal = function() {
+        console.log("cleared");
+        $scope.newEmployee = angular.copy($scope.newEmployeeBlank);
+    }
+
     //show add employee modal 
     $scope.toggleAddEmployeeModal = function() {
-        $scope.newEmployee = $scope.newEmployeeBlank;
+        console.log("toggled")
+        // $scope.newEmployee = angular.copy($scope.newEmployeeBlank);
         $scope.modalEmployeeShown = !$scope.modalEmployeeShown;
     };  
 
