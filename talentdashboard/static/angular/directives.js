@@ -889,7 +889,7 @@ angular.module('tdb.directives', [])
                         $scope.employee.avatar = data.avatar;
                     });
                 }
-                if (!$scope.leadership.length || ($scope.edit_leadership.leader.id != $scope.leadership.leader.id)) {
+                if ($scope.edit_leadership.leader.id != $scope.leadership.leader.id) {
                     var data = {id: $scope.employee.id, _leader_id: $scope.edit_leadership.leader.id};
                     EmployeeLeader.addNew(data, function (response) {
                         $scope.edit_leadership = response;
