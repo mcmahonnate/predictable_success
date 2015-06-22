@@ -859,6 +859,23 @@ angular.module('tdb.controllers', [])
     }
 }])
 
+.controller('TasksCtrl', ['$scope', '$rootScope', '$location', '$routeParams', '$window', 'EmployeeToDo', 'ToDo', function($scope, $rootScope, $location, $routeParams, $window, EmployeeToDo, ToDo) {
+
+    $scope.deleteToDo = function(todo) {
+        if ($window.confirm('Are you sure you want to delete this To Do?')) {
+            var data = {id: todo.id};
+            var todo_index = $scope.todos.indexOf(todo);
+            var deleteSuccess = function() {
+                $scope.todos.splice(todo_index, 1);
+            };
+
+            ToDo.remove(data, function() {
+                deleteSuccess();
+            });
+        }
+    }
+}])
+
 .controller('LeaderOverviewCtrl', ['$scope', '$location', '$routeParams', 'TalentReport', 'TeamLeadEmployees', 'User', 'analytics', function($scope, $location, $routeParams, TalentReport, TeamLeadEmployees, User, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
 

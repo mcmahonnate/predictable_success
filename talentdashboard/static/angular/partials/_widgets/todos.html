@@ -1,6 +1,7 @@
 <div class="panel todos" ng-if="currentUser.can_view_comments">
+
     <button ng-show="canAddNew" ng-click="newTask()" class="pull-right btn btn-sm btn-success">Add New Task</button>
-    <h2 class="panel-title">Tasks</h2>
+    <h2 ng-show="widget != false" class="panel-title">Tasks</h2>
     <ul class="nav nav-tabs">
         <li role="presentation" ng-class="{'active': tabs.activeTab == tabs.todoTab}"><a ng-click="setActiveTab(tabs.todoTab)">To Do</a></li>
         <li role="presentation" ng-class="{'active': tabs.activeTab == tabs.doneTab}"><a ng-click="setActiveTab(tabs.doneTab)">Done</a></li>
@@ -12,30 +13,34 @@
         </div>
         <div ng-if="todos.length > 0">
             <div class="row shaded">
-                <div class="col-md-3 col-lg-2"></div>
+                <div class="col-md-3 col-lg-2 first"></div>
                 <div class="col-md-4 col-lg-5">Tasks</div>
                 <div class="col-xs-3">Assigned To</div>
                 <div class="col-xs-2">Due Date</div>
             </div>    
-            <div class="row todo" ng-repeat="task in todos | orderBy:'-due_date'">
-                <div class="col-md-3 col-lg-2">
+            <div class="row todo" ng-repeat="task in todos | orderBy:'-created_date'">
+                <div class="col-xs-3 col-lg-2 first">
                     <input class="todo-checkbox" type="checkbox" ng-click="toggleCompleted(task)" ng-model="task.completed">
                     <a ng-href="/#/employees/{{task.employee.id}}" class="small-headshot">
                         <img alt="{{task.employee.full_name}}" title="{{task.employee.full_name}}" ng-src="{{ task.employee.avatar_small }}" />
                     </a>
                 </div>
-                <div class="col-md-4 col-lg-5 todo-description-container">     
+                <div class="col-xs-4 col-lg-5 todo-description-container">     
                     <div ng-class="{'todo-completed': task.completed}">
                         <p><strong><a href="javascript:void(0);" ng-href="/#/employees/{{task.employee.id}}">{{task.employee.full_name}}</a></strong> <span class="timestamp">{{ task.created_date | fromNow }}</span></p>
                         <p class="todo-description">{{task.description}}</p>
                     </div>
                 </div>  
                 <div class="col-xs-3">
-                    {{task.assigned_to.full_name || "Unassigned"}}
+                    <div ng-show="task.assigned_to.full_name">
+                        <a href="javascript:void(0);" ng-href="/#/employees/{{task.assigned_to.id}}">{{task.assigned_to.full_name}}</a>
+                    </div>
+                    <div ng-show="!task.assigned_to.full_name">
+                        Unassigned
+                    </div>
                 </div>
                 <div class="col-xs-2 date">    
                     {{(task.due_date | date:'MMM d') || "None"}}
-
                     <i class="fa fa-cog show-popover pull-right"></i>
                     <ul class="popover-items" style="display:none">
                         <li class="popover-item">

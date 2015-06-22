@@ -46,17 +46,34 @@ angular.module('tdb.controllers.tasks', [])
         $scope.canAddNew = false;
         $scope.todos = [];
         $scope.done = [];
+
+        $scope.init = function(filter, view, page_size) {
+            $scope.view = view;
+            $scope.filter = filter;
+            $scope.page_size = page_size;
+
+            $scope.loadTasks(false); //load todos
+            $scope.loadTasks(true); //load done todos
+        };
+
         $scope.loadTasks = function(completed) {
             $scope.busy = true;
 
             var page;
+            var filter = $scope.filter;
+
+            if (!$scope.page_size) {
+                var page_size = 5;
+            }    
+
             if (completed) {page = $scope.done_page + 1}
             else {page = $scope.todo_page + 1}
 
-            var query = {completed: completed, filter: 'mine', page: page};
+            var query = {completed: completed, filter: filter, page: page, page_size: 20};
+            
             if (employee_id) {
                 $scope.canAddNew = true;
-                query = {employee_id: employee_id, completed: completed, page: page};
+                query = {employee_id: employee_id, completed: completed, page: page, page_size: page_size};
             }
 
             Task.get(query, function(data) {
@@ -80,8 +97,6 @@ angular.module('tdb.controllers.tasks', [])
         $scope.todo_has_next = true;
         $scope.done_page = 0;
         $scope.todo_page = 0;
-        $scope.loadTasks(false); //load todos
-        $scope.loadTasks(true); //load done todos
 
         $scope.tabs = {
             todoTab: 'todo',
