@@ -707,7 +707,7 @@ class LeadershipDetail(APIView):
 
     def post(self, request, pk, format=None):
         employee = Employee.objects.get(id=pk)
-        leader_id = request.DATA["_leader_id"]
+        leader_id = request.DATA["leader_id"]
         leader = Employee.objects.get(id = leader_id)
         leadership = Leadership()
         leadership.employee = employee

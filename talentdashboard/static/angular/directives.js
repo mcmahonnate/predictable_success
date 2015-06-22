@@ -889,13 +889,18 @@ angular.module('tdb.directives', [])
                         $scope.employee.avatar = data.avatar;
                     });
                 }
-                if ($scope.edit_leadership.leader.id != $scope.leadership.leader.id) {
-                    var data = {id: $scope.employee.id, _leader_id: $scope.edit_leadership.leader.id};
+                // if ($scope.edit_leadership.leader.id != $scope.leadership.leader.id) {
+
+                if ($scope.edit_leadership.leader) {
+                    console.log($scope.edit_leadership.leader);
+                    var data = {id: $scope.employee.id, leader_id: $scope.edit_leadership.leader.id};
+                    console.log(data);
                     EmployeeLeader.addNew(data, function (response) {
                         $scope.edit_leadership = response;
                         $scope.leadership = angular.copy($scope.edit_leadership);
                     });
                 }
+
                 if (addNew) {changeLocation('employees/' + $scope.employee.id, false);}
             };
             var saveEmployee = function(id) {
