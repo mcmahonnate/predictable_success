@@ -14,17 +14,16 @@ angular.module('tdb.controllers.tasks', [])
             return $scope.task.id && $scope.task.id > 0;
         };
 
-        $scope.save = function () {
-            if (!$scope.task.description) return;
+        $scope.save = function (form) {
+            $scope.submitted = true;
+            if(form.$invalid) return;
 
             if($scope.taskIsBeingEdited()) {
                 Task.update($scope.task, (function (value) {
-                    value.due_date = value.due_date ? new Date(value.due_date) :null;
                     $modalInstance.close(value);
                 }));
             } else {
                 $scope.task.$save(function (value) {
-                    value.due_date = value.due_date ? new Date(value.due_date) :null;
                     $modalInstance.close(value);
                 });
             }
@@ -109,7 +108,7 @@ angular.module('tdb.controllers.tasks', [])
             modalInstance.result.then(
                 function (newTask) {
                     $scope.todos.push(newTask);
-                    $scope.setActiveTab($scope.todoTab);
+                    $scope.setActiveTab($scope.tabs.todoTab);
                 }
             );
         };
