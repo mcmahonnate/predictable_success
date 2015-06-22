@@ -942,7 +942,7 @@ class EmployeeDetail(APIView):
             if "_email" in request.DATA:
                 employee.email = request.DATA["_email"]
             if "_hire_date" in request.DATA:
-                employee.hire_date = request.DATA["_hire_date"]
+                employee.hire_date = dateutil.parser.parse(request.DATA["_hire_date"])
             if "_team_id" in request.DATA:
                 team_id = request.DATA["_team_id"]
                 if team_id is None:
@@ -955,7 +955,7 @@ class EmployeeDetail(APIView):
                 coach = Employee.objects.get(id=coach_id)
                 employee.coach = coach
             if "_departure_date" in request.DATA:
-                employee.departure_date = request.DATA["_departure_date"]
+                employee.departure_date = dateutil.parser.parse(request.DATA["_departure_date"])
             employee.save()
             serializer = EmployeeSerializer(employee, many=False, context={'request': request})
             return Response(serializer.data)
@@ -974,7 +974,7 @@ class EmployeeDetail(APIView):
             if "_email" in request.DATA:
                 employee.email = request.DATA["_email"]
             if "_hire_date" in request.DATA:
-                employee.hire_date = request.DATA["_hire_date"]
+                employee.hire_date = dateutil.parser.parse(request.DATA["_hire_date"])
             if "_team_id" in request.DATA:
                 team_id = request.DATA["_team_id"]
                 if team_id is None:
@@ -987,7 +987,7 @@ class EmployeeDetail(APIView):
                 coach = Employee.objects.get(id=coach_id)
                 employee.coach = coach
             if "_departure_date" in request.DATA:
-                employee.departure_date = request.DATA["_departure_date"]
+                employee.departure_date = dateutil.parser.parse(request.DATA["_departure_date"])
             employee.save()
             serializer = EmployeeSerializer(employee, many=False, context={'request': request})
             return Response(serializer.data)
