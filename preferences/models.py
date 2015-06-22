@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.sites.models import Site
+from django.contrib.auth.models import User
+
 
 class SitePreferences(models.Model):
     site = models.OneToOneField(Site,on_delete=models.SET_NULL, null=True, blank=True)
@@ -16,3 +18,14 @@ class SitePreferences(models.Model):
 
     def __str__(self):
         return "show kolbe: %s, show vops: %s, show mbti: %s" % (self.show_kolbe, self.show_vops, self.show_mbti)
+
+
+class UserPreferences(models.Model):
+    DISCUSSION_FOCUSED_DASHBOARD_VIEW = 1
+    STATS_FOCUSED_DASHBOARD_VIEW = 2
+    DASHBOARD_VIEW_CHOICES = (
+        (STATS_FOCUSED_DASHBOARD_VIEW, 'Stats-focused View'),
+        (DISCUSSION_FOCUSED_DASHBOARD_VIEW, 'Discussion-focused View'),
+    )
+    user = models.OneToOneField(User, related_name='preferences')
+    dashboard_view = models.IntegerField(choices=DASHBOARD_VIEW_CHOICES, default=DISCUSSION_FOCUSED_DASHBOARD_VIEW)

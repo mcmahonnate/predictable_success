@@ -8,7 +8,8 @@ angular.module('tdb.services.tasks', ['ngResource'])
             } else {
                 return fromServer(response);
             }
-        }
+        };
+
         var fromServer = function(task) {
             var copy = angular.copy(task);
             copy.due_date = copy.due_date ? new Date(copy.due_date) : null;

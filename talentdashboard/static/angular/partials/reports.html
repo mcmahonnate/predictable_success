@@ -3,31 +3,50 @@
         <div id="sorts" class="button-group" style="display: inline-block;">
           <button class="sort-button" ng-class="{'is-checked':orderValue=='name'}" ng-click="order('name')">name</button>
           <button class="sort-button" ng-class="{'is-checked':orderValue=='talent'}" ng-click="order('talent')">talent</button>
-          <button class="sort-button" ng-class="{'is-checked':orderValue=='happy'}" ng-click="order('happy')">happy</button>
-          <button class="sort-button" ng-class="{'is-checked':orderValue=='date'}" ng-click="order('date')">date</button>
+          <button class="sort-button" ng-class="{'is-checked':orderValue=='happy'}" ng-click="order('happy')">happiness</button>
+          <button class="sort-button" ng-class="{'is-checked':orderValue=='date'}" ng-click="order('date')">happiness date</button>
         </div>
-        <span class="glyphicon-regular glyphicon-export" style="cursor: pointer;float:right;display: inline-block;margin-top:2px;font-size:30px" ng-csv="csv" filename="fooldash.csv"></span>
+        <span class="fa fa-download" style="cursor: pointer;float:right;display: inline-block;margin-top:2px;font-size:30px" ng-csv="csv" filename="fooldash.csv"></span>
         <div style="position: absolute;width: 100%;margin-top:15px;">
             <ul class="isotope table-like">
                 <li ng-repeat="employee in evaluations" ng-style="{top: (((employee.index) * 55) + 'px')}">
-                    <div class="name"><a href="#/employees/{{employee.id}}">{{employee.full_name}}</a></div>
-                    <div class="talent"><canvas width="18" height="18" style="float:left;padding-left: 20px;" employee-talent-category="{{employee.current_talent_category}}"></canvas></div>
-                    <div class="employee-happiness-container happy-score" style="margin: 0;">
-                        <div class="employee-happiness employee-happiness-{{employee.happiness}} selected">
-                            <span ng-class="{'veryhappy': employee.happiness==5,'happy': employee.happiness==4,'indifferent': employee.happiness==3,'unhappy': employee.happiness==2,'veryunhappy': employee.happiness==1, 'nohappydata': employee.happiness==-1}"></span>
+                    <div class="avatar">
+                        <a ng-href="#/employees/{{employee.pk}}" class="medium-headshot">
+                            <img ng-src="{{ employee.avatar_small }}" />
+                        </a>
+                    </div>
+                    <div class="name vertical-align-container"><div class="vertical-align-text"><a href="#/employees/{{employee.pk}}">{{employee.full_name}}</a></div></div>
+
+                    <div style="margin: 0;position: relative;width: 150px;height: 50px;">
+
+
+                        <div class="employee-attribute employee-attribute-large" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{ talentCategories[employee.talent_category].label }}">
+                            <span class="segment employee-segment-background-color-{{employee.talent_category}}"></span>
+                        </div>
+                        <div class="employee-attribute employee-attribute-large employee-happiness-large" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{ talentCategories[employee.talent_category].label }}">
+                            <span class="employee-happiness-background-color-{{employee.happiness}} happiness-{{ employee.happiness }}"></span>
                         </div>
                     </div>
-                    <div class="happy-date" style="color: #333333;">{{employee.happiness_date}}</div>
+                    <div class="happy-date vertical-align-container" style="color: #333333;"><div class="happy-date vertical-align-text">{{employee.happiness_date | date:'MM/dd/yyyy'}}</div></div>
                  </li>
             </ul>
         </div>
     </div>
+    <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
   </div>
 <style>
 
 /* ---- button ---- */
-
+.vertical-align-text {
+    display: table-cell;
+    vertical-align: middle;
+    height:50px;
+}
+.vertical-align-container {
+    display: table;
+}
 .sort-button {
+  width: 150px;
   display: inline-block;
   padding: 0.5em 1.0em;
   background: #EEE;
@@ -137,7 +156,7 @@
   font-size: 18px;
 }
 
-.table-like .name { width: 30%; }
+.table-like .name { width: 30%; margin-left: 20px;}
 .table-like .talent { width: 10%;}
 .table-like .happy-score { width: 15%; text-align: center;}
 .table-like .happy-date { width: 20%; }

@@ -1,4 +1,4 @@
-<div class="panel salary-totals row stripes">
+<div class="panel salary-totals stripes">
     <h2 class="panel-title">Salaries by Talent</h2>
     <div class="salary-total-type" ng-repeat="(category, report) in talentReport.categories track by $index" ng-if="category>0">
         <a href="#/employees/?talent_category={{category}}&team_id={{team.id}}">
