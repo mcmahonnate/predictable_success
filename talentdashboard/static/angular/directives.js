@@ -933,8 +933,13 @@ angular.module('tdb.directives', [])
                 }
             };
             saveEmployee($scope.employee.id);
+            $scope.scrub();
+            $scope.hideModal();
         };
-
+        $scope.cancel = function () {
+            $scope.scrub();
+            $scope.hideModal();
+        }
         $scope.uploadFile = function(files){
             $scope.files = files;
             fileReader.readAsDataUrl($scope.files[0], $scope)
