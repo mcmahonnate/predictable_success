@@ -422,7 +422,7 @@ angular.module('tdb.controllers', [])
     Team.query(function(data) {
         $scope.teams = data;
     });
-    if (!$scope.employees && $rootScope.currentUser.can_view_company_dashboard) {
+    if (!$scope.employees && $rootScope.currentUser && $rootScope.currentUser.can_view_company_dashboard) {
         $scope.employees = Employee.query();
     }
     Employee.get(
