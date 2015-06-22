@@ -168,7 +168,7 @@ TENANT_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.admin',
-    'django.contrib.sites',
+    #'django.contrib.sites',
     'django_extensions',
     'talentdashboard',
     'rest_framework',
