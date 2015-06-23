@@ -482,7 +482,8 @@ angular.module('tdb.controllers', [])
     $scope.import = function() {
         $scope.importing = true;
         if ($scope.validTable) {
-            ImportData.addNew($scope.hot.getData()).$promise.then(function(data) {
+            // ignore first row
+            ImportData.addNew($scope.hot.getData().slice(1)).$promise.then(function(data) {
                 EmployeeNames.query(function(data) {
                     $scope.employee_autocomplete_values = data;
                 });

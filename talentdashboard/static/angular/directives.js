@@ -499,14 +499,18 @@ angular.module('tdb.directives', [])
             }
             var customRenderer = function(instance, td, row, col, prop, value, cellProperties) {
                 Handsontable.renderers.TextRenderer.apply(this, arguments);
-                // if (dataColHeaders.length) {
-                //     if (desiredColHeaders.indexOf(dataColHeaders[col]) > -1) {
-                //         // td.style.backgroundColor = '#cec';
-                //     }
-                //     else {
-                //         // td.style.backgroundColor = '#ff4c42';
-                //     }
-                // }
+
+                // header
+                if (row == 0) {
+                    if (dataColHeaders.length) {
+                        if (!columns[col].unknown) {
+                            td.style.backgroundColor = '#cec';
+                        }
+                        else {
+                            td.style.backgroundColor = '#ff4c42';
+                        }
+                    }
+                }
             }
             // var columns = [
             //     {data: "First name", renderer: "html"},
@@ -518,18 +522,24 @@ angular.module('tdb.directives', [])
             //     {data: "Manager", renderer:validManager},
             //     {data: "Salary", renderer: "html"}
             // ];
-            var columns = [
-                {data: "First name", renderer: customRenderer},
-                {data: "Last name", renderer: customRenderer},
-                {data: "Email", renderer: customRenderer},
-                {data: "Hire Date", renderer: customRenderer},
-                {data: "Job Title", renderer: customRenderer},
-                {data: "Team Name", renderer: customRenderer},
-                {data: "Team Leader", renderer: customRenderer},
-                {data: "Salary", renderer: customRenderer}
-            ];
+            var columns = [];
+            scope.resetTable = function() {
+                columns = [
+                    {data: "First name", renderer: customRenderer},
+                    {data: "Last name", renderer: customRenderer},
+                    {data: "Email", renderer: customRenderer},
+                    {data: "Hire Date", renderer: customRenderer},
+                    {data: "Job Title", renderer: customRenderer},
+                    {data: "Team Name", renderer: customRenderer},
+                    {data: "Team Leader", renderer: customRenderer},
+                    {data: "Salary", renderer: customRenderer}
+                ];
+            }
+            var desiredColHeaders = columns.map(function (c) {
+                c.unknown = false;
+                return c.data;
+            });
             var dataColHeaders;
-            var desiredColHeaders;
             scope.renderTable = function(){
                 if (scope.data.length > 0) {
                     var el = element[0];
@@ -551,9 +561,7 @@ angular.module('tdb.directives', [])
 
                     // column check
                     // var colHeaders = ["First name", "Last name", "Email", "Hire Date", "Job Title", "Department", "Manager", "Salary"]
-                    desiredColHeaders = columns.map(function (c) {
-                        return c.data;
-                    });
+                    
                     var first = scope.importData[0];
                     dataColHeaders = Object.keys(first);
                     for (var key in first) {
@@ -566,7 +574,7 @@ angular.module('tdb.directives', [])
 
                     scope.hot = new Handsontable(el, {
                         data: scope.importData,
-                        // colHeaders: dataColHeaders,
+                        // colHeaders: desiredColHeaders,
                         columns: columns,
                         contextMenu: true
                     });
@@ -659,8 +667,8 @@ angular.module('tdb.directives', [])
                 json = json.replace(/},/g, "},\r\n");
                 json = JSON.parse(json);
 
-
-                return json;
+                return addFirstRow(json);
+                // return json;
             };
             var addFirstRow = function(json) {
                 // make headers first row
@@ -736,6 +744,7 @@ angular.module('tdb.directives', [])
                         reader.onload = function (e) {
                             var raw_data = e.target.result;
                             // scope.data = CSVToJSON(raw_data);
+                            scope.resetTable();
                             scope.data = processData(raw_data, name);
                             scope.$apply();
                         };
