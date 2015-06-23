@@ -489,28 +489,41 @@ angular.module('tdb.directives', [])
             scope.hot;
             var validManager = function(instance, td, row, col, prop, value, cellProperties) {
                 Handsontable.renderers.TextRenderer.apply(this, arguments);
-                if (!scope.autocomplete_values) {
+                if (!scope.employee_autocomplete_values) {
                     td.style.background = '';
-                } else if (scope.autocomplete_values.indexOf(value)>-1) {
+                } else if (scope.employee_autocomplete_values.indexOf(value)>-1) {
                     td.style.background = '#cec';
                 } else {
                     td.style.background = '#ff4c42';
                 }
             }
+            // var columns = [
+            //     {data: "First name", renderer: "html"},
+            //     {data: "Last name", renderer: "html"},
+            //     {data: "Email", renderer: "html"},
+            //     {data: "Hire Date", renderer: "html"},
+            //     {data: "Job Title", renderer: "html"},
+            //     {data: "Department", renderer: "html"},
+            //     {data: "Manager", renderer:validManager},
+            //     {data: "Salary", renderer: "html"}
+            // ];
             var columns = [
                 {data: "First name", renderer: "html"},
                 {data: "Last name", renderer: "html"},
                 {data: "Email", renderer: "html"},
                 {data: "Hire Date", renderer: "html"},
                 {data: "Job Title", renderer: "html"},
-                {data: "Department", renderer: "html"},
-                {data: "Manager", renderer:validManager},
+                {data: "Team Name", renderer: "html"},
+                {data: "Team Leader", renderer: "html"},
                 {data: "Salary", renderer: "html"}
             ];
             var renderTable = function(){
                 if (scope.data.length > 0) {
                     scope.importData = angular.copy(scope.data)
-                    var colHeaders = ["First name", "Last name", "Email", "Hire Date", "Job Title", "Department", "Manager", "Salary"]
+                    // var colHeaders = ["First name", "Last name", "Email", "Hire Date", "Job Title", "Department", "Manager", "Salary"]
+                    var colHeaders = columns.map(function (c) {
+                        return c.data;
+                    });
 
                     var el = element[0];
                     if (scope.hot) {
@@ -522,20 +535,26 @@ angular.module('tdb.directives', [])
 
                     scope.hot = new Handsontable(el, {
                         data: scope.importData,
-                        colHeaders: colHeaders,
-                        columns: columns
+                        // colHeaders: colHeaders,
+                        columns: columns,
+                        contextMenu: true
                     });
                 }
+            }
+            var validateTable = function() {
+                //mark incorrect cells
+                scope.validTable = true;
             }
             scope.$watch("data", function (newValue) {
                 if (newValue) {
                     renderTable();
+                    validateTable();
                 }
             })
-            scope.$watch("autocomplete_values", function (newValue) {
+            scope.$watch("employee_autocomplete_values", function (newValue) {
                 if (newValue) {
                     columns[6].type = "autocomplete";
-                    columns[6].source = scope.autocomplete_values;
+                    columns[6].source = scope.employee_autocomplete_values;
                     renderTable();
                 }
             })

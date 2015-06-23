@@ -340,8 +340,8 @@ class ImportData(APIView):
 
         for item in items:
             employee = Employee.objects.get(id=item['id'])
-            leader_full_name = item['Manager']
-            team_name = item['Department']
+            leader_full_name = item['Team Leader']
+            team_name = item['Team Name']
             salary = Decimal(sub(r'[^\d\-.]', '', item['Salary']))
             now = datetime.datetime.now()
             year = int(now.year)

@@ -478,24 +478,32 @@ angular.module('tdb.controllers', [])
     $scope.hot;
     $scope.columns = [];
     $scope.importing = false;
+    $scope.validTable = false;
     $scope.import = function() {
-        $scope.importing =true
-        ImportData.addNew($scope.hot.getData()).$promise.then(function(data) {
-            EmployeeNames.query(function(data) {
-                $scope.autocomplete_values = data;
+        $scope.importing = true;
+        if ($scope.validTable) {
+            ImportData.addNew($scope.hot.getData()).$promise.then(function(data) {
+                EmployeeNames.query(function(data) {
+                    $scope.employee_autocomplete_values = data;
+                });
+                console.log(data);
+                // $scope.data = data;
+                if (!data.$resolved) {
+                    Notification.warning("Awesome but we ran into some errors. Make your corrections below.");
+                } else {
+                    $scope.hot.destroy();
+                    Notification.success("Your data imported successfully.");
+                }
+                $scope.importing = false;
+            },function(){
+                $scope.isSurveySending=false;
+                Notification.error("There was an error importing your data.");
+                $scope.importing = false;
             });
-            $scope.data = data;
-            $scope.importing = false;
-            if (data.length > 0) {
-                Notification.warning("Awesome but we ran into some errors. Make your corrections below.");
-            } else {
-                $scope.hot.destroy();
-                Notification.success("Your data imported successfully.");
-            }
-        },function(){
-            $scope.isSurveySending=false;
-            Notification.error("There was an error importing your data.");
-        });
+        }
+        else {
+            Notification.warning("Awesome but we ran into some errors. Make your corrections below.");
+        }
     };
 }])
 
