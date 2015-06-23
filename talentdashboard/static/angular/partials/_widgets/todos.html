@@ -9,7 +9,7 @@
     <div ng-show="tabs.activeTab == tabs.todoTab">
         <div ng-show="todos.length === 0 && !busy" class="todos-empty">
             <p ng-show="view == 'my-view'">You currently don't have any tasks. Add tasks on employee profile pages.</p>
-            <p ng-show="view == 'employee-view'">There are no tasks for {{ employee.first_name }}.</p>
+            <p ng-show="view == 'employee-view'">There are no tasks for {{ employee.full_name }}.</p>
         </div>
         <div ng-if="todos.length > 0">
             <div class="row shaded">
@@ -61,7 +61,7 @@
     <div ng-show="tabs.activeTab == tabs.doneTab">
         <div ng-show="done.length === 0 && !busy" class="todos-empty">
             <p ng-show="view == 'my-view'">You don't have any completed tasks.</p>
-            <p ng-show="view == 'employee-view'">There are no completed tasks for {{ employee.first_name }}.</p>
+            <p ng-show="view == 'employee-view'">There are no completed tasks for {{ employee.full_name }}.</p>
         </div>
         <div ng-if="done.length > 0">
             <div class="row shaded">
