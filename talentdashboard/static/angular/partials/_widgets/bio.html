@@ -31,4 +31,21 @@
             </li>
         </ul>
     </li>
+    <li ng-if="customer.show_vops" class="shaded">
+        <strong>Synergist Style:</strong>
+        <span ng-if="employee.vops_visionary > 299"><a ng-click="showAttributes('synergist-view', 'Visionary');">Visionary</a></span>
+        <span ng-if="employee.vops_operator > 299"><a ng-click="showAttributes('synergist-view', 'Operator');">Operator</a></span>
+        <span ng-if="employee.vops_processor > 299"><a ng-click="showAttributes('synergist-view', 'Processor');">Processor</a></span>
+        <span ng-if="employee.vops_synergist > 299"><a ng-click="showAttributes('synergist-view', 'Synergist');">Synergist</a></span>
+    </li>
+    <li ng-if="customer.show_mbti">
+        <strong>Myers Briggs:</strong> <span ng-if="mbti"><a ng-click="showAttributes('mbti-view');">{{ mbti.type | uppercase}}</a></span>
+    </li>
+    <li ng-if="customer.show_kolbe" class="shaded">
+        <strong>Kolbe:</strong>
+        <span ng-if="employee.kolbe_fact_finder"><a ng-click="showAttributes('kolbe-view', 'Fact Finder');">{{ employee.kolbe_fact_finder }}</a>,</span>
+        <span ng-if="employee.kolbe_follow_thru"><a ng-click="showAttributes('kolbe-view', 'Follow Thru');">{{ employee.kolbe_follow_thru }}</a>,</span>
+        <span ng-if="employee.kolbe_quick_start"><a ng-click="showAttributes('kolbe-view', 'Quick Start');">{{ employee.kolbe_quick_start }}</a>,</span>
+        <span ng-if="employee.kolbe_implementor"><a ng-click="showAttributes('kolbe-view', 'Implementor');">{{ employee.kolbe_implementor }}</a></span>
+    </li>
 </ol>

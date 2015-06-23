@@ -49,6 +49,15 @@ filters.filter('unique', ['$parse', function ($parse) {
   };
 }]);
 
+filters.filter('titlecase', function() {
+    return function(s) {
+        s = ( s === undefined || s === null ) ? '' : s;
+        return s.toString().toLowerCase().replace( /\b([a-z])/g, function(ch) {
+            return ch.toUpperCase();
+        });
+    };
+});
+
 filters.filter('noCents', function() {
   return function(value) {
     if (value) {
