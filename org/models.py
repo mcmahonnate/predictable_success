@@ -118,53 +118,29 @@ class Employee(models.Model):
 
     def _get_kolbe_fact_finder(self):
         try:
-            value = int(self.attributes.get(category__id=8).name)
-            if value < 4:
-                description = 'simplify'
-            elif value > 6:
-                description = 'specify'
-            else:
-                description = 'explain'
-            return description
+            name = self.assessments.get(category__name='Fact Finder').get_name
+            return name
         except:
             return None
 
     def _get_kolbe_follow_thru(self):
         try:
-            value = int(self.attributes.get(category__id=9).name)
-            if value < 4:
-                description = 'adapt'
-            elif value > 6:
-                description = 'systemize'
-            else:
-                description = 'maintain'
-            return description
+            name = self.assessments.get(category__name='Follow Thru').get_name
+            return name
         except:
             return None
 
     def _get_kolbe_quick_start(self):
         try:
-            value = int(self.attributes.get(category__id=10).name)
-            if value < 5:
-                description = 'stabilize'
-            elif value > 6:
-                description = 'improvise'
-            else:
-                description = 'modify'
-            return description
+            name = self.assessments.get(category__name='Quick Start').get_name
+            return name
         except:
             return None
 
     def _get_kolbe_implementor(self):
         try:
-            value = int(self.attributes.get(category__id=11).name)
-            if value < 4:
-                description = 'imagine'
-            elif value > 6:
-                description = 'build'
-            else:
-                description = 'restore'
-            return description
+            name = self.assessments.get(category__name='Implementor').get_name
+            return name
         except:
             return None
 

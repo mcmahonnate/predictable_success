@@ -1,0 +1,14 @@
+<div>
+    <div class="modal-body">
+        <button ng-click="cancel()" class="close">&times;</button>
+    	<h3 class="modal-title">
+            <span ng-if="view=='mbti-view'">Myers Briggs - {{mbti.type | uppercase}}</span>
+            <span ng-if="view=='synergist-view' && category">{{ category }}</span>
+            <span ng-if="view=='kolbe-view' && category">{{ name }}</span>
+        </h3>
+        <div ng-if="view=='mbti-view'" ng-bind-html="getMbtiDescription()"></div>
+        <div ng-if="view=='synergist-view'" ng-bind-html="getDescription()"></div>
+        <div ng-if="view=='kolbe-view'" ng-bind-html="getDescription()"></div>
+	</div>	
+
+</div>
