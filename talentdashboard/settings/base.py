@@ -3,6 +3,7 @@ import os.path
 import dj_database_url
 import raven
 
+SITE_ID=1
 SECRET_KEY = os.environ['SECRET_KEY']
 TEMPLATE_DEBUG = DEBUG = os.environ.get("DEBUG", False)
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
@@ -167,8 +168,8 @@ TENANT_APPS = (
     'django.contrib.auth',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'django.contrib.sites',
     'django.contrib.admin',
-    #'django.contrib.sites',
     'django_extensions',
     'talentdashboard',
     'rest_framework',
