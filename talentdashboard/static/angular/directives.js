@@ -503,12 +503,7 @@ angular.module('tdb.directives', [])
                 // header
                 if (row == 0) {
                     if (dataColHeaders.length) {
-                        if (!columns[col].unknown) {
-                            td.style.backgroundColor = '#cec';
-                        }
-                        else {
-                            td.style.backgroundColor = '#ff4c42';
-                        }
+                        td.style.backgroundColor = columns[col].unknown ? '#ff4c42' : '#cec'
                     }
                 }
             }
@@ -522,7 +517,7 @@ angular.module('tdb.directives', [])
             //     {data: "Manager", renderer:validManager},
             //     {data: "Salary", renderer: "html"}
             // ];
-            var columns = [];
+            var columns = [], desiredColHeaders = [], dataColHeaders;
             scope.resetTable = function() {
                 columns = [
                     {data: "First name", renderer: customRenderer},
@@ -534,12 +529,11 @@ angular.module('tdb.directives', [])
                     {data: "Team Leader", renderer: customRenderer},
                     {data: "Salary", renderer: customRenderer}
                 ];
+                desiredColHeaders = columns.map(function (c) {
+                    c.unknown = false;
+                    return c.data;
+                });
             }
-            var desiredColHeaders = columns.map(function (c) {
-                c.unknown = false;
-                return c.data;
-            });
-            var dataColHeaders;
             scope.renderTable = function(){
                 if (scope.data.length > 0) {
                     var el = element[0];
@@ -569,6 +563,7 @@ angular.module('tdb.directives', [])
                             // mark as unknown column
                             var newCol = {data: key, renderer: customRenderer, unknown: true};
                             columns.push(newCol);
+                            console.log(newCol);
                         }
                     }
 
