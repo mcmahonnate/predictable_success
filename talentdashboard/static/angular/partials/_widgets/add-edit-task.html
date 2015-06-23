@@ -5,8 +5,8 @@
                 <span ng-show="!taskIsBeingEdited()">Add New</span>
                 <span ng-show="taskIsBeingEdited()">Edit</span>
                 Task</h3>
-            <div class="form-group" ng-class="{'has-error': submitted && taskForm.description.$invalid}">
-                <p ng-show="submitted && taskForm.description.$invalid" class="help-block">You must enter a task description</p>
+            <div class="form-group" ng-class="{'has-error': taskForm.$submitted && taskForm.description.$invalid}">
+                <p ng-show="taskForm.$submitted && taskForm.description.$invalid" class="help-block">You must enter a task description</p>
                 <textarea required placeholder="Enter task here..." class="form-control" name="description" ng-model="task.description" style="min-height:80px;margin-bottom:20px"></textarea>
             </div>
             <div class="row">
