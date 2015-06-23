@@ -15,7 +15,6 @@ angular.module('tdb.controllers.tasks', [])
         };
 
         $scope.save = function (form) {
-            $scope.submitted = true;
             if(form.$invalid) return;
 
             if($scope.taskIsBeingEdited()) {
