@@ -605,7 +605,23 @@ angular.module('tdb.directives', [])
 
                 return json;
             };
+            var processData = function(data, filename) {
+                var ext = filename.split('.').pop().toLowerCase();
+                console.log(ext);
+                var handler = XLSX;
 
+                if (ext == "csv") {
+                    return CSVToJSON(data);
+                }
+
+                var workbook = XLSX.read(data, {type: 'binary'});
+                var first_sheet = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[first_sheet];
+                var json = XLSX.utils.sheet_to_json(worksheet);
+
+                console.log(json);
+                return json;
+            }
 
             var el = element[0];
             el.addEventListener(
@@ -653,7 +669,8 @@ angular.module('tdb.directives', [])
 
                         reader.onload = function (e) {
                             var raw_data = e.target.result;
-                            scope.data = CSVToJSON(raw_data);
+                            // scope.data = CSVToJSON(raw_data);
+                            scope.data = processData(raw_data, name);
                             scope.$apply();
                         };
                         reader.readAsBinaryString(f);
