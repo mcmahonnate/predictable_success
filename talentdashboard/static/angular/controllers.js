@@ -634,8 +634,26 @@ angular.module('tdb.controllers', [])
 
 }])
 
-.controller('CompanyOverviewCtrl', ['$rootScope', '$scope', '$location', '$routeParams', 'KPIIndicator', 'KPIPerformance', 'analytics', 'TalentReport', function($rootScope, $scope, $location, $routeParams, KPIIndicator, KPIPerformance, analytics, TalentReport) {
+.controller('CompanyOverviewCtrl', ['$rootScope', '$scope', '$location', '$routeParams', 'KPIIndicator', 'KPIPerformance', 'analytics', 'TalentReport', 'User', function($rootScope, $scope, $location, $routeParams, KPIIndicator, KPIPerformance, analytics, TalentReport, User) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
+
+    var defaultTemplate = "/static/angular/partials/company-overview.html";
+
+    User.get(function(data) {
+        if(data.preferences) {
+            switch(data.preferences.dashboard_view){
+                case 2:
+                    $scope.templateUrl = "/static/angular/partials/stats-focused-dashboard.html";
+                    break;
+                default:
+                    $scope.templateUrl = defaultTemplate;
+                    break;
+            }
+
+        } else {
+            $scope.templateUrl = defaultTemplate;
+        }
+    });
     KPIIndicator.get(function(data) {
             $scope.indicator = data;
        }
