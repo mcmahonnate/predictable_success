@@ -497,6 +497,17 @@ angular.module('tdb.directives', [])
                     td.style.background = '#ff4c42';
                 }
             }
+            var customRenderer = function(instance, td, row, col, prop, value, cellProperties) {
+                Handsontable.renderers.TextRenderer.apply(this, arguments);
+                // if (dataColHeaders.length) {
+                //     if (desiredColHeaders.indexOf(dataColHeaders[col]) > -1) {
+                //         // td.style.backgroundColor = '#cec';
+                //     }
+                //     else {
+                //         // td.style.backgroundColor = '#ff4c42';
+                //     }
+                // }
+            }
             // var columns = [
             //     {data: "First name", renderer: "html"},
             //     {data: "Last name", renderer: "html"},
@@ -508,36 +519,62 @@ angular.module('tdb.directives', [])
             //     {data: "Salary", renderer: "html"}
             // ];
             var columns = [
-                {data: "First name", renderer: "html"},
-                {data: "Last name", renderer: "html"},
-                {data: "Email", renderer: "html"},
-                {data: "Hire Date", renderer: "html"},
-                {data: "Job Title", renderer: "html"},
-                {data: "Team Name", renderer: "html"},
-                {data: "Team Leader", renderer: "html"},
-                {data: "Salary", renderer: "html"}
+                {data: "First name", renderer: customRenderer},
+                {data: "Last name", renderer: customRenderer},
+                {data: "Email", renderer: customRenderer},
+                {data: "Hire Date", renderer: customRenderer},
+                {data: "Job Title", renderer: customRenderer},
+                {data: "Team Name", renderer: customRenderer},
+                {data: "Team Leader", renderer: customRenderer},
+                {data: "Salary", renderer: customRenderer}
             ];
-            var renderTable = function(){
+            var dataColHeaders;
+            var desiredColHeaders;
+            scope.renderTable = function(){
                 if (scope.data.length > 0) {
-                    scope.importData = angular.copy(scope.data)
-                    // var colHeaders = ["First name", "Last name", "Email", "Hire Date", "Job Title", "Department", "Manager", "Salary"]
-                    var colHeaders = columns.map(function (c) {
-                        return c.data;
-                    });
-
                     var el = element[0];
+
+                    // destroy existing table
                     if (scope.hot) {
                         if (scope.hot.rootElement) {
                             console.log(scope.hot);
+                            //update new table with edits
+                            // scope.importData = angular.copy(scope.hot.getData());
+                            scope.importData = angular.copy(scope.data);
                             scope.hot.destroy();
+                        }
+                    }
+                    else {
+                        scope.importData = angular.copy(scope.data);
+                    }
+                    console.log(scope.importData);
+
+                    // column check
+                    // var colHeaders = ["First name", "Last name", "Email", "Hire Date", "Job Title", "Department", "Manager", "Salary"]
+                    desiredColHeaders = columns.map(function (c) {
+                        return c.data;
+                    });
+                    var first = scope.importData[0];
+                    dataColHeaders = Object.keys(first);
+                    for (var key in first) {
+                        if (desiredColHeaders.indexOf(key) == -1){
+                            // mark as unknown column
+                            var newCol = {data: key, renderer: customRenderer, unknown: true};
+                            columns.push(newCol);
                         }
                     }
 
                     scope.hot = new Handsontable(el, {
                         data: scope.importData,
-                        // colHeaders: colHeaders,
+                        // colHeaders: dataColHeaders,
                         columns: columns,
                         contextMenu: true
+                    });
+
+                    // persist any changes
+                    scope.hot.addHook('afterChange', function (changes, source) {
+                        console.log("changed");
+                        scope.importData = angular.copy(scope.hot.getData());
                     });
                 }
             }
@@ -547,7 +584,8 @@ angular.module('tdb.directives', [])
             }
             scope.$watch("data", function (newValue) {
                 if (newValue) {
-                    renderTable();
+                    console.log("render and validate");
+                    scope.renderTable();
                     validateTable();
                 }
             })
@@ -555,7 +593,7 @@ angular.module('tdb.directives', [])
                 if (newValue) {
                     columns[6].type = "autocomplete";
                     columns[6].source = scope.employee_autocomplete_values;
-                    renderTable();
+                    scope.renderTable();
                 }
             })
 
@@ -624,6 +662,14 @@ angular.module('tdb.directives', [])
 
                 return json;
             };
+            var addFirstRow = function(json) {
+                // make headers first row
+                var firstrow = [{}];
+                for (var key in json[0]) {
+                    firstrow[0][key] = key;
+                }
+                return firstrow.concat(json);
+            }
             var processData = function(data, filename) {
                 var ext = filename.split('.').pop().toLowerCase();
                 console.log(ext);
@@ -639,7 +685,8 @@ angular.module('tdb.directives', [])
                 var json = XLSX.utils.sheet_to_json(worksheet);
 
                 console.log(json);
-                return json;
+                return addFirstRow(json);
+                // return json;
             }
 
             var el = element[0];
