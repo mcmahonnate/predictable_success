@@ -39,20 +39,14 @@ angular.module('tdb.controllers.tasks', [])
         }
     }])
 
-    .controller('TaskListCtrl', ['$scope', '$modal', 'Task', function ($scope, $modal, Task) {
+    .controller('TaskListCtrl', ['$scope', '$attrs', '$modal', 'Task', function ($scope, $attrs, $modal, Task) {
         var employee_id = $scope.employee ? $scope.employee.id : null;
+        $scope.view = $attrs.view;
+        $scope.filter = $attrs.filter;
+        $scope.pageSize = $attrs.pageSize;
         $scope.canAddNew = false;
         $scope.todos = [];
         $scope.done = [];
-
-        $scope.init = function(filter, view, page_size) {
-            $scope.view = view;
-            $scope.filter = filter;
-            $scope.page_size = page_size;
-
-            $scope.loadTasks(false); //load todos
-            $scope.loadTasks(true); //load done todos
-        };
 
         $scope.loadTasks = function(completed) {
             $scope.busy = true;
@@ -147,8 +141,9 @@ angular.module('tdb.controllers.tasks', [])
         };
 
         $scope.deleteTask = function (task) {
-            task.$delete();
-            removeItemFromList($scope.todos, task);
+            Task.delete(task, function() {
+                removeItemFromList($scope.todos, task);
+            });
         };
 
         $scope.toggleCompleted = function (task) {
@@ -164,5 +159,9 @@ angular.module('tdb.controllers.tasks', [])
             var index = list.indexOf(currentItem);
             list.splice(index, 1);
             list.splice(index, 0, newItem);
-        }
+        };
+
+        $scope.loadTasks(false); //load todos
+        $scope.loadTasks(true); //load done todos
+
     }]);
