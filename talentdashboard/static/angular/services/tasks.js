@@ -62,6 +62,10 @@ angular.module('tdb.services.tasks', ['ngResource'])
                 transformRequest: [
                     forCreating,
                     angular.toJson
+                ],
+                transformResponse: [
+                    angular.fromJson,
+                    fromServer
                 ]
             },
             'update': {
@@ -69,6 +73,10 @@ angular.module('tdb.services.tasks', ['ngResource'])
                 transformRequest: [
                     forEditing,
                     angular.toJson
+                ],
+                transformResponse: [
+                    angular.fromJson,
+                    fromServer
                 ]
             }
         };
