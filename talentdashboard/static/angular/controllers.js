@@ -654,26 +654,16 @@ angular.module('tdb.controllers', [])
 
 }])
 
-.controller('CompanyOverviewCtrl', ['$rootScope', '$scope', '$location', '$routeParams', 'KPIIndicator', 'KPIPerformance', 'analytics', 'TalentReport', 'User', function($rootScope, $scope, $location, $routeParams, KPIIndicator, KPIPerformance, analytics, TalentReport, User) {
+.controller('CompanyOverviewCtrl', ['$rootScope', '$scope', '$location', '$routeParams', 'KPIIndicator', 'KPIPerformance', 'analytics', 'TalentReport', 'TemplatePreferences', function($rootScope, $scope, $location, $routeParams, KPIIndicator, KPIPerformance, analytics, TalentReport, TemplatePreferences) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
 
-    var defaultTemplate = "/static/angular/partials/company-overview.html";
-
-    User.get(function(data) {
-        if(data.preferences) {
-            switch(data.preferences.dashboard_view){
-                case 2:
-                    $scope.templateUrl = "/static/angular/partials/stats-focused-dashboard.html";
-                    break;
-                default:
-                    $scope.templateUrl = defaultTemplate;
-                    break;
+    TemplatePreferences.getPreferredTemplate('company-overview')
+        .then(
+            function(template) {
+                $scope.templateUrl = template;
             }
+        );
 
-        } else {
-            $scope.templateUrl = defaultTemplate;
-        }
-    });
     KPIIndicator.get(function(data) {
             $scope.indicator = data;
        }
@@ -736,8 +726,15 @@ angular.module('tdb.controllers', [])
     }
 }])
 
-.controller('LeaderOverviewCtrl', ['$scope', '$location', '$routeParams', 'TalentReport', 'TeamLeadEmployees', 'User', 'analytics', function($scope, $location, $routeParams, TalentReport, TeamLeadEmployees, User, analytics) {
+.controller('LeaderOverviewCtrl', ['$scope', '$location', '$routeParams', 'TalentReport', 'TeamLeadEmployees', 'User', 'analytics', 'TemplatePreferences', function($scope, $location, $routeParams, TalentReport, TeamLeadEmployees, User, analytics, TemplatePreferences) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
+
+    TemplatePreferences.getPreferredTemplate('team-lead-overview')
+        .then(
+            function(template) {
+                $scope.templateUrl = template;
+            }
+        );
 
     $scope.talentReport = TalentReport.myTeam();
 
@@ -749,8 +746,15 @@ angular.module('tdb.controllers', [])
     );
 }])
 
-.controller('TeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'Team', 'TeamMembers', 'TeamMBTI', 'Customers', 'TeamLeads', 'analytics', 'TalentReport', function($scope, $location, $routeParams, Team, TeamMembers, TeamMBTI, Customers, TeamLeads, analytics, TalentReport) {
+.controller('TeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'Team', 'TeamMembers', 'TeamMBTI', 'Customers', 'TeamLeads', 'analytics', 'TalentReport', 'TemplatePreferences', function($scope, $location, $routeParams, Team, TeamMembers, TeamMBTI, Customers, TeamLeads, analytics, TalentReport, TemplatePreferences) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
+
+    TemplatePreferences.getPreferredTemplate('team-overview')
+        .then(
+            function(template) {
+                $scope.templateUrl = template;
+            }
+        );
 
     Customers.get(function (data) {
         $scope.customer = data;
