@@ -480,6 +480,68 @@ angular.module('tdb.directives', [])
     };
 }])
 
+.directive('importTable', function() {
+    return {
+        restrict: 'E',
+        transclude: true,
+        template: '<div> <table class="table"> </table> </div>',
+        replace: true,
+        link: function (scope, element, attrs) {
+            scope.table;
+            var headerOptions = ["First name", "Last name", "Email", "Hire Date", "Job Title", "Salary", "Team Leader", "Team Name"];
+
+            // make dropdowns
+            var genDropdown = function() {
+                var res = "<select>";  
+                res += '<option selected="selected"> </option>'
+                headerOptions.map(function (h) {
+                    res += '<option>';
+                    res += h;
+                    res += '</option>'
+                })
+                return res + "</select";
+            }
+
+            // update data to import based on selected headers
+            scope.getData = function() {
+
+            }
+
+            // render
+            scope.renderTable = function() {
+                scope.table = $('.table:first');
+                scope.importData = angular.copy(scope.data);
+
+                var tableHTML = "";
+                var cellHTML = "<td> CONTENT </td>";
+                var cols = Object.keys(scope.importData[0]);
+
+                tableHTML += "<tr>";
+                for (var i = 0; i < cols.length; i++)
+                    tableHTML += "<td>" + genDropdown() + "</td>";
+                tableHTML += "</tr>";
+
+                scope.importData.map(function (obj) {
+                    tableHTML += "<tr>";
+                    cols.map(function (key) {
+                        tableHTML += cellHTML.replace('CONTENT', obj[key]);
+                    });
+                    tableHTML += "</tr>";
+                });
+
+                scope.table.html(tableHTML);
+            }
+
+            // new file
+            scope.$watch("data", function (newValue) {
+                if (newValue) {
+                    scope.renderTable();
+                }
+            })
+        }
+    };
+})
+
 .directive('handsOnTable', function() {
     return {
         restrict: 'E',
@@ -660,8 +722,8 @@ angular.module('tdb.directives', [])
                 json = json.replace(/},/g, "},\r\n");
                 json = JSON.parse(json);
 
-                return addFirstRow(json);
-                // return json;
+                // return addFirstRow(json);
+                return json;
             };
             var addFirstRow = function(json) {
                 // make headers first row
@@ -686,8 +748,8 @@ angular.module('tdb.directives', [])
                 var json = XLSX.utils.sheet_to_json(worksheet);
 
                 console.log(json);
-                return addFirstRow(json);
-                // return json;
+                // return addFirstRow(json);
+                return json;
             }
 
             var el = element[0];
@@ -737,7 +799,7 @@ angular.module('tdb.directives', [])
                         reader.onload = function (e) {
                             var raw_data = e.target.result;
                             // scope.data = CSVToJSON(raw_data);
-                            scope.resetTable();
+                            // scope.resetTable();
                             scope.data = processData(raw_data, name);
                             scope.$apply();
                         };
