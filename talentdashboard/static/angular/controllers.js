@@ -498,8 +498,7 @@ angular.module('tdb.controllers', [])
 
                 $scope.importing = false;
                 $scope.data = angular.copy($scope.importData);
-                $scope.renderTable();
-
+                // $scope.renderTable();
             },function(){
                 $scope.isSurveySending=false;
                 Notification.error("There was an error importing your data.");

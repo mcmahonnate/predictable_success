@@ -502,10 +502,8 @@ angular.module('tdb.directives', [])
 
                 // header
                 if (row == 0) {
-                    if (dataColHeaders.length) {
-                        td.style.backgroundColor = scope.isValidHeader(columns[col].data) ? '#cec' : '#ff4c42'
-                        // td.style.backgroundColor = columns[col].unknown ? '#ff4c42' : '#cec'
-                    }
+                    td.style.backgroundColor = scope.isValidHeader(columns[col].data) ? '#cec' : '#ff4c42'
+                    // td.style.backgroundColor = columns[col].unknown ? '#ff4c42' : '#cec'
                 }
             }
             // var columns = [
@@ -518,7 +516,7 @@ angular.module('tdb.directives', [])
             //     {data: "Manager", renderer:validManager},
             //     {data: "Salary", renderer: "html"}
             // ];
-            var columns = [], desiredColHeaders = [], dataColHeaders;
+            var columns = [], desiredColHeaders = [], unknownHeaders = [];
             scope.resetTable = function() {
                 columns = [
                     {data: "First name", renderer: customRenderer},
@@ -534,6 +532,7 @@ angular.module('tdb.directives', [])
                     c.unknown = false;
                     return c.data;
                 });
+                unknownHeaders = [];
             }
             scope.isValidHeader = function(header) {
                 for (var i = 0; i < desiredColHeaders.length; i++) {
@@ -556,12 +555,12 @@ angular.module('tdb.directives', [])
                     scope.importData = angular.copy(scope.data);
 
                     var first = scope.importData[0];
-                    dataColHeaders = Object.keys(first);
+                    // unknownHeaders = Object.keys(first);
                     for (var key in first) {
-                        // if (desiredColHeaders.indexOf(key) == -1){
-                        if (!scope.isValidHeader(key)){
-                            // mark as unknown column
+                        // if an invalid column that has not already been added
+                        if (!scope.isValidHeader(key) && unknownHeaders.indexOf(key) == -1){
                             var newCol = {data: key, renderer: customRenderer, unknown: true};
+                            unknownHeaders.push(key);
                             columns.push(newCol);
                             console.log(newCol);
                         }
