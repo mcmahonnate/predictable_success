@@ -90,16 +90,6 @@ angular.module('tdb.controllers.tasks', [])
         $scope.done_page = 0;
         $scope.todo_page = 0;
 
-        $scope.tabs = {
-            todoTab: 'todo',
-            doneTab: 'done',
-            activeTab: 'todo'
-        };
-
-        $scope.setActiveTab = function (tab) {
-            $scope.tabs.activeTab = tab;
-        };
-
         $scope.newTask = function () {
             if (!$scope.canAddNew) return;
             var modalInstance = $modal.open({
@@ -116,7 +106,6 @@ angular.module('tdb.controllers.tasks', [])
             modalInstance.result.then(
                 function (newTask) {
                     $scope.todos.push(newTask);
-                    $scope.setActiveTab($scope.tabs.todoTab);
                 }
             );
         };
