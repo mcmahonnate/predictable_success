@@ -11,6 +11,8 @@ from feedback.models import FeedbackRequest, FeedbackSubmission
 from customers.models import Customer
 from django.contrib.auth.models import User
 from django.utils.log import getLogger
+from preferences.models import UserPreferences
+
 
 logger = getLogger('talentdashboard')
 
@@ -274,6 +276,12 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'full_name', 'first_name', 'last_name', 'email', 'avatar', 'avatar_small', 'job_title', 'hire_date', 'leader_id', 'happiness', 'happiness_date', 'coach', 'kolbe_fact_finder','kolbe_follow_thru', 'kolbe_quick_start', 'kolbe_implementor', 'vops_visionary', 'vops_operator', 'vops_processor', 'vops_synergist', 'departure_date', 'team', 'display', 'current_salary', 'current_bonus', 'talent_category')
 
 
+class UserPreferencesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserPreferences
+        fields = ('dashboard_view',)
+
+
 class UserSerializer(serializers.ModelSerializer):
     employee = MinimalEmployeeSerializer()
     can_edit_employees = serializers.SerializerMethodField()
@@ -282,6 +290,7 @@ class UserSerializer(serializers.ModelSerializer):
     can_evaluate_employees = serializers.SerializerMethodField()
     can_view_company_dashboard = serializers.SerializerMethodField()
     is_team_lead = serializers.SerializerMethodField()
+    preferences = UserPreferencesSerializer()
 
     def get_can_edit_employees(self, obj):
         if obj.groups.filter(name='Edit Employee').exists() | obj.is_superuser:
@@ -314,7 +323,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'can_edit_employees', 'can_view_comments', 'can_coach_employees', 'can_evaluate_employees', 'can_view_company_dashboard', 'is_team_lead', 'employee', 'last_login')
+        fields = ('id', 'username', 'first_name', 'last_name', 'can_edit_employees', 'can_view_comments', 'can_coach_employees', 'can_evaluate_employees', 'can_view_company_dashboard', 'is_team_lead', 'employee', 'last_login', 'preferences')
 
 
 class KPIIndicatorSerializer(serializers.ModelSerializer):

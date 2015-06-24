@@ -25,7 +25,8 @@ angular.module('tdb.controllers', [])
       return input;
     };
     $rootScope.scrubDate = function (input, display) {
-        date = new Date(input);
+        var date = new Date(input);
+        if (isNaN(date)) { return null};
         var day = date.getDate();
         var month = date.getMonth() + 1; //Months are zero based
         var year = date.getFullYear();
@@ -333,7 +334,7 @@ angular.module('tdb.controllers', [])
     }
 }])
 
-.controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', '$sce', 'User', 'Employee', 'Team', 'Engagement', 'SendEngagementSurvey', 'EmployeeLeader', 'Attribute', 'CompSummary', '$http', 'Customers', 'analytics', 'fileReader','Assessment','EmployeeMBTI', 'Notification', function($rootScope, $scope, $location, $routeParams, $window, $sce, User, Employee, Team, Engagement, SendEngagementSurvey, EmployeeLeader, Attribute, CompSummary, $http, Customers, analytics, fileReader, Assessment, EmployeeMBTI, Notification) {
+.controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', '$modal', 'User', 'Employee', 'Team', 'Engagement', 'SendEngagementSurvey', 'EmployeeLeader', 'Attribute', '$http', 'Customers', 'analytics','EmployeeMBTI', 'Notification', function($rootScope, $scope, $location, $routeParams, $window, $modal, User, Employee, Team, Engagement, SendEngagementSurvey, EmployeeLeader, Attribute, $http, Customers, analytics, EmployeeMBTI, Notification) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     Customers.get(function (data) {
         $scope.customer = data;
@@ -344,9 +345,7 @@ angular.module('tdb.controllers', [])
         }
     },true);
 
-
     $scope.dynamicTooltipText = "LOGOUT";
-
 
     $scope.modalEmployeeShown = false;
     $scope.toggleEmployeeModal = function() {
@@ -360,87 +359,13 @@ angular.module('tdb.controllers', [])
     $scope.toggleSurveyModal = function() {
         $scope.modalSurveyShown = !$scope.modalSurveyShown;
     };
-    $scope.has_vops = false;
-    $scope.has_kolbe = false;
-    $scope.has_myers_briggs = false;
-    $scope.show_bio = false;
-    $scope.show_discussions = true;
-    $scope.show_vops = false;
-    $scope.show_kolbe = false;
-    $scope.show_myers_briggs = false;
-    $scope.show_todos = false;
-    $scope.show_engagement = false;
-    $scope.click_discussions= function() {
-        $scope.show_bio = false;
-        $scope.show_discussions = true;
-        $scope.show_vops = false;
-        $scope.show_kolbe = false;
-        $scope.show_myers_briggs = false;
-        $scope.show_todos = false;
-        $scope.show_engagement = false;
-    };
-    $scope.click_bio= function() {
-        $scope.show_bio = true;
-        $scope.show_discussions = false;
-        $scope.show_vops = false;
-        $scope.show_kolbe = false;
-        $scope.show_myers_briggs = false;
-        $scope.show_todos = false;
-        $scope.show_engagement = false;
-    };
-    $scope.click_todos= function() {
-        $scope.show_bio = false;
-        $scope.show_discussions = false;
-        $scope.show_vops = false;
-        $scope.show_kolbe = false;
-        $scope.show_myers_briggs = false;
-        $scope.show_todos = true;
-        $scope.show_engagement = false;
-    };
-    $scope.click_vops= function() {
-        $scope.show_bio = false;
-        $scope.show_discussions = false;
-        $scope.show_vops = true;
-        $scope.show_kolbe = false;
-        $scope.show_myers_briggs = false;
-        $scope.show_todos = false;
-        $scope.show_engagement = false;
-    };
-    $scope.click_engagement= function() {
-        $scope.show_bio = false;
-        $scope.show_discussions = false;
-        $scope.show_vops = false;
-        $scope.show_kolbe = false;
-        $scope.show_myers_briggs = false;
-        $scope.show_todos = false;
-        $scope.show_engagement = true;
-    };
-    $scope.click_kolbe= function() {
-        $scope.show_bio = false;
-        $scope.show_discussions = false;
-        $scope.show_vops = false;
-        $scope.show_kolbe = true;
-        $scope.show_myers_briggs = false;
-        $scope.show_todos = false;
-        $scope.show_engagement = false;
-
-    };
-    $scope.click_myers_briggs= function() {
-        $scope.show_bio = false;
-        $scope.show_discussions = false;
-        $scope.show_vops = false;
-        $scope.show_kolbe = false;
-        $scope.show_myers_briggs = true;
-        $scope.show_todos = false;
-        $scope.show_engagement = false;
-    };
     $scope.leadership=[];
     Team.query(function(data) {
         $scope.teams = data;
     });
-    if (!$scope.employees && $rootScope.currentUser.can_view_company_dashboard) {
-        $scope.employees = Employee.query();
-    }
+    if (!$scope.employees && $rootScope.currentUser && $rootScope.currentUser.can_view_company_dashboard) {
+         $scope.employees = Employee.query();
+     }
     Employee.get(
         {id: $routeParams.id},
         function(data) {
@@ -481,16 +406,6 @@ angular.module('tdb.controllers', [])
     };
 
     $scope.clicked_happy;
-    Assessment.query(
-        {id:$routeParams.id},
-        function(data) {
-            $scope.assessments = data;
-            if ($scope.assessments[0]){
-                $scope.has_vops = true;
-                $scope.has_kolbe = true;
-            }
-        }
-    )
 
     EmployeeMBTI.get(
         {id: $routeParams.id},
@@ -500,14 +415,7 @@ angular.module('tdb.controllers', [])
                 $scope.has_mbti = true;
             }
         }
-    )
-    $scope.getUnsantizedHTML = function() {
-        if ($scope.mbti) {
-            return $sce.trustAsHtml($scope.mbti.description);
-        } else {
-            return null;
-        }
-    };
+    );
 
     $scope.selected=0;
     $scope.set_choice = function(value) {
@@ -516,108 +424,62 @@ angular.module('tdb.controllers', [])
     $scope.is_selected = function(value) {
         return $scope.selected==value;
     };
-    $scope.disable_save_engagement = function() {
-        return $scope.selected==0;
-    };
-    $scope.editEngagement=false;
-    $scope.currentHappy=null;
-    $scope.open_edit_engagement = function(happy) {
-        $scope.editEngagement=true;
-        $scope.selected=happy.assessment;
-        $scope.currentHappy=happy;
-    }
-    $scope.save_engagement = function() {
-        var data = {id: $scope.employee.id, _assessment: $scope.selected, _assessed_by_id: $rootScope.currentUser.employee.id};
-        Engagement.addNew(data, function() {
-            var happy = [];
-            happy.assessment = $scope.selected;
-            happy.assessed_date = Date.now();
-            $scope.happys.unshift(happy);
-            $scope.selected=0;
-        });
-    };
-    $scope.update_engagement = function() {
-        if ($scope.currentHappy) {
-            var data = {id: $scope.employee.id, _assessment_id: $scope.currentHappy.id, _assessment: $scope.selected, _assessed_by_id: $rootScope.currentUser.employee.id};
-            Engagement.update(data, function() {
-                var index = $scope.happys.indexOf($scope.currentHappy);
-                $scope.happys[index].assessment = $scope.selected;
-            });
-        }
-    };
-    $scope.delete_happy = function(happy, parentScope) {
-        if ($window.confirm('Are you sure you want to delete this engagement?')) {
-            var data = {id: happy.id };
-            var index = $scope.happys.indexOf(happy);
-            var deleteSuccess = function() {
-                $scope.happys.splice(index, 1);
-                parentScope.happyIndex=0;
-            };
 
-            Engagement.remove(data, function() {
-                deleteSuccess();
-            });
-        }
-    };
-    $scope.cancel_engagement = function() {
-        $scope.selected=0;
-        $scope.currentHappy=null;
-        $scope.editEngagement=false;
-    };
-
-    $scope.model = {
-        name: "",
-        comments: ""
-    };
-
-    $scope.scrollIntoView = false;
-    $scope.popup = [];
-    $scope.popup.top = 0;
-    $scope.popup.left = 0;
     $scope.super_powers = Attribute.getAttributtesForEmployee($routeParams.id, 2);
     $scope.skills = Attribute.getAttributtesForEmployee($routeParams.id, 3);
     $scope.employeeEdit = false;
 
-    $scope.today = function() {
-        $scope.dt = new Date();
+    $scope.showAttributes = function (view, category) {
+        var modalInstance = $modal.open({
+            animation: true,
+            templateUrl: '/static/angular/partials/_modals/show-attributes.html',
+            controller: 'ShowAttributesCtrl',
+            resolve: {
+                category: function () {
+                    return category
+                },
+                view: function () {
+                    return view
+                },
+                mbti: function () {
+                    return $scope.mbti
+                }
+            }
+        });
     };
-
-    $scope.showWeeks = false;
-    $scope.toggleWeeks = function () {
-        $scope.showWeeks = ! $scope.showWeeks;
-    };
-
-    $scope.clear = function () {
-        $scope.dt = null;
-    };
-
-    // Disable weekend selection
-    $scope.disabled = function(date, mode) {
-        return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-    };
-
-    $scope.toggleMin = function() {
-        $scope.minDate = ( $scope.minDate ) ? null : new Date();
-    };
-    $scope.toggleMin();
-
-    $scope.open = function($event) {
-        if (!$scope.opened) {
-            $event.preventDefault();
-            $event.stopPropagation();
-            $scope.opened = true;
-        } else {
-            $scope.opened = false;
-        }
-    };
-
-    $scope.dateOptions = {
-        'year-format': "'yy'",
-        'starting-day': 1
-    };
-
     $scope.formats = ['yyyy-mm-dd', 'mm/dd/yyyy', 'shortDate'];
     $scope.format = $scope.formats[0];
+}])
+
+.controller('ShowAttributesCtrl', ['$scope', '$routeParams', '$modalInstance', '$sce', 'Assessment', 'view', 'category', 'mbti', function($scope, $routeParams, $modalInstance, $sce, Assessment, view, category, mbti) {
+    $scope.view = view;
+    $scope.category = category;
+    if (mbti) {
+        $scope.mbti = mbti;
+    };
+    $scope.cancel = function () {
+        $modalInstance.dismiss();
+    };
+    $scope.getMbtiDescription = function() {
+        if ($scope.mbti) {
+            return $sce.trustAsHtml($scope.mbti.description);
+        } else {
+            return null;
+        }
+    };
+    Assessment.query(
+        {id:$routeParams.id, category:$scope.category},
+        function(data) {
+            $scope.assessments = data;
+            if ($scope.assessments){
+                $scope.name = $scope.assessments[0].name
+                $scope.description = $scope.assessments[0].description
+            }
+        }
+    );
+    $scope.getDescription = function() {
+        return $sce.trustAsHtml($scope.description);
+    };
 }])
 
 .controller('UploadDataCtrl', ['$scope', 'ImportData','Notification','EmployeeNames', function($scope, ImportData, Notification, EmployeeNames) {
@@ -674,63 +536,39 @@ angular.module('tdb.controllers', [])
     }
 }])
 
-.controller('ReportsCtrl', ['$scope', '$location', '$routeParams', 'PvpEvaluation', 'analytics', function($scope, $location, $routeParams, PvpEvaluation, analytics) {
+.controller('ReportsCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'EmployeeSearch', 'TalentCategories', 'analytics', function($scope, $rootScope, $location, $routeParams, EmployeeSearch, TalentCategories, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
-
-    PvpEvaluation.query({current_round: true}).$promise.then(function(response) {
+    $scope.busy = true;
+    EmployeeSearch.query().$promise.then(function(response) {
             $scope.evaluations = response;
-
             var i = 0;
             angular.forEach($scope.evaluations, function (evaluation) {
                 evaluation.index = i;
                 i = i + 1;
             })
             $scope.evaluations_sort = angular.copy($scope.evaluations)
-
             $scope.csv = []
             buildCSV();
-        }
-    );
-    var talentToString = function(talent){
-        switch (talent) {
-            case 1:
-                return 'Top';
-                break;
-            case 2:
-                return 'Strong';
-                break;
-            case 3:
-                return 'Good';
-                break;
-            case 4:
-                return 'Low Potential';
-                break;
-            case 5:
-                return 'Low Performing';
-                break;
-            case 6:
-                return 'Poor';
-                break;
-        }
-    };
+            $scope.busy = false;
+    });
     var happyToString = function(happy){
         switch (happy) {
-            case 1:
+            case '1':
                 return 'Very Unhappy';
                 break;
-            case 2:
+            case '2':
                 return 'Unhappy';
                 break;
-            case 3:
+            case '3':
                 return 'Indifferent';
                 break;
-            case 4:
+            case '4':
                 return 'Happy';
                 break;
-            case 5:
+            case '5':
                 return 'Very Happy';
                 break;
-            case -1:
+            case '0':
                 return 'No Data';
                 break;
         }
@@ -768,9 +606,9 @@ angular.module('tdb.controllers', [])
         angular.forEach($scope.evaluations_sort, function(employee) {
             var row = {};
             row.name = employee.full_name;
-            row.talent = talentToString(employee.current_setHappyFiltergory);
+            row.talent = TalentCategories.getLabelByTalentCategory(employee.talent_category);
             row.happy = happyToString(employee.happiness);
-            row.date = employee.happiness_date;
+            row.date = $rootScope.scrubDate(employee.happiness_date);
             $scope.csv.push(row);
         });
     }
@@ -780,8 +618,9 @@ angular.module('tdb.controllers', [])
         return ((aValue < bValue) ? -1 : ((aValue > bValue) ? 1 : 0));
     }
     var orderByTalent= function(a,b){
-        var aValue = a.current_talent_category;
-        var bValue = b.current_talent_category;
+        var noDataValue=8;
+        var aValue = (a.talent_category===0) ? noDataValue : a.talent_category;
+        var bValue = (b.talent_category===0) ? noDataValue : b.talent_category;
         var aName = a.full_name;
         var bName = b.full_name;
         if (aValue === bValue) {
@@ -815,8 +654,26 @@ angular.module('tdb.controllers', [])
 
 }])
 
-.controller('CompanyOverviewCtrl', ['$rootScope', '$scope', '$location', '$routeParams', 'KPIIndicator', 'KPIPerformance', 'analytics', 'TalentReport', function($rootScope, $scope, $location, $routeParams, KPIIndicator, KPIPerformance, analytics, TalentReport) {
+.controller('CompanyOverviewCtrl', ['$rootScope', '$scope', '$location', '$routeParams', 'KPIIndicator', 'KPIPerformance', 'analytics', 'TalentReport', 'User', function($rootScope, $scope, $location, $routeParams, KPIIndicator, KPIPerformance, analytics, TalentReport, User) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
+
+    var defaultTemplate = "/static/angular/partials/company-overview.html";
+
+    User.get(function(data) {
+        if(data.preferences) {
+            switch(data.preferences.dashboard_view){
+                case 2:
+                    $scope.templateUrl = "/static/angular/partials/stats-focused-dashboard.html";
+                    break;
+                default:
+                    $scope.templateUrl = defaultTemplate;
+                    break;
+            }
+
+        } else {
+            $scope.templateUrl = defaultTemplate;
+        }
+    });
     KPIIndicator.get(function(data) {
             $scope.indicator = data;
        }
@@ -858,6 +715,23 @@ angular.module('tdb.controllers', [])
             ToDo.remove(data, function() {
                     deleteSuccess();
                 });
+        }
+    }
+}])
+
+.controller('TasksCtrl', ['$scope', '$rootScope', '$location', '$routeParams', '$window', 'EmployeeToDo', 'ToDo', function($scope, $rootScope, $location, $routeParams, $window, EmployeeToDo, ToDo) {
+
+    $scope.deleteToDo = function(todo) {
+        if ($window.confirm('Are you sure you want to delete this To Do?')) {
+            var data = {id: todo.id};
+            var todo_index = $scope.todos.indexOf(todo);
+            var deleteSuccess = function() {
+                $scope.todos.splice(todo_index, 1);
+            };
+
+            ToDo.remove(data, function() {
+                deleteSuccess();
+            });
         }
     }
 }])

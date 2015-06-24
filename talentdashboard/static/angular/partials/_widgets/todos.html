@@ -1,92 +1,95 @@
 <div class="panel todos" ng-if="currentUser.can_view_comments">
-    <button ng-show="canAddNew" ng-click="newTask()" class="pull-right btn btn-sm btn-success">Add New Task</button>
-    <h2 class="panel-title">Tasks</h2>
-    <ul class="nav nav-tabs">
-        <li role="presentation" ng-class="{'active': tabs.activeTab == tabs.todoTab}"><a ng-click="setActiveTab(tabs.todoTab)">To Do</a></li>
-        <li role="presentation" ng-class="{'active': tabs.activeTab == tabs.doneTab}"><a ng-click="setActiveTab(tabs.doneTab)">Done</a></li>
-    </ul>
-    <div ng-show="tabs.activeTab == tabs.todoTab">
-        <div ng-show="todos.length === 0 && !busy" class="todos-empty">
-            <p ng-show="view == 'my-view'">You currently don't have any tasks. Add tasks on employee profile pages.</p>
-            <p ng-show="view == 'employee-view'">There are no tasks for {{ employee.first_name }}.</p>
-        </div>
-        <div ng-if="todos.length > 0">
-            <div class="row shaded">
-                <div class="col-md-3 col-lg-2"></div>
-                <div class="col-md-4 col-lg-5">Tasks</div>
-                <div class="col-xs-3">Assigned To</div>
-                <div class="col-xs-2">Due Date</div>
-            </div>    
-            <div class="row todo" ng-repeat="task in todos | orderBy:'-due_date'">
-                <div class="col-md-3 col-lg-2">
-                    <input class="todo-checkbox" type="checkbox" ng-click="toggleCompleted(task)" ng-model="task.completed">
-                    <a ng-href="/#/employees/{{task.employee.id}}" class="small-headshot">
-                        <img alt="{{task.employee.full_name}}" title="{{task.employee.full_name}}" ng-src="{{ task.employee.avatar_small }}" />
-                    </a>
-                </div>
-                <div class="col-md-4 col-lg-5 todo-description-container">     
-                    <div ng-class="{'todo-completed': task.completed}">
-                        <p><strong><a href="javascript:void(0);" ng-href="/#/employees/{{task.employee.id}}">{{task.employee.full_name}}</a></strong> <span class="timestamp">{{ task.created_date | fromNow }}</span></p>
-                        <p class="todo-description">{{task.description}}</p>
-                    </div>
-                </div>  
-                <div class="col-xs-3">
-                    {{task.assigned_to.full_name || "Unassigned"}}
-                </div>
-                <div class="col-xs-2 date">    
-                    {{(task.due_date | date:'MMM d') || "None"}}
 
-                    <i class="fa fa-cog show-popover pull-right"></i>
-                    <ul class="popover-items" style="display:none">
-                        <li class="popover-item">
-                            <i class="fa fa-pencil-square-o"></i> 
-                            <a ng-click="editTask(task)">Edit</a>
-                        </li>
-                        <li class="popover-item">
-                            <i class="fa fa-trash-o"></i> 
-                            <a ng-click="deleteTask(task)">Delete</a>
-                        </li>
-                    </ul>
-                </div>
+    <button ng-show="canAddNew" ng-click="newTask()" class="pull-right btn btn-sm btn-success">Add New Task</button>
+    <h2 ng-show="widget != false" class="panel-title">Tasks</h2>
+    <tabset>
+        <tab heading="To Do" active="true">
+            <div ng-show="todos.length === 0 && !busy" class="todos-empty">
+                <p ng-show="view == 'my-view'">You currently don't have any tasks. Add tasks on employee profile pages.</p>
+                <p ng-show="view == 'employee-view'">There are no tasks for {{ employee.full_name }}.</p>
             </div>
-            <button class="btn btn-link btn-sm" ng-show="todo_has_next && !busy" ng-click="loadTasks(false)">Load More Tasks</button>
-        </div>
-        <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
-    </div>
-    <div ng-show="tabs.activeTab == tabs.doneTab">
-        <div ng-show="done.length === 0 && !busy" class="todos-empty">
-            <p ng-show="view == 'my-view'">You don't have any completed tasks.</p>
-            <p ng-show="view == 'employee-view'">There are no completed tasks for {{ employee.first_name }}.</p>
-        </div>
-        <div ng-if="done.length > 0">
-            <div class="row shaded">
-                <div class="col-md-3 col-lg-2"></div>
-                <div class="col-md-4 col-lg-5">Tasks</div>
-                <div class="col-xs-3">Assigned To</div>
-                <div class="col-xs-2">Due Date</div>
-            </div>    
-            <div class="row todo" ng-repeat="task in done | orderBy:'-due_date'" ng-init="currentTask=task">
-                <div class="col-md-3 col-lg-2">
-                    <input class="todo-checkbox" type="checkbox" ng-click="toggleCompleted(task)" ng-model="task.completed">
-                    <a ng-href="/#/employees/{{task.employee.id}}" class="small-headshot">
-                        <img alt="{{task.employee.full_name}}" title="{{task.employee.full_name}}" ng-src="{{ task.employee.avatar_small }}" />
-                    </a>
+            <div ng-if="todos.length > 0">
+                <div class="row shaded">
+                    <div class="col-md-3 col-lg-2 first"></div>
+                    <div class="col-md-4 col-lg-5">Tasks</div>
+                    <div class="col-xs-3">Assigned To</div>
+                    <div class="col-xs-2">Due Date</div>
                 </div>
-                <div class="col-md-4 col-lg-5 todo-description-container">     
-                    <div ng-class="{'todo-completed': task.completed}">
-                        <p><strong><a href="javascript:void(0);" ng-href="/#/employees/{{task.employee.id}}">{{task.employee.full_name}}</a></strong> <span class="timestamp">{{ task.created_date | fromNow }}</span></p>
-                        <p class="todo-description">{{task.description}}</p>
+                <div class="row todo" ng-repeat="task in todos | orderBy:'-created_date'">
+                    <div class="col-xs-3 col-lg-2 first">
+                        <input class="todo-checkbox" type="checkbox" ng-click="toggleCompleted(task)" ng-model="task.completed">
+                        <a ng-href="/#/employees/{{task.employee.id}}" class="small-headshot">
+                            <img alt="{{task.employee.full_name}}" title="{{task.employee.full_name}}" ng-src="{{ task.employee.avatar_small }}" />
+                        </a>
+                    </div>
+                    <div class="col-xs-4 col-lg-5 todo-description-container">
+                        <div ng-class="{'todo-completed': task.completed}">
+                            <p><strong><a href="javascript:void(0);" ng-href="/#/employees/{{task.employee.id}}">{{task.employee.full_name}}</a></strong> <span class="timestamp">{{ task.created_date | fromNow }}</span></p>
+                            <p class="todo-description">{{task.description}}</p>
+                        </div>
+                    </div>
+                    <div class="col-xs-3">
+                        <div ng-show="task.assigned_to.full_name">
+                            <a href="javascript:void(0);" ng-href="/#/employees/{{task.assigned_to.id}}">{{task.assigned_to.full_name}}</a>
+                        </div>
+                        <div ng-show="!task.assigned_to.full_name">
+                            Unassigned
+                        </div>
+                    </div>
+                    <div class="col-xs-2 date">
+                        {{(task.due_date | date:'MMM d') || "None"}}
+                        <i class="fa fa-cog show-popover pull-right"></i>
+                        <ul class="popover-items" style="display:none">
+                            <li class="popover-item">
+                                <i class="fa fa-pencil-square-o"></i>
+                                <a ng-click="editTask(task)">Edit</a>
+                            </li>
+                            <li class="popover-item">
+                                <i class="fa fa-trash-o"></i>
+                                <a ng-click="deleteTask(task)">Delete</a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
-                <div class="col-xs-3">
-                    {{task.assigned_to.full_name||"Unassigned"}}
-                </div>
-                <div class="col-xs-2 date">
-                    {{(task.due_date | date:'MMM d') || "None"}}
-                </div>
+                <button class="btn btn-link btn-sm" ng-show="todo_has_next && !busy" ng-click="loadTasks(false)">Load More Tasks</button>
             </div>
-            <button class="btn btn-link btn-sm" ng-show="done_has_next && !busy" ng-click="loadTasks(true)">Load More Tasks</button>
-        </div>
-        <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
-    </div>
+            <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
+        </tab>
+        <tab heading="Done">
+            <div ng-show="done.length === 0 && !busy" class="todos-empty">
+                <p ng-show="view == 'my-view'">You don't have any completed tasks.</p>
+                <p ng-show="view == 'employee-view'">There are no completed tasks for {{ employee.full_name }}.</p>
+            </div>
+            <div ng-if="done.length > 0">
+                <div class="row shaded">
+                    <div class="col-md-3 col-lg-2"></div>
+                    <div class="col-md-4 col-lg-5">Tasks</div>
+                    <div class="col-xs-3">Assigned To</div>
+                    <div class="col-xs-2">Due Date</div>
+                </div>
+                <div class="row todo" ng-repeat="task in done | orderBy:'-due_date'" ng-init="currentTask=task">
+                    <div class="col-md-3 col-lg-2">
+                        <input class="todo-checkbox" type="checkbox" ng-click="toggleCompleted(task)" ng-model="task.completed">
+                        <a ng-href="/#/employees/{{task.employee.id}}" class="small-headshot">
+                            <img alt="{{task.employee.full_name}}" title="{{task.employee.full_name}}" ng-src="{{ task.employee.avatar_small }}" />
+                        </a>
+                    </div>
+                    <div class="col-md-4 col-lg-5 todo-description-container">
+                        <div ng-class="{'todo-completed': task.completed}">
+                            <p><strong><a href="javascript:void(0);" ng-href="/#/employees/{{task.employee.id}}">{{task.employee.full_name}}</a></strong> <span class="timestamp">{{ task.created_date | fromNow }}</span></p>
+                            <p class="todo-description">{{task.description}}</p>
+                        </div>
+                    </div>
+                    <div class="col-xs-3">
+                        {{task.assigned_to.full_name||"Unassigned"}}
+                    </div>
+                    <div class="col-xs-2 date">
+                        {{(task.due_date | date:'MMM d') || "None"}}
+                    </div>
+                </div>
+                <button class="btn btn-link btn-sm" ng-show="done_has_next && !busy" ng-click="loadTasks(true)">Load More Tasks</button>
+            </div>
+            <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
+        </tab>
+    </tabset>
 </div>

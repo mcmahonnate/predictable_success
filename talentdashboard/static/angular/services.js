@@ -291,7 +291,7 @@ angular.module('tdb.services', ['ngResource'])
             return this.categories[category].color;
         },
         getLabelByTalentCategory: function(category) {
-            if (category) {
+            if (category  || category===0) {
                 return this.categories[category].label;
             } else {
                 return null;

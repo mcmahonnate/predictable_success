@@ -14,7 +14,7 @@ angular.module('tdb.controllers.comments', [])
         $scope.showMembers = function () {
             var modalInstance = $modal.open({
                 animation: true,
-                templateUrl: '/static/angular/partials/_widgets/show-members.html',
+                templateUrl: '/static/angular/partials/_modals/show-members.html',
                 controller: 'DailyDigestCtrl'
             });
         };

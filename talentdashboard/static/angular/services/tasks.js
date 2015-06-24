@@ -8,7 +8,8 @@ angular.module('tdb.services.tasks', ['ngResource'])
             } else {
                 return fromServer(response);
             }
-        }
+        };
+
         var fromServer = function(task) {
             var copy = angular.copy(task);
             copy.due_date = copy.due_date ? new Date(copy.due_date) : null;
@@ -61,6 +62,10 @@ angular.module('tdb.services.tasks', ['ngResource'])
                 transformRequest: [
                     forCreating,
                     angular.toJson
+                ],
+                transformResponse: [
+                    angular.fromJson,
+                    fromServer
                 ]
             },
             'update': {
@@ -68,7 +73,14 @@ angular.module('tdb.services.tasks', ['ngResource'])
                 transformRequest: [
                     forEditing,
                     angular.toJson
+                ],
+                transformResponse: [
+                    angular.fromJson,
+                    fromServer
                 ]
+            },
+            'delete': {
+                'method': 'DELETE'
             }
         };
 
