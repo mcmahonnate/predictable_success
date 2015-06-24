@@ -1,7 +1,7 @@
 <div ng-if="employee.display" class="container narrow-gutter employee-view" ng-class="{in:employee}">
+    <div ng-include="'/static/angular/partials/_widgets/search.html'"></div>
+    <h1>{{employee.full_name}}</h1>     
     <div class="row">
-        <div ng-include="'/static/angular/partials/_widgets/search.html'"></div>
-        <h1>{{employee.full_name}}</h1> 
         <div class="col-sm-5 col-md-5 col-lg-5">
             <div class="panel">
                 <div class="large-avatar-container">
