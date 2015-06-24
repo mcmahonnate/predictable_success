@@ -1,6 +1,29 @@
-<div class="panel talent-portfolio row"> 
-    <h2 class="panel-title">Talent Portfolio</h2>
+<div class="panel talent-portfolio row">
+	<a href="javascript:void(0)" data-toggle="modal" data-target="#distributions-modal" class="pull-right underline">Explaination</a> 
+    <h2 class="panel-title">Development Portfolio</h2>
     <div class="talent-pie-chart-container"> 
         <div x-talent-category-chart size="small" style="width: 100%; height: 100%;"></div>
     </div>
 </div>
+    <div class="modal fade in" id="distributions-modal" data-keyboard="true" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <div class="modal-body">
+                    <h4 class="modal-title">Development Portfolio Explaination</h4>
+                    <div class="distributions">
+                        <!-- TODO: get these from model -->
+                        <p class="distribution"><span class="tag employee-segment-background-color-1">Unleash</span> Has the freedom to design their role & pick important projects.</p>
+                        <p class="distribution"><span class="tag employee-segment-background-color-2">Encourage</span> With a few, targeted moves they could be next level.</p>
+                        <p class="distribution"><span class="tag employee-segment-background-color-3">Challenge</span> We need to push them beyond their comfort zone.</p>
+                        <p class="distribution"><span class="tag employee-segment-background-color-4">Discover</span> Let's uncover their hidden potential.</p>
+                        <p class="distribution"><span class="tag employee-segment-background-color-5">Change</span> We're underutilizing them; let's change that.</p>
+                        <p class="distribution"><span class="tag employee-segment-background-color-6">Worry</span> We're worried about them.</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>

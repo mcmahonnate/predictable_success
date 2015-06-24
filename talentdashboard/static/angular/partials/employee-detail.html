@@ -1,5 +1,7 @@
 <div ng-if="employee.display" class="container narrow-gutter employee-view" ng-class="{in:employee}">
     <div class="row">
+        <div ng-include="'/static/angular/partials/_widgets/search.html'"></div>
+        <h1>{{employee.full_name}}</h1> 
         <div class="col-sm-5 col-md-5 col-lg-5">
             <div class="panel">
                 <div class="large-avatar-container">
@@ -13,7 +15,7 @@
                         <span class="employee-happiness-background-color-{{employee.happiness}}" ng-class="{'veryhappy': employee.happiness==5,'happy': employee.happiness==4,'indifferent': employee.happiness==3,'unhappy': employee.happiness==2,'veryunhappy': employee.happiness==1}"></span>
                     </div> 
                 </div>   
-                <h1 class="centered">{{employee.full_name}}</h1> 
+                
                 <ul class="nav nav-tabs" ng-init="tab=1">
                     <li class="nav" ng-class="{active: tab==1}"><a ng-click="tab = 1">Bio</a></li>
                     <li class="nav" ng-show="currentUser.employee.id!=employee.id" ng-class="{active: tab==2}"><a ng-click="tab = 2">Growth</a></li>

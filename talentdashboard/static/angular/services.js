@@ -279,12 +279,12 @@ angular.module('tdb.services', ['ngResource'])
     var TalentCategories = {
         categories: {
             "0":{color:'#2c3e50',label:'No Data',description:''},
-            "1":{color:'#32d0a2',label:'Unleash',description:''},
-            "2":{color:'#5ed032',label:'Encourage',description:''},
-            "3":{color:'#bcd032',label:'Challenge',description:''},
-            "4":{color:'#5bc0de',label:'Discover',description:''},
-            "5":{color:'#ffca00',label:'Change',description:''},
-            "6":{color:'#ff0000',label:'Worry',description:''},
+            "1":{color:'#0f9d58',label:'Unleash',description:''},
+            "2":{color:'#8ad367',label:'Challenge',description:''},
+            "3":{color:'#d5d466',label:'Push',description:''},
+            "4":{color:'#5a9bed',label:'Discovery',description:''},
+            "5":{color:'#f59705',label:'Shift',description:''},
+            "6":{color:'#ab1600',label:'Worry',description:''},
             "7":{color:'#95a5a6',label:'Onboard',description:''}
         },
         getColorByTalentCategory: function(category) {
