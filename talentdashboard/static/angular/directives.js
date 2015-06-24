@@ -503,7 +503,8 @@ angular.module('tdb.directives', [])
                 // header
                 if (row == 0) {
                     if (dataColHeaders.length) {
-                        td.style.backgroundColor = columns[col].unknown ? '#ff4c42' : '#cec'
+                        td.style.backgroundColor = scope.isValidHeader(columns[col].data) ? '#cec' : '#ff4c42'
+                        // td.style.backgroundColor = columns[col].unknown ? '#ff4c42' : '#cec'
                     }
                 }
             }
@@ -534,6 +535,13 @@ angular.module('tdb.directives', [])
                     return c.data;
                 });
             }
+            scope.isValidHeader = function(header) {
+                for (var i = 0; i < desiredColHeaders.length; i++) {
+                    if (desiredColHeaders[i].toLowerCase() == header.toLowerCase())
+                        return true;
+                }
+                return false;
+            }
             scope.renderTable = function(){
                 if (scope.data.length > 0) {
                     var el = element[0];
@@ -542,24 +550,16 @@ angular.module('tdb.directives', [])
                     if (scope.hot) {
                         if (scope.hot.rootElement) {
                             console.log(scope.hot);
-                            //update new table with edits
-                            // scope.importData = angular.copy(scope.hot.getData());
-                            scope.importData = angular.copy(scope.data);
                             scope.hot.destroy();
                         }
                     }
-                    else {
-                        scope.importData = angular.copy(scope.data);
-                    }
-                    console.log(scope.importData);
+                    scope.importData = angular.copy(scope.data);
 
-                    // column check
-                    // var colHeaders = ["First name", "Last name", "Email", "Hire Date", "Job Title", "Department", "Manager", "Salary"]
-                    
                     var first = scope.importData[0];
                     dataColHeaders = Object.keys(first);
                     for (var key in first) {
-                        if (desiredColHeaders.indexOf(key) == -1){
+                        // if (desiredColHeaders.indexOf(key) == -1){
+                        if (!scope.isValidHeader(key)){
                             // mark as unknown column
                             var newCol = {data: key, renderer: customRenderer, unknown: true};
                             columns.push(newCol);
@@ -569,7 +569,6 @@ angular.module('tdb.directives', [])
 
                     scope.hot = new Handsontable(el, {
                         data: scope.importData,
-                        // colHeaders: desiredColHeaders,
                         columns: columns,
                         contextMenu: true
                     });
