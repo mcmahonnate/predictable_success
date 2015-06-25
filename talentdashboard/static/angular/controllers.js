@@ -481,32 +481,28 @@ angular.module('tdb.controllers', [])
     $scope.validTable = false;
     $scope.import = function() {
         $scope.importing = true;
-        if ($scope.validTable) {
-            ImportData.addNew($scope.getData()).$promise.then(function(data) {
-                EmployeeNames.query(function(data) {
-                    $scope.employee_autocomplete_values = data;
-                });
+        console.log($scope.getData());
+        // ImportData.addNew($scope.getData()).$promise.then(function(data) {
+        //     EmployeeNames.query(function(data) {
+        //         $scope.employee_autocomplete_values = data;
+        //     });
 
-                // check promise
-                if (!data.$resolved) {
-                    Notification.warning("Awesome but we ran into some errors. Make your corrections below.");
-                } else {
-                    $scope.hot.destroy();
-                    Notification.success("Your data imported successfully.");
-                }
+        //     // check promise
+        //     if (!data.$resolved) {
+        //         Notification.warning("Awesome but we ran into some errors. Make your corrections below.");
+        //     } else {
+        //         $scope.hot.destroy();
+        //         Notification.success("Your data imported successfully.");
+        //     }
 
-                $scope.importing = false;
-                $scope.data = angular.copy($scope.importData);
-                // $scope.renderTable();
-            },function(){
-                $scope.isSurveySending=false;
-                Notification.error("There was an error importing your data.");
-                $scope.importing = false;
-            });
-        }
-        else {
-            Notification.warning("Awesome but we ran into some errors. Make your corrections below.");
-        }
+        //     $scope.importing = false;
+        //     // $scope.data = angular.copy($scope.importData);
+        //     // $scope.renderTable();
+        // },function(){
+        //     $scope.isSurveySending=false;
+        //     Notification.error("There was an error importing your data.");
+        //     $scope.importing = false;
+        // });
     };
 }])
 

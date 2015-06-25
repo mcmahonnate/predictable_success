@@ -485,26 +485,62 @@ angular.module('tdb.directives', [])
         restrict: 'E',
         transclude: true,
         template: '<div> <table class="table"> </table> </div>',
-        replace: true,
         link: function (scope, element, attrs) {
             scope.table;
-            var headerOptions = ["First name", "Last name", "Email", "Hire Date", "Job Title", "Salary", "Team Leader", "Team Name"];
+            var headerOptions = ["First name", "Last name", "Email", "Hire Date", "Job Title", "Salary", "Team Leader", "Team Name", "Don't Import"];
+            var dataHeaders = [];
 
             // make dropdowns
             var genDropdown = function() {
-                var res = "<select>";  
+                // var res = "<select class='header-select'>";  
+                // res += '<option selected="selected"> </option>'
+                // headerOptions.map(function (h) {
+                //     res += '<option>';
+                //     res += h;
+                //     res += '</option>'
+                // });
+                // return res + "</select";
+
+                // var res = '<div class="dropdown"><button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"> Choose Header <span class="caret"></span></button><ul class="dropdown-menu" aria-labelledby="dropdownMenu1">';
+                // var option = '<li><a>CONTENT</a></li>';
+                // headerOptions.map(function (h) {
+                //     res += option.replace('CONTENT', h);
+                // });
+                // return res + "</ul> </div>"
+
+                var res = "<select class='form-control'>";  
                 res += '<option selected="selected"> </option>'
                 headerOptions.map(function (h) {
                     res += '<option>';
                     res += h;
                     res += '</option>'
-                })
+                });
                 return res + "</select";
             }
 
             // update data to import based on selected headers
             scope.getData = function() {
+                var headers = [];
+                $('select.form-control').each(function() {
+                    headers.push($(this).val());
+                });
 
+                var newData = [];
+                scope.importData.map(function (obj) {
+                    var nextRow = {};
+                    for (var i = 0; i < headers.length; i++) {
+                        // only include data if user selects it
+                        if (headers[i] == "Don't Import" || headers[i] == "")
+                            continue;
+                        nextRow[headers[i]] = obj[dataHeaders[i]];
+                    }   
+                    newData.push(nextRow);
+                });
+            }
+
+            // client side validations
+            scope.validateTable = function() {
+                console.log("validate");
             }
 
             // render
@@ -514,16 +550,21 @@ angular.module('tdb.directives', [])
 
                 var tableHTML = "";
                 var cellHTML = "<td> CONTENT </td>";
-                var cols = Object.keys(scope.importData[0]);
+                dataHeaders = Object.keys(scope.importData[0]);
 
+                // add dropdowns for headers
                 tableHTML += "<tr>";
-                for (var i = 0; i < cols.length; i++)
+                for (var i = 0; i < dataHeaders.length; i++)
                     tableHTML += "<td>" + genDropdown() + "</td>";
                 tableHTML += "</tr>";
 
+                // validate when dropdown is selected
+                // $('.form-control:first').change(scope.validateTable);
+
+                // add data cells
                 scope.importData.map(function (obj) {
                     tableHTML += "<tr>";
-                    cols.map(function (key) {
+                    dataHeaders.map(function (key) {
                         tableHTML += cellHTML.replace('CONTENT', obj[key]);
                     });
                     tableHTML += "</tr>";
