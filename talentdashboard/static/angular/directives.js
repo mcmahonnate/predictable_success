@@ -501,13 +501,6 @@ angular.module('tdb.directives', [])
                 // });
                 // return res + "</select";
 
-                // var res = '<div class="dropdown"><button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"> Choose Header <span class="caret"></span></button><ul class="dropdown-menu" aria-labelledby="dropdownMenu1">';
-                // var option = '<li><a>CONTENT</a></li>';
-                // headerOptions.map(function (h) {
-                //     res += option.replace('CONTENT', h);
-                // });
-                // return res + "</ul> </div>"
-
                 var res = "<select class='form-control'>";  
                 res += '<option selected="selected"> </option>'
                 headerOptions.map(function (h) {
@@ -536,11 +529,21 @@ angular.module('tdb.directives', [])
                     }   
                     newData.push(nextRow);
                 });
+
+                return newData;
             }
 
-            // client side validations
-            scope.validateTable = function() {
-                console.log("validate");
+            // auto-populate if header matches exactly
+            scope.populateHeaders = function() {
+                var index = 0;
+                $('select.form-control').each(function() {
+                    var h = dataHeaders[index];
+                    console.log(h);
+                    if (headerOptions.indexOf(h) > -1) {
+                        $(this).val(h);
+                    }
+                    index++;
+                });
             }
 
             // render
@@ -558,9 +561,6 @@ angular.module('tdb.directives', [])
                     tableHTML += "<td>" + genDropdown() + "</td>";
                 tableHTML += "</tr>";
 
-                // validate when dropdown is selected
-                // $('.form-control:first').change(scope.validateTable);
-
                 // add data cells
                 scope.importData.map(function (obj) {
                     tableHTML += "<tr>";
@@ -571,6 +571,7 @@ angular.module('tdb.directives', [])
                 });
 
                 scope.table.html(tableHTML);
+                scope.populateHeaders();
             }
 
             // new file
