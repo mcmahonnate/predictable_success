@@ -538,7 +538,6 @@ angular.module('tdb.directives', [])
                 var index = 0;
                 $('select.form-control').each(function() {
                     var h = dataHeaders[index];
-                    console.log(h);
                     if (headerOptions.indexOf(h) > -1) {
                         $(this).val(h);
                     }
@@ -553,7 +552,11 @@ angular.module('tdb.directives', [])
 
                 var tableHTML = "";
                 var cellHTML = "<td> CONTENT </td>";
+
+                // get headers in user's data, then remove them from data
+                console.log(scope.importData[0]);
                 dataHeaders = Object.keys(scope.importData[0]);
+                scope.importData.splice(0, 1);
 
                 // add dropdowns for headers
                 tableHTML += "<tr>";
@@ -565,7 +568,10 @@ angular.module('tdb.directives', [])
                 scope.importData.map(function (obj) {
                     tableHTML += "<tr>";
                     dataHeaders.map(function (key) {
-                        tableHTML += cellHTML.replace('CONTENT', obj[key]);
+                        if (obj[key] === undefined || obj[key] === null)
+                            tableHTML += cellHTML.replace('CONTENT', '');
+                        else
+                            tableHTML += cellHTML.replace('CONTENT', obj[key]);
                     });
                     tableHTML += "</tr>";
                 });
@@ -764,17 +770,24 @@ angular.module('tdb.directives', [])
                 json = json.replace(/},/g, "},\r\n");
                 json = JSON.parse(json);
 
-                // return addFirstRow(json);
-                return json;
+                return addFirstRow(json);
+                // return json;
             };
+
+            // make headers first row
             var addFirstRow = function(json) {
-                // make headers first row
                 var firstrow = [{}];
-                for (var key in json[0]) {
-                    firstrow[0][key] = key;
-                }
+
+                // check for all headers
+                json.map(function (obj) {
+                    for (var key in obj)
+                        if (!(key in firstrow[0]))
+                            firstrow[0][key] = key;
+                });
+
                 return firstrow.concat(json);
             }
+
             var processData = function(data, filename) {
                 var ext = filename.split('.').pop().toLowerCase();
                 console.log(ext);
@@ -790,8 +803,8 @@ angular.module('tdb.directives', [])
                 var json = XLSX.utils.sheet_to_json(worksheet);
 
                 console.log(json);
-                // return addFirstRow(json);
-                return json;
+                return addFirstRow(json);
+                // return json;
             }
 
             var el = element[0];
