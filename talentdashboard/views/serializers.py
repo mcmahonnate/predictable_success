@@ -155,9 +155,9 @@ class MBTISerializer(serializers.HyperlinkedModelSerializer):
 class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
     team = TeamSerializer()
     coach = MinimalEmployeeSerializer()
+    current_leader = MinimalEmployeeSerializer()
     avatar = serializers.SerializerMethodField()
     avatar_small = serializers.SerializerMethodField()
-    leader_id = serializers.SerializerMethodField()
     happiness = serializers.SerializerMethodField()
     happiness_date = serializers.SerializerMethodField()
     kolbe_fact_finder = serializers.SerializerMethodField()
@@ -204,12 +204,6 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
         if obj.current_happiness:
             happiness_date = obj.current_happiness.assessed_date
         return happiness_date
-
-    def get_leader_id(self, obj):
-        leader_id = 0
-        if obj.current_leader:
-            leader_id = obj.current_leader.id
-        return leader_id
 
     def get_kolbe_fact_finder(self, obj):
         kolbe_fact_finder = None
@@ -273,7 +267,7 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Employee
-        fields = ('id', 'full_name', 'first_name', 'last_name', 'email', 'avatar', 'avatar_small', 'job_title', 'hire_date', 'leader_id', 'happiness', 'happiness_date', 'coach', 'kolbe_fact_finder','kolbe_follow_thru', 'kolbe_quick_start', 'kolbe_implementor', 'vops_visionary', 'vops_operator', 'vops_processor', 'vops_synergist', 'departure_date', 'team', 'display', 'current_salary', 'current_bonus', 'talent_category')
+        fields = ('id', 'full_name', 'first_name', 'last_name', 'email', 'avatar', 'avatar_small', 'job_title', 'hire_date', 'current_leader', 'happiness', 'happiness_date', 'coach', 'kolbe_fact_finder','kolbe_follow_thru', 'kolbe_quick_start', 'kolbe_implementor', 'vops_visionary', 'vops_operator', 'vops_processor', 'vops_synergist', 'departure_date', 'team', 'display', 'current_salary', 'current_bonus', 'talent_category')
 
 
 class UserPreferencesSerializer(serializers.ModelSerializer):

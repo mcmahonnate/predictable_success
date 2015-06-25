@@ -238,7 +238,79 @@ angular.module('tdb.controllers', [])
     }
 }])
 
-.controller('NavigationCtrl', ['$scope', '$rootScope', '$routeParams', '$window', '$location', 'Employee', 'Customers', 'Team', function($scope, $rootScope, $routeParams, $window, $location, Employee, Customers, Team) {
+.controller('AddEditBioCtrl', ['$scope', '$rootScope', '$routeParams', '$modalInstance', '$location', 'employee', 'leadership', 'employees', 'teams', 'Employee', 'EmployeeLeader', 'fileReader', 'PhotoUpload', function($scope, $rootScope, $routeParams, $modalInstance, $location, employee, leadership, employees, teams, Employee, EmployeeLeader, fileReader, PhotoUpload) {
+    $scope.employee = angular.copy(employee);
+    $scope.leadership = angular.copy(leadership);
+    $scope.teams = teams;
+    $scope.employees = employees;
+    $scope.preview=$scope.employee.avatar;
+    $scope.cancel = function () {
+        $modalInstance.dismiss();
+    };
+    $scope.showHireDatePicker = false;
+    $scope.showDepartDatePicker = false;
+    $scope.toggleHireDatePicker = function(){
+        $scope.showDepartDatePicker = false;
+        $scope.showHireDatePicker = !$scope.showHireDatePicker;
+    };
+    $scope.toggleDepartDatePicker = function(){
+        $scope.showHireDatePicker = false;
+        $scope.showDepartDatePicker = !$scope.showDepartDatePicker;
+    };
+    $scope.saveEmployee = function() {
+        var data = getData();
+        console.log(data);
+        if ($scope.employee.id > 0) {
+            Employee.update(data, function (response) {
+                $scope.employee = response;
+                saveOtherInfo(false);
+            });
+        } else {
+            Employee.addNew(data, function (response) {
+                $scope.employee = response;
+                saveOtherInfo(true);
+            });
+        }
+    };
+    var saveOtherInfo = function(addNew) {
+        if ($scope.preview != $scope.employee.avatar) {
+            var upload_data = {id: $scope.employee.id};
+            PhotoUpload($scope.model, $scope.files).update(upload_data, function (data) {
+                $scope.employee.avatar = data.avatar;
+            });
+        }
+        $modalInstance.close($scope.employee);
+        if (addNew) {changeLocation('employees/' + $scope.employee.id, false);}
+    };
+
+    var getData = function() {
+        var data = {id: $scope.employee.id};
+        data._first_name = $scope.employee.first_name;
+        data._last_name = $scope.employee.last_name;
+        data._email = $scope.employee.email;
+        data._hire_date = ($scope.employee.hire_date) ? $rootScope.scrubDate($scope.employee.hire_date, false) : null;
+        data._departure_date = ($scope.employee.departure_date) ? $rootScope.scrubDate($scope.employee.departure_date, false) : null;
+        data._team_id = ($scope.employee.team && $scope.employee.team.name) ? $scope.employee.team.id : null;
+        data._coach_id = ($scope.employee.coach && $scope.employee.coach.full_name) ? $scope.employee.coach.id : null;
+        data._leader_id = ($scope.employee.current_leader && $scope.employee.current_leader.full_name) ? $scope.employee.current_leader.id : null;
+        return data;
+    };
+    $scope.uploadFile = function(files){
+        $scope.files = files;
+        fileReader.readAsDataUrl($scope.files[0], $scope)
+                      .then(function(result) {
+                          $scope.preview = result;
+                      });
+    };
+    var changeLocation = function(url, force) {
+        console.log('changelocation');
+        //this will mark the URL change
+        $location.path(url); //use $location.path(url).replace() if you want to replace the location instead
+        $scope = $scope || angular.element(document).scope();
+    };
+}])
+
+.controller('NavigationCtrl', ['$scope', '$rootScope', '$routeParams', '$window', '$location', '$modal', 'Employee', 'Customers', 'Team', function($scope, $rootScope, $routeParams, $window, $location, $modal, Employee, Customers, Team) {
     
     $scope.$window = $window;
 
@@ -265,14 +337,14 @@ angular.module('tdb.controllers', [])
         first_name:'',
         last_name:'', 
         email:'', 
-        team:{id:0, name:''}, 
+        team:{id:null, name:''},
         hire_date:'',
         departure_date:'', 
         avatar:'https://hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg'
     };
 
     $scope.newLeadership = {
-        id:0,
+        id:null,
         leader:{full_name:''}
     };  
 
@@ -286,7 +358,29 @@ angular.module('tdb.controllers', [])
     //show add employee modal 
     $scope.toggleEmployeeModal = function() {
         $scope.modalEmployeeShown = !$scope.modalEmployeeShown;
-    };  
+    };
+
+    $scope.addEmployee = function (employee, leadership, employees, teams) {
+        var modalInstance = $modal.open({
+            animation: true,
+            templateUrl: '/static/angular/partials/_modals/edit-bio-modal.html',
+            controller: 'AddEditBioCtrl',
+            resolve: {
+                employee: function () {
+                    return employee
+                },
+                leadership: function () {
+                    return leadership
+                },
+                employees: function () {
+                    return employees
+                },
+                teams: function () {
+                    return teams
+                }
+            }
+        });
+    };
 
     //clear search
     $scope.navQuery = '';
@@ -347,10 +441,6 @@ angular.module('tdb.controllers', [])
 
     $scope.dynamicTooltipText = "LOGOUT";
 
-    $scope.modalEmployeeShown = false;
-    $scope.toggleEmployeeModal = function() {
-        $scope.modalEmployeeShown = !$scope.modalEmployeeShown;
-    };
     $scope.modalHappyShown = false;
     $scope.toggleHappyModal = function() {
         $scope.modalHappyShown = !$scope.modalHappyShown;
@@ -446,6 +536,32 @@ angular.module('tdb.controllers', [])
                 }
             }
         });
+    };
+    $scope.editEmployee = function (employee, leadership, employees, teams) {
+        var modalInstance = $modal.open({
+            animation: true,
+            templateUrl: '/static/angular/partials/_modals/edit-bio-modal.html',
+            controller: 'AddEditBioCtrl',
+            resolve: {
+                employee: function () {
+                    return employee
+                },
+                leadership: function () {
+                    return leadership
+                },
+                employees: function () {
+                    return employees
+                },
+                teams: function () {
+                    return teams
+                }
+            }
+        });
+        modalInstance.result.then(
+            function (e, l) {
+                $scope.employee = e;
+            }
+        );
     };
     $scope.formats = ['yyyy-mm-dd', 'mm/dd/yyyy', 'shortDate'];
     $scope.format = $scope.formats[0];

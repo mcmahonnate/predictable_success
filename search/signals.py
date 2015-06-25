@@ -20,7 +20,9 @@ def employee_delete_handler(sender, **kwargs):
 @receiver(post_save, sender=Leadership)
 def leadership_save_handler(sender, **kwargs):
     leadership = kwargs['instance']
-    employees = [leadership.leader, leadership.employee]
+    employees = [leadership.employee]
+    if leadership.leader is not None:
+        employees.append(leadership.leader)
     _index(employees)
 
 
