@@ -916,7 +916,6 @@ class EmployeeDetail(APIView):
             return Response(serializer.data)
         except Employee.DoesNotExist:
             return Response(None)
-<<<<<<< HEAD
         
     def post(self, request, pk, format=None):
         def expire_view_cache(view_name, args=None, language=None, namespace=None, key_prefix=None, method="GET"):
