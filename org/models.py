@@ -108,7 +108,7 @@ class Employee(models.Model):
     coach = models.ForeignKey('Employee', related_name='coachees', null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        new_leadership = 1
+        # new_leadership = 1
         if self.first_name and self.last_name:
             self.full_name = self.first_name + " " + self.last_name
         if self._current_leadership is not None:
