@@ -553,7 +553,7 @@ angular.module('tdb.directives', [])
                 var tableHTML = "";
                 var cellHTML = "<td> CONTENT </td>";
 
-                // get headers in user's data, then remove them from data
+                // get headers from first row, then remove
                 console.log(scope.importData[0]);
                 dataHeaders = Object.keys(scope.importData[0]);
                 scope.importData.splice(0, 1);

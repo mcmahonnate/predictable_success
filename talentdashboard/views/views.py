@@ -316,20 +316,44 @@ class PvpEvaluationDetail(APIView):
 class ImportData(APIView):
     def post(self, request, format=None):
         items = json.loads(request.body)
-        error_items = []
+        response_items = []
         teams = []
+
+        # add all employees
         for item in items:
-            first_name = item['First name']
-            last_name = item['Last name']
+            first_name = ''
+            last_name = ''
+            email = ''
+            if 'First name' in item.keys():
+                first_name = item['First name']
+            else:
+                item['Missing Field'] = 'First name'
+
+            if 'Last name' in item.keys():
+                last_name = item['Last name']
+            else:
+                item['Missing Field'] = 'Last name'
+
+            if 'Email' in item.keys():
+                email = item['Email']
+            else:
+                item['Missing Field'] = 'Email'
             try:
-                employee = Employee.objects.get(first_name=first_name,last_name=last_name)
+                employee = Employee.objects.get(first_name=first_name,last_name=last_name,email=email)
             except Employee.DoesNotExist:
                 date_string = item['Hire Date']
                 date_parsed = dateutil.parser.parse(date_string)
                 employee = Employee(first_name=first_name,last_name=last_name,email=item['Email'],job_title=item['Job Title'],hire_date=date_parsed.date(),display=True)
                 employee.save()
             item['id'] = employee.id
-            # teams.append(item['Department'])
+            if 'Team Name' in item.keys():
+                teams.append(item['Team Name'])
+            else:
+                item['Missing Field'] = 'Team Name'
+                item['Team Name'] = ''
+            response_items.append(item)
+
+        # add teams
         trim_teams = set(teams)
         for trim_team in trim_teams:
             try:
@@ -338,29 +362,29 @@ class ImportData(APIView):
                 team = Team(name=trim_team)
                 team.save()
 
+        # add salaries and leaderships
         for item in items:
             employee = Employee.objects.get(id=item['id'])
-            leader_full_name = item['Team Leader']
             team_name = item['Team Name']
-            salary = Decimal(sub(r'[^\d\-.]', '', item['Salary']))
             now = datetime.datetime.now()
             year = int(now.year)
-            if item['Salary']:
+
+            if 'Team Leader' in item.keys():
+                leader_full_name = item['Team Leader']
+            else:
+                item['Missing Field'] = 'Team Leader'
+                leader_full_name = ''
+
+            if 'Salary' in item.keys():
                 try:
                     comp = CompensationSummary.objects.get(employee_id=employee.id, year=year)
                 except CompensationSummary.DoesNotExist:
                     comp = CompensationSummary(employee=employee,fiscal_year=year,year=year)
-                comp.salary = salary
+                comp.salary = Decimal(sub(r'[^\d\-.]', '', item['Salary']))
                 comp.save()
             else:
-                error_items.append(item)
-
-            try:
-                team = Team.objects.get(name=team_name)
-                employee.team = team
-                employee.save()
-            except Team.DoesNotExist:
-                error_items.append(item)
+                item['Missing Field'] = 'Salary'
+                response_items.append(item)
 
             try:
                 leader = Employee.objects.get(full_name=leader_full_name)
@@ -370,10 +394,11 @@ class ImportData(APIView):
                 leaders = Employee.objects.filter(last_name__in=leader_full_name.split(" ")).values('full_name')
                 if not leaders:
                     leaders = []
+                item['Incorrect Field'] = 'Team Leader'
                 item['Manager Suggestions'] = list(leaders)
-                error_items.append(item)
+                response_items.append(item)
 
-        return HttpResponse(json.dumps(error_items), content_type='application/json')
+        return HttpResponse(json.dumps(response_items), content_type='application/json')
 
 class EmployeeNames(APIView):
     def get(self, request, format=None):
