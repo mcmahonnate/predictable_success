@@ -282,7 +282,7 @@ angular.module('tdb.services', ['ngResource'])
             "1":{color:'#0f9d58',label:'Unleash',description:''},
             "2":{color:'#8ad367',label:'Challenge',description:''},
             "3":{color:'#d5d466',label:'Push',description:''},
-            "4":{color:'#5a9bed',label:'Discovery',description:''},
+            "4":{color:'#5a9bed',label:'Discover',description:''},
             "5":{color:'#f59705',label:'Shift',description:''},
             "6":{color:'#ab1600',label:'Worry',description:''},
             "7":{color:'#95a5a6',label:'Onboard',description:''}
