@@ -1,4 +1,4 @@
-<form enctype="multipart/form-data" name="uploadForm">
+<form enctype="multipart/form-data" novalidate="novalidate" name="uploadForm">
     <div>
             <div class="modal-body">
                 <div style="margin-top: 10px;width:28%;float:left;padding-right: 10px">
@@ -13,40 +13,56 @@
                     <span style="color:red;" ng-show="uploadForm.first_name.$dirty && uploadForm.first_name.$invalid">
                         <span ng-show="uploadForm.first_name.$error.required">*First name is required.</span>
                     </span>
-                    <input type="text" name="first_name" ng-model="employee.first_name" placeholder="required" class="view-value-input form-control" required tabindex="1">
+                    <p class="input-group">
+                        <input type="text" name="first_name" ng-model="employee.first_name" placeholder="required" class="view-value-input form-control" required tabindex="1">
+                    </p>
                     <span style="margin:10px 0;">Hire Date</span>
-                    <input ng-click="toggleHireDatePicker();" type="text" name="hire_date" value="{{employee.hire_date | date:'MM/dd/yyyy'}}" placeholder="optional"  class="view-value-input form-control" style="display:inline-block"/>
-                    <div ng-show="showHireDatePicker" style="background-color: #fff;margin-top: -5px;margin-left: -19px;padding:10px;float:left;position: absolute; z-index:99;" ng-model="employee.hire_date">
-                        <datepicker show-weeks="showWeeks"></datepicker>
-                    </div>
+                    <p class="input-group">
+                      <input type="text" name="hire_date" class="form-control" datepicker-popup="{{format}}" ng-model="employee.hire_date" is-open="datepickers.hire_date" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" placeholder="optional"  ng-required="false" close-text="Close" tabindex="3"/>
+                      <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="open($event, 'hire_date')"><i class="glyphicon glyphicon-calendar"></i></button>
+                      </span>
+                    </p>
                     <span style="margin:10px 0;">Team</span>
                     <div class="edit-dropdown">
-                        <input type="text" ng-model="employee.team.name" placeholder="optional" typeahead-on-select="employee.team=$item" typeahead="team.name for team in teams | filter:{name:$viewValue}:startsWith | orderBy:'name' | limitTo:8" typeahead-editable="false" class="view-value-input form-control" tabindex="5"/>
+                        <p class="input-group">
+                            <input type="text" ng-model="employee.team.name" placeholder="optional" typeahead-on-select="employee.team=$item" typeahead="team.name for team in teams | filter:{name:$viewValue}:startsWith | orderBy:'name' | limitTo:8" typeahead-editable="false" class="view-value-input form-control" tabindex="5"/>
+                        </p>
                     </div>
                     <span style="margin:10px 0;">Email</span>
                     <span style="color:red;" ng-show="uploadForm.email.$dirty && uploadForm.email.$invalid">
                         <span ng-show="uploadForm.email.$error.required">*Email is required.</span>
                     </span>
-                    <input type="email" name="email" ng-model="employee.email" placeholder="required" class="view-value-input form-control" required tabindex="4">
+                    <p class="input-group">
+                        <input type="email" name="email" ng-model="employee.email" placeholder="required" class="view-value-input form-control" required tabindex="7">
+                    </p>
                 </div>
                 <div style="margin-top: 10px;width:35%;float:left;padding-right: 10px">
                     <span style="margin:10px 0;">Last Name</span>
                     <span style="color:red;" ng-show="uploadForm.last_name.$dirty && uploadForm.last_name.$invalid">
                         <span ng-show="uploadForm.last_name.$error.required">*Last name is required.</span>
                     </span>
-                    <input type="text" name="last_name" ng-model="employee.last_name" placeholder="required" class="view-value-input form-control" required tabindex="2">
+                    <p class="input-group">
+                        <input type="text" name="last_name" ng-model="employee.last_name" placeholder="required" class="view-value-input form-control" required tabindex="2">
+                    </p>
                     <span style="margin:10px 0;">Departure Date</span>
-                    <input ng-click="toggleDepartDatePicker();" type="text" value="{{employee.departure_date | date:'MM/dd/yyyy'}}" style="display: inline-block;" placeholder="optional" class="view-value-input form-control"/>
-                    <div ng-show="showDepartDatePicker" style="background-color: #fff;margin-top: -5px;margin-left: -19px;padding:10px;float:left;position: absolute" ng-model="employee.departure_date">
-                        <datepicker show-weeks="showWeeks"></datepicker>
-                    </div>
+                    <p class="input-group">
+                      <input type="text" name="depart_date" class="form-control" datepicker-popup="{{format}}" ng-model="employee.departure_date" is-open="datepickers.depart_date" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" placeholder="optional"  ng-required="false" close-text="Close" tabindex="4"/>
+                      <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="open($event, 'depart_date')"><i class="glyphicon glyphicon-calendar"></i></button>
+                      </span>
+                    </p>
                     <span style="margin:10px 0;">Team Lead</span>
                     <div class="edit-dropdown">
-                        <input type="text" ng-model="employee.current_leader.full_name" placeholder="optional" typeahead-on-select="employee.current_leader=$item" typeahead="employee.full_name for employee in employees | filter:{full_name:$viewValue}:startsWith | orderBy:'full_name' | limitTo:8" typeahead-editable="false" class="view-value-input form-control" tabindex="6"/>
+                        <p class="input-group">
+                            <input type="text" ng-model="employee.current_leader.full_name" placeholder="optional" typeahead-on-select="employee.current_leader=$item" typeahead="employee.full_name for employee in employees | filter:{full_name:$viewValue}:startsWith | orderBy:'full_name' | limitTo:8" typeahead-editable="false" class="view-value-input form-control" tabindex="6"/>
+                        </p>
                     </div>
                     <span ng-if="customer.show_coaches" style="margin:10px;">Coach</span>
                     <div ng-if="customer.show_coaches" class="edit-dropdown" style="margin: 10px;">
-                        <input type="text" ng-model="employee.coach.full_name" placeholder="optional" typeahead-on-select="employee.coach=$item" typeahead="employee.full_name for coach in employees | filter:{full_name:$viewValue}:startsWith | orderBy:'full_name' | limitTo:8" typeahead-editable="false" class="view-value-input form-control" tabindex="8"/>
+                        <p class="input-group">
+                            <input type="text" ng-model="employee.coach.full_name" placeholder="optional" typeahead-on-select="employee.coach=$item" typeahead="employee.full_name for coach in employees | filter:{full_name:$viewValue}:startsWith | orderBy:'full_name' | limitTo:8" typeahead-editable="false" class="view-value-input form-control" tabindex="8"/>
+                        </p>
                     </div>
                 </div>
                 <div style="clear:both;"></div>

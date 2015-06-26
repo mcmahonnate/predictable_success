@@ -247,6 +247,23 @@ angular.module('tdb.controllers', [])
     $scope.cancel = function () {
         $modalInstance.dismiss();
     };
+    $scope.formats = ['dd-MMM-yyyy','dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+    $scope.format = $scope.formats[0];
+    $scope.dateOptions = {
+        formatYear: 'yy',
+        startingDay: 1,
+        showWeeks: false
+    };
+    $scope.datepickers = {
+        hire_date: false,
+        depart_date: false
+    }
+    $scope.open = function($event, which) {
+        $event.preventDefault();
+        $event.stopPropagation();
+
+        $scope.datepickers[which] = true;
+    };
     $scope.showHireDatePicker = false;
     $scope.showDepartDatePicker = false;
     $scope.toggleHireDatePicker = function(){
@@ -303,7 +320,6 @@ angular.module('tdb.controllers', [])
                       });
     };
     var changeLocation = function(url, force) {
-        console.log('changelocation');
         //this will mark the URL change
         $location.path(url); //use $location.path(url).replace() if you want to replace the location instead
         $scope = $scope || angular.element(document).scope();
