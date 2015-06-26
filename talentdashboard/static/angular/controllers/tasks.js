@@ -39,22 +39,33 @@ angular.module('tdb.controllers.tasks', [])
         }
     }])
 
-    .controller('TaskListCtrl', ['$scope', '$modal', 'Task', function ($scope, $modal, Task) {
+    .controller('TaskListCtrl', ['$scope', '$attrs', '$modal', 'Task', function ($scope, $attrs, $modal, Task) {
         var employee_id = $scope.employee ? $scope.employee.id : null;
+        $scope.view = $attrs.view;
+        $scope.filter = $attrs.filter;
+        $scope.pageSize = $attrs.pageSize;
         $scope.canAddNew = false;
         $scope.todos = [];
         $scope.done = [];
+
         $scope.loadTasks = function(completed) {
             $scope.busy = true;
 
             var page;
+            var filter = $scope.filter;
+
+            if (!$scope.page_size) {
+                var page_size = 5;
+            }    
+
             if (completed) {page = $scope.done_page + 1}
             else {page = $scope.todo_page + 1}
 
-            var query = {completed: completed, filter: 'mine', page: page};
+            var query = {completed: completed, filter: filter, page: page, page_size: 20};
+            
             if (employee_id) {
                 $scope.canAddNew = true;
-                query = {employee_id: employee_id, completed: completed, page: page};
+                query = {employee_id: employee_id, completed: completed, page: page, page_size: page_size};
             }
 
             Task.get(query, function(data) {
@@ -78,18 +89,6 @@ angular.module('tdb.controllers.tasks', [])
         $scope.todo_has_next = true;
         $scope.done_page = 0;
         $scope.todo_page = 0;
-        $scope.loadTasks(false); //load todos
-        $scope.loadTasks(true); //load done todos
-
-        $scope.tabs = {
-            todoTab: 'todo',
-            doneTab: 'done',
-            activeTab: 'todo'
-        };
-
-        $scope.setActiveTab = function (tab) {
-            $scope.tabs.activeTab = tab;
-        };
 
         $scope.newTask = function () {
             if (!$scope.canAddNew) return;
@@ -107,7 +106,6 @@ angular.module('tdb.controllers.tasks', [])
             modalInstance.result.then(
                 function (newTask) {
                     $scope.todos.push(newTask);
-                    $scope.setActiveTab($scope.tabs.todoTab);
                 }
             );
         };
@@ -132,8 +130,9 @@ angular.module('tdb.controllers.tasks', [])
         };
 
         $scope.deleteTask = function (task) {
-            task.$delete();
-            removeItemFromList($scope.todos, task);
+            Task.delete(task, function() {
+                removeItemFromList($scope.todos, task);
+            });
         };
 
         $scope.toggleCompleted = function (task) {
@@ -149,5 +148,9 @@ angular.module('tdb.controllers.tasks', [])
             var index = list.indexOf(currentItem);
             list.splice(index, 1);
             list.splice(index, 0, newItem);
-        }
+        };
+
+        $scope.loadTasks(false); //load todos
+        $scope.loadTasks(true); //load done todos
+
     }]);

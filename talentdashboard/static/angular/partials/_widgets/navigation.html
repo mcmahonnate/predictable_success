@@ -99,7 +99,7 @@
                 <div class="subnav-title">Settings</div>
                 <ul>
                     <li ng-show="!showAddEmployee">
-                        <a class="dashboard employee_menu" ng-click="toggleAddEmployeeModal()">
+                        <a class="dashboard employee_menu" ng-click="addEmployee(newEmployee, newLeadership, employees, teams);">
                             <span class="glyphicon glyphicon-user"></span>
                             <span>Add Employee</span>
                         </a>
@@ -108,7 +108,6 @@
             </div>
         </div>
     </div>
-    <modal-employee employee='newEmployee' leadership='newLeadership' employees='employees' teams='teams' show='modalEmployeeShown' width='700px'></modal-employee> 
 
     <!-- Search -->
     <div class="nav-item"  ng-if="currentUser.can_view_company_dashboard" ng-class="{'nav-item-active': $root.activeTab == searchTab}" ng-click="setActiveTab(searchTab); clearSearch();">

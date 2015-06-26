@@ -78,6 +78,9 @@ angular.module('tdb.services.tasks', ['ngResource'])
                     angular.fromJson,
                     fromServer
                 ]
+            },
+            'delete': {
+                'method': 'DELETE'
             }
         };
 

@@ -48,6 +48,7 @@ class EmployeeManager(models.Manager):
 
 class Employee(models.Model):
     objects = EmployeeManager()
+    _current_leadership = None
 
     full_name = models.CharField(
         max_length=255,
@@ -109,7 +110,15 @@ class Employee(models.Model):
     def save(self, *args, **kwargs):
         if self.first_name and self.last_name:
             self.full_name = self.first_name + " " + self.last_name
+        if self._current_leadership is not None:
+            new_leadership = self._current_leadership
+            old_leadership = self._get_current_leadership()
+            old_leader_id = old_leadership.leader.id if (old_leadership is not None) and (old_leadership.leader is not None) else 0
+            new_leader_id = self._current_leadership.leader.id if self._current_leadership.leader is not None else 0
         super(Employee, self).save(*args, **kwargs)
+        if (new_leadership is not None) and (old_leader_id != new_leader_id):
+            new_leadership.employee = self
+            new_leadership.save()
 
     def is_coach(self):
         if self.user is None:
@@ -174,10 +183,10 @@ class Employee(models.Model):
         except:
             return None
 
-    def _get_current_leader(self):
+    def _get_current_leadership(self):
         try:
-            obj = self.leaderships.latest('start_date')
-            return obj.leader
+            obj = self.leaderships.last()
+            return obj
         except:
             return None
 
@@ -205,7 +214,12 @@ class Employee(models.Model):
 
     @property
     def current_leader(self):
-        return self._get_current_leader()
+        self._current_leadership = self._get_current_leadership()
+        return self._current_leadership.leader if self._current_leadership else None
+
+    @current_leader.setter
+    def current_leader(self, value):
+        self._current_leadership = Leadership(employee=self, leader=value)
 
     @property
     def current_happiness(self):
@@ -273,7 +287,7 @@ class Mentorship(models.Model):
 
 
 class Leadership(models.Model):
-    leader = models.ForeignKey(Employee, related_name='+')
+    leader = models.ForeignKey(Employee, related_name='+', null=True, blank=True)
     employee = models.ForeignKey(Employee, related_name='leaderships')
     start_date = models.DateField(null=False, blank=False, default=datetime.date.today)
     end_date = models.DateField(null=True, blank=True)
@@ -284,7 +298,11 @@ class Leadership(models.Model):
         super(Leadership, self).save(*args, **kwargs)
 
     def __str__(self):
-        return "%s leader of %s" % (self.leader.full_name, self.employee.full_name)
+        leader_name = 'No one'
+        if self.leader is not None:
+            leader_name = self.leader.full_name
+
+        return "%s leads %s" % (leader_name, self.employee.full_name)
 
 
 class Attribute(models.Model):

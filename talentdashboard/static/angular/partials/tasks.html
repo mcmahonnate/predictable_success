@@ -1,0 +1,4 @@
+<div class="container" ng-if="currentUser.can_view_company_dashboard">
+    <h1>All Tasks</h1>
+    <div ng-include="'/static/angular/partials/_widgets/todos.html'" ng-init="init(page_size=20, widget=false)" ng-controller="TaskListCtrl"></div>
+</div>

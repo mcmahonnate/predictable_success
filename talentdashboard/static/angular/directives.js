@@ -1154,16 +1154,7 @@ angular.module('tdb.directives', [])
                               $scope.preview = result;
                           });
         };
-        $scope.showHireDatePicker = false;
-        $scope.showDepartDatePicker = false;
-        $scope.toggleHireDatePicker = function(){
-            $scope.showDepartDatePicker = false;
-            $scope.showHireDatePicker = !$scope.showHireDatePicker;
-        };
-        $scope.toggleDepartDatePicker = function(){
-            $scope.showHireDatePicker = false;
-            $scope.showDepartDatePicker = !$scope.showDepartDatePicker;
-        }
+
     },
     templateUrl: "/static/angular/partials/_modals/edit-bio-modal.html"
   };

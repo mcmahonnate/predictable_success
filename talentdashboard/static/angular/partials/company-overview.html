@@ -1,0 +1,16 @@
+<div class="container narrow-gutter {in:salaryReport}" ng-if="currentUser.can_view_company_dashboard">
+        <div ng-include="'/static/angular/partials/_widgets/search.html'"></div>
+        <h1>{{customer.name}} Dashboard</h1>    
+    <div class="row">
+        <div class="col col-sm-5 col-md-4 col-lg-5">
+            <div ng-include="'/static/angular/partials/_widgets/chart-talent-portfolio.html'"></div> 
+            <div ng-include="'/static/angular/partials/_widgets/talent-salary-totals.html'"></div> 
+            <div ng-include="'/static/angular/partials/_widgets/salary-total.html'"></div> 
+            <div ng-if="customer.show_kpi" ng-include="'/static/angular/partials/_widgets/revenue-per-employee.html'"></div>
+        </div>
+        <div class="col col-sm-7 col-md-8 col-lg-7">    
+            <div ng-include="'/static/angular/partials/_widgets/todos.html'" data-filter="mine" data-view="my-view" data-page-size="5" ng-controller="TaskListCtrl"></div>
+            <div ng-include="'/static/angular/partials/_widgets/comments.html'" ng-controller="CommentsCtrl" ng-init="init(view='company-view')"></div>
+        </div>
+    </div>
+</div>

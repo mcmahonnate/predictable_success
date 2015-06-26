@@ -916,6 +916,7 @@ class EmployeeDetail(APIView):
             return Response(serializer.data)
         except Employee.DoesNotExist:
             return Response(None)
+<<<<<<< HEAD
         
     def post(self, request, pk, format=None):
         def expire_view_cache(view_name, args=None, language=None, namespace=None, key_prefix=None, method="GET"):
@@ -968,31 +969,34 @@ class EmployeeDetail(APIView):
 
     def put(self, request, pk, format=None):
         employee = Employee.objects.get(id=pk)
-
+        
         if employee is not None:
-            if "_full_name" in request.DATA:
-                employee.full_name = request.DATA["_full_name"]
-            if "_first_name" in request.DATA:
-                employee.first_name = request.DATA["_first_name"]
-            if "_last_name" in request.DATA:
-                employee.last_name = request.DATA["_last_name"]
-            if "_email" in request.DATA:
-                employee.email = request.DATA["_email"]
-            if "_hire_date" in request.DATA:
+            employee.first_name = request.DATA["_first_name"]
+            employee.last_name = request.DATA["_last_name"]
+            employee.email = request.DATA["_email"]
+            if request.DATA["_hire_date"] is not None:
                 employee.hire_date = dateutil.parser.parse(request.DATA["_hire_date"])
-            if "_team_id" in request.DATA:
-                team_id = request.DATA["_team_id"]
-                if team_id is None:
-                    team = None
-                else:
-                    team = Team.objects.get(id=team_id)
-                employee.team = team
-            if "_coach_id" in request.DATA:
-                coach_id = request.DATA["_coach_id"]
-                coach = Employee.objects.get(id=coach_id)
-                employee.coach = coach
-            if "_departure_date" in request.DATA:
+            else:
+                employee.hire_date = None
+            if request.DATA["_departure_date"] is not None:
                 employee.departure_date = dateutil.parser.parse(request.DATA["_departure_date"])
+            else:
+                employee.departure_date = None
+            if request.DATA["_team_id"] is not None:
+                team_id = request.DATA["_team_id"]
+                employee.team = Team.objects.get(id=team_id)
+            else:
+                employee.team = None
+            if request.DATA["_coach_id"] is not None:
+                coach_id = request.DATA["_coach_id"]
+                employee.coach = Employee.objects.get(id=coach_id)
+            else:
+                employee.coach = None
+            if request.DATA["_leader_id"] is not None:
+                leader_id = request.DATA["_leader_id"]
+                employee.current_leader = Employee.objects.get(id=leader_id)
+            else:
+                employee.current_leader = None
             employee.save()
             serializer = EmployeeSerializer(employee, many=False, context={'request': request})
             return Response(serializer.data)

@@ -1,5 +1,5 @@
 <span ng-show="currentUser.can_edit_employees" class="pull-right">
-    <a ng-show="!employeeEdit" ng-click="toggleEditEmployeeModal();" class="btn btn-default btn-xs">Edit</a>
+    <a ng-show="!employeeEdit" ng-click="editEmployee(employee, leadership, employees, teams)" class="btn btn-default btn-xs">Edit</a>
 </span>
 <h2 class="panel-title">Bio</h2>
 <a ng-show="employeeEdit && !currentlyEditing" class="glyphicon glyphicon-edit" style="float:left;cursor:pointer;padding-right:10px"></a>
@@ -12,7 +12,7 @@
         <strong>Departure Date:</strong> {{ employee.departure_date | date:'MM/dd/yyyy' }}
     </li>
     <li>
-        <strong>Team Lead:</strong> <a ng-href="#/employees/{{leadership.leader.id}}">{{ leadership.leader.full_name }}</a>
+        <strong>Team Lead:</strong> <a ng-href="#/employees/{{employee.current_leader.id}}">{{ employee.current_leader.full_name }}</a>
     </li>
     <li ng-if="customer.show_coaches" class="clear">
         <strong>Coach:</strong> <a ng-href="#/employees/{{employee.coach.id}}">{{ employee.coach.full_name }}</a>

@@ -238,20 +238,90 @@ angular.module('tdb.controllers', [])
     }
 }])
 
-.controller('NavigationCtrl', ['$scope', '$rootScope', '$routeParams', '$window', '$location', 'Employee', 'Customers', 'Team', function($scope, $rootScope, $routeParams, $window, $location, Employee, Customers, Team) {
-    
-    $scope.$window = $window;
+.controller('AddEditBioCtrl', ['$scope', '$rootScope', '$routeParams', '$modalInstance', '$location', 'employee', 'leadership', 'employees', 'teams', 'Employee', 'EmployeeLeader', 'fileReader', 'PhotoUpload', function($scope, $rootScope, $routeParams, $modalInstance, $location, employee, leadership, employees, teams, Employee, EmployeeLeader, fileReader, PhotoUpload) {
+    $scope.employee = angular.copy(employee);
+    $scope.leadership = angular.copy(leadership);
+    $scope.teams = teams;
+    $scope.employees = employees;
+    $scope.preview=$scope.employee.avatar;
+    $scope.cancel = function () {
+        $modalInstance.dismiss();
+    };
+    $scope.showHireDatePicker = false;
+    $scope.showDepartDatePicker = false;
+    $scope.toggleHireDatePicker = function(){
+        $scope.showDepartDatePicker = false;
+        $scope.showHireDatePicker = !$scope.showHireDatePicker;
+    };
+    $scope.toggleDepartDatePicker = function(){
+        $scope.showHireDatePicker = false;
+        $scope.showDepartDatePicker = !$scope.showDepartDatePicker;
+    };
+    $scope.saveEmployee = function() {
+        var data = getData();
+        console.log(data);
+        if ($scope.employee.id > 0) {
+            Employee.update(data, function (response) {
+                $scope.employee = response;
+                saveOtherInfo(false);
+            });
+        } else {
+            Employee.addNew(data, function (response) {
+                $scope.employee = response;
+                saveOtherInfo(true);
+            });
+        }
+    };
+    var saveOtherInfo = function(addNew) {
+        if ($scope.preview != $scope.employee.avatar) {
+            var upload_data = {id: $scope.employee.id};
+            PhotoUpload($scope.model, $scope.files).update(upload_data, function (data) {
+                $scope.employee.avatar = data.avatar;
+            });
+        }
+        $modalInstance.close($scope.employee);
+        if (addNew) {changeLocation('employees/' + $scope.employee.id, false);}
+    };
 
+    var getData = function() {
+        var data = {id: $scope.employee.id};
+        data._first_name = $scope.employee.first_name;
+        data._last_name = $scope.employee.last_name;
+        data._email = $scope.employee.email;
+        data._hire_date = ($scope.employee.hire_date) ? $rootScope.scrubDate($scope.employee.hire_date, false) : null;
+        data._departure_date = ($scope.employee.departure_date) ? $rootScope.scrubDate($scope.employee.departure_date, false) : null;
+        data._team_id = ($scope.employee.team && $scope.employee.team.name) ? $scope.employee.team.id : null;
+        data._coach_id = ($scope.employee.coach && $scope.employee.coach.full_name) ? $scope.employee.coach.id : null;
+        data._leader_id = ($scope.employee.current_leader && $scope.employee.current_leader.full_name) ? $scope.employee.current_leader.id : null;
+        return data;
+    };
+    $scope.uploadFile = function(files){
+        $scope.files = files;
+        fileReader.readAsDataUrl($scope.files[0], $scope)
+                      .then(function(result) {
+                          $scope.preview = result;
+                      });
+    };
+    var changeLocation = function(url, force) {
+        console.log('changelocation');
+        //this will mark the URL change
+        $location.path(url); //use $location.path(url).replace() if you want to replace the location instead
+        $scope = $scope || angular.element(document).scope();
+    };
+}])
+
+.controller('NavigationCtrl', ['$scope', '$rootScope', '$routeParams', '$location', '$modal', 'Employee', 'Customers', 'Team', function($scope, $rootScope, $routeParams, $location, $modal, Employee, Customers, Team) {
     //search
     if (!$scope.employees) {
-        $scope.employees = Employee.query({
-        random:Math.floor((Math.random()*1000000000))
-        }); //!important browser cache buster
+        $scope.employees = Employee.query(); //!important browser cache buster
     }
     Customers.get(function (data) {
         $scope.customer = data;
     });
 
+    if (!$scope.employees && $rootScope.currentUser.can_view_company_dashboard) {
+        $scope.employees = Employee.query();
+    }
 
     //teams
     $scope.teams = Team.query();
@@ -261,7 +331,7 @@ angular.module('tdb.controllers', [])
         first_name:'',
         last_name:'', 
         email:'', 
-        team:{id:0, name:''}, 
+        team:{id:null, name:''},
         hire_date:'',
         departure_date:'', 
         avatar:'https://hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg'
@@ -269,7 +339,7 @@ angular.module('tdb.controllers', [])
     $scope.newEmployee = $scope.newEmployeeBlank;
 
     $scope.newLeadership = {
-        id:0,
+        id:null,
         leader:{full_name:''}
     };  
 
@@ -288,7 +358,29 @@ angular.module('tdb.controllers', [])
     $scope.toggleAddEmployeeModal = function() {
         $scope.clearAddModal();
         $scope.modalEmployeeShown = !$scope.modalEmployeeShown;
-    };  
+    };
+
+    $scope.addEmployee = function (employee, leadership, employees, teams) {
+        var modalInstance = $modal.open({
+            animation: true,
+            templateUrl: '/static/angular/partials/_modals/edit-bio-modal.html',
+            controller: 'AddEditBioCtrl',
+            resolve: {
+                employee: function () {
+                    return employee
+                },
+                leadership: function () {
+                    return leadership
+                },
+                employees: function () {
+                    return employees
+                },
+                teams: function () {
+                    return teams
+                }
+            }
+        });
+    };
 
     //clear search
     $scope.navQuery = '';
@@ -435,6 +527,32 @@ angular.module('tdb.controllers', [])
                 }
             }
         });
+    };
+    $scope.editEmployee = function (employee, leadership, employees, teams) {
+        var modalInstance = $modal.open({
+            animation: true,
+            templateUrl: '/static/angular/partials/_modals/edit-bio-modal.html',
+            controller: 'AddEditBioCtrl',
+            resolve: {
+                employee: function () {
+                    return employee
+                },
+                leadership: function () {
+                    return leadership
+                },
+                employees: function () {
+                    return employees
+                },
+                teams: function () {
+                    return teams
+                }
+            }
+        });
+        modalInstance.result.then(
+            function (e, l) {
+                $scope.employee = e;
+            }
+        );
     };
     $scope.formats = ['yyyy-mm-dd', 'mm/dd/yyyy', 'shortDate'];
     $scope.format = $scope.formats[0];
@@ -713,6 +831,23 @@ angular.module('tdb.controllers', [])
     }
 }])
 
+.controller('TasksCtrl', ['$scope', '$rootScope', '$location', '$routeParams', '$window', 'EmployeeToDo', 'ToDo', function($scope, $rootScope, $location, $routeParams, $window, EmployeeToDo, ToDo) {
+
+    $scope.deleteToDo = function(todo) {
+        if ($window.confirm('Are you sure you want to delete this To Do?')) {
+            var data = {id: todo.id};
+            var todo_index = $scope.todos.indexOf(todo);
+            var deleteSuccess = function() {
+                $scope.todos.splice(todo_index, 1);
+            };
+
+            ToDo.remove(data, function() {
+                deleteSuccess();
+            });
+        }
+    }
+}])
+
 .controller('LeaderOverviewCtrl', ['$scope', '$location', '$routeParams', 'TalentReport', 'TeamLeadEmployees', 'User', 'analytics', function($scope, $location, $routeParams, TalentReport, TeamLeadEmployees, User, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
 
@@ -849,130 +984,6 @@ angular.module('tdb.controllers', [])
             $scope.todos.splice(todo_index, 1);
         }
     }
-}])
-
-.controller('EmployeeToDoCtrl', ['$rootScope', '$scope', '$window', 'Employee', 'ToDo', 'EmployeeToDo', 'Coach', function($rootScope, $scope, $window, Employee, ToDo, EmployeeToDo, Coach) {
-    $scope.currentToDo = {due_date:null};
-    $scope.$window = $window;
-    $scope.$watch('currentToDo.due_date', function(newVal, oldVal){
-        if (newVal != oldVal) {
-            $scope.saveToDo();
-        }
-    },true);
-    $scope.offsetTop=0;
-    $scope.scrollIntoView=false;
-
-    $scope.toggleAssigneeMenu = function () {
-
-        $scope.openAssigneeMenu = !$scope.openAssigneeMenu;
-        $scope.scrollIntoView = $scope.openAssigneeMenu;
-        if ($scope.openAssigneeMenu ) {
-            $scope.$window.onclick = function (event) {
-                closeAssigneeWindow(event, $scope.toggleAssigneeMenu);
-            };
-        } else {
-            $scope.openAssigneeMenu = true;
-            $scope.$window.onclick = null;
-            $scope.$$phase || $scope.$apply(); //--> trigger digest cycle and make angular aware.
-        }
-    };
-    $scope.closeAssigneeMenu = function() {
-        $scope.openAssigneeMenu  = false;
-        $scope.$window.onclick = null;
-    };
-    function closeAssigneeWindow(event, callbackOnClose) {
-        var clickedElement = event.target;
-        if (!clickedElement) return;
-
-        var elementClasses = clickedElement.classList;
-        var clickedOnAssigneeMenu = elementClasses.contains('assignee_menu');
-        if (!clickedOnAssigneeMenu) {
-            callbackOnClose();
-        }
-    }
-    $scope.saveToDo = function() {
-        if (!$scope.saving) {
-            //$scope.currentToDo.edit = false;
-            $scope.saving = true;
-            var assigned_to_id = null;
-            if ($scope.currentToDo.assigned_to) {
-                assigned_to_id = $scope.currentToDo.assigned_to.id;
-            }
-            var due_date = null;
-            if ($scope.currentToDo.due_date) {
-                due_date = $rootScope.scrubDate($scope.currentToDo.due_date, false);
-            }
-
-            var data = {id: $scope.currentToDo.id, _description: $scope.currentToDo.description, _completed: $scope.currentToDo.completed, _assigned_to_id: assigned_to_id, _due_date: due_date, _employee_id: $scope.currentToDo.employee_id, _owner_id: $scope.currentToDo.created_by.id};
-            if ($scope.currentToDo.id != -1) {
-                ToDo.update(data, function (response) {
-                    $scope.saving = false;
-                });
-            } else {
-                if ($scope.currentToDo.description) {
-                    data.id = $scope.currentToDo.employee_id;
-                    EmployeeToDo.addNew(data, function (response) {
-                        $scope.currentToDo.id = response.id;
-                        $scope.saving = false;
-                    });
-                } else {
-
-                }
-            }
-        }
-    }
-    $scope.assigneeMenu = {show: false};
-    $scope.assignees = Coach.query();
-    $scope.startsWith  = function(expected, actual){
-        if(expected && actual){
-            return expected.toLowerCase().indexOf(actual.toLowerCase()) == 0;
-        }
-        return true;
-    }
-
-    $scope.today = function() {
-        $scope.dt = new Date();
-    };
-
-    $scope.showWeeks = false;
-    $scope.toggleWeeks = function () {
-        $scope.showWeeks = ! $scope.showWeeks;
-    };
-
-    $scope.clear = function () {
-        $scope.dt = null;
-    };
-
-    // Disable weekend selection
-    $scope.disabled = function(date, mode) {
-        return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-    };
-
-    $scope.toggleMin = function() {
-        $scope.minDate = ( $scope.minDate ) ? null : new Date();
-    };
-    $scope.toggleMin();
-
-    $scope.open = function($event) {
-        if (!$scope.opened) {
-            $event.preventDefault();
-            $event.stopPropagation();
-            $scope.opened = true;
-            $scope.scrollIntoView = true;
-        } else {
-            $scope.opened = false;
-            $scope.scrollIntoView = false;
-        }
-
-    };
-
-    $scope.dateOptions = {
-        'year-format': "'yy'",
-        'starting-day': 1
-    };
-
-    $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'shortDate'];
-    $scope.format = $scope.formats[0];
 }])
 
 .controller('DailyDigestCtrl', ['$scope', '$modalInstance', 'Employee', function($scope, $modalInstance, Employee) {

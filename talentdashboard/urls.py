@@ -9,6 +9,7 @@ from forms import *
 from rest_framework import routers
 from views.payment import ChargeView, PaymentView
 from views.homepage import IndexView
+from insights.views import Signup, Report, Survey, Confirmation
 
 router = routers.DefaultRouter()
 router.register(r'^api/v1/teams', TeamViewSet)
@@ -35,7 +36,7 @@ urlpatterns = patterns('',
     url(r'^account/reset/complete/$', password_reset_complete, {'template_name': 'password_reset_complete.html'}),
     url(r'^account/reset/done/$', password_reset_complete, {'template_name': 'password_reset_complete.html'}),
     url(r'^account/', include('django.contrib.auth.urls')),
-    url(r'^accounts/password/reset/$', password_reset, {'template_name': 'password_reset_form.html', 'email_template_name': 'password_reset_email.html'}),
+    url(r'^accounts/password/reset/$', password_reset, {'is_admin_site': True, 'template_name': 'password_reset_form.html', 'email_template_name': 'password_reset_email.html'}),
     url(r'^api/v1/annotation-chart/(?P<pk>[0-9]+)/$', AnnotationChartData.as_view()),
     url(r'^api/v1/customer/$', customer),
     url(r'^api/v1/kpi-performance/$', current_kpi_performance),
@@ -105,7 +106,12 @@ urlpatterns = patterns('',
     url(r'^api/v1/feedback/coachees/(?P<pk>[0-9]*)/$', view_coachee_feedback),
     url(r'^api/v1/feedback/submissions/mine/$', my_feedback),
     url(r'^api/v1/feedback/menu/$', menu_counts),
-
+    
+    url(r'^insights/$', Signup.as_view(), name="signup"),
+    url(r'^insights/report/(?P<access_token>[\w.@+-]+)/(?P<uid>[\w.@+-]+)/$', Report.as_view(), name="insights_survey_report"),
+    url(r'^insights/survey/(?P<access_token>[\w.@+-]+)/$', Survey.as_view(), name="insights_survey"),
+    url(r'^insights/thanks/$', Confirmation.as_view(), name="insights_confirmation"),
+    
     url(r'^api/v1/reports/talent/my-team/$', my_team_report),
     url(r'^api/v1/reports/talent/my-coachees/$', my_coachees_report),
     url(r'^api/v1/reports/talent/$', talent_report),
