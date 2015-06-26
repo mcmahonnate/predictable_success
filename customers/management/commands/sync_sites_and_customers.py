@@ -12,19 +12,21 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         customer = Customer.objects.filter(schema_name=connection.schema_name).first()
         if customer.is_public_tenant():
-            print "Site and Customer are already sync'd"
             return
 
         site = Site.objects.get_current()
-        if _site_isnt_syncd_with_customer(site, customer):
-            _sync(site, customer)
+
+        if site_isnt_syncd_with_customer(site, customer):
+            sync(site, customer)
+        else:
+            print "Site and Customer are already sync'd"
 
 
-def _site_isnt_syncd_with_customer(site, customer):
+def site_isnt_syncd_with_customer(site, customer):
     return site.domain != customer.domain_url or site.name != customer.name
 
 
-def _sync(site, customer):
+def sync(site, customer):
     print ("Syncing site.domain from {0} to {1}".format(site.domain, customer.domain_url))
     site.domain = customer.domain_url
     print ("Syncing site.name from {0} to {1}".format(site.name, customer.name))
