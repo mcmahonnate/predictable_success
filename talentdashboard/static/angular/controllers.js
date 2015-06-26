@@ -310,15 +310,10 @@ angular.module('tdb.controllers', [])
     };
 }])
 
-.controller('NavigationCtrl', ['$scope', '$rootScope', '$routeParams', '$window', '$location', '$modal', 'Employee', 'Customers', 'Team', function($scope, $rootScope, $routeParams, $window, $location, $modal, Employee, Customers, Team) {
-    
-    $scope.$window = $window;
-
+.controller('NavigationCtrl', ['$scope', '$rootScope', '$routeParams', '$location', '$modal', 'Employee', 'Customers', 'Team', function($scope, $rootScope, $routeParams, $location, $modal, Employee, Customers, Team) {
     //search
     if (!$scope.employees) {
-        $scope.employees = Employee.query({
-        random:Math.floor((Math.random()*1000000000))
-        }); //!important browser cache buster
+        $scope.employees = Employee.query(); //!important browser cache buster
     }
     Customers.get(function (data) {
         $scope.customer = data;
@@ -327,7 +322,6 @@ angular.module('tdb.controllers', [])
     if (!$scope.employees && $rootScope.currentUser.can_view_company_dashboard) {
         $scope.employees = Employee.query();
     }
-
 
     //teams
     $scope.teams = Team.query();
@@ -401,19 +395,6 @@ angular.module('tdb.controllers', [])
             $rootScope.activeTab = tab;
         }    
     };
-
-    // $scope.$window.onclick = function() {
-    //     if ($scope.activeTab != null) {
-    //         $scope.activeTab = null;
-    //         //$scope.$apply();
-
-    //         console.log('not null')
-    //     } else {
-    //         console.log('is null')
-    //     }
-    // };
-
-
 }])
 
 .controller('TeamListCtrl', ['$scope', 'Team', function($scope, Team) {
@@ -988,130 +969,6 @@ angular.module('tdb.controllers', [])
             $scope.todos.splice(todo_index, 1);
         }
     }
-}])
-
-.controller('EmployeeToDoCtrl', ['$rootScope', '$scope', '$window', 'Employee', 'ToDo', 'EmployeeToDo', 'Coach', function($rootScope, $scope, $window, Employee, ToDo, EmployeeToDo, Coach) {
-    $scope.currentToDo = {due_date:null};
-    $scope.$window = $window;
-    $scope.$watch('currentToDo.due_date', function(newVal, oldVal){
-        if (newVal != oldVal) {
-            $scope.saveToDo();
-        }
-    },true);
-    $scope.offsetTop=0;
-    $scope.scrollIntoView=false;
-
-    $scope.toggleAssigneeMenu = function () {
-
-        $scope.openAssigneeMenu = !$scope.openAssigneeMenu;
-        $scope.scrollIntoView = $scope.openAssigneeMenu;
-        if ($scope.openAssigneeMenu ) {
-            $scope.$window.onclick = function (event) {
-                closeAssigneeWindow(event, $scope.toggleAssigneeMenu);
-            };
-        } else {
-            $scope.openAssigneeMenu = true;
-            $scope.$window.onclick = null;
-            $scope.$$phase || $scope.$apply(); //--> trigger digest cycle and make angular aware.
-        }
-    };
-    $scope.closeAssigneeMenu = function() {
-        $scope.openAssigneeMenu  = false;
-        $scope.$window.onclick = null;
-    };
-    function closeAssigneeWindow(event, callbackOnClose) {
-        var clickedElement = event.target;
-        if (!clickedElement) return;
-
-        var elementClasses = clickedElement.classList;
-        var clickedOnAssigneeMenu = elementClasses.contains('assignee_menu');
-        if (!clickedOnAssigneeMenu) {
-            callbackOnClose();
-        }
-    }
-    $scope.saveToDo = function() {
-        if (!$scope.saving) {
-            //$scope.currentToDo.edit = false;
-            $scope.saving = true;
-            var assigned_to_id = null;
-            if ($scope.currentToDo.assigned_to) {
-                assigned_to_id = $scope.currentToDo.assigned_to.id;
-            }
-            var due_date = null;
-            if ($scope.currentToDo.due_date) {
-                due_date = $rootScope.scrubDate($scope.currentToDo.due_date, false);
-            }
-
-            var data = {id: $scope.currentToDo.id, _description: $scope.currentToDo.description, _completed: $scope.currentToDo.completed, _assigned_to_id: assigned_to_id, _due_date: due_date, _employee_id: $scope.currentToDo.employee_id, _owner_id: $scope.currentToDo.created_by.id};
-            if ($scope.currentToDo.id != -1) {
-                ToDo.update(data, function (response) {
-                    $scope.saving = false;
-                });
-            } else {
-                if ($scope.currentToDo.description) {
-                    data.id = $scope.currentToDo.employee_id;
-                    EmployeeToDo.addNew(data, function (response) {
-                        $scope.currentToDo.id = response.id;
-                        $scope.saving = false;
-                    });
-                } else {
-
-                }
-            }
-        }
-    }
-    $scope.assigneeMenu = {show: false};
-    $scope.assignees = Coach.query();
-    $scope.startsWith  = function(expected, actual){
-        if(expected && actual){
-            return expected.toLowerCase().indexOf(actual.toLowerCase()) == 0;
-        }
-        return true;
-    }
-
-    $scope.today = function() {
-        $scope.dt = new Date();
-    };
-
-    $scope.showWeeks = false;
-    $scope.toggleWeeks = function () {
-        $scope.showWeeks = ! $scope.showWeeks;
-    };
-
-    $scope.clear = function () {
-        $scope.dt = null;
-    };
-
-    // Disable weekend selection
-    $scope.disabled = function(date, mode) {
-        return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-    };
-
-    $scope.toggleMin = function() {
-        $scope.minDate = ( $scope.minDate ) ? null : new Date();
-    };
-    $scope.toggleMin();
-
-    $scope.open = function($event) {
-        if (!$scope.opened) {
-            $event.preventDefault();
-            $event.stopPropagation();
-            $scope.opened = true;
-            $scope.scrollIntoView = true;
-        } else {
-            $scope.opened = false;
-            $scope.scrollIntoView = false;
-        }
-
-    };
-
-    $scope.dateOptions = {
-        'year-format': "'yy'",
-        'starting-day': 1
-    };
-
-    $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'shortDate'];
-    $scope.format = $scope.formats[0];
 }])
 
 .controller('DailyDigestCtrl', ['$scope', '$modalInstance', 'Employee', function($scope, $modalInstance, Employee) {

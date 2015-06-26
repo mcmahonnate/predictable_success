@@ -887,25 +887,9 @@ class EmployeeDetail(APIView):
             return Response(None)
 
     def put(self, request, pk, format=None):
-        def expire_view_cache(view_name, args=None, language=None, namespace=None, key_prefix=None, method="GET"):
-            url = reverse(view_name, args=args)
-            key_prefix = settings.CACHE_MIDDLEWARE_KEY_PREFIX
-            ctx = hashlib.md5()
-            path = hashlib.md5(iri_to_uri(url))
-            cache_key = 'views.decorators.cache.cache_page.%s.%s.%s.%s' % (
-                key_prefix, 'GET', path.hexdigest(), ctx.hexdigest())
-            if settings.USE_I18N:
-                cache_key += '.%s' % (language or get_language())
-            if cache_key:
-                if cache.get(cache_key):
-                    cache.delete(cache_key)
-                return True
-            return False
-
         if int(pk) == 0 and "_first_name" in request.DATA:
             employee = Employee()
             employee.display = True
-            expire_view_cache('employee-list')
         else:
             employee = Employee.objects.get(id=pk)
         if employee is not None:
