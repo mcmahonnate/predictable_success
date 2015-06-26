@@ -31,21 +31,3 @@ class Customer(TenantMixin):
 
 def current_customer():
     return Customer.objects.filter(schema_name=connection.schema_name).first()
-
-
-@receiver(post_schema_sync)
-def create_initial_user(sender, **kwargs):
-    tenant = kwargs['tenant']
-    connection.set_tenant(tenant)
-    username = tenant.schema_name + 'admin'
-    if not User.objects.filter(username=username).exists():
-        user = User(username=username, is_staff=True, is_superuser=True)
-        password = os.environ.get('NEW_CUSTOMER_PWD')
-        user.set_password(password)
-        user.save()
-
-    for name in settings.REQUIRED_GROUPS:
-        if not Group.objects.filter(name=name).exists():
-            Group(name=name).save()
-
-    connection.set_schema_to_public()
