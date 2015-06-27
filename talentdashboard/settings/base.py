@@ -143,7 +143,7 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-SSLIFY_DISABLE = os.environ['SSLIFY_DISABLE']
+SSLIFY_DISABLE = os.environ.get('SSLIFY_DISABLE', False)
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 ROOT_URLCONF = 'talentdashboard.urls'
 
