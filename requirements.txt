@@ -31,4 +31,3 @@ django-test-without-migrations==0.2
 heroku==0.1.4
 -e git+git://github.com/themotleyfool/pysolr.git@master#egg=pysolr
 simplejson
-django-sslify==0.2.5
