@@ -483,33 +483,14 @@ angular.module('tdb.directives', [])
 .directive('importTable', function() {
     return {
         restrict: 'E',
-        transclude: true,
-        template: '<div> <table class="table"> </table> </div>',
+        replace: true,
+        // template: '<div> <table class="table"> </table> </div>',
+        templateUrl: "/static/angular/partials/import-table.html",
         link: function (scope, element, attrs) {
             scope.table;
-            var headerOptions = ["First name", "Last name", "Email", "Hire Date", "Job Title", "Salary", "Team Leader", "Team Name", "Don't Import"];
-            var dataHeaders = [];
-
-            // make dropdowns
-            var genDropdown = function() {
-                // var res = "<select class='header-select'>";  
-                // res += '<option selected="selected"> </option>'
-                // headerOptions.map(function (h) {
-                //     res += '<option>';
-                //     res += h;
-                //     res += '</option>'
-                // });
-                // return res + "</select";
-
-                var res = "<select class='form-control'>";  
-                res += '<option selected="selected"> </option>'
-                headerOptions.map(function (h) {
-                    res += '<option>';
-                    res += h;
-                    res += '</option>'
-                });
-                return res + "</select";
-            }
+            scope.headerOptions = ["First name", "Last name", "Email", "Hire Date", "Job Title", "Salary", "Team Leader", "Team Name", "Don't Import"];
+            scope.selectedHeaders = {};
+            scope.dataHeaders = [];
 
             // update data to import based on selected headers
             scope.getData = function() {
@@ -553,31 +534,14 @@ angular.module('tdb.directives', [])
                 var tableHTML = "";
                 var cellHTML = "<td> CONTENT </td>";
 
-                // get headers from first row, then remove
+                // get headers from first row, then remove them from data
                 console.log(scope.importData[0]);
-                dataHeaders = Object.keys(scope.importData[0]);
+                scope.dataHeaders = Object.keys(scope.importData[0]);
                 scope.importData.splice(0, 1);
 
-                // add dropdowns for headers
-                tableHTML += "<tr>";
-                for (var i = 0; i < dataHeaders.length; i++)
-                    tableHTML += "<td>" + genDropdown() + "</td>";
-                tableHTML += "</tr>";
-
-                // add data cells
-                scope.importData.map(function (obj) {
-                    tableHTML += "<tr>";
-                    dataHeaders.map(function (key) {
-                        if (obj[key] === undefined || obj[key] === null)
-                            tableHTML += cellHTML.replace('CONTENT', '');
-                        else
-                            tableHTML += cellHTML.replace('CONTENT', obj[key]);
-                    });
-                    tableHTML += "</tr>";
-                });
-
-                scope.table.html(tableHTML);
-                scope.populateHeaders();
+                // scope.table.html(tableHTML);
+                // scope.populateHeaders();
+                console.log(scope.selectedHeaders);
             }
 
             // new file
