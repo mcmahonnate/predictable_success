@@ -488,8 +488,8 @@ angular.module('tdb.directives', [])
         templateUrl: "/static/angular/partials/import-table.html",
         link: function (scope, element, attrs) {
             scope.table;
-            scope.headerOptions = ["First name", "Last name", "Email", "Hire Date", "Job Title", "Salary", "Team Leader", "Team Name", "Don't Import"];
-            scope.selectedHeaders = {};
+            scope.headerOptions = ["Don't Import", "First name", "Last name", "Email", "Hire Date", "Job Title", "Salary", "Team Leader", "Team Name"];
+            scope.selectedOptions = {};
             scope.dataHeaders = [];
 
             // update data to import based on selected headers
@@ -506,9 +506,10 @@ angular.module('tdb.directives', [])
                         // only include data if user selects it
                         if (headers[i] == "Don't Import" || headers[i] == "")
                             continue;
-                        nextRow[headers[i]] = obj[dataHeaders[i]];
+                        nextRow[headers[i]] = obj[scope.dataHeaders[i]];
                     }   
-                    newData.push(nextRow);
+                    if (Object.keys(nextRow).length > 0)
+                        newData.push(nextRow);
                 });
 
                 return newData;
@@ -516,14 +517,20 @@ angular.module('tdb.directives', [])
 
             // auto-populate if header matches exactly
             scope.populateHeaders = function() {
-                var index = 0;
+                var ind = 0;
                 $('select.form-control').each(function() {
-                    var h = dataHeaders[index];
-                    if (headerOptions.indexOf(h) > -1) {
+                    var h = scope.dataHeaders[ind];
+                    if (scope.headerOptions.indexOf(h) > -1) {
                         $(this).val(h);
                     }
-                    index++;
+                    ind++;
                 });
+            }
+
+            // check if this header can be auto assigned
+            scope.matchingHeader = function(option, index) {
+                // console.log(option == scope.dataHeaders[index]);
+                return (option === scope.dataHeaders[index]);
             }
 
             // render
@@ -535,13 +542,8 @@ angular.module('tdb.directives', [])
                 var cellHTML = "<td> CONTENT </td>";
 
                 // get headers from first row, then remove them from data
-                console.log(scope.importData[0]);
                 scope.dataHeaders = Object.keys(scope.importData[0]);
                 scope.importData.splice(0, 1);
-
-                // scope.table.html(tableHTML);
-                // scope.populateHeaders();
-                console.log(scope.selectedHeaders);
             }
 
             // new file

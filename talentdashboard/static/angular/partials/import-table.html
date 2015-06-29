@@ -1,10 +1,10 @@
 <div>
 	<table class="table">
 		<tr>
-			<td ng-repeat="header in dataHeaders">
-				<select class='form-control'>
-					<option selected="selected"> </option>
-					<option ng-repeat="option in headerOptions"> {{option}} </option>
+			<td ng-repeat="header in dataHeaders track by $index">
+				<select class="form-control">
+					<!-- <option ng-repeat="option in headerOptions" ng-selected="{{matchingHeader(option, $index)}}">{{option}}</option> -->
+					<option ng-repeat="option in headerOptions">{{option}}</option>
 				</select>
 			</td>
 		</tr>

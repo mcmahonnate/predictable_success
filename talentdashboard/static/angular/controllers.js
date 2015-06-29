@@ -597,29 +597,37 @@ angular.module('tdb.controllers', [])
     $scope.columns = [];
     $scope.importing = false;
     $scope.validTable = false;
+    // $scope.import = function() {
+    //     $scope.importing = true;
+    //     ImportData.addNew($scope.getData()).$promise.then(function(data) {
+    //         EmployeeNames.query(function(data) {
+    //             $scope.employee_autocomplete_values = data;
+    //         });
+
+    //         // check promise
+    //         if (!data.$resolved) {
+    //             Notification.warning("Awesome but we ran into some errors. Make your corrections below.");
+    //         } else {
+    //             Notification.success("Your data imported successfully.");
+    //         }
+
+    //         $scope.importing = false;
+    //         // $scope.data = angular.copy($scope.importData);
+    //         // $scope.renderTable();
+    //     },function(){
+    //         $scope.isSurveySending=false;
+    //         Notification.error("There was an error importing your data.");
+    //         $scope.importing = false;
+    //     });
+    // };
+
     $scope.import = function() {
-        $scope.importing = true;
-        ImportData.addNew($scope.getData()).$promise.then(function(data) {
-            EmployeeNames.query(function(data) {
-                $scope.employee_autocomplete_values = data;
-            });
-
-            // check promise
-            if (!data.$resolved) {
-                Notification.warning("Awesome but we ran into some errors. Make your corrections below.");
-            } else {
-                Notification.success("Your data imported successfully.");
-            }
-
-            $scope.importing = false;
-            // $scope.data = angular.copy($scope.importData);
-            // $scope.renderTable();
-        },function(){
-            $scope.isSurveySending=false;
-            Notification.error("There was an error importing your data.");
-            $scope.importing = false;
+        var parsedData = $scope.getData();
+        console.log(parsedData);
+        parsedData.map(function (employee) {
+            
         });
-    };
+    }
 }])
 
 .controller('CoachDetailCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'User', 'Employee', 'Coachees', 'TalentReport', '$http', 'analytics', function($scope, $rootScope, $location, $routeParams, User, Employee, Coachees, TalentReport, $http, analytics) {
