@@ -487,7 +487,7 @@ angular.module('tdb.directives', [])
         templateUrl: "/static/angular/partials/import-table.html",
         link: function (scope, element, attrs) {
             scope.table;
-            scope.headerOptions = ["Don't Import", "First name", "Last name", "Email", "Hire Date", "Job Title", "Salary", "Team Leader", "Team Name"];
+            scope.headerOptions = ["Don't Import", "First name", "Last name", "Email", "Hire Date", "Job Title", "Current Salary", "Team Leader", "Team"];
             scope.selectedHeaders = [];
             scope.dataHeaders = [];
 
@@ -504,7 +504,8 @@ angular.module('tdb.directives', [])
                             continue;
 
                         // underscores and lowercase for post
-                        var formattedHeader = "_" + headers[i].toLowerCase().replace(" ", "_");
+                        var fields = ['first_name', 'last_name', 'email', 'job_title', 'hire_date', 'team', 'current_salary'];
+                        var formattedHeader = headers[i].toLowerCase().replace(" ", "_");
                         nextRow[formattedHeader] = obj[scope.dataHeaders[i]];
                     }   
                     if (Object.keys(nextRow).length > 0)

@@ -402,9 +402,26 @@ class ImportData(APIView):
 
 @api_view(['POST'])
 def upload_employee(request):
-    print("Post employee")
-    result = {}
-    return Response(result)
+    team_id = 0
+    if 'team' in request.DATA:
+        team_name = request.DATA['team']
+        try:
+            team = Team.objects.get(name=team_name)
+            team_id = team.id
+        except Team.DoesNotExist:
+            team = Team(name=team_name)
+            team.save()
+            team_id = team.id
+    request.DATA['team'] = team_id
+
+    serializer =  CreateEmployeeSerializer(data = request.DATA, context={'request':request})
+
+    if serializer.is_valid():
+        employee = serializer.save()
+        serializer = EmployeeSerializer(employee, context={'request':request})
+        return Response(serializer.data)
+    else:
+        return Response(serializer.errors, status=400)
 
 class EmployeeNames(APIView):
     def get(self, request, format=None):
