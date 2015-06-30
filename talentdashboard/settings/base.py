@@ -189,6 +189,7 @@ TENANT_APPS = (
     'feedback',
     'search',
     'preferences',
+    'checkins',
 )
 
 INSTALLED_APPS = list(set(SHARED_APPS + TENANT_APPS))
