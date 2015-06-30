@@ -274,7 +274,7 @@ class CreateEmployeeSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Employee
-        fields = ('first_name', 'last_name', 'email', 'job_title', 'hire_date', 'team')
+        fields = ('first_name', 'last_name', 'email', 'job_title', 'hire_date', 'team', 'display')
 
 
 

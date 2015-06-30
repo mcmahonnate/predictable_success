@@ -402,6 +402,7 @@ class ImportData(APIView):
 
 @api_view(['POST'])
 def upload_employee(request):
+
     team_id = 0
     if 'team' in request.DATA:
         team_name = request.DATA['team']
@@ -415,13 +416,25 @@ def upload_employee(request):
     request.DATA['team'] = team_id
 
     serializer =  CreateEmployeeSerializer(data = request.DATA, context={'request':request})
-
     if serializer.is_valid():
         employee = serializer.save()
+        add_salary_to_employee(employee, request.DATA)
         serializer = EmployeeSerializer(employee, context={'request':request})
         return Response(serializer.data)
     else:
         return Response(serializer.errors, status=400)
+
+def add_salary_to_employee(employee, data):
+    response = {}
+    if 'current_salary' in data:
+        now = datetime.datetime.now()
+        year = int(now.year)
+        try:
+            comp = CompensationSummary.objects.get(employee_id=employee.id, year=year)
+        except CompensationSummary.DoesNotExist:
+            comp = CompensationSummary(employee=employee,fiscal_year=year,year=year)
+        comp.salary = Decimal(sub(r'[^\d\-.]', '', data['current_salary']))
+        comp.save()
 
 class EmployeeNames(APIView):
     def get(self, request, format=None):
