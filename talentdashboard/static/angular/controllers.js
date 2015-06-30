@@ -511,10 +511,25 @@ angular.module('tdb.controllers', [])
     $scope.is_selected = function(value) {
         return $scope.selected==value;
     };
+    Attribute.getAttributesForEmployee($routeParams.id).$promise.then(function(response) {
+        $scope.attributes = response;
+        var is_even = ($scope.attributes.length % 2 == 0);
+        if ($scope.customer.show_vops) {
+            if (!is_even)
+                $scope.vops_class = 'shaded';
+            is_even = !is_even;
+        }
+        if ($scope.customer.show_mbti) {
+            if (!is_even)
+                $scope.mbti_class = 'shaded';
+            is_even = !is_even;
+        }
+        if ($scope.customer.show_kolbe) {
+            if (!is_even)
+                $scope.kolbe_class = 'shaded';
+        }
+    });
 
-    $scope.super_powers = Attribute.getAttributtesForEmployee($routeParams.id, 2);
-    $scope.skills = Attribute.getAttributtesForEmployee($routeParams.id, 3);
-    $scope.employeeEdit = false;
 
     $scope.showAttributes = function (view, category) {
         var modalInstance = $modal.open({

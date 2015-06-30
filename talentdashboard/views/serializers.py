@@ -543,7 +543,7 @@ class AttributeSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Attribute
-        fields = ['employee', 'name', 'category',]        
+        fields = ['employee', 'name', 'category']
 
 
 class TalentCategoryReportSerializer(serializers.Serializer):

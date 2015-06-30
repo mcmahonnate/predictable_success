@@ -110,10 +110,13 @@ class AttributeViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         employee_id = self.request.QUERY_PARAMS.get('employee_id', None)
         category_id = self.request.QUERY_PARAMS.get('category_id', None)
+        display = self.request.QUERY_PARAMS.get('display', None)
         if employee_id is not None:
             self.queryset = self.queryset.filter(employee__id=employee_id)
         if category_id is not None:
-            self.queryset = self.queryset.filter(category__id=category_id)            
+            self.queryset = self.queryset.filter(category__id=category_id)
+        if display is not None:
+            self.queryset = self.queryset.filter(category__display=display)
             
         return self.queryset
 
