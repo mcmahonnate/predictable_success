@@ -92,9 +92,7 @@ urlpatterns = patterns('',
     url(r'^api/v1/tasks/(?P<pk>[0-9]+)?/$', (auth('AllAccess','CoachAccess','TeamLeadAccess')(TaskDetail.as_view()))),
     url(r'^api/v1/tasks/$', (auth('AllAccess','CoachAccess','TeamLeadAccess')(TaskDetail.as_view()))),
 
-    url(r'^api/v1/checkins/$', (auth('AllAccess','CoachAccess','TeamLeadAccess')(CheckInDetail.as_view()))),
-    url(r'^api/v1/checkins/employees/(?P<pk>[0-9]+)/$', (auth('AllAccess','CoachAccess','TeamLeadAccess')(CheckInDetail.as_view()))),
-
+    url(r'^api/v1/checkins/(?P<pk>[0-9]+)?/$', (auth('AllAccess','CoachAccess','TeamLeadAccess')(CheckInDetail.as_view()))),
 
     url(r'^api/v1/image-upload/employees/(?P<pk>[0-9]+)/$', ImageUploadView.as_view()),
     url(r'^api/v1/talent-categories/$', talent_categories),

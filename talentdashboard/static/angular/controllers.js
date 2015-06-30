@@ -413,6 +413,38 @@ angular.module('tdb.controllers', [])
     };
 }])
 
+
+.controller('EmployeeSearchCtrl', ['$scope', '$rootScope', '$routeParams', '$location', '$modal', 'Employee', 'Customers', 'Team', function($scope, $rootScope, $routeParams, $location, $modal, Employee, Customers, Team) {
+   
+    if (!$scope.employees) { $scope.employees = Employee.query();} //!important browser cache buster
+
+    Customers.get(function (data) {
+        $scope.customer = data;
+    });
+
+    if (!$scope.employees && $rootScope.currentUser.can_view_company_dashboard) {
+        $scope.employees = Employee.query();
+    }
+
+    $scope.startsWith  = function(expected, actual){
+        if(expected && actual){
+            return expected.toLowerCase().indexOf(actual.toLowerCase()) == 0;
+        }
+        return true;
+    }
+    $scope.selectEmployee = function(user) {
+        $scope.navQuery = '';
+        $scope.selectedEmployee = user;
+    }
+
+    $scope.showSearch = function() {
+        $scope.showSearch = true;
+    }
+    
+    $scope.navQuery = '';
+    $scope.selectedEmployee = '';
+}])
+
 .controller('TeamListCtrl', ['$scope', 'Team', function($scope, Team) {
     $scope.teams = Team.query();
     $scope.teamQuery = $scope.teams[0];

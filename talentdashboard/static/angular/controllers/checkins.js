@@ -1,7 +1,18 @@
 angular.module('tdb.controllers.checkins', [])
 
-    .controller('AddEditCheckInCtrl', ['$scope', '$rootScope', '$modalInstance', '$routeParams', 'CheckIn', 'checkin', function ($scope, $rootScope, $modalInstance, $routeParams, CheckIn, checkin) {
-        $scope.checkin = angular.copy(checkin);
+    .controller('AddEditCheckInCtrl', ['$scope', '$rootScope', '$routeParams', 'CheckIn', 'Employee', 'Customers', function ($scope, $rootScope, $routeParams, CheckIn, Employee, Customers) {
+        $scope.checkin = new CheckIn();
+        $scope.navQuery = '';
+        $scope.selectedEmployee = '';
+
+        //employee lookup
+        if (!$scope.employees) { $scope.employees = Employee.query();} //!important browser cache buster
+
+        //select employee
+        $scope.selectEmployee = function(user) {
+            $scope.navQuery = '';
+            $scope.selectedEmployee = user;
+        }
 
         $scope.save = function (form) {
             if(form.$invalid) return;
@@ -9,9 +20,14 @@ angular.module('tdb.controllers.checkins', [])
                 $modalInstance.close(value);
             });
         };
+
+        //show search
+        $scope.showSearch = function() {
+            $scope.selectedEmployee = '';
+        };
     }])
 
-    .controller('CheckInsCtrl', ['$scope', '$rootScope', '$modalInstance', '$routeParams', 'CheckIn', 'checkin', function ($scope, $rootScope, $modalInstance, $routeParams, CheckIn, checkin) {
+    .controller('CheckInsCtrl', ['$scope', '$rootScope', '$modalInstance', '$routeParams', 'CheckIn', function ($scope, $rootScope, $modalInstance, $routeParams, CheckIn) {
         
         CheckIn.get(query, function(data) {
             $scope.checkins = data.results;
