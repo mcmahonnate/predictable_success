@@ -2,7 +2,7 @@
 	<table class="table">
 		<tr>
 			<td ng-repeat="header in dataHeaders track by $index">
-				<select class="form-control">
+				<select class="form-control" ng-model="selectedHeaders[$index]">
 					<!-- <option ng-repeat="option in headerOptions" ng-selected="{{matchingHeader(option, $index)}}">{{option}}</option> -->
 					<option ng-repeat="option in headerOptions">{{option}}</option>
 				</select>

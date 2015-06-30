@@ -589,7 +589,7 @@ angular.module('tdb.controllers', [])
     };
 }])
 
-.controller('UploadDataCtrl', ['$scope', 'ImportData','Notification','EmployeeNames', function($scope, ImportData, Notification, EmployeeNames) {
+.controller('UploadDataCtrl', ['$scope', 'ImportData', 'Employee', 'Notification','EmployeeNames', function($scope, ImportData, Employee, Notification, EmployeeNames) {
     $scope.data;
     $scope.importData = [];
     $scope.hasColumnHeaders=true;
@@ -623,9 +623,12 @@ angular.module('tdb.controllers', [])
 
     $scope.import = function() {
         var parsedData = $scope.getData();
-        console.log(parsedData);
-        parsedData.map(function (employee) {
-            
+        parsedData.map(function (emp) {
+            console.log(emp);
+            emp["id"] = 0;
+            Employee.addNew(emp).$promise.then(function (data) {
+                console.log(data);
+            });
         });
     }
 }])

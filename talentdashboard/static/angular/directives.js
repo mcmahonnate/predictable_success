@@ -484,20 +484,16 @@ angular.module('tdb.directives', [])
     return {
         restrict: 'E',
         replace: true,
-        // template: '<div> <table class="table"> </table> </div>',
         templateUrl: "/static/angular/partials/import-table.html",
         link: function (scope, element, attrs) {
             scope.table;
             scope.headerOptions = ["Don't Import", "First name", "Last name", "Email", "Hire Date", "Job Title", "Salary", "Team Leader", "Team Name"];
-            scope.selectedOptions = {};
+            scope.selectedHeaders = [];
             scope.dataHeaders = [];
 
             // update data to import based on selected headers
             scope.getData = function() {
-                var headers = [];
-                $('select.form-control').each(function() {
-                    headers.push($(this).val());
-                });
+                var headers = scope.selectedHeaders;
 
                 var newData = [];
                 scope.importData.map(function (obj) {
@@ -506,7 +502,10 @@ angular.module('tdb.directives', [])
                         // only include data if user selects it
                         if (headers[i] == "Don't Import" || headers[i] == "")
                             continue;
-                        nextRow[headers[i]] = obj[scope.dataHeaders[i]];
+
+                        // underscores and lowercase for post
+                        var formattedHeader = "_" + headers[i].toLowerCase().replace(" ", "_");
+                        nextRow[formattedHeader] = obj[scope.dataHeaders[i]];
                     }   
                     if (Object.keys(nextRow).length > 0)
                         newData.push(nextRow);
@@ -544,6 +543,10 @@ angular.module('tdb.directives', [])
                 // get headers from first row, then remove them from data
                 scope.dataHeaders = Object.keys(scope.importData[0]);
                 scope.importData.splice(0, 1);
+
+                scope.dataHeaders.map(function (h) {
+                    scope.selectedHeaders.push("Don't Import");
+                });
             }
 
             // new file
