@@ -400,6 +400,12 @@ class ImportData(APIView):
 
         return HttpResponse(json.dumps(response_items), content_type='application/json')
 
+@api_view(['POST'])
+def upload_employee(request):
+    print("Post employee")
+    result = {}
+    return Response(result)
+
 class EmployeeNames(APIView):
     def get(self, request, format=None):
         employees = Employee.objects.get_current_employees()
@@ -961,6 +967,7 @@ class EmployeeDetail(APIView):
         employee = Employee()
         employee.display = True
         expire_view_cache('employee-list')
+        response_items = []
 
         if employee is not None:
             if "_full_name" in request.DATA:
@@ -987,6 +994,7 @@ class EmployeeDetail(APIView):
             if "_departure_date" in request.DATA:
                 employee.departure_date = dateutil.parser.parse(request.DATA["_departure_date"])
             employee.save()
+            response_items.append(employee)
             serializer = EmployeeSerializer(employee, many=False, context={'request': request})
             return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)

@@ -514,24 +514,6 @@ angular.module('tdb.directives', [])
                 return newData;
             }
 
-            // auto-populate if header matches exactly
-            scope.populateHeaders = function() {
-                var ind = 0;
-                $('select.form-control').each(function() {
-                    var h = scope.dataHeaders[ind];
-                    if (scope.headerOptions.indexOf(h) > -1) {
-                        $(this).val(h);
-                    }
-                    ind++;
-                });
-            }
-
-            // check if this header can be auto assigned
-            scope.matchingHeader = function(option, index) {
-                // console.log(option == scope.dataHeaders[index]);
-                return (option === scope.dataHeaders[index]);
-            }
-
             // render
             scope.renderTable = function() {
                 scope.table = $('.table:first');
