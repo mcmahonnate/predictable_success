@@ -1,5 +1,6 @@
 from django.db import models
 from org.models import Employee
+from checkins.models import CheckIn
 
 
 class Task(models.Model):
@@ -16,6 +17,7 @@ class Task(models.Model):
         blank=True,
     )
     completed = models.BooleanField(default=False)
+    checkin = models.ForeignKey(CheckIn, related_name='tasks', null=True, blank=True)
 
     def __str__(self):
         if self.assigned_to:
