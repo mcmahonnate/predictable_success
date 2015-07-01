@@ -9,9 +9,10 @@ angular.module('tdb.controllers.checkins', [])
         if (!$scope.employees) { $scope.employees = Employee.query();} //!important browser cache buster
 
         //select employee
-        $scope.selectEmployee = function(user) {
+        $scope.selectEmployee = function(employee) {
             $scope.navQuery = '';
-            $scope.selectedEmployee = user;
+            $scope.selectedEmployee = employee;
+            $scope.checkin.employee = employee.id;
         }
 
         $scope.save = function (form) {

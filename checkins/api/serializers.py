@@ -14,10 +14,10 @@ class CheckInSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class CreateCheckInSerializer(serializers.HyperlinkedModelSerializer):
-    host = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
+    host = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all(), required=False)
     employee = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
 
     class Meta:
         model = CheckIn
-        fields = ('employee', 'summary', 'happiness')
+        fields = ('host', 'employee', 'summary', 'happiness')
 
