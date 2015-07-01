@@ -9,7 +9,6 @@ from engagement.models import Happiness, SurveyUrl
 from kpi.models import Indicator, Performance
 from feedback.models import FeedbackRequest, FeedbackSubmission
 from customers.models import Customer
-from checkins.models import CheckIn
 from django.contrib.auth.models import User
 from django.utils.log import getLogger
 from preferences.models import UserPreferences
@@ -402,25 +401,6 @@ class EditTaskSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Task
         fields = ('id', 'description', 'assigned_to', 'assigned_by', 'due_date', 'completed')
-
-
-class CheckInSerializer(serializers.HyperlinkedModelSerializer):
-    employee = MinimalEmployeeSerializer()
-    host = MinimalEmployeeSerializer()
-
-    class Meta:
-        model = CheckIn
-        fields = ('employee', 'host', 'date', 'summary', 'happiness')
-
-
-class CreateCheckInSerializer(serializers.HyperlinkedModelSerializer):
-    host = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
-    employee = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
-
-    class Meta:
-        model = Task
-        fields = ('employee', 'summary', 'happiness')
-
 
 
 class SurveyUrlSerializer(serializers.HyperlinkedModelSerializer):

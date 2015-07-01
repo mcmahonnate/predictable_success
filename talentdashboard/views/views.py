@@ -968,34 +968,6 @@ class ImageUploadView(APIView):
         return Response(serializer.data)
 
 
-class CheckInDetail(APIView):
-    def get(self, request, pk):
-        employee = Employee.objects.get(id=pk)
-        if employee is None:
-            return Response(None, status=status.HTTP_404_NOT_FOUND)
-        checkins = CheckIn.objects.filter(employee=employee)
-        print checkins
-
-        paginator = StandardResultsSetPagination()
-        result_page = paginator.paginate_queryset(checkins, request)
-        serializer = CheckInSerializer(result_page, many=True,context={'request': request})
-        return paginator.get_paginated_response(serializer.data)
-
-
-    def post(self, request):
-        add_current_employee_to_request(request, 'host')
-        serializer = CreateCheckInSerializer(data=request.DATA)
-
-        if serializer.is_valid():
-            checkin = serializer.save()
-            checkin.save()
-            serializer = TaskSerializer(task)
-            return Response(serializer.data)
-        else:
-            return Response(serializer.errors, status=400)
-
-
-
 @api_view(['GET'])
 def coachee_list(request):
     employee = Employee.objects.get(user__id = request.user.id)
