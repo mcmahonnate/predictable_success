@@ -402,7 +402,7 @@ class ImportData(APIView):
 
 @api_view(['POST'])
 def upload_employee(request):
-    team_id = 0
+    team_id = -1
     if 'team' in request.DATA:
         team_name = request.DATA['team']
         try:
@@ -414,20 +414,23 @@ def upload_employee(request):
             team_id = team.id
     request.DATA['team'] = team_id
 
-    date_string = request.DATA['hire_date']
-    request.DATA['hire_date'] = dateutil.parser.parse(date_string).date()
+    if 'hire_date' in request.DATA:
+        date_string = request.DATA['hire_date']
+        request.DATA['hire_date'] = dateutil.parser.parse(date_string).date()
 
-    serializer =  CreateEmployeeSerializer(data = request.DATA, context={'request':request})
+    serializer = CreateEmployeeSerializer(data = request.DATA, context={'request':request})
     if serializer.is_valid():
+        print(request.DATA)
+        print("create")
         employee = serializer.save()
         add_salary_to_employee(employee, request.DATA)
         serializer = EmployeeSerializer(employee, context={'request':request})
         return Response(serializer.data)
     else:
+        print(serializer.errors)
         return Response(serializer.errors, status=400)
 
 def add_salary_to_employee(employee, data):
-    response = {}
     if 'current_salary' in data:
         now = datetime.datetime.now()
         year = int(now.year)
@@ -437,6 +440,23 @@ def add_salary_to_employee(employee, data):
             comp = CompensationSummary(employee=employee,fiscal_year=year,year=year)
         comp.salary = Decimal(sub(r'[^\d\-.]', '', data['current_salary']))
         comp.save()
+
+@api_view(['POST'])
+def upload_leadership(request):
+    response_item = {}
+    leader_full_name = request.DATA['team_leader']
+    employee = Employee.objects.get(id=request.DATA['id'])
+    try:
+        leader = Employee.objects.get(full_name=leader_full_name)
+        leadership = Leadership(employee=employee,leader=leader)
+        leadership.save()
+    except Employee.DoesNotExist:
+        leaders = Employee.objects.filter(last_name__in=leader_full_name.split(" ")).values('full_name')
+        if not leaders:
+            leaders = []
+        response_item['Incorrect Field'] = 'Team Leader'
+        response_item['Leader Suggestions'] = list(leaders)
+    return response_item
 
 class EmployeeNames(APIView):
     def get(self, request, format=None):

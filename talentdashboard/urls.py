@@ -121,5 +121,6 @@ urlpatterns = patterns('',
     url(r'^api/v1/search/employees/my-coachees/$', my_coachees_employee_search),
 
     url(r'^api/v1/import-data/employee$', upload_employee),
+    url(r'^api/v1/import-data/leadership$', upload_leadership),
     url(r'^', include(router.urls)),
 )

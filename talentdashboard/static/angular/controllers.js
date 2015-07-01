@@ -596,7 +596,7 @@ angular.module('tdb.controllers', [])
     $scope.hot;
     $scope.columns = [];
     $scope.importing = false;
-    $scope.validTable = false;
+    $scope.foundErrors = false;
     // $scope.import = function() {
     //     $scope.importing = true;
     //     ImportData.addNew($scope.getData()).$promise.then(function(data) {
@@ -623,13 +623,26 @@ angular.module('tdb.controllers', [])
 
     $scope.import = function() {
         var parsedData = $scope.getData();
-        parsedData.map(function (emp) {
+        for (var i = 0; i < parsedData.length; i++) {
+            var emp = parsedData[i];
             console.log(emp);
             emp["display"] = true;
             ImportData.addNewEmployee(emp).$promise.then(function (data) {
                 console.log(data);
+                parsedData[i] = data;
             });
-        });
+        }
+
+        for (var i = 0; i < parsedData.length; i++) {
+            var emp = parsedData[i];
+            emp["display"] = true;
+            console.log(emp);
+            if ("team_leader" in emp) {
+                ImportData.addNewLeadership(emp).$promise.then(function (data) {
+                    console.log(data);
+                });
+            }
+        }
     }
 }])
 
