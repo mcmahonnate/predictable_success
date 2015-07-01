@@ -7,7 +7,7 @@
 {% block content %}
 	<div class="container">
 		<h1>Hey there! Please fill out the survey below.</h1>
-		<p class="subhead">We'll be using your responses to help {{ lead.first_name }} make sure your work is engaging and you're happy doing it.</p>
+		<p class="subhead">We'll be using your responses to help make sure your work is important, engaging, and you're happy doing it.</p>
 	    <form method="POST">
 	    	{% csrf_token %}
 	      	{{ form.as_p }}	
