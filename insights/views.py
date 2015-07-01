@@ -66,7 +66,7 @@ class Survey(FormView):
         return render_to_response(self.template, {
             'form': form,
             'team_lead': team_lead
-        })    
+        }, context_instance=RequestContext(request))
 
 
     def get(self, request, **kwargs):
