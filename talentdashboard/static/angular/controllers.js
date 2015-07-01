@@ -625,7 +625,6 @@ angular.module('tdb.controllers', [])
         var parsedData = $scope.getData();
         parsedData.map(function (emp) {
             console.log(emp);
-            emp["id"] = 0;
             emp["display"] = true;
             ImportData.addNewEmployee(emp).$promise.then(function (data) {
                 console.log(data);

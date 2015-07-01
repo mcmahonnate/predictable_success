@@ -402,7 +402,6 @@ class ImportData(APIView):
 
 @api_view(['POST'])
 def upload_employee(request):
-
     team_id = 0
     if 'team' in request.DATA:
         team_name = request.DATA['team']
@@ -414,6 +413,9 @@ def upload_employee(request):
             team.save()
             team_id = team.id
     request.DATA['team'] = team_id
+
+    date_string = request.DATA['hire_date']
+    request.DATA['hire_date'] = dateutil.parser.parse(date_string).date()
 
     serializer =  CreateEmployeeSerializer(data = request.DATA, context={'request':request})
     if serializer.is_valid():

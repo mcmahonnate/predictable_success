@@ -527,8 +527,13 @@ angular.module('tdb.directives', [])
                 scope.dataHeaders = Object.keys(scope.importData[0]);
                 scope.importData.splice(0, 1);
 
+                // auto populate headers if exact match
+                scope.selectedHeaders = [];
                 scope.dataHeaders.map(function (h) {
-                    scope.selectedHeaders.push("Don't Import");
+                    if (scope.headerOptions.indexOf(h) > -1)
+                        scope.selectedHeaders.push(h);
+                    else
+                        scope.selectedHeaders.push("Don't Import");
                 });
             }
 
