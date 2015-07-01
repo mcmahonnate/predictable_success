@@ -104,7 +104,7 @@ class Employee(models.Model):
         blank=True,
         default=None
     )
-    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True)
+    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='employee')
     coach = models.ForeignKey('Employee', related_name='coachees', null=True, blank=True)
 
     def save(self, *args, **kwargs):

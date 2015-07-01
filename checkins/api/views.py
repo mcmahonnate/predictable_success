@@ -1,11 +1,27 @@
 from django.utils.decorators import method_decorator
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import status
+from rest_framework import status, generics
 from org.models import Employee
 from org.decorators import add_current_employee_id_to_request
 from ..models import CheckIn
 from .serializers import CheckInSerializer, CreateCheckInSerializer
+
+
+class EmployeeCheckInList(generics.ListAPIView):
+    serializer_class = CheckInSerializer
+
+    def get_queryset(self):
+        employee_id = self.kwargs['employee_id']
+        return CheckIn.objects.filter(employee_id=employee_id)
+
+
+class HostCheckInList(generics.ListAPIView):
+    serializer_class = CheckInSerializer
+
+    def get_queryset(self):
+        host = self.request.user.employee
+        return CheckIn.objects.filter(host=host)
 
 
 class CheckInDetail(APIView):
@@ -26,7 +42,6 @@ class CheckInDetail(APIView):
 
         if serializer.is_valid():
             checkin = serializer.save()
-            checkin.save()
             serializer = CheckInSerializer(checkin)
             return Response(serializer.data)
         else:
