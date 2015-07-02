@@ -19,5 +19,5 @@ class CreateCheckInSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = CheckIn
-        fields = ('host', 'employee', 'summary', 'happiness')
+        fields = ('host', 'employee', 'summary', 'happiness', 'date')
 

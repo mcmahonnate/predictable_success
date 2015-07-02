@@ -13,10 +13,11 @@ angular.module('tdb.controllers.checkins', [])
             $scope.navQuery = '';
             $scope.selectedEmployee = employee;
             $scope.checkin.employee = employee.id;
-        }
+        };
 
         $scope.save = function (form) {
             if(form.$invalid) return;
+            $scope.checkin.date = new Date(Date.now());
             $scope.checkin.$save(function (value) {
                 $modalInstance.close(value);
             });
