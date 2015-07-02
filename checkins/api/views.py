@@ -1,6 +1,6 @@
 from rest_framework import generics
 from ..models import CheckIn
-from .serializers import CheckInSerializer, CreateCheckInSerializer
+from .serializers import CheckInSerializer, AddEditCheckInSerializer
 
 
 class EmployeeCheckInList(generics.ListAPIView):
@@ -20,7 +20,7 @@ class HostCheckInList(generics.ListAPIView):
 
 
 class CreateCheckIn(generics.CreateAPIView):
-    serializer_class = CreateCheckInSerializer
+    serializer_class = AddEditCheckInSerializer
 
     def perform_create(self, serializer):
         serializer.save(host=self.request.user.employee)
