@@ -512,7 +512,7 @@ class PvpToDoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PvpEvaluation
-        fields = ('id', 'talent_category', 'employee', 'potential', 'performance', 'evaluator', 'comment', 'description')
+        fields = ('id', 'talent_category', 'employee', 'potential', 'performance', 'evaluator', 'comment', 'description', 'too_new')
 
 class MentorshipSerializer(serializers.HyperlinkedModelSerializer):
     mentor = MinimalEmployeeSerializer()

@@ -1,61 +1,65 @@
-<h2 class="panel-title">Growth</h2>
-<article ng-show="currentUser.employee.id!=employee.id">
-    
-      <div ng-controller="EmployeePvpEvaluationsCtrl">
-        <section class="widget-body text-widget">
-          <div ng-show="pvps.length > 0" class="swipe widget-canvas" id="pvp_slider">
+<div>
+    <span ng-show="currentUser.can_edit_employees" class="pull-right">
+        <a ng-show="!employeeEdit" ng-click="editPvP(pvps, pvpIndex)" class="btn btn-default btn-xs">Edit</a>
+    </span>
+    <h2 class="panel-title">Growth</h2>
+    <article ng-show="currentUser.employee.id!=employee.id">
 
-                <ul rn-carousel rn-carousel-index="pvpIndex">
-                    <li ng-repeat="pvp in pvps">
-              <svg x-pvp-chart x-potential="{{pvp.potential}}" x-performance="{{pvp.performance}}" x-talent-category="{{pvp.talent_category}}" class="pvp-chart" width="255" height="195" style="margin-left: 35px;" xmlns="http://www.w3.org/2000/svg">
-                <g fill="#343434">
-                 <title>{{ pvp.evaluation_round.date | date:'MM/yyyy' }}</title>
-                 <rect class="pvp-square-1-4" x="27" y="2" width="40" height="40"/>
-                 <rect class="pvp-square-2-4" x="67" y="2" width="40" height="40"/>
-                 <rect class="pvp-square-3-4" x="107" y="2" width="40" height="40"/>
-                 <rect class="pvp-square-4-4" x="147" y="2" width="40" height="40"/>
 
-                 <rect class="pvp-square-1-3" x="27" y="42" width="40" height="40"/>
-                 <rect class="pvp-square-2-3" x="67" y="42" width="40" height="40"/>
-                 <rect class="pvp-square-3-3" x="107" y="42" width="40" height="40"/>
-                 <rect class="pvp-square-4-3" x="147" y="42" width="40" height="40"/>
+            <section class="widget-body text-widget">
+              <div ng-show="pvps.length > 0" class="swipe widget-canvas" id="pvp_slider">
 
-                 <rect class="pvp-square-1-2" x="27" y="82" width="40" height="40"/>
-                 <rect class="pvp-square-2-2" x="67" y="82" width="40" height="40"/>
-                 <rect class="pvp-square-3-2" x="107" y="82" width="40" height="40"/>
-                 <rect class="pvp-square-4-2" x="147" y="82" width="40" height="40"/>
+                    <ul rn-carousel rn-carousel-index="pvpIndex">
+                        <li ng-repeat="pvp in pvps">
+                  <svg pvp-chart pvp="pvp" potential="{{pvp.potential}}" class="pvp-chart" width="255" height="195" style="margin-left: 35px;" xmlns="http://www.w3.org/2000/svg">
+                    <g fill="#343434">
+                     <title>{{ pvp.evaluation_round.date | date:'MM/yyyy' }}</title>
+                     <rect class="pvp-square-1-4" x="27" y="2" width="40" height="40"/>
+                     <rect class="pvp-square-2-4" x="67" y="2" width="40" height="40"/>
+                     <rect class="pvp-square-3-4" x="107" y="2" width="40" height="40"/>
+                     <rect class="pvp-square-4-4" x="147" y="2" width="40" height="40"/>
 
-                 <rect class="pvp-square-1-1" x="27" y="122" width="40" height="40"/>
-                 <rect class="pvp-square-2-1" x="67" y="122" width="40" height="40"/>
-                 <rect class="pvp-square-3-1" x="107" y="122" width="40" height="40"/>
-                 <rect class="pvp-square-4-1" x="147" y="122" width="40" height="40"/>
+                     <rect class="pvp-square-1-3" x="27" y="42" width="40" height="40"/>
+                     <rect class="pvp-square-2-3" x="67" y="42" width="40" height="40"/>
+                     <rect class="pvp-square-3-3" x="107" y="42" width="40" height="40"/>
+                     <rect class="pvp-square-4-3" x="147" y="42" width="40" height="40"/>
 
-                 <line class="grid-line" stroke="#ffffff" stroke-width="1" x1="67" y1="2" x2="67" y2="162"/>
-                 <line class="grid-line" stroke="#ffffff" stroke-width="2" x1="107" y1="2" x2="107" y2="162"/>
-                 <line class="grid-line" stroke="#ffffff" stroke-width="1" x1="147" y1="2" x2="147" y2="162"/>
+                     <rect class="pvp-square-1-2" x="27" y="82" width="40" height="40"/>
+                     <rect class="pvp-square-2-2" x="67" y="82" width="40" height="40"/>
+                     <rect class="pvp-square-3-2" x="107" y="82" width="40" height="40"/>
+                     <rect class="pvp-square-4-2" x="147" y="82" width="40" height="40"/>
 
-                 <line class="grid-line" stroke="#ffffff" stroke-width="1" x1="27" y1="42" x2="187" y2="42"/>
-                 <line class="grid-line" stroke="#ffffff" stroke-width="2" x1="27" y1="82" x2="187" y2="82"/>
-                 <line class="grid-line" stroke="#ffffff" stroke-width="1" x1="27" y1="122" x2="187" y2="122"/>
+                     <rect class="pvp-square-1-1" x="27" y="122" width="40" height="40"/>
+                     <rect class="pvp-square-2-1" x="67" y="122" width="40" height="40"/>
+                     <rect class="pvp-square-3-1" x="107" y="122" width="40" height="40"/>
+                     <rect class="pvp-square-4-1" x="147" y="122" width="40" height="40"/>
 
-                 <text class="potential-lablel" fill="rgb(139, 139, 139)" stroke="rgb(139, 139, 139)" stroke-width="0" x="12" y="90" font-size="12" font-family="'Proxima Nova', Helvetica, sans-serif" text-anchor="middle" xml:space="preserve" transform="rotate(-90 12 83.5)">Drive</text>
-                 <text class="performance-label" fill="rgb(139, 139, 139)" stroke="rgb(139, 139, 139)" stroke-width="0" x="107" y="175" font-size="12" font-family="'Proxima Nova', Helvetica, sans-serif" text-anchor="middle" xml:space="preserve">Impact - {{ pvp.evaluation_round.date | date:'MM/yyyy' }}</text>
-               </g>
-              </svg>
-                        </li>
-                    </ul>
+                     <line class="grid-line" stroke="#ffffff" stroke-width="1" x1="67" y1="2" x2="67" y2="162"/>
+                     <line class="grid-line" stroke="#ffffff" stroke-width="2" x1="107" y1="2" x2="107" y2="162"/>
+                     <line class="grid-line" stroke="#ffffff" stroke-width="1" x1="147" y1="2" x2="147" y2="162"/>
 
-                <div class="slide-pagination">
-                    <div class="inner" id="pvp_pages">
-                        <span class="slide-tally" data-ng-bind-html="(pvpIndex + 1)"></span><span class="slide-tally"> of {{ pvps.length }}</span>
-                        <nav>
-                            <a ng-repeat="pvp in pvps" ng-class="{categoryNavHighlightSmall: $index==pvpIndex,categoryNavSmall: $index!=pvpIndex}" ng-click="selectPvP($index)" style="cursor: pointer;"><canvas employee-talent-category="{{pvp.talent_category}}"></a>
+                     <line class="grid-line" stroke="#ffffff" stroke-width="1" x1="27" y1="42" x2="187" y2="42"/>
+                     <line class="grid-line" stroke="#ffffff" stroke-width="2" x1="27" y1="82" x2="187" y2="82"/>
+                     <line class="grid-line" stroke="#ffffff" stroke-width="1" x1="27" y1="122" x2="187" y2="122"/>
 
-                        </nav>
+                     <text class="potential-lablel" fill="rgb(139, 139, 139)" stroke="rgb(139, 139, 139)" stroke-width="0" x="12" y="90" font-size="12" font-family="'Proxima Nova', Helvetica, sans-serif" text-anchor="middle" xml:space="preserve" transform="rotate(-90 12 83.5)">Drive</text>
+                     <text class="performance-label" fill="rgb(139, 139, 139)" stroke="rgb(139, 139, 139)" stroke-width="0" x="107" y="175" font-size="12" font-family="'Proxima Nova', Helvetica, sans-serif" text-anchor="middle" xml:space="preserve">Impact - {{ pvp.evaluation_round.date | date:'MM/yyyy' }}</text>
+                   </g>
+                  </svg>
+                            </li>
+                        </ul>
+
+                    <div class="slide-pagination">
+                        <div class="inner" id="pvp_pages">
+                            <span class="slide-tally" data-ng-bind-html="(pvpIndex + 1)"></span><span class="slide-tally"> of {{ pvps.length }}</span>
+                            <nav>
+                                <a ng-repeat="pvp in pvps" ng-class="{categoryNavHighlightSmall: $index==pvpIndex,categoryNavSmall: $index!=pvpIndex}" ng-click="selectPvP($index)" style="cursor: pointer;"><canvas employee-talent-category pvp="pvp"></a>
+                            </nav>
+                        </div>
                     </div>
-                </div>
 
-          </div><!-- .widget-inner -->
-        </section>
-      </div>
+              </div><!-- .widget-inner -->
+            </section>
+
     </article>
+</div>

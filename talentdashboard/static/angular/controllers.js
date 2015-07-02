@@ -425,6 +425,70 @@ angular.module('tdb.controllers', [])
     }
 }])
 
+.controller('EmployeePvpEvaluationsCtrl', ['$scope', '$routeParams', 'PvpEvaluation', '$modal', function($scope, $routeParams, PvpEvaluation, $modal) {
+    $scope.pvpIndex = 0;
+    $scope.pvps = null;
+    PvpEvaluation.getAllEvaluationsForEmployee($routeParams.id).$promise.then(function(response) {
+        $scope.pvps = response;
+    });
+
+    $scope.selectPvP = function(index) {
+        $scope.pvpIndex = index;
+    }
+    $scope.editPvP = function (pvps, index) {
+        var modalInstance = $modal.open({
+            animation: true,
+            templateUrl: '/static/angular/partials/_modals/edit-pvp.html',
+            controller: 'AddEditPvPCtrl',
+            resolve: {
+                pvp: function () {
+                    return pvps[index]
+                }
+            }
+        });
+        modalInstance.result.then(
+            function (pvp) {
+                console.log('save return');
+                console.log(pvp);
+                $scope.pvps[$scope.pvpIndex].performance = pvp.performance;
+                $scope.pvps[$scope.pvpIndex].potential = pvp.potential;
+                $scope.pvps[$scope.pvpIndex].talent_category = pvp.talent_category;
+            }
+        );
+    };
+}])
+
+.controller('AddEditPvPCtrl', ['$scope', '$modalInstance', 'pvp', 'PvpEvaluation', 'PvpDescriptions', function($scope, $modalInstance, pvp, PvpEvaluation, PvpDescriptions) {
+    $scope.cancel = function () {
+        $modalInstance.dismiss();
+    };
+    $scope.pvp = angular.copy(pvp);
+    $scope.pvp_description = null;
+    PvpDescriptions.query().$promise.then(function(response) {
+            $scope.pvp_descriptions = response;
+        }
+    );
+    $scope.save = function() {
+        console.log('save start');
+        console.log($scope.pvp)
+        if ($scope.pvp.comment.content) {
+            var data = {id: $scope.pvp.id, _potential: $scope.pvp.potential, _performance: $scope.pvp.performance, _content: $scope.pvp.comment.content};
+            PvpEvaluation.update(data, function (response) {
+                $scope.pvp = response;
+                $modalInstance.close($scope.pvp);
+            });
+        } else {
+            data = {id: $scope.pvp.id, _potential: $scope.pvp.potential, _performance: $scope.pvp.performance};
+            PvpEvaluation.update(data, function (response) {
+                $scope.pvp = response;
+                $modalInstance.close($scope.pvp);
+            });
+        }
+    };
+
+}])
+
+
 .controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', '$modal', 'User', 'Employee', 'Team', 'Engagement', 'SendEngagementSurvey', 'EmployeeLeader', 'Attribute', '$http', 'Customers', 'analytics','EmployeeMBTI', 'Notification', function($rootScope, $scope, $location, $routeParams, $window, $modal, User, Employee, Team, Engagement, SendEngagementSurvey, EmployeeLeader, Attribute, $http, Customers, analytics, EmployeeMBTI, Notification) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     Customers.get(function (data) {
@@ -651,17 +715,6 @@ angular.module('tdb.controllers', [])
 
 .controller('EmployeeCompSummariesCtrl', ['$scope', '$routeParams', 'CompSummary', function($scope, $routeParams, CompSummary) {
     $scope.compSummaries = CompSummary.getAllSummariesForEmployee($routeParams.id);
-}])
-
-.controller('EmployeePvpEvaluationsCtrl', ['$scope', '$routeParams', 'PvpEvaluation', function($scope, $routeParams, PvpEvaluation) {
-    $scope.pvpIndex = 0;
-    PvpEvaluation.getAllEvaluationsForEmployee($routeParams.id).$promise.then(function(response) {
-        $scope.pvps = response;
-    });
-
-    $scope.selectPvP = function(index) {
-        $scope.pvpIndex = index;
-    }
 }])
 
 .controller('ReportsCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'EmployeeSearch', 'TalentCategories', 'analytics', function($scope, $rootScope, $location, $routeParams, EmployeeSearch, TalentCategories, analytics) {

@@ -1,0 +1,40 @@
+<div>
+    <div class="modal-body">
+              <div style="float:left;width:55%">
+                  <div class="large-avatar-container xxxlarge-headshot"><img ng-src="{{ pvp.employee.avatar }}"/></div>
+                  <div style="width: 100%">
+                      <h1 class="centered ng-binding" style="text-align:center;line-height:35px;margin:0">{{ pvp.employee.full_name }}</h1>
+                  </div>
+              </div>
+
+              <div style="width:45%;float: left;">
+                  <div class="vertical-text" style="width:200px;text-align: center;position: absolute;left: 237px;top: 142px;"><div style="display:inline-block;float:left">Low</div>Drive<div style="display:inline-block;float:right">High</div></div>
+                  <div style="margin: 25px">
+                    <canvas pvp-graph pvp="pvp" height="200" width="200" ng-click="click_canvas($event, false)"/>
+                  </div>
+                  <div style="width:200px;text-align: center;  margin-left: 25px;margin-top: -25px;"><div style="display:inline-block;float:left">Low</div>Impact<div style="display:inline-block;float:right">High</div></div>
+                  <input class="todo-checkbox" type="checkbox" ng-model="pvp.too_new">
+              </div>
+              <div style="clear: both;"></div>
+              <div style="display: block; width:100%;-webkit-border-radius: 2px;moz-border-radius: 3px;-ms-border-radius: 3px;-o-border-radius: 3px;border-radius: 3px;border: 1px solid #c1c1c1;margin-top: 10px; margin-right:15px;background-color:white;">
+                 <textarea class="text" ng-model="pvp.comment.content" rows="1" cols="50" placeholder="Add some context. Where are they awesome? How can they take it to the next level?" style="width:99.5%;height: 127px;font-size:14px;padding:5px;border: none;resize:vertical;"></textarea>
+              </div>
+
+	</div>
+    <div class="modal-footer">
+        <button class="btn btn-success" ng-click='save()' tabindex="10">Save</button>
+        <button class="btn btn-default" ng-click='cancel()' tabindex="11">Cancel</button>
+    </div>
+
+</div>
+<style>
+    .vertical-text {
+        display: block;
+        float: left;
+        -webkit-transform: rotate(-90deg);
+        -moz-transform: rotate(-90deg);
+        -ms-transform: rotate(-90deg);
+        -o-transform: rotate(-90deg);
+        transform: rotate(-90deg);
+    }
+</style>

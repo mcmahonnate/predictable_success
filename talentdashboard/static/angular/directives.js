@@ -273,13 +273,40 @@ angular.module('tdb.directives', [])
 }])
 
 .directive('employeeTalentCategory', ['TalentCategories', function(TalentCategories) {
-    return function(scope, element, attrs){
-        var color = TalentCategories.getColorByTalentCategory(attrs.employeeTalentCategory);
-        var canvas=element[0];
-        var ctx=canvas.getContext("2d");
-        ctx.fillStyle=color;
-        ctx.fillRect(0,0,element[0].height,element[0].width);
-    };
+    return {
+        scope: {
+            pvp: '='
+        },
+        link: function(scope, element, attrs){
+            scope.$watch('pvp.talent_category', function() {
+                var talentCategory = scope.pvp.talent_category;
+                var color = TalentCategories.getColorByTalentCategory(talentCategory);
+                var canvas = element[0];
+                var ctx = canvas.getContext("2d");
+                ctx.fillStyle = color;
+                ctx.fillRect(0, 0, element[0].height, element[0].width);
+            })
+        }
+    }
+}])
+
+.directive('pvpChart', ['TalentCategories', function(TalentCategories) {
+    return {
+        scope: {
+            pvp: '='
+        },
+        link: function (scope, element, attrs) {
+            scope.$watchGroup(['pvp.performance','pvp.potential','pvp.talent_category'], function() {
+                var svg = element[0];
+                var potential = scope.pvp.potential;
+                var performance = scope.pvp.performance;
+                var talentCategory = scope.pvp.talent_category;
+                var squareColor = TalentCategories.getColorByTalentCategory(talentCategory);
+                angular.element(svg.querySelector('[fill]')).attr('fill', null);
+                angular.element(svg.querySelector('.pvp-square-' + performance + '-' + potential)).attr('fill', squareColor);
+            })
+        }
+    }
 }])
 
 .directive('ngScrollIntoView', function ($window) {
@@ -468,17 +495,6 @@ angular.module('tdb.directives', [])
     }
   }
 })
-
-.directive('pvpChart', ['TalentCategories', function(TalentCategories) {
-    return function(scope, element, attrs){
-        var svg = element[0];
-        var potential = parseInt(attrs.potential, 10);
-        var performance = parseInt(attrs.performance, 10);
-        var talentCategory = parseInt(attrs.talentCategory, 10);
-        var squareColor = TalentCategories.getColorByTalentCategory(talentCategory);
-        angular.element(svg.querySelector('.pvp-square-' + performance + '-' + potential)).attr('fill', squareColor);
-    };
-}])
 
 .directive('handsOnTable', function() {
     return {
@@ -715,7 +731,12 @@ angular.module('tdb.directives', [])
         var offSquareColor = "#343434";
         var squares = [];
         var squaresHash = {};
-        var pvp = scope.pvps[attrs.index];
+        var pvp = null
+        if (attrs.index) {
+            pvp = scope.pvps[attrs.index];
+        } else {
+            pvp = scope.pvp;
+        }
 
         for(var potential = 1; potential <= 4; potential++) {
             squaresHash[potential] = {};
@@ -731,6 +752,7 @@ angular.module('tdb.directives', [])
                 var square = {
                     'potential': potential,
                     'performance': performance,
+                    'talent_category': talentCategory,
                     'topLeft': topLeft,
                     'bottomRight': bottomRight,
                     'color': color
@@ -801,7 +823,7 @@ angular.module('tdb.directives', [])
             drawSquare(findSquare());
         }
 
-        scope.click_canvas = function(e) {
+        scope.click_canvas = function(e, save) {
             var point = getCursorPosition(e);
             for(var index = 0; index < squares.length; index++) {
                 var square = squares[index];
@@ -809,8 +831,10 @@ angular.module('tdb.directives', [])
                     drawSquare(square);
                     pvp.potential = square.potential;
                     pvp.performance = square.performance;
+                    pvp.talent_category = square.talent_category
                     findDescription();
-                    scope.save();
+                    if (save)
+                        scope.save();
                     break;
                 }
             }
@@ -1034,6 +1058,8 @@ angular.module('tdb.directives', [])
     templateUrl: "/static/angular/partials/_modals/send-survey-modal.html"
   };
 }])
+
+
 
 .directive("masonry", function () {
     var NGREPEAT_SOURCE_RE = '<!-- ngRepeat: ((.*) in ((.*?)( track by (.*))?)) -->';
