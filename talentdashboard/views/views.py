@@ -313,93 +313,6 @@ class PvpEvaluationDetail(APIView):
         serializer = PvpEvaluationSerializer(pvp,context={'request': request})
         return Response(serializer.data)
 
-class ImportData(APIView):
-    def post(self, request, format=None):
-        items = json.loads(request.body)
-        response_items = []
-        teams = []
-
-        # add all employees
-        for item in items:
-            first_name = ''
-            last_name = ''
-            email = ''
-            if 'First name' in item.keys():
-                first_name = item['First name']
-            else:
-                item['Missing Field'] = 'First name'
-
-            if 'Last name' in item.keys():
-                last_name = item['Last name']
-            else:
-                item['Missing Field'] = 'Last name'
-
-            if 'Email' in item.keys():
-                email = item['Email']
-            else:
-                item['Missing Field'] = 'Email'
-            try:
-                employee = Employee.objects.get(first_name=first_name,last_name=last_name,email=email)
-            except Employee.DoesNotExist:
-                date_string = item['Hire Date']
-                date_parsed = dateutil.parser.parse(date_string)
-                employee = Employee(first_name=first_name,last_name=last_name,email=item['Email'],job_title=item['Job Title'],hire_date=date_parsed.date(),display=True)
-                employee.save()
-            item['id'] = employee.id
-            if 'Team Name' in item.keys():
-                teams.append(item['Team Name'])
-            else:
-                item['Missing Field'] = 'Team Name'
-                item['Team Name'] = ''
-            response_items.append(item)
-
-        # add teams
-        trim_teams = set(teams)
-        for trim_team in trim_teams:
-            try:
-                team = Team.objects.get(name=trim_team)
-            except Team.DoesNotExist:
-                team = Team(name=trim_team)
-                team.save()
-
-        # add salaries and leaderships
-        for item in items:
-            employee = Employee.objects.get(id=item['id'])
-            team_name = item['Team Name']
-            now = datetime.datetime.now()
-            year = int(now.year)
-
-            if 'Team Leader' in item.keys():
-                leader_full_name = item['Team Leader']
-            else:
-                item['Missing Field'] = 'Team Leader'
-                leader_full_name = ''
-
-            if 'Salary' in item.keys():
-                try:
-                    comp = CompensationSummary.objects.get(employee_id=employee.id, year=year)
-                except CompensationSummary.DoesNotExist:
-                    comp = CompensationSummary(employee=employee,fiscal_year=year,year=year)
-                comp.salary = Decimal(sub(r'[^\d\-.]', '', item['Salary']))
-                comp.save()
-            else:
-                item['Missing Field'] = 'Salary'
-                response_items.append(item)
-
-            try:
-                leader = Employee.objects.get(full_name=leader_full_name)
-                leadership = Leadership(employee=employee,leader=leader)
-                leadership.save()
-            except Employee.DoesNotExist:
-                leaders = Employee.objects.filter(last_name__in=leader_full_name.split(" ")).values('full_name')
-                if not leaders:
-                    leaders = []
-                item['Incorrect Field'] = 'Team Leader'
-                item['Manager Suggestions'] = list(leaders)
-                response_items.append(item)
-
-        return HttpResponse(json.dumps(response_items), content_type='application/json')
-
 @api_view(['POST'])
 def upload_employee(request):
     team_id = -1
@@ -420,8 +333,6 @@ def upload_employee(request):
 
     serializer = CreateEmployeeSerializer(data = request.DATA, context={'request':request})
     if serializer.is_valid():
-        print(request.DATA)
-        print("create")
         employee = serializer.save()
         add_salary_to_employee(employee, request.DATA)
         serializer = EmployeeSerializer(employee, context={'request':request})
@@ -450,6 +361,7 @@ def upload_leadership(request):
         leader = Employee.objects.get(full_name=leader_full_name)
         leadership = Leadership(employee=employee,leader=leader)
         leadership.save()
+        employee.current_leader(leader.id)
     except Employee.DoesNotExist:
         leaders = Employee.objects.filter(last_name__in=leader_full_name.split(" ")).values('full_name')
         if not leaders:
@@ -1001,55 +913,53 @@ class EmployeeDetail(APIView):
             return Response(None)
         
     def post(self, request, pk, format=None):
-        def expire_view_cache(view_name, args=None, language=None, namespace=None, key_prefix=None, method="GET"):
-            url = reverse(view_name, args=args)
-            key_prefix = settings.CACHE_MIDDLEWARE_KEY_PREFIX
-            ctx = hashlib.md5()
-            path = hashlib.md5(iri_to_uri(url))
-            cache_key = 'views.decorators.cache.cache_page.%s.%s.%s.%s' % (
-                key_prefix, 'GET', path.hexdigest(), ctx.hexdigest())
-            if settings.USE_I18N:
-                cache_key += '.%s' % (language or get_language())
-            if cache_key:
-                if cache.get(cache_key):
-                    cache.delete(cache_key)
-                return True
-            return False
 
-        employee = Employee()
-        employee.display = True
-        expire_view_cache('employee-list')
-        response_items = []
+        if 'hire_date' in request.DATA and request.DATA['hire_date'] is not None:
+            date_string = request.DATA['hire_date']
+            request.DATA['hire_date'] = dateutil.parser.parse(date_string).date()
 
-        if employee is not None:
-            if "_full_name" in request.DATA:
-                employee.full_name = request.DATA["_full_name"]
-            if "_first_name" in request.DATA:
-                employee.first_name = request.DATA["_first_name"]
-            if "_last_name" in request.DATA:
-                employee.last_name = request.DATA["_last_name"]
-            if "_email" in request.DATA:
-                employee.email = request.DATA["_email"]
-            if "_hire_date" in request.DATA:
-                employee.hire_date = dateutil.parser.parse(request.DATA["_hire_date"])
-            if "_team_id" in request.DATA:
-                team_id = request.DATA["_team_id"]
-                if team_id is None:
-                    team = None
-                else:
-                    team = Team.objects.get(id=team_id)
-                employee.team = team
-            if "_coach_id" in request.DATA:
-                coach_id = request.DATA["_coach_id"]
-                coach = Employee.objects.get(id=coach_id)
-                employee.coach = coach
-            if "_departure_date" in request.DATA:
-                employee.departure_date = dateutil.parser.parse(request.DATA["_departure_date"])
-            employee.save()
-            response_items.append(employee)
-            serializer = EmployeeSerializer(employee, many=False, context={'request': request})
+        serializer = CreateEmployeeSerializer(data = request.DATA, context={'request':request})
+        if serializer.is_valid():
+            employee = serializer.save()
+            add_salary_to_employee(employee, request.DATA)
+            serializer = EmployeeSerializer(employee, context={'request':request})
             return Response(serializer.data)
-        return Response(None, status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response(serializer.errors, status=400)
+
+        # employee = Employee()
+        # employee.display = True
+        # response_items = []
+
+        # if employee is not None:
+        #     if "_full_name" in request.DATA:
+        #         employee.full_name = request.DATA["_full_name"]
+        #     if "_first_name" in request.DATA:
+        #         employee.first_name = request.DATA["_first_name"]
+        #     if "_last_name" in request.DATA:
+        #         employee.last_name = request.DATA["_last_name"]
+        #     if "_email" in request.DATA:
+        #         employee.email = request.DATA["_email"]
+        #     if "_hire_date" in request.DATA:
+        #         employee.hire_date = dateutil.parser.parse(request.DATA["_hire_date"])
+        #     if "_team_id" in request.DATA:
+        #         team_id = request.DATA["_team_id"]
+        #         if team_id is None:
+        #             team = None
+        #         else:
+        #             team = Team.objects.get(id=team_id)
+        #         employee.team = team
+        #     if "_coach_id" in request.DATA:
+        #         coach_id = request.DATA["_coach_id"]
+        #         coach = Employee.objects.get(id=coach_id)
+        #         employee.coach = coach
+        #     if "_departure_date" in request.DATA:
+        #         employee.departure_date = dateutil.parser.parse(request.DATA["_departure_date"])
+        #     employee.save()
+        #     response_items.append(employee)
+        #     serializer = EmployeeSerializer(employee, many=False, context={'request': request})
+        #     return Response(serializer.data)
+        # return Response(None, status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request, pk, format=None):
         employee = Employee.objects.get(id=pk)
@@ -1085,6 +995,18 @@ class EmployeeDetail(APIView):
             serializer = EmployeeSerializer(employee, many=False, context={'request': request})
             return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['POST'])
+def upload_teams(request):
+    response_data = []
+    teams = request.DATA['teams']
+    trim_teams = set(teams)
+    for trim_team in trim_teams:
+        team = Team(name=trim_team)
+        team.save()
+        serializer = TeamSerializer(team, context={'request': request})
+        response_data.append(serializer.data)
+    return Response(response_data)
 
 class ImageUploadView(APIView):
     parser_classes = (MultiPartParser,FormParser)

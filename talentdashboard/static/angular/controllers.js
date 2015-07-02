@@ -285,14 +285,15 @@ angular.module('tdb.controllers', [])
 
     var getData = function() {
         var data = {id: $scope.employee.id};
-        data._first_name = $scope.employee.first_name;
-        data._last_name = $scope.employee.last_name;
-        data._email = $scope.employee.email;
-        data._hire_date = ($scope.employee.hire_date) ? $rootScope.scrubDate($scope.employee.hire_date, false) : null;
-        data._departure_date = ($scope.employee.departure_date) ? $rootScope.scrubDate($scope.employee.departure_date, false) : null;
-        data._team_id = ($scope.employee.team && $scope.employee.team.name) ? $scope.employee.team.id : null;
-        data._coach_id = ($scope.employee.coach && $scope.employee.coach.full_name) ? $scope.employee.coach.id : null;
-        data._leader_id = ($scope.employee.current_leader && $scope.employee.current_leader.full_name) ? $scope.employee.current_leader.id : null;
+        data.first_name = $scope.employee.first_name;
+        data.last_name = $scope.employee.last_name;
+        data.email = $scope.employee.email;
+        data.hire_date = ($scope.employee.hire_date) ? $rootScope.scrubDate($scope.employee.hire_date, false) : null;
+        data.departure_date = ($scope.employee.departure_date) ? $rootScope.scrubDate($scope.employee.departure_date, false) : null;
+        data.team = ($scope.employee.team && $scope.employee.team.name) ? $scope.employee.team.id : null;
+        data.coach_id = ($scope.employee.coach && $scope.employee.coach.full_name) ? $scope.employee.coach.id : null;
+        data.leader_id = ($scope.employee.current_leader && $scope.employee.current_leader.full_name) ? $scope.employee.current_leader.id : null;
+        data.display = true;
         return data;
     };
     $scope.uploadFile = function(files){
@@ -589,7 +590,7 @@ angular.module('tdb.controllers', [])
     };
 }])
 
-.controller('UploadDataCtrl', ['$scope', 'ImportData', 'Employee', 'Notification','EmployeeNames', function($scope, ImportData, Employee, Notification, EmployeeNames) {
+.controller('UploadDataCtrl', ['$scope', '$rootScope', '$q', 'ImportData', 'Employee', 'Notification','EmployeeNames', function($scope, $rootScope, $q, ImportData, Employee, Notification, EmployeeNames) {
     $scope.data;
     $scope.importData = [];
     $scope.hasColumnHeaders=true;
@@ -623,26 +624,64 @@ angular.module('tdb.controllers', [])
 
     $scope.import = function() {
         var parsedData = $scope.getData();
-        for (var i = 0; i < parsedData.length; i++) {
-            var emp = parsedData[i];
-            console.log(emp);
+        var responseData = [];
+        var defer = $q.defer()
+        var addEmployees = [];
+        var teams = [];
+        var team_ids = {}; // key is team name, value is id
+
+        parsedData.forEach(function (emp) {
             emp["display"] = true;
-            ImportData.addNewEmployee(emp).$promise.then(function (data) {
-                console.log(data);
-                parsedData[i] = data;
+            if ("team" in emp && emp.team && emp.team.length)
+                teams.push(emp.team);
+        });
+
+        ImportData.addNewTeams({'teams': teams}).$promise.then(function (data) {
+            console.log(data);
+            data.forEach(function (t) {
+                team_ids[t.name] = t.id;
             });
+            console.log(team_ids);
+
+            parsedData.forEach(function (emp) {
+                addEmp(emp);
+                // addEmployees.push(addEmp(emp));
+            });
+            // $q.all(addEmployees);
+            // $q.all(addEmployees).then(addLeaderships(responseData));
+        });
+
+        function addEmp(data) {
+            if ("team" in data)
+                data["team"] = team_ids[data.team];
+            data.id = 0;
+            console.log(data)
+            var employee = new Employee(data);
+            employee.$save();
+
+            // ImportData.addNewEmployee(employee).$promise.then(function (data) {
+            //     console.log(data);
+            //     responseData.push(data);
+            //     defer.resolve();
+            // });
         }
 
-        for (var i = 0; i < parsedData.length; i++) {
-            var emp = parsedData[i];
-            emp["display"] = true;
-            console.log(emp);
-            if ("team_leader" in emp) {
-                ImportData.addNewLeadership(emp).$promise.then(function (data) {
-                    console.log(data);
-                });
-            }
-        }
+        // function addLeaderships(parsedData) {
+        //     for (var i = 0; i < parsedData.length; i++) {
+        //         var emp = parsedData[i];
+        //         emp["display"] = true;
+        //         console.log(emp);
+        //         if ("team_leader" in emp) {
+        //             ImportData.addNewLeadership(emp).$promise.then(function (data) {
+        //                 console.log(data);
+        //             });
+        //         }
+        //     }
+        // }   
+
+        // addTeams(teams);
+        // $q.all(addEmployees).then(addLeaderships(responseData));
+        return defer;
     }
 }])
 
