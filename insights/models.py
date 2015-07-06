@@ -27,7 +27,7 @@ class Prospect(models.Model):
 	first_name = models.CharField(max_length=32)
 	last_name = models.CharField(max_length=32)
 	company = models.CharField(max_length=64, null=True)
-	email = models.EmailField(unique=True)
+	email = models.EmailField()
 	access_token = models.CharField(max_length=32, null=True)
 	talent_category = models.IntegerField(choices=TALENT_CATEGORY_CHOICES, null=True)
 	engagement = models.IntegerField(choices=ENGAGEMENT_CHOICES, null=True)
