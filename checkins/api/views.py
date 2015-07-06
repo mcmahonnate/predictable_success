@@ -32,3 +32,8 @@ class CreateCheckIn(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(host=self.request.user.employee)
+
+
+class RetrieveUpdateDestroyCheckIn(generics.RetrieveUpdateDestroyAPIView):
+    queryset = CheckIn.objects.all()
+    serializer_class = CheckInSerializer
