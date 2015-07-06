@@ -1,6 +1,14 @@
-from rest_framework import generics
-from ..models import CheckIn
-from .serializers import CheckInSerializer, AddEditCheckInSerializer
+from rest_framework import generics, views
+from rest_framework.response import Response
+from ..models import CheckIn, CheckInType
+from .serializers import CheckInSerializer, AddEditCheckInSerializer, CheckInTypeSerializer
+
+
+class CheckInTypeList(views.APIView):
+    def get(self, request):
+        qs = CheckInType.objects.all()
+        serializer = CheckInTypeSerializer(qs, many=True)
+        return Response(serializer.data)
 
 
 class EmployeeCheckInList(generics.ListAPIView):

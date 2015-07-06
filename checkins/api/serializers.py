@@ -4,7 +4,13 @@ from org.models import Employee
 from ..models import CheckIn, CheckInType
 
 
-class CheckInSerializer(serializers.HyperlinkedModelSerializer):
+class CheckInTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CheckInType
+        fields = ('id', 'name')
+
+
+class CheckInSerializer(serializers.ModelSerializer):
     employee = MinimalEmployeeSerializer()
     host = MinimalEmployeeSerializer()
 
@@ -13,7 +19,7 @@ class CheckInSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('employee', 'host', 'date', 'summary', 'happiness')
 
 
-class AddEditCheckInSerializer(serializers.HyperlinkedModelSerializer):
+class AddEditCheckInSerializer(serializers.ModelSerializer):
     host = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all(), required=False)
     employee = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
     type = serializers.PrimaryKeyRelatedField(queryset=CheckInType.objects.all())

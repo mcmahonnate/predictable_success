@@ -12,6 +12,7 @@ HAPPINESS_CHOICES = (
     (5, 'Very happy'),
 )
 
+
 class Happiness(models.Model):
     assessed_by = models.ForeignKey(Employee, related_name='+')
     assessed_date = models.DateTimeField(auto_now_add = True)
