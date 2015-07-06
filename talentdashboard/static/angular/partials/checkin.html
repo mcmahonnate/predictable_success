@@ -44,7 +44,20 @@
 	            <textarea required placeholder="Enter summary here..." class="form-control" name="summary" ng-model="checkin.summary" style="min-height:80px;margin-bottom:20px"></textarea>
 		    </div>		    	
 
-
+			<accordion>
+			    <accordion-group is-open="todo.open">
+			        <accordion-heading>
+			            Todo's <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': todo.open, 'glyphicon-chevron-right': !todo.open}"></i>
+			        </accordion-heading>
+			        Hello world!
+			    </accordion-group>
+			    <accordion-group is-open="engagement.open">
+			        <accordion-heading>
+			            Engagement <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': engagement.open, 'glyphicon-chevron-right': !engagement.open}"></i>
+			        </accordion-heading>
+			        Hello world!
+			    </accordion-group>
+			</accordion>
 
 	        <button type="submit" class="btn btn-success">Save</button>
 	        <a href="" ng-click="showSearch()">Cancel</a>
