@@ -1,34 +1,53 @@
 <div class="container" ng-controller="AddEditCheckInCtrl">
-    <h1>Checkin</h1>
-    <form name="checkinForm" novalidate="novalidate" ng-submit="save(checkinForm)">
-		
-		<div ng-show="selectedEmployee == ''" ng-class="{open: navQuery!=''}" class="search dropdown pull-left">
-		    <div style="position:relative;">
-		        <div class="glyphicon glyphicon-search search-icon"></div>
-		        <input ng-click="toggleNavQuery()" class="search-input nav_query" ng-model="navQuery" type="text" placeholder="Search Employees..."/>
-		    </div>
-		    <ul class="dropdown-menu" ng-show="navQuery!=''" role="menu" aria-labelledby="dLabel">     
-		        <div ng-if="navQuery!=''">
-		            <li ng-repeat="employee in filteredEmployees = (employees |filter:{full_name:navQuery}:startsWith) | orderBy:'full_name'">
-		                <a ng-click="selectEmployee({{employee}})" class="dashboard" href="">
-		                    <div class="tiny-headshot"><img ng-src="{{employee.avatar_small}}"/></div>
-		                    <span class="employee-name">{{employee.full_name}}</span>
-		                </a>
-		            </li>
-		            <li ng-show="!filteredEmployees.length" style="padding: 13px 20px;">No Results</li>
-		        </div>
-		    </ul>
-		</div>
+
+    <form class="checkin" name="checkinForm" novalidate="novalidate" ng-submit="save(checkinForm)">	
+    	<div ng-show="selectedEmployee == ''">
+	    	<h1>Create a Check-in</h1>
+			<div ng-class="{open: navQuery!=''}" class="search dropdown pull-left">
+			    <div style="position:relative;">
+			        <div class="glyphicon glyphicon-search search-icon"></div>
+			        <input ng-click="toggleNavQuery()" class="search-input nav_query" ng-model="navQuery" type="text" placeholder="Search Employees..."/>
+			    </div>
+			    <ul class="dropdown-menu" ng-show="navQuery!=''" role="menu" aria-labelledby="dLabel">     
+			        <div ng-if="navQuery!=''">
+			            <li ng-repeat="employee in filteredEmployees = (employees |filter:{full_name:navQuery}:startsWith) | orderBy:'full_name'">
+			                <a ng-click="selectEmployee({{employee}})" class="dashboard" href="">
+			                    <div class="tiny-headshot"><img ng-src="{{employee.avatar_small}}"/></div>
+			                    <span class="employee-name">{{employee.full_name}}</span>
+			                </a>
+			            </li>
+			            <li ng-show="!filteredEmployees.length" style="padding: 13px 20px;">No Results</li>
+			        </div>
+			    </ul>
+			</div>
+		</div>	
 
 		<div ng-show="selectedEmployee != ''">
-		    <img ng-src="{{ selectedEmployee.avatar_small }}"/>
-		    <span class="employee-name">{{ selectedEmployee.full_name }}</span>
-		    <a href="" ng-click="showSearch()">Search</a>
-	    </div>
 
-        <div class="form-group" ng-show="selectedEmployee != ''" ng-class="{'has-error': taskForm.$submitted && taskForm.description.$invalid}">
-            <textarea required placeholder="Enter summary here..." class="form-control" name="summary" ng-model="checkin.summary" style="min-height:80px;margin-bottom:20px"></textarea>
-        	<button type="submit" class="btn btn-success">Save</button>
-        </div>
+			<div>
+	    		<a href="#/employees/{{selectedEmployee.id}}">
+	    			<img ng-src="{{selectedEmployee.avatar_small}}" class="large-headshot"/>
+	    		</a>
+	    		<h1><a href="#/employees/{{selectedEmployee.id}}">{{ selectedEmployee.full_name }}</a></h1>
+	    	</div>	
+			<div class="panel">   	
+		    	<select class="form-control">
+		    		<option>--Select Check-In Type--</option>
+		    		<option>360 Feedback</option>
+		    		<option>Level Up</option>
+		    		<option>UFS</option>
+		    		<option>Other</option>
+		    	</select>
+		    </div>
+			<div class="panel">  
+				<h3>Summary</h3> 	
+	            <textarea required placeholder="Enter summary here..." class="form-control" name="summary" ng-model="checkin.summary" style="min-height:80px;margin-bottom:20px"></textarea>
+		    </div>		    	
+
+
+
+	        <button type="submit" class="btn btn-success">Save</button>
+	        <a href="" ng-click="showSearch()">Cancel</a>
+	    </div>    
 	</form>
 </div>
