@@ -1,7 +1,7 @@
 <div class="container" ng-controller="AddEditCheckInCtrl">
 
     <form class="checkin" name="checkinForm" novalidate="novalidate" ng-submit="save(checkinForm)">	
-    	<div ng-show="selectedEmployee == ''">
+    	<div ng-show="!selectedEmployee">
 	    	<h1>Create a Check-in</h1>
 			<div ng-class="{open: navQuery!=''}" class="search dropdown pull-left">
 			    <div style="position:relative;">
@@ -22,7 +22,7 @@
 			</div>
 		</div>	
 
-		<div ng-show="selectedEmployee != ''">
+		<div ng-show="selectedEmployee">
 
 			<div>
 	    		<a href="#/employees/{{selectedEmployee.id}}">
@@ -31,12 +31,8 @@
 	    		<h1><a href="#/employees/{{selectedEmployee.id}}">{{ selectedEmployee.full_name }}</a></h1>
 	    	</div>	
 			<div class="panel">   	
-		    	<select class="form-control">
-		    		<option>--Select Check-In Type--</option>
-		    		<option>360 Feedback</option>
-		    		<option>Level Up</option>
-		    		<option>UFS</option>
-		    		<option>Other</option>
+		    	<select class="form-control" ng-options="type.id as type.name for type in checkinTypes" ng-model="checkin.type" name="type">
+		    		<option value="">--Select Check-In Type--</option>
 		    	</select>
 		    </div>
 			<div class="panel">  
@@ -60,7 +56,7 @@
 			</accordion>
 
 	        <button type="submit" class="btn btn-success">Save</button>
-	        <a href="" ng-click="showSearch()">Cancel</a>
+	        <a href="" ng-click="cancel()">Cancel</a>
 	    </div>    
 	</form>
 </div>

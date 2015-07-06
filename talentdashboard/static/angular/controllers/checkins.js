@@ -1,14 +1,23 @@
 angular.module('tdb.controllers.checkins', [])
 
-    .controller('AddEditCheckInCtrl', ['$scope', '$rootScope', '$routeParams', 'CheckIn', 'Employee', 'Customers', function ($scope, $rootScope, $routeParams, CheckIn, Employee, Customers) {
+    .controller('AddEditCheckInCtrl', ['$scope', '$rootScope', '$routeParams', 'CheckIn', 'CheckInType', 'Engagement', 'Employee', function ($scope, $rootScope, $routeParams, CheckIn, CheckInType, Engagement, Employee) {
         $scope.checkin = new CheckIn();
+        $scope.engagement = new Engagement();
+        $scope.tasks = [];
         $scope.navQuery = '';
-        $scope.selectedEmployee = '';
+        $scope.selectedEmployee = null;
 
-        //employee lookup
-        if (!$scope.employees) { $scope.employees = Employee.query();} //!important browser cache buster
+        CheckInType.query({}, function(data) {
+            $scope.checkinTypes = data;
+        });
 
-        //select employee
+        // TODO: Solr-ize this
+        if (!$scope.employees) {
+            Employee.query({}, function(data) {
+                $scope.employees = data;
+            });
+        }
+
         $scope.selectEmployee = function(employee) {
             $scope.navQuery = '';
             $scope.selectedEmployee = employee;
@@ -19,23 +28,24 @@ angular.module('tdb.controllers.checkins', [])
             if(form.$invalid) return;
             $scope.checkin.date = new Date(Date.now());
             $scope.checkin.$save(function (value) {
-                $modalInstance.close(value);
+                // save engagement, if any
+                // save tasks, if any
+                // what here?
             });
         };
 
-        //show search
-        $scope.showSearch = function() {
-            $scope.selectedEmployee = '';
+        $scope.cancel = function() {
+            $scope.selectedEmployee = null;
         };
     }])
 
     .controller('CheckInsCtrl', ['$scope', '$rootScope', '$modalInstance', '$routeParams', 'CheckIn', function ($scope, $rootScope, $modalInstance, $routeParams, CheckIn) {
-        
+
         CheckIn.get(query, function(data) {
             $scope.checkins = data.results;
             angular.forEach($scope.checkins, function (checkin) {
                 $scope.checkins.push(checkin);
             });
-        });        
+        });
 
     }]);

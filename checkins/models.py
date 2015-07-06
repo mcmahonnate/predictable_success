@@ -5,7 +5,7 @@ from engagement.models import Happiness
 
 class CheckInType(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    sort_weight = models.IntegerField()
+    sort_weight = models.IntegerField(default=0)
 
     class Meta:
         ordering = ['sort_weight']
