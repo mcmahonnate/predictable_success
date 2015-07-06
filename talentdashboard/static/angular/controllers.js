@@ -431,9 +431,9 @@ angular.module('tdb.controllers', [])
     PvpEvaluation.getAllEvaluationsForEmployee($routeParams.id).$promise.then(function(response) {
         $scope.pvps = response;
     });
-
     $scope.selectPvP = function(index) {
         $scope.pvpIndex = index;
+        updateSlidePosition();
     }
     $scope.editPvP = function (pvps, index) {
         var modalInstance = $modal.open({
@@ -450,9 +450,9 @@ angular.module('tdb.controllers', [])
             function (pvp) {
                 console.log('save return');
                 console.log(pvp);
-                $scope.pvps[$scope.pvpIndex].performance = pvp.performance;
-                $scope.pvps[$scope.pvpIndex].potential = pvp.potential;
-                $scope.pvps[$scope.pvpIndex].talent_category = pvp.talent_category;
+                $scope.pvps[index].performance = pvp.performance;
+                $scope.pvps[index].potential = pvp.potential;
+                $scope.pvps[index].talent_category = pvp.talent_category;
             }
         );
     };
@@ -471,7 +471,7 @@ angular.module('tdb.controllers', [])
     $scope.save = function() {
         console.log('save start');
         console.log($scope.pvp)
-        if ($scope.pvp.comment.content) {
+        if ($scope.pvp.comment && $scope.pvp.comment.content) {
             var data = {id: $scope.pvp.id, _potential: $scope.pvp.potential, _performance: $scope.pvp.performance, _content: $scope.pvp.comment.content};
             PvpEvaluation.update(data, function (response) {
                 $scope.pvp = response;
