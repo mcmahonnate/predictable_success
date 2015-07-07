@@ -41,11 +41,11 @@
 	        	<textarea required placeholder="Enter notes here..." class="form-control simple-form-control" name="summary" ng-model="checkin.summary" style="min-height:250px;"></textarea>		    	
 			</div>
 			<accordion>
-			    <accordion-group is-open="engagement.open">
+			    <accordion-group is-open="happiness.open">
 			        <accordion-heading>
 			        	<div>
-			            Engagement <i class="pull-right glyphicon" ng-class="{'glyphicon glyphicon-minus': engagement.open, 'glyphicon glyphicon-plus': !engagement.open}"></i>
-			        	</div>
+			            	Engagement <i class="pull-right glyphicon" ng-class="{'glyphicon glyphicon-minus': happiness.open, 'glyphicon glyphicon-plus': !happiness.open}"></i>
+			            </div>
 			        </accordion-heading>
 			        <div class="checkin-engagement">
 				        <p>How professionally happy is {{selectedEmployee.full_name}}?</p>                

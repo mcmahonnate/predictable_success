@@ -1,5 +1,12 @@
 var app = angular.module('tdb', [
-        'tdb.services', 'tdb.preferences.services', 'tdb.search.controllers', 'tdb.search.services', 'tdb.services.tasks', 'tdb.controllers', 'tdb.controllers.tasks', 'tdb.controllers.comments', 'tdb.services.checkins', 'tdb.controllers.checkins', 'tdb.directives', 'tdb.filters', 'angular-carousel', 'analytics', 'ui.bootstrap', 'ngCsv','ngRoute','ui-notification'])
+        'tdb.services', 'tdb.controllers', 'tdb.directives', 'tdb.filters',
+        'tdb.preferences.services',
+        'tdb.search.controllers', 'tdb.search.services',
+        'tdb.services.tasks', 'tdb.controllers.tasks',
+        'tdb.controllers.comments',
+        'tdb.services.checkins', 'tdb.controllers.checkins',
+        'tdb.engagement.services',
+        'angular-carousel', 'analytics', 'ui.bootstrap', 'ngCsv','ngRoute','ui-notification'])
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.
           when('/', {template: '<div ng-include src="templateUrl"></div>', controller: 'CompanyOverviewCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
