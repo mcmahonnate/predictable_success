@@ -45,18 +45,18 @@
 	        	<textarea required placeholder="Enter summary here..." class="form-control simple-form-control" name="summary" ng-model="checkin.summary" style="min-height:250px;"></textarea>		    	
 			</div>
 			<accordion>
-			    <accordion-group is-open="todo.open">
-			        <accordion-heading>
-			            Todo's <i class="pull-right glyphicon" ng-class="{'glyphicon glyphicon-minus': todo.open, 'glyphicon glyphicon-plus': !todo.open}"></i>
-			        </accordion-heading>
-			        Hello world!
-			    </accordion-group>
 			    <accordion-group is-open="engagement.open">
 			        <accordion-heading>
 			            Engagement <i class="pull-right glyphicon" ng-class="{'glyphicon glyphicon-minus': engagement.open, 'glyphicon glyphicon-plus': !engagement.open}"></i>
 			        </accordion-heading>
 			        Hello world!
 			    </accordion-group>
+			    <accordion-group is-open="todo.open">
+			        <accordion-heading>
+			            Todo's <i class="pull-right glyphicon" ng-class="{'glyphicon glyphicon-minus': todo.open, 'glyphicon glyphicon-plus': !todo.open}"></i>
+			        </accordion-heading>
+			        Hello world!
+			    </accordion-group>	    
 			</accordion>
 	        <button type="submit" class="btn btn-success btn-lg">Publish to Profile</button>
 	    </div>    
