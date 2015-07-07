@@ -1,11 +1,76 @@
 .checkin {
-  	max-width: 600px;
-  	margin: 0 auto;
+  	max-width: 700px;
+  	margin: 40px auto;
 
 
-  	.panel-group .panel-heading {
-  		padding: o;
-  		background-color: none;
+  	.checkin-header{
+  		overflow: hidden;
+  		margin-bottom: 15px;
+
+  		h1 {
+  			margin: 16px 8px;
+
+  			a {
+  				color: #333;
+  			}
+  			a:focus {
+  				outline:0 !important;
+  			}
+  		}
   	}
+
+  	.checkin-search {
+  		margin-top: 35%;
+  		text-align: center;
+
+  		.search {
+  			width: 100%;
+  		}
+
+  		.search-input-container {
+  			  position: relative;
+			  border: 1px solid #ddd;
+			  border-radius: 5px;
+			  text-align: left;
+
+			.search-icon {
+			  	position: absolute;
+			  	padding: 25px 15px;
+			  	pointer-events: none;
+			}
+  		}
+
+  		.search-input {
+  			width: 100%;
+		  	font-size: 20px;
+		  	height: 65px;
+		  	padding-left: 40px;
+  		}
+  	}
+
+  	.checkin-type {
+  		margin: 25px 0;
+  	}
+
+  	.checkin-summary {
+  		margin-bottom: 10px;
+  	}
+
+  	.panel-default {
+  		border: none; 
+  	}
+  	.panel-group .panel-heading {
+  		padding: 0;
+  		background-color: #fff;
+
+  		.panel-title {
+  			margin-bottom: 0;
+  		}
+
+  		.glyphicon {
+  			color: #ccc;
+  		}
+  	}
+
 
 }
