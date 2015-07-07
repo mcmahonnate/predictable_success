@@ -1,11 +1,14 @@
 angular.module('tdb.controllers.checkins', [])
 
     .controller('AddEditCheckInCtrl', ['$scope', '$rootScope', '$routeParams', 'CheckIn', 'CheckInType', 'Engagement', 'Employee', function ($scope, $rootScope, $routeParams, CheckIn, CheckInType, Engagement, Employee) {
-        $scope.checkin = new CheckIn();
-        $scope.engagement = new Engagement();
-        $scope.tasks = [];
-        $scope.navQuery = '';
-        $scope.selectedEmployee = null;
+        var initialize = function() {
+            $scope.checkin = new CheckIn();
+            $scope.engagement = new Engagement();
+            $scope.tasks = [];
+            $scope.employeeSearch = '';
+            $scope.selectedEmployee = null;
+        };
+        initialize();
 
         CheckInType.query({}, function(data) {
             $scope.checkinTypes = data;
@@ -19,7 +22,7 @@ angular.module('tdb.controllers.checkins', [])
         }
 
         $scope.selectEmployee = function(employee) {
-            $scope.navQuery = '';
+            $scope.employeeSearch = '';
             $scope.selectedEmployee = employee;
             $scope.checkin.employee = employee.id;
         };
@@ -30,12 +33,12 @@ angular.module('tdb.controllers.checkins', [])
             $scope.checkin.$save(function (value) {
                 // save engagement, if any
                 // save tasks, if any
-                // what here?
+                // redirect to checkin page
             });
         };
 
         $scope.cancel = function() {
-            $scope.selectedEmployee = null;
+            initialize();
         };
     }])
 

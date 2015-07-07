@@ -3,14 +3,14 @@
     <form class="checkin" name="checkinForm" novalidate="novalidate" ng-submit="save(checkinForm)">	
     	<div ng-show="!selectedEmployee">
 	    	<h1>Create a Check-in</h1>
-			<div ng-class="{open: navQuery!=''}" class="search dropdown pull-left">
+			<div ng-class="{open: employeeSearch!=''}" class="search dropdown pull-left">
 			    <div style="position:relative;">
 			        <div class="glyphicon glyphicon-search search-icon"></div>
-			        <input ng-click="toggleNavQuery()" class="search-input nav_query" ng-model="navQuery" type="text" placeholder="Search Employees..."/>
+			        <input class="search-input nav_query" ng-model="employeeSearch" type="text" placeholder="Search Employees..."/>
 			    </div>
-			    <ul class="dropdown-menu" ng-show="navQuery!=''" role="menu" aria-labelledby="dLabel">     
-			        <div ng-if="navQuery!=''">
-			            <li ng-repeat="employee in filteredEmployees = (employees |filter:{full_name:navQuery}:startsWith) | orderBy:'full_name'">
+			    <ul class="dropdown-menu" ng-show="employeeSearch!=''" role="menu" aria-labelledby="dLabel">     
+			        <div ng-if="employeeSearch!=''">
+			            <li ng-repeat="employee in filteredEmployees = (employees |filter:{full_name:employeeSearch}:startsWith) | orderBy:'full_name'">
 			                <a ng-click="selectEmployee({{employee}})" class="dashboard" href="">
 			                    <div class="tiny-headshot"><img ng-src="{{employee.avatar_small}}"/></div>
 			                    <span class="employee-name">{{employee.full_name}}</span>
