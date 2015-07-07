@@ -1,5 +1,10 @@
 angular.module('tdb.services.checkins', ['ngResource'])
 
+    .factory('CheckInType', ['$resource', function ($resource) {
+        var CheckInType = $resource('/api/v1/checkintypes/');
+        return CheckInType;
+    }])
+
     .factory('CheckIn', ['$resource', function ($resource) {
         var fromServer = function(checkIn) {
             var copy = angular.copy(checkIn);

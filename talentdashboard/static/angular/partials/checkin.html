@@ -2,16 +2,16 @@
     <form name="checkinForm" novalidate="novalidate" ng-submit="save(checkinForm)">	
     	
     	<!-- Employee Search -->
-    	<div ng-show="selectedEmployee == ''" class="checkin-search">
+    	<div ng-show="!selectedEmployee" class="checkin-search">
 	    	<h1>Check-in with:</h1>
-			<div ng-class="{open: navQuery!=''}" class="search dropdown pull-left">
+			<div ng-class="{open: employeeSearch!=''}" class="search dropdown pull-left">
 			    <div class="search-input-container">
 			        <div class="glyphicon glyphicon-search search-icon"></div>
-			        <input ng-click="toggleNavQuery()" class="search-input nav_query" ng-model="navQuery" type="text" placeholder="Search Employees..."/>
+			        <input class="search-input nav_query" ng-model="employeeSearch" type="text" placeholder="Search Employees..."/>
 			    </div>
-			    <ul class="dropdown-menu" ng-show="navQuery!=''" role="menu" aria-labelledby="dLabel">     
-			        <div ng-if="navQuery!=''">
-			            <li ng-repeat="employee in filteredEmployees = (employees |filter:{full_name:navQuery}:startsWith) | orderBy:'full_name'">
+			    <ul class="dropdown-menu" ng-show="employeeSearch!=''" role="menu" aria-labelledby="dLabel">     
+			        <div ng-if="employeeSearch!=''">
+			            <li ng-repeat="employee in filteredEmployees = (employees |filter:{full_name:employeeSearch}:startsWith) | orderBy:'full_name'">
 			                <a ng-click="selectEmployee({{employee}})" class="dashboard" href="">
 			                    <div class="tiny-headshot"><img ng-src="{{employee.avatar_small}}"/></div>
 			                    <span class="employee-name">{{employee.full_name}}</span>
@@ -24,20 +24,16 @@
 		</div>	
 
 		<!-- Check-in -->
-		<div ng-show="selectedEmployee != ''">
+		<div ng-show="selectedEmployee">
 			<div class="checkin-header">
 	    		<a href="#/employees/{{selectedEmployee.id}}">
 	    			<img ng-src="{{selectedEmployee.avatar_small}}" class="medium-headshot pull-left"/>
 	    		</a>
 	    		<h1 class="pull-left"><a href="#/employees/{{selectedEmployee.id}}">{{ selectedEmployee.full_name }}</a></h1>
 	    	</div>	
-	    	<div class="checkin-type">  	
-		    	<select class="form-control simple-form-control">
-		    		<option>-- Select Check-In Type --</option>
-		    		<option>360 Feedback</option>
-		    		<option>Level Up</option>
-		    		<option>UFS</option>
-		    		<option>Other</option>
+	    	<div class="checkin-type">  	 	
+		    	<select class="form-control simple-form-control" ng-options="type.id as type.name for type in checkinTypes" ng-model="checkin.type" name="type">
+		    		<option value="">--Select Check-In Type--</option>
 		    	</select>
 		    </div>	
 		    <div class="checkin-summary">
