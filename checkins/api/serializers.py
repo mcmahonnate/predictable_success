@@ -23,7 +23,7 @@ class CheckInSerializer(serializers.ModelSerializer):
 class AddEditCheckInSerializer(serializers.ModelSerializer):
     host = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all(), required=False)
     employee = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
-    type = serializers.PrimaryKeyRelatedField(queryset=CheckInType.objects.all())
+    type = serializers.PrimaryKeyRelatedField(queryset=CheckInType.objects.all(), required=False)
     happiness = serializers.PrimaryKeyRelatedField(queryset=Happiness.objects.all(), required=False)
 
     class Meta:
