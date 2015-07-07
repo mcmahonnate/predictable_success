@@ -12,6 +12,11 @@ class Signup(CreateView):
     template_name = 'insights/signup.html'
     form_class = SignupForm
 
+    def get_form_kwargs(self):
+        kwargs = super(Signup, self).get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
+
     def form_valid(self, form):
         return super(Signup, self).form_valid(form) 
 

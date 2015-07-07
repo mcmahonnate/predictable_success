@@ -37,16 +37,9 @@ import StringIO
 from decimal import Decimal
 from re import sub
 from django.core.files.uploadedfile import InMemoryUploadedFile
-from django.core.urlresolvers import reverse
-from django.core.cache import cache
-from django.conf import settings
-from django.shortcuts import render
 from feedback.models import FeedbackRequest, FeedbackSubmission, UndeliveredFeedbackReport, CoacheeFeedbackReport
 from feedback.tasks import send_feedback_request_email
-import hashlib
 from collections import defaultdict
-from django.utils.encoding import iri_to_uri
-from django.utils.translation import get_language
 import collections
 import dateutil.parser, copy
 
