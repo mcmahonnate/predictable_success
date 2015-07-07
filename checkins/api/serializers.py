@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from talentdashboard.views.serializers import MinimalEmployeeSerializer
 from org.models import Employee
+from engagement.models import Happiness
 from ..models import CheckIn, CheckInType
 
 
@@ -16,15 +17,16 @@ class CheckInSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CheckIn
-        fields = ('employee', 'host', 'date', 'summary', 'happiness')
+        fields = ('id', 'employee', 'host', 'date', 'summary', 'happiness')
 
 
 class AddEditCheckInSerializer(serializers.ModelSerializer):
     host = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all(), required=False)
     employee = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
     type = serializers.PrimaryKeyRelatedField(queryset=CheckInType.objects.all())
+    happiness = serializers.PrimaryKeyRelatedField(queryset=Happiness.objects.all(), required=False)
 
     class Meta:
         model = CheckIn
-        fields = ('host', 'employee', 'summary', 'happiness', 'date', 'type', 'other_type_description')
+        fields = ('id', 'host', 'employee', 'summary', 'happiness', 'date', 'type', 'other_type_description')
 
