@@ -265,6 +265,7 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
             url = obj.avatar_small.url
         return url
 
+
     class Meta:
         model = Employee
         fields = ('id', 'full_name', 'first_name', 'last_name', 'email', 'avatar', 'avatar_small', 'job_title', 'hire_date', 'current_leader', 'happiness', 'happiness_date', 'coach', 'kolbe_fact_finder','kolbe_follow_thru', 'kolbe_quick_start', 'kolbe_implementor', 'vops_visionary', 'vops_operator', 'vops_processor', 'vops_synergist', 'departure_date', 'team', 'display', 'current_salary', 'current_bonus', 'talent_category')
@@ -274,9 +275,25 @@ class CreateEmployeeSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Employee
-        fields = ('first_name', 'last_name', 'email', 'job_title', 'hire_date', 'team', 'display')
+        fields = ('first_name', 'last_name', 'email', 'job_title', 'hire_date', 'team', 'display', 'current_leader')
 
+class EditEmployeeSerializer(serializers.HyperlinkedModelSerializer):
+    team = serializers.PrimaryKeyRelatedField(allow_null=True, queryset=Team.objects.all())
 
+    def update(self, instance, validated_data):
+        instance.first_name = validated_data.get('first_name', instance.first_name)
+        instance.last_name = validated_data.get('last_name', instance.last_name)
+        instance.email = validated_data.get('email', instance.email)
+        instance.job_title = validated_data.get('job_title', instance.job_title)
+        instance.hire_date = validated_data.get('hire_date', instance.email)
+        instance.departure_date = validated_data.get('departure_date', instance.email)
+        instance.display = validated_data.get('display', instance.email)
+        instance.save()
+        return instance
+
+    class Meta:
+        model = Employee
+        fields = ('first_name', 'last_name', 'email', 'job_title', 'hire_date', 'departure_date', 'team', 'display', 'current_leader')
 
 class UserPreferencesSerializer(serializers.ModelSerializer):
     class Meta:

@@ -590,7 +590,7 @@ angular.module('tdb.controllers', [])
     };
 }])
 
-.controller('UploadDataCtrl', ['$scope', '$rootScope', '$q', 'ImportData', 'Employee', 'Notification','EmployeeNames', function($scope, $rootScope, $q, ImportData, Employee, Notification, EmployeeNames) {
+.controller('UploadDataCtrl', ['$scope', '$rootScope', '$q', 'ImportData', 'Employee', 'Leadership', 'Notification','EmployeeNames', function($scope, $rootScope, $q, ImportData, Employee, Leadership, Notification, EmployeeNames) {
     $scope.data;
     $scope.importData = [];
     $scope.hasColumnHeaders=true;
@@ -625,10 +625,9 @@ angular.module('tdb.controllers', [])
     $scope.import = function() {
         var parsedData = $scope.getData();
         var responseData = [];
-        var defer = $q.defer()
-        var addEmployees = [];
+        var employees = [];
         var teams = [];
-        var team_ids = {}; // key is team name, value is id
+        var team_ids = {}; // team name : id
 
         parsedData.forEach(function (emp) {
             emp["display"] = true;
@@ -636,52 +635,66 @@ angular.module('tdb.controllers', [])
                 teams.push(emp.team);
         });
 
+        // first post all teams
         ImportData.addNewTeams({'teams': teams}).$promise.then(function (data) {
-            console.log(data);
             data.forEach(function (t) {
                 team_ids[t.name] = t.id;
             });
-            console.log(team_ids);
 
-            parsedData.forEach(function (emp) {
-                addEmp(emp);
-                // addEmployees.push(addEmp(emp));
-            });
-            // $q.all(addEmployees);
-            // $q.all(addEmployees).then(addLeaderships(responseData));
+            // post employees
+            addEmployees(0);
+            function addEmployees(index) {
+                if (index == parsedData.length) {
+                    addLeaderships(parsedData);
+                    return;
+                }
+                addEmp(parsedData[index]).then(function (data){
+                    console.log(data);
+                    addEmployees(index + 1);
+                });
+            }
         });
 
+        // single employee
         function addEmp(data) {
-            if ("team" in data)
+            var defer = $q.defer();
+            if ("team" in data && (data['team'] !== undefined))
                 data["team"] = team_ids[data.team];
+            else
+                data["team"] = 1;
             data.id = 0;
-            console.log(data)
             var employee = new Employee(data);
-            employee.$save();
-
-            // ImportData.addNewEmployee(employee).$promise.then(function (data) {
-            //     console.log(data);
-            //     responseData.push(data);
-            //     defer.resolve();
-            // });
+            employee.$save(function (emp) {
+                employees.push(emp); 
+                defer.resolve(emp);
+            });
+            return defer.promise;
         }
 
-        // function addLeaderships(parsedData) {
-        //     for (var i = 0; i < parsedData.length; i++) {
-        //         var emp = parsedData[i];
-        //         emp["display"] = true;
-        //         console.log(emp);
-        //         if ("team_leader" in emp) {
-        //             ImportData.addNewLeadership(emp).$promise.then(function (data) {
-        //                 console.log(data);
-        //             });
-        //         }
-        //     }
-        // }   
+        // post leaderships
+        function addLeaderships(data) {
+            for (var i = 0; i < data.length; i++) {
+                if ("team_leader" in data[i]) {
+                    addLead(data[i], employees[i]);
+                }
+            }
+        }   
 
-        // addTeams(teams);
-        // $q.all(addEmployees).then(addLeaderships(responseData));
-        return defer;
+        // single leadership
+        function addLead(data, emp) {
+            var leaderName = data.team_leader;
+            Employee.get({full_name: leaderName}, function (leader) {
+                if (leader === {}) {
+                    console.log("no leader");
+                }
+                else {
+                    var edited = angular.copy(emp);
+                    edited.team_leader = leader;
+                    edited.team = emp.team.id;
+                    Employee.update(edited);
+                }
+            });
+        }
     }
 }])
 
