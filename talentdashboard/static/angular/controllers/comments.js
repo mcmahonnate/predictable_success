@@ -84,7 +84,8 @@ angular.module('tdb.controllers.comments', [])
 
         $scope.cancelEditComment = function(comment) {
             var index = $scope.comments.indexOf(comment);
-            comment.content = $scope.originalComments[index].content;
+            //comment.content = $scope.originalComments[index].content;
+            $scope.originalComments[index].content = comment.content;
         }
 
          $scope.saveSubComment = function(subcomment, comment) {

@@ -416,6 +416,70 @@ angular.module('tdb.controllers', [])
     }
 }])
 
+.controller('EmployeePvpEvaluationsCtrl', ['$scope', '$routeParams', 'PvpEvaluation', '$modal', function($scope, $routeParams, PvpEvaluation, $modal) {
+    $scope.pvpIndex = 0;
+    $scope.pvps = null;
+    PvpEvaluation.getAllEvaluationsForEmployee($routeParams.id).$promise.then(function(response) {
+        $scope.pvps = response;
+    });
+    $scope.selectPvP = function(index) {
+        $scope.pvpIndex = index;
+        updateSlidePosition();
+    }
+    $scope.editPvP = function (pvps, index) {
+        var modalInstance = $modal.open({
+            animation: true,
+            templateUrl: '/static/angular/partials/_modals/edit-pvp.html',
+            controller: 'AddEditPvPCtrl',
+            resolve: {
+                pvp: function () {
+                    return pvps[index]
+                }
+            }
+        });
+        modalInstance.result.then(
+            function (pvp) {
+                console.log('save return');
+                console.log(pvp);
+                $scope.pvps[index].performance = pvp.performance;
+                $scope.pvps[index].potential = pvp.potential;
+                $scope.pvps[index].talent_category = pvp.talent_category;
+            }
+        );
+    };
+}])
+
+.controller('AddEditPvPCtrl', ['$scope', '$modalInstance', 'pvp', 'PvpEvaluation', 'PvpDescriptions', function($scope, $modalInstance, pvp, PvpEvaluation, PvpDescriptions) {
+    $scope.cancel = function () {
+        $modalInstance.dismiss();
+    };
+    $scope.pvp = angular.copy(pvp);
+    $scope.pvp_description = null;
+    PvpDescriptions.query().$promise.then(function(response) {
+            $scope.pvp_descriptions = response;
+        }
+    );
+    $scope.save = function() {
+        console.log('save start');
+        console.log($scope.pvp)
+        if ($scope.pvp.comment && $scope.pvp.comment.content) {
+            var data = {id: $scope.pvp.id, _potential: $scope.pvp.potential, _performance: $scope.pvp.performance, _content: $scope.pvp.comment.content};
+            PvpEvaluation.update(data, function (response) {
+                $scope.pvp = response;
+                $modalInstance.close($scope.pvp);
+            });
+        } else {
+            data = {id: $scope.pvp.id, _potential: $scope.pvp.potential, _performance: $scope.pvp.performance};
+            PvpEvaluation.update(data, function (response) {
+                $scope.pvp = response;
+                $modalInstance.close($scope.pvp);
+            });
+        }
+    };
+
+}])
+
+
 .controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', '$modal', 'User', 'Employee', 'Team', 'Engagement', 'SendEngagementSurvey', 'EmployeeLeader', 'Attribute', '$http', 'Customers', 'analytics','EmployeeMBTI', 'Notification', function($rootScope, $scope, $location, $routeParams, $window, $modal, User, Employee, Team, Engagement, SendEngagementSurvey, EmployeeLeader, Attribute, $http, Customers, analytics, EmployeeMBTI, Notification) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     Customers.get(function (data) {
@@ -506,10 +570,25 @@ angular.module('tdb.controllers', [])
     $scope.is_selected = function(value) {
         return $scope.selected==value;
     };
+    Attribute.getAttributesForEmployee($routeParams.id).$promise.then(function(response) {
+        $scope.attributes = response;
+        var is_even = ($scope.attributes.length % 2 == 0);
+        if ($scope.customer.show_vops) {
+            if (!is_even)
+                $scope.vops_class = 'shaded';
+            is_even = !is_even;
+        }
+        if ($scope.customer.show_mbti) {
+            if (!is_even)
+                $scope.mbti_class = 'shaded';
+            is_even = !is_even;
+        }
+        if ($scope.customer.show_kolbe) {
+            if (!is_even)
+                $scope.kolbe_class = 'shaded';
+        }
+    });
 
-    $scope.super_powers = Attribute.getAttributtesForEmployee($routeParams.id, 2);
-    $scope.skills = Attribute.getAttributtesForEmployee($routeParams.id, 3);
-    $scope.employeeEdit = false;
 
     $scope.showAttributes = function (view, category) {
         var modalInstance = $modal.open({
@@ -692,17 +771,6 @@ angular.module('tdb.controllers', [])
     $scope.compSummaries = CompSummary.getAllSummariesForEmployee($routeParams.id);
 }])
 
-.controller('EmployeePvpEvaluationsCtrl', ['$scope', '$routeParams', 'PvpEvaluation', function($scope, $routeParams, PvpEvaluation) {
-    $scope.pvpIndex = 0;
-    PvpEvaluation.getAllEvaluationsForEmployee($routeParams.id).$promise.then(function(response) {
-        $scope.pvps = response;
-    });
-
-    $scope.selectPvP = function(index) {
-        $scope.pvpIndex = index;
-    }
-}])
-
 .controller('ReportsCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'EmployeeSearch', 'TalentCategories', 'analytics', function($scope, $rootScope, $location, $routeParams, EmployeeSearch, TalentCategories, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     $scope.busy = true;
@@ -821,26 +889,16 @@ angular.module('tdb.controllers', [])
 
 }])
 
-.controller('CompanyOverviewCtrl', ['$rootScope', '$scope', '$location', '$routeParams', 'KPIIndicator', 'KPIPerformance', 'analytics', 'TalentReport', 'User', function($rootScope, $scope, $location, $routeParams, KPIIndicator, KPIPerformance, analytics, TalentReport, User) {
+.controller('CompanyOverviewCtrl', ['$rootScope', '$scope', '$location', '$routeParams', 'KPIIndicator', 'KPIPerformance', 'analytics', 'TalentReport', 'TemplatePreferences', function($rootScope, $scope, $location, $routeParams, KPIIndicator, KPIPerformance, analytics, TalentReport, TemplatePreferences) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
 
-    var defaultTemplate = "/static/angular/partials/company-overview.html";
-
-    User.get(function(data) {
-        if(data.preferences) {
-            switch(data.preferences.dashboard_view){
-                case 2:
-                    $scope.templateUrl = "/static/angular/partials/stats-focused-dashboard.html";
-                    break;
-                default:
-                    $scope.templateUrl = defaultTemplate;
-                    break;
+    TemplatePreferences.getPreferredTemplate('company-overview')
+        .then(
+            function(template) {
+                $scope.templateUrl = template;
             }
+        );
 
-        } else {
-            $scope.templateUrl = defaultTemplate;
-        }
-    });
     KPIIndicator.get(function(data) {
             $scope.indicator = data;
        }
@@ -903,8 +961,15 @@ angular.module('tdb.controllers', [])
     }
 }])
 
-.controller('LeaderOverviewCtrl', ['$scope', '$location', '$routeParams', 'TalentReport', 'TeamLeadEmployees', 'User', 'analytics', function($scope, $location, $routeParams, TalentReport, TeamLeadEmployees, User, analytics) {
+.controller('LeaderOverviewCtrl', ['$scope', '$location', '$routeParams', 'TalentReport', 'TeamLeadEmployees', 'User', 'analytics', 'TemplatePreferences', function($scope, $location, $routeParams, TalentReport, TeamLeadEmployees, User, analytics, TemplatePreferences) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
+
+    TemplatePreferences.getPreferredTemplate('team-lead-overview')
+        .then(
+            function(template) {
+                $scope.templateUrl = template;
+            }
+        );
 
     $scope.talentReport = TalentReport.myTeam();
 
@@ -916,8 +981,15 @@ angular.module('tdb.controllers', [])
     );
 }])
 
-.controller('TeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'Team', 'TeamMembers', 'TeamMBTI', 'Customers', 'TeamLeads', 'analytics', 'TalentReport', function($scope, $location, $routeParams, Team, TeamMembers, TeamMBTI, Customers, TeamLeads, analytics, TalentReport) {
+.controller('TeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'Team', 'TeamMembers', 'TeamMBTI', 'Customers', 'TeamLeads', 'analytics', 'TalentReport', 'TemplatePreferences', function($scope, $location, $routeParams, Team, TeamMembers, TeamMBTI, Customers, TeamLeads, analytics, TalentReport, TemplatePreferences) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
+
+    TemplatePreferences.getPreferredTemplate('team-overview')
+        .then(
+            function(template) {
+                $scope.templateUrl = template;
+            }
+        );
 
     Customers.get(function (data) {
         $scope.customer = data;

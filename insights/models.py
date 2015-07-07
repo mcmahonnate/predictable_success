@@ -7,11 +7,12 @@ import uuid
 class Prospect(models.Model):
 	
 	TALENT_CATEGORY_CHOICES = (
-        (6, 'I\'m not sure what my future looks like, or if people know about my current contributions.'), # Worried
-        (5, 'I want to focus on developing skills outside of my current role.'), # Change
-        (2, 'I could use a coach or mentor.'), # Encourage
-        (3, 'I\'d like a challenge.'), # Challenge         
-        (1, 'I\'d like the freedom to pick work that excites me.'), # Unleash           
+        (6, 'I\'m not sure what my future looks like or if I\'m making an impact. I\'m worried others also think this about me.'), # Worried
+        (5, 'I\'m not as impactful as I could be. I feel like my strengths and responsibilities may be misaligned.'), # Change
+        (4, 'I\'m great at my job and my work is impactful now. However, thinking long term I\'m not confident in the future impact of my role.'), # Discover
+        (3, 'I feel like I do a good job but the impact of my work is not visible to others.'), # Push
+        (2, 'Things are going well. I\'m successful at my job, but I think Fools haven\'t seen my best work yet.'), # Challenge
+        (1, 'I\'m making a big impact, am appropriately challenged, and have the freedom and trust to grow my role in a way that excites me.'), # Unleash
     )
 
 
@@ -26,7 +27,7 @@ class Prospect(models.Model):
 	first_name = models.CharField(max_length=32)
 	last_name = models.CharField(max_length=32)
 	company = models.CharField(max_length=64, null=True)
-	email = models.EmailField(unique=True)
+	email = models.EmailField()
 	access_token = models.CharField(max_length=32, null=True)
 	talent_category = models.IntegerField(choices=TALENT_CATEGORY_CHOICES, null=True)
 	engagement = models.IntegerField(choices=ENGAGEMENT_CHOICES, null=True)

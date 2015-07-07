@@ -273,13 +273,40 @@ angular.module('tdb.directives', [])
 }])
 
 .directive('employeeTalentCategory', ['TalentCategories', function(TalentCategories) {
-    return function(scope, element, attrs){
-        var color = TalentCategories.getColorByTalentCategory(attrs.employeeTalentCategory);
-        var canvas=element[0];
-        var ctx=canvas.getContext("2d");
-        ctx.fillStyle=color;
-        ctx.fillRect(0,0,element[0].height,element[0].width);
-    };
+    return {
+        scope: {
+            pvp: '='
+        },
+        link: function(scope, element, attrs){
+            scope.$watch('pvp.talent_category', function() {
+                var talentCategory = scope.pvp.talent_category;
+                var color = TalentCategories.getColorByTalentCategory(talentCategory);
+                var canvas = element[0];
+                var ctx = canvas.getContext("2d");
+                ctx.fillStyle = color;
+                ctx.fillRect(0, 0, element[0].height, element[0].width);
+            })
+        }
+    }
+}])
+
+.directive('pvpChart', ['TalentCategories', function(TalentCategories) {
+    return {
+        scope: {
+            pvp: '='
+        },
+        link: function (scope, element, attrs) {
+            scope.$watchGroup(['pvp.performance','pvp.potential','pvp.talent_category'], function() {
+                var svg = element[0];
+                var potential = scope.pvp.potential;
+                var performance = scope.pvp.performance;
+                var talentCategory = scope.pvp.talent_category;
+                var squareColor = TalentCategories.getColorByTalentCategory(talentCategory);
+                angular.element(svg.querySelector('[fill]')).attr('fill', null);
+                angular.element(svg.querySelector('.pvp-square-' + performance + '-' + potential)).attr('fill', squareColor);
+            })
+        }
+    }
 }])
 
 .directive('ngScrollIntoView', function ($window) {
@@ -543,128 +570,6 @@ angular.module('tdb.directives', [])
     };
 })
 
-.directive('handsOnTable', function() {
-    return {
-        restrict: 'E',
-        template: "<div></div>",
-        replace: true,
-        link: function (scope, element, attrs) {
-            scope.hot;
-            var validManager = function(instance, td, row, col, prop, value, cellProperties) {
-                Handsontable.renderers.TextRenderer.apply(this, arguments);
-                if (!scope.employee_autocomplete_values) {
-                    td.style.background = '';
-                } else if (scope.employee_autocomplete_values.indexOf(value)>-1) {
-                    td.style.background = '#cec';
-                } else {
-                    td.style.background = '#ff4c42';
-                }
-            }
-            var customRenderer = function(instance, td, row, col, prop, value, cellProperties) {
-                Handsontable.renderers.TextRenderer.apply(this, arguments);
-
-                // header
-                if (row == 0) {
-                    td.style.backgroundColor = scope.isValidHeader(columns[col].data) ? '#cec' : '#ff4c42'
-                    // td.style.backgroundColor = columns[col].unknown ? '#ff4c42' : '#cec'
-                }
-            }
-            // var columns = [
-            //     {data: "First name", renderer: "html"},
-            //     {data: "Last name", renderer: "html"},
-            //     {data: "Email", renderer: "html"},
-            //     {data: "Hire Date", renderer: "html"},
-            //     {data: "Job Title", renderer: "html"},
-            //     {data: "Department", renderer: "html"},
-            //     {data: "Manager", renderer:validManager},
-            //     {data: "Salary", renderer: "html"}
-            // ];
-            var columns = [], desiredColHeaders = [], unknownHeaders = [];
-            scope.resetTable = function() {
-                columns = [
-                    {data: "First name", renderer: customRenderer},
-                    {data: "Last name", renderer: customRenderer},
-                    {data: "Email", renderer: customRenderer},
-                    {data: "Hire Date", renderer: customRenderer},
-                    {data: "Job Title", renderer: customRenderer},
-                    {data: "Team Name", renderer: customRenderer},
-                    {data: "Team Leader", renderer: customRenderer},
-                    {data: "Salary", renderer: customRenderer}
-                ];
-                desiredColHeaders = columns.map(function (c) {
-                    c.unknown = false;
-                    return c.data;
-                });
-                unknownHeaders = [];
-            }
-            scope.isValidHeader = function(header) {
-                for (var i = 0; i < desiredColHeaders.length; i++) {
-                    if (desiredColHeaders[i].toLowerCase() == header.toLowerCase())
-                        return true;
-                }
-                return false;
-            }
-            scope.renderTable = function(){
-                if (scope.data.length > 0) {
-                    var el = element[0];
-
-                    // destroy existing table
-                    if (scope.hot) {
-                        if (scope.hot.rootElement) {
-                            console.log(scope.hot);
-                            scope.hot.destroy();
-                        }
-                    }
-                    scope.importData = angular.copy(scope.data);
-
-                    var first = scope.importData[0];
-                    // unknownHeaders = Object.keys(first);
-                    for (var key in first) {
-                        // if an invalid column that has not already been added
-                        if (!scope.isValidHeader(key) && unknownHeaders.indexOf(key) == -1){
-                            var newCol = {data: key, renderer: customRenderer, unknown: true};
-                            unknownHeaders.push(key);
-                            columns.push(newCol);
-                            console.log(newCol);
-                        }
-                    }
-
-                    scope.hot = new Handsontable(el, {
-                        data: scope.importData,
-                        columns: columns,
-                        contextMenu: true
-                    });
-
-                    // persist any changes
-                    scope.hot.addHook('afterChange', function (changes, source) {
-                        console.log("changed");
-                        scope.importData = angular.copy(scope.hot.getData());
-                    });
-                }
-            }
-            var validateTable = function() {
-                //mark incorrect cells
-                scope.validTable = true;
-            }
-            scope.$watch("data", function (newValue) {
-                if (newValue) {
-                    console.log("render and validate");
-                    scope.renderTable();
-                    validateTable();
-                }
-            })
-            scope.$watch("employee_autocomplete_values", function (newValue) {
-                if (newValue) {
-                    columns[6].type = "autocomplete";
-                    columns[6].source = scope.employee_autocomplete_values;
-                    scope.renderTable();
-                }
-            })
-
-        }
-    };
-})
-
 .directive('dragDropFile', function() {
     return {
         restrict: 'A',
@@ -870,7 +775,12 @@ angular.module('tdb.directives', [])
         var offSquareColor = "#343434";
         var squares = [];
         var squaresHash = {};
-        var pvp = scope.pvps[attrs.index];
+        var pvp = null
+        if (attrs.index) {
+            pvp = scope.pvps[attrs.index];
+        } else {
+            pvp = scope.pvp;
+        }
 
         for(var potential = 1; potential <= 4; potential++) {
             squaresHash[potential] = {};
@@ -886,6 +796,7 @@ angular.module('tdb.directives', [])
                 var square = {
                     'potential': potential,
                     'performance': performance,
+                    'talent_category': talentCategory,
                     'topLeft': topLeft,
                     'bottomRight': bottomRight,
                     'color': color
@@ -956,7 +867,7 @@ angular.module('tdb.directives', [])
             drawSquare(findSquare());
         }
 
-        scope.click_canvas = function(e) {
+        scope.click_canvas = function(e, save) {
             var point = getCursorPosition(e);
             for(var index = 0; index < squares.length; index++) {
                 var square = squares[index];
@@ -964,8 +875,10 @@ angular.module('tdb.directives', [])
                     drawSquare(square);
                     pvp.potential = square.potential;
                     pvp.performance = square.performance;
+                    pvp.talent_category = square.talent_category
                     findDescription();
-                    scope.save();
+                    if (save)
+                        scope.save();
                     break;
                 }
             }
@@ -1204,173 +1117,6 @@ angular.module('tdb.directives', [])
 }])
 
 
-.directive('sliderFollowThru', function() {
-  return {
-    link: function(scope, elem, attrs) {
-      elem.slider({
-        range: true,
-        min: scope.kolbe_values[0],
-        max: scope.kolbe_values[scope.kolbe_values.length-1],
-        step: 1,
-        create: function( event, ui ) {
-            var $slider =  $(event.target);
-            var max =  $slider.slider("option", "max");
-            var min =  $slider.slider("option", "min");
-            var spacing =  100 / (max - min);
-            var width = $slider.width() / (max - min);
-            $slider.find('.ui-slider-tick-mark').remove();
-            $('<div style="width:' + $slider.width() + 'px;text-align:center;color:white;margin: 15px 0px 0px 0px;display:inline-block">Follow Thru</div>').insertBefore($slider);
-            for (var i = 0; i < max-min ; i++) {
-                if (i<max) {
-                    $('<div class="ui-slider-label">' + scope.kolbe_follow_thru_labels[i] + '</div>').css({'left':  (spacing * i) +  '%','width': + width + 'px','text-align': 'center'}).appendTo($slider);
-                }
-                if (i != 0)
-                {
-                    $('<span class="ui-slider-tick-mark"></span>').css('left', (spacing * i) +  '%').appendTo($slider);
-                }
-            }
-        },
-        values: [scope.kolbe_values[0], scope.kolbe_values[scope.kolbe_values.length-1]],
-        slide: function( event, ui ) {
-          if(ui.values[1] - ui.values[0] < 1){
-              return false;
-          }
-          scope.follow_thru.length=0;
-          for (var i = ui.values[0]; i < ui.values[1] ; i++) {
-            scope.follow_thru.push(scope.kolbe_follow_thru_labels[i]);
-            scope.$apply();
-          }
-        }
-      });
-    }
-  }
-})
-    
-.directive('sliderQuickStart', function() {
-  return {
-    link: function(scope, elem, attrs) {
-      elem.slider({
-        range: true,
-        min: scope.kolbe_values[0],
-        max: scope.kolbe_values[scope.kolbe_values.length-1],
-        step: 1,
-        create: function( event, ui ) {
-            var $slider =  $(event.target);
-            var max =  $slider.slider("option", "max");
-            var min =  $slider.slider("option", "min");
-            var spacing =  100 / (max - min);
-            var width = $slider.width() / (max - min);
-            $('<div style="width:' + $slider.width() + 'px;text-align:center;color:white;margin: 15px 0px 0px 0px;display:inline-block">Quick Start</div>').insertBefore($slider);
-            $slider.find('.ui-slider-tick-mark').remove();
-            for (var i = 0; i < max-min ; i++) {
-                if (i<max) {
-                    $('<div class="ui-slider-label">' + scope.kolbe_quick_start_labels[i] + '</div>').css({'left':  (spacing * i) +  '%','width': + width + 'px','text-align': 'center'}).appendTo($slider);
-                }
-                if (i != 0)
-                {
-                    $('<span class="ui-slider-tick-mark"></span>').css('left', (spacing * i) +  '%').appendTo($slider);
-                }
-            }
-        },
-        values: [scope.kolbe_values[0], scope.kolbe_values[scope.kolbe_values.length-1]],
-        slide: function( event, ui ) {
-          if(ui.values[1] - ui.values[0] < 1){
-              return false;
-          }
-          scope.quick_start.length=0;
-          for (var i = ui.values[0]; i < ui.values[1] ; i++) {
-            scope.quick_start.push(scope.kolbe_quick_start_labels[i]);
-            scope.$apply();
-          }
-        }
-      });
-    }
-  }
-})
-
-.directive('sliderImplementor', function() {
-  return {
-    link: function(scope, elem, attrs) {
-      elem.slider({
-        range: true,
-        min: scope.kolbe_values[0],
-        max: scope.kolbe_values[scope.kolbe_values.length-1],
-        step: 1,
-        create: function( event, ui ) {
-            var $slider =  $(event.target);
-            var max =  $slider.slider("option", "max");
-            var min =  $slider.slider("option", "min");
-            var spacing =  100 / (max - min);
-            var width = $slider.width() / (max - min);
-            $slider.find('.ui-slider-tick-mark').remove();
-            $('<div style="width:' + $slider.width() + 'px;text-align:center;color:white;margin: 15px 0px 0px 0px;display:inline-block">Implementor</div>').insertBefore($slider);
-            for (var i = 0; i < max-min ; i++) {
-                if (i<max) {
-                    $('<div class="ui-slider-label">' + scope.kolbe_implementor_labels[i] + '</div>').css({'left':  (spacing * i) +  '%','width': + width + 'px','text-align': 'center'}).appendTo($slider);
-                }
-                if (i != 0)
-                {
-                    $('<span class="ui-slider-tick-mark"></span>').css('left', (spacing * i) +  '%').appendTo($slider);
-                }
-            }
-        },
-        values: [scope.kolbe_values[0], scope.kolbe_values[scope.kolbe_values.length-1]],
-        slide: function( event, ui ) {
-          if(ui.values[1] - ui.values[0] < 1){
-              return false;
-          }
-          scope.implementor.length=0;;
-          for (var i = ui.values[0]; i < ui.values[1] ; i++) {
-            scope.implementor.push(scope.kolbe_implementor_labels[i]);
-            scope.$apply();
-          }
-        }
-      });
-    }
-  }
-})
-
-.directive('sliderFactFinder', function() {
-  return {
-    link: function(scope, elem, attrs) {
-      elem.slider({
-        range: true,
-        min: scope.kolbe_values[0],
-        max: scope.kolbe_values[scope.kolbe_values.length-1],
-        step: 1,
-        create: function( event, ui ) {
-            var $slider =  $(event.target);
-            var max =  $slider.slider("option", "max");
-            var min =  $slider.slider("option", "min");
-            var spacing =  100 / (max - min);
-            var width = $slider.width() / (max - min);
-            $('<div style="width:' + $slider.width() + 'px;text-align:center;color:white;margin: 15px 0px 0px 0px;display:inline-block">Fact Finder</div>').insertBefore($slider);
-            $slider.find('.ui-slider-tick-mark').remove();
-            for (var i = 0; i < max-min ; i++) {
-                if (i<max) {
-                    $('<div class="ui-slider-label">' + scope.kolbe_fact_finder_labels[i] + '</div>').css({'left':  (spacing * i) +  '%','width': + width + 'px','text-align': 'center'}).appendTo($slider);
-                }
-                if (i != 0)
-                {
-                    $('<span class="ui-slider-tick-mark"></span>').css('left', (spacing * i) +  '%').appendTo($slider);
-                }
-            }
-        },
-        values: [scope.kolbe_values[0], scope.kolbe_values[scope.kolbe_values.length-1]],
-        slide: function( event, ui ) {
-          if(ui.values[1] - ui.values[0] < 1){
-              return false;
-          }
-          scope.fact_finder.length=0;
-          for (var i = ui.values[0]; i < ui.values[1] ; i++) {
-            scope.fact_finder.push(scope.kolbe_fact_finder_labels[i]);
-            scope.$apply();
-          }
-        }
-      });
-    }
-  }
-})
 
 .directive("masonry", function () {
     var NGREPEAT_SOURCE_RE = '<!-- ngRepeat: ((.*) in ((.*?)( track by (.*))?)) -->';

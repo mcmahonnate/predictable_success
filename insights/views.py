@@ -1,14 +1,11 @@
-from django.conf import settings
-from django.shortcuts import redirect, render_to_response
+from django.shortcuts import render_to_response
 from insights.models import Prospect
-from insights.forms import SignupForm, ReportForm, SurveyForm
+from insights.forms import SignupForm, SurveyForm
 from django.views.generic.edit import FormView, CreateView
 from django.views.generic import TemplateView
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect, Http404
 from django.template import RequestContext
-from django.core.mail import send_mail
-#from django.core.mail import EmailMultiAlternatives
+
 
 class Signup(CreateView):
     model = Prospect
@@ -38,14 +35,12 @@ class Report(FormView):
             else:
                 category_counts[talent_category] = 1     
 
-
         return render_to_response(self.template, {
             'url': url,
             'category_counts': category_counts,
             'responses': responses,
             'threshold': threshold,
         }, context_instance=RequestContext(request)) 
-
 
 
 class Survey(FormView):
@@ -56,7 +51,7 @@ class Survey(FormView):
 
     def post(self, request, *args, **kwargs):
         form = SurveyForm(request.POST)
-        team_lead =  Prospect.objects.filter(access_token=self.kwargs['access_token']).filter(team_lead=True)
+        team_lead = Prospect.objects.filter(access_token=self.kwargs['access_token']).filter(team_lead=True)
         
         if form.is_valid():
             f = form.save(commit=False)
@@ -66,26 +61,23 @@ class Survey(FormView):
         return render_to_response(self.template, {
             'form': form,
             'team_lead': team_lead
-        })    
-
+        }, context_instance=RequestContext(request))
 
     def get(self, request, **kwargs):
-        team_lead =  Prospect.objects.filter(access_token=self.kwargs['access_token']).filter(team_lead=True)
-        form = SurveyForm()
+        try:
+            lead = Prospect.objects.filter(access_token=self.kwargs['access_token']).filter(team_lead=True).first()
+            form = SurveyForm()
 
-        for lead in team_lead:
-            lead = lead
-
-        return render_to_response(self.template, {
-            'lead': lead,
-            'form': form,
-        }, context_instance=RequestContext(request)) 
-
+            return render_to_response(self.template, {
+                'lead': lead,
+                'form': form,
+            }, context_instance=RequestContext(request))
+        except Prospect.DoesNotExist:
+            return Http404()
 
 
 class Confirmation(TemplateView):
-   template = "insights/thanks.html"
+    template = "insights/thanks.html"
 
-   def get(self, request, **kwargs):
-       return render_to_response(self.template, {}, context_instance=RequestContext(request))    
-              
+    def get(self, request, **kwargs):
+        return render_to_response(self.template, {}, context_instance=RequestContext(request))

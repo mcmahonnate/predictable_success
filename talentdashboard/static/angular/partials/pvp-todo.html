@@ -7,22 +7,22 @@
                     <div>
                         <div class="widget-inner widget-size-2x2 large-screen" style="height: 550px;width:600px;">
                             <section style="margin: 25px">
-                              <div style="height: 300px;float:left;width:55%">
+                              <div style="float:left;width:55%">
                                   <div class="large-avatar-container xxxlarge-headshot"><img ng-src="{{ pvp.employee.avatar }}"/></div>
                                   <div style="width: 100%">
                                       <h1 class="centered ng-binding" style="text-align:center">{{ pvp.employee.full_name }}</h1>
                                   </div>
                               </div>
 
-                              <div style="height:300px;width:45%;float: left;">
-                                  <div class="vertical-text" style="width:200px;text-align: center;position: absolute;left: 237px;top: 142px;"><div style="display:inline-block;float:left">Low</div>Known Potential<div style="display:inline-block;float:right">High</div></div>
+                              <div style="width:45%;float: left;">
+                                  <div class="vertical-text" style="width:200px;text-align: center;position: absolute;left: 237px;top: 142px;"><div style="display:inline-block;float:left">Low</div>Drive<div style="display:inline-block;float:right">High</div></div>
                                   <div style="margin: 25px">
-                                    <canvas pvp-graph index="{{$index}}" height="200" width="200" ng-click="click_canvas($event)"/>
+                                    <canvas pvp-graph index="{{$index}}" height="200" width="200" ng-click="click_canvas($event, true)"/>
                                   </div>
-                                  <div style="width:200px;text-align: center;  margin-left: 25px;margin-top: -25px;"><div style="display:inline-block;float:left">Low</div>Contribution<div style="display:inline-block;float:right">High</div></div>
+                                  <div style="width:200px;text-align: center;  margin-left: 25px;margin-top: -25px;"><div style="display:inline-block;float:left">Low</div>Impact<div style="display:inline-block;float:right">High</div></div>
                               </div>
                               <div style="clear: both;"></div>
-                              <div style="height:55px;">
+                              <div>
                                 <div style="margin-left: 0px; font-size:16px;">
                                 {{pvp.description.description}}
                                 </div>

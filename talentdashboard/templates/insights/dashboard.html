@@ -36,7 +36,7 @@
                     {% if responses.count < threshold %}
                         <div class="no-data-banner">No Data</div>
                     {% endif %}
-                    <a href="javascript:void(0)" data-toggle="modal" data-target="#distributions-modal" class="pull-right underline">Development Zones Explaination</a>
+                    <a href="javascript:void(0)" data-toggle="modal" data-target="#distributions-modal" class="pull-right underline">Development Zones Explanation</a>
                     <h2 class="panel-title">Team Development Zones</h2>
                     <div id="columnchart_values" ></div>
                 </div>    
@@ -132,12 +132,12 @@
                     <h4 class="modal-title">Development Zones Explanation</h4>
                     <div class="distributions">
                         <!-- TODO: get these from model -->
-                        <p class="distribution"><span class="tag employee-segment-background-color-1">Unleash</span> This person is crushing it, and has the freedom to pick work that excites them.</p>
-                        <p class="distribution"><span class="tag employee-segment-background-color-2">Encourage</span> This person is crushing it and wants to focus on developing skills outside of my their current role.</p>
-                        <p class="distribution"><span class="tag employee-segment-background-color-3">Challenge</span> This person is doing a good job, but would like more direction.</p>
-                        <p class="distribution"><span class="tag employee-segment-background-color-4">Discover</span> This person is crushing it and wants to continue focusing on developing skills for their role.</p>
-                        <p class="distribution"><span class="tag employee-segment-background-color-5">Change</span> This person feels like their expertise and responsibilities are misaligned.</p>
-                        <p class="distribution"><span class="tag employee-segment-background-color-6">Worry</span> This person isn't sure what their future looks like, or if people know about their current contributions.</p>
+                        <p class="distribution"><span class="tag employee-segment-background-color-1">Unleash</span> Has the freedom to design their role and pick important projects.</p>
+                        <p class="distribution"><span class="tag employee-segment-background-color-2">Challenge</span> With a few, targeted moves they could be next level.</p>
+                        <p class="distribution"><span class="tag employee-segment-background-color-3">Push</span> They need to be pushed beyond their comfort zone.</p>
+                        <p class="distribution"><span class="tag employee-segment-background-color-4">Discover</span> They need help uncovering their hidden potential.</p>
+                        <p class="distribution"><span class="tag employee-segment-background-color-5">Shift</span> They are being underutilized and need a change.</p>
+                        <p class="distribution"><span class="tag employee-segment-background-color-6">Worry</span> We're worried about them.</p>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -177,19 +177,19 @@
 
             var labels = {
                 '1': 'Unleash',
-                '2': 'Encourage',
-                '3': 'Challenge',
+                '2': 'Challenge',
+                '3': 'Push',
                 '4': 'Discover',
-                '5': 'Change',
+                '5': 'Shift',
                 '6': 'Worry'
             };
             var colors = {
-                '1': '#32d0a2',
-                '2': '#5ed032',
-                '3': '#bcd032',
-                '4': '#5bc0de',
-                '5': '#ffca00',
-                '6': '#ff0000'
+                '1': '#0f9d58',
+                '2': '#8ad367',
+                '3': '#d5d466',
+                '4': '#5a9bed',
+                '5': '#f59705',
+                '6': '#ab1600'
             };
             var no_data_colors = {
                 '1': '#fafafa',

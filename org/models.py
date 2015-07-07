@@ -328,6 +328,7 @@ class AttributeCategory(models.Model):
         max_length=255,
         blank=True,
     )
+    display = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name        

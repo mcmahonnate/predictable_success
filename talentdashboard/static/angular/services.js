@@ -71,7 +71,7 @@ angular.module('tdb.services', ['ngResource'])
 .factory('Attribute', ['$resource', '$http', function($resource, $http) {
     var Attribute = $resource('/api/v1/attributes/');
 
-    Attribute.getAttributtesForEmployee = function(employee_id, category_id) { return this.query({employee_id: employee_id, category_id: category_id}); };
+    Attribute.getAttributesForEmployee = function(employee_id) { return this.query({employee_id: employee_id, display: true}); };
 
     return Attribute;
 }])

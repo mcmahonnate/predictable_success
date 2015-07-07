@@ -20,32 +20,29 @@
     <li class="shaded">
         <strong>Team:</strong> <span ng-if="employee.team"><a ng-href="#/teams/{{employee.team.id}}">{{ employee.team.name }}</a></span>
     </li>
-    <li>
-    <strong>Skills:</strong>
-        <ul ng-if="skills.length > 0">
-            <li>
-                <span ng-repeat="skill in skills | limitTo:4">
-                  <text ng-if="!$last">{{ skill.name }},</text>
-                  <text ng-if="$last">{{ skill.name }}</text>
+    <li ng-repeat="(key, value) in attributes | groupBy: 'category.name'" ng-class-odd="" ng-class-even="'shaded'">
+        <strong>{{key}}:</strong>
+                <span ng-repeat="attribute in value">
+                  <text ng-if="!$last">{{ attribute.name }},</text>
+                  <text ng-if="$last">{{ attribute.name }}</text>
                 </span>
-            </li>
-        </ul>
     </li>
-    <li ng-if="customer.show_vops" class="shaded">
+    <li ng-if="customer.show_vops" ng-class="vops_class">
         <strong>Synergist Style:</strong>
         <span ng-if="employee.vops_visionary > 299"><a ng-click="showAttributes('synergist-view', 'Visionary');">Visionary</a></span>
         <span ng-if="employee.vops_operator > 299"><a ng-click="showAttributes('synergist-view', 'Operator');">Operator</a></span>
         <span ng-if="employee.vops_processor > 299"><a ng-click="showAttributes('synergist-view', 'Processor');">Processor</a></span>
         <span ng-if="employee.vops_synergist > 299"><a ng-click="showAttributes('synergist-view', 'Synergist');">Synergist</a></span>
     </li>
-    <li ng-if="customer.show_mbti">
+    <li ng-if="customer.show_mbti" ng-class="mbti_class">
         <strong>Myers Briggs:</strong> <span ng-if="mbti"><a ng-click="showAttributes('mbti-view');">{{ mbti.type | uppercase}}</a></span>
     </li>
-    <li ng-if="customer.show_kolbe" class="shaded">
+    <li ng-if="customer.show_kolbe" ng-class="kolbe_class">
         <strong>Kolbe:</strong>
         <span ng-if="employee.kolbe_fact_finder"><a ng-click="showAttributes('kolbe-view', 'Fact Finder');">{{ employee.kolbe_fact_finder }}</a>,</span>
         <span ng-if="employee.kolbe_follow_thru"><a ng-click="showAttributes('kolbe-view', 'Follow Thru');">{{ employee.kolbe_follow_thru }}</a>,</span>
         <span ng-if="employee.kolbe_quick_start"><a ng-click="showAttributes('kolbe-view', 'Quick Start');">{{ employee.kolbe_quick_start }}</a>,</span>
         <span ng-if="employee.kolbe_implementor"><a ng-click="showAttributes('kolbe-view', 'Implementor');">{{ employee.kolbe_implementor }}</a></span>
     </li>
+
 </ol>
