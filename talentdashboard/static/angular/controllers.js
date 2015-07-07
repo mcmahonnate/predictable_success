@@ -598,29 +598,6 @@ angular.module('tdb.controllers', [])
     $scope.columns = [];
     $scope.importing = false;
     $scope.foundErrors = false;
-    // $scope.import = function() {
-    //     $scope.importing = true;
-    //     ImportData.addNew($scope.getData()).$promise.then(function(data) {
-    //         EmployeeNames.query(function(data) {
-    //             $scope.employee_autocomplete_values = data;
-    //         });
-
-    //         // check promise
-    //         if (!data.$resolved) {
-    //             Notification.warning("Awesome but we ran into some errors. Make your corrections below.");
-    //         } else {
-    //             Notification.success("Your data imported successfully.");
-    //         }
-
-    //         $scope.importing = false;
-    //         // $scope.data = angular.copy($scope.importData);
-    //         // $scope.renderTable();
-    //     },function(){
-    //         $scope.isSurveySending=false;
-    //         Notification.error("There was an error importing your data.");
-    //         $scope.importing = false;
-    //     });
-    // };
 
     $scope.import = function() {
         var parsedData = $scope.getData();
@@ -649,7 +626,11 @@ angular.module('tdb.controllers', [])
                     return;
                 }
                 addEmp(parsedData[index]).then(function (data){
+
+                    // show modal if error
+
                     console.log(data);
+                    employees.push(data);
                     addEmployees(index + 1);
                 });
             }
@@ -657,18 +638,13 @@ angular.module('tdb.controllers', [])
 
         // single employee
         function addEmp(data) {
-            var defer = $q.defer();
             if ("team" in data && (data['team'] !== undefined))
                 data["team"] = team_ids[data.team];
             else
-                data["team"] = 1;
+                data["team"] = null;
             data.id = 0;
             var employee = new Employee(data);
-            employee.$save(function (emp) {
-                employees.push(emp); 
-                defer.resolve(emp);
-            });
-            return defer.promise;
+            return employee.$save();
         }
 
         // post leaderships
@@ -676,6 +652,8 @@ angular.module('tdb.controllers', [])
             for (var i = 0; i < data.length; i++) {
                 if ("team_leader" in data[i]) {
                     addLead(data[i], employees[i]);
+
+                    // show modal if error
                 }
             }
         }   
@@ -690,7 +668,8 @@ angular.module('tdb.controllers', [])
                 else {
                     var edited = angular.copy(emp);
                     edited.team_leader = leader;
-                    edited.team = emp.team.id;
+                    if (emp.team)
+                        edited.team = emp.team.id;
                     Employee.update(edited);
                 }
             });
