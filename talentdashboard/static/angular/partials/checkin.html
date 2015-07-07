@@ -36,16 +36,37 @@
 		    		<option value="">--Select Check-In Type--</option>
 		    	</select>
 		    </div>	
-		    <div class="checkin-summary">
-				<h4 class="panel-title">Summary</h4> 	
-	        	<textarea required placeholder="Enter summary here..." class="form-control simple-form-control" name="summary" ng-model="checkin.summary" style="min-height:250px;"></textarea>		    	
+		    <div class="checkin-summary panel">
+				<h4 class="panel-title">Notes</h4> 	
+	        	<textarea required placeholder="Enter notes here..." class="form-control simple-form-control" name="summary" ng-model="checkin.summary" style="min-height:250px;"></textarea>		    	
 			</div>
 			<accordion>
 			    <accordion-group is-open="engagement.open">
 			        <accordion-heading>
+			        	<div>
 			            Engagement <i class="pull-right glyphicon" ng-class="{'glyphicon glyphicon-minus': engagement.open, 'glyphicon glyphicon-plus': !engagement.open}"></i>
+			        	</div>
 			        </accordion-heading>
-			        Hello world!
+			        <div class="checkin-engagement">
+				        <p>How professionally happy is {{selectedEmployee.full_name}}?</p>                
+	                    <div class="employee-happiness-container">
+	                        <div class="employee-happiness employee-happiness-5" ng-click="happy.assessment=5" ng-class="{selected: happy.assessment==5}">
+	                            <span class="veryhappy"></span>
+	                        </div>
+	                        <div class="employee-happiness employee-happiness-4" ng-click="happy.assessment=4" ng-class="{selected: happy.assessment==4}">
+	                            <span class="happy"></span>
+	                        </div> 
+	                        <div class="employee-happiness employee-happiness-3" ng-click="happy.assessment=3" ng-class="{selected: happy.assessment==3}">
+	                            <span class="indifferent"></span>
+	                        </div>   
+	                        <div class="employee-happiness employee-happiness-2" ng-click="happy.assessment=2" ng-class="{selected: happy.assessment==2}">
+	                            <span class="unhappy"></span>
+	                        </div> 
+	                        <div class="employee-happiness employee-happiness-1" ng-click="happy.assessment=1" ng-class="{selected: happy.assessment==1}">
+	                            <span class="unhappy"></span>
+	                        </div> 
+	                    </div>  
+	                </div>    
 			    </accordion-group>
 			    <accordion-group is-open="todo.open">
 			        <accordion-heading>

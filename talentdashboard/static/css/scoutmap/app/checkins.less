@@ -2,6 +2,9 @@
   	max-width: 700px;
   	margin: 40px auto;
 
+    a:focus {
+        outline: none !important;
+    }
 
   	.checkin-header{
   		overflow: hidden;
@@ -54,7 +57,21 @@
 
   	.checkin-summary {
   		margin-bottom: 10px;
+
+        textarea {
+            -webkit-box-shadow: none;
+            padding: 0; 
+        }
   	}
+
+    .checkin-engagement {
+        text-align: center;
+        padding: 30px 0 0;
+
+        .panel-body {
+            border-top:none 
+        }
+    }
 
   	.panel-default {
   		border: none; 
