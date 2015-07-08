@@ -12,40 +12,10 @@ from customers.models import Customer
 from django.contrib.auth.models import User
 from django.utils.log import getLogger
 from preferences.models import UserPreferences
-
-
+from checkins.models import CheckIn
+from checkins.api.serializers import CheckInSerializer
+from org.api.serializers import MinimalEmployeeSerializer, TeamSerializer
 logger = getLogger('talentdashboard')
-
-
-class TeamSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Team
-        fields = ('id', 'name', 'leader')
-
-
-class MinimalEmployeeSerializer(serializers.HyperlinkedModelSerializer):
-    avatar = serializers.SerializerMethodField()
-    avatar_small = serializers.SerializerMethodField()
-    current_talent_category = serializers.SerializerMethodField()
-
-    def get_avatar(self, obj):
-        url = ''
-        if obj.avatar:
-            url = obj.avatar.url
-        return url
-
-    def get_avatar_small(self, obj):
-        url = ''
-        if obj.avatar_small:
-            url = obj.avatar_small.url
-        return url
-
-    def get_current_talent_category(self, obj):
-        return obj.current_talent_category()
-
-    class Meta:
-        model = Employee
-        fields = ('id', 'full_name', 'first_name', 'display', 'avatar', 'avatar_small', 'current_talent_category')
 
 
 class PvPEmployeeSerializer(serializers.HyperlinkedModelSerializer):
@@ -369,20 +339,22 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
     assigned_to = MinimalEmployeeSerializer()
     assigned_by = MinimalEmployeeSerializer()
     employee = MinimalEmployeeSerializer()
+    checkin = CheckInSerializer()
 
     class Meta:
         model = Task
-        fields = ('id', 'description', 'assigned_to', 'assigned_by', 'created_by', 'employee', 'created_date', 'due_date', 'completed')
+        fields = ('id', 'description', 'assigned_to', 'assigned_by', 'created_by', 'employee', 'created_date', 'due_date', 'completed', 'checkin')
 
 
 class CreateTaskSerializer(serializers.HyperlinkedModelSerializer):
     created_by = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
     assigned_to = serializers.PrimaryKeyRelatedField(allow_null=True, queryset=Employee.objects.all())
     employee = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
+    checkin = serializers.PrimaryKeyRelatedField(queryset=CheckIn.objects.all(), required=False)
 
     class Meta:
         model = Task
-        fields = ('description', 'assigned_to', 'employee', 'due_date', 'created_by')
+        fields = ('description', 'assigned_to', 'employee', 'due_date', 'created_by', 'checkin')
 
 
 class EditTaskSerializer(serializers.HyperlinkedModelSerializer):

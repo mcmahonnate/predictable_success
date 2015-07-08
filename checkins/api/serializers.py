@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from talentdashboard.views.serializers import MinimalEmployeeSerializer
+from org.api.serializers import MinimalEmployeeSerializer
 from org.models import Employee
 from engagement.models import Happiness
 from ..models import CheckIn, CheckInType
