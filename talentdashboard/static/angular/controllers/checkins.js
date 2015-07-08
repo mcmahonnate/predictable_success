@@ -58,24 +58,14 @@ angular.module('tdb.controllers.checkins', [])
         };
     }])
 
-    .controller('CheckInDetailsCtrl', ['$scope', '$q', '$routeParams', 'CheckIn', 'CheckInType', 'Happiness', 'Employee', function ($scope, $q, $routeParams, CheckIn, CheckInType, Happiness, Employee) {
+    .controller('CheckInDetailsCtrl', ['$scope', '$q', '$routeParams', '$location', 'CheckIn', 'CheckInType', 'Happiness', 'Employee', function ($scope, $q, $routeParams, $location, CheckIn, CheckInType, Happiness, Employee) {
 
-        var query = {id: $routeParams.id};
-            
-        $scope.loadCheckin = function() {
-            CheckIn.get(query, function(data) {
-                $scope.checkin = data;
-            });
-        }    
-        $scope.loadCheckin();
+        $scope.loadCheckin = CheckIn.get({ id : $routeParams.id }, function(data) {
+            $scope.checkin = data;
+        }, function(response) {
+            if(response.status === 404) {
+                 $location.url('/404');
+            }
+        });       
+
     }])
-
-
-    .controller('CheckInsCtrl', ['$scope', '$modalInstance', '$routeParams', 'CheckIn', function ($scope, $modalInstance, $routeParams, CheckIn) {
-        CheckIn.get(query, function(data) {
-            $scope.checkins = data.results;
-            angular.forEach($scope.checkins, function (checkin) {
-                $scope.checkins.push(checkin);
-            });
-        });
-    }]);
