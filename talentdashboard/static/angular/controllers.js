@@ -1178,7 +1178,6 @@ angular.module('tdb.controllers', [])
     $scope.$watch('currentPvP.talent_category', function(newVal, oldVal){
         if (newVal != oldVal) {
             $scope.currentPvP.label = TalentCategories.getLabelByTalentCategory(newVal);
-            console.log('test');
         }
     },true);
     $scope.backward = function() {
