@@ -832,6 +832,7 @@ angular.module('tdb.directives', [])
                     pvp.potential = square.potential;
                     pvp.performance = square.performance;
                     pvp.talent_category = square.talent_category
+                    console.log(pvp.talent_category);
                     findDescription();
                     if (save)
                         scope.save();

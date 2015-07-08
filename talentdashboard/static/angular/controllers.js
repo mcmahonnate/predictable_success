@@ -1088,7 +1088,7 @@ angular.module('tdb.controllers', [])
     };
 }])
 
-.controller('PvpEvaluationTodosCtrl', ['$scope', '$filter', '$routeParams', '$window', '$interval', '$location', 'PvpEvaluation', 'PvpDescriptions', 'EmployeeComments', 'User', 'analytics', function($scope, $filter, $routeParams, $window, $interval, $location, PvpEvaluation, PvpDescriptions, EmployeeComments, User, analytics) {
+.controller('PvpEvaluationTodosCtrl', ['$scope', '$filter', '$routeParams', '$window', '$interval', '$location', 'PvpEvaluation', 'PvpDescriptions', 'EmployeeComments', 'TalentCategories', 'User', 'analytics', function($scope, $filter, $routeParams, $window, $interval, $location, PvpEvaluation, PvpDescriptions, EmployeeComments, TalentCategories, User, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     $scope.pvps = [];
     $scope.currentItemIndex = null;
@@ -1173,6 +1173,12 @@ angular.module('tdb.controllers', [])
     $scope.$watch('currentItemIndex', function(newVal, oldVal){
         if (newVal != oldVal) {
             $scope.currentPvP = $scope.pvps[$scope.currentItemIndex];
+        }
+    },true);
+    $scope.$watch('currentPvP.talent_category', function(newVal, oldVal){
+        if (newVal != oldVal) {
+            $scope.currentPvP.label = TalentCategories.getLabelByTalentCategory(newVal);
+            console.log('test');
         }
     },true);
     $scope.backward = function() {
