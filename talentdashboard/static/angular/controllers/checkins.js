@@ -3,7 +3,7 @@ angular.module('tdb.controllers.checkins', [])
     .controller('AddEditCheckInCtrl', ['$scope', '$q', '$routeParams', '$location', 'CheckIn', 'CheckInType', 'Happiness', 'Task', 'Employee', function ($scope, $q, $routeParams, $location, CheckIn, CheckInType, Happiness, Task, Employee) {
         var initialize = function() {
             $scope.checkin = new CheckIn({date: new Date(Date.now())});
-            $scope.happiness = new Happiness({assessment: 1});
+            $scope.happiness = new Happiness({assessment: 0});
             $scope.tasks = [];
             $scope.employeeSearch = '';
             $scope.selectedEmployee = null;
@@ -25,7 +25,6 @@ angular.module('tdb.controllers.checkins', [])
             $scope.employeeSearch = '';
             $scope.selectedEmployee = employee;
             $scope.checkin.employee = $scope.happiness.employee = employee.id;
-            $scope.tasks.push(new Task({employee: employee.id}));
         };
 
         $scope.save = function (form) {
