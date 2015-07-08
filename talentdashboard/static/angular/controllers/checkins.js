@@ -1,8 +1,8 @@
 angular.module('tdb.controllers.checkins', [])
 
-    .controller('AddEditCheckInCtrl', ['$scope', '$rootScope', '$routeParams', 'CheckIn', 'CheckInType', 'Happiness', 'Employee', function ($scope, $rootScope, $routeParams, CheckIn, CheckInType, Happiness, Employee) {
+    .controller('AddEditCheckInCtrl', ['$scope', '$q', '$routeParams', 'CheckIn', 'CheckInType', 'Happiness', 'Employee', function ($scope, $q, $routeParams, CheckIn, CheckInType, Happiness, Employee) {
         var initialize = function() {
-            $scope.checkin = new CheckIn();
+            $scope.checkin = new CheckIn({date: new Date(Date.now())});
             $scope.happiness = new Happiness({assessment: 0});
             $scope.tasks = [];
             $scope.employeeSearch = '';
@@ -30,26 +30,29 @@ angular.module('tdb.controllers.checkins', [])
         $scope.save = function (form) {
             if(form.$invalid) return;
 
-            var saveCheckin = function() {
-                $scope.checkin.date = new Date(Date.now());
-                $scope.checkin.$save(function (checkin) {
-                    $scope.checkin.id = checkin.id;
-                    if($scope.tasks.length > 0) {
-                        // save tasks
-
-                    }
-                    // redirect to checkin page
-                });
+            var saveHappiness = function() {
+                if($scope.happiness.assessment) {
+                    return $scope.happiness.$save();
+                } else {
+                    var deferred = $q.defer();
+                    deferred.resolve($scope.happiness);
+                    return deferred.promise;
+                }
             };
 
-            if($scope.happiness.assessment) {
-                $scope.happiness.$save(function(happiness) {
-                    $scope.checkin.happiness = happiness.id;
-                    saveCheckin();
-                });
-            } else {
-                saveCheckin();
-            }
+            saveHappiness()
+            .then(function(newHappiness) {
+                if(newHappiness.id) {
+                    $scope.checkin.happiness = newHappiness.id;
+                }
+                $scope.checkin.$save()
+                .then(function(newCheckin) {
+                    if($scope.tasks.length > 0) {
+                        // save tasks
+                    }
+                    // redirect to checkin page
+                })
+            });
         };
 
         $scope.cancel = function() {
@@ -57,7 +60,7 @@ angular.module('tdb.controllers.checkins', [])
         };
     }])
 
-    .controller('CheckInsCtrl', ['$scope', '$rootScope', '$modalInstance', '$routeParams', 'CheckIn', function ($scope, $rootScope, $modalInstance, $routeParams, CheckIn) {
+    .controller('CheckInsCtrl', ['$scope', '$modalInstance', '$routeParams', 'CheckIn', function ($scope, $modalInstance, $routeParams, CheckIn) {
         CheckIn.get(query, function(data) {
             $scope.checkins = data.results;
             angular.forEach($scope.checkins, function (checkin) {
