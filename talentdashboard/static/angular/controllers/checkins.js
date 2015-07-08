@@ -34,15 +34,13 @@ angular.module('tdb.controllers.checkins', [])
                 if($scope.happiness.assessment) {
                     return $scope.happiness.$save();
                 } else {
-                    var deferred = $q.defer();
-                    deferred.resolve($scope.happiness);
-                    return deferred.promise;
+                    return $q.defer().resolve(null).promise;
                 }
             };
 
             saveHappiness()
             .then(function(newHappiness) {
-                if(newHappiness.id) {
+                if(newHappiness) {
                     $scope.checkin.happiness = newHappiness.id;
                 }
                 $scope.checkin.$save()
