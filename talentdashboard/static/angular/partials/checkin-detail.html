@@ -1,0 +1,18 @@
+<div class="container checkin" ng-controller="CheckInDetailsCtrl">
+	<div class="checkin-header">
+		<div class="type-tag">
+			<span ng-show="!checkin.other_type_description">{{ checkin.type.name }}</span> 
+			<span ng-show="checkin.other_type_description">{{ checkin.other_type_description }}</span>
+		</div>
+		<a href="#/employees/{{employee.id}}">
+			<img ng-src="{{ checkin.employee.avatar_small }}" class="headshot medium-headshot pull-left"/>
+		</a>
+		<div class="pull-left">
+			<h1><a href="#/employees/{{ checkin.employee.id }}">{{ checkin.employee.full_name }}</a></h1>
+			<p class="timestamp">{{ checkin.host.full_name }} checked in {{ checkin.date | fromNow }}</p>
+		</div>
+	</div>	
+    <div class="checkin-summary panel">
+    	<span class="checkin-summary-instance" data-ng-bind-html="checkin.summary | new_line | cut:true:length">
+	</div>
+</div>

@@ -58,6 +58,19 @@ angular.module('tdb.controllers.checkins', [])
         };
     }])
 
+    .controller('CheckInDetailsCtrl', ['$scope', '$q', '$routeParams', 'CheckIn', 'CheckInType', 'Happiness', 'Employee', function ($scope, $q, $routeParams, CheckIn, CheckInType, Happiness, Employee) {
+
+        var query = {id: $routeParams.id};
+            
+        $scope.loadCheckin = function() {
+            CheckIn.get(query, function(data) {
+                $scope.checkin = data;
+            });
+        }    
+        $scope.loadCheckin();
+    }])
+
+
     .controller('CheckInsCtrl', ['$scope', '$modalInstance', '$routeParams', 'CheckIn', function ($scope, $modalInstance, $routeParams, CheckIn) {
         CheckIn.get(query, function(data) {
             $scope.checkins = data.results;

@@ -14,10 +14,11 @@ class CheckInTypeSerializer(serializers.ModelSerializer):
 class CheckInSerializer(serializers.ModelSerializer):
     employee = MinimalEmployeeSerializer()
     host = MinimalEmployeeSerializer()
+    type = CheckInTypeSerializer()
 
     class Meta:
         model = CheckIn
-        fields = ('id', 'employee', 'host', 'date', 'summary', 'happiness')
+        fields = ('id', 'employee', 'host', 'date', 'summary', 'happiness', 'type', 'other_type_description')
 
 
 class AddEditCheckInSerializer(serializers.ModelSerializer):
