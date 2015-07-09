@@ -138,7 +138,7 @@ class PvPEmployeeSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Employee
-        fields = ('id', 'full_name', 'avatar', 'happiness', 'happiness_date', 'kolbe_fact_finder','kolbe_follow_thru', 'kolbe_quick_start', 'kolbe_implementor', 'vops_visionary', 'vops_operator', 'vops_processor', 'vops_synergist', 'team', 'display', 'current_talent_category')
+        fields = ('id', 'full_name', 'first_name', 'last_name', 'avatar', 'happiness', 'happiness_date', 'kolbe_fact_finder','kolbe_follow_thru', 'kolbe_quick_start', 'kolbe_implementor', 'vops_visionary', 'vops_operator', 'vops_processor', 'vops_synergist', 'team', 'display', 'current_talent_category', 'email')
 
 
 class MBTISerializer(serializers.HyperlinkedModelSerializer):

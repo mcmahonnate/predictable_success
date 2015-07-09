@@ -4,9 +4,11 @@
             <li ng-repeat="pvp in pvps" fx-transition index="{{$index}}" ng-class="{'navInNext': click_next && currentItemIndex==$index, 'navOutNext': (click_next && (currentItemIndex-1)==$index) || (click_next && (currentItemIndex==0 && $index==last_index)) ,'navInPrev': click_prev && currentItemIndex==$index, 'navOutPrev': (click_prev && (currentItemIndex+1)==$index) || (click_prev && (currentItemIndex==last_index && $index==0))}">
                 <article class="widget clock loaded" id="widget-8494" style="height: 550px;width: 600px;position:relative;margin-left: auto;margin-right: auto;">
                   <div class="widget-inner widget-size-2x2 large-screen" style="height: 550px;width:600px;">
-                    <div>
+
+                   <div>
                         <div class="widget-inner widget-size-2x2 large-screen" style="height: 550px;width:600px;">
                             <section style="margin: 25px">
+
                               <div style="float:left;width:55%">
                                   <div class="large-avatar-container xxxlarge-headshot"><img ng-src="{{ pvp.employee.avatar }}"/></div>
                                   <div style="width: 100%">
@@ -17,6 +19,7 @@
                               <div style="width:45%;float: left;">
                                   <div class="vertical-text" style="width:200px;text-align: center;position: absolute;left: 237px;top: 142px;"><div style="display:inline-block;float:left">Low</div>Drive<div style="display:inline-block;float:right">High</div></div>
                                   <div style="margin: 25px">
+
                                     <canvas pvp-graph index="{{$index}}" height="200" width="200" ng-click="click_canvas($event, true)"/>
                                   </div>
                                   <div style="width:200px;text-align: center;  margin-left: 25px;margin-top: -25px;"><div style="display:inline-block;float:left">Low</div>Impact<div style="display:inline-block;float:right">High</div></div>
@@ -24,11 +27,11 @@
                               <div style="clear: both;"></div>
                               <div>
                                 <div style="margin-left: 0px; font-size:16px;">
-<div class="distributions">
-                        <!-- TODO: get these from model -->
-                        <p class="distribution"><span class="tag employee-segment-background-color-{{pvp.talent_category}}">{{pvp.label}}</span>{{pvp.description.description}}</p>
-                    </div>
+                                    <div class="distributions">
+                                        <!-- TODO: get these from model -->
+                                        <p class="distribution"><span class="tag employee-segment-background-color-{{pvp.talent_category}}">{{pvp.label}}</span>{{pvp.description.description}} <a data-toggle="modal" data-target="#self-assessment-modal" class="underline">See self assessment.</a></p>
 
+                                    </div>
                                 </div>
                               </div>
                               <div style="display: block; float:left;width:100%;-webkit-border-radius: 2px;moz-border-radius: 3px;-ms-border-radius: 3px;-o-border-radius: 3px;border-radius: 3px;border: 1px solid #c1c1c1;margin-top: 10px; margin-right:15px;background-color:white;">
@@ -50,6 +53,32 @@
         </div>
     </div>
 </div>
+    <div class="modal fade in" id="self-assessment-modal" data-keyboard="true" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <div class="modal-body">
+                    <h4 class="modal-title">{{currentPvP.employee.first_name}}'s Self Assessment</h4>
+                    <div ng-if="!selfAssessment.talent_category" class="distributions">
+                        <p class="distribution">{{currentPvP.employee.first_name}} has not done a self assessment.</p>
+                    </div>
+                    <div ng-if="selfAssessment.talent_category" class="distributions">
+                        <p class="distribution"><span class="tag employee-segment-background-color-{{selfAssessment.talent_category}}">{{selfAssessment.talent_category_label}}</span>{{selfAssessment.talent_category_description}}</p>
+                    </div>
+                    <div ng-if="selfAssessment.engagement" class="distributions">
+
+                            <p class="distribution employee-happiness-container" style="margin-left: 25px;">
+                                <span class="employee-happiness employee-happiness-{{selfAssessment.engagement}} selected" style="margin-right: 32px;"><span class="happiness-{{selfAssessment.engagement}}"></span></span>{{selfAssessment.engagement_description}}
+                            </p>
+                    </div>
+                    <p ng-if="selfAssessment.engagement">Completed on {{ selfAssessment.created_at | date:'MM/dd/yyyy' }}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 <style>
 .vertical-text {
     display: block;

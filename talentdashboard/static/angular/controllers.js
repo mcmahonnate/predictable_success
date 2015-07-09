@@ -1088,7 +1088,7 @@ angular.module('tdb.controllers', [])
     };
 }])
 
-.controller('PvpEvaluationTodosCtrl', ['$scope', '$filter', '$routeParams', '$window', '$interval', '$location', 'PvpEvaluation', 'PvpDescriptions', 'EmployeeComments', 'TalentCategories', 'User', 'analytics', function($scope, $filter, $routeParams, $window, $interval, $location, PvpEvaluation, PvpDescriptions, EmployeeComments, TalentCategories, User, analytics) {
+.controller('PvpEvaluationTodosCtrl', ['$scope', '$filter', '$routeParams', '$window', '$interval', '$location', 'PvpEvaluation', 'PvpDescriptions', 'EmployeeComments', 'TalentCategories', 'Prospect', 'User', 'analytics', function($scope, $filter, $routeParams, $window, $interval, $location, PvpEvaluation, PvpDescriptions, EmployeeComments, TalentCategories, Prospect, User, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
     $scope.pvps = [];
     $scope.currentItemIndex = null;
@@ -1102,7 +1102,7 @@ angular.module('tdb.controllers', [])
     $scope.pvp_description = null;
     $scope.currentPvP = null;
     $scope.isAnimating = false;
-
+    $scope.selfAssessment = null;
     setToIsClean = function(pvp) {
          if (!pvp.comment) {
             pvp.comment = {originalContent: "", content: "", id: -1};
@@ -1173,6 +1173,23 @@ angular.module('tdb.controllers', [])
     $scope.$watch('currentItemIndex', function(newVal, oldVal){
         if (newVal != oldVal) {
             $scope.currentPvP = $scope.pvps[$scope.currentItemIndex];
+            $scope.selfAssessment = Prospect.get({email: $scope.currentPvP.employee.email}, function(response) {
+                switch($scope.selfAssessment.engagement) {
+                    case 1:
+                        $scope.selfAssessment.engagement = 5
+                        break;
+                    case 2:
+                        $scope.selfAssessment.engagement = 4
+                        break;
+                    case 4:
+                        $scope.selfAssessment.engagement = 2
+                        break;
+                    case 5:
+                        $scope.selfAssessment.engagement = 1
+                        break;
+                }
+                $scope.selfAssessment.talent_category_label = TalentCategories.getLabelByTalentCategory($scope.selfAssessment.talent_category);
+            });
         }
     },true);
     $scope.$watch('currentPvP.talent_category', function(newVal, oldVal){

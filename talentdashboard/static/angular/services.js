@@ -258,6 +258,12 @@ angular.module('tdb.services', ['ngResource'])
     return EngagementReport;
 }])
 
+.factory('Prospect', ['$resource', '$http', function($resource, $http) {
+    Prospect = $resource('/api/v1/prospect/');
+
+    return Prospect;
+}])
+
 .factory('Happiness', [function() {
     var Happiness = {
         options: [
@@ -275,7 +281,7 @@ angular.module('tdb.services', ['ngResource'])
     return Happiness;
 }])
 
-    .factory('TalentCategories', [function() {
+.factory('TalentCategories', [function() {
     var TalentCategories = {
         categories: {
             "0":{color:'#2c3e50',label:'No Data',description:''},
