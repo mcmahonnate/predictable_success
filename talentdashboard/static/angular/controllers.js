@@ -684,13 +684,14 @@ angular.module('tdb.controllers', [])
         var teams = [];
         var team_ids = {}; // team name : id
 
+        // get teams
         parsedData.forEach(function (emp) {
             emp["display"] = true;
             if ("team" in emp && emp.team && emp.team.length)
                 teams.push(emp.team);
         });
 
-        // first post all teams
+        // post all teams
         ImportData.addNewTeams({'teams': teams}).$promise.then(function (data) {
             data.forEach(function (t) {
                 team_ids[t.name] = t.id;
@@ -702,23 +703,22 @@ angular.module('tdb.controllers', [])
         // post employees
         function addEmployees(index) {
             if (index == parsedData.length) {
-                addLeaderships(parsedData);
+                addLeaderships(0);
                 return;
             }
             addEmp(parsedData[index]).then(function (data){
                 console.log(data);
                 employees.push(data);
                 addEmployees(index + 1);
-                // $scope.importData.splice(0, 1);
             }, function (err) {
+                // show modal if error
                 console.log(err.data);
-                openEditModal(parsedData[index], null, null, teams, index);
+                openEditModal(parsedData[index], null, null, teams, index, false);
             });
         }
 
         // single employee
         function addEmp(data) {
-            console.log(data);
             // parseint checks if team id already assigned
             if ("team" in data && (data['team'] !== undefined) && (data['team'] !== null) && (parseInt(data['team']) !== data['team']))
                 data["team"] = team_ids[data.team];
@@ -729,19 +729,23 @@ angular.module('tdb.controllers', [])
             return employee.$save();
         }
 
-        // post leaderships
-        function addLeaderships(data) {
-            for (var i = 0; i < data.length; i++) {
-                if ("team_leader" in data[i]) {
-                    addLead(data[i], employees[i]);
-
-                    // show modal if error
-                }
+        // update leaderships after employees
+        function addLeaderships(index) {
+            if (index == parsedData.length) {
+                if ($scope.importData.length == 0)
+                    Notification.success("Your data imported successfully.");
+                return;
             }
+            addLead(parsedData[index], employees[index], index);
         }   
 
         // single leadership
-        function addLead(data, emp) {
+        function addLead(data, emp, index) {
+            if (!('team_leader' in data) || (data.team_leader === undefined) || (!data.team_leader.trim().length)) {
+                $scope.importData.splice(0, 1);
+                addLeaderships(index + 1);
+                return;
+            }
             var leaderName = data.team_leader;
             Employee.get({full_name: leaderName}, function (leader) {
                 if (leader === {}) {
@@ -754,13 +758,20 @@ angular.module('tdb.controllers', [])
                         edited.team = emp.team.id;
                     Employee.update(edited);
                 }
+
+                // remove from table when complete
+                $scope.importData.splice(0, 1);
+
+                addLeaderships(index + 1);
             }, function (err) {
+                // show modal if error
                 console.log(err.data);
-                // openEditModal(emp, leaderName, employees, teams, index);
+                openEditModal(emp, leaderName, employees, teams, index, true);
             });
         }
 
-        function openEditModal(employee, leadership, employees, teams, index) {
+        // correction modal
+        function openEditModal(employee, leadership, employees, teams, index, leaderUpload) {
             var modalInstance = $modal.open({
                 animation: true,
                 templateUrl: '/static/angular/partials/_modals/edit-bio-modal.html',
@@ -783,20 +794,20 @@ angular.module('tdb.controllers', [])
                     }
                 }
             });
-            modalInstance.result.then(function (data) {
-                // corrections submitted
-                // console.log(data);
 
+            modalInstance.result.then(function (data) {
+                // corrections submitted, update and try again
                 parsedData[index].first_name = data.first_name;
                 parsedData[index].last_name = data.last_name;
                 parsedData[index].email = data.email;
-
-                console.log(parsedData[index]);
-
-                addEmployees(index);
+                if (leaderUpload) {
+                    parsedData[index].team_leader = data.team_leader;
+                    addLeaderships(index);
+                }
+                else
+                    addEmployees(index);
             }, function (err) {
                 // cancel
-
             });
         }
     }
@@ -835,6 +846,7 @@ angular.module('tdb.controllers', [])
         data.email = $scope.employee.email;
         data.hire_date = ($scope.employee.hire_date) ? $rootScope.scrubDate($scope.employee.hire_date, false) : null;
         data.departure_date = ($scope.employee.departure_date) ? $rootScope.scrubDate($scope.employee.departure_date, false) : null;
+        data.team_leader = ($scope.employee.current_leader && $scope.employee.current_leader.full_name) ? $scope.employee.current_leader.full_name : null;
         // data.team = ($scope.employee.team && $scope.employee.team.name) ? $scope.employee.team.id : null;
         // data.coach_id = ($scope.employee.coach && $scope.employee.coach.full_name) ? $scope.employee.coach.id : null;
         // data.leader_id = ($scope.employee.current_leader && $scope.employee.current_leader.full_name) ? $scope.employee.current_leader.id : null;
