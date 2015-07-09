@@ -825,10 +825,8 @@ angular.module('tdb.directives', [])
 
         scope.click_canvas = function(e, save) {
             var point = getCursorPosition(e);
-            console.log(point);
             for(var index = 0; index < squares.length; index++) {
                 var square = squares[index];
-                console.log(square);
                 if(isOnSquare(point, square)) {
                     drawSquare(square);
                     pvp.potential = square.potential;
