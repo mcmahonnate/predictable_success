@@ -1,13 +1,12 @@
 angular.module('tdb.controllers.checkins', [])
 
-    .controller('AddEditCheckInCtrl', ['$scope', '$q', '$routeParams', '$location', 'CheckIn', 'CheckInType', 'Happiness', 'Task', 'Employee', function ($scope, $q, $routeParams, $location, CheckIn, CheckInType, Happiness, Task, Employee) {
+    .controller('AddEditCheckInCtrl', ['$scope', '$q', '$routeParams', '$location', '$modal', 'CheckIn', 'CheckInType', 'Happiness', 'Task', 'Employee', function ($scope, $q, $routeParams, $location, $modal, CheckIn, CheckInType, Happiness, Task, Employee) {
         var initialize = function() {
             $scope.checkin = new CheckIn({date: new Date(Date.now())});
             $scope.happiness = new Happiness({assessment: 0});
             $scope.tasks = [];
             $scope.employeeSearch = '';
             $scope.selectedEmployee = null;
-            $scope.newTask = new Task(); 
         };
         initialize();
 
@@ -31,9 +30,26 @@ angular.module('tdb.controllers.checkins', [])
 
         $scope.addTask = function(form) {
             if(form.$invalid) return;
-
-            $scope.tasks.push($scope.newTask);
             $scope.newTask = new Task();
+        };
+
+        $scope.addTask = function () {
+            var modalInstance = $modal.open({
+                animation: true,
+                templateUrl: '/static/angular/partials/_widgets/add-edit-task.html',
+                controller: 'AddEditTaskCtrl',
+                resolve: {
+                    task: function () {
+                        return new Task({employee: $scope.selectedEmployee.id});
+                    }
+                }
+            });
+
+            modalInstance.result.then(
+                function (newTask) {
+                    $scope.tasks.push(newTask);
+                }
+            );
         };
 
         $scope.save = function (form) {

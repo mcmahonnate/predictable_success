@@ -1,0 +1,32 @@
+                    <div class="col-xs-3 col-lg-2 first">
+                        <input class="todo-checkbox" type="checkbox" ng-click="toggleCompleted(task)" ng-model="task.completed">
+                        <a ng-href="/#/employees/{{task.employee.id}}" class="small-headshot">
+                            <img alt="{{task.employee.full_name}}" title="{{task.employee.full_name}}" ng-src="{{ task.employee.avatar_small }}" />
+                        </a>
+                    </div>
+                    <div class="col-xs-4 col-lg-5 todo-description-container">
+                        <div ng-class="{'todo-completed': task.completed}">
+                            <p><strong><a href="javascript:void(0);" ng-href="/#/employees/{{task.employee.id}}">{{task.employee.full_name}}</a></strong> <span class="timestamp">{{ task.created_date | fromNow }}</span></p>
+                            <p class="todo-description">{{task.description}}</p>
+                        </div>
+                    </div>
+                    <div class="col-xs-3">
+                        <div ng-show="task.assigned_to.full_name">
+                            <a href="javascript:void(0);" ng-href="/#/employees/{{task.assigned_to.id}}">{{task.assigned_to.full_name}}</a>
+                        </div>
+                        <div ng-show="!task.assigned_to.full_name">
+                            Unassigned
+                        </div>
+                    </div>
+                    <div class="col-xs-2 date">
+                        {{(task.due_date | date:'MMM d') || "None"}}
+                        <i class="fa fa-cog show-popover pull-right"></i>
+                        <ul class="popover-items" style="display:none">
+                            <li class="popover-item">
+                                <a ng-click="editTask(task)"><i class="fa fa-pencil-square-o"></i> Edit</a>
+                            </li>
+                            <li class="popover-item">
+                                <a ng-click="deleteTask(task)"><i class="fa fa-trash-o"></i> Delete</a>
+                            </li>
+                        </ul>
+                    </div>
