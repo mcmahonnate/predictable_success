@@ -233,13 +233,13 @@ class EmployeeList(APIView):
         else:
             employees = Employee.objects.get_current_employees(show_hidden=show_hidden)
         if full_name:
-            print(full_name)
-            try:
-                employee = Employee.objects.filter(full_name=full_name)[0]
-            except Employee.DoesNotExist:
-                return Response({})
-            serializer = EmployeeSerializer(employee, context={'request':request})
-            return Response(serializer.data)
+            employees = Employee.objects.filter(full_name=full_name)
+            if employees:
+                employee = employees[0]
+                serializer = EmployeeSerializer(employee, context={'request':request})
+                return Response(serializer.data)
+            else:
+                return Response({'leader': 'field error'}, status=400)
         serializer = MinimalEmployeeSerializer(employees, many=True, context={'request': request})
         return Response(serializer.data)
 
@@ -985,6 +985,9 @@ class EmployeeDetail(APIView):
         serializer = CreateEmployeeSerializer(data = request.DATA, context={'request':request})
         if serializer.is_valid():
             employee = serializer.save()
+            if 'leader_id' in request.DATA and request.DATA['leader_id'] is not None:
+                employee.current_leader = Employee.objects.get(id=request.DATA['leader_id'])
+                employee.save()
             add_salary_to_employee(employee, request.DATA)
             serializer = EmployeeSerializer(employee, context={'request':request})
             return Response(serializer.data)

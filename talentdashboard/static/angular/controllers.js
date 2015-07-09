@@ -238,10 +238,11 @@ angular.module('tdb.controllers', [])
     }
 }])
 
-.controller('AddEditBioCtrl', ['$scope', '$rootScope', '$routeParams', '$modalInstance', '$location', 'employee', 'leadership', 'employees', 'teams', 'Employee', 'EmployeeLeader', 'fileReader', 'PhotoUpload', function($scope, $rootScope, $routeParams, $modalInstance, $location, employee, leadership, employees, teams, Employee, EmployeeLeader, fileReader, PhotoUpload) {
+.controller('AddEditBioCtrl', ['$scope', '$rootScope', '$routeParams', '$modalInstance', '$location', 'employee', 'leadership', 'employees', 'teams', 'uploading', 'Employee', 'EmployeeLeader', 'fileReader', 'PhotoUpload', function($scope, $rootScope, $routeParams, $modalInstance, $location, employee, leadership, employees, teams, uploading, Employee, EmployeeLeader, fileReader, PhotoUpload) {
     $scope.employee = angular.copy(employee);
     $scope.leadership = angular.copy(leadership);
     $scope.teams = teams;
+    $scope.uploading = uploading;
     $scope.employees = employees;
     $scope.preview=$scope.employee.avatar;
     $scope.cancel = function () {
@@ -669,11 +670,9 @@ angular.module('tdb.controllers', [])
     };
 }])
 
-.controller('UploadDataCtrl', ['$scope', '$rootScope', '$q', 'ImportData', 'Employee', 'Leadership', 'Notification','EmployeeNames', function($scope, $rootScope, $q, ImportData, Employee, Leadership, Notification, EmployeeNames) {
+.controller('UploadDataCtrl', ['$scope', '$rootScope', '$q', '$modal', 'ImportData', 'Employee', 'Leadership', 'Notification','EmployeeNames', function($scope, $rootScope, $q, $modal, ImportData, Employee, Leadership, Notification, EmployeeNames) {
     $scope.data;
-    $scope.importData = [];
     $scope.hasColumnHeaders=true;
-    $scope.hot;
     $scope.columns = [];
     $scope.importing = false;
     $scope.foundErrors = false;
@@ -697,27 +696,31 @@ angular.module('tdb.controllers', [])
                 team_ids[t.name] = t.id;
             });
 
-            // post employees
             addEmployees(0);
-            function addEmployees(index) {
-                if (index == parsedData.length) {
-                    addLeaderships(parsedData);
-                    return;
-                }
-                addEmp(parsedData[index]).then(function (data){
-
-                    // show modal if error
-
-                    console.log(data);
-                    employees.push(data);
-                    addEmployees(index + 1);
-                });
-            }
         });
+
+        // post employees
+        function addEmployees(index) {
+            if (index == parsedData.length) {
+                addLeaderships(parsedData);
+                return;
+            }
+            addEmp(parsedData[index]).then(function (data){
+                console.log(data);
+                employees.push(data);
+                addEmployees(index + 1);
+                // $scope.importData.splice(0, 1);
+            }, function (err) {
+                console.log(err.data);
+                openEditModal(parsedData[index], null, null, teams, index);
+            });
+        }
 
         // single employee
         function addEmp(data) {
-            if ("team" in data && (data['team'] !== undefined))
+            console.log(data);
+            // parseint checks if team id already assigned
+            if ("team" in data && (data['team'] !== undefined) && (data['team'] !== null) && (parseInt(data['team']) !== data['team']))
                 data["team"] = team_ids[data.team];
             else
                 data["team"] = null;
@@ -751,9 +754,92 @@ angular.module('tdb.controllers', [])
                         edited.team = emp.team.id;
                     Employee.update(edited);
                 }
+            }, function (err) {
+                console.log(err.data);
+                // openEditModal(emp, leaderName, employees, teams, index);
+            });
+        }
+
+        function openEditModal(employee, leadership, employees, teams, index) {
+            var modalInstance = $modal.open({
+                animation: true,
+                templateUrl: '/static/angular/partials/_modals/edit-bio-modal.html',
+                controller: 'importModalCtrl',
+                resolve: {
+                    employee: function () {
+                        return employee
+                    },
+                    leadership: function () {
+                        return leadership
+                    },
+                    employees: function () {
+                        return employees
+                    },
+                    teams: function () {
+                        return teams
+                    },
+                    uploading: function() {
+                        return true
+                    }
+                }
+            });
+            modalInstance.result.then(function (data) {
+                // corrections submitted
+                // console.log(data);
+
+                parsedData[index].first_name = data.first_name;
+                parsedData[index].last_name = data.last_name;
+                parsedData[index].email = data.email;
+
+                console.log(parsedData[index]);
+
+                addEmployees(index);
+            }, function (err) {
+                // cancel
+
             });
         }
     }
+
+}])
+
+.controller('importModalCtrl', ['$scope', '$rootScope', '$routeParams', '$modalInstance', '$location', 'employee', 'leadership', 'employees', 'teams', 'uploading', 'Employee', 'EmployeeLeader', 'fileReader', 'PhotoUpload', function($scope, $rootScope, $routeParams, $modalInstance, $location, employee, leadership, employees, teams, uploading, Employee, EmployeeLeader, fileReader, PhotoUpload) {
+    $scope.employee = angular.copy(employee);
+    $scope.leadership = angular.copy(leadership);
+    $scope.teams = teams;
+    // $scope.uploading = uploading;
+    $scope.employees = employees;
+    $scope.preview=$scope.employee.avatar;
+    $scope.cancel = function () {
+        $modalInstance.dismiss();
+    };
+    $scope.showHireDatePicker = false;
+    $scope.showDepartDatePicker = false;
+    $scope.toggleHireDatePicker = function(){
+        $scope.showDepartDatePicker = false;
+        $scope.showHireDatePicker = !$scope.showHireDatePicker;
+    };
+    $scope.toggleDepartDatePicker = function(){
+        $scope.showHireDatePicker = false;
+        $scope.showDepartDatePicker = !$scope.showDepartDatePicker;
+    };
+    $scope.saveEmployee = function() {
+        var data = getData();
+        $modalInstance.close(data);
+    };
+
+    var getData = function() {
+        var data = {id: $scope.employee.id};
+        data.first_name = $scope.employee.first_name;
+        data.last_name = $scope.employee.last_name;
+        data.email = $scope.employee.email;
+        data.hire_date = ($scope.employee.hire_date) ? $rootScope.scrubDate($scope.employee.hire_date, false) : null;
+        data.departure_date = ($scope.employee.departure_date) ? $rootScope.scrubDate($scope.employee.departure_date, false) : null;
+        // data.team = ($scope.employee.team && $scope.employee.team.name) ? $scope.employee.team.id : null;
+        // data.coach_id = ($scope.employee.coach && $scope.employee.coach.full_name) ? $scope.employee.coach.id : null;
+        // data.leader_id = ($scope.employee.current_leader && $scope.employee.current_leader.full_name) ? $scope.employee.current_leader.id : null;
+        return data;
+    };
 }])
 
 .controller('CoachDetailCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'User', 'Employee', 'Coachees', 'TalentReport', '$http', 'analytics', function($scope, $rootScope, $location, $routeParams, User, Employee, Coachees, TalentReport, $http, analytics) {
