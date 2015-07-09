@@ -20,6 +20,7 @@ from engagement.models import Happiness, SurveyUrl, generate_survey
 from kpi.models import Performance, Indicator
 from assessment.models import EmployeeAssessment, MBTI
 from org.teamreports import get_mbti_report_for_team
+from insights.models import Prospect
 import datetime
 import json
 from datetime import date, timedelta
@@ -872,6 +873,15 @@ class EmployeeTaskList(APIView):
         serializer = TaskSerializer(task, context={'request': request})
         return Response(serializer.data)
 
+class ProspectDetail(APIView):
+    def get(self, request, format=None):
+        try:
+            email = request.QUERY_PARAMS.get('email', None)
+            prospect = Prospect.objects.filter(email=email,team_lead=False).latest('created_at')
+            serializer = ProspectSerializer(prospect,context={'request': request})
+            return Response(serializer.data)
+        except Employee.DoesNotExist:
+            return Response(None)
 
 class EmployeeDetail(APIView):
     def get(self, request, pk, format=None):

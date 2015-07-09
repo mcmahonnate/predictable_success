@@ -86,7 +86,7 @@ urlpatterns = patterns('',
     url(r'^api/v1/comments/subcomments/(?P<pk>[0-9]+)/$', (auth('AllAccess','CoachAccess','TeamLeadAccess')(SubCommentList.as_view()))),
     url(r'^api/v1/comments/$', (auth_employee('AllAccess','CoachAccess','TeamLeadAccess')(CommentList.as_view()))),
     url(r'^api/v1/comments/(?P<pk>[0-9]+)/$', (auth('AllAccess','CoachAccess','TeamLeadAccess')(CommentDetail.as_view()))),
-
+    url(r'^api/v1/prospect/$', (auth_employee('AllAccess','CoachAccess','TeamLeadAccess')(ProspectDetail.as_view()))),
     url(r'^api/v1/tasks/mine/$', (MyTaskList.as_view())),
     url(r'^api/v1/tasks/employees/(?P<pk>[0-9]+)/$', (auth_employee('AllAccess','CoachAccess','TeamLeadAccess')(EmployeeTaskList.as_view()))),
     url(r'^api/v1/tasks/(?P<pk>[0-9]+)?/$', (auth('AllAccess','CoachAccess','TeamLeadAccess')(TaskDetail.as_view()))),
