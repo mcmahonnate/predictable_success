@@ -16,16 +16,7 @@ angular.module('tdb.controllers.tasks', [])
 
         $scope.save = function (form) {
             if(form.$invalid) return;
-
-            if($scope.taskIsBeingEdited()) {
-                Task.update($scope.task, (function (value) {
-                    $modalInstance.close(value);
-                }));
-            } else {
-                $scope.task.$save(function (value) {
-                    $modalInstance.close(value);
-                });
-            }
+            $modalInstance.close($scope.task);
         };
 
         $scope.openDatePicker = function ($event) {
@@ -105,7 +96,9 @@ angular.module('tdb.controllers.tasks', [])
 
             modalInstance.result.then(
                 function (newTask) {
-                    $scope.todos.push(newTask);
+                    newTask.$save(function(result) {
+                        $scope.todos.push(result);
+                    });
                 }
             );
         };
@@ -124,7 +117,9 @@ angular.module('tdb.controllers.tasks', [])
 
             modalInstance.result.then(
                 function (editedTask) {
-                    replaceItemInList($scope.todos, task, editedTask);
+                    Task.update(editedTask, function(result) {
+                        replaceItemInList($scope.todos, task, result);
+                    });
                 }
             );
         };

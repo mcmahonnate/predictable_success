@@ -7,6 +7,7 @@ angular.module('tdb.controllers.checkins', [])
             $scope.tasks = [];
             $scope.employeeSearch = '';
             $scope.selectedEmployee = null;
+            $scope.newTask = new Task(); 
         };
         initialize();
 
@@ -25,6 +26,14 @@ angular.module('tdb.controllers.checkins', [])
             $scope.employeeSearch = '';
             $scope.selectedEmployee = employee;
             $scope.checkin.employee = $scope.happiness.employee = employee.id;
+        };
+
+
+        $scope.addTask = function(form) {
+            if(form.$invalid) return;
+
+            $scope.tasks.push($scope.newTask);
+            $scope.newTask = new Task();
         };
 
         $scope.save = function (form) {
