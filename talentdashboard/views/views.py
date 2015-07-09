@@ -37,19 +37,26 @@ import StringIO
 from decimal import Decimal
 from re import sub
 from django.core.files.uploadedfile import InMemoryUploadedFile
-from django.core.urlresolvers import reverse
-from django.core.cache import cache
-from django.conf import settings
-from django.shortcuts import render
 from feedback.models import FeedbackRequest, FeedbackSubmission, UndeliveredFeedbackReport, CoacheeFeedbackReport
 from feedback.tasks import send_feedback_request_email
-import hashlib
 from collections import defaultdict
-from django.utils.encoding import iri_to_uri
-from django.utils.translation import get_language
 import collections
 import dateutil.parser, copy
-
+from org.models import Mentorship, Team, Leadership, Attribute
+from org.api.serializers import UserSerializer, EmployeeSerializer, TeamSerializer, MentorshipSerializer, LeadershipSerializer, AttributeSerializer, MinimalEmployeeSerializer
+from assessment.models import MBTI
+from assessment.api.serializers import MBTIReportSerializer, MBTISerializer
+from blah.api.serializers import SubCommentSerializer, EmployeeCommentSerializer, TeamCommentSerializer
+from pvp.models import PvpEvaluation, EvaluationRound
+from pvp.api.serializers import PvpEvaluationSerializer, PvPEmployeeSerializer, PvpToDoSerializer, PvpDescriptionSerializer
+from comp.models import CompensationSummary
+from comp.api.serializers import CompensationSummarySerializer
+from engagement.api.serializers import SurveyUrlSerializer, HappinessSerializer
+from assessment.api.serializers import AssessmentSerializer
+from todo.api.serializers import TaskSerializer, CreateTaskSerializer, EditTaskSerializer
+from customers.api.serializers import CustomerSerializer
+from kpi.api.serializers import KPIIndicatorSerializer, KPIPerformanceSerializer
+from feedback.api.serializers import FeedbackRequestSerializer, FeedbackRequestPostSerializer, FeedbackSubmissionSerializerForCoaches, FeedbackSubmissionSerializerForEmployees, WriteableFeedbackSubmissionSerializer, AnonymizedFeedbackSubmissionSerializer, UndeliveredFeedbackReportSerializer, CoacheeFeedbackReportSerializer
 logger = getLogger('talentdashboard')
 
 

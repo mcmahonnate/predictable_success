@@ -1,7 +1,8 @@
 from rest_framework import serializers
-from talentdashboard.views.serializers import MinimalEmployeeSerializer
+from org.api.serializers import MinimalEmployeeSerializer
 from org.models import Employee
-from ..models import Happiness
+from blah.api.serializers import EmployeeCommentSerializer
+from ..models import Happiness, SurveyUrl
 
 
 class HappinessSerializer(serializers.ModelSerializer):
@@ -21,3 +22,24 @@ class AddEditHappinessSerializer(serializers.ModelSerializer):
         model = Happiness
         fields = ('id', 'assessed_by', 'employee', 'assessed_date', 'assessment', 'comment')
 
+
+class SurveyUrlSerializer(serializers.HyperlinkedModelSerializer):
+    sent_from = MinimalEmployeeSerializer()
+    sent_to = MinimalEmployeeSerializer()
+
+    class Meta:
+        model = SurveyUrl
+        fields = ('id', 'sent_from', 'sent_to', 'url', 'active', 'completed', 'sent_date')
+
+
+class HappinessSerializer(serializers.HyperlinkedModelSerializer):
+    assessed_by = MinimalEmployeeSerializer()
+    employee = MinimalEmployeeSerializer()
+    comment = EmployeeCommentSerializer()
+
+    def get_assessment_verbose(self, obj):
+        return obj.assessment_verbose
+
+    class Meta:
+        model = Happiness
+        fields = ('id', 'employee', 'assessment', 'assessment_verbose', 'assessed_by', 'assessed_date', 'comment')
