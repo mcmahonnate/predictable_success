@@ -2,7 +2,9 @@ from rest_framework import serializers
 from org.api.serializers import MinimalEmployeeSerializer
 from org.models import Employee
 from engagement.models import Happiness
+from engagement.api.serializers import HappinessSerializer
 from ..models import CheckIn, CheckInType
+from todo.api.serializers import TaskSerializer
 
 
 class CheckInTypeSerializer(serializers.ModelSerializer):
@@ -15,10 +17,12 @@ class CheckInSerializer(serializers.ModelSerializer):
     employee = MinimalEmployeeSerializer()
     host = MinimalEmployeeSerializer()
     type = CheckInTypeSerializer()
+    happiness = HappinessSerializer()
+    tasks = TaskSerializer(many=True)
 
     class Meta:
         model = CheckIn
-        fields = ('id', 'employee', 'host', 'date', 'summary', 'happiness', 'type', 'other_type_description')
+        fields = ('id', 'employee', 'host', 'date', 'summary', 'happiness', 'type', 'other_type_description', 'tasks')
 
 
 class AddEditCheckInSerializer(serializers.ModelSerializer):

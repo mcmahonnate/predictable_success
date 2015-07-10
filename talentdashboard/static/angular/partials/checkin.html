@@ -8,18 +8,16 @@
 				<div ng-class="{open: employeeSearch!=''}" class="search dropdown pull-left col-xs-7">
 				    <div class="search-input-container">
 				        <div class="glyphicon glyphicon-search search-icon"></div>
-				        <input class="search-input nav_query" ng-model="employeeSearch" type="text" placeholder="Search Employees..."  name="selectedEmplyeeName" ng-model="{{selectedEmployee.full_name}}" value="{{selectedEmployee.full_name}}" />
+				        <input class="search-input nav_query" ng-model="employeeSearch" type="text" placeholder="Search Employees..."  name="selectedEmplyeeName"  value="{{selectedEmployee.full_name}}" />
 				    </div>
-				    <ul class="dropdown-menu" ng-show="employeeSearch!=''" role="menu" aria-labelledby="dLabel">     
-				        <div ng-if="employeeSearch!=''">
-				            <li ng-repeat="employee in filteredEmployees = (employees |filter:{full_name:employeeSearch}:startsWith) | orderBy:'full_name'" >
-				                <a ng-click="selectEmployee({{employee}})" class="dashboard" href="">
-				                    <div class="tiny-headshot"><img ng-src="{{employee.avatar_small}}"/></div>
-				                    <span class="employee-name">{{employee.full_name}}</span>
-				                </a>
-				            </li>
-				            <li ng-show="!filteredEmployees.length" style="padding: 13px 20px;">No Results</li>
-				        </div>
+				    <ul class="dropdown-menu" ng-hide="selectedEmplyee || !employeeSearch" role="menu" aria-labelledby="dLabel">     
+			            <li ng-repeat="employee in filteredEmployees = (employees |filter:{full_name:employeeSearch}:startsWith) | orderBy:'full_name'" >
+			                <a ng-click="selectEmployee({{employee}})" class="dashboard" href="">
+			                    <div class="tiny-headshot"><img ng-src="{{employee.avatar_small}}"/></div>
+			                    <span class="employee-name">{{employee.full_name}}</span>
+			                </a>
+			            </li>
+			            <li ng-show="!filteredEmployees.length" style="padding: 13px 20px;">No Results</li>
 				    </ul>
 				</div>
 		    	<div class="checkin-type col-xs-5">
@@ -35,7 +33,7 @@
 		<div ng-show="selectedEmployee && checkin.type">
 			<div class="checkin-header">
 				<div class="type-tag">
-					<span ng-show="!checkin.other_type_description">{{ checkin.type.name }}</span> 
+					<span ng-show="!checkin.other_type_description">{{ checkin.type }}</span> 
 					<span ng-show="checkin.other_type_description">{{ checkin.other_type_description }}</span>
 				</div>
 				<a href="#/employees/{{employee.id}}">

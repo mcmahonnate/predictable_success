@@ -3,7 +3,6 @@ from ..models import Task
 from org.models import Employee
 from org.api.serializers import MinimalEmployeeSerializer
 from checkins.models import CheckIn
-from checkins.api.serializers import CheckInSerializer
 
 
 class TaskSerializer(serializers.HyperlinkedModelSerializer):
@@ -11,11 +10,10 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
     assigned_to = MinimalEmployeeSerializer()
     assigned_by = MinimalEmployeeSerializer()
     employee = MinimalEmployeeSerializer()
-    checkin = CheckInSerializer()
 
     class Meta:
         model = Task
-        fields = ('id', 'description', 'assigned_to', 'assigned_by', 'created_by', 'employee', 'created_date', 'due_date', 'completed', 'checkin')
+        fields = ('id', 'description', 'assigned_to', 'assigned_by', 'created_by', 'employee', 'created_date', 'due_date', 'completed')
 
 
 class CreateTaskSerializer(serializers.HyperlinkedModelSerializer):

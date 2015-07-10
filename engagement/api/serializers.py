@@ -5,13 +5,17 @@ from blah.api.serializers import EmployeeCommentSerializer
 from ..models import Happiness, SurveyUrl
 
 
-class HappinessSerializer(serializers.ModelSerializer):
-    assessed_by = MinimalEmployeeSerializer()
-    employee = MinimalEmployeeSerializer()
+# class HappinessSerializer(serializers.ModelSerializer):
+#     assessed_by = MinimalEmployeeSerializer()
+#     employee = MinimalEmployeeSerializer() 
+#     display = serializers.SerializerMethodField()
 
-    class Meta:
-        model = Happiness
-        fields = ('id', 'assessed_by', 'employee', 'assessed_date', 'assessment', 'comment')
+#     def get_display(self, obj):
+#         return obj.get_happiness_display()
+
+#     class Meta:
+#         model = Happiness
+#         fields = ('id', 'assessed_by', 'employee', 'assessed_date', 'assessment', 'comment')
 
 
 class AddEditHappinessSerializer(serializers.ModelSerializer):

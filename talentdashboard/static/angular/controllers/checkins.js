@@ -22,7 +22,7 @@ angular.module('tdb.controllers.checkins', [])
         }
 
         $scope.selectEmployee = function(employee) {
-            $scope.employeeSearch = '';
+            $scope.employeeSearch = employee.full_name;
             $scope.selectedEmployee = employee;
             $scope.checkin.employee = $scope.happiness.employee = employee.id;
         };
