@@ -2,85 +2,95 @@
     <form name="checkinForm" novalidate="novalidate" ng-submit="save(checkinForm)">
 
     	<!-- Employee Search -->
-    	<div ng-show="!selectedEmployee" class="checkin-search">
+    	<div ng-show="!checkin.type || !selectedEmployee" class="checkin-search">
 	    	<h1>Check-in with:</h1>
-			<div ng-class="{open: employeeSearch!=''}" class="search dropdown pull-left">
-			    <div class="search-input-container">
-			        <div class="glyphicon glyphicon-search search-icon"></div>
-			        <input class="search-input nav_query" ng-model="employeeSearch" type="text" placeholder="Search Employees..."/>
+	    	<div class="row">
+				<div ng-class="{open: employeeSearch!=''}" class="search dropdown pull-left col-xs-7">
+				    <div class="search-input-container">
+				        <div class="glyphicon glyphicon-search search-icon"></div>
+				        <input class="search-input nav_query" ng-model="employeeSearch" type="text" placeholder="Search Employees..."  name="selectedEmplyeeName" ng-model="{{selectedEmployee.full_name}}" value="{{selectedEmployee.full_name}}" />
+				    </div>
+				    <ul class="dropdown-menu" ng-show="employeeSearch!=''" role="menu" aria-labelledby="dLabel">     
+				        <div ng-if="employeeSearch!=''">
+				            <li ng-repeat="employee in filteredEmployees = (employees |filter:{full_name:employeeSearch}:startsWith) | orderBy:'full_name'" >
+				                <a ng-click="selectEmployee({{employee}})" class="dashboard" href="">
+				                    <div class="tiny-headshot"><img ng-src="{{employee.avatar_small}}"/></div>
+				                    <span class="employee-name">{{employee.full_name}}</span>
+				                </a>
+				            </li>
+				            <li ng-show="!filteredEmployees.length" style="padding: 13px 20px;">No Results</li>
+				        </div>
+				    </ul>
+				</div>
+		    	<div class="checkin-type col-xs-5">
+			    	<select class="form-control simple-form-control input-lg" ng-options="type.id as type.name for type in checkinTypes" ng-model="checkin.type" name="type">
+			    		<option value="">--Select Check-In Type--</option>
+			    	</select>
+			    	<input ng-show="checkin.type===1" name="other_type_description" class="form-control" placeholder="Enter check in type..." />
 			    </div>
-			    <ul class="dropdown-menu" ng-show="employeeSearch!=''" role="menu" aria-labelledby="dLabel">     
-			        <div ng-if="employeeSearch!=''">
-			            <li ng-repeat="employee in filteredEmployees = (employees |filter:{full_name:employeeSearch}:startsWith) | orderBy:'full_name'">
-			                <a ng-click="selectEmployee({{employee}})" class="dashboard" href="">
-			                    <div class="tiny-headshot"><img ng-src="{{employee.avatar_small}}"/></div>
-			                    <span class="employee-name">{{employee.full_name}}</span>
-			                </a>
-			            </li>
-			            <li ng-show="!filteredEmployees.length" style="padding: 13px 20px;">No Results</li>
-			        </div>
-			    </ul>
-			</div>
+			</div>    
 		</div>	
 
 		<!-- Check-in -->
-		<div ng-show="selectedEmployee">
+		<div ng-show="selectedEmployee && checkin.type">
 			<div class="checkin-header">
-	    		<a href="#/employees/{{selectedEmployee.id}}">
-	    			<img ng-src="{{selectedEmployee.avatar_small}}" class="medium-headshot pull-left"/>
-	    		</a>
-	    		<h1 class="pull-left"><a href="#/employees/{{selectedEmployee.id}}">{{ selectedEmployee.full_name }}</a></h1>
-	    	</div>
-	    	<div class="checkin-type">
-		    	<select class="form-control simple-form-control" ng-options="type.id as type.name for type in checkinTypes" ng-model="checkin.type" name="type">
-		    		<option value="">--Select Check-In Type--</option>
-		    	</select>
-		    	<input ng-show="checkin.type===1" name="other_type_description" />
-		    </div>
+				<div class="type-tag">
+					<span ng-show="!checkin.other_type_description">{{ checkin.type.name }}</span> 
+					<span ng-show="checkin.other_type_description">{{ checkin.other_type_description }}</span>
+				</div>
+				<a href="#/employees/{{employee.id}}">
+					<img ng-src="{{ selectedEmployee.avatar_small }}" class="headshot medium-headshot pull-left"/>
+				</a>
+				<div class="pull-left">
+					<h1><a href="#/employees/{{ selectedEmployee.id }}">{{ selectedEmployee.full_name }}</a></h1>
+					<p class="timestamp">You're checking in now</p>
+				</div>
+			</div>	
+
 		    <div class="checkin-summary panel">
-				<h4 class="panel-title">Notes</h4>
-	        	<textarea required placeholder="Enter notes here..." class="form-control simple-form-control" name="summary" ng-model="checkin.summary" style="min-height:250px;"></textarea>
+	        	<textarea required placeholder="Enter check-in summary here..." class="form-control simple-form-control" name="summary" ng-model="checkin.summary" style="min-height:250px;"></textarea>
 			</div>
-			<accordion>
-			    <accordion-group is-open="happiness.open">
-			        <accordion-heading>
-			        	<div>
-			            	Engagement <i class="pull-right glyphicon" ng-class="{'glyphicon glyphicon-minus': happiness.open, 'glyphicon glyphicon-plus': !happiness.open}"></i>
-			            </div>
-			        </accordion-heading>
-			        <div class="checkin-engagement">
-				        <p>How happy is {{selectedEmployee.full_name}}?</p>
-	                    <div class="employee-happiness-container">
-	                        <div class="employee-happiness employee-happiness-5" ng-click="happiness.assessment=5" ng-class="{selected: happiness.assessment==5}">
-	                            <span class="happiness-5"></span>
-	                        </div>
-	                        <div class="employee-happiness employee-happiness-4" ng-click="happiness.assessment=4" ng-class="{selected: happiness.assessment==4}">
-	                            <span class="happiness-4"></span>
-	                        </div>
-	                        <div class="employee-happiness employee-happiness-3" ng-click="happiness.assessment=3" ng-class="{selected: happiness.assessment==3}">
-	                            <span class="happiness-3"></span>
-	                        </div>
-	                        <div class="employee-happiness employee-happiness-2" ng-click="happiness.assessment=2" ng-class="{selected: happiness.assessment==2}">
-	                            <span class="happiness-2"></span>
-	                        </div>
-	                        <div class="employee-happiness employee-happiness-1" ng-click="happiness.assessment=1" ng-class="{selected: happiness.assessment==1}">
-	                            <span class="happiness-1"></span>
-	                        </div>
-	                    </div>
-	                </div>
-			    </accordion-group>
-			    <accordion-group is-open="todo.open">
-			        <accordion-heading>
-			            Tasks <i class="pull-right glyphicon" ng-class="{'glyphicon glyphicon-minus': todo.open, 'glyphicon glyphicon-plus': !todo.open}"></i>
-			        </accordion-heading>
-                    <div>
-                        <button type="button" ng-click="addTask()" class="pull-right btn btn-sm btn-success">Add New Task</button>
-                        <div class="row todo" ng-repeat="task in tasks">
-                            <div ng-include="'/static/angular/partials/_widgets/task-list-item.html'"></div>
+
+			<div class="panel" style="overflow:hidden;">
+				<h4 class="panel-title pull-left">Happiness</h4>
+
+		        <div class="checkin-engagement pull-right">
+                    <div class="employee-happiness-container">
+                        <div class="employee-happiness employee-happiness-5" ng-click="happiness.assessment=5" ng-class="{selected: happiness.assessment==5}">
+                            <span class="happiness-5"></span>
+                        </div>
+                        <div class="employee-happiness employee-happiness-4" ng-click="happiness.assessment=4" ng-class="{selected: happiness.assessment==4}">
+                            <span class="happiness-4"></span>
+                        </div>
+                        <div class="employee-happiness employee-happiness-3" ng-click="happiness.assessment=3" ng-class="{selected: happiness.assessment==3}">
+                            <span class="happiness-3"></span>
+                        </div>
+                        <div class="employee-happiness employee-happiness-2" ng-click="happiness.assessment=2" ng-class="{selected: happiness.assessment==2}">
+                            <span class="happiness-2"></span>
+                        </div>
+                        <div class="employee-happiness employee-happiness-1" ng-click="happiness.assessment=1" ng-class="{selected: happiness.assessment==1}">
+                            <span class="happiness-1"></span>
                         </div>
                     </div>
-			    </accordion-group>
-			</accordion>
+                </div>
+
+            </div>    
+
+            <div class="panel">
+            	<button type="button" ng-click="addTask()" class="pull-right btn btn-sm btn-success">Add New Task</button>
+				<h4 class="panel-title">Tasks</h4>
+				<div class="row shaded" ng-show="task">
+                    <div class="col-md-3 col-lg-2 first"></div>
+                    <div class="col-md-4 col-lg-5">Tasks</div>
+                    <div class="col-xs-3">Assigned To</div>
+                    <div class="col-xs-2">Due Date</div>
+                </div>
+                <div class="row todo" ng-repeat="task in tasks">
+                    <div ng-include="'/static/angular/partials/_widgets/task-list-item.html'"></div>
+                </div>
+            </div>    
+     
+
 	        <button type="submit" class="btn btn-success btn-lg">Publish to Profile</button>
 	    </div>    
 	</form>
