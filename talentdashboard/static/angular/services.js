@@ -264,6 +264,12 @@ angular.module('tdb.services', ['ngResource'])
     return Prospect;
 }])
 
+.factory('ProspectReport', ['$resource', '$http', function($resource, $http) {
+    ProspectReport = $resource('/api/v1/prospects/');
+
+    return ProspectReport;
+}])
+
 .factory('Happiness', [function() {
     var Happiness = {
         options: [

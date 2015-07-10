@@ -873,6 +873,22 @@ class EmployeeTaskList(APIView):
         serializer = TaskSerializer(task, context={'request': request})
         return Response(serializer.data)
 
+class ProspectList(APIView):
+    def get(self, request, format=None):
+        try:
+            domain = request.QUERY_PARAMS.get('domain', None)
+            talent_category = request.QUERY_PARAMS.get('talent_category', None)
+            engagement = request.QUERY_PARAMS.get('engagement', None)
+            prospects = Prospect.objects.filter(email__contains=domain, team_lead=False)
+            if talent_category is not None:
+                prospects = prospects.filter(talent_category=talent_category)
+            if engagement is not None:
+                prospects = prospects.filter(engagement=engagement)
+            serializer = ProspectSerializer(prospects, many=True, context={'request': request})
+            return Response(serializer.data)
+        except Employee.DoesNotExist:
+            return Response(None)
+
 class ProspectDetail(APIView):
     def get(self, request, format=None):
         try:

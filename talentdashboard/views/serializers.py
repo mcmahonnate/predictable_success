@@ -164,7 +164,7 @@ class ProspectSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Prospect
-        fields = ('talent_category', 'talent_category_description', 'engagement', 'engagement_description',  'created_at')
+        fields = ('email', 'first_name','last_name', 'talent_category', 'talent_category_description', 'engagement', 'engagement_description',  'created_at')
 
 class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
     team = TeamSerializer()
@@ -526,7 +526,7 @@ class PvpToDoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PvpEvaluation
-        fields = ('id', 'talent_category', 'employee', 'potential', 'performance', 'evaluator', 'comment', 'description', 'too_new')
+        fields = ('id', 'talent_category', 'employee', 'potential', 'performance', 'evaluator', 'comment', 'description', 'too_new',  'is_complete')
 
 class MentorshipSerializer(serializers.HyperlinkedModelSerializer):
     mentor = MinimalEmployeeSerializer()
