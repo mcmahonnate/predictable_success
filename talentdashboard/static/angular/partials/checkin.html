@@ -10,7 +10,7 @@
 				        <div class="glyphicon glyphicon-search search-icon"></div>
 				        <input class="search-input nav_query" ng-model="employeeSearch" type="text" placeholder="Search Employees..."  name="selectedEmplyeeName"  value="{{selectedEmployee.full_name}}" />
 				    </div>
-				    <ul class="dropdown-menu" ng-hide="selectedEmplyee || !employeeSearch" role="menu" aria-labelledby="dLabel">     
+				    <ul class="dropdown-menu" ng-hide="selectedEmployee || !employeeSearch" role="menu" aria-labelledby="dLabel">     
 			            <li ng-repeat="employee in filteredEmployees = (employees |filter:{full_name:employeeSearch}:startsWith) | orderBy:'full_name'" >
 			                <a ng-click="selectEmployee({{employee}})" class="dashboard" href="">
 			                    <div class="tiny-headshot"><img ng-src="{{employee.avatar_small}}"/></div>
