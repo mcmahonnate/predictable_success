@@ -684,6 +684,8 @@ angular.module('tdb.controllers', [])
         var teams = [];
         var team_ids = {}; // team name : id
 
+        $scope.importing = true;
+
         // get teams
         parsedData.forEach(function (emp) {
             emp["display"] = true;
@@ -732,8 +734,10 @@ angular.module('tdb.controllers', [])
         // update leaderships after employees
         function addLeaderships(index) {
             if (index == parsedData.length) {
-                if ($scope.importData.length == 0)
+                if ($scope.importData.length == 0) {
                     Notification.success("Your data imported successfully.");
+                    $scope.importing = false;
+                }
                 return;
             }
             addLead(parsedData[index], employees[index], index);
