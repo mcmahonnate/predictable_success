@@ -797,10 +797,10 @@ angular.module('tdb.controllers', [])
         var noDataValue=8;
         var aValue = (a.talent_category===0) ? noDataValue : a.talent_category;
         var bValue = (b.talent_category===0) ? noDataValue : b.talent_category;
-        var aName = a.first_name + a.last_name;
-        var bName = b.first_name + b.last_name;
+        var aHappy = a.engagement;
+        var bHappy = b.engagement;
         if (aValue === bValue) {
-            return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+            return ((aHappy < bHappy) ? -1 : ((aHappy > bHappy) ? 1 : 0));
         } else {
             return aValue - bValue;
         }
@@ -808,10 +808,10 @@ angular.module('tdb.controllers', [])
     var orderByHappy= function(a,b){
         var aValue = a.engagement;
         var bValue = b.engagement;
-        var aName = a.first_name + a.last_name;
-        var bName = b.first_name + b.last_name;
+        var aTalent = a.talent_category;
+        var bTalent = b.talent_category;
         if (aValue === bValue) {
-            return ((aName > bName) ? -1 : ((aName < bName) ? 1 : 0));
+            return ((aTalent < bTalent) ? -1 : ((aTalent > bTalent) ? 1 : 0));
         } else {
             return aValue - bValue;
         }
