@@ -7,6 +7,7 @@ from comp.models import CompensationSummary
 from blah.models import Comment
 from engagement.models import Happiness, SurveyUrl
 from kpi.models import Indicator, Performance
+from insights.models import Prospect
 from feedback.models import FeedbackRequest, FeedbackSubmission
 from customers.models import Customer
 from django.contrib.auth.models import User
@@ -137,7 +138,7 @@ class PvPEmployeeSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Employee
-        fields = ('id', 'full_name', 'avatar', 'happiness', 'happiness_date', 'kolbe_fact_finder','kolbe_follow_thru', 'kolbe_quick_start', 'kolbe_implementor', 'vops_visionary', 'vops_operator', 'vops_processor', 'vops_synergist', 'team', 'display', 'current_talent_category')
+        fields = ('id', 'full_name', 'first_name', 'last_name', 'avatar', 'happiness', 'happiness_date', 'kolbe_fact_finder','kolbe_follow_thru', 'kolbe_quick_start', 'kolbe_implementor', 'vops_visionary', 'vops_operator', 'vops_processor', 'vops_synergist', 'team', 'display', 'current_talent_category', 'email')
 
 
 class MBTISerializer(serializers.HyperlinkedModelSerializer):
@@ -151,6 +152,19 @@ class MBTISerializer(serializers.HyperlinkedModelSerializer):
         model = MBTI
         fields = ('employee', 'type', 'description')
 
+class ProspectSerializer(serializers.HyperlinkedModelSerializer):
+    talent_category_description = serializers.SerializerMethodField()
+    engagement_description = serializers.SerializerMethodField()
+
+    def get_talent_category_description(self, obj):
+        return obj.talent_category_description
+
+    def get_engagement_description(self, obj):
+        return obj.engagement_description
+
+    class Meta:
+        model = Prospect
+        fields = ('email', 'first_name','last_name', 'talent_category', 'talent_category_description', 'engagement', 'engagement_description',  'created_at')
 
 class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
     team = TeamSerializer()
@@ -537,7 +551,7 @@ class PvpToDoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PvpEvaluation
-        fields = ('id', 'talent_category', 'employee', 'potential', 'performance', 'evaluator', 'comment', 'description', 'too_new')
+        fields = ('id', 'talent_category', 'employee', 'potential', 'performance', 'evaluator', 'comment', 'description', 'too_new',  'is_complete')
 
 class MentorshipSerializer(serializers.HyperlinkedModelSerializer):
     mentor = MinimalEmployeeSerializer()

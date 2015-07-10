@@ -16,6 +16,7 @@ class SignupForm(forms.ModelForm):
     team_lead = forms.BooleanField(widget=forms.HiddenInput(), initial=True)
 
     def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
         super(SignupForm, self).__init__(*args, **kwargs)
         self.fields.pop('company')
         self.fields.pop('first_name')
@@ -24,8 +25,7 @@ class SignupForm(forms.ModelForm):
     def save(self, *args, **kwargs):
         kwargs['commit']=True
         obj = super(SignupForm, self).save(*args, **kwargs)
-        report_url = obj.get_absolute_url()
-        logger.debug(obj.get_absolute_url())
+        report_url = self.request.META['HTTP_HOST'] + obj.get_absolute_url()
         html_template = get_template('insights/insights_report_email.html')
         text_template = get_template('insights/insights_report_email.txt')
         template_vars = Context({'report_url': report_url})

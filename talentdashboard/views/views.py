@@ -20,6 +20,7 @@ from engagement.models import Happiness, SurveyUrl, generate_survey
 from kpi.models import Performance, Indicator
 from assessment.models import EmployeeAssessment, MBTI
 from org.teamreports import get_mbti_report_for_team
+from insights.models import Prospect
 import datetime
 import json
 from datetime import date, timedelta
@@ -38,16 +39,9 @@ import StringIO
 from decimal import Decimal
 from re import sub
 from django.core.files.uploadedfile import InMemoryUploadedFile
-from django.core.urlresolvers import reverse
-from django.core.cache import cache
-from django.conf import settings
-from django.shortcuts import render
 from feedback.models import FeedbackRequest, FeedbackSubmission, UndeliveredFeedbackReport, CoacheeFeedbackReport
 from feedback.tasks import send_feedback_request_email
-import hashlib
 from collections import defaultdict
-from django.utils.encoding import iri_to_uri
-from django.utils.translation import get_language
 import collections
 import dateutil.parser, copy
 
@@ -367,7 +361,7 @@ class PvpEvaluationDetail(APIView):
             content = request.DATA["_content"]
             if pvp.comment is None:
                 visibility = 3
-                include_in_daily_digest = False
+                include_in_daily_digest = True
                 comment = pvp.employee.comments.add_comment(content, visibility, include_in_daily_digest, pvp.evaluator)
                 pvp.comment = comment
             else:
@@ -966,6 +960,32 @@ class EmployeeTaskList(APIView):
         task.save()
         serializer = TaskSerializer(task, context={'request': request})
         return Response(serializer.data)
+
+class ProspectList(APIView):
+    def get(self, request, format=None):
+        try:
+            domain = request.QUERY_PARAMS.get('domain', None)
+            talent_category = request.QUERY_PARAMS.get('talent_category', None)
+            engagement = request.QUERY_PARAMS.get('engagement', None)
+            prospects = Prospect.objects.filter(email__contains=domain, team_lead=False)
+            if talent_category is not None:
+                prospects = prospects.filter(talent_category=talent_category)
+            if engagement is not None:
+                prospects = prospects.filter(engagement=engagement)
+            serializer = ProspectSerializer(prospects, many=True, context={'request': request})
+            return Response(serializer.data)
+        except Employee.DoesNotExist:
+            return Response(None)
+
+class ProspectDetail(APIView):
+    def get(self, request, format=None):
+        try:
+            email = request.QUERY_PARAMS.get('email', None)
+            prospect = Prospect.objects.filter(email=email,team_lead=False).latest('created_at')
+            serializer = ProspectSerializer(prospect,context={'request': request})
+            return Response(serializer.data)
+        except Employee.DoesNotExist:
+            return Response(None)
 
 class EmployeeDetail(APIView):
     def get(self, request, pk, format=None):
