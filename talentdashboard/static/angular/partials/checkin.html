@@ -24,7 +24,7 @@
                     <div ng-show="checkinForm.$submitted" ng-messages="checkinForm.type.$error">
                         <div class="help-block" ng-message="required">You must specify the type</div>
                     </div>
-			    	<select class="form-control simple-form-control input-lg" ng-options="type.id as type.name for type in checkinTypes" ng-model="checkin.type" name="type">
+			    	<select class="form-control simple-form-control input-lg" ng-options="type as type.name for type in checkinTypes" ng-model="checkin.type" name="type">
 			    		<option value="">--Select Check-In Type--</option>
 			    	</select>
                     <div ng-show="checkinForm.$submitted" ng-messages="checkinForm.other_type_description.$error">
@@ -39,7 +39,7 @@
 		<div ng-show="selectedEmployee && checkin.type">
 			<div class="checkin-header">
 				<div class="type-tag">
-					<span ng-show="!checkin.other_type_description">{{ checkin.type }}</span> 
+					<span ng-show="!checkin.other_type_description">{{ checkin.type.name }}</span>
 					<span ng-show="checkin.other_type_description">{{ checkin.other_type_description }}</span>
 				</div>
 				<a href="#/employees/{{employee.id}}">

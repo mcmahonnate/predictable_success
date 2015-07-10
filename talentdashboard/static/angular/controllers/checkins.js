@@ -94,6 +94,7 @@ angular.module('tdb.controllers.checkins', [])
                     $scope.checkin.happiness = newHappiness.id;
                 }
                 // Save the CheckIn
+                $scope.checkin.type = $scope.checkin.type.id;
                 $scope.checkin.$save()
                 .then(function(newCheckin) {
                     var promises = [];
