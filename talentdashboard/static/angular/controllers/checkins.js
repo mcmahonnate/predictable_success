@@ -27,7 +27,6 @@ angular.module('tdb.controllers.checkins', [])
             $scope.checkin.employee = $scope.happiness.employee = employee.id;
         };
 
-
         $scope.addTask = function(form) {
             if(form.$invalid) return;
             $scope.newTask = new Task();
@@ -117,13 +116,11 @@ angular.module('tdb.controllers.checkins', [])
     }])
 
     .controller('CheckInDetailsCtrl', ['$scope', '$q', '$routeParams', '$location', 'CheckIn', 'CheckInType', 'Happiness', 'Employee', function ($scope, $q, $routeParams, $location, CheckIn, CheckInType, Happiness, Employee) {
-
         $scope.loadCheckin = CheckIn.get({ id : $routeParams.id }, function(data) {
             $scope.checkin = data;
         }, function(response) {
             if(response.status === 404) {
                  $location.url('/404');
             }
-        });       
-
+        });
     }])

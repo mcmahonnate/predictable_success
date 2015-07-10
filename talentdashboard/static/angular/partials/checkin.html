@@ -32,13 +32,22 @@
 	    		<h1 class="pull-left"><a href="#/employees/{{selectedEmployee.id}}">{{ selectedEmployee.full_name }}</a></h1>
 	    	</div>
 	    	<div class="checkin-type">
-		    	<select class="form-control simple-form-control" ng-options="type.id as type.name for type in checkinTypes" ng-model="checkin.type" name="type">
+                <div ng-show="checkinForm.$submitted" ng-messages="checkinForm.type.$error">
+                    <div class="help-block" ng-message="required">You must specify the type</div>
+                </div>
+		    	<select class="form-control simple-form-control" ng-options="type.id as type.name for type in checkinTypes" ng-model="checkin.type" name="type" required>
 		    		<option value="">--Select Check-In Type--</option>
 		    	</select>
-		    	<input ng-show="checkin.type===1" name="other_type_description" />
+                <div ng-show="checkinForm.$submitted" ng-messages="checkinForm.other_type_description.$error">
+                    <div class="help-block" ng-message="required">You must specify the description</div>
+                </div>
+		    	<input ng-show="checkin.type==1" name="other_type_description" ng-model="checkin.other_type_description" ng-required="checkin.type==1" />
 		    </div>
 		    <div class="checkin-summary panel">
 				<h4 class="panel-title">Notes</h4>
+                <div ng-show="checkinForm.$submitted" ng-messages="checkinForm.summary.$error">
+                    <div class="help-block" ng-message="required">Please enter some notes</div>
+                </div>
 	        	<textarea required placeholder="Enter notes here..." class="form-control simple-form-control" name="summary" ng-model="checkin.summary" style="min-height:250px;"></textarea>
 			</div>
 			<accordion>
