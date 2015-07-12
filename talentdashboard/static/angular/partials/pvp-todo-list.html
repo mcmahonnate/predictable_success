@@ -1,0 +1,69 @@
+<div class="container">
+    <div class="row sorts">
+        <div class="dropdown btn-group">
+            <h1><span ng-if="!currentTeam">All Employees</span>{{currentTeam.name}}</h1>
+        </div>
+        <div class="dropdown pull-right" style="margin-right:5px">
+            <button class="btn btn-default dropdown-toggle" type="button" id="teamList" data-toggle="dropdown" aria-expanded="true">
+                <span ng-if="!currentTeam">All Teams</span> {{currentTeam.name}}
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-teams" role="menu" aria-labelledby="teamList">
+                <li ng-repeat="team in teams | orderBy:'name'">
+                    <a ng-click="setTeamFilter(team.id);">{{team.name}}</a>
+                </li>
+                <li class="divider"></li>
+                <li><a ng-click="setTeamFilter(null)">All Teams</a></li>
+            </ul>
+        </div>
+        <div class="grid filled-light rounded">
+            <ul masonry="true">
+                <li data-category="{{employee.team.name}}" class="employee" on-filter index="{{$index}}" stale-days="90" ng-repeat="pvp in pvps">
+                    <div class="large-avatar-container">
+                        <div class="xxxlarge-headshot xxxlarge-headshot-active">
+                            <a ng-click="editPvP(pvps, $index)" style="cursor:pointer">
+                                <img ng-class="{'done': pvp.is_complete}" ng-src="{{ pvp.employee.avatar }}" />
+                            </a>
+                        </div>
+                        <div ng-if="pvp.talent_category != 0" class="employee-attribute employee-attribute-large" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{ talentCategories[employee.talent_category].label }}">
+                            <span class="segment employee-segment-background-color-{{pvp.talent_category}}"><span class="fa fa-check" style="font-size:42px;color:#ebedf3;"></span></span></span>
+                        </div>
+                    </div>
+                    <h3 class="employee-name centered"><a href="#/employees/{{employee.pk}}">{{employee.full_name}}</a></h3>
+                    <div class="team-name centered "><a ng-click="setTeamFilter(pvp.employee.team.id, pvp.employee.team.name);menu.show=false;">{{pvp.employee.team_name}}</a></div>
+                </li>
+            </ul>
+            <div ng-if="pvps.$resolved && employees.length === 0" class="no-results">No Results</div>
+            <div ng-if="!pvps.$resolved" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
+        </div>
+    </div>
+</div>
+    <div class="modal fade in" id="self-assessment-modal" data-keyboard="true" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <div class="modal-body">
+                    <h4 class="modal-title">{{currentPvP.employee.first_name}}'s Self Assessment</h4>
+                    <div ng-if="!selfAssessment.talent_category" class="distributions">
+                        <p class="distribution">{{currentPvP.employee.first_name}} has not done a self assessment.</p>
+                    </div>
+                    <div ng-if="selfAssessment.talent_category" class="distributions">
+                        <p class="distribution"><span class="tag employee-segment-background-color-{{selfAssessment.talent_category}}">{{selfAssessment.talent_category_label}}</span>{{selfAssessment.talent_category_description}}</p>
+                    </div>
+                    <div ng-if="selfAssessment.engagement" class="distributions">
+
+                            <p class="distribution employee-happiness-container" style="margin-left: 25px;">
+                                <span class="employee-happiness employee-happiness-{{selfAssessment.engagement}} selected" style="margin-right: 32px;"><span class="happiness-{{selfAssessment.engagement}}"></span></span>{{selfAssessment.engagement_description}}
+                            </p>
+                    </div>
+                    <p ng-if="selfAssessment.engagement">Completed on {{ selfAssessment.created_at | date:'MM/dd/yyyy' }}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<style>
+    .done {opacity: .3}
+</style>

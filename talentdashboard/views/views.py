@@ -1164,6 +1164,9 @@ def my_coachees_pvp_evaluations(request):
 @api_view(['GET'])
 def pvp_todos(request):
     evaluations = PvpEvaluation.objects.todos_for_user(request.user)
+    team_id = request.QUERY_PARAMS.get('team_id', None)
+    if team_id is not None:
+        evaluations = evaluations.filter(employee__team__id=team_id)
     serializer = PvpToDoSerializer(evaluations, many=True, context={'request': request})
     return Response(serializer.data)
 

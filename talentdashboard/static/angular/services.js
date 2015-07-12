@@ -129,8 +129,12 @@ angular.module('tdb.services', ['ngResource'])
         return this.query(params);
     };
 
-    PvpEvaluation.getToDos = function() {
-        return this.query({ path: 'todo' });
+    PvpEvaluation.getToDos = function(team_id) {
+        if (team_id != 0) {
+            return this.query({ path: 'todo', team_id: team_id });
+        } else {
+            return this.query({ path: 'todo' });
+        }
     };
 
     return PvpEvaluation;
