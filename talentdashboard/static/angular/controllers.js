@@ -448,8 +448,6 @@ angular.module('tdb.controllers', [])
         });
         modalInstance.result.then(
             function (pvp) {
-                console.log('save return');
-                console.log(pvp);
                 $scope.pvps[index].performance = pvp.performance;
                 $scope.pvps[index].potential = pvp.potential;
                 $scope.pvps[index].talent_category = pvp.talent_category;
@@ -1435,13 +1433,12 @@ angular.module('tdb.controllers', [])
                 $scope.pvps[index].performance = pvp.performance;
                 $scope.pvps[index].potential = pvp.potential;
                 $scope.pvps[index].talent_category = pvp.talent_category;
+                $scope.pvps[index].comment.content = pvp.comment.content;
             }
         );
     };
     $scope.search = function() {
-        console.log('test');
         $scope.pvps = PvpEvaluation.getToDos($scope.filters.team_id);
-
     };
     $scope.search();
 }]);
