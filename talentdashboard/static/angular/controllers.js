@@ -238,11 +238,10 @@ angular.module('tdb.controllers', [])
     }
 }])
 
-.controller('AddEditBioCtrl', ['$scope', '$rootScope', '$routeParams', '$modalInstance', '$location', 'employee', 'leadership', 'employees', 'teams', 'uploading', 'Employee', 'EmployeeLeader', 'fileReader', 'PhotoUpload', function($scope, $rootScope, $routeParams, $modalInstance, $location, employee, leadership, employees, teams, uploading, Employee, EmployeeLeader, fileReader, PhotoUpload) {
+.controller('AddEditBioCtrl', ['$scope', '$rootScope', '$routeParams', '$modalInstance', '$location', 'employee', 'leadership', 'employees', 'teams', 'Employee', 'EmployeeLeader', 'fileReader', 'PhotoUpload', function($scope, $rootScope, $routeParams, $modalInstance, $location, employee, leadership, employees, teams, Employee, EmployeeLeader, fileReader, PhotoUpload) {
     $scope.employee = angular.copy(employee);
     $scope.leadership = angular.copy(leadership);
     $scope.teams = teams;
-    $scope.uploading = uploading;
     $scope.employees = employees;
     $scope.preview=$scope.employee.avatar;
     $scope.cancel = function () {
@@ -710,8 +709,9 @@ angular.module('tdb.controllers', [])
         // get teams
         parsedData.forEach(function (emp) {
             emp["display"] = true;
-            if ("team" in emp && emp.team && emp.team.length)
+            if ("team" in emp && emp.team && emp.team.length) {
                 teams.push(emp.team);
+            }
         });
 
         // post all teams
