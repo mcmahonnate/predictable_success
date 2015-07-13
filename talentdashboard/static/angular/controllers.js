@@ -440,8 +440,6 @@ angular.module('tdb.controllers', [])
         });
         modalInstance.result.then(
             function (pvp) {
-                console.log('save return');
-                console.log(pvp);
                 $scope.pvps[index].performance = pvp.performance;
                 $scope.pvps[index].potential = pvp.potential;
                 $scope.pvps[index].talent_category = pvp.talent_category;
@@ -450,19 +448,42 @@ angular.module('tdb.controllers', [])
     };
 }])
 
-.controller('AddEditPvPCtrl', ['$scope', '$modalInstance', 'pvp', 'PvpEvaluation', 'PvpDescriptions', function($scope, $modalInstance, pvp, PvpEvaluation, PvpDescriptions) {
+.controller('AddEditPvPCtrl', ['$scope', '$modalInstance', 'pvp', 'Prospect', 'PvpEvaluation', 'PvpDescriptions', 'TalentCategories', function($scope, $modalInstance, pvp, Prospect, PvpEvaluation, PvpDescriptions, TalentCategories) {
     $scope.cancel = function () {
         $modalInstance.dismiss();
     };
     $scope.pvp = angular.copy(pvp);
-    $scope.pvp_description = null;
+    Prospect.get({email: $scope.pvp.employee.email}, function(response) {
+        $scope.selfAssessment = response;
+        switch ($scope.selfAssessment.engagement) {
+            case 1:
+                $scope.selfAssessment.engagement = 5
+                break;
+            case 2:
+                $scope.selfAssessment.engagement = 4
+                break;
+            case 4:
+                $scope.selfAssessment.engagement = 2
+                break;
+            case 5:
+                $scope.selfAssessment.engagement = 1
+                break;
+        }
+        $scope.selfAssessment.talent_category_label = TalentCategories.getLabelByTalentCategory($scope.selfAssessment.talent_category);
+    });
+    $scope.showSelfAssessment=false;
+    $scope.pvp.label = TalentCategories.getLabelByTalentCategory(pvp.talent_category);
+    $scope.$watch('pvp.talent_category', function(newVal, oldVal){
+        if (newVal != oldVal) {
+            $scope.pvp.label = TalentCategories.getLabelByTalentCategory(newVal);
+        }
+    },true);
     PvpDescriptions.query().$promise.then(function(response) {
             $scope.pvp_descriptions = response;
         }
     );
+
     $scope.save = function() {
-        console.log('save start');
-        console.log($scope.pvp)
         if ($scope.pvp.comment && $scope.pvp.comment.content) {
             var data = {id: $scope.pvp.id, _potential: $scope.pvp.potential, _performance: $scope.pvp.performance, _content: $scope.pvp.comment.content};
             PvpEvaluation.update(data, function (response) {
@@ -1532,4 +1553,49 @@ angular.module('tdb.controllers', [])
         });
     }
 
+}])
+
+.controller('PvpTodoListCtrl', ['$scope', '$routeParams', '$location', '$modal', '$filter', 'PvpEvaluation', 'Team', 'User', 'analytics', function($scope, $routeParams, $location, $modal, $filter, PvpEvaluation, Team, User, analytics) {
+    analytics.trackPage($scope, $location.absUrl(), $location.url());
+    $scope.filters = {
+        team_id: $routeParams.team_id
+    };
+    $scope.pvps = [];
+    $scope.team_id = $scope.currentTeam ? $scope.currentTeam.id : 0;
+
+    $scope.setTeamFilter = function(teamId) {
+        $location.search('team_id', teamId);
+    };
+    Team.query({}, function(results) {
+        $scope.teams = results;
+        if($scope.filters.team_id) {
+            var filteredTeams = $filter('filter')($scope.teams, {id: $scope.filters.team_id});
+            $scope.currentTeam = filteredTeams.length ? filteredTeams[0] : null;
+        }
+    });
+    $scope.editPvP = function (pvps, index) {
+        var modalInstance = $modal.open({
+            animation: true,
+            backdrop : 'static',
+            templateUrl: '/static/angular/partials/_modals/edit-pvp.html',
+            controller: 'AddEditPvPCtrl',
+            resolve: {
+                pvp: function () {
+                    return pvps[index]
+                }
+            }
+        });
+        modalInstance.result.then(
+            function (pvp) {
+                $scope.pvps[index].performance = pvp.performance;
+                $scope.pvps[index].potential = pvp.potential;
+                $scope.pvps[index].talent_category = pvp.talent_category;
+                $scope.pvps[index].comment.content = pvp.comment.content;
+            }
+        );
+    };
+    $scope.search = function() {
+        $scope.pvps = PvpEvaluation.getToDos($scope.filters.team_id);
+    };
+    $scope.search();
 }]);
