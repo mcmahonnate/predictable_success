@@ -720,6 +720,8 @@ angular.module('tdb.controllers', [])
                 team_ids[t.name] = t.id;
             });
 
+            console.log(data);
+
             addEmployees(0);
         });
 
@@ -743,7 +745,7 @@ angular.module('tdb.controllers', [])
         // single employee
         function addEmp(data) {
             // parseint checks if team id already assigned
-            if ("team" in data && (data['team'] !== undefined) && (data['team'] !== null) && (parseInt(data['team']) !== data['team']))
+            if ("team" in data && (data.team !== undefined) && (data.team !== null) && (parseInt(data.team) !== data.team) && data.team.trim().length && (data.team in team_ids))
                 data["team"] = team_ids[data.team];
             else
                 data["team"] = null;

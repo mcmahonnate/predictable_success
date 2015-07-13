@@ -1107,8 +1107,13 @@ def upload_teams(request):
     teams = request.DATA['teams']
     trim_teams = set(teams)
     for trim_team in trim_teams:
-        team = Team(name=trim_team)
-        team.save()
+        team = None
+        try:
+            # teams = Team.objects.filter(name=trim_team)
+            team = Team.objects.get(name=trim_team)
+        except Team.DoesNotExist:
+            team = Team(name=trim_team)
+            team.save()
         serializer = TeamSerializer(team, context={'request': request})
         response_data.append(serializer.data)
     return Response(response_data)
