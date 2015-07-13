@@ -289,7 +289,7 @@ class CreateEmployeeSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Employee
-        fields = ('first_name', 'last_name', 'email', 'job_title', 'hire_date', 'team', 'display', 'current_leader')
+        fields = ('first_name', 'last_name', 'email', 'job_title', 'hire_date', 'departure_date', 'team', 'display', 'current_leader')
 
 class EditEmployeeSerializer(serializers.HyperlinkedModelSerializer):
     team = serializers.PrimaryKeyRelatedField(allow_null=True, queryset=Team.objects.all())
@@ -301,6 +301,7 @@ class EditEmployeeSerializer(serializers.HyperlinkedModelSerializer):
         instance.job_title = validated_data.get('job_title', instance.job_title)
         instance.hire_date = validated_data.get('hire_date', instance.email)
         instance.departure_date = validated_data.get('departure_date', instance.email)
+        instance.team = validated_data.get('team', instance.team)
         instance.display = validated_data.get('display', instance.email)
         instance.save()
         return instance

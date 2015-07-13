@@ -244,6 +244,7 @@ angular.module('tdb.controllers', [])
     $scope.teams = teams;
     $scope.employees = employees;
     $scope.preview=$scope.employee.avatar;
+    $scope.files = [];
     $scope.cancel = function () {
         $modalInstance.dismiss();
     };
