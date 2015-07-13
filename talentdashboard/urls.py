@@ -10,7 +10,8 @@ from rest_framework import routers
 from views.payment import ChargeView, PaymentView
 from views.homepage import IndexView
 from insights.views import Signup, Report, Survey, Confirmation
-
+from checkins.api.views import EmployeeCheckInList, HostCheckInList, CreateCheckIn, CheckInTypeList, RetrieveUpdateDestroyCheckIn
+from engagement.api.views import RetrieveUpdateDestroyHappiness, CreateHappiness, EmployeeHappinessList
 router = routers.DefaultRouter()
 router.register(r'^api/v1/teams', TeamViewSet)
 router.register(r'^api/v1/mentorships', MentorshipViewSet)
@@ -61,6 +62,11 @@ urlpatterns = patterns('',
     url(r'^api/v1/my-coachees-pvp-evaluations/$', my_coachees_pvp_evaluations),
     url(r'^api/v1/happiness-reports/$', happiness_reports),
     url(r'^api/v1/engagement/employees/(?P<pk>[0-9]+)/$', (auth_employee('AllAccess')(EmployeeEngagement.as_view()))),
+
+    url(r'^api/v1/happiness/employees/(?P<employee_id>[0-9]+)/$', (auth_employee('AllAccess')(EmployeeHappinessList.as_view()))),
+    url(r'^api/v1/happiness/(?P<pk>[0-9]+)/$', (auth_employee('AllAccess')(RetrieveUpdateDestroyHappiness.as_view()))),
+    url(r'^api/v1/happiness/$', (auth_employee('AllAccess')(CreateHappiness.as_view()))),
+
     url(r'^api/v1/assessment/employees/(?P<pk>[0-9]+)/$', (auth_employee('AllAccess')(Assessment.as_view()))),
     url(r'^api/v1/assessment/mbti/employees/(?P<pk>[0-9]+)/$', (auth_employee('AllAccess')(EmployeeMBTI.as_view()))),
     url(r'^api/v1/assessment/mbti/teams/(?P<pk>[0-9]+)/$', (auth('AllAccess')(TeamMBTIReportDetail.as_view()))),
@@ -91,6 +97,12 @@ urlpatterns = patterns('',
     url(r'^api/v1/tasks/employees/(?P<pk>[0-9]+)/$', (auth_employee('AllAccess','CoachAccess','TeamLeadAccess')(EmployeeTaskList.as_view()))),
     url(r'^api/v1/tasks/(?P<pk>[0-9]+)?/$', (auth('AllAccess','CoachAccess','TeamLeadAccess')(TaskDetail.as_view()))),
     url(r'^api/v1/tasks/$', (auth('AllAccess','CoachAccess','TeamLeadAccess')(TaskDetail.as_view()))),
+
+    url(r'^api/v1/checkins/employees/(?P<employee_id>[0-9]+)/$', (auth('AllAccess','CoachAccess','TeamLeadAccess')(EmployeeCheckInList.as_view()))),
+    url(r'^api/v1/checkins/hosted/$', (auth('AllAccess','CoachAccess','TeamLeadAccess')(HostCheckInList.as_view()))),
+    url(r'^api/v1/checkins/(?P<pk>[0-9]+)/$', (auth('AllAccess','CoachAccess','TeamLeadAccess')(RetrieveUpdateDestroyCheckIn.as_view()))),
+    url(r'^api/v1/checkins/$', (auth('AllAccess','CoachAccess','TeamLeadAccess')(CreateCheckIn.as_view()))),
+    url(r'^api/v1/checkintypes/$', (auth('AllAccess','CoachAccess','TeamLeadAccess')(CheckInTypeList.as_view()))),
 
     url(r'^api/v1/image-upload/employees/(?P<pk>[0-9]+)/$', ImageUploadView.as_view()),
     url(r'^api/v1/talent-categories/$', talent_categories),

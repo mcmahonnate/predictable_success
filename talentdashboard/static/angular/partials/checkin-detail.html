@@ -1,0 +1,65 @@
+<div class="container checkin" ng-controller="CheckInDetailsCtrl">
+	<div class="checkin-header">
+		<div class="type-tag">
+			<span ng-show="!checkin.other_type_description">{{ checkin.type.name }}</span> 
+			<span ng-show="checkin.other_type_description">{{ checkin.other_type_description }}</span>
+		</div>
+		<a href="#/employees/{{employee.id}}">
+			<img ng-src="{{ checkin.employee.avatar_small }}" class="headshot medium-headshot pull-left"/>
+		</a>
+		<div class="pull-left">
+			<h1><a href="#/employees/{{ checkin.employee.id }}">{{ checkin.employee.full_name }}</a></h1>
+			<p class="timestamp">{{ checkin.host.full_name }} checked in {{ checkin.date | fromNow }}</p>
+		</div>
+	</div>	
+    <div class="checkin-summary panel">
+    	<span class="checkin-summary-instance" data-ng-bind-html="checkin.summary | new_line | cut:true:length">
+	</div>
+
+	<div class="panel panel-happiness" ng-show="checkin.happiness" style="overflow:hidden">
+		<h4 class="panel-title pull-left">Happiness: <span class="employee-happiness-color-{{checkin.happiness.assessment}}">{{ checkin.happiness.assessment_verbose }}</span></h4>
+	</div>		
+
+    <div class="panel panel-tasks todos">
+		<h4 class="panel-title">Tasks</h4>
+	    <tabset>
+	        <tab heading="To Do" active="true">
+	            <div ng-show="checkin.tasks.length === 0 && !busy" class="todos-empty">
+	                <p ng-show="view == 'my-view'">You currently don't have any tasks. Add tasks on employee profile pages.</p>
+	                <p ng-show="view == 'employee-view'">There are no tasks for {{ employee.full_name }}.</p>
+	            </div>
+	            <div ng-if="checkin.tasks.length > 0">
+	                <div class="row shaded">
+	                    <div class="col-md-4 col-lg-5"></div>
+	                    <div class="col-xs-3">Assigned To</div>
+	                    <div class="col-xs-2">Due Date</div>
+	                </div>
+			        <div class="row todo" ng-repeat="task in checkin.tasks">
+			            <div ng-include="'/static/angular/partials/_widgets/task-list-item.html'" ng-init="mode='simple'"></div>
+			        </div>
+	                <button class="btn btn-link btn-sm" ng-show="todo_has_next && !busy" ng-click="loadTasks(false)">Load More Tasks</button>
+	            </div>
+	            <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
+	        </tab>
+	        <tab heading="Done">
+	            <div ng-show="done.length === 0 && !busy" class="todos-empty">
+	                <p ng-show="view == 'my-view'">You don't have any completed tasks.</p>
+	                <p ng-show="view == 'employee-view'">There are no completed tasks for {{ employee.full_name }}.</p>
+	            </div>
+	            <div ng-if="done.length > 0">
+	                <div class="row shaded">
+	                    <div class="col-md-4 col-lg-5"></div>
+	                    <div class="col-xs-3">Assigned To</div>
+	                    <div class="col-xs-2">Due Date</div>
+	                </div>
+			        <div class="row todo" ng-repeat="task in checkin.tasks">
+			            <div ng-include="'/static/angular/partials/_widgets/task-list-item.html'" ng-init="mode='simple'"></div>
+			        </div>
+	                <button class="btn btn-link btn-sm" ng-show="done_has_next && !busy" ng-click="loadTasks(true)">Load More Tasks</button>
+	            </div>
+	            <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
+	        </tab>
+	    </tabset>
+    </div>  
+
+</div>

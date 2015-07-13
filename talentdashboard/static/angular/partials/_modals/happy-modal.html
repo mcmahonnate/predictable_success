@@ -7,19 +7,19 @@
                     <h3 class="modal-title">How professionally happy is {{employee.full_name}}?</h3>                
                     <div class="employee-happiness-container">
                         <div class="employee-happiness employee-happiness-5" ng-click="happy.assessment=5" ng-class="{selected: happy.assessment==5}">
-                            <span class="veryhappy"></span>
+                            <span class="happiness-5"></span>
                         </div>
                         <div class="employee-happiness employee-happiness-4" ng-click="happy.assessment=4" ng-class="{selected: happy.assessment==4}">
-                            <span class="happy"></span>
+                            <span class="happiness-4"></span>
                         </div> 
                         <div class="employee-happiness employee-happiness-3" ng-click="happy.assessment=3" ng-class="{selected: happy.assessment==3}">
-                            <span class="indifferent"></span>
+                            <span class="happiness-3"></span>
                         </div>   
                         <div class="employee-happiness employee-happiness-2" ng-click="happy.assessment=2" ng-class="{selected: happy.assessment==2}">
-                            <span class="unhappy"></span>
+                            <span class="happiness-2"></span>
                         </div> 
                         <div class="employee-happiness employee-happiness-1" ng-click="happy.assessment=1" ng-class="{selected: happy.assessment==1}">
-                            <span class="unhappy"></span>
+                            <span class="happiness-1"></span>
                         </div> 
                     </div>                                                                                                                       
                     <textarea class="form-control" ng-model="happy.comment.content" rows="6" cols="50" placeholder="Add your notes here."></textarea>

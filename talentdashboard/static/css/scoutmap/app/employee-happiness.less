@@ -63,24 +63,22 @@
 	}
 
 	.employee-happiness{
-		display: block;
-		width: 46px;
-		height: 48px;
+		display: inline-block;
+		width: 45px;
+		height: 45px;
 		border-radius: 90px;
 		position: relative;
-		float: left;
-	  	margin-right: 5px;
-	  	cursor: pointer;
+		cursor: pointer;
 	  	opacity: .3;
 	}
 	.employee-happiness span:before {
 		font-family: 'Emoticons';
-	  	font-size: 60px;
-	  	text-shadow: none;
-	  	color: #fff;
-	  	top: 11px;
-	  	position: absolute;
-	  	right: -6px;
+		font-size: 61px;
+		text-shadow: none;
+		color: #fff;
+		top: 8px;
+		position: absolute;
+		right: -7px;
 	}	
 	.employee-happiness:hover {
 		opacity: 1;
@@ -125,4 +123,22 @@
 }
 .happiness-0:before {
   	content: "\002C";
+}
+
+
+
+.employee-happiness-color-5 { /* Very happy */
+	color: #32d0a2;
+}
+.employee-happiness-color-4 { /* Happy */
+	color: #5ed032;
+}
+.employee-happiness-color-3 { /* Indifferent */
+	color: #bcd032;
+}
+.employee-happiness-color-2 { /* Unhappy */
+	color: #ffca00;
+}
+.employee-happiness-color-1 { /* Very Unhappy */
+	color: #ff0000;
 }

@@ -1,5 +1,12 @@
 var app = angular.module('tdb', [
-        'tdb.services', 'tdb.preferences.services', 'tdb.search.controllers', 'tdb.search.services', 'tdb.services.tasks', 'tdb.controllers', 'tdb.controllers.tasks', 'tdb.controllers.comments', 'tdb.directives', 'tdb.filters', 'angular.filter', 'angular-carousel', 'analytics', 'ui.bootstrap', 'ngCsv','ngRoute','ui-notification'])
+        'tdb.services', 'tdb.controllers', 'tdb.directives', 'tdb.filters',
+        'tdb.preferences.services',
+        'tdb.search.controllers', 'tdb.search.services',
+        'tdb.services.tasks', 'tdb.controllers.tasks',
+        'tdb.controllers.comments',
+        'tdb.services.checkins', 'tdb.controllers.checkins',
+        'tdb.engagement.services',
+        'angular-carousel', 'analytics', 'ui.bootstrap', 'ngCsv','ngRoute','ui-notification', 'ngMessages'])
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.
           when('/', {template: '<div ng-include src="templateUrl"></div>', controller: 'CompanyOverviewCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
@@ -7,8 +14,6 @@ var app = angular.module('tdb', [
           when('/engagement-survey/:employeeId/:surveyId', {templateUrl: '/static/angular/partials/engagement-survey.html', controller: 'EngagementSurveyCtrl'}).
           when('/team-survey/:employeeId/:surveyId', {templateUrl: '/static/angular/partials/team-survey.html'}).
           when('/reports', {templateUrl: '/static/angular/partials/reports.html', controller: 'ReportsCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
-          when('/reports/self-assess', {templateUrl: '/static/angular/partials/self-assess-report.html', controller: 'SelfAssessReportCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
-
           when('/teams/:id/', {template: '<div ng-include src="templateUrl"></div>', controller: 'TeamOverviewCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
           when('/employees/:id/discussions', {templateUrl: '/static/angular/partials/employee-discussion-overview.html', controller: 'EmployeeDetailCtrl', resolve: {authorizeRoute: authorizeRoute}}).
           when('/employees/my-team', {templateUrl: '/static/angular/partials/employee-list.html', controller: 'EmployeeSearchCtrl', resolve: {authorizeRoute: authorizeRoute, view: function() {return 'my-team';}}}).
@@ -18,10 +23,12 @@ var app = angular.module('tdb', [
           when('/coach', {templateUrl: '/static/angular/partials/coach-overview.html', controller: 'CoachDetailCtrl', resolve: {authorizeRoute: authorizeRoute}}).
           when('/pvp/todo', {templateUrl: '/static/angular/partials/pvp-todo.html', controller: 'PvpEvaluationTodosCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
           when('/pvp/todos', {templateUrl: '/static/angular/partials/pvp-todo-list.html', controller: 'PvpTodoListCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
-
           when('/team-lead', {template: '<div ng-include src="templateUrl"></div>', controller: 'LeaderOverviewCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
           when('/feedback/', {templateUrl: '/static/angular/partials/feedback/index.html', controller: 'RequestFeedbackCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
+          when('/reports/self-assess', {templateUrl: '/static/angular/partials/self-assess-report.html', controller: 'SelfAssessReportCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
           when('/tasks', {templateUrl: '/static/angular/partials/tasks.html', controller: 'TasksCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
+          when('/checkin', {templateUrl: '/static/angular/partials/checkin.html', controller: 'AddEditCheckInCtrl', resolve: {authorizeRoute: authorizeRoute}}).
+          when('/checkins/:id', {templateUrl: '/static/angular/partials/checkin-detail.html', controller: 'CheckInDetailsCtrl', resolve: {authorizeRoute: authorizeRoute}}).
           otherwise({redirectTo: '/'});
     }])
     .run(['$rootScope', 'User', 'TalentCategories', 'Customers', function($rootScope, User, TalentCategories, Customers) {

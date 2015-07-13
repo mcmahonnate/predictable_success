@@ -16,16 +16,7 @@ angular.module('tdb.controllers.tasks', [])
 
         $scope.save = function (form) {
             if(form.$invalid) return;
-
-            if($scope.taskIsBeingEdited()) {
-                Task.update($scope.task, (function (value) {
-                    $modalInstance.close(value);
-                }));
-            } else {
-                $scope.task.$save(function (value) {
-                    $modalInstance.close(value);
-                });
-            }
+            $modalInstance.close($scope.task);
         };
 
         $scope.openDatePicker = function ($event) {
@@ -39,7 +30,7 @@ angular.module('tdb.controllers.tasks', [])
         }
     }])
 
-    .controller('TaskListCtrl', ['$scope', '$attrs', '$modal', 'Task', function ($scope, $attrs, $modal, Task) {
+    .controller('TaskListCtrl', ['$rootScope', '$scope', '$attrs', '$modal', 'Task', function ($rootScope, $scope, $attrs, $modal, Task) {
         var employee_id = $scope.employee ? $scope.employee.id : null;
         $scope.view = $attrs.view;
         $scope.filter = $attrs.filter;
@@ -105,7 +96,9 @@ angular.module('tdb.controllers.tasks', [])
 
             modalInstance.result.then(
                 function (newTask) {
-                    $scope.todos.push(newTask);
+                    newTask.$save(function(result) {
+                        $scope.todos.push(result);
+                    });
                 }
             );
         };
@@ -124,30 +117,21 @@ angular.module('tdb.controllers.tasks', [])
 
             modalInstance.result.then(
                 function (editedTask) {
-                    replaceItemInList($scope.todos, task, editedTask);
+                    Task.update(editedTask, function(result) {
+                        $rootScope.replaceItemInList($scope.todos, task, result);
+                    });
                 }
             );
         };
 
         $scope.deleteTask = function (task) {
             Task.delete(task, function() {
-                removeItemFromList($scope.todos, task);
+                $rootScope.removeItemFromList($scope.todos, task);
             });
         };
 
         $scope.toggleCompleted = function (task) {
             Task.update(task);
-        };
-
-        var removeItemFromList = function (list, item) {
-            var index = list.indexOf(item);
-            list.splice(index, 1);
-        };
-
-        var replaceItemInList = function (list, currentItem, newItem) {
-            var index = list.indexOf(currentItem);
-            list.splice(index, 1);
-            list.splice(index, 0, newItem);
         };
 
         $scope.loadTasks(false); //load todos
