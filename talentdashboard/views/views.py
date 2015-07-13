@@ -1017,6 +1017,9 @@ class EmployeeDetail(APIView):
         if 'hire_date' in request.DATA and request.DATA['hire_date'] is not None:
             date_string = request.DATA['hire_date']
             request.DATA['hire_date'] = dateutil.parser.parse(date_string).date()
+        if 'departure_date' in request.DATA and request.DATA['departure_date'] is not None:
+            date_string = request.DATA['departure_date']
+            request.DATA['departure_date'] = dateutil.parser.parse(date_string).date()
 
         serializer = CreateEmployeeSerializer(data = request.DATA, context={'request':request})
         if serializer.is_valid():
@@ -1070,7 +1073,11 @@ class EmployeeDetail(APIView):
         if 'hire_date' in request.DATA and request.DATA['hire_date'] is not None:
             date_string = request.DATA['hire_date']
             request.DATA['hire_date'] = dateutil.parser.parse(date_string).date()
+        if 'departure_date' in request.DATA and request.DATA['departure_date'] is not None:
+            date_string = request.DATA['departure_date']
+            request.DATA['departure_date'] = dateutil.parser.parse(date_string).date()
 
+        # by name (for upload)
         if 'team_leader' in request.DATA:
             leader = Employee.objects.get(id=request.DATA['team_leader']['id'])
             employee.current_leader = leader
@@ -1078,10 +1085,18 @@ class EmployeeDetail(APIView):
             serializer = EmployeeSerializer(employee, context={'request':request})
             return Response(serializer.data)
 
+        # by id
+        if 'leader_id' in request.DATA:
+            if request.DATA['leader_id']:
+                leader = Employee.objects.get(id=request.DATA['leader_id'])
+                employee.current_leader = leader
+                employee.save()
+
         serializer = EditEmployeeSerializer(employee, request.DATA, context={'request':request})
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
+            emp_serializer = EmployeeSerializer(employee, context={'request':request})
+            return Response(emp_serializer.data)
         else:
             return Response(serializer.errors, status=400)
 
