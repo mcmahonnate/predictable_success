@@ -89,6 +89,10 @@
 		display: block;
 	  	margin-top: 20px;
 		font-weight: bold;
+
+	    @media only screen and (max-width : 640px) {
+	        margin-left: -55px;
+	    } 	
 	}
 
 	.comment-item {
@@ -112,6 +116,16 @@
   			margin: 15px 0 5px;
   			font-size: 14px;
   			line-height: 20px;
+
+		    @media only screen and (max-width : 640px) {
+		        margin-top: 25px;
+		    } 
+
+  			.avatar-container {
+			    @media only screen and (max-width : 640px) {
+			        display: none;
+			    } 
+			}    			
 		}
 
 		.comment-associated-avatar {
@@ -166,6 +180,10 @@
 	.comment-replies {
 		margin: 10px 60px 0 60px;
 
+	    @media only screen and (max-width : 640px) {
+	        margin: 10px 0 0;
+	    } 
+
 		.comment-reply {
 			margin-bottom: 2px;
 			padding: 15px 15px 20px;
@@ -209,6 +227,10 @@
 				@media only screen and (max-width : 1280px) {
 					width: 70%;
 				}
+			    @media only screen and (max-width : 640px) {
+			        width: 100%;
+			        margin-bottom: 5px;
+			    } 	
 			}
 		}
 		.comment-reply-name {
@@ -250,6 +272,10 @@
 		    display: inline;
 		    vertical-align: top;
 		    margin-left: 0;
+
+		    @media only screen and (max-width : 640px) {
+		        width: 100%;
+		    }   
 		  }
 		  button.small-comment:hover:enabled {
 		    background-color:#272727;
@@ -264,6 +290,17 @@
 		      cursor: default;opacity:0.4;
 		  }
 	}
+}
+
+.btn-show-more {
+	@media only screen and (max-width : 640px) {
+		background-color: #efefef;
+	  	font-size: 14px;
+	  	display: block;
+	  	width: 100%;
+	  	padding: 10px;
+	  	font-weight: bold;
+	}  	
 }
 
 /* We don't need to show "about" avatars on employee pages */ 
