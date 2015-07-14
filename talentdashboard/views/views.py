@@ -45,7 +45,7 @@ from collections import defaultdict
 import collections
 import dateutil.parser, copy
 from org.models import Mentorship, Team, Leadership, Attribute
-from org.api.serializers import UserSerializer, EmployeeSerializer, TeamSerializer, MentorshipSerializer, LeadershipSerializer, AttributeSerializer, MinimalEmployeeSerializer
+from org.api.serializers import UserSerializer, EmployeeSerializer, TeamSerializer, MentorshipSerializer, LeadershipSerializer, AttributeSerializer, MinimalEmployeeSerializer, EditEmployeeSerializer, CreateEmployeeSerializer
 from assessment.models import MBTI
 from assessment.api.serializers import MBTIReportSerializer, MBTISerializer
 from blah.api.serializers import SubCommentSerializer, EmployeeCommentSerializer, TeamCommentSerializer
