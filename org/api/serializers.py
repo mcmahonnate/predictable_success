@@ -243,9 +243,10 @@ class EditEmployeeSerializer(serializers.HyperlinkedModelSerializer):
         instance.last_name = validated_data.get('last_name', instance.last_name)
         instance.email = validated_data.get('email', instance.email)
         instance.job_title = validated_data.get('job_title', instance.job_title)
-        instance.hire_date = validated_data.get('hire_date', instance.email)
-        instance.departure_date = validated_data.get('departure_date', instance.email)
-        instance.display = validated_data.get('display', instance.email)
+        instance.hire_date = validated_data.get('hire_date', instance.hire_date)
+        instance.departure_date = validated_data.get('departure_date', instance.departure_date)
+        instance.team = validated_data.get('team', instance.team)
+        instance.display = validated_data.get('display', instance.display)
         instance.save()
         return instance
 
