@@ -16,6 +16,7 @@ from blah.commentreports import get_employees_with_comments
 from engagement.engagementreports import get_employees_with_happiness_scores
 from blah.models import Comment
 from todo.models import Task
+from checkins.models import CheckIn
 from engagement.models import Happiness, SurveyUrl, generate_survey
 from kpi.models import Performance, Indicator
 from assessment.models import EmployeeAssessment, MBTI
@@ -145,6 +146,64 @@ def all_employee_comment_report(request):
         report = get_employees_with_comments(int(days_ago), neglected)
         serializer = TalentCategoryReportSerializer(report, context={'request': request})
         return Response(serializer.data)
+
+@api_view(['POST'])
+def comment_report_timespan(request):
+    start_date = dateutil.parser.parse(request.DATA['start_date']).date()
+    end_date = dateutil.parser.parse(request.DATA['end_date']).date()
+    
+    response_data = {}
+    comments = Comment.objects.filter(created_date__range=[start_date, end_date])
+    response_data['total'] = len(comments)
+    response_data['by_user'] = {};
+
+    for comment in comments:
+        user = comment.owner.username
+        if user in response_data['by_user']:
+            response_data['by_user'][user] += 1
+        else:
+            response_data['by_user'][user] = 1
+
+    return Response(response_data)
+
+@api_view(['POST'])
+def task_report_timespan(request):
+    start_date = dateutil.parser.parse(request.DATA['start_date']).date()
+    end_date = dateutil.parser.parse(request.DATA['end_date']).date()
+    
+    response_data = {}
+    tasks = Task.objects.filter(created_date__range=[start_date, end_date])
+    response_data['total'] = len(tasks)
+    response_data['by_user'] = {};
+
+    for task in tasks:
+        user = task.created_by.user.username
+        if user in response_data['by_user']:
+            response_data['by_user'][user] += 1
+        else:
+            response_data['by_user'][user] = 1
+
+    return Response(response_data)
+
+@api_view(['POST'])
+def checkin_report_timespan(request):
+    start_date = dateutil.parser.parse(request.DATA['start_date']).date()
+    end_date = dateutil.parser.parse(request.DATA['end_date']).date()
+    
+    response_data = {}
+    checkins = CheckIn.objects.filter(date__range=[start_date, end_date])
+    response_data['total'] = len(checkins)
+    response_data['by_user'] = {};
+
+    for checkin in checkins:
+        print(checkin.host)
+        user = checkin.host.user.username
+        if user in response_data['by_user']:
+            response_data['by_user'][user] += 1
+        else:
+            response_data['by_user'][user] = 1
+
+    return Response(response_data)
 
 class TeamMBTIReportDetail(APIView):
     def get(self, request, pk, format=None):
