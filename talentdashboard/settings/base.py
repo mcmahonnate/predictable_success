@@ -184,6 +184,7 @@ TENANT_APPS = (
     'todo',
     'engagement',
     'assessment',
+    'activity',
     'storages',
     'kpi',
     'feedback',
