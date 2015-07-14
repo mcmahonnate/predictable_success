@@ -29,8 +29,8 @@
                             <span class="segment employee-segment-background-color-{{pvp.talent_category}}"><span class="fa fa-check" style="font-size:42px;color:#ebedf3;"></span></span></span>
                         </div>
                     </div>
-                    <h3 class="employee-name centered"><a href="#/employees/{{employee.pk}}">{{employee.full_name}}</a></h3>
-                    <div class="team-name centered "><a ng-click="setTeamFilter(pvp.employee.team.id, pvp.employee.team.name);menu.show=false;">{{pvp.employee.team_name}}</a></div>
+                    <h3 class="employee-name centered"><a ng-click="editPvP(pvps, $index)" style="cursor:pointer">{{pvp.employee.full_name}}</a></h3>
+                    <div class="team-name centered "><a ng-click="editPvP(pvps, $index)" style="cursor:pointer">{{pvp.employee.team.name}}</a></div>
                 </li>
             </ul>
             <div ng-if="pvps.$resolved && employees.length === 0" class="no-results">No Results</div>
