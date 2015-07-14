@@ -10,7 +10,7 @@
                 </div>
                 <div style="margin-top: 10px;width:36%;float:left;padding: 0 10px">
                     <span style="margin:10px 0;">First Name</span>
-                    <span style="color:red;" ng-show="uploadForm.first_name.$dirty && uploadForm.first_name.$invalid">
+                    <span style="color:red;" ng-show="(uploadForm.first_name.$dirty && uploadForm.first_name.$invalid) || (uploading && uploadForm.first_name.$invalid)">
                         <span ng-show="uploadForm.first_name.$error.required">*First name is required.</span>
                     </span>
                     <input type="text" name="first_name" ng-model="employee.first_name" placeholder="required" class="view-value-input form-control" required tabindex="1">
@@ -24,14 +24,14 @@
                         <input type="text" ng-model="employee.team.name" placeholder="optional" typeahead-on-select="employee.team=$item" typeahead="team.name for team in teams | filter:{name:$viewValue}:startsWith | orderBy:'name' | limitTo:8" typeahead-editable="false" class="view-value-input form-control" tabindex="5"/>
                     </div>
                     <span style="margin:10px 0;">Email</span>
-                    <span style="color:red;" ng-show="uploadForm.email.$dirty && uploadForm.email.$invalid">
+                    <span style="color:red;" ng-show="(uploadForm.email.$dirty && uploadForm.email.$invalid) || (uploading && uploadForm.email.$invalid)">
                         <span ng-show="uploadForm.email.$error.required">*Email is required.</span>
                     </span>
                     <input type="email" name="email" ng-model="employee.email" placeholder="required" class="view-value-input form-control" required tabindex="4">
                 </div>
                 <div style="margin-top: 10px;width:35%;float:left;padding-right: 10px">
                     <span style="margin:10px 0;">Last Name</span>
-                    <span style="color:red;" ng-show="uploadForm.last_name.$dirty && uploadForm.last_name.$invalid">
+                    <span style="color:red;" ng-show="(uploadForm.last_name.$dirty && uploadForm.last_name.$invalid) || (uploading && uploadForm.last_name.$invalid)">
                         <span ng-show="uploadForm.last_name.$error.required">*Last name is required.</span>
                     </span>
                     <input type="text" name="last_name" ng-model="employee.last_name" placeholder="required" class="view-value-input form-control" required tabindex="2">
@@ -41,6 +41,9 @@
                         <datepicker show-weeks="showWeeks"></datepicker>
                     </div>
                     <span style="margin:10px 0;">Team Lead</span>
+                    <span style="color:red;" ng-show="leaderUpload">
+                        <span>*Team Lead is invalid.</span>
+                    </span>
                     <div class="edit-dropdown">
                         <input type="text" ng-model="employee.current_leader.full_name" placeholder="optional" typeahead-on-select="employee.current_leader=$item" typeahead="employee.full_name for employee in employees | filter:{full_name:$viewValue}:startsWith | orderBy:'full_name' | limitTo:8" typeahead-editable="false" class="view-value-input form-control" tabindex="6"/>
                     </div>

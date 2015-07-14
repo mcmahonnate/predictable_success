@@ -834,6 +834,9 @@ angular.module('tdb.controllers', [])
                         },
                         uploading: function() {
                             return true
+                        },
+                        leaderUpload: function() {
+                            return leaderUpload
                         }
                     }
                 });
@@ -858,11 +861,12 @@ angular.module('tdb.controllers', [])
 
     }])
 
-    .controller('importModalCtrl', ['$scope', '$rootScope', '$routeParams', '$modalInstance', '$location', 'employee', 'leadership', 'employees', 'teams', 'uploading', 'Employee', 'EmployeeLeader', 'fileReader', 'PhotoUpload', function($scope, $rootScope, $routeParams, $modalInstance, $location, employee, leadership, employees, teams, uploading, Employee, EmployeeLeader, fileReader, PhotoUpload) {
+    .controller('importModalCtrl', ['$scope', '$rootScope', '$routeParams', '$modalInstance', '$location', 'employee', 'leadership', 'employees', 'teams', 'uploading', 'leaderUpload', 'Employee', 'EmployeeLeader', 'fileReader', 'PhotoUpload', function($scope, $rootScope, $routeParams, $modalInstance, $location, employee, leadership, employees, teams, uploading, leaderUpload, Employee, EmployeeLeader, fileReader, PhotoUpload) {
         $scope.employee = angular.copy(employee);
         $scope.leadership = angular.copy(leadership);
         $scope.teams = teams;
-        // $scope.uploading = uploading;
+        $scope.uploading = uploading;
+        $scope.leaderUpload = leaderUpload;
         $scope.employees = employees;
         $scope.preview=$scope.employee.avatar;
         $scope.cancel = function () {

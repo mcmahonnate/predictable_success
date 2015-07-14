@@ -196,7 +196,6 @@ def checkin_report_timespan(request):
     response_data['by_user'] = {};
 
     for checkin in checkins:
-        print(checkin.host)
         user = checkin.host.user.username
         if user in response_data['by_user']:
             response_data['by_user'][user] += 1
