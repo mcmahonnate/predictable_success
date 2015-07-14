@@ -5,7 +5,7 @@ var app = angular.module('tdb', [
         'tdb.services.tasks', 'tdb.controllers.tasks',
         'tdb.controllers.comments',
         'tdb.services.checkins', 'tdb.controllers.checkins',
-        'tdb.engagement.services',
+        'tdb.engagement.services', 'angular.filter',
         'angular-carousel', 'analytics', 'ui.bootstrap', 'ngCsv','ngRoute','ui-notification', 'ngMessages'])
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.

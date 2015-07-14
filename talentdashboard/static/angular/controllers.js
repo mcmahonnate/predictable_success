@@ -563,19 +563,12 @@ angular.module('tdb.controllers', [])
             function (data) {
                 $scope.employee = data;
                 $scope.employee.hire_date = $rootScope.parseDate($scope.employee.hire_date);
-            }
-        );
-
-        EmployeeLeader.get(
-            {id: $routeParams.id},
-            function (data) {
-                $scope.leadership = data;
-                $scope.showCompensation = false;
-                if ($scope.leadership.leader.id == $rootScope.currentUser.employee.id) {
+                if ($scope.employee.current_leader && $scope.employee.current_leader.id == $rootScope.currentUser.employee.id) {
                     $scope.showCompensation = true;
                 }
             }
         );
+
         $scope.happyIndex = 0;
         Engagement.query(
             {id: $routeParams.id},

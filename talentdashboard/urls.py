@@ -135,5 +135,10 @@ urlpatterns = patterns('',
     url(r'^api/v1/import-data/employee$', upload_employee),
     url(r'^api/v1/import-data/leadership$', upload_leadership),
     url(r'^api/v1/import-data/teams$', upload_teams),
+
+    url(r'^api/v1/reports/comments$', comment_report_timespan),
+    url(r'^api/v1/reports/tasks$', task_report_timespan),
+    url(r'^api/v1/reports/checkins$', checkin_report_timespan),
+
     url(r'^', include(router.urls)),
 )

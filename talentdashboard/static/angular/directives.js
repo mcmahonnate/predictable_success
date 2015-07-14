@@ -496,17 +496,6 @@ angular.module('tdb.directives', [])
   }
 })
 
-.directive('pvpChart', ['TalentCategories', function(TalentCategories) {
-    return function(scope, element, attrs){
-        var svg = element[0];
-        var potential = parseInt(attrs.potential, 10);
-        var performance = parseInt(attrs.performance, 10);
-        var talentCategory = parseInt(attrs.talentCategory, 10);
-        var squareColor = TalentCategories.getColorByTalentCategory(talentCategory);
-        angular.element(svg.querySelector('.pvp-square-' + performance + '-' + potential)).attr('fill', squareColor);
-    };
-}])
-
 .directive('importTable', function() {
     return {
         restrict: 'E',
