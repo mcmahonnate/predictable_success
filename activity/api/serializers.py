@@ -12,8 +12,12 @@ logger = getLogger('talentdashboard')
 class EventSerializer(serializers.ModelSerializer):
     employee = MinimalEmployeeSerializer()
     user = UserSerializer()
+    type = serializers.SerializerMethodField()
     description = serializers.SerializerMethodField()
     verb = serializers.SerializerMethodField()
+
+    def get_type(self, obj):
+        return obj.event_type.name
 
     def get_description(self, obj):
         comment_type = ContentType.objects.get_for_model(Comment)
@@ -37,4 +41,4 @@ class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ('id', 'employee', 'user', 'event_type', 'event_id', 'date', 'verb', 'description')
+        fields = ('id', 'type', 'employee', 'user', 'event_type', 'event_id', 'date', 'verb', 'description')

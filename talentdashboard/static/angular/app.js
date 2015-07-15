@@ -4,6 +4,7 @@ var app = angular.module('tdb', [
         'tdb.search.controllers', 'tdb.search.services',
         'tdb.services.tasks', 'tdb.controllers.tasks',
         'tdb.controllers.comments',
+        'tdb.services.events', 'tdb.controllers.events',
         'tdb.services.checkins', 'tdb.controllers.checkins',
         'tdb.engagement.services', 'angular.filter',
         'angular-carousel', 'analytics', 'ui.bootstrap', 'ngCsv','ngRoute','ui-notification', 'ngMessages'])
