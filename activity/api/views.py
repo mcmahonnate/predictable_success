@@ -2,6 +2,7 @@ from rest_framework import generics, views
 from rest_framework.response import Response
 from ..models import Event
 from .serializers import EventSerializer
+from talentdashboard.views.views import StandardResultsSetPagination
 
 
 class EmployeeEventList(generics.ListAPIView):
@@ -18,5 +19,7 @@ class EventList(views.APIView):
     """
     def get(self, request):
         qs = Event.objects.all()
-        serializer = EventSerializer(qs, many=True)
-        return Response(serializer.data)
+        paginator = StandardResultsSetPagination()
+        result_page = paginator.paginate_queryset(qs, request)
+        serializer = EventSerializer(result_page, many=True, context={'request': request})
+        return paginator.get_paginated_response(serializer.data)
