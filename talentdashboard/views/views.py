@@ -147,11 +147,11 @@ def all_employee_comment_report(request):
         serializer = TalentCategoryReportSerializer(report, context={'request': request})
         return Response(serializer.data)
 
-@api_view(['POST'])
+@api_view(['GET'])
 def comment_report_timespan(request):
-    start_date = dateutil.parser.parse(request.DATA['start_date']).date()
-    end_date = dateutil.parser.parse(request.DATA['end_date']).date()
-    
+    start_date = dateutil.parser.parse(request.QUERY_PARAMS.get('start_date', None)).date()
+    end_date = dateutil.parser.parse(request.QUERY_PARAMS.get('end_date', None)).date()
+
     response_data = {}
     comments = Comment.objects.filter(created_date__range=[start_date, end_date])
     response_data['total'] = len(comments)
@@ -166,10 +166,10 @@ def comment_report_timespan(request):
 
     return Response(response_data)
 
-@api_view(['POST'])
+@api_view(['GET'])
 def task_report_timespan(request):
-    start_date = dateutil.parser.parse(request.DATA['start_date']).date()
-    end_date = dateutil.parser.parse(request.DATA['end_date']).date()
+    start_date = dateutil.parser.parse(request.QUERY_PARAMS.get('start_date', None)).date()
+    end_date = dateutil.parser.parse(request.QUERY_PARAMS.get('end_date', None)).date()
     
     response_data = {}
     tasks = Task.objects.filter(created_date__range=[start_date, end_date])
@@ -185,10 +185,10 @@ def task_report_timespan(request):
 
     return Response(response_data)
 
-@api_view(['POST'])
+@api_view(['GET'])
 def checkin_report_timespan(request):
-    start_date = dateutil.parser.parse(request.DATA['start_date']).date()
-    end_date = dateutil.parser.parse(request.DATA['end_date']).date()
+    start_date = dateutil.parser.parse(request.QUERY_PARAMS.get('start_date', None)).date()
+    end_date = dateutil.parser.parse(request.QUERY_PARAMS.get('end_date', None)).date()
     
     response_data = {}
     checkins = CheckIn.objects.filter(date__range=[start_date, end_date])

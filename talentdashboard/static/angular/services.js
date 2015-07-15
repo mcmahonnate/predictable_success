@@ -415,6 +415,21 @@ angular.module('tdb.services', ['ngResource'])
     return res;
 }])
 
+.factory('CommentReport', ['$resource', '$http', function($resource, $http) {
+    var res = $resource('/api/v1/reports/comments');
+    return res;
+}])
+
+.factory('TaskReport', ['$resource', '$http', function($resource, $http) {
+    var res = $resource('/api/v1/reports/tasks');
+    return res;
+}])
+
+.factory('CheckInReport', ['$resource', '$http', function($resource, $http) {
+    var res = $resource('/api/v1/reports/checkins');
+    return res;
+}])
+
 .factory('EmployeeComments', ['$resource', '$http', function($resource, $http) {
     var actions = {
         'addNew': { method:'POST' },

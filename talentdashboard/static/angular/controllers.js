@@ -1064,6 +1064,42 @@ angular.module('tdb.controllers', [])
         };
     }])
 
+    .controller('TimespanReportCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'CommentReport', 'TaskReport', 'CheckInReport', 'analytics', function ($scope, $rootScope, $location, $routeParams, CommentReport, TaskReport, CheckInReport, analytics) {
+        analytics.trackPage($scope, $location.absUrl(), $location.url());
+        $scope.submitted = false;
+        $scope.responseData = {};
+        $scope.total = {};
+
+        $scope.submit = function() {
+            $scope.submitted = true;
+            CommentReport.get({start_date: $scope.startDate, end_date: $scope.endDate}, function (data) {
+                $scope.total.comments = data.total;
+                var arr = [];
+                for (user in data.by_user) {
+                    arr.push({'user': user, 'count': data['by_user'][user]});
+                }
+                $scope.responseData.comments = arr;
+            });
+
+            TaskReport.get({start_date: $scope.startDate, end_date: $scope.endDate}, function (data) {
+                $scope.total.tasks = data.total;
+                var arr = [];
+                for (user in data.by_user) {
+                    arr.push({'user': user, 'count': data['by_user'][user]});
+                }
+                $scope.responseData.tasks = arr;
+            });
+
+            CheckInReport.get({start_date: $scope.startDate, end_date: $scope.endDate}, function (data) {
+                $scope.total.checkins = data.total;
+                var arr = [];
+                for (user in data.by_user) {
+                    arr.push({'user': user, 'count': data['by_user'][user]});
+                }
+                $scope.responseData.checkins = arr;
+            });
+        }  
+    }])
 
     .controller('ReportsCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'EmployeeSearch', 'TalentCategories', 'analytics', function ($scope, $rootScope, $location, $routeParams, EmployeeSearch, TalentCategories, analytics) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());

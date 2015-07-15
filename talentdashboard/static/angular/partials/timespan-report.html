@@ -1,0 +1,65 @@
+<div ng-controller="TimespanReportCtrl" class="container" id="dashboard">
+
+	<form name="timespan" class="timeform" ng-submit="submit()">
+		Start Date:
+		<input ng-model="startDate" name="startDate"/>
+		<br>
+		End Date:
+		<input ng-model="endDate" name="endDate"/>
+		<br>
+		<input type="submit" id="submit" value="Submit" />
+	</form>
+
+	<div class="results" ng-show="submitted">
+		<div class="column-left">
+			<p> Total Comments: {{total.comments}} </p>
+			<p> By User: </p>
+			<div ng-repeat="obj in responseData.comments">
+				<p>{{obj.user}}: {{obj.count}}</p>
+			</div>
+		</div>
+
+		<div class="column-center">
+			<p> Total Tasks: {{total.tasks}} </p>
+			<p> By User: </p>
+			<div ng-repeat="obj in responseData.tasks">
+				<p>{{obj.user}}: {{obj.count}}</p>
+			</div>
+		</div>
+
+		<div class="column-right">
+			<p> Total Checkins: {{total.checkins}} </p>
+			<p> By User: </p>
+			<div ng-repeat="obj in responseData.checkins">
+				<p>{{obj.user}}: {{obj.count}}</p>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<style>
+
+/*.container {
+	padding-top: 75px;
+}*/
+
+.timeform {
+	text-align: center;
+	padding-bottom: 50px;
+}
+
+.results {
+	padding-left: 100px;
+}
+
+.column-left{ 
+	float: left; width: 33%; 
+}
+.column-right{ 
+	float: right; width: 33%; 
+}
+.column-center{ 
+	display: inline-block; width: 33%; 
+}
+</style>
