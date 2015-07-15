@@ -58,7 +58,6 @@ angular.module('tdb.controllers.events', [])
                     $scope.events.push(event)
                     $scope.originalEvents.push(original_event);
                 });
-                console.log($scope.events);
                 $scope.busy = false;
             });
         };
