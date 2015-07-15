@@ -1048,7 +1048,7 @@ class ProspectList(APIView):
                 prospects = prospects.filter(engagement=engagement)
             serializer = ProspectSerializer(prospects, many=True, context={'request': request})
             return Response(serializer.data)
-        except Employee.DoesNotExist:
+        except Prospect.DoesNotExist:
             return Response(None)
 
 class ProspectDetail(APIView):
@@ -1058,7 +1058,7 @@ class ProspectDetail(APIView):
             prospect = Prospect.objects.filter(email=email,team_lead=False).latest('created_at')
             serializer = ProspectSerializer(prospect,context={'request': request})
             return Response(serializer.data)
-        except Employee.DoesNotExist:
+        except Prospect.DoesNotExist:
             return Response(None)
 
 class EmployeeDetail(APIView):
