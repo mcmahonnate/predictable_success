@@ -1,15 +1,13 @@
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from org.models import Employee
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from blah.models import Comment
 from checkins.models import CheckIn
 from django.contrib.auth.models import User
 import datetime
-from django.utils.log import getLogger
 
-logger = getLogger('talentdashboard')
 
 class Event(models.Model):
     event_type = models.ForeignKey(ContentType, related_name = 'event_type')
@@ -20,6 +18,7 @@ class Event(models.Model):
 
     def __str__(self):
         return "%s created a %s about %s" % (self.user.email, self.event_type.name, self.employee.full_name)
+
 
 @receiver(post_save, sender=Comment)
 def comment_save_handler(sender, instance, created, **kwargs):
@@ -34,6 +33,7 @@ def comment_save_handler(sender, instance, created, **kwargs):
             event = Event(event_type=content_type, event_id=instance.id, employee=employee, user=user, date=instance.created_date)
             event.save()
 
+
 @receiver(post_save, sender=CheckIn)
 def checkin_save_handler(sender, instance, created, **kwargs):
     if created:
@@ -43,3 +43,11 @@ def checkin_save_handler(sender, instance, created, **kwargs):
         date = instance.date
         event = Event(event_type=content_type, event_id=instance.id, employee=employee, user=user, date=date)
         event.save()
+
+
+@receiver(post_delete, sender=Comment)
+@receiver(post_delete, sender=CheckIn)
+def object_delete_handler(sender, instance, **kwargs):
+    content_type = ContentType.objects.get_for_model(sender)
+    event = Event.objects.get(event_type=content_type, event_id=instance.id)
+    event.delete()
