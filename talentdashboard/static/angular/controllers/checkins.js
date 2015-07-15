@@ -6,9 +6,9 @@ angular.module('tdb.controllers.checkins', [])
             $scope.happiness = new Happiness({assessment: 0});
             $scope.tasks = [];
             $scope.employeeSearch = '';
-            $scope.selectedEmployee = null;
         };
         initialize();
+
 
         CheckInType.query({}, function(data) {
             $scope.checkinTypes = data;
@@ -21,10 +21,30 @@ angular.module('tdb.controllers.checkins', [])
             });
         }
 
+        // Get user id from url if it exists and show form otherwise show search 
+        if ($routeParams.id) { 
+            Employee.get({id:$routeParams.id})
+                .$promise.then(
+                    //success
+                    function(employee){
+                        $scope.selectedEmployee = employee;
+                        $scope.checkin.employee = $scope.happiness.employee = employee.id;
+                    },
+                    //error
+                    function( error ){
+                        $scope.showSearch = true;
+                    }
+                );
+        } else {
+            $scope.showSearch = true;
+        }    
+
+
         $scope.selectEmployee = function(employee) {
             $scope.employeeSearch = employee.full_name;
             $scope.selectedEmployee = employee;
             $scope.checkin.employee = $scope.happiness.employee = employee.id;
+            $scope.showSearch = false;
         };
 
         $scope.addTask = function(form) {
@@ -114,6 +134,7 @@ angular.module('tdb.controllers.checkins', [])
         $scope.cancel = function() {
             initialize();
         };
+        $scope.busy = false;
     }])
 
     .controller('CheckInDetailsCtrl', ['$scope', '$q', '$routeParams', '$location', 'CheckIn', 'CheckInType', 'Happiness', 'Employee', function ($scope, $q, $routeParams, $location, CheckIn, CheckInType, Happiness, Employee) {

@@ -1,6 +1,6 @@
 <div ng-if="employee.display" class="container narrow-gutter employee-view" ng-class="{in:employee}">
     <div ng-include="'/static/angular/partials/_widgets/search.html'"></div>
-    <h1>{{employee.full_name}} <a href="" class="btn btn-success"><span class="glyphicon glyphicon-user"></span> Check-In</a></h1>     
+    <h1>{{employee.full_name}} <a href="#/checkin/{{ employee.id }}" class="btn btn-success"><span class="glyphicon glyphicon-user"></span> Check-In</a></h1>     
     <div class="row">
         <div class="col-sm-5 col-md-5 col-lg-5">
             <div class="panel">

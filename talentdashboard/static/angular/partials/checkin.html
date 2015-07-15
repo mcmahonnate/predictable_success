@@ -2,10 +2,10 @@
     <form name="checkinForm" novalidate="novalidate" ng-submit="save(checkinForm)">
 
     	<!-- Employee Search -->
-    	<div ng-show="!checkin.type || !selectedEmployee" class="checkin-search">
+    	<div ng-show="showSearch" class="checkin-search">
 	    	<h1>Check-in with:</h1>
 	    	<div class="row">
-				<div ng-class="{open: employeeSearch!=''}" class="search dropdown pull-left col-xs-7">
+				<div ng-class="{open: employeeSearch!=''}" class="search dropdown">
 				    <div class="search-input-container">
 				        <div class="glyphicon glyphicon-search search-icon"></div>
 				        <input class="search-input nav_query" ng-model="employeeSearch" type="text" placeholder="Search Employees..."  name="selectedEmplyeeName"  value="{{selectedEmployee.full_name}}" />
@@ -20,23 +20,11 @@
 			            <li ng-show="!filteredEmployees.length" style="padding: 13px 20px;">No Results</li>
 				    </ul>
 				</div>
-		    	<div class="checkin-type col-xs-5">
-                    <div ng-show="checkinForm.$submitted" ng-messages="checkinForm.type.$error">
-                        <div class="help-block" ng-message="required">You must specify the type</div>
-                    </div>
-			    	<select class="form-control simple-form-control input-lg" ng-options="type as type.name for type in checkinTypes" ng-model="checkin.type" name="type">
-			    		<option value="">--Select Check-In Type--</option>
-			    	</select>
-                    <div ng-show="checkinForm.$submitted" ng-messages="checkinForm.other_type_description.$error">
-                        <div class="help-block" ng-message="required">You must specify the description</div>
-                    </div>
-			    	<input ng-show="checkin.type===1" name="other_type_description" class="form-control" placeholder="Enter check in type..." />
-			    </div>
 			</div>    
 		</div>	
 
 		<!-- Check-in -->
-		<div ng-show="selectedEmployee && checkin.type">
+		<div ng-show="selectedEmployee">
 			<div class="checkin-header">
 				<div class="type-tag">
 					<span ng-show="!checkin.other_type_description">{{ checkin.type.name }}</span>
@@ -50,6 +38,21 @@
 					<p class="timestamp">You're checking in now</p>
 				</div>
 			</div>	
+
+
+	    	<div class="checkin-type">
+                <div ng-show="checkinForm.$submitted" ng-messages="checkinForm.type.$error">
+                    <div class="help-block" ng-message="required">You must specify the type</div>
+                </div>
+		    	<select class="form-control simple-form-control input-lg" ng-options="type as type.name for type in checkinTypes" ng-model="checkin.type" name="type">
+		    		<option value="">--Select Check-In Type--</option>
+		    	</select>
+                <div ng-show="checkinForm.$submitted" ng-messages="checkinForm.other_type_description.$error">
+                    <div class="help-block" ng-message="required">You must specify the description</div>
+                </div>
+		    	<input ng-show="checkin.type===1" name="other_type_description" class="form-control" placeholder="Enter check in type..." />
+		    </div>
+
 
 		    <div class="checkin-summary panel">
 	        	<textarea required placeholder="Enter check-in summary here..." class="form-control simple-form-control" name="summary" ng-model="checkin.summary" style="min-height:250px;"></textarea>
