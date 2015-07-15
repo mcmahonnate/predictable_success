@@ -1069,36 +1069,74 @@ angular.module('tdb.controllers', [])
         $scope.submitted = false;
         $scope.responseData = {};
         $scope.total = {};
+        $scope.csv = [];
 
         $scope.submit = function() {
             $scope.submitted = true;
             CommentReport.get({start_date: $scope.startDate, end_date: $scope.endDate}, function (data) {
+                $scope.responseData.comments = data.by_user;
                 $scope.total.comments = data.total;
-                var arr = [];
-                for (user in data.by_user) {
-                    arr.push({'user': user, 'count': data['by_user'][user]});
-                }
-                $scope.responseData.comments = arr;
             });
 
             TaskReport.get({start_date: $scope.startDate, end_date: $scope.endDate}, function (data) {
+                $scope.responseData.tasks = data.by_user;
                 $scope.total.tasks = data.total;
-                var arr = [];
-                for (user in data.by_user) {
-                    arr.push({'user': user, 'count': data['by_user'][user]});
-                }
-                $scope.responseData.tasks = arr;
             });
 
             CheckInReport.get({start_date: $scope.startDate, end_date: $scope.endDate}, function (data) {
+                $scope.responseData.checkins = data.by_user;
                 $scope.total.checkins = data.total;
-                var arr = [];
-                for (user in data.by_user) {
-                    arr.push({'user': user, 'count': data['by_user'][user]});
-                }
-                $scope.responseData.checkins = arr;
             });
         }  
+
+        // aggregate by user
+        $scope.buildCSV = function () {
+            $scope.csv = [];
+            $scope.users = {};
+
+            var firstrow = {};
+            firstrow.user = "User";
+            firstrow.comments = "Comments";
+            firstrow.tasks = "Tasks"
+            firstrow.checkins = "Check-ins";
+            $scope.csv.push(firstrow);
+
+            var commentData = $scope.responseData.comments;
+            for (user in commentData) {
+                if (!(user in $scope.users)) 
+                    $scope.users[user] = {};
+                $scope.users[user].comments = commentData[user];
+            }
+            var taskData = $scope.responseData.tasks;
+            for (user in taskData) {
+                if (!(user in $scope.users)) 
+                    $scope.users[user] = {};
+                $scope.users[user].tasks = taskData[user];
+            }
+            var checkinData = $scope.responseData.checkins;
+            for (user in checkinData) {
+                if (!(user in $scope.users)) 
+                    $scope.users[user] = {};
+                $scope.users[user].checkins = checkinData[user];
+            }
+            for (user in $scope.users) {
+                var row = {};
+                row.user = user;
+                row.comments = ($scope.users[user].comments) ? $scope.users[user].comments : 0;
+                row.tasks = ($scope.users[user].tasks) ? $scope.users[user].tasks : 0;
+                row.checkins = ($scope.users[user].checkins) ? $scope.users[user].checkins : 0;
+                $scope.csv.push(row);
+            }
+
+            var lastrow = {};
+            lastrow.user = "Total";
+            lastrow.comments = $scope.total.comments;
+            lastrow.tasks = $scope.total.tasks;
+            lastrow.checkins = $scope.total.checkins;
+            $scope.csv.push(lastrow);
+
+            return $scope.csv;
+        }
     }])
 
     .controller('ReportsCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'EmployeeSearch', 'TalentCategories', 'analytics', function ($scope, $rootScope, $location, $routeParams, EmployeeSearch, TalentCategories, analytics) {
