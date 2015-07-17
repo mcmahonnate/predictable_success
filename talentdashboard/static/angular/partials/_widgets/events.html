@@ -17,7 +17,7 @@
         </div>
         <div class="comment-item">
             <div class="comment-title">
-                <div class="comment-actions pull-right" ng-show="event.user.id==currentUser.id">
+                <div ng-show="event.type == 'comment'" class="comment-actions pull-right" ng-show="event.user.id==currentUser.id">
                     <i class="fa fa-cog show-popover"></i>
                     <ul class="popover-items" style="display:none">
                         <li class="popover-item" ng-show="event.user.id==currentUser.id">
@@ -45,8 +45,7 @@
                     <label>
                         <input ng-model="comment.include_in_daily_digest" ng-checked="comment.include_in_daily_digest" type="checkbox"> Include in <a ng-click="showMembers()">Daily Digest Email</a>
                     </label>
-                </div>    
-                <happiness show="true" happy="comment.happiness"></happiness>
+                </div>
                 <button class="btn btn-primary btn-sm" ng-disabled="!event.description" ng-click="saveComment(event);showCommentEdit=false">Save Edits</button>
                 <button class="btn btn-link btn-sm" ng-click="cancelEditComment(event);showCommentEdit=false">Cancel</button>
             </div>
@@ -69,7 +68,7 @@
                 </span>    
             </div>
         </div>
-        <div class="comment-replies" ng-show="showCommentInput || event.subcomments">
+        <div ng-show="event.type == 'comment'" class="comment-replies" ng-show="showCommentInput || event.subcomments">
             <div class="comment-reply" ng-repeat="subcomment in event.subcomments | orderBy:'created_date'">
                 <div class="comment-actions pull-right" ng-show="subcomment.owner.id==currentUser.id">
                     <i class="fa fa-cog show-popover"></i>
@@ -95,8 +94,8 @@
                         msd-elastic
                         class="form-control edit-textarea">
                     </textarea>
-                    <button class="btn btn-primary btn-sm" ng-disabled="!subcomment.content" ng-click="saveSubComment(subcomment, comment);showSubCommentEdit=false">Save Edits</button>
-                    <button class="btn btn-link btn-sm" ng-click="cancelEditSubComment(subcomment, comment);showSubCommentEdit=false">Cancel</button>
+                    <button class="btn btn-primary btn-sm" ng-disabled="!subcomment.content" ng-click="saveSubComment(subcomment, event);showSubCommentEdit=false">Save Edits</button>
+                    <button class="btn btn-link btn-sm" ng-click="cancelEditSubComment(subcomment, event);showSubCommentEdit=false">Cancel</button>
                 </div>
                 <div class="comment-reply-copy" ng-show="!showSubCommentEdit">
                     <span ng-init="length=500" data-ng-bind-html="subcomment.content | new_line | cut:true:length"></span> 
@@ -106,7 +105,7 @@
                     </span>
                 </div>
             </div>
-            <div ng-show="showCommentInput || comment.subcomments" class="comment-reply-textarea">
+            <div ng-show="showCommentInput || event.subcomments" class="comment-reply-textarea">
                 <textarea class="form-control" 
                     msd-elastic 
                     ng-model="event.newSubCommentText"

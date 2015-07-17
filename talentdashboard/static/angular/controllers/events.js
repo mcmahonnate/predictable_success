@@ -35,7 +35,6 @@ angular.module('tdb.controllers.events', [])
             $scope.busy = true;
             var query = $scope.path ? { path: $scope.path, id: $scope.id, page: $scope.page + 1 } : { page: $scope.page + 1 };
             Events.get(query, function(data) {
-                console.log(data);
                 $scope.has_next = data.has_next;
                 $scope.page = data.page;
                 $scope.new_events = data.results;
@@ -65,46 +64,36 @@ angular.module('tdb.controllers.events', [])
         $scope.busy = false;
         $scope.has_next = true;
 
-        $scope.saveComment = function(comment) {
-            var index = $scope.comments.indexOf(comment);
-            if (comment.happiness && comment.happiness.assessment > 0) {
-                var data = {id: $scope.employee.id, _assessment_id:comment.happiness.id,_assessed_by_id: $rootScope.currentUser.employee.id, _assessment: comment.happiness.assessment, _content:comment.content,_visibility: comment.visibility,_include_in_daily_digest: comment.include_in_daily_digest};
-                Engagement.update(data, function(response) {
-                    $scope.originalComments[index].content = comment.content;
-                    $scope.originalComments[index].visibility = comment.visibility;
-                    $scope.originalComments[index].happiness = comment.happiness;
-                });
-            } else {
-                var data = {id: comment.id, _content: comment.content, _visibility: comment.visibility, _include_in_daily_digest: comment.include_in_daily_digest};
-                console.log(data);
-                Comment.update(data, function() {
-                    $scope.originalComments[index].content = comment.content;
-                    $scope.originalComments[index].visibility = comment.visibility;
-                    $scope.originalComments[index].daily_digest = comment.daily_digest;
-                });
-            };
+        $scope.saveComment = function(event) {
+            var index = $scope.events.indexOf(event);
+            var data = {id: event.event_id, _content: event.description, _visibility: event.visibility, _include_in_daily_digest: event.include_in_daily_digest};
+            Comment.update(data, function() {
+                $scope.originalEvents[index].content = comment.content;
+                $scope.originalEvents[index].visibility = comment.visibility;
+                $scope.originalEvents[index].daily_digest = comment.daily_digest;
+            });
+
         }
 
-        $scope.cancelEditComment = function(comment) {
-            var index = $scope.comments.indexOf(comment);
-            //comment.content = $scope.originalComments[index].content;
-            $scope.originalComments[index].content = comment.content;
+        $scope.cancelEditComment = function(event) {
+            var index = $scope.events.indexOf(event);
+            event.description = $scope.originalEvents[index].description;
         }
 
-         $scope.saveSubComment = function(subcomment, comment) {
-            var parent_index = $scope.comments.indexOf(comment);
-            var subcomment_index = $scope.comments[parent_index].subcomments.indexOf(subcomment);
+         $scope.saveSubComment = function(subcomment, event) {
+            var parent_index = $scope.events.indexOf(event);
+            var subcomment_index = $scope.events[parent_index].subcomments.indexOf(subcomment);
             var data = {id: subcomment.id, _content: subcomment.content};
 
             Comment.update(data, function() {
-                $scope.originalComments[parent_index].subcomments[subcomment_index].content = subcomment.content;
+                $scope.originalEvents[parent_index].subcomments[subcomment_index].content = subcomment.content;
             });
         }
 
-        $scope.cancelEditSubComment = function(subcomment, comment) {
-            var parent_index = $scope.comments.indexOf(comment);
-            var subcomment_index = $scope.comments[parent_index].subcomments.indexOf(subcomment);
-            subcomment.content = $scope.originalComments[parent_index].subcomments[subcomment_index].content;
+        $scope.cancelEditSubComment = function(subcomment, event) {
+            var parent_index = $scope.events.indexOf(event);
+            var subcomment_index = $scope.events[parent_index].subcomments.indexOf(subcomment);
+            subcomment.content = $scope.originalEvents[parent_index].subcomments[subcomment_index].content;
         }
 
         $scope.addComment = function(equals) {
@@ -131,28 +120,30 @@ angular.module('tdb.controllers.events', [])
             $scope.newComment = getBlankComment();
         }
 
-        $scope.addSubComment = function(comment) {
+        $scope.addSubComment = function(event) {
             var newComment = {};
             newComment.id = -1;
-            newComment.content = comment.newSubCommentText;
+            newComment.content = event.newSubCommentText;
             newComment.modified_date = new Date().toJSON();
             newComment.owner = $rootScope.currentUser;
 
-            var data = {id: newComment.id, _model_name: "comment", _object_id: comment.id,_content: newComment.content};
+            var data = {id: newComment.id, _model_name: "comment", _object_id: event.event_id,_content: newComment.content};
+            var parent_index = $scope.events.indexOf(event);
 
-            data.id = comment.associated_object.id;
+            data.id = event.employee.id;
             EmployeeComments.save(data, function(response) {
-                comment.subcomments.push(response);
-                comment.newSubCommentText = "";
+                event.subcomments.push(response);
+                $scope.originalEvents[parent_index].subcomments.push(response);
+                event.newSubCommentText = "";
             });
         }
 
-        $scope.deleteComment = function(comment) {
+        $scope.deleteComment = function(event) {
             if ($window.confirm('Are you sure you want to delete this comment?')) {
-                var data = {id: comment.id};
-                var index = $scope.comments.indexOf(comment);
+                var data = {id: event.event_id};
+                var index = $scope.events.indexOf(event);
                 var deleteSuccess = function() {
-                    $scope.comments.splice(index, 1);
+                    $scope.events.splice(index, 1);
                 };
 
                 Comment.remove(data, function() {
@@ -161,14 +152,14 @@ angular.module('tdb.controllers.events', [])
             }
         };
 
-        $scope.deleteSubComment = function(comment, subcomment) {
+        $scope.deleteSubComment = function(event, subcomment) {
             if ($window.confirm('Are you sure you want to delete this comment?')) {
                 var data = {id: subcomment.id};
-                var comment_index = $scope.comments.indexOf(comment);
-                var subcomment_index = $scope.comments[comment_index].subcomments.indexOf(subcomment);
+                var parent_index = $scope.events.indexOf(event);
+                var subcomment_index = $scope.events[parent_index].subcomments.indexOf(subcomment);
                 var deleteSuccess = function() {
-                    $scope.comments[comment_index].subcomments.splice(subcomment_index, 1);
-                    $scope.originalComments[comment_index].subcomments.splice(subcomment_index, 1);
+                    $scope.events[parent_index].subcomments.splice(subcomment_index, 1);
+                    $scope.originalEvents[parent_index].subcomments.splice(subcomment_index, 1);
                 };
 
                 Comment.remove(data, function() {

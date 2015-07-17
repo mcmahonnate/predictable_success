@@ -7,7 +7,9 @@ from blah.models import Comment
 from checkins.models import CheckIn
 from django.contrib.auth.models import User
 import datetime
+from django.utils.log import getLogger
 
+logger = getLogger('talentdashboard')
 
 class Event(models.Model):
     event_type = models.ForeignKey(ContentType, related_name = 'event_type')
@@ -49,5 +51,10 @@ def checkin_save_handler(sender, instance, created, **kwargs):
 @receiver(post_delete, sender=CheckIn)
 def object_delete_handler(sender, instance, **kwargs):
     content_type = ContentType.objects.get_for_model(sender)
+    comment_type = ContentType.objects.get_for_model(Comment)
+    # Delete events for comments about employees only.
+    if content_type.id is comment_type.id:
+        if instance.content_type.id is comment_type.id:
+            return
     event = Event.objects.get(event_type=content_type, event_id=instance.id)
     event.delete()
