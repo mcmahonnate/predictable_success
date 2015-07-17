@@ -12,7 +12,7 @@ from views.homepage import IndexView
 from insights.views import Signup, Report, Survey, Confirmation
 from checkins.api.views import EmployeeCheckInList, HostCheckInList, CreateCheckIn, CheckInTypeList, RetrieveUpdateDestroyCheckIn
 from engagement.api.views import RetrieveUpdateDestroyHappiness, CreateHappiness, EmployeeHappinessList
-from activity.api.views import EventList, EmployeeEventList
+from activity.api.views import EventList, EmployeeEventList, TeamEventList, CoachEventList, LeadEventList
 
 router = routers.DefaultRouter()
 router.register(r'^api/v1/teams', TeamViewSet)
@@ -107,6 +107,9 @@ urlpatterns = patterns('',
     url(r'^api/v1/checkintypes/$', (auth('AllAccess','CoachAccess','TeamLeadAccess')(CheckInTypeList.as_view()))),
 
     url(r'^api/v1/events/employees/(?P<employee_id>[0-9]+)/$', (auth('AllAccess','CoachAccess','TeamLeadAccess')(EmployeeEventList.as_view()))),
+    url(r'^api/v1/events/teams/(?P<pk>[0-9]+)/$', (auth('AllAccess')(TeamEventList.as_view()))),
+    url(r'^api/v1/events/leads/$', (auth_employee('AllAccess','TeamLeadAccess')(LeadEventList.as_view()))),
+    url(r'^api/v1/events/coaches/$', (auth_employee('AllAccess','CoachAccess')(CoachEventList.as_view()))),
     url(r'^api/v1/events/$', (auth('AllAccess','CoachAccess','TeamLeadAccess')(EventList.as_view()))),
 
     url(r'^api/v1/image-upload/employees/(?P<pk>[0-9]+)/$', ImageUploadView.as_view()),

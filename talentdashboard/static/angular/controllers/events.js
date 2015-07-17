@@ -100,23 +100,15 @@ angular.module('tdb.controllers.events', [])
             var newComment = {id: -1, content: $scope.newComment.text, modified_date: new Date().toJSON(), owner: $rootScope.currentUser, newSubCommentText: '', visibility: $scope.newComment.visibility, happy: $scope.newComment.happy, include_in_daily_digest: $scope.newComment.include_in_daily_digest};
             newComment.subcomments=[];
 
-            if ($scope.newComment.happy.assessment>0) {
-                var data = {id: $scope.id, _assessed_by_id: $rootScope.currentUser.employee.id, _assessment: newComment.happy.assessment, _content:newComment.content, _visibility: newComment.visibility, _include_in_daily_digest: newComment.include_in_daily_digest};
-                Engagement.addNew(data, function(response) {
-                    newComment.id = response.comment.id;
-                    newComment.happiness = response.comment.happiness;
-                    newComment.visibility = response.comment.visibility;
-                });
-            } else {
-                var data = {id: newComment.id, _model_name: "employee", _object_id: 0, _content: newComment.content, _visibility: newComment.visibility, _include_in_daily_digest: newComment.include_in_daily_digest};
-                console.log(data);
-                data.id = $scope.id;
-                EmployeeComments.save(data, function (response) {
-                    newComment.id = response.id;
-                });
-            };
-            $scope.comments.push(newComment);
-            $scope.originalComments.push(angular.copy(newComment));
+            var data = {id: newComment.id, _model_name: "employee", _object_id: 0, _content: newComment.content, _visibility: newComment.visibility, _include_in_daily_digest: newComment.include_in_daily_digest};
+            data.id = $scope.id;
+            EmployeeComments.save(data, function (response) {
+                newComment.id = response.id;
+
+            });
+            var newEvent = {event_id: newComment.id, description: newComment.content}
+            $scope.events.push(newEvent);
+            $scope.originalEvents.push(angular.copy(newEvent));
             $scope.newComment = getBlankComment();
         }
 
