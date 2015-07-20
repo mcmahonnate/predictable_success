@@ -140,5 +140,7 @@ urlpatterns = patterns('',
     url(r'^api/v1/reports/tasks$', task_report_timespan),
     url(r'^api/v1/reports/checkins$', checkin_report_timespan),
 
+    url(r'^api/v1/reports/activity$', last_activity_report),
+
     url(r'^', include(router.urls)),
 )

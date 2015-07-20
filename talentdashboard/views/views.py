@@ -155,7 +155,7 @@ def comment_report_timespan(request):
     response_data = {}
     comments = Comment.objects.filter(created_date__range=[start_date, end_date])
     response_data['total'] = len(comments)
-    response_data['by_user'] = {};
+    response_data['by_user'] = {}
 
     for comment in comments:
         user = comment.owner.username
@@ -174,7 +174,7 @@ def task_report_timespan(request):
     response_data = {}
     tasks = Task.objects.filter(created_date__range=[start_date, end_date])
     response_data['total'] = len(tasks)
-    response_data['by_user'] = {};
+    response_data['by_user'] = {}
 
     for task in tasks:
         user = task.created_by.user.username
@@ -193,7 +193,7 @@ def checkin_report_timespan(request):
     response_data = {}
     checkins = CheckIn.objects.filter(date__range=[start_date, end_date])
     response_data['total'] = len(checkins)
-    response_data['by_user'] = {};
+    response_data['by_user'] = {}
 
     for checkin in checkins:
         user = checkin.host.user.username
@@ -201,6 +201,29 @@ def checkin_report_timespan(request):
             response_data['by_user'][user] += 1
         else:
             response_data['by_user'][user] = 1
+
+    return Response(response_data)
+
+@api_view(['GET'])
+def last_activity_report(request):
+    employee_id = int(request.QUERY_PARAMS.get('employee'))
+    try: 
+        employee = Employee.objects.get(id=employee_id)
+    except Employee.DoesNotExist:
+        return Response(None, status=status.HTTP_404_NOT_FOUND)
+    response_data = {}
+
+    requester = Employee.objects.get(user__id=request.user.id)
+    comments = Comment.objects.get_comments_for_employee(requester=requester,employee=employee)
+    if comments:
+        print(len(comments))
+        last_comment = comments.order_by('-created_date')[0]
+        response_data['last comment'] = last_comment.created_date
+
+    checkins = employee.checkins.all()
+    if checkins:
+        last_checkin = checkins.order_by('-date')[0]
+        response_data['last checkin'] = last_checkin.date
 
     return Response(response_data)
 
