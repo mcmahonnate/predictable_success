@@ -1,7 +1,7 @@
 <div ng-controller="TimespanReportCtrl" class="container" id="dashboard">
 
 	<div class="export">
-		<span class="fa fa-download" style="cursor: pointer;float:right;display: inline-block;margin-top:2px;font-size:30px" ng-csv="buildCSV()" filename="timespan.csv"></span>
+		<span class="fa fa-download" style="cursor: pointer;float:right;display: inline-block;margin-top:2px;font-size:30px" ng-csv="buildCSV()" csv-header="['User', 'Comments', 'Tasks', 'Check-ins']" filename="timespan.csv"></span>
 	</div>
 
 	<form name="timespan" class="timeform" ng-submit="submit();">

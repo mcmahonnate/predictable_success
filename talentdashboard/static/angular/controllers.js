@@ -1094,13 +1094,6 @@ angular.module('tdb.controllers', [])
             $scope.csv = [];
             $scope.users = {};
 
-            var firstrow = {};
-            firstrow.user = "User";
-            firstrow.comments = "Comments";
-            firstrow.tasks = "Tasks"
-            firstrow.checkins = "Check-ins";
-            $scope.csv.push(firstrow);
-
             var commentData = $scope.responseData.comments;
             for (user in commentData) {
                 if (!(user in $scope.users)) 
