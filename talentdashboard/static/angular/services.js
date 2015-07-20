@@ -430,6 +430,11 @@ angular.module('tdb.services', ['ngResource'])
     return res;
 }])
 
+.factory('ActivityReport', ['$resource', '$http', function($resource, $http) {
+    var res = $resource('/api/v1/reports/activity');
+    return res;
+}])
+
 .factory('EmployeeComments', ['$resource', '$http', function($resource, $http) {
     var actions = {
         'addNew': { method:'POST' },

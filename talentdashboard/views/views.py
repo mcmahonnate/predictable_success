@@ -206,25 +206,27 @@ def checkin_report_timespan(request):
 
 @api_view(['GET'])
 def last_activity_report(request):
-    employee_id = int(request.QUERY_PARAMS.get('employee'))
-    try: 
-        employee = Employee.objects.get(id=employee_id)
-    except Employee.DoesNotExist:
-        return Response(None, status=status.HTTP_404_NOT_FOUND)
-    response_data = {}
+    employees = Employee.objects.all();
+    response_data = [];
 
-    requester = Employee.objects.get(user__id=request.user.id)
-    comments = Comment.objects.get_comments_for_employee(requester=requester,employee=employee)
-    if comments:
-        print(len(comments))
-        last_comment = comments.order_by('-created_date')[0]
-        response_data['last comment'] = last_comment.created_date
+    for employee in employees:
+        res = {}
+        res['employee'] = employee.full_name
+        res['last comment'] = "None"
+        res['last check-in'] = "None"
 
-    checkins = employee.checkins.all()
-    if checkins:
-        last_checkin = checkins.order_by('-date')[0]
-        response_data['last checkin'] = last_checkin.date
+        requester = Employee.objects.get(user__id=request.user.id)
+        comments = Comment.objects.get_comments_for_employee(requester=requester,employee=employee)
+        if comments:
+            last_comment = comments.order_by('-created_date')[0]
+            res['last comment'] = last_comment.created_date
 
+        checkins = employee.checkins.all()
+        if checkins:
+            last_checkin = checkins.order_by('-date')[0]
+            res['last check-in'] = last_checkin.date
+
+        response_data.append(res)
     return Response(response_data)
 
 class TeamMBTIReportDetail(APIView):

@@ -1132,6 +1132,29 @@ angular.module('tdb.controllers', [])
         }
     }])
 
+    .controller('ActivityReportCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'ActivityReport', 'analytics', function ($scope, $rootScope, $location, $routeParams, ActivityReport, analytics) {
+        analytics.trackPage($scope, $location.absUrl(), $location.url());
+        $scope.responseData = {};
+        $scope.loading = true;
+
+        $scope.getActivity = function() {
+            ActivityReport.query(function (data) {
+                $scope.loading = false;
+                $scope.responseData = data;
+            });
+        }
+
+        $scope.buildCSV = function () {
+            var csv = [];
+            var firstrow = {};
+            firstrow['employee'] = "Employee";
+            firstrow['last comment'] = "Last Comment";
+            firstrow['last check-in'] = "Last Check-In";
+            csv.push(firstrow);
+            return csv.concat($scope.responseData);
+        }
+    }])
+
     .controller('ReportsCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'EmployeeSearch', 'TalentCategories', 'analytics', function ($scope, $rootScope, $location, $routeParams, EmployeeSearch, TalentCategories, analytics) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         $scope.busy = true;
