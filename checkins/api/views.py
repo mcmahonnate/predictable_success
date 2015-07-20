@@ -19,6 +19,8 @@ class RetrieveUpdateDestroyCheckIn(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = CheckIn.objects.all()
     serializer_class = CheckInSerializer
+    
+
 
 
 class EmployeeCheckInList(generics.ListAPIView):

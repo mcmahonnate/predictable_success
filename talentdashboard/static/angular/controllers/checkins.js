@@ -94,6 +94,7 @@ angular.module('tdb.controllers.checkins', [])
             );
         };
 
+
         $scope.save = function (form) {
             if(form.$invalid) return;
 
@@ -145,4 +146,12 @@ angular.module('tdb.controllers.checkins', [])
                  $location.url('/404');
             }
         });
+
+        $scope.saveSummary = function (checkin) {
+
+            console.log(checkin);
+            data = {summary: checkin.summary, id: checkin.id};
+            CheckIn.update(data, function() {});
+        }
+
     }])

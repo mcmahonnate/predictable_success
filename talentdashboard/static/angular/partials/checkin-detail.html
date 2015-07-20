@@ -13,7 +13,20 @@
 		</div>
 	</div>	
     <div class="checkin-summary panel">
-    	<span class="checkin-summary-instance" data-ng-bind-html="checkin.summary | new_line | cut:true:length">
+    	<div ng-hide="showSummaryEdit">
+    		<div class="pull-right">
+    			<a href="javascript:void(0);" ng-click="showSummaryEdit=true" class="btn btn-xs btn-default"><span class="fa fa-pencil"></span> Edit</a>
+    		</div>
+    		<span class="checkin-summary-instance" data-ng-bind-html="checkin.summary | new_line | cut:true:length"></span>
+    	</div>	
+
+	    <div ng-show="showSummaryEdit">
+            <textarea 
+               	ng-bind-html="checkin.summary" class="form-control edit-textarea">
+            </textarea>
+        	<button class="btn btn-primary btn-sm" ng-click="saveSummary(checkin); showCommentEdit=false">Save Edits</button>
+        	<button class="btn btn-link btn-sm" ng-click="cancelEditComment(comment);showSummaryEdit=false">Cancel</button>
+        </div>
 	</div>
 
 	<div class="panel panel-happiness" ng-show="checkin.happiness" style="overflow:hidden">
