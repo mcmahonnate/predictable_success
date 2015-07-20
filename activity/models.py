@@ -7,6 +7,31 @@ from blah.models import Comment
 from checkins.models import CheckIn
 from django.contrib.auth.models import User
 import datetime
+from django.utils.log import getLogger
+
+logger = getLogger('talentdashboard')
+
+class EventManager(models.Manager):
+    """
+    A manager that retrieves events for a particular model.
+    """
+    def get_events_for_all_employees(self, requester):
+        events = self.exclude(employee__id=requester.id)
+        events = events.extra(order_by = ['-date'])
+
+        return events
+
+    def get_events_for_employee(self, requester, employee):
+        events = self.get_events_for_all_employees(requester)
+        events = events.filter(employee__id = employee.id)
+
+        return events
+
+    def get_events_for_employees(self, requester, employee_ids):
+        events = self.get_events_for_all_employees(requester)
+        events = events.filter(employee__id__in = employee_ids)
+
+        return events
 
 
 class Event(models.Model):
@@ -15,6 +40,8 @@ class Event(models.Model):
     user = models.ForeignKey(User, related_name='+')
     employee = models.ForeignKey(Employee, related_name='+')
     date = models.DateTimeField(null=False, blank=False, default=datetime.datetime.now())
+
+    objects = EventManager()
 
     def __str__(self):
         return "%s created a %s about %s" % (self.user.email, self.event_type.name, self.employee.full_name)
@@ -49,5 +76,10 @@ def checkin_save_handler(sender, instance, created, **kwargs):
 @receiver(post_delete, sender=CheckIn)
 def object_delete_handler(sender, instance, **kwargs):
     content_type = ContentType.objects.get_for_model(sender)
+    comment_type = ContentType.objects.get_for_model(Comment)
+    # Delete events for comments about employees only.
+    if content_type.id is comment_type.id:
+        if instance.content_type.id is comment_type.id:
+            return
     event = Event.objects.get(event_type=content_type, event_id=instance.id)
     event.delete()
