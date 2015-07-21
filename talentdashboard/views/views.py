@@ -220,12 +220,12 @@ def last_activity_report(request):
         comments = Comment.objects.get_comments_for_employee(requester=requester,employee=employee)
         if comments:
             last_comment = comments.order_by('-created_date')[0]
-            res['last_comment'] = last_comment.created_date
+            res['last_comment'] = last_comment.created_date.date()
 
         checkins = employee.checkins.all()
         if checkins:
             last_checkin = checkins.order_by('-date')[0]
-            res['last_checkin'] = last_checkin.date
+            res['last_checkin'] = last_checkin.date.date()
 
         response_data.append(res)
     return Response(response_data)
