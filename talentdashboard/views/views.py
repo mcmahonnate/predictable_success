@@ -211,20 +211,21 @@ def last_activity_report(request):
 
     for employee in employees:
         res = {}
-        res['employee'] = employee.full_name
-        res['last comment'] = "None"
-        res['last check-in'] = "None"
+        res['full_name'] = employee.full_name
+        res['email'] = employee.email
+        res['last_comment'] = "None"
+        res['last_checkin'] = "None"
 
         requester = Employee.objects.get(user__id=request.user.id)
         comments = Comment.objects.get_comments_for_employee(requester=requester,employee=employee)
         if comments:
             last_comment = comments.order_by('-created_date')[0]
-            res['last comment'] = last_comment.created_date
+            res['last_comment'] = last_comment.created_date
 
         checkins = employee.checkins.all()
         if checkins:
             last_checkin = checkins.order_by('-date')[0]
-            res['last check-in'] = last_checkin.date
+            res['last_checkin'] = last_checkin.date
 
         response_data.append(res)
     return Response(response_data)

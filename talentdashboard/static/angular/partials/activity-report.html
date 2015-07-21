@@ -2,7 +2,7 @@
 
 	<h1>Activity Report</h1>
 	<div class="export" ng-show="!loading">
-		<span class="fa fa-download" style="cursor: pointer;float:right;display: inline-block;margin-top:2px;font-size:30px" ng-csv="buildCSV()" filename="activity.csv"></span>
+		<span class="fa fa-download" style="cursor: pointer;float:right;display: inline-block;margin-top:2px;font-size:30px" ng-csv="buildCSV()" csv-header="['Employee', 'Email', 'Last Comment', 'Last Check-in']" filename="activity.csv"></span>
 	</div>
 
 	<div ng-show="loading" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
@@ -12,13 +12,15 @@
 		<table>
 			<tr>
 				<th>Employee</th>
+				<th>Email</th>
 				<th>Last Comment</th>
 				<th>Last Check-In</th>
 			</tr>
 			<tr ng-repeat="obj in responseData">
-				<td>{{obj.employee}}</td>
-				<td>{{obj['last comment']}}</td>
-				<td>{{obj['last check-in']}}</td>
+				<td>{{obj.full_name}}</td>
+				<td>{{obj.email}}</td>
+				<td>{{obj.last_comment}}</td>
+				<td>{{obj.last_checkin}}</td>
 			</tr>
 		</table>
 	</div>
@@ -29,5 +31,9 @@
 
 .container {
 	padding-top: 75px;
+}
+
+td {
+	padding-right: 5px;
 }
 </style>

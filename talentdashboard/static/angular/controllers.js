@@ -1146,12 +1146,12 @@ angular.module('tdb.controllers', [])
 
         $scope.buildCSV = function () {
             var csv = [];
-            var firstrow = {};
-            firstrow['employee'] = "Employee";
-            firstrow['last comment'] = "Last Comment";
-            firstrow['last check-in'] = "Last Check-In";
-            csv.push(firstrow);
-            return csv.concat($scope.responseData);
+            $scope.responseData.map(function (obj) {
+                var next = [];
+                next.push(obj.full_name, obj.email, obj.last_comment, obj.last_checkin);
+                csv.push(next);
+            });
+            return csv;
         }
     }])
 
