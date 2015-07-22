@@ -206,9 +206,9 @@ def checkin_report_timespan(request):
 
 @api_view(['GET'])
 def last_activity_report(request):
-    employees = Employee.objects.all();
+    employees = Employee.objects.get_current_employees();
     response_data = [];
-
+    print(len(employees))
     for employee in employees:
         res = {}
         res['full_name'] = employee.full_name
