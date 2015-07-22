@@ -8,7 +8,6 @@
             <span ng-show="view == 'team-view'">There are not any discussions yet.</span>
         </p>  
     </div>
-
     <div class="comment" ng-repeat="event in events | orderBy:'date':true">
         <div class="comment-owner-avatar-container">
             <a ng-href="#/employees/{{event.user.employee.id}}" class="medium-headshot">
@@ -27,10 +26,12 @@
                             <a ng-click="deleteComment(event)"><i class="fa fa-trash-o"></i> Delete</a>
                         </li>
                     </ul>
-                </div>    
+                </div>   
+
                 <a ng-href="#/employees/{{event.user.employee.id}}" class="comment-title-employee-name">{{event.user.employee.full_name}}</a>
-                {{ event.verb }} on
-                <a ng-href="#/employees/{{event.employee.id}}" class="comment-title-employee-name">{{event.employee.full_name}}</a>
+                {{ event.verb }} 
+                <span ng-show="event.type == 'comment'">on</span>
+                <a ng-href="#/employees/{{event.employee.id}}" class="comment-title-employee-name" ng-show="event.type == 'comment'">{{event.employee.full_name}}</a>
                 <span class="timestamp" data-toggle="tooltip" data-placement="top" title="{{event.date | date:'MMM d, yyyy h:mma'}}">{{event.date | fromNow }}</span>
             </div>
             <div ng-show="showCommentEdit" class="comment-editor">
@@ -51,21 +52,48 @@
             </div>
 
             <div class="comment-copy" ng-show="!showCommentEdit">
-                <div class="avatar-container pull-right" >
-                    <a class="large-headshot" ng-show="view != 'employee-view'" ng-href="#/employees/{{event.employee.id}}">
-                        <img ng-src="{{ event.employee.avatar_small }}"/>
-                    </a>
-                    <div class="employee-attribute">
-                        <span class="segment employee-segment-background-color-{{event.employee.current_talent_category}}"></span>
+                
+                <!-- Check-in -->
+                <a class="activity-checkin row" href="#/checkins/{{ event.event_id }}" ng-show="event.type == 'check in'">
+                    <div class="activity-checkin-type pull-right">
+                        <span class="glyphicon glyphicon-top glyphicon-user"></span> 
+                        <span class="glyphicon glyphicon-outline glyphicon-user"></span> 
+                        <span class="glyphicon glyphicon-user"></span>   
                     </div>
-                </div>    
-                <span ng-init="length=500" ng-bind-html="event.description | new_line | cut:true:length" style="line-height: 125%"></span> <span ng-show="event.description.length>length" ng-init="showMoreButton=true"><a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a><a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a></span>
-                <span class="total-replies" ng-show="event.subcomments.length == 1">
-                    {{event.subcomments.length}} reply
-                </span>
-                <span class="total-replies" ng-show="event.subcomments.length > 1">
-                    {{event.subcomments.length}} replies
-                </span>    
+                    <div class="avatar-container col-xs-2">
+                        <span class="large-headshot">
+                            <img ng-src="{{ event.employee.avatar_small }}" alt="{{ event.employee.full_name }}" />
+                        </span>
+                        <div class="employee-attribute">
+                            <span class="segment employee-segment-background-color-{{event.employee.current_talent_category}}"></span>
+                        </div>
+                    </div> 
+                    <div class="activity-checkin-details col-xs-9">
+                        <h3 class="comment-title-employee-name">{{event.employee.full_name}}</h3>  
+                        <span class="activity-checkin-summary" ng-init="length=10" ng-bind-html="event.description | new_line | cut:true:length" style="line-height: 125%"></span> 
+                        <span ng-show="event.description.length>length" ng-init="showMoreButton=true">
+                            <span ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</span>
+                            <span ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</span>
+                        </span> 
+                    </div>
+                </a>
+                <div ng-show="event.type == 'comment'">
+                    <div class="avatar-container pull-right">
+                        <a class="large-headshot" ng-show="view != 'employee-view'" ng-href="#/employees/{{event.employee.id}}">
+                            <img ng-src="{{ event.employee.avatar_small }}"/>
+                        </a>
+                        <div class="employee-attribute">
+                            <span class="segment employee-segment-background-color-{{event.employee.current_talent_category}}"></span>
+                        </div>
+                    </div>   
+                    <span ng-init="length=500" ng-bind-html="event.description | new_line | cut:true:length" style="line-height: 125%"></span> <span ng-show="event.description.length>length" ng-init="showMoreButton=true"><a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a><a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a></span>
+                    <span class="total-replies" ng-show="event.subcomments.length == 1">
+                        {{event.subcomments.length}} reply
+                    </span>
+                    <span class="total-replies" ng-show="event.subcomments.length > 1">
+                        {{event.subcomments.length}} replies
+                    </span>   
+                </div>     
             </div>
         </div>
         <div ng-show="event.type == 'comment'" class="comment-replies" ng-show="showCommentInput || event.subcomments">
