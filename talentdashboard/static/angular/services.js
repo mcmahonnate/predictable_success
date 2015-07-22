@@ -274,8 +274,8 @@ angular.module('tdb.services', ['ngResource'])
     return ProspectReport;
 }])
 
-.factory('Happiness', [function() {
-    var Happiness = {
+.factory('HappinessOptions', [function() {
+    var HappinessOptions = {
         options: [
             {id: 0, name: 'No Happiness'},
             {id: 1, name: 'Very Unhappy'},
@@ -288,7 +288,7 @@ angular.module('tdb.services', ['ngResource'])
             return this.options;
         }
     };
-    return Happiness;
+    return HappinessOptions;
 }])
 
 .factory('TalentCategories', [function() {

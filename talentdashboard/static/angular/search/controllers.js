@@ -1,6 +1,6 @@
 angular.module('tdb.search.controllers', [])
 
-    .controller('EmployeeSearchCtrl', ['$scope', '$routeParams', '$location', '$filter', 'Happiness', 'EmployeeSearch', 'TalentCategories', 'Team', 'view', function ($scope, $routeParams, $location, $filter, Happiness, EmployeeSearch, TalentCategories, Team, view) {
+    .controller('EmployeeSearchCtrl', ['$scope', '$routeParams', '$location', '$filter', 'HappinessOptions', 'EmployeeSearch', 'TalentCategories', 'Team', 'view', function ($scope, $routeParams, $location, $filter, HappinessOptions, EmployeeSearch, TalentCategories, Team, view) {
         $scope.filters = {
             talentCategory: $routeParams.talent_category ,
             happiness: $routeParams.happiness,
@@ -8,7 +8,7 @@ angular.module('tdb.search.controllers', [])
             vops: $routeParams.vops
         };
         $scope.talentCategories = TalentCategories.categories;
-        $scope.happinessOptions = Happiness.query();
+        $scope.happinessOptions = HappinessOptions.query();
         if($scope.filters.happiness) {
             var filtered = $filter('filter')($scope.happinessOptions, {id: $scope.filters.happiness});
             $scope.currentHappiness = filtered.length ? filtered[0] : null;
