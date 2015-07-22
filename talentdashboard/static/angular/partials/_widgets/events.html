@@ -21,7 +21,7 @@
                     <i class="fa fa-cog show-popover"></i>
                     <ul class="popover-items" style="display:none">
                         <li class="popover-item" ng-show="event.user.id==currentUser.id">
-                            <a ng-click="showCommentEdit=true" class="edit"><i class="fa fa-pencil-square-o"></i> Edit</a>
+                            <a ng-click="editComment(event);showCommentEdit=true" class="edit"><i class="fa fa-pencil-square-o"></i> Edit</a>
                         </li>
                         <li class="popover-item" ng-show="event.user.id==currentUser.id">
                             <a ng-click="deleteComment(event)"><i class="fa fa-trash-o"></i> Delete</a>
@@ -36,17 +36,17 @@
             <div ng-show="showCommentEdit" class="comment-editor">
                 <div class="comment-reply-copy">
                     <textarea 
-                        ng-model="event.description"
+                        ng-model="event.comment.content"
                         msd-elastic
                         class="form-control edit-textarea">
                     </textarea>
                 </div> 
                 <div class="visibility">
                     <label>
-                        <input ng-model="comment.include_in_daily_digest" ng-checked="comment.include_in_daily_digest" type="checkbox"> Include in <a ng-click="showMembers()">Daily Digest Email</a>
+                        <input ng-model="event.comment.include_in_daily_digest" ng-checked="event.comment.include_in_daily_digest" type="checkbox"> Include in <a ng-click="showMembers()">Daily Digest Email</a>
                     </label>
                 </div>
-                <button class="btn btn-primary btn-sm" ng-disabled="!event.description" ng-click="saveComment(event);showCommentEdit=false">Save Edits</button>
+                <button class="btn btn-primary btn-sm" ng-disabled="!event.comment.content" ng-click="saveComment(event);showCommentEdit=false">Save Edits</button>
                 <button class="btn btn-link btn-sm" ng-click="cancelEditComment(event);showCommentEdit=false">Cancel</button>
             </div>
 

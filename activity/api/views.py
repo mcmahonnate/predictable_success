@@ -12,7 +12,8 @@ class EmployeeEventList(views.APIView):
     """
     def get(self, request, **kwargs):
         employee_id = kwargs['employee_id']
-        qs = Event.objects.filter(employee_id=employee_id)
+        qs = Event.objects.filter(employee__id=employee_id)
+        qs = qs.extra(order_by=['-date'])
         paginator = StandardResultsSetPagination()
         result_page = paginator.paginate_queryset(qs, request)
         serializer = EventSerializer(result_page, many=True, context={'request': request})
@@ -23,6 +24,7 @@ class EventList(views.APIView):
     """
     def get(self, request):
         qs = Event.objects.all()
+        qs = qs.extra(order_by=['-date'])
         paginator = StandardResultsSetPagination()
         result_page = paginator.paginate_queryset(qs, request)
         serializer = EventSerializer(result_page, many=True, context={'request': request})
@@ -34,9 +36,10 @@ class LeadEventList(views.APIView):
         employee_ids = Employee.objects.get_current_employees_by_team_lead(lead_id=requester.id).values('id')
         if not employee_ids:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
-        events = Event.objects.get_events_for_employees(requester=requester, employee_ids=employee_ids)
+        qs = Event.objects.get_events_for_employees(requester=requester, employee_ids=employee_ids)
+        qs = qs.extra(order_by=['-date'])
         paginator = StandardResultsSetPagination()
-        result_page = paginator.paginate_queryset(events, request)
+        result_page = paginator.paginate_queryset(qs, request)
         serializer = EventSerializer(result_page, many=True, context={'request': request})
         return paginator.get_paginated_response(serializer.data)
 
@@ -46,9 +49,10 @@ class CoachEventList(views.APIView):
         employee_ids = Employee.objects.get_current_employees_by_coach(coach_id=requester.id).values('id')
         if not employee_ids:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
-        events = Event.objects.get_events_for_employees(requester=requester, employee_ids=employee_ids)
+        qs = Event.objects.get_events_for_employees(requester=requester, employee_ids=employee_ids)
+        qs = qs.extra(order_by=['-date'])
         paginator = StandardResultsSetPagination()
-        result_page = paginator.paginate_queryset(events, request)
+        result_page = paginator.paginate_queryset(qs, request)
         serializer = EventSerializer(result_page, many=True, context={'request': request})
         return paginator.get_paginated_response(serializer.data)
 
@@ -58,8 +62,9 @@ class TeamEventList(views.APIView):
         employee_ids = Employee.objects.get_current_employees_by_team(team_id=pk).values('id')
         if not employee_ids:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
-        events = Event.objects.get_events_for_employees(requester=requester, employee_ids=employee_ids)
+        qs = Event.objects.get_events_for_employees(requester=requester, employee_ids=employee_ids)
+        qs = qs.extra(order_by=['-date'])
         paginator = StandardResultsSetPagination()
-        result_page = paginator.paginate_queryset(events, request)
+        result_page = paginator.paginate_queryset(qs, request)
         serializer = EventSerializer(result_page, many=True, context={'request': request})
         return paginator.get_paginated_response(serializer.data)

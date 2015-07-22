@@ -1,12 +1,20 @@
 angular.module('tdb.controllers.events', [])
 
-    .controller('EventsCtrl', ['$scope', '$rootScope', '$filter', '$window', '$modal', 'Events', 'EmployeeComments', 'SubComments','Comment', 'Engagement', function($scope, $rootScope, $filter, $window, $modal, Events, EmployeeComments, SubComments, Comment, Engagement) {
+    .controller('EventsCtrl', ['$scope', '$rootScope', '$filter', '$window', '$modal', 'Events', 'EmployeeComments', 'SubComments','Comment', 'Employee', function($scope, $rootScope, $filter, $window, $modal, Events, EmployeeComments, SubComments, Comment, Employee) {
         $scope.init = function(view, path, id) {
             $scope.view = view;
             $scope.path = path;
             $scope.id = id;
             $scope.loadEvents();
         };
+        if ($scope.path == 'employees') {
+            Employee.get(
+                {id: $scope.id},
+                function (data) {
+                    $scope.employee = data;
+                }
+            );
+        }
         if ($rootScope.currentUser.can_coach_employees || $rootScope.currentUser.can_view_company_dashboard) {
                 $scope.newCommentVisibility = 2;
                 $scope.showPeopleTeamVisibility = true;
@@ -63,21 +71,31 @@ angular.module('tdb.controllers.events', [])
         $scope.page = 0;
         $scope.busy = false;
         $scope.has_next = true;
+        $scope.editComment = function(event) {
+            var index = $scope.events.indexOf(event);
+            if (!event.comment) {
+                Comment.get({id: event.event_id}).$promise.then(function (response) {
+                    $scope.events[index].comment = response;
+                    $scope.originalEvents[index].comment = angular.copy($scope.events[index].comment);
+                });
+            };
+        };
 
         $scope.saveComment = function(event) {
             var index = $scope.events.indexOf(event);
-            var data = {id: event.event_id, _content: event.description, _visibility: event.visibility, _include_in_daily_digest: event.include_in_daily_digest};
+            var data = {id: event.event_id, _content: event.comment.content, _visibility: event.visibility, _include_in_daily_digest: event.comment.include_in_daily_digest};
             Comment.update(data, function() {
-                $scope.originalEvents[index].content = comment.content;
-                $scope.originalEvents[index].visibility = comment.visibility;
-                $scope.originalEvents[index].daily_digest = comment.daily_digest;
+                event.description = event.comment.content;
+                $scope.originalEvents[index].comment = angular.copy($scope.events[index].comment);
+                $scope.originalEvents[index].description = $scope.events[index].comment.content;
             });
-
         }
 
         $scope.cancelEditComment = function(event) {
             var index = $scope.events.indexOf(event);
-            event.description = $scope.originalEvents[index].description;
+            event.comment.content = $scope.originalEvents[index].comment.content;
+            event.comment.include_in_daily_digest = $scope.originalEvents[index].comment.include_in_daily_digest;
+
         }
 
          $scope.saveSubComment = function(subcomment, event) {
@@ -104,12 +122,12 @@ angular.module('tdb.controllers.events', [])
             data.id = $scope.id;
             EmployeeComments.save(data, function (response) {
                 newComment.id = response.id;
+                var newEvent = {event_id: newComment.id, description: newComment.content, user: $rootScope.currentUser, verb: 'commented', employee: $scope.employee, type: 'comment', subcomments: {}}
+                $scope.events.push(newEvent);
+                $scope.originalEvents.push(angular.copy(newEvent));
+                $scope.newComment = getBlankComment();
 
             });
-            var newEvent = {event_id: newComment.id, description: newComment.content}
-            $scope.events.push(newEvent);
-            $scope.originalEvents.push(angular.copy(newEvent));
-            $scope.newComment = getBlankComment();
         }
 
         $scope.addSubComment = function(event) {
