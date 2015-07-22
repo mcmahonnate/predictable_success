@@ -14,10 +14,10 @@
         <img alt="{{task.employee.full_name}}" title="{{task.employee.full_name}}" ng-src="{{ task.employee.avatar_small }}" />
     </a>
 </div>
-<div class="col-xs-12 col-md-4 col-lg-6 todo-description-container">
+<div class="col-xs-12 col-md-6 todo-description-container">
     
     <p class="todo-description">{{task.description}}</p>
-    <span class="timestamp">Created by {{task.created_by.full_name}} {{ task.created_date | fromNow }}</span>
+    <span class="timestamp">Created by <span ng-show="task.created_by.full_name">{{task.created_by.full_name}}</span> <span ng-show="!task.created_by.full_name">you</span> {{ task.created_date | fromNow }}</span>
 </div>
 <div class="col-xs-12 col-md-3">
     <div ng-show="task.assigned_to.full_name">

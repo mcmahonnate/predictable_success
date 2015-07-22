@@ -6,8 +6,43 @@ angular.module('tdb.controllers.checkins', [])
             $scope.happiness = new Happiness({assessment: 0});
             $scope.tasks = [];
             $scope.employeeSearch = '';
+
         };
         initialize();
+
+        $scope.$watch('view', function () {
+
+            // New Check-in
+            if ($scope.view == 'new') { 
+                if ($routeParams.id) { 
+                    Employee.get({id:$routeParams.id})
+                        .$promise.then(
+                            //success
+                            function(employee){
+                                $scope.selectedEmployee = employee;
+                                $scope.checkin.employee = $scope.happiness.employee = employee.id;
+                            },
+                            //error
+                            function( error ){
+                                $scope.showSearch = true;
+                            }
+                        );
+                } else {
+                    $scope.showSearch = true;
+                }  
+            }   
+
+            // Check-in Details
+            if ($scope.view == 'detail') { 
+                $scope.loadCheckin = CheckIn.get({ id : $routeParams.id }, function(data) {
+                    $scope.checkin = data;
+                }, function(response) {
+                    if(response.status === 404) {
+                         $location.url('checkin');
+                    }
+                });
+            }   
+        });
 
         CheckInType.query({}, function(data) {
             $scope.checkinTypes = data;
@@ -20,24 +55,6 @@ angular.module('tdb.controllers.checkins', [])
             });
         }
 
-        // Get user id from url if it exists and show form otherwise show search 
-        if ($routeParams.id) { 
-            Employee.get({id:$routeParams.id})
-                .$promise.then(
-                    //success
-                    function(employee){
-                        $scope.selectedEmployee = employee;
-                        $scope.checkin.employee = $scope.happiness.employee = employee.id;
-                    },
-                    //error
-                    function( error ){
-                        $scope.showSearch = true;
-                    }
-                );
-        } else {
-            $scope.showSearch = true;
-        }    
-
         $scope.selectEmployee = function(employee) {
             $scope.employeeSearch = employee.full_name;
             $scope.selectedEmployee = employee;
@@ -45,9 +62,30 @@ angular.module('tdb.controllers.checkins', [])
             $scope.showSearch = false;
         };
 
-        $scope.addTask = function(form) {
+
+        $scope.newTask = function(form) {
             if(form.$invalid) return;
             $scope.newTask = new Task();
+        };
+
+
+        $scope.newTask = function () {
+            var modalInstance = $modal.open({
+                animation: true,
+                templateUrl: '/static/angular/partials/_widgets/add-edit-task.html',
+                controller: 'AddEditTaskCtrl',
+                resolve: {
+                    task: function () {
+                        return new Task({employee: $scope.selectedEmployee.id});
+                    }
+                }
+            });
+
+            modalInstance.result.then(
+                function (newTask) {
+                    $scope.tasks.push(newTask);
+                }
+            );
         };
 
         $scope.editTask = function(task) {
@@ -64,19 +102,21 @@ angular.module('tdb.controllers.checkins', [])
 
             modalInstance.result.then(
                 function (editedTask) {
-                    $rootScope.replaceItemInList($scope.tasks, task, editedTask);
+                    $rootScope.replaceItemInList($scope.tasks, task, editedTask);   
                 }
             );
         };
 
-        $scope.deleteTask = function(task) {
-            $rootScope.removeItemFromList($scope.tasks, task);
-        };
 
+        $scope.saveSummary = function (checkin) {
+            data = {summary: checkin.summary, id: checkin.id};
+            CheckIn.update(data, function() {
+                $scope.showSummaryEdit = false;
+                Notification.success("Saved!");
+            });
+        }
 
-
-
-        $scope.save = function (form) {
+        $scope.saveCheckin = function (form) {
             if(form.$invalid) return;
 
             var saveHappiness = function() {
@@ -114,29 +154,9 @@ angular.module('tdb.controllers.checkins', [])
             });
         };
 
-        $scope.cancel = function() {
-            initialize();
+        $scope.deleteTask = function(task) {
+            $rootScope.removeItemFromList($scope.tasks, task);
         };
-
-        $scope.busy = false;
-    }])
-
-    .controller('CheckInDetailsCtrl', ['$rootScope', '$scope', '$q', '$routeParams', '$location', 'CheckIn', 'Notification', 'CheckInType', 'Happiness', 'Employee', '$modal', '$window', function ($rootScope, $scope, $q, $routeParams, $location, CheckIn, Notification, CheckInType, Happiness, Employee, $modal, $window) {
-        $scope.loadCheckin = CheckIn.get({ id : $routeParams.id }, function(data) {
-            $scope.checkin = data;
-        }, function(response) {
-            if(response.status === 404) {
-                 //$location.url('/404');
-            }
-        });
-
-        $scope.saveSummary = function (checkin) {
-            data = {summary: checkin.summary, id: checkin.id};
-            CheckIn.update(data, function() {
-                $scope.showSummaryEdit = false;
-                Notification.success("Saved!");
-            });
-        }
 
         $scope.deleteCheckin = function(checkin) {
             if ($window.confirm('Are you sure you want to delete this check-in?')) {
@@ -148,4 +168,11 @@ angular.module('tdb.controllers.checkins', [])
                 });
             }
         };
-    }])
+
+
+        $scope.cancel = function() {
+            initialize();
+        };
+
+        $scope.busy = false;
+    }]);

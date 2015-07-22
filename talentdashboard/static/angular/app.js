@@ -31,7 +31,7 @@ var app = angular.module('tdb', [
           when('/tasks', {templateUrl: '/static/angular/partials/tasks.html', controller: 'TasksCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
           when('/checkin/:id', {templateUrl: '/static/angular/partials/checkin.html', controller: 'AddEditCheckInCtrl', resolve: {authorizeRoute: authorizeRoute}}).       
           when('/checkin', {templateUrl: '/static/angular/partials/checkin.html', controller: 'AddEditCheckInCtrl', resolve: {authorizeRoute: authorizeRoute}}).
-          when('/checkins/:id', {templateUrl: '/static/angular/partials/checkin-detail.html', controller: 'CheckInDetailsCtrl', resolve: {authorizeRoute: authorizeRoute}}).
+          when('/checkins/:id', {templateUrl: '/static/angular/partials/checkin-detail.html', controller: 'AddEditCheckInCtrl', resolve: {authorizeRoute: authorizeRoute}}).
           otherwise({redirectTo: '/'});
     }])
     .run(['$rootScope', 'User', 'TalentCategories', 'Customers', function($rootScope, User, TalentCategories, Customers) {
