@@ -10,6 +10,27 @@ angular.module('tdb.controllers.checkins', [])
         };
         initialize();
 
+
+        CheckInType.query({}, function(data) {
+            $scope.checkinTypes = data;
+        });
+
+        // TODO: Solr-ize this
+        if (!$scope.employees) {
+            Employee.query({}, function(data) {
+                $scope.employees = data;
+            });
+        }
+
+        $scope.selectEmployee = function(employee) {
+            $scope.employeeSearch = employee.full_name;
+            $scope.selectedEmployee = employee;
+            $scope.checkin.employee = $scope.happiness.employee = employee.id;
+            $scope.showSearch = false;
+        };
+
+
+        // View switch
         $scope.$watch('view', function () {
 
             // New Check-in
@@ -43,24 +64,6 @@ angular.module('tdb.controllers.checkins', [])
                 });
             }   
         });
-
-        CheckInType.query({}, function(data) {
-            $scope.checkinTypes = data;
-        });
-
-        // TODO: Solr-ize this
-        if (!$scope.employees) {
-            Employee.query({}, function(data) {
-                $scope.employees = data;
-            });
-        }
-
-        $scope.selectEmployee = function(employee) {
-            $scope.employeeSearch = employee.full_name;
-            $scope.selectedEmployee = employee;
-            $scope.checkin.employee = $scope.happiness.employee = employee.id;
-            $scope.showSearch = false;
-        };
 
 
         $scope.newTask = function(form) {
@@ -168,7 +171,6 @@ angular.module('tdb.controllers.checkins', [])
                 });
             }
         };
-
 
         $scope.cancel = function() {
             initialize();
