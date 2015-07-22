@@ -260,7 +260,11 @@ angular.module('tdb.controllers', [])
         $scope.leadership = angular.copy(leadership);
         $scope.teams = teams;
         $scope.employees = employees;
-        $scope.preview = $scope.employee.avatar;
+        // $scope.preview = $scope.employee.avatar;
+        $scope.image = {
+            uploadedImg: '',
+            croppedImg: $scope.employee.avatar
+        }; // have to use this format for ng-img-crop to work
         $scope.cancel = function () {
             $modalInstance.dismiss();
         };
@@ -307,9 +311,10 @@ angular.module('tdb.controllers', [])
             }
         };
         var saveOtherInfo = function (addNew) {
-            if ($scope.preview != $scope.employee.avatar) {
+            if ($scope.image.croppedImg != $scope.employee.avatar) {
                 var upload_data = {id: $scope.employee.id};
-                PhotoUpload($scope.model, $scope.files).update(upload_data, function (data) {
+                var newfile = [dataURItoBlob($scope.image.croppedImg)];
+                PhotoUpload($scope.model, newfile).update(upload_data, function (data) {
                     $scope.employee.avatar = data.avatar;
                 });
             }
@@ -318,6 +323,16 @@ angular.module('tdb.controllers', [])
                 changeLocation('employees/' + $scope.employee.id, false);
             }
         };
+        var dataURItoBlob = function(dataURI) {
+            var byteString = atob(dataURI.split(',')[1]);
+            var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+            var ab = new ArrayBuffer(byteString.length);
+            var dw = new DataView(ab);
+            for(var i = 0; i < byteString.length; i++) {
+                dw.setUint8(i, byteString.charCodeAt(i));
+            }
+            return new Blob([ab], {type: mimeString});
+        }
 
         var getData = function () {
             var data = {id: $scope.employee.id};
@@ -336,7 +351,8 @@ angular.module('tdb.controllers', [])
             $scope.files = files;
             fileReader.readAsDataUrl($scope.files[0], $scope)
                 .then(function (result) {
-                    $scope.preview = result;
+                    $scope.image.uploadedImg = result;
+                    $scope.image.croppedImg = result;
                 });
         };
         var changeLocation = function (url, force) {

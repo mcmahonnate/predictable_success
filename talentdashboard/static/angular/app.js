@@ -6,7 +6,7 @@ var app = angular.module('tdb', [
         'tdb.controllers.comments',
         'tdb.services.checkins', 'tdb.controllers.checkins',
         'tdb.engagement.services', 'angular.filter',
-        'angular-carousel', 'analytics', 'ui.bootstrap', 'ngCsv','ngRoute','ui-notification', 'ngMessages'])
+        'angular-carousel', 'analytics', 'ui.bootstrap', 'ngCsv','ngImgCrop', 'ngRoute','ui-notification', 'ngMessages'])
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.
           when('/', {template: '<div ng-include src="templateUrl"></div>', controller: 'CompanyOverviewCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).

@@ -2,10 +2,13 @@
     <div>
             <div class="modal-body">
                 <div style="margin-top: 10px;width:28%;float:left;padding-right: 10px">
-                    <img ng-src="{{preview}}" style="width:100%;display:block;margin-left:auto;margin-right:auto;float:left;border-radius: 90px;">
+                    <img ng-src="{{image.croppedImg}}" style="width:100%;display:block;margin-left:auto;margin-right:auto;float:left;border-radius: 90px;">
                     <div style="float:left;display:block;background-color: #3498db;border-radius: 6px;width:100%;margin:10px 0;text-align: center;height: 40px;">
                         <input class="custom-file-upload" onchange="angular.element(this).scope().uploadFile(this.files)" style="z-index:1;width:135px;opacity:0;position: absolute;left:30px;height: 30px; z-index:99;" type="file" name="file" accept="image/*" tabindex="9">
                         <span class="glyphicon glyphicon-photo-big" style="padding-top:4px"></span>
+                    </div>
+                    <div class="croparea" ng-if="files">
+                        <img-crop image="image.uploadedImg" result-image="image.croppedImg"> </img-crop>
                     </div>
                 </div>
                 <div style="margin-top: 10px;width:36%;float:left;padding: 0 10px">
@@ -60,3 +63,14 @@
             </div>
     </div>
 </form>
+
+<style>
+    .croparea {
+        width: 150px;
+        height: 150px;
+        display:block;
+        margin-left:auto;
+        margin-right:auto;
+        float:left;
+    }
+</style>
