@@ -1,6 +1,6 @@
 angular.module('tdb.controllers.checkins', [])
 
-    .controller('AddEditCheckInCtrl', ['$rootScope', '$scope', '$q', '$routeParams', '$location', '$modal', 'CheckIn', 'CheckInType', 'Happiness', 'Task', 'Employee', function ($rootScope, $scope, $q, $routeParams, $location, $modal, CheckIn, CheckInType, Happiness, Task, Employee) {
+    .controller('AddEditCheckInCtrl', ['$rootScope', '$scope', '$q', '$routeParams', '$location', '$modal', 'CheckIn', 'CheckInType', 'Happiness', 'Task', 'Employee', 'Notification', function ($rootScope, $scope, $q, $routeParams, $location, $modal, CheckIn, CheckInType, Happiness, Task, Employee, Notification) {
         var initialize = function() {
             $scope.checkin = new CheckIn({date: new Date(Date.now())});
             $scope.happiness = new Happiness({assessment: 0});
@@ -8,7 +8,6 @@ angular.module('tdb.controllers.checkins', [])
             $scope.employeeSearch = '';
         };
         initialize();
-
 
         CheckInType.query({}, function(data) {
             $scope.checkinTypes = data;
@@ -38,7 +37,6 @@ angular.module('tdb.controllers.checkins', [])
         } else {
             $scope.showSearch = true;
         }    
-
 
         $scope.selectEmployee = function(employee) {
             $scope.employeeSearch = employee.full_name;
@@ -75,24 +73,7 @@ angular.module('tdb.controllers.checkins', [])
             $rootScope.removeItemFromList($scope.tasks, task);
         };
 
-        $scope.addTask = function () {
-            var modalInstance = $modal.open({
-                animation: true,
-                templateUrl: '/static/angular/partials/_widgets/add-edit-task.html',
-                controller: 'AddEditTaskCtrl',
-                resolve: {
-                    task: function () {
-                        return new Task({employee: $scope.selectedEmployee.id});
-                    }
-                }
-            });
 
-            modalInstance.result.then(
-                function (newTask) {
-                    $scope.tasks.push(newTask);
-                }
-            );
-        };
 
 
         $scope.save = function (form) {
@@ -127,6 +108,7 @@ angular.module('tdb.controllers.checkins', [])
                     $q.all(promises).then(function() {
                         // Redirect to the CheckIn detail
                         $location.path("/checkins/" + newCheckin.id);
+                        Notification.success("Successfully created Check-in!");
                     });
                 })
             });
@@ -135,23 +117,35 @@ angular.module('tdb.controllers.checkins', [])
         $scope.cancel = function() {
             initialize();
         };
+
         $scope.busy = false;
     }])
 
-    .controller('CheckInDetailsCtrl', ['$scope', '$q', '$routeParams', '$location', 'CheckIn', 'CheckInType', 'Happiness', 'Employee', function ($scope, $q, $routeParams, $location, CheckIn, CheckInType, Happiness, Employee) {
+    .controller('CheckInDetailsCtrl', ['$rootScope', '$scope', '$q', '$routeParams', '$location', 'CheckIn', 'Notification', 'CheckInType', 'Happiness', 'Employee', '$modal', '$window', function ($rootScope, $scope, $q, $routeParams, $location, CheckIn, Notification, CheckInType, Happiness, Employee, $modal, $window) {
         $scope.loadCheckin = CheckIn.get({ id : $routeParams.id }, function(data) {
             $scope.checkin = data;
         }, function(response) {
             if(response.status === 404) {
-                 $location.url('/404');
+                 //$location.url('/404');
             }
         });
 
         $scope.saveSummary = function (checkin) {
-
-            console.log(checkin);
             data = {summary: checkin.summary, id: checkin.id};
-            CheckIn.update(data, function() {});
+            CheckIn.update(data, function() {
+                $scope.showSummaryEdit = false;
+                Notification.success("Saved!");
+            });
         }
 
+        $scope.deleteCheckin = function(checkin) {
+            if ($window.confirm('Are you sure you want to delete this check-in?')) {
+                var data = {id: checkin.id};
+
+                CheckIn.remove(data, function() {
+                    $location.path("/checkin");
+                    Notification.success("Successfully deleted check-in!");    
+                });
+            }
+        };
     }])

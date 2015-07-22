@@ -13,37 +13,44 @@
 		</div>
 	</div>	
     <div class="checkin-summary panel">
+        <div class="pull-right" ng-hide="showSummaryEdit" ng-show="checkin.host.id == currentUser.employee.id">
+            <i class="fa fa-cog show-popover"></i>
+            <ul class="popover-items" style="display:none">
+                <li class="popover-item">
+                    <a ng-click="showSummaryEdit=true" class="edit"><i class="fa fa-pencil-square-o"></i> Edit</a>
+                </li>
+                <li class="popover-item">
+                    <a ng-click="deleteCheckin(checkin)"><i class="fa fa-trash-o"></i> Delete</a>
+                </li>
+            </ul>
+        </div> 
     	<div ng-hide="showSummaryEdit">
-    		<div class="pull-right">
-    			<a href="javascript:void(0);" ng-click="showSummaryEdit=true" class="btn btn-xs btn-default"><span class="fa fa-pencil"></span> Edit</a>
-    		</div>
     		<span class="checkin-summary-instance" data-ng-bind-html="checkin.summary | new_line | cut:true:length"></span>
     	</div>	
-
 	    <div ng-show="showSummaryEdit">
             <textarea 
-               	ng-bind-html="checkin.summary" class="form-control edit-textarea">
+               	ng-bind-html="checkin.summary" ng-model="checkin.summary" class="form-control edit-textarea" style="min-height:250px;">
             </textarea>
-        	<button class="btn btn-primary btn-sm" ng-click="saveSummary(checkin); showCommentEdit=false">Save Edits</button>
+        	<button class="btn btn-primary btn-sm" ng-click="saveSummary(checkin);">Save Edits</button>
         	<button class="btn btn-link btn-sm" ng-click="cancelEditComment(comment);showSummaryEdit=false">Cancel</button>
         </div>
 	</div>
-
 	<div class="panel panel-happiness" ng-show="checkin.happiness" style="overflow:hidden">
-		<h4 class="panel-title pull-left">Happiness: <span class="employee-happiness-color-{{checkin.happiness.assessment}}">{{ checkin.happiness.assessment_verbose }}</span></h4>
+		<h4 class="panel-title pull-left">Happiness: 
+			<span class="employee-happiness-color-{{checkin.happiness.assessment}}">{{ checkin.happiness.assessment_verbose }}</span>
+		</h4>
 	</div>		
-
-    <div class="panel panel-tasks todos">
+    <div class="panel panel-tasks todos" ng-if="checkin.tasks.length > 0" ng-controller="TaskListCtrl">
 		<h4 class="panel-title">Tasks</h4>
-	    <tabset>
+	    <tabset ng-show="checkin.tasks.length > 0">
 	        <tab heading="To Do" active="true">
 	            <div ng-show="checkin.tasks.length === 0 && !busy" class="todos-empty">
 	                <p ng-show="view == 'my-view'">You currently don't have any tasks. Add tasks on employee profile pages.</p>
 	                <p ng-show="view == 'employee-view'">There are no tasks for {{ employee.full_name }}.</p>
 	            </div>
 	            <div ng-if="checkin.tasks.length > 0">
-	                <div class="row shaded">
-	                    <div class="col-md-4 col-lg-5"></div>
+	                <div class="row shaded tab-header">
+	                    <div class="col-xs-6"></div>
 	                    <div class="col-xs-3">Assigned To</div>
 	                    <div class="col-xs-2">Due Date</div>
 	                </div>
@@ -60,8 +67,8 @@
 	                <p ng-show="view == 'employee-view'">There are no completed tasks for {{ employee.full_name }}.</p>
 	            </div>
 	            <div ng-if="done.length > 0">
-	                <div class="row shaded">
-	                    <div class="col-md-4 col-lg-5"></div>
+	                <div class="row shaded tab-header">
+	                    <div class="col-xs-6"></div>
 	                    <div class="col-xs-3">Assigned To</div>
 	                    <div class="col-xs-2">Due Date</div>
 	                </div>
@@ -74,5 +81,4 @@
 	        </tab>
 	    </tabset>
     </div>  
-
 </div>

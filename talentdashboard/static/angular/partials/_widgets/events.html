@@ -1,5 +1,5 @@
 <div class="comments panel" ng-if="currentUser.can_view_comments" >
-    <h2 class="panel-title">Discussions</h2>
+    <h2 class="panel-title">Activity</h2>
 
     <!-- Empty discussion messages -->
     <div ng-show="comments.length==0" class="no-comments">
@@ -116,6 +116,6 @@
             </div>
         </div>
     </div>
-    <button class="btn btn-link btn-sm btn-show-more" ng-show="has_next && !busy" ng-click="loadEvents()">Load More Discussions</button>
+    <button class="btn btn-link btn-sm btn-show-more" ng-show="has_next && !busy" ng-click="loadEvents()">Load More Activity</button>
     <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
 </div>

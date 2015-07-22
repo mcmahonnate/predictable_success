@@ -26,10 +26,6 @@
 		<!-- Check-in -->
 		<div ng-show="selectedEmployee">
 			<div class="checkin-header">
-				<div class="type-tag">
-					<span ng-show="!checkin.other_type_description">{{ checkin.type.name }}</span>
-					<span ng-show="checkin.other_type_description">{{ checkin.other_type_description }}</span>
-				</div>
 				<a href="#/employees/{{employee.id}}">
 					<img ng-src="{{ selectedEmployee.avatar_small }}" class="headshot medium-headshot pull-left"/>
 				</a>
@@ -38,13 +34,11 @@
 					<p class="timestamp">You're checking in now</p>
 				</div>
 			</div>	
-
-
 	    	<div class="checkin-type">
                 <div ng-show="checkinForm.$submitted" ng-messages="checkinForm.type.$error">
                     <div class="help-block" ng-message="required">You must specify the type</div>
                 </div>
-		    	<select class="form-control simple-form-control input-lg" ng-options="type as type.name for type in checkinTypes" ng-model="checkin.type" name="type">
+		    	<select class="form-control simple-form-control" ng-options="type as type.name for type in checkinTypes" ng-model="checkin.type" name="type">
 		    		<option value="">--Select Check-In Type--</option>
 		    	</select>
                 <div ng-show="checkinForm.$submitted" ng-messages="checkinForm.other_type_description.$error">
@@ -52,12 +46,9 @@
                 </div>
 		    	<input ng-show="checkin.type===1" name="other_type_description" class="form-control" placeholder="Enter check in type..." />
 		    </div>
-
-
 		    <div class="checkin-summary panel">
-	        	<textarea required placeholder="Enter check-in summary here..." class="form-control simple-form-control" name="summary" ng-model="checkin.summary" style="min-height:250px;"></textarea>
+	        	<textarea required placeholder="Enter check-in summary here..." class="form-control" name="summary" ng-model="checkin.summary" style="min-height:250px;"></textarea>
 			</div>
-
 			<div class="panel" style="overflow:hidden;">
 				<h4 class="panel-title pull-left">Happiness</h4>
 
@@ -80,25 +71,25 @@
                         </div>
                     </div>
                 </div>
-
             </div>    
-
-            <div class="panel">
-            	<button type="button" ng-click="addTask()" class="pull-right btn btn-sm btn-success">Add New Task</button>
+            <div class="panel panel-tasks todos" ng-controller="TaskListCtrl">
+            	<button type="button" ng-click="addTask()" class="pull-right btn btn-sm btn-success btn-add-task"><span class="glyphicon glyphicon-plus"></span> Task</button>
 				<h4 class="panel-title">Tasks</h4>
-				<div class="row shaded" ng-show="task">
-                    <div class="col-md-3 col-lg-2 first"></div>
-                    <div class="col-md-4 col-lg-5">Tasks</div>
-                    <div class="col-xs-3">Assigned To</div>
-                    <div class="col-xs-2">Due Date</div>
-                </div>
-                <div class="row todo" ng-repeat="task in tasks">
-                    <div ng-include="'/static/angular/partials/_widgets/task-list-item.html'"></div>
-                </div>
+				<tabset ng-show="tasks.length > 0">
+        			<tab heading="To Do" active="true">
+						<div class="row shaded tab-header" ng-show="tasks">
+		                    <div class="col-md-3 col-lg-2 first"></div>
+		                    <div class="col-md-4 col-lg-5">Tasks</div>
+		                    <div class="col-xs-3">Assigned To</div>
+		                    <div class="col-xs-2">Due Date</div>
+		                </div>
+		            </tab>
+		        </tabset>        
+	            <div class="row todo" ng-repeat="task in tasks">
+	                <div ng-include="'/static/angular/partials/_widgets/task-list-item.html'"></div>
+	            </div>
             </div>    
-     
-
-	        <button type="submit" class="btn btn-success btn-lg">Publish to Profile</button>
+	        <button type="submit" class="btn btn-success btn-lg btn-publish">Publish to Profile</button>
 	    </div>    
 	</form>
 </div>

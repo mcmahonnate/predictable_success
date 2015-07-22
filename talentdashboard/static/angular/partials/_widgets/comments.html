@@ -1,5 +1,5 @@
 <div class="comments panel" ng-if="currentUser.can_view_comments" >
-    <h2 class="panel-title">Discussions</h2>   
+    <h2 class="panel-title">Activity</h2>   
 
     <!-- Empty discussion messages -->
     <div ng-show="comments.length==0" class="no-comments">
@@ -8,7 +8,6 @@
             <span ng-show="view == 'team-view'">There are not any discussions yet.</span>
         </p>  
     </div>
-
     <div class="comment" ng-repeat="comment in comments | orderBy:'created_date':true">  
         <div class="comment-owner-avatar-container">
             <a ng-href="#/employees/{{comment.owner.employee.id}}" class="medium-headshot">
@@ -117,6 +116,6 @@
             </div>
         </div>
     </div>
-    <button class="btn btn-link btn-sm btn-show-more" ng-show="has_next && !busy" ng-click="loadComments()">Load More Discussions</button>
+    <button class="btn btn-link btn-sm btn-show-more" ng-show="has_next && !busy" ng-click="loadComments()">Load More Activity</button>
     <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
 </div>
