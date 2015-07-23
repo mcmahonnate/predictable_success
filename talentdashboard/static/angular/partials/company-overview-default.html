@@ -1,6 +1,6 @@
 <div class="container narrow-gutter {in:salaryReport}" ng-if="currentUser.can_view_company_dashboard">
         <div ng-include="'/static/angular/partials/_widgets/search.html'"></div>
-        <h1>{{customer.name}} Dashboard</h1>    
+        <h1>{{customer.name}} Dashboard <a href="#/checkin" class="btn btn-success btn-checkin"><span class="glyphicon glyphicon-plus"></span> Check-In</a></h1>    
     <div class="row">
         <div class="col col-sm-5 col-md-4 col-lg-5">
             <div ng-include="'/static/angular/partials/_widgets/chart-talent-portfolio.html'"></div> 
@@ -10,7 +10,7 @@
         </div>
         <div class="col col-sm-7 col-md-8 col-lg-7">    
             <div ng-include="'/static/angular/partials/_widgets/todos.html'" data-filter="mine" data-view="my-view" data-page-size="5" ng-controller="TaskListCtrl"></div>
-            <div ng-include="'/static/angular/partials/_widgets/comments.html'" ng-controller="CommentsCtrl" ng-init="init(view='company-view')"></div>
+            <div ng-include="'/static/angular/partials/_widgets/events.html'" ng-controller="EventsCtrl" ng-init="init(view='company-view')"></div>
         </div>
     </div>
 </div>

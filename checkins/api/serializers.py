@@ -14,11 +14,11 @@ class CheckInTypeSerializer(serializers.ModelSerializer):
 
 
 class CheckInSerializer(serializers.ModelSerializer):
-    employee = MinimalEmployeeSerializer()
-    host = MinimalEmployeeSerializer()
-    type = CheckInTypeSerializer()
-    happiness = HappinessSerializer()
-    tasks = TaskSerializer(many=True)
+    employee = MinimalEmployeeSerializer(required=False)
+    host = MinimalEmployeeSerializer(required=False)
+    type = CheckInTypeSerializer(required=False)
+    happiness = HappinessSerializer(required=False)
+    tasks = TaskSerializer(required=False, many=True)
 
     class Meta:
         model = CheckIn

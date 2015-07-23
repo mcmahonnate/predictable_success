@@ -1,6 +1,6 @@
 <div ng-if="employee.display" class="container narrow-gutter employee-view" ng-class="{in:employee}">
     <div ng-include="'/static/angular/partials/_widgets/search.html'"></div>
-    <h1>{{employee.full_name}}</h1>     
+    <h1>{{employee.full_name}} <a href="#/checkin/{{ employee.id }}" class="btn btn-success btn-checkin"><span class="glyphicon glyphicon-plus"></span> Check-In</a></h1>     
     <div class="row">
         <div class="col-sm-5 col-md-5 col-lg-5">
             <div class="panel">
@@ -43,9 +43,9 @@
         </div>    
         <div class="col-sm-7 col-md-7 col-lg-7">  
             <div ng-include="'/static/angular/partials/_widgets/todos.html'" data-view="employee-view" data-page-size="5" ng-controller="TaskListCtrl"></div>
-            <div ng-controller="CommentsCtrl" ng-init="init(view='employee-view', path='employees', id=employee.id)">
+            <div ng-controller="EventsCtrl" ng-init="init(view='employee-view', path='employees', id=employee.id)">
                 <div ng-include="'/static/angular/partials/_widgets/add-comment.html'"></div>
-                <div ng-include="'/static/angular/partials/_widgets/comments.html'"></div>
+                <div ng-include="'/static/angular/partials/_widgets/events.html'"></div>
             </div>          
         </div>
     </div>

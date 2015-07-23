@@ -1,4 +1,4 @@
-<div ng-controller="NavigationCtrl" ng-if="currentUser.can_view_company_dashboard" ng-class="{open: navQuery!=''}" class="search dropdown">
+<div ng-controller="SearchCtrl" ng-if="currentUser.can_view_company_dashboard" ng-class="{open: navQuery!=''}" class="search search-inpage dropdown pull-right">
     <div style="position:relative;">
         <div class="glyphicon glyphicon-search search-icon"></div>
         <input ng-click="toggleNavQuery()" class="search-input nav_query" ng-model="navQuery" type="text" placeholder="Search Employees..."/>

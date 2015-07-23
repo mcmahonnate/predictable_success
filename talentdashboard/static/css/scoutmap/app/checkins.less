@@ -1,3 +1,21 @@
+.btn-checkin {
+    font-size: 16px;
+    font-weight: bold;
+    padding: 8px 15px;
+    border-radius: 30px;
+    position: absolute;
+    margin: -12px 12px;
+
+
+    @media only screen and (max-width : 800px) {
+        padding: 10px 15px;
+        position: fixed;
+        bottom: 28px;
+        left: 5px;
+        z-index: 5;
+    }    
+}
+
 .checkin {
   	max-width: 700px;
   	margin: 40px auto;
@@ -21,7 +39,7 @@
   			}
   		}
         .timestamp {
-            font-size: 15px;
+            font-size: 14px;
             color: #666;
             margin-top: -6px;
             position: relative;
@@ -52,34 +70,52 @@
   		}
   	}
 
-  	.checkin-type select {
-  		color: #999;
-  	}
+  	.checkin-type {
+        margin-bottom: 10px;
+
+        select {
+      		color: #999;
+      	}
+    }
 
   	.checkin-summary {
   		margin-bottom: 10px;
+        position: relative;
 
         textarea {
-            -webkit-box-shadow: none;
-            padding: 0; 
             line-height: 25px;
             font-size: 16px;
             color: #444;
+            -webkit-box-shadow: none;
+            padding: 0; 
+            border: none;
         }
-
         .checkin-summary-instance {
             line-height: 25px;
             font-size: 16px;
             color: #444;
         }
+        .popover-items {
+            margin: 25px 20px
+        }
   	}
 
 
+    .edit-textarea {
+      margin: 12px 0 8px;
+      background-color: floralwhite;
+    }
+    
     .checkin-engagement {
         text-align: center;
 
         .employee-happiness-container {
           margin: -10px 0;
+        }
+
+        @media only screen and (max-width : 640px) {
+            float: left !important;
+            margin: 20px 0 0;
         }
     }
 
@@ -112,6 +148,10 @@
         .panel-title {
             margin-bottom: 0;
         }
+
+        .popover-items {
+            margin: 18px 12px;
+        }
     }
 
 
@@ -129,4 +169,45 @@
         margin: 18px 0 0;
     }
 
+    @media only screen and (max-width : 640px) {
+      .type-tag {
+        position: absolute;
+        top: 33px;
+        font-size: 11px;
+        padding: 3px 10px;
+        right: 30px;
+      }  
+    }  
+
+    @media only screen and (max-width : 640px) {
+        .btn-publish {
+            width: 100%;
+        }
+    }
+
+
+    .todos .first {
+        display: none;
+    } 
+    .todos .todo{
+        padding: 15px;
+    }
+
+    @media only screen and (max-width : 640px) {
+        .tab-header {
+            display: none;
+        }
+        .todo .timestamp {
+            display: none;
+        }
+        .todo-description {
+            padding: 0 10px 10px;
+        }
+    }
 }
+
+.btn-add-task {
+  margin: -6px 0;
+}
+
+

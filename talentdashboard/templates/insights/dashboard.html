@@ -13,7 +13,7 @@
     <div class="container {% if responses.count < threshold %}no-data{% endif %}">
         <h1>Insights Dashboard</h1>
         {% if responses.count < threshold %}
-            <div class="alert alert-warning" role="alert"><i class="fa fa-exclamation-triangle"></i> You have <strong>{{ responses.count }}</strong> responses. You need  at least two responses!</div>
+            <div class="alert alert-warning" role="alert"><i class="fa fa-exclamation-triangle"></i> You have <strong>{{ responses.count }}</strong> {% if responses.count == 1 %}response{% else %}responses{% endif %}. You need  at least two responses!</div>
         {% endif %}
         <div class="row">
             <div class="col-sm-4">

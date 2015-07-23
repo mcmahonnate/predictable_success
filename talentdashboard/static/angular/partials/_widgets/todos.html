@@ -1,6 +1,6 @@
 <div class="panel todos" ng-if="currentUser.can_view_comments">
 
-    <button ng-show="canAddNew" ng-click="newTask()" class="pull-right btn btn-sm btn-success">Add New Task</button>
+    <button ng-show="canAddNew" ng-click="newTask()" class="pull-right btn btn-sm btn-default">Add New Task</button>
     <h2 ng-show="widget != false" class="panel-title">Tasks</h2>
     <tabset>
         <tab heading="To Do" active="true">
@@ -11,7 +11,7 @@
             <div ng-if="todos.length > 0">
                 <div class="row shaded">
                     <div class="col-md-3 col-lg-2 first"></div>
-                    <div class="col-md-4 col-lg-5">Tasks</div>
+                    <div class="col-md-4 col-lg-5"></div>
                     <div class="col-xs-3">Assigned To</div>
                     <div class="col-xs-2">Due Date</div>
                 </div>
@@ -30,7 +30,7 @@
             <div ng-if="done.length > 0">
                 <div class="row shaded">
                     <div class="col-md-3 col-lg-2"></div>
-                    <div class="col-md-4 col-lg-5">Tasks</div>
+                    <div class="col-md-4 col-lg-5"></div>
                     <div class="col-xs-3">Assigned To</div>
                     <div class="col-xs-2">Due Date</div>
                 </div>

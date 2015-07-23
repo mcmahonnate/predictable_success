@@ -21,7 +21,6 @@
         <div class="nav-item hide">
             <a ng-href="#/"><span class="fa fa-tachometer nav-item-icon"></span></a>
         </div>
-
         <div class="nav-item" ng-class="{'nav-item-active': $root.activeTab == zonesTab}" ng-click="setActiveTab(zonesTab)">
             <span class="nav-item-icon glyphicon glyphicon-user filter_menu"></span>
             <div class="subnav">
@@ -110,7 +109,7 @@
     </div>
 
     <!-- Search -->
-    <div class="nav-item"  ng-if="currentUser.can_view_company_dashboard" ng-class="{'nav-item-active': $root.activeTab == searchTab}" ng-click="setActiveTab(searchTab); clearSearch();">
+    <div class="nav-item"  ng-controller="SearchCtrl" ng-if="currentUser.can_view_company_dashboard" ng-class="{'nav-item-active': $root.activeTab == searchTab}" ng-click="setActiveTab(searchTab); clearSearch();">
         <div class="fa fa-search nav-item-icon"></div>
         <div class="subnav subnav-search" ng-click="setActiveTab(searchTab);">
             <div class="subnav-title">Search</div>

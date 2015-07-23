@@ -4,6 +4,8 @@ var app = angular.module('tdb', [
         'tdb.search.controllers', 'tdb.search.services',
         'tdb.services.tasks', 'tdb.controllers.tasks',
         'tdb.controllers.comments',
+        'tdb.controllers.search',
+        'tdb.services.events', 'tdb.controllers.events',
         'tdb.services.checkins', 'tdb.controllers.checkins',
         'tdb.engagement.services', 'angular.filter',
         'angular-carousel', 'analytics', 'ui.bootstrap', 'ngCsv','ngImgCrop', 'ngRoute','ui-notification', 'ngMessages'])
@@ -29,8 +31,9 @@ var app = angular.module('tdb', [
           when('/reports/timespan', {templateUrl: '/static/angular/partials/timespan-report.html', controller: 'TimespanReportCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
           when('/reports/activity', {templateUrl: '/static/angular/partials/activity-report.html', controller: 'ActivityReportCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
           when('/tasks', {templateUrl: '/static/angular/partials/tasks.html', controller: 'TasksCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
+          when('/checkin/:id', {templateUrl: '/static/angular/partials/checkin.html', controller: 'AddEditCheckInCtrl', resolve: {authorizeRoute: authorizeRoute}}).       
           when('/checkin', {templateUrl: '/static/angular/partials/checkin.html', controller: 'AddEditCheckInCtrl', resolve: {authorizeRoute: authorizeRoute}}).
-          when('/checkins/:id', {templateUrl: '/static/angular/partials/checkin-detail.html', controller: 'CheckInDetailsCtrl', resolve: {authorizeRoute: authorizeRoute}}).
+          when('/checkins/:id', {templateUrl: '/static/angular/partials/checkin-detail.html', controller: 'AddEditCheckInCtrl', resolve: {authorizeRoute: authorizeRoute}}).
           otherwise({redirectTo: '/'});
     }])
     .run(['$rootScope', 'User', 'TalentCategories', 'Customers', function($rootScope, User, TalentCategories, Customers) {
