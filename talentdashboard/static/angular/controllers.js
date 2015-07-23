@@ -363,18 +363,7 @@ angular.module('tdb.controllers', [])
     }])
 
     .controller('NavigationCtrl', ['$scope', '$rootScope', '$routeParams', '$location', '$modal', 'Employee', 'Customers', 'Team', function ($scope, $rootScope, $routeParams, $location, $modal, Employee, Customers, Team) {
-        //search
-        if (!$scope.employees) {
-            $scope.employees = Employee.query(); //!important browser cache buster
-        }
-        Customers.get(function (data) {
-            $scope.customer = data;
-        });
-
-        if (!$scope.employees && $rootScope.currentUser.can_view_company_dashboard) {
-            $scope.employees = Employee.query();
-        }
-
+        
         //teams
         $scope.teams = Team.query();
         $scope.modalEmployeeShown = false;
@@ -427,9 +416,6 @@ angular.module('tdb.controllers', [])
                 }
             });
         };
-
-        //clear search
-        $scope.navQuery = '';
 
         //set active tab
         $rootScope.activeTab = null;

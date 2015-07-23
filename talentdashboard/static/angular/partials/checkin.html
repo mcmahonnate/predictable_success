@@ -1,11 +1,11 @@
-<div class="container checkin" ng-controller="AddEditCheckInCtrl">
-    <form name="checkinForm" novalidate="novalidate" ng-submit="save(checkinForm)">
+<div class="container checkin" ng-controller="AddEditCheckInCtrl" ng-init="view='new'">
+    <form name="checkinForm" novalidate="novalidate" ng-submit="saveCheckin(checkinForm)">
 
     	<!-- Employee Search -->
-    	<div ng-show="!checkin.type || !selectedEmployee" class="checkin-search">
+    	<div ng-show="showSearch" class="checkin-search">
 	    	<h1>Check-in with:</h1>
 	    	<div class="row">
-				<div ng-class="{open: employeeSearch!=''}" class="search dropdown pull-left col-xs-7">
+				<div ng-class="{open: employeeSearch!=''}" class="search dropdown">
 				    <div class="search-input-container">
 				        <div class="glyphicon glyphicon-search search-icon"></div>
 				        <input class="search-input nav_query" ng-model="employeeSearch" type="text" placeholder="Search Employees..."  name="selectedEmplyeeName"  value="{{selectedEmployee.full_name}}" />
@@ -20,28 +20,12 @@
 			            <li ng-show="!filteredEmployees.length" style="padding: 13px 20px;">No Results</li>
 				    </ul>
 				</div>
-		    	<div class="checkin-type col-xs-5">
-                    <div ng-show="checkinForm.$submitted" ng-messages="checkinForm.type.$error">
-                        <div class="help-block" ng-message="required">You must specify the type</div>
-                    </div>
-			    	<select class="form-control simple-form-control input-lg" ng-options="type as type.name for type in checkinTypes" ng-model="checkin.type" name="type">
-			    		<option value="">--Select Check-In Type--</option>
-			    	</select>
-                    <div ng-show="checkinForm.$submitted" ng-messages="checkinForm.other_type_description.$error">
-                        <div class="help-block" ng-message="required">You must specify the description</div>
-                    </div>
-			    	<input ng-show="checkin.type===1" name="other_type_description" class="form-control" placeholder="Enter check in type..." />
-			    </div>
 			</div>    
 		</div>	
 
 		<!-- Check-in -->
-		<div ng-show="selectedEmployee && checkin.type">
+		<div ng-show="selectedEmployee">
 			<div class="checkin-header">
-				<div class="type-tag">
-					<span ng-show="!checkin.other_type_description">{{ checkin.type.name }}</span>
-					<span ng-show="checkin.other_type_description">{{ checkin.other_type_description }}</span>
-				</div>
 				<a href="#/employees/{{employee.id}}">
 					<img ng-src="{{ selectedEmployee.avatar_small }}" class="headshot medium-headshot pull-left"/>
 				</a>
@@ -51,13 +35,29 @@
 				</div>
 			</div>	
 
+			<!-- Type -->
+	    	<div class="checkin-type">
+                <div ng-show="checkinForm.$submitted" ng-messages="checkinForm.type.$error">
+                    <div class="help-block" ng-message="required">You must specify the type</div>
+                </div>
+		    	<select class="form-control simple-form-control" ng-options="type as type.name for type in checkinTypes" ng-model="checkin.type" name="type">
+		    		<option value="">--Select Check-In Type--</option>
+		    	</select>
+                <div ng-show="checkinForm.$submitted" ng-messages="checkinForm.other_type_description.$error">
+                    <div class="help-block" ng-message="required">You must specify the description</div>
+                </div>
+		    	<input ng-show="checkin.type===1" name="other_type_description" class="form-control" placeholder="Enter check in type..." />
+		    </div>
+
+		    <!-- Summary -->
 		    <div class="checkin-summary panel">
-	        	<textarea required placeholder="Enter check-in summary here..." class="form-control simple-form-control" name="summary" ng-model="checkin.summary" style="min-height:250px;"></textarea>
+	        	<textarea required placeholder="Enter check-in summary here..." class="form-control" name="summary" ng-model="checkin.summary" style="min-height:250px;"></textarea>
 			</div>
 
+
+			<!-- Happiness -->
 			<div class="panel" style="overflow:hidden;">
 				<h4 class="panel-title pull-left">Happiness</h4>
-
 		        <div class="checkin-engagement pull-right">
                     <div class="employee-happiness-container">
                         <div class="employee-happiness employee-happiness-5" ng-click="happiness.assessment=5" ng-class="{selected: happiness.assessment==5}">
@@ -77,25 +77,27 @@
                         </div>
                     </div>
                 </div>
-
             </div>    
 
-            <div class="panel">
-            	<button type="button" ng-click="addTask()" class="pull-right btn btn-sm btn-success">Add New Task</button>
+            <!-- Tasks -->
+            <div class="panel panel-tasks todos">
+            	<button type="button" ng-click="newTask()" class="pull-right btn btn-sm btn-success btn-add-task"><span class="glyphicon glyphicon-plus"></span> Task</button>
 				<h4 class="panel-title">Tasks</h4>
-				<div class="row shaded" ng-show="task">
-                    <div class="col-md-3 col-lg-2 first"></div>
-                    <div class="col-md-4 col-lg-5">Tasks</div>
-                    <div class="col-xs-3">Assigned To</div>
-                    <div class="col-xs-2">Due Date</div>
-                </div>
-                <div class="row todo" ng-repeat="task in tasks">
-                    <div ng-include="'/static/angular/partials/_widgets/task-list-item.html'"></div>
-                </div>
+				<tabset ng-show="tasks.length > 0">
+        			<tab heading="To Do" active="true">
+						<div class="row shaded tab-header" ng-show="tasks">
+		                    <div class="col-md-3 col-lg-2 first"></div>
+		                    <div class="col-md-4 col-lg-5">Tasks</div>
+		                    <div class="col-xs-3">Assigned To</div>
+		                    <div class="col-xs-2">Due Date</div>
+		                </div>
+		            </tab>
+		        </tabset>        
+	            <div class="row todo" ng-repeat="task in tasks">
+	                <div ng-include="'/static/angular/partials/_widgets/task-list-item.html'"></div>
+	            </div>
             </div>    
-     
-
-	        <button type="submit" class="btn btn-success btn-lg">Publish to Profile</button>
+	        <button type="submit" class="btn btn-success btn-lg btn-publish">Publish to Profile</button>
 	    </div>    
 	</form>
 </div>
