@@ -10,7 +10,21 @@
               <div style="width:45%;float: left;">
                   <div class="vertical-text" style="width:200px;text-align: center;position: absolute;left: 237px;top: 127px;"><div style="display:inline-block;float:left">Low</div>Drive<div style="display:inline-block;float:right">High</div></div>
                   <div style="margin: 25px;margin-top: 5px">
-                    <canvas pvp-graph pvp="pvp" height="200" width="200" ng-click="click_canvas($event, false)"/>
+                    <table pvp-graph>
+                      <tr> 
+                        <td class="box" id="12" ng-click="click_pvp($event, false)"></td> <td class="box" id="13" ng-click="click_pvp($event, false)"></td> <td class="box" id="14" ng-click="click_pvp($event, false)"></td> <td class="box" id="15" ng-click="click_pvp($event, false)"></td> 
+                      </tr>
+                      <tr> 
+                        <td class="box" id="8" ng-click="click_pvp($event, false)"></td> <td class="box" id="9" ng-click="click_pvp($event, false)"></td> <td class="box" id="10" ng-click="click_pvp($event, false)"></td> <td class="box" id="11" ng-click="click_pvp($event, false)"></td> 
+                      </tr>
+                      <tr> 
+                        <td class="box" id="4" ng-click="click_pvp($event, false)"></td> <td class="box" id="5" ng-click="click_pvp($event, false)"></td> <td class="box" id="6" ng-click="click_pvp($event, false)"></td> <td class="box" id="7" ng-click="click_pvp($event, false)"></td> 
+                      </tr>
+                      <tr> 
+                        <td class="box" id="0" ng-click="click_pvp($event, false)"></td> <td class="box" id="1" ng-click="click_pvp($event, false)"></td> <td class="box" id="2" ng-click="click_pvp($event, false)"></td> <td class="box" id="3" ng-click="click_pvp($event, false)"></td> 
+                      </tr>
+                    </table>
+                    <!-- <canvas pvp-graph pvp="pvp" height="200" width="200" ng-click="click_canvas($event, false)"/> -->
                   </div>
                   <div style="width:200px;text-align: center;  margin-left: 25px;margin-top: -25px;"><div style="display:inline-block;float:left">Low</div>Impact<div style="display:inline-block;float:right">High</div></div>
               </div>
@@ -55,5 +69,15 @@
         -o-transform: rotate(-90deg);
         transform: rotate(-90deg);
     }
-
+    table {
+        border-collapse: collapse;
+    }
+    table, th, td {
+        border: 1px solid #999999;
+    }
+    .box {
+        width: 50px;
+        height: 50px;
+        background-color: #343434;
+    }
 </style>
