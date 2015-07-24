@@ -11,8 +11,10 @@ class EmployeeEventList(views.APIView):
     """ Get a list of Events for a given employee via employee_id query param.
     """
     def get(self, request, **kwargs):
+        requester = Employee.objects.get(user__id=request.user.id)
         employee_id = kwargs['employee_id']
-        qs = Event.objects.filter(employee__id=employee_id)
+        employee = Employee.objects.get(id=employee_id)
+        qs = Event.objects.get_events_for_employee(requester, employee)
         qs = qs.extra(order_by=['-date'])
         paginator = StandardResultsSetPagination()
         result_page = paginator.paginate_queryset(qs, request)
@@ -24,9 +26,7 @@ class EventList(views.APIView):
     """
     def get(self, request):
         requester = Employee.objects.get(user__id=request.user.id)
-        qs = Event.objects.all()
-        qs = qs.exclude(employee__id=requester.id)
-        qs = qs.extra(order_by=['-date'])
+        qs = Event.objects.get_events_for_all_employees(requester)
         paginator = StandardResultsSetPagination()
         result_page = paginator.paginate_queryset(qs, request)
         serializer = EventSerializer(result_page, many=True, context={'request': request})
