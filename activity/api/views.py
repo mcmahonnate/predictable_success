@@ -23,7 +23,9 @@ class EventList(views.APIView):
     """ Retrieve all Events
     """
     def get(self, request):
+        requester = Employee.objects.get(user__id=request.user.id)
         qs = Event.objects.all()
+        qs = qs.exclude(employee__id=requester.id)
         qs = qs.extra(order_by=['-date'])
         paginator = StandardResultsSetPagination()
         result_page = paginator.paginate_queryset(qs, request)
