@@ -1739,6 +1739,9 @@ angular.module('tdb.controllers', [])
             });
             modalInstance.result.then(
                 function (pvp) {
+                    if (!$scope.pvps[index].comment) {
+                        $scope.pvps[index].comment = {};
+                    }
                     $scope.pvps[index].performance = pvp.performance;
                     $scope.pvps[index].potential = pvp.potential;
                     $scope.pvps[index].talent_category = pvp.talent_category;
