@@ -15,7 +15,7 @@ class Command(BaseCommand):
         tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
         if tenant.is_public_tenant():
             return
-
+        ContentType.objects.clear_cache()
         comment_type = ContentType.objects.get_for_model(Comment)
         checkin_type = ContentType.objects.get_for_model(CheckIn)
         employee_type = ContentType.objects.get_for_model(Employee)
