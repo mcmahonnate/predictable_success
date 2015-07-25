@@ -1035,6 +1035,7 @@ angular.module('tdb.controllers', [])
             angular.forEach($scope.selfAssessments_sort, function(selfAssessment) {
                 var row = {};
                 row.name = selfAssessment.first_name + " " + selfAssessment.last_name;
+                row.email = selfAssessment.email;
                 row.talent = TalentCategories.getLabelByTalentCategory(selfAssessment.talent_category);
                 row.happy = happyToString($scope.getEngagementScore(selfAssessment.engagement));
                 row.date = $rootScope.scrubDate(selfAssessment.created_at);
@@ -1227,6 +1228,7 @@ angular.module('tdb.controllers', [])
             angular.forEach($scope.evaluations_sort, function (employee) {
                 var row = {};
                 row.name = employee.full_name;
+                row.email = employee.email;
                 row.talent = TalentCategories.getLabelByTalentCategory(employee.talent_category);
                 row.happy = happyToString(employee.happiness);
                 row.date = $rootScope.scrubDate(employee.happiness_date);
