@@ -753,14 +753,7 @@ angular.module('tdb.directives', [])
                 "4": 1
             }
         };
-        var canvas = element[0];
-        var ctx = canvas.getContext("2d");
         var currentSquare = null;
-        var height = canvas.height;
-        var width = canvas.width;
-        var squareWidth = Math.floor(width / 4);
-        var squareHeight = Math.floor(height / 4);
-        var lineColor = "#999999";
         var offSquareColor = "#343434";
         var squares = [];
         var squaresHash = {};
@@ -774,58 +767,18 @@ angular.module('tdb.directives', [])
         for(var potential = 1; potential <= 4; potential++) {
             squaresHash[potential] = {};
             for(var performance = 1; performance <= 4; performance++) {
-                var topLeft = {};
-                var bottomRight = {};
                 var talentCategory = talentCategories[potential][performance];
                 var color = TalentCategories.getColorByTalentCategory(talentCategory);
-                topLeft.y = height - squareHeight - (((potential - 1) * squareHeight));
-                topLeft.x = ((performance - 1) * squareWidth);
-                bottomRight.y = topLeft.y + squareHeight;
-                bottomRight.x = topLeft.x + squareWidth;
                 var square = {
                     'potential': potential,
                     'performance': performance,
                     'talent_category': talentCategory,
-                    'topLeft': topLeft,
-                    'bottomRight': bottomRight,
                     'color': color
                 };
                 squares.push(square);
                 squaresHash[potential][performance] = square;
             }
         }
-
-        function drawBlankGraph() {
-            for(var index=0; index < squares.length; index++) {
-                square = squares[index];
-                ctx.fillStyle = offSquareColor;
-                ctx.fillRect(square.topLeft.x, square.topLeft.y, squareWidth, squareHeight);
-                ctx.strokeStyle = lineColor;
-                ctx.strokeRect(square.topLeft.x, square.topLeft.y, squareWidth, squareHeight);
-            }
-        }
-
-        var isOnSquare = function (point, square) {
-            var inX = point.x > square.topLeft.x && point.x < square.bottomRight.x;
-            var inY = point.y > square.topLeft.y && point.y < square.bottomRight.y;
-            return inX && inY;
-        };
-
-        var getCursorPosition = function(event) {
-            var totalOffsetX = 0;
-            var totalOffsetY = 0;
-            var currentElement = event.currentTarget;
-
-            do {
-                totalOffsetX += currentElement.offsetLeft - currentElement.scrollLeft;
-                totalOffsetY += currentElement.offsetTop - currentElement.scrollTop;
-            } while(currentElement = currentElement.offsetParent);
-
-            var canvasX = event.pageX - totalOffsetX;
-            var canvasY = event.pageY - totalOffsetY;
-
-            return {x:canvasX, y:canvasY}
-        };
 
         var findSquare = function() {
           return squaresHash[pvp.potential][pvp.performance];
@@ -838,39 +791,40 @@ angular.module('tdb.directives', [])
             pvp.description = descriptions[0];
         };
 
-        var drawSquare = function(square) {
-            if(currentSquare) {
-                ctx.fillStyle = offSquareColor;
-                ctx.fillRect(currentSquare.topLeft.x, currentSquare.topLeft.y, squareWidth, squareHeight);
-                ctx.strokeRect(currentSquare.topLeft.x, currentSquare.topLeft.y, squareWidth, squareHeight);
-            }
+        var clearSquare = function(square, potential, performance) {
+            var squareID = (potential - 1) * 4 + (performance - 1);
+            var squareEl = document.getElementById(squareID.toString());
+            squareEl.style['background-color'] = offSquareColor;
+        }
 
-            ctx.fillStyle = square.color;
-            ctx.fillRect(square.topLeft.x, square.topLeft.y, squareWidth, squareHeight);
-            ctx.strokeRect(square.topLeft.x, square.topLeft.y, squareWidth, squareHeight);
+        var drawSquare = function(square, potential, performance) {
+            var squareID = (potential - 1) * 4 + (performance - 1);
+            var squareEl = document.getElementById(squareID.toString());
+            squareEl.style['background-color'] = square.color;
             currentSquare = square;
         };
 
-        drawBlankGraph();
         if(pvp.potential > 0 && pvp.performance > 0){
-            drawSquare(findSquare());
+            var square = findSquare();
+            drawSquare(findSquare(), pvp.potential, pvp.performance, square.color);
         }
 
-        scope.click_canvas = function(e, save) {
-            var point = getCursorPosition(e);
-            for(var index = 0; index < squares.length; index++) {
-                var square = squares[index];
-                if(isOnSquare(point, square)) {
-                    drawSquare(square);
-                    pvp.potential = square.potential;
-                    pvp.performance = square.performance;
-                    pvp.talent_category = square.talent_category
-                    findDescription();
-                    if (save)
-                        scope.save();
-                    break;
-                }
+        scope.click_pvp = function(e, save) {
+            var squareID = e.target.id;
+            var row = Math.floor(squareID / 4) + 1;
+            var col = squareID % 4 + 1;
+            var square = squaresHash[row][col];
+            if (currentSquare) {
+                clearSquare(currentSquare, currentSquare.potential, currentSquare.performance, offSquareColor);
             }
+            drawSquare(square, row, col, square.color);
+
+            pvp.potential = square.potential;
+            pvp.performance = square.performance;
+            pvp.talent_category = square.talent_category
+            findDescription();
+            if (save)
+                scope.save();
         };
     }
 }])

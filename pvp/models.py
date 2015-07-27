@@ -53,7 +53,7 @@ class PvpEvaluationManager(models.Manager):
 
     def todos_for_user(self, user):
         current_round = EvaluationRound.objects.most_recent(is_complete=False)
-        return self.filter(evaluation_round=current_round).filter(evaluator=user)
+        return self.filter(evaluation_round=current_round)
 
     def get_most_recent_for_all(self):
         evaluations = self.filter(employee__departure_date__isnull=True)
