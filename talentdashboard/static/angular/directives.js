@@ -281,10 +281,12 @@ angular.module('tdb.directives', [])
             scope.$watch('pvp.talent_category', function() {
                 var talentCategory = scope.pvp.talent_category;
                 var color = TalentCategories.getColorByTalentCategory(talentCategory);
-                var canvas = element[0];
-                var ctx = canvas.getContext("2d");
-                ctx.fillStyle = color;
-                ctx.fillRect(0, 0, element[0].height, element[0].width);
+                var box = element[0];
+                box.parentNode.style['background-color'] = color;
+                // var canvas = element[0];
+                // var ctx = canvas.getContext("2d");
+                // ctx.fillStyle = color;
+                // ctx.fillRect(0, 0, element[0].height, element[0].width);
             })
         }
     }
