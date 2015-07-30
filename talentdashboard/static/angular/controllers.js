@@ -456,7 +456,7 @@ angular.module('tdb.controllers', [])
 
         $scope.selectPvP = function(index) {
             $scope.pvpIndex = index;
-            updateSlidePosition();
+            // updateSlidePosition();
         }
         $scope.editPvP = function (pvps, index) {
             var modalInstance = $modal.open({
