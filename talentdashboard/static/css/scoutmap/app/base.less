@@ -203,8 +203,17 @@ textarea.expandable:focus {
 
 /* Bootstrap Overrides */
 .modal-body {
-  position: relative;
-  padding: 30px;
+    position: relative;
+    padding: 30px;
+
+    textarea {
+        font-size: 16px;
+    }
+
+    .dropdown {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
 }
 .modal-footer {
     border-bottom-left-radius: 10px;
@@ -216,14 +225,15 @@ textarea.expandable:focus {
     margin-bottom: 15px;
     font-weight: bold;
 }
-
 .modal-body p {
   margin: 15px 0;
 }
-
 .radio + .radio, .checkbox + .checkbox {
  	margin-top: 5px;
 }
+
+
+
 
 .nav-tabs {
     margin: 45px 0 0;

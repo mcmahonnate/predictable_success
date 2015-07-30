@@ -85,7 +85,7 @@ angular.module('tdb.controllers.tasks', [])
             if (!$scope.canAddNew) return;
             var modalInstance = $modal.open({
                 animation: true,
-                templateUrl: '/static/angular/partials/_widgets/add-edit-task.html',
+                templateUrl: '/static/angular/partials/_modals/add-edit-task.html',
                 controller: 'AddEditTaskCtrl',
                 resolve: {
                     task: function () {
@@ -106,7 +106,7 @@ angular.module('tdb.controllers.tasks', [])
         $scope.editTask = function (task) {
             var modalInstance = $modal.open({
                 animation: true,
-                templateUrl: '/static/angular/partials/_widgets/add-edit-task.html',
+                templateUrl: '/static/angular/partials/_modals/add-edit-task.html',
                 controller: 'AddEditTaskCtrl',
                 resolve: {
                     task: function () {
