@@ -2707,7 +2707,7 @@ COPY blah_comment (id, content_type_id, object_id, owner_content_type_id, owner_
 17	9	1430	3	1	sbsfbsfbsfbsfsf s sf fs sf	2015-02-02 15:06:52.373085-05	2015-02-02 15:06:52.373127-05	2
 18	18	17	3	1	advavdadvadva	2015-02-02 15:07:19.107986-05	2015-02-02 15:07:19.108034-05	2
 19	9	1444	3	7	What a guy!	2015-02-02 15:09:47.873209-05	2015-02-02 15:09:47.873256-05	2
-20	18	19	3	1	yeah he's not so bad	2015-02-22 16:14:13.064625-05	2015-02-22 16:14:13.064671-05	3
+20	18	19	3	1	yeah he''s not so bad	2015-02-22 16:14:13.064625-05	2015-02-22 16:14:13.064671-05	3
 21	9	1444	3	1	Nulla euismod condimentum lectus non egestas. Cras non condimentum mi, in semper neque. Etiam tincidunt justo ut ante ultricies venenatis molestie id risus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Fusce efficitur posuere odio, at tempor est placerat vitae. Nulla facilisi. Nam et pharetra velit. Proin ac leo quis enim dictum dapibus ac id libero. Morbi est lacus, pulvinar blandit blandit vel, tempus at sapien. Cras scelerisque lectus id ex lacinia imperdiet. Proin sit amet ligula pretium, condimentum libero non, aliquam nibh.	2015-02-23 10:54:17.823771-05	2015-02-25 12:12:02.482531-05	2
 22	18	21	3	1	Donec placerat sodales nisl. Suspendisse risus sem, bibendum consectetur metus sed, sagittis lacinia quam. Aliquam eleifend, dolor at molestie ornare, nulla odio sollicitudin turpis, sit amet gravida risus massa non nulla. Vestibulum aliquam lectus vel dignissim porta. Nulla suscipit finibus lacus id vulputate.	2015-02-23 10:54:22.373971-05	2015-02-25 12:12:19.186469-05	3
 23	9	1358	3	1	Vivamus sollicitudin augue ut porta aliquam. Sed id orci tellus. Suspendisse nec arcu enim. Maecenas laoreet augue turpis, sit amet sodales nibh auctor non. Donec tempor vestibulum semper. Pellentesque neque ante, accumsan sit amet velit vel, hendrerit sagittis massa. Sed accumsan nunc ut eros imperdiet molestie. Sed viverra quam ultricies, semper dolor et, rhoncus purus. Cras enim risus, mattis tincidunt vulputate eget, egestas quis neque. Suspendisse mi nisi, rhoncus eu lorem et, lobortis egestas lacus. Donec eget euismod purus. In fringilla, sapien eget vulputate blandit, mauris felis bibendum tellus, dignissim fermentum urna justo elementum purus. Aliquam sit amet urna id nisl bibendum aliquet in nec lectus. Sed feugiat est arcu, ac bibendum diam interdum aliquet.	2015-02-25 12:14:27.907236-05	2015-02-25 12:14:27.907279-05	2
@@ -5252,7 +5252,7 @@ SELECT pg_catalog.setval('pvp_evaluationround_id_seq', 10, true);
 --
 
 COPY pvp_pvpdescription (id, potential, performance, description) FROM stdin;
-1	0	0	The benchmarks you use for assessing performance and potential are largely up to you. You will see we've provided some guidelines. Click the grid to get started.
+1	0	0	The benchmarks you use for assessing performance and potential are largely up to you. You will see we''ve provided some guidelines. Click the grid to get started.
 2	4	4	Excels in current role and utilizes their skills outside of their current role in exceptional ways.
 3	3	4	Excels in current role and utilizes their skills outside of their current role.
 4	2	4	Excels in current role and can demonstrate initiative outside their role when provoked.
