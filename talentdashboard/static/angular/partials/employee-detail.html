@@ -13,7 +13,7 @@
                     </div>
 
                     <div class="employee-attribute employee-attribute-large employee-happiness-large" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{ talentCategories[employee.talent_category].label }}">
-                        <span class="employee-happiness-background-color-{{employee.happiness}}" ng-class="{'veryhappy': employee.happiness==5,'happy': employee.happiness==4,'indifferent': employee.happiness==3,'unhappy': employee.happiness==2,'veryunhappy': employee.happiness==1}"></span>
+                        <span class="employee-happiness-background-color-{{employee.happiness}} happiness-{{employee.happiness}}"></span>
                     </div> 
                 </div>   
                 
