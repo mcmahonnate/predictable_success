@@ -22,7 +22,7 @@
             <a ng-href="#/"><span class="fa fa-tachometer nav-item-icon"></span></a>
         </div>
         <div class="nav-item" ng-class="{'nav-item-active': $root.activeTab == zonesTab}" ng-click="setActiveTab(zonesTab)">
-            <span class="nav-item-icon glyphicon glyphicon-user filter_menu"></span>
+            <span class="nav-item-icon glyphicon glyphicon-th filter_menu"></span>
             <div class="subnav">
                 <div class="subnav-title">Employee Zones</div>
                 <ul class="talent-groups">
@@ -79,7 +79,7 @@
         </div>
 
         <div class="nav-item" ng-if="currentUser.can_view_company_dashboard" ng-class="{'nav-item-active': $root.activeTab == teamsTab}" ng-click="setActiveTab(teamsTab)" ng-controller="TeamListCtrl">
-            <span class="fa fa-file-text team_menu nav-item-icon"></span>
+            <span class="glyphicon glyphicon-user team_menu nav-item-icon"></span>
             <div class="subnav subnav-reports">
                 <div class="subnav-title">Teams</div>
                 <ul>

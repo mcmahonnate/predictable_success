@@ -904,13 +904,28 @@ angular.module('tdb.controllers', [])
         };
     }])
 
-    .controller('CoachDetailCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'User', 'Employee', 'Coachees', 'TalentReport', '$http', 'analytics', function ($scope, $rootScope, $location, $routeParams, User, Employee, Coachees, TalentReport, $http, analytics) {
+    .controller('CoachDetailCtrl', ['$scope', '$rootScope', '$location', 'Events', '$routeParams', 'User', 'Employee', 'Coachees', 'TalentReport', '$http', 'analytics', function ($scope, $rootScope, $location, Events, $routeParams, User, Employee, Coachees, TalentReport, $http, analytics) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         $scope.coach = $rootScope.currentUser.employee;
 
         Coachees.query({ id: $routeParams.id }).$promise.then(function (response) {
             $scope.employees = response;
         });
+
+        // $scope.getLastCheckin = function(employeeId) {
+        //     Events.get({ employee: employeeId }, function(data) {
+        //         console.log(data);
+        //     });    
+        // };
+
+        // $scope.lastCheckin = [];
+        // Events.query({1514}, function (data) {
+        //         $scope.lastCheckin = data;
+        //         console.log($scope.lastCheckin);
+        //     }
+        // );
+
+
         $scope.talentReport = TalentReport.myCoachees();
     }])
 
