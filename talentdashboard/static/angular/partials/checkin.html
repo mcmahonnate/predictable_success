@@ -40,13 +40,13 @@
                 <div ng-show="checkinForm.$submitted" ng-messages="checkinForm.type.$error">
                     <div class="help-block" ng-message="required">You must specify the type</div>
                 </div>
-		    	<select class="form-control simple-form-control" ng-options="type as type.name for type in checkinTypes" ng-model="checkin.type" name="type">
+		    	<select class="form-control simple-form-control" ng-options="type as type.name for type in checkinTypes" ng-model="checkin.type" name="type" required>
 		    		<option value="">--Select Check-In Type--</option>
 		    	</select>
-                <div ng-show="checkinForm.$submitted" ng-messages="checkinForm.other_type_description.$error">
+                <div ng-if="checkinForm.$submitted && checkin.type.name==='Other'" ng-messages="checkinForm.other_type_description.$error">
                     <div class="help-block" ng-message="required">You must specify the description</div>
                 </div>
-		    	<input ng-show="checkin.type===1" name="other_type_description" class="form-control" placeholder="Enter check in type..." />
+		    	<input ng-if="checkin.type.name==='Other'" name="other_type_description" ng-model="checkin.other_type" required class="form-control" placeholder="Enter check in type..." />
 		    </div>
 
 		    <!-- Summary -->
