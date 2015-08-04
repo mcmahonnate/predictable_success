@@ -211,6 +211,13 @@ class Employee(models.Model):
             talent_category = pvp.talent_category()
         return talent_category
 
+    def current_talent_category_date(self):
+        pvp = self._get_current_pvp()
+        date = None
+        if pvp is not None:
+            date = pvp.evaluation_round.date
+        return date
+
     @property
     def current_pvp(self):
         return self._get_current_pvp()

@@ -1208,8 +1208,11 @@ angular.module('tdb.controllers', [])
                 case 'happy':
                     $scope.evaluations_sort.sort(orderByHappy);
                     break;
-                case 'date':
-                    $scope.evaluations_sort.sort(orderByDate);
+                case 'happyDate':
+                    $scope.evaluations_sort.sort(orderByHappyDate);
+                    break;
+                case 'zoneDate':
+                    $scope.evaluations_sort.sort(orderByZoneDate);
                     break;
                 default:
                     $scope.evaluations_sort.sort(orderByName);
@@ -1230,8 +1233,9 @@ angular.module('tdb.controllers', [])
                 row.name = employee.full_name;
                 row.email = employee.email;
                 row.talent = TalentCategories.getLabelByTalentCategory(employee.talent_category);
+                row.talent_date = $rootScope.scrubDate(employee.talent_category_date);
                 row.happy = happyToString(employee.happiness);
-                row.date = $rootScope.scrubDate(employee.happiness_date);
+                row.happy_date = $rootScope.scrubDate(employee.happiness_date);
                 $scope.csv.push(row);
             });
         }
@@ -1263,7 +1267,18 @@ angular.module('tdb.controllers', [])
                 return bValue - aValue;
             }
         }
-        var orderByDate = function (a, b) {
+        var orderByZoneDate = function (a, b) {
+            var aValue = Date.parse(a.talent_category_date) || 0;
+            var bValue = Date.parse(b.talent_category_date) || 0;
+            var aName = a.full_name;
+            var bName = b.full_name;
+            if (aValue === bValue) {
+                return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+            } else {
+                return bValue - aValue;
+            }
+        }
+        var orderByHappyDate = function (a, b) {
             var aValue = Date.parse(a.happiness_date) || 0;
             var bValue = Date.parse(b.happiness_date) || 0;
             var aName = a.full_name;

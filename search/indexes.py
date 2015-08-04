@@ -63,6 +63,7 @@ class EmployeeIndex(object):
                     'current_salary': comp.salary if comp else None,
                     'current_bonus': comp.bonus if comp else None,
                     'talent_category': employee.current_talent_category(),
+                    'talent_category_date': employee.current_talent_category_date(),
                     'coach_id': employee.coach.id if employee.coach else None,
                     'coach_full_name': employee.coach.full_name if employee.coach else None,
                     'leader_id': leader.id if leader else None,
