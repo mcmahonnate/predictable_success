@@ -27,7 +27,7 @@
     	<div ng-hide="showSummaryEdit">
     		<!-- <span class="checkin-summary-instance" data-ng-bind-html="checkin.summary | new_line | cut:true:length"></span> -->
     		<!-- preserve white space and newlines -->
-    		<span class="checkin-summary-instance" style="white-space: pre;">{{ checkin.summary }}</span>
+    		<span class="checkin-summary-instance" style="white-space: pre-wrap;">{{ checkin.summary }}</span>
     	</div>	
 	    <div ng-show="showSummaryEdit">
             <textarea 
