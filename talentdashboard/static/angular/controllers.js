@@ -1231,6 +1231,7 @@ angular.module('tdb.controllers', [])
             angular.forEach($scope.evaluations_sort, function (employee) {
                 var row = {};
                 row.name = employee.full_name;
+                row.team = employee.team_name;
                 row.email = employee.email;
                 row.talent = TalentCategories.getLabelByTalentCategory(employee.talent_category);
                 row.talent_date = $rootScope.scrubDate(employee.talent_category_date);
