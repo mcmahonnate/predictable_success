@@ -1,10 +1,5 @@
-import os
 from django.db import models, connection
-from django.dispatch import receiver
-from django.contrib.auth.models import User, Group
-from django.conf import settings
 from tenant_schemas.models import TenantMixin
-from tenant_schemas.signals import post_schema_sync
 
 
 class Customer(TenantMixin):
