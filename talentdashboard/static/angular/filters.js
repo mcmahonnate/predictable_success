@@ -2,9 +2,14 @@ var filters = angular.module('tdb.filters', []);
 
 
 filters.filter('fromNow', function() {
-  return function(date) {
-    return moment(date).fromNow();
-  }
+    return function(date) {
+
+        if (date) {
+            return moment(date).fromNow();
+        } else {
+            return 'n/a';
+        }  
+    }
 });
 
 filters.filter('titleCase', function() {

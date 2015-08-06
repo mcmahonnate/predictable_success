@@ -68,9 +68,10 @@
                             <span class="segment employee-segment-background-color-{{event.employee.current_talent_category}}"></span>
                         </div>
                     </div> 
-                    <div class="activity-checkin-details col-xs-9">
+
+                    <div class="activity-checkin-details" ng-class="{'col-xs-11': view='employee-view', 'col-xs-9': view='team'}">
                         <h3 class="comment-title-employee-name">{{event.employee.full_name}}</h3>  
-                        <span class="activity-checkin-summary" ng-init="length=10" ng-bind-html="event.description | new_line | cut:true:length" style="line-height: 125%"></span> 
+                        <span class="activity-checkin-summary" ng-init="length=10" ng-bind-html="event.description | cut:true:length" style="line-height: 125%"></span> 
                         <span ng-show="event.description.length>length" ng-init="showMoreButton=true">
                             <span ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</span>
                             <span ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</span>
@@ -78,7 +79,7 @@
                     </div>
                 </a>
                 <div ng-show="event.type == 'comment'">
-                    <div class="avatar-container pull-right">
+                    <div class="avatar-container pull-right hide">
                         <a class="large-headshot" ng-show="view != 'employee-view'" ng-href="#/employees/{{event.employee.id}}">
                             <img ng-src="{{ event.employee.avatar_small }}"/>
                         </a>

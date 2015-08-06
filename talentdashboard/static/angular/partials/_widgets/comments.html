@@ -49,7 +49,6 @@
                 <button class="btn btn-primary btn-sm" ng-disabled="!comment.content" ng-click="saveComment(comment);showCommentEdit=false">Save Edits</button>
                 <button class="btn btn-link btn-sm" ng-click="cancelEditComment(comment);showCommentEdit=false">Cancel</button>
             </div>
-
             <div class="comment-copy" ng-show="!showCommentEdit">
                 <div class="avatar-container pull-right" >
                     <a class="large-headshot" ng-show="view != 'employee-view'" ng-href="#/employees/{{comment.associated_object.id}}">

@@ -23,6 +23,9 @@ class CheckIn(models.Model):
     other_type_description = models.CharField(max_length=100, null=True, blank=True)
     happiness = models.ForeignKey(Happiness, null=True, blank=True)
 
+    class Meta:
+        get_latest_by = "date"
+
     def get_type_description(self):
         if self.type is not None:
             return self.type.name

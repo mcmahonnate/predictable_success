@@ -1,0 +1,63 @@
+<div class="panel employees-snapshot" ng-controller="EmployeesSnapshotCtrl">
+    <div ng-show="employees > 0" class="pull-right" style="margin:-7px;">
+        <div class="dropdown" style="display:inline">
+            <button class="btn btn-sm btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                <span ng-if="!filteredZoneType">All Zones</span> {{ talentCategories[filteredZoneType].label }}
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu employee-happiness-list" role="menu" aria-labelledby="dropdownMenu1">
+                <li ng-click="filteredZoneType = 1" role="presentation"><a role="menuitem" tabindex="-1">Unleash</a></li>
+                <li ng-click="filteredZoneType = 2" role="presentation"><a role="menuitem" tabindex="-1">Challenge</a></li>
+                <li ng-click="filteredZoneType = 3" role="presentation"><a role="menuitem" tabindex="-1">Push</a></li> 
+                <li ng-click="filteredZoneType = 4" role="presentation"><a role="menuitem" tabindex="-1">Discover</a></li> 
+                <li ng-click="filteredZoneType = 5" role="presentation"><a role="menuitem" tabindex="-1">Shift</a></li>  
+                <li ng-click="filteredZoneType = 6" role="presentation"><a role="menuitem" tabindex="-1">Worry</a></li>  
+                <li ng-click="filteredZoneType = 7" role="presentation"><a role="menuitem" tabindex="-1">Onboard</a></li>  
+                <li class="divider"></li>
+                <li ng-click="filteredZoneType = ''" role="presentation"><a role="menuitem" tabindex="-1">All Zones</a></li>                                                                                               
+            </ul>
+        </div>
+        <div class="dropdown" style="display:inline">
+            <button class="btn btn-sm btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                <span ng-if="!filteredHappinessType">All Moods</span> {{ filteredHappinessName }}
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu employee-happiness-list" role="menu" aria-labelledby="dropdownMenu1">
+                <li ng-click="filteredHappinessType = 5; filteredHappinessName = 'Very Happy'" role="presentation"><a role="menuitem" tabindex="-1">Very Happy</a></li>
+                <li ng-click="filteredHappinessType = 4; filteredHappinessName = 'Happy'" role="presentation"><a role="menuitem" tabindex="-1">Happy</a></li>
+                <li ng-click="filteredHappinessType = 3; filteredHappinessName = 'Indeifferent'" role="presentation"><a role="menuitem" tabindex="-1">Indifferent</a></li>
+                <li ng-click="filteredHappinessType = 2; filteredHappinessName = 'Unhappy'" role="presentation"><a role="menuitem" tabindex="-1">Unhappy</a></li>
+                <li ng-click="filteredHappinessType = 1; filteredHappinessName = 'Very Unhappy'" role="presentation"><a role="menuitem" tabindex="-1">Very Unhappy</a></li>
+                <li ng-click="filteredHappinessType = -1; filteredHappinessName = 'No Happiness'" role="presentation"><a role="menuitem" tabindex="-1">No Happiness</a></li>
+                <li class="divider"></li>
+                <li ng-click="filteredHappinessType = ''" role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)">All Moods</a></li>
+            </ul>
+        </div>
+    </div> 
+    <h2 class="panel-title" ng-show="view == 'lead-view'">{{ employees.length }} Team Leads</h2>
+    <h2 class="panel-title" ng-show="view == 'team-view'">{{ employees.length }} Team Members</h2>
+    <h2 class="panel-title" ng-show="view == 'coach-view'">{{ employees.length }} People I Coach</h2>
+    <div class="employees">
+        <div class="employee" ng-repeat="employee in employees | orderBy:sortorder | filter:{talent_category: filteredZoneType, happiness: filteredHappinessType}" >    
+            <i ng-show="!employee.last_checkin_date" class="fa fa-exclamation-circle pull-right alert-no-checkins" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{ employee.full_name }} has not had a check-in."></i>
+            <a class="avatar-container pull-left" ng-if="employee.display" href="#/employees/{{employee.id}}">
+                <div class="xlarge-headshot">
+                    <img ng-src="{{ employee.avatar_small }}" />
+                </div>
+                <div class="employee-attribute" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{ talentCategories[employee.talent_category].label }}">
+                    <span class="segment employee-segment-background-color-{{employee.talent_category}}"></span>
+                </div>
+            </a>  
+            <ul class="employee-details pull-left">
+                <li>
+                    <h3 class="employee-name"><a href="#/employees/{{employee.id}}">{{employee.full_name}}</a> </h3>
+                </li>    
+                <li>Happiness: {{employee.happiness_verbose}} <span ng-show="!employee.happiness_verbose">n/a</span></li>
+                <li>Last Check In: {{ employee.last_checkin_date | fromNow }}</li>
+            </ul>  
+        </div>
+    </div>
+    <a href="" 
+        ng-click="filteredZoneType = ''; filteredHappinessType = ''; filteredHappinessName = ''" 
+        ng-show="filteredZoneType || filteredHappinessType">Show all {{ employees.length }} Employees</a>
+</div>

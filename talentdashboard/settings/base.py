@@ -164,6 +164,7 @@ SHARED_APPS = (
     'compressor',
     'raven.contrib.django.raven_compat',
     'test_without_migrations',
+    'django.contrib.sites',
 )
 
 TENANT_APPS = (
