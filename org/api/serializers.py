@@ -246,13 +246,15 @@ class AttributeSerializer(serializers.HyperlinkedModelSerializer):
 
 class CreateEmployeeSerializer(serializers.HyperlinkedModelSerializer):
     team = serializers.PrimaryKeyRelatedField(allow_null=True, queryset=Team.objects.all())
+    coach = serializers.PrimaryKeyRelatedField(allow_null=True, queryset=Employee.objects.all())
 
     class Meta:
         model = Employee
-        fields = ('first_name', 'last_name', 'email', 'job_title', 'hire_date', 'team', 'display', 'current_leader')
+        fields = ('first_name', 'last_name', 'email', 'job_title', 'hire_date', 'team', 'display', 'current_leader', 'coach')
 
 class EditEmployeeSerializer(serializers.HyperlinkedModelSerializer):
     team = serializers.PrimaryKeyRelatedField(allow_null=True, queryset=Team.objects.all())
+    coach = serializers.PrimaryKeyRelatedField(allow_null=True, queryset=Employee.objects.all())
 
     def update(self, instance, validated_data):
         instance.first_name = validated_data.get('first_name', instance.first_name)
@@ -263,9 +265,10 @@ class EditEmployeeSerializer(serializers.HyperlinkedModelSerializer):
         instance.departure_date = validated_data.get('departure_date', instance.departure_date)
         instance.team = validated_data.get('team', instance.team)
         instance.display = validated_data.get('display', instance.display)
+        instance.coach = validated_data.get('coach', instance.coach)
         instance.save()
         return instance
 
     class Meta:
         model = Employee
-        fields = ('first_name', 'last_name', 'email', 'job_title', 'hire_date', 'departure_date', 'team', 'display', 'current_leader')
+        fields = ('first_name', 'last_name', 'email', 'job_title', 'hire_date', 'departure_date', 'team', 'display', 'current_leader', 'coach')
