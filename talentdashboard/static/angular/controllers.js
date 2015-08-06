@@ -342,7 +342,7 @@ angular.module('tdb.controllers', [])
             data.hire_date = ($scope.employee.hire_date) ? $rootScope.scrubDate($scope.employee.hire_date, false) : null;
             data.departure_date = ($scope.employee.departure_date) ? $rootScope.scrubDate($scope.employee.departure_date, false) : null;
             data.team = ($scope.employee.team && $scope.employee.team.name) ? $scope.employee.team.id : null;
-            data.coach_id = ($scope.employee.coach && $scope.employee.coach.full_name) ? $scope.employee.coach.id : null;
+            data.coach = ($scope.employee.coach && $scope.employee.coach.full_name) ? $scope.employee.coach.id : null;
             data.leader_id = ($scope.employee.current_leader && $scope.employee.current_leader.full_name) ? $scope.employee.current_leader.id : null;
             data.display = true;
             return data;
@@ -364,7 +364,7 @@ angular.module('tdb.controllers', [])
 
     .controller('NavigationCtrl', ['$scope', '$rootScope', '$routeParams', '$location', '$modal', 'Employee', 'Customers', 'Team', function ($scope, $rootScope, $routeParams, $location, $modal, Employee, Customers, Team) {
         
-        //teams
+        $scope.employees = Employee.query();
         $scope.teams = Team.query();
         $scope.modalEmployeeShown = false;
         $scope.newEmployee = {
