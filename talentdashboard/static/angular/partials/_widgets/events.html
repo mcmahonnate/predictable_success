@@ -87,7 +87,7 @@
                             <span class="segment employee-segment-background-color-{{event.employee.current_talent_category}}"></span>
                         </div>
                     </div>   
-                    <span ng-init="length=500" ng-bind-html="event.description | new_line | cut:true:length" style="line-height: 125%"></span> <span ng-show="event.description.length>length" ng-init="showMoreButton=true"><a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a><a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a></span>
+                    <span ng-init="length=500" ng-bind="event.description | cut:true:length" style="line-height: 125%;white-space: pre-wrap;"></span> <span ng-show="event.description.length>length" ng-init="showMoreButton=true"><a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a><a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a></span>
                     <span class="total-replies" ng-show="event.subcomments.length == 1">
                         {{event.subcomments.length}} reply
                     </span>
@@ -127,7 +127,7 @@
                     <button class="btn btn-link btn-sm" ng-click="cancelEditSubComment(subcomment, event);showSubCommentEdit=false">Cancel</button>
                 </div>
                 <div class="comment-reply-copy" ng-show="!showSubCommentEdit">
-                    <span ng-init="length=500" data-ng-bind-html="subcomment.content | new_line | cut:true:length"></span> 
+                    <span ng-init="length=500" data-ng-bind="subcomment.content | cut:true:length" style="white-space: pre-wrap;"></span>
                     <span ng-show="subcomment.content.length>length" ng-init="showMoreButton=true">
                         <a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a>
                         <a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a>

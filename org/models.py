@@ -1,13 +1,34 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.utils.translation import ugettext as _
 import datetime
 import blah
+from model_utils import Choices, FieldTracker
 from django.utils.log import getLogger
 
-logger = getLogger('talentdashboard')
+logger = getLogger(__name__)
 
 COACHES_GROUP = 'CoachAccess'
+
+
+class Relationship(models.Model):
+    RELATION_TYPES = Choices(
+        ('coach', _('Coach')),
+        ('leader', _('Leader')),
+    )
+    employee = models.ForeignKey('Employee', related_name='subject_relationships')
+    related_employee = models.ForeignKey('Employee', related_name='object_relationships')
+    relation_type = models.CharField(max_length=25, choices=RELATION_TYPES, null=False, blank=False)
+    start_date = models.DateField(null=False, blank=False, default=datetime.date.today)
+    end_date = models.DateField(null=True, blank=True)
+
+    @property
+    def relation_type_name(self):
+        return Relationship.RELATION_TYPES[self.relation_type]
+
+    def __unicode__(self):
+        return '{0} has {1} {2}'.format(self.employee, self.relation_type_name, self.related_employee)
 
 
 class EmployeeManager(models.Manager):
@@ -106,6 +127,7 @@ class Employee(models.Model):
     )
     user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='employee')
     coach = models.ForeignKey('Employee', related_name='coachees', null=True, blank=True)
+    field_tracker = FieldTracker(fields=['coach'])
 
     def save(self, *args, **kwargs):
         new_leadership = None
@@ -122,6 +144,21 @@ class Employee(models.Model):
         if (new_leadership is not None) and (old_leader_id != new_leader_id):
             new_leadership.employee = self
             new_leadership.save()
+        self._update_relationships()
+
+    def _update_relationships(self):
+        self._update_relationship('coach', Relationship.RELATION_TYPES.coach)
+
+    def _update_relationship(self, field_name, relation_type):
+        if self.field_tracker.has_changed(field_name):
+            Relationship.objects\
+                .filter(employee=self)\
+                .filter(end_date=None)\
+                .filter(relation_type=relation_type)\
+                .update(end_date=datetime.datetime.today())
+            field_value = getattr(self, field_name)
+            if field_value is not None:
+                Relationship(employee=self, related_employee=field_value, relation_type=relation_type).save()
 
     def is_coach(self):
         if self.user is None:
@@ -210,6 +247,13 @@ class Employee(models.Model):
         if pvp is not None:
             talent_category = pvp.talent_category()
         return talent_category
+
+    def current_talent_category_date(self):
+        pvp = self._get_current_pvp()
+        date = None
+        if pvp is not None:
+            date = pvp.evaluation_round.date
+        return date
 
     @property
     def current_pvp(self):
@@ -333,4 +377,4 @@ class AttributeCategory(models.Model):
     display = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.name        
+        return self.name
