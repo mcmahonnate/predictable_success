@@ -69,7 +69,7 @@
                         </div>
                     </div> 
 
-                    <div class="activity-checkin-details" ng-class="{'col-xs-11': view='employee-view', 'col-xs-9': view='team'}">
+                    <div class="activity-checkin-details" ng-class="{'col-xs-11': view='employee-view', 'col-xs-9 col-md-8': view='team'}">
                         <h3 class="comment-title-employee-name">{{event.employee.full_name}}</h3>  
                         <span class="activity-checkin-summary" ng-init="length=10" ng-bind-html="event.description | cut:true:length" style="line-height: 125%"></span> 
                         <span ng-show="event.description.length>length" ng-init="showMoreButton=true">

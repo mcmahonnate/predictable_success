@@ -46,7 +46,7 @@
                 <div ng-if="checkinForm.$submitted && checkin.type.name==='Other'" ng-messages="checkinForm.other_type_description.$error">
                     <div class="help-block" ng-message="required">You must specify the description</div>
                 </div>
-		    	<input ng-if="checkin.type.name==='Other'" name="other_type_description" ng-model="checkin.other_type" required class="form-control" placeholder="Enter check in type..." />
+		    	<input class="form-control simple-form-control custom-checkin-type" ng-if="checkin.type.name==='Other'" name="other_type_description" ng-model="checkin.other_type" required class="form-control" placeholder="Enter check in type..." />
 		    </div>
 
 		    <!-- Summary -->
