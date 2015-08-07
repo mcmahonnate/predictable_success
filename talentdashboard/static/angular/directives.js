@@ -191,14 +191,14 @@ angular.module('tdb.directives', [])
     return function(scope, element, attrs){
         scope.$watch("talentReport", function() {
             if(scope.talentReport && scope.talentReport.categories) {
-                var nodata = scope.talentReport.categories[0] ? scope.talentReport.categories[0].count : 0;
-                var top = scope.talentReport.categories[1] ? scope.talentReport.categories[1].count : 0;
-                var strong = scope.talentReport.categories[2] ? scope.talentReport.categories[2].count : 0;
-                var good = scope.talentReport.categories[3] ? scope.talentReport.categories[3].count : 0;
-                var lackspotential = scope.talentReport.categories[4] ? scope.talentReport.categories[4].count : 0;
-                var wrongrole = scope.talentReport.categories[5] ? scope.talentReport.categories[5].count : 0;
-                var needschange = scope.talentReport.categories[6] ? scope.talentReport.categories[6].count : 0;
-                var toonew = scope.talentReport.categories[7] ? scope.talentReport.categories[7].count : 0;
+                var nodata = scope.talentReport.categories[0] ? scope.talentReport.categories[0] : 0;
+                var top = scope.talentReport.categories[1] ? scope.talentReport.categories[1] : 0;
+                var strong = scope.talentReport.categories[2] ? scope.talentReport.categories[2] : 0;
+                var good = scope.talentReport.categories[3] ? scope.talentReport.categories[3] : 0;
+                var lackspotential = scope.talentReport.categories[4] ? scope.talentReport.categories[4] : 0;
+                var wrongrole = scope.talentReport.categories[5] ? scope.talentReport.categories[5] : 0;
+                var needschange = scope.talentReport.categories[6] ? scope.talentReport.categories[6] : 0;
+                var toonew = scope.talentReport.categories[7] ? scope.talentReport.categories[7] : 0;
                 var chart_colors = [TalentCategories.categories[1].color,TalentCategories.categories[2].color,TalentCategories.categories[3].color,TalentCategories.categories[4].color,TalentCategories.categories[5].color,TalentCategories.categories[6].color,TalentCategories.categories[7].color,TalentCategories.categories[0].color];
                 var data = [['PvP', 'Employees', 'Talent Category'],
                     [TalentCategories.categories[1].label, top, 1],

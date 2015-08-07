@@ -19,4 +19,14 @@ angular.module('tdb.search.services', ['ngResource'])
         var TalentReport = $resource('/api/v1/reports/talent/', null, actions);
         return TalentReport;
     }])
+
+    .factory('SalaryReport', ['$resource', function ($resource) {
+        var actions = {
+            query: {method: 'GET', isArray: false},
+            myTeam: {method: 'GET', isArray: false, url: '/api/v1/reports/salary/my-team/'},
+            myCoachees: {method: 'GET', isArray: false, url: '/api/v1/reports/salary/my-coachees/'}
+        };
+        var SalaryReport = $resource('/api/v1/reports/salary/', null, actions);
+        return SalaryReport;
+    }])
 ;

@@ -904,11 +904,12 @@ angular.module('tdb.controllers', [])
         };
     }])
 
-    .controller('CoachDetailCtrl', ['$scope', 'Events', '$rootScope', '$location', '$routeParams', 'User', 'Employee', 'Coachees', 'TalentReport', '$http', 'analytics', 'Engagement', 'TalentCategories', function ($scope, Events, $rootScope, $location, $routeParams, User, Employee, Coachees, TalentReport, $http, analytics, Engagement, TalentCategories) {
+    .controller('CoachDetailCtrl', ['$scope', 'Events', '$rootScope', '$location', '$routeParams', 'User', 'Employee', 'Coachees', 'SalaryReport', 'TalentReport', '$http', 'analytics', 'Engagement', 'TalentCategories', function ($scope, Events, $rootScope, $location, $routeParams, User, Employee, Coachees, SalaryReport, TalentReport, $http, analytics, Engagement, TalentCategories) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         $scope.coach = $rootScope.currentUser.employee;
 
         $scope.talentReport = TalentReport.myCoachees();
+        $scope.salaryReport = SalaryReport.myCoachees();
     }])
 
 
@@ -1290,7 +1291,7 @@ angular.module('tdb.controllers', [])
 
     }])
 
-    .controller('CompanyOverviewCtrl', ['$rootScope', '$scope', '$location', '$routeParams', 'KPIIndicator', 'KPIPerformance', 'analytics', 'TalentReport', 'TemplatePreferences', function ($rootScope, $scope, $location, $routeParams, KPIIndicator, KPIPerformance, analytics, TalentReport, TemplatePreferences) {
+    .controller('CompanyOverviewCtrl', ['$rootScope', '$scope', '$location', '$routeParams', 'KPIIndicator', 'KPIPerformance', 'analytics', 'SalaryReport', 'TalentReport', 'TemplatePreferences', function ($rootScope, $scope, $location, $routeParams, KPIIndicator, KPIPerformance, analytics, SalaryReport, TalentReport, TemplatePreferences) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
 
         TemplatePreferences.getPreferredTemplate('company-overview')
@@ -1311,6 +1312,7 @@ angular.module('tdb.controllers', [])
             }
         );
         $scope.talentReport = TalentReport.query();
+        $scope.salaryReport = SalaryReport.query();
     }])
 
     .controller('PeopleReportCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'HappinessReport', 'EngagementReport', 'TalentCategoryReport', 'Engagement', 'analytics', function ($scope, $rootScope, $location, $routeParams, HappinessReport, EngagementReport, TalentCategoryReport, Engagement, analytics) {
@@ -1362,7 +1364,7 @@ angular.module('tdb.controllers', [])
         }
     }])
 
-    .controller('LeaderOverviewCtrl', ['$scope', '$location', '$routeParams', 'TalentReport', 'TeamLeadEmployees', 'User', 'analytics', 'TemplatePreferences', function ($scope, $location, $routeParams, TalentReport, TeamLeadEmployees, User, analytics, TemplatePreferences) {
+    .controller('LeaderOverviewCtrl', ['$scope', '$location', '$routeParams', 'SalaryReport', 'TalentReport', 'TeamLeadEmployees', 'User', 'analytics', 'TemplatePreferences', function ($scope, $location, $routeParams, SalaryReport, TalentReport, TeamLeadEmployees, User, analytics, TemplatePreferences) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
 
         TemplatePreferences.getPreferredTemplate('team-lead-overview')
@@ -1373,6 +1375,7 @@ angular.module('tdb.controllers', [])
         );
 
         $scope.talentReport = TalentReport.myTeam();
+        $scope.salaryReport = SalaryReport.myTeam();
 
         User.get(
             function (data) {
@@ -1382,7 +1385,7 @@ angular.module('tdb.controllers', [])
         );
     }])
 
-    .controller('TeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'Team', 'TeamMembers', 'TeamMBTI', 'Customers', 'TeamLeads', 'analytics', 'TalentReport', 'TemplatePreferences', function ($scope, $location, $routeParams, Team, TeamMembers, TeamMBTI, Customers, TeamLeads, analytics, TalentReport, TemplatePreferences) {
+    .controller('TeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'Team', 'TeamMembers', 'TeamMBTI', 'Customers', 'TeamLeads', 'analytics', 'SalaryReport', 'TalentReport', 'TemplatePreferences', function ($scope, $location, $routeParams, Team, TeamMembers, TeamMBTI, Customers, TeamLeads, analytics, SalaryReport, TalentReport, TemplatePreferences) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
 
         TemplatePreferences.getPreferredTemplate('team-overview')
@@ -1399,6 +1402,7 @@ angular.module('tdb.controllers', [])
         $scope.employees = TeamLeads.getCurrentEvaluationsForTeamLeads($scope.teamId)
 
         $scope.talentReport = TalentReport.query({team_id: $routeParams.id});
+        $scope.salaryReport = SalaryReport.query({team_id: $routeParams.id});
 
         Team.get(
             {id: $routeParams.id},
