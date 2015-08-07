@@ -8,18 +8,18 @@
     </li>
 </ul>
 
-<div class="col-xs-3 col-lg-2 first">
+<div class="col-md-3 col-lg-3 first">
     <input class="todo-checkbox" type="checkbox" ng-click="toggleCompleted(task)" ng-model="task.completed">
     <a ng-href="/#/employees/{{task.employee.id}}" class="small-headshot">
         <img alt="{{task.employee.full_name}}" title="{{task.employee.full_name}}" ng-src="{{ task.employee.avatar_small }}" />
     </a>
 </div>
-<div class="col-xs-12 col-md-6 todo-description-container">
+<div class="col-md-5 col-lg-6 todo-description-container">
     
-    <p class="todo-description">{{task.description}}</p>
+    <p class="todo-description" ng-class="{'todo-completed': task.completed}">{{task.description}}</p>
     <span class="timestamp">Created by <span ng-show="task.created_by.full_name">{{task.created_by.full_name}}</span> <span ng-show="!task.created_by.full_name">you</span> {{ task.created_date | fromNow }}</span>
 </div>
-<div class="col-xs-12 col-md-3">
+<div class="col-md-4 col-lg-4">
     <div ng-show="task.assigned_to.full_name">
         <span class="mobile-show">Assigned to: </span>
         <a href="javascript:void(0);" ng-href="/#/employees/{{task.assigned_to.id}}">{{task.assigned_to.full_name}}</a>
@@ -28,8 +28,6 @@
         <span class="mobile-show">Assigned to:</span>
         Unassigned
     </div>
-</div>
-<div class="col-xs-12 col-md-2 date">
     <span class="mobile-show">Due Date: </span>
-    {{(task.due_date | date:'MMM d') || "None"}}
+    {{(task.due_date | date:'MMM d') || "No Date"}}    
 </div>

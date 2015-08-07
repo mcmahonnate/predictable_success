@@ -7,7 +7,7 @@ filters.filter('fromNow', function() {
         if (date) {
             return moment(date).fromNow();
         } else {
-            return 'n/a';
+            return '';
         }  
     }
 });

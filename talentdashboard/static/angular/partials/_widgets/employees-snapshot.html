@@ -53,7 +53,7 @@
                     <h3 class="employee-name"><a href="#/employees/{{employee.id}}">{{employee.full_name}}</a> </h3>
                 </li>    
                 <li>Happiness: {{employee.happiness_verbose}} <span ng-show="!employee.happiness_verbose">n/a</span></li>
-                <li>Last Check In: {{ employee.last_checkin_date | fromNow }}</li>
+                <li>Last Check In: {{ employee.last_checkin_date | fromNow }} <span ng-show="!employee.last_checkin_date">n/a</span></li>
             </ul>  
         </div>
     </div>
