@@ -1,6 +1,6 @@
 angular.module('tdb.controllers.tasks', [])
 
-    .controller('AddEditTaskCtrl', ['$scope', '$rootScope', '$modalInstance', '$routeParams', 'Coach', 'Task', 'task', function ($scope, $rootScope, $modalInstance, $routeParams, Coach, Task, task) {
+    .controller('AddEditTaskCtrl', ['$scope', '$rootScope', '$modalInstance', '$routeParams', 'Users', 'Task', 'task', function ($scope, $rootScope, $modalInstance, $routeParams, Users, Task, task) {
         $scope.task = angular.copy(task);
         $scope.task.assigned_by = $rootScope.currentUser.employee;
         $scope.datePicker = {
@@ -8,7 +8,7 @@ angular.module('tdb.controllers.tasks', [])
             dateFormat: 'mediumDate'
         };
 
-        $scope.coaches = Coach.query();
+        $scope.coaches = Users.query();
 
         $scope.taskIsBeingEdited = function() {
             return $scope.task.id && $scope.task.id > 0;

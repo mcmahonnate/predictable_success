@@ -456,6 +456,12 @@ angular.module('tdb.services', ['ngResource'])
     return currentUser;
 }])
 
+.factory('Users', ['$resource', '$http', function($resource, $http) {
+    var currentUsers = $resource('api/v1/users/');
+
+    return currentUsers;
+}])
+
 .factory('Customers', ['$resource', '$http', function($resource, $http) {
     return $resource('api/v1/customer/', {}, {
         get: {

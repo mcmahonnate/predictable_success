@@ -70,9 +70,9 @@ def parseBoolString(theString):
 
 
 class UserList(generics.ListAPIView):
-    serializer_class = UserSerializer
-    queryset = User.objects.all()
-    queryset = queryset.extra(order_by=['-last_login'])
+    serializer_class = EmployeeSerializer
+    queryset = Employee.objects.get_current_employees()
+    queryset = queryset.filter(user__isnull=False)
 
 
 class CoachList(generics.ListAPIView):
