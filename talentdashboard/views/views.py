@@ -77,7 +77,8 @@ class UserList(generics.ListAPIView):
 
 class CoachList(generics.ListAPIView):
     serializer_class = EmployeeSerializer
-    queryset = Employee.objects.filter(user__groups__id=2)
+    queryset = Employee.objects.get_current_employees()
+    queryset = queryset.filter(user__groups__name='CoachAccess')
 
 
 class TeamViewSet(viewsets.ReadOnlyModelViewSet):
