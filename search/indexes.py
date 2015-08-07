@@ -56,6 +56,8 @@ class EmployeeIndex(object):
                     'vops_operator': employee.get_vops_operator,
                     'vops_processor': employee.get_vops_processor,
                     'vops_synergist': employee.get_vops_synergist,
+                    'last_checkin_about': employee.last_checkin_about.date if employee.last_checkin_about else None,
+                    'last_comment_about': employee.last_comment_about.created_date if employee.last_comment_about else None,
                     'departure_date': employee.departure_date,
                     'team_id': team.id if team else None,
                     'team_name': team.name if team else None,
@@ -95,7 +97,7 @@ class EmployeeIndex(object):
         results = self.solr.search('*:*', headers=self._get_auth_headers(), **query)
         return results
 
-    def get_talent_report(self, tenant, talent_categories=None, team_ids=None, happiness=None, leader_ids=None,
+    def get_salary_report(self, tenant, talent_categories=None, team_ids=None, happiness=None, leader_ids=None,
                           coach_ids=None):
         query = {
             'q': '*:*',
@@ -131,6 +133,34 @@ class EmployeeIndex(object):
                 'salaries': category['sum']
             }
             report['categories'][key] = value
+        return report
+
+    def get_talent_report(self, tenant, talent_categories=None, team_ids=None, happiness=None, leader_ids=None,
+                          coach_ids=None):
+        query = {
+            'q': '*:*',
+            'wt': 'json',
+            'rows': 0,
+            'facet': 'true',
+            "facet.field": "talent_category",
+            'fq': self._get_filters(tenant, talent_categories=talent_categories, team_ids=team_ids, happiness=happiness,
+                                    leader_ids=leader_ids, coach_ids=coach_ids),
+        }
+
+        query_string = urlencode(query, doseq=True)
+        url = "%s/select?%s" % (settings.EMPLOYEES_SOLR_URL, query_string)
+        results = requests.get(url, headers=self._get_auth_headers()).json()
+        count = results['response']['numFound']
+        results = results['facet_counts']['facet_fields']['talent_category']
+
+        if results is None:
+            return results
+
+        report = {
+            'count': count,
+            'categories': dict(zip(results[0::2], results[1::2])),
+        }
+
         return report
 
     def _get_start(self, page, rows):

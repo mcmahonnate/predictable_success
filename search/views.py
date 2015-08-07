@@ -42,32 +42,67 @@ def _find_employees(request, **kwargs):
 
 
 @api_view(['GET'])
+def salary_report(request):
+    kwargs = {
+        'talent_categories': request.QUERY_PARAMS.getlist('talent_category', None),
+        'team_ids': request.QUERY_PARAMS.getlist('team_id', None),
+        'happiness': request.QUERY_PARAMS.getlist('happiness', None),
+    }
+    return _get_salary_report(request, **kwargs)
+
+
+@api_view(['GET'])
+def my_team_salary_report(request):
+    return _get_salary_report_filtered_by_relationship_to_current_user(request, 'leader_ids')
+
+
+@api_view(['GET'])
+def my_coachees_salary_report(request):
+    return _get_salary_report_filtered_by_relationship_to_current_user(request, 'coach_ids')
+
+
+@api_view(['GET'])
 def talent_report(request):
     kwargs = {
         'talent_categories': request.QUERY_PARAMS.getlist('talent_category', None),
         'team_ids': request.QUERY_PARAMS.getlist('team_id', None),
         'happiness': request.QUERY_PARAMS.getlist('happiness', None),
     }
-    return _get_report(request, **kwargs)
+    return _get_talent_report(request, **kwargs)
 
 
 @api_view(['GET'])
-def my_team_report(request):
-    return _get_report_filtered_by_relationship_to_current_user(request, 'leader_ids')
+def my_team_talent_report(request):
+    return _get_talent_report_filtered_by_relationship_to_current_user(request, 'leader_ids')
 
 
 @api_view(['GET'])
-def my_coachees_report(request):
-    return _get_report_filtered_by_relationship_to_current_user(request, 'coach_ids')
+def my_coachees_talent_report(request):
+    return _get_talent_report_filtered_by_relationship_to_current_user(request, 'coach_ids')
 
 
-def _get_report_filtered_by_relationship_to_current_user(request, relationship_field):
+def _get_salary_report_filtered_by_relationship_to_current_user(request, relationship_field):
     current_employee = Employee.objects.get(user=request.user)
     kwargs = {relationship_field: [current_employee.id]}
-    return _get_report(request, **kwargs)
+    return _get_salary_report(request, **kwargs)
 
 
-def _get_report(request, **kwargs):
+def _get_salary_report(request, **kwargs):
+    index = EmployeeIndex()
+    report = index.get_salary_report(request.tenant, **kwargs)
+    if report is None:
+        return Response(None, status=status.HTTP_404_NOT_FOUND)
+
+    return Response(report)
+
+
+def _get_talent_report_filtered_by_relationship_to_current_user(request, relationship_field):
+    current_employee = Employee.objects.get(user=request.user)
+    kwargs = {relationship_field: [current_employee.id]}
+    return _get_talent_report(request, **kwargs)
+
+
+def _get_talent_report(request, **kwargs):
     index = EmployeeIndex()
     report = index.get_talent_report(request.tenant, **kwargs)
     if report is None:

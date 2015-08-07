@@ -4,6 +4,7 @@ from django.db.models import Q
 from django.utils.translation import ugettext as _
 import datetime
 import blah
+from blah.models import Comment
 from model_utils import Choices, FieldTracker
 from django.utils.log import getLogger
 
@@ -258,6 +259,24 @@ class Employee(models.Model):
     @property
     def current_pvp(self):
         return self._get_current_pvp()
+
+    @property
+    def last_comment_about(self):
+        try:
+            comments = Comment.objects.get_comments_for_employee(employee=self)
+            comment = comments.latest('created_date')
+            return comment
+        except:
+            return None
+
+    @property
+    def last_checkin_about(self):
+        try:
+            checkins = self.checkins.all()
+            checkin = checkins.latest('date')
+            return checkin
+        except:
+            return None
 
     @property
     def current_leader(self):

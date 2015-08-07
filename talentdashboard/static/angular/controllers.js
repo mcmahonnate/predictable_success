@@ -904,11 +904,12 @@ angular.module('tdb.controllers', [])
         };
     }])
 
-    .controller('CoachDetailCtrl', ['$scope', 'Events', '$rootScope', '$location', '$routeParams', 'User', 'Employee', 'Coachees', 'TalentReport', '$http', 'analytics', 'Engagement', 'TalentCategories', function ($scope, Events, $rootScope, $location, $routeParams, User, Employee, Coachees, TalentReport, $http, analytics, Engagement, TalentCategories) {
+    .controller('CoachDetailCtrl', ['$scope', 'Events', '$rootScope', '$location', '$routeParams', 'User', 'Employee', 'Coachees', 'SalaryReport', 'TalentReport', '$http', 'analytics', 'Engagement', 'TalentCategories', function ($scope, Events, $rootScope, $location, $routeParams, User, Employee, Coachees, SalaryReport, TalentReport, $http, analytics, Engagement, TalentCategories) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         $scope.coach = $rootScope.currentUser.employee;
 
         $scope.talentReport = TalentReport.myCoachees();
+        $scope.salaryReport = SalaryReport.myCoachees();
     }])
 
 
@@ -1211,6 +1212,15 @@ angular.module('tdb.controllers', [])
                 case 'zoneDate':
                     $scope.evaluations_sort.sort(orderByZoneDate);
                     break;
+                case 'lastCheckin':
+                    $scope.evaluations_sort.sort(orderByLastCheckin);
+                    break;
+                case 'lastComment':
+                    $scope.evaluations_sort.sort(orderByLastComment);
+                    break;
+                case 'coach':
+                    $scope.evaluations_sort.sort(orderByCoach);
+                    break;
                 default:
                     $scope.evaluations_sort.sort(orderByName);
                     break;
@@ -1234,6 +1244,9 @@ angular.module('tdb.controllers', [])
                 row.talent_date = $rootScope.scrubDate(employee.talent_category_date);
                 row.happy = happyToString(employee.happiness);
                 row.happy_date = $rootScope.scrubDate(employee.happiness_date);
+                row.last_checkin = $rootScope.scrubDate(employee.last_checkin_about);
+                row.last_comment = $rootScope.scrubDate(employee.last_comment_about);
+                row.coach = employee.coach_full_name
                 $scope.csv.push(row);
             });
         }
@@ -1241,6 +1254,11 @@ angular.module('tdb.controllers', [])
             var aValue = a.full_name;
             var bValue = b.full_name;
             return ((aValue < bValue) ? -1 : ((aValue > bValue) ? 1 : 0));
+        }
+        var orderByCoach = function (a, b) {
+            var aValue = (a.coach_full_name) ? a.coach_full_name : '';
+            var bValue = (b.coach_full_name) ? b.coach_full_name : '';
+            return ((aValue > bValue) ? -1 : ((aValue < bValue) ? 1 : 0));
         }
         var orderByTalent = function (a, b) {
             var noDataValue = 8;
@@ -1287,10 +1305,31 @@ angular.module('tdb.controllers', [])
                 return bValue - aValue;
             }
         }
-
+        var orderByLastCheckin = function (a, b) {
+            var aValue = Date.parse(a.last_checkin_about) || 0;
+            var bValue = Date.parse(b.last_checkin_about) || 0;
+            var aName = a.full_name;
+            var bName = b.full_name;
+            if (aValue === bValue) {
+                return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+            } else {
+                return bValue - aValue;
+            }
+        }
+        var orderByLastComment = function (a, b) {
+            var aValue = Date.parse(a.last_comment_about) || 0;
+            var bValue = Date.parse(b.last_comment_about) || 0;
+            var aName = a.full_name;
+            var bName = b.full_name;
+            if (aValue === bValue) {
+                return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+            } else {
+                return bValue - aValue;
+            }
+        }
     }])
 
-    .controller('CompanyOverviewCtrl', ['$rootScope', '$scope', '$location', '$routeParams', 'KPIIndicator', 'KPIPerformance', 'analytics', 'TalentReport', 'TemplatePreferences', function ($rootScope, $scope, $location, $routeParams, KPIIndicator, KPIPerformance, analytics, TalentReport, TemplatePreferences) {
+    .controller('CompanyOverviewCtrl', ['$rootScope', '$scope', '$location', '$routeParams', 'KPIIndicator', 'KPIPerformance', 'analytics', 'SalaryReport', 'TalentReport', 'TemplatePreferences', function ($rootScope, $scope, $location, $routeParams, KPIIndicator, KPIPerformance, analytics, SalaryReport, TalentReport, TemplatePreferences) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
 
         TemplatePreferences.getPreferredTemplate('company-overview')
@@ -1311,6 +1350,7 @@ angular.module('tdb.controllers', [])
             }
         );
         $scope.talentReport = TalentReport.query();
+        $scope.salaryReport = SalaryReport.query();
     }])
 
     .controller('PeopleReportCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'HappinessReport', 'EngagementReport', 'TalentCategoryReport', 'Engagement', 'analytics', function ($scope, $rootScope, $location, $routeParams, HappinessReport, EngagementReport, TalentCategoryReport, Engagement, analytics) {
@@ -1362,7 +1402,7 @@ angular.module('tdb.controllers', [])
         }
     }])
 
-    .controller('LeaderOverviewCtrl', ['$scope', '$location', '$routeParams', 'TalentReport', 'TeamLeadEmployees', 'User', 'analytics', 'TemplatePreferences', function ($scope, $location, $routeParams, TalentReport, TeamLeadEmployees, User, analytics, TemplatePreferences) {
+    .controller('LeaderOverviewCtrl', ['$scope', '$location', '$routeParams', 'SalaryReport', 'TalentReport', 'TeamLeadEmployees', 'User', 'analytics', 'TemplatePreferences', function ($scope, $location, $routeParams, SalaryReport, TalentReport, TeamLeadEmployees, User, analytics, TemplatePreferences) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
 
         TemplatePreferences.getPreferredTemplate('team-lead-overview')
@@ -1373,6 +1413,7 @@ angular.module('tdb.controllers', [])
         );
 
         $scope.talentReport = TalentReport.myTeam();
+        $scope.salaryReport = SalaryReport.myTeam();
 
         User.get(
             function (data) {
@@ -1382,7 +1423,7 @@ angular.module('tdb.controllers', [])
         );
     }])
 
-    .controller('TeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'Team', 'TeamMembers', 'TeamMBTI', 'Customers', 'TeamLeads', 'analytics', 'TalentReport', 'TemplatePreferences', function ($scope, $location, $routeParams, Team, TeamMembers, TeamMBTI, Customers, TeamLeads, analytics, TalentReport, TemplatePreferences) {
+    .controller('TeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'Team', 'TeamMembers', 'TeamMBTI', 'Customers', 'TeamLeads', 'analytics', 'SalaryReport', 'TalentReport', 'TemplatePreferences', function ($scope, $location, $routeParams, Team, TeamMembers, TeamMBTI, Customers, TeamLeads, analytics, SalaryReport, TalentReport, TemplatePreferences) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
 
         TemplatePreferences.getPreferredTemplate('team-overview')
@@ -1399,6 +1440,7 @@ angular.module('tdb.controllers', [])
         $scope.employees = TeamLeads.getCurrentEvaluationsForTeamLeads($scope.teamId)
 
         $scope.talentReport = TalentReport.query({team_id: $routeParams.id});
+        $scope.salaryReport = SalaryReport.query({team_id: $routeParams.id});
 
         Team.get(
             {id: $routeParams.id},
