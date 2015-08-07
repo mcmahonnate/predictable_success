@@ -1212,6 +1212,15 @@ angular.module('tdb.controllers', [])
                 case 'zoneDate':
                     $scope.evaluations_sort.sort(orderByZoneDate);
                     break;
+                case 'lastCheckin':
+                    $scope.evaluations_sort.sort(orderByLastCheckin);
+                    break;
+                case 'lastComment':
+                    $scope.evaluations_sort.sort(orderByLastComment);
+                    break;
+                case 'coach':
+                    $scope.evaluations_sort.sort(orderByCoach);
+                    break;
                 default:
                     $scope.evaluations_sort.sort(orderByName);
                     break;
@@ -1235,6 +1244,9 @@ angular.module('tdb.controllers', [])
                 row.talent_date = $rootScope.scrubDate(employee.talent_category_date);
                 row.happy = happyToString(employee.happiness);
                 row.happy_date = $rootScope.scrubDate(employee.happiness_date);
+                row.last_checkin = $rootScope.scrubDate(employee.last_checkin_about);
+                row.last_comment = $rootScope.scrubDate(employee.last_comment_about);
+                row.coach = employee.coach_full_name
                 $scope.csv.push(row);
             });
         }
@@ -1242,6 +1254,11 @@ angular.module('tdb.controllers', [])
             var aValue = a.full_name;
             var bValue = b.full_name;
             return ((aValue < bValue) ? -1 : ((aValue > bValue) ? 1 : 0));
+        }
+        var orderByCoach = function (a, b) {
+            var aValue = (a.coach_full_name) ? a.coach_full_name : '';
+            var bValue = (b.coach_full_name) ? b.coach_full_name : '';
+            return ((aValue > bValue) ? -1 : ((aValue < bValue) ? 1 : 0));
         }
         var orderByTalent = function (a, b) {
             var noDataValue = 8;
@@ -1288,7 +1305,28 @@ angular.module('tdb.controllers', [])
                 return bValue - aValue;
             }
         }
-
+        var orderByLastCheckin = function (a, b) {
+            var aValue = Date.parse(a.last_checkin_about) || 0;
+            var bValue = Date.parse(b.last_checkin_about) || 0;
+            var aName = a.full_name;
+            var bName = b.full_name;
+            if (aValue === bValue) {
+                return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+            } else {
+                return bValue - aValue;
+            }
+        }
+        var orderByLastComment = function (a, b) {
+            var aValue = Date.parse(a.last_comment_about) || 0;
+            var bValue = Date.parse(b.last_comment_about) || 0;
+            var aName = a.full_name;
+            var bName = b.full_name;
+            if (aValue === bValue) {
+                return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+            } else {
+                return bValue - aValue;
+            }
+        }
     }])
 
     .controller('CompanyOverviewCtrl', ['$rootScope', '$scope', '$location', '$routeParams', 'KPIIndicator', 'KPIPerformance', 'analytics', 'SalaryReport', 'TalentReport', 'TemplatePreferences', function ($rootScope, $scope, $location, $routeParams, KPIIndicator, KPIPerformance, analytics, SalaryReport, TalentReport, TemplatePreferences) {

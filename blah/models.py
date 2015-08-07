@@ -51,25 +51,26 @@ class CommentManager(models.Manager):
     """
     A manager that retrieves comments for a particular model.
     """
-    def get_comments_for_all_employees(self, requester):
+    def get_comments_for_all_employees(self, requester=None):
         employee_type = ContentType.objects.get(model='employee')
         comments = self.filter(content_type=employee_type)
-        comments = comments.exclude(object_id=requester.id)
-        daily_digest_subscriber = requester.user.groups.filter(name="Daily Digest Subscribers").exists()
-        admin_access = requester.user.groups.filter(name="AdminAccess").exists()
-        if not daily_digest_subscriber or not admin_access:
-            comments = comments.exclude(~Q(owner_id=requester.user.id), include_in_daily_digest=False)
+        if requester is not None:
+            comments = comments.exclude(object_id=requester.id)
+            daily_digest_subscriber = requester.user.groups.filter(name="Daily Digest Subscribers").exists()
+            admin_access = requester.user.groups.filter(name="AdminAccess").exists()
+            if not daily_digest_subscriber or not admin_access:
+                comments = comments.exclude(~Q(owner_id=requester.user.id), include_in_daily_digest=False)
         comments = comments.extra(order_by = ['-created_date'])
 
         return comments
 
-    def get_comments_for_employee(self, requester, employee):
+    def get_comments_for_employee(self, employee, requester=None):
         comments = self.get_comments_for_all_employees(requester)
         comments = comments.filter(object_id = employee.id)
 
         return comments
 
-    def get_comments_for_employees(self, requester, employee_ids):
+    def get_comments_for_employees(self, employee_ids, requester=None):
         comments = self.get_comments_for_all_employees(requester)
         comments = comments.filter(object_id__in = employee_ids)
 
