@@ -1260,7 +1260,7 @@ class ImageUploadView(APIView):
                 elif orientation == 6: image = image.transpose(Image.ROTATE_270)
                 elif orientation == 8: image = image.transpose(Image.ROTATE_90)
 
-        filename = image_obj.name
+        filename = str(request.tenant.pk) + ' ' + str(employee.id)
         content_type = image_obj.content_type
         #resize to avatar size
         avatar_size = (215, 215)
