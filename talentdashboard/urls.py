@@ -4,7 +4,6 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 from django.contrib.auth.views import password_reset, password_reset_confirm, password_reset_done, password_reset_complete, login, logout
 from views.views import *
-from search.views import employee_search, salary_report, my_team_salary_report, my_coachees_salary_report, talent_report, my_team_talent_report, my_coachees_talent_report, my_team_employee_search, my_coachees_employee_search
 from forms import *
 from rest_framework import routers
 from views.payment import ChargeView, PaymentView
@@ -132,18 +131,6 @@ urlpatterns = patterns('',
     url(r'^insights/survey/(?P<access_token>[\w.@+-]+)/$', Survey.as_view(), name="insights_survey"),
     url(r'^insights/thanks/$', Confirmation.as_view(), name="insights_confirmation"),
     
-    url(r'^api/v1/reports/talent/my-team/$', my_team_talent_report),
-    url(r'^api/v1/reports/talent/my-coachees/$', my_coachees_talent_report),
-    url(r'^api/v1/reports/talent/$', talent_report),
-
-    url(r'^api/v1/reports/salary/my-team/$', my_team_salary_report),
-    url(r'^api/v1/reports/salary/my-coachees/$', my_coachees_salary_report),
-    url(r'^api/v1/reports/salary/$', salary_report),
-
-    url(r'^api/v1/search/employees/$', employee_search),
-    url(r'^api/v1/search/employees/my-team/$', my_team_employee_search),
-    url(r'^api/v1/search/employees/my-coachees/$', my_coachees_employee_search),
-
     url(r'^api/v1/import-data/employee$', upload_employee),
     url(r'^api/v1/import-data/leadership$', upload_leadership),
     url(r'^api/v1/import-data/teams$', upload_teams),
@@ -154,5 +141,6 @@ urlpatterns = patterns('',
 
     url(r'^api/v1/reports/activity$', last_activity_report),
 
+    url(r'^api/v1/search/', include('search.api.urls')),
     url(r'^', include(router.urls)),
 )
