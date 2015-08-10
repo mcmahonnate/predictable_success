@@ -16,7 +16,7 @@ angular.module('tdb.search.services', ['ngResource'])
             myTeam: {method: 'GET', isArray: false, url: '/api/v1/reports/talent/my-team/'},
             myCoachees: {method: 'GET', isArray: false, url: '/api/v1/reports/talent/my-coachees/'}
         };
-        var TalentReport = $resource('/api/v1/reports/talent/', null, actions);
+        var TalentReport = $resource('/api/v1/search/reports/talent/', null, actions);
         return TalentReport;
     }])
 
@@ -26,7 +26,7 @@ angular.module('tdb.search.services', ['ngResource'])
             myTeam: {method: 'GET', isArray: false, url: '/api/v1/reports/salary/my-team/'},
             myCoachees: {method: 'GET', isArray: false, url: '/api/v1/reports/salary/my-coachees/'}
         };
-        var SalaryReport = $resource('/api/v1/reports/salary/', null, actions);
+        var SalaryReport = $resource('/api/v1/search/reports/salary/', null, actions);
         return SalaryReport;
     }])
 ;
