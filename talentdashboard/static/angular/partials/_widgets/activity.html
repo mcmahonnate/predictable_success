@@ -55,11 +55,6 @@
                 
                 <!-- Check-in -->
                 <a class="activity-checkin row" href="#/checkins/{{ event.event_id }}" ng-show="event.type == 'check in'">
-                    <div class="activity-checkin-type pull-right">
-                        <span class="glyphicon glyphicon-top glyphicon-user"></span> 
-                        <span class="glyphicon glyphicon-outline glyphicon-user"></span> 
-                        <span class="glyphicon glyphicon-user"></span>   
-                    </div>
                     <div class="avatar-container col-xs-2">
                         <span class="large-headshot">
                             <img ng-src="{{ event.employee.avatar_small }}" alt="{{ event.employee.full_name }}" />
@@ -69,7 +64,12 @@
                         </div>
                     </div> 
 
-                    <div class="activity-checkin-details" ng-class="{'col-xs-11 col-md-10': view='employee-view', 'col-xs-9 col-md-8': view='team'}">
+                    <div class="activity-checkin-details" ng-class="{'col-xs-12 col-sm-10': view='employee-view', 'col-xs-12 col-sm-10': view='team'}">
+                        <div class="activity-checkin-type pull-right">
+                            <span class="glyphicon glyphicon-top glyphicon-user"></span> 
+                            <span class="glyphicon glyphicon-outline glyphicon-user"></span> 
+                            <span class="glyphicon glyphicon-user"></span>   
+                        </div>
                         <h3 class="comment-title-employee-name">{{event.employee.full_name}}</h3>  
                         <span class="activity-checkin-summary" ng-init="length=10" ng-bind-html="event.description | cut:true:length" style="line-height: 125%"></span> 
                         <span ng-show="event.description.length>length" ng-init="showMoreButton=true">

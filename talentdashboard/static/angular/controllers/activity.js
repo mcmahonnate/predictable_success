@@ -1,6 +1,6 @@
-angular.module('tdb.controllers.events', [])
+angular.module('tdb.controllers.activity', [])
 
-    .controller('EventsCtrl', ['$scope', '$rootScope', '$filter', '$window', '$modal', 'Events', 'EmployeeComments', 'SubComments','Comment', 'Employee', function($scope, $rootScope, $filter, $window, $modal, Events, EmployeeComments, SubComments, Comment, Employee) {
+    .controller('ActivityCtrl', ['$scope', '$rootScope', '$filter', '$window', '$modal', 'Events', 'EmployeeComments', 'SubComments','Comment', 'Employee', function($scope, $rootScope, $filter, $window, $modal, Events, EmployeeComments, SubComments, Comment, Employee) {
         $scope.init = function(view, path, id) {
             $scope.view = view;
             $scope.path = path;
