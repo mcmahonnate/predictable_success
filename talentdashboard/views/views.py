@@ -70,14 +70,15 @@ def parseBoolString(theString):
 
 
 class UserList(generics.ListAPIView):
-    serializer_class = UserSerializer
-    queryset = User.objects.all()
-    queryset = queryset.extra(order_by=['-last_login'])
+    serializer_class = EmployeeSerializer
+    queryset = Employee.objects.get_current_employees()
+    queryset = queryset.filter(user__isnull=False)
 
 
 class CoachList(generics.ListAPIView):
     serializer_class = EmployeeSerializer
-    queryset = Employee.objects.filter(user__groups__id=2)
+    queryset = Employee.objects.get_current_employees()
+    queryset = queryset.filter(user__groups__name='CoachAccess')
 
 
 class TeamViewSet(viewsets.ReadOnlyModelViewSet):
@@ -1259,7 +1260,7 @@ class ImageUploadView(APIView):
                 elif orientation == 6: image = image.transpose(Image.ROTATE_270)
                 elif orientation == 8: image = image.transpose(Image.ROTATE_90)
 
-        filename = image_obj.name
+        filename = str(request.tenant.pk) + ' ' + str(employee.id)
         content_type = image_obj.content_type
         #resize to avatar size
         avatar_size = (215, 215)
