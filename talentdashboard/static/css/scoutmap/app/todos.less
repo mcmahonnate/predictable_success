@@ -43,11 +43,6 @@
   		color: #aaa;
   		font-size: 12px;
 	}
-	.show-popover {
-		position: absolute;
-	    right: 25px;
-	    top: 25px;
-	}
 
 	.todo-description-container {
 		padding: 0;
@@ -58,7 +53,7 @@
 	}
 
 	.nav-tabs {
-	  margin: 15px 0 0;
+		margin: 15px 0 0;
 	}
 
 	.todo {
@@ -67,8 +62,16 @@
   		background: #efefef;
   		position: relative;
 
+		.show-popover {
+			position: absolute;
+		    right: 25px;
+		    top: 25px;
+		    z-index: 9;
+		}
+
   		.popover-items {
-  			top: 34px;
+  			top: 45px;
+    		right: 25px;
   		}
 	}
 
