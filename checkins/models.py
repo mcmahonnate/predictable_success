@@ -25,6 +25,14 @@ class CheckIn(models.Model):
 
     class Meta:
         get_latest_by = "date"
+        permissions = (
+            ("view_checkin_summary", "Can view the summary of the Check In."),
+        )
+
+    def get_summary(self, user):
+        if user.has_perm('checkins.view_checkin_summary'):
+            return self.summary
+        return None
 
     def get_type_description(self):
         if self.type is not None:

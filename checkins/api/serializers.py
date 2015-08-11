@@ -19,6 +19,10 @@ class CheckInSerializer(serializers.ModelSerializer):
     type = CheckInTypeSerializer(required=False)
     happiness = HappinessSerializer(required=False)
     tasks = TaskSerializer(required=False, many=True)
+    summary = serializers.SerializerMethodField()
+
+    def get_summary(self, obj):
+        return obj.get_summary(self.context['request'].user)
 
     class Meta:
         model = CheckIn
