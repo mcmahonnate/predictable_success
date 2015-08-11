@@ -71,7 +71,7 @@ def parseBoolString(theString):
 
 class UserList(generics.ListAPIView):
     serializer_class = EmployeeSerializer
-    queryset = Employee.objects.get_current_employees()
+    queryset = Employee.objects.get_current_employees(show_hidden=True)
     queryset = queryset.filter(user__isnull=False)
 
 
