@@ -10,7 +10,7 @@ from blah.models import Comment
 from todo.models import Task
 from django.db import connection
 from customers.models import Customer
-
+from checkins.models import CheckIn
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
@@ -31,9 +31,11 @@ class Command(BaseCommand):
             comments = comments.exclude(include_in_daily_digest=False)
             comments = comments.exclude(object_id=recipient.employee.id, content_type=employee_type)
             comments = comments.exclude(content_type=employee_type, visibility=1)
+            check_ins = CheckIn.objects.filter(date__range=[start_dt,dt])
+            check_ins = check_ins.exclude(employee__id=recipient.employee.id)
             todos = Task.objects.filter(created_date__range=[start_dt,dt])
             todos = todos.exclude(employee__id=recipient.employee.id)
-            if comments.count() > 0 or todos.count() > 0:
+            if comments.count() > 0 or todos.count() > 0 or check_ins.count > 0:
                 df = DateFormat(dt)
                 from_email = 'Scoutmap<scoutmap@dfrntlabs.com>'
                 subject = 'Daily Recap for ' + df.format('l, d F')
@@ -42,6 +44,7 @@ class Command(BaseCommand):
                     {
                         'date': date,
                         'comments': comments,
+                        'checkins': check_ins,
                         'todos': todos,
                         'site': tenant.domain_url,
                         'employee_type': employee_type,
