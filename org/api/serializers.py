@@ -178,6 +178,10 @@ class UserSerializer(serializers.ModelSerializer):
     can_view_company_dashboard = serializers.SerializerMethodField()
     is_team_lead = serializers.SerializerMethodField()
     preferences = UserPreferencesSerializer()
+    permissions = serializers.SerializerMethodField()
+
+    def get_permissions(self, obj):
+        return obj.get_all_permissions()
 
     def get_can_edit_employees(self, obj):
         if obj.groups.filter(name='Edit Employee').exists() | obj.is_superuser:
@@ -210,7 +214,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'can_edit_employees', 'can_view_comments', 'can_coach_employees', 'can_evaluate_employees', 'can_view_company_dashboard', 'is_team_lead', 'employee', 'last_login', 'preferences')
+        fields = ('id', 'username', 'first_name', 'last_name', 'can_edit_employees', 'can_view_comments', 'can_coach_employees', 'can_evaluate_employees', 'can_view_company_dashboard', 'is_team_lead', 'employee', 'last_login', 'preferences', 'permissions')
 
 
 class MentorshipSerializer(serializers.HyperlinkedModelSerializer):
