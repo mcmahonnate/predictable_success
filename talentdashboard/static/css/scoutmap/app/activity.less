@@ -9,26 +9,36 @@
     margin: 0 20px 0 0;
     background-color: #f1f1f1;
 
+    @media only screen and (max-width : 990px) {
+        margin: 0;
+        padding: 15px 10px;
+    }
+    
+
   	h3 {
   		margin-bottom: 5px;
   	}
   	.avatar-container {
       margin: 0;
-      width: 95px;
       padding-right: 0;
   	}
-
   	.employee-attribute {
   		left: 10px;
   	}
-
   	.activity-checkin-summary {
   		color: #333;
       white-space: pre-wrap;
   	}
+    .activity-checkin-details {
+        padding-left: 20px;
 
+        @media only screen and (max-width : 990px) {
+            padding-left: 0;
+        }  
+    }
   	.activity-checkin-type {
   		position: relative;
+        margin: 0 0 15px 18px;
   	}
   	.activity-checkin-type .glyphicon {
 	  	font-size: 30px;

@@ -1,4 +1,4 @@
-angular.module('tdb.services.events', ['ngResource'])
+angular.module('tdb.services.activity', ['ngResource'])
 
     .factory('Events', ['$resource', '$http', function($resource, $http) {
         Events = $resource('/api/v1/events/:path/:id/');
