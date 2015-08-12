@@ -594,8 +594,13 @@ class EngagementSurvey(APIView):
         signer = Signer()
         survey_id = signer.unsign(sid)
         survey = SurveyUrl.objects.get(id=survey_id)
-        employee_id = signer.unsign(pk)
-        employee = Employee.objects.get(id=employee_id)
+        logger.debug('TEST START')
+        logger.debug("survey_id is %s" % survey.id)
+        logger.debug("employee is %s" % survey.sent_to)
+        logger.debug("user.id is %s" % survey.sent_to.user.id)
+        logger.debug('TEST END')
+
+        employee = survey.sent_to
         visibility = 3
         if employee is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
@@ -605,7 +610,7 @@ class EngagementSurvey(APIView):
         happy.assessment = int(assessment)
         if "_content" in request.DATA:
             content = request.DATA["_content"]
-            comment = employee.comments.add_comment(content, visibility, employee.user)
+            comment = employee.comments.add_comment(content=content, visibility=visibility, daily_digest=True, owner=employee.user)
             happy.comment = comment
         happy.save()
         survey.completed = True

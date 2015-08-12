@@ -81,5 +81,8 @@ def object_delete_handler(sender, instance, **kwargs):
     if content_type.id is comment_type.id:
         if instance.content_type.id is comment_type.id:
             return
-    event = Event.objects.get(event_type=content_type, event_id=instance.id)
-    event.delete()
+    try:
+        event = Event.objects.get(event_type=content_type, event_id=instance.id)
+        event.delete()
+    except:
+        return
