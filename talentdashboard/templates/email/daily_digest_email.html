@@ -72,6 +72,7 @@
     <br/>
     <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;border-spacing:0;width:100%;text-align:justify;margin:0;padding:0;border-width:0;">
         <tbody>
+    {% load checkin_extras %}
     {% for checkin in checkins %}
         <tr>
         <font face="Helvetica Neue,helvetica,arial,sans-serif" size="2">
@@ -82,7 +83,7 @@
                 <p>
                 <a href="http://{{site}}/#/employees/{{checkin.employee.id}}"><b>{{checkin.employee.full_name}}</b></a> had a {{checkin.get_type_description}} check-in.
                 <br/>
-                <span style="font-size:14px;">{{checkin.get_summary}}</span>
+                <span style="font-size:14px;">{{ checkin | get_summary:recipient | default_if_none:"" }}</span>
                 <span style="font-size:14px;color:#AA9C84"><b>from {{checkin.host.full_name}}</b></span>
                 <br/>
                 </p>

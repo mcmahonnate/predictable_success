@@ -23,8 +23,8 @@ class Command(BaseCommand):
         employee_type = ContentType.objects.get(model="employee")
         team_type = ContentType.objects.get(model="team")
         start_dt = dt-timedelta(days=1)
-        plaintext = get_template('daily_digest_email.txt')
-        htmly = get_template('daily_digest_email.html')
+        plaintext = get_template('email/daily_digest_email.txt')
+        htmly = get_template('email/daily_digest_email.html')
         recipients = User.objects.filter(groups__id=3)
         for recipient in recipients:
             comments = Comment.objects.filter(created_date__range=[start_dt,dt])
