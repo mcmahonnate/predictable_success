@@ -1534,7 +1534,8 @@ def team_lead_employees(request):
         employees = []
         for leadership in leaderships:
             if leadership.employee not in employees:
-                employees.append(leadership.employee)
+                if leadership.employee.departure_date is None:
+                    employees.append(leadership.employee)
         
         serializer = EmployeeSerializer(employees, many=True, context={'request': request})
 
