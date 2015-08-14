@@ -1,5 +1,5 @@
-from rest_framework import generics, views
-from rest_framework.response import Response
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
 from ..models import CheckIn, CheckInType
 from .serializers import CheckInSerializer, AddEditCheckInSerializer, CheckInTypeSerializer
 
@@ -9,6 +9,8 @@ class CreateCheckIn(generics.CreateAPIView):
     """ Create a CheckIn via POST.
     """
     serializer_class = AddEditCheckInSerializer
+    permission_classes = (IsAuthenticated, DjangoModelPermissions)
+    model = CheckIn
 
     def perform_create(self, serializer):
         serializer.save(host=self.request.user.employee)
@@ -19,12 +21,14 @@ class RetrieveUpdateDestroyCheckIn(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = CheckIn.objects.all()
     serializer_class = CheckInSerializer
+    permission_classes = (IsAuthenticated, DjangoModelPermissions)
 
 
 class EmployeeCheckInList(generics.ListAPIView):
     """ Get a list of CheckIns for a given employee via employee_id query param.
     """
     serializer_class = CheckInSerializer
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         employee_id = self.kwargs['employee_id']
@@ -35,6 +39,7 @@ class HostCheckInList(generics.ListAPIView):
     """ Get a list of CheckIns where the current user is the host.
     """
     serializer_class = CheckInSerializer
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         host = self.request.user.employee
@@ -42,11 +47,8 @@ class HostCheckInList(generics.ListAPIView):
 
 
 # CheckInType views
-class CheckInTypeList(views.APIView):
-    """ Retrieve all CheckInTypes
-    """
-    def get(self, request):
-        qs = CheckInType.objects.all()
-        serializer = CheckInTypeSerializer(qs, many=True)
-        return Response(serializer.data)
+class CheckInTypeList(generics.ListAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = CheckInTypeSerializer
+    queryset = CheckInType.objects.all()
 

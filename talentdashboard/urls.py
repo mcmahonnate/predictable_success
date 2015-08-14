@@ -99,12 +99,6 @@ urlpatterns = patterns('',
     url(r'^api/v1/tasks/(?P<pk>[0-9]+)?/$', (auth('AllAccess','CoachAccess','TeamLeadAccess')(TaskDetail.as_view()))),
     url(r'^api/v1/tasks/$', (auth('AllAccess','CoachAccess','TeamLeadAccess')(TaskDetail.as_view()))),
 
-    url(r'^api/v1/checkins/employees/(?P<employee_id>[0-9]+)/$', (auth('AllAccess','CoachAccess','TeamLeadAccess')(EmployeeCheckInList.as_view()))),
-    url(r'^api/v1/checkins/hosted/$', (auth('AllAccess','CoachAccess','TeamLeadAccess')(HostCheckInList.as_view()))),
-    url(r'^api/v1/checkins/(?P<pk>[0-9]+)/$', (auth('AllAccess','CoachAccess','TeamLeadAccess')(RetrieveUpdateDestroyCheckIn.as_view()))),
-    url(r'^api/v1/checkins/$', (auth('AllAccess','CoachAccess','TeamLeadAccess')(CreateCheckIn.as_view()))),
-    url(r'^api/v1/checkintypes/$', (auth('AllAccess','CoachAccess','TeamLeadAccess')(CheckInTypeList.as_view()))),
-
     url(r'^api/v1/events/employees/(?P<employee_id>[0-9]+)/$', (auth('AllAccess','CoachAccess','TeamLeadAccess')(EmployeeEventList.as_view()))),
     url(r'^api/v1/events/teams/(?P<pk>[0-9]+)/$', (auth('AllAccess')(TeamEventList.as_view()))),
     url(r'^api/v1/events/leads/$', (auth_employee('AllAccess','TeamLeadAccess')(LeadEventList.as_view()))),
@@ -142,5 +136,6 @@ urlpatterns = patterns('',
     url(r'^api/v1/reports/activity$', last_activity_report),
 
     url(r'^api/v1/search/', include('search.api.urls')),
+    url(r'^api/v1/checkins/', include('checkins.api.urls')),
     url(r'^', include(router.urls)),
 )
