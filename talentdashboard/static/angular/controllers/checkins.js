@@ -112,7 +112,7 @@ angular.module('tdb.controllers.checkins', [])
 
 
         $scope.saveSummary = function (checkin) {
-            data = {summary: checkin.summary, id: checkin.id};
+            data = {summary: checkin.summary, id: checkin.id, employee: checkin.employee.id, type: checkin.type.id};
             CheckIn.update(data, function() {
                 $scope.showSummaryEdit = false;
                 Notification.success("Saved!");
