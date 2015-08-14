@@ -59,3 +59,8 @@ class CompensationSummary(models.Model):
 
     class Meta:
         ordering = ['year', 'fiscal_year']
+
+    class Meta:
+        permissions = (
+            ("view_compensationsummary", "Can view compensation summary"),
+        )
