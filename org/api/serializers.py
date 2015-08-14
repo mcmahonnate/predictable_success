@@ -199,7 +199,7 @@ class UserSerializer(serializers.ModelSerializer):
         return False
 
     def get_can_coach_employees(self, obj):
-        if (obj.employee is not None and obj.employee.is_coach()) | obj.is_superuser:
+        if (obj.employee is not None and obj.employee.is_a_coach()) | obj.is_superuser:
                 return True
         return False
 
