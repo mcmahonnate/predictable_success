@@ -87,7 +87,14 @@
                             <span class="segment employee-segment-background-color-{{event.employee.current_talent_category}}"></span>
                         </div>
                     </div>   
-                    <span ng-init="length=500" ng-bind="event.description | cut:true:length" style="line-height: 125%;white-space: pre-wrap;"></span> <span ng-show="event.description.length>length" ng-init="showMoreButton=true"><a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a><a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a></span>
+                    <div class="activity-comment" 
+                        ng-init="length=500" 
+                        ng-bind="event.description | cut:true:length">
+                    </div> 
+                    <span ng-show="event.description.length>length" ng-init="showMoreButton=true">
+                        <a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a>
+                        <a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a>
+                    </span>
                     <span class="total-replies" ng-show="event.subcomments.length == 1">
                         {{event.subcomments.length}} reply
                     </span>

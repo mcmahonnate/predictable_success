@@ -425,6 +425,7 @@ angular.module('tdb.controllers', [])
         $scope.teamsTab = 'teams';
         $scope.settingsTab = 'settings';
         $scope.searchTab = 'search';
+        $scope.reportsTab = 'reports';
 
         $scope.setActiveTab = function (tab) {
             if ($rootScope.activeTab == tab) {
@@ -1144,6 +1145,30 @@ angular.module('tdb.controllers', [])
                 $scope.responseData = data;
             });
         }
+
+        $scope.happyToString = function(happy){
+            console.log(happy);
+            switch (happy) {
+                case 1:
+                    return 'Very Unhappy';
+                    break;
+                case 2:
+                    return 'Unhappy';
+                    break;
+                case 3:
+                    return 'Indifferent';
+                    break;
+                case 4:
+                    return 'Happy';
+                    break;
+                case 5:
+                    return 'Very Happy';
+                    break;
+                case 0:
+                    return 'No Data';
+                    break;
+            }
+        };        
 
         $scope.buildCSV = function () {
             var csv = [];

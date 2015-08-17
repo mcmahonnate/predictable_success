@@ -1,171 +1,97 @@
-  <div class="dashboard-sized-el fade in" ng-class="{in:salaryReport}" id="dashboard" style="margin-top: 63px; max-width: 970px;">
-    <div class="widget-inner large-screen">
-        <div id="sorts" class="button-group" style="display: inline-block;">
-          <button class="sort-button" ng-class="{'is-checked':orderValue=='name'}" ng-click="order('name')">name</button>
-          <button class="sort-button" ng-class="{'is-checked':orderValue=='talent'}" ng-click="order('talent')">zone</button>
-          <button class="sort-button" ng-class="{'is-checked':orderValue=='happy'}" ng-click="order('happy')">happiness</button>
-          <button class="sort-button" ng-class="{'is-checked':orderValue=='lastCheckin'}" ng-click="order('lastCheckin')">last checkin</button>
-          <button class="sort-button" ng-class="{'is-checked':orderValue=='lastComment'}" ng-click="order('lastComment')">last comment</button>
-          <button class="sort-button" ng-class="{'is-checked':orderValue=='coach'}" ng-click="order('coach')">coach</button>
-        </div>
-        <span class="fa fa-download" style="cursor: pointer;float:right;display: inline-block;margin-top:2px;font-size:30px" ng-csv="csv" filename="scoutmap.csv" csv-header="['Employee','Team','Email','Development Zone','Development Zone Date','Happiness', 'Happiness Date', 'Last Checkin', 'Last Comment', 'Coach']"></span>
-        <div style="position: absolute;width: 100%;margin-top:15px;">
-            <ul class="isotope table-like">
-                <li ng-repeat="employee in evaluations" ng-style="{top: (((employee.index) * 55) + 'px')}">
-                    <div class="avatar">
-                        <a ng-href="#/employees/{{employee.pk}}" class="medium-headshot">
-                            <img ng-src="{{ employee.avatar_small }}" />
-                        </a>
-                    </div>
-                    <div class="name vertical-align-container"><div class="vertical-align-text"><a href="#/employees/{{employee.pk}}">{{employee.full_name}}</a></div></div>
+<div class="container">  
+  <h1>Activity Report</h1>
+  <div class="panel" ng-class="{in:salaryReport}">
+        
+        <div>
+            <div class="dropdown pull-left">
+                <strong>Sort By:</strong>
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                    <span>{{orderValue}}</span> 
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                    <li><a ng-click="sortType = 'full_name'; orderValue = 'Name'">Name</a></li>
+                    <li><a ng-click="sortType = 'talent_category'; orderValue = 'Development Zones'">Development Zones</a></li>
+                    <li><a ng-click="sortType = '-happiness'; orderValue = 'Happiness'">Happiness</a></li>
+                    <li><a ng-click="order('lastCheckin'); orderValue = 'Last Check-in'">Last Check-in</a></li>
+                    <li><a ng-click="order('lastComment'); orderValue = 'Last Comment'">Last Comment</a></li>
+                    <li><a ng-click="order('coach'); orderValue = 'Coach'">Coach</a></li>
+                </ul>
+            </div>
+            <button class="btn btn-default pull-left" style="margin-left:5px;" type="button" ng-csv="csv" filename="scoutmap.csv" csv-header="['Employee','Team','Email','Development Zone','Development Zone Date','Happiness', 'Happiness Date', 'Last Checkin', 'Last Comment', 'Coach']">
+                <span class="fa fa-download"></span> Download
+            </button>
+        </div>    
 
-                    <div style="margin: 0;position: relative;width: 80px;height: 50px;">
 
+      
+            <table class="table" style="margin-top:35px;">
+                <thead>
+                    <tr>
+                        <th>Employee</th>
+                        <th>Development Zones</th>
+                        <th>Happiness</th>
+                        <th>Last Check-in</th>
+                        <th>Last Comment</th>
+                        <th>Coach</th>
+                    </tr>
+                </thead>        
 
-                        <div class="employee-attribute employee-attribute-large" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{ talentCategories[employee.talent_category].label }}">
-                            <span class="segment employee-segment-background-color-{{employee.talent_category}}"></span>
-                        </div>
-                        <div class="employee-attribute employee-attribute-large employee-happiness-large" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{ talentCategories[employee.talent_category].label }}">
-                            <span class="employee-happiness-background-color-{{employee.happiness}} happiness-{{ employee.happiness }}"></span>
-                        </div>
-                    </div>
-                    <div class="happy-date vertical-align-container" style="color: #333333;"><div class="happy-date vertical-align-text">{{employee.last_checkin_about | date:'MM/dd/yyyy'}}</div></div>
-                    <div class="happy-date vertical-align-container" style="color: #333333;"><div class="happy-date vertical-align-text">{{employee.last_comment_about | date:'MM/dd/yyyy'}}</div></div>
-                    <div class="name vertical-align-container"><div class="vertical-align-text"><a href="#/employees/{{employee.coach_id}}">{{employee.coach_full_name}}</a></div></div>
-                </li>
-            </ul>
-        </div>
-    </div>
+                <tbody>
+                    <tr ng-repeat="employee in evaluations | orderBy:sortType">
+                        <td>
+                            <a ng-href="#/employees/{{employee.pk}}" class="medium-headshot pull-left">
+                                <img ng-src="{{ employee.avatar_small }}" />
+                            </a>
+                            <a href="#/employees/{{employee.pk}}">{{employee.full_name}}</a>
+                        </td>
+                        <td>
+                            {{ talentCategories[employee.talent_category].label }}
+                        </td>
+                        <td>    
+                            {{ employee.happiness }}
+                        </td>
+                        <td>
+                            {{employee.last_checkin_about | date:'MM/dd/yyyy'}}
+                        </td>
+                        <td>
+                            {{employee.last_comment_about | date:'MM/dd/yyyy'}}
+                        </td>
+                        <td>
+                            <a href="#/employees/{{employee.coach_id}}">
+                                {{employee.coach_full_name}}
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>    
+            </table>    
+           
+  
+
     <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
   </div>
+</div>  
 <style>
 
-/* ---- button ---- */
-.vertical-align-text {
-    display: table-cell;
-    vertical-align: middle;
-    height:50px;
-}
-.vertical-align-container {
-    display: table;
-}
-.sort-button {
-  width: 130px;
-  display: inline-block;
-  padding: 0.5em 1.0em;
-  background: #EEE;
-  border: none;
-  border-radius: 7px;
-  background-image: linear-gradient( to bottom, hsla(0, 0%, 0%, 0), hsla(0, 0%, 0%, 0.2) );
-  color: #222;
-  font-family: sans-serif;
-  font-size: 16px;
-  text-shadow: 0 1px white;
-  cursor: pointer;
-}
-
-.sort-button:hover {
-  background-color: #8CF;
-  text-shadow: 0 1px hsla(0, 0%, 100%, 0.5);
-  color: #222;
-}
-
-.sort-button:active,
-.sort-button.is-checked {
-  background-color: #28F;
-}
-
-.sort-button.is-checked {
-  color: white;
-  text-shadow: 0 -1px hsla(0, 0%, 0%, 0.8);
-}
-
-.sort-button:active {
-  box-shadow: inset 0 1px 10px hsla(0, 0%, 0%, 0.8);
-}
-
-/* ---- button-group ---- */
-
-.button-group:after {
-  content: '';
-  display: block;
-  clear: both;
-}
-
-.button-group .sort-button {
-  float: left;
-  border-radius: 0;
-  margin-left: 0;
-  margin-right: 1px;
-}
-
-.button-group .sort-button:first-child { border-radius: 0.5em 0 0 0.5em; }
-.button-group .sort-button:last-child { border-radius: 0 0.5em 0.5em 0; }
-
-
-/* ---- isotope ---- */
-
-.isotope {
-  background: #DDD;
-  max-width: 1200px;
-}
-
-/* clear fix */
-.isotope:after {
-  content: '';
-  display: block;
-  clear: both;
-}
 
 /* ---- vertical table-like ---- */
 
-.table-like {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+
+table {
+    position: relative;
 }
 
-.table-like > li {
-  width: 100%;
-  position: absolute;
-  clear: both;
-  border-top: 1px solid;
-  border-color: #DDD;
-  color: #DDD;
-  position: absolute;
-  /* Top: 0; this will be changed for every single list item by AngularJS */
-  top:0;
-  /* Item height; hold this in sync with template file */
-  height: 40px;
+.masonry {
+  clear:both;
+}
+
+tr {
+
+
   /*  Simple transition */
   -webkit-transition: top .7s ease-in-out;
   -moz-transition: top .7s ease-in-out;
   transition: top .7s ease-in-out;
 }
 
-.table-like > li.header {
-    border-top: 0px;
-}
-
-/* clearfix */
-.table-like > li:after {
-  display: block;
-  content: '';
-  clear: both;
-}
-
-.table-like > li > * {
-  float: left;
-  padding: 5px 4px;
-  font-size: 18px;
-}
-
-.table-like .name { width: 20%; margin-left: 20px;}
-.table-like .talent { width: 10%;}
-.table-like .happy-score { width: 15%; text-align: center;}
-.table-like .happy-date { width: 15%; }
-.table-like .category { width: 10%; }
-.glyphicon-export:hover:before{
-    color: #8CF;
-}
 </style>
