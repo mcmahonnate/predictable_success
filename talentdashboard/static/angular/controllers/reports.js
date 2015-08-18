@@ -87,7 +87,7 @@ angular.module('tdb.controllers.reports', [])
             TaskReport.get({start_date: $scope.startDate, end_date: $scope.endDate}, function (data) {
                 $scope.responseData.tasks = data.by_user;
                 $scope.total.tasks = data.total;
-            });
+            });            
 
             CheckInReport.get({start_date: $scope.startDate, end_date: $scope.endDate}, function (data) {
                 $scope.responseData.checkins = data.by_user;
