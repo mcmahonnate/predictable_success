@@ -92,7 +92,7 @@ class PvpEvaluation(models.Model):
     is_complete = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
-        self.is_complete = self.performance > 0 and self.potential > 0
+        self.is_complete = (self.performance > 0 and self.potential > 0) or self.too_new
         super(PvpEvaluation, self).save(*args, **kwargs)
         return self
 
