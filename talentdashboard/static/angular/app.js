@@ -6,6 +6,7 @@ var app = angular.module('tdb', [
         'tdb.controllers.comments',
         'tdb.controllers.search',
         'tdb.controllers.employeesSnapshot',
+        'tdb.controllers.reports',
         'tdb.services.activity', 'tdb.controllers.activity',
         'tdb.services.checkins', 'tdb.controllers.checkins',
         'tdb.engagement.services', 'angular.filter',

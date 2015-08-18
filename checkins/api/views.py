@@ -18,8 +18,12 @@ class RetrieveUpdateDestroyCheckIn(generics.RetrieveUpdateDestroyAPIView):
     """ Retrieve, Update, or Delete a CheckIn via GET, PUT, DELETE.
     """
     queryset = CheckIn.objects.all()
-    serializer_class = CheckInSerializer
+    serializer_class = AddEditCheckInSerializer
 
+    def get(self, request, pk, format=None):
+        check_in = CheckIn.objects.get(id=pk)
+        serializer = CheckInSerializer(check_in, context={'request': request})
+        return Response(serializer.data)
 
 class EmployeeCheckInList(generics.ListAPIView):
     """ Get a list of CheckIns for a given employee via employee_id query param.

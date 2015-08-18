@@ -21,7 +21,7 @@
         <div class="nav-item hide">
             <a ng-href="#/"><span class="fa fa-tachometer nav-item-icon"></span></a>
         </div>
-        <div class="nav-item" ng-class="{'nav-item-active': $root.activeTab == zonesTab}" ng-click="setActiveTab(zonesTab)">
+        <div class="nav-item" ng-if="currentUser.can_view_company_dashboard" ng-class="{'nav-item-active': $root.activeTab == zonesTab}" ng-click="setActiveTab(zonesTab)">
             <span class="nav-item-icon glyphicon glyphicon-th filter_menu"></span>
             <div class="subnav">
                 <div class="subnav-title">Development Zones</div>
@@ -99,13 +99,13 @@
                 <div class="subnav-title">Reports</div>
                 <ul>
                     <li>
-                        <a class="dashboard employee_menu" href="#/reports">
-                            Employee Report
-                        </a>
-                    </li>
-                    <li>
                         <a class="dashboard employee_menu" href="#/reports/activity">
                             Activity Report
+                        </a>
+                    </li>                
+                    <li>
+                        <a class="dashboard employee_menu" href="#/reports">
+                            Employee Report
                         </a>
                     </li>
                     <li>

@@ -31,7 +31,8 @@
                 <a ng-href="#/employees/{{event.user.employee.id}}" class="comment-title-employee-name">{{event.user.employee.full_name}}</a>
                 {{ event.verb }} 
                 <span ng-show="event.type == 'comment'">on</span>
-                <a ng-href="#/employees/{{event.employee.id}}" class="comment-title-employee-name" ng-show="event.type == 'comment'">{{event.employee.full_name}}</a>
+                <span ng-show="event.type == 'check in'">with</span>
+                <a ng-href="#/employees/{{event.employee.id}}" class="comment-title-employee-name">{{event.employee.full_name}}</a>
                 <span class="timestamp" data-toggle="tooltip" data-placement="top" title="{{event.date | date:'MMM d, yyyy h:mma'}}">{{event.date | fromNow }}</span>
             </div>
             <div ng-show="showCommentEdit" class="comment-editor">

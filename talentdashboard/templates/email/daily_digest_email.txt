@@ -18,6 +18,16 @@ http://{{site}}/#/discussions/{{comment.id}}
 No Discussions
 {% endfor %}
 
+Check-Ins
+--------------------
+{% load checkin_extras %}
+{% for checkin in checkins %}
+{{checkin.employee.full_name}} had a {{checkin.get_type_description}} check-in.
+{{ checkin | get_summary:recipient | default_if_none:"" }} --{{checkin.host.full_name}}
+{% empty %}
+No Check-ins
+{% endfor %}
+
 Tasks
 --------------------
 {% for todo in todos %}

@@ -27,7 +27,7 @@ class EventSerializer(serializers.ModelSerializer):
             return comment.content
         elif obj.event_type.id is checkin_type.id:
             checkin = CheckIn.objects.get(pk=obj.event_id)
-            return checkin.summary
+            return checkin.get_summary(self.context['request'].user)
         return None
 
     def get_verb(self, obj):
@@ -36,7 +36,8 @@ class EventSerializer(serializers.ModelSerializer):
         if obj.event_type.id is comment_type.id:
             return 'commented'
         elif obj.event_type.id is checkin_type.id:
-            return 'checked in'
+            check_in = CheckIn.objects.get(id=obj.event_id)
+            return 'had a %s check-in' % check_in.get_type_description()
         return None
 
     class Meta:

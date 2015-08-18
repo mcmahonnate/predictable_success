@@ -1,97 +1,68 @@
-<div class="container">  
-  <h1>Activity Report</h1>
-  <div class="panel" ng-class="{in:salaryReport}">
-        
-        <div>
-            <div class="dropdown pull-left">
-                <strong>Sort By:</strong>
-                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-                    <span>{{orderValue}}</span> 
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                    <li><a ng-click="sortType = 'full_name'; orderValue = 'Name'">Name</a></li>
-                    <li><a ng-click="sortType = 'talent_category'; orderValue = 'Development Zones'">Development Zones</a></li>
-                    <li><a ng-click="sortType = '-happiness'; orderValue = 'Happiness'">Happiness</a></li>
-                    <li><a ng-click="order('lastCheckin'); orderValue = 'Last Check-in'">Last Check-in</a></li>
-                    <li><a ng-click="order('lastComment'); orderValue = 'Last Comment'">Last Comment</a></li>
-                    <li><a ng-click="order('coach'); orderValue = 'Coach'">Coach</a></li>
-                </ul>
-            </div>
-            <button class="btn btn-default pull-left" style="margin-left:5px;" type="button" ng-csv="csv" filename="scoutmap.csv" csv-header="['Employee','Team','Email','Development Zone','Development Zone Date','Happiness', 'Happiness Date', 'Last Checkin', 'Last Comment', 'Coach']">
-                <span class="fa fa-download"></span> Download
-            </button>
-        </div>    
-
-
-      
-            <table class="table" style="margin-top:35px;">
-                <thead>
-                    <tr>
-                        <th>Employee</th>
-                        <th>Development Zones</th>
-                        <th>Happiness</th>
-                        <th>Last Check-in</th>
-                        <th>Last Comment</th>
-                        <th>Coach</th>
-                    </tr>
-                </thead>        
-
-                <tbody>
-                    <tr ng-repeat="employee in evaluations | orderBy:sortType">
-                        <td>
-                            <a ng-href="#/employees/{{employee.pk}}" class="medium-headshot pull-left">
-                                <img ng-src="{{ employee.avatar_small }}" />
-                            </a>
-                            <a href="#/employees/{{employee.pk}}">{{employee.full_name}}</a>
-                        </td>
-                        <td>
-                            {{ talentCategories[employee.talent_category].label }}
-                        </td>
-                        <td>    
-                            {{ employee.happiness }}
-                        </td>
-                        <td>
-                            {{employee.last_checkin_about | date:'MM/dd/yyyy'}}
-                        </td>
-                        <td>
-                            {{employee.last_comment_about | date:'MM/dd/yyyy'}}
-                        </td>
-                        <td>
-                            <a href="#/employees/{{employee.coach_id}}">
-                                {{employee.coach_full_name}}
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>    
-            </table>    
-           
-  
-
-    <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
-  </div>
-</div>  
-<style>
-
-
-/* ---- vertical table-like ---- */
-
-
-table {
-    position: relative;
-}
-
-.masonry {
-  clear:both;
-}
-
-tr {
-
-
-  /*  Simple transition */
-  -webkit-transition: top .7s ease-in-out;
-  -moz-transition: top .7s ease-in-out;
-  transition: top .7s ease-in-out;
-}
-
-</style>
+<div class="container"> 
+    <div class="pull-right">
+        <div class="dropdown pull-left">
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                <li><a ng-click="predicate = 'full_name'; orderValue = 'Name'">Name</a></li>
+                <li><a ng-click="predicate = 'talent_category'; orderValue = 'Development Zones'">Development Zones</a></li>
+                <li><a ng-click="predicate = 'happiness'; orderValue = 'Happiness'">Happiness</a></li>
+                <li><a ng-click="predicate = 'last_checkin_about'; orderValue = 'Last Check-in'">Last Check-in</a></li>
+                <li><a ng-click="predicate = 'last_comment_about'; orderValue = 'Last Comment'">Last Comment</a></li>
+                <li><a ng-click="predicate = 'coach_full_name'; orderValue = 'Coach'">Coach</a></li>
+            </ul>
+        </div>
+        <button class="btn btn-default pull-left" type="button" ng-csv="csv" filename="scoutmap.csv" csv-header="['Employee','Team','Email','Development Zone','Development Zone Date','Happiness', 'Happiness Date', 'Last Checkin', 'Last Comment', 'Coach']">
+            <span class="fa fa-download"></span> Download
+        </button>
+    </div>    
+    <h1>Activity Report</h1>
+    <div class="panel">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        <a href="" ng-click="order('full_name'); orderValue = 'Name'"><strong>Employee</strong></a>
+                        <span class="sortorder fa" ng-show="predicate === 'full_name'" ng-class="reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                    </th>
+                    <th>
+                        <a href="" ng-click="order('talent_category'); orderValue = 'Development Zones'"><strong>Development Zones</strong></a> 
+                        <span class="sortorder fa" ng-show="predicate === 'talent_category'" ng-class="reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>                           
+                    </th>
+                    <th>
+                        <a href="" ng-click="order('happiness'); orderValue = 'Happiness'"><strong>Happiness</strong></a>
+                        <span class="sortorder fa" ng-show="predicate === 'happiness'" ng-class="reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>     
+                    </th>
+                    <th>
+                        <a href="" ng-click="order('last_checkin_about'); orderValue = 'Last Check-in'"><strong>Last Check-in</strong></a>
+                        <span class="sortorder fa" ng-show="predicate === 'last_checkin_about'" ng-class="reverse ? 'fa-caret-up' : 'fa-caret-down'"></span> 
+                    </th>
+                    <th>
+                        <a href="" ng-click="order('last_comment_about'); orderValue = 'Last Comment'"><strong>Last Comment</strong></a>
+                        <span class="sortorder fa" ng-show="predicate === 'last_comment_about'" ng-class="reverse ? 'fa-caret-up' : 'fa-caret-down'"></span> 
+                    </th>
+                    <th>
+                        <a href="" ng-click="order('coach_full_name'); orderValue = 'Coach'"><strong>Coach</strong></a>
+                        <span class="sortorder fa" ng-show="predicate === 'coach_full_name'" ng-class="reverse ? 'fa-caret-up' : 'fa-caret-down'"></span> 
+                    </th>
+                </tr>
+            </thead>        
+            <tbody>
+                <tr ng-repeat="employee in evaluations | orderBy:predicate:reverse">
+                    <td>
+                        <a ng-href="#/employees/{{employee.pk}}" class="tiny-headshot pull-left"><img ng-src="{{ employee.avatar_small }}" /></a>
+                        <a href="#/employees/{{employee.pk}}">{{employee.full_name}}</a>
+                    </td>
+                    <td>{{talentCategories[employee.talent_category].label}}</td>
+                    <td>{{happiness_verbose(employee.happiness)}}</td>
+                    <td>{{employee.last_checkin_about | date:'MM/dd/yyyy'}}</td>
+                    <td>{{employee.last_comment_about | date:'MM/dd/yyyy'}}</td>
+                    <td>                   
+                        <a href="#/employees/{{employee.coach_id}}">
+                            {{employee.coach_full_name}}
+                        </a>
+                    </td>
+                </tr>
+            </tbody>    
+        </table>    
+        <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
+    </div>
+</div>
