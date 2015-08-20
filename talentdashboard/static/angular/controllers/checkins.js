@@ -1,6 +1,6 @@
 angular.module('tdb.controllers.checkins', [])
 
-    .controller('AddEditCheckInCtrl', ['$rootScope', '$scope', '$q', '$routeParams', '$location', '$modal', 'CheckIn', 'CheckInType', 'Happiness', 'Task', 'Employee', 'Notification', '$window', function ($rootScope, $scope, $q, $routeParams, $location, $modal, CheckIn, CheckInType, Happiness, Task, Employee, Notification, $window) {
+    .controller('AddEditCheckInCtrl', ['$rootScope', '$scope', '$q', '$routeParams', '$location', '$modal', 'CheckIn', 'CheckInType', 'Happiness', 'Task', 'Employee', 'EmployeeSearch', 'Notification', '$window', function ($rootScope, $scope, $q, $routeParams, $location, $modal, CheckIn, CheckInType, Happiness, Task, Employee, EmployeeSearch, Notification, $window) {
         var initialize = function() {
             $scope.checkin = new CheckIn({date: new Date(Date.now())});
             $scope.happiness = new Happiness({assessment: 0});
@@ -17,7 +17,7 @@ angular.module('tdb.controllers.checkins', [])
 
         // TODO: Solr-ize this
         if (!$scope.employees) {
-            Employee.query({}, function(data) {
+            EmployeeSearch.query({}, function(data) {
                 $scope.employees = data;
             });
         }
