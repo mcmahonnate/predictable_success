@@ -64,9 +64,9 @@ urlpatterns = patterns('',
     url(r'^api/v1/happiness-reports/$', happiness_reports),
     url(r'^api/v1/engagement/employees/(?P<pk>[0-9]+)/$', (auth_employee('AllAccess')(EmployeeEngagement.as_view()))),
 
-    url(r'^api/v1/happiness/employees/(?P<employee_id>[0-9]+)/$', (auth_employee('AllAccess')(EmployeeHappinessList.as_view()))),
-    url(r'^api/v1/happiness/(?P<pk>[0-9]+)/$', (auth_employee('AllAccess')(RetrieveUpdateDestroyHappiness.as_view()))),
-    url(r'^api/v1/happiness/$', (auth_employee('AllAccess')(CreateHappiness.as_view()))),
+    url(r'^api/v1/happiness/employees/(?P<employee_id>[0-9]+)/$', (auth_employee('AllAccess','CoachAccess','TeamLeadAccess')(EmployeeHappinessList.as_view()))),
+    url(r'^api/v1/happiness/(?P<pk>[0-9]+)/$', (auth_employee('AllAccess','CoachAccess','TeamLeadAccess')(RetrieveUpdateDestroyHappiness.as_view()))),
+    url(r'^api/v1/happiness/$', (auth_employee('AllAccess','CoachAccess','TeamLeadAccess')(CreateHappiness.as_view()))),
 
     url(r'^api/v1/assessment/employees/(?P<pk>[0-9]+)/$', (auth_employee('AllAccess')(Assessment.as_view()))),
     url(r'^api/v1/assessment/mbti/employees/(?P<pk>[0-9]+)/$', (auth_employee('AllAccess')(EmployeeMBTI.as_view()))),
