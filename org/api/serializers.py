@@ -11,6 +11,14 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'name', 'leader')
 
 
+class SanitizedEmployeeSerializer(serializers.HyperlinkedModelSerializer):
+    ''' Contains only information about an employee that can be displayed to any user.
+    '''
+    class Meta:
+        model = Employee
+        fields = ('id', 'full_name', 'first_name', 'last_name', 'avatar', 'avatar_small',)
+
+
 class MinimalEmployeeSerializer(serializers.HyperlinkedModelSerializer):
     avatar = serializers.SerializerMethodField()
     avatar_small = serializers.SerializerMethodField()
@@ -218,20 +226,21 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class MentorshipSerializer(serializers.HyperlinkedModelSerializer):
-    mentor = MinimalEmployeeSerializer()
-    mentee = MinimalEmployeeSerializer()
+    mentor = SanitizedEmployeeSerializer()
+    mentee = SanitizedEmployeeSerializer()
+
     class Meta:
         model = Mentorship
         fields = ['mentor', 'mentee',]
 
 
 class LeadershipSerializer(serializers.HyperlinkedModelSerializer):
-    leader = MinimalEmployeeSerializer()
-    employee = MinimalEmployeeSerializer()
+    leader = SanitizedEmployeeSerializer()
+    employee = SanitizedEmployeeSerializer()
 
     class Meta:
         model = Leadership
-        fields = ['leader', 'employee','start_date', 'end_date']
+        fields = ['leader', 'employee', 'start_date', 'end_date']
 
 
 class AttributeCategorySerializer(serializers.HyperlinkedModelSerializer):

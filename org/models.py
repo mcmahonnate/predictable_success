@@ -164,7 +164,16 @@ class Employee(models.Model):
                 Relationship(employee=self, related_employee=field_value, relation_type=relation_type).save()
 
     def is_viewable_by_user(self, user):
-        return user.is_superuser or self.user == user or self.coach.user == user or self.current_leader.user == user
+        if user.is_superuser:
+            return True
+        if self.user and self.user == user:
+            return True
+        if self.coach and self.coach.user and self.coach.user == user:
+            return True
+        current_leader = self.current_leader
+        if current_leader and current_leader.user and current_leader.user == user:
+            return True
+        return False
 
     def is_a_coach(self):
         if self.user is None:
