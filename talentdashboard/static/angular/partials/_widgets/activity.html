@@ -14,6 +14,8 @@
                 <img ng-src="{{ event.user.employee.avatar_small }}" />
             </a>
         </div>
+
+
         <div class="comment-item">
             <div class="comment-title">
                 <div ng-show="event.type == 'comment' && event.user.id==currentUser.id" class="comment-actions pull-right">
@@ -53,32 +55,6 @@
             </div>
 
             <div class="comment-copy" ng-show="!showCommentEdit">
-                
-                <!-- Check-in -->
-                <a class="activity-checkin row" href="#/checkins/{{ event.event_id }}" ng-show="event.type == 'check in'">
-                    <div class="avatar-container col-xs-2">
-                        <span class="large-headshot">
-                            <img ng-src="{{ event.employee.avatar_small }}" alt="{{ event.employee.full_name }}" />
-                        </span>
-                        <div class="employee-attribute" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{ talentCategories[event.employee.current_talent_category].label }}">
-                            <span class="segment employee-segment-background-color-{{event.employee.current_talent_category}}"></span>
-                        </div>
-                    </div> 
-
-                    <div class="activity-checkin-details" ng-class="{'col-xs-12 col-sm-10': view='employee-view', 'col-xs-12 col-sm-10': view='team'}">
-                        <div class="activity-checkin-type pull-right">
-                            <span class="glyphicon glyphicon-top glyphicon-user"></span> 
-                            <span class="glyphicon glyphicon-outline glyphicon-user"></span> 
-                            <span class="glyphicon glyphicon-user"></span>   
-                        </div>
-                        <h3 class="comment-title-employee-name">{{event.employee.full_name}}</h3>  
-                        <span class="activity-checkin-summary" ng-init="length=10" ng-bind-html="event.description | cut:true:length" style="line-height: 125%"></span> 
-                        <span ng-show="event.description.length>length" ng-init="showMoreButton=true">
-                            <span ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</span>
-                            <span ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</span>
-                        </span> 
-                    </div>
-                </a>
                 <div ng-show="event.type == 'comment'">
                     <div class="avatar-container pull-right hide">
                         <a class="large-headshot" ng-show="view != 'employee-view'" ng-href="#/employees/{{event.employee.id}}">
@@ -105,6 +81,34 @@
                 </div>     
             </div>
         </div>
+
+        <!-- Check-in -->
+        <a class="activity-checkin row" href="#/checkins/{{ event.event_id }}" ng-show="event.type == 'check in'">
+            <div class="avatar-container col-xs-2">
+                <span class="large-headshot">
+                    <img ng-src="{{ event.employee.avatar_small }}" alt="{{ event.employee.full_name }}" />
+                </span>
+                <div class="employee-attribute" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{ talentCategories[event.employee.current_talent_category].label }}">
+                    <span class="segment employee-segment-background-color-{{event.employee.current_talent_category}}"></span>
+                </div>
+            </div> 
+
+            <div class="activity-checkin-details" ng-class="{'col-xs-12 col-sm-10': view='employee-view', 'col-xs-12 col-sm-10': view='team'}">
+                <div class="activity-checkin-type pull-right">
+                    <span class="glyphicon glyphicon-top glyphicon-user"></span> 
+                    <span class="glyphicon glyphicon-outline glyphicon-user"></span> 
+                    <span class="glyphicon glyphicon-user"></span>   
+                </div>
+                <h3 class="comment-title-employee-name">{{event.employee.full_name}}</h3>  
+                <span class="activity-checkin-summary" ng-init="length=10" ng-bind-html="event.description | cut:true:length" style="line-height: 125%"></span> 
+                <span ng-show="event.description.length>length" ng-init="showMoreButton=true">
+                    <span ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</span>
+                    <span ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</span>
+                </span> 
+            </div>
+        </a>
+
+     
         <div ng-show="event.type == 'comment'" class="comment-replies" ng-show="showCommentInput || event.subcomments">
             <div class="comment-reply" ng-repeat="subcomment in event.subcomments | orderBy:'created_date'">
                 <div class="comment-actions pull-right" ng-show="subcomment.owner.id==currentUser.id">

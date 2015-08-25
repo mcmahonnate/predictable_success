@@ -76,7 +76,7 @@
         </div>
         <div class="nav-item" ng-class="{'nav-item-active': $root.activeTab == teamsTab}" ng-click="setActiveTab(teamsTab)" ng-controller="TeamListCtrl" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Employees">
             <span class="glyphicon glyphicon-user team_menu nav-item-icon"></span>
-            <div class="subnav subnav-reports">
+            <div class="subnav subnav-scroll subnav-employees">
 
                 <div class="subnav-title">Employees</div>
                 <ul>
@@ -94,14 +94,14 @@
         </div>
 
         <!-- Coaching -->
-        <div class="nav-item" ng-if="currentUser.can_coach_employees && customer.show_coaches" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Coaching">
+        <div class="nav-item" ng-click="setActiveTab(coachTab)"  ng-if="currentUser.can_coach_employees && customer.show_coaches" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Coaching">
             <a ng-href="#/coach"><span class="nav-item-icon glyphicon glyphicon-education filter_menu"></span></a>
         </div>
 
         <!-- Reports -->
         <div class="nav-item"  ng-if="currentUser.can_view_company_dashboard" ng-class="{'nav-item-active': $root.activeTab == reportsTab}" ng-click="setActiveTab(reportsTab)" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Reports">
             <span class="fa fa-file-text nav-item-icon"></span>
-            <div class="subnav subnav-settings">
+            <div class="subnav subnav-reports">
                 <div ng-show="currentUser.can_edit_employees">
                     <div class="subnav-title">Reports</div>
                     <ul>
