@@ -31,7 +31,8 @@
                 <a ng-href="#/employees/{{event.user.employee.id}}" class="comment-title-employee-name">{{event.user.employee.full_name}}</a>
                 {{ event.verb }} 
                 <span ng-show="event.type == 'comment'">on</span>
-                <a ng-href="#/employees/{{event.employee.id}}" class="comment-title-employee-name" ng-show="event.type == 'comment'">{{event.employee.full_name}}</a>
+                <span ng-show="event.type == 'check in'">with</span>
+                <a ng-href="#/employees/{{event.employee.id}}" class="comment-title-employee-name">{{event.employee.full_name}}</a>
                 <span class="timestamp" data-toggle="tooltip" data-placement="top" title="{{event.date | date:'MMM d, yyyy h:mma'}}">{{event.date | fromNow }}</span>
             </div>
             <div ng-show="showCommentEdit" class="comment-editor">
@@ -59,7 +60,7 @@
                         <span class="large-headshot">
                             <img ng-src="{{ event.employee.avatar_small }}" alt="{{ event.employee.full_name }}" />
                         </span>
-                        <div class="employee-attribute">
+                        <div class="employee-attribute" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{ talentCategories[event.employee.current_talent_category].label }}">
                             <span class="segment employee-segment-background-color-{{event.employee.current_talent_category}}"></span>
                         </div>
                     </div> 
@@ -87,7 +88,14 @@
                             <span class="segment employee-segment-background-color-{{event.employee.current_talent_category}}"></span>
                         </div>
                     </div>   
-                    <span ng-init="length=500" ng-bind="event.description | cut:true:length" style="line-height: 125%;white-space: pre-wrap;"></span> <span ng-show="event.description.length>length" ng-init="showMoreButton=true"><a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a><a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a></span>
+                    <div class="activity-comment" 
+                        ng-init="length=500" 
+                        ng-bind="event.description | cut:true:length">
+                    </div> 
+                    <span ng-show="event.description.length>length" ng-init="showMoreButton=true">
+                        <a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a>
+                        <a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a>
+                    </span>
                     <span class="total-replies" ng-show="event.subcomments.length == 1">
                         {{event.subcomments.length}} reply
                     </span>

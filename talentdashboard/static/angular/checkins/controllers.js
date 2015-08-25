@@ -1,6 +1,6 @@
 angular.module('tdb.checkins.controllers', [])
 
-    .controller('AddEditCheckInCtrl', ['$rootScope', '$scope', '$q', '$routeParams', '$location', '$modal', 'CheckIn', 'CheckInType', 'Happiness', 'Task', 'Employee', 'Notification', '$window', function ($rootScope, $scope, $q, $routeParams, $location, $modal, CheckIn, CheckInType, Happiness, Task, Employee, Notification, $window) {
+    .controller('AddEditCheckInCtrl', ['$rootScope', '$scope', '$q', '$routeParams', '$location', '$modal', 'CheckIn', 'CheckInType', 'Happiness', 'Task', 'Employee', 'EmployeeSearch', 'Notification', '$window', function ($rootScope, $scope, $q, $routeParams, $location, $modal, CheckIn, CheckInType, Happiness, Task, Employee, EmployeeSearch, Notification, $window) {
         var initialize = function() {
             $scope.checkin = new CheckIn({date: new Date(Date.now())});
             $scope.happiness = new Happiness({assessment: 0});
@@ -17,7 +17,7 @@ angular.module('tdb.checkins.controllers', [])
 
         // TODO: Solr-ize this
         if (!$scope.employees) {
-            Employee.query({}, function(data) {
+            EmployeeSearch.query({}, function(data) {
                 $scope.employees = data;
             });
         }
@@ -112,7 +112,7 @@ angular.module('tdb.checkins.controllers', [])
 
 
         $scope.saveSummary = function (checkin) {
-            data = {summary: checkin.summary, id: checkin.id};
+            data = {summary: checkin.summary, id: checkin.id, employee: checkin.employee.id, type: checkin.type.id};
             CheckIn.update(data, function() {
                 $scope.showSummaryEdit = false;
                 Notification.success("Saved!");

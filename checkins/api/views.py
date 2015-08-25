@@ -1,4 +1,5 @@
 from rest_framework import generics
+from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
 from ..models import CheckIn, CheckInType
 from .serializers import CheckInSerializer, AddEditCheckInSerializer, CheckInTypeSerializer
@@ -20,8 +21,13 @@ class RetrieveUpdateDestroyCheckIn(generics.RetrieveUpdateDestroyAPIView):
     """ Retrieve, Update, or Delete a CheckIn via GET, PUT, DELETE.
     """
     queryset = CheckIn.objects.all()
-    serializer_class = CheckInSerializer
     permission_classes = (IsAuthenticated, DjangoModelPermissions)
+    serializer_class = AddEditCheckInSerializer
+
+    def get(self, request, pk, format=None):
+        check_in = CheckIn.objects.get(id=pk)
+        serializer = CheckInSerializer(check_in, context={'request': request})
+        return Response(serializer.data)
 
 
 class EmployeeCheckInList(generics.ListAPIView):
