@@ -16,7 +16,7 @@
         </div>
         <div class="comment-item">
             <div class="comment-title">
-                <div ng-show="event.type == 'comment'" class="comment-actions pull-right" ng-show="event.user.id==currentUser.id">
+                <div ng-show="event.type == 'comment' && event.user.id==currentUser.id" class="comment-actions pull-right">
                     <i class="fa fa-cog show-popover"></i>
                     <ul class="popover-items" style="display:none">
                         <li class="popover-item" ng-show="event.user.id==currentUser.id">
