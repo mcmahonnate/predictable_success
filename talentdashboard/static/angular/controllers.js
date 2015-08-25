@@ -420,13 +420,17 @@ angular.module('tdb.controllers', [])
         $rootScope.activeTab = null;
 
         //tabs
+        $scope.homeTab = 'home';
         $scope.zonesTab = 'zones';
         $scope.teamsTab = 'teams';
         $scope.settingsTab = 'settings';
         $scope.searchTab = 'search';
         $scope.reportsTab = 'reports';
+        $scope.employeesTab = 'employees';
 
         $scope.setActiveTab = function (tab) {
+            $('.nav-item').tooltip('hide');
+
             if ($rootScope.activeTab == tab) {
                 $rootScope.activeTab = null;
             } else {
