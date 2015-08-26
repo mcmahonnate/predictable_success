@@ -127,7 +127,7 @@
 
 
     <!-- Settings -->
-    <div class="nav-item"  ng-if="currentUser.can_view_company_dashboard" ng-class="{'nav-item-active': $root.activeTab == settingsTab}" ng-click="setActiveTab(settingsTab)">
+    <div class="nav-item"  ng-if="currentUser.can_view_company_dashboard" ng-class="{'nav-item-active': $root.activeTab == settingsTab}" ng-click="setActiveTab(settingsTab)" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Settings">
         <span class="fa fa-gear employee_menu nav-item-icon"></span>
         <div class="subnav subnav-settings">
             <div ng-show="currentUser.can_edit_employees">
@@ -145,7 +145,7 @@
     </div>
 
     <!-- Search -->
-    <div class="nav-item"  ng-controller="SearchCtrl" ng-if="currentUser.can_view_company_dashboard" ng-class="{'nav-item-active': $root.activeTab == searchTab}" ng-click="setActiveTab(searchTab); clearSearch();">
+    <div class="nav-item"  ng-controller="SearchCtrl" ng-if="currentUser.can_view_company_dashboard" ng-class="{'nav-item-active': $root.activeTab == searchTab}" ng-click="setActiveTab(searchTab); clearSearch();" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Search">
         <div class="fa fa-search nav-item-icon"></div>
         <div class="subnav subnav-search" ng-click="setActiveTab(searchTab);">
             <div class="subnav-title">Search</div>
