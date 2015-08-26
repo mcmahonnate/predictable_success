@@ -100,7 +100,7 @@
                     <span class="glyphicon glyphicon-user"></span>   
                 </div>
                 <h3 class="comment-title-employee-name">{{event.employee.full_name}}</h3>  
-                <span class="activity-checkin-summary" ng-init="length=10" ng-bind-html="event.description | cut:true:length" style="line-height: 125%"></span> 
+                <span class="activity-checkin-summary" ng-init="length=200" ng-bind-html="event.description | cut:true:length" style="line-height: 125%"></span> 
                 <span ng-show="event.description.length>length" ng-init="showMoreButton=true">
                     <span ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</span>
                     <span ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</span>
