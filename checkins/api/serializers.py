@@ -1,10 +1,11 @@
 from rest_framework import serializers
-from org.api.serializers import MinimalEmployeeSerializer
+from org.api.serializers import MinimalEmployeeSerializer, UserSerializer
 from org.models import Employee
 from engagement.models import Happiness
 from engagement.api.serializers import HappinessSerializer
 from ..models import CheckIn, CheckInType
 from todo.api.serializers import TaskSerializer
+from blah.models import Comment
 
 
 class CheckInTypeSerializer(serializers.ModelSerializer):

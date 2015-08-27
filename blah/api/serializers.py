@@ -2,6 +2,18 @@ from rest_framework import serializers
 from ..models import Comment
 from org.api.serializers import MinimalEmployeeSerializer, UserSerializer
 
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+
+
+class AddCommentSerializer(serializers.Serializer):
+    content = serializers.CharField()
+    visibility = serializers.IntegerField()
+    include_in_daily_digest = serializers.BooleanField()
+
+
 class SubCommentSerializer(serializers.HyperlinkedModelSerializer):
     owner = UserSerializer()
 

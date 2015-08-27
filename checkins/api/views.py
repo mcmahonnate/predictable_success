@@ -2,7 +2,7 @@ from rest_framework import generics, views
 from rest_framework.response import Response
 from ..models import CheckIn, CheckInType
 from .serializers import CheckInSerializer, AddEditCheckInSerializer, CheckInTypeSerializer
-
+from blah.api.views import CreateComment
 
 # CheckIn views
 class CreateCheckIn(generics.CreateAPIView):
@@ -54,3 +54,6 @@ class CheckInTypeList(views.APIView):
         serializer = CheckInTypeSerializer(qs, many=True)
         return Response(serializer.data)
 
+
+class CreateCheckinComment(CreateComment):
+    queryset = CheckIn.objects.all()

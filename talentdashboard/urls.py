@@ -9,7 +9,7 @@ from rest_framework import routers
 from views.payment import ChargeView, PaymentView
 from views.homepage import IndexView
 from insights.views import Signup, Report, Survey, Confirmation
-from checkins.api.views import EmployeeCheckInList, HostCheckInList, CreateCheckIn, CheckInTypeList, RetrieveUpdateDestroyCheckIn
+from checkins.api.views import EmployeeCheckInList, HostCheckInList, CreateCheckIn, CheckInTypeList, RetrieveUpdateDestroyCheckIn, CreateCheckinComment
 from engagement.api.views import RetrieveUpdateDestroyHappiness, CreateHappiness, EmployeeHappinessList
 from activity.api.views import EventList, EmployeeEventList, TeamEventList, CoachEventList, LeadEventList
 
@@ -104,6 +104,7 @@ urlpatterns = patterns('',
     url(r'^api/v1/checkins/(?P<pk>[0-9]+)/$', (auth('AllAccess','CoachAccess','TeamLeadAccess')(RetrieveUpdateDestroyCheckIn.as_view()))),
     url(r'^api/v1/checkins/$', (auth('AllAccess','CoachAccess','TeamLeadAccess')(CreateCheckIn.as_view()))),
     url(r'^api/v1/checkintypes/$', (auth('AllAccess','CoachAccess','TeamLeadAccess')(CheckInTypeList.as_view()))),
+    url(r'^api/v1/checkins/(?P<pk>[0-9]+)/comments/$', CreateCheckinComment.as_view()),
 
     url(r'^api/v1/events/employees/(?P<employee_id>[0-9]+)/$', (auth('AllAccess','CoachAccess','TeamLeadAccess')(EmployeeEventList.as_view()))),
     url(r'^api/v1/events/teams/(?P<pk>[0-9]+)/$', (auth('AllAccess')(TeamEventList.as_view()))),
