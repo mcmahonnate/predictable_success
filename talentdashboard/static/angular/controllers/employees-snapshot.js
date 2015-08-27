@@ -1,8 +1,7 @@
 angular.module('tdb.controllers.employeesSnapshot', [])
 
     .controller('EmployeesSnapshotCtrl', ['$scope', 'Events', '$rootScope', '$location', '$routeParams', 'User', 'Employee', 'Coachees', 'TalentReport', '$http', 'analytics', 'Engagement', 'TalentCategories', function ($scope, Events, $rootScope, $location, $routeParams, User, Employee, Coachees, TalentReport, $http, analytics, Engagement, TalentCategories) {
-        
-        //view = '';
+        $scope.busy = true;
 
         // For coaches view    
         if ($scope.view == 'coach-view') {
@@ -14,4 +13,5 @@ angular.module('tdb.controllers.employeesSnapshot', [])
         $scope.filteredZoneType = '';
         $scope.filteredHappinessType = '';
         $scope.sortorder = 'last_checkin_date';
+        $scope.busy = false;
     }]);

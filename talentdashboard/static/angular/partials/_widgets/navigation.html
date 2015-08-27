@@ -11,18 +11,21 @@
 
 
 <header id="main-header">
-    <div class="logo-container">
+    <div class="logo-container" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Home">
         <a href="#/"><img src="../static/images/brand/compass-logo-medium.png" class="logo"/></a>
     </div>    
     <div ng-controller="NavigationCtrl">
-        <div class="nav-item" ng-click="setActiveTab(homeTab)" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Home">
-            <a ng-href="#/"><span class="fa fa-tachometer nav-item-icon"></span></a>
-        </div>
-        <div class="nav-item" ng-if="currentUser.can_view_company_dashboard" ng-class="{'nav-item-active': $root.activeTab == zonesTab}" ng-click="setActiveTab(zonesTab)" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Development Zones">
+        <div class="nav-item" ng-class="{'nav-item-active': $root.activeTab == zonesTab}" ng-click="setActiveTab(zonesTab)" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Screener">
             <span class="nav-item-icon glyphicon glyphicon-th filter_menu"></span>
             <div class="subnav">
-                <div class="subnav-title">Development Zones</div>
-                <ul class="talent-groups">
+                <div class="subnav-title">Employees</div>
+                <ul>
+                    <li ng-if="currentUser.can_coach_employees && customer.show_coaches"><a ng-href="#/employees/my-coachees">My Coachees</a></li>
+                    <li ng-if="currentUser.is_team_lead"><a ng-href="#/employees/my-team">My Team</a></li>
+                </ul>
+
+                <div class="subnav-title" ng-if="currentUser.can_view_company_dashboard">Development Zones</div>
+                <ul class="talent-groups" ng-if="currentUser.can_view_company_dashboard">
                     <li>
                         <a class="dashboard" href="#/employees?talent_category=1">
                             <i class="glyphicon glyphicon-user pull-left employee-segment employee-segment-color-1"></i>
@@ -74,28 +77,14 @@
                 </ul>
             </div>
         </div>
-        <div class="nav-item" ng-class="{'nav-item-active': $root.activeTab == teamsTab}" ng-click="setActiveTab(teamsTab)" ng-controller="TeamListCtrl" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Employees">
-            <span class="glyphicon glyphicon-user team_menu nav-item-icon"></span>
-            <div class="subnav subnav-scroll subnav-employees">
 
-                <div class="subnav-title">Employees</div>
-                <ul>
-                    <li ng-if="currentUser.can_coach_employees && customer.show_coaches"><a ng-href="#/employees/my-coachees">My Coachees</a></li>
-                    <li ng-if="currentUser.is_team_lead"><a ng-href="#/employees/my-team">My Team</a></li>
-                </ul>
-
-                <div class="subnav-title" ng-if="currentUser.can_view_company_dashboard">Teams</div>
-                <ul ng-if="currentUser.can_view_company_dashboard">
-                    <li ng-repeat="team in teams | filter:{name:teamQuery}:startsWith | orderBy:'name'">
-                        <a class="dashboard" href="#/teams/{{team.id}}">{{team.name}}</a>
-                    </li>
-                </ul>
-            </div>
+        <div class="nav-item" ng-class="{'nav-item-active': $root.activeTab == teamsTab}" ng-click="setActiveTab(teamsTab)" ng-controller="TeamListCtrl" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="My Team">
+            <a ng-href="#/team-lead"><span class="glyphicon glyphicon-user team_menu nav-item-icon"></span></a>
         </div>
 
         <!-- Coaching -->
         <div class="nav-item" ng-click="setActiveTab(coachTab)"  ng-if="currentUser.can_coach_employees && customer.show_coaches" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Coaching">
-            <a ng-href="#/coach"><span class="nav-item-icon glyphicon glyphicon-education filter_menu"></span></a>
+            <a ng-href="#/coach"><span class="nav-item-icon fa fa-map filter_menu"></span></a>
         </div>
 
         <!-- Reports -->

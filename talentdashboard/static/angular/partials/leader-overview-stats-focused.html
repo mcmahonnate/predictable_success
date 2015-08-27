@@ -1,7 +1,7 @@
 <div class="container narrow-gutter">
     <div class="row">
         <div ng-include="'/static/angular/partials/_widgets/search.html'"></div>
-        <h1>My Team</h1>
+        <h1>My Team <a href="#/checkin" ng-show="customer.show_beta_features" class="btn btn-success btn-checkin"><span class="glyphicon glyphicon-plus"></span> Check-In</a></h1>
         <div class="col col-sm-5 col-md-4 col-lg-5">
             <div ng-include="'/static/angular/partials/_widgets/chart-talent-portfolio.html'"></div>
             <div ng-init="view='team-view'" ng-include="'/static/angular/partials/_widgets/employees-snapshot.html'"></div>
