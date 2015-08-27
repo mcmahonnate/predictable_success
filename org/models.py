@@ -119,13 +119,15 @@ class Employee(models.Model):
         blank=True,
         default=None
     )
-    display = models.BooleanField(default=False)
     team = models.ForeignKey(
         'Team',
         null=True,
         blank=True,
         default=None
     )
+    display = models.BooleanField(default=False)
+    is_coach = models.BooleanField(default=False)
+    is_lead = models.BooleanField(default=False)
     user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='employee')
     coach = models.ForeignKey('Employee', related_name='coachees', null=True, blank=True)
     field_tracker = FieldTracker(fields=['coach'])
@@ -161,7 +163,19 @@ class Employee(models.Model):
             if field_value is not None:
                 Relationship(employee=self, related_employee=field_value, relation_type=relation_type).save()
 
-    def is_coach(self):
+    def is_viewable_by_user(self, user):
+        if user.is_superuser:
+            return True
+        if self.user and self.user == user:
+            return True
+        if self.coach and self.coach.user and self.coach.user == user:
+            return True
+        current_leader = self.current_leader
+        if current_leader and current_leader.user and current_leader.user == user:
+            return True
+        return False
+
+    def is_a_coach(self):
         if self.user is None:
             return False
         return any(group.name == COACHES_GROUP for group in self.user.groups.all())
@@ -326,6 +340,13 @@ class Employee(models.Model):
     @property
     def get_comp(self):
         return self._get_comp()
+
+    class Meta:
+        permissions = (
+            ("view_employee", "Can view employees"),
+            ("create_employee_comments", "Can create comments on employees"),
+            ("view_employee_comments", "Can view comments on employees"),
+        )
 
 
 blah.register(Employee)
