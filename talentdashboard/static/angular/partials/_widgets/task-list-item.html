@@ -11,11 +11,10 @@
 <div class="col-md-3 col-lg-3 first">
     <input class="todo-checkbox" type="checkbox" ng-click="toggleCompleted(task)" ng-model="task.completed">
     <a ng-href="/#/employees/{{task.employee.id}}" class="small-headshot">
-        <img alt="{{task.employee.full_name}}" title="{{task.employee.full_name}}" ng-src="{{ task.employee.avatar_small }}" />
+        <img alt="{{task.employee.full_name}}'s avatar" title="{{task.employee.full_name}}" ng-src="{{ task.employee.avatar_small }}" />
     </a>
 </div>
 <div class="col-md-5 col-lg-6 todo-description-container">
-    
     <p class="todo-description" ng-class="{'todo-completed': task.completed}">{{task.description}}</p>
     <span class="timestamp">Created by <span ng-show="task.created_by.full_name">{{task.created_by.full_name}}</span> <span ng-show="!task.created_by.full_name">you</span> {{ task.created_date | fromNow }}</span>
 </div>

@@ -1,6 +1,6 @@
 <div class="account-menu">
     <div class="show-account-menu tiny-headshot">
-        <img ng-src="{{currentUser.employee.avatar_small}}" alt="User Image" />
+        <img ng-src="{{currentUser.employee.avatar_small}}" alt="Your avatar" />
     </div>    
     <ul class="account-action-items">
         <li>
@@ -8,11 +8,9 @@
         </li>
     </ul>
 </div>
-
-
 <header id="main-header">
     <div class="logo-container" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Home">
-        <a href="#/"><img src="../static/images/brand/compass-logo-medium.png" class="logo"/></a>
+        <a href="#/"><img src="../static/images/brand/compass-logo-medium.png" class="logo" alt="Go Home" /></a>
     </div>    
     <div ng-controller="NavigationCtrl">
         <div class="nav-item" ng-class="{'nav-item-active': $root.activeTab == zonesTab}" ng-click="setActiveTab(zonesTab)" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Screener">
@@ -145,7 +143,7 @@
                         <li ng-repeat="employee in filteredEmployees = (employees |filter:{full_name:navQuery}:startsWith) | orderBy:'full_name'">
                             <a ng-click="setActiveTab(searchTab)" class="search-result" href="#/employees/{{employee.id}}">
                                 <span class="tiny-headshot">
-                                    <img ng-src="{{employee.avatar_small}}" alt="{{employee.full_name}}'s Picture" />
+                                    <img ng-src="{{employee.avatar_small}}" alt="{{employee.full_name}}'s avatar" />
                                 </span>
                                 <span class="employee-name">{{employee.full_name}}</span>
                             </a>

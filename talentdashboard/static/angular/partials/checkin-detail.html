@@ -5,7 +5,7 @@
 			<span ng-show="checkin.other_type_description">{{ checkin.other_type_description }}</span>
 		</div>
 		<a href="#/employees/{{employee.id}}">
-			<img ng-src="{{ checkin.employee.avatar_small }}" class="headshot medium-headshot pull-left"/>
+			<img ng-src="{{ checkin.employee.avatar_small }}" class="headshot medium-headshot pull-left" alt="{{ checkin.employee.full_name }}'s avatar" />
 		</a>
 		<div class="pull-left">
 			<h1><a href="#/employees/{{ checkin.employee.id }}">{{ checkin.employee.full_name }}</a></h1>

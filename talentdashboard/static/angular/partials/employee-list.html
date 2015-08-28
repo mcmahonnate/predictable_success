@@ -64,7 +64,7 @@
                     <div class="large-avatar-container">
                         <div class="xxxlarge-headshot xxxlarge-headshot-active">
                             <a href="#/employees/{{employee.pk}}">
-                                <img ng-src="{{ employee.avatar }}" />
+                                <img ng-src="{{ employee.avatar }}" alt="{{ employee.full_name }}'s avatar" />
                             </a>
                         </div>
                         <div class="employee-attribute employee-attribute-large" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{ talentCategories[employee.talent_category].label }}">
