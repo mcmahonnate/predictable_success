@@ -50,14 +50,12 @@
             <div class="slide-pagination">
                 <div class="inner" id="pvp_pages">
                     <span class="slide-tally" data-ng-bind-html="(pvpIndex + 1)"></span><span class="slide-tally"> of {{ pvps.length }}</span>
-                    <nav>
                         <small> {{ pvps[0].evaluation_round.date | date:'MM/yyyy' }} </small>
                         <a ng-repeat="pvp in pvps" ng-class="{categoryNavHighlightSmall: $index==pvpIndex,categoryNavSmall: $index!=pvpIndex}" ng-click="selectPvP($index)" style="cursor: pointer;">
                             <!-- <canvas employee-talent-category pvp="pvp"> -->
                             <div employee-talent-category pvp="pvp"> </div>
                         </a>
                         <small> {{ pvps[pvps.length-1].evaluation_round.date | date:'MM/yyyy' }} </small>
-                    </nav>
                 </div>
             </div>
 
