@@ -87,6 +87,7 @@ angular.module('tdb.controllers', [])
         Customers.get(function (data) {
             $scope.customer = data;
         });
+
         $scope.hideTeamMenu = true;
         $scope.kolbe_values = [0, 1, 2, 3];
         $scope.vops_values = [0, 320, 6400, 960];

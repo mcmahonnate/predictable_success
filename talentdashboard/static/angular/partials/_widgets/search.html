@@ -1,7 +1,8 @@
 <div ng-controller="SearchCtrl" ng-if="currentUser.can_view_company_dashboard" ng-class="{open: navQuery!=''}" class="search search-inpage dropdown pull-right">
     <div style="position:relative;">
         <div class="glyphicon glyphicon-search search-icon"></div>
-        <input ng-click="toggleNavQuery()" class="search-input nav_query" ng-model="navQuery" type="text" placeholder="Search Employees..."/>
+        <label for="search">Search Employees:</label>
+        <input id="search" ng-click="toggleNavQuery()" class="search-input nav_query" ng-model="navQuery" type="text" placeholder="Search Employees..."/>
     </div>
     <ul class="dropdown-menu" ng-show="navQuery!=''" role="menu" aria-labelledby="dLabel">
         <div ng-if="navQuery!=''">
