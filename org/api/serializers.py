@@ -218,7 +218,7 @@ class UserSerializer(serializers.ModelSerializer):
         return False
 
     def get_can_view_comments(self, obj):
-        if obj.groups.filter(name='View Comments').exists() | obj.is_superuser:
+        if obj.groups.filter(name='View Comments').exists() | obj.is_superuser | obj.has_perm('org.view_employee_comments'):
                 return True
         return False
 

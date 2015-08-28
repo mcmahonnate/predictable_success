@@ -173,6 +173,8 @@ class Employee(models.Model):
         current_leader = self.current_leader
         if current_leader and current_leader.user and current_leader.user == user:
             return True
+        if user.has_perm('org.view_employees'):
+            return True
         return False
 
     def is_a_coach(self):
@@ -343,7 +345,7 @@ class Employee(models.Model):
 
     class Meta:
         permissions = (
-            ("view_employee", "Can view employees"),
+            ("view_employees", "Can view employees"),
             ("create_employee_comments", "Can create comments on employees"),
             ("view_employee_comments", "Can view comments on employees"),
         )
