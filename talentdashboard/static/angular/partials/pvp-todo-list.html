@@ -22,7 +22,7 @@
                     <div class="large-avatar-container">
                         <div class="xxxlarge-headshot xxxlarge-headshot-active">
                             <a ng-click="editPvP(pvps, $index)" style="cursor:pointer">
-                                <img ng-class="{'done': pvp.is_complete}" ng-src="{{ pvp.employee.avatar }}" />
+                                <img ng-class="{'done': pvp.is_complete}" ng-src="{{ pvp.employee.avatar }}" alt="{{ pvp.employee.full_name }}'s avatar" />
                             </a>
                         </div>
                         <div ng-if="pvp.talent_category != 0" class="employee-attribute employee-attribute-large" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{ talentCategories[employee.talent_category].label }}">

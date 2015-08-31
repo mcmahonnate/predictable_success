@@ -1,13 +1,14 @@
 <div ng-controller="SearchCtrl" ng-if="currentUser.can_view_company_dashboard" ng-class="{open: navQuery!=''}" class="search search-inpage dropdown pull-right">
     <div style="position:relative;">
         <div class="glyphicon glyphicon-search search-icon"></div>
-        <input ng-click="toggleNavQuery()" class="search-input nav_query" ng-model="navQuery" type="text" placeholder="Search Employees..."/>
+        <label for="search">Search Employees:</label>
+        <input id="search" ng-click="toggleNavQuery()" class="search-input nav_query" ng-model="navQuery" type="text" placeholder="Search Employees..."/>
     </div>
     <ul class="dropdown-menu" ng-show="navQuery!=''" role="menu" aria-labelledby="dLabel">
         <div ng-if="navQuery!=''">
             <li ng-repeat="employee in filteredEmployees = (employees |filter:{full_name:navQuery}:startsWith) | orderBy:'full_name'">
                 <a class="dashboard" href="#/employees/{{employee.id}}">
-                    <div class="tiny-headshot"><img ng-src="{{employee.avatar_small}}"/></div>
+                    <div class="tiny-headshot"><img ng-src="{{employee.avatar_small}}" alt="{{employee.full_name}}'s avatar" /></div>
                     <span class="employee-name">{{employee.full_name}}</span>
                 </a>
             </li>

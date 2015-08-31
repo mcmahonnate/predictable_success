@@ -44,7 +44,7 @@
             <tbody>
                 <tr ng-repeat="employee in evaluations | orderBy:predicate:reverse">
                     <td>
-                        <a ng-href="#/employees/{{employee.pk}}" class="tiny-headshot pull-left"><img ng-src="{{ employee.avatar_small }}" /></a>
+                        <a ng-href="#/employees/{{employee.pk}}" class="tiny-headshot pull-left"><img ng-src="{{ employee.avatar_small }}" alt="{{ employee.full_name }}'s avatar" /></a>
                         <a href="#/employees/{{employee.pk}}">{{employee.full_name}}</a>
                     </td>
                     <td>{{talentCategories[employee.talent_category].label}}</td>

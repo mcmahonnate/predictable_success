@@ -9,7 +9,7 @@
     <div class="recipients">
         <div ng-repeat="employee in members" class="recipient">
             <div class="headshot xlarge-headshot">
-                <img ng-src="{{ employee.avatar_small }}" />
+                <img ng-src="{{ employee.avatar_small }}" alt="{{ employee.full_name }}'s avatar" />
             </div>
             <span class="recipients-name">
                 {{employee.full_name}}
