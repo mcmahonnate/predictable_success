@@ -11,6 +11,14 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'name', 'leader')
 
 
+class SanitizedEmployeeSerializer(serializers.HyperlinkedModelSerializer):
+    ''' Contains only information about an employee that can be displayed to any user.
+    '''
+    class Meta:
+        model = Employee
+        fields = ('id', 'full_name', 'first_name', 'last_name', 'avatar', 'avatar_small',)
+
+
 class MinimalEmployeeSerializer(serializers.HyperlinkedModelSerializer):
     avatar = serializers.SerializerMethodField()
     avatar_small = serializers.SerializerMethodField()
@@ -210,7 +218,7 @@ class UserSerializer(serializers.ModelSerializer):
         return False
 
     def get_can_view_comments(self, obj):
-        if obj.groups.filter(name='View Comments').exists() | obj.is_superuser:
+        if obj.groups.filter(name='View Comments').exists() | obj.is_superuser | obj.has_perm('org.view_employee_comments'):
                 return True
         return False
 
@@ -220,7 +228,7 @@ class UserSerializer(serializers.ModelSerializer):
         return False
 
     def get_can_coach_employees(self, obj):
-        if (obj.employee is not None and obj.employee.is_coach()) | obj.is_superuser:
+        if (obj.employee is not None and obj.employee.is_a_coach()) | obj.is_superuser:
                 return True
         return False
 
@@ -239,20 +247,21 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class MentorshipSerializer(serializers.HyperlinkedModelSerializer):
-    mentor = MinimalEmployeeSerializer()
-    mentee = MinimalEmployeeSerializer()
+    mentor = SanitizedEmployeeSerializer()
+    mentee = SanitizedEmployeeSerializer()
+
     class Meta:
         model = Mentorship
         fields = ['mentor', 'mentee',]
 
 
 class LeadershipSerializer(serializers.HyperlinkedModelSerializer):
-    leader = MinimalEmployeeSerializer()
-    employee = MinimalEmployeeSerializer()
+    leader = SanitizedEmployeeSerializer()
+    employee = SanitizedEmployeeSerializer()
 
     class Meta:
         model = Leadership
-        fields = ['leader', 'employee','start_date', 'end_date']
+        fields = ['leader', 'employee', 'start_date', 'end_date']
 
 
 class AttributeCategorySerializer(serializers.HyperlinkedModelSerializer):

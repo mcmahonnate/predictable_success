@@ -1,6 +1,8 @@
 from rest_framework import views
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.exceptions import PermissionDenied
+from rest_framework.permissions import IsAuthenticated
 from ..models import Event
 from .serializers import EventSerializer
 from talentdashboard.views.views import StandardResultsSetPagination
@@ -8,12 +10,17 @@ from org.models import Employee
 
 
 class EmployeeEventList(views.APIView):
+    permission_classes = (IsAuthenticated,)
+
     """ Get a list of Events for a given employee via employee_id query param.
     """
     def get(self, request, **kwargs):
         requester = Employee.objects.get(user__id=request.user.id)
         employee_id = kwargs['employee_id']
         employee = Employee.objects.get(id=employee_id)
+        if not employee.is_viewable_by_user(request.user):
+            raise PermissionDenied
+
         qs = Event.objects.get_events_for_employee(requester, employee)
         qs = qs.extra(order_by=['-date'])
         paginator = StandardResultsSetPagination()
@@ -23,6 +30,8 @@ class EmployeeEventList(views.APIView):
 
 
 class EventList(views.APIView):
+    permission_classes = (IsAuthenticated,)
+
     """ Retrieve all Events
     """
     def get(self, request):
@@ -46,20 +55,28 @@ def _get_event_list(request, requester, employee_ids):
 
 
 class LeadEventList(views.APIView):
+    permission_classes = (IsAuthenticated,)
+
     def get(self, request, format=None):
         requester = Employee.objects.get(user__id=request.user.id)
         employee_ids = Employee.objects.get_current_employees_by_team_lead(lead_id=requester.id).values('id')
         return _get_event_list(request, requester, employee_ids)
 
 
+
 class CoachEventList(views.APIView):
+    permission_classes = (IsAuthenticated,)
+
     def get(self, request, format=None):
         requester = Employee.objects.get(user__id=request.user.id)
         employee_ids = Employee.objects.get_current_employees_by_coach(coach_id=requester.id).values('id')
         return _get_event_list(request, requester, employee_ids)
 
 
+
 class TeamEventList(views.APIView):
+    permission_classes = (IsAuthenticated,)
+
     def get(self, request, pk, format=None):
         requester = Employee.objects.get(user__id=request.user.id)
         employee_ids = Employee.objects.get_current_employees_by_team(team_id=pk).values('id')
