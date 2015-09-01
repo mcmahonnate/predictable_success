@@ -7,9 +7,9 @@
                   </div>
               </div>
 
-              <div style="width:45%;float: left;">
+              <div style="width:45%;float: left; cursor:pointer">
                   <div class="vertical-text" style="width:200px;text-align: center;position: absolute;left: 237px;top: 127px;"><div style="display:inline-block;float:left">Low</div>Drive<div style="display:inline-block;float:right">High</div></div>
-                  <div style="margin: 25px;margin-top: 5px">
+                  <div style="margin: 25px;margin-top: 5px;">
                     <table pvp-graph>
                       <tr> 
                         <td class="box" id="12" ng-click="click_pvp($event, false)"></td> <td class="box" id="13" ng-click="click_pvp($event, false)"></td> <td class="box" id="14" ng-click="click_pvp($event, false)"></td> <td class="box" id="15" ng-click="click_pvp($event, false)"></td> 
@@ -39,16 +39,16 @@
                                     <p class="distribution"><span class="tag employee-segment-background-color-{{selfAssessment.talent_category}}">{{selfAssessment.talent_category_label}}</span>{{selfAssessment.talent_category_description}}</p>
                                 </div>
                                 <div ng-if="selfAssessment.engagement" class="distributions">
-                                        <p class="distribution employee-happiness-container" style="margin-left: 25px;">
-                                            <span class="employee-happiness employee-happiness-{{selfAssessment.engagement}} selected" style="margin-right: 32px;"><span class="happiness-{{selfAssessment.engagement}}"></span></span>{{selfAssessment.engagement_description}}
-                                        </p>
+                                    <p class="distribution employee-happiness-container" style="margin-left: 25px;">
+                                      <span class="employee-happiness employee-happiness-{{selfAssessment.engagement}} selected" style="margin-right: 32px;"><span class="happiness-{{selfAssessment.engagement}}"></span></span>{{selfAssessment.engagement_description}}
+                                    </p>
                                 </div>
                             </div>
                         </div>
                     </div>
               </div>
               <div style="display: block; width:100%;-webkit-border-radius: 2px;moz-border-radius: 3px;-ms-border-radius: 3px;-o-border-radius: 3px;border-radius: 3px;border: 1px solid #c1c1c1;margin-top: 10px; margin-right:15px;background-color:white;">
-                 <textarea class="text" ng-model="pvp.comment.content" rows="1" cols="50" placeholder="Add some context. Where are they awesome? How can they take it to the next level?" style="width:99.5%;height: 127px;font-size:14px;padding:5px;border: none;resize:vertical;"></textarea>
+                 <textarea class="text" ng-model="pvp.comment.content" rows="1" cols="50" placeholder="Add some context. Where are they awesome? How can they take it to the next level?" style="width:99.5%;height: 127px;font-size:14px;padding:5px;border: none;resize:vertical; min-height:100px;"></textarea>
               </div>
 
 	</div>

@@ -7,6 +7,7 @@ var app = angular.module('tdb', [
         'tdb.controllers.search',
         'tdb.controllers.employeesSnapshot',
         'tdb.controllers.reports',
+        'tdb.controllers.profile',
         'tdb.services.activity', 'tdb.controllers.activity',
         'tdb.services.checkins', 'tdb.controllers.checkins',
         'tdb.engagement.services', 'angular.filter',
@@ -36,6 +37,7 @@ var app = angular.module('tdb', [
           when('/checkin/:id', {templateUrl: '/static/angular/partials/checkin.html', controller: 'AddEditCheckInCtrl', resolve: {authorizeRoute: authorizeRoute}}).       
           when('/checkin', {templateUrl: '/static/angular/partials/checkin.html', controller: 'AddEditCheckInCtrl', resolve: {authorizeRoute: authorizeRoute}}).
           when('/checkins/:id', {templateUrl: '/static/angular/partials/checkin-detail.html', controller: 'AddEditCheckInCtrl', resolve: {authorizeRoute: authorizeRoute}}).
+          when('/profile/:id', {templateUrl: '/static/angular/partials/profile.html', controller: 'ProfileCtrl', resolve: {authorizeRoute: authorizeRoute}}).        
           otherwise({redirectTo: '/'});
     }])
     .run(['$rootScope', 'User', 'TalentCategories', 'Customers', function($rootScope, User, TalentCategories, Customers) {

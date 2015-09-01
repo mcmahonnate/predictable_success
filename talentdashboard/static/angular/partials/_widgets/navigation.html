@@ -68,9 +68,26 @@
                 </ul>
             </div>
         </div>
-        <div role="menuitem" aria-haspopup="false" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == teamsTab}" ng-click="setActiveTab(teamsTab)" ng-controller="TeamListCtrl" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="My Team">
+
+        <div role="menuitem" class="nav-item" ng-if="currentUser.can_view_company_dashboard" ng-class="{'nav-item-active': $root.activeTab == teamsTab}" ng-click="setActiveTab(teamsTab)" ng-controller="TeamListCtrl" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Teams">
+            <span class="glyphicon glyphicon-user team_menu nav-item-icon"></span>
+            <div class="subnav subnav-employees">
+                <div class="subnav-title" ng-if="currentUser.is_team_lead">
+                    <a ng-href="#/team-lead" class="my-team-title">My Team</a>
+                </div>
+                <div class="subnav-title">Teams</div>
+                <ul>
+                    <li ng-repeat="team in teams | filter:{name:teamQuery}:startsWith | orderBy:'name'">
+                        <a class="dashboard" href="#/teams/{{team.id}}">{{team.name}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div role="menuitem" ng-show="currentUser.is_team_lead && !currentUser.can_view_company_dashboard" aria-haspopup="false" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == teamsTab}" ng-click="setActiveTab(teamsTab)" ng-controller="TeamListCtrl" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="My Team">
             <a ng-href="#/team-lead"><span class="glyphicon glyphicon-user team_menu nav-item-icon"></span></a>
         </div>
+
         <div role="menuitem" aria-haspopup="false" class="nav-item" ng-click="setActiveTab(coachTab)"  ng-if="currentUser.can_coach_employees && customer.show_coaches" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Coaching">
             <a ng-href="#/coach"><span class="nav-item-icon fa fa-map filter_menu"></span></a>
         </div>

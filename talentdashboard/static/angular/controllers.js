@@ -140,6 +140,7 @@ angular.module('tdb.controllers', [])
         }
     }])
 
+
     .controller('MyTeamEvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'MyTeamPvpEvaluation', 'Team', 'Customers', 'TalentCategories', 'analytics', function ($scope, $rootScope, $location, $routeParams, MyTeamPvpEvaluation, Team, Customers, TalentCategories, analytics) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         Customers.get(function (data) {
