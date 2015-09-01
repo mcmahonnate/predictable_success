@@ -198,6 +198,13 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'full_name', 'first_name', 'last_name', 'email', 'avatar', 'avatar_small', 'job_title', 'hire_date', 'current_leader', 'happiness', 'happiness_date', 'happiness_verbose', 'coach', 'kolbe_fact_finder','kolbe_follow_thru', 'kolbe_quick_start', 'kolbe_implementor', 'vops_visionary', 'vops_operator', 'vops_processor', 'vops_synergist', 'departure_date', 'team', 'display', 'current_salary', 'current_bonus', 'talent_category', 'last_checkin_date')
 
 
+class SimpleUserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'first_name', 'last_name')
+
+
 class UserSerializer(serializers.ModelSerializer):
     employee = MinimalEmployeeSerializer()
     can_edit_employees = serializers.SerializerMethodField()

@@ -3,7 +3,10 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
 from ..models import CheckIn, CheckInType
 from .serializers import CheckInSerializer, AddEditCheckInSerializer, CheckInTypeSerializer
-from blah.api.views import CreateComment
+from blah.models import Comment
+from blah.api.views import CreateComment, CommentList
+from blah.api.serializers import CommentSerializer
+
 
 # CheckIn views
 class CreateCheckIn(generics.CreateAPIView):
@@ -61,3 +64,12 @@ class CheckInTypeList(generics.ListAPIView):
 
 class CreateCheckinComment(CreateComment):
     queryset = CheckIn.objects.all()
+
+
+class CheckInCommentList(CommentList):
+    serializer_class = CommentSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_object(self):
+        pk = self.kwargs['pk']
+        return CheckIn.objects.get(pk=pk)

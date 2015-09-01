@@ -17,3 +17,11 @@ class CreateComment(generics.CreateAPIView):
         serializer = CommentSerializer(comment, context={'request': request})
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+class CommentList(generics.ListAPIView):
+    serializer_class = CommentSerializer
+
+    def get_queryset(self):
+        subject = self.get_object()
+        return Comment.objects.get_for_object(subject)

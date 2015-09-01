@@ -1,11 +1,14 @@
 from rest_framework import serializers
 from ..models import Comment
-from org.api.serializers import MinimalEmployeeSerializer, UserSerializer
+from org.api.serializers import MinimalEmployeeSerializer, SimpleUserSerializer
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    owner = SimpleUserSerializer()
+
     class Meta:
         model = Comment
+        fields = ('id', 'content', 'owner', 'content_type', 'object_id', 'visibility', 'include_in_daily_digest', 'created_date', 'modified_date')
 
 
 class AddCommentSerializer(serializers.Serializer):
@@ -15,7 +18,7 @@ class AddCommentSerializer(serializers.Serializer):
 
 
 class SubCommentSerializer(serializers.HyperlinkedModelSerializer):
-    owner = UserSerializer()
+    owner = SimpleUserSerializer()
 
     class Meta:
         model = Comment
@@ -23,7 +26,7 @@ class SubCommentSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class EmployeeCommentSerializer(serializers.HyperlinkedModelSerializer):
-    owner = UserSerializer()
+    owner = SimpleUserSerializer()
     associated_object = MinimalEmployeeSerializer()
 
     class Meta:
@@ -32,7 +35,7 @@ class EmployeeCommentSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class TeamCommentSerializer(serializers.HyperlinkedModelSerializer):
-    owner = UserSerializer()
+    owner = SimpleUserSerializer()
     associated_object = MinimalEmployeeSerializer()
 
     class Meta:
