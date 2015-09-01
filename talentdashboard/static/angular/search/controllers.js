@@ -22,6 +22,7 @@ angular.module('tdb.search.controllers', [])
             }
         });
 
+
         $scope.categoryName  = TalentCategories.getLabelByTalentCategory($scope.filters.talentCategory);
         $scope.setSynergistStyle = function(style) {
             $scope.synergistStyle = style;
@@ -47,6 +48,7 @@ angular.module('tdb.search.controllers', [])
 
         $scope.search = function() {
             var query = {};
+
             if($scope.filters.talentCategory || $scope.filters.talentCategory===0) {
                 query['talent_category'] = $scope.filters.talentCategory;
             }
@@ -62,9 +64,11 @@ angular.module('tdb.search.controllers', [])
             }
             switch(view) {
                 case 'my-coachees':
+                    $scope.categoryName = 'My Coachees';
                     $scope.employees = EmployeeSearch.myCoachees(query);
                     break;
                 case 'my-team':
+                    $scope.categoryName = 'My Team';
                     $scope.employees = EmployeeSearch.myTeam(query);
                     break;
                 default:

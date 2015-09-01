@@ -18,7 +18,7 @@
                             <li role="presentation" class="popover-item" ng-repeat="coach in coaches | orderBy:'full_name'">
                                 <a href="javascript:void(0);" role="menuitem" tabindex="-1" ng-click="task.assigned_to=coach">
                                 <div class="tiny-headshot pull-left">
-                                    <img ng-src="{{coach.avatar_small}}"/>
+                                    <img ng-src="{{coach.avatar_small}}" alt="{{coach.full_name}}'s avatar"/>
                                 </div>
                                 <span class="employee-name">{{coach.full_name}}</span>
                                 </a>

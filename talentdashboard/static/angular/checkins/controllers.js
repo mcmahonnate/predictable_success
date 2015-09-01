@@ -1,4 +1,4 @@
-angular.module('tdb.controllers.checkins', [])
+angular.module('tdb.checkins.controllers', [])
 
     .controller('AddEditCheckInCtrl', ['$rootScope', '$scope', '$q', '$routeParams', '$location', '$modal', 'CheckIn', 'CheckInType', 'Happiness', 'Task', 'Employee', 'EmployeeSearch', 'Notification', '$window', function ($rootScope, $scope, $q, $routeParams, $location, $modal, CheckIn, CheckInType, Happiness, Task, Employee, EmployeeSearch, Notification, $window) {
         var initialize = function() {
@@ -25,7 +25,7 @@ angular.module('tdb.controllers.checkins', [])
         $scope.selectEmployee = function(employee) {
             $scope.employeeSearch = employee.full_name;
             $scope.selectedEmployee = employee;
-            $scope.checkin.employee = $scope.happiness.employee = employee.id;
+            $scope.checkin.employee = $scope.happiness.employee = employee.pk;
             $scope.showSearch = false;
         };
 

@@ -1,7 +1,7 @@
-angular.module('tdb.services.checkins', ['ngResource'])
+angular.module('tdb.checkins.services', ['ngResource'])
 
     .factory('CheckInType', ['$resource', function ($resource) {
-        var CheckInType = $resource('/api/v1/checkintypes/');
+        var CheckInType = $resource('/api/v1/checkins/checkin-types/');
         return CheckInType;
     }])
 

@@ -87,6 +87,7 @@ angular.module('tdb.controllers', [])
         Customers.get(function (data) {
             $scope.customer = data;
         });
+
         $scope.hideTeamMenu = true;
         $scope.kolbe_values = [0, 1, 2, 3];
         $scope.vops_values = [0, 320, 6400, 960];
@@ -420,13 +421,18 @@ angular.module('tdb.controllers', [])
         $rootScope.activeTab = null;
 
         //tabs
+        $scope.homeTab = 'home';
         $scope.zonesTab = 'zones';
         $scope.teamsTab = 'teams';
         $scope.settingsTab = 'settings';
         $scope.searchTab = 'search';
         $scope.reportsTab = 'reports';
+        $scope.employeesTab = 'employees';
+        $scope.coachTab = 'coach';
 
         $scope.setActiveTab = function (tab) {
+            $('.nav-item').tooltip('hide');
+
             if ($rootScope.activeTab == tab) {
                 $rootScope.activeTab = null;
             } else {

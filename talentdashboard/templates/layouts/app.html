@@ -3,7 +3,6 @@
 {% load compress %}
 
 {% block content %}{% endblock content%}
-
 {% block css %}
     <link href="{% static 'css/scoutmap/app/snapshot.less' %}" rel="stylesheet" type="text/less" />
     <link href="{% static 'css/scoutmap/app/component.less' %}" rel="stylesheet" type="text/less" />  
@@ -12,7 +11,7 @@
     <link href="{% static 'css/libs/angular-ui-notification.css' %}" rel="stylesheet"  type="text/css">
     <link href="{% static 'css/libs/angular-ui-notification.css' %}" rel="stylesheet"  type="text/css">
     <link href="{% static 'css/libs/ng-img-crop.css' %}" rel="stylesheet"  type="text/css">
-
+    <link href="{% static 'css/libs/font-awesome.min.css' %}" rel="stylesheet" type="text/css" />
 {% endblock css %}
 
 {% block javascript %}
@@ -49,8 +48,8 @@
     <script src="{% static 'angular/controllers/search.js' %}"></script>
     <script src="{% static 'angular/search/controllers.js' %}"></script>
     <script src="{% static 'angular/directives.js' %}"></script>
-    <script src="{% static 'angular/controllers/checkins.js' %}"></script>
-    <script src="{% static 'angular/services/checkins.js' %}"></script>
+    <script src="{% static 'angular/checkins/controllers.js' %}"></script>
+    <script src="{% static 'angular/checkins/services.js' %}"></script>
     <script src="{% static 'angular/controllers/employees-snapshot.js' %}"></script>
     <script src="{% static 'angular/filters.js' %}"></script>
     <script src="{% static 'angular/engagement/services.js' %}"></script>

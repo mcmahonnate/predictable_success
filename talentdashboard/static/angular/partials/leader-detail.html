@@ -8,7 +8,7 @@
         <section class="widget-body rag-widget">
           <div class="widget-canvas">
             <div class="outer" style="margin-left: auto; margin-right: auto;">
-              <div class="image" style="margin-left: auto; margin-right: auto;"><img ng-src="{{ employee.avatar }}" style="padding-bottom:15px; display: block; margin-left: auto; margin-right: auto; height: 210px;"/></div>
+              <div class="image" style="margin-left: auto; margin-right: auto;"><img ng-src="{{ employee.avatar }}" style="padding-bottom:15px; display: block; margin-left: auto; margin-right: auto; height: 210px;" alt="{{ employee.full_name }}'s avatar" /></div>
             </div>
 
           </div>
@@ -65,7 +65,7 @@
           </div>
           <ul style="left:130px; position: absolute; width:835px">  
           <li ng-repeat="leadership in leaderships">
-            <a href="#/employees/{{leadership.employee.id}}"><div class="description">{{leadership.employee.full_name}}</div><img ng-src="{{leadership.employee.avatar}}" style="display: block; margin-left: auto; margin-right: auto;height: 100%;"></a>
+            <a href="#/employees/{{leadership.employee.id}}"><div class="description">{{leadership.employee.full_name}}</div><img ng-src="{{leadership.employee.avatar}}" alt="{{leadership.employee.full_name}}'s avatar" style="display: block; margin-left: auto; margin-right: auto;height: 100%;"></a>
           </li>
           </ul>
         </div>

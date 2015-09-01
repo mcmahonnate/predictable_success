@@ -1,4 +1,4 @@
-<div class="panel employees-snapshot" ng-controller="EmployeesSnapshotCtrl">
+<div class="panel employees-snapshot" ng-controller="EmployeesSnapshotCtrl" ng-show="!busy">
     <div class="pull-right" style="margin:-7px;">
         <div class="dropdown" style="display:inline">
             <button class="btn btn-sm btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
@@ -42,7 +42,7 @@
             <i ng-show="!employee.last_checkin_date" class="fa fa-exclamation-circle pull-right alert-no-checkins" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{ employee.full_name }} has not had a check-in."></i>
             <a class="avatar-container pull-left" ng-if="employee.display" href="#/employees/{{employee.id}}">
                 <div class="xlarge-headshot">
-                    <img ng-src="{{ employee.avatar_small }}" />
+                    <img ng-src="{{ employee.avatar_small }}" alt="{{ employee.full_name }}'s avatar" />
                 </div>
                 <div class="employee-attribute" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{ talentCategories[employee.talent_category].label }}">
                     <span class="segment employee-segment-background-color-{{employee.talent_category}}"></span>
@@ -59,5 +59,9 @@
     </div>
     <a href="" 
         ng-click="filteredZoneType = ''; filteredHappinessType = ''; filteredHappinessName = ''" 
-        ng-show="filteredZoneType || filteredHappinessType">Show all {{ employees.length }} Employees</a>
+        ng-show="filteredZoneType || filteredHappinessType">Show all {{ employees.length }} Employees
+    </a>   
 </div>
+    <div ng-show="busy" class="no-results">
+        <img src="../static/images/loader.gif" alt="Loading spinner" />
+    </div> 
