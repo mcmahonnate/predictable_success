@@ -3,7 +3,7 @@ var app = angular.module('tdb', [
         'tdb.preferences.services',
         'tdb.search.controllers', 'tdb.search.services',
         'tdb.services.tasks', 'tdb.controllers.tasks',
-        'tdb.controllers.comments',
+        'tdb.controllers.comments', 'tdb.services.comments',
         'tdb.controllers.search',
         'tdb.controllers.employeesSnapshot',
         'tdb.controllers.reports',
