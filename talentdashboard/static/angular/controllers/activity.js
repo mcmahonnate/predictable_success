@@ -125,7 +125,7 @@ angular.module('tdb.controllers.activity', [])
             subcomment.content = $scope.originalEvents[parent_index].subcomments[subcomment_index].content;
         }
 
-        $scope.addComment = function(equals) {
+        $scope.add = function(equals) {
             var newComment = {id: -1, content: $scope.newComment.text, modified_date: new Date().toJSON(), owner: $rootScope.currentUser, newSubCommentText: '', visibility: $scope.newComment.visibility, happy: $scope.newComment.happy, include_in_daily_digest: $scope.newComment.include_in_daily_digest};
             newComment.subcomments=[];
 
