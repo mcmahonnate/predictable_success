@@ -33,7 +33,7 @@ class CommentList(generics.ListCreateAPIView):
         deserializer.is_valid(raise_exception=True)
         owner = request.user
         subject = self.get_object()
-        comment = Comment.objects.add_comment(subject, deserializer.data['content'], deserializer.data['visibility'], deserializer.data['include_in_daily_digest'], owner)
+        comment = Comment.objects.add_comment(subject, deserializer.data['content'], deserializer.data.get('visibility', None), deserializer.data['include_in_daily_digest'], owner)
         serializer = CommentSerializer(comment, context={'request': request})
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
