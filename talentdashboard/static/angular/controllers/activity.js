@@ -15,10 +15,6 @@ angular.module('tdb.controllers.activity', [])
                 }
             );
         }
-        if ($rootScope.currentUser.can_coach_employees || $rootScope.currentUser.can_view_company_dashboard) {
-                $scope.newCommentVisibility = 2;
-                $scope.showPeopleTeamVisibility = true;
-        }
         $scope.showMembers = function () {
             var modalInstance = $modal.open({
                 animation: true,
@@ -29,6 +25,13 @@ angular.module('tdb.controllers.activity', [])
         var getBlankComment = function() {
             return {text: '', visibility: 3, include_in_daily_digest: true, happy: {assessment: 0}}
         };
+
+
+        if ($rootScope.currentUser.can_coach_employees || $rootScope.currentUser.can_view_company_dashboard) {
+                $scope.newCommentVisibility = 2;
+                $scope.showPeopleTeamVisibility = true;
+        }
+
         $scope.newComment = getBlankComment();
         $scope.showPeopleTeamVisibility = false;
         $scope.CreateHeader = function(date) {

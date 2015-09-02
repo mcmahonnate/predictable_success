@@ -85,5 +85,7 @@
 	            <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
 	        </tab>
 	    </tabset>
-    </div>  
+    </div> 
+    <div ng-include="'/static/angular/partials/_widgets/add-comment.html'" ng-controller="CheckinCommentCtrl"></div>
+    <div ng-include="'/static/angular/partials/_widgets/activity.html'" ng-controller="ActivityCtrl"></div>
 </div>
