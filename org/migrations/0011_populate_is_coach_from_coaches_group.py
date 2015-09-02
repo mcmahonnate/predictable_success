@@ -20,6 +20,10 @@ def populate_is_lead_from_lead_group(apps, schema_editor):
     leads.update(is_lead=True)
 
 
+def backwards(apps, schema_editor):
+    pass
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -27,6 +31,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(populate_is_coach_from_coaches_group),
-        migrations.RunPython(populate_is_lead_from_lead_group),
+        migrations.RunPython(populate_is_coach_from_coaches_group, backwards),
+        migrations.RunPython(populate_is_lead_from_lead_group, backwards),
     ]

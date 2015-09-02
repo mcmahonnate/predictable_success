@@ -11,15 +11,12 @@ def add_permissions_to_existing_groups(apps, schema_editor):
     ContentType = apps.get_model("contenttypes", "ContentType")
     Permission = apps.get_model("auth", "Permission")
 
-    try:
-        content_type = ContentType.objects.get(app_label='org', model='employee')
-        view_comments_permission = Permission.objects.get(content_type=content_type, codename='view_employee_comments')
-        view_employees_permission = Permission.objects.get(content_type=content_type, codename='view_employees')
-        all_access = Group.objects.get(name='AllAccess')
-        coaches = Group.objects.get(name='CoachAccess')
-        team_leads = Group.objects.get(name='TeamLeadAccess')
-    except:
-        return
+    content_type = ContentType.objects.get(app_label='org', model='employee')
+    view_comments_permission = Permission.objects.get(content_type=content_type, codename='view_employee_comments')
+    view_employees_permission = Permission.objects.get(content_type=content_type, codename='view_employees')
+    all_access = Group.objects.get(name='AllAccess')
+    coaches = Group.objects.get(name='CoachAccess')
+    team_leads = Group.objects.get(name='TeamLeadAccess')
 
     all_access.permissions.add(view_comments_permission, view_employees_permission)
     all_access.save()
@@ -29,6 +26,10 @@ def add_permissions_to_existing_groups(apps, schema_editor):
     team_leads.save()
 
 
+def backwards(apps, schema_editor):
+    pass
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -36,5 +37,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(add_permissions_to_existing_groups),
+        migrations.RunPython(add_permissions_to_existing_groups, backwards),
     ]
