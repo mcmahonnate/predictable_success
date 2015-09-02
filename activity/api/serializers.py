@@ -47,7 +47,7 @@ class EventSerializer(serializers.ModelSerializer):
             objects[instance.event_type] = {instance.event_id: item}
         return objects
 
-    def related_object(self, obj):
+    def get_related_object(self, obj):
         if not self.related_objects:
             self.related_objects = self.get_related_objects(self.instance)
         if obj.event_type not in self.related_objects:
@@ -64,7 +64,7 @@ class EventSerializer(serializers.ModelSerializer):
 
     def get_serializer_for_related_object(self, obj):
         serializer = self.related_object_serializers[obj.__class__]
-        return serializer()
+        return serializer(context=self.context)
 
     def get_type(self, obj):
         return obj.event_type.name
