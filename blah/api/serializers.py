@@ -13,7 +13,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class AddCommentSerializer(serializers.Serializer):
     content = serializers.CharField()
-    visibility = serializers.IntegerField()
+    visibility = serializers.IntegerField(required=False)
     include_in_daily_digest = serializers.BooleanField()
 
 
