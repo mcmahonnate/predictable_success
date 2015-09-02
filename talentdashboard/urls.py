@@ -9,7 +9,6 @@ from rest_framework import routers
 from views.payment import ChargeView, PaymentView
 from views.homepage import IndexView
 from insights.views import Signup, Report, Survey, Confirmation
-from checkins.api.views import EmployeeCheckInList, HostCheckInList, CreateCheckIn, CheckInTypeList, RetrieveUpdateDestroyCheckIn, CreateCheckinComment
 from engagement.api.views import RetrieveUpdateDestroyHappiness, CreateHappiness, EmployeeHappinessList
 from activity.api.views import EventList, EmployeeEventList, TeamEventList, CoachEventList, LeadEventList
 
@@ -138,5 +137,6 @@ urlpatterns = patterns('',
 
     url(r'^api/v1/search/', include('search.api.urls')),
     url(r'^api/v1/checkins/', include('checkins.api.urls')),
+    url(r'^api/v1/comments/', include('blah.api.urls')),
     url(r'^', include(router.urls)),
 )

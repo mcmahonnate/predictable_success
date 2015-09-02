@@ -1,8 +1,10 @@
 from rest_framework import generics, views
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from .serializers import AddCommentSerializer, CommentSerializer
 from blah.models import Comment
+from checkins.models import CheckIn
 
 
 class CreateComment(generics.CreateAPIView):
@@ -25,3 +27,16 @@ class CommentList(generics.ListAPIView):
     def get_queryset(self):
         subject = self.get_object()
         return Comment.objects.get_for_object(subject)
+
+
+class CreateCheckinComment(CreateComment):
+    queryset = CheckIn.objects.all()
+
+
+class CheckInCommentList(CommentList):
+    serializer_class = CommentSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_object(self):
+        pk = self.kwargs['pk']
+        return CheckIn.objects.get(pk=pk)
