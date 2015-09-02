@@ -349,6 +349,16 @@ angular.module('tdb.controllers', [])
             data.display = true;
             return data;
         };
+
+        var select = function () {
+            $scope.showHireDatePicker = false;
+            $scope.showDepartDatePicker = false;
+
+            console.log('hide');
+        }    
+
+
+
         $scope.uploadFile = function (files) {
             $scope.files = files;
             fileReader.readAsDataUrl($scope.files[0], $scope)

@@ -19,7 +19,7 @@
                     <input type="text" name="first_name" ng-model="employee.first_name" placeholder="required" class="view-value-input form-control" required tabindex="1">
                     <span style="margin:10px 0;">Hire Date</span>
                     <input ng-click="toggleHireDatePicker();" type="text" name="hire_date" value="{{employee.hire_date | date:'MM/dd/yyyy'}}" placeholder="optional"  class="view-value-input form-control" style="display:inline-block"/>
-                    <div ng-show="showHireDatePicker" style="background-color: #fff;margin-top: -5px;margin-left: -19px;padding:10px;float:left;position: absolute; z-index:99;" ng-model="employee.hire_date">
+                    <div ng-show="showHireDatePicker" style="background-color: #fff;margin-top: -5px;margin-left: -19px;padding:10px;float:left;position: absolute; z-index:99; box-shadow: 3px 2px 18px -3px #000;" ng-model="employee.hire_date">
                         <datepicker show-weeks="showWeeks"></datepicker>
                     </div>
                     <span style="margin:10px 0;">Team</span>
@@ -39,9 +39,9 @@
                     </span>
                     <input type="text" name="last_name" ng-model="employee.last_name" placeholder="required" class="view-value-input form-control" required tabindex="2">
                     <span style="margin:10px 0;">Departure Date</span>
-                    <input ng-click="toggleDepartDatePicker();" type="text" value="{{employee.departure_date | date:'MM/dd/yyyy'}}" style="display: inline-block;" placeholder="optional" class="view-value-input form-control"/>
-                    <div ng-show="showDepartDatePicker" style="background-color: #fff;margin-top: -5px;margin-left: -19px;padding:10px;float:left;position: absolute" ng-model="employee.departure_date">
-                        <datepicker show-weeks="showWeeks"></datepicker>
+                    <input ng-click="toggleDepartDatePicker();"  type="text" value="{{employee.departure_date | date:'MM/dd/yyyy'}}" style="display: inline-block;" placeholder="optional" class="view-value-input form-control"/>
+                    <div ng-show="showDepartDatePicker" style="background-color: #fff;margin-top: -5px;margin-left: -19px;padding:10px;float:left;position: absolute; z-index:99; box-shadow: 3px 2px 18px -3px #000;">
+                        <datepicker show-weeks="showWeeks" ng-model="employee.departure_date"></datepicker>
                     </div>
                     <span style="margin:10px 0;">Team Lead</span>
                     <span style="color:red;" ng-show="leaderUpload">

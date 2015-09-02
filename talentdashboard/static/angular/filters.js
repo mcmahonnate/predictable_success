@@ -1,7 +1,12 @@
-var filters = angular.module('tdb.filters', []);
+var app = angular.module('tdb.filters', []);
 
+app.filter('reverse', function() {
+  return function(items) {
+    return items.slice().reverse();
+  };
+});
 
-filters.filter('fromNow', function() {
+app.filter('fromNow', function() {
     return function(date) {
 
         if (date) {
@@ -12,14 +17,14 @@ filters.filter('fromNow', function() {
     }
 });
 
-filters.filter('titleCase', function() {
+app.filter('titleCase', function() {
     return function(input) {
       input = input || '';
       return input.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
     };
 });
 
-filters.filter('unique', ['$parse', function ($parse) {
+app.filter('unique', ['$parse', function ($parse) {
   return function (items, filterOn) {
 
     if (filterOn === false) {
@@ -54,7 +59,7 @@ filters.filter('unique', ['$parse', function ($parse) {
   };
 }]);
 
-filters.filter('titlecase', function() {
+app.filter('titlecase', function() {
     return function(s) {
         s = ( s === undefined || s === null ) ? '' : s;
         return s.toString().toLowerCase().replace( /\b([a-z])/g, function(ch) {
@@ -63,7 +68,7 @@ filters.filter('titlecase', function() {
     };
 });
 
-filters.filter('noCents', function() {
+app.filter('noCents', function() {
   return function(value) {
     if (value) {
         return value.replace(/\.\d+/, '');
@@ -71,7 +76,7 @@ filters.filter('noCents', function() {
   };
 });
 
-filters.filter('cut', function () {
+app.filter('cut', function () {
     return function (value, wordwise, max, tail) {
         if (!value) return '';
 
@@ -91,7 +96,7 @@ filters.filter('cut', function () {
     };
 });
 
-filters.filter('new_line', function () {
+app.filter('new_line', function () {
     return function (value) {
         if (!value) return '';
         var new_value = value.replace(/[\n\r]/g,"<br/>");
@@ -105,7 +110,7 @@ filters.filter('new_line', function () {
     };
 });
 
-filters.filter('greaterThan', function() {
+app.filter('greaterThan', function() {
   return function (items, number) {
     var filtered = [];
     if (items) {
@@ -120,7 +125,7 @@ filters.filter('greaterThan', function() {
   };
 });
 
-filters.filter('filterEmployees', function () {
+app.filter('filterEmployees', function () {
   return function( items, talentCategory, teamId, happy, days_since_happy, fact_finder, follow_thru, quick_start, implementor, visionary, operator, processor, synergist) {
 
     parseDate = function (input) {
