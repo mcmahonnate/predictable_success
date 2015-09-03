@@ -11,32 +11,37 @@ from django.utils.log import getLogger
 
 logger = getLogger('talentdashboard')
 
+
 class EventManager(models.Manager):
     """
     A manager that retrieves events for a particular model.
     """
     def get_events_for_all_employees(self, requester):
         events = self.exclude(employee__id=requester.id)
-        events = events.extra(order_by = ['-date'])
+        events = events.extra(order_by=['-date'])
 
         return events
 
     def get_events_for_employee(self, requester, employee):
         events = self.get_events_for_all_employees(requester)
-        events = events.filter(employee__id = employee.id)
+        events = events.filter(employee__id=employee.id)
 
         return events
 
     def get_events_for_employees(self, requester, employee_ids):
         events = self.get_events_for_all_employees(requester)
-        events = events.filter(employee__id__in = employee_ids)
+        events = events.filter(employee__id__in=employee_ids)
 
         return events
 
+    def get_events_for_object(self, obj):
+        content_type = ContentType.objects.get_for_model(obj)
+        return self.filter(event_type__pk=content_type.pk, event_id=obj.pk)
+
 
 class Event(models.Model):
-    event_type = models.ForeignKey(ContentType, related_name = 'event_type')
-    event_id = models.PositiveIntegerField('object id', db_index = True)
+    event_type = models.ForeignKey(ContentType, related_name='event_type')
+    event_id = models.PositiveIntegerField('object id', db_index=True)
     user = models.ForeignKey(User, related_name='+')
     employee = models.ForeignKey(Employee, related_name='+')
     date = models.DateTimeField(null=False, blank=False, default=datetime.datetime.now())
@@ -52,13 +57,18 @@ def comment_save_handler(sender, instance, created, **kwargs):
     if created:
         content_type = ContentType.objects.get_for_model(sender)
         employee_type = ContentType.objects.get_for_model(Employee)
+        checkin_type = ContentType.objects.get_for_model(CheckIn)
         user_type = ContentType.objects.get_for_model(User)
-        # Create events for comments about employees only.
         if instance.content_type is employee_type:
             employee = employee_type.get_object_for_this_type(pk=instance.object_id)
-            user = user_type.get_object_for_this_type(pk=instance.owner_id)
-            event = Event(event_type=content_type, event_id=instance.id, employee=employee, user=user, date=instance.created_date)
-            event.save()
+        elif instance.content_type is checkin_type:
+            checkin = checkin_type.get_object_for_this_type(pk=instance.object_id)
+            employee = checkin.employee
+        else:
+            return
+        user = user_type.get_object_for_this_type(pk=instance.owner_id)
+        event = Event(event_type=content_type, event_id=instance.id, employee=employee, user=user, date=instance.created_date)
+        event.save()
 
 
 @receiver(post_save, sender=CheckIn)

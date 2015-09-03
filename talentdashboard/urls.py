@@ -10,7 +10,7 @@ from views.payment import ChargeView, PaymentView
 from views.homepage import IndexView
 from insights.views import Signup, Report, Survey, Confirmation
 from engagement.api.views import RetrieveUpdateDestroyHappiness, CreateHappiness, EmployeeHappinessList
-from activity.api.views import EventList, EmployeeEventList, TeamEventList, CoachEventList, LeadEventList
+from activity.api.views import EventList, EmployeeEventList, TeamEventList, CoachEventList, LeadEventList, CheckInEventList, CommentEvent
 
 router = routers.DefaultRouter()
 router.register(r'^api/v1/teams', TeamViewSet)
@@ -102,7 +102,9 @@ urlpatterns = patterns('',
     url(r'^api/v1/events/teams/(?P<pk>[0-9]+)/$', TeamEventList.as_view()),
     url(r'^api/v1/events/leads/$', LeadEventList.as_view()),
     url(r'^api/v1/events/coaches/$', CoachEventList.as_view()),
+    url(r'^api/v1/events/checkins/(?P<pk>[0-9]+)/$', CheckInEventList.as_view()),
     url(r'^api/v1/events/$', EventList.as_view()),
+    url(r'^api/v1/events/sources/comments/(?P<pk>[0-9]+)/$', CommentEvent.as_view()),
 
     url(r'^api/v1/image-upload/employees/(?P<pk>[0-9]+)/$', ImageUploadView.as_view()),
     url(r'^api/v1/talent-categories/$', talent_categories),

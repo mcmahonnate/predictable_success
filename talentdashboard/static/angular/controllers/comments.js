@@ -9,7 +9,7 @@ angular.module('tdb.controllers.comments', [])
             if (form.$invalid) return;
             Comment.addToCheckIn({ id:$routeParams.id}, $scope.newComment, function(comment) {
                 $scope.newComment = new Comment({content:'', include_in_daily_digest:true});
-                $rootScope.$broadcast("commentCreated", comment);
+                $rootScope.$broadcast("comments.commentCreated", comment);
             });
         }      
     }]);

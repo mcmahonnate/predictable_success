@@ -1,11 +1,11 @@
 angular.module('tdb.controllers.activity', [])
-    .controller('CheckInActivityCtrl', ['$scope', '$rootScope', 'Events', function($scope, $rootScope, Events) {
-        $scope.events = [];
-
-        $rootScope.$on("commentCreated", function(e, comment){
-            console.log(comment);
+    .controller('CheckInActivityCtrl', ['$scope', '$rootScope', '$routeParams', 'Events', function($scope, $rootScope, $routeParams, Events) {
+        $scope.events = Events.getCheckInEvents({id:$routeParams.id});
+        $rootScope.$on("comments.commentCreated", function(e, comment) {
+            Events.getEventForComment({id: comment.id}, function(event) {
+                $scope.events.unshift(event);
+            })
         });
-
     }])
 
     .controller('ActivityCtrl', ['$scope', '$rootScope', '$filter', '$window', '$modal', 'Events', 'EmployeeComments', 'SubComments','Comment', 'Employee', function($scope, $rootScope, $filter, $window, $modal, Events, EmployeeComments, SubComments, Comment, Employee) {
