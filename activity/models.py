@@ -57,18 +57,12 @@ def comment_save_handler(sender, instance, created, **kwargs):
     if created:
         content_type = ContentType.objects.get_for_model(sender)
         employee_type = ContentType.objects.get_for_model(Employee)
-        checkin_type = ContentType.objects.get_for_model(CheckIn)
         user_type = ContentType.objects.get_for_model(User)
         if instance.content_type is employee_type:
             employee = employee_type.get_object_for_this_type(pk=instance.object_id)
-        elif instance.content_type is checkin_type:
-            checkin = checkin_type.get_object_for_this_type(pk=instance.object_id)
-            employee = checkin.employee
-        else:
-            return
-        user = user_type.get_object_for_this_type(pk=instance.owner_id)
-        event = Event(event_type=content_type, event_id=instance.id, employee=employee, user=user, date=instance.created_date)
-        event.save()
+            user = user_type.get_object_for_this_type(pk=instance.owner_id)
+            event = Event(event_type=content_type, event_id=instance.id, employee=employee, user=user, date=instance.created_date)
+            event.save()
 
 
 @receiver(post_save, sender=CheckIn)

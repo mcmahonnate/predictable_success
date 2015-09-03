@@ -1,5 +1,5 @@
 <div class="comments panel" ng-if="currentUser.can_view_comments" >
-    <h2 class="panel-title">Activity</h2>   
+    <h2 class="panel-title">{{ comments.length }} <span ng-bind="comments.length == 1 ? 'Comment' : 'Comments'"></span></h2>
 
     <!-- Empty discussion messages -->
     <div ng-show="comments.length==0" class="no-comments">
@@ -8,7 +8,7 @@
             <span ng-show="view == 'team-view'">There are not any discussions yet.</span>
         </p>  
     </div>
-    <div class="comment" ng-repeat="comment in comments | orderBy:'created_date':true">  
+    <div class="comment" ng-repeat="comment in comments | orderBy:'created_date':true">
         <div class="comment-owner-avatar-container">
             <a ng-href="#/employees/{{comment.owner.employee.id}}" class="medium-headshot">
                 <img ng-src="{{ comment.owner.employee.avatar_small }}" />
@@ -23,42 +23,35 @@
                             <a ng-click="showCommentEdit=true" class="edit"><i class="fa fa-pencil-square-o"></i> Edit</a>
                         </li>
                         <li class="popover-item" ng-show="comment.owner.id==currentUser.id">
-                            <a ng-click="deleteComment(comment)"><i class="fa fa-trash-o"></i> Delete</a>
+                            <a ng-click="delete(comment)"><i class="fa fa-trash-o"></i> Delete</a>
                         </li>
                     </ul>
                 </div>    
                 <a ng-href="#/employees/{{comment.owner.employee.id}}" class="comment-title-employee-name">{{comment.owner.employee.full_name}}</a> 
-                commented on 
-                <a ng-href="#/employees/{{comment.associated_object.id}}" class="comment-title-employee-name">{{comment.associated_object.full_name}}</a>
+                commented
                 <span class="timestamp" data-toggle="tooltip" data-placement="top" title="{{comment.created_date | date:'MMM d, yyyy h:mma'}}">{{comment.created_date | fromNow }}</span>
             </div>
             <div ng-show="showCommentEdit" class="comment-editor">
-                <div class="comment-reply-copy">
-                    <textarea 
-                        ng-model="comment.content"
-                        msd-elastic
-                        class="form-control edit-textarea">
-                    </textarea>
-                </div> 
-                <div class="visibility">
-                    <label>
-                        <input ng-model="comment.include_in_daily_digest" ng-checked="comment.include_in_daily_digest" type="checkbox"> Include in <a ng-click="showMembers()">Daily Digest Email</a>
-                    </label>
-                </div>    
-                <happiness show="true" happy="comment.happiness"></happiness>
-                <button class="btn btn-primary btn-sm" ng-disabled="!comment.content" ng-click="saveComment(comment);showCommentEdit=false">Save Edits</button>
-                <button class="btn btn-link btn-sm" ng-click="cancelEditComment(comment);showCommentEdit=false">Cancel</button>
+                <form name="editForm">
+                    <div class="comment-reply-copy">
+                        <textarea
+                            ng-model="comment.content"
+                            msd-elastic
+                            class="form-control edit-textarea">
+                        </textarea>
+                    </div>
+                    <div class="visibility">
+                        <label>
+                            <input ng-model="comment.include_in_daily_digest" ng-checked="comment.include_in_daily_digest" type="checkbox"> Include in <span ng-controller="ShowDailyDigestCtrl"><a ng-click="showMembers()">Daily Digest Email</a></span>
+                        </label>
+                    </div>
+                    <happiness show="true" happy="comment.happiness"></happiness>
+                    <button class="btn btn-primary btn-sm" ng-disabled="!comment.content" ng-click="edit(editForm, comment);showCommentEdit=false">Save Edits</button>
+                    <button class="btn btn-link btn-sm" ng-click="cancelEditComment(comment);showCommentEdit=false">Cancel</button>
+                </form>
             </div>
             <div class="comment-copy" ng-show="!showCommentEdit">
-                <div class="avatar-container pull-right" >
-                    <a class="large-headshot" ng-show="view != 'employee-view'" ng-href="#/employees/{{comment.associated_object.id}}">
-                        <img ng-src="{{ comment.associated_object.avatar_small }}"/>
-                    </a>
-                    <div class="employee-attribute">
-                        <span class="segment employee-segment-background-color-{{comment.associated_object.current_talent_category}}"></span>
-                    </div>
-                </div>    
-                <span ng-init="length=500" ng-bind-html="comment.content | new_line | cut:true:length" style="line-height: 125%"></span> <span ng-show="comment.content.length>length" ng-init="showMoreButton=true"><a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a><a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a></span>   
+                <span ng-init="length=500" ng-bind-html="comment.content | new_line | cut:true:length" style="line-height: 125%"></span> <span ng-show="comment.content.length>length" ng-init="showMoreButton=true"><a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a><a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a></span>
                 <span class="total-replies" ng-show="comment.subcomments.length == 1">
                     {{comment.subcomments.length}} reply
                 </span>

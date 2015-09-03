@@ -199,10 +199,12 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class SimpleUserSerializer(serializers.ModelSerializer):
+    employee = SanitizedEmployeeSerializer(read_only=True)
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name')
+        fields = ('id', 'username', 'first_name', 'last_name', 'employee')
+        read_only_fields = ('id', 'username', 'first_name', 'last_name', 'employee')
 
 
 class UserSerializer(serializers.ModelSerializer):

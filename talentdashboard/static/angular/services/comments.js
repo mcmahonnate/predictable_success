@@ -2,6 +2,10 @@ angular.module('tdb.services.comments', ['ngResource'])
 
     .factory('Comment', ['$resource', function ($resource) {
         var actions = {
+            'update': {
+                method: 'PUT',
+                isArray: false
+            },
             'getCheckInComments': {
                 'method': 'GET',
                 'isArray': true,

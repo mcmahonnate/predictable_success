@@ -1339,6 +1339,16 @@ angular.module('tdb.controllers', [])
         }
     }])
 
+    .controller('ShowDailyDigestCtrl', ['$scope', '$modal', function ($scope, $modal) {
+        $scope.showMembers = function () {
+            $modal.open({
+                animation: true,
+                templateUrl: '/static/angular/partials/_modals/show-members.html',
+                controller: 'DailyDigestCtrl'
+            });
+        };
+    }])
+
     .controller('EngagementSurveyCtrl', ['$scope', '$window', '$routeParams', '$location', 'EngagementSurvey', 'analytics', function ($scope, $window, $routeParams, $location, EngagementSurvey, analytics) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         $scope.employee_id = $routeParams.employeeId;

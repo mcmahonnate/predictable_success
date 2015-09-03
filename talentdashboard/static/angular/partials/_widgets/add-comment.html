@@ -4,7 +4,7 @@
         <textarea class="form-control" ng-model="newComment.content" name="content" ng-class="{'expand': comment.expandTextArea, 'compress': !comment.expandTextArea}" ng-click="comment.expandTextArea=true;toggleCommentTextExpander(comment)" rows="1" cols="40" placeholder="Add a comment about {{employee.full_name}}..."></textarea>
         <div class="visibility" style="display:none;">
             <label>
-                <input ng-model="newComment.include_in_daily_digest" name="include_in_daily_digest" ng-checked="newComment.include_in_daily_digest" type="checkbox"> Include in <a ng-click="showMembers()">Daily Digest Email</a>
+                <input name="include_in_daily_digest" ng-model="newComment.include_in_daily_digest" type="checkbox"> Include in <span ng-controller="ShowDailyDigestCtrl"><a ng-click="showMembers()">Daily Digest Email</a></span>
             </label>
             <button class="btn btn-primary pull-right" ng-disabled="!newComment.content" ng-click="add(addCommentForm);">Comment</button>
         </div> 

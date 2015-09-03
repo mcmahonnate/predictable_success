@@ -4,14 +4,15 @@ from org.api.serializers import MinimalEmployeeSerializer, SimpleUserSerializer
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    owner = SimpleUserSerializer()
+    owner = SimpleUserSerializer(read_only=True)
 
     class Meta:
         model = Comment
         fields = ('id', 'content', 'owner', 'content_type', 'object_id', 'visibility', 'include_in_daily_digest', 'created_date', 'modified_date')
+        read_only_fields = ('id', 'owner', 'content_type', 'object_id', 'created_date')
 
 
-class AddCommentSerializer(serializers.Serializer):
+class CreateCommentSerializer(serializers.Serializer):
     content = serializers.CharField()
     visibility = serializers.IntegerField(required=False)
     include_in_daily_digest = serializers.BooleanField()
