@@ -344,7 +344,7 @@ angular.module('tdb.controllers', [])
             data.departure_date = ($scope.employee.departure_date) ? $rootScope.scrubDate($scope.employee.departure_date, false) : null;
             data.team = ($scope.employee.team && $scope.employee.team.name) ? $scope.employee.team.id : null;
             data.coach = ($scope.employee.coach && $scope.employee.coach.full_name) ? $scope.employee.coach.id : null;
-            data.leader_id = ($scope.employee.current_leader && $scope.employee.current_leader.full_name) ? $scope.employee.current_leader.id : null;
+            data.leader_id = ($scope.employee.current_leader && $scope.employee.current_leader.full_name) ? $scope.employee.current_leader.pk : null;
             data.display = true;
             return data;
         };
