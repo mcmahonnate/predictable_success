@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 from .serializers import CreateCommentSerializer, CommentSerializer
 from blah.models import Comment
+from org.models import Employee
 from checkins.models import CheckIn
 
 
@@ -22,7 +23,7 @@ class CreateComment(generics.CreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-class CommentDetailx(generics.RetrieveUpdateDestroyAPIView):
+class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CommentSerializer
     permission_classes = (IsAuthenticated,)
     queryset = Comment.objects.all()
@@ -63,3 +64,21 @@ class CheckInCommentList(CommentList):
     def get_object(self):
         pk = self.kwargs['pk']
         return CheckIn.objects.get(pk=pk)
+
+
+class EmployeeCommentListx(CommentList):
+    serializer_class = CommentSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_object(self):
+        pk = self.kwargs['pk']
+        return Employee.objects.get(pk=pk)
+
+
+class CommentReplyList(CommentList):
+    serializer_class = CommentSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_object(self):
+        pk = self.kwargs['pk']
+        return Comment.objects.get(pk=pk)

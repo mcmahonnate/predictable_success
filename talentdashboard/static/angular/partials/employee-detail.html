@@ -43,8 +43,10 @@
         </div>    
         <div class="col-sm-7 col-md-7 col-lg-7">  
             <div ng-include="'/static/angular/partials/_widgets/todos.html'" data-view="employee-view" data-page-size="5" ng-controller="TaskListCtrl"></div>
-            <div ng-controller="ActivityCtrl" ng-init="init(view='employee-view', path='employees', id=employee.id)">
+            <div ng-controller="AddEmployeeCommentCtrl">
                 <div ng-include="'/static/angular/partials/_widgets/add-comment.html'"></div>
+            </div>
+            <div ng-controller="EmployeeActivityCtrl">
                 <div ng-include="'/static/angular/partials/_widgets/activity.html'"></div>
             </div>          
         </div>

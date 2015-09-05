@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from org.api.serializers import MinimalEmployeeSerializer, UserSerializer
+from org.api.serializers import SanitizedEmployeeSerializer, SimpleUserSerializer
 from django.contrib.contenttypes.models import ContentType
 from blah.models import Comment
 from blah.api.serializers import CommentSerializer
@@ -12,8 +12,8 @@ logger = getLogger('talentdashboard')
 
 
 class EventSerializer(serializers.ModelSerializer):
-    employee = MinimalEmployeeSerializer()
-    user = UserSerializer()
+    employee = SanitizedEmployeeSerializer()
+    user = SimpleUserSerializer()
     type = serializers.SerializerMethodField()
     description = serializers.SerializerMethodField()
     verb = serializers.SerializerMethodField()

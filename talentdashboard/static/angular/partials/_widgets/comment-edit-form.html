@@ -1,0 +1,21 @@
+<form novalidate name="commentEditForm">
+    <div class="comment-reply-copy">
+        <textarea
+            ng-model="editingComment.content"
+            msd-elastic
+            class="form-control edit-textarea">
+        </textarea>
+    </div>
+    <div class="visibility">
+        <label>
+            <input required ng-model="editingComment.include_in_daily_digest" type="checkbox">
+                Include in
+                <span ng-controller="ShowDailyDigestCtrl">
+                    <a ng-click="showMembers()">Daily Digest Email</a>
+                </span>
+        </label>
+    </div>
+    <happiness show="true" happy="comment.happiness"></happiness>
+    <button class="btn btn-primary btn-sm" ng-disabled="!editingComment.content" ng-click="update(commentEditForm, comment)">Save Edits</button>
+    <button class="btn btn-link btn-sm" ng-click="cancelEdit()">Cancel</button>
+</form>

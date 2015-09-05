@@ -11,7 +11,7 @@ from views.homepage import IndexView
 from insights.views import Signup, Report, Survey, Confirmation
 from engagement.api.views import RetrieveUpdateDestroyHappiness, CreateHappiness, EmployeeHappinessList
 from activity.api.views import EventList, EmployeeEventList, TeamEventList, CoachEventList, LeadEventList, CheckInEventList, CommentEvent
-from blah.api.views import CommentDetailx
+from blah.api.views import CommentDetail, EmployeeCommentListx
 router = routers.DefaultRouter()
 router.register(r'^api/v1/teams', TeamViewSet)
 router.register(r'^api/v1/mentorships', MentorshipViewSet)
@@ -90,7 +90,7 @@ urlpatterns = patterns('',
     url(r'^api/v1/comments/coaches/$', CoachCommentList.as_view()),
     url(r'^api/v1/comments/subcomments/(?P<pk>[0-9]+)/$', SubCommentList.as_view()),
     url(r'^api/v1/comments/$', CommentList.as_view()),
-    url(r'^api/v1/comments/(?P<pk>[0-9]+)/$', CommentDetailx.as_view()),
+    url(r'^api/v1/comments/(?P<pk>[0-9]+)/$', CommentDetail.as_view()),
     url(r'^api/v1/prospect/$', ProspectDetail.as_view()),
     url(r'^api/v1/prospects/$', ProspectList.as_view()),
     url(r'^api/v1/tasks/mine/$', (MyTaskList.as_view())),

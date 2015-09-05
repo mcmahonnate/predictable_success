@@ -8,6 +8,36 @@ angular.module('tdb.controllers.activity', [])
         });
     }])
 
+    .controller('EmployeeActivityCtrl', ['$scope', '$rootScope', '$routeParams', '$window', 'Events', 'Comment', function($scope, $rootScope, $routeParams, $window, Events, Comment) {
+        $scope.events = [];
+        Events.getEmployeeEvents($routeParams.id, 1, function(page) {
+            $scope.events = page.results;
+        });
+        $rootScope.$on("comments.commentCreated", function(e, comment) {
+            Events.getEventForComment({id: comment.id}, function(event) {
+                $scope.events.push(event);
+            })
+        });
+
+        $scope.saveComment = function(event) {
+            var comment = new Comment(event.related_object);
+            comment.$update(function(updatedComment) {
+                Events.getEventForComment({id: updatedComment.id}, function(updatedEvent) {
+                    $rootScope.replaceItemInList($scope.events, event, updatedEvent)
+                });
+            });
+        };
+
+        $scope.deleteComment = function(event) {
+            if ($window.confirm('Are you sure you want to delete this comment?')) {
+                var comment = new Comment(event.related_object);
+                comment.$delete(function () {
+                    $rootScope.removeItemFromList($scope.events, event)
+                });
+            }
+        };
+    }])
+
     .controller('ActivityCtrl', ['$scope', '$rootScope', '$filter', '$window', '$modal', 'Events', 'EmployeeComments', 'SubComments','Comment', 'Employee', function($scope, $rootScope, $filter, $window, $modal, Events, EmployeeComments, SubComments, Comment, Employee) {
         $scope.init = function(view, path, id) {
             $scope.view = view;
@@ -141,7 +171,7 @@ angular.module('tdb.controllers.activity', [])
             });
         }
 
-        $scope.addSubComment = function(event) {
+        $scope.showCommentInput = function(event) {
             var newComment = {};
             newComment.id = -1;
             newComment.content = event.newSubCommentText;

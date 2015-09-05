@@ -3,8 +3,8 @@ from ..models import Comment
 from org.api.serializers import MinimalEmployeeSerializer, SimpleUserSerializer
 
 
-class CommentSerializer(serializers.ModelSerializer):
-    owner = SimpleUserSerializer(read_only=True)
+class SubCommentSerializer(serializers.ModelSerializer):
+    owner = SimpleUserSerializer()
 
     class Meta:
         model = Comment
@@ -12,18 +12,20 @@ class CommentSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'owner', 'content_type', 'object_id', 'created_date')
 
 
-class CreateCommentSerializer(serializers.Serializer):
-    content = serializers.CharField()
-    visibility = serializers.IntegerField(required=False)
-    include_in_daily_digest = serializers.BooleanField()
-
-
-class SubCommentSerializer(serializers.HyperlinkedModelSerializer):
-    owner = SimpleUserSerializer()
+class CommentSerializer(serializers.ModelSerializer):
+    owner = SimpleUserSerializer(read_only=True)
+    replies = SubCommentSerializer(read_only=True, many=True)
 
     class Meta:
         model = Comment
-        fields = ('id', 'content', 'owner', 'object_id', 'visibility', 'include_in_daily_digest', 'created_date', 'modified_date')
+        fields = ('id', 'content', 'owner', 'content_type', 'object_id', 'visibility', 'include_in_daily_digest', 'created_date', 'modified_date', 'replies')
+        read_only_fields = ('id', 'owner', 'content_type', 'object_id', 'created_date', 'replies')
+
+
+class CreateCommentSerializer(serializers.Serializer):
+    content = serializers.CharField()
+    visibility = serializers.IntegerField(required=False)
+    include_in_daily_digest = serializers.BooleanField(required=False, default=False)
 
 
 class EmployeeCommentSerializer(serializers.HyperlinkedModelSerializer):

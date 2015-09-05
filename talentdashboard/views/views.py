@@ -21,7 +21,7 @@ from todo.models import Task
 from checkins.models import CheckIn
 from engagement.models import Happiness, SurveyUrl, generate_survey
 from kpi.models import Performance, Indicator
-from assessment.models import EmployeeAssessment, MBTI
+from assessment.models import EmployeeAssessment
 from org.teamreports import get_mbti_report_for_team
 from insights.models import Prospect
 import datetime
@@ -916,36 +916,6 @@ class LeadershipDetail(APIView):
         leadership.save()
         serializer = LeadershipSerializer(leadership, many=False, context={'request': request})
         return Response(serializer.data)
-
-
-class CommentDetail(APIView):
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request, pk, format=None):
-        comment = Comment.objects.get(id=pk)
-        serializer = EmployeeCommentSerializer(comment, context={'request': request})
-        return Response(serializer.data)
-
-    def put(self, request, pk, format=None):
-        comment = Comment.objects.get(id=pk)
-        if comment is not None:
-            comment.content = request.DATA["_content"]
-            if "_visibility" in request.DATA:
-                comment.visibility = request.DATA["_visibility"]
-            if "_include_in_daily_digest" in request.DATA:
-                comment.include_in_daily_digest = request.DATA["_include_in_daily_digest"]
-            comment.modified_date = datetime.datetime.now()
-            comment.save()
-            serializer = EmployeeCommentSerializer(comment, many=False, context={'request': request})
-            return Response(None)
-        return Response(None, status=status.HTTP_404_NOT_FOUND)
-
-    def delete(self, request, pk, format=None):
-        comment = Comment.objects.filter(id=pk)
-        if comment is not None:
-            comment.delete()
-            return Response(None)
-        return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 
 class MyTaskList(APIView):
