@@ -1,8 +1,9 @@
 angular.module('tdb.controllers.comments', [])
 
-    .controller('CommentCtrl', ['$scope', '$rootScope', '$window', 'Comment', function($scope, $rootScope, $window, Comment) {
+    .controller('CommentCtrl', ['$scope', '$rootScope', '$window', 'Comment', 'Event', function($scope, $rootScope, $window, Comment, Event) {
         $scope.editedComment = new Comment();
         $scope.newReply = new Comment();
+        $scope.editMode = false;
 
         $scope.edit = function(comment) {
             $scope.editingComment = angular.copy(comment);
@@ -18,15 +19,39 @@ angular.module('tdb.controllers.comments', [])
             Comment.update($scope.editingComment, function(result) {
                     angular.copy(result, comment);
                     $scope.editMode = false;
+                    $scope.editedComment = new Comment();
+                }
+            );
+        };
+
+        $scope.updateEvent = function(form, event) {
+            if(form.$invalid) return;
+            Comment.update($scope.editingComment, function(result) {
+                    Event.getEventForComment({id: result.id}, function(result) {
+                        angular.copy(result, event);
+                        $scope.editedComment = new Comment();
+                        $scope.editMode = false;
+                    });
                 }
             );
         };
 
         $scope.delete = function(comment, collection) {
             if ($window.confirm('Are you sure you want to delete this comment?')) {
-                Comment.delete(comment, function(result) {
+                Comment.delete({id: comment.id}, function(result) {
                         if(collection) {
                             $rootScope.removeItemFromList(collection, comment);
+                        }
+                    }
+                );
+            }
+        };
+
+        $scope.deleteEvent = function(event, collection) {
+            if ($window.confirm('Are you sure you want to delete this comment?')) {
+                Comment.delete({id: event.related_object.id}, function(result) {
+                        if(collection) {
+                            $rootScope.removeItemFromList(collection, event);
                         }
                     }
                 );
@@ -39,43 +64,6 @@ angular.module('tdb.controllers.comments', [])
                 comment.replies.push(result);
                 $scope.newReply = new Comment();
             });
-        };
-    }])
-
-    .controller('CommentReplyCtrl', ['$scope', '$rootScope', 'Comment', function($scope, $rootScope, Comment) {
-        $scope.editReply = function(form, reply) {
-            if (form.$invalid) return;
-            var editedComment = new Comment(reply);
-            editedComment.$update();
-        };
-
-        $scope.edit = function(comment) {
-            $scope.editingComment = angular.copy(comment);
-            $scope.editMode = true;
-        };
-
-        $scope.cancelEdit = function() {
-            $scope.editMode = false;
-        };
-
-        $scope.update = function(form, comment) {
-            if(form.$invalid) return;
-            Comment.update($scope.editingComment, function(result) {
-                    angular.copy(result, comment);
-                    $scope.editMode = false;
-                }
-            );
-        };
-
-        $scope.delete = function(comment, collection) {
-            if ($window.confirm('Are you sure you want to delete this comment?')) {
-                Comment.delete(comment, function(result) {
-                        if(collection) {
-                            $rootScope.removeItemFromList(collection, comment);
-                        }
-                    }
-                );
-            }
         };
     }])
 

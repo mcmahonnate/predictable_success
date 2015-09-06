@@ -66,7 +66,7 @@ class CheckInCommentList(CommentList):
         return CheckIn.objects.get(pk=pk)
 
 
-class EmployeeCommentListx(CommentList):
+class EmployeeCommentList(CommentList):
     serializer_class = CommentSerializer
     permission_classes = (IsAuthenticated,)
 

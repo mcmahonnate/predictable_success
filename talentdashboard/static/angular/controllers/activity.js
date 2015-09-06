@@ -1,20 +1,20 @@
 angular.module('tdb.controllers.activity', [])
-    .controller('CheckInActivityCtrl', ['$scope', '$rootScope', '$routeParams', 'Events', function($scope, $rootScope, $routeParams, Events) {
-        $scope.events = Events.getCheckInEvents({id:$routeParams.id});
+    .controller('CheckInActivityCtrl', ['$scope', '$rootScope', '$routeParams', 'Event', function($scope, $rootScope, $routeParams, Event) {
+        $scope.events = Event.getCheckInEvents({id:$routeParams.id});
         $rootScope.$on("comments.commentCreated", function(e, comment) {
-            Events.getEventForComment({id: comment.id}, function(event) {
+            Event.getEventForComment({id: comment.id}, function(event) {
                 $scope.events.unshift(event);
             })
         });
     }])
 
-    .controller('EmployeeActivityCtrl', ['$scope', '$rootScope', '$routeParams', '$window', 'Events', 'Comment', function($scope, $rootScope, $routeParams, $window, Events, Comment) {
+    .controller('EmployeeActivityCtrl', ['$scope', '$rootScope', '$routeParams', '$window', 'Event', 'Comment', function($scope, $rootScope, $routeParams, $window, Event, Comment) {
         $scope.events = [];
-        Events.getEmployeeEvents($routeParams.id, 1, function(page) {
+        Event.getEmployeeEvents($routeParams.id, 1, function(page) {
             $scope.events = page.results;
         });
         $rootScope.$on("comments.commentCreated", function(e, comment) {
-            Events.getEventForComment({id: comment.id}, function(event) {
+            Event.getEventForComment({id: comment.id}, function(event) {
                 $scope.events.push(event);
             })
         });
@@ -22,7 +22,7 @@ angular.module('tdb.controllers.activity', [])
         $scope.saveComment = function(event) {
             var comment = new Comment(event.related_object);
             comment.$update(function(updatedComment) {
-                Events.getEventForComment({id: updatedComment.id}, function(updatedEvent) {
+                Event.getEventForComment({id: updatedComment.id}, function(updatedEvent) {
                     $rootScope.replaceItemInList($scope.events, event, updatedEvent)
                 });
             });
@@ -38,12 +38,12 @@ angular.module('tdb.controllers.activity', [])
         };
     }])
 
-    .controller('ActivityCtrl', ['$scope', '$rootScope', '$filter', '$window', '$modal', 'Events', 'EmployeeComments', 'SubComments','Comment', 'Employee', function($scope, $rootScope, $filter, $window, $modal, Events, EmployeeComments, SubComments, Comment, Employee) {
+    .controller('ActivityCtrl', ['$scope', '$rootScope', '$filter', '$window', '$modal', 'Event', 'EmployeeComments', 'SubComments','Comment', 'Employee', function($scope, $rootScope, $filter, $window, $modal, Event, EmployeeComments, SubComments, Comment, Employee) {
         $scope.init = function(view, path, id) {
             $scope.view = view;
             $scope.path = path;
             $scope.id = id;
-            $scope.loadEvents();
+            $scope.loadEvent();
         };
         if ($scope.path == 'employees') {
             Employee.get(
@@ -79,18 +79,18 @@ angular.module('tdb.controllers.activity', [])
             return showHeader;
         }
         $scope.events = [];
-        $scope.originalEvents = [];
-        $scope.loadEvents = function() {
+        $scope.originalEvent = [];
+        $scope.loadEvent = function() {
             $scope.busy = true;
             var query = $scope.path ? { path: $scope.path, id: $scope.id, page: $scope.page + 1 } : { page: $scope.page + 1 };
-            Events.get(query, function(data) {
+            Event.get(query, function(data) {
                 $scope.has_next = data.has_next;
                 $scope.page = data.page;
                 $scope.new_events = data.results;
-                $scope.new_originalEvents = angular.copy($scope.new_events);
+                $scope.new_originalEvent = angular.copy($scope.new_events);
                 angular.forEach($scope.new_events, function (event) {
                     var index = $scope.new_events.indexOf(event);
-                    var original_event = $scope.new_originalEvents[index];
+                    var original_event = $scope.new_originalEvent[index];
                     event.subcomments = [];
                     original_event.subcomments = [];
                     if (event.type == 'comment') {
@@ -104,7 +104,7 @@ angular.module('tdb.controllers.activity', [])
                     event.expandTextArea = false;
                     event.expandChildTextArea = false;
                     $scope.events.push(event)
-                    $scope.originalEvents.push(original_event);
+                    $scope.originalEvent.push(original_event);
                 });
                 $scope.busy = false;
             });
@@ -117,7 +117,7 @@ angular.module('tdb.controllers.activity', [])
             if (!event.comment) {
                 Comment.get({id: event.event_id}).$promise.then(function (response) {
                     $scope.events[index].comment = response;
-                    $scope.originalEvents[index].comment = angular.copy($scope.events[index].comment);
+                    $scope.originalEvent[index].comment = angular.copy($scope.events[index].comment);
                 });
             };
         };
@@ -127,15 +127,15 @@ angular.module('tdb.controllers.activity', [])
             var data = {id: event.event_id, _content: event.comment.content, _visibility: event.visibility, _include_in_daily_digest: event.comment.include_in_daily_digest};
             Comment.update(data, function() {
                 event.description = event.comment.content;
-                $scope.originalEvents[index].comment = angular.copy($scope.events[index].comment);
-                $scope.originalEvents[index].description = $scope.events[index].comment.content;
+                $scope.originalEvent[index].comment = angular.copy($scope.events[index].comment);
+                $scope.originalEvent[index].description = $scope.events[index].comment.content;
             });
         }
 
         $scope.cancelEditComment = function(event) {
             var index = $scope.events.indexOf(event);
-            event.comment.content = $scope.originalEvents[index].comment.content;
-            event.comment.include_in_daily_digest = $scope.originalEvents[index].comment.include_in_daily_digest;
+            event.comment.content = $scope.originalEvent[index].comment.content;
+            event.comment.include_in_daily_digest = $scope.originalEvent[index].comment.include_in_daily_digest;
 
         }
 
@@ -145,14 +145,14 @@ angular.module('tdb.controllers.activity', [])
             var data = {id: subcomment.id, _content: subcomment.content};
 
             Comment.update(data, function() {
-                $scope.originalEvents[parent_index].subcomments[subcomment_index].content = subcomment.content;
+                $scope.originalEvent[parent_index].subcomments[subcomment_index].content = subcomment.content;
             });
         }
 
         $scope.cancelEditSubComment = function(subcomment, event) {
             var parent_index = $scope.events.indexOf(event);
             var subcomment_index = $scope.events[parent_index].subcomments.indexOf(subcomment);
-            subcomment.content = $scope.originalEvents[parent_index].subcomments[subcomment_index].content;
+            subcomment.content = $scope.originalEvent[parent_index].subcomments[subcomment_index].content;
         }
 
         $scope.add = function(equals) {
@@ -165,7 +165,7 @@ angular.module('tdb.controllers.activity', [])
                 newComment.id = response.id;
                 var newEvent = {event_id: newComment.id, description: newComment.content, user: $rootScope.currentUser, verb: 'commented', employee: $scope.employee, type: 'comment', subcomments: {}}
                 $scope.events.push(newEvent);
-                $scope.originalEvents.push(angular.copy(newEvent));
+                $scope.originalEvent.push(angular.copy(newEvent));
                 $scope.newComment = getBlankComment();
 
             });
@@ -184,7 +184,7 @@ angular.module('tdb.controllers.activity', [])
             data.id = event.employee.id;
             EmployeeComments.save(data, function(response) {
                 event.subcomments.push(response);
-                $scope.originalEvents[parent_index].subcomments.push(response);
+                $scope.originalEvent[parent_index].subcomments.push(response);
                 event.newSubCommentText = "";
             });
         }
@@ -210,7 +210,7 @@ angular.module('tdb.controllers.activity', [])
                 var subcomment_index = $scope.events[parent_index].subcomments.indexOf(subcomment);
                 var deleteSuccess = function() {
                     $scope.events[parent_index].subcomments.splice(subcomment_index, 1);
-                    $scope.originalEvents[parent_index].subcomments.splice(subcomment_index, 1);
+                    $scope.originalEvent[parent_index].subcomments.splice(subcomment_index, 1);
                 };
 
                 Comment.remove(data, function() {
