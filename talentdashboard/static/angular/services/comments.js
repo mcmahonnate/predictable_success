@@ -8,7 +8,6 @@ angular.module('tdb.services.comments', ['ngResource'])
             },
             'getCheckInComments': {
                 'method': 'GET',
-                'isArray': true,
                 'url': '/api/v1/comments/checkins/:id/'
             },
             'addToCheckIn': {

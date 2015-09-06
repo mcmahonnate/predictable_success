@@ -97,6 +97,6 @@
             </div>
         </div>
     </div>
-    <button class="btn btn-link btn-sm btn-show-more" ng-show="has_next && !busy" ng-click="loadComments()">Load More Activity</button>
+    <button class="btn btn-link btn-sm btn-show-more" ng-show="hasNextPage" ng-click="loadNextPage()">Load More Activity</button>
     <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
 </div>

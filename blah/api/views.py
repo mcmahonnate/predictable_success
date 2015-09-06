@@ -7,7 +7,7 @@ from .serializers import CreateCommentSerializer, CommentSerializer
 from blah.models import Comment
 from org.models import Employee
 from checkins.models import CheckIn
-
+from talentdashboard.views.views import StandardResultsSetPagination
 
 class CreateComment(generics.CreateAPIView):
     serializer_class = CreateCommentSerializer
@@ -60,6 +60,7 @@ class CreateCheckinComment(CreateComment):
 class CheckInCommentList(CommentList):
     serializer_class = CommentSerializer
     permission_classes = (IsAuthenticated,)
+    pagination_class = StandardResultsSetPagination
 
     def get_object(self):
         pk = self.kwargs['pk']

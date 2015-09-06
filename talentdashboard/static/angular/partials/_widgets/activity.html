@@ -42,7 +42,7 @@
                       title="{{ event.date | date:'MMM d, yyyy h:mma' }}">{{ event.date | fromNow }}</span>
             </div>
             <div ng-show="editMode" class="comment-editor">
-                LLL<form name="commentEditForm">
+                <form name="commentEditForm">
                     <div class="comment-reply-copy">
                         <textarea
                                 ng-model="editingComment.content"
@@ -167,7 +167,7 @@
         </div>
 
         <!-- Check-in -->
-        <a class="activity-checkin row" href="#/checkins/{{ event.event_id }}" ng-show="event.type == 'check in'">
+        <a class="activity-checkin row" ng-show="event.type == 'check in'" href="#/checkins/{{ event.event_id }}">
             <div class="avatar-container col-xs-2">
                 <span class="large-headshot">
                     <img ng-src="{{ event.employee.avatar_small }}" alt="{{ event.employee.full_name }}"/>
@@ -199,7 +199,7 @@
         </a>
 
     </div>
-    <button class="btn btn-link btn-sm btn-show-more" ng-show="has_next && !busy" ng-click="loadEvents()">Load More
+    <button class="btn btn-link btn-sm btn-show-more" ng-show="hasNextPage" ng-click="loadNextPage()">Load More
         Activity
     </button>
     <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner"/></div>

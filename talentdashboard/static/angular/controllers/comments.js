@@ -68,11 +68,23 @@ angular.module('tdb.controllers.comments', [])
     }])
 
     .controller('AddCheckInCommentCtrl', ['$scope', '$rootScope', '$routeParams', 'Comment', function($scope, $rootScope, $routeParams, Comment) {
+        $scope.nextPage = 1;
+        $scope.hasNextPage = false;
+        $scope.comments = [];
         var initialize = function() {
             $scope.newComment = new Comment({content:'', include_in_daily_digest:true});
         };
+
+        $scope.loadNextPage = function() {
+            Comment.getCheckInComments({id:$routeParams.id, page: $scope.nextPage}, function(page) {
+                $scope.comments = $scope.comments.concat(page.results);
+                $scope.nextPage++;
+                $scope.hasNextPage = page.has_next;
+            })
+        };
+
         initialize();
-        $scope.comments = Comment.getCheckInComments({id:$routeParams.id});
+        $scope.loadNextPage();
 
         $scope.add = function(form) {
             if (form.$invalid) return;

@@ -1,18 +1,19 @@
 angular.module('tdb.controllers.activity', [])
-    .controller('CheckInActivityCtrl', ['$scope', '$rootScope', '$routeParams', 'Event', function($scope, $rootScope, $routeParams, Event) {
-        $scope.events = Event.getCheckInEvents({id:$routeParams.id});
-        $rootScope.$on("comments.commentCreated", function(e, comment) {
-            Event.getEventForComment({id: comment.id}, function(event) {
-                $scope.events.unshift(event);
-            })
-        });
-    }])
-
     .controller('EmployeeActivityCtrl', ['$scope', '$rootScope', '$routeParams', '$window', 'Event', 'Comment', function($scope, $rootScope, $routeParams, $window, Event, Comment) {
         $scope.events = [];
-        Event.getEmployeeEvents($routeParams.id, 1, function(page) {
-            $scope.events = page.results;
-        });
+        $scope.nextPage = 1;
+        $scope.hasNextPage = false;
+
+        $scope.loadNextPage = function() {
+            Event.getEmployeeEvents($routeParams.id, $scope.nextPage, function(page) {
+                $scope.events = $scope.events.concat(page.results);
+                $scope.nextPage++;
+                $scope.hasNextPage = page.has_next;
+            });
+        };
+
+        $scope.loadNextPage();
+
         $rootScope.$on("comments.commentCreated", function(e, comment) {
             Event.getEventForComment({id: comment.id}, function(event) {
                 $scope.events.push(event);
