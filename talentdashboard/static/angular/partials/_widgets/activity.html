@@ -16,7 +16,7 @@
             </a>
         </div>
         <!-- Comment -->
-        <div class="comment-item" ng-show="event.type == 'comment'" ng-controller="CommentCtrl">
+        <div class="comment-item" ng-show="event.type == 'comment'" ng-controller="CommentCtrl" summary-length="500">
             <div class="comment-title">
                 <div ng-show="event.user.id==currentUser.id" class="comment-actions pull-right">
                     <i class="fa fa-cog show-popover"></i>
@@ -79,26 +79,23 @@
                     </div>
                 </div>
                 <div class="activity-comment"
-                     ng-init="length=500"
                      ng-bind="event.description | cut:true:length">
                 </div>
-                    <span ng-show="event.description.length>length" ng-init="showMoreButton=true">
-                        <a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton"
-                           style="color: #8b8b8b;cursor: pointer">more</a>
-                        <a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton"
-                           style="color: #8b8b8b;cursor: pointer">less</a>
+                    <span ng-show="contentIsLong(event.related_object)">
+                        <a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a>
+                        <a ng-click="length=summaryLength;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a>
                     </span>
-                    <span class="total-replies" ng-show="event.replies.length == 1">
-                        {{ event.replies.length }} reply
+                    <span class="total-replies" ng-show="event.related_object.replies.length == 1">
+                        {{ event.related_object.replies.length }} reply
                     </span>
-                    <span class="total-replies" ng-show="event.replies.length > 1">
-                        {{ event.replies.length }} replies
+                    <span class="total-replies" ng-show="event.related_object.replies.length > 1">
+                        {{ event.related_object.replies.length }} replies
                     </span>
             </div>
             <div class="comment-replies">
                 <div class="comment-reply"
                      ng-repeat="reply in event.related_object.replies | orderBy:'created_date'">
-                    <div ng-controller="CommentCtrl">
+                    <div ng-controller="CommentCtrl" summary-length="500">
                         <div class="comment-actions pull-right" ng-show="reply.owner.id==currentUser.id">
                             <i class="fa fa-cog show-popover"></i>
                             <ul class="popover-items" style="display:none">
@@ -139,13 +136,11 @@
                             </form>
                         </div>
                         <div class="comment-reply-copy" ng-show="!editMode">
-                            <span ng-init="length=500" data-ng-bind="reply.content | cut:true:length"
+                            <span data-ng-bind="reply.content | cut:true:length"
                                   style="white-space: pre-wrap;"></span>
-                            <span ng-show="subcomment.content.length>length" ng-init="showMoreButton=true">
-                                <a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton"
-                                   style="color: #8b8b8b;cursor: pointer">more</a>
-                                <a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton"
-                                   style="color: #8b8b8b;cursor: pointer">less</a>
+                            <span ng-show="contentIsLong(reply)">
+                                <a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a>
+                                <a ng-click="length=summaryLength;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a>
                             </span>
                         </div>
                     </div>

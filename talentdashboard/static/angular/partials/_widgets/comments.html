@@ -9,7 +9,7 @@
         </p>  
     </div>
     <div class="comment" ng-repeat="comment in comments | orderBy:'created_date':true">
-        <div ng-controller="CommentCtrl">
+        <div ng-controller="CommentCtrl" summary-length="500">
             <div class="comment-owner-avatar-container">
                 <a ng-href="#/employees/{{comment.owner.employee.id}}" class="medium-headshot">
                     <img ng-src="{{ comment.owner.employee.avatar_small }}" />
@@ -36,7 +36,11 @@
                     <div ng-include="'/static/angular/partials/_widgets/comment-edit-form.html'"></div>
                 </div>
                 <div class="comment-copy" ng-show="!editMode">
-                    <span ng-init="length=500" ng-bind-html="comment.content | new_line | cut:true:length" style="line-height: 125%"></span> <span ng-show="comment.content.length>length" ng-init="showMoreButton=true"><a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a><a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a></span>
+                    <span ng-bind-html="comment.content | new_line | cut:true:length" style="line-height: 125%"></span>
+                    <span ng-show="contentIsLong(comment)">
+                        <a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a>
+                        <a ng-click="length=summaryLength;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a>
+                    </span>
                     <span class="total-replies">
                         {{comment.replies.length }} <span ng-bind="comment.replies.length == 1 ? 'reply' : 'replies'"></span>
                     </span>
@@ -44,7 +48,7 @@
             </div>
             <div class="comment-replies">
                 <div class="comment-reply" ng-repeat="reply in comment.replies | orderBy:'created_date'">
-                    <div ng-controller="CommentCtrl">
+                    <div ng-controller="CommentCtrl" summary-length="500">
                         <div class="comment-actions pull-right" ng-show="reply.owner.id==currentUser.id">
                             <i class="fa fa-cog show-popover"></i>
                             <ul class="popover-items" style="display:none">
@@ -75,10 +79,10 @@
                             </form>
                         </div>
                         <div class="comment-reply-copy" ng-show="!editMode">
-                            <span ng-init="length=500" data-ng-bind-html="reply.content | new_line | cut:true:length"></span>
-                            <span ng-show="reply.content.length>length">
+                            <span ng-bind-html="reply.content | new_line | cut:true:length" style="line-height: 125%"></span>
+                            <span ng-show="contentIsLong(reply)">
                                 <a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a>
-                                <a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a>
+                                <a ng-click="length=summaryLength;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a>
                             </span>
                         </div>
                     </div>
