@@ -1,6 +1,6 @@
 <form novalidate name="commentEditForm">
     <div class="comment-reply-copy">
-        <textarea
+        <textarea required
             ng-model="editingComment.content"
             msd-elastic
             class="form-control edit-textarea">
@@ -8,7 +8,7 @@
     </div>
     <div class="visibility">
         <label>
-            <input required ng-model="editingComment.include_in_daily_digest" type="checkbox">
+            <input ng-model="editingComment.include_in_daily_digest" type="checkbox">
                 Include in
                 <span ng-controller="ShowDailyDigestCtrl">
                     <a ng-click="showMembers()">Daily Digest Email</a>

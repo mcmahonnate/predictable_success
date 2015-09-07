@@ -1,15 +1,9 @@
 angular.module('tdb.controllers.comments', [])
 
-    .controller('CommentCtrl', ['$scope', '$rootScope', '$window', '$attrs', 'Comment', 'Event', function($scope, $rootScope, $window, $attrs, Comment, Event) {
-        $scope.length = $scope.summaryLength = parseInt($attrs.summaryLength);
-        $scope.showMoreButton = true;
+    .controller('CommentCtrl', ['$scope', '$rootScope', '$window', 'Comment', 'Event', function($scope, $rootScope, $window, Comment, Event) {
         $scope.editedComment = new Comment();
         $scope.newReply = new Comment();
         $scope.editMode = false;
-
-        $scope.contentIsLong = function(comment) {
-            return comment.content.length > $scope.summaryLength;
-        };
 
         $scope.edit = function(comment) {
             $scope.editingComment = angular.copy(comment);

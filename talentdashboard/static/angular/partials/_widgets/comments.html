@@ -9,7 +9,7 @@
         </p>  
     </div>
     <div class="comment" ng-repeat="comment in comments | orderBy:'created_date':true">
-        <div ng-controller="CommentCtrl" summary-length="500">
+        <div ng-controller="CommentCtrl">
             <div class="comment-owner-avatar-container">
                 <a ng-href="#/employees/{{comment.owner.employee.id}}" class="medium-headshot">
                     <img ng-src="{{ comment.owner.employee.avatar_small }}" />
@@ -35,12 +35,8 @@
                 <div ng-show="editMode" class="comment-editor">
                     <div ng-include="'/static/angular/partials/_widgets/comment-edit-form.html'"></div>
                 </div>
-                <div class="comment-copy" ng-show="!editMode">
-                    <span ng-bind-html="comment.content | new_line | cut:true:length" style="line-height: 125%"></span>
-                    <span ng-show="contentIsLong(comment)">
-                        <a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a>
-                        <a ng-click="length=summaryLength;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a>
-                    </span>
+                <div>
+                    <div class="comment-copy comment-text" ng-show="!editMode" read-more ng-model="comment.content" words="true" length="100"></div>
                     <span class="total-replies">
                         {{comment.replies.length }} <span ng-bind="comment.replies.length == 1 ? 'reply' : 'replies'"></span>
                     </span>
@@ -78,13 +74,7 @@
                                 <button class="btn btn-link btn-sm" ng-click="cancelEdit()">Cancel</button>
                             </form>
                         </div>
-                        <div class="comment-reply-copy" ng-show="!editMode">
-                            <span ng-bind-html="reply.content | new_line | cut:true:length" style="line-height: 125%"></span>
-                            <span ng-show="contentIsLong(reply)">
-                                <a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a>
-                                <a ng-click="length=summaryLength;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a>
-                            </span>
-                        </div>
+                        <div class="comment-reply-copy comment-text" ng-show="!editMode" read-more ng-model="reply.content" words="true" length="100"></div>
                     </div>
                 </div>
                 <div class="comment-reply-textarea">

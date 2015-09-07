@@ -78,24 +78,12 @@
                         <span class="segment employee-segment-background-color-{{ event.employee.current_talent_category }}"></span>
                     </div>
                 </div>
-                <div class="activity-comment"
-                     ng-bind="event.description | cut:true:length">
-                </div>
-                    <span ng-show="contentIsLong(event.related_object)">
-                        <a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a>
-                        <a ng-click="length=summaryLength;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a>
-                    </span>
-                    <span class="total-replies" ng-show="event.related_object.replies.length == 1">
-                        {{ event.related_object.replies.length }} reply
-                    </span>
-                    <span class="total-replies" ng-show="event.related_object.replies.length > 1">
-                        {{ event.related_object.replies.length }} replies
-                    </span>
+                <div class="activity-comment comment-text" ng-show="!editMode" read-more ng-model="event.description" words="true" length="100"></div>
             </div>
             <div class="comment-replies">
                 <div class="comment-reply"
                      ng-repeat="reply in event.related_object.replies | orderBy:'created_date'">
-                    <div ng-controller="CommentCtrl" summary-length="500">
+                    <div ng-controller="CommentCtrl">
                         <div class="comment-actions pull-right" ng-show="reply.owner.id==currentUser.id">
                             <i class="fa fa-cog show-popover"></i>
                             <ul class="popover-items" style="display:none">
@@ -135,14 +123,7 @@
                                 </button>
                             </form>
                         </div>
-                        <div class="comment-reply-copy" ng-show="!editMode">
-                            <span data-ng-bind="reply.content | cut:true:length"
-                                  style="white-space: pre-wrap;"></span>
-                            <span ng-show="contentIsLong(reply)">
-                                <a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a>
-                                <a ng-click="length=summaryLength;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a>
-                            </span>
-                        </div>
+                        <div class="comment-reply-copy comment-text" ng-show="!editMode" read-more ng-model="reply.content" words="true" length="100"></div>
                     </div>
                 </div>
                 <div class="comment-reply-textarea">
@@ -182,14 +163,7 @@
                     <span class="glyphicon glyphicon-user"></span>
                 </div>
                 <h3 class="comment-title-employee-name">{{ event.employee.full_name }}</h3>
-                <span class="activity-checkin-summary" ng-init="length=200"
-                      ng-bind-html="event.description | cut:true:length" style="line-height: 125%"></span>
-                <span ng-show="event.description.length>length" ng-init="showMoreButton=true">
-                    <span ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton"
-                          style="color: #8b8b8b;cursor: pointer">more</span>
-                    <span ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton"
-                          style="color: #8b8b8b;cursor: pointer">less</span>
-                </span>
+                <span class="activity-checkin-summary  comment-text" read-more ng-model="event.description" words="true" length="100"></span>
             </div>
         </a>
 
