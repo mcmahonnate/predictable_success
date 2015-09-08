@@ -1,5 +1,6 @@
 import blah
 from django.db import models
+from blah.models import Comment
 from org.models import Employee
 from engagement.models import Happiness
 

@@ -5,7 +5,7 @@ from engagement.models import Happiness
 from engagement.api.serializers import HappinessSerializer
 from ..models import CheckIn, CheckInType
 from todo.api.serializers import TaskSerializer
-from blah.models import Comment
+from blah.api.serializers import CommentSerializer
 
 
 class CheckInTypeSerializer(serializers.ModelSerializer):
@@ -21,13 +21,14 @@ class CheckInSerializer(serializers.ModelSerializer):
     happiness = HappinessSerializer(required=False)
     tasks = TaskSerializer(required=False, many=True)
     summary = serializers.SerializerMethodField()
+    comments = CommentSerializer(required=False, many=True)
 
     def get_summary(self, obj):
         return obj.get_summary(self.context['request'].user)
 
     class Meta:
         model = CheckIn
-        fields = ('id', 'employee', 'host', 'date', 'summary', 'happiness', 'type', 'other_type_description', 'tasks')
+        fields = ('id', 'employee', 'host', 'date', 'summary', 'happiness', 'type', 'other_type_description', 'tasks', 'comments')
 
 
 class AddEditCheckInSerializer(serializers.ModelSerializer):
