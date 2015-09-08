@@ -80,7 +80,6 @@ class UserList(generics.ListAPIView):
 class CoachList(generics.ListAPIView):
     serializer_class = SanitizedEmployeeSerializer
     queryset = Employee.objects.get_current_employees(show_hidden=True)
-    queryset = queryset.filter(is_coach=True)
 
 
 class TeamViewSet(viewsets.ReadOnlyModelViewSet):
