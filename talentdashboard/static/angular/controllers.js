@@ -422,13 +422,12 @@ angular.module('tdb.controllers', [])
 
         //tabs
         $scope.homeTab = 'home';
-        $scope.zonesTab = 'zones';
-        $scope.teamsTab = 'teams';
+        $scope.myTab = 'my';
+        $scope.dashboardsTab = 'dashboards';
+        $scope.screenerTab = 'screener';
+        $scope.reportsTab = 'reports';
         $scope.settingsTab = 'settings';
         $scope.searchTab = 'search';
-        $scope.reportsTab = 'reports';
-        $scope.employeesTab = 'employees';
-        $scope.coachTab = 'coach';
 
         $scope.setActiveTab = function (tab) {
             $('.nav-item').tooltip('hide');
