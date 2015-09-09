@@ -4,31 +4,31 @@
 </div>
 <div class="container" ng-if="(!survey.active || survey.completed) && !first_load">
     <div class="overlay overlay-slidedown">
-        <nav>
+        <div style="position: absolute;top:0;bottom: 0;left: 0;right: 0;width:50%;height:50%;margin: auto;text-align: center">
             <ul>
                 <li>Thank you!</li>
             </ul>
-        </nav>
+        </div>
     </div>
 </div>
 <div class="container" ng-if="(!survey.active || survey.completed) && first_load && survey">
     <div class="overlay overlay-slidedown">
-        <nav>
+        <div style="position: absolute;top:0;bottom: 0;left: 0;right: 0;width:50%;height:50%;margin: auto;text-align: center">
             <ul>
                 <li>Sorry!</li>
                 <li>This survey is closed.</li>
             </ul>
-        </nav>
+        </div>
     </div>
 </div>
 <div class="container" ng-if="error">
     <div class="overlay overlay-slidedown">
-        <nav>
+        <div style="position: absolute;top:0;bottom: 0;left: 0;right: 0;width:50%;height:50%;margin: auto;text-align: center">
             <ul>
                 <li>Sorry!</li>
                 <li>We couldn't find your survey.</li>
             </ul>
-        </nav>
+        </div>
     </div>
 </div>
 <style>
