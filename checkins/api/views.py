@@ -1,8 +1,11 @@
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
+from blah.api.views import CommentList, CreateComment
+from blah.api.serializers import CommentSerializer
 from ..models import CheckIn, CheckInType
 from .serializers import CheckInSerializer, AddEditCheckInSerializer, CheckInTypeSerializer
+from talentdashboard.views.views import StandardResultsSetPagination
 
 
 # CheckIn views
@@ -57,3 +60,20 @@ class CheckInTypeList(generics.ListAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = CheckInTypeSerializer
     queryset = CheckInType.objects.all()
+
+
+# Comment views
+class CreateCheckinComment(CreateComment):
+    queryset = CheckIn.objects.all()
+
+
+class CheckInCommentList(CommentList):
+    serializer_class = CommentSerializer
+    permission_classes = (IsAuthenticated,)
+    pagination_class = StandardResultsSetPagination
+
+    def get_object(self):
+        pk = self.kwargs['pk']
+        return CheckIn.objects.get(pk=pk)
+
+

@@ -8,11 +8,11 @@ angular.module('tdb.services.comments', ['ngResource'])
             },
             'getCheckInComments': {
                 'method': 'GET',
-                'url': '/api/v1/comments/checkins/:id/'
+                'url': '/api/v1/checkins/:id/comments/'
             },
             'addToCheckIn': {
                 'method': 'POST',
-                'url': '/api/v1/comments/checkins/:id/'
+                'url': '/api/v1/checkins/:id/comments/'
             },
             'addToEmployee': {
                 'method': 'POST',
