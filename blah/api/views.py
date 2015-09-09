@@ -5,9 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 from .serializers import CreateCommentSerializer, CommentSerializer
 from blah.models import Comment
-from org.models import Employee
-from checkins.models import CheckIn
-from talentdashboard.views.views import StandardResultsSetPagination
+
 
 class CreateComment(generics.CreateAPIView):
     serializer_class = CreateCommentSerializer
@@ -40,7 +38,7 @@ class CommentList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         subject = self.get_object()
-        return Comment.objects.get_for_object(subject)
+        return subject.comments.all()
 
     def create(self, request, *args, **kwargs):
         deserializer = CreateCommentSerializer(data=request.data)
@@ -51,29 +49,6 @@ class CommentList(generics.ListCreateAPIView):
         serializer = CommentSerializer(comment, context={'request': request})
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-
-
-class CreateCheckinComment(CreateComment):
-    queryset = CheckIn.objects.all()
-
-
-class CheckInCommentList(CommentList):
-    serializer_class = CommentSerializer
-    permission_classes = (IsAuthenticated,)
-    pagination_class = StandardResultsSetPagination
-
-    def get_object(self):
-        pk = self.kwargs['pk']
-        return CheckIn.objects.get(pk=pk)
-
-
-class EmployeeCommentList(CommentList):
-    serializer_class = CommentSerializer
-    permission_classes = (IsAuthenticated,)
-
-    def get_object(self):
-        pk = self.kwargs['pk']
-        return Employee.objects.get(pk=pk)
 
 
 class CommentReplyList(CommentList):
