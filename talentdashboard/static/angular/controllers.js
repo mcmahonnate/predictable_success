@@ -344,8 +344,8 @@ angular.module('tdb.controllers', [])
             data.hire_date = ($scope.employee.hire_date) ? $rootScope.scrubDate($scope.employee.hire_date, false) : null;
             data.departure_date = ($scope.employee.departure_date) ? $rootScope.scrubDate($scope.employee.departure_date, false) : null;
             data.team = ($scope.employee.team && $scope.employee.team.name) ? $scope.employee.team.id : null;
-            data.coach = ($scope.employee.coach && $scope.employee.coach.full_name) ? $scope.employee.coach.id : null;
-            data.leader_id = ($scope.employee.current_leader && $scope.employee.current_leader.full_name) ? $scope.employee.current_leader.id : null;
+            data.coach = ($scope.employee.coach && $scope.employee.coach.full_name) ? ($scope.employee.current_leader.pk ? $scope.employee.coach.pk: $scope.employee.coach.id) : null;
+            data.leader_id = ($scope.employee.current_leader && $scope.employee.current_leader.full_name) ? ($scope.employee.current_leader.pk ? $scope.employee.current_leader.pk: $scope.employee.current_leader.id) : null;
             data.display = true;
             return data;
         };
@@ -433,13 +433,12 @@ angular.module('tdb.controllers', [])
 
         //tabs
         $scope.homeTab = 'home';
-        $scope.zonesTab = 'zones';
-        $scope.teamsTab = 'teams';
+        $scope.myTab = 'my';
+        $scope.dashboardsTab = 'dashboards';
+        $scope.screenerTab = 'screener';
+        $scope.reportsTab = 'reports';
         $scope.settingsTab = 'settings';
         $scope.searchTab = 'search';
-        $scope.reportsTab = 'reports';
-        $scope.employeesTab = 'employees';
-        $scope.coachTab = 'coach';
 
         $scope.setActiveTab = function (tab) {
             $('.nav-item').tooltip('hide');
@@ -549,7 +548,7 @@ angular.module('tdb.controllers', [])
 
     }])
 
-    .controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', '$modal', 'User', 'Employee', 'Team', 'Engagement', 'SendEngagementSurvey', 'EmployeeLeader', 'Attribute', '$http', 'Customers', 'analytics', 'EmployeeMBTI', 'Notification', function ($rootScope, $scope, $location, $routeParams, $window, $modal, User, Employee, Team, Engagement, SendEngagementSurvey, EmployeeLeader, Attribute, $http, Customers, analytics, EmployeeMBTI, Notification) {
+    .controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', '$modal', 'User', 'Employee', 'EmployeeSearch', 'Team', 'Engagement', 'SendEngagementSurvey', 'EmployeeLeader', 'Attribute', '$http', 'Customers', 'analytics', 'EmployeeMBTI', 'Notification', function ($rootScope, $scope, $location, $routeParams, $window, $modal, User, Employee, EmployeeSearch, Team, Engagement, SendEngagementSurvey, EmployeeLeader, Attribute, $http, Customers, analytics, EmployeeMBTI, Notification) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         Customers.get(function (data) {
             $scope.customer = data;
@@ -575,7 +574,7 @@ angular.module('tdb.controllers', [])
             $scope.teams = data;
         });
         if (!$scope.employees && $rootScope.currentUser && $rootScope.currentUser.can_view_company_dashboard) {
-            $scope.employees = Employee.query();
+            $scope.employees = EmployeeSearch.query();;
         }
         Employee.get(
             {id: $routeParams.id},

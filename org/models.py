@@ -126,8 +126,6 @@ class Employee(models.Model):
         default=None
     )
     display = models.BooleanField(default=False)
-    is_coach = models.BooleanField(default=False)
-    is_lead = models.BooleanField(default=False)
     user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='employee')
     coach = models.ForeignKey('Employee', related_name='coachees', null=True, blank=True)
     field_tracker = FieldTracker(fields=['coach'])
@@ -163,6 +161,14 @@ class Employee(models.Model):
             if field_value is not None:
                 Relationship(employee=self, related_employee=field_value, relation_type=relation_type).save()
 
+    def is_coach(self):
+        employee_count = Employee.objects.filter(coach__id=self.id).count()
+        return employee_count > 0
+
+    def is_lead(self):
+        leadership_count = Leadership.objects.filter(leader__id=self.id, end_date__isnull=True).count()
+        return leadership_count > 0
+
     def is_viewable_by_user(self, user):
         if user.is_superuser:
             return True
@@ -176,11 +182,6 @@ class Employee(models.Model):
         if user.has_perm('org.view_employees'):
             return True
         return False
-
-    def is_a_coach(self):
-        if self.user is None:
-            return False
-        return any(group.name == COACHES_GROUP for group in self.user.groups.all())
 
     def _get_kolbe_fact_finder(self):
         try:

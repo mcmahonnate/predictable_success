@@ -4,7 +4,15 @@
 
 {% block content %}
     <div ng-app="tdb" ng-controller="BaseAppCtrl">
-        <div ng-if="currentUser" ng-include="'/static/angular/partials/_widgets/navigation.html'"></div>
+
+        {% if perms.org.view_employees %}
+            <div ng-include="'/static/angular/partials/_widgets/navigation/nav-all-access.html'"></div>
+        {% elif user.employee.is_lead %}
+            <div ng-include="'/static/angular/partials/_widgets/navigation/nav-lead.html'"></div>
+        {% elif user.employee.is_coach %}
+            <div ng-include="'/static/angular/partials/_widgets/navigation/nav-coach.html'"></div>
+        {% endif %}
+
         <div ng-view></div>
     </div>
 {% endblock content%}
