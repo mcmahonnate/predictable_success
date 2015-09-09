@@ -13,7 +13,7 @@ class CreateCheckIn(generics.CreateAPIView):
     """ Create a CheckIn via POST.
     """
     serializer_class = AddEditCheckInSerializer
-    permission_classes = (IsAuthenticated, DjangoModelPermissions)
+    permission_classes = (IsAuthenticated,)
     model = CheckIn
 
     def perform_create(self, serializer):
@@ -24,7 +24,7 @@ class RetrieveUpdateDestroyCheckIn(generics.RetrieveUpdateDestroyAPIView):
     """ Retrieve, Update, or Delete a CheckIn via GET, PUT, DELETE.
     """
     queryset = CheckIn.objects.all()
-    permission_classes = (IsAuthenticated, DjangoModelPermissions)
+    permission_classes = (IsAuthenticated,)
     serializer_class = AddEditCheckInSerializer
 
     def get(self, request, pk, format=None):

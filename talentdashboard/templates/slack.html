@@ -1,0 +1,25 @@
+{% extends "layouts/blank.html" %}
+{% load staticfiles %}
+{% block title %}Slack Intergrations{% endblock title %}
+
+{% block css %}
+{% endblock css %}
+
+{% block content %}
+    <div class="container">
+        <h1>Slack Intergrations</h1>
+        <p>Testing some Slack intergrations</p>
+
+        <br />
+        <br />
+        <br />
+
+        <h3><strong>Users</strong></h3>
+        <ul>
+        {% for user in users %}
+            <li>{{ user.profile.first_name }} {{ user.profile.last_name }} ({{ user.profile.email }})</li>
+        {% endfor %}
+        </ul>
+
+    </div>    
+{% endblock content %}

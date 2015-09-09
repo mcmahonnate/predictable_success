@@ -139,6 +139,7 @@ urlpatterns = patterns('',
     url(r'^api/v1/reports/activity$', last_activity_report),
 
     url(r'^api/v1/search/', include('search.api.urls')),
+
     url(r'^api/v1/checkins/', include('checkins.api.urls')),
     url(r'^api/v1/comments/', include('blah.api.urls')),
     url(r'^', include(router.urls)),

@@ -237,18 +237,14 @@ class UserSerializer(serializers.ModelSerializer):
         return False
 
     def get_can_coach_employees(self, obj):
-        if (obj.employee is not None and obj.employee.is_a_coach()) | obj.is_superuser:
-                return True
-        return False
+        return obj.employee.is_coach()
 
     def get_can_view_company_dashboard(self, obj):
         if obj.groups.filter(name='AllAccess').exists() | obj.is_superuser:
                 return True
         return False
     def get_is_team_lead(self, obj):
-        if obj.groups.filter(name='TeamLeadAccess').exists() | obj.is_superuser:
-                return True
-        return False
+        return obj.employee.is_lead()
 
     class Meta:
         model = User
