@@ -857,7 +857,10 @@ angular.module('tdb.directives', [])
         Customers.get(function (data) {
             $scope.customer = data;
         });
-        $scope.$watch("editEmployee.departure_date",function(newValue,OldValue,scope) {
+
+        console.log('foo');
+        
+        $scope.$watch("employee.departure_date",function(newValue,OldValue,scope) {
             if (newValue) {
                 $scope.showDepartDatePicker = false;
             }

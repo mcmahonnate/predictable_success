@@ -262,6 +262,7 @@ angular.module('tdb.controllers', [])
         $scope.leadership = angular.copy(leadership);
         $scope.teams = teams;
         $scope.employees = employees;
+        
         // $scope.preview = $scope.employee.avatar;
         $scope.image = {
             uploadedImg: '',
@@ -297,6 +298,18 @@ angular.module('tdb.controllers', [])
             $scope.showHireDatePicker = false;
             $scope.showDepartDatePicker = !$scope.showDepartDatePicker;
         };
+
+        $scope.$watch("employee.departure_date",function(newValue,OldValue,scope) {
+            if (newValue) {
+                $scope.showDepartDatePicker = false;
+            }
+        });
+        $scope.$watch("employee.hire_date",function(newValue,OldValue,scope) {
+            if (newValue) {
+                $scope.showHireDatePicker = false;
+            }
+        });
+                
         $scope.saveEmployee = function () {
             var data = getData();
             console.log(data);
@@ -350,15 +363,7 @@ angular.module('tdb.controllers', [])
             return data;
         };
 
-        var select = function () {
-            $scope.showHireDatePicker = false;
-            $scope.showDepartDatePicker = false;
-
-            console.log('hide');
-        }    
-
-
-
+  
         $scope.uploadFile = function (files) {
             $scope.files = files;
             fileReader.readAsDataUrl($scope.files[0], $scope)
