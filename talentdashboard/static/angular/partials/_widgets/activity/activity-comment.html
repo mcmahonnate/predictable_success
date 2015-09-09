@@ -1,0 +1,123 @@
+<div class="activity-item" ng-show="event.type == 'comment'" ng-controller="CommentCtrl" summary-length="500">
+    <div class="activity-header">
+        <div ng-show="event.user.id==currentUser.id" class="comment-actions pull-right">
+            <i class="fa fa-cog show-popover"></i>
+            <ul class="popover-items" style="display:none">
+                <li class="popover-item">
+                    <a ng-click="edit(event.related_object)" class="edit"><i class="fa fa-pencil-square-o"></i>Edit</a>
+                </li>
+                <li class="popover-item">
+                    <a ng-click="deleteEvent(event, events)"><i class="fa fa-trash-o"></i> Delete</a>
+                </li>
+            </ul>
+        </div>
+        <div class="activity-owner-avatar-container">
+            <a ng-href="#/employees/{{ event.user.employee.id }}" class="medium-headshot">
+                <img ng-src="{{ event.user.employee.avatar_small }}" alt="{{ event.user.employee.full_name }}'s avatar"/>
+            </a>
+        </div>
+        <div class="activity-description">
+            <a ng-href="#/employees/{{ event.user.employee.id }}" class="activity-title-employee-name">{{ event.user.employee.full_name }}</a>
+            {{ event.verb }}
+            <span ng-show="event.type == 'comment'">on</span>
+            <a ng-href="#/employees/{{ event.employee.id }}" class="activity-title-employee-name">{{ event.employee.full_name }}</a>
+            <span class="timestamp" data-toggle="tooltip" data-placement="top" title="{{ event.date | date:'MMM d, yyyy h:mma' }}">{{ event.date | fromNow }}</span>
+        </div>    
+    </div>
+
+    <!-- Comment -->
+    <div class="comment-copy" ng-show="!editMode">
+        <div class="avatar-container pull-right hide">
+            <a class="large-headshot" ng-show="view != 'employee-view'"
+               ng-href="#/employees/{{ event.employee.id }}">
+                <img ng-src="{{ event.employee.avatar_small }}" alt="{{ event.employee.full_name }}'s avatar"/>
+            </a>
+
+            <div class="employee-attribute">
+                <span class="segment employee-segment-background-color-{{ event.employee.current_talent_category }}"></span>
+            </div>
+        </div>
+        <div class="activity-comment comment-text" ng-show="!editMode" read-more ng-model="event.description" words="true" length="100"></div> 
+    </div>
+
+    <!-- Comment Editor -->
+    <div ng-show="editMode" class="comment-editor">
+        <form name="commentEditForm">
+            <div class="comment-reply-copy">
+                <textarea ng-model="editingComment.content" msd-elastic class="form-control edit-textarea"></textarea>
+            </div>
+            <div class="visibility pull-right" style="margin:0 25px;">
+                <label>
+                    <input ng-model="editingComment.include_in_daily_digest" name="include_in_daily_digest" type="checkbox">
+                    Include in
+                    <span ng-controller="ShowDailyDigestCtrl">
+                        <a ng-click="showMembers()">Daily Digest Email</a>
+                    </span>
+                </label>
+            </div>
+            <button class="btn btn-primary btn-sm" ng-disabled="!editingComment.content" ng-click="updateEvent(commentEditForm, event)">Save Edits</button>
+            <button class="btn btn-link btn-sm" ng-click="cancelEdit()">Cancel</button>
+        </form>
+    </div>
+
+    <!-- Comment replies -->
+    <div class="comment-replies">
+        <span class="total-replies" ng-show="event.related_object.replies.length == 1">
+            {{event.related_object.replies.length}} reply
+        </span>
+        <span class="total-replies" ng-show="event.related_object.replies.length > 1">
+            {{event.related_object.replies.length}} replies
+        </span>
+        <div class="comment-reply"
+             ng-repeat="reply in event.related_object.replies | orderBy:'created_date'">
+            <div ng-controller="CommentCtrl">
+                <div class="comment-actions pull-right" ng-show="reply.owner.id==currentUser.id">
+                    <i class="fa fa-cog show-popover"></i>
+                    <ul class="popover-items" style="display:none">
+                        <li class="popover-item">
+                            <a ng-click="edit(reply)" class="edit"><i class="fa fa-pencil-square-o"></i>
+                                Edit</a>
+                        </li>
+                        <li class="popover-item">
+                            <a ng-click="delete(reply, event.related_object.replies)"><i class="fa fa-trash-o"></i>
+                                Delete</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="comment-reply-avatar-container">
+                    <a ng-href="#/employees/{{ reply.owner.employee.id }}" class="small-headshot">
+                        <img ng-src="{{ reply.owner.employee.avatar_small }}"
+                             alt="{{ reply.owner.employee.full_name }}'s avatar"/>
+                    </a>
+                </div>
+                <a class="comment-reply-name"
+                   ng-href="#/employees/{{ reply.owner.employee.id }}">{{ reply.owner.employee.full_name }}</a>
+                <span class="timestamp"
+                      title="{{ reply.created_date | date:'MMM d, yyyy h:mma' }}">{{ reply.created_date | fromNow }}</span>
+
+                <div class="comment-reply-copy" ng-show="editMode">
+                    <form name="replyEditForm">
+                        <textarea
+                                ng-model="editingComment.content"
+                                msd-elastic
+                                class="form-control edit-textarea">
+                        </textarea>
+                        <button class="btn btn-primary btn-sm" ng-disabled="!editingComment.content"
+                                ng-click="update(replyEditForm, reply)">Save Edits
+                        </button>
+                        <button class="btn btn-link btn-sm"
+                                ng-click="cancelEdit()">Cancel
+                        </button>
+                    </form>
+                </div>
+                <div class="comment-reply-copy comment-text" ng-show="!editMode" read-more ng-model="reply.content" words="true" length="100"></div>
+            </div>
+        </div>
+        <div class="comment-reply-textarea">
+            <form name="replyForm">
+                <textarea class="form-control" name="content" msd-elastic ng-model="newReply.content" rows="1" cols="40" placeholder="Add a reply..."></textarea>
+                <button class="small-comment" ng-disabled="!replyForm.content" ng-click="addReply(replyForm, event.related_object)">Comment</button>
+            </form>
+        </div>
+    </div>
+</div>

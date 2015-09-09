@@ -1,81 +1,369 @@
+.activity {
+    min-height: 600px;
 
-
-.activity-checkin {
-    padding: 15px;
-    display: block;
-    overflow: hidden;
-    margin: 0 20px 0 60px;
-    background-color: #f1f1f1;
-
-    @media only screen and (max-width : 990px) {
-      padding: 15px 10px;
-      clear: both;
-      margin-top: 30px;
+    .panel-title {
+        margin-bottom: 20px; 
     }
-      
-  	h3 {
-  		margin-bottom: 5px;
-  	}
-    .avatar-container {
-        margin: 0;
-        padding-right: 0;
 
-        @media only screen and (max-width : 900px) {
-            display: none;
-        } 
-    }  
-  	.employee-attribute {
-  		left: 10px;
-  	}
-  	.activity-checkin-summary {
-  		color: #333;
-      white-space: pre-wrap;
-  	}
-    .activity-checkin-details {
-        padding-left: 20px;
-
-        .comment-title-employee-name {
-          color: #333;
-          font-weight: bold;
+    .activity-items {
+        .activity-item {
+            margin-bottom: 25px;
+            border-bottom: 1px solid #ebedf3;
+            padding-bottom: 25px;
         }
 
+        .activity-title-employee-name {
+            color: #1a7f7e;
+            font-weight: bold;
+        }
+        .activity-header {
+            display: block; 
+            min-width: 90%;
+        }
+        .activity-owner-avatar-container {
+            display: block; 
+            float: left; 
+            width: 48px;
+            margin-right: 20px;
+
+            .comment-owner-avatar {
+                display: inline-block; 
+                margin-left: auto; 
+                margin-right: auto; 
+                height: 48px; 
+                vertical-align:text-top;
+                border-radius: 90px;
+            }   
+        }
+    } 
+
+
+
+    /* Activity Type [Check-in] */
+    .activity-checkin {
+        padding: 20px 10px;
+        display: block;
+        overflow: hidden;
+        margin: 20px 0px 0 68px;
+        background-color: #f1f1f1;
 
         @media only screen and (max-width : 990px) {
-            padding-left: 0;
+            padding: 15px 10px;
+            clear: both;
+            margin-top: 30px;
+        }
+        h3 {
+            margin-bottom: 5px;
+        }
+        .avatar-container {
+            margin: 0;
+            padding-right: 0;
+
+            @media only screen and (max-width : 900px) {
+                display: none;
+            } 
         }  
+        .employee-attribute {
+            left: 10px;
+        }
+        .activity-checkin-summary {
+            color: #555;
+            white-space: pre-line;
+        }
+        .activity-checkin-details {
+            padding-left: 20px;
+
+            @media only screen and (max-width : 990px) {
+              padding-left: 0;
+            }  
+        }
+        .activity-checkin-type {
+            position: relative;
+            margin: 0 0 15px 18px;
+        }
+        .activity-checkin-type .glyphicon {
+            font-size: 30px;
+            color: #ccc;
+        }   
+        .activity-checkin-type .glyphicon-top {
+            position: absolute;
+            right: 12px;
+            color: #ccc;
+            z-index: 18;
+            top: 5px;
+        } 
+        .activity-checkin-type .glyphicon-outline {
+            position: absolute;
+            right: 10px;
+            color: #fff;
+            z-index: 11;
+            top: 4px;
+        }        
     }
-  	.activity-checkin-type {
-  		position: relative;
-        margin: 0 0 15px 18px;
-  	}
-  	.activity-checkin-type .glyphicon {
-	  	font-size: 30px;
-	    color: #ccc;
-	}   
-  	.activity-checkin-type .glyphicon-top {
-	    position: absolute;
-	    right: 12px;
-	    color: #ccc;
-	    z-index: 18;
-	    top: 5px;
-	} 
-  	.activity-checkin-type .glyphicon-outline {
-	    position: absolute;
-	    right: 10px;
-	    color: #fff;
-	    z-index: 11;
-	    top: 4px;
-	} 	  	 
+
+    .activity-checkin:hover {
+        background-color: #f9f9f9;
+    }
+
+
+
+
+    /* Activity Type [Comments] */
+    .comment-copy {
+        margin: -20px 0px 0 68px;
+        color: #555;
+        white-space: pre-line;
+    }
+
+
+/*    .comments-date {
+        font-size: 13px;
+        color: #8b8b8b;
+        border-bottom: 2px solid #efefef;
+        padding-bottom: 2px;
+    }*/
+
+
+  .comment-actions {
+    position: relative;
+    color: #ccc;
+  }
+
+
+
+  .total-replies {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;  
+  }
+
+/*  .comment-item {
+    display: block; 
+    margin-left:35px; 
+    padding-left:25px;
+    min-width: 80%;
+    min-height: 28px;
+
+
+      .comment-text {
+      white-space: pre-wrap;
+    }
+
+    .comment-copy {
+        margin: 15px 0 5px;
+        font-size: 14px;
+        line-height: 20px;
+    }
+
+    .comment-associated-avatar {
+      float: right;
+      height: 90px;
+      border-radius: 50%;
+      border: 4px solid #fff;
+    }
+
+  }*/
+
+    .edit-textarea {
+        margin: 12px 0 8px;
+        width: 95%;
+        min-height: 100px;
+    }
+    .comment-editor {
+        position: relative;
+        background: #fff;
+        margin: 0 0 35px 68px;
+    }
+  
+
+  ul.feed-actions {
+      list-style: none;
+      font-size: 12px;
+  }
+  .feed-actions li {
+      background: url('/static/css/icon_bullet_grey2_4x4.png') no-repeat scroll 100% 6px transparent;
+      float: left;
+    margin: 0 0px 0 7px;
+    padding: 0 10px 0 0px;
+      cursor: pointer;
+  }
+  .feed-actions li:last-child {
+    background: none;
+  }
+  .feed-action a {
+      color: #888;
+  } 
+  .feed-action a:hover {
+      text-decoration: none;
+      color: #333;
+  }
+
+    .comment-reply-avatar-container {
+        float: left; 
+    }
+
+
+  .comment-replies {
+    margin: 10px 0px 0 68px;
+
+      @media only screen and (max-width : 640px) {
+          margin: 10px 0 0;
+      } 
+
+    .comment-reply {
+      margin-bottom: 2px;
+      padding: 15px 15px 20px;
+      background-color: #efefef;
+
+      .timestamp {
+        @media only screen and (max-width : 1280px) {
+          display: block;
+            line-height: 16px;
+            padding-left: 12px;
+            margin: 1px 38px 15px;
+        }
+      }
+    }
+    .comment-reply-textarea {
+        padding: 10px;
+        background-color: #efefef;
+
+        textarea {
+            position: relative; 
+            max-width: 515px; 
+            min-height: 27px;
+            height: 60px;
+            background-color:#fff;
+            color:#333;
+            resize:vertical;
+            font-size: 15px;
+            padding: 6px;
+            border:1px solid #ccc;
+            display: inline;
+            vertical-align: top;
+            width: 80%;
+            height: 36px;
+            transition: height .3s ease-out;
+
+            textarea:focus {
+                min-height: 120px;
+                height: 120px;
+            }
+
+            @media only screen and (max-width : 1280px) {
+                width: 80%;
+            }
+            @media only screen and (max-width : 640px) {
+                width: 100%;
+                margin-bottom: 5px;
+            }   
+        }
+    }
+    .comment-reply-name {
+        color: #1a7f7e;
+        font-weight: bold;  
+        margin-left: 1px;   
+    }
+    .comment-reply-copy {
+      margin-left: 52px;
+      font-size: 14px;
+        line-height: 20px;
+    }
+
+    button.comment {
+        border: 1px solid #434343;
+        -moz-border-radius: 3px;
+        -webkit-border-radius: 3px;
+        border-radius: 3px;
+        height: 35px;
+        width: 110px;
+        background-color:#434343;
+        font-size:14px;
+        color:#d3d4d4;
+        margin-top:10px;
+        margin-bottom:15px;
+        cursor: pointer;
+      }
+      button.small-comment {
+        border: 1px solid #434343;
+        -moz-border-radius: 3px;
+        -webkit-border-radius: 3px;
+        border-radius: 3px;
+      height: 36px;
+      width: 19%;
+        background-color:#434343;
+        font-size:14px;
+        color:#fff;
+        cursor: pointer;
+        display: inline;
+        vertical-align: top;
+        margin-left: 0;
+
+        @media only screen and (max-width : 640px) {
+            width: 100%;
+        }   
+      }
+      button.small-comment:hover:enabled {
+        background-color:#272727;
+      }
+      button.small-comment:disabled {
+          cursor: default;opacity:0.4;
+      }
+      button.comment:hover:enabled {
+        background-color:#272727;
+      }
+      button.comment:disabled {
+          cursor: default;opacity:0.4;
+      }
+  }
 }
 
-.activity-checkin:hover {
-	background-color: #f9f9f9;
+.btn-show-more {
+  @media only screen and (max-width : 640px) {
+    background-color: #efefef;
+      font-size: 14px;
+      display: block;
+      width: 100%;
+      padding: 10px;
+      font-weight: bold;
+  }   
+}
+
+/* No Comments */
+.no-comments {
+  color: #aaa;
+  margin-top: -15px;
+}
+
+.new-comment {
+  textarea {
+    height: 35px;
+  }
+  .expand {
+    height: 120px;
+  }
+}
+
+.visibility {
+  overflow: hidden;
+  margin: 15px 0;
+
+  h3, label {
+    float: left;
+    margin: 5px 0;
+  }
+  h3 {
+    margin: 5px 20px 0 0;
+  }
+    a {
+      cursor: pointer;
+    }
 }
 
 
 
 
-.activity-comment {
-    line-height: 125%;
-    white-space: pre-wrap;
-}
+
+
+
+
