@@ -45,7 +45,7 @@
             </div>    
         
             <div class="comment-copy" ng-show="!editMode" style="margin-top:0px;">
-                <div class="activity-comment comment-text" ng-show="!editMode" read-more ng-model="comment.content" words="true" length="100"></div>
+                <div class="activity-comment comment-text" ng-show="!editMode" read-more ng-model="comment.content" words="false" length="400"></div>
             </div>
 
             <div class="comment-replies">
@@ -82,7 +82,7 @@
                                 <button class="btn btn-link btn-sm" ng-click="cancelEdit()">Cancel</button>
                             </form>
                         </div>
-                        <div class="comment-reply-copy comment-text" ng-show="!editMode" read-more ng-model="reply.content" words="true" length="100"></div>
+                        <div class="comment-reply-copy comment-text" ng-show="!editMode" read-more ng-model="reply.content" words="false" length="400"></div>
                     </div>
                 </div>
                 <div class="comment-reply-textarea">
