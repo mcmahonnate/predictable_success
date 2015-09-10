@@ -4,7 +4,7 @@
             <i class="fa fa-cog show-popover"></i>
             <ul class="popover-items" style="display:none">
                 <li class="popover-item">
-                    <a ng-click="edit(event.related_object)" class="edit"><i class="fa fa-pencil-square-o"></i>Edit</a>
+                    <a ng-click="edit(event.related_object)" class="edit"><i class="fa fa-pencil-square-o"></i> Edit</a>
                 </li>
                 <li class="popover-item">
                     <a ng-click="deleteEvent(event, events)"><i class="fa fa-trash-o"></i> Delete</a>
@@ -37,7 +37,7 @@
                 <span class="segment employee-segment-background-color-{{ event.employee.current_talent_category }}"></span>
             </div>
         </div>
-        <div class="activity-comment comment-text" ng-show="!editMode" read-more ng-model="event.description" words="true" length="100"></div> 
+        <div class="activity-comment comment-text" ng-show="!editMode" read-more ng-model="event.description" words="false" length="400"></div> 
     </div>
 
     <!-- Comment Editor -->
@@ -92,6 +92,7 @@
                 </div>
                 <a class="comment-reply-name"
                    ng-href="#/employees/{{ reply.owner.employee.id }}">{{ reply.owner.employee.full_name }}</a>
+                   replied 
                 <span class="timestamp"
                       title="{{ reply.created_date | date:'MMM d, yyyy h:mma' }}">{{ reply.created_date | fromNow }}</span>
 
@@ -110,7 +111,7 @@
                         </button>
                     </form>
                 </div>
-                <div class="comment-reply-copy comment-text" ng-show="!editMode" read-more ng-model="reply.content" words="true" length="100"></div>
+                <div class="comment-reply-copy comment-text" ng-show="!editMode" read-more ng-model="reply.content" words="false" length="400"></div>
             </div>
         </div>
         <div class="comment-reply-textarea">

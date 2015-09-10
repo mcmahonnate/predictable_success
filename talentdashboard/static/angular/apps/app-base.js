@@ -11,7 +11,7 @@ var app = angular.module('tdb', [
         'tdb.checkins.services', 'tdb.checkins.controllers',
         'tdb.services.comments', 'tdb.controllers.comments',
         'tdb.engagement.services', 'angular.filter',
-        'angular-carousel', 'analytics', 'ui.bootstrap', 'ngCsv','ngImgCrop', 'ngRoute','ui-notification', 'ngMessages'])
+        'angular-carousel', 'analytics', 'ui.bootstrap', 'ngCsv','ngImgCrop', 'ngRoute','ui-notification', 'ngMessages', 'readMore'])
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.
             when('/', {resolve: {authorizeRoute: authorizeRoute}}).
