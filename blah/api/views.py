@@ -38,7 +38,7 @@ class CommentList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         subject = self.get_object()
-        return subject.comments.all()
+        return Comment.objects.get_for_object(subject)
 
     def create(self, request, *args, **kwargs):
         deserializer = CreateCommentSerializer(data=request.data)

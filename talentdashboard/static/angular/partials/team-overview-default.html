@@ -9,7 +9,7 @@
             <div ng-init="view='lead-view'" ng-include="'/static/angular/partials/_widgets/employees-snapshot.html'"></div>
         </div> 
         <div class="col-sm-7 col-md-8 col-lg-7">
-            <div ng-include="'/static/angular/partials/_widgets/activity.html'" ng-controller="ActivityCtrl" ng-init="init(view='team-view', path='teams', id=teamId)"></div>
+            <div ng-include="'/static/angular/partials/_widgets/activity.html'" ng-controller="ActivityCtrl" data-view="team"></div>
         </div>
       </div>
 </div>

@@ -232,3 +232,6 @@ class Comment(models.Model):
         del self.owner_content_type
         del self.owner_id
         self.save()
+
+    class Meta:
+        ordering = ['-created_date']
