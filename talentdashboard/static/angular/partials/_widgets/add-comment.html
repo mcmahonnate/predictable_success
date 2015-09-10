@@ -1,26 +1,12 @@
 <div class="panel new-comment">
     <h2 class="panel-title">Add Comment</h2>
-    <textarea class="form-control" ng-model="newComment.text" ng-class="{'expand': comment.expandTextArea, 'compress': !comment.expandTextArea}" ng-click="comment.expandTextArea=true;toggleCommentTextExpander(comment)" rows="1" cols="40" placeholder="Add a comment about {{employee.full_name}}..."></textarea>
-    <div class="visibility" style="display:none;">
-
-        <label>
-            <input ng-model="newComment.include_in_daily_digest" ng-checked="newComment.include_in_daily_digest" type="checkbox"> Include in <a ng-click="showMembers()">Daily Digest Email</a>
-        </label>
-
-        <button class="btn btn-primary pull-right" ng-disabled="!newComment.text" ng-click="addComment();">Comment</button>
-    
-        <div class="hide">
-        <!-- NOTE: figure out how to work this in according to new spec -->
-
-            <div><span class="glyphicon glyphicon-edit"></span></div>
-            <span style="padding:7px">Engagement</span>
-            <ul style="padding:5px">
-                <li ng-repeat="choice in engagement_choices" ng-click="set_choice(choice.id)" class="engage-select" style="padding:5px"><span ng-class="{'glyphicon-check': is_selected(choice.id)}" class="glyphicon" style="padding-right:5px"></span><span class="{{choice.css}} small"> {{choice.title}}</span></li>
-            </ul>
-            <div id="editActions" style="right:2px;bottom:-33px;">
-                <button class="button small blue" ng-disabled="disable_save_engagement()" style="margin-bottom:3px;" ng-click="update_engagement();editEngagement=false">Save</button>
-                <button class="button small orange" style="margin-bottom:3px;" ng-click="cancel_engagement();">Cancel</button>
-            </div>
-        </div>
-    </div>     
+    <form name="addCommentForm">
+        <textarea class="form-control" ng-model="newComment.content" name="content" ng-class="{'expand': comment.expandTextArea, 'compress': !comment.expandTextArea}" ng-click="comment.expandTextArea=true;toggleCommentTextExpander(comment)" rows="1" cols="40" placeholder="Add a comment about {{employee.full_name}}..."></textarea>
+        <div class="visibility" style="display:none;">
+            <label>
+                <input name="include_in_daily_digest" ng-model="newComment.include_in_daily_digest" type="checkbox"> Include in <span ng-controller="ShowDailyDigestCtrl"><a ng-click="showMembers()">Daily Digest Email</a></span>
+            </label>
+            <button class="btn btn-primary pull-right" ng-disabled="!newComment.content" ng-click="add(addCommentForm);">Comment</button>
+        </div> 
+    </form>        
 </div>    

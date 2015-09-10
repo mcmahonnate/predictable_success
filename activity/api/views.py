@@ -1,4 +1,6 @@
+from django.http import Http404
 from rest_framework import views
+from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import PermissionDenied
@@ -7,6 +9,8 @@ from ..models import Event
 from .serializers import EventSerializer
 from talentdashboard.views.views import StandardResultsSetPagination
 from org.models import Employee
+from checkins.models import CheckIn
+from blah.models import Comment
 
 
 class EmployeeEventList(views.APIView):
@@ -43,7 +47,7 @@ class EventList(views.APIView):
         return paginator.get_paginated_response(serializer.data)
 
 
-def _get_event_list(request, requester, employee_ids):
+def _get_event_list_for_employees(request, requester, employee_ids):
     if not employee_ids:
         return Response(None, status=status.HTTP_404_NOT_FOUND)
     qs = Event.objects.get_events_for_employees(requester=requester, employee_ids=employee_ids)
@@ -60,8 +64,7 @@ class LeadEventList(views.APIView):
     def get(self, request, format=None):
         requester = Employee.objects.get(user__id=request.user.id)
         employee_ids = Employee.objects.get_current_employees_by_team_lead(lead_id=requester.id).values('id')
-        return _get_event_list(request, requester, employee_ids)
-
+        return _get_event_list_for_employees(request, requester, employee_ids)
 
 
 class CoachEventList(views.APIView):
@@ -70,8 +73,7 @@ class CoachEventList(views.APIView):
     def get(self, request, format=None):
         requester = Employee.objects.get(user__id=request.user.id)
         employee_ids = Employee.objects.get_current_employees_by_coach(coach_id=requester.id).values('id')
-        return _get_event_list(request, requester, employee_ids)
-
+        return _get_event_list_for_employees(request, requester, employee_ids)
 
 
 class TeamEventList(views.APIView):
@@ -80,4 +82,30 @@ class TeamEventList(views.APIView):
     def get(self, request, pk, format=None):
         requester = Employee.objects.get(user__id=request.user.id)
         employee_ids = Employee.objects.get_current_employees_by_team(team_id=pk).values('id')
-        return _get_event_list(request, requester, employee_ids)
+        return _get_event_list_for_employees(request, requester, employee_ids)
+
+
+class CheckInEventList(generics.ListAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = EventSerializer
+
+    def get_object(self):
+        pk = self.kwargs['pk']
+        return CheckIn.objects.get(pk=pk)
+
+    def get_queryset(self):
+        subject = self.get_object()
+        return Event.objects.get_events_for_object(subject)
+
+
+class CommentEvent(generics.RetrieveAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = EventSerializer
+
+    def get_object(self):
+        pk = self.kwargs['pk']
+        comment = Comment.objects.get(pk=pk)
+        event = Event.objects.get_events_for_object(comment).first()
+        if event is None:
+            raise Http404
+        return event

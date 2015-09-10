@@ -8,6 +8,7 @@ VISIBILITY_CHOICES = (
     (3, 'Everyone'),
 )
 
+
 class ModelCommentManager(models.Manager):
     """
     A manager that retrieves comments for a particular calling instance.
@@ -164,6 +165,7 @@ class CommentDescriptor(object):
     def __delete__(self, instance):
         Comment.objects.delete_comments(instance)
 
+
 class Comment(models.Model):
     """
     Represents a generic comment.
@@ -188,6 +190,10 @@ class Comment(models.Model):
             return self.content_type.get_object_for_this_type(pk = self.object_id)
         else:
             return None
+
+    @property
+    def replies(self):
+        return list(Comment.objects.get_for_object(self))
 
     @property
     def associated_object(self):
@@ -226,3 +232,6 @@ class Comment(models.Model):
         del self.owner_content_type
         del self.owner_id
         self.save()
+
+    class Meta:
+        ordering = ['-created_date']

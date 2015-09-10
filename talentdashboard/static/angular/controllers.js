@@ -925,7 +925,7 @@ angular.module('tdb.controllers', [])
         };
     }])
 
-    .controller('CoachDetailCtrl', ['$scope', 'Events', '$rootScope', '$location', '$routeParams', 'User', 'Employee', 'Coachees', 'SalaryReport', 'TalentReport', '$http', 'analytics', 'Engagement', 'TalentCategories', function ($scope, Events, $rootScope, $location, $routeParams, User, Employee, Coachees, SalaryReport, TalentReport, $http, analytics, Engagement, TalentCategories) {
+    .controller('CoachDetailCtrl', ['$scope', 'Event', '$rootScope', '$location', '$routeParams', 'User', 'Employee', 'Coachees', 'SalaryReport', 'TalentReport', '$http', 'analytics', 'Engagement', 'TalentCategories', function ($scope, Event, $rootScope, $location, $routeParams, User, Employee, Coachees, SalaryReport, TalentReport, $http, analytics, Engagement, TalentCategories) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         $scope.coach = $rootScope.currentUser.employee;
 
@@ -1352,6 +1352,16 @@ angular.module('tdb.controllers', [])
         $scope.cancel = function () {
             $modalInstance.dismiss();
         }
+    }])
+
+    .controller('ShowDailyDigestCtrl', ['$scope', '$modal', function ($scope, $modal) {
+        $scope.showMembers = function () {
+            $modal.open({
+                animation: true,
+                templateUrl: '/static/angular/partials/_modals/show-members.html',
+                controller: 'DailyDigestCtrl'
+            });
+        };
     }])
 
     .controller('EngagementSurveyCtrl', ['$scope', '$window', '$routeParams', '$location', 'EngagementSurvey', 'analytics', function ($scope, $window, $routeParams, $location, EngagementSurvey, analytics) {

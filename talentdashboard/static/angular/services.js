@@ -406,15 +406,6 @@ angular.module('tdb.services', ['ngResource'])
     return Comments;
 }])
 
-.factory('Comment', ['$resource', '$http', function($resource, $http) {
-    var actions = {
-        'update': { method:'PUT', isArray: false },
-        'remove': { method:'DELETE' },
-    };
-    var res = $resource('/api/v1/comments/:id/', {id:'@id'}, actions);
-    return res;
-}])
-
 .factory('CommentReport', ['$resource', '$http', function($resource, $http) {
     var res = $resource('/api/v1/reports/comments');
     return res;

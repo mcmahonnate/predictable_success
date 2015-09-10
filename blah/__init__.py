@@ -30,6 +30,8 @@ OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
+default_app_config = 'blah.apps.CommentsConfig'
+
 from blah.models import CommentDescriptor
 
 STATUS = "dev"

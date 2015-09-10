@@ -37,16 +37,13 @@
         	<button class="btn btn-link btn-sm" ng-click="cancelEditComment(comment);showSummaryEdit=false">Cancel</button>
         </div>
 	</div>
-	<div class="panel panel-happiness" ng-show="checkin.happiness" style="overflow:hidden">
-		<h4 class="panel-title pull-left">Happiness: 
+	<div class="checkin-happiness panel" ng-show="checkin.happiness">
+		<h2 class="panel-title pull-left">Happiness: 
 			<span class="employee-happiness-color-{{checkin.happiness.assessment}}">{{ checkin.happiness.assessment_verbose }}</span>
-		</h4>
+		</h2>
 	</div>	
-
-
-    <div class="panel panel-tasks todos" ng-if="checkin.tasks.length > 0">
-		<h4 class="panel-title">Tasks</h4>
-	    
+    <div class="checkin-tasks panel todos" ng-if="checkin.tasks.length > 0">
+		<h2 class="panel-title">Tasks</h2>
 	    <tabset ng-show="checkin.tasks.length > 0">
 	        <tab heading="To Do" active="true">
 	            <div ng-show="checkin.tasks.length === 0 && !busy" class="todos-empty">
@@ -85,5 +82,9 @@
 	            <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
 	        </tab>
 	    </tabset>
-    </div>  
+    </div>
+    <div ng-controller="AddCheckInCommentCtrl">
+        <div ng-include="'/static/angular/partials/_widgets/add-comment.html'"></div>
+        <div ng-include="'/static/angular/partials/_widgets/comments.html'"></div>
+    </div>
 </div>

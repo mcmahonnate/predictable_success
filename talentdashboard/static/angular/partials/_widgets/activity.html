@@ -1,160 +1,21 @@
-<div class="comments panel" ng-if="currentUser.can_view_comments" >
+<div class="activity panel" ng-if="currentUser.can_view_comments">
     <h2 class="panel-title">Activity</h2>
 
-    <!-- Empty discussion messages -->
+    <!-- Activity stream -->
+    <div class="activity-items" ng-repeat="event in events | orderBy:'date':true">
+        <div ng-include="'/static/angular/partials/_widgets/activity/activity-comment.html'"></div>
+        <div ng-include="'/static/angular/partials/_widgets/activity/activity-checkin.html'"></div>
+    </div>
+
+    <!-- No activity message -->
     <div ng-show="comments.length==0" class="no-comments">
         <p>
             <span ng-show="view == 'employee-view'">Start the discussion by entering a comment above.</span>
             <span ng-show="view == 'team-view'">There are not any discussions yet.</span>
-        </p>  
+        </p>
     </div>
-    <div class="comment" ng-repeat="event in events | orderBy:'date':true">
-        <div class="comment-owner-avatar-container">
-            <a ng-href="#/employees/{{event.user.employee.id}}" class="medium-headshot">
-                <img ng-src="{{ event.user.employee.avatar_small }}" alt="{{event.user.employee.full_name}}'s avatar" />
-            </a>
-        </div>
-        <div class="comment-item">
-            <div class="comment-title">
-                <div ng-show="event.type == 'comment' && event.user.id==currentUser.id" class="comment-actions pull-right">
-                    <i class="fa fa-cog show-popover"></i>
-                    <ul class="popover-items" style="display:none">
-                        <li class="popover-item" ng-show="event.user.id==currentUser.id">
-                            <a ng-click="editComment(event);showCommentEdit=true" class="edit"><i class="fa fa-pencil-square-o"></i> Edit</a>
-                        </li>
-                        <li class="popover-item" ng-show="event.user.id==currentUser.id">
-                            <a ng-click="deleteComment(event)"><i class="fa fa-trash-o"></i> Delete</a>
-                        </li>
-                    </ul>
-                </div>   
 
-                <a ng-href="#/employees/{{event.user.employee.id}}" class="comment-title-employee-name">{{event.user.employee.full_name}}</a>
-                {{ event.verb }} 
-                <span ng-show="event.type == 'comment'">on</span>
-                <span ng-show="event.type == 'check in'">with</span>
-                <a ng-href="#/employees/{{event.employee.id}}" class="comment-title-employee-name">{{event.employee.full_name}}</a>
-                <span class="timestamp" data-toggle="tooltip" data-placement="top" title="{{event.date | date:'MMM d, yyyy h:mma'}}">{{event.date | fromNow }}</span>
-            </div>
-            <div ng-show="showCommentEdit" class="comment-editor">
-                <div class="comment-reply-copy">
-                    <textarea 
-                        ng-model="event.comment.content"
-                        msd-elastic
-                        class="form-control edit-textarea">
-                    </textarea>
-                </div> 
-                <div class="visibility">
-                    <label>
-                        <input ng-model="event.comment.include_in_daily_digest" ng-checked="event.comment.include_in_daily_digest" type="checkbox"> Include in <a ng-click="showMembers()">Daily Digest Email</a>
-                    </label>
-                </div>
-                <button class="btn btn-primary btn-sm" ng-disabled="!event.comment.content" ng-click="saveComment(event);showCommentEdit=false">Save Edits</button>
-                <button class="btn btn-link btn-sm" ng-click="cancelEditComment(event);showCommentEdit=false">Cancel</button>
-            </div>
-
-            <div class="comment-copy" ng-show="!showCommentEdit">
-                <div ng-show="event.type == 'comment'">
-                    <div class="avatar-container pull-right hide">
-                        <a class="large-headshot" ng-show="view != 'employee-view'" ng-href="#/employees/{{event.employee.id}}">
-                            <img ng-src="{{ event.employee.avatar_small }}" alt="{{ event.employee.full_name }}'s avatar" />
-                        </a>
-                        <div class="employee-attribute">
-                            <span class="segment employee-segment-background-color-{{event.employee.current_talent_category}}"></span>
-                        </div>
-                    </div>   
-                    <div class="activity-comment" 
-                        ng-init="length=500" 
-                        ng-bind="event.description | cut:true:length">
-                    </div> 
-                    <span ng-show="event.description.length>length" ng-init="showMoreButton=true">
-                        <a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a>
-                        <a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a>
-                    </span>
-                    <span class="total-replies" ng-show="event.subcomments.length == 1">
-                        {{event.subcomments.length}} reply
-                    </span>
-                    <span class="total-replies" ng-show="event.subcomments.length > 1">
-                        {{event.subcomments.length}} replies
-                    </span>   
-                </div>     
-            </div>
-        </div>
-
-        <!-- Check-in -->
-        <a class="activity-checkin row" href="#/checkins/{{ event.event_id }}" ng-show="event.type == 'check in'">
-            <div class="avatar-container col-xs-2">
-                <span class="large-headshot">
-                    <img ng-src="{{ event.employee.avatar_small }}" alt="{{ event.employee.full_name }}" />
-                </span>
-                <div class="employee-attribute" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{ talentCategories[event.employee.current_talent_category].label }}">
-                    <span class="segment employee-segment-background-color-{{event.employee.current_talent_category}}"></span>
-                </div>
-            </div> 
-
-            <div class="activity-checkin-details" ng-class="{'col-xs-12 col-sm-10': view='employee-view', 'col-xs-12 col-sm-10': view='team'}">
-                <div class="activity-checkin-type pull-right">
-                    <span class="glyphicon glyphicon-top glyphicon-user"></span> 
-                    <span class="glyphicon glyphicon-outline glyphicon-user"></span> 
-                    <span class="glyphicon glyphicon-user"></span>   
-                </div>
-                <h3 class="comment-title-employee-name">{{event.employee.full_name}}</h3>  
-                <span class="activity-checkin-summary" ng-init="length=200" ng-bind-html="event.description | cut:true:length" style="line-height: 125%"></span> 
-                <span ng-show="event.description.length>length" ng-init="showMoreButton=true">
-                    <span ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</span>
-                    <span ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</span>
-                </span> 
-            </div>
-        </a>
-
-     
-        <div ng-show="event.type == 'comment'" class="comment-replies" ng-show="showCommentInput || event.subcomments">
-            <div class="comment-reply" ng-repeat="subcomment in event.subcomments | orderBy:'created_date'">
-                <div class="comment-actions pull-right" ng-show="subcomment.owner.id==currentUser.id">
-                    <i class="fa fa-cog show-popover"></i>
-                    <ul class="popover-items" style="display:none">
-                        <li class="popover-item" ng-show="subcomment.owner.id==currentUser.id">
-                            <a ng-click="showSubCommentEdit=true" class="edit"><i class="fa fa-pencil-square-o"></i> Edit</a>
-                        </li>
-                        <li class="popover-item" ng-show="subcomment.owner.id==currentUser.id">
-                            <a ng-click="deleteSubComment(event, subcomment)"><i class="fa fa-trash-o"></i> Delete</a>
-                        </li>
-                    </ul>
-                </div>                            
-                <div class="comment-reply-avatar-container"> 
-                    <a ng-href="#/employees/{{subcomment.owner.employee.id}}" class="small-headshot">
-                        <img ng-src="{{ subcomment.owner.employee.avatar_small }}" alt="{{subcomment.owner.employee.full_name}}'s avatar" />
-                    </a>
-                </div>
-                <a class="comment-reply-name" ng-href="#/employees/{{subcomment.owner.employee.id}}">{{subcomment.owner.employee.full_name}}</a> 
-                <span class="timestamp" title="{{subcomment.created_date | date:'MMM d, yyyy h:mma' }}">{{subcomment.created_date | fromNow }}</span>     
-                <div class="comment-reply-copy" ng-show="showSubCommentEdit">
-                    <textarea 
-                        ng-model="subcomment.content"
-                        msd-elastic
-                        class="form-control edit-textarea">
-                    </textarea>
-                    <button class="btn btn-primary btn-sm" ng-disabled="!subcomment.content" ng-click="saveSubComment(subcomment, event);showSubCommentEdit=false">Save Edits</button>
-                    <button class="btn btn-link btn-sm" ng-click="cancelEditSubComment(subcomment, event);showSubCommentEdit=false">Cancel</button>
-                </div>
-                <div class="comment-reply-copy" ng-show="!showSubCommentEdit">
-                    <span ng-init="length=500" data-ng-bind="subcomment.content | cut:true:length" style="white-space: pre-wrap;"></span>
-                    <span ng-show="subcomment.content.length>length" ng-init="showMoreButton=true">
-                        <a ng-click="length=0;showMoreButton=false;" ng-show="showMoreButton" style="color: #8b8b8b;cursor: pointer">more</a>
-                        <a ng-click="length=500;showMoreButton=true" ng-show="!showMoreButton" style="color: #8b8b8b;cursor: pointer">less</a>
-                    </span>
-                </div>
-            </div>
-            <div ng-show="showCommentInput || event.subcomments" class="comment-reply-textarea">
-                <textarea class="form-control" 
-                    msd-elastic 
-                    ng-model="event.newSubCommentText"
-                    rows="1" cols="40" 
-                    placeholder="Add a reply..." >
-                </textarea>
-                <button class="small-comment" ng-disabled="!event.newSubCommentText" ng-click="addSubComment(event);expandTextArea=false">Comment</button>
-            </div>
-        </div>
-    </div>
-    <button class="btn btn-link btn-sm btn-show-more" ng-show="has_next && !busy" ng-click="loadEvents()">Load More Activity</button>
-    <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
+    <!-- Load more button -->
+    <button class="btn btn-link btn-sm btn-show-more" ng-show="hasNextPage" ng-click="loadNextPage()">Load More Activity</button>
+    <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner"/></div>    
 </div>

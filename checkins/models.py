@@ -1,3 +1,4 @@
+import blah
 from django.db import models
 from org.models import Employee
 from engagement.models import Happiness
@@ -41,3 +42,5 @@ class CheckIn(models.Model):
 
     def __unicode__(self):
         return u'{0} "{1}" Check-in with {2} on {3}'.format(self.host, self.get_type_description(), self.employee, self.date.strftime('%x'))
+
+blah.register(CheckIn)

@@ -10,7 +10,7 @@
         </div>
         <div class="col-sm-7">
             <div ng-include="'/static/angular/partials/_widgets/todos.html'" data-filter="mine" data-view="my-view" ng-controller="TaskListCtrl"></div>
-            <div ng-include="'/static/angular/partials/_widgets/activity.html'" ng-controller="ActivityCtrl" ng-init="init(view='team-view', path='leads')"></div>
+            <div ng-include="'/static/angular/partials/_widgets/activity.html'" ng-controller="ActivityCtrl" data-view="leader"></div>
         </div>
       </div>
 </div>
