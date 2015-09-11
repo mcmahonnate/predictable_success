@@ -46,14 +46,6 @@ angular.module('tdb.controllers', [])
             return new Date();
         };
 
-        $rootScope.engagement_choices = [
-            {id: 5, title: 'Very Happy', css: 'veryhappy'},
-            {id: 4, title: 'Happy', css: 'happy'},
-            {id: 3, title: 'Indifferent', css: 'indifferent'},
-            {id: 2, title: 'Unhappy', css: 'unhappy'},
-            {id: 1, title: 'Very Unhappy', css: 'veryunhappy'}
-        ];
-
         $rootScope.lazyround = function (num) {
             return Math.abs(Number(num)) >= 1.0e+9
 
@@ -80,181 +72,6 @@ angular.module('tdb.controllers', [])
             list.splice(index, 1);
             list.splice(index, 0, newItem);
         };
-    }])
-
-    .controller('MyCoacheesEvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'MyCoacheesPvpEvaluation', 'Team', 'Customers', 'TalentCategories', 'analytics', function ($scope, $rootScope, $location, $routeParams, MyCoacheesPvpEvaluation, Team, Customers, TalentCategories, analytics) {
-        analytics.trackPage($scope, $location.absUrl(), $location.url());
-        Customers.get(function (data) {
-            $scope.customer = data;
-        });
-
-        $scope.hideTeamMenu = true;
-        $scope.kolbe_values = [0, 1, 2, 3];
-        $scope.vops_values = [0, 320, 6400, 960];
-        $scope.kolbe_fact_finder_labels = ['simplify', 'explain', 'specify'];
-        $scope.kolbe_follow_thru_labels = ['adapt', 'maintain', 'systemize'];
-        $scope.kolbe_quick_start_labels = ['improvise', 'modify', 'stabilize'];
-        $scope.kolbe_implementor_labels = ['imagine', 'restore', 'build'];
-        $scope.evaluations = MyCoacheesPvpEvaluation.getCurrentEvaluations();
-        $scope.teamId = $routeParams.team_id;
-        $scope.talentCategory = $routeParams.talent_category;
-        $scope.categoryName = TalentCategories.getLabelByTalentCategory($scope.talentCategory)
-        $scope.happy = $routeParams.happy;
-        $scope.days_since_happy = $routeParams.days_since_happy;
-        $scope.fact_finder = $routeParams.fact_finder;
-        $scope.follow_thru = $routeParams.follow_thru;
-        $scope.quick_start = $routeParams.quick_start;
-        $scope.implementor = $routeParams.implementor;
-        $scope.vops = {visionary: false, operator: false, processor: false, synergist: false};
-        $scope.teamName = '';
-        $scope.staleDays = 360;
-        $scope.staleDate = new Date();
-        $scope.staleDate.setDate($scope.staleDate.getDate() - $scope.staleDays);
-        if ($routeParams.team_id) {
-            Team.get(
-                {id: $routeParams.team_id},
-                function (data) {
-                    $scope.teamName = data.name
-                    $scope.teamId = data.id
-                }
-            );
-        }
-        $scope.menu = {show: false};
-        $scope.clearSynegistStyle = function () {
-            $scope.vops = {visionary: false, operator: false, processor: false, synergist: false};
-        };
-        $scope.setTeamFilter = function (id, name) {
-            $scope.teamId = id;
-            $scope.teamName = name;
-        };
-
-        $scope.staleHappy = function (date) {
-            return ($rootScope.parseDate(date) < $scope.staleDate)
-        };
-        $scope.sortHappy = function (evaluation) {
-            if (evaluation.employee.happiness && $rootScope.parseDate(evaluation.employee.happiness_date) > $scope.staleDate) {
-                return -evaluation.employee.happiness;
-            } else {
-                return -1;
-            }
-        }
-    }])
-
-
-    .controller('MyTeamEvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'MyTeamPvpEvaluation', 'Team', 'Customers', 'TalentCategories', 'analytics', function ($scope, $rootScope, $location, $routeParams, MyTeamPvpEvaluation, Team, Customers, TalentCategories, analytics) {
-        analytics.trackPage($scope, $location.absUrl(), $location.url());
-        Customers.get(function (data) {
-            $scope.customer = data;
-        });
-        $scope.hideTeamMenu = true;
-        $scope.kolbe_values = [0, 1, 2, 3];
-        $scope.kolbe_fact_finder_labels = ['simplify', 'explain', 'specify'];
-        $scope.kolbe_follow_thru_labels = ['adapt', 'maintain', 'systemize'];
-        $scope.kolbe_quick_start_labels = ['improvise', 'modify', 'stabilize'];
-        $scope.kolbe_implementor_labels = ['imagine', 'restore', 'build'];
-        $scope.evaluations = MyTeamPvpEvaluation.getCurrentEvaluations();
-        $scope.teamId = $routeParams.team_id;
-        $scope.talentCategory = $routeParams.talent_category;
-        $scope.categoryName = TalentCategories.getLabelByTalentCategory($scope.talentCategory)
-        $scope.happy = $routeParams.happy;
-        $scope.days_since_happy = $routeParams.days_since_happy;
-        $scope.fact_finder = $routeParams.fact_finder;
-        $scope.follow_thru = $routeParams.follow_thru;
-        $scope.quick_start = $routeParams.quick_start;
-        $scope.implementor = $routeParams.implementor;
-        $scope.vops = {visionary: false, operator: false, processor: false, synergist: false};
-        $scope.teamName = '';
-        $scope.staleDays = 360;
-        $scope.staleDate = new Date();
-        $scope.staleDate.setDate($scope.staleDate.getDate() - $scope.staleDays);
-        if ($routeParams.team_id) {
-            Team.get(
-                {id: $routeParams.team_id},
-                function (data) {
-                    $scope.teamName = data.name
-                    $scope.teamId = data.id
-                }
-            );
-        }
-        $scope.menu = {show: false};
-        $scope.clearSynegistStyle = function () {
-            $scope.vops = {visionary: false, operator: false, processor: false, synergist: false};
-        };
-        $scope.setTeamFilter = function (id, name) {
-            $scope.teamId = id;
-            $scope.teamName = name;
-        };
-
-        $scope.staleHappy = function (date) {
-            return ($rootScope.parseDate(date) < $scope.staleDate)
-        };
-        $scope.sortHappy = function (evaluation) {
-            if (evaluation.employee.happiness && $rootScope.parseDate(evaluation.employee.happiness_date) > $scope.staleDate) {
-                return -evaluation.employee.happiness;
-            } else {
-                return -1;
-            }
-        }
-    }])
-
-    .controller('EvaluationListCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'PvpEvaluation', 'Team', 'Customers', 'TalentCategories', 'analytics', function ($scope, $rootScope, $location, $routeParams, PvpEvaluation, Team, Customers, TalentCategories, analytics) {
-        analytics.trackPage($scope, $location.absUrl(), $location.url());
-        Customers.get(function (data) {
-            $scope.customer = data;
-        });
-        $scope.happiness = '';
-        $scope.hideTeamMenu = false;
-        $scope.kolbe_values = [0, 1, 2, 3];
-        $scope.kolbe_fact_finder_labels = ['simplify', 'explain', 'specify'];
-        $scope.kolbe_follow_thru_labels = ['adapt', 'maintain', 'systemize'];
-        $scope.kolbe_quick_start_labels = ['improvise', 'modify', 'stabilize'];
-        $scope.kolbe_implementor_labels = ['imagine', 'restore', 'build'];
-        $scope.evaluations = PvpEvaluation.getCurrentEvaluations();
-        $scope.teamId = $routeParams.team_id;
-        $scope.talentCategory = $routeParams.talent_category.toString();
-        $scope.categoryName = TalentCategories.getLabelByTalentCategory($scope.talentCategory);
-        $scope.days_since_happy = $routeParams.days_since_happy;
-        $scope.fact_finder = angular.copy($scope.kolbe_fact_finder_labels);
-        $scope.follow_thru = angular.copy($scope.kolbe_follow_thru_labels);
-        $scope.quick_start = angular.copy($scope.kolbe_quick_start_labels);
-        $scope.implementor = angular.copy($scope.kolbe_implementor_labels);
-        $scope.vops = {visionary: false, operator: false, processor: false, synergist: false};
-        $scope.teamName = '';
-        $scope.staleDays = 360;
-        $scope.staleDate = new Date();
-        $scope.staleDate.setDate($scope.staleDate.getDate() - $scope.staleDays);
-        if ($routeParams.team_id) {
-            Team.get(
-                {id: $routeParams.team_id},
-                function (data) {
-                    $scope.teamName = data.name
-                    $scope.teamId = data.id
-                }
-            );
-        }
-
-        $scope.menu = {show: false};
-        $scope.clearSynegistStyle = function () {
-            $scope.vops = {visionary: false, operator: false, processor: false, synergist: false};
-        };
-        $scope.setTeamFilter = function (id, name) {
-            $scope.teamId = id;
-            $scope.teamName = name;
-        };
-        $scope.setHappyFilter = function (id, name) {
-            $scope.happy = id;
-            $scope.happyName = name;
-        };
-        $scope.staleHappy = function (date) {
-            return ($rootScope.parseDate(date) < $scope.staleDate)
-        };
-        $scope.sortHappy = function (evaluation) {
-            if (evaluation.employee.happiness && $rootScope.parseDate(evaluation.employee.happiness_date) > $scope.staleDate) {
-                return -evaluation.employee.happiness;
-            } else {
-                return -1;
-            }
-        }
     }])
 
     .controller('AddEditBioCtrl', ['$scope', '$rootScope', '$routeParams', '$modalInstance', '$location', 'employee', 'leadership', 'employees', 'teams', 'Employee', 'EmployeeLeader', 'fileReader', 'PhotoUpload', function($scope, $rootScope, $routeParams, $modalInstance, $location, employee, leadership, employees, teams, Employee, EmployeeLeader, fileReader, PhotoUpload) {
@@ -1112,37 +929,6 @@ angular.module('tdb.controllers', [])
         $scope.salaryReport = SalaryReport.query();
     }])
 
-    .controller('PeopleReportCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'HappinessReport', 'EngagementReport', 'TalentCategoryReport', 'Engagement', 'analytics', function ($scope, $rootScope, $location, $routeParams, HappinessReport, EngagementReport, TalentCategoryReport, Engagement, analytics) {
-        analytics.trackPage($scope, $location.absUrl(), $location.url());
-        $scope.days_ago = 120;
-        EngagementReport.getReportForCompany($scope.days_ago, function (data) {
-            $scope.talentCategoryReport = data;
-        });
-
-        HappinessReport.getReportForCompany($scope.days_ago, true).$promise.then(function (response) {
-            $scope.neglectedEmployees = response;
-            angular.forEach($scope.neglectedEmployees, function (neglected) {
-                neglected.happy = Engagement.getCurrentEngagement(neglected.employee.id);
-            });
-        });
-    }])
-
-    .controller('ToDoReportCtrl', ['$scope', '$rootScope', '$location', '$routeParams', '$window', 'EmployeeToDo', 'ToDo', function ($scope, $rootScope, $location, $routeParams, $window, EmployeeToDo, ToDo) {
-        $scope.todos = EmployeeToDo.getReportForCompany(7);
-        $scope.deleteToDo = function (todo) {
-            if ($window.confirm('Are you sure you want to delete this To Do?')) {
-                var data = {id: todo.id};
-                var todo_index = $scope.todos.indexOf(todo);
-                var deleteSuccess = function () {
-                    $scope.todos.splice(todo_index, 1);
-                };
-
-                ToDo.remove(data, function () {
-                    deleteSuccess();
-                });
-            }
-        }
-    }])
 
     .controller('TasksCtrl', ['$scope', '$rootScope', '$location', '$routeParams', '$window', 'EmployeeToDo', 'ToDo', function ($scope, $rootScope, $location, $routeParams, $window, EmployeeToDo, ToDo) {
 
@@ -1308,44 +1094,6 @@ angular.module('tdb.controllers', [])
         };
     }])
 
-    .controller('EmployeeToDoListCtrl', ['$scope', '$routeParams', '$window', 'EmployeeToDo', 'ToDo', 'User', function ($scope, $routeParams, $window, EmployeeToDo, ToDo, User) {
-        EmployeeToDo.query({ id: $routeParams.id }).$promise.then(function (response) {
-                $scope.todos = response;
-            }
-        );
-        $scope.completed_todos = EmployeeToDo.query({ id: $routeParams.id, completed: true });
-        $scope.addToDo = function (id) {
-            var newToDo = {};
-            newToDo.id = -1;
-            newToDo.description = "";
-            newToDo.assigned_to_id = -1;
-            newToDo.employee_id = id;
-            newToDo.due_date = null;
-            newToDo.completed = "";
-            newToDo.edit = true;
-            newToDo.created_by = User.get();
-            $scope.todos.push(newToDo);
-        }
-        $scope.deleteToDo = function (todo) {
-            if ($window.confirm('Are you sure you want to delete this To Do?')) {
-                var data = {id: todo.id};
-                var todo_index = $scope.todos.indexOf(todo);
-                var deleteSuccess = function () {
-                    $scope.todos.splice(todo_index, 1);
-                };
-
-                ToDo.remove(data, function () {
-                    deleteSuccess();
-                });
-            }
-        }
-        $scope.scrubToDo = function (todo) {
-            if (!todo.description) {
-                var todo_index = $scope.todos.indexOf(todo);
-                $scope.todos.splice(todo_index, 1);
-            }
-        }
-    }])
 
     .controller('DailyDigestCtrl', ['$scope', '$modalInstance', 'Employee', function ($scope, $modalInstance, Employee) {
         $scope.members = Employee.query({group_name: 'Daily Digest Subscribers', show_hidden: true});
