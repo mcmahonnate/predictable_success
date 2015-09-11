@@ -1,6 +1,6 @@
 angular.module('tdb.controllers.profile', [])
 
-    .controller('ProfileCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', '$modal', 'User', 'Employee', 'Team', 'Engagement', 'SendEngagementSurvey', 'EmployeeLeader', 'Attribute', '$http', 'Customers', 'analytics', 'EmployeeMBTI', 'Notification', function ($rootScope, $scope, $location, $routeParams, $window, $modal, User, Employee, Team, Engagement, SendEngagementSurvey, EmployeeLeader, Attribute, $http, Customers, analytics, EmployeeMBTI, Notification) {
+    .controller('ProfileCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', '$modal', 'User', 'Employee', 'Profile','Team', 'Engagement', 'SendEngagementSurvey', 'EmployeeLeader', 'Attribute', '$http', 'Customers', 'analytics', 'EmployeeMBTI', 'Notification', function ($rootScope, $scope, $location, $routeParams, $window, $modal, User, Employee, Profile, Team, Engagement, SendEngagementSurvey, EmployeeLeader, Attribute, $http, Customers, analytics, EmployeeMBTI, Notification) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         Customers.get(function (data) {
             $scope.customer = data;
@@ -28,24 +28,24 @@ angular.module('tdb.controllers.profile', [])
         if (!$scope.employees && $rootScope.currentUser && $rootScope.currentUser.can_view_company_dashboard) {
             $scope.employees = Employee.query();
         }
-        Employee.get(
-            {id: $routeParams.id},
-            function (data) {
-                $scope.employee = data;
-                $scope.employee.hire_date = $rootScope.parseDate($scope.employee.hire_date);
-                if ($scope.employee.current_leader && $scope.employee.current_leader.id == $rootScope.currentUser.employee.id) {
-                    $scope.showCompensation = true;
-                }
+        Profile.get(function(data){
+            $scope.employee = data;
+            $scope.employee.hire_date = $rootScope.parseDate($scope.employee.hire_date);
+            if ($scope.employee.current_leader && $scope.employee.current_leader.id == $rootScope.currentUser.employee.id) {
+                $scope.showCompensation = true;
             }
-        );
+            Engagement.query(
+                {id: $scope.employee.id},
+                function (data) {
+                    $scope.happys = data;
+                }
+            );
+            console.log($scope.employee.hire_date);
+        });
+
 
         $scope.happyIndex = 0;
-        Engagement.query(
-            {id: $routeParams.id},
-            function (data) {
-                $scope.happys = data;
-            }
-        );
+
         $scope.isSurveySending = false;
         $scope.sendSurvey = function () {
             $scope.isSurveySending = true;
@@ -63,7 +63,7 @@ angular.module('tdb.controllers.profile', [])
         $scope.clicked_happy;
 
         EmployeeMBTI.get(
-            {id: $routeParams.id},
+            {id: $rootScope.currentUser.employee.id},
             function (data) {
                 $scope.mbti = data;
                 if ($scope.mbti.description) {
@@ -79,7 +79,7 @@ angular.module('tdb.controllers.profile', [])
         $scope.is_selected = function (value) {
             return $scope.selected == value;
         };
-        Attribute.getAttributesForEmployee($routeParams.id).$promise.then(function(response) {
+        Attribute.getAttributesForEmployee($rootScope.currentUser.employee.id).$promise.then(function(response) {
             $scope.attributes = response;
             var is_even = ($scope.attributes.length % 2 == 0);
             if ($scope.customer.show_vops) {
