@@ -1,4 +1,4 @@
-angular.module('feedback.controllers', [])
+angular.module('tdb.feedback.controllers', [])
     .controller(
         'MenuCtrl',
         ['$scope', '$rootScope', '$location', '$http', 'User',

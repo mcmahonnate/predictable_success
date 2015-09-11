@@ -1,4 +1,4 @@
-angular.module('tdb.controllers.comments', [])
+angular.module('tdb.comments.controllers', [])
 
     .controller('CommentCtrl', ['$scope', '$rootScope', '$window', 'Comment', 'Event', function($scope, $rootScope, $window, Comment, Event) {
         $scope.editedComment = new Comment();
@@ -107,6 +107,23 @@ angular.module('tdb.controllers.comments', [])
             Comment.addToEmployee({ id:$routeParams.id}, $scope.newComment, function(comment) {
                 $rootScope.$broadcast("comments.commentCreated", comment);
                 resetNewComment();
+            });
+        };
+    }])
+
+    .controller('DailyDigestCtrl', ['$scope', '$modalInstance', 'Employee', function ($scope, $modalInstance, Employee) {
+        $scope.members = Employee.query({group_name: 'Daily Digest Subscribers', show_hidden: true});
+        $scope.cancel = function () {
+            $modalInstance.dismiss();
+        }
+    }])
+
+    .controller('ShowDailyDigestCtrl', ['$scope', '$modal', function ($scope, $modal) {
+        $scope.showMembers = function () {
+            $modal.open({
+                animation: true,
+                templateUrl: '/static/angular/partials/_modals/show-members.html',
+                controller: 'DailyDigestCtrl'
             });
         };
     }])

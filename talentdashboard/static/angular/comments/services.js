@@ -1,4 +1,4 @@
-angular.module('tdb.services.comments', ['ngResource'])
+angular.module('tdb.comments.services', ['ngResource'])
 
     .factory('Comment', ['$resource', function ($resource) {
         var actions = {
@@ -24,5 +24,19 @@ angular.module('tdb.services.comments', ['ngResource'])
             }
         };
         return $resource('/api/v1/comments/:id/', {id: '@id'}, actions);
+    }])
+
+    .factory('EmployeeComments', ['$resource', '$http', function($resource, $http) {
+        var actions = {
+            'addNew': { method:'POST' },
+            'update': { method:'PUT' }
+        };
+        var res = $resource('/api/v1/comments/employees/:id/', {id:'@id'}, actions);
+        return res;
+    }])
+
+    .factory('CommentReport', ['$resource', '$http', function($resource, $http) {
+        var res = $resource('/api/v1/reports/comments');
+        return res;
     }])
 ;

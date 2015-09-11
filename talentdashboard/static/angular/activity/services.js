@@ -1,4 +1,4 @@
-angular.module('tdb.services.activity', ['ngResource'])
+angular.module('tdb.activity.services', ['ngResource'])
 
     .factory('Event', ['$resource', function($resource) {
         var actions = {
@@ -19,5 +19,10 @@ angular.module('tdb.services.activity', ['ngResource'])
         Event.getCoachEvents = function(page, success, failure) { return this.get({ path: 'coaches', page: page}, success, failure); };
 
         return Event;
+    }])
+
+    .factory('ActivityReport', ['$resource', '$http', function($resource, $http) {
+        var res = $resource('/api/v1/reports/activity');
+        return res;
     }])
 ;

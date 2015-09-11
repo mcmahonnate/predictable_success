@@ -1,4 +1,4 @@
-angular.module('tdb.services.tasks', ['ngResource'])
+angular.module('tdb.tasks.services', ['ngResource'])
 
     .factory('Task', ['$resource', function ($resource) {
         var checkedPaged  = function(response) {
@@ -86,5 +86,35 @@ angular.module('tdb.services.tasks', ['ngResource'])
 
         var Task = $resource('/api/v1/tasks/:id/', {id: '@id'}, actions);
         return Task;
+    }])
+
+    .factory('EmployeeToDo', ['$resource', '$http', function($resource, $http) {
+        var actions = {
+            'addNew': { method:'POST', data:{description:'@description', completed: '@completed', assigned_to_id: '@assigned_to_id', due_date: '@due_date', owner_id: '@owner_id'}, isArray: false },
+            'update': { method:'PUT', data:{description:'@description'}, isArray: false },
+            'remove': { method:'DELETE' },
+        }
+        var EmployeeToDo = $resource('/api/v1/tasks/employees/:id/', {id:'@id', completed: '@completed'}, actions);
+
+        EmployeeToDo.getReportForCompany = function(days_ahead) {
+            var params = {id: 'all-employees', days_ahead: days_ahead};
+            return this.query(params);
+        };
+
+        return EmployeeToDo;
+    }])
+
+    .factory('TaskReport', ['$resource', '$http', function($resource, $http) {
+        var res = $resource('/api/v1/reports/tasks');
+        return res;
+    }])
+
+    .factory('ToDo', ['$resource', '$http', function($resource, $http) {
+        var actions = {
+            'update': { method:'PUT', data:{description:'@description', completed: '@completed', assigned_to_id: '@assigned_to_id', due_date: '@due_date'}, isArray: false },
+            'remove': { method:'DELETE' },
+        }
+        var res = $resource('/api/v1/tasks/:id/', {id:'@id'}, actions);
+        return res;
     }])
 ;

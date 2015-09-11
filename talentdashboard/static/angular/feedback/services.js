@@ -1,4 +1,4 @@
-angular.module('feedback.services', ['ngResource'])
+angular.module('tdb.feedback.services', ['ngResource'])
     .factory('User', ['$resource', '$http', function ($resource, $http) {
         var currentUser = $resource('api/v1/user-status/');
         return currentUser;
