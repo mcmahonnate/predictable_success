@@ -23,30 +23,28 @@
                 <span class="segment employee-segment-background-color-{{ event.related_object.employee.current_talent_category }}"></span>
             </div>
         </div>
-        <div class="activity-checkin-details"
-             ng-class="{'col-xs-12 col-sm-10': view='employee-view', 'col-xs-12 col-sm-10': view='team'}">
+        <div class="activity-checkin-details" ng-class="{'col-xs-12 col-sm-10': view='employee-view', 'col-xs-12 col-sm-10': view='team'}">
             <div class="activity-checkin-type pull-right">
                 <span class="glyphicon glyphicon-top glyphicon-user"></span>
                 <span class="glyphicon glyphicon-outline glyphicon-user"></span>
                 <span class="glyphicon glyphicon-user"></span>
             </div>
             <h3 class="comment-title-employee-name"><strong>{{ event.employee.full_name }}</strong></h3>
+            <div class="checkin-type">{{ event.related_object.type.name }} Check-in</div>
             <span class="activity-checkin-summary  comment-text" read-more ng-model="event.description" words="false" length="400"></span>
         </div>
     </a>
-    
-    <!-- Comment replies notification -->
-    <a ng-show="event.type == 'check in'" href="#/checkins/{{ event.event_id }}" class="comment-replies-notification">
-        <span ng-show="event.related_object.comments.length == 1">
-            {{event.related_object.comments.length}} reply
-        </span>
-        <span ng-show="event.related_object.comments.length > 1">
-            {{event.related_object.comments.length}} replies
-        </span>
-    </a>
+
 
     <!-- Comment replies -->
-    <div class="comment-replies hide">
+    <div class="comment-replies">
+        <span class="total-replies" ng-show="event.related_object.comments.length == 1" style="margin-top:20px;">
+            {{event.related_object.comments.length}} reply
+        </span>
+        <span class="total-replies" ng-show="event.related_object.comments.length > 1" style="margin-top:20px;">
+            {{event.related_object.comments.length}} replies
+        </span>
+
         <div class="comment-reply" ng-repeat="comment in event.related_object.comments | orderBy:'created_date':true">
             <div ng-controller="CommentCtrl">
                 <div class="comment-actions pull-right" ng-show="comment.owner.id==currentUser.id">
