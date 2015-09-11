@@ -137,4 +137,22 @@ angular.module('tdb.tasks.controllers', [])
         $scope.loadTasks(false); //load todos
         $scope.loadTasks(true); //load done todos
 
-    }]);
+    }])
+
+    .controller('TasksCtrl', ['$scope', '$rootScope', '$location', '$routeParams', '$window', 'EmployeeToDo', 'ToDo', function ($scope, $rootScope, $location, $routeParams, $window, EmployeeToDo, ToDo) {
+
+        $scope.deleteToDo = function (todo) {
+            if ($window.confirm('Are you sure you want to delete this To Do?')) {
+                var data = {id: todo.id};
+                var todo_index = $scope.todos.indexOf(todo);
+                var deleteSuccess = function () {
+                    $scope.todos.splice(todo_index, 1);
+                };
+
+                ToDo.remove(data, function () {
+                    deleteSuccess();
+                });
+            }
+        }
+    }])
+;

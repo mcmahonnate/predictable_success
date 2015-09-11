@@ -110,4 +110,21 @@ angular.module('tdb.comments.controllers', [])
             });
         };
     }])
+
+    .controller('DailyDigestCtrl', ['$scope', '$modalInstance', 'Employee', function ($scope, $modalInstance, Employee) {
+        $scope.members = Employee.query({group_name: 'Daily Digest Subscribers', show_hidden: true});
+        $scope.cancel = function () {
+            $modalInstance.dismiss();
+        }
+    }])
+
+    .controller('ShowDailyDigestCtrl', ['$scope', '$modal', function ($scope, $modal) {
+        $scope.showMembers = function () {
+            $modal.open({
+                animation: true,
+                templateUrl: '/static/angular/partials/_modals/show-members.html',
+                controller: 'DailyDigestCtrl'
+            });
+        };
+    }])
 ;
