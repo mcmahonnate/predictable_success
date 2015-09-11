@@ -20,4 +20,9 @@ angular.module('tdb.activity.services', ['ngResource'])
 
         return Event;
     }])
+
+    .factory('ActivityReport', ['$resource', '$http', function($resource, $http) {
+        var res = $resource('/api/v1/reports/activity');
+        return res;
+    }])
 ;

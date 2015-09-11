@@ -44,4 +44,10 @@ angular.module('tdb.checkins.services', ['ngResource'])
 
         var CheckIn = $resource('/api/v1/checkins/:id/', {id: '@id'}, actions);
         return CheckIn;
-    }]);
+    }])
+
+    .factory('CheckInReport', ['$resource', '$http', function($resource, $http) {
+        var res = $resource('/api/v1/reports/checkins');
+        return res;
+    }])
+;

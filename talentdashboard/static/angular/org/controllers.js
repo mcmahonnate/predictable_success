@@ -167,9 +167,6 @@ angular.module('tdb.org.controllers', [])
         $scope.salaryReport = SalaryReport.myCoachees();
     }])
 
-    .controller('EmployeeCompSummariesCtrl', ['$scope', '$routeParams', 'CompSummary', function ($scope, $routeParams, CompSummary) {
-        $scope.compSummaries = CompSummary.getAllSummariesForEmployee($routeParams.id);
-    }])
     .controller('AddEditBioCtrl', ['$scope', '$rootScope', '$routeParams', '$modalInstance', '$location', 'employee', 'leadership', 'employees', 'teams', 'Employee', 'EmployeeLeader', 'fileReader', 'PhotoUpload', function($scope, $rootScope, $routeParams, $modalInstance, $location, employee, leadership, employees, teams, Employee, EmployeeLeader, fileReader, PhotoUpload) {
         $scope.employee = angular.copy(employee);
         $scope.leadership = angular.copy(leadership);
