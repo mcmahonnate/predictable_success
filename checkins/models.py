@@ -1,4 +1,5 @@
 import blah
+from blah.models import Comment
 from django.db import models
 from org.models import Employee
 from engagement.models import Happiness
@@ -30,6 +31,10 @@ class CheckIn(models.Model):
             ("view_checkin_summary", "Can view the summary of the Check In."),
         )
 
+    @property
+    def comments(self):
+        return list(Comment.objects.get_for_object(self))
+
     def get_summary(self, user):
         if user.has_perm('checkins.view_checkin_summary'):
             return self.summary
@@ -43,4 +48,4 @@ class CheckIn(models.Model):
     def __unicode__(self):
         return u'{0} "{1}" Check-in with {2} on {3}'.format(self.host, self.get_type_description(), self.employee, self.date.strftime('%x'))
 
-blah.register(CheckIn)
+blah.register(CheckIn, attr_name='_comments')
