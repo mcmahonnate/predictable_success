@@ -1,4 +1,4 @@
-angular.module('tdb.controllers.employeesSnapshot', [])
+angular.module('tdb.employees.controllers', [])
 
     .controller('EmployeesSnapshotCtrl', ['$scope', 'Event', '$rootScope', '$location', '$routeParams', 'User', 'Employee', 'Coachees', 'TalentReport', '$http', 'analytics', 'Engagement', 'TalentCategories', function ($scope, Event, $rootScope, $location, $routeParams, User, Employee, Coachees, TalentReport, $http, analytics, Engagement, TalentCategories) {
         $scope.busy = true;

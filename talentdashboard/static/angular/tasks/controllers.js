@@ -1,4 +1,4 @@
-angular.module('tdb.controllers.tasks', [])
+angular.module('tdb.tasks.controllers', [])
 
     .controller('AddEditTaskCtrl', ['$scope', '$rootScope', '$modalInstance', '$routeParams', 'Users', 'Task', 'task', function ($scope, $rootScope, $modalInstance, $routeParams, Users, Task, task) {
         $scope.task = angular.copy(task);
@@ -47,13 +47,13 @@ angular.module('tdb.controllers.tasks', [])
 
             if (!$scope.page_size) {
                 var page_size = 5;
-            }    
+            }
 
             if (completed) {page = $scope.done_page + 1}
             else {page = $scope.todo_page + 1}
 
             var query = {completed: completed, filter: filter, page: page, page_size: 20};
-            
+
             if (employee_id) {
                 $scope.canAddNew = true;
                 query = {employee_id: employee_id, completed: completed, page: page, page_size: page_size};

@@ -1,4 +1,4 @@
-angular.module('tdb.controllers.profile', [])
+angular.module('tdb.profile.controllers', [])
 
     .controller('ProfileCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', '$modal', 'User', 'Employee', 'Profile','Team', 'Engagement', 'SendEngagementSurvey', 'EmployeeLeader', 'Attribute', '$http', 'Customers', 'analytics', 'EmployeeMBTI', 'Notification', function ($rootScope, $scope, $location, $routeParams, $window, $modal, User, Employee, Profile, Team, Engagement, SendEngagementSurvey, EmployeeLeader, Attribute, $http, Customers, analytics, EmployeeMBTI, Notification) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());

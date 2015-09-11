@@ -1,4 +1,4 @@
-angular.module('tdb.controllers.reports', [])
+angular.module('tdb.reports.controllers', [])
     .controller('ReportsCtrl', ['$scope', '$rootScope',  '$filter', '$location', '$routeParams', 'EmployeeSearch', 'TalentCategories', 'analytics', function ($scope, $rootScope, $filter, $location, $routeParams, EmployeeSearch, TalentCategories, analytics) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         $scope.busy = true;

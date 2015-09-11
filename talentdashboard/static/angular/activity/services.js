@@ -1,4 +1,4 @@
-angular.module('tdb.services.activity', ['ngResource'])
+angular.module('tdb.activity.services', ['ngResource'])
 
     .factory('Event', ['$resource', function($resource) {
         var actions = {

@@ -1,4 +1,4 @@
-angular.module('tdb.services.tasks', ['ngResource'])
+angular.module('tdb.tasks.services', ['ngResource'])
 
     .factory('Task', ['$resource', function ($resource) {
         var checkedPaged  = function(response) {

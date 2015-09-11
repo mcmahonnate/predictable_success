@@ -1,4 +1,4 @@
-angular.module('tdb.controllers.comments', [])
+angular.module('tdb.comments.controllers', [])
 
     .controller('CommentCtrl', ['$scope', '$rootScope', '$window', 'Comment', 'Event', function($scope, $rootScope, $window, Comment, Event) {
         $scope.editedComment = new Comment();

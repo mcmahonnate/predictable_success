@@ -1,4 +1,4 @@
-angular.module('tdb.services.comments', ['ngResource'])
+angular.module('tdb.comments.services', ['ngResource'])
 
     .factory('Comment', ['$resource', function ($resource) {
         var actions = {

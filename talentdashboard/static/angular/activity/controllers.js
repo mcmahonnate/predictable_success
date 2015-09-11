@@ -1,4 +1,4 @@
-angular.module('tdb.controllers.activity', [])
+angular.module('tdb.activity.controllers', [])
     .controller('ActivityCtrl', ['$scope', '$rootScope', '$routeParams', '$window', '$attrs', 'Event', 'Comment', function($scope, $rootScope, $routeParams, $window, $attrs, Event, Comment) {
         var view = $attrs.view;
         $scope.events = [];

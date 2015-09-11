@@ -1,17 +1,16 @@
 var app = angular.module('tdb', [
         'tdb.services', 'tdb.controllers', 'tdb.directives', 'tdb.filters',
-        'tdb.preferences.services',
-        'tdb.search.controllers', 'tdb.search.services',
-        'tdb.services.tasks', 'tdb.controllers.tasks',
-        'tdb.controllers.comments',
-        'tdb.controllers.search',
-        'tdb.controllers.employeesSnapshot',
-        'tdb.controllers.reports',
-        'tdb.controllers.profile', 'tdb.services.profile',
-        'tdb.services.activity', 'tdb.controllers.activity',
+        'tdb.activity.services', 'tdb.activity.controllers',
         'tdb.checkins.services', 'tdb.checkins.controllers',
-        'tdb.services.comments', 'tdb.controllers.comments',
-        'tdb.engagement.services', 'angular.filter',
+        'tdb.comments.services', 'tdb.comments.controllers',
+        'tdb.employees.controllers',
+        'tdb.engagement.services',
+        'tdb.preferences.services',
+        'tdb.profile.controllers', 'tdb.profile.services',
+        'tdb.reports.controllers',
+        'tdb.search.controllers', 'tdb.search.services',
+        'tdb.tasks.services', 'tdb.tasks.controllers',
+        'angular.filter',
         'angular-carousel', 'analytics', 'ui.bootstrap', 'ngCsv','ngImgCrop', 'ngRoute','ui-notification', 'ngMessages', 'readMore'])
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.
