@@ -30,7 +30,7 @@
                 <span class="glyphicon glyphicon-user"></span>
             </div>
             <h3 class="comment-title-employee-name"><strong>{{ event.employee.full_name }}</strong></h3>
-            <div class="checkin-type">{{ event.related_object.type.name }} Check-in</div>
+            <div class="checkin-type">{{ event.related_object.type.name }} Check-in <span ng-show="{{ event.related_object.happiness }}">&rarr; {{ event.related_object.happiness.assessment_verbose }}</span></div>
             <span class="activity-checkin-summary  comment-text" read-more ng-model="event.description" words="false" length="400"></span>
         </div>
     </a>
