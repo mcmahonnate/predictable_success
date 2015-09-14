@@ -91,9 +91,9 @@
             </div>
         </div>
         <div class="comment-reply-textarea">
-            <form name="replyForm">
-                <textarea class="form-control" name="content" msd-elastic ng-model="newReply.content" rows="1" cols="40" placeholder="Add a reply..."></textarea>
-                <button class="small-comment" ng-disabled="!replyForm.content" ng-click="addReply(replyForm, comment.related_object)">Comment</button>
+            <form name="replyForm" ng-controller="AddCheckInActivityCommentCtrl">
+                <textarea class="form-control" name="content" msd-elastic ng-model="newComment.content" rows="1" cols="40" placeholder="Add a reply..."></textarea>
+                <button class="small-comment" ng-disabled="!newComment.content" ng-click="add(replyForm, event.related_object.id, event.related_object.comments)">Comment</button>
             </form>
         </div>
     </div>    
