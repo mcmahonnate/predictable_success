@@ -49,7 +49,7 @@
                         <a href="http://{{site}}/#/teams/{{comment.associated_object.id}}"><b>{{comment.associated_object.name}}</b></a>
                     {% endif %}
                     <br/>
-                    <span style="font-size:14px;">{{comment.content}}</span>
+                    <span style="font-size:14px;white-space: pre-wrap;">{{comment.content}}</span>
                     <span style="font-size:14px;color:#AA9C84"><b>from {{comment.owner.employee.full_name}}</b></span>
                     <br/>
                     <a href="http://{{site}}/#/employees/{{comment.associated_object.id}}">leave a comment</a>
