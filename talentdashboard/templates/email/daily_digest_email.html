@@ -27,7 +27,7 @@
                             <a href="http://{{site}}/#/teams/{{comment.associated_object.associated_object.id}}"><b>{{comment.associated_object.associated_object.name}}</b></a>
                         {% endif %}
                         <br/>
-                        <span style="font-size:14px;white-space: pre-wrap;">{{comment.content}}</span>
+                        <pre><span style="font-size:14px;white-space: pre-wrap;">{{comment.content}}</span></pre>
                         <span style="font-size:14px;color:#AA9C84"><b>from {{comment.owner.employee.full_name}}</b></span>
                         <br/>
                         <a href="http://{{site}}/#/employees/{{comment.associated_object.associated_object.id}}">leave a comment</a>
@@ -49,7 +49,7 @@
                         <a href="http://{{site}}/#/teams/{{comment.associated_object.id}}"><b>{{comment.associated_object.name}}</b></a>
                     {% endif %}
                     <br/>
-                    <span style="font-size:14px;white-space: pre-wrap;">{{comment.content}}</span>
+                    <pre><span style="font-size:14px;white-space: pre-wrap;">{{comment.content}}</span></pre>
                     <span style="font-size:14px;color:#AA9C84"><b>from {{comment.owner.employee.full_name}}</b></span>
                     <br/>
                     <a href="http://{{site}}/#/employees/{{comment.associated_object.id}}">leave a comment</a>
@@ -83,7 +83,7 @@
                 <p>
                 <a href="http://{{site}}/#/employees/{{checkin.employee.id}}"><b>{{checkin.employee.full_name}}</b></a> had a {{checkin.get_type_description}} check-in.
                 <br/>
-                <span style="font-size:14px;white-space: pre-wrap;">{{ checkin | get_summary:recipient | default_if_none:"" }}</span>
+                <pre><span style="font-size:14px;white-space: pre-wrap;">{{ checkin | get_summary:recipient | default_if_none:"" }}</span></pre>
                 <span style="font-size:14px;color:#AA9C84"><b>from {{checkin.host.full_name}}</b></span>
                 <br/>
                 </p>
@@ -115,7 +115,7 @@
                     <p>
                     <a href="http://{{site}}/#/employees/{{todo.employee.id}}">{{todo.employee.full_name}}</a>
                     <br/>
-                    <span style="font-size:14px;white-space: pre-wrap;">{{todo.description}}</span>
+                    <pre><span style="font-size:14px;white-space: pre-wrap;">{{todo.description}}</span></pre>
                     <span style="font-size:14px;color:#AA9C84"><b>created by {{todo.created_by.full_name}}</b></span>
                     <br/>
                     <a href="http://{{site}}/#/employees/{{todo.employee.id}}">get it done</a>
