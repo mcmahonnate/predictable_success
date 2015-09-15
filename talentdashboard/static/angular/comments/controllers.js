@@ -1,10 +1,13 @@
 angular.module('tdb.comments.controllers', [])
 
     .controller('CommentCtrl', ['$scope', '$rootScope', '$window', 'Comment', 'Event', function($scope, $rootScope, $window, Comment, Event) {
-        $scope.editedComment = new Comment();
+        $scope.editingComment = new Comment();
         $scope.newReply = new Comment();
         $scope.editMode = false;
 
+        $scope.foo = function(comment) {
+            console.log(comment);
+        };
         $scope.edit = function(comment) {
             $scope.editingComment = angular.copy(comment);
             $scope.editMode = true;
@@ -29,7 +32,7 @@ angular.module('tdb.comments.controllers', [])
             Comment.update($scope.editingComment, function(result) {
                     Event.getEventForComment({id: result.id}, function(result) {
                         angular.copy(result, event);
-                        $scope.editedComment = new Comment();
+                        $scope.editingComment = new Comment();
                         $scope.editMode = false;
                     });
                 }
@@ -124,6 +127,21 @@ angular.module('tdb.comments.controllers', [])
                 animation: true,
                 templateUrl: '/static/angular/partials/_modals/show-members.html',
                 controller: 'DailyDigestCtrl'
+            });
+        }
+    }])
+
+    .controller('AddCheckInActivityCommentCtrl', ['$scope', '$rootScope', 'Comment', function($scope, $rootScope, Comment) {
+        var blankComment = new Comment({content:'', include_in_daily_digest:true});
+        angular.copy(blankComment, $scope.newComment);
+
+        $scope.add = function(form, checkInId, comments) {
+            if (form.$invalid) return;
+            Comment.addToCheckIn({ id:checkInId}, $scope.newComment, function(comment) {
+                if(comments) {
+                    comments.push(comment);
+                }
+                angular.copy(blankComment, $scope.newComment);
             });
         };
     }])

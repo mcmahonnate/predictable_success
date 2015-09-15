@@ -36,7 +36,10 @@
                     </textarea> 
                     <div class="visibility pull-right" style="margin:0 25px;">
                         <label>
-                            <input ng-model="comment.include_in_daily_digest" ng-checked="comment.include_in_daily_digest" type="checkbox"> Include in <a ng-click="showMembers()">Daily Digest Email</a>
+                            <input ng-model="comment.include_in_daily_digest" ng-checked="comment.include_in_daily_digest" type="checkbox"> Include in
+                            <span ng-controller="ShowDailyDigestCtrl">
+                                <a ng-click="showMembers()">Daily Digest Email</a>
+                            </span>
                         </label>
                     </div>
                     <button class="btn btn-primary btn-sm" ng-disabled="!comment.content" ng-click="update(commentEditForm, comment);">Save Edits</button>
