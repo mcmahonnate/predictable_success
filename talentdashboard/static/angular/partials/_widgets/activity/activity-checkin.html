@@ -45,17 +45,17 @@
             {{event.related_object.comments.length}} replies
         </span>
 
-        <div class="comment-reply" ng-repeat="comment in event.related_object.comments | orderBy:'created_date':true">
+        <div class="comment-reply" ng-repeat="comment in event.related_object.comments | orderBy:'created_date'">
             <div ng-controller="CommentCtrl">
                 <div class="comment-actions pull-right" ng-show="comment.owner.id==currentUser.id">
                     <i class="fa fa-cog show-popover"></i>
                     <ul class="popover-items" style="display:none">
                         <li class="popover-item">
-                            <a ng-click="edit(reply)" class="edit"><i class="fa fa-pencil-square-o"></i>
+                            <a ng-click="edit(comment)" class="edit"><i class="fa fa-pencil-square-o"></i>
                                 Edit</a>
                         </li>
                         <li class="popover-item">
-                            <a ng-click="delete(reply, event.related_object.replies)"><i class="fa fa-trash-o"></i>
+                            <a ng-click="delete(comment, event.related_object.replies)"><i class="fa fa-trash-o"></i>
                                 Delete</a>
                         </li>
                     </ul>
@@ -80,7 +80,7 @@
                                 class="form-control edit-textarea">
                         </textarea>
                         <button class="btn btn-primary btn-sm" ng-disabled="!editingComment.content"
-                                ng-click="update(replyEditForm, reply)">Save Edits
+                                ng-click="update(replyEditForm, comment)">Save Edits
                         </button>
                         <button class="btn btn-link btn-sm"
                                 ng-click="cancelEdit()">Cancel
@@ -91,9 +91,9 @@
             </div>
         </div>
         <div class="comment-reply-textarea">
-            <form name="replyForm">
-                <textarea class="form-control" name="content" msd-elastic ng-model="newReply.content" rows="1" cols="40" placeholder="Add a reply..."></textarea>
-                <button class="small-comment" ng-disabled="!replyForm.content" ng-click="addReply(replyForm, comment.related_object)">Comment</button>
+            <form name="replyForm" ng-controller="AddCheckInActivityCommentCtrl">
+                <textarea class="form-control" name="content" msd-elastic ng-model="newComment.content" rows="1" cols="40" placeholder="Add a reply..."></textarea>
+                <button class="small-comment" ng-disabled="!newComment.content" ng-click="add(replyForm, event.related_object.id, event.related_object.comments)">Comment</button>
             </form>
         </div>
     </div>    

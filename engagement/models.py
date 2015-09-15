@@ -50,7 +50,7 @@ def generate_survey(employee, sent_from, customer):
     signed_uid = signer.sign(employee.id)
     signed_id = signer.sign(survey.id)
     site = customer.domain_url
-    url = 'http://' + site + '/#/engagement-survey/' + signed_uid + '/' + signed_id
+    url = 'https://' + site + '/#/engagement-survey/' + signed_uid + '/' + signed_id
     survey.url = url
     survey.save()
 
