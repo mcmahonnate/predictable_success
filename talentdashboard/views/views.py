@@ -560,10 +560,13 @@ class SendEngagementSurvey(APIView):
         elif not employee.email:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
         if employee.user is None:
-            password = User.objects.make_random_password()
-            user = User.objects.create_user(employee.email, employee.email, password)
-            user.is_active = False
-            user.save()
+            try:
+                user = User.objects.get(email=employee.email)
+            except User.DoesNotExist:
+                password = User.objects.make_random_password()
+                user = User.objects.create_user(employee.email, employee.email, password)
+                user.is_active = False
+                user.save()
             employee.user = user
             employee.save()
         survey = generate_survey(employee, sent_from, request.tenant)
