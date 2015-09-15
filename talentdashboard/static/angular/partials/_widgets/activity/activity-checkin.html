@@ -45,7 +45,7 @@
             {{event.related_object.comments.length}} replies
         </span>
 
-        <div class="comment-reply" ng-repeat="comment in event.related_object.comments | orderBy:'created_date':true">
+        <div class="comment-reply" ng-repeat="comment in event.related_object.comments | orderBy:'created_date'">
             <div ng-controller="CommentCtrl">
                 <div class="comment-actions pull-right" ng-show="comment.owner.id==currentUser.id">
                     <i class="fa fa-cog show-popover"></i>
