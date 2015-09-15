@@ -42,7 +42,7 @@
             <i ng-show="!employee.last_checkin_date" class="fa fa-exclamation-circle pull-right alert-no-checkins" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{ employee.full_name }} has not had a check-in."></i>
             <a class="avatar-container pull-left" ng-if="employee.display" href="#/employees/{{employee.id}}">
                 <div class="xlarge-headshot">
-                    <img ng-src="{{ employee.avatar_small }}" alt="{{ employee.full_name }}'s avatar" />
+                    <img ng-src="{{ employee.avatar_small }}" alt="{{ employee.full_name }}'s avatar" class="headshot-image" />
                 </div>
                 <div class="employee-attribute" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{ talentCategories[employee.talent_category].label }}">
                     <span class="segment employee-segment-background-color-{{employee.talent_category}}"></span>

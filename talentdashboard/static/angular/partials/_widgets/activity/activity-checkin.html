@@ -72,7 +72,7 @@
                 <span class="timestamp"
                       title="{{ comment.created_date | date:'MMM d, yyyy h:mma' }}">{{ comment.created_date | fromNow }}</span>
 
-                <div class="comment-reply-copy" ng-show="editMode">
+                <div style="padding-left:50px;" ng-show="editMode">
                     <form name="replyEditForm">
                         <textarea
                                 ng-model="editingComment.content"
