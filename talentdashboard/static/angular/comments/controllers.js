@@ -1,7 +1,7 @@
 angular.module('tdb.comments.controllers', [])
 
     .controller('CommentCtrl', ['$scope', '$rootScope', '$window', 'Comment', 'Event', function($scope, $rootScope, $window, Comment, Event) {
-        $scope.editedComment = new Comment();
+        $scope.editingComment = new Comment();
         $scope.newReply = new Comment();
         $scope.editMode = false;
 
@@ -32,7 +32,7 @@ angular.module('tdb.comments.controllers', [])
             Comment.update($scope.editingComment, function(result) {
                     Event.getEventForComment({id: result.id}, function(result) {
                         angular.copy(result, event);
-                        $scope.editedComment = new Comment();
+                        $scope.editingComment = new Comment();
                         $scope.editMode = false;
                     });
                 }
