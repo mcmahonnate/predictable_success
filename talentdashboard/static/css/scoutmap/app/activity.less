@@ -45,7 +45,7 @@
         display: block;
         overflow: hidden;
         margin: 20px 0px 0 68px;
-        border: 1px solid #ddd;
+        background: #f1f1f1;
 
         @media only screen and (max-width : 990px) {
             padding: 15px 10px;
@@ -69,6 +69,7 @@
         .activity-checkin-summary {
             color: #555;
             white-space: pre-line;
+            margin-top: 10px;
         }
         .activity-checkin-details {
             padding-left: 20px;
@@ -105,12 +106,10 @@
         background-color: #f9f9f9;
     }
 
-
     .checkin-type {
-        color: #666;
+        color: #333;
         font-weight: bold;
         font-size: 12px;
-        margin-bottom: 10px;
     }
 
 
@@ -120,56 +119,15 @@
         color: #555;
         white-space: pre-line;
     }
-
-
-/*    .comments-date {
-        font-size: 13px;
-        color: #8b8b8b;
-        border-bottom: 2px solid #efefef;
-        padding-bottom: 2px;
-    }*/
-
-
-  .comment-actions {
-    position: relative;
-    color: #ccc;
-  }
-
-
-
-  .total-replies {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;  
-  }
-
-/*  .comment-item {
-    display: block; 
-    margin-left:35px; 
-    padding-left:25px;
-    min-width: 80%;
-    min-height: 28px;
-
-
-      .comment-text {
-      white-space: pre-wrap;
+    .comment-actions {
+        position: relative;
+        color: #ccc;
     }
-
-    .comment-copy {
-        margin: 15px 0 5px;
-        font-size: 14px;
-        line-height: 20px;
+    .total-replies {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;  
     }
-
-    .comment-associated-avatar {
-      float: right;
-      height: 90px;
-      border-radius: 50%;
-      border: 4px solid #fff;
-    }
-
-  }*/
-
     .edit-textarea {
         margin: 12px 0 8px;
         width: 95%;
@@ -181,18 +139,17 @@
         margin: 0 0 35px 68px;
     }
   
-
-  ul.feed-actions {
+    ul.feed-actions {
       list-style: none;
       font-size: 12px;
-  }
-  .feed-actions li {
-      background: url('/static/css/icon_bullet_grey2_4x4.png') no-repeat scroll 100% 6px transparent;
-      float: left;
-    margin: 0 0px 0 7px;
-    padding: 0 10px 0 0px;
-      cursor: pointer;
-  }
+    }
+    .feed-actions li {
+        background: url('/static/css/icon_bullet_grey2_4x4.png') no-repeat scroll 100% 6px transparent;
+        float: left;
+        margin: 0 0px 0 7px;
+        padding: 0 10px 0 0px;
+        cursor: pointer;
+    }
   .feed-actions li:last-child {
     background: none;
   }

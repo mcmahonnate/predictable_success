@@ -1,6 +1,7 @@
 angular.module('tdb.checkins.controllers', [])
 
-    .controller('AddEditCheckInCtrl', ['$rootScope', '$scope', '$q', '$routeParams', '$location', '$modal', 'CheckIn', 'CheckInType', 'Happiness', 'Task', 'Employee', 'EmployeeSearch', 'Notification', '$window', function ($rootScope, $scope, $q, $routeParams, $location, $modal, CheckIn, CheckInType, Happiness, Task, Employee, EmployeeSearch, Notification, $window) {
+    .controller('AddEditCheckInCtrl', ['$rootScope', '$scope', '$q', '$routeParams', '$location', '$modal', 'CheckIn', 'CheckInType', 'Happiness', 'Task', 'Employee', 'EmployeeSearch', 'Notification', '$window', 'analytics', function ($rootScope, $scope, $q, $routeParams, $location, $modal, CheckIn, CheckInType, Happiness, Task, Employee, EmployeeSearch, Notification, $window, analytics) {
+        analytics.trackPage($scope, $location.absUrl(), $location.url());
         var initialize = function() {
             $scope.checkin = new CheckIn({date: new Date(Date.now())});
             $scope.happiness = new Happiness({assessment: 0});
