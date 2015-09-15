@@ -1,12 +1,12 @@
 <div ng-if="employee.display" class="container narrow-gutter employee-view" ng-class="{in:employee}">
     <div ng-include="'/static/angular/partials/_widgets/search.html'"></div>
-    <h1>{{employee.full_name}} <a href="#/checkin/{{ employee.id }}" ng-show="customer.show_beta_features" class="btn btn-success btn-checkin"><span class="glyphicon glyphicon-plus"></span> Check-In</a></h1>
+    <h1 class="sensitive-text">{{employee.full_name}} <a href="#/checkin/{{ employee.id }}" ng-show="customer.show_beta_features" class="btn btn-success btn-checkin"><span class="glyphicon glyphicon-plus"></span> Check-In</a></h1>
     <div class="row">
         <div class="col-sm-5 col-md-5 col-lg-5">
             <div class="panel">
                 <div class="large-avatar-container">
                     <div class="xxxlarge-headshot">
-                        <img ng-src="{{ employee.avatar }}" alt="{{ employee.full_name }}'s avatar" />  
+                        <img ng-src="{{ employee.avatar }}" alt="{{ employee.full_name }}'s avatar" class="headshot-image" />  
                     </div>    
                     <div class="employee-attribute employee-attribute-large" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{ talentCategories[employee.talent_category].label }}">
                         <span class="segment employee-segment-background-color-{{employee.talent_category}}"></span>

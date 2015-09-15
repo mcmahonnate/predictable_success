@@ -64,7 +64,7 @@
                     <div class="large-avatar-container">
                         <div class="xxxlarge-headshot xxxlarge-headshot-active">
                             <a href="#/employees/{{employee.pk}}">
-                                <img ng-src="{{ employee.avatar }}" alt="{{ employee.full_name }}'s avatar" />
+                                <img ng-src="{{ employee.avatar }}" alt="{{ employee.full_name }}'s avatar" class="headshot-image" />
                             </a>
                         </div>
                         <div class="employee-attribute employee-attribute-large" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{ talentCategories[employee.talent_category].label }}">
@@ -74,8 +74,8 @@
                             <span class="employee-happiness-background-color-{{employee.happiness}} happiness-{{ employee.happiness }}"></span>
                         </div>
                     </div>
-                    <h3 class="employee-name centered"><a href="#/employees/{{employee.pk}}">{{employee.full_name}}</a></h3>
-                    <div class="team-name centered "><a ng-click="setTeamFilter(employee.team.id, employee.team.name);menu.show=false;">{{employee.team_name}}</a></div>
+                    <h3 class="employee-name centered"><a href="#/employees/{{employee.pk}}" class="sensitive-text">{{employee.full_name}}</a></h3>
+                    <div class="team-name centered "><a ng-click="setTeamFilter(employee.team.id, employee.team.name);menu.show=false;" class="sensitive-text">{{employee.team_name}}</a></div>
                 </li>
             </ul>
             <div ng-if="employees.$resolved && employees.length === 0" class="no-results">No Results</div>

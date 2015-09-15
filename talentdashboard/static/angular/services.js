@@ -48,7 +48,40 @@ angular.module('tdb.services', ['ngResource'])
         return {
             readAsDataUrl: readAsDataURL
         };
-}]);
+}])
+.factory('privacyMode', function($cookieStore, $http){
+    return function(scope) {
+    
+        // check if privacy cookie exists
+        var privacy = $cookieStore.get('privacy');
+
+        if (privacy) {
+            // indicate privacy mode is on in navigation
+            document.getElementsByClassName("privacy-mode")[0].className = 'privacy-mode privacy-mode-active';
+
+            setTimeout(function(){                 
+
+                // Private images    
+                var images = document.getElementsByClassName('headshot-image');
+                for(var i = 0; i < images.length; i++) {
+                    var img = images[i];
+
+                        $cookieStore.put('privacy', true);
+                        img.setAttribute('data-original-src', img.src);
+                        img.src = 'http://theoldreader.com/kittens/200/200/?foo=' + [i];
+                        console.log('Turning on cat mode');  
+                }   
+
+                // Private names
+                var employeeName = document.getElementsByClassName("sensitive-text");
+                for(var i = 0; i < employeeName.length; i++) {   
+                    var name = employeeName[i];
+                    name.className = 'sensitive-text sensitive-text-active';
+                }
+            }, 2000);
+        }    
+    }
+});
 
 angular.module('analytics', ['ng'])
 

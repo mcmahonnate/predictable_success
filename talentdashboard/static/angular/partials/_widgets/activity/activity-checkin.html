@@ -2,7 +2,7 @@
     <div class="activity-header">
         <div class="activity-owner-avatar-container">
             <a ng-href="#/employees/{{ event.user.employee.id }}" class="medium-headshot">
-                <img ng-src="{{ event.user.employee.avatar_small }}" alt="{{ event.user.employee.full_name }}'s avatar"/>
+                <img ng-src="{{ event.user.employee.avatar_small }}" alt="{{ event.user.employee.full_name }}'s avatar" class="headshot-image"/>
             </a>
         </div>
         <div class="activity-description">
@@ -16,7 +16,7 @@
     <a class="activity-checkin row" ng-show="event.type == 'check in'" href="#/checkins/{{ event.event_id }}">
         <div class="avatar-container col-xs-2">
             <span class="large-headshot">
-                <img ng-src="{{ event.related_object.employee.avatar_small }}" alt="{{ event.related_object.employee.full_name }}"/>
+                <img ng-src="{{ event.related_object.employee.avatar_small }}" alt="{{ event.related_object.employee.full_name }}" class="headshot-image"/>
             </span>
             <div class="employee-attribute" rel="tooltip" data-toggle="tooltip" data-placement="right"
                  data-original-title="{{ talentCategories[event.related_object.employee.current_talent_category].label }}">
@@ -29,7 +29,7 @@
                 <span class="glyphicon glyphicon-outline glyphicon-user"></span>
                 <span class="glyphicon glyphicon-user"></span>
             </div>
-            <h3 class="comment-title-employee-name"><strong>{{ event.employee.full_name }}</strong></h3>
+            <h3 class="comment-title-employee-name"><strong><span class="sensitive-text">{{ event.employee.full_name }}</span></strong></h3>
             <div class="checkin-type">{{ event.related_object.type.name }} Check-in <span ng-show="{{ event.related_object.happiness }}">&rarr; {{ event.related_object.happiness.assessment_verbose }}</span></div>
             <span class="activity-checkin-summary  comment-text" read-more ng-model="event.description" words="false" length="400"></span>
         </div>
@@ -63,7 +63,7 @@
                 <div class="comment-reply-avatar-container">
                     <a ng-href="#/employees/{{ comment.owner.employee.id }}" class="small-headshot">
                         <img ng-src="{{ comment.owner.employee.avatar_small }}"
-                             alt="{{ comment.owner.employee.full_name }}'s avatar"/>
+                             alt="{{ comment.owner.employee.full_name }}'s avatar" class="headshot-image"/>
                     </a>
                 </div>
                 <a class="comment-reply-name"

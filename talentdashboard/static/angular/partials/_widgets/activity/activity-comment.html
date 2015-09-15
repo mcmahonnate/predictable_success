@@ -13,7 +13,7 @@
         </div>
         <div class="activity-owner-avatar-container">
             <a ng-href="#/employees/{{ event.user.employee.id }}" class="medium-headshot">
-                <img ng-src="{{ event.user.employee.avatar_small }}" alt="{{ event.user.employee.full_name }}'s avatar"/>
+                <img ng-src="{{ event.user.employee.avatar_small }}" alt="{{ event.user.employee.full_name }}'s avatar" class="headshot-image"/>
             </a>
         </div>
         <div class="activity-description">
@@ -30,7 +30,7 @@
         <div class="avatar-container pull-right hide">
             <a class="large-headshot" ng-show="view != 'employee-view'"
                ng-href="#/employees/{{ event.employee.id }}">
-                <img ng-src="{{ event.employee.avatar_small }}" alt="{{ event.employee.full_name }}'s avatar"/>
+                <img ng-src="{{ event.employee.avatar_small }}" alt="{{ event.employee.full_name }}'s avatar" class="headshot-image"/>
             </a>
 
             <div class="employee-attribute">
@@ -87,7 +87,7 @@
                 <div class="comment-reply-avatar-container">
                     <a ng-href="#/employees/{{ reply.owner.employee.id }}" class="small-headshot">
                         <img ng-src="{{ reply.owner.employee.avatar_small }}"
-                             alt="{{ reply.owner.employee.full_name }}'s avatar"/>
+                             alt="{{ reply.owner.employee.full_name }}'s avatar" class="headshot-image"/>
                     </a>
                 </div>
                 <a class="comment-reply-name"

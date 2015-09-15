@@ -1,6 +1,6 @@
 angular.module('tdb.org.controllers', [])
 
-    .controller('TeamListCtrl', ['$scope', 'Team', function ($scope, Team) {
+    .controller('TeamListCtrl', ['$scope', 'Team', '$cookies', '$cookieStore', function ($scope, Team, $cookies, $cookieStore) {
         $scope.teams = Team.query();
         $scope.teamQuery = $scope.teams[0];
         $scope.teamMenu = {show: false};

@@ -268,3 +268,26 @@ textarea.expandable:focus {
             max-width: none;
             white-space: nowrap;
         }
+
+
+
+/* Privacy Mode */
+.privacy-mode {
+    background: transparent url(/static/images/cat-icon.png) no-repeat;
+    height: 32px;
+    width: 32px;
+    display: block;
+    background-size: 32px;
+    text-indent: -99999px;
+    opacity: .2;
+    position: absolute;
+    bottom: 10px;
+    left: 20px;
+    cursor: pointer;
+}   
+.privacy-mode:hover, .privacy-mode-active {
+    opacity:1;
+} 
+.sensitive-text-active {
+    color: #ddd !important;   
+}    

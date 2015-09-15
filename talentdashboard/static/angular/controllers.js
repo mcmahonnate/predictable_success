@@ -1,6 +1,6 @@
 angular.module('tdb.controllers', [])
 
-    .controller('BaseAppCtrl', ['$rootScope', '$location', '$document', 'User', 'Customers', function ($rootScope, $location, $document, User, Customers) {
+    .controller('BaseAppCtrl', ['$rootScope', '$location', '$document', 'User', 'Customers', '$cookies', '$cookieStore', function ($rootScope, $location, $document, User, Customers, $cookies, $cookieStore) {
         $rootScope.$on("$routeChangeError", function () {
             window.location = '/account/login?next=' + $location.path();
         });
@@ -72,6 +72,48 @@ angular.module('tdb.controllers', [])
             list.splice(index, 1);
             list.splice(index, 0, newItem);
         };
+
+        // Privacy Mode
+        var privacyMode = function () {
+
+            // check if privacy cookie exists
+            var privacy = $cookieStore.get('privacy');
+
+            // get all images
+            var images = document.getElementsByClassName('headshot-image');
+            for(var i = 0; i < images.length; i++) {
+                var img = images[i];
+
+                if (privacy){
+                    $cookieStore.remove('privacy');
+                    document.getElementsByClassName("privacy-mode")[0].className = 'privacy-mode';
+                    img.src = img.getAttribute("data-original-src");
+                    console.log('Turning off cat mode');
+
+                } else {
+                    $cookieStore.put('privacy', true);
+                    img.setAttribute('data-original-src', img.src);
+                    document.getElementsByClassName("privacy-mode")[0].className = 'privacy-mode privacy-mode-active';
+                    img.src = 'http://theoldreader.com/kittens/200/200/?foo=' + [i];
+                    console.log('Setting cat mode');  
+                } 
+            }
+
+            var employeeName = document.getElementsByClassName("sensitive-text");
+            for(var i = 0; i < employeeName.length; i++) {   
+                var name = employeeName[i];
+
+                if (privacy){ 
+                    name.className = 'sensitive-text';
+                } else {
+                    name.className = 'sensitive-text sensitive-text-active';
+                }
+            }               
+        }
+        $rootScope.setPrivacyMode = function () {
+            privacyMode();
+        };
+
     }])
 
     .controller('NavigationCtrl', ['$scope', '$rootScope', '$routeParams', '$location', '$modal', 'EmployeeSearch', 'Customers', 'Team', function ($scope, $rootScope, $routeParams, $location, $modal, EmployeeSearch, Customers, Team) {
@@ -100,6 +142,7 @@ angular.module('tdb.controllers', [])
             }
             return true;
         }
+
 
         //show add employee modal
         $scope.toggleEmployeeModal = function () {
