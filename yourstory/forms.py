@@ -5,12 +5,15 @@ from .models import TextResponse, EmployeeChoiceResponse
 
 
 class TextResponseForm(forms.ModelForm):
-    is_public = forms.BooleanField(required=False)
+    is_public = forms.BooleanField(
+        required=False,
+        label=_('Do you want to make your answer public?')
+    )
     text = forms.CharField()
 
     def __init__(self, *args, **kwargs):
         super(TextResponseForm, self).__init__(*args, **kwargs)
-        self.fields['text'].label = self.Meta.question
+        self.fields['text'].label = _(self.Meta.question)
         if self.Meta.max_length:
             self.fields['text'].max_length = self.Meta.max_length
 
@@ -22,12 +25,17 @@ class TextResponseForm(forms.ModelForm):
 
 
 class EmployeeChoiceResponseForm(forms.ModelForm):
-    is_public = forms.BooleanField(required=False)
-    employees = forms.ModelMultipleChoiceField(queryset=Employee.objects.all())
+    is_public = forms.BooleanField(
+        required=False,
+        label=_('Do you want to make your answer public?')
+    )
+    employees = forms.ModelMultipleChoiceField(
+        queryset=Employee.objects.all()
+    )
 
     def __init__(self, *args, **kwargs):
         super(EmployeeChoiceResponseForm, self).__init__(*args, **kwargs)
-        self.fields['employees'].label = self.Meta.question
+        self.fields['employees'].label = _(self.Meta.question)
 
     def clean_employees(self):
         data = self.cleaned_data['employees']
