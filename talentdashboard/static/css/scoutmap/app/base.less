@@ -284,10 +284,15 @@ textarea.expandable:focus {
     bottom: 10px;
     left: 20px;
     cursor: pointer;
+
+    @media only screen and (max-width : 640px) {
+        display:none;
+    }
 }   
 .privacy-mode:hover, .privacy-mode-active {
     opacity:1;
 } 
+
 .sensitive-text-active {
     color: #ddd !important;   
 }    
