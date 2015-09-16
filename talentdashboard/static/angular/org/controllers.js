@@ -46,8 +46,6 @@ angular.module('tdb.org.controllers', [])
         Customers.get(function (data) {
             $scope.customer = data;
         });
-        $scope.teamId = $routeParams.id;
-        $scope.employees = TeamLeads.getCurrentEvaluationsForTeamLeads($scope.teamId)
 
         $scope.talentReport = TalentReport.query({team_id: $routeParams.id});
         $scope.salaryReport = SalaryReport.query({team_id: $routeParams.id});
@@ -104,7 +102,11 @@ angular.module('tdb.org.controllers', [])
     .controller('CoachDetailCtrl', ['$scope', 'Event', '$rootScope', '$location', '$routeParams', 'User', 'Employee', 'Coachees', 'SalaryReport', 'TalentReport', '$http', 'analytics', 'Engagement', 'TalentCategories', function ($scope, Event, $rootScope, $location, $routeParams, User, Employee, Coachees, SalaryReport, TalentReport, $http, analytics, Engagement, TalentCategories) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         $scope.coach = $rootScope.currentUser.employee;
+        Coachees.query({ id: $routeParams.id }).$promise.then(function (response) {
 
+            $scope.employees = response;
+            console.log($scope.employees)
+        });
         $scope.talentReport = TalentReport.myCoachees();
         $scope.salaryReport = SalaryReport.myCoachees();
     }])
@@ -409,13 +411,13 @@ angular.module('tdb.org.controllers', [])
         };
     }])
 
-    .controller('EmployeesSnapshotCtrl', ['$scope', 'Event', '$rootScope', '$location', '$routeParams', 'User', 'Employee', 'Coachees', 'TalentReport', '$http', 'analytics', 'Engagement', 'TalentCategories', function ($scope, Event, $rootScope, $location, $routeParams, User, Employee, Coachees, TalentReport, $http, analytics, Engagement, TalentCategories) {
+    .controller('EmployeesSnapshotCtrl', ['$scope', '$routeParams', 'Event', '$rootScope', '$location', '$routeParams', 'User', 'Employee', 'Coachees', 'TeamLeads', function ($scope, $routeParams, Event, $rootScope, $location, $routeParams, User, Employee, Coachees, TeamLeads) {
         $scope.busy = true;
 
-        // For coaches view    
-        if ($scope.view == 'coach-view') {
-            Coachees.query({ id: $routeParams.id }).$promise.then(function (response) {
-                $scope.employees = response;
+        if ($scope.view == 'team-view') {
+            $scope.teamId = $routeParams.id;
+            TeamLeads.getCurrentEvaluationsForTeamLeads($scope.teamId).$promise.then(function(response) {
+                $scope.employees = TeamLeads.getCurrentEvaluationsForTeamLeads($scope.teamId)
             });
         }
 
