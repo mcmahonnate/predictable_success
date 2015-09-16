@@ -60,64 +60,6 @@ angular.module('tdb.org.controllers', [])
             }
         );
 
-        TeamMBTI.get(
-            {id: $routeParams.id},
-            function (data) {
-                $scope.mbti = data;
-                angular.forEach($scope.mbti.mbtis, function (mbti_type) {
-                    if (mbti_type.type == 'istj') {
-                        $scope.istj = mbti_type
-                    }
-                    if (mbti_type.type == 'isfj') {
-                        $scope.isfj = mbti_type
-                    }
-                    if (mbti_type.type == 'infj') {
-                        $scope.infj = mbti_type
-                    }
-                    if (mbti_type.type == 'intj') {
-                        $scope.intj = mbti_type
-                    }
-                    if (mbti_type.type == 'istp') {
-                        $scope.istp = mbti_type
-                    }
-                    if (mbti_type.type == 'isfp') {
-                        $scope.isfp = mbti_type
-                    }
-                    if (mbti_type.type == 'infp') {
-                        $scope.infp = mbti_type
-                    }
-                    if (mbti_type.type == 'intp') {
-                        $scope.intp = mbti_type
-                    }
-                    if (mbti_type.type == 'estp') {
-                        $scope.estp = mbti_type
-                    }
-                    if (mbti_type.type == 'esfp') {
-                        $scope.esfp = mbti_type
-                    }
-                    if (mbti_type.type == 'enfp') {
-                        $scope.enfp = mbti_type
-                    }
-                    if (mbti_type.type == 'entp') {
-                        $scope.entp = mbti_type
-                    }
-                    if (mbti_type.type == 'estj') {
-                        $scope.estj = mbti_type
-                    }
-                    if (mbti_type.type == 'esfj') {
-                        $scope.esfj = mbti_type
-                    }
-                    if (mbti_type.type == 'enfj') {
-                        $scope.enfj = mbti_type
-                    }
-                    if (mbti_type.type == 'entj') {
-                        $scope.entj = mbti_type
-                    }
-                });
-
-            }
-        );
-
         $scope.show_discussions = true;
         $scope.show_vops = false;
         $scope.show_kolbe = false;
