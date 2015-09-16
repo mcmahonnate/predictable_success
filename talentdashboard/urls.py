@@ -14,6 +14,7 @@ from engagement.api.views import RetrieveUpdateDestroyHappiness, CreateHappiness
 from activity.api.views import EventList, EmployeeEventList, TeamEventList, CoachEventList, LeadEventList, CheckInEventList, CommentEvent
 from blah.api.views import CommentDetail
 from org.api.views import EmployeeCommentList
+from yourstory.views import YourStory
 router = routers.DefaultRouter()
 router.register(r'^api/v1/teams', TeamViewSet)
 router.register(r'^api/v1/mentorships', MentorshipViewSet)
@@ -146,6 +147,8 @@ urlpatterns = patterns('',
     url(r'^api/v1/comments/', include('blah.api.urls')),
 
     url(r'^api/v1/profile/$', Profile.as_view()),
+
+    url(r'^yourstory/$', YourStory.as_view(), name="yourstory"),
 
     url(r'^', include(router.urls)),
 )
