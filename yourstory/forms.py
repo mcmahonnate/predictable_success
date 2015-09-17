@@ -205,8 +205,8 @@ question_forms = {
 }
 
 
-def get_form(questionNumber, data=None):
-    config = question_forms[questionNumber]
+def get_form(question_number, data=None):
+    config = question_forms[question_number]
     form_class = config['form']
     kwargs = config['kwargs']
     if data is not None:
