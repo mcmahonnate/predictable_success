@@ -10,10 +10,13 @@ class YourStory(TemplateView):
     template = 'yourstory/index.html'
     
 	# We'll need to first check if person is logged in
+	#def post(self, request, **kwargs):
+
 
     def get(self, request, **kwargs):
         return render_to_response(self.template, {
-        	}, context_instance=RequestContext(request)) 
+        	}, context_instance=RequestContext(request))
+
 
 
 class YourStoryQuestions(FormView):
