@@ -40,16 +40,15 @@ class YourStory(TimeStampedModel):
     a10 = models.ForeignKey(TextResponse, null=True, related_name='+')
     a11 = models.ForeignKey(TextResponse, null=True, related_name='+')
     a12 = models.ForeignKey(TextResponse, null=True, related_name='+')
-    a13 = models.ForeignKey(TextResponse, null=True, related_name='+')
-    a14 = models.ForeignKey(EmployeeChoiceResponse, null=True, related_name='+')
+    a13 = models.ForeignKey(EmployeeChoiceResponse, null=True, related_name='+')
+    a14 = models.ForeignKey(TextResponse, null=True, related_name='+')
     a15 = models.ForeignKey(TextResponse, null=True, related_name='+')
     a16 = models.ForeignKey(TextResponse, null=True, related_name='+')
     a17 = models.ForeignKey(TextResponse, null=True, related_name='+')
     a18 = models.ForeignKey(TextResponse, null=True, related_name='+')
     a19 = models.ForeignKey(TextResponse, null=True, related_name='+')
     a20 = models.ForeignKey(TextResponse, null=True, related_name='+')
-    a21 = models.ForeignKey(TextResponse, null=True, related_name='+')
-    a22 = models.ForeignKey(EmployeeChoiceResponse, null=True, related_name='+')
+    a21 = models.ForeignKey(EmployeeChoiceResponse, null=True, related_name='+')
 
     @staticmethod
     def _get_field_name_for_question(question_number):
