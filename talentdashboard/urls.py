@@ -15,6 +15,7 @@ from engagement.api.views import RetrieveUpdateDestroyHappiness, CreateHappiness
 from activity.api.views import EventList, EmployeeEventList, TeamEventList, CoachEventList, LeadEventList, CheckInEventList, CommentEvent
 from blah.api.views import CommentDetail
 from org.api.views import EmployeeCommentList
+from yourstory.views import YourStory, YourStoryQuestions
 router = routers.DefaultRouter()
 router.register(r'^api/v1/teams', TeamViewSet)
 router.register(r'^api/v1/mentorships', MentorshipViewSet)
@@ -149,6 +150,9 @@ urlpatterns = patterns('',
     url(r'^api/v1/profile/$', Profile.as_view()),
 
     url(r'^slack/$', Slack.as_view()),
+
+    url(r'^yourstory/$', YourStory.as_view(), name="yourstory"),
+    url(r'^yourstory/questions/(?P<pk>[0-9]+)/$', YourStoryQuestions.as_view(), name="yourstory_questions"),
 
     url(r'^', include(router.urls)),
 )
