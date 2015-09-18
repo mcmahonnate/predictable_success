@@ -1,14 +1,18 @@
-from django.shortcuts import render_to_response
-from yourstory.models import YourStory
-from yourstory.forms import EmployeeChoiceResponseForm
-from django.views.generic.edit import FormView
+from django.shortcuts import render_to_response, redirect, render
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.http import Http404
 from django.template import RequestContext
+from django.views.generic.edit import View
 from django.views.generic import TemplateView
+from yourstory.models import YourStory
+from yourstory.forms import get_form, TextResponseForm, EmployeeChoiceResponseForm
 
-class YourStory(TemplateView):
+
+class YourStoryDetail(TemplateView):
     model = YourStory
     template = 'yourstory/index.html'
-    
+
 	# We'll need to first check if person is logged in
 	#def post(self, request, **kwargs):
 
@@ -18,17 +22,56 @@ class YourStory(TemplateView):
         	}, context_instance=RequestContext(request))
 
 
+class Questions(View):
+    form_templates = {
+        TextResponseForm: 'text_response.html',
+        EmployeeChoiceResponseForm: 'employee_choice_response.html',
+    }
 
-class YourStoryQuestions(FormView):
-    model = YourStory
-    template_name = 'yourstory/questions.html'
-    form_class = EmployeeChoiceResponseForm
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(Questions, self).dispatch(*args, **kwargs)
 
-    def get(self, request, **kwargs):
-        questionId = self.kwargs['pk']
-        context = self.get_context_data()
-        context['questionId'] = questionId
-        return self.render_to_response(context)
+    def get_template_for_form(self, form):
+        template = self.form_templates.get(type(form), None)
+        return template
 
-    def form_valid(self, form):
-        return super(YourStoryQuestions, self).form_valid(form)
+    @staticmethod
+    def get_form_or_404(question_number, data=None):
+        form = get_form(question_number, data=data)
+        if form is None:
+            raise Http404()
+        return form
+
+    def get(self, request, question_number):
+        story = YourStory.objects.get(employee__user=request.user)
+        if story is None:
+            return redirect('yourstory')
+
+        question_number = int(question_number)
+
+        form = self.get_form_or_404(question_number)
+        template = self.get_template_for_form(form)
+
+        return render(request, template, {'form': form, 'question_number': question_number, 'question': form.question})
+
+    def post(self, request, question_number):
+        story = YourStory.objects.get(employee__user=request.user)
+        if story is None:
+            return redirect('yourstory')
+
+        question_number = int(question_number)
+
+        form = self.get_form_or_404(question_number, data=request.POST)
+
+        if form.is_valid():
+            answer = form.save()
+            story.add_answer(question_number, answer)
+            story.save()
+            next_question = story.next_unanswered_question_number()
+            if next_question is None:
+                return redirect('yourstory')  # Need a 'finished' view?
+            return redirect('yourstory_questions', question_number=next_question)
+        else:
+            template = self.get_template_for_form(form)
+            return render(request, template, {'form': form, 'question_number': question_number, 'question': form.question})

@@ -70,7 +70,7 @@ class YourStory(TimeStampedModel):
                 return question_number
             question_number += 1
 
-    def add_response(self, question_number, response):
+    def add_answer(self, question_number, response):
         """
         Convenience method for attaching a response to the proper field
         based on the question number. Relies on the convention that all response
