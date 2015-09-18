@@ -1,8 +1,9 @@
+<h1>Question {{ question_number }} of {{ story.total_questions }}</h1>
 <form action="." method="post">
     {% csrf_token %}
-    <div>
-        {{ question_number }}. {{ form.employees.label }}
-    </div>
+    <h2>
+        {{ form.employees.label }}
+    </h2>
     <div>
         {{ form.employees }}
     </div>

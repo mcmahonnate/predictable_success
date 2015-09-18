@@ -1,25 +1,31 @@
-from django.shortcuts import render_to_response, redirect, render
 from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
 from django.http import Http404
-from django.template import RequestContext
+from django.shortcuts import redirect, render
+from django.utils.decorators import method_decorator
 from django.views.generic.edit import View
-from django.views.generic import TemplateView
-from yourstory.models import YourStory
 from yourstory.forms import get_form, TextResponseForm, EmployeeChoiceResponseForm
+from yourstory.models import YourStory
 
 
-class YourStoryDetail(TemplateView):
-    model = YourStory
-    template = 'yourstory/index.html'
+class YourStoryDetail(View):
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(YourStoryDetail, self).dispatch(*args, **kwargs)
 
-	# We'll need to first check if person is logged in
-	#def post(self, request, **kwargs):
+    def get(self, request):
+        try:
+            story = YourStory.objects.get(employee__user=request.user)
+            next_question = story.next_unanswered_question_number
+            if next_question is None:
+                return render(request, 'finished.html', {'story': story})
+            return render(request, 'continue.html', {'story': story})
+        except YourStory.DoesNotExist:
+            return render(request, 'get_started.html')
 
-
-    def get(self, request, **kwargs):
-        return render_to_response(self.template, {
-        	}, context_instance=RequestContext(request))
+    def post(self, request):
+        story = YourStory(employee=request.user.employee)
+        story.save()
+        return redirect('question', question_number=story.next_unanswered_question_number)
 
 
 class Questions(View):
@@ -51,7 +57,7 @@ class Questions(View):
         form = self.get_form_or_404(question_number, story)
         template = self.get_template_for_form(form)
 
-        return render(request, template, {'form': form, 'question_number': question_number, 'question': form.question})
+        return render(request, template, {'form': form, 'story': story, 'question_number': question_number, 'question': form.question})
 
     def post(self, request, question_number):
         story = YourStory.objects.get(employee__user=request.user)
@@ -64,7 +70,7 @@ class Questions(View):
             answer = form.save()
             story.add_answer(question_number, answer)
             story.save()
-            next_question = story.next_unanswered_question_number()
+            next_question = story.next_unanswered_question_number
             if next_question is None:
                 return redirect('index')  # Need a 'finished' view?
             return redirect('question', question_number=next_question)

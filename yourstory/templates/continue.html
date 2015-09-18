@@ -1,0 +1,19 @@
+<h1>Want to continue writing Your Story?</h1>
+<a href="{% url 'question' story.next_unanswered_question_number %}">Continue where I left off</a>
+{% for answer in story.answers %}
+    {% if forloop.first and answer %}
+        <h2>Questions you've already answered</h2>
+    {%  endif %}
+    {%  if answer %}
+        <h3>{{ forloop.counter }}. {{ answer.question }} <a href="{% url 'question' forloop.counter %}">Edit</a></h3>
+        {% if answer.employees %}
+            <ul>
+            {% for employee in answer.employees.all %}
+                <li>{{ employee.full_name }}</li>
+            {% endfor %}
+            </ul>
+        {%  elif answer.text %}
+            <p>{{ answer.text }}</p>
+        {% endif %}
+    {% endif %}
+{% endfor %}
