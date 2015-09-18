@@ -226,7 +226,8 @@ question_forms = {
 }
 
 
-def get_form(question_number, data=None):
+def get_form(question_number, story, data=None):
+    question_number = int(question_number)
     config = question_forms.get(question_number, None)
     if config is None:
         return None
@@ -234,5 +235,8 @@ def get_form(question_number, data=None):
     kwargs = config['kwargs']
     if data is not None:
         kwargs['data'] = data
+    instance = story.get_answer(question_number)
+    if instance is not None:
+        kwargs['instance'] = instance
     form = form_class(**kwargs)
     return form

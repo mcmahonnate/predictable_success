@@ -70,14 +70,18 @@ class YourStory(TimeStampedModel):
                 return question_number
             question_number += 1
 
-    def add_answer(self, question_number, response):
+    def add_answer(self, question_number, answer):
         """
         Convenience method for attaching a response to the proper field
         based on the question number. Relies on the convention that all response
         fields begin with an 'a' and end with a number, e.g. 'a5' should hold
         the response for question #5.
         :param question_number: The question number that the response is for
-        :param response: The response object
+        :param answer: The model to be attached for the question number
         """
         key = self._get_field_name_for_question(question_number)
-        setattr(self, key, response)
+        setattr(self, key, answer)
+
+    def get_answer(self, question_number):
+        key = self._get_field_name_for_question(question_number)
+        return getattr(self, key)

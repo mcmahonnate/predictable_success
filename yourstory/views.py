@@ -37,8 +37,8 @@ class Questions(View):
         return template
 
     @staticmethod
-    def get_form_or_404(question_number, data=None):
-        form = get_form(question_number, data=data)
+    def get_form_or_404(question_number, story, data=None):
+        form = get_form(question_number, story, data=data)
         if form is None:
             raise Http404()
         return form
@@ -48,9 +48,7 @@ class Questions(View):
         if story is None:
             return redirect('yourstory')
 
-        question_number = int(question_number)
-
-        form = self.get_form_or_404(question_number)
+        form = self.get_form_or_404(question_number, story)
         template = self.get_template_for_form(form)
 
         return render(request, template, {'form': form, 'question_number': question_number, 'question': form.question})
@@ -58,11 +56,9 @@ class Questions(View):
     def post(self, request, question_number):
         story = YourStory.objects.get(employee__user=request.user)
         if story is None:
-            return redirect('yourstory')
+            return redirect('index')
 
-        question_number = int(question_number)
-
-        form = self.get_form_or_404(question_number, data=request.POST)
+        form = self.get_form_or_404(question_number, story, data=request.POST)
 
         if form.is_valid():
             answer = form.save()
@@ -70,8 +66,8 @@ class Questions(View):
             story.save()
             next_question = story.next_unanswered_question_number()
             if next_question is None:
-                return redirect('yourstory')  # Need a 'finished' view?
-            return redirect('yourstory_questions', question_number=next_question)
+                return redirect('index')  # Need a 'finished' view?
+            return redirect('question', question_number=next_question)
         else:
             template = self.get_template_for_form(form)
             return render(request, template, {'form': form, 'question_number': question_number, 'question': form.question})
