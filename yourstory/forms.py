@@ -46,6 +46,7 @@ class EmployeeChoiceResponseForm(forms.ModelForm):
         self.min_choices = kwargs.pop('min_choices', None)
         self.max_choices = kwargs.pop('max_choices', None)
         if 'data' in kwargs:
+            kwargs['data'] = kwargs['data'].copy()  # Make a copy so it's mutable
             kwargs['data']['question'] = self.question
 
         super(EmployeeChoiceResponseForm, self).__init__(*args, **kwargs)
