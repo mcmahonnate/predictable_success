@@ -22,7 +22,7 @@ router.register(r'^api/v1/attributes', AttributeViewSet)
 
 admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^$', IndexView.as_view(), name='index'),
 	url(r'^404/?$', TemplateView.as_view(template_name="404.html"), name='404'),
 	url(r'^error/?$', TemplateView.as_view(template_name="error.html"), name='error'),
@@ -140,14 +140,10 @@ urlpatterns = patterns('',
     url(r'^api/v1/reports/activity$', last_activity_report),
 
     url(r'^api/v1/search/', include('search.api.urls')),
-
     url(r'^api/v1/checkins/', include('checkins.api.urls')),
-
     url(r'^api/v1/comments/', include('blah.api.urls')),
-
     url(r'^yourstory/', include('yourstory.urls')),
-
     url(r'^api/v1/profile/$', Profile.as_view()),
 
     url(r'^', include(router.urls)),
-)
+]
