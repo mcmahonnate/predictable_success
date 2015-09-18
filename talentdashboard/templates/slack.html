@@ -21,5 +21,17 @@
         {% endfor %}
         </ul>
 
+
+        <script type="text/javascript">
+
+        var slackBot = require('slack-bot')("https://hooks.slack.com/services/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");
+        slackBot.send({
+          text: 'OMG look at this thing',
+          channel: '@doug', // Can also be '@someone' for a direct message 
+          username: 'Alert Bot'
+        }, callback);
+
+        </script>
+
     </div>    
 {% endblock content %}

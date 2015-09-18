@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 from django.contrib.auth.views import password_reset, password_reset_confirm, password_reset_done, password_reset_complete, login, logout
 from views.views import *
+from views.slack import *
 from forms import *
 from rest_framework import routers
 from views.payment import ChargeView, PaymentView
@@ -146,6 +147,8 @@ urlpatterns = patterns('',
     url(r'^api/v1/comments/', include('blah.api.urls')),
 
     url(r'^api/v1/profile/$', Profile.as_view()),
+
+    url(r'^slack/$', Slack.as_view()),
 
     url(r'^', include(router.urls)),
 )
