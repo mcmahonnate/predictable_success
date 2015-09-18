@@ -7,10 +7,10 @@ from yourstory.forms import get_form, TextResponseForm, EmployeeChoiceResponseFo
 from yourstory.models import YourStory
 
 
-class YourStoryDetail(View):
+class Index(View):
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
-        return super(YourStoryDetail, self).dispatch(*args, **kwargs)
+        return super(Index, self).dispatch(*args, **kwargs)
 
     def get(self, request):
         try:
@@ -28,7 +28,7 @@ class YourStoryDetail(View):
         return redirect('question', question_number=story.next_unanswered_question_number)
 
 
-class Questions(View):
+class Question(View):
     form_templates = {
         TextResponseForm: 'text_response.html',
         EmployeeChoiceResponseForm: 'employee_choice_response.html',
@@ -36,7 +36,7 @@ class Questions(View):
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
-        return super(Questions, self).dispatch(*args, **kwargs)
+        return super(Question, self).dispatch(*args, **kwargs)
 
     def get_template_for_form(self, form):
         template = self.form_templates.get(type(form), None)
