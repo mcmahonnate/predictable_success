@@ -36,7 +36,7 @@ class YourStory(TimeStampedModel):
     a6 = models.ForeignKey(TextResponse, null=True, related_name='+')
     a7 = models.ForeignKey(TextResponse, null=True, related_name='+')
     a8 = models.ForeignKey(TextResponse, null=True, related_name='+')
-    a9 = models.ForeignKey(TextResponse, null=True, related_name='+')
+    a9 = models.ForeignKey(EmployeeChoiceResponse, null=True, related_name='+')
     a10 = models.ForeignKey(TextResponse, null=True, related_name='+')
     a11 = models.ForeignKey(TextResponse, null=True, related_name='+')
     a12 = models.ForeignKey(TextResponse, null=True, related_name='+')
