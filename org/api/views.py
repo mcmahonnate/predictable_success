@@ -126,5 +126,5 @@ def team_lead_employees(request):
 
 def show_org_chart(request):
     return render_to_response("org_chart.html",
-                          {'nodes':Employee.objects.all()},
+                          {'nodes':Employee.objects.get_current_employees()},
                           context_instance=RequestContext(request))
