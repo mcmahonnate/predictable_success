@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from org.models import Employee
 
 from django.db import models, migrations
 
@@ -12,9 +11,8 @@ def add_permissions_to_existing_groups(apps, schema_editor):
     ContentType = apps.get_model("contenttypes", "ContentType")
     Permission = apps.get_model("auth", "Permission")
 
-    content_type = ContentType.objects.get_for_model(Employee)
-    view_comments_permission = Permission.objects.get(content_type=content_type, codename='view_employee_comments')
-    view_employees_permission = Permission.objects.get(content_type=content_type, codename='view_employees')
+    view_comments_permission = Permission.objects.get(codename='view_employee_comments')
+    view_employees_permission = Permission.objects.get(codename='view_employees')
     all_access = Group.objects.get(name='AllAccess')
     coaches = Group.objects.get(name='CoachAccess')
     team_leads = Group.objects.get(name='TeamLeadAccess')
