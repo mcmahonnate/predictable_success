@@ -3,23 +3,37 @@ from model_utils.models import TimeStampedModel
 from org.models import Employee
 
 
-class TextResponse(TimeStampedModel):
+class Response(TimeStampedModel):
+    """
+    Abstract base class model that provides common fields
+    for all responses to YourStory questions.
+    """
+    question = models.TextField(blank=False)
+    is_public = models.BooleanField(default=False)
+
+    @property
+    def question_type(self):
+        return self.question_type
+
+    class Meta:
+        abstract = True
+
+
+class TextResponse(Response):
     """
     A text response to a Your Story question.
     """
-    question = models.TextField(blank=False)
+    question_type = 'text'
     text = models.TextField(blank=True)
-    is_public = models.BooleanField(default=False)
 
 
-class EmployeeChoiceResponse(TimeStampedModel):
+class EmployeeChoiceResponse(Response):
     """
     A response to a Your Story question that consists of choosing
     one or more Employees, e.g. "Who are your favorite Fools?"
     """
-    question = models.TextField(blank=False)
+    question_type = 'employeechoice'
     employees = models.ManyToManyField(Employee)
-    is_public = models.BooleanField(default=False)
 
 
 class YourStory(TimeStampedModel):
@@ -68,8 +82,8 @@ class YourStory(TimeStampedModel):
     @property
     def next_unanswered_question_number(self):
         """
-        Finds the number of the next unanswered question
-        :return: The next unanswered question number, or None if all questions have been answered
+        Finds the number of the next unanswered question.
+        :return: The next unanswered question number, or None if all questions have been answered.
         """
         question_number = 1
         while True:
@@ -100,11 +114,17 @@ class YourStory(TimeStampedModel):
         fields begin with an 'a' and end with a number, e.g. 'a5' should hold
         the response for question #5.
         :param question_number: The question number that the response is for
-        :param answer: The model to be attached for the question number
+        :param answer: The model to be attached for the question number.
         """
         key = self._get_field_name_for_question(question_number)
         setattr(self, key, answer)
 
     def get_answer(self, question_number):
+        """
+        Convenience method for getting a response based on the question number.
+        Relies on the convention that all response fields begin with an 'a' and
+        end with a number, e.g. 'a5' should hold the response for question #5.
+        :param question_number: The question number to get the response for.
+        """
         key = self._get_field_name_for_question(question_number)
         return getattr(self, key)

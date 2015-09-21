@@ -142,6 +142,7 @@ urlpatterns = [
     url(r'^api/v1/search/', include('search.api.urls')),
     url(r'^api/v1/checkins/', include('checkins.api.urls')),
     url(r'^api/v1/comments/', include('blah.api.urls')),
+    url(r'^api/v1/yourstory/', include('yourstory.api.urls')),
     url(r'^yourstory/', include('yourstory.urls')),
     url(r'^api/v1/profile/$', Profile.as_view()),
 
