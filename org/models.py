@@ -6,6 +6,7 @@ import datetime
 import blah
 from blah.models import Comment
 from model_utils import Choices, FieldTracker
+from mptt.models import MPTTModel, TreeForeignKey, TreeManager
 from django.utils.log import getLogger
 
 logger = getLogger(__name__)
@@ -32,7 +33,7 @@ class Relationship(models.Model):
         return '{0} has {1} {2}'.format(self.employee, self.relation_type_name, self.related_employee)
 
 
-class EmployeeManager(models.Manager):
+class EmployeeManager(TreeManager):
     def coaches(self):
         return self.filter(user__groups__name=COACHES_GROUP).order_by('full_name')
 
@@ -68,7 +69,7 @@ class EmployeeManager(models.Manager):
         return self.filter(user=user).get()
 
 
-class Employee(models.Model):
+class Employee(MPTTModel):
     objects = EmployeeManager()
     _current_leadership = None
 
@@ -128,6 +129,7 @@ class Employee(models.Model):
     display = models.BooleanField(default=False)
     user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='employee')
     coach = models.ForeignKey('Employee', related_name='coachees', null=True, blank=True)
+    leader = TreeForeignKey('self', null=True, blank=True, related_name='employees', db_index=True)
     field_tracker = FieldTracker(fields=['coach'])
 
     def save(self, *args, **kwargs):
@@ -350,6 +352,10 @@ class Employee(models.Model):
             ("create_employee_comments", "Can create comments on employees"),
             ("view_employee_comments", "Can view comments on employees"),
         )
+
+    class MPTTMeta:
+        parent_attr = 'leader'
+        order_insertion_by = ['full_name']
 
 
 blah.register(Employee)

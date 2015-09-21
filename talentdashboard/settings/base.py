@@ -179,6 +179,7 @@ TENANT_APPS = (
     'rest_framework',
     'blah',
     'org',
+    'mptt',
     'pvp',
     'comp',
     'todo',

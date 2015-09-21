@@ -1494,31 +1494,7 @@ def team_leads(request):
     employees = Employee.objects.filter(id__in=leaders)
     serializer = EmployeeSerializer(employees, many=True, context={'request': request})
     
-    return Response(serializer.data)    
-
-@api_view(['GET'])
-def team_lead_employees(request):
-    current_user = request.user
-    lead_id = request.QUERY_PARAMS.get('lead_id', 0)
-    if lead_id==0:
-        lead = Employee.objects.get(user=current_user)
-        lead_id = lead.id
-    else:
-        lead = Employee.objects.get(id=lead_id)
-    if lead.user == current_user or current_user.is_superuser:
-        leaderships = Leadership.objects.filter(leader__id=int(lead_id))
-        leaderships = leaderships.filter(end_date__isnull=True)
-        employees = []
-        for leadership in leaderships:
-            if leadership.employee not in employees:
-                if leadership.employee.departure_date is None:
-                    employees.append(leadership.employee)
-        
-        serializer = EmployeeSerializer(employees, many=True, context={'request': request})
-
-        return Response(serializer.data)        
-    else:
-        return Response(None, status=status.HTTP_403_FORBIDDEN)
+    return Response(serializer.data)
 
 @api_view(['GET'])
 def talent_categories(request):

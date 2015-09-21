@@ -8,7 +8,7 @@ from forms import *
 from rest_framework import routers
 from views.payment import ChargeView, PaymentView
 from views.homepage import IndexView
-from org.api.views import Profile
+from org.api.views import Profile, team_lead_employees
 from insights.views import Signup, Report, Survey, Confirmation
 from engagement.api.views import RetrieveUpdateDestroyHappiness, CreateHappiness, EmployeeHappinessList
 from activity.api.views import EventList, EmployeeEventList, TeamEventList, CoachEventList, LeadEventList, CheckInEventList, CommentEvent
@@ -31,6 +31,7 @@ urlpatterns = patterns('',
     url(r'^logout/$', logout,{'next_page': '/account/login/'}),
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^org/chart/$', 'org.api.views.show_org_chart'),
     url(r'^account/payment/?$', PaymentView.as_view(), name='payment'),
     url(r'^account/thanks/?$',ChargeView.as_view(), name='charge'),
     url(r'^account/login/?$',login,{'template_name':'login.html', 'authentication_form':CustomAuthenticationForm}, name='login'),
