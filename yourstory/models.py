@@ -97,6 +97,9 @@ class YourStory(TimeStampedModel):
 
     @property
     def answers(self):
+        """
+        A way to access all of the responses as an ordered list.
+        """
         answers = []
         question_number = 1
         key = self._get_field_name_for_question(question_number)
