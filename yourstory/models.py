@@ -28,33 +28,44 @@ class YourStory(TimeStampedModel):
     specific Employee.
     """
     employee = models.ForeignKey(Employee, unique=True)
-    a1 = models.ForeignKey(TextResponse, null=True, related_name='+')
-    a2 = models.ForeignKey(EmployeeChoiceResponse, null=True, related_name='+')
-    a3 = models.ForeignKey(TextResponse, null=True, related_name='+')
-    a4 = models.ForeignKey(TextResponse, null=True, related_name='+')
-    a5 = models.ForeignKey(TextResponse, null=True, related_name='+')
-    a6 = models.ForeignKey(TextResponse, null=True, related_name='+')
-    a7 = models.ForeignKey(TextResponse, null=True, related_name='+')
-    a8 = models.ForeignKey(TextResponse, null=True, related_name='+')
-    a9 = models.ForeignKey(TextResponse, null=True, related_name='+')
-    a10 = models.ForeignKey(TextResponse, null=True, related_name='+')
-    a11 = models.ForeignKey(TextResponse, null=True, related_name='+')
-    a12 = models.ForeignKey(TextResponse, null=True, related_name='+')
-    a13 = models.ForeignKey(TextResponse, null=True, related_name='+')
-    a14 = models.ForeignKey(EmployeeChoiceResponse, null=True, related_name='+')
-    a15 = models.ForeignKey(TextResponse, null=True, related_name='+')
-    a16 = models.ForeignKey(TextResponse, null=True, related_name='+')
-    a17 = models.ForeignKey(TextResponse, null=True, related_name='+')
-    a18 = models.ForeignKey(TextResponse, null=True, related_name='+')
-    a19 = models.ForeignKey(TextResponse, null=True, related_name='+')
-    a20 = models.ForeignKey(TextResponse, null=True, related_name='+')
-    a21 = models.ForeignKey(TextResponse, null=True, related_name='+')
-    a22 = models.ForeignKey(EmployeeChoiceResponse, null=True, related_name='+')
+    a1 = models.ForeignKey(TextResponse, null=True, related_name='+', on_delete=models.SET_NULL)
+    a2 = models.ForeignKey(EmployeeChoiceResponse, null=True, related_name='+', on_delete=models.SET_NULL)
+    a3 = models.ForeignKey(TextResponse, null=True, related_name='+', on_delete=models.SET_NULL)
+    a4 = models.ForeignKey(TextResponse, null=True, related_name='+', on_delete=models.SET_NULL)
+    a5 = models.ForeignKey(TextResponse, null=True, related_name='+', on_delete=models.SET_NULL)
+    a6 = models.ForeignKey(TextResponse, null=True, related_name='+', on_delete=models.SET_NULL)
+    a7 = models.ForeignKey(TextResponse, null=True, related_name='+', on_delete=models.SET_NULL)
+    a8 = models.ForeignKey(TextResponse, null=True, related_name='+', on_delete=models.SET_NULL)
+    a9 = models.ForeignKey(EmployeeChoiceResponse, null=True, related_name='+', on_delete=models.SET_NULL)
+    a10 = models.ForeignKey(TextResponse, null=True, related_name='+', on_delete=models.SET_NULL)
+    a11 = models.ForeignKey(TextResponse, null=True, related_name='+', on_delete=models.SET_NULL)
+    a12 = models.ForeignKey(TextResponse, null=True, related_name='+', on_delete=models.SET_NULL)
+    a13 = models.ForeignKey(EmployeeChoiceResponse, null=True, related_name='+', on_delete=models.SET_NULL)
+    a14 = models.ForeignKey(TextResponse, null=True, related_name='+', on_delete=models.SET_NULL)
+    a15 = models.ForeignKey(TextResponse, null=True, related_name='+', on_delete=models.SET_NULL)
+    a16 = models.ForeignKey(TextResponse, null=True, related_name='+', on_delete=models.SET_NULL)
+    a17 = models.ForeignKey(TextResponse, null=True, related_name='+', on_delete=models.SET_NULL)
+    a18 = models.ForeignKey(TextResponse, null=True, related_name='+', on_delete=models.SET_NULL)
+    a19 = models.ForeignKey(TextResponse, null=True, related_name='+', on_delete=models.SET_NULL)
+    a20 = models.ForeignKey(TextResponse, null=True, related_name='+', on_delete=models.SET_NULL)
+    a21 = models.ForeignKey(EmployeeChoiceResponse, null=True, related_name='+', on_delete=models.SET_NULL)
 
     @staticmethod
     def _get_field_name_for_question(question_number):
         return 'a{}'.format(question_number)
 
+    @property
+    def total_questions(self):
+        last_question_number = 0
+        question_number = 1
+        key = self._get_field_name_for_question(question_number)
+        while hasattr(self, key):
+            last_question_number = question_number
+            question_number += 1
+            key = self._get_field_name_for_question(question_number)
+        return last_question_number
+
+    @property
     def next_unanswered_question_number(self):
         """
         Finds the number of the next unanswered question
@@ -70,14 +81,30 @@ class YourStory(TimeStampedModel):
                 return question_number
             question_number += 1
 
-    def add_response(self, question_number, response):
+    @property
+    def answers(self):
+        answers = []
+        question_number = 1
+        key = self._get_field_name_for_question(question_number)
+        while hasattr(self, key):
+            answer = getattr(self, key)
+            answers.append(answer)
+            question_number += 1
+            key = self._get_field_name_for_question(question_number)
+        return answers
+
+    def add_answer(self, question_number, answer):
         """
         Convenience method for attaching a response to the proper field
         based on the question number. Relies on the convention that all response
         fields begin with an 'a' and end with a number, e.g. 'a5' should hold
         the response for question #5.
         :param question_number: The question number that the response is for
-        :param response: The response object
+        :param answer: The model to be attached for the question number
         """
         key = self._get_field_name_for_question(question_number)
-        setattr(self, key, response)
+        setattr(self, key, answer)
+
+    def get_answer(self, question_number):
+        key = self._get_field_name_for_question(question_number)
+        return getattr(self, key)

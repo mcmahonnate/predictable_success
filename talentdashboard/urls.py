@@ -15,7 +15,6 @@ from engagement.api.views import RetrieveUpdateDestroyHappiness, CreateHappiness
 from activity.api.views import EventList, EmployeeEventList, TeamEventList, CoachEventList, LeadEventList, CheckInEventList, CommentEvent
 from blah.api.views import CommentDetail
 from org.api.views import EmployeeCommentList
-from yourstory.views import YourStory, YourStoryQuestions
 router = routers.DefaultRouter()
 router.register(r'^api/v1/teams', TeamViewSet)
 router.register(r'^api/v1/mentorships', MentorshipViewSet)
@@ -24,7 +23,7 @@ router.register(r'^api/v1/attributes', AttributeViewSet)
 
 admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^$', IndexView.as_view(), name='index'),
 	url(r'^404/?$', TemplateView.as_view(template_name="404.html"), name='404'),
 	url(r'^error/?$', TemplateView.as_view(template_name="error.html"), name='error'),
@@ -142,17 +141,14 @@ urlpatterns = patterns('',
     url(r'^api/v1/reports/activity$', last_activity_report),
 
     url(r'^api/v1/search/', include('search.api.urls')),
-
     url(r'^api/v1/checkins/', include('checkins.api.urls')),
-
     url(r'^api/v1/comments/', include('blah.api.urls')),
-
+    url(r'^yourstory/', include('yourstory.urls')),
     url(r'^api/v1/profile/$', Profile.as_view()),
 
     url(r'^slack/$', Slack.as_view()),
 
     url(r'^yourstory/$', YourStory.as_view(), name="yourstory"),
     url(r'^yourstory/questions/(?P<pk>[0-9]+)/$', YourStoryQuestions.as_view(), name="yourstory_questions"),
-
     url(r'^', include(router.urls)),
-)
+]
