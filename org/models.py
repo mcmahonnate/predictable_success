@@ -133,20 +133,14 @@ class Employee(MPTTModel):
     field_tracker = FieldTracker(fields=['coach'])
 
     def save(self, *args, **kwargs):
-        new_leadership = None
-        old_leadership = None
-
         if self.first_name and self.last_name:
             self.full_name = self.first_name + " " + self.last_name
-        if self._current_leadership is not None:
-            new_leadership = self._current_leadership
-            old_leadership = self._get_current_leadership()
-            old_leader_id = old_leadership.leader.id if (old_leadership is not None) and (old_leadership.leader is not None) else 0
-            new_leader_id = self._current_leadership.leader.id if self._current_leadership.leader is not None else 0
         super(Employee, self).save(*args, **kwargs)
-        if (new_leadership is not None) and (old_leader_id != new_leader_id):
-            new_leadership.employee = self
-            new_leadership.save()
+        new_leader_id = self.leader.id if self.leader else 0
+        old_leader_id = self.current_leader.id if self.current_leader else 0
+        if new_leader_id != old_leader_id:
+            leadership = Leadership(employee=self, leader=self.leader)
+            leadership.save()
         self._update_relationships()
 
     def _update_relationships(self):

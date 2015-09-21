@@ -8,7 +8,7 @@ from forms import *
 from rest_framework import routers
 from views.payment import ChargeView, PaymentView
 from views.homepage import IndexView
-from org.api.views import Profile, team_lead_employees
+from org.api.views import Profile, team_lead_employees, EmployeeDetail
 from insights.views import Signup, Report, Survey, Confirmation
 from engagement.api.views import RetrieveUpdateDestroyHappiness, CreateHappiness, EmployeeHappinessList
 from activity.api.views import EventList, EmployeeEventList, TeamEventList, CoachEventList, LeadEventList, CheckInEventList, CommentEvent

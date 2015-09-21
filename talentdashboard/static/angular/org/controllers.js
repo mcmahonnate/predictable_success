@@ -211,8 +211,8 @@ angular.module('tdb.org.controllers', [])
             data.hire_date = ($scope.employee.hire_date) ? $rootScope.scrubDate($scope.employee.hire_date, false) : null;
             data.departure_date = ($scope.employee.departure_date) ? $rootScope.scrubDate($scope.employee.departure_date, false) : null;
             data.team = ($scope.employee.team && $scope.employee.team.name) ? $scope.employee.team.id : null;
-            data.coach = ($scope.employee.coach && $scope.employee.coach.full_name) ? ($scope.employee.current_leader.pk ? $scope.employee.coach.pk: $scope.employee.coach.id) : null;
-            data.leader_id = ($scope.employee.current_leader && $scope.employee.current_leader.full_name) ? ($scope.employee.current_leader.pk ? $scope.employee.current_leader.pk: $scope.employee.current_leader.id) : null;
+            data.coach = ($scope.employee.coach && $scope.employee.coach.full_name) ? ($scope.employee.coach.pk ? $scope.employee.coach.pk: $scope.employee.coach.id) : null;
+            data.leader = ($scope.employee.leader && $scope.employee.leader.full_name) ? ($scope.employee.leader.pk ? $scope.employee.leader.pk: $scope.employee.leader.id) : null;
             data.display = true;
             return data;
         };

@@ -48,7 +48,7 @@
                         <span>*Team Lead is invalid.</span>
                     </span>
                     <div class="edit-dropdown">
-                        <input type="text" ng-model="employee.current_leader.full_name" placeholder="optional" typeahead-on-select="employee.current_leader=$item" typeahead="employee.full_name for employee in employees | filter:{full_name:$viewValue}:startsWith | orderBy:'full_name' | limitTo:8" typeahead-editable="false" class="view-value-input form-control" tabindex="6"/>
+                        <input type="text" ng-model="employee.leader.full_name" placeholder="optional" typeahead-on-select="employee.leader=$item" typeahead="employee.full_name for employee in employees | filter:{full_name:$viewValue}:startsWith | orderBy:'full_name' | limitTo:8" typeahead-editable="false" class="view-value-input form-control" tabindex="6"/>
                     </div>
                     <span ng-if="customer.show_coaches">Coach</span>
                     <div ng-if="customer.show_coaches" class="edit-dropdown">
