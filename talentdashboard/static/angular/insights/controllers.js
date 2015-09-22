@@ -1,6 +1,6 @@
 angular.module('tdb.insights.controllers', [])
 
-    .controller('SelfAssessReportCtrl', ['$scope', '$rootScope','ProspectReport', 'TalentCategories', 'User', 'analytics', function($scope, $rootScope, ProspectReport, TalentCategories, User, analytics) {
+    .controller('SelfAssessReportCtrl', ['$scope', '$rootScope', '$location', 'ProspectReport', 'TalentCategories', 'User', 'analytics', function($scope, $rootScope, $location, ProspectReport, TalentCategories, User, analytics) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         ProspectReport.query({domain: 'com'}).$promise.then(function(response) {
                 $scope.selfAssessments = response;
