@@ -179,6 +179,12 @@ class Employee(MPTTModel):
             return True
         return False
 
+    def is_ancestor_of(self, other, include_self=False):
+        if self.user.has_perm('org.view_employees'):
+            return True
+        else:
+            return super(Employee, self).is_ancestor_of(other, include_self)
+
     def _get_kolbe_fact_finder(self):
         try:
             name = self.assessments.get(category__name='Fact Finder').get_name

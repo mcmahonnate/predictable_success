@@ -15,7 +15,8 @@ angular.module('tdb.activity.controllers', [])
                     request = Event.get({page: $scope.nextPage});
                     break;
                 case 'leader':
-                    request = Event.getLeadEvents($scope.nextPage);
+                    console.log($routeParams.id);
+                    request = Event.getLeadEvents($routeParams.id, $scope.nextPage);
                     break;
                 case 'team':
                     request = Event.getTeamEvents($routeParams.id, $scope.nextPage);

@@ -12,7 +12,7 @@ angular.module('tdb.org.controllers', [])
         }
     }])
 
-    .controller('LeaderOverviewCtrl', ['$scope', '$location', '$routeParams', 'SalaryReport', 'TalentReport', 'TeamLeadEmployees', 'User', 'analytics', 'TemplatePreferences', function ($scope, $location, $routeParams, SalaryReport, TalentReport, TeamLeadEmployees, User, analytics, TemplatePreferences) {
+    .controller('LeaderOverviewCtrl', ['$scope', '$location', '$routeParams', 'Employee', 'SalaryReport', 'TalentReport', 'MyEmployees', 'TeamLeadEmployees', 'User', 'analytics', 'TemplatePreferences', function ($scope, $location, $routeParams, Employee, SalaryReport, TalentReport, MyEmployees, TeamLeadEmployees, User, analytics, TemplatePreferences) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
 
         TemplatePreferences.getPreferredTemplate('team-lead-overview')
@@ -22,15 +22,26 @@ angular.module('tdb.org.controllers', [])
             }
         );
 
+        if ($routeParams.id) {
+            Employee.get(
+                {id: $routeParams.id},
+                function (data) {
+                    $scope.show_name = true;
+                    $scope.lead = data;
+                    $scope.employees = TeamLeadEmployees.query({id: $routeParams.id});
+                }
+            );
+        } else {
+            User.get(
+                function (data) {
+                    $scope.lead = data.employee;
+                    $scope.employees =  MyEmployees.query();
+                }
+            );
+        }
+
         $scope.talentReport = TalentReport.myTeam();
         $scope.salaryReport = SalaryReport.myTeam();
-
-        User.get(
-            function (data) {
-                $scope.lead = data.employee;
-                $scope.employees = TeamLeadEmployees.getEmployees($scope.lead.id);
-            }
-        );
     }])
 
     .controller('TeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'Team', 'TeamMembers', 'TeamMBTI', 'Customers', 'TeamLeads', 'analytics', 'SalaryReport', 'TalentReport', 'TemplatePreferences', function ($scope, $location, $routeParams, Team, TeamMembers, TeamMBTI, Customers, TeamLeads, analytics, SalaryReport, TalentReport, TemplatePreferences) {
@@ -411,7 +422,7 @@ angular.module('tdb.org.controllers', [])
         };
     }])
 
-    .controller('EmployeesSnapshotCtrl', ['$scope', '$routeParams', 'Event', '$rootScope', '$location', '$routeParams', 'User', 'Employee', 'Coachees', 'TeamLeads', function ($scope, $routeParams, Event, $rootScope, $location, $routeParams, User, Employee, Coachees, TeamLeads) {
+    .controller('EmployeesSnapshotCtrl', ['$scope', '$routeParams', 'Event', '$rootScope', '$location', 'User', 'Employee', 'Coachees', 'TeamLeads', function ($scope, $routeParams, Event, $rootScope, $location, User, Employee, Coachees, TeamLeads) {
         $scope.busy = true;
 
         if ($scope.view == 'team-view') {

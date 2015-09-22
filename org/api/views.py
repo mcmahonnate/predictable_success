@@ -11,8 +11,10 @@ from django.shortcuts import render_to_response
 import dateutil.parser
 from talentdashboard.views.views import add_salary_to_employee
 from .serializers import EmployeeSerializer, CreateEmployeeSerializer, EditEmployeeSerializer
-from ..models import Employee, Leadership
+from ..models import Employee
+from django.utils.log import getLogger
 
+logger = getLogger('talentdashboard')
 
 class EmployeeDetail(APIView):
     def get(self, request, pk, format=None):
@@ -101,28 +103,32 @@ class Profile(APIView):
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
-def team_lead_employees(request):
+def my_employees(request):
     current_user = request.user
-    lead_id = request.QUERY_PARAMS.get('lead_id', 0)
-    if lead_id==0:
-        lead = Employee.objects.get(user=current_user)
-        lead_id = lead.id
-    else:
-        lead = Employee.objects.get(id=lead_id)
+    lead = Employee.objects.get(user=current_user)
     if lead.user == current_user or current_user.is_superuser:
-        leaderships = Leadership.objects.filter(leader__id=int(lead_id))
-        leaderships = leaderships.filter(end_date__isnull=True)
-        employees = []
-        for leadership in leaderships:
-            if leadership.employee not in employees:
-                if leadership.employee.departure_date is None:
-                    employees.append(leadership.employee)
-
+        employees = lead.get_descendants()
+        employees = employees.filter(departure_date__isnull=True)
         serializer = EmployeeSerializer(employees, many=True, context={'request': request})
 
         return Response(serializer.data)
     else:
         return Response(None, status=status.HTTP_403_FORBIDDEN)
+
+@api_view(['GET'])
+def team_lead_employees(request, pk):
+    current_employee = Employee.objects.get(user=request.user)
+    lead = Employee.objects.get(id=pk)
+
+    if current_employee.is_ancestor_of(other=lead, include_self=True):
+        employees = lead.get_descendants()
+        employees = employees.filter(departure_date__isnull=True)
+        serializer = EmployeeSerializer(employees, many=True, context={'request': request})
+
+        return Response(serializer.data)
+    else:
+        return Response(None, status=status.HTTP_403_FORBIDDEN)
+
 
 def show_org_chart(request):
     return render_to_response("org_chart.html",
