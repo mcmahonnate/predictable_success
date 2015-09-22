@@ -4,25 +4,38 @@ from org.models import Employee
 from .models import TextResponse, EmployeeChoiceResponse
 
 
-class TextResponseForm(forms.ModelForm):
+class ResponseForm(forms.ModelForm):
+    """
+    A base form for different response types to inherit from.
+    Forms that inherit from this form should include 'response_field'
+    in the Meta class, which is the name of the field that holds the user's
+    response. See TextResponseForm for an example.
+    """
     is_public = forms.BooleanField(
         required=False,
         initial=True,
         label=_('Make answer public')
     )
-    text = forms.CharField()
 
     def __init__(self, *args, **kwargs):
         self.question = kwargs.pop('question', None)
-        self.max_length = kwargs.pop('max_length', None)
-        self.widget = kwargs.pop('widget', None)
         if 'data' in kwargs:
             kwargs['data'] = kwargs['data'].copy()  # Make a copy so it's mutable
             kwargs['data']['question'] = _(self.question)
-        super(TextResponseForm, self).__init__(*args, **kwargs)
+        super(ResponseForm, self).__init__(*args, **kwargs)
 
         if self.question is not None:
-            self.fields['text'].label = _(self.question)
+            self.fields[self.Meta.response_field].label = _(self.question)
+
+
+class TextResponseForm(ResponseForm):
+    text = forms.CharField()
+
+    def __init__(self, *args, **kwargs):
+        self.max_length = kwargs.pop('max_length', None)
+        self.widget = kwargs.pop('widget', None)
+        super(TextResponseForm, self).__init__(*args, **kwargs)
+
         if self.max_length:
             self.fields['text'].max_length = int(self.max_length)
         if self.widget is not None:
@@ -31,30 +44,28 @@ class TextResponseForm(forms.ModelForm):
     class Meta:
         model = TextResponse
         fields = ['is_public', 'text', 'question']
+        response_field = 'text'
 
 
+<<<<<<< HEAD
 class EmployeeChoiceResponseForm(forms.ModelForm):
     is_public = forms.BooleanField(
         required=False,
         initial=True,
         label=_('Make answer public')
     )
+=======
+class EmployeeChoiceResponseForm(ResponseForm):
+>>>>>>> e03bb9965677974f2465b2d055a6e2f7ab070210
     employees = forms.ModelMultipleChoiceField(
         queryset=Employee.objects.all()
     )
 
     def __init__(self, *args, **kwargs):
-        self.question = kwargs.pop('question', None)
         self.min_choices = kwargs.pop('min_choices', None)
         self.max_choices = kwargs.pop('max_choices', None)
-        if 'data' in kwargs:
-            kwargs['data'] = kwargs['data'].copy()  # Make a copy so it's mutable
-            kwargs['data']['question'] = self.question
 
         super(EmployeeChoiceResponseForm, self).__init__(*args, **kwargs)
-
-        if self.question is not None:
-            self.fields['employees'].label = _(self.question)
 
     def clean_employees(self):
         data = self.cleaned_data['employees']
@@ -73,6 +84,7 @@ class EmployeeChoiceResponseForm(forms.ModelForm):
     class Meta:
         model = EmployeeChoiceResponse
         fields = ['is_public', 'employees', 'question']
+        response_field = 'employees'
 
 
 question_forms = {
@@ -230,6 +242,13 @@ question_forms = {
 
 
 def get_form(question_number, story, data=None):
+    """
+    Factory method for getting a Form for managing a response to a YourStory question.
+    :param question_number: The question number that the Form is for.
+    :param story: The YourStory instance that the response is for
+    :param data: The input data, if any, from the request.
+    :return: A fully initialized form.
+    """
     question_number = int(question_number)
     config = question_forms.get(question_number, None)
     if config is None:
