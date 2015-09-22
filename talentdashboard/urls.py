@@ -148,7 +148,5 @@ urlpatterns = [
 
     url(r'^slack/$', Slack.as_view()),
 
-    url(r'^yourstory/$', YourStory.as_view(), name="yourstory"),
-    url(r'^yourstory/questions/(?P<pk>[0-9]+)/$', YourStoryQuestions.as_view(), name="yourstory_questions"),
     url(r'^', include(router.urls)),
 ]

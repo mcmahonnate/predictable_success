@@ -7,7 +7,8 @@ from .models import TextResponse, EmployeeChoiceResponse
 class TextResponseForm(forms.ModelForm):
     is_public = forms.BooleanField(
         required=False,
-        label=_('Do you want to make your answer public?')
+        initial=True,
+        label=_('Make answer public')
     )
     text = forms.CharField()
 
@@ -35,7 +36,8 @@ class TextResponseForm(forms.ModelForm):
 class EmployeeChoiceResponseForm(forms.ModelForm):
     is_public = forms.BooleanField(
         required=False,
-        label=_('Do you want to make your answer public?')
+        initial=True,
+        label=_('Make answer public')
     )
     employees = forms.ModelMultipleChoiceField(
         queryset=Employee.objects.all()

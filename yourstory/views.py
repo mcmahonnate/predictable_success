@@ -54,10 +54,18 @@ class Question(View):
         if story is None:
             return redirect('yourstory')
 
+        random_story = YourStory.objects.order_by('?').first()
+
         form = self.get_form_or_404(question_number, story)
         template = self.get_template_for_form(form)
 
-        return render(request, template, {'form': form, 'story': story, 'question_number': question_number, 'question': form.question})
+        return render(request, template, {
+            'form': form, 
+            'story': story, 
+            'question_number': question_number, 
+            'question': form.question,
+            'random_story': random_story
+        })
 
     def post(self, request, question_number):
         story = YourStory.objects.get(employee__user=request.user)

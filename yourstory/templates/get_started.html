@@ -1,5 +1,17 @@
-<p>It doesn't look like you have a story yet!</p>
-<form action="." method="post">
-    {% csrf_token %}
-    <button type="submit">Get Started!</button>
-</form>
+{% extends "layouts/blank.html" %}
+{% block title %}Your Story{% endblock title %}
+{% block mainclass %}your-story-start{% endblock %}
+
+{% block content %}
+    <div class="container">
+	    <div class="continue-story">
+		    <img src="/static/images/yourstory-logo.png" width="275px" />
+			<p class="about-yourstory">Welcome Fool! At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.</p>
+			<form action="." method="post">
+			    {% csrf_token %}
+			    <button type="submit" class="btn btn-lg btn-story">Get Started!</button>
+			</form>
+			<p class="powered-by">Built by Fools for Fools and powered by Scoutmap</p>
+		</div>
+	</div>	
+{% endblock content %}

@@ -1,17 +1,30 @@
-<h1>Question {{ question_number }} of {{ story.total_questions }}</h1>
-<form action="." method="post">
-    {% csrf_token %}
-    <h2>
-        {{ form.employees.label }}
-    </h2>
-    <div>
-        {{ form.employees }}
+{% extends "layouts/blank.html" %}
+{% block title %}Your Story{% endblock title %}
+{% block mainclass %}your-story your-story-question{% endblock %}
+
+{% block content %}
+    <a href="{% url 'index' %}"><img src="/static/images/yourstory-logo-green.png" class="story-logo" alt="Your Story Home" /></a>
+    <p class="pull-right question-status">Question {{ question_number }} of {{ story.total_questions }}</p>
+    <div class="container">
+        {% for field in form %}
+            {% if field.errors %}
+                <div class="errors">
+                    {{ field.errors }}
+                </div>
+            {% endif %}
+        {% endfor %}
+        <form action="." method="post">
+            {% csrf_token %}
+            <h1>
+                {{ form.employees.label }}
+            </h1>
+            <div rel="tooltip" data-toggle="tooltip" data-placement="left" data-original-title="<strong>TIP:</strong> On Mac hold Command key while <br /> selecting your second choice.">
+                {{ form.employees }}
+            </div>
+            <button type="submit" class="btn btn-lg btn-story pull-left">Save & Continue &#10142;</button>
+            <div class="public pull-left">
+                {{ form.is_public }} {{ form.is_public.label }}
+            </div>
+        </form>
     </div>
-    <div>
-        {{ form.is_public.label }}
-    </div>
-    <div>
-        {{ form.is_public }}
-    </div>
-    <button type="submit">Save</button>
-</form>
+{% endblock content %}
