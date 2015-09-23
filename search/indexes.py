@@ -70,6 +70,9 @@ class EmployeeIndex(object):
                     'coach_full_name': employee.coach.full_name if employee.coach else None,
                     'leader_id': leader.id if leader else None,
                     'leader_full_name': leader.full_name if leader else None,
+                    'lft': employee.lft,
+                    'rght': employee.rght,
+                    'tree_id': employee.tree_id,
                 }
                 documents.append(document)
 
@@ -83,6 +86,9 @@ class EmployeeIndex(object):
                        coach_ids=None,
                        leader_ids=None,
                        page=1,
+                       tree_id=None,
+                       lft=None,
+                       rght=None,
                        rows=10):
         query = {
             'sort': 'full_name asc',
@@ -94,11 +100,16 @@ class EmployeeIndex(object):
         if vops:
             query['fq'].append('vops_%s:[260 TO *]' % vops.lower())
 
+        if tree_id:
+            query['fq'].append('tree_id:%s' % tree_id)
+            query['fq'].append('lft:%s' % lft)
+            query['fq'].append('rght:%s' % rght)
+
         results = self.solr.search('*:*', headers=self._get_auth_headers(), **query)
         return results
 
     def get_salary_report(self, tenant, talent_categories=None, team_ids=None, happiness=None, leader_ids=None,
-                          coach_ids=None):
+                          coach_ids=None, tree_id=None, lft=None, rght=None):
         query = {
             'q': '*:*',
             'wt': 'json',
@@ -110,10 +121,14 @@ class EmployeeIndex(object):
                                     leader_ids=leader_ids, coach_ids=coach_ids),
         }
 
+        if tree_id:
+             query['fq'].append('tree_id:%s' % tree_id)
+             query['fq'].append('lft:%s' % lft)
+             query['fq'].append('rght:%s' % rght)
+
         query_string = urlencode(query, doseq=True)
         url = "%s/select?%s" % (settings.EMPLOYEES_SOLR_URL, query_string)
         results = requests.get(url, headers=self._get_auth_headers()).json()
-
         results = results['stats']['stats_fields']['current_salary']
 
         if results is None:
@@ -136,7 +151,7 @@ class EmployeeIndex(object):
         return report
 
     def get_talent_report(self, tenant, talent_categories=None, team_ids=None, happiness=None, leader_ids=None,
-                          coach_ids=None):
+                          coach_ids=None, tree_id=None, lft=None, rght=None):
         query = {
             'q': '*:*',
             'wt': 'json',
@@ -146,6 +161,11 @@ class EmployeeIndex(object):
             'fq': self._get_filters(tenant, talent_categories=talent_categories, team_ids=team_ids, happiness=happiness,
                                     leader_ids=leader_ids, coach_ids=coach_ids),
         }
+
+        if tree_id:
+             query['fq'].append('tree_id:%s' % tree_id)
+             query['fq'].append('lft:%s' % lft)
+             query['fq'].append('rght:%s' % rght)
 
         query_string = urlencode(query, doseq=True)
         url = "%s/select?%s" % (settings.EMPLOYEES_SOLR_URL, query_string)
@@ -205,7 +225,7 @@ class EmployeeIndex(object):
         filters.append(self._get_filter_string(field_name, values, operator=operator))
 
     def _get_filters(self, tenant, talent_categories=None, team_ids=None, happiness=None, leader_ids=None,
-                     coach_ids=None, display=True):
+                     coach_ids=None, display=True, tree_id=None, lft=None, rght=None):
         filters = ['tenant:%s' % tenant.schema_name]
         self._add_filters(filters, 'talent_category', talent_categories)
         self._add_filters(filters, 'team_id', team_ids)
@@ -213,4 +233,7 @@ class EmployeeIndex(object):
         self._add_filters(filters, 'leader_id', leader_ids)
         self._add_filters(filters, 'coach_id', coach_ids)
         self._add_filters(filters, 'display', ['true'] if display else ['false'])
+        self._add_filters(filters, 'tree_id', tree_id)
+        self._add_filters(filters, 'lft', lft)
+        self._add_filters(filters, 'rght', rght)
         return filters

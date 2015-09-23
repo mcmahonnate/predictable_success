@@ -12,13 +12,17 @@ def employee_search(request):
 
 @api_view(['GET'])
 def my_team_employee_search(request):
-    return _find_employees_filtered_by_relationship_to_current_user(request, 'leader_ids')
+    return _find_employees_filtered_by_current_user_descendants(request)
 
 
 @api_view(['GET'])
 def my_coachees_employee_search(request):
     return _find_employees_filtered_by_relationship_to_current_user(request, 'coach_ids')
 
+def _find_employees_filtered_by_current_user_descendants(request):
+    current_employee = Employee.objects.get(user=request.user)
+    kwargs = {'tree_id': current_employee.tree_id, 'lft': "[%d TO *]" % current_employee.lft, 'rght': "[* TO %d]" % current_employee.rght}
+    return _find_employees(request, **kwargs)
 
 def _find_employees_filtered_by_relationship_to_current_user(request, relationship_field):
     current_employee = Employee.objects.get(user=request.user)
@@ -53,7 +57,7 @@ def salary_report(request):
 
 @api_view(['GET'])
 def my_team_salary_report(request):
-    return _get_salary_report_filtered_by_relationship_to_current_user(request, 'leader_ids')
+    return _get_salary_report_filtered_by_current_user_descendants(request)
 
 
 @api_view(['GET'])
@@ -73,13 +77,19 @@ def talent_report(request):
 
 @api_view(['GET'])
 def my_team_talent_report(request):
-    return _get_talent_report_filtered_by_relationship_to_current_user(request, 'leader_ids')
+    return _get_talent_report_filtered_by_current_user_descendants(request)
 
 
 @api_view(['GET'])
 def my_coachees_talent_report(request):
     return _get_talent_report_filtered_by_relationship_to_current_user(request, 'coach_ids')
 
+
+def _get_salary_report_filtered_by_current_user_descendants(request):
+    current_employee = Employee.objects.get(user=request.user)
+    kwargs = {'tree_id': current_employee.tree_id, 'lft': "[%d TO *]" % current_employee.lft, 'rght': "[* TO %d]" % current_employee.rght}
+
+    return _get_salary_report(request, **kwargs)
 
 def _get_salary_report_filtered_by_relationship_to_current_user(request, relationship_field):
     current_employee = Employee.objects.get(user=request.user)
@@ -94,6 +104,12 @@ def _get_salary_report(request, **kwargs):
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
     return Response(report)
+
+
+def _get_talent_report_filtered_by_current_user_descendants(request):
+    current_employee = Employee.objects.get(user=request.user)
+    kwargs = {'tree_id': current_employee.tree_id, 'lft': "[%d TO *]" % current_employee.lft, 'rght': "[* TO %d]" % current_employee.rght}
+    return _get_talent_report(request, **kwargs)
 
 
 def _get_talent_report_filtered_by_relationship_to_current_user(request, relationship_field):

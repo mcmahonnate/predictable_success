@@ -172,8 +172,7 @@ class Employee(MPTTModel):
             return True
         if self.coach and self.coach.user and self.coach.user == user:
             return True
-        current_leader = self.current_leader
-        if current_leader and current_leader.user and current_leader.user == user:
+        if user.employee.is_ancestor_of(self):
             return True
         if user.has_perm('org.view_employees'):
             return True

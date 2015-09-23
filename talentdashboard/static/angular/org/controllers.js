@@ -22,23 +22,36 @@ angular.module('tdb.org.controllers', [])
             }
         );
 
-        if ($routeParams.id) {
-            Employee.get(
-                {id: $routeParams.id},
-                function (data) {
-                    $scope.show_name = true;
-                    $scope.lead = data;
-                    $scope.employees = TeamLeadEmployees.query({id: $routeParams.id});
-                }
-            );
-        } else {
-            User.get(
-                function (data) {
-                    $scope.lead = data.employee;
-                    $scope.employees =  MyEmployees.query();
-                }
-            );
-        }
+
+        Employee.get(
+            {id: $routeParams.id},
+            function (data) {
+                $scope.show_name = true;
+                $scope.lead = data;
+                $scope.employees = TeamLeadEmployees.query({id: $routeParams.id});
+            }
+        );
+
+        $scope.talentReport = TalentReport.myTeam();
+        $scope.salaryReport = SalaryReport.myTeam();
+    }])
+
+    .controller('MyTeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'Employee', 'SalaryReport', 'TalentReport', 'MyEmployees', 'TeamLeadEmployees', 'User', 'analytics', 'TemplatePreferences', function ($scope, $location, $routeParams, Employee, SalaryReport, TalentReport, MyEmployees, TeamLeadEmployees, User, analytics, TemplatePreferences) {
+        analytics.trackPage($scope, $location.absUrl(), $location.url());
+
+        TemplatePreferences.getPreferredTemplate('team-lead-overview')
+            .then(
+            function (template) {
+                $scope.templateUrl = template;
+            }
+        );
+
+        User.get(
+            function (data) {
+                $scope.lead = data.employee;
+                $scope.employees =  MyEmployees.query();
+            }
+        );
 
         $scope.talentReport = TalentReport.myTeam();
         $scope.salaryReport = SalaryReport.myTeam();

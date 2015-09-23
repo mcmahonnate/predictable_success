@@ -14,6 +14,7 @@ angular.module('tdb.search.services', ['ngResource'])
         var actions = {
             query: {method: 'GET', isArray: false},
             myTeam: {method: 'GET', isArray: false, url: '/api/v1/search/reports/talent/my-team/'},
+            leadEmployees: {method: 'GET', isArray: false, url: '/api/v1/search/reports/talent/lead/'},
             myCoachees: {method: 'GET', isArray: false, url: '/api/v1/search/reports/talent/my-coachees/'}
         };
         var TalentReport = $resource('/api/v1/search/reports/talent/', null, actions);
