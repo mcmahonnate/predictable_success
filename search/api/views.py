@@ -21,7 +21,7 @@ def my_coachees_employee_search(request):
 
 def _find_employees_filtered_by_current_user_descendants(request):
     current_employee = Employee.objects.get(user=request.user)
-    kwargs = {'tree_id': current_employee.tree_id, 'lft': "[%d TO *]" % current_employee.lft, 'rght': "[* TO %d]" % current_employee.rght}
+    kwargs = {'tree_id': current_employee.tree_id, 'lft': "[%d TO *]" % current_employee.lft, 'rght': "[* TO %d]" % current_employee.rght, 'pk': current_employee.pk}
     return _find_employees(request, **kwargs)
 
 def _find_employees_filtered_by_relationship_to_current_user(request, relationship_field):
@@ -87,7 +87,7 @@ def my_coachees_talent_report(request):
 
 def _get_salary_report_filtered_by_current_user_descendants(request):
     current_employee = Employee.objects.get(user=request.user)
-    kwargs = {'tree_id': current_employee.tree_id, 'lft': "[%d TO *]" % current_employee.lft, 'rght': "[* TO %d]" % current_employee.rght}
+    kwargs = {'tree_id': current_employee.tree_id, 'lft': "[%d TO *]" % current_employee.lft, 'rght': "[* TO %d]" % current_employee.rght, 'pk': current_employee.pk}
 
     return _get_salary_report(request, **kwargs)
 
@@ -108,7 +108,7 @@ def _get_salary_report(request, **kwargs):
 
 def _get_talent_report_filtered_by_current_user_descendants(request):
     current_employee = Employee.objects.get(user=request.user)
-    kwargs = {'tree_id': current_employee.tree_id, 'lft': "[%d TO *]" % current_employee.lft, 'rght': "[* TO %d]" % current_employee.rght}
+    kwargs = {'tree_id': current_employee.tree_id, 'lft': "[%d TO *]" % current_employee.lft, 'rght': "[* TO %d]" % current_employee.rght, 'pk': current_employee.pk}
     return _get_talent_report(request, **kwargs)
 
 
