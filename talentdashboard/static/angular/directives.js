@@ -256,7 +256,8 @@ angular.module('tdb.directives', [])
                             search['team_id'] = scope.teamId;
                         }
                         if(scope.lead) {
-                            path = '/employees/my-team/';
+                            if (scope.myTeam) {path = '/employees/my-team/'}
+                            else {path = '/employees/team-lead/' + scope.lead.id}
                         }
                         if(scope.coach) {
                             path = '/employees/my-coachees/';

@@ -26,14 +26,14 @@ angular.module('tdb.org.controllers', [])
         Employee.get(
             {id: $routeParams.id},
             function (data) {
-                $scope.show_name = true;
+                $scope.myTeam = false;
                 $scope.lead = data;
                 $scope.employees = TeamLeadEmployees.query({id: $routeParams.id});
             }
         );
 
-        $scope.talentReport = TalentReport.myTeam();
-        $scope.salaryReport = SalaryReport.myTeam();
+        $scope.talentReport = TalentReport.leadEmployees({id: $routeParams.id});
+        $scope.salaryReport = SalaryReport.leadEmployees({id: $routeParams.id});
     }])
 
     .controller('MyTeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'Employee', 'SalaryReport', 'TalentReport', 'MyEmployees', 'TeamLeadEmployees', 'User', 'analytics', 'TemplatePreferences', function ($scope, $location, $routeParams, Employee, SalaryReport, TalentReport, MyEmployees, TeamLeadEmployees, User, analytics, TemplatePreferences) {
@@ -48,6 +48,7 @@ angular.module('tdb.org.controllers', [])
 
         User.get(
             function (data) {
+                $scope.myTeam = true;
                 $scope.lead = data.employee;
                 $scope.employees =  MyEmployees.query();
             }
