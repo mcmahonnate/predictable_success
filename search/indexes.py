@@ -171,7 +171,7 @@ class EmployeeIndex(object):
             query['fq'].append('lft:%s' % lft)
             query['fq'].append('rght:%s' % rght)
             query['fq'].append('-pk:%s' % pk)
-            
+
         query_string = urlencode(query, doseq=True)
         url = "%s/select?%s" % (settings.EMPLOYEES_SOLR_URL, query_string)
         results = requests.get(url, headers=self._get_auth_headers()).json()

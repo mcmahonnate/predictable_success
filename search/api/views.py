@@ -12,16 +12,24 @@ def employee_search(request):
 
 @api_view(['GET'])
 def my_team_employee_search(request):
-    return _find_employees_filtered_by_current_user_descendants(request)
+    current_employee = Employee.objects.get(user=request.user)
+    return _find_employees_filtered_by_employee_descendants(request, current_employee)
 
+@api_view(['GET'])
+def lead_employee_search(request, pk):
+    current_employee = Employee.objects.get(user=request.user)
+    lead = Employee.objects.get(id=pk)
+    if current_employee.is_ancestor_of(other=lead, include_self=True):
+        return _find_employees_filtered_by_employee_descendants(request, lead)
+    else:
+        return Response(None, status=status.HTTP_403_FORBIDDEN)
 
 @api_view(['GET'])
 def my_coachees_employee_search(request):
     return _find_employees_filtered_by_relationship_to_current_user(request, 'coach_ids')
 
-def _find_employees_filtered_by_current_user_descendants(request):
-    current_employee = Employee.objects.get(user=request.user)
-    kwargs = {'tree_id': current_employee.tree_id, 'lft': "[%d TO *]" % current_employee.lft, 'rght': "[* TO %d]" % current_employee.rght, 'pk': current_employee.pk}
+def _find_employees_filtered_by_employee_descendants(request, employee):
+    kwargs = {'tree_id': employee.tree_id, 'lft': "[%d TO *]" % employee.lft, 'rght': "[* TO %d]" % employee.rght, 'pk': employee.pk}
     return _find_employees(request, **kwargs)
 
 def _find_employees_filtered_by_relationship_to_current_user(request, relationship_field):
@@ -57,8 +65,17 @@ def salary_report(request):
 
 @api_view(['GET'])
 def my_team_salary_report(request):
-    return _get_salary_report_filtered_by_current_user_descendants(request)
+    current_employee = Employee.objects.get(user=request.user)
+    return _get_salary_report_filtered_by_employee_descendants(request, current_employee)
 
+@api_view(['GET'])
+def lead_salary_report(request, pk):
+    current_employee = Employee.objects.get(user=request.user)
+    lead = Employee.objects.get(id=pk)
+    if current_employee.is_ancestor_of(other=lead, include_self=True):
+        return _get_salary_report_filtered_by_employee_descendants(request, lead)
+    else:
+        return Response(None, status=status.HTTP_403_FORBIDDEN)
 
 @api_view(['GET'])
 def my_coachees_salary_report(request):
@@ -77,17 +94,25 @@ def talent_report(request):
 
 @api_view(['GET'])
 def my_team_talent_report(request):
-    return _get_talent_report_filtered_by_current_user_descendants(request)
+    current_employee = Employee.objects.get(user=request.user)
+    return _get_talent_report_filtered_by_employee_descendants(request, current_employee)
 
+@api_view(['GET'])
+def lead_talent_report(request, pk):
+    current_employee = Employee.objects.get(user=request.user)
+    lead = Employee.objects.get(id=pk)
+    if current_employee.is_ancestor_of(other=lead, include_self=True):
+        return _get_talent_report_filtered_by_employee_descendants(request, lead)
+    else:
+        return Response(None, status=status.HTTP_403_FORBIDDEN)
 
 @api_view(['GET'])
 def my_coachees_talent_report(request):
     return _get_talent_report_filtered_by_relationship_to_current_user(request, 'coach_ids')
 
 
-def _get_salary_report_filtered_by_current_user_descendants(request):
-    current_employee = Employee.objects.get(user=request.user)
-    kwargs = {'tree_id': current_employee.tree_id, 'lft': "[%d TO *]" % current_employee.lft, 'rght': "[* TO %d]" % current_employee.rght, 'pk': current_employee.pk}
+def _get_salary_report_filtered_by_employee_descendants(request, employee):
+    kwargs = {'tree_id': employee.tree_id, 'lft': "[%d TO *]" % employee.lft, 'rght': "[* TO %d]" % employee.rght, 'pk': employee.pk}
 
     return _get_salary_report(request, **kwargs)
 
@@ -106,9 +131,8 @@ def _get_salary_report(request, **kwargs):
     return Response(report)
 
 
-def _get_talent_report_filtered_by_current_user_descendants(request):
-    current_employee = Employee.objects.get(user=request.user)
-    kwargs = {'tree_id': current_employee.tree_id, 'lft': "[%d TO *]" % current_employee.lft, 'rght': "[* TO %d]" % current_employee.rght, 'pk': current_employee.pk}
+def _get_talent_report_filtered_by_employee_descendants(request, employee):
+    kwargs = {'tree_id': employee.tree_id, 'lft': "[%d TO *]" % employee.lft, 'rght': "[* TO %d]" % employee.rght, 'pk': employee.pk}
     return _get_talent_report(request, **kwargs)
 
 
