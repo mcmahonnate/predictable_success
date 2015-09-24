@@ -10,7 +10,6 @@ from rest_framework.decorators import permission_classes
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.pagination import PageNumberPagination
 from .serializers import *
-from .decorators import *
 from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team, get_talent_category_report_for_lead, get_talent_category_report_for_coach
 from pvp.salaryreports import get_salary_report_for_team, get_salary_report_for_all_employees, get_salary_report_for_lead
 from pvp.models import PvpDescription
