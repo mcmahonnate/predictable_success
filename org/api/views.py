@@ -9,7 +9,7 @@ from rest_framework.exceptions import PermissionDenied
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 import dateutil.parser
-from talentdashboard.views.views import add_salary_to_employee
+from talentdashboard.views.views import add_salary_to_employee, PermissionsViewThisEmployee
 from .serializers import EmployeeSerializer, CreateEmployeeSerializer, EditEmployeeSerializer
 from ..models import Employee
 from django.utils.log import getLogger
@@ -83,10 +83,9 @@ class EmployeeDetail(APIView):
         else:
             return Response(serializer.errors, status=400)
 
-
 class EmployeeCommentList(CommentList):
     serializer_class = CommentSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, PermissionsViewThisEmployee)
 
     def get_object(self):
         pk = self.kwargs['pk']

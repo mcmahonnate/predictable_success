@@ -35,6 +35,7 @@ from django.http import Http404
 from django.template.loader import get_template
 from django.template import Context
 from django.db.models import Q
+from rest_framework import permissions
 from PIL import Image, ExifTags
 import StringIO
 from decimal import Decimal
@@ -45,7 +46,7 @@ from feedback.tasks import send_feedback_request_email
 from collections import defaultdict
 import collections
 import dateutil.parser, copy
-from org.models import Mentorship, Team, Leadership, Attribute
+from org.models import Mentorship, Team, Leadership, Attribute, Employee
 from org.api.serializers import SanitizedEmployeeSerializer, UserSerializer, EmployeeSerializer, TeamSerializer, MentorshipSerializer, LeadershipSerializer, AttributeSerializer, MinimalEmployeeSerializer, EditEmployeeSerializer, CreateEmployeeSerializer
 from assessment.models import MBTI
 from assessment.api.serializers import MBTIReportSerializer, MBTISerializer
@@ -68,6 +69,24 @@ logger = getLogger('talentdashboard')
 def parseBoolString(theString):
     return theString[0].upper() == 'T'
 
+
+class PermissionsViewAllEmployees(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.user.has_perm('org.view_employees'):
+            return True
+        else:
+            return False
+
+
+class PermissionsViewThisEmployee(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.user.has_perm('org.view_employees'):
+            return True
+        else:
+            pk = view.kwargs['pk']
+            requester = Employee.objects.get(user=request.user)
+            employee = Employee.objects.get(id=pk)
+            return requester.is_ancestor_of(employee)
 
 class UserList(generics.ListAPIView):
     serializer_class = SanitizedEmployeeSerializer
@@ -600,11 +619,6 @@ class EngagementSurvey(APIView):
         signer = Signer()
         survey_id = signer.unsign(sid)
         survey = SurveyUrl.objects.get(id=survey_id)
-        logger.debug('TEST START')
-        logger.debug("survey_id is %s" % survey.id)
-        logger.debug("employee is %s" % survey.sent_to)
-        logger.debug("user.id is %s" % survey.sent_to.user.id)
-        logger.debug('TEST END')
 
         employee = survey.sent_to
         visibility = 3
@@ -742,7 +756,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 
 class CommentList(APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, PermissionsViewAllEmployees)
 
     def get(self, request, format=None):
         requester = Employee.objects.get(user__id=request.user.id)

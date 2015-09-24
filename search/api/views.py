@@ -3,6 +3,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from ..indexes import EmployeeIndex
 from org.models import Employee
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAuthenticated
+from talentdashboard.views.views import PermissionsViewThisEmployee
 
 
 @api_view(['GET'])
@@ -16,13 +19,10 @@ def my_team_employee_search(request):
     return _find_employees_filtered_by_employee_descendants(request, current_employee)
 
 @api_view(['GET'])
+@permission_classes((IsAuthenticated, PermissionsViewThisEmployee))
 def lead_employee_search(request, pk):
-    current_employee = Employee.objects.get(user=request.user)
     lead = Employee.objects.get(id=pk)
-    if current_employee.is_ancestor_of(other=lead, include_self=True):
-        return _find_employees_filtered_by_employee_descendants(request, lead)
-    else:
-        return Response(None, status=status.HTTP_403_FORBIDDEN)
+    return _find_employees_filtered_by_employee_descendants(request, lead)
 
 @api_view(['GET'])
 def my_coachees_employee_search(request):
@@ -69,13 +69,10 @@ def my_team_salary_report(request):
     return _get_salary_report_filtered_by_employee_descendants(request, current_employee)
 
 @api_view(['GET'])
+@permission_classes((IsAuthenticated, PermissionsViewThisEmployee))
 def lead_salary_report(request, pk):
-    current_employee = Employee.objects.get(user=request.user)
     lead = Employee.objects.get(id=pk)
-    if current_employee.is_ancestor_of(other=lead, include_self=True):
-        return _get_salary_report_filtered_by_employee_descendants(request, lead)
-    else:
-        return Response(None, status=status.HTTP_403_FORBIDDEN)
+    return _get_salary_report_filtered_by_employee_descendants(request, lead)
 
 @api_view(['GET'])
 def my_coachees_salary_report(request):
@@ -98,13 +95,10 @@ def my_team_talent_report(request):
     return _get_talent_report_filtered_by_employee_descendants(request, current_employee)
 
 @api_view(['GET'])
+@permission_classes((IsAuthenticated, PermissionsViewThisEmployee))
 def lead_talent_report(request, pk):
-    current_employee = Employee.objects.get(user=request.user)
     lead = Employee.objects.get(id=pk)
-    if current_employee.is_ancestor_of(other=lead, include_self=True):
-        return _get_talent_report_filtered_by_employee_descendants(request, lead)
-    else:
-        return Response(None, status=status.HTTP_403_FORBIDDEN)
+    return _get_talent_report_filtered_by_employee_descendants(request, lead)
 
 @api_view(['GET'])
 def my_coachees_talent_report(request):

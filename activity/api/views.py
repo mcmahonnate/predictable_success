@@ -7,7 +7,7 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 from ..models import Event
 from .serializers import EventSerializer
-from talentdashboard.views.views import StandardResultsSetPagination
+from talentdashboard.views.views import StandardResultsSetPagination, PermissionsViewAllEmployees
 from org.models import Employee
 from checkins.models import CheckIn
 from blah.models import Comment
@@ -36,7 +36,7 @@ class EmployeeEventList(views.APIView):
 
 
 class EventList(views.APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, PermissionsViewAllEmployees)
 
     """ Retrieve all Events
     """

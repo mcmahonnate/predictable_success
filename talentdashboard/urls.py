@@ -2,6 +2,7 @@ from django.conf import settings
 from django.conf.urls import *
 from django.contrib import admin
 from django.views.generic import TemplateView
+from django.views.decorators.cache import cache_page
 from django.contrib.auth.views import password_reset, password_reset_confirm, password_reset_done, password_reset_complete, login, logout
 from views.views import *
 from forms import *
