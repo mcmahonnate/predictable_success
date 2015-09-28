@@ -11,6 +11,7 @@ python-dateutil==2.1
 python-mimeparse==0.1.4
 six==1.4.1
 static==0.4
+slacker==0.7.3
 wsgiref==0.1.2
 pillow==2.7.0
 pytz==2014.10
