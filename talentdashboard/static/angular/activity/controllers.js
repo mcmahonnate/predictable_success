@@ -4,7 +4,6 @@ angular.module('tdb.activity.controllers', [])
         $scope.events = [];
         $scope.nextPage = 1;
         $scope.hasNextPage = false;
-
         $scope.loadNextPage = function() {
             var request = null;
             switch(view) {
@@ -15,11 +14,10 @@ angular.module('tdb.activity.controllers', [])
                     request = Event.get({page: $scope.nextPage});
                     break;
                 case 'leader':
-                    console.log($routeParams.id);
                     request = Event.getLeadEvents($routeParams.id, $scope.nextPage);
                     break;
                 case 'team':
-                    request = Event.getTeamEvents($routeParams.id, $scope.nextPage);
+                    request = Event.getTeamEvents($routeParams.teamId, $scope.nextPage);
                     break;
                 case 'coach':
                     request = Event.getCoachEvents($scope.nextPage);

@@ -72,11 +72,11 @@ angular.module('tdb.org.controllers', [])
             $scope.customer = data;
         });
 
-        $scope.talentReport = TalentReport.query({team_id: $routeParams.id});
-        $scope.salaryReport = SalaryReport.query({team_id: $routeParams.id});
+        $scope.talentReport = TalentReport.query({team_id: $routeParams.teamId});
+        $scope.salaryReport = SalaryReport.query({team_id: $routeParams.teamId});
 
         Team.get(
-            {id: $routeParams.id},
+            {id: $routeParams.teamId},
             function (data) {
                 $scope.team = data;
                 $scope.team_name = data.name;
@@ -440,7 +440,7 @@ angular.module('tdb.org.controllers', [])
         $scope.busy = true;
 
         if ($scope.view == 'team-view') {
-            $scope.teamId = $routeParams.id;
+            $scope.teamId = $routeParams.teamId;
             TeamLeads.getCurrentEvaluationsForTeamLeads($scope.teamId).$promise.then(function(response) {
                 $scope.employees = TeamLeads.getCurrentEvaluationsForTeamLeads($scope.teamId)
             });

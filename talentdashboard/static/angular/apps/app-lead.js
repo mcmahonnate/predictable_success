@@ -10,6 +10,6 @@ app.config(['$routeProvider', function($routeProvider) {
       when('/team-lead/:id', {templateUrl: '/static/angular/partials/leader-overview-default.html', controller: 'LeaderOverviewCtrl', resolve: {authorizeRoute: authorizeRoute}}).
       when('/checkin/:id', {templateUrl: '/static/angular/partials/checkin.html', controller: 'AddEditCheckInCtrl', resolve: {authorizeRoute: authorizeRoute}}).
       when('/checkin', {templateUrl: '/static/angular/partials/checkin.html', controller: 'AddEditCheckInCtrl', resolve: {authorizeRoute: authorizeRoute}}).
-      when('/checkins/:id', {templateUrl: '/static/angular/partials/checkin-detail.html', controller: 'AddEditCheckInCtrl', resolve: {authorizeRoute: authorizeRoute}}).
+      when('/checkins/:checkinId', {templateUrl: '/static/angular/partials/checkin-detail.html', controller: 'AddEditCheckInCtrl', resolve: {authorizeRoute: authorizeRoute}}).
       otherwise({redirectTo: '/'});
 }]);
