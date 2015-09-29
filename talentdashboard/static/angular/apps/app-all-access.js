@@ -8,6 +8,7 @@ app.config(['$routeProvider', function($routeProvider) {
       when('/teams/:teamId/', {template: '<div ng-include src="templateUrl"></div>', controller: 'TeamOverviewCtrl', resolve: {authorizeRoute: authorizeRoute, view: function() {return 'team';}}}).
       when('/employees/:id/discussions', {templateUrl: '/static/angular/partials/employee-discussion-overview.html', controller: 'EmployeeDetailCtrl', resolve: {authorizeRoute: authorizeRoute}}).
       when('/employees/my-team', {templateUrl: '/static/angular/partials/employee-list.html', controller: 'EmployeeSearchCtrl', resolve: {authorizeRoute: authorizeRoute, view: function() {return 'my-team';}}}).
+      when('/employees/team-lead/:id', {templateUrl: '/static/angular/partials/employee-list.html', controller: 'EmployeeSearchCtrl', resolve: {authorizeRoute: authorizeRoute, view: function() {return 'team-lead';}}}).
       when('/employees/my-coachees', {templateUrl: '/static/angular/partials/employee-list.html', controller: 'EmployeeSearchCtrl', resolve: {authorizeRoute: authorizeRoute, view: function() {return 'my-coachees';}}}).
       when('/employees/:id', {templateUrl: '/static/angular/partials/employee-detail.html', controller: 'EmployeeDetailCtrl', resolve: {authorizeRoute: authorizeRoute}}).
       when('/employees', {templateUrl: '/static/angular/partials/employee-list.html', controller: 'EmployeeSearchCtrl', resolve: {authorizeRoute: authorizeRoute, view: function() {return '';}}}).
@@ -15,6 +16,7 @@ app.config(['$routeProvider', function($routeProvider) {
       when('/pvp/todo', {templateUrl: '/static/angular/partials/pvp-todo.html', controller: 'PvpEvaluationTodosCtrl', resolve: {authorizeRoute: authorizeRoute}}).
       when('/pvp/todos', {templateUrl: '/static/angular/partials/pvp-todo-list.html', controller: 'PvpTodoListCtrl', resolve: {authorizeRoute: authorizeRoute}}).
       when('/my-team', {template: '<div ng-include src="templateUrl"></div>', controller: 'LeaderOverviewCtrl', resolve: {authorizeRoute: authorizeRoute}}).
+      when('/team-lead/:id', {templateUrl: '/static/angular/partials/leader-overview-default.html', controller: 'LeaderOverviewCtrl', resolve: {authorizeRoute: authorizeRoute}}).
       when('/feedback/', {templateUrl: '/static/angular/partials/feedback/index.html', controller: 'RequestFeedbackCtrl', resolve: {authorizeRoute: authorizeRoute}}).
       when('/reports/self-assess', {templateUrl: '/static/angular/partials/self-assess-report.html', controller: 'SelfAssessReportCtrl', resolve: {authorizeRoute: authorizeRoute}}).
       when('/reports/timespan', {templateUrl: '/static/angular/partials/timespan-report.html', controller: 'TimespanReportCtrl', resolve: {authorizeRoute: authorizeRoute}}).
