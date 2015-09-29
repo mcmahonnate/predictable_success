@@ -15,7 +15,7 @@
                 </div>
             </div>
         </div>
-        <div ng-show="activeEmployee.is_lead" role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == employeeTab}" ng-click="setActiveTab(employeeTab)" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{activeEmployee.full_name}}">
+        <div ng-show="activeEmployee.leader.id == currentUser.employee.id" role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == employeeTab}" ng-click="setActiveTab(employeeTab)" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{activeEmployee.full_name}}">
 
             <div class="small-headshot team_menu">
                     <img ng-src="{{ activeEmployee.avatar_small }}" class="headshot-image nav-input">

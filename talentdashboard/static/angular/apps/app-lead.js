@@ -1,7 +1,6 @@
 app.config(['$routeProvider', function($routeProvider) {
     $routeProvider.
       when('/', {template: '<div ng-include src="templateUrl"></div>', controller: 'MyTeamOverviewCtrl', resolve: {authorizeRoute: authorizeRoute}}).
-      when('/engagement-survey/:employeeId/:surveyId', {templateUrl: '/static/angular/partials/engagement-survey.html', controller: 'EngagementSurveyCtrl'}).
       when('/employees/my-team', {templateUrl: '/static/angular/partials/employee-list.html', controller: 'EmployeeSearchCtrl', resolve: {authorizeRoute: authorizeRoute, view: function() {return 'my-team';}}}).
       when('/employees/team-lead/:id', {templateUrl: '/static/angular/partials/employee-list.html', controller: 'EmployeeSearchCtrl', resolve: {authorizeRoute: authorizeRoute, view: function() {return 'team-lead';}}}).
       when('/employees/:id', {templateUrl: '/static/angular/partials/employee-detail.html', controller: 'EmployeeDetailCtrl', resolve: {authorizeRoute: authorizeRoute}}).
