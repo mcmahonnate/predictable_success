@@ -40,7 +40,7 @@ angular.module('tdb.feedback.services', ['ngResource'])
 
     .factory('Employee', ['$resource', function ($resource) {
         var actions = {
-            'potentialReviewers': { method: 'GET', url: '/api/v1/employees/potential-reviewers/', isArray: true }
+            'potentialReviewers': { method: 'GET', url: '/api/v1/feedback/potential-reviewers/', isArray: true }
         };
         return $resource('/api/v1/employees/:id/', {id: '@id'}, actions);
     }])

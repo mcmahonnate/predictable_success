@@ -2,8 +2,8 @@ var app = angular.module('feedback', [
             'ngRoute',
             'ngSanitize',
             'ui.select',
-            'feedback.services',
-            'feedback.controllers',
+            'tdb.feedback.services',
+            'tdb.feedback.controllers',
             'ui-notification'
         ])
         .config(['$routeProvider',
