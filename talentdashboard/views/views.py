@@ -475,6 +475,7 @@ class PvpEvaluationDetail(APIView):
         pvp = PvpEvaluation.objects.get(id=pvp_id)
         pvp.performance = request.DATA["_performance"]
         pvp.potential = request.DATA["_potential"]
+        pvp.evaluator = request.user
         if "_content" in request.DATA:
             content = request.DATA["_content"]
             if pvp.comment is None:
