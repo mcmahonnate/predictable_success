@@ -52,11 +52,11 @@ angular.module('tdb.checkins.controllers', [])
                 } else {
                     $scope.showSearch = true;
                 }  
-            }   
+            }
 
             // Check-in Details
             if ($scope.view == 'detail') { 
-                $scope.loadCheckin = CheckIn.get({ id : $routeParams.id }, function(data) {
+                $scope.loadCheckin = CheckIn.get({ id : $routeParams.checkinId }, function(data) {
                     $scope.checkin = data;
                 }, function(response) {
                     if(response.status === 404) {

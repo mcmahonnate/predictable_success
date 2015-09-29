@@ -138,8 +138,12 @@ angular.module('tdb.org.services', ['ngResource'])
     }])
 
     .factory('TeamLeadEmployees', ['$resource', '$http', function($resource, $http) {
-        var TeamLeadEmployees = $resource('/api/v1/team-lead-employees/');
-        TeamLeadEmployees.getEmployees = function(id, success, failure) { return this.query({ id: id }, success, failure); };
-        return TeamLeadEmployees;
+        var res = $resource('/api/v1/team-lead/employees/:id', {id:'@id'});
+        return res;
+    }])
+
+    .factory('MyEmployees', ['$resource', '$http', function($resource, $http) {
+        var res = $resource('/api/v1/team-lead/employees/');
+        return res;
     }])
 ;

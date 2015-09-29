@@ -69,15 +69,16 @@
     <script src="{% static 'angular/directives.js' %}"></script>
     <script src="{% static 'angular/filters.js' %}"></script>
     <script src="{% static 'angular/apps/app-base.js' %}"></script>
-    {% if user.employee.is_coach %}
-        <script src="{% static 'angular/apps/app-coach.js' %}"></script>
-    {% endif %}
-    {% if user.employee.is_lead %}
-        <script src="{% static 'angular/apps/app-lead.js' %}"></script>
-    {% endif %}
     {% if perms.org.view_employees %}
         <script src="{% static 'angular/apps/app-all-access.js' %}"></script>
+    {% elif user.employee.is_lead and user.employee.is_coach%}
+        <script src="{% static 'angular/apps/app-lead-coach.js' %}"></script>
+    {% elif user.employee.is_lead %}
+            <script src="{% static 'angular/apps/app-lead.js' %}"></script>
+    {% elif user.employee.is_coach %}
+            <script src="{% static 'angular/apps/app-coach.js' %}"></script>
     {% endif %}
+
     <script>
     
         // Add the CSRF Token to all http requests.

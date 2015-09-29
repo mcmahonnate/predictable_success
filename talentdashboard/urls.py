@@ -2,6 +2,7 @@ from django.conf import settings
 from django.conf.urls import *
 from django.contrib import admin
 from django.views.generic import TemplateView
+from django.views.decorators.cache import cache_page
 from django.contrib.auth.views import password_reset, password_reset_confirm, password_reset_done, password_reset_complete, login, logout
 from views.views import *
 from views.slack import *
@@ -9,10 +10,10 @@ from forms import *
 from rest_framework import routers
 from views.payment import ChargeView, PaymentView
 from views.homepage import IndexView
-from org.api.views import Profile
+from org.api.views import Profile, team_lead_employees, my_employees, EmployeeDetail
 from insights.views import Signup, Report, Survey, Confirmation
 from engagement.api.views import RetrieveUpdateDestroyHappiness, CreateHappiness, EmployeeHappinessList
-from activity.api.views import EventList, EmployeeEventList, TeamEventList, CoachEventList, LeadEventList, CheckInEventList, CommentEvent
+from activity.api.views import EventList, EmployeeEventList, TeamEventList, CoachEventList, LeadEventList, MyTeamEventList, CheckInEventList, CommentEvent
 from blah.api.views import CommentDetail
 from org.api.views import EmployeeCommentList
 router = routers.DefaultRouter()
@@ -32,6 +33,7 @@ urlpatterns = [
     url(r'^logout/$', logout,{'next_page': '/account/login/'}),
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^org/chart/$', 'org.api.views.show_org_chart'),
     url(r'^account/payment/?$', PaymentView.as_view(), name='payment'),
     url(r'^account/thanks/?$',ChargeView.as_view(), name='charge'),
     url(r'^account/login/?$',login,{'template_name':'login.html', 'authentication_form':CustomAuthenticationForm}, name='login'),
@@ -74,7 +76,8 @@ urlpatterns = [
     url(r'^api/v1/assessment/mbti/employees/(?P<pk>[0-9]+)/$', EmployeeMBTI.as_view()),
     url(r'^api/v1/assessment/mbti/teams/(?P<pk>[0-9]+)/$', TeamMBTIReportDetail.as_view()),
     url(r'^api/v1/team-leads/$', cache_page(60*1440)(team_leads)),
-    url(r'^api/v1/team-lead-employees/$', team_lead_employees),
+    url(r'^api/v1/team-lead/employees/$', my_employees),
+    url(r'^api/v1/team-lead/employees/(?P<pk>[0-9]+)/$', team_lead_employees),
     url(r'^api/v1/team-members/(?P<pk>[0-9]+)/$', TeamMemberList.as_view(), name='employee-list'),
     url(r'^api/v1/compensation-summaries/employees/(?P<pk>[0-9]+)/$', EmployeeCompensationSummaries.as_view()),
     url(r'^api/v1/compensation-summaries/$', cache_page(60*1440)(compensation_summaries)),
@@ -103,7 +106,8 @@ urlpatterns = [
 
     url(r'^api/v1/events/employees/(?P<employee_id>[0-9]+)/$', EmployeeEventList.as_view()),
     url(r'^api/v1/events/teams/(?P<pk>[0-9]+)/$', TeamEventList.as_view()),
-    url(r'^api/v1/events/leads/$', LeadEventList.as_view()),
+    url(r'^api/v1/events/leads/$', MyTeamEventList.as_view()),
+    url(r'^api/v1/events/leads/(?P<pk>[0-9]+)/$', LeadEventList.as_view()),
     url(r'^api/v1/events/coaches/$', CoachEventList.as_view()),
     url(r'^api/v1/events/checkins/(?P<pk>[0-9]+)/$', CheckInEventList.as_view()),
     url(r'^api/v1/events/$', EventList.as_view()),

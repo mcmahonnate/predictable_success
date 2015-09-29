@@ -6,6 +6,7 @@ import datetime
 import blah
 from blah.models import Comment
 from model_utils import Choices, FieldTracker
+from mptt.models import MPTTModel, TreeForeignKey, TreeManager
 from django.utils.log import getLogger
 
 logger = getLogger(__name__)
@@ -32,7 +33,7 @@ class Relationship(models.Model):
         return '{0} has {1} {2}'.format(self.employee, self.relation_type_name, self.related_employee)
 
 
-class EmployeeManager(models.Manager):
+class EmployeeManager(TreeManager):
     def coaches(self):
         return self.filter(user__groups__name=COACHES_GROUP).order_by('full_name')
 
@@ -68,7 +69,7 @@ class EmployeeManager(models.Manager):
         return self.filter(user=user).get()
 
 
-class Employee(models.Model):
+class Employee(MPTTModel):
     objects = EmployeeManager()
     _current_leadership = None
 
@@ -128,23 +129,18 @@ class Employee(models.Model):
     display = models.BooleanField(default=False)
     user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='employee')
     coach = models.ForeignKey('Employee', related_name='coachees', null=True, blank=True)
+    leader = TreeForeignKey('self', null=True, blank=True, related_name='employees', db_index=True)
     field_tracker = FieldTracker(fields=['coach'])
 
     def save(self, *args, **kwargs):
-        new_leadership = None
-        old_leadership = None
-
         if self.first_name and self.last_name:
             self.full_name = self.first_name + " " + self.last_name
-        if self._current_leadership is not None:
-            new_leadership = self._current_leadership
-            old_leadership = self._get_current_leadership()
-            old_leader_id = old_leadership.leader.id if (old_leadership is not None) and (old_leadership.leader is not None) else 0
-            new_leader_id = self._current_leadership.leader.id if self._current_leadership.leader is not None else 0
         super(Employee, self).save(*args, **kwargs)
-        if (new_leadership is not None) and (old_leader_id != new_leader_id):
-            new_leadership.employee = self
-            new_leadership.save()
+        new_leader_id = self.leader.id if self.leader else 0
+        old_leader_id = self.current_leader.id if self.current_leader else 0
+        if new_leader_id != old_leader_id:
+            leadership = Leadership(employee=self, leader=self.leader)
+            leadership.save()
         self._update_relationships()
 
     def _update_relationships(self):
@@ -176,12 +172,17 @@ class Employee(models.Model):
             return True
         if self.coach and self.coach.user and self.coach.user == user:
             return True
-        current_leader = self.current_leader
-        if current_leader and current_leader.user and current_leader.user == user:
+        if user.employee.is_ancestor_of(self):
             return True
         if user.has_perm('org.view_employees'):
             return True
         return False
+
+    def is_ancestor_of(self, other, include_self=False):
+        if self.user.has_perm('org.view_employees'):
+            return True
+        else:
+            return super(Employee, self).is_ancestor_of(other, include_self)
 
     def _get_kolbe_fact_finder(self):
         try:
@@ -350,6 +351,10 @@ class Employee(models.Model):
             ("create_employee_comments", "Can create comments on employees"),
             ("view_employee_comments", "Can view comments on employees"),
         )
+
+    class MPTTMeta:
+        parent_attr = 'leader'
+        order_insertion_by = ['full_name']
 
 
 blah.register(Employee)

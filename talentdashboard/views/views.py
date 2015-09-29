@@ -10,7 +10,6 @@ from rest_framework.decorators import permission_classes
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.pagination import PageNumberPagination
 from .serializers import *
-from .decorators import *
 from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team, get_talent_category_report_for_lead, get_talent_category_report_for_coach
 from pvp.salaryreports import get_salary_report_for_team, get_salary_report_for_all_employees, get_salary_report_for_lead
 from pvp.models import PvpDescription
@@ -36,6 +35,7 @@ from django.http import Http404
 from django.template.loader import get_template
 from django.template import Context
 from django.db.models import Q
+from rest_framework import permissions
 from PIL import Image, ExifTags
 import StringIO
 from decimal import Decimal
@@ -46,7 +46,7 @@ from feedback.tasks import send_feedback_request_email
 from collections import defaultdict
 import collections
 import dateutil.parser, copy
-from org.models import Mentorship, Team, Leadership, Attribute
+from org.models import Mentorship, Team, Leadership, Attribute, Employee
 from org.api.serializers import SanitizedEmployeeSerializer, UserSerializer, EmployeeSerializer, TeamSerializer, MentorshipSerializer, LeadershipSerializer, AttributeSerializer, MinimalEmployeeSerializer, EditEmployeeSerializer, CreateEmployeeSerializer
 from assessment.models import MBTI
 from assessment.api.serializers import MBTIReportSerializer, MBTISerializer
@@ -69,6 +69,24 @@ logger = getLogger('talentdashboard')
 def parseBoolString(theString):
     return theString[0].upper() == 'T'
 
+
+class PermissionsViewAllEmployees(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.user.has_perm('org.view_employees'):
+            return True
+        else:
+            return False
+
+
+class PermissionsViewThisEmployee(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.user.has_perm('org.view_employees'):
+            return True
+        else:
+            pk = view.kwargs['pk']
+            requester = Employee.objects.get(user=request.user)
+            employee = Employee.objects.get(id=pk)
+            return requester.is_ancestor_of(employee)
 
 class UserList(generics.ListAPIView):
     serializer_class = SanitizedEmployeeSerializer
@@ -602,11 +620,6 @@ class EngagementSurvey(APIView):
         signer = Signer()
         survey_id = signer.unsign(sid)
         survey = SurveyUrl.objects.get(id=survey_id)
-        logger.debug('TEST START')
-        logger.debug("survey_id is %s" % survey.id)
-        logger.debug("employee is %s" % survey.sent_to)
-        logger.debug("user.id is %s" % survey.sent_to.user.id)
-        logger.debug('TEST END')
 
         employee = survey.sent_to
         visibility = 3
@@ -744,7 +757,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 
 class CommentList(APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, PermissionsViewAllEmployees)
 
     def get(self, request, format=None):
         requester = Employee.objects.get(user__id=request.user.id)
@@ -753,99 +766,6 @@ class CommentList(APIView):
         result_page = paginator.paginate_queryset(comments, request)
         serializer = EmployeeCommentSerializer(result_page, many=True, context={'request': request})
         return paginator.get_paginated_response(serializer.data)
-
-
-# class EmployeeCommentList(APIView):
-#     permission_classes = (IsAuthenticated,)
-#
-#     def get(self, request, pk, format=None):
-#         employee = Employee.objects.get(id=pk)
-#         if employee is None:
-#             return Response(None, status=status.HTTP_404_NOT_FOUND)
-#
-#         if not employee.is_viewable_by_user(request.user):
-#             raise PermissionDenied
-#
-#         requester = Employee.objects.get(user__id=request.user.id)
-#         comments = Comment.objects.get_comments_for_employee(requester=requester,employee=employee)
-#         paginator = StandardResultsSetPagination()
-#         result_page = paginator.paginate_queryset(comments, request)
-#         serializer = EmployeeCommentSerializer(result_page, many=True,context={'request': request})
-#         return paginator.get_paginated_response(serializer.data)
-#
-#     def put(self, request, pk, format=None):
-#         object_id = request.DATA["_object_id"]
-#         content = request.DATA["_content"]
-#         comment = Comment.objects.get(pk=object_id)
-#         comment.content = content
-#         if "_include_in_daily_digest" in request.DATA:
-#             daily_digest = request.DATA["_include_in_daily_digest"]
-#             comment.include_in_daily_digest = daily_digest
-#         comment.save()
-#         serializer = EmployeeCommentSerializer(comment, many=False, context={'request': request})
-#         return Response(serializer.data)
-#
-#     def post(self, request, pk, format=None):
-#         comment_type = ContentType.objects.get(model="comment")
-#         model_name = request.DATA["_model_name"]
-#         content_type = ContentType.objects.get(model=model_name)
-#         object_id = request.DATA["_object_id"]
-#         if "_include_in_daily_digest" in request.DATA:
-#             daily_digest = request.DATA["_include_in_daily_digest"]
-#         else:
-#             daily_digest = True
-#         if "_visibility" in request.DATA:
-#             visibility = request.DATA["_visibility"]
-#         else:
-#             visibility = 3
-#         employee = Employee.objects.get(id=pk)
-#         if employee is None:
-#             return Response(None, status=status.HTTP_404_NOT_FOUND)
-#         owner = request.user
-#         content = request.DATA["_content"]
-#         if content_type == comment_type:
-#             comment = Comment.objects.get(id=object_id)
-#             commenter = Employee.objects.get(user__id=comment.owner_id)
-#             if not "_include_in_daily_digest" in request.DATA:
-#                 daily_digest = comment.include_in_daily_digest
-#             sub_comment = Comment.objects.add_comment(comment, content, visibility, daily_digest, owner)
-#             serializer = SubCommentSerializer(sub_comment, many=False, context={'request': request})
-#
-#             sub_commenters = Comment.objects.get_for_object(comment)
-#             sub_commenters = sub_commenters.values('owner_id')
-#             mail_to = User.objects.filter(id__in=sub_commenters, is_active=True)
-#             mail_to = mail_to.exclude(id=owner.id)
-#             mail_to = list(mail_to.values_list('email', flat=True))
-#
-#             if commenter.user.is_active:
-#                 if len(mail_to) > 0:
-#                     mail_to.append(commenter.user.email)
-#                 else:
-#                     mail_to = [commenter.user.email]
-#
-#             if len(mail_to) > 0:
-#                 html_template = get_template('reply_notification.html')
-#                 sub_commenter = Employee.objects.get(user__id=request.user.id)
-#                 comment_content = comment.content
-#                 sub_comment_content = sub_comment.content
-#                 employee_name = employee.full_name
-#                 commenter_avatar = commenter.avatar_small.url
-#                 commenter_full_name = commenter.full_name
-#                 sub_commenter_avatar = sub_commenter.avatar_small.url
-#                 sub_commenter_full_name = sub_commenter.full_name
-#                 dash_link = 'http://' + request.tenant.domain_url + '/#/employees/' + str(employee.id)
-#                 template_vars = Context({'employee_name': employee_name, 'dash_link': dash_link, 'commenter_avatar': commenter_avatar,'commenter_full_name': commenter_full_name, 'sub_commenter_avatar': sub_commenter_avatar, 'sub_commenter_full_name': sub_commenter_full_name, 'comment_content': comment_content, 'sub_comment_content': sub_comment_content})
-#                 html_content = html_template.render(template_vars)
-#                 subject = sub_commenter.full_name + ' commented on a post about ' + employee.full_name
-#                 text_content = 'View comment here:\r\n http://' + request.tenant.domain_url + '/#/employees/' + str(employee.id)
-#                 mail_from = sub_commenter.full_name + '<notify@dfrntlabs.com>'
-#                 msg = EmailMultiAlternatives(subject, text_content, mail_from, mail_to)
-#                 msg.attach_alternative(html_content, "text/html")
-#                 msg.send()
-#         else:
-#             comment = employee.comments.add_comment(content, visibility, daily_digest, owner)
-#             serializer = EmployeeCommentSerializer(comment, many=False, context={'request': request})
-#         return Response(serializer.data)
 
 
 class LeadCommentList(APIView):
@@ -1120,73 +1040,6 @@ class ProspectDetail(APIView):
         except Prospect.DoesNotExist:
             return Response(None)
 
-
-class EmployeeDetail(APIView):
-    def get(self, request, pk, format=None):
-        try:
-            employee = Employee.objects.get(id=pk)
-            if not employee.is_viewable_by_user(request.user):
-                raise PermissionDenied
-
-            serializer = EmployeeSerializer(employee,context={'request': request})
-            return Response(serializer.data)
-        except Employee.DoesNotExist:
-            return Response(None)
-        
-    def post(self, request, pk, format=None):
-
-        if 'hire_date' in request.DATA and request.DATA['hire_date'] is not None:
-            date_string = request.DATA['hire_date']
-            request.DATA['hire_date'] = dateutil.parser.parse(date_string).date()
-        if 'departure_date' in request.DATA and request.DATA['departure_date'] is not None:
-            date_string = request.DATA['departure_date']
-            request.DATA['departure_date'] = dateutil.parser.parse(date_string).date()
-
-        serializer = CreateEmployeeSerializer(data = request.DATA, context={'request':request})
-        if serializer.is_valid():
-            employee = serializer.save()
-            if 'leader_id' in request.DATA and request.DATA['leader_id'] is not None:
-                employee.current_leader = Employee.objects.get(id=request.DATA['leader_id'])
-                employee.save()
-            add_salary_to_employee(employee, request.DATA)
-            serializer = EmployeeSerializer(employee, context={'request':request})
-            return Response(serializer.data)
-        else:
-            return Response(serializer.errors, status=400)
-
-
-    def put(self, request, pk, format=None):
-        employee = Employee.objects.get(id=pk)
-        
-        if 'hire_date' in request.DATA and request.DATA['hire_date'] is not None:
-            date_string = request.DATA['hire_date']
-            request.DATA['hire_date'] = dateutil.parser.parse(date_string).date()
-        if 'departure_date' in request.DATA and request.DATA['departure_date'] is not None:
-            date_string = request.DATA['departure_date']
-            request.DATA['departure_date'] = dateutil.parser.parse(date_string).date()
-
-        # by name (for upload)
-        if 'team_leader' in request.DATA:
-            leader = Employee.objects.get(id=request.DATA['team_leader']['id'])
-            employee.current_leader = leader
-            employee.save()
-            serializer = EmployeeSerializer(employee, context={'request':request})
-            return Response(serializer.data)
-
-        # by id
-        if 'leader_id' in request.DATA:
-            if request.DATA['leader_id']:
-                leader = Employee.objects.get(id=request.DATA['leader_id'])
-                employee.current_leader = leader
-                employee.save()
-
-        serializer = EditEmployeeSerializer(employee, request.DATA, context={'request':request})
-        if serializer.is_valid():
-            serializer.save()
-            emp_serializer = EmployeeSerializer(employee, context={'request':request})
-            return Response(emp_serializer.data)
-        else:
-            return Response(serializer.errors, status=400)
 
 @api_view(['POST'])
 def upload_teams(request):
@@ -1495,31 +1348,7 @@ def team_leads(request):
     employees = Employee.objects.filter(id__in=leaders)
     serializer = EmployeeSerializer(employees, many=True, context={'request': request})
     
-    return Response(serializer.data)    
-
-@api_view(['GET'])
-def team_lead_employees(request):
-    current_user = request.user
-    lead_id = request.QUERY_PARAMS.get('lead_id', 0)
-    if lead_id==0:
-        lead = Employee.objects.get(user=current_user)
-        lead_id = lead.id
-    else:
-        lead = Employee.objects.get(id=lead_id)
-    if lead.user == current_user or current_user.is_superuser:
-        leaderships = Leadership.objects.filter(leader__id=int(lead_id))
-        leaderships = leaderships.filter(end_date__isnull=True)
-        employees = []
-        for leadership in leaderships:
-            if leadership.employee not in employees:
-                if leadership.employee.departure_date is None:
-                    employees.append(leadership.employee)
-        
-        serializer = EmployeeSerializer(employees, many=True, context={'request': request})
-
-        return Response(serializer.data)        
-    else:
-        return Response(None, status=status.HTTP_403_FORBIDDEN)
+    return Response(serializer.data)
 
 @api_view(['GET'])
 def talent_categories(request):

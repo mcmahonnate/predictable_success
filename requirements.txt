@@ -18,6 +18,7 @@ pytz==2014.10
 pylibmc==1.2.3
 django-pylibmc-sasl==0.2.4
 django-storages==1.1.8
+django-mptt==0.7.4
 boto==2.27.0
 django-extensions
 django-celery==3.1.16

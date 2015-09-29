@@ -68,12 +68,13 @@ class EmployeeNameSerializer(serializers.HyperlinkedModelSerializer):
 class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
     team = TeamSerializer()
     coach = MinimalEmployeeSerializer()
-    current_leader = MinimalEmployeeSerializer()
+    leader = MinimalEmployeeSerializer()
     avatar = serializers.SerializerMethodField()
     avatar_small = serializers.SerializerMethodField()
     happiness_verbose  = serializers.SerializerMethodField()
     happiness = serializers.SerializerMethodField()
     happiness_date = serializers.SerializerMethodField()
+    is_lead = serializers.SerializerMethodField()
     kolbe_fact_finder = serializers.SerializerMethodField()
     kolbe_follow_thru = serializers.SerializerMethodField()
     kolbe_quick_start = serializers.SerializerMethodField()
@@ -92,6 +93,9 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
         if obj.current_happiness is None:
             return None
         return obj.current_happiness.assessment_verbose()
+
+    def get_is_lead(self, obj):
+        return obj.is_lead()
 
     def get_talent_category(self, obj):
          try:
@@ -195,7 +199,7 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Employee
-        fields = ('id', 'full_name', 'first_name', 'last_name', 'email', 'avatar', 'avatar_small', 'job_title', 'hire_date', 'current_leader', 'happiness', 'happiness_date', 'happiness_verbose', 'coach', 'kolbe_fact_finder','kolbe_follow_thru', 'kolbe_quick_start', 'kolbe_implementor', 'vops_visionary', 'vops_operator', 'vops_processor', 'vops_synergist', 'departure_date', 'team', 'display', 'current_salary', 'current_bonus', 'talent_category', 'last_checkin_date')
+        fields = ('id', 'full_name', 'first_name', 'last_name', 'email', 'avatar', 'avatar_small', 'job_title', 'hire_date', 'leader', 'happiness', 'happiness_date', 'happiness_verbose', 'coach', 'kolbe_fact_finder','kolbe_follow_thru', 'kolbe_quick_start', 'kolbe_implementor', 'vops_visionary', 'vops_operator', 'vops_processor', 'vops_synergist', 'departure_date', 'team', 'display', 'current_salary', 'current_bonus', 'talent_category', 'last_checkin_date', 'is_lead')
 
 
 class SimpleUserSerializer(serializers.ModelSerializer):
@@ -286,14 +290,16 @@ class AttributeSerializer(serializers.HyperlinkedModelSerializer):
 class CreateEmployeeSerializer(serializers.HyperlinkedModelSerializer):
     team = serializers.PrimaryKeyRelatedField(allow_null=True, queryset=Team.objects.all())
     coach = serializers.PrimaryKeyRelatedField(allow_null=True, queryset=Employee.objects.all())
+    leader = serializers.PrimaryKeyRelatedField(allow_null=True, queryset=Employee.objects.all())
 
     class Meta:
         model = Employee
-        fields = ('first_name', 'last_name', 'email', 'job_title', 'hire_date', 'team', 'display', 'current_leader', 'coach')
+        fields = ('first_name', 'last_name', 'email', 'job_title', 'hire_date', 'team', 'display', 'coach', 'leader')
 
 class EditEmployeeSerializer(serializers.HyperlinkedModelSerializer):
     team = serializers.PrimaryKeyRelatedField(allow_null=True, queryset=Team.objects.all())
     coach = serializers.PrimaryKeyRelatedField(allow_null=True, queryset=Employee.objects.all())
+    leader = serializers.PrimaryKeyRelatedField(allow_null=True, queryset=Employee.objects.all())
 
     def update(self, instance, validated_data):
         instance.first_name = validated_data.get('first_name', instance.first_name)
@@ -305,9 +311,10 @@ class EditEmployeeSerializer(serializers.HyperlinkedModelSerializer):
         instance.team = validated_data.get('team', instance.team)
         instance.display = validated_data.get('display', instance.display)
         instance.coach = validated_data.get('coach', instance.coach)
+        instance.leader = validated_data.get('leader', instance.leader)
         instance.save()
         return instance
 
     class Meta:
         model = Employee
-        fields = ('first_name', 'last_name', 'email', 'job_title', 'hire_date', 'departure_date', 'team', 'display', 'current_leader', 'coach')
+        fields = ('first_name', 'last_name', 'email', 'job_title', 'hire_date', 'departure_date', 'team', 'display', 'leader', 'coach')

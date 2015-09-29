@@ -70,6 +70,9 @@ class EmployeeIndex(object):
                     'coach_full_name': employee.coach.full_name if employee.coach else None,
                     'leader_id': leader.id if leader else None,
                     'leader_full_name': leader.full_name if leader else None,
+                    'lft': employee.lft,
+                    'rght': employee.rght,
+                    'tree_id': employee.tree_id,
                 }
                 documents.append(document)
 
@@ -83,6 +86,10 @@ class EmployeeIndex(object):
                        coach_ids=None,
                        leader_ids=None,
                        page=1,
+                       tree_id=None,
+                       lft=None,
+                       rght=None,
+                       pk=None,
                        rows=10):
         query = {
             'sort': 'full_name asc',
@@ -94,11 +101,17 @@ class EmployeeIndex(object):
         if vops:
             query['fq'].append('vops_%s:[260 TO *]' % vops.lower())
 
+        if tree_id:
+            query['fq'].append('tree_id:%s' % tree_id)
+            query['fq'].append('lft:%s' % lft)
+            query['fq'].append('rght:%s' % rght)
+            query['fq'].append('-pk:%s' % pk)
+
         results = self.solr.search('*:*', headers=self._get_auth_headers(), **query)
         return results
 
     def get_salary_report(self, tenant, talent_categories=None, team_ids=None, happiness=None, leader_ids=None,
-                          coach_ids=None):
+                          coach_ids=None, tree_id=None, lft=None, rght=None, pk=None):
         query = {
             'q': '*:*',
             'wt': 'json',
@@ -110,10 +123,16 @@ class EmployeeIndex(object):
                                     leader_ids=leader_ids, coach_ids=coach_ids),
         }
 
+        if tree_id:
+            query['fq'].append('tree_id:%s' % tree_id)
+            query['fq'].append('lft:%s' % lft)
+            query['fq'].append('rght:%s' % rght)
+            query['fq'].append('-pk:%s' % pk)
+
+
         query_string = urlencode(query, doseq=True)
         url = "%s/select?%s" % (settings.EMPLOYEES_SOLR_URL, query_string)
         results = requests.get(url, headers=self._get_auth_headers()).json()
-
         results = results['stats']['stats_fields']['current_salary']
 
         if results is None:
@@ -136,7 +155,7 @@ class EmployeeIndex(object):
         return report
 
     def get_talent_report(self, tenant, talent_categories=None, team_ids=None, happiness=None, leader_ids=None,
-                          coach_ids=None):
+                          coach_ids=None, tree_id=None, lft=None, rght=None, pk=None):
         query = {
             'q': '*:*',
             'wt': 'json',
@@ -146,6 +165,12 @@ class EmployeeIndex(object):
             'fq': self._get_filters(tenant, talent_categories=talent_categories, team_ids=team_ids, happiness=happiness,
                                     leader_ids=leader_ids, coach_ids=coach_ids),
         }
+
+        if tree_id:
+            query['fq'].append('tree_id:%s' % tree_id)
+            query['fq'].append('lft:%s' % lft)
+            query['fq'].append('rght:%s' % rght)
+            query['fq'].append('-pk:%s' % pk)
 
         query_string = urlencode(query, doseq=True)
         url = "%s/select?%s" % (settings.EMPLOYEES_SOLR_URL, query_string)

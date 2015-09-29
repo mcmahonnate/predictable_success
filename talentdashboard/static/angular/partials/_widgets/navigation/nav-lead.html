@@ -15,6 +15,22 @@
                 </div>
             </div>
         </div>
+        <div ng-show="activeEmployee.leader.id == currentUser.employee.id" role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == employeeTab}" ng-click="setActiveTab(employeeTab)" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{activeEmployee.full_name}}">
+
+            <div class="small-headshot team_menu">
+                    <img ng-src="{{ activeEmployee.avatar_small }}" class="headshot-image nav-input">
+            </div>
+
+            <div class="subnav" role="menu">
+                <div>
+                    <div class="subnav-title">{{ activeEmployee.full_name }}</div>
+                    <ul>
+                        <li><a ng-href="#/employees/{{ activeEmployee.id }}">Profile</a></li>
+                        <li><a ng-href="#/team-lead/{{ activeEmployee.id }}">Team</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
         <a href="" ng-click="setPrivacyMode()" class="privacy-mode" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Privacy Mode">Privacy Mode</a>   
     </div>    
 </nav>
