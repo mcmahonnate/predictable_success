@@ -106,7 +106,7 @@ def my_employees(request):
     current_user = request.user
     lead = Employee.objects.get(user=current_user)
     if lead.user == current_user or current_user.is_superuser:
-        employees = lead.get_descendants()
+        employees = lead.get_children()
         employees = employees.filter(departure_date__isnull=True)
         serializer = EmployeeSerializer(employees, many=True, context={'request': request})
 
@@ -120,7 +120,7 @@ def team_lead_employees(request, pk):
     lead = Employee.objects.get(id=pk)
 
     if current_employee.is_ancestor_of(other=lead, include_self=True):
-        employees = lead.get_descendants()
+        employees = lead.get_children()
         employees = employees.filter(departure_date__isnull=True)
         serializer = EmployeeSerializer(employees, many=True, context={'request': request})
 

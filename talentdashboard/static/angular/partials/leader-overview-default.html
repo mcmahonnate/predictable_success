@@ -11,7 +11,7 @@
             <div ng-include="'/static/angular/partials/_widgets/salary-total.html'"></div>
         </div>
         <div class="col-sm-7">
-            <div ng-include="'/static/angular/partials/_widgets/todos.html'" data-filter="mine" data-view="my-view" ng-controller="TaskListCtrl"></div>
+            <div ng-show="myTeam" ng-include="'/static/angular/partials/_widgets/todos.html'" data-filter="mine" data-view="my-view" ng-controller="TaskListCtrl"></div>
             <div ng-include="'/static/angular/partials/_widgets/activity.html'" ng-controller="ActivityCtrl" data-view="leader"></div>
         </div>
       </div>
