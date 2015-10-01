@@ -3,13 +3,13 @@ angular
     .module('feedback')
     .factory('ReviewersService', ReviewersService);
 
-ReviewersService.$inject = ['$http'];
+ReviewersService.$inject = ['$http', '$log'];
 
-function ReviewersService($http) {
+function ReviewersService($http, $log) {
     return {
         getPotentialReviewers: getPotentialReviewers
     };
-    
+
     function getPotentialReviewers() {
         return $http.get('/api/v1/feedback/potential-reviewers/')
             .then(getPotentialReviewersComplete)
@@ -20,7 +20,7 @@ function ReviewersService($http) {
         }
 
         function getPotentialReviewersFailed(error) {
-            console.log.error('getPotentialReviewers failed.' + error.data);
+            $log.error('getPotentialReviewers failed');
         }
     }
 }

@@ -3,9 +3,9 @@
         .module('feedback')
         .controller('RequestFeedbackController', RequestFeedbackController);
 
-    RequestFeedbackController.$inject = ['ReviewersService'];
+    RequestFeedbackController.$inject = ['ReviewersService', 'FeedbackRequestService'];
 
-    function RequestFeedbackController(ReviewersService) {
+    function RequestFeedbackController(ReviewersService, FeedbackRequestService) {
         var vm = this;
         vm.potentialReviewers = [];
         vm.selectedReviewers = [];
@@ -27,7 +27,10 @@
         }
 
         function sendFeedbackRequests() {
-
+            return FeedbackRequestService.sendFeedbackRequests(vm.selectedReviewers, vm.message)
+                .then(function(result) {
+                    return result;
+                });
         }
     }
 })();
