@@ -57,6 +57,7 @@ class EmployeeIndex(object):
                     'vops_processor': employee.get_vops_processor,
                     'vops_synergist': employee.get_vops_synergist,
                     'last_checkin_about': employee.last_checkin_about.date if employee.last_checkin_about else None,
+                    'last_checkin_type': employee.last_checkin_about.type.name if employee.last_checkin_about else None,
                     'last_comment_about': employee.last_comment_about.created_date if employee.last_comment_about else None,
                     'departure_date': employee.departure_date,
                     'team_id': team.id if team else None,

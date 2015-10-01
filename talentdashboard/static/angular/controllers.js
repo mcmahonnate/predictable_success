@@ -286,6 +286,7 @@ angular.module('tdb.controllers', [])
             $scope.csv = []
             angular.forEach($scope.evaluations_sort, function (employee) {
                 var row = {};
+                row.id = employee.pk;
                 row.name = employee.full_name;
                 row.team = employee.team_name;
                 row.email = employee.email;
@@ -294,8 +295,9 @@ angular.module('tdb.controllers', [])
                 row.happy = happyToString(employee.happiness);
                 row.happy_date = $rootScope.scrubDate(employee.happiness_date);
                 row.last_checkin = $rootScope.scrubDate(employee.last_checkin_about);
+                row.last_checkin_type = employee.last_checkin_type;
                 row.last_comment = $rootScope.scrubDate(employee.last_comment_about);
-                row.coach = employee.coach_full_name
+                row.coach = employee.coach_full_name;
                 row.current_salary = employee.current_salary;
                 row.hire_date = $rootScope.scrubDate(employee.hire_date);
                 $scope.csv.push(row);
