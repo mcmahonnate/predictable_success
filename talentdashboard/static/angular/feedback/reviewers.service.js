@@ -3,13 +3,13 @@ angular
     .module('feedback')
     .factory('ReviewersService', ReviewersService);
 
-ReviewersService.$inject = ['$resource'];
+ReviewersService.$inject = ['$http'];
 
 function ReviewersService($http) {
     return {
         getPotentialReviewers: getPotentialReviewers
     };
-
+    
     function getPotentialReviewers() {
         return $http.get('/api/v1/feedback/potential-reviewers/')
             .then(getPotentialReviewersComplete)

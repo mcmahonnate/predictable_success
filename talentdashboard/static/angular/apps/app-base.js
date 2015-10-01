@@ -16,6 +16,7 @@ var app = angular.module('tdb', [
         'tdb.search.controllers', 'tdb.search.services',
         'tdb.tasks.controllers', 'tdb.tasks.services',
         'angular.filter',
+        'feedback',
         'angular-carousel', 'analytics', 'ui.bootstrap', 'ngCsv','ngImgCrop', 'ngRoute','ui-notification', 'ngMessages', 'readMore', 'ngCookies'])
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.
