@@ -18,7 +18,9 @@ angular.module('tdb.search.controllers', [])
         }
  	}])
 
-    .controller('EmployeeSearchCtrl', ['$scope', '$routeParams', '$location', '$filter', 'HappinessOptions', 'EmployeeSearch', 'TalentCategories', 'Team', 'view', function ($scope, $routeParams, $location, $filter, HappinessOptions, EmployeeSearch, TalentCategories, Team, view) {
+    .controller('EmployeeSearchCtrl', ['$scope', '$routeParams', '$location', '$filter', 'HappinessOptions', 'EmployeeSearch', 'TalentCategories', 'Team', 'view', 'analytics', function ($scope, $routeParams, $location, $filter, HappinessOptions, EmployeeSearch, TalentCategories, Team, view, analytics) {
+        console.log($location.url());
+        analytics.trackPage($scope, $location.absUrl(), $location.url());
         $scope.filters = {
             talentCategory: $routeParams.talent_category ,
             happiness: $routeParams.happiness,
