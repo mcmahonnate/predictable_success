@@ -60,7 +60,7 @@ from assessment.api.serializers import AssessmentSerializer
 from todo.api.serializers import TaskSerializer, CreateTaskSerializer, EditTaskSerializer
 from customers.api.serializers import CustomerSerializer
 from kpi.api.serializers import KPIIndicatorSerializer, KPIPerformanceSerializer
-from feedback.api.serializers import FeedbackRequestSerializer, FeedbackRequestPostSerializer, FeedbackSubmissionSerializerForCoaches, FeedbackSubmissionSerializerForEmployees, WriteableFeedbackSubmissionSerializer, AnonymizedFeedbackSubmissionSerializer, UndeliveredFeedbackReportSerializer, CoacheeFeedbackReportSerializer
+from feedback.api.serializers import FeedbackRequestSerializer, CreateFeedbackRequestSerializer, FeedbackSubmissionSerializerForCoaches, FeedbackSubmissionSerializerForEmployees, WriteableFeedbackSubmissionSerializer, AnonymizedFeedbackSubmissionSerializer, UndeliveredFeedbackReportSerializer, CoacheeFeedbackReportSerializer
 from insights.api.serializers import ProspectSerializer
 
 logger = getLogger('talentdashboard')
@@ -1558,7 +1558,7 @@ class FeedbackRequestView(APIView):
     def post(self, request, pk, format=None):
         add_current_employee_to_request(request, 'requester')
         has_multiple_items = isinstance(request.DATA, list)
-        serializer = FeedbackRequestPostSerializer(data=request.DATA, many=has_multiple_items)
+        serializer = CreateFeedbackRequestSerializer(data=request.DATA, many=has_multiple_items)
         if serializer.is_valid():
             feedback_request = serializer.save()
             if has_multiple_items:
@@ -1573,28 +1573,13 @@ class FeedbackRequestView(APIView):
             return Response(serializer.errors, status=400)
 
     def put(self, request, pk, format=None):
-        serializer = FeedbackRequestPostSerializer(data=request.DATA)
+        serializer = CreateFeedbackRequestSerializer(data=request.DATA)
         if serializer.is_valid():
             feedback_request = serializer.save()
             response_serializer = FeedbackRequestSerializer(feedback_request)
             return Response(response_serializer.data)
         else:
             return Response(serializer.errors, status=400)
-
-@api_view(['GET'])
-def incomplete_feedback_requests_for_reviewer(request):
-    reviewer = Employee.objects.get_from_user(request.user)
-    pending_requests = FeedbackRequest.objects.pending_for_reviewer(reviewer)
-    serializer = FeedbackRequestSerializer(pending_requests, many=True)
-    return Response(serializer.data)
-
-@api_view(['GET'])
-def incomplete_feedback_requests_for_requester(request):
-    requester = Employee.objects.get_from_user(request.user)
-    pending_requests = FeedbackRequest.objects.pending_for_requester(requester)
-    serializer = FeedbackRequestSerializer(pending_requests, many=True)
-    return Response(serializer.data)
-
 
 class FeedbackSubmissionView(APIView):
     def get_object(self, pk):
@@ -1626,18 +1611,6 @@ class FeedbackSubmissionView(APIView):
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
 
-
-@api_view(['GET'])
-def potential_reviewers(request):
-    all_employees = set(Employee.objects.all())
-    requester = Employee.objects.get_from_user(request.user)
-    current_requests = FeedbackRequest.objects.pending_for_requester(requester)
-    current_reviewers = set([feedback_request.reviewer for feedback_request in current_requests])
-    requester = {Employee.objects.get_from_user(request.user)}
-    employee_set = all_employees - current_reviewers - requester
-    potential_reviewers = sorted(employee_set, key=lambda employee: employee.full_name)
-    serializer = SanitizedEmployeeSerializer(potential_reviewers, many=True)
-    return Response(serializer.data)
 
 @api_view(['GET'])
 def get_coachees_feedback_report(request):
@@ -1674,9 +1647,6 @@ def mark_feedback_read(request):
     else:
         return Response(serializer.errors, status=400)
 
-@api_view(['GET'])
-def confidentiality_options(request):
-    return Response(FeedbackSubmission.CONFIDENTIALITY_CHOICES)
 
 @api_view(['GET'])
 def my_feedback(request):

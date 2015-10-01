@@ -1,29 +1,27 @@
 from rest_framework import serializers
 from org.models import Employee
-from org.api.serializers import MinimalEmployeeSerializer
+from org.api.serializers import SanitizedEmployeeSerializer
 from ..models import FeedbackRequest, FeedbackSubmission
+
 
 class FeedbackRequestSerializer(serializers.ModelSerializer):
     request_date = serializers.DateTimeField(required=False, read_only=True)
     expiration_date = serializers.DateField(required=False)
-    requester = MinimalEmployeeSerializer()
-    reviewer = MinimalEmployeeSerializer()
-    is_complete = serializers.BooleanField(required=False)
+    requester = SanitizedEmployeeSerializer()
+    reviewer = SanitizedEmployeeSerializer()
 
     class Meta:
         model = FeedbackRequest
+        fields = ['request_date', 'expiration_date', 'requester', 'reviewer', 'message', 'is_complete']
 
 
-class FeedbackRequestPostSerializer(serializers.ModelSerializer):
-    request_date = serializers.DateTimeField(required=False, read_only=True)
-    expiration_date = serializers.DateField(required=False)
-    requester = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
+class CreateFeedbackRequestSerializer(serializers.ModelSerializer):
     reviewer = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
     message = serializers.CharField(required=False, allow_blank=True)
-    is_complete = serializers.BooleanField(required=False)
 
     class Meta:
         model = FeedbackRequest
+        fields = ['reviewer', 'message']
 
 
 class WriteableFeedbackSubmissionSerializer(serializers.ModelSerializer):
@@ -51,7 +49,7 @@ class WriteableFeedbackSubmissionSerializer(serializers.ModelSerializer):
 
 class AnonymizedFeedbackSubmissionSerializer(serializers.ModelSerializer):
     feedback_date = serializers.DateTimeField(required=False)
-    subject = MinimalEmployeeSerializer()
+    subject = SanitizedEmployeeSerializer()
 
     class Meta:
         model = FeedbackSubmission
@@ -62,7 +60,7 @@ class AnonymizedFeedbackSubmissionSerializer(serializers.ModelSerializer):
 
 class FeedbackSubmissionSerializerForCoaches(serializers.ModelSerializer):
     feedback_date = serializers.DateTimeField(required=False)
-    subject = MinimalEmployeeSerializer()
+    subject = SanitizedEmployeeSerializer()
     reviewer = serializers.SerializerMethodField()
 
     def get_reviewer(self, obj):
@@ -80,7 +78,7 @@ class FeedbackSubmissionSerializerForCoaches(serializers.ModelSerializer):
 
 class FeedbackSubmissionSerializerForEmployees(serializers.ModelSerializer):
     feedback_date = serializers.DateTimeField(required=False)
-    subject = MinimalEmployeeSerializer()
+    subject = SanitizedEmployeeSerializer()
     reviewer = serializers.SerializerMethodField()
 
     def get_reviewer(self, obj):
@@ -97,11 +95,11 @@ class FeedbackSubmissionSerializerForEmployees(serializers.ModelSerializer):
 
 
 class UndeliveredFeedbackReportSerializer(serializers.Serializer):
-    employee = MinimalEmployeeSerializer()
+    employee = SanitizedEmployeeSerializer()
     undelivered_feedback = serializers.IntegerField()
 
 
 class CoacheeFeedbackReportSerializer(serializers.Serializer):
-    employee = MinimalEmployeeSerializer()
+    employee = SanitizedEmployeeSerializer()
     feedback = serializers.ListField(child=FeedbackSubmissionSerializerForCoaches())
 
