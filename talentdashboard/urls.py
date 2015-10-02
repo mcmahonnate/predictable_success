@@ -139,6 +139,8 @@ urlpatterns = patterns('',
 
     url(r'^api/v1/checkins/', include('checkins.api.urls')),
 
+    url(r'^api/v1/org/', include('org.api.urls')),
+
     url(r'^api/v1/comments/', include('blah.api.urls')),
 
     url(r'^api/v1/feedback/', include('feedback.api.urls')),
