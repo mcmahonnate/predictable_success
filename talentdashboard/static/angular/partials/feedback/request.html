@@ -3,12 +3,6 @@
         <div class="panel-heading">
             <h3 class="panel-title">Request feedback</h3>
         </div>
-
-        <ul>
-            <li ng-repeat="reviewer in request.potentialReviewers">{{ reviewer.full_name }}</li>
-        </ul>
-
-
         <div class="panel-body">
             <form>
                 <div class="form-group">
@@ -16,7 +10,7 @@
                     <ui-select
                             id="to"
                             multiple
-                            ng-model=" request.selectedReviewers"
+                            ng-model="request.selectedReviewers"
                             reset-search-input="true"
                             theme="bootstrap"
                             >
