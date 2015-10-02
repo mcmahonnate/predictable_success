@@ -27,8 +27,8 @@
         }
 
         function sendFeedbackRequests() {
-            return FeedbackRequestService.sendFeedbackRequests(vm.selectedReviewers, vm.message)
-                .then(function(result) {
+            FeedbackRequestService.sendFeedbackRequests(vm.selectedReviewers, vm.message)
+                .then(function() {
                     // Show success/navigate to dashboard?
                 });
         }
