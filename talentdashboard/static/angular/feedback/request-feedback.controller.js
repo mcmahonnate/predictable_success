@@ -29,7 +29,7 @@
         function sendFeedbackRequests() {
             return FeedbackRequestService.sendFeedbackRequests(vm.selectedReviewers, vm.message)
                 .then(function(result) {
-                    return result;
+                    // Show success/navigate to dashboard?
                 });
         }
     }
