@@ -298,7 +298,6 @@ angular.module('tdb.controllers', [])
                 row.last_checkin_type = employee.last_checkin_type;
                 row.last_comment = $rootScope.scrubDate(employee.last_comment_about);
                 row.coach = employee.coach_full_name;
-                row.current_salary = employee.current_salary;
                 row.hire_date = $rootScope.scrubDate(employee.hire_date);
                 $scope.csv.push(row);
             });
