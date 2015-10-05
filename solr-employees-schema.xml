@@ -134,6 +134,9 @@
    <field name="talent_category" type="int" indexed="true" stored="true" required="false" multiValued="false" />
    <field name="talent_category_description" type="string" indexed="true" stored="true" required="false" multiValued="false" />
    <field name="talent_category_date" type="date" indexed="true" stored="true" required="false" multiValued="false" />
+   <field name="last_checkin_about" type="date" indexed="true" stored="true" required="false" multiValued="false" />
+   <field name="last_checkin_type" type="string" indexed="true" stored="true" required="false" multiValued="false" />
+   <field name="last_comment_about" type="date" indexed="true" stored="true" required="false" multiValued="false" />
    <field name="current_salary" type="float" indexed="true" stored="true" required="false" multiValued="false" />
    <field name="current_bonus" type="float" indexed="true" stored="true" required="false" multiValued="false" />
    <field name="display" type="boolean" indexed="true" stored="true" required="false" multiValued="false" />
@@ -141,6 +144,9 @@
    <field name="coach_full_name" type="string" indexed="true" stored="true" required="false" multiValued="false" />
    <field name="leader_id" type="int" indexed="true" stored="true" required="false" multiValued="false" />
    <field name="leader_full_name" type="string" indexed="true" stored="true" required="false" multiValued="false" />
+   <field name="lft" type="int" indexed="true" stored="true" required="false" multiValued="false" />
+   <field name="rght" type="int" indexed="true" stored="true" required="false" multiValued="false" />
+   <field name="tree_id" type="int" indexed="true" stored="true" required="false" multiValued="false" />
 
    <dynamicField name="*_i"  type="int"    indexed="true"  stored="true"/>
    <dynamicField name="*_is" type="int"    indexed="true"  stored="true"  multiValued="true"/>
