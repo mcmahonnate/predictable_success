@@ -3,9 +3,9 @@
         .module('feedback')
         .controller('RequestFeedbackController', RequestFeedbackController);
 
-    RequestFeedbackController.$inject = ['ReviewersService', 'FeedbackRequestService'];
+    RequestFeedbackController.$inject = ['ReviewersService', 'FeedbackRequestService', 'Notification'];
 
-    function RequestFeedbackController(ReviewersService, FeedbackRequestService) {
+    function RequestFeedbackController(ReviewersService, FeedbackRequestService, Notification) {
         var vm = this;
         vm.potentialReviewers = [];
         vm.selectedReviewers = [];
@@ -29,6 +29,7 @@
         function sendFeedbackRequests() {
             FeedbackRequestService.sendFeedbackRequests(vm.selectedReviewers, vm.message)
                 .then(function() {
+                    Notification.success("Success!");
                     // Show success/navigate to dashboard?
                 });
         }

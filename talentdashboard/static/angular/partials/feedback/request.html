@@ -20,9 +20,15 @@
                             <div ng-bind-html="reviewer.full_name"></div>
                         </ui-select-choices>
                     </ui-select>
+                    <label for="to">Add a few notes below on specific areas you'd like to receive feedback.</label>
+                    <textarea
+                        ng-model="request.message"
+                        msd-elastic
+                        class="form-control edit-textarea">
+                    </textarea>
                 </div>
                 <div class="form-group">
-                    <button class="btn btn-primary" type="button" ng-click="submit()">Ask for feedback!</button>
+                    <button class="btn btn-primary" type="button" ng-click="request.sendFeedbackRequests()">Ask for feedback!</button>
                 </div>
             </form>
         </div>
