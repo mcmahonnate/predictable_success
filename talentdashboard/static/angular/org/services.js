@@ -137,9 +137,59 @@ angular.module('tdb.org.services', ['ngResource'])
         }
     }])
 
-    .factory('TeamLeadEmployees', ['$resource', '$http', function($resource, $http) {
+    .factory('TeamLeadEmployees', ['$resource', function($resource) {
         var TeamLeadEmployees = $resource('/api/v1/team-lead-employees/');
         TeamLeadEmployees.getEmployees = function(id, success, failure) { return this.query({ id: id }, success, failure); };
         return TeamLeadEmployees;
+    }])
+
+    .factory('CoachService', ['$http', function($http) {
+        return {
+            getCurrentCoach: getCurrentCoach,
+            getAvailableCoaches: getAvailableCoaches,
+            changeCoach: changeCoach
+        };
+
+        function getCurrentCoach() {
+            return $http.get('/api/v1/org/coaches/current/')
+                .then(complete)
+                .catch(failed);
+
+            function complete(response) {
+                return response.data;
+            }
+
+            function failed(response) {
+                if(response.status == 404) {
+                    return null;
+                }
+            }
+        }
+
+        function getAvailableCoaches() {
+            return $http.get('/api/v1/org/coaches/available/')
+                .then(complete)
+                .catch(failed);
+
+            function complete(response) {
+                return response.data;
+            }
+
+            function failed(response) {
+            }
+        }
+
+        function changeCoach(newCoach) {
+            return $http.post('/api/v1/org/coaches/change/', {new_coach: newCoach.id})
+                .then(complete)
+                .catch(failed);
+
+            function complete(response) {
+                return response.data;
+            }
+
+            function failed(response) {
+            }
+        }
     }])
 ;
