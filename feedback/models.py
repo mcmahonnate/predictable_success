@@ -27,10 +27,10 @@ class FeedbackRequest(models.Model):
 
     def send_notification_email(self):
         recipient_email = self.reviewer.email
-        tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
-        response_url = 'https://%s/#/feedback/submission/%d' % (tenant.domain_url, self.id)
         if not recipient_email:
             return
+        tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
+        response_url = 'https://%s/#/feedback/submission/%d' % (tenant.domain_url, self.id)
         context = {
             'recipient_first_name': self.reviewer.first_name,
             'requester_full_name': self.requester.full_name,
