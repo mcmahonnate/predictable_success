@@ -1,4 +1,4 @@
-Hello, {{ recipient_full_name }}!
+Hi, {{ recipient_first_name }}!
 
 {{ requester_full_name }} has asked you for feedback.
 {% if custom_message %}

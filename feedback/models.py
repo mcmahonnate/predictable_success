@@ -1,8 +1,10 @@
 from django.db import models
 from django.template.loader import render_to_string
-from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
 from org.models import Employee
 from django.conf import settings
+from django.db import connection
+from customers.models import Customer
 
 
 class FeedbackRequestManager(models.Manager):
@@ -24,17 +26,23 @@ class FeedbackRequest(models.Model):
     was_declined = models.BooleanField(default=False)
 
     def send_notification_email(self):
-        recipient_email = self.requester.email
+        recipient_email = self.reviewer.email
+        tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
+        response_url = 'https://%s/#/feedback/submission/%d' % (tenant.domain_url, self.id)
         if not recipient_email:
             return
         context = {
-            'recipient_full_name': self.reviewer.full_name,
+            'recipient_first_name': self.reviewer.first_name,
             'requester_full_name': self.requester.full_name,
             'custom_message': self.message,
+            'response_url': response_url,
         }
         subject = "Someone wants your feedback!"
-        plain_text_message = render_to_string('email/feedback_request_notification.txt', context)
-        send_mail(subject, plain_text_message, settings.DEFAULT_FROM_EMAIL, [recipient_email])
+        text_content = render_to_string('email/feedback_request_notification.txt', context)
+        html_content = render_to_string('email/feedback_request_notification.html', context)
+        msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
 
     def __str__(self):
         return "Feedback request from %s for %s" % (self.requester, self.reviewer)

@@ -1,1 +1,1 @@
-__author__ = 'mkennedy'
+default_app_config = 'feedback.apps.FeedbackConfig'

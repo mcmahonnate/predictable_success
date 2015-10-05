@@ -1,0 +1,20 @@
+<html>
+    <head>
+    </head>
+    <body>
+        <p>
+            Hi, {{ recipient_first_name }}!
+        </p>
+        <p>
+            {{ requester_full_name }} has asked you for feedback.
+            {% if custom_message %}
+            They included the following message in their request:
+
+            {{ custom_message }}
+            {% endif %}
+        </p>
+        <p>
+            To leave feedback for {{ requester_full_name }}, please visit this page: {{ response_url }}
+        </p>
+    </body>
+</html>
