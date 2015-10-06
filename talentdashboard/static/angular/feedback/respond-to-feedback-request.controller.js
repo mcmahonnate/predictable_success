@@ -3,17 +3,15 @@
         .module('feedback')
         .controller('RespondToFeedbackRequestController', RespondToFeedbackRequestController);
 
-    RespondToFeedbackRequestController.$inject = ['$routeParams', '$location', 'FeedbackAPI'];
+    RespondToFeedbackRequestController.$inject = ['$routeParams', '$location', 'Notification', 'FeedbackAPI'];
 
-    function RespondToFeedbackRequestController($routeParams, $location, FeedbackAPI) {
+    function RespondToFeedbackRequestController($routeParams, $location, Notification, FeedbackAPI) {
         var vm = this;
-        // Properties
         vm.feedbackRequest = null;
         vm.subject = null;
         vm.excels_at = null;
         vm.could_improve_on = null;
         vm.anonymous = false;
-        // Methods
         vm.submitFeedback = submitFeedback;
         vm.cancel = cancel;
 
@@ -36,8 +34,12 @@
             if(form.$invalid) return;
             FeedbackAPI.respondToFeedbackRequest(vm.feedbackRequest, vm.excels_at, vm.could_improve_on, vm.anonymous)
                 .then(function() {
+                    Notification.success('Your feedback was saved.');
                     returnToDashboard();
                 })
+                .catch(function() {
+                    Notification.error('An error occurred when saving your feedback. Please try again.');
+                });
         }
 
         function cancel() {

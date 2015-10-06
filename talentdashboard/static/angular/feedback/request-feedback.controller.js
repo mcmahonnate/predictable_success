@@ -7,12 +7,10 @@
 
     function RequestFeedbackController(FeedbackAPI, CoachService, Notification, $location, $modal) {
         var vm = this;
-        // Properties
         vm.potentialReviewers = [];
         vm.selectedReviewers = [];
         vm.message = '';
         vm.currentCoach = null;
-        // Methods
         vm.sendFeedbackRequests = sendFeedbackRequests;
         vm.changeCoach = changeCoach;
 
@@ -34,8 +32,8 @@
         function sendFeedbackRequests() {
             FeedbackAPI.sendFeedbackRequests(vm.selectedReviewers, vm.message)
                 .then(function() {
+                    Notification.success("Your feedback requests have been sent.");
                     $location.path("/feedback");
-                    Notification.success("Success!");
                 });
         }
 
@@ -61,6 +59,7 @@
             });
             modalInstance.result.then(
                 function (newCoach) {
+                    Notification.success("Your coach has been changed to " + newCoach.full_name);
                     vm.currentCoach = newCoach;
                 }
             );

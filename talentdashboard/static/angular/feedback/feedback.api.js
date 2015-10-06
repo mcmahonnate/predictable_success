@@ -22,56 +22,56 @@ function FeedbackAPI($http, $log, FeedbackRequestResource, FeedbackSubmissionRes
         }
 
         return FeedbackRequestResource.sendFeedbackRequests(requests).$promise
-            .then(complete)
-            .catch(failed);
+            .then(success)
+            .catch(fail);
 
-        function complete(response) {
+        function success(response) {
             return response;
         }
 
-        function failed(error) {
-            console.log.error('sendFeedbackRequests failed.' + error.data);
+        function fail(error) {
+            $log.error('sendFeedbackRequests failed');
         }
     }
 
     function getFeedbackRequest(id) {
         return FeedbackRequestResource.get({id: id}).$promise
-            .then(getFeedbackRequestsComplete)
-            .catch(getFeedbackRequestsFailed);
+            .then(success)
+            .catch(fail);
 
-        function getFeedbackRequestsComplete(response) {
+        function success(response) {
             return response;
         }
 
-        function getFeedbackRequestsFailed(error) {
-            $log.error('getFeedbackRequests failed');
+        function fail(error) {
+            $log.error('getFeedbackRequest failed');
         }
     }
 
     function getFeedbackRequests() {
         return FeedbackRequestResource.getFeedbackRequests().$promise
-            .then(getFeedbackRequestsComplete)
-            .catch(getFeedbackRequestsFailed);
+            .then(success)
+            .catch(fail);
 
-        function getFeedbackRequestsComplete(response) {
+        function success(response) {
             return response;
         }
 
-        function getFeedbackRequestsFailed(error) {
+        function fail(error) {
             $log.error('getFeedbackRequests failed');
         }
     }
 
     function getPotentialReviewers() {
         return $http.get('/api/v1/feedback/potential-reviewers/')
-            .then(getPotentialReviewersComplete)
-            .catch(getPotentialReviewersFailed);
+            .then(success)
+            .catch(fail);
 
-        function getPotentialReviewersComplete(response) {
+        function success(response) {
             return response.data;
         }
 
-        function getPotentialReviewersFailed(error) {
+        function fail(error) {
             $log.error('getPotentialReviewers failed');
         }
     }
@@ -96,7 +96,6 @@ function FeedbackAPI($http, $log, FeedbackRequestResource, FeedbackSubmissionRes
         function fail(error) {
             $log.error('respondToFeedbackRequest failed');
         }
-
     }
 }
 })();
