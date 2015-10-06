@@ -11,7 +11,7 @@
         <div ng-repeat="request in feedback.feedbackRequests | orderBy:'request.requester.full_name'" class="todos">
             <div class="todo row">
                 <div class="pull-right">
-                    <a class="btn btn-default pull-left" ng-href="#/feedback/submission/{{ request.id }}" type="button">
+                    <a class="btn btn-default pull-left" ng-href="#/feedback/request/{{ request.id }}/reply/" type="button">
                         Give Feedback
                     </a>
                 </div>

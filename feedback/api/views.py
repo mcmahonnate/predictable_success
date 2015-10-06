@@ -1,8 +1,6 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import *
-from org.api.serializers import SanitizedEmployeeSerializer
-from org.models import Employee
-from serializers import FeedbackRequestSerializer, CreateFeedbackRequestSerializer
+from serializers import *
 from ..models import FeedbackRequest
 
 
@@ -21,7 +19,16 @@ class CreateFeedbackRequest(CreateAPIView):
 
 
 class RetrieveFeedbackRequest(RetrieveAPIView):
+    serializer_class = FeedbackRequestSerializer
     queryset = FeedbackRequest.objects.all()
+
+
+class CreateFeedbackSubmission(CreateAPIView):
+    serializer_class = CreateFeedbackSubmissionSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def perform_create(self, serializer):
+        serializer.save(reviewer=self.request.user.employee)
 
 
 class PotentialReviewers(ListAPIView):

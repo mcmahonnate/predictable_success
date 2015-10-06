@@ -3,9 +3,9 @@
         .module('feedback')
         .controller('FeedbackController', FeedbackController);
 
-    FeedbackController.$inject = ['FeedbackRequestService'];
+    FeedbackController.$inject = ['FeedbackAPI'];
 
-    function FeedbackController(FeedbackRequestService) {
+    function FeedbackController(FeedbackAPI) {
         var vm = this;
         // Properties
         vm.feedbackRequests = [];
@@ -17,7 +17,7 @@
         }
 
         function getFeedbackRequests() {
-            return FeedbackRequestService.getFeedbackRequests()
+            return FeedbackAPI.getFeedbackRequests()
                 .then(function (data) {
                     vm.feedbackRequests = data;
                     return vm.feedbackRequests;

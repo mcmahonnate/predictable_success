@@ -49,14 +49,6 @@ class FeedbackRequest(models.Model):
 
 
 class FeedbackSubmission(models.Model):
-    NOT_CONFIDENTIAL = 0
-    COACH_VISIBLE = 1
-    CONFIDENTIAL = 2
-    CONFIDENTIALITY_CHOICES = (
-        (NOT_CONFIDENTIAL, "Anyone can see it"),
-        (COACH_VISIBLE, "The coach can see it but not the recipient"),
-        (CONFIDENTIAL, "No one can see it; Please keep it confidential."),
-    )
     feedback_request = models.ForeignKey(FeedbackRequest, null=True, blank=True, related_name='submissions')
     feedback_date = models.DateTimeField(auto_now_add=True)
     subject = models.ForeignKey(Employee, related_name='feedback_about')
@@ -65,22 +57,12 @@ class FeedbackSubmission(models.Model):
     could_improve_on = models.TextField(blank=True)
     has_been_delivered = models.BooleanField(default=False)
     unread = models.BooleanField(default=True)
-    confidentiality = models.IntegerField(choices=CONFIDENTIALITY_CHOICES, default=0)
+    anonymous = models.BooleanField(default=False)
 
     def was_unsolicited(self):
         if self.feedback_request is None:
             return True
         return False
-
-    def get_reviewer_for_viewing_by_coach(self):
-        if self.confidentiality <= self.COACH_VISIBLE:
-            return self.reviewer
-        return None
-
-    def get_reviewer_for_viewing_by_subject(self):
-        if self.confidentiality == self.NOT_CONFIDENTIAL:
-            return self.reviewer
-        return None
 
     def save(self, *args, **kwargs):
         if self.feedback_request:

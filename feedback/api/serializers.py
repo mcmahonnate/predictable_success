@@ -5,7 +5,7 @@ from ..models import FeedbackRequest, FeedbackSubmission
 
 
 class FeedbackRequestSerializer(serializers.ModelSerializer):
-    request_date = serializers.DateTimeField(required=False, read_only=True)
+    request_date = serializers.DateTimeField(required=False)
     expiration_date = serializers.DateField(required=False)
     requester = SanitizedEmployeeSerializer()
     reviewer = SanitizedEmployeeSerializer()
@@ -22,6 +22,25 @@ class CreateFeedbackRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = FeedbackRequest
         fields = ['reviewer', 'message']
+
+
+class CreateFeedbackSubmissionSerializer(serializers.ModelSerializer):
+    feedback_request = serializers.PrimaryKeyRelatedField(queryset=FeedbackRequest.objects.all(), required=False)
+    subject = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
+
+    def validate(self, data):
+        feedback_request = data['feedback_request']
+        if feedback_request is not None:
+            if feedback_request.is_complete:
+                raise serializers.ValidationError("Cannot reply to a request that is already complete.")
+            subject = data['subject']
+            if feedback_request.requester != subject:
+                raise serializers.ValidationError("Subject must be the same as requester.")
+        return data
+
+    class Meta:
+        model = FeedbackSubmission
+        fields = ['feedback_request', 'subject', 'excels_at', 'could_improve_on', 'anonymous']
 
 
 class WriteableFeedbackSubmissionSerializer(serializers.ModelSerializer):
