@@ -1,0 +1,20 @@
+<div class="modal-body daily-digest-modal">
+    <button ng-click="cancel()" class="close">&times;</button>
+	<h3 class="modal-title">
+        <span>Heads up!</span>
+    </h3>
+    <p>Before you continue we want you to know who will be able to see your response.  In addition to <span ng-if="customer.show_coaches">your <strong>Coach</strong> and</span> your <strong>Manager</strong> the following people will be able to view your response.
+    <div class="recipients">
+        <div ng-repeat="employee in members" class="recipient">
+            <div class="headshot xlarge-headshot">
+                <img ng-src="{{ employee.avatar_small }}" alt="{{ employee.full_name }}'s avatar" />
+            </div>
+            <span class="recipients-name">
+                {{employee.full_name}}
+            </span>
+        </div>
+    </div>    
+</div>
+<div class="modal-footer">
+    <button type="button" ng-click="cancel()" class="btn btn-default">Got it, thanks!</button>
+</div>
