@@ -12,7 +12,7 @@ class FeedbackRequestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FeedbackRequest
-        fields = ['request_date', 'expiration_date', 'requester', 'reviewer', 'message', 'is_complete']
+        fields = ['id', 'request_date', 'expiration_date', 'requester', 'reviewer', 'message', 'is_complete']
 
 
 class CreateFeedbackRequestSerializer(serializers.ModelSerializer):

@@ -8,5 +8,25 @@
     <h1>My Feedback</h1>
     <div class="panel">
 
+        <div ng-repeat="request in feedback.feedbackRequests | orderBy:'request.requester.full_name'" class="todos">
+            <div class="todo row">
+                <div class="pull-right">
+                    <a class="btn btn-default pull-left" ng-href="#/feedback/submission/{{ request.id }}" type="button">
+                        Give Feedback
+                    </a>
+                </div>
+                <div class="col-md-3 col-lg-3 first">
+                    <span class="large-headshot">
+                        <img ng-src="{{request.requester.avatar_small}}" alt="{{request.requester.full_name}}" class="headshot-image">
+                    </span>
+                </div>
+                <div class="todo-description-container col-xs-12 col-sm-10" style="width:70%;margin-left:10px">
+
+                    <h3 class="comment-title-employee-name"><strong><span class="sensitive-text ng-binding">{{request.requester.full_name}}</span> requested feedback</strong></h3>
+                    <p class="todo-description comment-text ng-binding ng-isolate-scope ng-valid" read-more="" ng-model="request.message" words="false" length="400"></p>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
