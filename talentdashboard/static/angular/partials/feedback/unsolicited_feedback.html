@@ -1,12 +1,11 @@
 <div class="panel panel-default">
     <div class="panel-heading">Submit feedback</div>
     <div class="panel-body">
-        <form>
             <div class="form-group">
                 <label for="to">Who would you like to give feedback to?</label>
                 <ui-select
                         id="to"
-                        ng-model="search.selectedEmployee"
+                        ng-model="submitFeedback.subject"
                         reset-search-input="false"
                         theme="bootstrap"
                         style="width:50%"
@@ -14,28 +13,32 @@
                     <ui-select-match placeholder="Type an employee's name">
                         {{ $select.selected.full_name }}</ui-select-match>
                     <ui-select-choices
-                            repeat="employee in employees | propsFilter: {full_name: $select.search}">
+                            repeat="employee in submitFeedback.employees | filter: {full_name: $select.search}">
                         <div ng-bind-html="employee.full_name | highlight: $select.search"></div>
                     </ui-select-choices>
                 </ui-select>
             </div>
-            <div ng-show="search.selectedEmployee">
+        <form ng-show="submitFeedback.subject" name="feedbackForm" novalidate="novalidate">
+            <div class="panel-body">
                 <div class="form-group">
-                    <label class="control-label">Who do you want to know that you sent this feedback?</label>
-                    <select class="form-control" ng-options="item[0] as item[1] for item in confidentialityOptions" ng-model="feedback.confidentiality"></select>
+                    <label class="control-label">In what area do you think I'm awesome?</label>
+                    <textarea class="form-control" cols="30" rows="5" ng-model="submitFeedback.excels_at"></textarea>
                 </div>
                 <div class="form-group">
-                    <label class="control-label">How is {{ search.selectedEmployee.full_name }} awesome?</label>
-                    <textarea class="form-control" cols="30" rows="5" ng-model="feedback.excels_at"></textarea>
+                    <label class="control-label">How do you think I can be even more awesome?</label>
+                    <textarea class="form-control" cols="30" rows="5"
+                              ng-model="submitFeedback.could_improve_on"></textarea>
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Where can {{ search.selectedEmployee.full_name }} be more
-                        awesome?</label>
-                    <textarea class="form-control" cols="30" rows="5" ng-model="feedback.could_improve_on"></textarea>
+                    <input type="checkbox" ng-model="submitFeedback.anonymous"/>
+                    <label class="control-label">Make my feedback anonymous
+                        to {{ submitFeedback.subject.full_name }}</label>
                 </div>
                 <div class="form-group">
-                    <button class="btn btn-primary" type="button" ng-click="submit()">Submit</button>
-                    <button class="btn btn-default" type="button" ng-click="cancel()">Cancel</button>
+                    <button class="btn btn-primary" type="button"
+                            ng-click="submitFeedback.submitFeedback(feedbackForm)">Submit Feedback
+                    </button>
+                    <button class="btn btn-default" type="button" ng-click="submitFeedback.cancel()">Cancel</button>
                 </div>
             </div>
         </form>

@@ -6,7 +6,7 @@
         <h2>Here are specific areas I'm like feedback on:</h2>
         <p>{{ submitFeedback.feedbackRequest.message }}</p>
     </div>
-    <form name="respondToFeedbackForm" novalidate="novalidate">
+    <form name="feedbackForm" novalidate="novalidate">
         <div class="panel-body">
             <div class="form-group">
                 <label class="control-label">In what area do you think I'm awesome?</label>
@@ -21,7 +21,7 @@
                 <label class="control-label">Make my feedback anonymous to {{ submitFeedback.subject.full_name }}</label>
             </div>
             <div class="form-group">
-                <button class="btn btn-primary" type="button" ng-click="submitFeedback.submitFeedback(respondToFeedbackForm)">Submit Feedback</button>
+                <button class="btn btn-primary" type="button" ng-click="submitFeedback.submitFeedback(feedbackForm)">Submit Feedback</button>
                 <button class="btn btn-default" type="button" ng-click="submitFeedback.cancel()">Cancel</button>
             </div>
         </div>

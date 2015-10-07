@@ -18,6 +18,7 @@ app.config(['$routeProvider', function($routeProvider) {
       when('/feedback/request', {templateUrl: '/static/angular/partials/feedback/request.html', controller: 'RequestFeedbackController as request', resolve: {authorizeRoute: authorizeRoute}}).
       when('/feedback', {templateUrl: '/static/angular/partials/feedback/index.html', controller: 'FeedbackController as feedback', resolve: {authorizeRoute: authorizeRoute}}).
       when('/feedback/request/:id/reply', {templateUrl: '/static/angular/partials/feedback/respond_to_request.html', controller: 'RespondToFeedbackRequestController as submitFeedback', resolve: {authorizeRoute: authorizeRoute}}).
+      when('/feedback/submit', {templateUrl: '/static/angular/partials/feedback/unsolicited_feedback.html', controller: 'UnsolicitedFeedbackController as submitFeedback', resolve: {authorizeRoute: authorizeRoute}}).
       when('/reports/self-assess', {templateUrl: '/static/angular/partials/self-assess-report.html', controller: 'SelfAssessReportCtrl', resolve: {authorizeRoute: authorizeRoute}}).
       when('/reports/timespan', {templateUrl: '/static/angular/partials/timespan-report.html', controller: 'TimespanReportCtrl', resolve: {authorizeRoute: authorizeRoute}}).
       when('/reports/activity', {templateUrl: '/static/angular/partials/activity-report.html', controller: 'ReportsCtrl', resolve: {authorizeRoute: authorizeRoute}}).

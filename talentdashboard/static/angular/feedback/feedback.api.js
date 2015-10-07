@@ -3,15 +3,17 @@ angular
     .module('feedback')
     .factory('FeedbackAPI', FeedbackAPI);
 
-FeedbackAPI.$inject = ['$http', '$log', 'FeedbackRequestResource', 'FeedbackSubmissionResource'];
+FeedbackAPI.$inject = ['$http', '$log', 'FeedbackRequestResource', 'FeedbackSubmissionResource', 'Employee'];
 
-function FeedbackAPI($http, $log, FeedbackRequestResource, FeedbackSubmissionResource) {
+function FeedbackAPI($http, $log, FeedbackRequestResource, FeedbackSubmissionResource, Employee) {
     return {
         getFeedbackRequest: getFeedbackRequest,
         sendFeedbackRequests: sendFeedbackRequests,
         getFeedbackRequests: getFeedbackRequests,
         getPotentialReviewers: getPotentialReviewers,
+        getEmployees: getEmployees,
         respondToFeedbackRequest: respondToFeedbackRequest,
+        giveUnsolicitedFeedback: giveUnsolicitedFeedback
     };
 
     function sendFeedbackRequests(reviewers, message) {
@@ -21,44 +23,50 @@ function FeedbackAPI($http, $log, FeedbackRequestResource, FeedbackSubmissionRes
             requests.push({reviewer: reviewers[i].id, message: message});
         }
 
-        return FeedbackRequestResource.sendFeedbackRequests(requests).$promise
-            .then(success)
-            .catch(fail);
+        return FeedbackRequestResource.sendFeedbackRequests(requests, success, fail).$promise;
 
         function success(response) {
             return response;
         }
 
-        function fail(error) {
+        function fail(response) {
             $log.error('sendFeedbackRequests failed');
         }
     }
 
     function getFeedbackRequest(id) {
-        return FeedbackRequestResource.get({id: id}).$promise
-            .then(success)
-            .catch(fail);
+        return FeedbackRequestResource.get({id: id}, success, fail).$promise;
 
         function success(response) {
             return response;
         }
 
-        function fail(error) {
+        function fail(response) {
             $log.error('getFeedbackRequest failed');
         }
     }
 
     function getFeedbackRequests() {
-        return FeedbackRequestResource.getFeedbackRequests().$promise
-            .then(success)
-            .catch(fail);
+        return FeedbackRequestResource.getFeedbackRequests(null, success, fail).$promise;
 
         function success(response) {
             return response;
         }
 
-        function fail(error) {
+        function fail(response) {
             $log.error('getFeedbackRequests failed');
+        }
+    }
+
+    function getEmployees() {
+        return Employee.query(null, success, fail).$promise;
+
+        function success(response) {
+            return response;
+        }
+
+        function fail(response) {
+            $log.error('getEmployees failed');
         }
     }
 
@@ -71,7 +79,7 @@ function FeedbackAPI($http, $log, FeedbackRequestResource, FeedbackSubmissionRes
             return response.data;
         }
 
-        function fail(error) {
+        function fail(response) {
             $log.error('getPotentialReviewers failed');
         }
     }
@@ -85,15 +93,28 @@ function FeedbackAPI($http, $log, FeedbackRequestResource, FeedbackSubmissionRes
             could_improve_on: couldImproveOn,
             anonymous: anonymous
         };
-        return FeedbackSubmissionResource.save(submission).$promise
-            .then(success)
-            .catch(fail);
+        return _sendFeedback(submission);
+    }
+
+    function giveUnsolicitedFeedback(subject, excelsAt, couldImproveOn, anonymous)
+    {
+        var submission = {
+            subject: subject.id,
+            excels_at: excelsAt,
+            could_improve_on: couldImproveOn,
+            anonymous: anonymous
+        };
+        return _sendFeedback(submission);
+    }
+
+    function _sendFeedback(submission) {
+        return FeedbackSubmissionResource.save(submission, success, fail).$promise;
 
         function success(response) {
             return response;
         }
 
-        function fail(error) {
+        function fail(response) {
             $log.error('respondToFeedbackRequest failed');
         }
     }
