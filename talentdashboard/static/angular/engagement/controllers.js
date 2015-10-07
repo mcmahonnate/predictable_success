@@ -21,6 +21,7 @@ angular.module('tdb.engagement.controllers', [])
         showWhoCanSeeThis = function () {
             $modal.open({
                 animation: true,
+                backdrop: 'static',
                 templateUrl: '/static/angular/partials/_modals/who-can-see-this.html',
                 controller: 'DailyDigestCtrl'
             });

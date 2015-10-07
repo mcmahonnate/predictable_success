@@ -377,6 +377,7 @@ angular.module('tdb.org.controllers', [])
         $scope.editEmployee = function (employee, leadership, employees, teams) {
             var modalInstance = $modal.open({
                 animation: true,
+                backdrop: 'static',
                 templateUrl: '/static/angular/partials/_modals/edit-bio-modal.html',
                 controller: 'AddEditBioCtrl',
                 resolve: {
