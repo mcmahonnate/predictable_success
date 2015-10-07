@@ -29,7 +29,7 @@ class CreateFeedbackSubmissionSerializer(serializers.ModelSerializer):
     subject = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
 
     def validate(self, data):
-        feedback_request = data['feedback_request']
+        feedback_request = data.get('feedback_request', None)
         if feedback_request is not None:
             if feedback_request.is_complete:
                 raise serializers.ValidationError("Cannot reply to a request that is already complete.")
@@ -40,7 +40,8 @@ class CreateFeedbackSubmissionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FeedbackSubmission
-        fields = ['feedback_request', 'subject', 'excels_at', 'could_improve_on', 'anonymous']
+        fields = ['id', 'feedback_request', 'subject', 'excels_at', 'could_improve_on', 'anonymous']
+        read_only_fields = ['id',]
 
 
 class WriteableFeedbackSubmissionSerializer(serializers.ModelSerializer):
