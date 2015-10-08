@@ -3,10 +3,12 @@
         .module('feedback')
         .controller('FeedbackController', FeedbackController);
 
-    FeedbackController.$inject = ['FeedbackAPI', '$modal', '$location'];
+    FeedbackController.$inject = ['FeedbackAPI', '$modal', '$location', '$filter', '$interval', '$scope'];
 
-    function FeedbackController(FeedbackAPI, $modal, $location) {
+    function FeedbackController(FeedbackAPI, $modal, $location, $filter, $interval, $scope) {
         var vm = this;
+        var promise = null;
+
         // Properties
         vm.feedbackRequests = [];
         vm.requestFeedback = requestFeedback;
@@ -14,14 +16,18 @@
         activate();
 
         function activate() {
-            getFeedbackRequests();
+            promise = $interval(getFeedbackRequests, 1000);
         }
 
         function getFeedbackRequests() {
-            return FeedbackAPI.getFeedbackRequests()
+            FeedbackAPI.getFeedbackRequests()
                 .then(function (data) {
-                    vm.feedbackRequests = data;
-                    return vm.feedbackRequests;
+                    console.log('polling');
+                    var feedbackRequests = data;
+                    angular.forEach(feedbackRequests, function(request) {
+                        var results = $filter('filter')(vm.feedbackRequests, {id: request.id});
+                        if (results.length==0) { vm.feedbackRequests.push(request)}
+                    });
                 });
         }
 
@@ -45,6 +51,15 @@
         function giveUnsolicitedFeedback() {
             $location.path('/feedback/submit');
         }
+
+
+        // Cancel interval on page changes
+        $scope.$on('$destroy', function(){
+            if (angular.isDefined(promise)) {
+                $interval.cancel(promise);
+                promise = undefined;
+            }
+        });
 
     }
 })();
