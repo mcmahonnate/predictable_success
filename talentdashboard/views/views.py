@@ -86,7 +86,10 @@ class PermissionsViewThisEmployee(permissions.BasePermission):
             pk = view.kwargs['pk']
             requester = Employee.objects.get(user=request.user)
             employee = Employee.objects.get(id=pk)
-            return requester.is_ancestor_of(employee)
+            has_permission = requester.is_ancestor_of(employee)
+            if not has_permission and requester.id == employee.coach.id:
+                has_permission = True
+            return has_permission
 
 class UserList(generics.ListAPIView):
     serializer_class = SanitizedEmployeeSerializer
