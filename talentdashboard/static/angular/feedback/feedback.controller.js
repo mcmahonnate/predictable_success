@@ -3,13 +3,14 @@
         .module('feedback')
         .controller('FeedbackController', FeedbackController);
 
-    FeedbackController.$inject = ['FeedbackAPI', '$modal'];
+    FeedbackController.$inject = ['FeedbackAPI', '$modal', '$location'];
 
-    function FeedbackController(FeedbackAPI, $modal) {
+    function FeedbackController(FeedbackAPI, $modal, $location) {
         var vm = this;
         // Properties
         vm.feedbackRequests = [];
         vm.requestFeedback = requestFeedback;
+        vm.giveUnsolicitedFeedback = giveUnsolicitedFeedback;
         activate();
 
         function activate() {
@@ -40,6 +41,10 @@
                 }
             );
         };
+
+        function giveUnsolicitedFeedback() {
+            $location.path('/feedback/submit');
+        }
 
     }
 })();
