@@ -3,13 +3,13 @@
         .module('feedback')
         .controller('FeedbackController', FeedbackController);
 
-    FeedbackController.$inject = ['FeedbackAPI'];
+    FeedbackController.$inject = ['FeedbackAPI', '$modal'];
 
-    function FeedbackController(FeedbackAPI) {
+    function FeedbackController(FeedbackAPI, $modal) {
         var vm = this;
         // Properties
         vm.feedbackRequests = [];
-
+        vm.requestFeedback = requestFeedback;
         activate();
 
         function activate() {
@@ -23,5 +23,23 @@
                     return vm.feedbackRequests;
                 });
         }
+
+        function requestFeedback() {
+            var modalInstance = $modal.open({
+                animation: true,
+                backdrop: 'static',
+                templateUrl: '/static/angular/partials/feedback/_modals/request-feedback.html',
+                controller: 'RequestFeedbackController as request',
+                resolve: {
+
+                }
+            });
+            modalInstance.result.then(
+                function (e, l) {
+
+                }
+            );
+        };
+
     }
 })();
