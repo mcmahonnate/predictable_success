@@ -22,7 +22,6 @@
         function getFeedbackRequests() {
             FeedbackAPI.getFeedbackRequests()
                 .then(function (data) {
-                    console.log('polling');
                     var feedbackRequests = data;
                     angular.forEach(feedbackRequests, function(request) {
                         var results = $filter('filter')(vm.feedbackRequests, {id: request.id});
@@ -51,7 +50,6 @@
         function giveUnsolicitedFeedback() {
             $location.path('/feedback/submit');
         }
-
 
         // Cancel interval on page changes
         $scope.$on('$destroy', function(){
