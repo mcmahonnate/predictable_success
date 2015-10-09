@@ -10,7 +10,7 @@ from forms import *
 from rest_framework import routers
 from views.payment import ChargeView, PaymentView
 from views.homepage import IndexView
-from org.api.views import Profile, team_lead_employees, my_employees, EmployeeDetail
+from org.api.views import Profile, team_lead_employees, my_employees, EmployeeDetail, employee_support_team
 from insights.views import Signup, Report, Survey, Confirmation
 from engagement.api.views import RetrieveUpdateDestroyHappiness, CreateHappiness, EmployeeHappinessList
 from activity.api.views import EventList, EmployeeEventList, TeamEventList, CoachEventList, LeadEventList, MyTeamEventList, CheckInEventList, CommentEvent
@@ -56,6 +56,7 @@ urlpatterns = [
 
     url(r'^api/v1/employees/$', (cache_page(60*1440)(EmployeeList.as_view())), name='employee-list'),
     url(r'^api/v1/employees/(?P<pk>[0-9]+)/$', EmployeeDetail.as_view(), name='employee-detail'),
+    url(r'^api/v1/employees/(?P<pk>[0-9]+)/support-team/$', employee_support_team),
     url(r'^api/v1/employee-names/$', EmployeeNames.as_view(), name='employee-name-list'),
     url(r'^api/v1/leaderships/employees/(?P<pk>[0-9]+)/$', LeadershipDetail.as_view()),
     url(r'^api/v1/pvp-descriptions/$', pvp_descriptions),
