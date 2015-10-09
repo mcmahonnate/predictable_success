@@ -1,14 +1,17 @@
 <div class="container">
 
     <div class="pull-right">
-        <a class="btn btn-default pull-left" href="#/feedback/request" type="button">
+        <button class="btn btn-default" ng-click="feedback.giveUnsolicitedFeedback()" type="button">
+            <span class=""></span> Give Feedback
+        </button>
+        <button class="btn btn-default" ng-click="feedback.requestFeedback()" type="button">
             <span class="fa fa-comment"></span> Ask for Feedback
-        </a>
+        </button>
     </div>
     <h1>My Feedback</h1>
     <div class="panel">
 
-        <div ng-repeat="request in feedback.feedbackRequests | orderBy:'request.requester.full_name'" class="todos">
+        <div ng-repeat="request in feedback.feedbackRequests | orderBy:'request.requester.full_name'" class="todos animate-repeat">
             <div class="todo row">
                 <div class="pull-right">
                     <a class="btn btn-default pull-left" ng-href="#/feedback/request/{{ request.id }}/reply/" type="button">
@@ -30,3 +33,23 @@
 
     </div>
 </div>
+
+<style>
+.animate-repeat.ng-move,
+.animate-repeat.ng-enter,
+.animate-repeat.ng-leave {
+  transition:all linear 0.5s;
+}
+
+.animate-repeat.ng-leave.ng-leave-active,
+.animate-repeat.ng-move,
+.animate-repeat.ng-enter {
+  opacity:0;
+}
+
+.animate-repeat.ng-leave,
+.animate-repeat.ng-move.ng-move-active,
+.animate-repeat.ng-enter.ng-enter-active {
+  opacity:1;
+}
+</style>

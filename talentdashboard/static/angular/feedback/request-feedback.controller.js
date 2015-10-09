@@ -3,9 +3,9 @@
         .module('feedback')
         .controller('RequestFeedbackController', RequestFeedbackController);
 
-    RequestFeedbackController.$inject = ['FeedbackAPI', 'CoachService', 'Notification', '$location', '$modal'];
+    RequestFeedbackController.$inject = ['FeedbackAPI', 'CoachService', 'Notification', '$location', '$modal', '$modalInstance'];
 
-    function RequestFeedbackController(FeedbackAPI, CoachService, Notification, $location, $modal) {
+    function RequestFeedbackController(FeedbackAPI, CoachService, Notification, $location, $modal, $modalInstance) {
         var vm = this;
         vm.potentialReviewers = [];
         vm.selectedReviewers = [];
@@ -13,6 +13,10 @@
         vm.currentCoach = null;
         vm.sendFeedbackRequests = sendFeedbackRequests;
         vm.changeCoach = changeCoach;
+        vm.stepNext = stepNext;
+        vm.stepBack = stepBack;
+        vm.cancel = cancel;
+        vm.panel_index = 0;
 
         activate();
 
@@ -33,7 +37,7 @@
             FeedbackAPI.sendFeedbackRequests(vm.selectedReviewers, vm.message)
                 .then(function() {
                     Notification.success("Your feedback requests have been sent.");
-                    $location.path("/feedback");
+                    $modalInstance.close()
                 });
         }
 
@@ -63,6 +67,18 @@
                     vm.currentCoach = newCoach;
                 }
             );
+        }
+
+        function stepNext() {
+            vm.panel_index++;
+        }
+
+        function stepBack() {
+            vm.panel_index--;
+        }
+
+        function cancel() {
+            $modalInstance.dismiss();
         }
     }
 })();

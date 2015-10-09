@@ -1,10 +1,16 @@
-<div class="panel panel-default">
-    <div class="panel-heading">
-        Feedback for {{ submitFeedback.subject.full_name }}
+<div class="container">
+    <h1>Feedback for {{ submitFeedback.subject.full_name }}</h1>
+    <div class="panel panel-default">
+        <div ng-if="submitFeedback.feedbackRequest.message">
+            <h3>Here are specific areas I'd like feedback on:</h3>
+            <p class="feedback-message">"{{ submitFeedback.feedbackRequest.message }}"</p>
+        </div>
+        <feedback-submission-form feedback="submitFeedback.feedback" subject="submitFeedback.subject" submit="submitFeedback.submitFeedback(form)" cancel="submitFeedback.cancel()" />
     </div>
-    <div ng-if="submitFeedback.feedbackRequest.message">
-        <h2>Here are specific areas I'm like feedback on:</h2>
-        <p>{{ submitFeedback.feedbackRequest.message }}</p>
-    </div>
-    <feedback-submission-form feedback="submitFeedback.feedback" subject="submitFeedback.subject" submit="submitFeedback.submitFeedback(form)" cancel="submitFeedback.cancel()" />
 </div>
+
+<style>
+    .form-group {margin-top: 15px;margin-bottom: 15px;}
+    .form-control {margin-top: 10px;}
+    .feedback-message {margin-top: 15px;margin-bottom: 15px;}
+</style>

@@ -1,25 +1,30 @@
-<div class="panel panel-default">
-    <div class="panel-heading">Submit feedback</div>
-    <div class="panel-body">
-            <div class="form-group">
-                <label for="to">Who would you like to give feedback to?</label>
-                <ui-select
-                        id="to"
-                        ng-model="submitFeedback.subject"
-                        reset-search-input="false"
-                        theme="bootstrap"
-                        style="width:50%"
-                        >
-                    <ui-select-match placeholder="Type an employee's name">
-                        {{ $select.selected.full_name }}</ui-select-match>
-                    <ui-select-choices
-                            repeat="employee in submitFeedback.employees | filter: {full_name: $select.search}">
-                        <div ng-bind-html="employee.full_name | highlight: $select.search"></div>
-                    </ui-select-choices>
-                </ui-select>
+<div class="container">
+    <h1>Submit Feedback</h1>
+    <div class="panel panel-default">
+        <div class="panel-body">
+                <div class="form-group">
+                    <label for="to">Who would you like to give feedback to?</label>
+                    <ui-select
+                            id="to"
+                            ng-model="submitFeedback.subject"
+                            reset-search-input="false"
+                            theme="bootstrap"
+                            style="width:50%"
+                            >
+                        <ui-select-match placeholder="Type an employee's name">
+                            {{ $select.selected.full_name }}</ui-select-match>
+                        <ui-select-choices
+                                repeat="employee in submitFeedback.employees | filter: {full_name: $select.search}">
+                            <div ng-bind-html="employee.full_name | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <feedback-submission-form ng-show="submitFeedback.subject" feedback="submitFeedback.feedback" subject="submitFeedback.subject" submit="submitFeedback.submitFeedback(form)" cancel="submitFeedback.cancel()" />
             </div>
-        <div ng-show="submitFeedback.subject">
-            <feedback-submission-form feedback="submitFeedback.feedback" subject="submitFeedback.subject" submit="submitFeedback.submitFeedback(form)" cancel="submitFeedback.cancel()" />
         </div>
     </div>
 </div>
+<style>
+    .form-group {margin-top: 15px;margin-bottom: 15px;}
+    .form-control {margin-top: 10px;}
+</style>
