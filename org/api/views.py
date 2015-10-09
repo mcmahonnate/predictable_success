@@ -163,10 +163,8 @@ def show_org_chart(request):
 @api_view(['GET'])
 def available_coaches(request):
     coaches = [c.employee for c in CoachCapacity.objects.filter(num_coachees__lt=F('max_allowed_coachees'))]
-    serializer = SanitizedEmployeeSerializer(data=coaches, many=True)
-    if serializer.is_valid():
-        return Response(data=serializer.data)
-    return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    serializer = SanitizedEmployeeSerializer(coaches, many=True)
+    return Response(data=serializer.data)
 
 
 @api_view(['POST'])
