@@ -2,13 +2,13 @@
 
     <div class="pull-right">
         <button class="btn btn-default" ng-click="feedback.giveUnsolicitedFeedback()" type="button">
-            <span class=""></span> Give Feedback
+            Give Feedback
         </button>
         <button class="btn btn-default" ng-click="feedback.requestFeedback()" type="button">
-            <span class="fa fa-comment"></span> Ask for Feedback
+            Ask for Feedback
         </button>
     </div>
-    <h1>My Feedback</h1>
+    <h1>Feedback Dashboard</h1>
     <div class="panel">
 
         <div ng-repeat="request in feedback.feedbackRequests | orderBy:'request.requester.full_name'" class="todos animate-repeat">
@@ -30,8 +30,19 @@
                 </div>
             </div>
         </div>
-
+        <div class="feedback-reports-container">
+            <h2>My Feedback</h2>
+            <div class="feedback-report">
+                <h3 class="comment-title-employee-name centered">We noticed you don't have any feedback yet.</h3>
+                <br/>
+                <button class="btn btn-success" ng-click="feedback.requestFeedback()" type="button">
+                    Click here to get started!
+                </button>
+                </span>
+            </div>
+        </div>
     </div>
+
 </div>
 
 <style>
@@ -51,5 +62,14 @@
 .animate-repeat.ng-move.ng-move-active,
 .animate-repeat.ng-enter.ng-enter-active {
   opacity:1;
+}
+.feedback-reports-container {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+.feedback-report {
+    margin-top: 25px;
+    padding-top: 25px;
+    border-top: 1px solid #ebedf3;
 }
 </style>
