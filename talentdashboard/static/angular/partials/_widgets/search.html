@@ -7,7 +7,7 @@
     <ul class="dropdown-menu" ng-show="navQuery!=''" role="menu" aria-labelledby="dLabel">
         <div ng-if="navQuery!=''">
             <li ng-repeat="employee in filteredEmployees = (employees |filter:{full_name:navQuery}:startsWith) | orderBy:'full_name'">
-                <a class="dashboard" href="#/employees/{{employee.id ? employee.id : ''}}">
+                <a class="dashboard" href="#/employees/{{employee.pk ? employee.pk : employee.id}}">
                     <div class="tiny-headshot"><img ng-src="{{employee.avatar_small}}" alt="{{employee.full_name}}'s avatar" /></div>
                     <span class="employee-name">{{employee.full_name}}</span>
                 </a>

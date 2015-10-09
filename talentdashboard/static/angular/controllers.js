@@ -116,7 +116,7 @@ angular.module('tdb.controllers', [])
 
     }])
 
-    .controller('NavigationCtrl', ['$scope', '$rootScope', '$routeParams', '$location', '$modal', 'EmployeeSearch', 'Customers', 'Team', function ($scope, $rootScope, $routeParams, $location, $modal, EmployeeSearch, Customers, Team) {
+    .controller('NavigationCtrl', ['$scope', '$rootScope', '$routeParams', '$location', '$modal', 'Employee', 'EmployeeSearch', 'Customers', 'Team', function ($scope, $rootScope, $routeParams, $location, $modal, Employee, EmployeeSearch, Customers, Team) {
         $scope.employees = EmployeeSearch.query();
         $scope.teams = Team.query();
         $scope.modalEmployeeShown = false;
@@ -130,6 +130,15 @@ angular.module('tdb.controllers', [])
             departure_date: '',
             avatar: 'https://hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg'
         };
+        $scope.$on('$routeChangeSuccess', function() {
+            if ($routeParams.id) {
+                Employee.get({id: $routeParams.id}, function (data) {
+                    $scope.activeEmployee = data;
+                });
+            } else {
+                $scope.activeEmployee = null;
+            }
+        });
 
         $scope.newLeadership = {
             id: null,
@@ -177,6 +186,7 @@ angular.module('tdb.controllers', [])
         //tabs
         $scope.homeTab = 'home';
         $scope.myTab = 'my';
+        $scope.employeeTab = 'employee';
         $scope.dashboardsTab = 'dashboards';
         $scope.screenerTab = 'screener';
         $scope.reportsTab = 'reports';
@@ -187,8 +197,10 @@ angular.module('tdb.controllers', [])
             $('.nav-item').tooltip('hide');
 
             if ($rootScope.activeTab == tab) {
+                $('[data-toggle="tooltip"]').tooltip('enable')
                 $rootScope.activeTab = null;
             } else {
+                $('[data-toggle="tooltip"]').tooltip('disable')
                 $rootScope.activeTab = tab;
             }
         };
@@ -274,6 +286,7 @@ angular.module('tdb.controllers', [])
             $scope.csv = []
             angular.forEach($scope.evaluations_sort, function (employee) {
                 var row = {};
+                row.id = employee.pk;
                 row.name = employee.full_name;
                 row.team = employee.team_name;
                 row.email = employee.email;
@@ -282,8 +295,10 @@ angular.module('tdb.controllers', [])
                 row.happy = happyToString(employee.happiness);
                 row.happy_date = $rootScope.scrubDate(employee.happiness_date);
                 row.last_checkin = $rootScope.scrubDate(employee.last_checkin_about);
+                row.last_checkin_type = employee.last_checkin_type;
                 row.last_comment = $rootScope.scrubDate(employee.last_comment_about);
-                row.coach = employee.coach_full_name
+                row.coach = employee.coach_full_name;
+                row.hire_date = $rootScope.scrubDate(employee.hire_date);
                 $scope.csv.push(row);
             });
         }

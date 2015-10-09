@@ -2,16 +2,18 @@ from django.conf import settings
 from django.conf.urls import *
 from django.contrib import admin
 from django.views.generic import TemplateView
+from django.views.decorators.cache import cache_page
 from django.contrib.auth.views import password_reset, password_reset_confirm, password_reset_done, password_reset_complete, login, logout
 from views.views import *
+from views.slack import *
 from forms import *
 from rest_framework import routers
 from views.payment import ChargeView, PaymentView
 from views.homepage import IndexView
-from org.api.views import Profile
+from org.api.views import Profile, team_lead_employees, my_employees, EmployeeDetail, employee_support_team
 from insights.views import Signup, Report, Survey, Confirmation
 from engagement.api.views import RetrieveUpdateDestroyHappiness, CreateHappiness, EmployeeHappinessList
-from activity.api.views import EventList, EmployeeEventList, TeamEventList, CoachEventList, LeadEventList, CheckInEventList, CommentEvent
+from activity.api.views import EventList, EmployeeEventList, TeamEventList, CoachEventList, LeadEventList, MyTeamEventList, CheckInEventList, CommentEvent
 from blah.api.views import CommentDetail
 from org.api.views import EmployeeCommentList
 router = routers.DefaultRouter()
@@ -22,7 +24,7 @@ router.register(r'^api/v1/attributes', AttributeViewSet)
 
 admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^$', IndexView.as_view(), name='index'),
 	url(r'^404/?$', TemplateView.as_view(template_name="404.html"), name='404'),
 	url(r'^error/?$', TemplateView.as_view(template_name="error.html"), name='error'),
@@ -31,6 +33,7 @@ urlpatterns = patterns('',
     url(r'^logout/$', logout,{'next_page': '/account/login/'}),
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^org/chart/$', 'org.api.views.show_org_chart'),
     url(r'^account/payment/?$', PaymentView.as_view(), name='payment'),
     url(r'^account/thanks/?$',ChargeView.as_view(), name='charge'),
     url(r'^account/login/?$',login,{'template_name':'login.html', 'authentication_form':CustomAuthenticationForm}, name='login'),
@@ -53,6 +56,7 @@ urlpatterns = patterns('',
 
     url(r'^api/v1/employees/$', (cache_page(60*1440)(EmployeeList.as_view())), name='employee-list'),
     url(r'^api/v1/employees/(?P<pk>[0-9]+)/$', EmployeeDetail.as_view(), name='employee-detail'),
+    url(r'^api/v1/employees/(?P<pk>[0-9]+)/support-team/$', employee_support_team),
     url(r'^api/v1/employee-names/$', EmployeeNames.as_view(), name='employee-name-list'),
     url(r'^api/v1/leaderships/employees/(?P<pk>[0-9]+)/$', LeadershipDetail.as_view()),
     url(r'^api/v1/pvp-descriptions/$', pvp_descriptions),
@@ -73,7 +77,8 @@ urlpatterns = patterns('',
     url(r'^api/v1/assessment/mbti/employees/(?P<pk>[0-9]+)/$', EmployeeMBTI.as_view()),
     url(r'^api/v1/assessment/mbti/teams/(?P<pk>[0-9]+)/$', TeamMBTIReportDetail.as_view()),
     url(r'^api/v1/team-leads/$', cache_page(60*1440)(team_leads)),
-    url(r'^api/v1/team-lead-employees/$', team_lead_employees),
+    url(r'^api/v1/team-lead/employees/$', my_employees),
+    url(r'^api/v1/team-lead/employees/(?P<pk>[0-9]+)/$', team_lead_employees),
     url(r'^api/v1/team-members/(?P<pk>[0-9]+)/$', TeamMemberList.as_view(), name='employee-list'),
     url(r'^api/v1/compensation-summaries/employees/(?P<pk>[0-9]+)/$', EmployeeCompensationSummaries.as_view()),
     url(r'^api/v1/compensation-summaries/$', cache_page(60*1440)(compensation_summaries)),
@@ -102,7 +107,8 @@ urlpatterns = patterns('',
 
     url(r'^api/v1/events/employees/(?P<employee_id>[0-9]+)/$', EmployeeEventList.as_view()),
     url(r'^api/v1/events/teams/(?P<pk>[0-9]+)/$', TeamEventList.as_view()),
-    url(r'^api/v1/events/leads/$', LeadEventList.as_view()),
+    url(r'^api/v1/events/leads/$', MyTeamEventList.as_view()),
+    url(r'^api/v1/events/leads/(?P<pk>[0-9]+)/$', LeadEventList.as_view()),
     url(r'^api/v1/events/coaches/$', CoachEventList.as_view()),
     url(r'^api/v1/events/checkins/(?P<pk>[0-9]+)/$', CheckInEventList.as_view()),
     url(r'^api/v1/events/$', EventList.as_view()),
@@ -110,15 +116,6 @@ urlpatterns = patterns('',
 
     url(r'^api/v1/image-upload/employees/(?P<pk>[0-9]+)/$', ImageUploadView.as_view()),
     url(r'^api/v1/talent-categories/$', talent_categories),
-    # url(r'^api/v1/feedback/requests/(?P<pk>[0-9]*)/$', FeedbackRequestView.as_view()),
-    # url(r'^api/v1/feedback/submissions/mine/$', my_feedback),
-    # url(r'^api/v1/feedback/submissions/read/$', mark_feedback_read),
-    # url(r'^api/v1/feedback/submissions/deliver/$', mark_feedback_delivered),
-    # url(r'^api/v1/feedback/submissions/(?P<pk>[0-9]*)/$', FeedbackSubmissionView.as_view()),
-    # url(r'^api/v1/feedback/coachees/$', get_coachees_feedback_report),
-    # url(r'^api/v1/feedback/coachees/(?P<pk>[0-9]*)/$', view_coachee_feedback),
-    # url(r'^api/v1/feedback/submissions/mine/$', my_feedback),
-    # url(r'^api/v1/feedback/menu/$', menu_counts),
 
     url(r'^insights/$', Signup.as_view(), name="signup"),
     url(r'^insights/report/(?P<access_token>[\w.@+-]+)/(?P<uid>[\w.@+-]+)/$', Report.as_view(), name="insights_survey_report"),
@@ -136,16 +133,15 @@ urlpatterns = patterns('',
     url(r'^api/v1/reports/activity$', last_activity_report),
 
     url(r'^api/v1/search/', include('search.api.urls')),
-
     url(r'^api/v1/checkins/', include('checkins.api.urls')),
-
     url(r'^api/v1/org/', include('org.api.urls')),
-
     url(r'^api/v1/comments/', include('blah.api.urls')),
 
     url(r'^api/v1/feedback/', include('feedback.api.urls')),
 
     url(r'^api/v1/profile/$', Profile.as_view()),
 
+    #url(r'^slack/$', Slack.as_view()),
+
     url(r'^', include(router.urls)),
-)
+]

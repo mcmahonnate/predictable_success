@@ -37,6 +37,7 @@ class CommentList(generics.ListCreateAPIView):
     serializer_class = CommentSerializer
 
     def get_queryset(self):
+
         subject = self.get_object()
         return Comment.objects.get_for_object(subject)
 

@@ -7,11 +7,13 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 from ..models import Event
 from .serializers import EventSerializer
-from talentdashboard.views.views import StandardResultsSetPagination
+from talentdashboard.views.views import StandardResultsSetPagination, PermissionsViewAllEmployees
 from org.models import Employee
 from checkins.models import CheckIn
 from blah.models import Comment
+from django.utils.log import getLogger
 
+logger = getLogger('talentdashboard')
 
 class EmployeeEventList(views.APIView):
     permission_classes = (IsAuthenticated,)
@@ -34,7 +36,7 @@ class EmployeeEventList(views.APIView):
 
 
 class EventList(views.APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, PermissionsViewAllEmployees)
 
     """ Retrieve all Events
     """
@@ -58,13 +60,27 @@ def _get_event_list_for_employees(request, requester, employee_ids):
     return paginator.get_paginated_response(serializer.data)
 
 
-class LeadEventList(views.APIView):
+class MyTeamEventList(views.APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, format=None):
         requester = Employee.objects.get(user__id=request.user.id)
-        employee_ids = Employee.objects.get_current_employees_by_team_lead(lead_id=requester.id).values('id')
+        employees = requester.get_descendants()
+        employee_ids = employees.filter(departure_date__isnull=True).values('id')
         return _get_event_list_for_employees(request, requester, employee_ids)
+
+class LeadEventList(views.APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, pk, format=None):
+        requester = Employee.objects.get(user__id=request.user.id)
+        lead = Employee.objects.get(id=pk)
+        if requester.is_ancestor_of(other=lead, include_self=True):
+            employees = lead.get_descendants()
+            employee_ids = employees.filter(departure_date__isnull=True).values('id')
+            return _get_event_list_for_employees(request, requester, employee_ids)
+        else:
+            return Response(None, status=status.HTTP_403_FORBIDDEN)
 
 
 class CoachEventList(views.APIView):

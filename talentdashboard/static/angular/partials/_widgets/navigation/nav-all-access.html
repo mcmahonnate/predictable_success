@@ -3,6 +3,7 @@
         <div role="menuitem" class="logo-container" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Home">
             <a href="#/"><img src="../static/images/brand/compass-logo-medium.png" class="logo" alt="Home" /></a>
         </div>
+
         <div role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == myTab}" ng-click="setActiveTab(myTab)" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="My Stuff">
             <span class="glyphicon glyphicon-user team_menu nav-item-icon"></span>
             <div class="subnav" role="menu">
@@ -15,6 +16,24 @@
                 </div>
             </div>
         </div>
+
+         <div ng-show="activeEmployee.is_lead" role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == employeeTab}" ng-click="setActiveTab(employeeTab)" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{activeEmployee.full_name}}">
+
+            <div class="small-headshot team_menu">
+                    <img ng-src="{{ activeEmployee.avatar_small }}" class="headshot-image nav-input">
+            </div>
+
+            <div class="subnav" role="menu">
+                <div>
+                    <div class="subnav-title">{{ activeEmployee.full_name }}</div>
+                    <ul>
+                        <li><a ng-href="#/employees/{{ activeEmployee.id }}">Profile</a></li>
+                        <li><a ng-href="#/team-lead/{{ activeEmployee.id }}">Team</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
         <div role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == dashboardsTab}" ng-click="setActiveTab(dashboardsTab)" ng-controller="TeamListCtrl"  rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Dashboards">
             <span class="nav-item-icon fa fa-tachometer filter_menu"></span>
             <div class="subnav" role="menu">

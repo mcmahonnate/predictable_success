@@ -1,0 +1,23 @@
+{% extends "layouts/blank.html" %}
+{% load staticfiles %}
+
+{% block content %}
+    {% load mptt_tags %}
+    <ul>
+        {% recursetree nodes %}
+            <li style="margin-left: 50px">
+                <div class="activity-owner-avatar-container">
+                    <a class="medium-headshot" href="/#/employees/{{ node.id }}">
+                        <img alt="{{ node.full_name }}'s avatar" class="headshot-image" src="{{ node.avatar_small.url }}">
+                    </a>
+                </div>
+                {{ node.full_name }}
+                {% if not node.is_leaf_node %}
+                    <ul class="children" style="margin-left: 50px">
+                        {{ children }}
+                    </ul>
+                {% endif %}
+            </li>
+        {% endrecursetree %}
+    </ul>
+{% endblock content %}

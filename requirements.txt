@@ -11,12 +11,14 @@ python-dateutil==2.1
 python-mimeparse==0.1.4
 six==1.4.1
 static==0.4
+slacker==0.7.3
 wsgiref==0.1.2
 pillow==2.7.0
 pytz==2014.10
 pylibmc==1.2.3
 django-pylibmc-sasl==0.2.4
 django-storages==1.1.8
+django-mptt==0.7.4
 boto==2.27.0
 django-extensions
 django-celery==3.1.16

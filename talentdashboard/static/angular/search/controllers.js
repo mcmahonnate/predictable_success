@@ -18,12 +18,14 @@ angular.module('tdb.search.controllers', [])
         }
  	}])
 
-    .controller('EmployeeSearchCtrl', ['$scope', '$routeParams', '$location', '$filter', 'HappinessOptions', 'EmployeeSearch', 'TalentCategories', 'Team', 'view', function ($scope, $routeParams, $location, $filter, HappinessOptions, EmployeeSearch, TalentCategories, Team, view) {
+    .controller('EmployeeSearchCtrl', ['$scope', '$routeParams', '$location', '$filter', 'HappinessOptions', 'EmployeeSearch', 'TalentCategories', 'Team', 'view', 'analytics', function ($scope, $routeParams, $location, $filter, HappinessOptions, EmployeeSearch, TalentCategories, Team, view, analytics) {
+        console.log($location.url());
+        analytics.trackPage($scope, $location.absUrl(), $location.url());
         $scope.filters = {
             talentCategory: $routeParams.talent_category ,
             happiness: $routeParams.happiness,
             team_id: $routeParams.team_id,
-            vops: $routeParams.vops
+            vops: $routeParams.vops,
         };
         $scope.talentCategories = TalentCategories.categories;
         $scope.happinessOptions = HappinessOptions.query();
@@ -80,6 +82,9 @@ angular.module('tdb.search.controllers', [])
                 query['vops'] = $scope.filters.vops;
                 $scope.synergistStyle = $scope.filters.vops;
             }
+            if($routeParams.id) {
+                query['id'] = $routeParams.id;
+            }
             switch(view) {
                 case 'my-coachees':
                     $scope.categoryName = 'My Coachees';
@@ -88,6 +93,10 @@ angular.module('tdb.search.controllers', [])
                 case 'my-team':
                     $scope.categoryName = 'My Team';
                     $scope.employees = EmployeeSearch.myTeam(query);
+                    break;
+                case 'team-lead':
+                    $scope.categoryName = 'Team';
+                    $scope.employees = EmployeeSearch.leadEmployees(query);
                     break;
                 default:
                     $scope.employees = EmployeeSearch.query(query);

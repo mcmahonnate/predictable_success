@@ -15,7 +15,8 @@ angular.module('tdb.org.services', ['ngResource'])
         var actions = {
             'addNew': { method:'POST', data:{full_name:'@full_name', hire_date: '@hire_date', coach_id: '@coach_id'}, isArray: false },
             'update': { method:'PUT', data:{full_name:'@full_name', hire_date: '@hire_date', departure_date: '@departure_date', coach_id: '@coach_id'}, isArray: false },
-            'potentialReviewers': { method:'GET', url: '/api/v1/feedback/potential-reviewers/', isArray: true }
+            'potentialReviewers': { method:'GET', url: '/api/v1/feedback/potential-reviewers/', isArray: true },
+            'supportTeam': { method:'GET', url: '/api/v1/employees/:id/support-team/', isArray: true }
         };
         var res = $resource('/api/v1/employees/:id/', {id:'@id'}, actions);
         return res;
@@ -137,10 +138,14 @@ angular.module('tdb.org.services', ['ngResource'])
         }
     }])
 
-    .factory('TeamLeadEmployees', ['$resource', function($resource) {
-        var TeamLeadEmployees = $resource('/api/v1/team-lead-employees/');
-        TeamLeadEmployees.getEmployees = function(id, success, failure) { return this.query({ id: id }, success, failure); };
-        return TeamLeadEmployees;
+    .factory('TeamLeadEmployees', ['$resource', '$http', function($resource, $http) {
+        var res = $resource('/api/v1/team-lead/employees/:id', {id:'@id'});
+        return res;
+    }])
+
+    .factory('MyEmployees', ['$resource', '$http', function($resource, $http) {
+        var res = $resource('/api/v1/team-lead/employees/');
+        return res;
     }])
 
     .factory('CoachService', ['$http', function($http) {

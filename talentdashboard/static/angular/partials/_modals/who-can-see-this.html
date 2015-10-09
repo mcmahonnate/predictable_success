@@ -1,0 +1,20 @@
+<div class="modal-body daily-digest-modal">
+    <button ng-click="cancel()" class="close">&times;</button>
+	<h3 class="modal-title">
+        <span>Your Support Team</span>
+    </h3>
+    <p>Heads up! Before you continue we want to let you know who will be able to see your response.  This is your support team.  They are comprised of your Leadership Team, the People Team, <span ng-if="customer.show_coaches">your Coach and</span> your Team lead.  They really, really, care about you.  Let them know how they can help.
+    <div class="recipients">
+        <div ng-repeat="employee in members" class="recipient">
+            <div class="headshot xlarge-headshot">
+                <img ng-src="{{ employee.avatar_small }}" alt="{{ employee.full_name }}'s avatar" />
+            </div>
+            <span class="recipients-name">
+                {{employee.full_name}}
+            </span>
+        </div>
+    </div>    
+</div>
+<div class="modal-footer">
+    <button type="button" ng-click="cancel()" class="btn btn-default">Got it, thanks!</button>
+</div>

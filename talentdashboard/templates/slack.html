@@ -8,18 +8,82 @@
 {% block content %}
     <div class="container">
         <h1>Slack Intergrations</h1>
-        <p>Testing some Slack intergrations</p>
 
+        <div class="alert alert-success" style="display:none" role="alert"><span class="msg"></span></div>
+        <form>
+            <p>
+                <label>Employee Email</label>
+                <input name="email" class="form-control" />
+            </p>
+            <br />
+            <p>    
+                <label>Message</label>
+                <textarea class="form-control" name="message"></textarea>
+            </p>
+            <br />
+            <button class="btn btn-primary send-msg">Send Message</button>
+        </form>    
         <br />
         <br />
         <br />
 
-        <h3><strong>Users</strong></h3>
         <ul>
         {% for user in users %}
             <li>{{ user.profile.first_name }} {{ user.profile.last_name }} ({{ user.profile.email }})</li>
         {% endfor %}
         </ul>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script type="text/javascript">
+
+        $('.send-msg').click(function(e) {
+            e.preventDefault();
+            var email = $("input[name='email']").val();
+            var token = 'xoxb-9857236818-Pg9xjUzkDBVwUOHYiypRJWcS';
+            var username = 'Scoutbot';
+            var message = $("textarea[name='message']").val();
+
+            if (email && message) {
+                $.ajax({
+                    url: "https://slack.com/api/rtm.start?token=" + token,
+                })
+                .done(function(data) {
+                   
+                    //get users id from email 
+                    $.each(data.users, function(index, results) {
+                        
+                        // get users id
+                        if (results.profile.email == email) {
+                            var userId = results.id;
+                            var name = results.real_name;
+
+                            // open rtm with users
+                            $.ajax({
+                                url: "https://slack.com/api/im.open?token="+token+"&user="+userId,
+                            })
+                            .done(function(data) {
+                                var channel = data.channel.id;
+
+                                // send Message
+                                $.ajax({
+                                    url: "https://slack.com/api/chat.postMessage?token="+token+"&channel="+channel+"&text="+message+"&username="+username+"&as_user=true&parse=none",
+                                })
+                                .success(function() {
+                                    $('.alert .msg').text('Successfully sent a message to '+name+' ['+email+']');
+                                    $('.alert').show();
+                                });
+                            });    
+                        }
+                        
+                    });
+
+                });
+            } else {
+                alert('Please enter email address and message!');
+            }    
+        });
+
+        </script>
 
     </div>    
 {% endblock content %}

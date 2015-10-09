@@ -4,7 +4,8 @@
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
   ga('create', 'UA-45570095-1', 'auto');
-  if (window.location.host != "localhost:8000" && window.location.host != "0.0.0.0:8000") {
+  host = window.location.host;
+  if (host.search("localhost:8000") < 0 && host.search("0.0.0.0:8000") < 0) {
     ga('send', 'pageview');
   } else {
       console.log('not tracked ' + window.location.pathname)

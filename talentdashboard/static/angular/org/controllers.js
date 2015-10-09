@@ -12,7 +12,7 @@ angular.module('tdb.org.controllers', [])
         }
     }])
 
-    .controller('LeaderOverviewCtrl', ['$scope', '$location', '$routeParams', 'SalaryReport', 'TalentReport', 'TeamLeadEmployees', 'User', 'analytics', 'TemplatePreferences', function ($scope, $location, $routeParams, SalaryReport, TalentReport, TeamLeadEmployees, User, analytics, TemplatePreferences) {
+    .controller('LeaderOverviewCtrl', ['$scope', '$location', '$routeParams', 'Employee', 'SalaryReport', 'TalentReport', 'MyEmployees', 'TeamLeadEmployees', 'User', 'analytics', 'TemplatePreferences', function ($scope, $location, $routeParams, Employee, SalaryReport, TalentReport, MyEmployees, TeamLeadEmployees, User, analytics, TemplatePreferences) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
 
         TemplatePreferences.getPreferredTemplate('team-lead-overview')
@@ -22,15 +22,40 @@ angular.module('tdb.org.controllers', [])
             }
         );
 
-        $scope.talentReport = TalentReport.myTeam();
-        $scope.salaryReport = SalaryReport.myTeam();
+
+        Employee.get(
+            {id: $routeParams.id},
+            function (data) {
+                $scope.myTeam = false;
+                $scope.lead = data;
+                $scope.employees = TeamLeadEmployees.query({id: $routeParams.id});
+            }
+        );
+
+        $scope.talentReport = TalentReport.leadEmployees({id: $routeParams.id});
+        $scope.salaryReport = SalaryReport.leadEmployees({id: $routeParams.id});
+    }])
+
+    .controller('MyTeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'Employee', 'SalaryReport', 'TalentReport', 'MyEmployees', 'TeamLeadEmployees', 'User', 'analytics', 'TemplatePreferences', function ($scope, $location, $routeParams, Employee, SalaryReport, TalentReport, MyEmployees, TeamLeadEmployees, User, analytics, TemplatePreferences) {
+        analytics.trackPage($scope, $location.absUrl(), $location.url());
+
+        TemplatePreferences.getPreferredTemplate('team-lead-overview')
+            .then(
+            function (template) {
+                $scope.templateUrl = template;
+            }
+        );
 
         User.get(
             function (data) {
+                $scope.myTeam = true;
                 $scope.lead = data.employee;
-                $scope.employees = TeamLeadEmployees.getEmployees($scope.lead.id);
+                $scope.employees =  MyEmployees.query();
             }
         );
+
+        $scope.talentReport = TalentReport.myTeam();
+        $scope.salaryReport = SalaryReport.myTeam();
     }])
 
     .controller('TeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'Team', 'TeamMembers', 'TeamMBTI', 'Customers', 'TeamLeads', 'analytics', 'SalaryReport', 'TalentReport', 'TemplatePreferences', function ($scope, $location, $routeParams, Team, TeamMembers, TeamMBTI, Customers, TeamLeads, analytics, SalaryReport, TalentReport, TemplatePreferences) {
@@ -46,75 +71,15 @@ angular.module('tdb.org.controllers', [])
         Customers.get(function (data) {
             $scope.customer = data;
         });
-        $scope.teamId = $routeParams.id;
-        $scope.employees = TeamLeads.getCurrentEvaluationsForTeamLeads($scope.teamId)
 
-        $scope.talentReport = TalentReport.query({team_id: $routeParams.id});
-        $scope.salaryReport = SalaryReport.query({team_id: $routeParams.id});
+        $scope.talentReport = TalentReport.query({team_id: $routeParams.teamId});
+        $scope.salaryReport = SalaryReport.query({team_id: $routeParams.teamId});
 
         Team.get(
-            {id: $routeParams.id},
+            {id: $routeParams.teamId},
             function (data) {
                 $scope.team = data;
                 $scope.team_name = data.name;
-            }
-        );
-
-        TeamMBTI.get(
-            {id: $routeParams.id},
-            function (data) {
-                $scope.mbti = data;
-                angular.forEach($scope.mbti.mbtis, function (mbti_type) {
-                    if (mbti_type.type == 'istj') {
-                        $scope.istj = mbti_type
-                    }
-                    if (mbti_type.type == 'isfj') {
-                        $scope.isfj = mbti_type
-                    }
-                    if (mbti_type.type == 'infj') {
-                        $scope.infj = mbti_type
-                    }
-                    if (mbti_type.type == 'intj') {
-                        $scope.intj = mbti_type
-                    }
-                    if (mbti_type.type == 'istp') {
-                        $scope.istp = mbti_type
-                    }
-                    if (mbti_type.type == 'isfp') {
-                        $scope.isfp = mbti_type
-                    }
-                    if (mbti_type.type == 'infp') {
-                        $scope.infp = mbti_type
-                    }
-                    if (mbti_type.type == 'intp') {
-                        $scope.intp = mbti_type
-                    }
-                    if (mbti_type.type == 'estp') {
-                        $scope.estp = mbti_type
-                    }
-                    if (mbti_type.type == 'esfp') {
-                        $scope.esfp = mbti_type
-                    }
-                    if (mbti_type.type == 'enfp') {
-                        $scope.enfp = mbti_type
-                    }
-                    if (mbti_type.type == 'entp') {
-                        $scope.entp = mbti_type
-                    }
-                    if (mbti_type.type == 'estj') {
-                        $scope.estj = mbti_type
-                    }
-                    if (mbti_type.type == 'esfj') {
-                        $scope.esfj = mbti_type
-                    }
-                    if (mbti_type.type == 'enfj') {
-                        $scope.enfj = mbti_type
-                    }
-                    if (mbti_type.type == 'entj') {
-                        $scope.entj = mbti_type
-                    }
-                });
-
             }
         );
 
@@ -162,7 +127,11 @@ angular.module('tdb.org.controllers', [])
     .controller('CoachDetailCtrl', ['$scope', 'Event', '$rootScope', '$location', '$routeParams', 'User', 'Employee', 'Coachees', 'SalaryReport', 'TalentReport', '$http', 'analytics', 'Engagement', 'TalentCategories', function ($scope, Event, $rootScope, $location, $routeParams, User, Employee, Coachees, SalaryReport, TalentReport, $http, analytics, Engagement, TalentCategories) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         $scope.coach = $rootScope.currentUser.employee;
+        Coachees.query({ id: $routeParams.id }).$promise.then(function (response) {
 
+            $scope.employees = response;
+            console.log($scope.employees)
+        });
         $scope.talentReport = TalentReport.myCoachees();
         $scope.salaryReport = SalaryReport.myCoachees();
     }])
@@ -267,8 +236,8 @@ angular.module('tdb.org.controllers', [])
             data.hire_date = ($scope.employee.hire_date) ? $rootScope.scrubDate($scope.employee.hire_date, false) : null;
             data.departure_date = ($scope.employee.departure_date) ? $rootScope.scrubDate($scope.employee.departure_date, false) : null;
             data.team = ($scope.employee.team && $scope.employee.team.name) ? $scope.employee.team.id : null;
-            data.coach = ($scope.employee.coach && $scope.employee.coach.full_name) ? ($scope.employee.current_leader.pk ? $scope.employee.coach.pk: $scope.employee.coach.id) : null;
-            data.leader_id = ($scope.employee.current_leader && $scope.employee.current_leader.full_name) ? ($scope.employee.current_leader.pk ? $scope.employee.current_leader.pk: $scope.employee.current_leader.id) : null;
+            data.coach = ($scope.employee.coach && $scope.employee.coach.full_name) ? ($scope.employee.coach.pk ? $scope.employee.coach.pk: $scope.employee.coach.id) : null;
+            data.leader = ($scope.employee.leader && $scope.employee.leader.full_name) ? ($scope.employee.leader.pk ? $scope.employee.leader.pk: $scope.employee.leader.id) : null;
             data.display = true;
             return data;
         };
@@ -408,6 +377,7 @@ angular.module('tdb.org.controllers', [])
         $scope.editEmployee = function (employee, leadership, employees, teams) {
             var modalInstance = $modal.open({
                 animation: true,
+                backdrop: 'static',
                 templateUrl: '/static/angular/partials/_modals/edit-bio-modal.html',
                 controller: 'AddEditBioCtrl',
                 resolve: {
@@ -467,13 +437,13 @@ angular.module('tdb.org.controllers', [])
         };
     }])
 
-    .controller('EmployeesSnapshotCtrl', ['$scope', 'Event', '$rootScope', '$location', '$routeParams', 'User', 'Employee', 'Coachees', 'TalentReport', '$http', 'analytics', 'Engagement', 'TalentCategories', function ($scope, Event, $rootScope, $location, $routeParams, User, Employee, Coachees, TalentReport, $http, analytics, Engagement, TalentCategories) {
+    .controller('EmployeesSnapshotCtrl', ['$scope', '$routeParams', 'Event', '$rootScope', '$location', 'User', 'Employee', 'Coachees', 'TeamLeads', function ($scope, $routeParams, Event, $rootScope, $location, User, Employee, Coachees, TeamLeads) {
         $scope.busy = true;
 
-        // For coaches view    
-        if ($scope.view == 'coach-view') {
-            Coachees.query({ id: $routeParams.id }).$promise.then(function (response) {
-                $scope.employees = response;
+        if ($scope.view == 'team-view') {
+            $scope.teamId = $routeParams.teamId;
+            TeamLeads.getCurrentEvaluationsForTeamLeads($scope.teamId).$promise.then(function(response) {
+                $scope.employees = TeamLeads.getCurrentEvaluationsForTeamLeads($scope.teamId)
             });
         }
 
