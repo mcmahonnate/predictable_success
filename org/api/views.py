@@ -1,4 +1,7 @@
+from django.db.models import F
+from django.http import Http404
 from rest_framework.decorators import api_view
+from rest_framework.generics import RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated
 from blah.api.serializers import CommentSerializer
 from blah.api.views import CommentList
@@ -100,6 +103,15 @@ class Profile(APIView):
             serializer = EmployeeSerializer(current_user.employee, context={'request': request})
             return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
+
+class CurrentCoach(RetrieveAPIView):
+    serializer_class = SanitizedEmployeeSerializer
+
+    def get_object(self):
+        coach = self.request.user.employee.coach
+        if coach is None:
+            raise Http404
+        return coach
 
 @api_view(['GET'])
 def employee_support_team(request, pk):
