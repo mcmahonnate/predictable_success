@@ -9,7 +9,7 @@ angular.module('tdb.engagement.controllers', [])
         EngagementSurvey.getSurvey($scope.employee_id, $scope.survey_id).$promise.then(function (response) {
                 $scope.survey = response;
                 if ($scope.survey.active && !$scope.survey.complete){
-                    showWhoCanSeeThis();
+                    showWhoCanSeeThis($scope.employee_id);
                 }
             }, function (response) {
                 $scope.error = true
@@ -18,12 +18,20 @@ angular.module('tdb.engagement.controllers', [])
         $scope.happy = {assessment: 0};
         $scope.happy.comment = {visibility: 3, content: ''};
 
-        showWhoCanSeeThis = function () {
+        showWhoCanSeeThis = function (employee_id) {
+            is_signed_id = employee_id.indexOf(":");
+            if (is_signed_id > -1)
+                employee_id = employee_id.substring(0, is_signed_id);
             $modal.open({
                 animation: true,
                 backdrop: 'static',
                 templateUrl: '/static/angular/partials/_modals/who-can-see-this.html',
-                controller: 'DailyDigestCtrl'
+                controller: 'SupportTeamCtrl',
+                resolve: {
+                    employee_id: function () {
+                        return employee_id
+                    }
+                }
             });
         }
         $scope.cancel = function () {
@@ -36,5 +44,13 @@ angular.module('tdb.engagement.controllers', [])
                 $scope.first_load = false;
             });
         };
+    }])
+
+    .controller('SupportTeamCtrl', ['$scope', '$modalInstance', 'Employee', 'employee_id', function ($scope, $modalInstance, Employee, employee_id) {
+        console.log(employee_id);
+        $scope.members = Employee.supportTeam({id: employee_id});
+        $scope.cancel = function () {
+            $modalInstance.dismiss();
+        }
     }])
 ;

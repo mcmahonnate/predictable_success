@@ -72,6 +72,7 @@ class EmployeeManager(TreeManager):
 
     def get_employees_that_have_access_to_employee(self, employee):
         employees = self.get_current_employees(show_hidden=True)
+        coach_id = None
         #get coach id
         if employee.coach:
             coach_id = employee.coach.id
