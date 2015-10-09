@@ -26,7 +26,8 @@
                 <div class="todo-description-container col-xs-12 col-sm-10" style="width:70%;margin-left:10px">
 
                     <h3 class="comment-title-employee-name"><strong><span class="sensitive-text ng-binding">{{request.requester.full_name}}</span> requested feedback</strong></h3>
-                    <p class="todo-description comment-text ng-binding ng-isolate-scope ng-valid" read-more="" ng-model="request.message" words="false" length="400"></p>
+                    <p class="todo-description comment-text">Here are the specific areas they'd like feedback:</p>
+                    <p class="todo-description comment-text">"{{ request.message }}"</p>
                 </div>
             </div>
         </div>
@@ -34,11 +35,12 @@
             <h2>My Feedback</h2>
             <div class="feedback-report">
                 <h3 class="comment-title-employee-name centered">We noticed you don't have any feedback yet.</h3>
-                <br/>
-                <button class="btn btn-success" ng-click="feedback.requestFeedback()" type="button">
-                    Click here to get started!
-                </button>
-                </span>
+                <div class="centered feedback-report-item">
+                    <button class="btn btn-success" ng-click="feedback.requestFeedback()" type="button">
+                        Click here to get started!
+                    </button>
+                </div>
+
             </div>
         </div>
     </div>
@@ -71,5 +73,10 @@
     margin-top: 25px;
     padding-top: 25px;
     border-top: 1px solid #ebedf3;
+}
+.feedback-report-item {
+    margin-top: 15px;
+    padding-top: 15px;
+
 }
 </style>
