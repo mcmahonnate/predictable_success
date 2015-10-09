@@ -172,7 +172,7 @@ def change_coach(request):
     serializer = CoachChangeRequestSerializer(data=request.data)
     if not serializer.is_valid():
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    coach = serializer.new_coach
+    coach = serializer.validated_data['new_coach']
     try:
         capacity = CoachCapacity.objects.get(employee=coach)
         if capacity.is_full():
