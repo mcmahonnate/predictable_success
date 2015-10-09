@@ -84,27 +84,27 @@ function FeedbackAPI($http, $log, FeedbackRequestResource, FeedbackSubmissionRes
         }
     }
 
-    function respondToFeedbackRequest(feedbackRequest, excelsAt, couldImproveOn, anonymous)
+    function respondToFeedbackRequest(feedbackRequest, feedback)
     {
-        var submission = {
-            feedback_request: feedbackRequest.id,
-            subject: feedbackRequest.requester.id,
-            excels_at: excelsAt,
-            could_improve_on: couldImproveOn,
-            anonymous: anonymous
-        };
+        var submission = _map_feedback_to_submission(feedback);
+        submission.feedback_request = feedbackRequest.id;
+        submission.subject = feedbackRequest.requester.id;
         return _sendFeedback(submission);
     }
 
-    function giveUnsolicitedFeedback(subject, excelsAt, couldImproveOn, anonymous)
+    function giveUnsolicitedFeedback(subject, feedback)
     {
-        var submission = {
-            subject: subject.id,
-            excels_at: excelsAt,
-            could_improve_on: couldImproveOn,
-            anonymous: anonymous
-        };
+        var submission = _map_feedback_to_submission(feedback);
+        submission.subject = subject.id;
         return _sendFeedback(submission);
+    }
+
+    function _map_feedback_to_submission(feedback) {
+        return {
+            excels_at: feedback.excelsAt,
+            could_improve_on: feedback.couldImproveOn,
+            anonymous: feedback.anonymous
+        };
     }
 
     function _sendFeedback(submission) {

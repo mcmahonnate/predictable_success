@@ -5,26 +5,7 @@
             <h3>Here are specific areas I'd like feedback on:</h3>
             <p class="feedback-message">"{{ submitFeedback.feedbackRequest.message }}"</p>
         </div>
-        <form name="feedbackForm" novalidate="novalidate">
-            <div class="panel-body">
-                <div class="form-group">
-                    <label class="control-label">In what areas am I'm awesome?</label>
-                    <textarea class="form-control" cols="30" rows="5" ng-model="submitFeedback.excels_at"></textarea>
-                </div>
-                <div class="form-group">
-                    <label class="control-label">In what ways can I be even more awesome?</label>
-                    <textarea class="form-control" cols="30" rows="5" ng-model="submitFeedback.could_improve_on"></textarea>
-                </div>
-                <div class="form-group">
-                    <input type="checkbox" ng-model="submitFeedback.anonymous"/>
-                    <label class="control-label">Make my feedback anonymous to {{ submitFeedback.subject.full_name }}</label>
-                </div>
-                <div class="form-group">
-                    <button class="btn btn-primary" type="button" ng-click="submitFeedback.submitFeedback(feedbackForm)">Submit Feedback</button>
-                    <button class="btn btn-default" type="button" ng-click="submitFeedback.cancel()">Cancel</button>
-                </div>
-            </div>
-        </form>
+        <feedback-submission-form feedback="submitFeedback.feedback" subject="submitFeedback.subject" submit="submitFeedback.submitFeedback(form)" cancel="submitFeedback.cancel()" />
     </div>
 </div>
 

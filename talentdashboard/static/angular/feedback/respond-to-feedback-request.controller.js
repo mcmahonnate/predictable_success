@@ -6,14 +6,9 @@
     RespondToFeedbackRequestController.$inject = ['$routeParams', '$location', 'Notification', 'FeedbackAPI'];
 
     function RespondToFeedbackRequestController($routeParams, $location, Notification, FeedbackAPI) {
+        BaseSubmitFeedbackController.call(this, $location);
         var vm = this;
         vm.feedbackRequest = null;
-        vm.subject = null;
-        vm.excels_at = null;
-        vm.could_improve_on = null;
-        vm.anonymous = false;
-        vm.submitFeedback = submitFeedback;
-        vm.cancel = cancel;
 
         activate();
 
@@ -30,24 +25,15 @@
                 });
         }
 
-        function submitFeedback(form) {
-            if(form.$invalid) return;
-            FeedbackAPI.respondToFeedbackRequest(vm.feedbackRequest, vm.excels_at, vm.could_improve_on, vm.anonymous)
+        this._submitFeedback = function() {
+            return FeedbackAPI.respondToFeedbackRequest(vm.feedbackRequest, vm.feedback)
                 .then(function() {
                     Notification.success('Your feedback was saved.');
-                    returnToDashboard();
                 })
                 .catch(function() {
                     Notification.error('An error occurred when saving your feedback. Please try again.');
                 });
-        }
-
-        function cancel() {
-            returnToDashboard();
-        }
-
-        function returnToDashboard() {
-            $location.path('/feedback');
-        }
+        };
     }
+    RespondToFeedbackRequestController.prototype = Object.create(BaseSubmitFeedbackController.prototype);
 })();

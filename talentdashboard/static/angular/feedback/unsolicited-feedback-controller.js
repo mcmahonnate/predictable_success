@@ -6,14 +6,10 @@
     UnsolicitedFeedbackController.$inject = ['$location', 'Notification', 'FeedbackAPI'];
 
     function UnsolicitedFeedbackController($location, Notification, FeedbackAPI) {
+        BaseSubmitFeedbackController.call(this, $location);
         var vm = this;
         vm.employees = [];
         vm.subject = null;
-        vm.excels_at = null;
-        vm.could_improve_on = null;
-        vm.anonymous = false;
-        vm.submitFeedback = submitFeedback;
-        vm.cancel = cancel;
 
         activate();
 
@@ -29,24 +25,15 @@
                 });
         }
 
-        function submitFeedback(form) {
-            if(form.$invalid) return;
-            var p = FeedbackAPI.giveUnsolicitedFeedback(vm.subject, vm.excels_at, vm.could_improve_on, vm.anonymous)
+        this._submitFeedback = function() {
+            return FeedbackAPI.giveUnsolicitedFeedback(vm.subject, vm.feedback)
                 .then(function(response) {
                     Notification.success('Your feedback was saved.');
-                    returnToDashboard();
                 })
                 .catch(function(response) {
                     Notification.error('An error occurred when saving your feedback. Please try again.');
                 });
         }
-
-        function cancel() {
-            returnToDashboard();
-        }
-
-        function returnToDashboard() {
-            $location.path('/feedback');
-        }
     }
+    UnsolicitedFeedbackController.prototype = Object.create(BaseSubmitFeedbackController.prototype);
 })();
