@@ -18,29 +18,8 @@
                     </ui-select-choices>
                 </ui-select>
             </div>
-        <form ng-show="submitFeedback.subject" name="feedbackForm" novalidate="novalidate">
-            <div class="panel-body">
-                <div class="form-group">
-                    <label class="control-label">In what area do you think I'm awesome?</label>
-                    <textarea class="form-control" cols="30" rows="5" ng-model="submitFeedback.excels_at"></textarea>
-                </div>
-                <div class="form-group">
-                    <label class="control-label">How do you think I can be even more awesome?</label>
-                    <textarea class="form-control" cols="30" rows="5"
-                              ng-model="submitFeedback.could_improve_on"></textarea>
-                </div>
-                <div class="form-group">
-                    <input type="checkbox" ng-model="submitFeedback.anonymous"/>
-                    <label class="control-label">Make my feedback anonymous
-                        to {{ submitFeedback.subject.full_name }}</label>
-                </div>
-                <div class="form-group">
-                    <button class="btn btn-primary" type="button"
-                            ng-click="submitFeedback.submitFeedback(feedbackForm)">Submit Feedback
-                    </button>
-                    <button class="btn btn-default" type="button" ng-click="submitFeedback.cancel()">Cancel</button>
-                </div>
-            </div>
-        </form>
+        <div ng-show="submitFeedback.subject">
+            <feedback-submission-form feedback="submitFeedback.feedback" subject="submitFeedback.subject" submit="submitFeedback.submitFeedback(form)" cancel="submitFeedback.cancel()" />
+        </div>
     </div>
 </div>
