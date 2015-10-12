@@ -1,7 +1,7 @@
 (function() {
     angular
         .module('feedback')
-        .directive('feedbackSubmissionForm', feedbackSubmissionForm);
+        .directive('smFeedbackSubmissionForm', feedbackSubmissionForm);
 
     function feedbackSubmissionForm() {
         return {
