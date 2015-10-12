@@ -1,5 +1,5 @@
-from rest_framework.decorators import api_view
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from blah.api.serializers import CommentSerializer
 from blah.api.views import CommentList
 from rest_framework.response import Response
@@ -102,6 +102,7 @@ class Profile(APIView):
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
+@permission_classes((AllowAny, ))
 def employee_support_team(request, pk):
     try:
         employee = Employee.objects.get(id=pk)
