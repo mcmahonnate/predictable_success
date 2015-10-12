@@ -1,6 +1,7 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import *
 from serializers import *
+from org.models import Employee
 from ..models import FeedbackRequest
 
 
@@ -70,3 +71,15 @@ class FeedbackRequestsToDoList(ListAPIView):
         Return all FeedbackRequests sent to the user that haven't been completed.
         """
         return FeedbackRequest.objects.pending_for_reviewer(self.request.user.employee)
+
+class FeedbackSubmissionsForEmployee(ListAPIView):
+    serializer_class = FeedbackSubmissionSerializerForCoaches
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        """
+        Return all FeedbackSubmissions for an Employee.
+        """
+        pk = self.kwargs['pk']
+        employee = Employee.objects.get(id=pk)
+        return FeedbackSubmission.objects.for_subject(employee)

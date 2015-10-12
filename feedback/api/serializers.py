@@ -81,19 +81,13 @@ class AnonymizedFeedbackSubmissionSerializer(serializers.ModelSerializer):
 class FeedbackSubmissionSerializerForCoaches(serializers.ModelSerializer):
     feedback_date = serializers.DateTimeField(required=False)
     subject = SanitizedEmployeeSerializer()
-    reviewer = serializers.SerializerMethodField()
-
-    def get_reviewer(self, obj):
-        reviewer = obj.get_reviewer_for_viewing_by_coach()
-        if reviewer:
-            return reviewer.full_name
-        return "Anonymous"
+    reviewer = SanitizedEmployeeSerializer()
 
     class Meta:
         model = FeedbackSubmission
         fields = ('id', 'feedback_date', 'subject', 'reviewer',
                   'excels_at', 'could_improve_on', 'unread',
-                  'has_been_delivered', 'confidentiality', 'was_unsolicited')
+                  'has_been_delivered', 'anonymous')
 
 
 class FeedbackSubmissionSerializerForEmployees(serializers.ModelSerializer):

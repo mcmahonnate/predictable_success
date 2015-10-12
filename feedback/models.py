@@ -47,8 +47,12 @@ class FeedbackRequest(models.Model):
     def __str__(self):
         return "Feedback request from %s for %s" % (self.requester, self.reviewer)
 
+class FeedbackSubmissionManager(models.Manager):
+    def for_subject(self, subject):
+        return self.filter(subject=subject).filter(has_been_delivered=False)
 
 class FeedbackSubmission(models.Model):
+    objects = FeedbackSubmissionManager()
     feedback_request = models.ForeignKey(FeedbackRequest, null=True, blank=True, related_name='submissions')
     feedback_date = models.DateTimeField(auto_now_add=True)
     subject = models.ForeignKey(Employee, related_name='feedback_about')
