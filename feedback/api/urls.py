@@ -6,5 +6,5 @@ urlpatterns = [
     url(r'^requests/(?P<pk>[0-9]*)/$', RetrieveFeedbackRequest.as_view()),
     url(r'^submissions/$', CreateFeedbackSubmission.as_view()),
     url(r'^potential-reviewers/$', PotentialReviewers.as_view(), name='potential-reviewers'),
-    url(r'^coachees/(?P<pk>[0-9]*)/report/$', coachee_feedback_report),
+    url(r'^progress-reports/(?P<pk>[0-9]*)/$', feedback_progress_report),
 ]

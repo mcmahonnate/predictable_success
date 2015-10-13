@@ -106,7 +106,7 @@ class FeedbackDigest(TimeStampedModel):
     has_been_delivered = models.BooleanField(default=False)
 
 
-class FeedbackReport(object):
+class FeedbackProgressReport(object):
     def __init__(self, employee):
         self.employee = employee
         self.unanswered_requests = []

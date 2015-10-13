@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from serializers import *
 from org.models import Employee
-from ..models import FeedbackRequest, FeedbackReport
+from ..models import FeedbackRequest, FeedbackProgressReport
 
 
 # FeedbackRequest
@@ -57,14 +57,14 @@ class PotentialReviewers(ListAPIView):
 
 
 @api_view(['GET'])
-def coachee_feedback_report(request, pk):
+def feedback_progress_report(request, pk):
     try:
         employee = Employee.objects.get(pk=pk)
-        if request.user.employee is not employee.coach:
-            raise PermissionDenied
-        report = FeedbackReport(employee)
+        #if request.user.employee is not employee.coach:
+        #    raise PermissionDenied
+        report = FeedbackProgressReport(employee)
         report.load()
-        serializer = CoacheeFeedbackReportSerializer(report)
+        serializer = FeedbackProgressReportSerializer(report)
         return Response(serializer.data)
     except Employee.DoesNotExist:
         raise Http404()

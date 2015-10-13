@@ -84,6 +84,21 @@ function FeedbackAPI($http, $log, FeedbackRequestResource, FeedbackSubmissionRes
         }
     }
 
+    function getFeedbackProgressReportForEmployee(employee_id) {
+        var url = '/api/v1/feedback/progress-reports/' + employee_id + '/';
+        return $http.get(url)
+            .then(success)
+            .catch(fail);
+
+        function success(response) {
+            return response.data;
+        }
+
+        function fail(response) {
+            $log.error('getFeedbackProgressReportForEmployee failed');
+        }
+    }
+
     function respondToFeedbackRequest(feedbackRequest, feedback)
     {
         var submission = _map_feedback_to_submission(feedback);

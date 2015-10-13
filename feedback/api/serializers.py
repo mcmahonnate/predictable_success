@@ -80,8 +80,8 @@ class FeedbackSubmissionSerializerForCoaches(serializers.ModelSerializer):
                   'has_been_delivered', 'anonymous')
 
 
-class CoacheeFeedbackReportSerializer(serializers.Serializer):
-    coachee = SanitizedEmployeeSerializer()
+class FeedbackProgressReportSerializer(serializers.Serializer):
+    employee = SanitizedEmployeeSerializer()
     unanswered_requests = FeedbackRequestSerializer(many=True)
     solicited_submissions = FeedbackSubmissionSerializerForCoaches(many=True)
     unsolicited_submissions = FeedbackSubmissionSerializerForCoaches(many=True)
