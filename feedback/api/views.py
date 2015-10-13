@@ -1,10 +1,14 @@
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.generics import *
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from serializers import *
 from org.models import Employee
-from ..models import FeedbackRequest
+from ..models import FeedbackRequest, FeedbackReport
 
 
+# FeedbackRequest
 class CreateFeedbackRequest(CreateAPIView):
     serializer_class = CreateFeedbackRequestSerializer
     permission_classes = (IsAuthenticated,)
@@ -24,6 +28,7 @@ class RetrieveFeedbackRequest(RetrieveAPIView):
     queryset = FeedbackRequest.objects.all()
 
 
+# FeedbackSubmission
 class CreateFeedbackSubmission(CreateAPIView):
     serializer_class = CreateFeedbackSubmissionSerializer
     permission_classes = (IsAuthenticated,)
@@ -32,6 +37,7 @@ class CreateFeedbackSubmission(CreateAPIView):
         serializer.save(reviewer=self.request.user.employee)
 
 
+# Miscellaneous
 class PotentialReviewers(ListAPIView):
     serializer_class = SanitizedEmployeeSerializer
     permission_classes = (IsAuthenticated,)
@@ -42,7 +48,7 @@ class PotentialReviewers(ListAPIView):
         as anyone that they have pending requests for.
         """
         requester = self.request.user.employee
-        current_requests = FeedbackRequest.objects.pending_for_requester(requester)
+        current_requests = FeedbackRequest.objects.unanswered_for_requester(requester)
         employees_to_exclude = [feedback_request.reviewer for feedback_request in current_requests]
         requester = Employee.objects.get_from_user(self.request.user)
         employees_to_exclude.append(requester)
@@ -50,36 +56,15 @@ class PotentialReviewers(ListAPIView):
         return Employee.objects.exclude(id__in=ids_to_exclude)
 
 
-class FeedbackRequestsThatHaventBeenRespondedTo(ListAPIView):
-    serializer_class = FeedbackRequestSerializer
-    permission_classes = (IsAuthenticated,)
-
-    def get_queryset(self):
-        """
-        Return all FeedbackRequests that the user has sent that have not
-        been completed.
-        """
-        return FeedbackRequest.objects.pending_for_requester(self.request.user.employee)
-
-
-class FeedbackRequestsToDoList(ListAPIView):
-    serializer_class = FeedbackRequestSerializer
-    permission_classes = (IsAuthenticated,)
-
-    def get_queryset(self):
-        """
-        Return all FeedbackRequests sent to the user that haven't been completed.
-        """
-        return FeedbackRequest.objects.pending_for_reviewer(self.request.user.employee)
-
-class FeedbackSubmissionsForEmployee(ListAPIView):
-    serializer_class = FeedbackSubmissionSerializerForCoaches
-    permission_classes = (IsAuthenticated,)
-
-    def get_queryset(self):
-        """
-        Return all FeedbackSubmissions for an Employee.
-        """
-        pk = self.kwargs['pk']
-        employee = Employee.objects.get(id=pk)
-        return FeedbackSubmission.objects.for_subject(employee)
+@api_view(['GET'])
+def coachee_feedback_report(request, pk):
+    try:
+        employee = Employee.objects.get(pk=pk)
+        if request.user.employee is not employee.coach:
+            raise PermissionDenied
+        report = FeedbackReport(employee)
+        report.load()
+        serializer = CoacheeFeedbackReportSerializer(report)
+        return Response(serializer.data)
+    except Employee.DoesNotExist:
+        raise Http404()
