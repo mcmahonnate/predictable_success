@@ -3,9 +3,9 @@
         .module('feedback')
         .controller('UnsolicitedFeedbackController', UnsolicitedFeedbackController);
 
-    UnsolicitedFeedbackController.$inject = ['$location', 'Notification', 'FeedbackAPI'];
+    UnsolicitedFeedbackController.$inject = ['$location', 'Notification', 'FeedbackSubmissionService'];
 
-    function UnsolicitedFeedbackController($location, Notification, FeedbackAPI) {
+    function UnsolicitedFeedbackController($location, Notification, FeedbackSubmissionService) {
         BaseSubmitFeedbackController.call(this, $location);
         var vm = this;
         vm.employees = [];
@@ -18,7 +18,7 @@
         }
 
         function getEmployees() {
-            return FeedbackAPI.getEmployees()
+            return FeedbackSubmissionService.getEmployees()
                 .then(function (employees) {
                     vm.employees = employees;
                     return vm.employees;
@@ -26,7 +26,7 @@
         }
 
         this._submitFeedback = function() {
-            return FeedbackAPI.giveUnsolicitedFeedback(vm.subject, vm.feedback)
+            return FeedbackSubmissionService.giveUnsolicitedFeedback(vm.subject, vm.feedback)
                 .then(function(response) {
                     Notification.success('Your feedback was saved.');
                 })
