@@ -54,7 +54,8 @@
         </div>
         <div class="modal-footer">
             <button ng-show="request.panel_index>0" type="button" ng-click="request.stepBack()" class="btn btn-default">Back</button>
-            <button ng-show="request.panel_index<3" ng-disabled="request.selectedReviewers.length==0" type="button" class="btn btn-success" ng-click="request.stepNext()">Next</button>
+            <button ng-show="request.panel_index<3" type="button" ng-click="request.cancel()" class="btn btn-default pull-left">Cancel</button>
+            <button ng-show="request.panel_index<3" ng-disabled="request.selectedReviewers.length==0" type="button" class="btn btn-info" ng-click="request.stepNext()">Next</button>
 
         </div>
     </div>
