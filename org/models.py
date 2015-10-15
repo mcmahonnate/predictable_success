@@ -156,9 +156,12 @@ class Employee(MPTTModel):
             self.full_name = self.first_name + " " + self.last_name
         if self.field_tracker.has_changed('coach'):
             if self.coach is not None:
-                coach_capacity = CoachCapacity.objects.get(employee=self.coach)
-                if coach_capacity.is_full():
-                    raise CoachCapacityError()
+                try:
+                    coach_capacity = CoachCapacity.objects.get(employee=self.coach)
+                    if coach_capacity.is_full():
+                        raise CoachCapacityError()
+                except CoachCapacity.DoesNotExist:
+                    pass
         super(Employee, self).save(*args, **kwargs)
         new_leader_id = self.leader.id if self.leader else 0
         old_leader_id = self.current_leader.id if self.current_leader else 0
