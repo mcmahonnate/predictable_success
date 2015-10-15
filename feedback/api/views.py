@@ -56,6 +56,17 @@ class PotentialReviewers(ListAPIView):
         return Employee.objects.exclude(id__in=ids_to_exclude)
 
 
+class FeedbackRequestsToDoList(ListAPIView):
+    serializer_class = FeedbackRequestSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        """
+        Return all FeedbackRequests sent to the user that haven't been completed.
+        """
+        return FeedbackRequest.objects.pending_for_reviewer(self.request.user.employee)
+
+
 @api_view(['GET'])
 def feedback_progress_report(request, pk):
     try:
