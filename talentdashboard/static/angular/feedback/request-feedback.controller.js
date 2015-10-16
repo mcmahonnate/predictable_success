@@ -3,9 +3,9 @@
         .module('feedback')
         .controller('RequestFeedbackController', RequestFeedbackController);
 
-    RequestFeedbackController.$inject = ['FeedbackAPI', 'CoachService', 'Notification', '$location', '$modal', '$modalInstance'];
+    RequestFeedbackController.$inject = ['FeedbackRequestService', 'CoachService', 'Notification', '$modal', '$modalInstance'];
 
-    function RequestFeedbackController(FeedbackAPI, CoachService, Notification, $location, $modal, $modalInstance) {
+    function RequestFeedbackController(FeedbackRequestService, CoachService, Notification, $modal, $modalInstance) {
         var vm = this;
         vm.potentialReviewers = [];
         vm.selectedReviewers = [];
@@ -26,7 +26,7 @@
         }
 
         function getPotentialReviewers() {
-            return FeedbackAPI.getPotentialReviewers()
+            return FeedbackRequestService.getPotentialReviewers()
                 .then(function (data) {
                     vm.potentialReviewers = data;
                     return vm.potentialReviewers;
@@ -34,7 +34,7 @@
         }
 
         function sendFeedbackRequests() {
-            FeedbackAPI.sendFeedbackRequests(vm.selectedReviewers, vm.message)
+            FeedbackRequestService.sendFeedbackRequests(vm.selectedReviewers, vm.message)
                 .then(function() {
                     Notification.success("Your feedback requests have been sent.");
                     $modalInstance.close()

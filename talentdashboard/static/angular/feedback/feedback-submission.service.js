@@ -68,7 +68,7 @@ function FeedbackSubmissionService($log, FeedbackSubmissionResource, Employee) {
         }
 
         function fail(response) {
-            $log.error('respondToFeedbackRequest failed');
+            $log.error('_sendFeedback failed');
         }
     }
 }

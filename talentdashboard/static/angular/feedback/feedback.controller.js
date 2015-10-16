@@ -3,30 +3,40 @@
         .module('feedback')
         .controller('FeedbackController', FeedbackController);
 
-    FeedbackController.$inject = ['FeedbackAPI', '$modal', '$location', '$filter', '$interval', '$scope'];
+    FeedbackController.$inject = ['FeedbackRequestService', '$modal', '$location', '$filter', '$interval', '$scope'];
 
-    function FeedbackController(FeedbackAPI, $modal, $location, $filter, $interval, $scope) {
+    function FeedbackController(FeedbackRequestService, $modal, $location, $filter, $interval, $scope) {
         var vm = this;
         var promise = null;
 
         // Properties
         vm.feedbackRequests = [];
+        vm.myRecentlySentRequests = [];
         vm.requestFeedback = requestFeedback;
         vm.giveUnsolicitedFeedback = giveUnsolicitedFeedback;
         activate();
 
         function activate() {
+            getMyRecentlySentRequests();
             promise = $interval(getFeedbackRequests, 1000);
         }
 
         function getFeedbackRequests() {
-            FeedbackAPI.getFeedbackRequests()
+            FeedbackRequestService.getFeedbackRequests()
                 .then(function (data) {
                     var feedbackRequests = data;
                     angular.forEach(feedbackRequests, function(request) {
                         var results = $filter('filter')(vm.feedbackRequests, {id: request.id});
                         if (results.length==0) { vm.feedbackRequests.push(request)}
                     });
+                });
+        }
+
+        function getMyRecentlySentRequests() {
+            FeedbackRequestService.getMyRecentlySentRequests()
+                .then(function (data) {
+                    vm.myRecentlySentRequests = data;
+                    return vm.myRecentlySentRequests;
                 });
         }
 

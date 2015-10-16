@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from org.models import Employee
 from org.api.serializers import SanitizedEmployeeSerializer
-from ..models import FeedbackRequest, FeedbackSubmission
+from ..models import FeedbackRequest, FeedbackSubmission, FeedbackDigest
 
 
 class FeedbackRequestSerializer(serializers.ModelSerializer):
@@ -9,11 +9,10 @@ class FeedbackRequestSerializer(serializers.ModelSerializer):
     expiration_date = serializers.DateField(required=False)
     requester = SanitizedEmployeeSerializer()
     reviewer = SanitizedEmployeeSerializer()
-    has_been_answered = serializers.BooleanField()
 
     class Meta:
         model = FeedbackRequest
-        fields = ['id', 'request_date', 'expiration_date', 'requester', 'reviewer', 'message', 'has_been_answered']
+        fields = ['id', 'request_date', 'expiration_date', 'requester', 'reviewer', 'message', 'has_been_answered', 'was_declined']
 
 
 class CreateFeedbackRequestSerializer(serializers.ModelSerializer):
@@ -85,3 +84,16 @@ class FeedbackProgressReportSerializer(serializers.Serializer):
     unanswered_requests = FeedbackRequestSerializer(many=True)
     solicited_submissions = FeedbackSubmissionSerializerForCoaches(many=True)
     unsolicited_submissions = FeedbackSubmissionSerializerForCoaches(many=True)
+
+
+class FeedbackDigestSerializerForCoach(serializers.ModelSerializer):
+    subject = SanitizedEmployeeSerializer()
+    delivered_by = SanitizedEmployeeSerializer()
+    submissions = FeedbackSubmissionSerializerForCoaches(many=True)
+
+    class Meta:
+        model = FeedbackDigest
+
+
+class AddSubmissionToDigestSerializer(serializers.Serializer):
+    submission = serializers.PrimaryKeyRelatedField(queryset=FeedbackSubmission.objects.all())

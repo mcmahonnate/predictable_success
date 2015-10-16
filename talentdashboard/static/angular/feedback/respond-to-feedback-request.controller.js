@@ -3,9 +3,9 @@
         .module('feedback')
         .controller('RespondToFeedbackRequestController', RespondToFeedbackRequestController);
 
-    RespondToFeedbackRequestController.$inject = ['$routeParams', '$location', 'Notification', 'FeedbackAPI', 'FeedbackSubmissionService'];
+    RespondToFeedbackRequestController.$inject = ['$routeParams', '$location', 'Notification', 'FeedbackRequestService', 'FeedbackSubmissionService'];
 
-    function RespondToFeedbackRequestController($routeParams, $location, Notification, FeedbackAPI, FeedbackSubmissionService) {
+    function RespondToFeedbackRequestController($routeParams, $location, Notification, FeedbackRequestService, FeedbackSubmissionService) {
         BaseSubmitFeedbackController.call(this, $location);
         var vm = this;
         vm.feedbackRequest = null;
@@ -17,7 +17,7 @@
         }
 
         function getFeedbackRequest() {
-            return FeedbackAPI.getFeedbackRequest($routeParams.id)
+            return FeedbackRequestService.getFeedbackRequest($routeParams.id)
                 .then(function (feedbackRequest) {
                     vm.feedbackRequest = feedbackRequest;
                     vm.subject = feedbackRequest.requester;

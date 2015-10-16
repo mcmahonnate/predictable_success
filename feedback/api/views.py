@@ -1,11 +1,13 @@
+from datetime import datetime
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.exceptions import PermissionDenied
 from rest_framework.generics import *
-from rest_framework.decorators import api_view
+from rest_framework.exceptions import PermissionDenied
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework import status
 from rest_framework.response import Response
 from serializers import *
 from org.models import Employee
-from ..models import FeedbackRequest, FeedbackProgressReport
+from ..models import FeedbackRequest, FeedbackProgressReport, FeedbackDigest
 
 
 # FeedbackRequest
@@ -23,7 +25,18 @@ class CreateFeedbackRequest(CreateAPIView):
         serializer.save(requester=self.request.user.employee)
 
 
+class RecentFeedbackRequestsIveSentList(ListAPIView):
+    serializer_class = FeedbackRequestSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        return FeedbackRequest.objects.all()\
+            .filter(requester=self.request.user.employee)\
+            .exclude(expiration_date__lt=datetime.today())
+
+
 class RetrieveFeedbackRequest(RetrieveAPIView):
+    permission_classes = (IsAuthenticated,)
     serializer_class = FeedbackRequestSerializer
     queryset = FeedbackRequest.objects.all()
 
@@ -68,14 +81,50 @@ class FeedbackRequestsToDoList(ListAPIView):
 
 
 @api_view(['GET'])
+@permission_classes((IsAuthenticated, ))
 def feedback_progress_report(request, pk):
     try:
         employee = Employee.objects.get(pk=pk)
-        #if request.user.employee is not employee.coach:
-        #    raise PermissionDenied
+        if not request.user.employee == employee.coach:
+            raise PermissionDenied
         report = FeedbackProgressReport(employee)
         report.load()
         serializer = FeedbackProgressReportSerializer(report)
         return Response(serializer.data)
     except Employee.DoesNotExist:
         raise Http404()
+
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated, ))
+def get_current_digest(request, employee_id):
+    try:
+        employee = Employee.objects.get(pk=employee_id)
+        if not request.user.employee == employee.coach:
+            raise PermissionDenied
+        digest = FeedbackDigest.objects.get(subject=employee, has_been_delivered=False)
+        serializer = FeedbackDigestSerializerForCoach(digest)
+        return Response(serializer.data)
+    except Employee.DoesNotExist:
+        raise Http404()
+
+
+@api_view(['POST'])
+def add_submission_to_digest(request, employee_id):
+    employee = Employee.objects.get(pk=employee_id)
+    if not request.user.employee == employee.coach:
+        raise PermissionDenied
+    if not FeedbackDigest.objects.filter(subject=employee, has_been_delivered=False).exists():
+        digest = FeedbackDigest(subject=employee)
+        digest.save()
+        success_status_code = status.HTTP_201_CREATED
+    else:
+        digest = FeedbackDigest.objects.filter(subject=employee, has_been_delivered=False).first()
+        success_status_code = status.HTTP_204_NO_CONTENT
+
+    serializer = AddSubmissionToDigestSerializer(data=request.data)
+
+    if serializer.is_valid():
+        digest.submissions.add(serializer.validated_data['submission'])
+        return Response(status=success_status_code)
+    return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)

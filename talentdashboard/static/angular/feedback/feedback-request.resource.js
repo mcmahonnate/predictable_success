@@ -15,6 +15,11 @@ function FeedbackRequestResource($resource) {
             url: '/api/v1/feedback/requests/todo/',
             method: 'GET',
             isArray: true
+        },
+        'getMyRecentlySentRequests': {
+            url: '/api/v1/feedback/requests/recently-sent/',
+            method: 'GET',
+            isArray: true
         }
     };
     return $resource('/api/v1/feedback/requests/:id/', null, actions);
