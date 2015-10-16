@@ -11,9 +11,6 @@ function FeedbackAPI($http, $log, FeedbackRequestResource) {
         sendFeedbackRequests: sendFeedbackRequests,
         getFeedbackRequests: getFeedbackRequests,
         getPotentialReviewers: getPotentialReviewers,
-        getEmployees: getEmployees,
-        respondToFeedbackRequest: respondToFeedbackRequest,
-        giveUnsolicitedFeedback: giveUnsolicitedFeedback,
         getFeedbackProgressReportForEmployee: getFeedbackProgressReportForEmployee
     };
 

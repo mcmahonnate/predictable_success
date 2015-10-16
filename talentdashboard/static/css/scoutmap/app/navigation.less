@@ -71,7 +71,8 @@ nav {
 .logo-container {
 	width: 70px;
 	height: 70px;
-	background-color: #0f9d58;
+	/*background-color: #0f9d58;*/
+	background-color: #232b32;
 
 
     /* For mobile experiences we move the navigation bar to the top of the viewport */
@@ -183,14 +184,19 @@ nav {
 
 /*== NAVIGATION ===================================================== */
 .nav-item {
-  padding: 10px 15px;
+  padding: 10px;
   cursor: pointer;
   text-align: center;
+  font-size: 11px;
 
     @media only screen and (max-width : 640px) {
     	padding: 3px 10px;
     	float: left;
-    }	    
+    }	
+
+    a {
+    	color: #ccc;
+    }    
 }
 .nav-item .nav-item-icon {
   color: #ccc;
