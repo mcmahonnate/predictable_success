@@ -24,15 +24,19 @@ class FeedbackRequestManager(models.Manager):
             .filter(has_no_submission | has_no_digest)\
             .filter(was_declined=False)
 
+def default_feedback_request_expiration_date():
+    return datetime.now() + timedelta(weeks=6)
+
 
 class FeedbackRequest(models.Model):
     objects = FeedbackRequestManager()
     request_date = models.DateTimeField(auto_now_add=True)
-    expiration_date = models.DateField(null=True, blank=True, default=lambda: datetime.now() + timedelta(weeks=6))
+    expiration_date = models.DateField(null=True, blank=True, default=default_feedback_request_expiration_date)
     requester = models.ForeignKey(Employee, related_name='feedback_requests')
     reviewer = models.ForeignKey(Employee, related_name='requests_for_feedback')
     message = models.TextField(blank=True)
     was_declined = models.BooleanField(default=False)
+    was_responded_to = models.BooleanField(default=False)
 
     def send_notification_email(self):
         recipient_email = self.reviewer.email
@@ -95,8 +99,8 @@ class FeedbackSubmission(models.Model):
         return False
 
     def save(self, *args, **kwargs):
-        if self.feedback_request:
-            self.feedback_request.is_complete = True
+        if self.feedback_request and not self.feedback_request.was_responded_to:
+            self.feedback_request.was_responded_to = True
             self.feedback_request.save()
         super(FeedbackSubmission, self).save(*args, **kwargs)
 

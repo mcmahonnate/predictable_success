@@ -1,9 +1,6 @@
-(function() {
 angular
     .module('feedback')
     .factory('FeedbackRequestService', FeedbackRequestService);
-
-FeedbackRequestService.$inject = ['$http', '$log', 'FeedbackRequestResource'];
 
 function FeedbackRequestService($http, $log, FeedbackRequestResource) {
     return {
@@ -97,4 +94,3 @@ function FeedbackRequestService($http, $log, FeedbackRequestResource) {
         }
     }
 }
-})();

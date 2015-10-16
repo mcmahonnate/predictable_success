@@ -1,9 +1,6 @@
-(function() {
 angular
     .module('feedback')
     .factory('FeedbackSubmissionService', FeedbackSubmissionService);
-
-FeedbackSubmissionService.$inject = ['$log', 'FeedbackSubmissionResource', 'Employee'];
 
 function FeedbackSubmissionService($log, FeedbackSubmissionResource, Employee) {
     return {
@@ -72,4 +69,3 @@ function FeedbackSubmissionService($log, FeedbackSubmissionResource, Employee) {
         }
     }
 }
-})();

@@ -1,9 +1,6 @@
-(function() {
     angular
         .module('feedback')
         .controller('FeedbackWorksheetController', FeedbackWorksheetController);
-
-    FeedbackWorksheetController.$inject = ['FeedbackRequestService'];
 
     function FeedbackWorksheetController($routeParams, FeedbackRequestService) {
         var vm = this;
@@ -25,4 +22,3 @@
                 });
         }
     }
-})();

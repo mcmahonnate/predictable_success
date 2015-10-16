@@ -1,9 +1,6 @@
-(function() {
     angular
         .module('feedback')
         .controller('RequestFeedbackController', RequestFeedbackController);
-
-    RequestFeedbackController.$inject = ['FeedbackRequestService', 'CoachService', 'Notification', '$modal', '$modalInstance'];
 
     function RequestFeedbackController(FeedbackRequestService, CoachService, Notification, $modal, $modalInstance) {
         var vm = this;
@@ -81,4 +78,3 @@
             $modalInstance.dismiss();
         }
     }
-})();

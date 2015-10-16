@@ -1,4 +1,3 @@
-(function(window) {
     angular
         .module('feedback')
         .controller('BaseSubmitFeedbackController', BaseSubmitFeedbackController);
@@ -27,5 +26,3 @@
             $location.path('/feedback');
         }
     }
-    window.BaseSubmitFeedbackController = BaseSubmitFeedbackController;
-})(window);

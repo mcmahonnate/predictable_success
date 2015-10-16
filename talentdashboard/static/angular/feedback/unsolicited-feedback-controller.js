@@ -1,9 +1,6 @@
-(function() {
     angular
         .module('feedback')
         .controller('UnsolicitedFeedbackController', UnsolicitedFeedbackController);
-
-    UnsolicitedFeedbackController.$inject = ['$location', 'Notification', 'FeedbackSubmissionService'];
 
     function UnsolicitedFeedbackController($location, Notification, FeedbackSubmissionService) {
         BaseSubmitFeedbackController.call(this, $location);
@@ -36,4 +33,3 @@
         }
     }
     UnsolicitedFeedbackController.prototype = Object.create(BaseSubmitFeedbackController.prototype);
-})();
