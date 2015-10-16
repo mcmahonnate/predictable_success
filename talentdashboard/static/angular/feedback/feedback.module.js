@@ -1,4 +1,2 @@
-(function() {
-    angular
-        .module('feedback', ['ngRoute', 'ui-notification']);
-})();
+angular
+    .module('feedback', ['ngRoute', 'ui-notification']);

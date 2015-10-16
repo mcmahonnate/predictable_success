@@ -1,4 +1,3 @@
-(function() {
     angular
         .module('feedback')
         .controller('FeedbackWorksheetController', FeedbackWorksheetController);
@@ -25,4 +24,3 @@
                 });
         }
     }
-})();

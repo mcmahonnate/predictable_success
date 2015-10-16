@@ -1,9 +1,6 @@
-(function() {
 angular
     .module('feedback')
     .factory('FeedbackRequestResource', FeedbackRequestResource);
-
-FeedbackRequestResource.$inject = ['$resource'];
 
 function FeedbackRequestResource($resource) {
     var actions = {
@@ -24,4 +21,3 @@ function FeedbackRequestResource($resource) {
     };
     return $resource('/api/v1/feedback/requests/:id/', null, actions);
 }
-})();

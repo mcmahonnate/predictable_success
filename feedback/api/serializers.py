@@ -31,8 +31,8 @@ class CreateFeedbackSubmissionSerializer(serializers.ModelSerializer):
     def validate(self, data):
         feedback_request = data.get('feedback_request', None)
         if feedback_request is not None:
-            if feedback_request.is_complete:
-                raise serializers.ValidationError("Cannot reply to a request that is already complete.")
+            if feedback_request.was_responded_to:
+                raise serializers.ValidationError("Cannot reply to a request that has already been responded to.")
             subject = data['subject']
             if feedback_request.requester != subject:
                 raise serializers.ValidationError("Subject must be the same as requester.")
@@ -55,8 +55,8 @@ class WriteableFeedbackSubmissionSerializer(serializers.ModelSerializer):
             feedback_request = attrs['feedback_request']
             subject = attrs['subject']
             reviewer = attrs['reviewer']
-            if feedback_request.is_complete:
-                raise serializers.ValidationError("Request has already been completed.")
+            if feedback_request.was_responded_to:
+                raise serializers.ValidationError("Request has already been responded to.")
             if feedback_request.requester != subject:
                 raise serializers.ValidationError("Subject is not the same as the feedback requester.")
             if feedback_request.reviewer != reviewer:

@@ -9,6 +9,7 @@ var iife = require('gulp-iife');
 
 gulp.task('scripts', function() {
     return gulp.src('./talentdashboard/static/angular/feedback/**/*.js')
+        .pipe(angularFilesort())
         .pipe(concat('feedback.js'))
         .pipe(iife())
         .pipe(ngAnnotate())
@@ -24,7 +25,6 @@ gulp.task('less', function () {
 });
 
 gulp.task('watch', function() {
-    gulp.watch('./talentdashboard/**/*.less', ['less']);
     gulp.watch('./talentdashboard/**/*.js', ['scripts']);
 });
 

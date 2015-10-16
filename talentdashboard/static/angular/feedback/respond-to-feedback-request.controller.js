@@ -1,9 +1,6 @@
-(function() {
     angular
         .module('feedback')
         .controller('RespondToFeedbackRequestController', RespondToFeedbackRequestController);
-
-    RespondToFeedbackRequestController.$inject = ['$routeParams', '$location', 'Notification', 'FeedbackRequestService', 'FeedbackSubmissionService'];
 
     function RespondToFeedbackRequestController($routeParams, $location, Notification, FeedbackRequestService, FeedbackSubmissionService) {
         BaseSubmitFeedbackController.call(this, $location);
@@ -36,4 +33,3 @@
         };
     }
     RespondToFeedbackRequestController.prototype = Object.create(BaseSubmitFeedbackController.prototype);
-})();

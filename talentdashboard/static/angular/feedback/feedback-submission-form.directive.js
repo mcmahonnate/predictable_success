@@ -1,4 +1,3 @@
-(function() {
     angular
         .module('feedback')
         .directive('smFeedbackSubmissionForm', feedbackSubmissionForm);
@@ -23,4 +22,3 @@
             }
         };
     }
-})();

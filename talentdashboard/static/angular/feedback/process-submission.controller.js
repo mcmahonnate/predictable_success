@@ -1,9 +1,6 @@
-(function() {
     angular
         .module('feedback')
         .controller('ProcessSubmissionController', ProcessSubmissionController);
-
-    ProcessSubmissionController.$inject = ['FeedbackSubmissionService', 'FeedbackDigestService'];
 
     function ProcessSubmissionController($routeParams, FeedbackSubmissionService, FeedbackDigestService) {
         var vm = this;
@@ -41,4 +38,3 @@
 
         }
     }
-})();
