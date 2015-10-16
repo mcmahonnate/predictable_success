@@ -11,7 +11,7 @@ function FeedbackRequestService($http, $log, FeedbackRequestResource) {
         sendFeedbackRequests: sendFeedbackRequests,
         getFeedbackRequests: getFeedbackRequests,
         getPotentialReviewers: getPotentialReviewers,
-        getFeedbackProgressReportForEmployee: getFeedbackProgressReportForEmployee
+        getFeedbackProgressReportForEmployee: getFeedbackProgressReportForEmployee,
         getMyRecentlySentRequests: getMyRecentlySentRequests
     };
 

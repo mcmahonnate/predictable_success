@@ -1,9 +1,9 @@
 <div class="container">
 
     <!-- Welcome --> 
-    <div ng-show="!feedback.feedbackRequests.length">
+    <div ng-show="!feedback.feedbackRequests.length" style="margin-bottom: 65px">
         <div class="panel">
-            <div class="feedback-reports-container row" style="max-width:900px; margin:70px; padding-bottom:100px">
+            <div class="feedback-reports-container row" style="max-width:900px; margin:70px;">
                 <div class="pull-right">
                     <img src="../static/images/bubbles-alpha.png" style="width:290px; margin-bottom:35px"/>
                 </div>
@@ -29,17 +29,9 @@
         </div>
     </div>
 
-    <div ng-show="feedback.feedbackRequests.length">
-        <div class="pull-right">
-            <button class="btn btn-default" ng-click="feedback.requestFeedback()" type="button">
-                Ask for Feedback
-            </button>        
-            <button class="btn btn-default" ng-click="feedback.giveUnsolicitedFeedback()" type="button">
-                Give Feedback
-            </button>
-        </div>
-        <h1>Feedback</h1>
-
+    <div style="margin-bottom: 65px">
+        {{ feedback.feedbackRequests }}
+        <h1>People who want feedback from me</h1>
         <div class="panel">
             <div ng-repeat="request in feedback.feedbackRequests | orderBy:'request.requester.full_name'" class="todos animate-repeat">
                 <div class="todo row">
@@ -54,31 +46,6 @@
                         </span>
                     </div>
                     <div class="todo-description-container col-xs-12 col-sm-10" style="width:70%;margin-left:10px">
-
-                        <h3 class="comment-title-employee-name"><strong><span class="sensitive-text ng-binding">{{request.requester.full_name}}</span> requested feedback</strong></h3>
-                        <p class="todo-description comment-text">Here are the specific areas they'd like feedback:</p>
-                        <p class="todo-description comment-text">"{{ request.message }}"</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="panel">
-            <div ng-repeat="request in feedback.feedbackRequests | orderBy:'request.requester.full_name'" class="todos animate-repeat">
-                <div class="todo row">
-                    <div class="pull-right">
-                        <a class="btn btn-default pull-left" ng-href="#/feedback/request/{{ request.id }}/reply/" type="button">
-                            Give Feedback
-                        </a>
-                    </div>
-                    <div class="col-md-3 col-lg-3 first">
-                        <span class="large-headshot">
-                            <img ng-src="{{request.requester.avatar_small}}" alt="{{request.requester.full_name}}" class="headshot-image">
-                        </span>
-                    </div>
-                    <div class="todo-description-container col-xs-12 col-sm-10" style="width:70%;margin-left:10px">
-
                         <h3 class="comment-title-employee-name"><strong><span class="sensitive-text ng-binding">{{request.requester.full_name}}</span> requested feedback</strong></h3>
                         <p class="todo-description comment-text">Here are the specific areas they'd like feedback:</p>
                         <p class="todo-description comment-text">"{{ request.message }}"</p>
@@ -87,6 +54,46 @@
             </div>
         </div>
     </div>
+
+    <div>
+        <div class="pull-right">
+            <button class="btn btn-default" ng-click="feedback.requestFeedback()" type="button">
+                Ask for Feedback
+            </button>        
+            <button class="btn btn-default" ng-click="feedback.giveUnsolicitedFeedback()" type="button">
+                Give Feedback
+            </button>
+        </div>
+        <h1>People I've asked for Feedback</h1>
+        <div class="panel">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                      <th>Person</th>
+                      <th>Date</th>
+                      <th>Completed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="request in feedback.myRecentlySentRequests | reverse">
+                        <td>
+                            <span class="tiny-headshot">
+                                <img ng-src="{{ request.reviewer.avatar_small }}" alt="{{ request.reviewer.full_name }}'s avatar" />
+                            </span>  
+                            {{ request.reviewer.full_name }}
+                        </td>
+                        <td>
+                            {{ request.request_date | fromNow }}
+                        </td>
+                        <td>
+                            {{ request.has_been_answered }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>    
+
 
 </div>
 
