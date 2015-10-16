@@ -1,16 +1,17 @@
 (function() {
 angular
     .module('feedback')
-    .factory('FeedbackAPI', FeedbackAPI);
+    .factory('FeedbackRequestService', FeedbackRequestService);
 
-FeedbackAPI.$inject = ['$http', '$log', 'FeedbackRequestResource'];
+FeedbackRequestService.$inject = ['$http', '$log', 'FeedbackRequestResource'];
 
-function FeedbackAPI($http, $log, FeedbackRequestResource) {
+function FeedbackRequestService($http, $log, FeedbackRequestResource) {
     return {
         getFeedbackRequest: getFeedbackRequest,
         sendFeedbackRequests: sendFeedbackRequests,
         getFeedbackRequests: getFeedbackRequests,
-        getPotentialReviewers: getPotentialReviewers
+        getPotentialReviewers: getPotentialReviewers,
+        getMyRecentlySentRequests: getMyRecentlySentRequests
     };
 
     function sendFeedbackRequests(reviewers, message) {
@@ -66,6 +67,18 @@ function FeedbackAPI($http, $log, FeedbackRequestResource) {
 
         function fail(response) {
             $log.error('getPotentialReviewers failed');
+        }
+    }
+
+    function getMyRecentlySentRequests() {
+        return FeedbackRequestResource.getMyRecentlySentRequests(null, success, fail).$promise;
+
+        function success(response) {
+            return response;
+        }
+
+        function fail(response) {
+            $log.error('getMyRecentlySentRequests failed');
         }
     }
 

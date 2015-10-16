@@ -3,7 +3,7 @@ angular
     .module('feedback')
     .factory('FeedbackSubmissionService', FeedbackSubmissionService);
 
-FeedbackAPI.$inject = ['$log', 'FeedbackSubmissionResource', 'Employee'];
+FeedbackSubmissionService.$inject = ['$log', 'FeedbackSubmissionResource', 'Employee'];
 
 function FeedbackSubmissionService($log, FeedbackSubmissionResource, Employee) {
     return {
@@ -68,7 +68,7 @@ function FeedbackSubmissionService($log, FeedbackSubmissionResource, Employee) {
         }
 
         function fail(response) {
-            $log.error('respondToFeedbackRequest failed');
+            $log.error('_sendFeedback failed');
         }
     }
 }

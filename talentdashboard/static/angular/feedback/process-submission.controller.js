@@ -3,9 +3,9 @@
         .module('feedback')
         .controller('ProcessSubmissionController', ProcessSubmissionController);
 
-    ProcessSubmissionController.$inject = ['FeedbackSubmissionService'];
+    ProcessSubmissionController.$inject = ['FeedbackSubmissionService', 'FeedbackDigestService'];
 
-    function ProcessSubmissionController($routeParams, FeedbackSubmissionService) {
+    function ProcessSubmissionController($routeParams, FeedbackSubmissionService, FeedbackDigestService) {
         var vm = this;
         vm.submissionId = $routeParams.id;
         vm.submission = null;
@@ -29,7 +29,7 @@
         function addToDigest() {
             return save()
                 .then(function() {
-                    return FeedbackSubmissionService.addSubmissionToDigest(vm.submission);
+                    return FeedbackDigestService.addSubmissionToDigest(vm.submission);
                 });
         }
 

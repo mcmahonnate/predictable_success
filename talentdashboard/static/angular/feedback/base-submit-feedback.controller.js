@@ -1,4 +1,8 @@
 (function(window) {
+    angular
+        .module('feedback')
+        .controller('BaseSubmitFeedbackController', BaseSubmitFeedbackController);
+
     function BaseSubmitFeedbackController($location) {
         var vm = this;
         vm.feedback = {

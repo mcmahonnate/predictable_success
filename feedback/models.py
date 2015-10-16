@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from django.db import models
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
@@ -27,7 +28,7 @@ class FeedbackRequestManager(models.Manager):
 class FeedbackRequest(models.Model):
     objects = FeedbackRequestManager()
     request_date = models.DateTimeField(auto_now_add=True)
-    expiration_date = models.DateField(null=True, blank=True)
+    expiration_date = models.DateField(null=True, blank=True, default=lambda: datetime.now() + timedelta(weeks=6))
     requester = models.ForeignKey(Employee, related_name='feedback_requests')
     reviewer = models.ForeignKey(Employee, related_name='requests_for_feedback')
     message = models.TextField(blank=True)
@@ -51,6 +52,10 @@ class FeedbackRequest(models.Model):
         msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
         msg.attach_alternative(html_content, "text/html")
         msg.send()
+
+    @property
+    def expired(self):
+        return not self.has_been_answered and self.expiration_date < datetime.today()
 
     @property
     def has_been_answered(self):
@@ -99,11 +104,30 @@ class FeedbackSubmission(models.Model):
         return "Feedback submission by %s for %s" % (self.reviewer, self.subject)
 
 
+class OnlyOneCurrentFeedbackDigestAllowed(Exception):
+    pass
+
+
 class FeedbackDigest(TimeStampedModel):
     subject = models.ForeignKey(Employee, related_name='+')
-    coach = models.ForeignKey(Employee, related_name='+')
     summary = models.TextField(blank=True)
     has_been_delivered = models.BooleanField(default=False)
+    delivered_by = models.ForeignKey(Employee, related_name='+', null=True)
+
+    def save(self, *args, **kwargs):
+        if not self.has_been_delivered:
+            if self.pk is None and FeedbackDigest.objects\
+                    .filter(subject=self.subject)\
+                    .filter(has_been_delivered=False)\
+                    .exists():
+                raise OnlyOneCurrentFeedbackDigestAllowed()
+            elif FeedbackDigest.objects\
+                    .exclude(pk=self.pk)\
+                    .filter(subject=self.subject)\
+                    .filter(has_been_delivered=False)\
+                    .exists():
+                raise OnlyOneCurrentFeedbackDigestAllowed()
+        super(FeedbackDigest, self).save(*args, **kwargs)
 
 
 class FeedbackProgressReport(object):
