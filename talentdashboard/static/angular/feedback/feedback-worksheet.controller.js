@@ -3,7 +3,7 @@
         .module('feedback')
         .controller('FeedbackWorksheetController', FeedbackWorksheetController);
 
-    FeedbackWorksheetController.$inject = ['FeedbackAPI'];
+    FeedbackWorksheetController.$inject = ['$routeParams', 'FeedbackAPI'];
 
     function FeedbackWorksheetController($routeParams, FeedbackAPI) {
         var vm = this;
@@ -18,6 +18,7 @@
         }
 
         function getFeedbackProgressReport() {
+            console.log($routeParams.id);
             return FeedbackAPI.getFeedbackProgressReportForEmployee($routeParams.id)
                 .then(function (data) {
                     vm.progressReport = data;

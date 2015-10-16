@@ -11,6 +11,8 @@
             <div ng-include="'/static/angular/partials/_widgets/navigation/nav-lead.html'"></div>
         {% elif user.employee.is_coach %}
             <div ng-include="'/static/angular/partials/_widgets/navigation/nav-coach.html'"></div>
+        {% else %}
+            <div ng-include="'/static/angular/partials/_widgets/navigation/nav-individual.html'"></div>    
         {% endif %}
 
         <div ng-view></div>

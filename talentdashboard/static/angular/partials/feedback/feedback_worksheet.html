@@ -1,0 +1,123 @@
+<div class="container">
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<h1>Feedback for {{ feedbackWorksheet.progressReport.employee.full_name }}</h1>
+			<div class="panel">
+				<div ng-show="feedbackWorksheet.progressReport.solicited_submissions">
+					<h3><strong>Feedback Submissions</strong></h3>
+					<table class="table table-striped" style="margin-bottom:45px">
+						<thead>
+					        <tr>
+					          <th style="width:30%">From</th>
+					          <th class="centered" style="width:30%">Anonymous</th>
+					          <th style="width:30%">Date</th>
+					          <th></th>
+					        </tr>
+			      		</thead>
+			      		<tbody>
+							<tr ng-repeat="submission in feedbackWorksheet.progressReport.solicited_submissions">
+								<td>
+									<a href="#/employees/{{ submission.reviewer.id }}">
+										<span class="tiny-headshot">
+											<img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
+										</span> 
+									</a>	
+									<a href="#/employees/{{ submission.reviewer.id }}">{{ submission.reviewer.full_name }}</a>
+								</td>
+								<td class="centered">
+									<i ng-show="{{ submission.anonymous }}" class="fa fa-check" title="Marked as Anonymous"></i>
+								</td>
+								<td>
+									{{ submission.feedback_date | fromNow }}
+								</td>
+								<td>
+									<a href="" class="btn btn-sm btn-default pull-right">View Feedback</a>
+								</td>
+							</tr>
+			      		</tbody>
+					</table>
+				</div>	
+
+				<div ng-show="feedbackWorksheet.progressReport.unsolicited_submissions">
+					<h3><strong>Unsolicited Feedback</strong></h3>
+					<table class="table table-striped" style="margin-bottom:45px">
+						<thead>
+					        <tr>
+					          <th style="width:30%">From</th>
+					          <th class="centered" style="width:30%">Anonymous</th>
+					          <th style="width:30%">Date</th>
+					          <th></th>
+					        </tr>
+			      		</thead>
+			      		<tbody>
+							<tr ng-repeat="submission in feedbackWorksheet.progressReport.unsolicited_submissions">
+								<td>
+									<a href="#/employees/{{ submission.reviewer.id }}">
+										<span class="tiny-headshot">
+											<img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
+										</span> 
+									</a>	
+									<a href="#/employees/{{ submission.reviewer.id }}">{{ submission.reviewer.full_name }}</a>
+								</td>
+								<td class="centered">
+									<i ng-show="{{ submission.anonymous }}" class="fa fa-check" title="Marked as Anonymous"></i>
+								</td>
+								<td>
+									{{ submission.feedback_date | fromNow }}
+								</td>
+								<td>
+									<a href="" class="btn btn-sm btn-default pull-right">View Feedback</a>
+								</td>
+							</tr>
+			      		</tbody>
+					</table>
+				</div>	
+
+				<h3>Unanswered Requests</h3>
+				<table class="table table-striped">
+					<thead>
+				        <tr>
+				          <th>From</th>
+				          <th>Anonymous</th>
+				          <th>Request Date</th>
+				          <th></th>
+				        </tr>
+		      		</thead>
+		      		<tbody>
+						<tr ng-repeat="submission in feedbackWorksheet.progressReport.unanswered_requests">
+							<td>
+								{{ submission.requester.full_name }}
+							</td>
+							<td>
+								{{ submission.anonymous }}
+							</td>
+							<td>
+								{{ submission.request_date | fromNow }}
+							</td>
+							<td>
+								<a href="" class="btn btn-sm btn-default">View</a>
+							</td>
+						</tr>
+		      		</tbody>
+				</table>		
+
+			</div>			
+
+			<h2>Feedback Digest</h2>
+			<div class="panel">
+				<form>
+					<h3>In what areas...</h3>
+					<div><!-- Feedback --></div>
+					<h3>In what areas...</h3>
+					<div><!-- Feedback --></div>
+
+					<h2>Your Feedback Summary for <!-- Employee Name --></h2>
+					<textarea class="form-control"></textarea>
+					<button class="btn-primary pull-right">Send to <!-- Employee Name --></button>
+					<button class="btn-default">Save</button>
+					<button class="btn-default">Print</button>
+				</form>	
+			</div>	  	
+		</div>	
+	</div>	
+</div>

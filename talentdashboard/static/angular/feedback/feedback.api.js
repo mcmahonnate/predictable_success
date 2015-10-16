@@ -13,7 +13,8 @@ function FeedbackAPI($http, $log, FeedbackRequestResource, FeedbackSubmissionRes
         getPotentialReviewers: getPotentialReviewers,
         getEmployees: getEmployees,
         respondToFeedbackRequest: respondToFeedbackRequest,
-        giveUnsolicitedFeedback: giveUnsolicitedFeedback
+        giveUnsolicitedFeedback: giveUnsolicitedFeedback,
+        getFeedbackProgressReportForEmployee: getFeedbackProgressReportForEmployee
     };
 
     function sendFeedbackRequests(reviewers, message) {

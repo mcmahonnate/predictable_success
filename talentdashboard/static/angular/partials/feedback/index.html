@@ -1,34 +1,65 @@
+<div>
+    <a href="">Dashboard</a> <a href="#/my-profile">My Profile</a>
+</div>    
 <div class="container">
 
     <!-- Welcome --> 
     <div ng-show="!feedback.feedbackRequests.length">
         <div class="feedback-reports-container">
             <div class="feedback-report">
-                <img src="../static/images/bubbles.gif" style="max-width:400px"/>
-                <h1 class="comment-title-employee-name centered">Welcome, {{ currentUser.employee.full_name }}!</h1>
-                <p>How would you like to get started?</p>
+                <img src="../static/images/bubbles.png" style="max-width:400px; margin-bottom:35px"/>
+                <h1 class="comment-title-employee-name centered">Welcome, 
+                    {{ currentUser.employee.full_name }}!</h1>
+                <p class="get-started-text">How would you like to get started?</p>
                 <div class="centered feedback-report-item">
-                    <button class="btn btn-info btn-lg" ng-click="feedback.requestFeedback()" type="button">
+                    <button class="btn btn-default btn-lg" ng-click="feedback.requestFeedback()" type="button">
                         Ask for Feedback
                     </button>
-                    <button class="btn btn-info btn-lg" ng-click="feedback.giveUnsolicitedFeedback()" type="button">
-                        Request Feedback
+                    <button class="btn btn-default btn-lg" ng-click="feedback.giveUnsolicitedFeedback()" type="button">
+                        Give Feedback
                     </button>
                 </div>
             </div>
-        </div>   
+        </div> 
+     
     </div>
 
-    <div ng-show="feedback.feedbackRequests.length">
+    <div>
         <div class="pull-right">
+            <button class="btn btn-default" ng-click="feedback.requestFeedback()" type="button">
+                Ask for Feedback
+            </button>        
             <button class="btn btn-default" ng-click="feedback.giveUnsolicitedFeedback()" type="button">
                 Give Feedback
             </button>
-            <button class="btn btn-default" ng-click="feedback.requestFeedback()" type="button">
-                Ask for Feedback
-            </button>
         </div>
-        <h1>Feedback Dashboard</h1>
+        <h1>Feedback</h1>
+
+        {{ feedback }}
+        <div class="panel">
+            <div ng-repeat="request in feedback.feedbackRequests | orderBy:'request.requester.full_name'" class="todos animate-repeat">
+                <div class="todo row">
+                    <div class="pull-right">
+                        <a class="btn btn-default pull-left" ng-href="#/feedback/request/{{ request.id }}/reply/" type="button">
+                            Give Feedback
+                        </a>
+                    </div>
+                    <div class="col-md-3 col-lg-3 first">
+                        <span class="large-headshot">
+                            <img ng-src="{{request.requester.avatar_small}}" alt="{{request.requester.full_name}}" class="headshot-image">
+                        </span>
+                    </div>
+                    <div class="todo-description-container col-xs-12 col-sm-10" style="width:70%;margin-left:10px">
+
+                        <h3 class="comment-title-employee-name"><strong><span class="sensitive-text ng-binding">{{request.requester.full_name}}</span> requested feedback</strong></h3>
+                        <p class="todo-description comment-text">Here are the specific areas they'd like feedback:</p>
+                        <p class="todo-description comment-text">"{{ request.message }}"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <div class="panel">
             <div ng-repeat="request in feedback.feedbackRequests | orderBy:'request.requester.full_name'" class="todos animate-repeat">
                 <div class="todo row">
@@ -57,8 +88,22 @@
 
 <style>
 
-body {
-    background-color: #fff;
+
+.comment-title-employee-name {
+    font-size: 38px;
+}
+.get-started-text {
+    font-size: 16px;
+    color: #777;
+}
+.btn {
+    font-size: 16px;
+}
+
+
+.container {
+    margin-top: 40px;
+    padding: 20px;
 }
 .animate-repeat.ng-move,
 .animate-repeat.ng-enter,
@@ -98,18 +143,19 @@ body {
 }
 
 .modal:before {
-  content: '';
-  display: inline-block;
-  height: 100%;
-  vertical-align: middle;
-  margin-right: -4px; /* Adjusts for spacing */
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    margin-right: -4px; /* Adjusts for spacing */
+    margin-top: -8%;
 }
 
 .modal-dialog {
-  display: inline-block;
-  text-align: left;
-  vertical-align: middle;
-      max-width: 475px;
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+    max-width: 475px;
 }
 .modal-body {
     padding: 40px 30px;

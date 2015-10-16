@@ -1,20 +1,22 @@
 <div class="container">
-    <h1>Submit Feedback</h1>
-    <div class="panel panel-default">
-        <div class="panel-body">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+        <h1>Submit Feedback</h1>
+        <div class="panel panel-default">
+            <div class="panel-body">
                 <div class="form-group">
                     <label for="to">Who would you like to give feedback to?</label>
                     <ui-select
-                            id="to"
-                            ng-model="submitFeedback.subject"
-                            reset-search-input="false"
-                            theme="bootstrap"
-                            style="width:50%"
-                            >
+                        id="to"
+                        ng-model="submitFeedback.subject"
+                        reset-search-input="false"
+                        theme="bootstrap"
+                        style="width:50%"
+                        >
                         <ui-select-match placeholder="Type an employee's name">
-                            {{ $select.selected.full_name }}</ui-select-match>
-                        <ui-select-choices
-                                repeat="employee in submitFeedback.employees | filter: {full_name: $select.search}">
+                            {{ $select.selected.full_name }}
+                        </ui-select-match>
+                        <ui-select-choices repeat="employee in submitFeedback.employees | filter: {full_name: $select.search}">
                             <div ng-bind-html="employee.full_name | highlight: $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
@@ -22,7 +24,7 @@
                 <sm-feedback-submission-form ng-show="submitFeedback.subject" feedback="submitFeedback.feedback" subject="submitFeedback.subject" submit="submitFeedback.submitFeedback(form)" cancel="submitFeedback.cancel()" />
             </div>
         </div>
-    </div>
+    </div>    
 </div>
 <style>
     .form-group {margin-top: 15px;margin-bottom: 15px;}
