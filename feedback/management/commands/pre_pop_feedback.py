@@ -42,6 +42,8 @@ class Command(BaseCommand):
                 submission.save()
 
             for reviewer in unsolicited_reviewers:
+                if subject == reviewer:
+                    continue
                 submission = FeedbackSubmission(subject=subject, reviewer=reviewer)
                 submission.excels_at = excels_at_answer
                 submission.could_improve_on = could_improve_on_answer

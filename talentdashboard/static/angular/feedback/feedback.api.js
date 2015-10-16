@@ -3,9 +3,9 @@ angular
     .module('feedback')
     .factory('FeedbackAPI', FeedbackAPI);
 
-FeedbackAPI.$inject = ['$http', '$log', 'FeedbackRequestResource', 'FeedbackSubmissionResource', 'Employee'];
+FeedbackAPI.$inject = ['$http', '$log', 'FeedbackRequestResource'];
 
-function FeedbackAPI($http, $log, FeedbackRequestResource, FeedbackSubmissionResource, Employee) {
+function FeedbackAPI($http, $log, FeedbackRequestResource) {
     return {
         getFeedbackRequest: getFeedbackRequest,
         sendFeedbackRequests: sendFeedbackRequests,
@@ -59,18 +59,6 @@ function FeedbackAPI($http, $log, FeedbackRequestResource, FeedbackSubmissionRes
         }
     }
 
-    function getEmployees() {
-        return Employee.query(null, success, fail).$promise;
-
-        function success(response) {
-            return response;
-        }
-
-        function fail(response) {
-            $log.error('getEmployees failed');
-        }
-    }
-
     function getPotentialReviewers() {
         return $http.get('/api/v1/feedback/potential-reviewers/')
             .then(success)
@@ -97,41 +85,6 @@ function FeedbackAPI($http, $log, FeedbackRequestResource, FeedbackSubmissionRes
 
         function fail(response) {
             $log.error('getFeedbackProgressReportForEmployee failed');
-        }
-    }
-
-    function respondToFeedbackRequest(feedbackRequest, feedback)
-    {
-        var submission = _map_feedback_to_submission(feedback);
-        submission.feedback_request = feedbackRequest.id;
-        submission.subject = feedbackRequest.requester.id;
-        return _sendFeedback(submission);
-    }
-
-    function giveUnsolicitedFeedback(subject, feedback)
-    {
-        var submission = _map_feedback_to_submission(feedback);
-        submission.subject = subject.id;
-        return _sendFeedback(submission);
-    }
-
-    function _map_feedback_to_submission(feedback) {
-        return {
-            excels_at: feedback.excelsAt,
-            could_improve_on: feedback.couldImproveOn,
-            anonymous: feedback.anonymous
-        };
-    }
-
-    function _sendFeedback(submission) {
-        return FeedbackSubmissionResource.save(submission, success, fail).$promise;
-
-        function success(response) {
-            return response;
-        }
-
-        function fail(response) {
-            $log.error('respondToFeedbackRequest failed');
         }
     }
 }

@@ -10,6 +10,11 @@ function FeedbackRequestResource($resource) {
         'sendFeedbackRequests': {
             method: 'POST',
             isArray: true
+        },
+        'getFeedbackRequests': {
+            url: '/api/v1/feedback/requests/todo/',
+            method: 'GET',
+            isArray: true
         }
     };
     return $resource('/api/v1/feedback/requests/:id/', null, actions);

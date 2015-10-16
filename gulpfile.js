@@ -1,11 +1,13 @@
 var gulp = require('gulp');
 var less = require('gulp-less');
 var path = require('path');
+var ngAnnotate = require('gulp-ng-annotate');
 var concat = require('gulp-concat');
 
 gulp.task('scripts', function() {
     return gulp.src('./talentdashboard/static/angular/**/*.js')
         .pipe(concat('main.js'))
+        .pipe(ngAnnotate())
         .pipe(gulp.dest('./talentdashboard/staticfiles/'));
 });
 

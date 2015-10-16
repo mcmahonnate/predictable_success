@@ -11,7 +11,7 @@ from customers.models import Customer
 
 class FeedbackRequestManager(models.Manager):
     def pending_for_reviewer(self, reviewer):
-        return self.filter(reviewer=reviewer).filter(is_complete=False)
+        return self.filter(reviewer=reviewer).filter(submission=None)
 
     def unanswered_for_requester(self, requester):
         return self.filter(requester=requester).filter(submission=None)
