@@ -1,12 +1,9 @@
 <div class="container">
 
     <!-- Welcome --> 
-    <div ng-show="!feedback.feedbackRequests.length" style="margin-bottom: 65px">
+    <div style="margin-bottom: 65px">
         <div class="panel">
-            <div class="feedback-reports-container row" style="max-width:900px; margin:70px;">
-                <div class="pull-right">
-                    <img src="../static/images/bubbles-alpha.png" style="width:290px; margin-bottom:35px"/>
-                </div>
+            <div class="feedback-reports-container row" style="max-width:900px; margin:40px;">
                 <div class="col-sm-8">
                     <h1 class="comment-title-employee-name">Foolish 360 Feedback</h1>
                     <p class="get-started-text">
@@ -24,34 +21,48 @@
                             Give Feedback
                         </button>
                     </div>
-                </div>    
+                </div> 
+                <div class="col-sm-4">
+                    <img src="../static/images/bubbles-alpha.png" style="width:100%; margin-bottom:35px"/>
+                </div>                   
             </div> 
         </div>
     </div>
 
     <div style="margin-bottom: 65px">
-        {{ feedback.feedbackRequests }}
         <h1>People who want feedback from me</h1>
         <div class="panel">
-            <div ng-repeat="request in feedback.feedbackRequests | orderBy:'request.requester.full_name'" class="todos animate-repeat">
-                <div class="todo row">
-                    <div class="pull-right">
-                        <a class="btn btn-default pull-left" ng-href="#/feedback/request/{{ request.id }}/reply/" type="button">
-                            Give Feedback
-                        </a>
-                    </div>
-                    <div class="col-md-3 col-lg-3 first">
-                        <span class="large-headshot">
-                            <img ng-src="{{request.requester.avatar_small}}" alt="{{request.requester.full_name}}" class="headshot-image">
-                        </span>
-                    </div>
-                    <div class="todo-description-container col-xs-12 col-sm-10" style="width:70%;margin-left:10px">
-                        <h3 class="comment-title-employee-name"><strong><span class="sensitive-text ng-binding">{{request.requester.full_name}}</span> requested feedback</strong></h3>
-                        <p class="todo-description comment-text">Here are the specific areas they'd like feedback:</p>
-                        <p class="todo-description comment-text">"{{ request.message }}"</p>
-                    </div>
-                </div>
-            </div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                      <th style="width:30%">Person</th>
+                      <th>Sent</th>
+                      <th>Where they'd like feedback</th>
+                      <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="request in feedback.feedbackRequests | orderBy:'request.requester.full_name'">
+                        <td>
+                            <span class="tiny-headshot">
+                                <img ng-src="{{ request.requester.avatar_small }}" alt="{{ request.requester.full_name }}'s avatar" />
+                            </span>  
+                            {{ request.requester.full_name }}
+                        </td>
+                        <td>
+                            {{ request.request_date | fromNow }}
+                        </td>
+                        <td>
+                            {{ request.message }}
+                        </td>    
+                        <td>
+                            <a class="btn btn-default pull-right" ng-href="#/feedback/request/{{ request.id }}/reply/" type="button">
+                                Give Feedback
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -64,13 +75,13 @@
                 Give Feedback
             </button>
         </div>
-        <h1>People I've asked for Feedback</h1>
+        <h1>People I've asked for feedback</h1>
         <div class="panel">
             <table class="table table-striped">
                 <thead>
                     <tr>
-                      <th>Person</th>
-                      <th>Date</th>
+                      <th style="width:30%">Person</th>
+                      <th>Sent</th>
                       <th>Completed</th>
                     </tr>
                 </thead>
