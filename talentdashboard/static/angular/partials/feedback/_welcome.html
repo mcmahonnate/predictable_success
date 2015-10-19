@@ -1,0 +1,25 @@
+<div ng-cloak class="panel ng-cloak" style="display:hidden;" ng-show="!feedback.myRecentlySentRequests.length">
+    <div class="feedback-reports-container row" style="margin:35px 35px 0;">
+        <div class="col-md-8">
+            <h1 class="comment-title-employee-name">Foolish 360 Feedback</h1>
+            <p class="get-started-text">
+                Hi Fools, we hope you like our new feedback app. 
+                It's a safe place to ask for and give feedback. 
+                You can do it whenever, with whomever, and about whatever you'd like. 
+                The best part is, it's still just between you and your coach. &mdash;Kara Chambers            
+            </p>
+            <h2>Get started!</h2>
+            <div class="feedback-report-item">
+                <button class="btn btn-success btn-lg" ng-click="feedback.requestFeedback()" type="button">
+                    Ask for Feedback
+                </button>
+                <button class="btn btn-success btn-lg" ng-click="feedback.giveUnsolicitedFeedback()" type="button">
+                    Give Feedback
+                </button>
+            </div>
+        </div> 
+        <div class="col-md-4">
+            <img src="../static/images/bubbles-alpha.png" style="width:100%; margin-bottom:35px"/>
+        </div>                   
+    </div> 
+</div>

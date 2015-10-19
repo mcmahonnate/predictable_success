@@ -3,20 +3,19 @@
 {% block title %}Sign in{% endblock title %}
 
 {% block content %}
-    <div class="login-form">
+    <div class="login-form {% if form.errors %}has-error{% endif %}">
         <form method="post" action="{% url 'django.contrib.auth.views.login' %}">
             {% csrf_token %}
-
-            <a href="{% url 'index' %}"><img class="logo" src="{% static 'images/logo-dark.png' %}" /></a>
-
-            {% if form.errors %}
-                <p>Your username and password didn't match. Please try again.</p>
-            {% endif %}
-
+            <a href="{% url 'index' %}"><img class="logo" src="{% static 'images/compass-logo-green.png' %}" /></a>
+            <h1>Hello. Sign in.</h1>
             <form class="form-signin">
+
+
+            {{ form.instance.id_username }}
+
                 <input autofocus autocomplete="off" class="form-control input-lg" id="id_username" name="username" placeholder="Username or Email" type="text">
                 <input id="id_password" class="form-control input-lg" name="password" placeholder="Password" type="password">
-                <button class="btn btn-lg btn-success btn-block" type="submit">Sign in</button>
+                <button class="btn btn-lg btn-success btn-block" type="submit">Login</button>
                 <input type="hidden" name="next" id="next" />
                 <script>
                     var elem = document.getElementById("next");

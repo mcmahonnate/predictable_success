@@ -1,87 +1,67 @@
 <div class="container">
-
-    <!-- Welcome --> 
-    <div style="margin-bottom: 65px">
-        <div class="panel">
-            <div class="feedback-reports-container row" style="max-width:900px; margin:40px;">
-                <div class="col-sm-8">
-                    <h1 class="comment-title-employee-name">Foolish 360 Feedback</h1>
-                    <p class="get-started-text">
-                        Hi Fools, we hope you like our new feedback app. 
-                        It's a safe place to ask for and give feedback. 
-                        You can do it whenever, with whomever, and about whatever you'd like. 
-                        The best part is, it's still just between you and your coach. &mdash;Kara Chambers            
-                    </p>
-                    <h2>Get started!</h2>
-                    <div class="feedback-report-item">
-                        <button class="btn btn-success btn-lg" ng-click="feedback.requestFeedback()" type="button">
-                            Ask for Feedback
-                        </button>
-                        <button class="btn btn-success btn-lg" ng-click="feedback.giveUnsolicitedFeedback()" type="button">
-                            Give Feedback
-                        </button>
-                    </div>
-                </div> 
-                <div class="col-sm-4">
-                    <img src="../static/images/bubbles-alpha.png" style="width:100%; margin-bottom:35px"/>
-                </div>                   
-            </div> 
-        </div>
-    </div>
-
-    <div style="margin-bottom: 65px">
-        <h1>People who want feedback from me</h1>
-        <div class="panel">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                      <th style="width:30%">Person</th>
-                      <th>Sent</th>
-                      <th>Where they'd like feedback</th>
-                      <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="request in feedback.feedbackRequests | orderBy:'request.requester.full_name'">
-                        <td>
-                            <span class="tiny-headshot">
-                                <img ng-src="{{ request.requester.avatar_small }}" alt="{{ request.requester.full_name }}'s avatar" />
-                            </span>  
-                            {{ request.requester.full_name }}
-                        </td>
-                        <td>
-                            {{ request.request_date | fromNow }}
-                        </td>
-                        <td>
-                            {{ request.message }}
-                        </td>    
-                        <td>
-                            <a class="btn btn-default pull-right" ng-href="#/feedback/request/{{ request.id }}/reply/" type="button">
-                                Give Feedback
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div>
+    <div ng-show="feedback.myRecentlySentRequests.length">
         <div class="pull-right">
-            <button class="btn btn-default" ng-click="feedback.requestFeedback()" type="button">
+            <button class="btn btn-success" ng-click="feedback.requestFeedback()" type="button">
                 Ask for Feedback
-            </button>        
-            <button class="btn btn-default" ng-click="feedback.giveUnsolicitedFeedback()" type="button">
+            </button>
+            <button class="btn btn-success" ng-click="feedback.giveUnsolicitedFeedback()" type="button">
                 Give Feedback
             </button>
         </div>
-        <h1>People I've asked for feedback</h1>
-        <div class="panel">
-            <table class="table table-striped">
+        <h1>Foolish 360 Feedback</h1>
+    </div>    
+    <div ng-include src="'/static/angular/partials/feedback/_welcome.html'"></div>
+
+    <div class="panel">
+        <h2 class="panel-title">
+            {{ feedback.feedbackRequests.length }} 
+            <span ng-show="feedback.feedbackRequests.length == 1">Person wants</span> 
+            <span ng-show="feedback.feedbackRequests.length != 1">People want</span> 
+            feedback
+        </h2>
+        <table class="table">
+            <thead>
+                <tr>
+                  <th style="width:30%">Person</th>
+                  <th style="width:15%">Sent</th>
+                  <th style="width:30%">Where they'd like feedback</th>
+                  <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="request in feedback.feedbackRequests | orderBy:'request.requester.full_name'">
+                    <td>
+                        <span class="tiny-headshot">
+                            <img ng-src="{{ request.requester.avatar_small }}" alt="{{ request.requester.full_name }}'s avatar" />
+                        </span>  
+                        {{ request.requester.full_name }}
+                    </td>
+                    <td>
+                        {{ request.request_date | fromNow }}
+                    </td>
+                    <td>
+                        {{ request.message }}
+                    </td>    
+                    <td>
+                        <a class="btn btn-default pull-right" ng-href="#/feedback/request/{{ request.id }}/reply/" type="button">
+                            Give Feedback
+                        </a>
+                    </td>
+                </tr>
+                <tr ng-show="!feedback.feedbackRequests.length">
+                    <td colspan="4">You currently don't have any requests for feedback.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="panel" ng-show="feedback.myRecentlySentRequests.length">
+        <h2 class="panel-title">People I've asked for feedback</h1>
+            <table class="table">
                 <thead>
                     <tr>
                       <th style="width:30%">Person</th>
-                      <th>Sent</th>
+                      <th style="width:15%">Sent</th>
                       <th>Completed</th>
                     </tr>
                 </thead>
@@ -105,8 +85,6 @@
         </div>
     </div>    
 
-
-</div>
 
 <style>
 
