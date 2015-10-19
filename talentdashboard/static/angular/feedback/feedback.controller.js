@@ -42,8 +42,8 @@ function FeedbackController(FeedbackRequestService, $modal, $location) {
             }
         });
         modalInstance.result.then(
-            function (e, l) {
-
+            function (sentFeedbackRequests) {
+                getMyRecentlySentRequests();
             }
         );
     }

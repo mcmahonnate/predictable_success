@@ -21,8 +21,8 @@ function FeedbackRequestService($http, $log, FeedbackRequestResource) {
 
         return FeedbackRequestResource.sendFeedbackRequests(requests, success, fail).$promise;
 
-        function success(response) {
-            return response;
+        function success(sentFeedbackRequests) {
+            return sentFeedbackRequests;
         }
 
         function fail(response) {

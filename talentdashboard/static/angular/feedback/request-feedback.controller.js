@@ -32,9 +32,9 @@
 
         function sendFeedbackRequests() {
             FeedbackRequestService.sendFeedbackRequests(vm.selectedReviewers, vm.message)
-                .then(function() {
+                .then(function(sentFeedbackRequests) {
                     Notification.success("Your feedback requests have been sent.");
-                    $modalInstance.close()
+                    $modalInstance.close(sentFeedbackRequests)
                 });
         }
 
