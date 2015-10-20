@@ -89,6 +89,8 @@ class FeedbackSubmission(models.Model):
     reviewer = models.ForeignKey(Employee, related_name='feedback_submissions')
     excels_at = models.TextField(blank=True)
     could_improve_on = models.TextField(blank=True)
+    excels_at_summarized = models.TextField(blank=True)
+    could_improve_on_summarized = models.TextField(blank=True)
     has_been_delivered = models.BooleanField(default=False)
     unread = models.BooleanField(default=True)
     anonymous = models.BooleanField(default=False)

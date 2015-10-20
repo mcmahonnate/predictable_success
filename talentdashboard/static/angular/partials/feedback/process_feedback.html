@@ -1,0 +1,73 @@
+<div class="container">
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<h1>Feedback for {{ processFeedback.submission.subject.full_name }}</h1>
+			<div class="panel activity">
+                    <div class="panel-body">
+                        <div class="activity-items">
+                            <div class="activity-item">
+                                <h2 class="panel-title">In what area do you think I'm awesome?</h2>
+                                <div class="activity-header">
+                                    <div class="activity-owner-avatar-container">
+                                        <span class="medium-headshot">
+                                            <img ng-src="{{ processFeedback.submission.reviewer.avatar_small }}" class="headshot-image">
+                                        </span>
+                                    </div>
+
+                                    <div class="activity-description">
+                                        <span class="activity-title-employee-name">{{ processFeedback.submission.reviewer.full_name }}</span> said
+                                        <span class="timestamp" data-toggle="tooltip" data-placement="top" title="{{ event.date | date:'MMM d, yyyy h:mma' }}">{{ processFeedback.submission.feedback_date | fromNow }}</span>
+                                        <span ng-show="processFeedback.submission.anonymous" class="tag employee-segment-background-color-7 pull-right">Anonymous</span>
+                                    </div>
+                                </div>
+
+                                <div class="comment-copy" style="padding-top: 15px">
+                                    <div class="activity-comment comment-text">{{ processFeedback.submission.excels_at }}</div>
+                                </div>
+                                <div class="comment-editor">
+                                    <form name="commentEditForm">
+                                        <div class="comment-reply-copy">
+                                            <textarea ng-model="processFeedback.submission.excels_at_on_summarized" msd-elastic class="form-control edit-textarea"></textarea>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <h2 class="panel-title">How do you think I can be even more awesome?</h2>
+                                <div class="activity-header">
+                                    <div class="activity-owner-avatar-container">
+                                        <span class="medium-headshot">
+                                            <img ng-src="{{ processFeedback.submission.reviewer.avatar_small }}" class="headshot-image">
+                                        </span>
+                                    </div>
+                                    <div class="activity-description">
+                                        <span class="activity-title-employee-name">{{ processFeedback.submission.reviewer.full_name }}</span> said
+                                        <span class="timestamp" data-toggle="tooltip" data-placement="top" title="{{ event.date | date:'MMM d, yyyy h:mma' }}">{{ processFeedback.submission.feedback_date | fromNow }}</span>
+                                        <span ng-show="processFeedback.submission.anonymous" class="tag employee-segment-background-color-7 pull-right">Anonymous</span>
+                                    </div>
+                                </div>
+
+                                <div class="comment-copy" style="padding-top: 15px">
+                                    <div class="activity-comment comment-text">{{ processFeedback.submission.could_improve_on }}</div>
+                                </div>
+                                <div class="comment-editor">
+                                    <form name="commentEditForm">
+                                        <div class="comment-reply-copy">
+                                            <textarea ng-model="processFeedback.submission.could_improve_on_summarized" msd-elastic class="form-control edit-textarea"></textarea>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <button class="btn btn-default btn-lg" type="button" ng-click="processFeedback.save()">Save</button>
+                            <button class="btn btn-success btn-lg" type="button" ng-click="">Add to Digest</button>
+
+                        </div>
+                    </div>
+
+            </div>
+        </div>
+    </div>
+</div>

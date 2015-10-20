@@ -1,4 +1,5 @@
 from datetime import datetime
+from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import *
 from rest_framework.exceptions import PermissionDenied
@@ -114,6 +115,23 @@ def get_current_digest(request, employee_id):
         return Response(serializer.data)
     except Employee.DoesNotExist:
         raise Http404()
+
+
+
+class RetrieveUpdateDestroySubmission(generics.RetrieveUpdateDestroyAPIView):
+    """ Retrieve, Update, or Delete a Submission via GET, PUT, DELETE.
+    """
+    queryset = FeedbackSubmission.objects.all()
+    permission_classes = (IsAuthenticated,)
+    serializer_class = FeedbackSubmissionSerializerForCoaches
+
+    def get(self, request, pk, format=None):
+        submission = FeedbackSubmission.objects.get(id=pk)
+        employee = submission.subject
+        if not request.user.employee == employee.coach:
+            raise PermissionDenied
+        serializer = FeedbackSubmissionSerializerForCoaches(submission)
+        return Response(serializer.data)
 
 
 @api_view(['POST'])

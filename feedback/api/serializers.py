@@ -75,7 +75,8 @@ class FeedbackSubmissionSerializerForCoaches(serializers.ModelSerializer):
     class Meta:
         model = FeedbackSubmission
         fields = ('id', 'feedback_date', 'subject', 'reviewer',
-                  'excels_at', 'could_improve_on', 'unread',
+                  'excels_at', 'could_improve_on', 'excels_at_summarized',
+                  'could_improve_on_summarized', 'unread',
                   'has_been_delivered', 'anonymous')
 
 
