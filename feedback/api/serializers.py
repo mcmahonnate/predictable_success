@@ -44,6 +44,13 @@ class CreateFeedbackSubmissionSerializer(serializers.ModelSerializer):
         read_only_fields = ['id',]
 
 
+class CoachEditFeedbackSubmissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FeedbackSubmission
+        fields = ['id', 'excels_at_summarized', 'could_improve_on_summarized',]
+        read_only_fields = ['id',]
+
+
 class WriteableFeedbackSubmissionSerializer(serializers.ModelSerializer):
     feedback_date = serializers.DateTimeField(required=False)
     subject = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())

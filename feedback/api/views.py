@@ -8,6 +8,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from serializers import *
 from org.models import Employee
+from permissions import UserIsCoachOfEmployee
 from ..models import FeedbackRequest, FeedbackProgressReport, FeedbackDigest
 
 
@@ -117,21 +118,14 @@ def get_current_digest(request, employee_id):
         raise Http404()
 
 
-
-class RetrieveUpdateDestroySubmission(generics.RetrieveUpdateDestroyAPIView):
-    """ Retrieve, Update, or Delete a Submission via GET, PUT, DELETE.
-    """
+class CoachUpdateFeedbackSubmission(generics.UpdateAPIView):
     queryset = FeedbackSubmission.objects.all()
-    permission_classes = (IsAuthenticated,)
-    serializer_class = FeedbackSubmissionSerializerForCoaches
+    permission_classes = (IsAuthenticated, UserIsCoachOfEmployee,)
+    serializer_class = CoachEditFeedbackSubmissionSerializer
 
-    def get(self, request, pk, format=None):
-        submission = FeedbackSubmission.objects.get(id=pk)
-        employee = submission.subject
-        if not request.user.employee == employee.coach:
-            raise PermissionDenied
-        serializer = FeedbackSubmissionSerializerForCoaches(submission)
-        return Response(serializer.data)
+    def get_employee(self):
+        submission = self.get_object()
+        return submission.subject
 
 
 @api_view(['POST'])
