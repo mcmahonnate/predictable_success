@@ -1180,7 +1180,7 @@ class EmployeeCompensationSummaries(APIView):
 
     def get(self, request, pk, format=None):
         employee = Employee.objects.get(pk=pk)
-        if not employee.is_viewable_by_user(request.user):
+        if not employee.is_viewable_by_user(user=request.user, allowCoach=False):
             raise PermissionDenied
 
         compensation_summaries = CompensationSummary.objects.all()

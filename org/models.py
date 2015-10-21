@@ -184,12 +184,12 @@ class Employee(MPTTModel):
         leadership_count = Leadership.objects.filter(leader__id=self.id, end_date__isnull=True).count()
         return leadership_count > 0
 
-    def is_viewable_by_user(self, user):
+    def is_viewable_by_user(self, user, allowCoach=True):
         if user.is_superuser:
             return True
         if self.user and self.user == user:
             return True
-        if self.coach and self.coach.user and self.coach.user == user:
+        if self.coach and self.coach.user and self.coach.user == user and allowCoach:
             return True
         if user.employee.is_ancestor_of(self):
             return True

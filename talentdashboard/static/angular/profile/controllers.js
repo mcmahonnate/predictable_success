@@ -31,9 +31,6 @@ angular.module('tdb.profile.controllers', [])
         Profile.get(function(data){
             $scope.employee = data;
             $scope.employee.hire_date = $rootScope.parseDate($scope.employee.hire_date);
-            if ($scope.employee.current_leader && $scope.employee.current_leader.id == $rootScope.currentUser.employee.id) {
-                $scope.showCompensation = true;
-            }
             Engagement.query(
                 {id: $scope.employee.id},
                 function (data) {
