@@ -94,6 +94,25 @@ class FeedbackProgressReportSerializer(serializers.Serializer):
     unsolicited_submissions = FeedbackSubmissionSerializerForCoaches(many=True)
 
 
+class FeedbackProgressReportCountsSerializer(serializers.Serializer):
+    employee = SanitizedEmployeeSerializer()
+    unanswered_requests_count = serializers.SerializerMethodField()
+    solicited_submissions_count = serializers.SerializerMethodField()
+    unsolicited_submissions_count = serializers.SerializerMethodField()
+
+    def get_unanswered_requests_count(self, obj):
+        return int(obj.unanswered_requests.count())
+
+    def get_solicited_submissions_count(self, obj):
+        return int(obj.solicited_submissions.count())
+
+    def get_unsolicited_submissions_count(self, obj):
+        return int(obj.unsolicited_submissions.count())
+
+class FeedbackProgressReportsSerializer(serializers.Serializer):
+    progress_reports = FeedbackProgressReportCountsSerializer(many=True)
+
+
 class FeedbackDigestSerializerForCoach(serializers.ModelSerializer):
     subject = SanitizedEmployeeSerializer()
     delivered_by = SanitizedEmployeeSerializer()

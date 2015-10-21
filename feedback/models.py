@@ -135,6 +135,21 @@ class FeedbackDigest(TimeStampedModel):
                 raise OnlyOneCurrentFeedbackDigestAllowed()
         super(FeedbackDigest, self).save(*args, **kwargs)
 
+class FeedbackProgressReports(object):
+    def __init__(self, coach):
+        self.coach = coach
+        self.progress_reports = []
+
+    def load(self):
+        employees = Employee.objects.get_current_employees_by_coach(self.coach.id)
+        for employee in employees:
+            progress_report = FeedbackProgressReport(employee)
+            progress_report.load()
+            if progress_report.unsolicited_submissions.count() > 0 or \
+                progress_report.solicited_submissions.count() > 0 or \
+                progress_report.unanswered_requests.count() > 0:
+                self.progress_reports.append(progress_report)
+
 
 class FeedbackProgressReport(object):
     def __init__(self, employee):
