@@ -3,7 +3,7 @@ var app = angular.module('tdb', [
         'tdb.activity.controllers', 'tdb.activity.services',
         'tdb.checkins.controllers', 'tdb.checkins.services',
         'tdb.comments.controllers', 'tdb.comments.services',
-        'tdb.comp.controllers', 'tdb.comp.services',
+        'tdb.comp.services',
         'tdb.customers.services',
         'tdb.engagement.controllers', 'tdb.engagement.services',
         'tdb.import.controllers', 'tdb.import.services',
