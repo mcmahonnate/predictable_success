@@ -1,20 +1,18 @@
 angular.module('tdb.search.controllers', [])
 
-    .controller('SearchCtrl', ['$scope', '$rootScope', '$routeParams', '$location', '$modal', 'Employee', 'Customers', 'Team', function ($scope, $rootScope, $routeParams, $location, $modal, Employee, Customers, Team) {
+    .controller('SearchCtrl', ['$scope', '$rootScope', '$routeParams', '$location', '$modal', 'EmployeeSearch', 'Customers', 'Team', function ($scope, $rootScope, $routeParams, $location, $modal, EmployeeSearch, Customers, Team) {
 
         //clear search
         $scope.navQuery = '';
-
-        if (!$scope.employees) {
-            $scope.employees = Employee.query(); //!important browser cache buster
-        }
 
         Customers.get(function (data) {
             $scope.customer = data;
         });
 
         if (!$scope.employees && $rootScope.currentUser.can_view_company_dashboard) {
-            $scope.employees = Employee.query();
+            $scope.employees = EmployeeSearch.query();
+        } else if (!$scope.employees && $rootScope.currentUser.is_team_lead) {
+            $scope.employees = EmployeeSearch.myTeam()
         }
  	}])
 
