@@ -161,8 +161,10 @@ class FeedbackProgressReport(object):
         self.unanswered_requests = []
         self.solicited_submissions = []
         self.unsolicited_submissions = []
+        self.recent_feedback_requests_ive_sent = []
 
     def load(self):
         self.unanswered_requests = FeedbackRequest.objects.unanswered_for_requester(self.employee)
         self.solicited_submissions = FeedbackSubmission.objects.solicited_and_ready_for_processing(self.employee)
         self.unsolicited_submissions = FeedbackSubmission.objects.unsolicited_and_ready_for_processing(self.employee)
+        self.recent_feedback_requests_ive_sent = FeedbackRequest.objects.recent_feedback_requests_ive_sent(self.employee)

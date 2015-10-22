@@ -124,6 +124,8 @@ class FeedbackProgressReportCountsSerializer(serializers.Serializer):
     unanswered_requests_count = serializers.SerializerMethodField()
     solicited_submissions_count = serializers.SerializerMethodField()
     unsolicited_submissions_count = serializers.SerializerMethodField()
+    total_submissions_count = serializers.SerializerMethodField()
+    recent_feedback_requests_ive_sent_count = serializers.SerializerMethodField()
 
     def get_unanswered_requests_count(self, obj):
         return int(obj.unanswered_requests.count())
@@ -133,6 +135,14 @@ class FeedbackProgressReportCountsSerializer(serializers.Serializer):
 
     def get_unsolicited_submissions_count(self, obj):
         return int(obj.unsolicited_submissions.count())
+
+    def get_recent_feedback_requests_ive_sent_count(self, obj):
+        return int(obj.recent_feedback_requests_ive_sent.count())
+
+    def get_total_submissions_count(self, obj):
+        total = obj.solicited_submissions.count() + obj.unsolicited_submissions.count()
+        return int(total)
+
 
 
 class FeedbackDigestSerializerForCoach(serializers.ModelSerializer):
