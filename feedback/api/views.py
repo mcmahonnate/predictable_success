@@ -124,7 +124,7 @@ def feedback_progress_report(request, pk):
             raise PermissionDenied
         report = FeedbackProgressReport(employee)
         report.load()
-        serializer = FeedbackProgressReportSerializer(report, many=True)
+        serializer = FeedbackProgressReportSerializer(report)
         return Response(serializer.data)
     except Employee.DoesNotExist:
         raise Http404()
