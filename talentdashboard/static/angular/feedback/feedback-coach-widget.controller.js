@@ -20,8 +20,6 @@
             return FeedbackRequestService.getFeedbackProgressReportForEmployees()
                 .then(function (data) {
                     vm.progressReports = data;
-                    console.log(vm.progressReports)
-                    console.log(vm.progressReports.length);
                     if (vm.progressReports.length > 0) {
                         vm.busy = false;
                     }
