@@ -3,6 +3,7 @@
     <h1>Coaching <a href="#/checkin" ng-show="customer.show_beta_features" class="btn btn-success btn-checkin"><span class="glyphicon glyphicon-plus"></span> Check-In</a></h1>
     <div class="row">
         <div class="col col-sm-5">
+            <div ng-include="'/static/angular/partials/feedback/_widgets/coachees_feedback.html'" ng-controller="FeedbackCoachWidgetController as feedbackCoachWidget"></div>
             <div ng-init="view='coach-view'" ng-include="'/static/angular/partials/_widgets/employees-snapshot.html'"></div>
             <div ng-include="'/static/angular/partials/_widgets/chart-talent-portfolio.html'"></div>
         </div>

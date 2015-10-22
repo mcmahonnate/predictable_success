@@ -134,9 +134,6 @@ class FeedbackProgressReportCountsSerializer(serializers.Serializer):
     def get_unsolicited_submissions_count(self, obj):
         return int(obj.unsolicited_submissions.count())
 
-class FeedbackProgressReportsSerializer(serializers.Serializer):
-    progress_reports = FeedbackProgressReportCountsSerializer(many=True)
-
 
 class FeedbackDigestSerializerForCoach(serializers.ModelSerializer):
     subject = SanitizedEmployeeSerializer()

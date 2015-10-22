@@ -109,7 +109,7 @@ def feedback_progress_reports(request):
     try:
         report = FeedbackProgressReports(request.user.employee)
         report.load()
-        serializer = FeedbackProgressReportsSerializer(report)
+        serializer = FeedbackProgressReportCountsSerializer(report.progress_reports, many=True)
         return Response(serializer.data)
     except Employee.DoesNotExist:
         raise Http404()

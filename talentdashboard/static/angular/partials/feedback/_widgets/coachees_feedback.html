@@ -1,0 +1,20 @@
+<div class="panel employees-snapshot" ng-show="!feedbackCoachWidget.busy">
+    <h2 class="panel-title">Feedback</h2>
+    <div class="employees">
+        <div class="employee" ng-repeat="progressReport in feedbackCoachWidget.progressReports" >
+            <a class="avatar-container pull-left" href="#/employees/{{progressReport.employee.id}}">
+                <div class="xlarge-headshot">
+                    <img ng-src="{{ progressReport.employee.avatar_small }}" alt="{{ progressReport.employee.full_name }}'s avatar" class="headshot-image" />
+                </div>
+            </a>
+            <ul class="employee-details pull-left">
+                <li>
+                    <h3 class="employee-name"><a href="#/employees/{{progressReport.employee.id}}">{{progressReport.employee.full_name}}</a> </h3>
+                </li>
+                <li>Unanswered Requests: {{progressReport.unanswered_requests_count}}</li>
+                <li>Solicited Submissions: {{progressReport.solicited_submissions_count}}</li>
+                <li>Unsolicited Submissions: {{progressReport.unsolicited_submissions_count}}</li>
+            </ul>
+        </div>
+    </div>
+</div>
