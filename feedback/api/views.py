@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from serializers import *
 from org.models import Employee
 from org.api.permissions import UserIsEmployeesCoach, UserIsEmployeeOrCoachOfEmployee
-from ..models import FeedbackRequest, FeedbackProgressReport, FeedbackDigest
+from ..models import FeedbackRequest, FeedbackProgressReport, FeedbackProgressReports, FeedbackDigest
 
 
 # FeedbackRequest
@@ -103,6 +103,17 @@ class FeedbackRequestsToDoList(ListAPIView):
         """
         return FeedbackRequest.objects.pending_for_reviewer(self.request.user.employee)
 
+@api_view(['GET'])
+@permission_classes((IsAuthenticated, ))
+def feedback_progress_reports(request):
+    try:
+        report = FeedbackProgressReports(request.user.employee)
+        report.load()
+        serializer = FeedbackProgressReportsSerializer(report)
+        return Response(serializer.data)
+    except Employee.DoesNotExist:
+        raise Http404()
+
 
 @api_view(['GET'])
 @permission_classes((IsAuthenticated, ))
@@ -113,7 +124,7 @@ def feedback_progress_report(request, pk):
             raise PermissionDenied
         report = FeedbackProgressReport(employee)
         report.load()
-        serializer = FeedbackProgressReportSerializer(report)
+        serializer = FeedbackProgressReportSerializer(report, many=True)
         return Response(serializer.data)
     except Employee.DoesNotExist:
         raise Http404()
