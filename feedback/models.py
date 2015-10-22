@@ -17,6 +17,10 @@ class FeedbackRequestManager(models.Manager):
     def unanswered_for_requester(self, requester):
         return self.filter(requester=requester).filter(submission=None)
 
+    def recent_feedback_requests_ive_sent(self, requester):
+        return self.filter(requester=requester)\
+            .exclude(expiration_date__lt=datetime.today())
+
     def ready_for_processing(self, requester):
         has_no_digest = Q(submission__feedback_digest=None)
         has_no_submission = Q(submission=None)

@@ -87,6 +87,31 @@ class FeedbackSubmissionSerializerForCoaches(serializers.ModelSerializer):
                   'has_been_delivered', 'anonymous')
 
 
+class FeedbackSubmissionSerializerForEmployee(serializers.ModelSerializer):
+    feedback_date = serializers.DateTimeField(required=False)
+    subject = SanitizedEmployeeSerializer()
+    reviewer = serializers.SerializerMethodField()
+    excels_at = serializers.SerializerMethodField()
+    could_improve_on = serializers.SerializerMethodField()
+    
+    def get_reviewer(self, submission):
+        if submission.annonymous:
+            return None
+        return submission.reviewer
+    
+    def get_could_improve_on(self, submission):
+        return submission.could_improve_on_summarized if submission.could_improve_on_summarized else submission.could_improve_on
+
+    def get_excels_at(self, submission):
+        return submission.excels_at_summarized if submission.excels_at_summarized else submission.excels_at
+
+    class Meta:
+        model = FeedbackSubmission
+        fields = ('id', 'feedback_date', 'subject', 'reviewer',
+                  'excels_at', 'could_improve_on', 'unread',
+                  'has_been_delivered', 'anonymous')
+
+
 class FeedbackProgressReportSerializer(serializers.Serializer):
     employee = SanitizedEmployeeSerializer()
     unanswered_requests = FeedbackRequestSerializer(many=True)

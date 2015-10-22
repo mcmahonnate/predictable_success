@@ -1,4 +1,3 @@
-from datetime import datetime
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import *
@@ -8,7 +7,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from serializers import *
 from org.models import Employee
-from permissions import UserIsCoachOfEmployee
+from org.api.permissions import UserIsEmployeesCoach, UserIsEmployeeOrCoachOfEmployee
 from ..models import FeedbackRequest, FeedbackProgressReport, FeedbackDigest
 
 
@@ -39,9 +38,7 @@ class RecentFeedbackRequestsIveSentList(ListAPIView):
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        return FeedbackRequest.objects.all()\
-            .filter(requester=self.request.user.employee)\
-            .exclude(expiration_date__lt=datetime.today())
+        return FeedbackRequest.objects.recent_feedback_requests_ive_sent(requester=self.request.user.employee)
 
 
 class RetrieveFeedbackRequest(RetrieveAPIView):
@@ -57,6 +54,24 @@ class CreateFeedbackSubmission(CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(reviewer=self.request.user.employee)
+
+
+class RetrieveFeedbackSubmission(RetrieveAPIView):
+    permission_classes = (IsAuthenticated, UserIsEmployeeOrCoachOfEmployee,)
+    queryset = FeedbackSubmission.objects.all()
+
+    def get_employee(self):
+        submission = self.get_object()
+        return submission.subject
+
+    def get_serializer_class(self):
+        employee_making_the_request = self.request.user.employee
+        submission = self.get_object()
+        if employee_making_the_request == submission.subject.coach:
+            return FeedbackSubmissionSerializerForCoaches
+        if employee_making_the_request == submission.subject:
+            return FeedbackSubmissionSerializerForEmployee
+        raise Exception("Can't determine which serializer class to use")
 
 
 # Miscellaneous
@@ -120,7 +135,7 @@ def get_current_digest(request, employee_id):
 
 class CoachUpdateFeedbackSubmission(generics.UpdateAPIView):
     queryset = FeedbackSubmission.objects.all()
-    permission_classes = (IsAuthenticated, UserIsCoachOfEmployee,)
+    permission_classes = (IsAuthenticated, UserIsEmployeesCoach,)
     serializer_class = CoachEditFeedbackSubmissionSerializer
 
     def get_employee(self):

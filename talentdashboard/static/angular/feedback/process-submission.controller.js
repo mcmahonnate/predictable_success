@@ -31,7 +31,7 @@
         }
 
         function save() {
-            return FeedbackSubmissionService.updateFeedbackSubmission(vm.submission);
+            return FeedbackSubmissionService.updateCoachSummary(vm.submission);
         }
 
         function cancel() {
