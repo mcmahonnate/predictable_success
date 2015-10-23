@@ -189,3 +189,13 @@ def update_digest_summary(request, employee_id):
         return Response(serializer.data)
     return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+@api_view(['POST'])
+def deliver_digest(request, employee_id):
+    employee = Employee.objects.get(pk=employee_id)
+    if not request.user.employee == employee.coach:
+        raise PermissionDenied
+    digest = FeedbackDigest.objects.get(subject=employee, has_been_delivered=False)
+    digest.deliver(request.user.employee)
+    return Response(status=status.HTTP_204_NO_CONTENT)
+

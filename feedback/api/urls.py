@@ -15,4 +15,5 @@ urlpatterns = [
     url(r'^coachees/(?P<employee_id>[0-9]*)/digests/current/submissions/$', add_submission_to_digest),
     url(r'^coachees/(?P<employee_id>[0-9]*)/digests/current/summary/$', update_digest_summary),
     url(r'^coachees/(?P<employee_id>[0-9]*)/digests/current/$', get_current_digest),
+    url(r'^coachees/(?P<employee_id>[0-9]*)/digests/current/deliver/$', deliver_digest),
 ]

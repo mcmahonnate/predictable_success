@@ -145,6 +145,14 @@ class FeedbackDigest(TimeStampedModel):
                 raise OnlyOneCurrentFeedbackDigestAllowed()
         super(FeedbackDigest, self).save(*args, **kwargs)
 
+    def deliver(self, delivered_by):
+        self.delivered_by = delivered_by
+        self.has_been_delivered = True
+        for submission in self.submissions.all():
+            submission.has_been_delivered = True
+            submission.save()
+        self.save()
+
 class FeedbackProgressReports(object):
     def __init__(self, coach):
         self.coach = coach
