@@ -90,15 +90,10 @@ class FeedbackSubmissionSerializerForCoaches(serializers.ModelSerializer):
 class FeedbackSubmissionSerializerForEmployee(serializers.ModelSerializer):
     feedback_date = serializers.DateTimeField(required=False)
     subject = SanitizedEmployeeSerializer()
-    reviewer = serializers.SerializerMethodField()
+    reviewer = SanitizedEmployeeSerializer(source='anonymized_reviewer')
     excels_at = serializers.SerializerMethodField()
     could_improve_on = serializers.SerializerMethodField()
-    
-    def get_reviewer(self, submission):
-        if submission.annonymous:
-            return None
-        return submission.reviewer
-    
+
     def get_could_improve_on(self, submission):
         return submission.could_improve_on_summarized if submission.could_improve_on_summarized else submission.could_improve_on
 
@@ -144,11 +139,10 @@ class FeedbackProgressReportCountsSerializer(serializers.Serializer):
         return int(total)
 
 
-
-class FeedbackDigestSerializerForCoach(serializers.ModelSerializer):
+class FeedbackDigestSerializer(serializers.ModelSerializer):
     subject = SanitizedEmployeeSerializer()
     delivered_by = SanitizedEmployeeSerializer()
-    submissions = FeedbackSubmissionSerializerForCoaches(many=True)
+    submissions = FeedbackSubmissionSerializerForEmployee(many=True)
 
     class Meta:
         model = FeedbackDigest
@@ -156,3 +150,7 @@ class FeedbackDigestSerializerForCoach(serializers.ModelSerializer):
 
 class AddSubmissionToDigestSerializer(serializers.Serializer):
     submission = serializers.PrimaryKeyRelatedField(queryset=FeedbackSubmission.objects.all())
+
+
+class EditDigestSummarySerializer(serializers.Serializer):
+    summary = serializers.CharField()

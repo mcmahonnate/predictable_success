@@ -24,12 +24,16 @@
                 });
         }
 
-        function addToDigest() {
+        function checkForUnsavedChanges() {
             if(vm.form.$dirty) {
                 if($window.confirm("You have unsaved changes. Would you like to save your changes before closing?")) {
                     save();
                 }
             }
+        }
+
+        function addToDigest() {
+            checkForUnsavedChanges();
             FeedbackDigestService.addSubmissionToCurrentDigest(vm.submission)
                 .then(function() {
                     Notification.success("The feedback has been added to the digest.");
@@ -46,11 +50,7 @@
         }
 
         function close() {
-            if(vm.form.$dirty) {
-                if($window.confirm("You have unsaved changes. Would you like to save your changes before closing?")) {
-                    save();
-                }
-            }
+            checkForUnsavedChanges();
             $location.path('/feedback/' + vm.submission.subject.id + '/worksheet');
         }
     }

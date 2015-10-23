@@ -5,11 +5,12 @@ angular
 function FeedbackDigestService($log, $http) {
     return {
         getCurrentDigestForEmployee: getCurrentDigestForEmployee,
-        addSubmissionToCurrentDigest: addSubmissionToCurrentDigest
+        addSubmissionToCurrentDigest: addSubmissionToCurrentDigest,
+        updateSummaryOfCurrentDigest: updateSummaryOfCurrentDigest
     };
 
-    function getCurrentDigestForEmployee(employee) {
-        var url = '/api/v1/feedback/coachees/' + employee.id + '/digests/current/';
+    function getCurrentDigestForEmployee(employeeId) {
+        var url = '/api/v1/feedback/coachees/' + employeeId + '/digests/current/';
         return $http.get(url)
             .then(success)
             .catch(fail);
@@ -35,6 +36,21 @@ function FeedbackDigestService($log, $http) {
 
         function fail(response) {
             $log.error('addSubmissionToDigest failed');
+        }
+    }
+
+    function updateSummaryOfCurrentDigest(submission) {
+        var url = '/api/v1/feedback/coachees/' + submission.subject.id + '/digests/current/summary/';
+        return $http.post(url, {'summary': submission.summary})
+            .then(success)
+            .catch(fail);
+
+        function success(response) {
+            return response.data;
+        }
+
+        function fail(response) {
+            $log.error('updateSummaryOfCurrentDigest failed');
         }
     }
 }

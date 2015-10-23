@@ -110,6 +110,12 @@ class FeedbackSubmission(models.Model):
             self.feedback_request.save()
         super(FeedbackSubmission, self).save(*args, **kwargs)
 
+    @property
+    def anonymized_reviewer(self):
+        if self.anonymous:
+            return None
+        return self.reviewer
+
     def __str__(self):
         return "Feedback submission by %s for %s" % (self.reviewer, self.subject)
 
