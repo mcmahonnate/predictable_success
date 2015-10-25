@@ -148,9 +148,13 @@ class FeedbackDigestSerializer(serializers.ModelSerializer):
         model = FeedbackDigest
 
 
-class AddSubmissionToDigestSerializer(serializers.Serializer):
+class AddSubmissionToDigestSerializer(serializers.ModelSerializer):
     submission = serializers.PrimaryKeyRelatedField(queryset=FeedbackSubmission.objects.all())
 
+    class Meta:
+        model = FeedbackDigest
 
-class EditDigestSummarySerializer(serializers.Serializer):
-    summary = serializers.CharField()
+
+class EditFeedbackDigestSerializer(serializers.Serializer):
+    summary = serializers.CharField(required=False)
+    has_been_delivered = serializers.BooleanField(required=False)

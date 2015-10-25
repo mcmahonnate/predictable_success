@@ -149,7 +149,7 @@
 
 					<h2>Your Feedback Summary for <!-- Employee Name --></h2>
 					<textarea class="form-control" ng-model="feedbackWorksheet.digest.summary"></textarea>
-					<button class="btn-primary pull-right">Send to <!-- Employee Name --></button>
+					<button class="btn-primary pull-right" ng-click="feedbackWorksheet.deliverDigest()">Send to <!-- Employee Name --></button>
 					<button class="btn-default" ng-click="feedbackWorksheet.save()">Save</button>
 					<button class="btn-default">Print</button>
 				</form>	

@@ -6,7 +6,8 @@ function FeedbackDigestService($log, $http) {
     return {
         getCurrentDigestForEmployee: getCurrentDigestForEmployee,
         addSubmissionToCurrentDigest: addSubmissionToCurrentDigest,
-        updateSummaryOfCurrentDigest: updateSummaryOfCurrentDigest
+        deliverDigest: deliverDigest,
+        save: save
     };
 
     function getCurrentDigestForEmployee(employeeId) {
@@ -39,9 +40,14 @@ function FeedbackDigestService($log, $http) {
         }
     }
 
-    function updateSummaryOfCurrentDigest(submission) {
-        var url = '/api/v1/feedback/coachees/' + submission.subject.id + '/digests/current/summary/';
-        return $http.post(url, {'summary': submission.summary})
+    function deliverDigest(digest) {
+        digest.has_been_delivered = true;
+        return save(digest);
+    }
+
+    function save(digest) {
+        var url = '/api/v1/feedback/coachees/' + digest.subject.id + '/digests/current/';
+        return $http.post(url, digest)
             .then(success)
             .catch(fail);
 
@@ -50,7 +56,7 @@ function FeedbackDigestService($log, $http) {
         }
 
         function fail(response) {
-            $log.error('updateSummaryOfCurrentDigest failed');
+            $log.error('save failed');
         }
     }
 }

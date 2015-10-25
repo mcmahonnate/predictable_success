@@ -10,6 +10,7 @@
         vm.getFeedbackProgressReport = getFeedbackProgressReport;
         vm.getCurrentDigest = getCurrentDigest;
         vm.save = save;
+        vm.deliverDigest = deliverDigest;
         activate();
 
         function activate() {
@@ -34,9 +35,16 @@
         }
 
         function save() {
-            return FeedbackDigestService.updateSummaryOfCurrentDigest(vm.digest)
+            return FeedbackDigestService.save(vm.digest)
                 .then(function (data) {
                     Notification.success("Your changes were saved.")
+                });
+        }
+
+        function deliverDigest() {
+            return FeedbackDigestService.deliverDigest(vm.digest)
+                .then(function (data) {
+                    Notification.success("The digest will be delivered to " + vm.digest.subject.full_name + ".");
                 });
         }
     }
