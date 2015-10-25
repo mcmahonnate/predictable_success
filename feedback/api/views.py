@@ -161,9 +161,9 @@ class RetrieveUpdateCurrentFeedbackDigest(APIView):
         if serializer.is_valid():
             employee = self.get_employee()
             digest = FeedbackDigest.objects.get(subject=employee, has_been_delivered=False)
-            if serializer.validated_data.has_key('summary'):
+            if 'summary' in serializer.validated_data:
                 digest.summary = serializer.validated_data['summary']
-            if digest.has_been_delivered is False and serializer.validated_data.has_key('has_been_delivered'):
+            if digest.has_been_delivered is False and 'has_been_delivered' in serializer.validated_data:
                 has_been_delivered = serializer.validated_data['has_been_delivered']
                 if has_been_delivered:
                     digest.deliver(request.user.employee)
