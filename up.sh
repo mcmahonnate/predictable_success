@@ -9,8 +9,8 @@ elif [ ! -z "$ENVIRONMENT" ]; then
     echo "ERROR: You almost ran up.sh on a non-dev environment"
     exit 1
 else
-    python manage.py collectstatic --noinput --settings=talentdashboard.settings.local;
     pip install -r requirements.txt;
+    python manage.py collectstatic --noinput --settings=talentdashboard.settings.local;
     python manage.py runserver 0.0.0.0:8000
 fi
 

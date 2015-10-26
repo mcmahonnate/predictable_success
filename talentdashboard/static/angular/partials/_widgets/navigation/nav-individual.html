@@ -1,5 +1,16 @@
 <nav role="navigation" aria-label="Main menu">
-    <div role="menubar" ng-controller="NavigationCtrl">
+    
+    <div ng-click="toggleMenu()">
+        <i class="fa fa-bars mobile-nav-trigger"></i>
+    </div>
+    <div class="mobile-logo-container">
+        <a href="#/">
+            <img src="../static/images/compass-logo-white.png" class="logo" alt="Home" />
+        </a>
+    </div> 
+
+
+    <div role="menubar" ng-controller="NavigationCtrl" >
         <div role="menuitem" class="logo-container" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Home">
             <a href="#/"><img src="../static/images/compass-logo-white.png" class="logo" alt="Home" /></a>
         </div>
@@ -9,14 +20,15 @@
                 Profile
             </a>    
         </div>
-
         <div role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == myTab}" ng-click="setActiveTab(myTab)">
             <a href="#/feedback">
                 <span class="fa fa-comments team_menu nav-item-icon"></span>
                 Feedback
             </a>
         </div>        
-    </div>    
+    </div>
+
+
 </nav>
 
 
@@ -27,6 +39,30 @@
     <ul class="account-action-items">
         <li>
             <i class="fa fa-sign-out"></i> <a class="dashboard" href="/logout">Sign Out</a>
+        </li>
+    </ul>
+</div>
+
+
+<div id="menuleft" ng-class="{retract:!showmenu,slide:showmenu}">
+    <ul>
+        <li>
+            <a href="#/my-profile" ng-click="toggleMenu()">
+                <span class="glyphicon glyphicon-user team_menu nav-item-icon"></span>
+                My Profile
+            </a> 
+        </li>
+        <li>
+            <a href="#/feedback" ng-click="toggleMenu()">
+                <span class="fa fa-comments team_menu nav-item-icon"></span>
+                Feedback
+            </a>
+        </li>
+        <li>
+            <a href="#/feedback" ng-click="toggleMenu()">
+                <span class="fa fa-comments team_menu nav-item-icon"></span>
+                Coaching
+            </a>
         </li>
     </ul>
 </div>

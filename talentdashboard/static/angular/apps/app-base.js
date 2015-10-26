@@ -17,7 +17,7 @@ var app = angular.module('tdb', [
         'tdb.tasks.controllers', 'tdb.tasks.services',
         'angular.filter',
         'feedback',
-        'angular-carousel', 'analytics', 'ui.bootstrap', 'ngCsv','ngImgCrop', 'ngRoute', 'ngAnimate', 'ui-notification', 'ngMessages', 'readMore', 'ngCookies', 'ui.select', 'selectize'])
+        'angular-carousel', 'analytics', 'ui.bootstrap', 'ngCsv','ngImgCrop', 'ngRoute', 'ngAnimate', 'ui-notification', 'ngMessages', 'readMore', 'ngCookies', 'ui.select', 'selectize','ngTouch'])
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.
             when('/', {templateUrl: '/static/angular/partials/feedback/index.html', controller: 'FeedbackController as feedback', resolve: {authorizeRoute: authorizeRoute}}).

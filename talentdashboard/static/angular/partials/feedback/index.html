@@ -1,17 +1,11 @@
 <div class="container">
     <div ng-show="feedback.myRecentlySentRequests.length">
-        <div class="pull-right">
-            <button class="btn btn-success" ng-click="feedback.requestFeedback()" type="button">
-                Ask for Feedback
-            </button>
-            <button class="btn btn-success" ng-click="feedback.giveUnsolicitedFeedback()" type="button">
-                Give Feedback
-            </button>
-        </div>
-        <h1>Foolish 360 Feedback</h1>
+        <h1>Foolish 360 Feedback
+            <button class="btn btn-success btn-feedback" ng-click="feedback.requestFeedback()" type="button">Ask for Feedback</button>
+            <button class="btn btn-success btn-feedback" ng-click="feedback.giveUnsolicitedFeedback()" type="button">Give Feedback</button>
+        </h1>
     </div>    
     <div ng-include src="'/static/angular/partials/feedback/_welcome.html'"></div>
-
     <div class="panel">
         <h2 class="panel-title">
             {{ feedback.feedbackRequests.length }} 
@@ -19,12 +13,12 @@
             <span ng-show="feedback.feedbackRequests.length != 1">People want</span> 
             feedback
         </h2>
-        <table class="table">
+        <table class="table responsive-table">
             <thead>
                 <tr>
-                  <th style="width:30%">Person</th>
-                  <th style="width:15%">Sent</th>
-                  <th style="width:30%">Where they'd like feedback</th>
+                  <th class="width-percent-30">Person</th>
+                  <th class="width-percent-15">Sent</th>
+                  <th class="width-percent-30">Where they'd like feedback</th>
                   <th></th>
                 </tr>
             </thead>
@@ -36,14 +30,10 @@
                         </span>  
                         {{ request.requester.full_name }}
                     </td>
+                    <td class="timeago">{{ request.request_date | fromNow }}</td>
+                    <td class="message">{{ request.message }}</td>    
                     <td>
-                        {{ request.request_date | fromNow }}
-                    </td>
-                    <td>
-                        {{ request.message }}
-                    </td>    
-                    <td>
-                        <a class="btn btn-default pull-right" ng-href="#/feedback/request/{{ request.id }}/reply/" type="button">
+                        <a class="btn btn-default btn-sm give-feedback-btn" ng-href="#/feedback/request/{{ request.id }}/reply/" type="button">
                             Give Feedback
                         </a>
                     </td>
@@ -54,122 +44,36 @@
             </tbody>
         </table>
     </div>
-
     <div class="panel" ng-show="feedback.myRecentlySentRequests.length">
-        <h2 class="panel-title">People I've asked for feedback</h1>
-            <table class="table">
-                <thead>
-                    <tr>
-                      <th style="width:30%">Person</th>
-                      <th style="width:15%">Sent</th>
-                      <th>Completed</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="request in feedback.myRecentlySentRequests | reverse">
-                        <td>
-                            <span class="tiny-headshot">
-                                <img ng-src="{{ request.reviewer.avatar_small }}" alt="{{ request.reviewer.full_name }}'s avatar" />
-                            </span>  
-                            {{ request.reviewer.full_name }}
-                        </td>
-                        <td>
-                            {{ request.request_date | fromNow }}
-                        </td>
-                        <td>
-                            {{ request.has_been_answered }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>    
-
-
-<style>
-
-
-.comment-title-employee-name {
-    font-size: 38px;
-}
-.get-started-text {
-    font-size: 18px;
-    line-height: 24px;
-    color: #777;
-    margin-bottom: 55px;
-}
-
-
-
-.animate-repeat.ng-move,
-.animate-repeat.ng-enter,
-.animate-repeat.ng-leave {
-  transition:all linear 0.5s;
-}
-
-.animate-repeat.ng-leave.ng-leave-active,
-.animate-repeat.ng-move,
-.animate-repeat.ng-enter {
-  opacity:0;
-}
-
-.animate-repeat.ng-leave,
-.animate-repeat.ng-move.ng-move-active,
-.animate-repeat.ng-enter.ng-enter-active {
-  opacity:1;
-}
-.feedback-reports-container {
-    margin-top: 30px;
-    margin-bottom: 30px;
-}
-.feedback-report {
-    margin-top: 25px;
-    padding-top: 25px;
-    text-align: center;
-}
-.feedback-report-item {
-    margin-top: 15px;
-    padding-top: 15px;
-
-}
-
-.modal {
-  text-align: center;
-  padding: 0!important;
-}
-
-.modal:before {
-    content: '';
-    display: inline-block;
-    height: 100%;
-    vertical-align: middle;
-    margin-right: -4px; /* Adjusts for spacing */
-    margin-top: -8%;
-}
-
-.modal-dialog {
-    display: inline-block;
-    text-align: left;
-    vertical-align: middle;
-    max-width: 475px;
-}
-.modal-body {
-    padding: 40px 30px;
-}
-
-/* Select 2 fixes */
-.ui-select-multiple.ui-select-bootstrap .ui-select-match-item {
-    background-color: rgb(240, 248, 255);
-}
-.ui-select-match-close {
-    margin: 0;
-}
-.btn-xs, .btn-group-xs > .btn {
-    font-size: 14px;
-    line-height: 1.5;
-}
-.ui-select-multiple.ui-select-bootstrap .ui-select-match .close {
-    font-size: 22px;
-}
-
-</style>
+        <h2 class="panel-title">People I've asked for feedback</h2>
+        <table class="table responsive-table">
+            <thead>
+                <tr>
+                  <th class="width-percent-30">Person</th>
+                  <th class="width-percent-15">Sent</th>
+                  <th class="width-percent-30">Where you'd like feedback</th>
+                  <th class="width-percent-10 centered">Completed</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="request in feedback.myRecentlySentRequests | reverse">
+                    <td>
+                        <span class="tiny-headshot">
+                            <img ng-src="{{ request.reviewer.avatar_small }}" alt="{{ request.reviewer.full_name }}'s avatar" />
+                        </span>  
+                        {{ request.reviewer.full_name }}
+                    </td>
+                    <td class="timeago">
+                        {{ request.request_date | fromNow }}
+                    </td>
+                    <td class="message">
+                        {{ request.message }}&nbsp;
+                    </td>                          
+                    <td class="centered">
+                        <i ng-show="{{ request.has_been_answered }}" class="fa fa-check" title="Completed"></i>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>    

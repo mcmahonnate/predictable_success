@@ -3,9 +3,9 @@
         <div role="menuitem" class="logo-container" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Home">
             <a href="#/"><img src="../static/images/compass-logo-white.png" class="logo" alt="Home" /></a>
         </div>
-
-        <div role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == myTab}" ng-click="setActiveTab(myTab)" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="My Stuff">
+        <div role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == myTab}" ng-click="setActiveTab(myTab)">
             <span class="glyphicon glyphicon-user team_menu nav-item-icon"></span>
+            My Stuff
             <div class="subnav" role="menu">
                 <div>
                     <div class="subnav-title">My Stuff</div>
@@ -17,13 +17,10 @@
                 </div>
             </div>
         </div>
-
-         <div ng-show="activeEmployee.is_lead" role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == employeeTab}" ng-click="setActiveTab(employeeTab)" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{activeEmployee.full_name}}">
-
+        <div ng-show="activeEmployee.is_lead" role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == employeeTab}" ng-click="setActiveTab(employeeTab)">
             <div class="small-headshot team_menu">
-                    <img ng-src="{{ activeEmployee.avatar_small }}" class="headshot-image nav-input">
+                <img ng-src="{{ activeEmployee.avatar_small }}" class="headshot-image nav-input">
             </div>
-
             <div class="subnav" role="menu">
                 <div>
                     <div class="subnav-title">{{ activeEmployee.full_name }}</div>
@@ -34,9 +31,9 @@
                 </div>
             </div>
         </div>
-
-        <div role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == dashboardsTab}" ng-click="setActiveTab(dashboardsTab)" ng-controller="TeamListCtrl"  rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Dashboards">
+        <div role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == dashboardsTab}" ng-click="setActiveTab(dashboardsTab)" ng-controller="TeamListCtrl">
             <span class="nav-item-icon fa fa-tachometer filter_menu"></span>
+            Dashboard
             <div class="subnav" role="menu">
                 <div>
                     <div class="subnav-title">Company</div>
@@ -55,8 +52,9 @@
             </div>
         </div>
 
-        <div role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == screenerTab}" ng-click="setActiveTab(screenerTab)" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Screener">
+        <div role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == screenerTab}" ng-click="setActiveTab(screenerTab)">
             <span class="nav-item-icon glyphicon glyphicon-th filter_menu"></span>
+            Screener
             <div class="subnav" role="menu">
 
                 <div class="subnav-title">Development Zones</div>
@@ -113,8 +111,9 @@
             </div>
         </div>
 
-        <div role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == reportsTab}" ng-click="setActiveTab(reportsTab)" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Reports">
+        <div role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == reportsTab}" ng-click="setActiveTab(reportsTab)">
             <span class="fa fa-file-text nav-item-icon"></span>
+            Reports
             <div class="subnav subnav-reports" role="menu">
                 <div>
                     <div class="subnav-title">Reports</div>
@@ -138,8 +137,9 @@
                 </div>
             </div>
         </div>
-        <div role="menuitem" aria-haspopup="true" class="nav-item"  ng-controller="SearchCtrl" ng-class="{'nav-item-active': $root.activeTab == searchTab}" ng-click="setActiveTab(searchTab); clearSearch();" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Search">
+        <div role="menuitem" aria-haspopup="true" class="nav-item"  ng-controller="SearchCtrl" ng-class="{'nav-item-active': $root.activeTab == searchTab}" ng-click="setActiveTab(searchTab); clearSearch();">
             <div class="fa fa-search nav-item-icon"></div>
+            Search
             <div class="subnav subnav-search" role="menu" ng-click="setActiveTab(searchTab);">
                 <div class="subnav-title">Search</div>
                 <div class="subnav-search-input">
@@ -160,8 +160,9 @@
                 </div>
             </div>
         </div>
-        <div role="menuitem" aria-haspopup="true" class="nav-item"  ng-if="currentUser.can_edit_employees" ng-class="{'nav-item-active': $root.activeTab == settingsTab}" ng-click="setActiveTab(settingsTab)" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Settings">
+        <div role="menuitem" aria-haspopup="true" class="nav-item"  ng-if="currentUser.can_edit_employees" ng-class="{'nav-item-active': $root.activeTab == settingsTab}" ng-click="setActiveTab(settingsTab)">
             <span class="fa fa-gear employee_menu nav-item-icon"></span>
+            Settings
             <div class="subnav subnav-settings" role="menu">
                 <div ng-show="currentUser.can_edit_employees">
                     <div class="subnav-title">Settings</div>
@@ -188,6 +189,30 @@
     <ul class="account-action-items">
         <li>
             <i class="fa fa-sign-out"></i> <a class="dashboard" href="/logout">Sign Out</a>
+        </li>
+    </ul>
+</div>
+
+
+<div id="menuleft" ng-class="{retract:!showmenu,slide:showmenu}">
+    <ul>
+        <li>
+            <a href="#/my-profile" ng-click="toggleMenu()">
+                <span class="glyphicon glyphicon-user team_menu nav-item-icon"></span>
+                My Profile
+            </a> 
+        </li>
+        <li>
+            <a href="#/feedback" ng-click="toggleMenu()">
+                <span class="fa fa-comments team_menu nav-item-icon"></span>
+                Feedback
+            </a>
+        </li>
+        <li>
+            <a href="#/feedback" ng-click="toggleMenu()">
+                <span class="fa fa-comments team_menu nav-item-icon"></span>
+                Coaching
+            </a>
         </li>
     </ul>
 </div>
