@@ -1,4 +1,4 @@
-<div class="container">
+<div id="feedback" class="container">
     <div ng-show="feedback.myRecentlySentRequests.length">
         <h1>Foolish 360 Feedback
             <button class="btn btn-success btn-feedback" ng-click="feedback.requestFeedback()" type="button">Ask for Feedback</button>
@@ -32,8 +32,8 @@
                     </td>
                     <td class="timeago">{{ request.request_date | fromNow }}</td>
                     <td class="message">{{ request.message }}</td>    
-                    <td>
-                        <a class="btn btn-default btn-sm give-feedback-btn" ng-href="#/feedback/request/{{ request.id }}/reply/" type="button">
+                    <td class="right-align">
+                        <a class="btn btn-default btn-sm give-feedback-btn text-bolded" ng-href="#/feedback/request/{{ request.id }}/reply/" type="button">
                             Give Feedback
                         </a>
                     </td>

@@ -1,12 +1,16 @@
 <div class="container">
-    <h1>Feedback for {{ submitFeedback.subject.full_name }}</h1>
-    <div class="panel panel-default">
-        <div ng-if="submitFeedback.feedbackRequest.message">
-            <h3>Here are specific areas I'd like feedback on:</h3>
-            <p class="feedback-message">"{{ submitFeedback.feedbackRequest.message }}"</p>
-        </div>
-        <sm-feedback-submission-form feedback="submitFeedback.feedback" subject="submitFeedback.subject" submit="submitFeedback.submitFeedback(form)" cancel="submitFeedback.cancel()" />
-    </div>
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <h1>Feedback for {{ submitFeedback.subject.full_name }}</h1>
+            <div class="panel">
+                <div ng-if="submitFeedback.feedbackRequest.message">
+                    <h3>Here are specific areas I'd like feedback on:</h3>
+                    <p class="feedback-message">"{{ submitFeedback.feedbackRequest.message }}"</p>
+                </div>
+                <sm-feedback-submission-form feedback="submitFeedback.feedback" subject="submitFeedback.subject" submit="submitFeedback.submitFeedback(form)" cancel="submitFeedback.cancel()" />
+            </div>
+        </div>    
+    </div>    
 </div>
 
 <style>

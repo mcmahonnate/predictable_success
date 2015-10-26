@@ -12,6 +12,12 @@
         display: block; 
     }
 }
+.mobile-hide {
+    @media only screen and (max-width : 640px) {
+        display:none;
+    }    
+}
+
 
 /* Alignments */
 .centered {
@@ -30,6 +36,10 @@
 }
 .rounded {
     border-radius: 5px;
+}
+
+.text-bolded {
+    font-weight: bold;
 }
 
 .stripes div:nth-child(even), .stripes li:nth-child(odd) {

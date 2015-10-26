@@ -1,5 +1,19 @@
 <nav role="navigation" aria-label="Main menu">
-    <div role="menubar" ng-controller="NavigationCtrl">
+
+    <!-- Mobile -->
+    <div class="mobile-navigation"> 
+        <div ng-click="toggleMenu()" class="mobile-menu-btn pull-right">
+            Menu
+        </div>
+        <div class="mobile-logo-container">
+            <a href="#/">
+                <img src="../static/images/compass-logo-white.png" class="logo" alt="Home" />
+            </a>
+        </div> 
+    </div>    
+
+    <!-- Desktop/large screen formats -->
+    <div class="desktop-navigation" role="menubar" ng-controller="NavigationCtrl">
         <div role="menuitem" class="logo-container" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Home">
             <a href="#/"><img src="../static/images/compass-logo-white.png" class="logo" alt="Home" /></a>
         </div>
@@ -177,11 +191,11 @@
                 </div>
             </div>
         </div>
-         <a href="" ng-click="setPrivacyMode()" class="privacy-mode" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Privacy Mode">Privacy Mode</a>   
+        <a href="" ng-click="setPrivacyMode()" class="privacy-mode" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Privacy Mode">Privacy Mode</a>   
     </div> 
-
 </nav>
 
+<!-- User Account Menu -->
 <div class="account-menu">
     <div class="show-account-menu tiny-headshot">
         <img ng-src="{{currentUser.employee.avatar_small}}" alt="Your avatar" />
@@ -193,13 +207,23 @@
     </ul>
 </div>
 
-
+<!-- Slidein Menu -->
 <div id="menuleft" ng-class="{retract:!showmenu,slide:showmenu}">
     <ul>
         <li>
             <a href="#/my-profile" ng-click="toggleMenu()">
                 <span class="glyphicon glyphicon-user team_menu nav-item-icon"></span>
-                My Profile
+                My Stuff
+                <div class="subnav" role="menu">
+                    <div>
+                        <div class="subnav-title">My Stuff</div>
+                        <ul>
+                            <li ng-if="currentUser.is_team_lead"><a ng-href="#/my-team">My Team</a></li>
+                            <li ng-if="currentUser.can_coach_employees"><a ng-href="#/my-coachees">My Coachees</a></li>
+                            <li><a ng-href="#/feedback">My Feedback</a></li>
+                        </ul>
+                    </div>
+                </div>
             </a> 
         </li>
         <li>
