@@ -9,6 +9,7 @@ function FeedbackRequestService($http, $log, FeedbackRequestResource) {
         getFeedbackRequests: getFeedbackRequests,
         getPotentialReviewers: getPotentialReviewers,
         getFeedbackProgressReportForEmployee: getFeedbackProgressReportForEmployee,
+        getFeedbackProgressReportForEmployees: getFeedbackProgressReportForEmployees,
         getMyRecentlySentRequests: getMyRecentlySentRequests
     };
 
@@ -92,6 +93,21 @@ function FeedbackRequestService($http, $log, FeedbackRequestResource) {
 
         function fail(response) {
             $log.error('getFeedbackProgressReportForEmployee failed');
+        }
+    }
+
+    function getFeedbackProgressReportForEmployees() {
+        var url = '/api/v1/feedback/progress-reports/';
+        return $http.get(url)
+            .then(success)
+            .catch(fail);
+
+        function success(response) {
+            return response.data;
+        }
+
+        function fail(response) {
+            $log.error('getFeedbackProgressReportForEmployees failed');
         }
     }
 }

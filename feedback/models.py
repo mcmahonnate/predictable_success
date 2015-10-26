@@ -17,6 +17,10 @@ class FeedbackRequestManager(models.Manager):
     def unanswered_for_requester(self, requester):
         return self.filter(requester=requester).filter(submission=None)
 
+    def recent_feedback_requests_ive_sent(self, requester):
+        return self.filter(requester=requester)\
+            .exclude(expiration_date__lt=datetime.today())
+
     def ready_for_processing(self, requester):
         has_no_digest = Q(submission__feedback_digest=None)
         has_no_submission = Q(submission=None)
@@ -89,6 +93,8 @@ class FeedbackSubmission(models.Model):
     reviewer = models.ForeignKey(Employee, related_name='feedback_submissions')
     excels_at = models.TextField(blank=True)
     could_improve_on = models.TextField(blank=True)
+    excels_at_summarized = models.TextField(blank=True)
+    could_improve_on_summarized = models.TextField(blank=True)
     has_been_delivered = models.BooleanField(default=False)
     unread = models.BooleanField(default=True)
     anonymous = models.BooleanField(default=False)
@@ -103,6 +109,12 @@ class FeedbackSubmission(models.Model):
             self.feedback_request.was_responded_to = True
             self.feedback_request.save()
         super(FeedbackSubmission, self).save(*args, **kwargs)
+
+    @property
+    def anonymized_reviewer(self):
+        if self.anonymous:
+            return None
+        return self.reviewer
 
     def __str__(self):
         return "Feedback submission by %s for %s" % (self.reviewer, self.subject)
@@ -133,6 +145,29 @@ class FeedbackDigest(TimeStampedModel):
                 raise OnlyOneCurrentFeedbackDigestAllowed()
         super(FeedbackDigest, self).save(*args, **kwargs)
 
+    def deliver(self, delivered_by):
+        self.delivered_by = delivered_by
+        self.has_been_delivered = True
+        for submission in self.submissions.all():
+            submission.has_been_delivered = True
+            submission.save()
+        self.save()
+
+class FeedbackProgressReports(object):
+    def __init__(self, coach):
+        self.coach = coach
+        self.progress_reports = []
+
+    def load(self):
+        employees = Employee.objects.get_current_employees_by_coach(self.coach.id)
+        for employee in employees:
+            progress_report = FeedbackProgressReport(employee)
+            progress_report.load()
+            if progress_report.unsolicited_submissions.count() > 0 or \
+                progress_report.solicited_submissions.count() > 0 or \
+                progress_report.unanswered_requests.count() > 0:
+                self.progress_reports.append(progress_report)
+
 
 class FeedbackProgressReport(object):
     def __init__(self, employee):
@@ -140,8 +175,10 @@ class FeedbackProgressReport(object):
         self.unanswered_requests = []
         self.solicited_submissions = []
         self.unsolicited_submissions = []
+        self.recent_feedback_requests_ive_sent = []
 
     def load(self):
         self.unanswered_requests = FeedbackRequest.objects.unanswered_for_requester(self.employee)
         self.solicited_submissions = FeedbackSubmission.objects.solicited_and_ready_for_processing(self.employee)
         self.unsolicited_submissions = FeedbackSubmission.objects.unsolicited_and_ready_for_processing(self.employee)
+        self.recent_feedback_requests_ive_sent = FeedbackRequest.objects.recent_feedback_requests_ive_sent(self.employee)

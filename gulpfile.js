@@ -6,13 +6,16 @@ var concat = require('gulp-concat');
 var angularFilesort = require('gulp-angular-filesort');
 var inject = require('gulp-inject');
 var iife = require('gulp-iife');
+var sourcemaps = require('gulp-sourcemaps');
 
 gulp.task('scripts', function() {
     return gulp.src('./talentdashboard/static/angular/feedback/**/*.js')
+        .pipe(sourcemaps.init())
         .pipe(angularFilesort())
         .pipe(concat('feedback.js'))
         .pipe(iife())
         .pipe(ngAnnotate())
+        .pipe(sourcemaps.write())
         .pipe(gulp.dest('./talentdashboard/staticfiles/'));
 });
 

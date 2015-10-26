@@ -31,7 +31,7 @@
 									{{ submission.feedback_date | fromNow }}
 								</td>
 								<td>
-									<a href="" class="btn btn-sm btn-default pull-right">View Feedback</a>
+									<a ng-href="#/feedback/submission/{{ submission.id }}/process" class="btn btn-sm btn-default pull-right">View Feedback</a>
 								</td>
 							</tr>
 			      		</tbody>
@@ -66,7 +66,7 @@
 									{{ submission.feedback_date | fromNow }}
 								</td>
 								<td>
-									<a href="" class="btn btn-sm btn-default pull-right">View Feedback</a>
+									<a ng-href="#/feedback/submission/{{ submission.id }}/process" class="btn btn-sm btn-default pull-right">View Feedback</a>
 								</td>
 							</tr>
 			      		</tbody>
@@ -106,15 +106,51 @@
 			<h2>Feedback Digest</h2>
 			<div class="panel">
 				<form>
-					<h3>In what areas...</h3>
-					<div><!-- Feedback --></div>
-					<h3>In what areas...</h3>
-					<div><!-- Feedback --></div>
+					<h3>In what area do you think I'm awesome?</h3>
+					<div ng-repeat="submission in feedbackWorksheet.digest.submissions">
+                        <div class="activity-header">
+                            <div class="activity-owner-avatar-container">
+                                <span class="medium-headshot">
+                                    <img ng-src="{{ submission.reviewer.avatar_small }}" class="headshot-image">
+                                </span>
+                            </div>
+                            <div class="activity-description">
+
+                                <span ng-show="!submission.anonymous" class="activity-title-employee-name">{{ submission.reviewer.full_name }}</span> said
+                                <span ng-show="!submission.anonymous" class="timestamp" data-toggle="tooltip" data-placement="top" title="{{ event.date | date:'MMM d, yyyy h:mma' }}">{{ submission.feedback_date | fromNow }}</span>
+                                <span ng-show="submission.anonymous" class="tag employee-segment-background-color-7 pull-right">Anonymous</span>
+                            </div>
+                        </div>
+
+                        <div class="comment-copy" style="padding-top: 15px">
+                            <div class="activity-comment comment-text">{{ submission.excels_at }}</div>
+                        </div>
+                    </div>
+					<h3>In what area do you think I'm not awesome?</h3>
+					<div ng-repeat="submission in feedbackWorksheet.digest.submissions">
+                        <div class="activity-header">
+                            <div class="activity-owner-avatar-container">
+                                <span class="medium-headshot">
+                                    <img ng-src="{{ submission.reviewer.avatar_small }}" class="headshot-image">
+                                </span>
+                            </div>
+                            <div class="activity-description">
+
+                                <span ng-show="!submission.anonymous" class="activity-title-employee-name">{{ submission.reviewer.full_name }}</span> said
+                                <span ng-show="!submission.anonymous" class="timestamp" data-toggle="tooltip" data-placement="top" title="{{ event.date | date:'MMM d, yyyy h:mma' }}">{{ submission.feedback_date | fromNow }}</span>
+                                <span ng-show="submission.anonymous" class="tag employee-segment-background-color-7 pull-right">Anonymous</span>
+                            </div>
+                        </div>
+
+                        <div class="comment-copy" style="padding-top: 15px">
+                            <div class="activity-comment comment-text">{{ submission.could_improve_on }}</div>
+                        </div>
+                    </div>
 
 					<h2>Your Feedback Summary for <!-- Employee Name --></h2>
-					<textarea class="form-control"></textarea>
-					<button class="btn-primary pull-right">Send to <!-- Employee Name --></button>
-					<button class="btn-default">Save</button>
+					<textarea class="form-control" ng-model="feedbackWorksheet.digest.summary"></textarea>
+					<button class="btn-primary pull-right" ng-click="feedbackWorksheet.deliverDigest()">Send to <!-- Employee Name --></button>
+					<button class="btn-default" ng-click="feedbackWorksheet.save()">Save</button>
 					<button class="btn-default">Print</button>
 				</form>	
 			</div>	  	

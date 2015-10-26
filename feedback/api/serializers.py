@@ -44,6 +44,13 @@ class CreateFeedbackSubmissionSerializer(serializers.ModelSerializer):
         read_only_fields = ['id',]
 
 
+class CoachEditFeedbackSubmissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FeedbackSubmission
+        fields = ['id', 'excels_at_summarized', 'could_improve_on_summarized',]
+        read_only_fields = ['id',]
+
+
 class WriteableFeedbackSubmissionSerializer(serializers.ModelSerializer):
     feedback_date = serializers.DateTimeField(required=False)
     subject = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
@@ -75,6 +82,27 @@ class FeedbackSubmissionSerializerForCoaches(serializers.ModelSerializer):
     class Meta:
         model = FeedbackSubmission
         fields = ('id', 'feedback_date', 'subject', 'reviewer',
+                  'excels_at', 'could_improve_on', 'excels_at_summarized',
+                  'could_improve_on_summarized', 'unread',
+                  'has_been_delivered', 'anonymous')
+
+
+class FeedbackSubmissionSerializerForEmployee(serializers.ModelSerializer):
+    feedback_date = serializers.DateTimeField(required=False)
+    subject = SanitizedEmployeeSerializer()
+    reviewer = SanitizedEmployeeSerializer(source='anonymized_reviewer')
+    excels_at = serializers.SerializerMethodField()
+    could_improve_on = serializers.SerializerMethodField()
+
+    def get_could_improve_on(self, submission):
+        return submission.could_improve_on_summarized if submission.could_improve_on_summarized else submission.could_improve_on
+
+    def get_excels_at(self, submission):
+        return submission.excels_at_summarized if submission.excels_at_summarized else submission.excels_at
+
+    class Meta:
+        model = FeedbackSubmission
+        fields = ('id', 'feedback_date', 'subject', 'reviewer',
                   'excels_at', 'could_improve_on', 'unread',
                   'has_been_delivered', 'anonymous')
 
@@ -86,14 +114,47 @@ class FeedbackProgressReportSerializer(serializers.Serializer):
     unsolicited_submissions = FeedbackSubmissionSerializerForCoaches(many=True)
 
 
-class FeedbackDigestSerializerForCoach(serializers.ModelSerializer):
+class FeedbackProgressReportCountsSerializer(serializers.Serializer):
+    employee = SanitizedEmployeeSerializer()
+    unanswered_requests_count = serializers.SerializerMethodField()
+    solicited_submissions_count = serializers.SerializerMethodField()
+    unsolicited_submissions_count = serializers.SerializerMethodField()
+    total_submissions_count = serializers.SerializerMethodField()
+    recent_feedback_requests_ive_sent_count = serializers.SerializerMethodField()
+
+    def get_unanswered_requests_count(self, obj):
+        return int(obj.unanswered_requests.count())
+
+    def get_solicited_submissions_count(self, obj):
+        return int(obj.solicited_submissions.count())
+
+    def get_unsolicited_submissions_count(self, obj):
+        return int(obj.unsolicited_submissions.count())
+
+    def get_recent_feedback_requests_ive_sent_count(self, obj):
+        return int(obj.recent_feedback_requests_ive_sent.count())
+
+    def get_total_submissions_count(self, obj):
+        total = obj.solicited_submissions.count() + obj.unsolicited_submissions.count()
+        return int(total)
+
+
+class FeedbackDigestSerializer(serializers.ModelSerializer):
     subject = SanitizedEmployeeSerializer()
     delivered_by = SanitizedEmployeeSerializer()
-    submissions = FeedbackSubmissionSerializerForCoaches(many=True)
+    submissions = FeedbackSubmissionSerializerForEmployee(many=True)
 
     class Meta:
         model = FeedbackDigest
 
 
-class AddSubmissionToDigestSerializer(serializers.Serializer):
+class AddSubmissionToDigestSerializer(serializers.ModelSerializer):
     submission = serializers.PrimaryKeyRelatedField(queryset=FeedbackSubmission.objects.all())
+
+    class Meta:
+        model = FeedbackDigest
+
+
+class EditFeedbackDigestSerializer(serializers.Serializer):
+    summary = serializers.CharField(required=False)
+    has_been_delivered = serializers.BooleanField(required=False)

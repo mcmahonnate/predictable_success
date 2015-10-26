@@ -5,6 +5,7 @@ angular
 function FeedbackSubmissionService($log, FeedbackSubmissionResource, Employee) {
     return {
         getFeedbackSubmission: getFeedbackSubmission,
+        updateCoachSummary: updateCoachSummary,
         getEmployees: getEmployees,
         respondToFeedbackRequest: respondToFeedbackRequest,
         giveUnsolicitedFeedback: giveUnsolicitedFeedback
@@ -21,6 +22,19 @@ function FeedbackSubmissionService($log, FeedbackSubmissionResource, Employee) {
             $log.error('getFeedbackSubmission failed');
         }
     }
+
+    function updateCoachSummary(submission) {
+        return FeedbackSubmissionResource.updateCoachSummary({id: submission.id}, submission, success, fail).$promise;
+
+        function success(response) {
+            return response;
+        }
+
+        function fail(response) {
+            $log.error('updateCoachSummary');
+        }
+    }
+
 
     function getEmployees() {
         return Employee.query(null, success, fail).$promise;

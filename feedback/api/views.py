@@ -1,4 +1,5 @@
-from datetime import datetime
+from rest_framework import generics
+from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import *
 from rest_framework.exceptions import PermissionDenied
@@ -7,7 +8,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from serializers import *
 from org.models import Employee
-from ..models import FeedbackRequest, FeedbackProgressReport, FeedbackDigest
+from org.api.permissions import UserIsEmployeesCoach, UserIsEmployeeOrCoachOfEmployee
+from ..models import FeedbackRequest, FeedbackProgressReport, FeedbackProgressReports, FeedbackDigest
 
 
 # FeedbackRequest
@@ -37,9 +39,7 @@ class RecentFeedbackRequestsIveSentList(ListAPIView):
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        return FeedbackRequest.objects.all()\
-            .filter(requester=self.request.user.employee)\
-            .exclude(expiration_date__lt=datetime.today())
+        return FeedbackRequest.objects.recent_feedback_requests_ive_sent(requester=self.request.user.employee)
 
 
 class RetrieveFeedbackRequest(RetrieveAPIView):
@@ -55,6 +55,24 @@ class CreateFeedbackSubmission(CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(reviewer=self.request.user.employee)
+
+
+class RetrieveFeedbackSubmission(RetrieveAPIView):
+    permission_classes = (IsAuthenticated, UserIsEmployeeOrCoachOfEmployee,)
+    queryset = FeedbackSubmission.objects.all()
+
+    def get_employee(self):
+        submission = self.get_object()
+        return submission.subject
+
+    def get_serializer_class(self):
+        employee_making_the_request = self.request.user.employee
+        submission = self.get_object()
+        if employee_making_the_request == submission.subject.coach:
+            return FeedbackSubmissionSerializerForCoaches
+        if employee_making_the_request == submission.subject:
+            return FeedbackSubmissionSerializerForEmployee
+        raise Exception("Can't determine which serializer class to use")
 
 
 # Miscellaneous
@@ -86,6 +104,17 @@ class FeedbackRequestsToDoList(ListAPIView):
         """
         return FeedbackRequest.objects.pending_for_reviewer(self.request.user.employee)
 
+@api_view(['GET'])
+@permission_classes((IsAuthenticated, ))
+def feedback_progress_reports(request):
+    try:
+        report = FeedbackProgressReports(request.user.employee)
+        report.load()
+        serializer = FeedbackProgressReportCountsSerializer(report.progress_reports, many=True)
+        return Response(serializer.data)
+    except Employee.DoesNotExist:
+        raise Http404()
+
 
 @api_view(['GET'])
 @permission_classes((IsAuthenticated, ))
@@ -102,18 +131,46 @@ def feedback_progress_report(request, pk):
         raise Http404()
 
 
-@api_view(['GET'])
-@permission_classes((IsAuthenticated, ))
-def get_current_digest(request, employee_id):
-    try:
-        employee = Employee.objects.get(pk=employee_id)
-        if not request.user.employee == employee.coach:
-            raise PermissionDenied
-        digest = FeedbackDigest.objects.get(subject=employee, has_been_delivered=False)
-        serializer = FeedbackDigestSerializerForCoach(digest)
-        return Response(serializer.data)
-    except Employee.DoesNotExist:
-        raise Http404()
+class CoachUpdateFeedbackSubmission(generics.UpdateAPIView):
+    queryset = FeedbackSubmission.objects.all()
+    permission_classes = (IsAuthenticated, UserIsEmployeesCoach,)
+    serializer_class = CoachEditFeedbackSubmissionSerializer
+
+    def get_employee(self):
+        submission = self.get_object()
+        return submission.subject
+
+
+class RetrieveUpdateCurrentFeedbackDigest(APIView):
+    permission_classes = (IsAuthenticated, UserIsEmployeeOrCoachOfEmployee)
+
+    def get_employee(self):
+        return Employee.objects.get(pk=self.kwargs['employee_id'])
+
+    def get(self, request, employee_id):
+        try:
+            employee = self.get_employee()
+            digest = FeedbackDigest.objects.get(subject=employee, has_been_delivered=False)
+            serializer = FeedbackDigestSerializer(digest)
+            return Response(serializer.data)
+        except Employee.DoesNotExist:
+            raise Http404()
+
+    def post(self, request, employee_id):
+        serializer = EditFeedbackDigestSerializer(data=request.data)
+        if serializer.is_valid():
+            employee = self.get_employee()
+            digest = FeedbackDigest.objects.get(subject=employee, has_been_delivered=False)
+            if 'summary' in serializer.validated_data:
+                digest.summary = serializer.validated_data['summary']
+            if digest.has_been_delivered is False and 'has_been_delivered' in serializer.validated_data:
+                has_been_delivered = serializer.validated_data['has_been_delivered']
+                if has_been_delivered:
+                    digest.deliver(request.user.employee)
+            digest.save()
+            serializer = FeedbackDigestSerializer(digest)
+            return Response(serializer.data)
+        return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
@@ -135,3 +192,5 @@ def add_submission_to_digest(request, employee_id):
         digest.submissions.add(serializer.validated_data['submission'])
         return Response(status=success_status_code)
     return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+

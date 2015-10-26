@@ -5,11 +5,13 @@ angular
 function FeedbackDigestService($log, $http) {
     return {
         getCurrentDigestForEmployee: getCurrentDigestForEmployee,
-        addSubmissionToCurrentDigest: addSubmissionToCurrentDigest
+        addSubmissionToCurrentDigest: addSubmissionToCurrentDigest,
+        deliverDigest: deliverDigest,
+        save: save
     };
 
-    function getCurrentDigestForEmployee(employee) {
-        var url = '/api/v1/feedback/coachees/' + employee.id + '/digests/current/';
+    function getCurrentDigestForEmployee(employeeId) {
+        var url = '/api/v1/feedback/coachees/' + employeeId + '/digests/current/';
         return $http.get(url)
             .then(success)
             .catch(fail);
@@ -35,6 +37,26 @@ function FeedbackDigestService($log, $http) {
 
         function fail(response) {
             $log.error('addSubmissionToDigest failed');
+        }
+    }
+
+    function deliverDigest(digest) {
+        digest.has_been_delivered = true;
+        return save(digest);
+    }
+
+    function save(digest) {
+        var url = '/api/v1/feedback/coachees/' + digest.subject.id + '/digests/current/';
+        return $http.post(url, digest)
+            .then(success)
+            .catch(fail);
+
+        function success(response) {
+            return response.data;
+        }
+
+        function fail(response) {
+            $log.error('save failed');
         }
     }
 }

@@ -2,13 +2,14 @@
         .module('feedback')
         .controller('ProcessSubmissionController', ProcessSubmissionController);
 
-    function ProcessSubmissionController($routeParams, FeedbackSubmissionService, FeedbackDigestService) {
+    function ProcessSubmissionController($routeParams, $location, $window, Notification, FeedbackSubmissionService, FeedbackDigestService) {
         var vm = this;
         vm.submissionId = $routeParams.id;
         vm.submission = null;
+        vm.form = null;
         vm.addToDigest = addToDigest;
         vm.save = save;
-        vm.cancel = cancel;
+        vm.close = close;
         activate();
 
         function activate() {
@@ -23,18 +24,33 @@
                 });
         }
 
+        function checkForUnsavedChanges() {
+            if(vm.form.$dirty) {
+                if($window.confirm("You have unsaved changes. Would you like to save your changes before closing?")) {
+                    save();
+                }
+            }
+        }
+
         function addToDigest() {
-            return save()
+            checkForUnsavedChanges();
+            FeedbackDigestService.addSubmissionToCurrentDigest(vm.submission)
                 .then(function() {
-                    return FeedbackDigestService.addSubmissionToDigest(vm.submission);
-                });
+                    Notification.success("The feedback has been added to the digest.");
+                    close();
+            });
         }
 
         function save() {
-            return FeedbackSubmissionService.save(vm.submission);
+            FeedbackSubmissionService.updateCoachSummary(vm.submission)
+                .then(function() {
+                    vm.form.$setPristine();
+                    Notification.success("Your changes were saved.");
+                });
         }
 
-        function cancel() {
-
+        function close() {
+            checkForUnsavedChanges();
+            $location.path('/feedback/' + vm.submission.subject.id + '/worksheet');
         }
     }
