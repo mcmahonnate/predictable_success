@@ -159,9 +159,7 @@ class FeedbackDigest(TimeStampedModel):
         self.delivered_by = delivered_by
         self.has_been_delivered = True
         self.delivery_date = timezone.now()
-        for submission in self.submissions.all():
-            submission.has_been_delivered = True
-            submission.save()
+        self.submissions.all().update(has_been_delivered=True)
         self.save()
 
 class FeedbackProgressReports(object):

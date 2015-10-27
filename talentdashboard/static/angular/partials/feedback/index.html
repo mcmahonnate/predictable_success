@@ -6,7 +6,7 @@
         </h1>
     </div>    
     <div ng-include src="'/static/angular/partials/feedback/_welcome.html'"></div>
-    <div class="panel">
+    <div class="panel" ng-show="feedback.feedbackRequests.length>0">
         <h2 class="panel-title">
             {{ feedback.feedbackRequests.length }} 
             <span ng-show="feedback.feedbackRequests.length == 1">Person wants</span> 
@@ -44,6 +44,7 @@
             </tbody>
         </table>
     </div>
+
     <div class="panel" ng-show="feedback.myRecentlySentRequests.length">
         <h2 class="panel-title">People I've asked for feedback</h2>
         <table class="table responsive-table">
@@ -60,7 +61,7 @@
                     <td>
                         <span class="tiny-headshot">
                             <img ng-src="{{ request.reviewer.avatar_small }}" alt="{{ request.reviewer.full_name }}'s avatar" />
-                        </span>  
+                        </span>
                         {{ request.reviewer.full_name }}
                     </td>
                     <td class="timeago">
@@ -68,12 +69,81 @@
                     </td>
                     <td class="message">
                         {{ request.message }}&nbsp;
-                    </td>                          
+                    </td>
                     <td class="centered">
                         <i ng-show="{{ request.has_been_answered }}" class="fa fa-check" title="Completed"></i>
                     </td>
                 </tr>
             </tbody>
         </table>
+    </div>
+    <div style="padding-top:20px" ng-repeat="digest in feedback.myDigests | orderBy:'delivery_date':true">
+
+        <div class="panel">
+
+            <h2 class="panel-title" style="margin-bottom:0">Feedback Summary - {{ digest.delivery_date | date:'longDate' }}</h2>
+            <span style="color: #aaa;font-style: italic;">Delivered by: {{ digest.delivered_by.full_name }}</span>
+                <p style="margin:25px 0">{{ digest.summary }}</p>
+                <h3>In what area do you think I'm awesome?</h3>
+                <table class="table table-striped" style="margin-bottom:45px">
+                    <thead>
+                        <tr>
+                          <th style="width:20%"></th>
+                          <th class="centered" style="width:70%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="submission in digest.submissions">
+                            <td ng-show="!submission.anonymous">
+                                <span class="tiny-headshot">
+                                    <img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
+                                </span>
+                                {{ submission.reviewer.full_name }}
+                                {{ submission.requester.full_name }}
+                            </td>
+                            <td ng-show="submission.anonymous">
+                                    <span class="tiny-headshot">
+                                        <img src="//hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg"/>
+                                    </span>
+                                Anonymous
+                            </td>
+                            <td>
+                                {{ submission.excels_at }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>In what area do you think I could be more awesome?</h3>
+
+                <table class="table table-striped" style="margin-bottom:45px">
+                    <thead>
+                        <tr>
+                          <th style="width:20%"></th>
+                          <th class="centered" style="width:70%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="submission in digest.submissions">
+                            <td ng-show="!submission.anonymous">
+                                <span class="tiny-headshot">
+                                    <img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
+                                </span>
+                                {{ submission.reviewer.full_name }}
+                                {{ submission.requester.full_name }}
+                            </td>
+                            <td ng-show="submission.anonymous">
+                                    <span class="tiny-headshot">
+                                        <img src="//hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg"/>
+                                    </span>
+                                Anonymous
+                            </td>
+                            <td>
+                                {{ submission.could_improve_on }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+        </div>
     </div>
 </div>    

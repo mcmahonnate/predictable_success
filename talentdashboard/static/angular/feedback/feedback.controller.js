@@ -2,10 +2,11 @@ angular
     .module('feedback')
     .controller('FeedbackController', FeedbackController);
 
-function FeedbackController(FeedbackRequestService, $modal, $location) {
+function FeedbackController(FeedbackRequestService, FeedbackDigestService, $modal, $location) {
     var vm = this;
     vm.feedbackRequests = [];
     vm.myRecentlySentRequests = [];
+    vm.myDigests = [];
     vm.requestFeedback = requestFeedback;
     vm.giveUnsolicitedFeedback = giveUnsolicitedFeedback;
     activate();
@@ -13,6 +14,7 @@ function FeedbackController(FeedbackRequestService, $modal, $location) {
     function activate() {
         getMyRecentlySentRequests();
         getFeedbackRequests();
+        getMyDigests();
     }
 
     function getFeedbackRequests() {
@@ -28,6 +30,14 @@ function FeedbackController(FeedbackRequestService, $modal, $location) {
             .then(function (data) {
                 vm.myRecentlySentRequests = data;
                 return vm.myRecentlySentRequests;
+            });
+    }
+
+    function getMyDigests() {
+        FeedbackDigestService.getMyDigests()
+            .then(function (data) {
+                vm.myDigests = data;
+                return vm.myDigests;
             });
     }
 

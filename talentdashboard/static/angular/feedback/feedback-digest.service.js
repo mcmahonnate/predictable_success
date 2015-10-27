@@ -5,6 +5,7 @@ angular
 function FeedbackDigestService($log, $http) {
     return {
         getCurrentDigestForEmployee: getCurrentDigestForEmployee,
+        getMyDigests: getMyDigests,
         addSubmissionToCurrentDigest: addSubmissionToCurrentDigest,
         deliverDigest: deliverDigest,
         save: save
@@ -22,6 +23,21 @@ function FeedbackDigestService($log, $http) {
 
         function fail(response) {
             $log.error('getCurrentDigestForEmployee failed');
+        }
+    }
+
+    function getMyDigests() {
+        var url = '/api/v1/feedback/my/digests/';
+        return $http.get(url)
+            .then(success)
+            .catch(fail);
+
+        function success(response) {
+            return response.data;
+        }
+
+        function fail(response) {
+            $log.error('getMyDigests failed');
         }
     }
 
