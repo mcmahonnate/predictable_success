@@ -145,7 +145,10 @@ class RetrieveUpdateCurrentFeedbackDigest(APIView):
     permission_classes = (IsAuthenticated, UserIsEmployeeOrCoachOfEmployee)
 
     def get_employee(self):
-        return Employee.objects.get(pk=self.kwargs['employee_id'])
+        try:
+            return Employee.objects.get(pk=self.kwargs['employee_id'])
+        except Employee.DoesNotExist:
+            raise Http404()
 
     def get(self, request, employee_id):
         try:
@@ -153,7 +156,7 @@ class RetrieveUpdateCurrentFeedbackDigest(APIView):
             digest = FeedbackDigest.objects.get(subject=employee, has_been_delivered=False)
             serializer = FeedbackDigestSerializer(digest)
             return Response(serializer.data)
-        except Employee.DoesNotExist:
+        except FeedbackDigest.DoesNotExist:
             raise Http404()
 
     def post(self, request, employee_id):
