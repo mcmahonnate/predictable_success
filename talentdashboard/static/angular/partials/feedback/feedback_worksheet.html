@@ -2,7 +2,7 @@
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2">
 			<h1>Feedback for {{ feedbackWorksheet.progressReport.employee.full_name }}</h1>
-			<div class="panel">
+			<div class="panel" ng-show="feedbackWorksheet.showProgressReport">
 				<div ng-show="feedbackWorksheet.progressReport.solicited_submissions.length>0">
 					<h3><strong>Feedback Submissions</strong></h3>
 					<table class="table table-striped" style="margin-bottom:45px">
@@ -77,25 +77,24 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                              <th>From</th>
-                              <th>Anonymous</th>
-                              <th>Request Date</th>
-                              <th></th>
+                              <th>Person</th>
+                              <th>Sent</th>
+                              <th>Where they'd like feedback</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="submission in feedbackWorksheet.progressReport.unanswered_requests">
+                            <tr ng-repeat="request in feedbackWorksheet.progressReport.unanswered_requests">
                                 <td>
-                                    {{ submission.requester.full_name }}
+                                    <span class="tiny-headshot">
+                                        <img ng-src="{{ request.reviewer.avatar_small }}" alt="{{ request.reviewer.full_name }}'s avatar" />
+                                    </span>
+                                    {{ request.reviewer.full_name }}
                                 </td>
-                                <td>
-                                    {{ submission.anonymous }}
+                                <td class="timeago">
+                                    {{ request.request_date | fromNow }}
                                 </td>
-                                <td>
-                                    {{ submission.request_date | fromNow }}
-                                </td>
-                                <td>
-
+                                <td class="message">
+                                    {{ request.message }}&nbsp;
                                 </td>
                             </tr>
                         </tbody>
