@@ -117,7 +117,8 @@
                             <div class="activity-header">
                                 <div class="activity-owner-avatar-container">
                                     <span class="medium-headshot">
-                                        <img ng-src="{{ submission.reviewer.avatar_small }}" class="headshot-image">
+                                        <img ng-show="!submission.anonymous" ng-src="{{ submission.reviewer.avatar_small }}" class="headshot-image">
+
                                     </span>
                                 </div>
                                 <div class="activity-description">
