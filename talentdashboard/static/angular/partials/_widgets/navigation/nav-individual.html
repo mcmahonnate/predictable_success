@@ -1,15 +1,19 @@
 <nav role="navigation" aria-label="Main menu">
-    
-    <div ng-click="toggleMenu()">
-        <i class="fa fa-bars mobile-nav-trigger"></i>
-    </div>
-    <div class="mobile-logo-container">
-        <a href="#/">
-            <img src="../static/images/compass-logo-white.png" class="logo" alt="Home" />
-        </a>
-    </div> 
 
-    <div role="menubar" ng-controller="NavigationCtrl" >
+    <!-- Mobile -->
+    <div class="mobile-navigation"> 
+        <div ng-click="toggleMenu()">
+            <i class="fa fa-bars mobile-nav-trigger"></i>
+        </div>
+        <div class="mobile-logo-container">
+            <a href="#/">
+                <img src="../static/images/compass-logo-white.png" class="logo" alt="Home" />
+            </a>
+        </div> 
+    </div>    
+
+    <!-- Desktop/large screen formats -->
+    <div class="desktop-navigation" role="menubar" ng-controller="NavigationCtrl" >
         <div role="menuitem" class="logo-container" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Home">
             <a href="#/"><img src="../static/images/compass-logo-white.png" class="logo" alt="Home" /></a>
         </div>
