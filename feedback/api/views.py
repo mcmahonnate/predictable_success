@@ -141,8 +141,21 @@ class CoachUpdateFeedbackSubmission(generics.UpdateAPIView):
         return submission.subject
 
 
+class RetrieveMyFeedbackDigests(ListAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = FeedbackDigestSerializer
+
+    def get_queryset(self):
+        try:
+            employee = self.request.user.employee
+            digests = FeedbackDigest.objects.get_all_delivered_for_employee(employee=employee)
+            return digests
+        except FeedbackDigest.DoesNotExist:
+            raise Http404()
+
+
 class RetrieveUpdateCurrentFeedbackDigest(APIView):
-    permission_classes = (IsAuthenticated, UserIsEmployeeOrCoachOfEmployee)
+    permission_classes = (IsAuthenticated, UserIsEmployeesCoach)
 
     def get_employee(self):
         try:
