@@ -2,7 +2,7 @@
 
     <!-- Mobile -->
     <div class="mobile-navigation"> 
-        <div ng-click="toggleMenu()" class="mobile-menu-btn pull-right">
+        <div ng-click="toggleMenu();" class="mobile-menu-btn pull-right">
             Menu
         </div>
         <div class="mobile-logo-container">
@@ -206,7 +206,7 @@
     </ul>
 </div>
 
-<!-- Slidein Menu -->
+<!-- Mobile Slidein Menu -->
 <div id="menuleft" ng-class="{retract:!showmenu,slide:showmenu}" ng-controller="NavigationCtrl">
     <ul>
         <li ng-controller="SearchCtrl">
@@ -217,7 +217,7 @@
                 <div class="search-results" ng-show="navQuery != ''">
                     <ul ng-if="navQuery!=''">
                         <li ng-repeat="employee in filteredEmployees = (employees |filter:{full_name:navQuery}:startsWith) | orderBy:'full_name'">
-                            <a ng-click="setActiveTab(searchTab)" class="search-result" href="#/employees/{{employee.pk}}">
+                            <a ng-click="toggleMenu();navQuery='f';" class="search-result" href="#/employees/{{employee.pk}}">
                                 <span class="tiny-headshot">
                                     <img ng-src="{{employee.avatar_small}}" alt="{{employee.full_name}}'s avatar" />
                                 </span>
