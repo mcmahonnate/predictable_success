@@ -1,0 +1,48 @@
+@media only screen and (max-width: 640px) {
+    
+
+    /* Force table to not be like tables anymore */
+    .responsive-table table, 
+    .responsive-table thead, 
+    .responsive-table tbody, 
+    .responsive-table th, 
+    .responsive-table td, 
+    .responsive-table tr { 
+        display: block; 
+        font-size: 14px;
+    }
+    .responsive-table tr {
+        position: relative;
+        margin-bottom: 15px;
+        border-bottom: 2px solid #eee;
+    }
+ 
+    /* Hide table headers (but not display: none;, for accessibility) */
+    .responsive-table thead tr { 
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    .responsive-table td { 
+        /* Behave  like a "row" */
+        border: none;
+        position: relative;
+        padding-left: 0 !important; 
+        white-space: normal;
+        text-align:left !important;
+    }
+    .responsive-table tbody tr td:first-child {
+        padding-left: 0 !important;
+    }
+    .responsive-table tbody tr td {
+        border: none;
+    }
+    .responsive-table tbody tr td:last-child {
+        border: none;
+    } 
+    .responsive-table tbody tr:last-child {
+        border: none;
+        margin-bottom: 0;
+    }       
+    .responsive-table td:before { content: attr(data-title); }
+}

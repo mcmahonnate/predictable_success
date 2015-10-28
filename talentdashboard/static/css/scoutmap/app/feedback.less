@@ -1,0 +1,157 @@
+#feedback {
+
+    .feedback-welcome-panel {
+        padding: 55px;
+        @media only screen and (max-width: 640px) {padding: 25px;}   
+
+
+        .feedback-welcome-title {
+            @media only screen and (max-width: 640px) {
+                text-align: center;
+                font-size: 26px;
+                line-height: 28px;
+                margin-bottom: 15px;
+            }    
+        }
+        .get-started-title {
+            @media only screen and (max-width: 640px) {
+                font-size: 20px;
+                text-align: center;
+            }    
+        }
+        .get-started-text {
+            font-size: 18px;
+            line-height: 24px;
+            color: #777;
+            margin-bottom: 55px;
+
+            @media only screen and (max-width: 640px) {
+                font-size: 14px;
+                line-height: 20px;
+                margin-bottom: 26px;
+            }    
+        }
+        .get-started-btns {
+            margin-top: 25px;
+
+            @media only screen and (max-width: 640px) {
+                margin-top: 15px;
+
+                .btn {
+                    display: block;
+                    width: 100%;
+                    font-size: 14px;
+                }
+                .btn:first-child {
+                    margin-bottom: 5px;
+                }    
+            }    
+        }
+    }
+
+
+
+
+    @media only screen and (max-width: 640px) {
+        
+        h1 {
+            font-size: 25px;
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        .panel {
+            padding: 20px;
+        }
+
+        .btn-feedback {
+            margin-top: 5px;
+            display: block;
+            width: 100%;
+        }
+        .btn-feedback:first-child {
+            margin-top: 20px;
+        }
+
+
+        /* Table */
+        .timeago {
+            position: absolute !important;
+            font-size: 12px !important;
+            color: #999;
+            top: 18px;
+            left: 36px;
+            width: 100%;
+        }
+        .tiny-headshot {
+            margin-right: 5px;
+        }
+        .message {
+            margin: 10px 0px 0px;
+        }
+        .give-feedback-btn {
+            width: 100%;
+            font-weight: bold;
+            font-size: 14px;
+        }
+    }
+
+    @media only screen and (max-width: 991px) {
+        .welcome-image {
+            display: none;
+        }
+    }
+
+    .comment-title-employee-name {
+        font-size: 38px;
+    }
+    .feedback-reports-container {
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+    .feedback-report {
+        margin-top: 25px;
+        padding-top: 25px;
+        text-align: center;
+    }
+}
+
+
+/* Feedback Modal */
+#feedback-modal {
+
+    .modal-body {
+        @media only screen and (max-width: 640px) {
+            padding: 20px;
+        }    
+    }
+
+    .modal-question-list {
+        list-style-type: decimal;
+        list-style-position: inside;
+        border-left: 5px solid #eee;
+        padding-left: 11px;
+        font-size: 15px;
+        line-height: 21px;
+        margin-bottom: 31px;
+    }
+
+    /* Select 2 fixes for modal */
+    .ui-select-multiple.ui-select-bootstrap .ui-select-match-item {
+        background-color: rgb(240, 248, 255);
+    }
+    .ui-select-match-close {
+        margin: 0;
+    }
+    .btn-xs, .btn-group-xs > .btn {
+        font-size: 16px;
+        line-height: 1.5;
+    }
+    .ui-select-multiple.ui-select-bootstrap .ui-select-match .close {
+        font-size: 22px;
+        margin: 2px;
+    }
+    .selected-requested-people {
+        color: #0f9d58;
+    }    
+}

@@ -1,29 +1,54 @@
 from rest_framework import serializers
 from org.models import Employee
-from org.api.serializers import MinimalEmployeeSerializer
-from ..models import FeedbackRequest, FeedbackSubmission
+from org.api.serializers import SanitizedEmployeeSerializer
+from ..models import FeedbackRequest, FeedbackSubmission, FeedbackDigest
+
 
 class FeedbackRequestSerializer(serializers.ModelSerializer):
-    request_date = serializers.DateTimeField(required=False, read_only=True)
+    request_date = serializers.DateTimeField(required=False)
     expiration_date = serializers.DateField(required=False)
-    requester = MinimalEmployeeSerializer()
-    reviewer = MinimalEmployeeSerializer()
-    is_complete = serializers.BooleanField(required=False)
+    requester = SanitizedEmployeeSerializer()
+    reviewer = SanitizedEmployeeSerializer()
 
     class Meta:
         model = FeedbackRequest
+        fields = ['id', 'request_date', 'expiration_date', 'requester', 'reviewer', 'message', 'has_been_answered', 'was_declined']
 
 
-class FeedbackRequestPostSerializer(serializers.ModelSerializer):
-    request_date = serializers.DateTimeField(required=False, read_only=True)
-    expiration_date = serializers.DateField(required=False)
-    requester = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
+class CreateFeedbackRequestSerializer(serializers.ModelSerializer):
     reviewer = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
     message = serializers.CharField(required=False, allow_blank=True)
-    is_complete = serializers.BooleanField(required=False)
 
     class Meta:
         model = FeedbackRequest
+        fields = ['reviewer', 'message']
+
+
+class CreateFeedbackSubmissionSerializer(serializers.ModelSerializer):
+    feedback_request = serializers.PrimaryKeyRelatedField(queryset=FeedbackRequest.objects.all(), required=False)
+    subject = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
+
+    def validate(self, data):
+        feedback_request = data.get('feedback_request', None)
+        if feedback_request is not None:
+            if feedback_request.was_responded_to:
+                raise serializers.ValidationError("Cannot reply to a request that has already been responded to.")
+            subject = data['subject']
+            if feedback_request.requester != subject:
+                raise serializers.ValidationError("Subject must be the same as requester.")
+        return data
+
+    class Meta:
+        model = FeedbackSubmission
+        fields = ['id', 'feedback_request', 'subject', 'excels_at', 'could_improve_on', 'anonymous']
+        read_only_fields = ['id',]
+
+
+class CoachEditFeedbackSubmissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FeedbackSubmission
+        fields = ['id', 'excels_at_summarized', 'could_improve_on_summarized',]
+        read_only_fields = ['id',]
 
 
 class WriteableFeedbackSubmissionSerializer(serializers.ModelSerializer):
@@ -37,8 +62,8 @@ class WriteableFeedbackSubmissionSerializer(serializers.ModelSerializer):
             feedback_request = attrs['feedback_request']
             subject = attrs['subject']
             reviewer = attrs['reviewer']
-            if feedback_request.is_complete:
-                raise serializers.ValidationError("Request has already been completed.")
+            if feedback_request.was_responded_to:
+                raise serializers.ValidationError("Request has already been responded to.")
             if feedback_request.requester != subject:
                 raise serializers.ValidationError("Subject is not the same as the feedback requester.")
             if feedback_request.reviewer != reviewer:
@@ -49,59 +74,88 @@ class WriteableFeedbackSubmissionSerializer(serializers.ModelSerializer):
         model = FeedbackSubmission
 
 
-class AnonymizedFeedbackSubmissionSerializer(serializers.ModelSerializer):
-    feedback_date = serializers.DateTimeField(required=False)
-    subject = MinimalEmployeeSerializer()
-
-    class Meta:
-        model = FeedbackSubmission
-        fields = ('id', 'feedback_date', 'subject',
-                  'excels_at', 'could_improve_on', 'unread',
-                  'has_been_delivered', 'confidentiality', 'was_unsolicited')
-
-
 class FeedbackSubmissionSerializerForCoaches(serializers.ModelSerializer):
     feedback_date = serializers.DateTimeField(required=False)
-    subject = MinimalEmployeeSerializer()
-    reviewer = serializers.SerializerMethodField()
-
-    def get_reviewer(self, obj):
-        reviewer = obj.get_reviewer_for_viewing_by_coach()
-        if reviewer:
-            return reviewer.full_name
-        return "Anonymous"
+    subject = SanitizedEmployeeSerializer()
+    reviewer = SanitizedEmployeeSerializer()
 
     class Meta:
         model = FeedbackSubmission
         fields = ('id', 'feedback_date', 'subject', 'reviewer',
-                  'excels_at', 'could_improve_on', 'unread',
-                  'has_been_delivered', 'confidentiality', 'was_unsolicited')
+                  'excels_at', 'could_improve_on', 'excels_at_summarized',
+                  'could_improve_on_summarized', 'unread',
+                  'has_been_delivered', 'anonymous')
 
 
-class FeedbackSubmissionSerializerForEmployees(serializers.ModelSerializer):
+class FeedbackSubmissionSerializerForEmployee(serializers.ModelSerializer):
     feedback_date = serializers.DateTimeField(required=False)
-    subject = MinimalEmployeeSerializer()
-    reviewer = serializers.SerializerMethodField()
+    subject = SanitizedEmployeeSerializer()
+    reviewer = SanitizedEmployeeSerializer(source='anonymized_reviewer')
+    excels_at = serializers.SerializerMethodField()
+    could_improve_on = serializers.SerializerMethodField()
 
-    def get_reviewer(self, obj):
-        reviewer = obj.get_reviewer_for_viewing_by_subject()
-        if reviewer:
-            return reviewer.full_name
-        return "Anonymous"
+    def get_could_improve_on(self, submission):
+        return submission.could_improve_on_summarized if submission.could_improve_on_summarized else submission.could_improve_on
+
+    def get_excels_at(self, submission):
+        return submission.excels_at_summarized if submission.excels_at_summarized else submission.excels_at
 
     class Meta:
         model = FeedbackSubmission
         fields = ('id', 'feedback_date', 'subject', 'reviewer',
                   'excels_at', 'could_improve_on', 'unread',
-                  'has_been_delivered', 'confidentiality', 'was_unsolicited')
+                  'has_been_delivered', 'anonymous')
 
 
-class UndeliveredFeedbackReportSerializer(serializers.Serializer):
-    employee = MinimalEmployeeSerializer()
-    undelivered_feedback = serializers.IntegerField()
+class FeedbackProgressReportSerializer(serializers.Serializer):
+    employee = SanitizedEmployeeSerializer()
+    unanswered_requests = FeedbackRequestSerializer(many=True)
+    solicited_submissions = FeedbackSubmissionSerializerForCoaches(many=True)
+    unsolicited_submissions = FeedbackSubmissionSerializerForCoaches(many=True)
 
 
-class CoacheeFeedbackReportSerializer(serializers.Serializer):
-    employee = MinimalEmployeeSerializer()
-    feedback = serializers.ListField(child=FeedbackSubmissionSerializerForCoaches())
+class FeedbackProgressReportCountsSerializer(serializers.Serializer):
+    employee = SanitizedEmployeeSerializer()
+    unanswered_requests_count = serializers.SerializerMethodField()
+    solicited_submissions_count = serializers.SerializerMethodField()
+    unsolicited_submissions_count = serializers.SerializerMethodField()
+    total_submissions_count = serializers.SerializerMethodField()
+    recent_feedback_requests_ive_sent_count = serializers.SerializerMethodField()
 
+    def get_unanswered_requests_count(self, obj):
+        return int(obj.unanswered_requests.count())
+
+    def get_solicited_submissions_count(self, obj):
+        return int(obj.solicited_submissions.count())
+
+    def get_unsolicited_submissions_count(self, obj):
+        return int(obj.unsolicited_submissions.count())
+
+    def get_recent_feedback_requests_ive_sent_count(self, obj):
+        return int(obj.recent_feedback_requests_ive_sent.count())
+
+    def get_total_submissions_count(self, obj):
+        total = obj.solicited_submissions.count() + obj.unsolicited_submissions.count()
+        return int(total)
+
+
+class FeedbackDigestSerializer(serializers.ModelSerializer):
+    subject = SanitizedEmployeeSerializer()
+    delivered_by = SanitizedEmployeeSerializer()
+    submissions = FeedbackSubmissionSerializerForEmployee(many=True)
+
+    class Meta:
+        model = FeedbackDigest
+
+
+class AddSubmissionToDigestSerializer(serializers.Serializer):
+    submission = serializers.PrimaryKeyRelatedField(queryset=FeedbackSubmission.objects.all())
+
+    class Meta:
+        model = FeedbackDigest
+        fields = ('submission',)
+
+
+class EditFeedbackDigestSerializer(serializers.Serializer):
+    summary = serializers.CharField(required=False)
+    has_been_delivered = serializers.BooleanField(required=False)

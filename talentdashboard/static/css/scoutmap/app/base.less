@@ -1,6 +1,6 @@
 /* Base style rules for the Scoutmap
 
-** Foundation ==================================== */   
+** Foundational stuff ==================================== */   
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font:inherit;font-size:100%;vertical-align:baseline}
 html{line-height:1}
 ol,ul{list-style:none}
@@ -21,20 +21,25 @@ a:hover {color: #156766;}
 p {line-height: 18px;font-size: 14px;}
 strong {font-weight: bold;}
 
-[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak],
+.ng-cloak, .x-ng-cloak,
+.ng-hide {
+    display: none !important;
+}
+.ng-hide-add,
+.ng-hide-remove {
   display: none !important;
 }
-
 
 /* Layout ==================================== */
 .container {
 	margin-top:40px;
-	padding-left: 70px;
+	padding-left: 80px;
 
     /* For mobile experiences we move the navigation bar to the top of the viewport */
     @media only screen and (max-width : 640px) {
-        margin-top: 50px;
-        padding: 25px;
+        margin-top: 40px;
+        padding: 15px;
     }
 }
 
@@ -53,6 +58,9 @@ h1 {
 
     @media only screen and (max-width : 640px) {
         font-size: 25px;
+        line-height: 28px;
+        text-align: center;
+        margin-top: 8px;
     }
 } 
 h2 {
@@ -202,6 +210,34 @@ textarea.expandable:focus {
 
 
 /* Bootstrap Overrides */
+.btn-default {
+    background-color: #f1f1f1;
+}
+
+
+.modal {
+  text-align: center;
+  padding: 0!important;
+}
+.modal-content {
+    transition: 1s;
+}    
+.modal:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    margin-right: -4px; /* Adjusts for spacing */
+    margin-top: -8%;
+}
+.modal-dialog {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+    max-width: 475px;
+}
+
+    
 .modal-body {
     position: relative;
     padding: 30px;
@@ -231,6 +267,7 @@ textarea.expandable:focus {
 .radio + .radio, .checkbox + .checkbox {
  	margin-top: 5px;
 }
+
 
 
 
@@ -271,28 +308,4 @@ textarea.expandable:focus {
 
 
 
-/* Privacy Mode */
-.privacy-mode {
-    background: transparent url(/static/images/cat-icon.png) no-repeat;
-    height: 32px;
-    width: 32px;
-    display: block;
-    background-size: 32px;
-    text-indent: -99999px;
-    opacity: .2;
-    position: absolute;
-    bottom: 10px;
-    left: 20px;
-    cursor: pointer;
-
-    @media only screen and (max-width : 640px) {
-        display:none;
-    }
-}   
-.privacy-mode:hover, .privacy-mode-active {
-    opacity:1;
-} 
-
-.sensitive-text-active {
-    color: #ddd !important;   
-}    
+    

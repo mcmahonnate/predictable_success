@@ -1,32 +1,60 @@
 .fadein > * {
     display:none;
 }
-
 .simple-form-control {
-	box-shadow: none;
-	border: none;
+    box-shadow: none;
+    border: none;
 }
-
 .mobile-show {
-	display: none;
+    display: none;
     
     @media only screen and (max-width : 640px) {
-    	display: block;	
+        display: block; 
     }
 }
+.mobile-hide {
+    @media only screen and (max-width : 640px) {
+        display:none;
+    }    
+}
 
+
+/* Alignments */
 .centered {
     text-align: center;
 }
+.left-align {
+    text-align: left;
+}
+.right-align {
+    text-align: right;
+}
+
+
 .filled-light {
     background: #fff;
 }
 .rounded {
     border-radius: 5px;
 }
+
+.text-bolded {
+    font-weight: bold;
+}
+
 .stripes div:nth-child(even), .stripes li:nth-child(odd) {
    background-color: #efefef;
 }
-[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
-  display: none !important;
-}
+
+
+/* Used for widths of table th */
+.width-5-percent {width:5%;}
+.width-10-percent {width:10%;}
+.width-15-percent {width:15%;}
+.width-20-percent {width:20%;}
+.width-25-percent {width:25%;}
+.width-30-percent {width:30%;}
+.width-35-percent {width:35%;}
+.width-40-percent {width:40%;}
+.width-45-percent {width:45%;}
+.width-50-percent {width:50%}

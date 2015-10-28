@@ -16,11 +16,18 @@ var app = angular.module('tdb', [
         'tdb.search.controllers', 'tdb.search.services',
         'tdb.tasks.controllers', 'tdb.tasks.services',
         'angular.filter',
-        'angular-carousel', 'analytics', 'ui.bootstrap', 'ngCsv','ngImgCrop', 'ngRoute','ui-notification', 'ngMessages', 'readMore', 'ngCookies'])
+        'feedback',
+        'angular-carousel', 'analytics', 'ui.bootstrap', 'ngCsv','ngImgCrop', 'ngRoute', 'ngAnimate', 'ui-notification', 'ngMessages', 'readMore', 'ngCookies', 'ui.select', 'selectize','ngTouch'])
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.
-            when('/', {templateUrl: '/static/angular/partials/profile.html', controller: 'ProfileCtrl', resolve: {authorizeRoute: authorizeRoute}}).
+            when('/', {templateUrl: '/static/angular/partials/feedback/index.html', controller: 'FeedbackController as feedback', resolve: {authorizeRoute: authorizeRoute}}).
             when('/engagement-survey/:employeeId/:surveyId', {templateUrl: '/static/angular/partials/engagement-survey.html', controller: 'EngagementSurveyCtrl'}).
+            when('/feedback/request', {templateUrl: '/static/angular/partials/feedback/request.html', controller: 'RequestFeedbackController as request', resolve: {authorizeRoute: authorizeRoute}}).
+            when('/feedback/request/:id/reply', {templateUrl: '/static/angular/partials/feedback/respond_to_request.html', controller: 'RespondToFeedbackRequestController as submitFeedback', resolve: {authorizeRoute: authorizeRoute}}).
+            when('/feedback/submit', {templateUrl: '/static/angular/partials/feedback/unsolicited_feedback.html', controller: 'UnsolicitedFeedbackController as submitFeedback', resolve: {authorizeRoute: authorizeRoute}}).
+            when('/feedback/submission/:id/process', {templateUrl: '/static/angular/partials/feedback/process_feedback.html', controller: 'ProcessSubmissionController as processFeedback', resolve: {authorizeRoute: authorizeRoute}}).
+            when('/feedback', {templateUrl: '/static/angular/partials/feedback/index.html', controller: 'FeedbackController as feedback', resolve: {authorizeRoute: authorizeRoute}}).
+            when('/feedback/:id/worksheet', {templateUrl: '/static/angular/partials/feedback/feedback_worksheet.html', controller: 'FeedbackWorksheetController as feedbackWorksheet', resolve: {authorizeRoute: authorizeRoute}}).
             when('/my-profile', {templateUrl: '/static/angular/partials/profile.html', controller: 'ProfileCtrl', resolve: {authorizeRoute: authorizeRoute}}).
             otherwise({redirectTo: '/'});
     }])

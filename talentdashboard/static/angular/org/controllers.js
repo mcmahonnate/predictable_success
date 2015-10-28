@@ -449,4 +449,33 @@ angular.module('tdb.org.controllers', [])
         $scope.sortorder = 'last_checkin_date';
         $scope.busy = false;
     }])
+
+    .controller('ChangeCoachController', ['$modalInstance', 'CoachService', 'currentCoach', function($modalInstance, CoachService, currentCoach) {
+        var vm = this;
+        vm.availableCoaches = [];
+        vm.currentCoach = currentCoach;
+        vm.newCoach = null;
+        vm.save = save;
+        vm.cancel = cancel;
+
+        activate();
+
+        function activate() {
+            CoachService.getAvailableCoaches()
+                .then(function(data) {
+                    vm.availableCoaches = data;
+                    return vm.availableCoaches;
+                });
+        }
+
+        function save(form) {
+            if(form.$invalid) return;
+            CoachService.changeCoach(vm.newCoach);
+            $modalInstance.close(vm.newCoach);
+        }
+
+        function cancel() {
+            $modalInstance.dismiss();
+        }
+    }])
 ;

@@ -147,4 +147,54 @@ angular.module('tdb.org.services', ['ngResource'])
         var res = $resource('/api/v1/team-lead/employees/');
         return res;
     }])
+
+    .factory('CoachService', ['$http', function($http) {
+        return {
+            getCurrentCoach: getCurrentCoach,
+            getAvailableCoaches: getAvailableCoaches,
+            changeCoach: changeCoach
+        };
+
+        function getCurrentCoach() {
+            return $http.get('/api/v1/org/coaches/current/')
+                .then(complete)
+                .catch(failed);
+
+            function complete(response) {
+                return response.data;
+            }
+
+            function failed(response) {
+                if(response.status == 404) {
+                    return null;
+                }
+            }
+        }
+
+        function getAvailableCoaches() {
+            return $http.get('/api/v1/org/coaches/available/')
+                .then(complete)
+                .catch(failed);
+
+            function complete(response) {
+                return response.data;
+            }
+
+            function failed(response) {
+            }
+        }
+
+        function changeCoach(newCoach) {
+            return $http.post('/api/v1/org/coaches/change/', {new_coach: newCoach.id})
+                .then(complete)
+                .catch(failed);
+
+            function complete(response) {
+                return response.data;
+            }
+
+            function failed(response) {
+            }
+        }
+    }])
 ;

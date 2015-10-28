@@ -31,7 +31,7 @@ from django.core.signing import Signer
 from django.utils.log import getLogger
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.contrib.contenttypes.models import ContentType
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.template.loader import get_template
 from django.template import Context
 from django.db.models import Q
@@ -41,8 +41,6 @@ import StringIO
 from decimal import Decimal
 from re import sub
 from django.core.files.uploadedfile import InMemoryUploadedFile
-from feedback.models import FeedbackRequest, FeedbackSubmission, UndeliveredFeedbackReport, CoacheeFeedbackReport
-from feedback.tasks import send_feedback_request_email
 from collections import defaultdict
 import collections
 import dateutil.parser, copy
@@ -60,7 +58,6 @@ from assessment.api.serializers import AssessmentSerializer
 from todo.api.serializers import TaskSerializer, CreateTaskSerializer, EditTaskSerializer
 from customers.api.serializers import CustomerSerializer
 from kpi.api.serializers import KPIIndicatorSerializer, KPIPerformanceSerializer
-from feedback.api.serializers import FeedbackRequestSerializer, FeedbackRequestPostSerializer, FeedbackSubmissionSerializerForCoaches, FeedbackSubmissionSerializerForEmployees, WriteableFeedbackSubmissionSerializer, AnonymizedFeedbackSubmissionSerializer, UndeliveredFeedbackReportSerializer, CoacheeFeedbackReportSerializer
 from insights.api.serializers import ProspectSerializer
 
 logger = getLogger('talentdashboard')
@@ -872,7 +869,7 @@ class TaskDetail(APIView):
     def get_object(self, pk):
         try:
             return Task.objects.get(pk=pk)
-        except FeedbackRequest.DoesNotExist:
+        except Task.DoesNotExist:
             raise Http404
 
     def get(self, request, pk=None):
@@ -1375,179 +1372,3 @@ def add_current_employee_to_request(request, field_name):
     else:
         request.DATA[field_name] = employee.id
 
-
-class FeedbackRequestView(APIView):
-    def get_object(self, pk):
-        try:
-            return FeedbackRequest.objects.get(pk=pk)
-        except FeedbackRequest.DoesNotExist:
-            raise Http404
-
-    def get(self, request, pk, format=None):
-        feedback_request = self.get_object(pk)
-        serializer = FeedbackRequestSerializer(feedback_request)
-        return Response(serializer.data)
-
-    def post(self, request, pk, format=None):
-        add_current_employee_to_request(request, 'requester')
-        has_multiple_items = isinstance(request.DATA, list)
-        serializer = FeedbackRequestPostSerializer(data=request.DATA, many=has_multiple_items)
-        if serializer.is_valid():
-            feedback_request = serializer.save()
-            if has_multiple_items:
-                for item in feedback_request:
-                    send_feedback_request_email.delay(item)
-            else:
-                send_feedback_request_email.delay(feedback_request)
-
-            response_serializer = FeedbackRequestSerializer(feedback_request, many=has_multiple_items)
-            return Response(response_serializer.data)
-        else:
-            return Response(serializer.errors, status=400)
-
-    def put(self, request, pk, format=None):
-        serializer = FeedbackRequestPostSerializer(data=request.DATA)
-        if serializer.is_valid():
-            feedback_request = serializer.save()
-            response_serializer = FeedbackRequestSerializer(feedback_request)
-            return Response(response_serializer.data)
-        else:
-            return Response(serializer.errors, status=400)
-
-@api_view(['GET'])
-def incomplete_feedback_requests_for_reviewer(request):
-    reviewer = Employee.objects.get_from_user(request.user)
-    pending_requests = FeedbackRequest.objects.pending_for_reviewer(reviewer)
-    serializer = FeedbackRequestSerializer(pending_requests, many=True)
-    return Response(serializer.data)
-
-@api_view(['GET'])
-def incomplete_feedback_requests_for_requester(request):
-    requester = Employee.objects.get_from_user(request.user)
-    pending_requests = FeedbackRequest.objects.pending_for_requester(requester)
-    serializer = FeedbackRequestSerializer(pending_requests, many=True)
-    return Response(serializer.data)
-
-
-class FeedbackSubmissionView(APIView):
-    def get_object(self, pk):
-        try:
-            return FeedbackSubmission.objects.get(pk=pk)
-        except FeedbackSubmission.DoesNotExist:
-            raise Http404
-
-    def get(self, request, pk, format=None):
-        feedback = self.get_object(pk)
-        employee = Employee.objects.get_from_user(request.user)
-        if employee == feedback.subject:
-            serializer = FeedbackSubmissionSerializerForEmployees(feedback)
-            return Response(serializer.data)
-        if employee == feedback.subject.coach:
-            serializer = FeedbackSubmissionSerializerForCoaches(feedback)
-            return Response(serializer.data)
-        return Response(status=401) # Unauthorized
-
-    def post(self, request, pk, format=None):
-        add_current_employee_to_request(request, 'reviewer')
-        serializer = WriteableFeedbackSubmissionSerializer(data=request.DATA)
-        if serializer.is_valid():
-            feedback = serializer.save()
-            if feedback.confidentiality == FeedbackSubmission.NOT_CONFIDENTIAL:
-                feedback.has_been_delivered = True
-                feedback.save()
-            serializer = AnonymizedFeedbackSubmissionSerializer(feedback)
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
-
-
-@api_view(['GET'])
-def potential_reviewers(request):
-    all_employees = set(Employee.objects.all())
-    requester = Employee.objects.get_from_user(request.user)
-    current_requests = FeedbackRequest.objects.pending_for_requester(requester)
-    current_reviewers = set([feedback_request.reviewer for feedback_request in current_requests])
-    requester = {Employee.objects.get_from_user(request.user)}
-    employee_set = all_employees - current_reviewers - requester
-    potential_reviewers = sorted(employee_set, key=lambda employee: employee.full_name)
-    serializer = SanitizedEmployeeSerializer(potential_reviewers, many=True)
-    return Response(serializer.data)
-
-@api_view(['GET'])
-def get_coachees_feedback_report(request):
-    current_user = request.user
-    coach = Employee.objects.get(user=current_user)
-    reports = []
-    for coachee in coach.coachees.all():
-        report = UndeliveredFeedbackReport(coachee)
-        reports.append(report)
-    serializer = UndeliveredFeedbackReportSerializer(reports, many=True)
-    return Response(serializer.data)
-
-@api_view(['PUT'])
-def mark_feedback_delivered(request):
-    coach = Employee.objects.get(user=request.user)
-    serializer = IdSerializer(data=request.DATA, many=True)
-    if serializer.is_valid():
-        items = serializer.validated_data
-        feedback = FeedbackSubmission.objects.filter(id__in=[item['id'] for item in items]).filter(subject__coach=coach)
-        feedback.update(has_been_delivered=True)
-        return Response(None, status=200)
-    else:
-        return Response(serializer.errors, status=400)
-
-@api_view(['PUT'])
-def mark_feedback_read(request):
-    employee = Employee.objects.get(user=request.user)
-    serializer = IdSerializer(data=request.DATA, many=True)
-    if serializer.is_valid():
-        items = serializer.validated_data
-        feedback = FeedbackSubmission.objects.filter(id__in=[item['id'] for item in items]).filter(subject=employee)
-        feedback.update(unread=False)
-        return Response(None, status=200)
-    else:
-        return Response(serializer.errors, status=400)
-
-@api_view(['GET'])
-def confidentiality_options(request):
-    return Response(FeedbackSubmission.CONFIDENTIALITY_CHOICES)
-
-@api_view(['GET'])
-def my_feedback(request):
-    employee = Employee.objects.get(user=request.user)
-    feedback = employee.feedback_about.filter(has_been_delivered=True)
-    serializer = FeedbackSubmissionSerializerForEmployees(feedback, many=True)
-    return Response(serializer.data)
-
-@api_view(['GET'])
-def view_feedback(request):
-    current_user = request.user
-    employee = Employee.objects.get(user=current_user)
-    feedback = employee.feedback_about.filter(has_been_delivered=True)
-    serializer = FeedbackSubmissionSerializerForEmployees(feedback, many=True)
-    return Response(serializer.data)
-
-@api_view(['GET'])
-def view_coachee_feedback(request, pk):
-    coach = Employee.objects.get(user=request.user)
-    employee = Employee.objects.get(pk=pk)
-    if coach != employee.coach:
-        return Response(status=401)
-    report = CoacheeFeedbackReport(employee)
-    serializer = CoacheeFeedbackReportSerializer(report)
-    return Response(serializer.data)
-
-@api_view(['GET'])
-def menu_counts(request):
-    employee = Employee.objects.get(user=request.user)
-    unreadFeedback = employee.feedback_about.filter(has_been_delivered=True).filter(unread=True).count()
-    unansweredRequests = FeedbackRequest.objects.pending_for_reviewer(employee).count()
-    toBeDelivered = 0
-    for coachee in employee.coachees.all():
-        if coachee.feedback_about.filter(has_been_delivered=False).count() > 0:
-            toBeDelivered = toBeDelivered + 1
-    result = {
-        'unreadFeedback': unreadFeedback,
-        'unansweredRequests': unansweredRequests,
-        'toBeDelivered': toBeDelivered
-    }
-    return Response(result)

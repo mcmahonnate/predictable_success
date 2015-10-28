@@ -46,6 +46,14 @@ angular.module('tdb.controllers', [])
             return new Date();
         };
 
+
+        //Mobile navigation
+        $rootScope.showmenu=false;
+        $rootScope.toggleMenu = function(){
+            $rootScope.showmenu=($rootScope.showmenu) ? false : true;
+        }
+
+
         $rootScope.lazyround = function (num) {
             return Math.abs(Number(num)) >= 1.0e+9
 

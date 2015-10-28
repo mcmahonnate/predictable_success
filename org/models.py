@@ -154,6 +154,14 @@ class Employee(MPTTModel):
     def save(self, *args, **kwargs):
         if self.first_name and self.last_name:
             self.full_name = self.first_name + " " + self.last_name
+        if self.field_tracker.has_changed('coach'):
+            if self.coach is not None:
+                try:
+                    coach_capacity = CoachCapacity.objects.get(employee=self.coach)
+                    if coach_capacity.is_full():
+                        raise CoachCapacityError()
+                except CoachCapacity.DoesNotExist:
+                    pass
         super(Employee, self).save(*args, **kwargs)
         new_leader_id = self.leader.id if self.leader else 0
         old_leader_id = self.current_leader.id if self.current_leader else 0
@@ -177,8 +185,7 @@ class Employee(MPTTModel):
                 Relationship(employee=self, related_employee=field_value, relation_type=relation_type).save()
 
     def is_coach(self):
-        employee_count = Employee.objects.filter(coach__id=self.id).count()
-        return employee_count > 0
+        return CoachCapacity.objects.filter(employee=self).exists()
 
     def is_lead(self):
         leadership_count = Leadership.objects.filter(leader__id=self.id, end_date__isnull=True).count()
@@ -445,3 +452,23 @@ class AttributeCategory(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class CoachCapacity(models.Model):
+    employee = models.OneToOneField(Employee, related_name='+')
+    max_allowed_coachees = models.IntegerField(default=0)
+    num_coachees = models.IntegerField(default=0)
+
+    def save(self, *args, **kwargs):
+        self.num_coachees = self.employee.coachees.count()
+        super(CoachCapacity, self).save(*args, **kwargs)
+
+    def is_full(self):
+        return self.num_coachees >= self.max_allowed_coachees
+
+    def __unicode__(self):
+        return self.employee.full_name
+
+
+class CoachCapacityError(Exception):
+    pass

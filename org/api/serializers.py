@@ -318,3 +318,7 @@ class EditEmployeeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Employee
         fields = ('first_name', 'last_name', 'email', 'job_title', 'hire_date', 'departure_date', 'team', 'display', 'leader', 'coach')
+
+
+class CoachChangeRequestSerializer(serializers.Serializer):
+    new_coach = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())

@@ -1,0 +1,35 @@
+<div class="panel employees-snapshot" ng-show="!feedbackCoachWidget.busy">
+					<h2 class="panel-title">360 Feedback</h2>
+					<table class="table table-striped" style="margin-bottom:45px">
+						<thead>
+					        <tr>
+					          <th style="width:50%">Employee</th>
+					          <th class="centered" style="width:20%">Requested</th>
+					          <th class="centered" style="width:20%">Received</th>
+					          <th></th>
+					        </tr>
+			      		</thead>
+			      		<tbody>
+							<tr ng-repeat="progressReport in feedbackCoachWidget.progressReports">
+								<td>
+									<a href="/#/feedback/{{progressReport.employee.id}}/worksheet/">
+										<span class="tiny-headshot">
+											<img ng-src="{{ progressReport.employee.avatar_small }}" alt="{{ progressReport.employee.full_name }}'s avatar" />
+										</span>
+									</a>
+									<a href="#/employees/{{ progressReport.employee.id }}">{{ progressReport.employee.full_name }}</a>
+								</td>
+								<td class="centered">
+									{{ progressReport.recent_feedback_requests_ive_sent_count }}
+								</td>
+								<td class="centered">
+                                    {{ progressReport.total_submissions_count }}
+								</td>
+								<td>
+									<a href="/#/feedback/{{progressReport.employee.id}}/worksheet/" class="btn btn-sm btn-default pull-right">View</a>
+								</td>
+							</tr>
+			      		</tbody>
+					</table>
+
+</div>
