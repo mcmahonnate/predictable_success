@@ -81,10 +81,13 @@
 
         <div class="panel">
 
-            <h2 class="panel-title" style="margin-bottom:0">Feedback Summary - {{ digest.delivery_date | date:'longDate' }}</h2>
+            <h2 class="panel-title" style="margin-bottom:0">360 Feedback- {{ digest.delivery_date | date:'longDate' }}</h2>
             <span style="color: #aaa;font-style: italic;">Delivered by: {{ digest.delivered_by.full_name }}</span>
-                <p style="margin:25px 0">{{ digest.summary }}</p>
-                <h3>In what area do you think I'm awesome?</h3>
+                <div ng-show="digest.summary">
+                    <h3 style="margin-top:25px;margin-bottom:15px;">Summary from your Coach</h3>
+                    <p>{{ digest.summary }}</p>
+                </div>
+                <h3 style="margin-top:25px">In what area do you think I'm awesome?</h3>
                 <table class="table table-striped" style="margin-bottom:45px">
                     <thead>
                         <tr>
