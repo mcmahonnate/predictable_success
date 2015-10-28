@@ -48,7 +48,7 @@ class FeedbackRequest(models.Model):
         if not recipient_email:
             return
         tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
-        response_url = 'https://%s/#/feedback/submission/%d' % (tenant.domain_url, self.id)
+        response_url = 'https://%s/#/feedback/request/%d/reply' % (tenant.domain_url, self.id)
         context = {
             'recipient_first_name': self.reviewer.first_name,
             'requester_full_name': self.requester.full_name,
