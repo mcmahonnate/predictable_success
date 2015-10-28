@@ -288,9 +288,9 @@ class AttributeSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['employee', 'name', 'category', 'display']
 
 class CreateEmployeeSerializer(serializers.HyperlinkedModelSerializer):
-    team = serializers.PrimaryKeyRelatedField(allow_null=True, queryset=Team.objects.all())
-    coach = serializers.PrimaryKeyRelatedField(allow_null=True, queryset=Employee.objects.all())
-    leader = serializers.PrimaryKeyRelatedField(allow_null=True, queryset=Employee.objects.all())
+    team = serializers.PrimaryKeyRelatedField(allow_null=True, required=False, queryset=Team.objects.all())
+    coach = serializers.PrimaryKeyRelatedField(allow_null=True, required=False, queryset=Employee.objects.all())
+    leader = serializers.PrimaryKeyRelatedField(allow_null=True, required=False, queryset=Employee.objects.all())
 
     class Meta:
         model = Employee

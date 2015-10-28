@@ -258,7 +258,7 @@ angular.module('tdb.org.controllers', [])
         };
     }])
 
-    .controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', '$modal', 'User', 'Employee', 'EmployeeSearch', 'Team', 'Engagement', 'SendEngagementSurvey', 'EmployeeLeader', 'Attribute', '$http', 'Customers', 'analytics', 'EmployeeMBTI', 'Notification', function ($rootScope, $scope, $location, $routeParams, $window, $modal, User, Employee, EmployeeSearch, Team, Engagement, SendEngagementSurvey, EmployeeLeader, Attribute, $http, Customers, analytics, EmployeeMBTI, Notification) {
+    .controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', '$modal', 'User', 'Employee', 'EmployeeSearch', 'Team', 'Engagement', 'SendEngagementSurvey', 'EmployeeLeader', 'Attribute', '$http', 'Customers', 'analytics', 'EmployeeMBTI', 'Notification', 'CompSummary', function ($rootScope, $scope, $location, $routeParams, $window, $modal, User, Employee, EmployeeSearch, Team, Engagement, SendEngagementSurvey, EmployeeLeader, Attribute, $http, Customers, analytics, EmployeeMBTI, Notification, CompSummary) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         Customers.get(function (data) {
             $scope.customer = data;
@@ -291,12 +291,9 @@ angular.module('tdb.org.controllers', [])
             function (data) {
                 $scope.employee = data;
                 $scope.employee.hire_date = $rootScope.parseDate($scope.employee.hire_date);
-                if ($scope.employee.current_leader && $scope.employee.current_leader.id == $rootScope.currentUser.employee.id) {
-                    $scope.showCompensation = true;
-                }
             }
         );
-
+        $scope.compSummaries = CompSummary.getAllSummariesForEmployee($routeParams.id);
         $scope.happyIndex = 0;
         Engagement.query(
             {id: $routeParams.id},
