@@ -1,8 +1,8 @@
 from django.db.models import F
 from django.http import Http404
-from rest_framework.decorators import api_view
 from rest_framework.generics import RetrieveAPIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from blah.api.serializers import CommentSerializer
 from blah.api.views import CommentList
 from rest_framework.response import Response
@@ -114,6 +114,7 @@ class CurrentCoach(RetrieveAPIView):
         return coach
 
 @api_view(['GET'])
+@permission_classes((AllowAny, ))
 def employee_support_team(request, pk):
     try:
         employee = Employee.objects.get(id=pk)

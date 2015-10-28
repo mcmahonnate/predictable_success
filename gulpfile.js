@@ -16,7 +16,7 @@ gulp.task('scripts', function() {
         .pipe(iife())
         .pipe(ngAnnotate())
         .pipe(sourcemaps.write())
-        .pipe(gulp.dest('./talentdashboard/staticfiles/'));
+        .pipe(gulp.dest('./talentdashboard/static/'));
 });
 
 gulp.task('less', function () {
