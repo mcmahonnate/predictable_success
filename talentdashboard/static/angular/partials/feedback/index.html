@@ -85,7 +85,7 @@
             <span style="color: #aaa;font-style: italic;">Delivered by: {{ digest.delivered_by.full_name }}</span>
                 <div ng-show="digest.summary">
                     <h3 style="margin-top:25px;margin-bottom:15px;">Summary from your Coach</h3>
-                    <p>{{ digest.summary }}</p>
+                    <p style="white-space: pre-line;">{{ digest.summary }}</p>
                 </div>
                 <h3 style="margin-top:25px">In what area do you think I'm awesome?</h3>
                 <table class="table table-striped" style="margin-bottom:45px">
@@ -110,7 +110,7 @@
                                     </span>
                                 Anonymous
                             </td>
-                            <td>
+                            <td style="white-space: pre-line;">
                                 {{ submission.excels_at }}
                             </td>
                         </tr>
@@ -141,7 +141,7 @@
                                     </span>
                                 Anonymous
                             </td>
-                            <td>
+                            <td style="white-space: pre-line;">
                                 {{ submission.could_improve_on }}
                             </td>
                         </tr>
