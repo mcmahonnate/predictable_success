@@ -58,14 +58,14 @@
                 <span class="xxxlarge-headshot">
                     <img ng-src="{{request.currentCoach.avatar}}" alt="{{request.currentCoach.full_name}}" class="headshot-image">
                 </span>
-                <h3 class="centered">{{request.currentCoach.full_name}}</h3>
-                <p class="centered"><a ng-click="request.changeCoach()">Select a different coach</a></p>
+                <h3 class="centered"><strong>{{request.currentCoach.full_name}}</strong></h3>
+                <p class="centered" style="margin-top:5px"><a ng-click="request.changeCoach()">Select a different coach</a></p>
             </panel>
         </div>
         <div class="modal-footer">
             <button ng-show="request.panel_index>0" type="button" ng-click="request.stepBack()" class="btn btn-default">Back</button>
             <button type="button" ng-click="request.cancel()" class="btn btn-default pull-left">Cancel</button>
-            <button ng-show="request.panel_index<3" ng-disabled="request.selectedReviewers.length==0" type="button" class="btn btn-success" ng-click="request.sendFeedbackRequests()">Submit Request</button>
+            <button ng-show="request.panel_index<3" ng-disabled="request.selectedReviewers.length==0" type="button" class="btn btn-success" ng-click="request.sendFeedbackRequests()">Submit</button>
         </div>
     </div>   
 </form>

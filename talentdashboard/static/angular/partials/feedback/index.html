@@ -1,6 +1,6 @@
 <div id="feedback" class="container">
     <div ng-show="feedback.myRecentlySentRequests.length">
-        <h1>Foolish 360 Feedback
+        <h1>360 Feedback
             <button class="btn btn-success btn-feedback" ng-click="feedback.requestFeedback()" type="button">Ask for Feedback</button>
             <button class="btn btn-success btn-feedback" ng-click="feedback.giveUnsolicitedFeedback()" type="button">Give Feedback</button>
         </h1>
@@ -67,7 +67,7 @@
                         {{ request.request_date | fromNow }}
                     </td>
                     <td class="message">
-                        {{ request.message }}&nbsp;
+                        {{ request.message }}
                     </td>                          
                     <td class="centered">
                         <i ng-show="{{ request.has_been_answered }}" class="fa fa-check" title="Completed"></i>

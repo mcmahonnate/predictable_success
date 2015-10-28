@@ -2,15 +2,15 @@
 
     <!-- Mobile -->
     <div class="mobile-navigation"> 
-        <div ng-click="toggleMenu()">
-            <i class="fa fa-bars mobile-nav-trigger"></i>
+        <div ng-click="toggleMenu()" class="mobile-menu-btn pull-right">
+            Menu
         </div>
         <div class="mobile-logo-container">
             <a href="#/">
                 <img src="../static/images/compass-logo-white.png" class="logo" alt="Home" />
             </a>
         </div> 
-    </div>    
+    </div>  
 
     <!-- Desktop/large screen formats -->
     <div class="desktop-navigation" role="menubar" ng-controller="NavigationCtrl" >
@@ -58,13 +58,13 @@
         <li>
             <a href="#/feedback" ng-click="toggleMenu()">
                 <span class="fa fa-comments team_menu nav-item-icon"></span>
-                Feedback
+                360 Feedback
             </a>
         </li>
         <li>
-            <a href="#/feedback" ng-click="toggleMenu()">
-                <span class="fa fa-comments team_menu nav-item-icon"></span>
-                Coaching
+            <a href="/logout" ng-click="toggleMenu()">
+                <span class="fa fa-sign-out team_menu nav-item-icon"></span>
+                Log Out
             </a>
         </li>
     </ul>

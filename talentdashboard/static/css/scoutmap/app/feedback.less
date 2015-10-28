@@ -54,7 +54,22 @@
 
     @media only screen and (max-width: 640px) {
         
+        h1 {
+            font-size: 25px;
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        .panel {
+            padding: 20px;
+        }
+
         .btn-feedback {
+            margin-top: 5px;
+            display: block;
+            width: 100%;
+        }
+        .btn-feedback:first-child {
             margin-top: 20px;
         }
 
@@ -65,7 +80,11 @@
             font-size: 12px !important;
             color: #999;
             top: 18px;
-            left: 41px;
+            left: 36px;
+            width: 100%;
+        }
+        .tiny-headshot {
+            margin-right: 5px;
         }
         .message {
             margin: 10px 0px 0px;
@@ -100,6 +119,12 @@
 
 /* Feedback Modal */
 #feedback-modal {
+
+    .modal-body {
+        @media only screen and (max-width: 640px) {
+            padding: 20px;
+        }    
+    }
 
     .modal-question-list {
         list-style-type: decimal;

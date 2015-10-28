@@ -1,7 +1,7 @@
-<div class="container">
+<div id="feedback" class="container">
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
-        <h1>Submit Feedback</h1>
+        <h1 class="page-title">Submit Feedback</h1>
         <div class="panel">
             <div class="panel-body">
                 <div class="form-group">
@@ -11,7 +11,6 @@
                         ng-model="submitFeedback.subject"
                         reset-search-input="false"
                         theme="bootstrap"
-                        style="width:50%"
                         >
                         <ui-select-match placeholder="Type an employee's name">
                             {{ $select.selected.full_name }}

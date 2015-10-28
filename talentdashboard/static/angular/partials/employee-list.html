@@ -1,8 +1,6 @@
 <div class="container">
     <div class="row sorts">
-        <div class="dropdown btn-group">
-            <h1><span ng-if="!categoryName">All Employees</span>{{categoryName}}</h1>
-        </div>
+        <h1><span ng-if="!categoryName">All Employees</span>{{categoryName}}</h1>
         <div class="dropdown pull-right" ng-if="customer.show_vops" style="margin-left:5px">
             <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
                 <span ng-if="!synergistStyle">Synergist Style</span> {{synergistStyle | titleCase}}

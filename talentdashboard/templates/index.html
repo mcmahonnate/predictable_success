@@ -15,9 +15,7 @@
             <div ng-include="'/static/angular/partials/_widgets/navigation/nav-individual.html'"></div>    
         {% endif %}
 
-        <div id="all" ng-class="{retract:showmenu,slide:!showmenu}">
-            <div class="overlay" ng-class="{show:showmenu}" ng-swipe-left="showmenu=false"></div>
-            <div ng-view></div>
-        </div>    
+        <div class="overlay" ng-class="{show:showmenu}" ng-swipe-left="showmenu=true"></div>
+        <div ng-view></div> 
     </div>
 {% endblock content%}

@@ -70,7 +70,6 @@
             <span class="nav-item-icon glyphicon glyphicon-th filter_menu"></span>
             Screener
             <div class="subnav" role="menu">
-
                 <div class="subnav-title">Development Zones</div>
                 <ul class="talent-groups">
                     <li>
@@ -208,35 +207,135 @@
 </div>
 
 <!-- Slidein Menu -->
-<div id="menuleft" ng-class="{retract:!showmenu,slide:showmenu}">
+<div id="menuleft" ng-class="{retract:!showmenu,slide:showmenu}" ng-controller="NavigationCtrl">
     <ul>
+        <li ng-controller="SearchCtrl">
+            <div class="subnav-search-input">
+                <div class="subnav-search-input-container">
+                    <input ng-model="navQuery" type="text" placeholder="Search Employees..." class="form-control nav-input" />
+                </div>    
+                <div class="search-results" ng-show="navQuery != ''">
+                    <ul ng-if="navQuery!=''">
+                        <li ng-repeat="employee in filteredEmployees = (employees |filter:{full_name:navQuery}:startsWith) | orderBy:'full_name'">
+                            <a ng-click="setActiveTab(searchTab)" class="search-result" href="#/employees/{{employee.pk}}">
+                                <span class="tiny-headshot">
+                                    <img ng-src="{{employee.avatar_small}}" alt="{{employee.full_name}}'s avatar" />
+                                </span>
+                                <span class="employee-name">{{employee.full_name}}</span>
+                            </a>
+                        </li>
+                        <li ng-show="!filteredEmployees.length">No Results</li>
+                    </ul>
+                </div>
+            </div>
+        </li>
         <li>
-            <a href="#/my-profile" ng-click="toggleMenu()">
+            <div ng-click="isMyStuffOpen = !isMyStuffOpen" class="mobile-menu-item">
                 <span class="glyphicon glyphicon-user team_menu nav-item-icon"></span>
                 My Stuff
-                <div class="subnav" role="menu">
-                    <div>
-                        <div class="subnav-title">My Stuff</div>
-                        <ul>
-                            <li ng-if="currentUser.is_team_lead"><a ng-href="#/my-team">My Team</a></li>
-                            <li ng-if="currentUser.can_coach_employees"><a ng-href="#/my-coachees">My Coachees</a></li>
-                            <li><a ng-href="#/feedback">My Feedback</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </a> 
+            </div>    
+            <ul ng-show="isMyStuffOpen" class="mobile-sub-menu" role="menu">
+                <li ng-if="!currentUser.is_team_lead"><a ng-href="#/my-team" ng-click="toggleMenu()">My Team</a></li>
+                <li ng-if="!currentUser.can_coach_employees"><a ng-href="#/my-coachees" ng-click="toggleMenu()">My Coachees</a></li>
+                <li><a ng-href="#/feedback" ng-click="toggleMenu()">My Feedback</a></li>
+            </ul>
+        </li>
+        <li ng-show="!activeEmployee.is_lead">
+            <div ng-click="isDashboardOpen = !isDashboardOpen" class="mobile-menu-item">
+                <span class="nav-item-icon fa fa-tachometer filter_menu"></span>
+                Dashboard
+            </div>    
+            <ul ng-show="isDashboardOpen" class="mobile-sub-menu" role="menu">
+                <li><a ng-href="#/" ng-click="toggleMenu()">Company Dashboard</a></li>
+                <li ng-repeat="team in teams | filter:{name:teamQuery}:startsWith | orderBy:'name'">
+                    <a class="dashboard" href="#/teams/{{team.id}}" ng-click="toggleMenu()">{{team.name}}</a>
+                </li>
+            </ul>
         </li>
         <li>
-            <a href="#/feedback" ng-click="toggleMenu()">
-                <span class="fa fa-comments team_menu nav-item-icon"></span>
-                Feedback
-            </a>
-        </li>
+            <div ng-click="isScreenerOpen = !isScreenerOpen"  class="mobile-menu-item">
+                <span class="nav-item-icon glyphicon glyphicon-th filter_menu"></span>
+                Screener
+            </div>    
+            <ul ng-show="isScreenerOpen" class="mobile-sub-menu">
+                <li>
+                    <a class="dashboard" ng-click="toggleMenu()" href="#/employees?talent_category=1">
+                        <span>{{talentCategories["1"].label}}</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="dashboard" ng-click="toggleMenu()" href="#/employees?talent_category=2">
+                        <span>{{talentCategories["2"].label}}</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="dashboard" ng-click="toggleMenu()" href="#/employees?talent_category=3">
+                        <span>{{talentCategories["3"].label}}</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="dashboard" ng-click="toggleMenu()" href="#/employees?talent_category=4">
+                        <span>{{talentCategories["4"].label}}</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="dashboard" ng-click="toggleMenu()" href="#/employees?talent_category=5">
+                        <span>{{talentCategories["5"].label}}</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="dashboard" ng-click="toggleMenu()" href="#/employees?talent_category=6">
+                        <span>{{talentCategories["6"].label}}</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="dashboard" ng-click="toggleMenu()" href="#/employees?talent_category=7">
+                        <span>{{talentCategories["7"].label}}</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="dashboard" hng-click="toggleMenu()" ref="#/employees">
+                        <span>All Employees</span>
+                    </a>
+                </li>    
+            </ul>
+        </li>  
         <li>
-            <a href="#/feedback" ng-click="toggleMenu()">
-                <span class="fa fa-comments team_menu nav-item-icon"></span>
-                Coaching
-            </a>
-        </li>
+            <div ng-click="isReportsOpen = !isReportsOpen"  class="mobile-menu-item">
+                <span class="fa fa-file-text nav-item-icon"></span>
+                Reports
+            </div>    
+            <ul ng-show="isReportsOpen" class="mobile-sub-menu">
+                <li>
+                    <a ng-click="toggleMenu()" class="dashboard employee_menu" href="#/reports/activity">
+                        Activity Report
+                    </a>
+                </li>                
+                <li>
+                    <a ng-click="toggleMenu()" class="dashboard employee_menu" href="#/reports">
+                        Employee Report
+                    </a>
+                </li>
+                <li>
+                    <a ng-click="toggleMenu()" class="dashboard employee_menu" href="#/reports/timespan">
+                        Timespan Report
+                    </a>
+                </li>                    
+            </ul>
+        </li>  
+        <li>
+            <div ng-click="isSettingsOpen = !isSettingsOpen" class="mobile-menu-item">
+                <span class="fa fa-gear employee_menu nav-item-icon"></span>
+                Settings
+            </div>    
+            <ul ng-show="isSettingsOpen" class="mobile-sub-menu">
+                <li ng-show="!showAddEmployee">
+                    <a ng-click="toggleMenu()" class="dashboard employee_menu" ng-click="addEmployee(newEmployee, newLeadership, employees, teams);">
+                        <span class="glyphicon glyphicon-user"></span>
+                        <span>Add Employee</span>
+                    </a>
+                </li>
+            </ul>
+        </li>    
     </ul>
 </div>

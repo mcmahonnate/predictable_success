@@ -11,11 +11,20 @@
 }
 .subnav-search-input {
 	padding: 0 30px 10px;
+
+  	@media only screen and (max-width : 640px) {
+  		padding: 0;
+  	}
 }
 .search-results {
 	margin-top: 10px;
   	height: 200px;
   	overflow: scroll;
+
+  	@media only screen and (max-width : 640px) {
+  		height: auto;
+  		overflow: auto;
+  	}
 }
 .search-result {
 	margin: 0;
@@ -24,6 +33,20 @@
 .employee-name {
 	margin-top: 6px;
   	display: block;
+}
+
+
+.subnav-search-input-container {
+	position: relative;
+	margin: 5px;
+
+	.clear-search {
+		position: absolute;
+	    top: 5px;
+	    font-size: 25px;
+	    color: #aaa;
+	    right: 6px;
+	}
 }
 
 
