@@ -18,12 +18,6 @@
             <a href="#/"><img src="../static/images/compass-logo-white.png" class="logo" alt="Home" /></a>
         </div>
         <div role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == myTab}" ng-click="setActiveTab(myTab)">
-            <a href="#/my-profile">
-                <span class="glyphicon glyphicon-user team_menu nav-item-icon"></span>
-                Profile
-            </a>    
-        </div>
-        <div role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == myTab}" ng-click="setActiveTab(myTab)">
             <a href="#/feedback">
                 <span class="fa fa-comments team_menu nav-item-icon"></span>
                 Feedback
@@ -49,12 +43,6 @@
 <!-- Left Menu -->
 <div id="menuleft" ng-class="{retract:!showmenu,slide:showmenu}">
     <ul>
-        <li>
-            <a href="#/my-profile" ng-click="toggleMenu()">
-                <span class="glyphicon glyphicon-user team_menu nav-item-icon"></span>
-                My Profile
-            </a> 
-        </li>
         <li>
             <a href="#/feedback" ng-click="toggleMenu()">
                 <span class="fa fa-comments team_menu nav-item-icon"></span>
