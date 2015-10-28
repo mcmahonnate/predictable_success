@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from django.db import models
+from django.utils import timezone
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from model_utils.models import TimeStampedModel
@@ -124,11 +125,20 @@ class OnlyOneCurrentFeedbackDigestAllowed(Exception):
     pass
 
 
+class FeedbackDigestManager(models.Manager):
+    def get_current_delivered_for_employee(self, employee):
+        return self.filter(subject=employee, has_been_delivered=True).latest('delivery_date')
+
+    def get_all_delivered_for_employee(self, employee):
+        return self.filter(subject=employee, has_been_delivered=True)
+
 class FeedbackDigest(TimeStampedModel):
+    objects = FeedbackDigestManager()
     subject = models.ForeignKey(Employee, related_name='+')
     summary = models.TextField(blank=True)
     has_been_delivered = models.BooleanField(default=False)
     delivered_by = models.ForeignKey(Employee, related_name='+', null=True)
+    delivery_date = models.DateTimeField(null=True)
 
     def save(self, *args, **kwargs):
         if not self.has_been_delivered:
@@ -148,9 +158,8 @@ class FeedbackDigest(TimeStampedModel):
     def deliver(self, delivered_by):
         self.delivered_by = delivered_by
         self.has_been_delivered = True
-        for submission in self.submissions.all():
-            submission.has_been_delivered = True
-            submission.save()
+        self.delivery_date = timezone.now()
+        self.submissions.all().update(has_been_delivered=True)
         self.save()
 
 class FeedbackProgressReports(object):

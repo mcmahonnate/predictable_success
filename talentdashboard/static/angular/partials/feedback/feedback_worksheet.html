@@ -2,7 +2,7 @@
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2">
 			<h1>Feedback for {{ feedbackWorksheet.progressReport.employee.full_name }}</h1>
-			<div class="panel">
+			<div class="panel" ng-show="feedbackWorksheet.showProgressReport">
 				<div ng-show="feedbackWorksheet.progressReport.solicited_submissions.length>0">
 					<h3><strong>Feedback Submissions</strong></h3>
 					<table class="table table-striped" style="margin-bottom:45px">
@@ -77,25 +77,24 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                              <th>From</th>
-                              <th>Anonymous</th>
-                              <th>Request Date</th>
-                              <th></th>
+                              <th>Person</th>
+                              <th>Sent</th>
+                              <th>Where they'd like feedback</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="submission in feedbackWorksheet.progressReport.unanswered_requests">
+                            <tr ng-repeat="request in feedbackWorksheet.progressReport.unanswered_requests">
                                 <td>
-                                    {{ submission.requester.full_name }}
+                                    <span class="tiny-headshot">
+                                        <img ng-src="{{ request.reviewer.avatar_small }}" alt="{{ request.reviewer.full_name }}'s avatar" />
+                                    </span>
+                                    {{ request.reviewer.full_name }}
                                 </td>
-                                <td>
-                                    {{ submission.anonymous }}
+                                <td class="timeago">
+                                    {{ request.request_date | fromNow }}
                                 </td>
-                                <td>
-                                    {{ submission.request_date | fromNow }}
-                                </td>
-                                <td>
-
+                                <td class="message">
+                                    {{ request.message }}&nbsp;
                                 </td>
                             </tr>
                         </tbody>
@@ -106,51 +105,93 @@
             <div ng-show="feedbackWorksheet.digest.submissions.length>0">
 
                 <div class="panel">
+
                     <h3>Feedback Digest</h3>
+                    <br>
                     <form>
+
                         <h3>In what area do you think I'm awesome?</h3>
-                        <div ng-repeat="submission in feedbackWorksheet.digest.submissions">
-                            <div class="activity-header">
-                                <div class="activity-owner-avatar-container">
-                                    <span class="medium-headshot">
-                                        <img ng-src="{{ submission.reviewer.avatar_small }}" class="headshot-image">
-                                    </span>
-                                </div>
-                                <div class="activity-description">
+                        <table class="table table-striped" style="margin-bottom:45px">
+                            <thead>
+                                <tr>
+                                  <th style="width:20%"></th>
+                                  <th class="centered" style="width:60%"></th>
+                                  <th style="width:10%"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="submission in feedbackWorksheet.digest.submissions">
+                                    <td ng-show="!submission.anonymous">
+                                        <a href="#/employees/{{ submission.reviewer.id }}">
+                                            <span class="tiny-headshot">
+                                                <img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
+                                            </span>
+                                        </a>
+                                        <a href="#/employees/{{ submission.reviewer.id }}">{{ submission.reviewer.full_name }}</a>
+                                        {{ submission.requester.full_name }}
+                                    </td>
+                                    <td ng-show="submission.anonymous">
+                                            <span class="tiny-headshot">
+                                                <img src="//hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg"/>
+                                            </span>
+                                        Anonymous
+                                    </td>
+                                    <td ng-show="submission.excels_at_summarized">
+                                        {{ submission.excels_at_summarized }}
+                                    </td>
+                                    <td ng-show="!submission.excels_at_summarized">
+                                        {{ submission.excels_at }}
+                                    </td>
+                                    <td>
+                                        <a ng-href="#/feedback/submission/{{ submission.id }}/process" class="btn btn-sm btn-default pull-right">Edit</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
 
-                                    <span ng-show="!submission.anonymous" class="activity-title-employee-name">{{ submission.reviewer.full_name }}</span> said
-                                    <span ng-show="!submission.anonymous" class="timestamp" data-toggle="tooltip" data-placement="top" title="{{ event.date | date:'MMM d, yyyy h:mma' }}">{{ submission.feedback_date | fromNow }}</span>
-                                    <span ng-show="submission.anonymous" class="tag employee-segment-background-color-7 pull-right">Anonymous</span>
-                                </div>
-                            </div>
+                        <h3>In what area do you think I could be more awesome?</h3>
 
-                            <div class="comment-copy" style="padding-top: 15px">
-                                <div class="activity-comment comment-text">{{ submission.excels_at }}</div>
-                            </div>
-                        </div>
-                        <h3>In what area do you think I'm not awesome?</h3>
-                        <div ng-repeat="submission in feedbackWorksheet.digest.submissions">
-                            <div class="activity-header">
-                                <div class="activity-owner-avatar-container">
-                                    <span class="medium-headshot">
-                                        <img ng-src="{{ submission.reviewer.avatar_small }}" class="headshot-image">
-                                    </span>
-                                </div>
-                                <div class="activity-description">
-
-                                    <span ng-show="!submission.anonymous" class="activity-title-employee-name">{{ submission.reviewer.full_name }}</span> said
-                                    <span ng-show="!submission.anonymous" class="timestamp" data-toggle="tooltip" data-placement="top" title="{{ event.date | date:'MMM d, yyyy h:mma' }}">{{ submission.feedback_date | fromNow }}</span>
-                                    <span ng-show="submission.anonymous" class="tag employee-segment-background-color-7 pull-right">Anonymous</span>
-                                </div>
-                            </div>
-
-                            <div class="comment-copy" style="padding-top: 15px">
-                                <div class="activity-comment comment-text">{{ submission.could_improve_on }}</div>
-                            </div>
-                        </div>
-
-                        <h2>Your Feedback Summary for <!-- Employee Name --></h2>
+                        <table class="table table-striped" style="margin-bottom:45px">
+                            <thead>
+                                <tr>
+                                  <th style="width:20%"></th>
+                                  <th class="centered" style="width:60%"></th>
+                                  <th style="width:10%"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="submission in feedbackWorksheet.digest.submissions">
+                                    <td ng-show="!submission.anonymous">
+                                        <a href="#/employees/{{ submission.reviewer.id }}">
+                                            <span class="tiny-headshot">
+                                                <img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
+                                            </span>
+                                        </a>
+                                        <a href="#/employees/{{ submission.reviewer.id }}">{{ submission.reviewer.full_name }}</a>
+                                        {{ submission.requester.full_name }}
+                                    </td>
+                                    <td ng-show="submission.anonymous">
+                                            <span class="tiny-headshot">
+                                                <img src="//hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg"/>
+                                            </span>
+                                        Anonymous
+                                    </td>
+                                    <td ng-show="submission.could_improve_on_summarized">
+                                        {{ submission.could_improve_on_summarized }}
+                                    </td>
+                                    <td ng-show="!submission.could_improve_on_summarized">
+                                        {{ submission.could_improve_on }}
+                                    </td>
+                                    <td>
+                                        <a ng-href="#/feedback/submission/{{ submission.id }}/process" class="btn btn-sm btn-default pull-right">Edit</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <h2>Your Feedback Summary for {{ feedbackWorksheet.progressReport.employee.full_name }}</h2>
+                        <br>
                         <textarea class="form-control" ng-model="feedbackWorksheet.digest.summary"></textarea>
+                        <br>
                         <button class="btn btn-success btn-lg" type="button" ng-click="feedbackWorksheet.deliverDigest()">Send to {{ feedbackWorksheet.progressReport.employee.full_name }}</button>
 
                         <button class="btn btn-default btn-lg" type="button" ng-click="feedbackWorksheet.save()">Save</button>

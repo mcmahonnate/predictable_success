@@ -11,6 +11,7 @@
         vm.getCurrentDigest = getCurrentDigest;
         vm.save = save;
         vm.deliverDigest = deliverDigest;
+        vm.showProgressReport = true;
         activate();
 
         function activate() {
@@ -30,6 +31,11 @@
             return FeedbackRequestService.getFeedbackProgressReportForEmployee(vm.employeeId)
                 .then(function (data) {
                     vm.progressReport = data;
+                    if (vm.progressReport.solicited_submissions.length>0 ||
+                        vm.progressReport.unsolicited_submissions.length>0 ||
+                        vm.progressReport.unanswered_requests.length>0) {
+                        vm.showProgressReport = true;
+                    }
                     return vm.progressReport;
                 });
         }
