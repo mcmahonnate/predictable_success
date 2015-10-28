@@ -2,7 +2,7 @@
         .module('feedback')
         .controller('FeedbackWorksheetController', FeedbackWorksheetController);
 
-    function FeedbackWorksheetController($routeParams, Notification, FeedbackRequestService, FeedbackDigestService) {
+    function FeedbackWorksheetController($routeParams, $location, Notification, FeedbackRequestService, FeedbackDigestService) {
         var vm = this;
         vm.employeeId = $routeParams.id;
         vm.progressReport = null;
@@ -51,6 +51,7 @@
             return FeedbackDigestService.deliverDigest(vm.digest)
                 .then(function (data) {
                     Notification.success("The digest will be delivered to " + vm.digest.subject.full_name + ".");
+                    $location.path('/my-coachees/');
                 });
         }
     }
