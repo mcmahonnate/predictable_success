@@ -2,7 +2,7 @@
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2">
 			<h1>Feedback for {{ processFeedback.submission.subject.full_name }}</h1>
-			<div class="panel activity">
+			<div class="panel activity" style="min-height:auto">
                 <form name="processFeedback.form">
                     <div class="panel-body">
                         <div class="activity-items">
@@ -14,21 +14,23 @@
                                             <img ng-src="{{ processFeedback.submission.reviewer.avatar_small }}" class="headshot-image">
                                         </span>
                                     </div>
-
                                     <div class="activity-description">
                                         <span class="activity-title-employee-name">{{ processFeedback.submission.reviewer.full_name }}</span> said
                                         <span class="timestamp" data-toggle="tooltip" data-placement="top" title="{{ event.date | date:'MMM d, yyyy h:mma' }}">{{ processFeedback.submission.feedback_date | fromNow }}</span>
                                         <span ng-show="processFeedback.submission.anonymous" class="tag employee-segment-background-color-7 pull-right">Anonymous</span>
                                     </div>
                                 </div>
-
                                 <div class="comment-copy" style="padding-top: 15px">
                                     <div class="activity-comment comment-text">{{ processFeedback.submission.excels_at }}</div>
+                                    <label for="editFeedbackQuestion1"  style="font-size:12px;font-weight:bold;cursor:pointer">
+                                        <input ng-click="isEditFeedbackCollapsed1 = !isEditFeedbackCollapsed1" id="editFeedbackQuestion1" type="checkbox"> Edit Feedback
+                                    </label>
                                 </div>
-                                <div class="comment-editor">
-                                        <div class="comment-reply-copy">
-                                            <textarea name="excels_at_summarized" ng-model="processFeedback.submission.excels_at_summarized" msd-elastic class="form-control edit-textarea"></textarea>
-                                        </div>
+
+                                <div ng-show="isEditFeedbackCollapsed1" class="comment-editor">
+                                    <div class="comment-reply-copy">
+                                        <textarea name="excels_at_summarized" ng-model="processFeedback.submission.excels_at_summarized" msd-elastic class="form-control edit-textarea"></textarea>
+                                    </div>
                                 </div>
                             </div>
                             <div class="activity-item">
@@ -48,19 +50,22 @@
 
                                 <div class="comment-copy" style="padding-top: 15px">
                                     <div class="activity-comment comment-text">{{ processFeedback.submission.could_improve_on }}</div>
+                                    <label for="editFeedbackQuestion2"  style="font-size:12px;font-weight:bold;cursor:pointer">
+                                        <input ng-click="isEditFeedbackCollapsed2 = !isEditFeedbackCollapsed2" id="editFeedbackQuestion2" type="checkbox"> Edit Feedback
+                                    </label>                           
                                 </div>
-                                <div class="comment-editor">
-                                        <div class="comment-reply-copy">
-                                            <textarea name="could_improve_on_summarized" ng-model="processFeedback.submission.could_improve_on_summarized" msd-elastic class="form-control edit-textarea"></textarea>
-                                        </div>
+
+                                <div ng-show="isEditFeedbackCollapsed2" class="comment-editor">
+                                    <div class="comment-reply-copy">
+                                        <textarea name="could_improve_on_summarized" ng-model="processFeedback.submission.could_improve_on_summarized" msd-elastic class="form-control edit-textarea"></textarea>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
                         <div class="form-group">
-                            <button ng-disabled="processFeedback.form.$pristine" class="btn btn-default btn-lg" type="button" ng-click="processFeedback.save()">Save</button>
-                            <button class="btn btn-success btn-lg" type="button" ng-click="processFeedback.addToDigest()">Add to Digest</button>
-                            <button class="btn btn-success btn-lg" type="button" ng-click="processFeedback.close()">Close</button>
+                            <button class="btn btn-default" type="button" ng-click="processFeedback.close()">Cancel</button>
+                            <button class="btn btn-success pull-right" type="button" ng-click="processFeedback.addToDigest()" rel="tooltip" data-toggle="tooltip" data-placement="top" data-original-title="A digest is a summary all of the feedback submitted to an individual.">Add to Digest</button>
+                            <button ng-disabled="processFeedback.form.$pristine" class="btn btn-default pull-right" type="button" ng-click="processFeedback.save()" style="margin-right:5px;">Save</button>
                         </div>
                     </div>
                 </form>
