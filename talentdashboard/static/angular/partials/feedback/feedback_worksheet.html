@@ -136,10 +136,10 @@
                                             </span>
                                         Anonymous
                                     </td>
-                                    <td ng-show="submission.excels_at_summarized">
+                                    <td ng-show="submission.excels_at_summarized" style="white-space: pre-line;">
                                         {{ submission.excels_at_summarized }}
                                     </td>
-                                    <td ng-show="!submission.excels_at_summarized">
+                                    <td ng-show="!submission.excels_at_summarized" style="white-space: pre-line;">
                                         {{ submission.excels_at }}
                                     </td>
                                     <td>
@@ -176,10 +176,10 @@
                                             </span>
                                         Anonymous
                                     </td>
-                                    <td ng-show="submission.could_improve_on_summarized">
+                                    <td ng-show="submission.could_improve_on_summarized" style="white-space: pre-line;">
                                         {{ submission.could_improve_on_summarized }}
                                     </td>
-                                    <td ng-show="!submission.could_improve_on_summarized">
+                                    <td ng-show="!submission.could_improve_on_summarized" style="white-space: pre-line;">
                                         {{ submission.could_improve_on }}
                                     </td>
                                     <td>
@@ -195,7 +195,7 @@
                         <button class="btn btn-success btn-lg" type="button" ng-click="feedbackWorksheet.deliverDigest()">Send to {{ feedbackWorksheet.progressReport.employee.full_name }}</button>
 
                         <button class="btn btn-default btn-lg" type="button" ng-click="feedbackWorksheet.save()">Save</button>
-                        <button class="btn btn-default btn-lg" type="button">Print</button>
+                        <button class="btn btn-default btn-lg" type="button" ng-click="feedbackWorksheet.printDigest()">Print</button>
                     </form>
                 </div>
             </div>
