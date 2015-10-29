@@ -149,20 +149,33 @@ class Employee(MPTTModel):
     user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='employee')
     coach = models.ForeignKey('Employee', related_name='coachees', null=True, blank=True)
     leader = TreeForeignKey('self', null=True, blank=True, related_name='employees', db_index=True)
-    field_tracker = FieldTracker(fields=['coach'])
+    field_tracker = FieldTracker(fields=['coach', 'departure_date'])
+
+    def update_coach(self, coach):
+        try:
+            old_coach_capacity = None
+            if self.coach:
+                old_coach_capacity = CoachCapacity.objects.get(employee=self.coach)
+
+            coach_capacity = CoachCapacity.objects.get(employee=coach)
+            if coach_capacity.is_full():
+                raise CoachCapacityError()
+            else:
+                self.coach = coach
+                self.save()
+                coach_capacity.save()
+                if old_coach_capacity:
+                    old_coach_capacity.save()
+        except CoachCapacity.DoesNotExist:
+            pass
 
     def save(self, *args, **kwargs):
         if self.first_name and self.last_name:
             self.full_name = self.first_name + " " + self.last_name
-        if self.field_tracker.has_changed('coach'):
-            if self.coach is not None:
-                try:
-                    coach_capacity = CoachCapacity.objects.get(employee=self.coach)
-                    if coach_capacity.is_full():
-                        raise CoachCapacityError()
-                except CoachCapacity.DoesNotExist:
-                    pass
         super(Employee, self).save(*args, **kwargs)
+        if self.field_tracker.has_changed('departure_date') and self.coach is not None:
+            coach_capacity = CoachCapacity.objects.get(employee=self.coach)
+            coach_capacity.save()
         new_leader_id = self.leader.id if self.leader else 0
         old_leader_id = self.current_leader.id if self.current_leader else 0
         if new_leader_id != old_leader_id:
@@ -460,7 +473,7 @@ class CoachCapacity(models.Model):
     num_coachees = models.IntegerField(default=0)
 
     def save(self, *args, **kwargs):
-        self.num_coachees = self.employee.coachees.count()
+        self.num_coachees = self.employee.coachees.filter(departure_date__isnull=True).count()
         super(CoachCapacity, self).save(*args, **kwargs)
 
     def is_full(self):

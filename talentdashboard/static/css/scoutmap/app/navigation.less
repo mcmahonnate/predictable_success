@@ -4,8 +4,8 @@
 @media only screen and (max-width : 640px) {
     .mobile-navigation {display: block;} 
     .mobile-logo-container {
-        height: 44px;
-        width: 44px;
+        height: 50px;
+        width: 50px;
         background-color: #0f9d58;
 
         .logo {
@@ -27,10 +27,10 @@
     }
     .mobile-menu-btn {
         color: #fff;
-        margin: 8px;
+        margin: 9px;
         font-size: 15px;
         border: 1px solid #888;
-        padding: 4px 12px;
+        padding: 6px 15px;
         border-radius: 5px;
     }
 
@@ -38,10 +38,6 @@
     /* Hides desktop navigation */
     .desktop-navigation {display: none;} 
 }
-
-
-
-
 
 
 
@@ -82,7 +78,7 @@ nav {
     /* For mobile experiences we move the navigation bar to the top of the viewport */
     @media only screen and (max-width : 640px) {
         width: 100% !important;
-        height: 44px !important;
+        height: 50px !important;
     }	
 }
 .nav-item-active{
@@ -293,10 +289,7 @@ nav {
 }
 
 
-
-
-
-    /* Mobile Navigation */
+/* Mobile Navigation */
 #menuleft{
     left:-85%;
     position:absolute;
@@ -310,7 +303,12 @@ nav {
 
     @media only screen and (max-width : 640px) {
         display: block;
-    }   
+    }
+    .nav-input {
+        @media only screen and (max-width : 640px) {
+            height: 40px;
+        }
+    } 
 }
 #menuleft .nav-item-icon {
     margin-right: 10px;
