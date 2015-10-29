@@ -7,7 +7,7 @@
                     <h3>Here are specific areas I'd like feedback on:</h3>
                     <p class="feedback-message">"{{ submitFeedback.feedbackRequest.message }}"</p>
                 </div>
-                <sm-feedback-submission-form feedback="submitFeedback.feedback" subject="submitFeedback.subject" submit="submitFeedback.submitFeedback(form)" cancel="submitFeedback.cancel()" />
+                <sm-feedback-submission-form feedback="submitFeedback.feedback" subject="submitFeedback.subject" submit="submitFeedback.submitFeedback(form)" cancel="submitFeedback.cancel()" toggle="submitFeedback.toggleAnonymous(submitFeedback.feedback.anonymous, submitFeedback.subject)"/>
             </div>
         </div>    
     </div>    
