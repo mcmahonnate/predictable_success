@@ -157,5 +157,5 @@ class AddSubmissionToDigestSerializer(serializers.Serializer):
 
 
 class EditFeedbackDigestSerializer(serializers.Serializer):
-    summary = serializers.CharField(required=False)
+    summary = serializers.CharField(required=False, allow_blank=True)
     has_been_delivered = serializers.BooleanField(required=False)
