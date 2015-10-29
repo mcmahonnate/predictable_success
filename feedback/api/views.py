@@ -91,7 +91,7 @@ class PotentialReviewers(ListAPIView):
         requester = Employee.objects.get_from_user(self.request.user)
         employees_to_exclude.append(requester)
         ids_to_exclude = [e.id for e in employees_to_exclude]
-        return Employee.objects.exclude(id__in=ids_to_exclude)
+        return Employee.objects.get_current_employees().exclude(id__in=ids_to_exclude)
 
 
 class FeedbackRequestsToDoList(ListAPIView):
