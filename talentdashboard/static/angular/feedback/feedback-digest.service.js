@@ -6,6 +6,7 @@ function FeedbackDigestService($log, $http) {
     return {
         getCurrentDigestForEmployee: getCurrentDigestForEmployee,
         getMyDigests: getMyDigests,
+        getDigestsIveDelivered: getDigestsIveDelivered,
         addSubmissionToCurrentDigest: addSubmissionToCurrentDigest,
         deliverDigest: deliverDigest,
         save: save
@@ -40,6 +41,23 @@ function FeedbackDigestService($log, $http) {
             $log.error('getMyDigests failed');
         }
     }
+
+
+    function getDigestsIveDelivered() {
+        var url = '/api/v1/feedback/digests/delivered/';
+        return $http.get(url)
+            .then(success)
+            .catch(fail);
+
+        function success(response) {
+            return response.data;
+        }
+
+        function fail(response) {
+            $log.error('getDigestsIveDelivered failed');
+        }
+    }
+
 
     function addSubmissionToCurrentDigest(submission) {
         var url = '/api/v1/feedback/coachees/' + submission.subject.id + '/digests/current/submissions/';

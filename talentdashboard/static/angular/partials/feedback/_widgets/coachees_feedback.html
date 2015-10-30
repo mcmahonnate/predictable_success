@@ -1,35 +1,73 @@
-<div class="panel employees-snapshot" ng-show="!feedbackCoachWidget.busy">
-					<h2 class="panel-title">360 Feedback</h2>
-					<table class="table table-striped" style="margin-bottom:45px">
-						<thead>
-					        <tr>
-					          <th style="width:50%">Employee</th>
-					          <th class="centered" style="width:20%">Requested</th>
-					          <th class="centered" style="width:20%">Received</th>
-					          <th></th>
-					        </tr>
-			      		</thead>
-			      		<tbody>
-							<tr ng-repeat="progressReport in feedbackCoachWidget.progressReports">
-								<td>
-									<a href="/#/feedback/{{progressReport.employee.id}}/worksheet/">
-										<span class="tiny-headshot">
-											<img ng-src="{{ progressReport.employee.avatar_small }}" alt="{{ progressReport.employee.full_name }}'s avatar" />
-										</span>
-									</a>
-									<a href="#/employees/{{ progressReport.employee.id }}">{{ progressReport.employee.full_name }}</a>
-								</td>
-								<td class="centered">
-									{{ progressReport.recent_feedback_requests_ive_sent_count }}
-								</td>
-								<td class="centered">
-                                    {{ progressReport.total_submissions_count }}
-								</td>
-								<td>
-									<a href="/#/feedback/{{progressReport.employee.id}}/worksheet/" class="btn btn-sm btn-default pull-right">View</a>
-								</td>
-							</tr>
-			      		</tbody>
-					</table>
+<div class="panel todos" ng-show="feedbackCoachWidget.show">
+	<h2 class="panel-title">360 Feedback</h2>
+    <tabset>
+        <tab heading="Ready" active="true">
+            <table class="table table-striped" style="margin-bottom:45px">
+                <thead>
+                    <tr>
+                      <th style="width:50%">Employee</th>
+                      <th class="centered" style="width:20%">Requested</th>
+                      <th class="centered" style="width:20%">Received</th>
+                      <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="progressReport in feedbackCoachWidget.progressReports">
+                        <td>
+                            <a href="/#/feedback/{{progressReport.employee.id}}/worksheet/">
+                                <span class="tiny-headshot">
+                                    <img ng-src="{{ progressReport.employee.avatar_small }}" alt="{{ progressReport.employee.full_name }}'s avatar" />
+                                </span>
+                            </a>
+                            <a href="#/employees/{{ progressReport.employee.id }}">{{ progressReport.employee.full_name }}</a>
+                        </td>
+                        <td class="centered">
+                            {{ progressReport.recent_feedback_requests_ive_sent_count }}
+                        </td>
+                        <td class="centered">
+                            {{ progressReport.total_submissions_count }}
+                        </td>
+                        <td>
+                            <a href="/#/feedback/{{progressReport.employee.id}}/worksheet/" class="btn btn-sm btn-default pull-right">View</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </tab>
+        <tab heading="Finished" active="true">
+            <div ng-show="feedbackCoachWidget.progressReports.length === 0 && !feedbackCoachWidget.busy" class="todos-empty">
+                <p ng-show="view == 'my-view'">You have not delivered any feedback yet.</p>
+            </div>
+            <div ng-show="feedbackCoachWidget.busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
+            <div ng-if="feedbackCoachWidget.digests.length > 0">
+                <table class="table table-striped" style="margin-bottom:45px">
+                    <thead>
+                        <tr>
+                          <th style="width:50%">Employee</th>
+                          <th class="centered" style="width:40%">Delivered</th>
+                          <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="digest in feedbackCoachWidget.digests">
+                            <td>
+                                <a href="/#/feedback/{{digest.subject.id}}/worksheet/">
+                                    <span class="tiny-headshot">
+                                        <img ng-src="{{ digest.subject.avatar_small }}" alt="{{ digest.subject.full_name }}'s avatar" />
+                                    </span>
+                                </a>
+                                <a href="#/employees/{{ digest.subject.id }}">{{ digest.subject.full_name }}</a>
+                            </td>
+                            <td class="centered">
+                                {{ digest.delivery_date | fromNow }}
+                            </td>
+                            <td>
+                                <a href="/#/feedback/{{digest.id}}/worksheet/" class="btn btn-sm btn-default pull-right">View</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </tab>
 
 </div>
