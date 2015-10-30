@@ -23,11 +23,10 @@
                                 <div class="comment-copy" style="padding-top: 15px">
                                     <div class="activity-comment comment-text">{{ processFeedback.submission.excels_at }}</div>
                                     <label for="editFeedbackQuestion1"  style="font-size:12px;font-weight:bold;cursor:pointer">
-                                        <input ng-click="isEditFeedbackCollapsed1 = !isEditFeedbackCollapsed1" id="editFeedbackQuestion1" type="checkbox"> Edit Feedback
+                                        <input ng-click="isEditFeedbackCollapsed1 = !isEditFeedbackCollapsed1" id="editFeedbackQuestion1" ng-checked="processFeedback.submission.excels_at_summarized.length" type="checkbox"> Edit Feedback
                                     </label>
                                 </div>
-
-                                <div ng-show="isEditFeedbackCollapsed1" class="comment-editor">
+                                <div ng-show="isEditFeedbackCollapsed1 || processFeedback.submission.excels_at_summarized.length" class="comment-editor">
                                     <div class="comment-reply-copy">
                                         <textarea name="excels_at_summarized" ng-model="processFeedback.submission.excels_at_summarized" msd-elastic class="form-control edit-textarea"></textarea>
                                     </div>
@@ -47,15 +46,13 @@
                                         <span ng-show="processFeedback.submission.anonymous" class="tag employee-segment-background-color-7 pull-right">Anonymous</span>
                                     </div>
                                 </div>
-
                                 <div class="comment-copy" style="padding-top: 15px">
                                     <div class="activity-comment comment-text">{{ processFeedback.submission.could_improve_on }}</div>
                                     <label for="editFeedbackQuestion2"  style="font-size:12px;font-weight:bold;cursor:pointer">
-                                        <input ng-click="isEditFeedbackCollapsed2 = !isEditFeedbackCollapsed2" id="editFeedbackQuestion2" type="checkbox"> Edit Feedback
+                                        <input ng-click="isEditFeedbackCollapsed2 = !isEditFeedbackCollapsed2" id="editFeedbackQuestion2" type="checkbox" ng-checked="processFeedback.submission.could_improve_on_summarized.length"> Edit Feedback
                                     </label>                           
                                 </div>
-
-                                <div ng-show="isEditFeedbackCollapsed2" class="comment-editor">
+                                <div ng-show="isEditFeedbackCollapsed2 || processFeedback.submission.could_improve_on_summarized.length" class="comment-editor">
                                     <div class="comment-reply-copy">
                                         <textarea name="could_improve_on_summarized" ng-model="processFeedback.submission.could_improve_on_summarized" msd-elastic class="form-control edit-textarea"></textarea>
                                     </div>

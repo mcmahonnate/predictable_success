@@ -4,29 +4,28 @@
         <h1 class="page-title">Submit Feedback</h1>
         <div class="panel">
             <div class="panel-body">
-                <div class="form-group">
-                    <label for="to">Who would you like to give feedback to?</label>
-                    <ui-select
-                        id="to"
-                        ng-model="submitFeedback.subject"
-                        reset-search-input="false"
-                        theme="bootstrap"
-                        >
-                        <ui-select-match placeholder="Type an employee's name">
-                            {{ $select.selected.full_name }}
-                        </ui-select-match>
-                        <ui-select-choices repeat="employee in submitFeedback.employees | filter: {full_name: $select.search}">
-                            <div ng-bind-html="employee.full_name | highlight: $select.search"></div>
-                        </ui-select-choices>
-                    </ui-select>
-                </div>
-                <sm-feedback-submission-form ng-show="submitFeedback.subject" feedback="submitFeedback.feedback" subject="submitFeedback.subject" submit="submitFeedback.submitFeedback(form)" cancel="submitFeedback.cancel()" />
+                <h2 class="panel-title">Who would you like to give feedback to?</h2>
+                <ui-select
+                    id="to"
+                    ng-model="submitFeedback.subject"
+                    reset-search-input="false"
+                    theme="bootstrap"
+                    style="max-width:300px"
+                    >
+                    <ui-select-match placeholder="Type an employee's name">
+                        {{ $select.selected.full_name }}
+                    </ui-select-match>
+                    <ui-select-choices repeat="employee in submitFeedback.employees | filter: {full_name: $select.search}">
+                        <div ng-bind-html="employee.full_name | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
             </div>
+            <sm-feedback-submission-form ng-show="submitFeedback.subject" feedback="submitFeedback.feedback" subject="submitFeedback.subject" submit="submitFeedback.submitFeedback(form)" cancel="submitFeedback.cancel()" />
         </div>
     </div>    
 </div>
 <style>
-    .form-group {margin-top: 15px;margin-bottom: 15px;}
+    .form-group {margin-top: 45px;margin-bottom: 15px;}
     .form-control {margin-top: 10px;}
     .form-group label {
         font-size: 14px;

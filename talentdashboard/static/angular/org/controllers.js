@@ -130,7 +130,7 @@ angular.module('tdb.org.controllers', [])
         Coachees.query({ id: $routeParams.id }).$promise.then(function (response) {
 
             $scope.employees = response;
-            console.log($scope.employees)
+            //console.log($scope.employees)
         });
         $scope.talentReport = TalentReport.myCoachees();
         $scope.salaryReport = SalaryReport.myCoachees();
