@@ -132,6 +132,10 @@ class FeedbackDigestManager(models.Manager):
     def get_all_delivered_for_employee(self, employee):
         return self.filter(subject=employee, has_been_delivered=True)
 
+    def get_all_ive_delivered(self, employee):
+        return self.filter(delivered_by=employee, has_been_delivered=True, subject__departure_date__isnull=True)
+
+
 class FeedbackDigest(TimeStampedModel):
     objects = FeedbackDigestManager()
     subject = models.ForeignKey(Employee, related_name='+')

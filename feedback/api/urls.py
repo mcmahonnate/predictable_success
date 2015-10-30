@@ -15,4 +15,6 @@ urlpatterns = [
     url(r'^coachees/(?P<employee_id>[0-9]*)/digests/current/submissions/$', add_submission_to_digest),
     url(r'^coachees/(?P<employee_id>[0-9]*)/digests/current/$', RetrieveUpdateCurrentFeedbackDigest.as_view()),
     url(r'^my/digests/$', RetrieveMyFeedbackDigests.as_view()),
+    url(r'^digests/delivered/$', RetrieveFeedbackDigestsIveDelivered.as_view()),
+    url(r'^digests/(?P<pk>[0-9]*)/$', RetrieveFeedbackDigest.as_view()),
 ]
