@@ -2,8 +2,8 @@
         .module('feedback')
         .controller('RespondToFeedbackRequestController', RespondToFeedbackRequestController);
 
-    function RespondToFeedbackRequestController($routeParams, $location, Notification, FeedbackRequestService, FeedbackSubmissionService) {
-        BaseSubmitFeedbackController.call(this, $location);
+    function RespondToFeedbackRequestController($routeParams, $location, $modal, Notification, FeedbackRequestService, FeedbackSubmissionService) {
+        BaseSubmitFeedbackController.call(this, $location, $modal);
         var vm = this;
         vm.feedbackRequest = null;
 

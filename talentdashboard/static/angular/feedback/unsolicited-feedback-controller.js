@@ -2,8 +2,8 @@
         .module('feedback')
         .controller('UnsolicitedFeedbackController', UnsolicitedFeedbackController);
 
-    function UnsolicitedFeedbackController($location, Notification, FeedbackSubmissionService) {
-        BaseSubmitFeedbackController.call(this, $location);
+    function UnsolicitedFeedbackController($location, $modal, Notification, FeedbackSubmissionService) {
+        BaseSubmitFeedbackController.call(this, $location, $modal);
         var vm = this;
         vm.employees = [];
         vm.subject = null;

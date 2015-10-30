@@ -10,6 +10,7 @@
                 feedback: '=',
                 subject: '=',
                 submit: '&',
+                toggle: '&',
                 cancel: '&'
             },
             controller: function($scope) {
@@ -18,6 +19,9 @@
                 };
                 $scope.cancelForm = function() {
                     $scope.cancel();
+                }
+                $scope.toggleValue = function(anonymous, subject) {
+                    $scope.toggle(anonymous, subject);
                 }
             }
         };
