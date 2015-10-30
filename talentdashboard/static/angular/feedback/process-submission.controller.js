@@ -10,6 +10,8 @@
         vm.addToDigest = addToDigest;
         vm.save = save;
         vm.close = close;
+        vm.back = back;
+
         activate();
 
         function activate() {
@@ -52,5 +54,9 @@
         function close() {
             checkForUnsavedChanges();
             $location.path('/feedback/' + vm.submission.subject.id + '/worksheet');
+        }
+
+        function back() {
+            $window.history.back();
         }
     }
