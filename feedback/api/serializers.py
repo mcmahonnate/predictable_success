@@ -139,13 +139,31 @@ class FeedbackProgressReportCountsSerializer(serializers.Serializer):
         return int(total)
 
 
-class FeedbackDigestSerializer(serializers.ModelSerializer):
+class FeedbackDigestSerializerForEmployee(serializers.ModelSerializer):
     subject = SanitizedEmployeeSerializer()
     delivered_by = SanitizedEmployeeSerializer()
     submissions = FeedbackSubmissionSerializerForEmployee(many=True)
 
     class Meta:
         model = FeedbackDigest
+
+
+class FeedbackDigestSerializerForCoaches(serializers.ModelSerializer):
+    subject = SanitizedEmployeeSerializer()
+    delivered_by = SanitizedEmployeeSerializer()
+    submissions = FeedbackSubmissionSerializerForCoaches(many=True)
+
+    class Meta:
+        model = FeedbackDigest
+
+
+class SummarizedFeedbackDigestSerializer(serializers.ModelSerializer):
+    subject = SanitizedEmployeeSerializer()
+    delivered_by = SanitizedEmployeeSerializer()
+
+    class Meta:
+        model = FeedbackDigest
+        fields = ('id', 'subject', 'delivered_by', 'delivery_date')
 
 
 class AddSubmissionToDigestSerializer(serializers.Serializer):
@@ -157,5 +175,5 @@ class AddSubmissionToDigestSerializer(serializers.Serializer):
 
 
 class EditFeedbackDigestSerializer(serializers.Serializer):
-    summary = serializers.CharField(required=False)
+    summary = serializers.CharField(required=False, allow_blank=True)
     has_been_delivered = serializers.BooleanField(required=False)

@@ -2,18 +2,20 @@
         .module('feedback')
         .controller('FeedbackCoachWidgetController', FeedbackCoachWidgetController);
 
-    FeedbackCoachWidgetController.$inject = ['FeedbackRequestService'];
+    FeedbackCoachWidgetController.$inject = ['FeedbackRequestService', 'FeedbackDigestService'];
 
-    function FeedbackCoachWidgetController(FeedbackRequestService) {
+    function FeedbackCoachWidgetController(FeedbackRequestService, FeedbackDigestService) {
         var vm = this;
-        vm.busy = true;
+        vm.show = false;
         vm.progressReports = [];
+        vm.digests = [];
         vm.getFeedbackProgressReport = getFeedbackProgressReport;
 
         activate();
 
         function activate() {
-            getFeedbackProgressReport()
+            getFeedbackProgressReport();
+            getDigestsIveDelivered()
         }
 
         function getFeedbackProgressReport() {
@@ -21,9 +23,20 @@
                 .then(function (data) {
                     vm.progressReports = data;
                     if (vm.progressReports.length > 0) {
-                        vm.busy = false;
+                        vm.show = true;
                     }
                     return vm.progressReport;
+                });
+        }
+
+        function getDigestsIveDelivered() {
+            return FeedbackDigestService.getDigestsIveDelivered()
+                .then(function (data) {
+                    vm.digests = data;
+                    if (vm.digests.length > 0) {
+                        vm.show = true;
+                    }
+                    return vm.digests;
                 });
         }
     }
