@@ -109,7 +109,7 @@
                             </a>
                             <div style="padding-left:60px;">
                                 <strong><a href="#/employees/{{ submission.reviewer.id }}">{{ submission.reviewer.full_name }}</a></strong> said:
-                                <div ng-show="submission.excels_at_summarized">
+                                <div ng-show="submission.excels_at_summarized" style="white-space: pre-line;">
                                     {{ submission.excels_at_summarized }}
                                 </div>
                                 <div ng-show="!submission.excels_at_summarized" style="white-space: pre-line;">

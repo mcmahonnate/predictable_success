@@ -25,7 +25,7 @@
                     if (vm.progressReports.length > 0) {
                         vm.show = true;
                     }
-                    return vm.progressReport;
+                    return vm.progressReports;
                 });
         }
 
