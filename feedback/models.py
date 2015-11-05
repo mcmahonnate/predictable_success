@@ -1,14 +1,10 @@
 from datetime import datetime, timedelta
 from django.db import models
 from django.utils import timezone
-from django.template.loader import render_to_string
-from django.core.mail import EmailMultiAlternatives
 from model_utils.models import TimeStampedModel
 from org.models import Employee
-from django.conf import settings
-from django.db import connection
 from django.db.models import Q
-from customers.models import Customer
+from .tasks import send_feedback_request_email
 
 
 class FeedbackRequestManager(models.Manager):
@@ -44,23 +40,7 @@ class FeedbackRequest(models.Model):
     was_responded_to = models.BooleanField(default=False)
 
     def send_notification_email(self):
-        recipient_email = self.reviewer.email
-        if not recipient_email:
-            return
-        tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
-        response_url = 'https://%s/#/feedback/request/%d/reply' % (tenant.domain_url, self.id)
-        context = {
-            'recipient_first_name': self.reviewer.first_name,
-            'requester_full_name': self.requester.full_name,
-            'custom_message': self.message,
-            'response_url': response_url,
-        }
-        subject = "Someone wants your feedback!"
-        text_content = render_to_string('email/feedback_request_notification.txt', context)
-        html_content = render_to_string('email/feedback_request_notification.html', context)
-        msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
-        msg.attach_alternative(html_content, "text/html")
-        msg.send()
+        send_feedback_request_email.subtask((self.id,)).apply_async()
 
     @property
     def expired(self):
@@ -131,6 +111,10 @@ class FeedbackDigestManager(models.Manager):
 
     def get_all_delivered_for_employee(self, employee):
         return self.filter(subject=employee, has_been_delivered=True)
+
+    def get_all_ive_delivered(self, employee):
+        return self.filter(delivered_by=employee, has_been_delivered=True, subject__departure_date__isnull=True)
+
 
 class FeedbackDigest(TimeStampedModel):
     objects = FeedbackDigestManager()

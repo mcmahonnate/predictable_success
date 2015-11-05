@@ -8,7 +8,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from serializers import *
 from org.models import Employee
-from org.api.permissions import UserIsEmployeesCoach, UserIsEmployeeOrCoachOfEmployee
+from org.api.permissions import UserIsEmployeesCoach, UserIsEmployeeOrCoachOfEmployee, UserIsEmployeeOrDigestDeliverer
 from ..models import FeedbackRequest, FeedbackProgressReport, FeedbackProgressReports, FeedbackDigest
 
 
@@ -143,7 +143,7 @@ class CoachUpdateFeedbackSubmission(generics.UpdateAPIView):
 
 class RetrieveMyFeedbackDigests(ListAPIView):
     permission_classes = (IsAuthenticated,)
-    serializer_class = FeedbackDigestSerializer
+    serializer_class = FeedbackDigestSerializerForEmployee
 
     def get_queryset(self):
         try:
@@ -152,6 +152,39 @@ class RetrieveMyFeedbackDigests(ListAPIView):
             return digests
         except FeedbackDigest.DoesNotExist:
             raise Http404()
+
+
+class RetrieveFeedbackDigestsIveDelivered(ListAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = SummarizedFeedbackDigestSerializer
+
+    def get_queryset(self):
+        try:
+            employee = self.request.user.employee
+            digests = FeedbackDigest.objects.get_all_ive_delivered(employee=employee)
+            return digests
+        except FeedbackDigest.DoesNotExist:
+            raise Http404()
+
+
+class RetrieveFeedbackDigest(RetrieveAPIView):
+    permission_classes = (IsAuthenticated, UserIsEmployeeOrDigestDeliverer)
+    queryset = FeedbackDigest.objects.all()
+
+    def get_digest(self):
+        try:
+            return self.get_object()
+        except FeedbackDigest.DoesNotExist:
+            raise Http404()
+
+    def get_serializer_class(self):
+        employee_making_the_request = self.request.user.employee
+        digest = self.get_object()
+        if employee_making_the_request == digest.delivered_by:
+            return FeedbackDigestSerializerForCoaches
+        if employee_making_the_request == digest.subject:
+            return FeedbackDigestSerializerForEmployee
+        raise Exception("Can't determine which serializer class to use")
 
 
 class RetrieveUpdateCurrentFeedbackDigest(APIView):
@@ -167,7 +200,7 @@ class RetrieveUpdateCurrentFeedbackDigest(APIView):
         try:
             employee = self.get_employee()
             digest = FeedbackDigest.objects.get(subject=employee, has_been_delivered=False)
-            serializer = FeedbackDigestSerializer(digest)
+            serializer = FeedbackDigestSerializerForCoaches(digest)
             return Response(serializer.data)
         except FeedbackDigest.DoesNotExist:
             raise Http404()
@@ -184,7 +217,7 @@ class RetrieveUpdateCurrentFeedbackDigest(APIView):
                 if has_been_delivered:
                     digest.deliver(request.user.employee)
             digest.save()
-            serializer = FeedbackDigestSerializer(digest)
+            serializer = FeedbackDigestSerializerForEmployee(digest)
             return Response(serializer.data)
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

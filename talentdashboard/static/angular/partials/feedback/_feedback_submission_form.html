@@ -1,22 +1,20 @@
-    <form name="feedbackForm" novalidate="novalidate">
-        <div class="panel-body">
-            <div class="form-group">
-                <label class="control-label">In what area do you think {{ subject.full_name }} is awesome?</label>
-                <textarea class="form-control" cols="30" rows="5" ng-model="feedback.excelsAt"></textarea>
-            </div>
-            <div class="form-group">
-                <label class="control-label">How do you think {{ subject.full_name }} can be even more awesome?</label>
-                <textarea class="form-control" cols="30" rows="5" ng-model="feedback.couldImproveOn"></textarea>
-            </div>
-            <div class="form-group">
-                <label class="control-label">
-                    <input type="checkbox" ng-model="feedback.anonymous" ng-click="toggleValue(feedback.anonymous, subject)"/>
-                    Make my feedback anonymous to {{ subject.full_name }}
-                </label>
-            </div>
-            <div class="form-group">
-                <button class="btn btn-success btn-lg" type="button" ng-click="submitForm(feedbackForm)">Submit Feedback</button>
-                <button class="btn btn-default btn-lg" type="button" ng-click="cancelForm()">Cancel</button>
-            </div>
-        </div>
-    </form>
+<form name="feedbackForm" novalidate="novalidate">
+    <div class="form-group">
+        <label class="control-label">In what area do you think {{ subject.full_name }} is awesome?</label>
+        <textarea class="form-control" cols="30" rows="5" ng-model="feedback.excelsAt"></textarea>
+    </div>
+    <div class="form-group">
+        <label class="control-label">How do you think {{ subject.full_name }} can be even more awesome?</label>
+        <textarea class="form-control" cols="30" rows="5" ng-model="feedback.couldImproveOn"></textarea>
+    </div>
+    <div class="form-group">
+        <label class="control-label">
+            <input type="checkbox" ng-model="feedback.anonymous"/>
+            Make my feedback anonymous to {{ subject.full_name }}
+        </label>
+    </div>
+    <div class="form-group">
+        <button class="btn btn-success" type="button" ng-click="submitForm(feedbackForm)">Submit Feedback</button>
+        <button class="btn btn-default" type="button" ng-click="cancelForm()">Cancel</button>
+    </div>
+</form>
