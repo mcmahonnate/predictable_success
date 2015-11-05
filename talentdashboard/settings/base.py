@@ -21,7 +21,7 @@ CELERY_ALWAYS_EAGER = False
 CELERY_TIMEZONE = 'America/New_York'
 
 #RabbitMQ settings
-BROKER_URL = os.environ['BROKER_URL']
+BROKER_URL = os.environ['RABBITMQ_BIGWIG_URL']
 
 MANAGERS = ADMINS = (
     ('Doug Dosberg', 'ddosberg@fool.com'),
