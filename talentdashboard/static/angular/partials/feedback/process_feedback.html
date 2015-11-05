@@ -23,12 +23,12 @@
                                 <div class="comment-copy" style="padding-top: 15px">
                                     <div class="activity-comment comment-text">{{ processFeedback.submission.excels_at }}</div>
                                     <label for="editFeedbackQuestion1"  style="font-size:12px;font-weight:bold;cursor:pointer">
-                                        <input ng-click="isEditFeedbackCollapsed1 = !isEditFeedbackCollapsed1" id="editFeedbackQuestion1" ng-checked="processFeedback.submission.excels_at_summarized.length" type="checkbox"> Edit Feedback
+                                        <input ng-disabled="processFeedback.submission.has_been_delivered" ng-click="isEditFeedbackCollapsed1 = !isEditFeedbackCollapsed1" id="editFeedbackQuestion1" ng-checked="processFeedback.submission.excels_at_summarized.length" type="checkbox"> Edit Feedback
                                     </label>
                                 </div>
                                 <div ng-show="isEditFeedbackCollapsed1 || processFeedback.submission.excels_at_summarized.length" class="comment-editor">
                                     <div class="comment-reply-copy">
-                                        <textarea name="excels_at_summarized" ng-model="processFeedback.submission.excels_at_summarized" msd-elastic class="form-control edit-textarea"></textarea>
+                                        <textarea ng-disabled="processFeedback.submission.has_been_delivered" name="excels_at_summarized" ng-model="processFeedback.submission.excels_at_summarized" msd-elastic class="form-control edit-textarea"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -49,20 +49,21 @@
                                 <div class="comment-copy" style="padding-top: 15px">
                                     <div class="activity-comment comment-text">{{ processFeedback.submission.could_improve_on }}</div>
                                     <label for="editFeedbackQuestion2"  style="font-size:12px;font-weight:bold;cursor:pointer">
-                                        <input ng-click="isEditFeedbackCollapsed2 = !isEditFeedbackCollapsed2" id="editFeedbackQuestion2" type="checkbox" ng-checked="processFeedback.submission.could_improve_on_summarized.length"> Edit Feedback
+                                        <input ng-disabled="processFeedback.submission.has_been_delivered" ng-click="isEditFeedbackCollapsed2 = !isEditFeedbackCollapsed2" id="editFeedbackQuestion2" type="checkbox" ng-checked="processFeedback.submission.could_improve_on_summarized.length"> Edit Feedback
                                     </label>                           
                                 </div>
                                 <div ng-show="isEditFeedbackCollapsed2 || processFeedback.submission.could_improve_on_summarized.length" class="comment-editor">
                                     <div class="comment-reply-copy">
-                                        <textarea name="could_improve_on_summarized" ng-model="processFeedback.submission.could_improve_on_summarized" msd-elastic class="form-control edit-textarea"></textarea>
+                                        <textarea ng-disabled="processFeedback.submission.has_been_delivered" name="could_improve_on_summarized" ng-model="processFeedback.submission.could_improve_on_summarized" msd-elastic class="form-control edit-textarea"></textarea>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <button class="btn btn-default" type="button" ng-click="processFeedback.close()">Cancel</button>
-                            <button class="btn btn-success pull-right" type="button" ng-click="processFeedback.addToDigest()" rel="tooltip" data-toggle="tooltip" data-placement="top" data-original-title="A digest is a summary all of the feedback submitted to an individual.">Add to Digest</button>
-                            <button ng-disabled="processFeedback.form.$pristine" class="btn btn-default pull-right" type="button" ng-click="processFeedback.save()" style="margin-right:5px;">Save</button>
+                            <button ng-show="processFeedback.submission.has_been_delivered" class="btn btn-success pull-right" type="button" ng-click="processFeedback.back()">Back</button>
+                            <button ng-show="!processFeedback.submission.has_been_delivered"class="btn btn-default" type="button" ng-click="processFeedback.close()">Cancel</button>
+                            <button ng-show="!processFeedback.submission.has_been_delivered" class="btn btn-success pull-right" type="button" ng-click="processFeedback.addToDigest()" rel="tooltip" data-toggle="tooltip" data-placement="top" data-original-title="A digest is a summary all of the feedback submitted to an individual.">Add to Digest</button>
+                            <button ng-show="!processFeedback.submission.has_been_delivered" ng-disabled="processFeedback.form.$pristine" class="btn btn-default pull-right" type="button" ng-click="processFeedback.save()" style="margin-right:5px;">Save</button>
                         </div>
                     </div>
                 </form>

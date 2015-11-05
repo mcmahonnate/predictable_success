@@ -7,6 +7,7 @@ function FeedbackDigestService($log, $http) {
         getCurrentDigestForEmployee: getCurrentDigestForEmployee,
         getMyDigests: getMyDigests,
         getDigestsIveDelivered: getDigestsIveDelivered,
+        getDigest: getDigest,
         addSubmissionToCurrentDigest: addSubmissionToCurrentDigest,
         deliverDigest: deliverDigest,
         save: save
@@ -42,6 +43,20 @@ function FeedbackDigestService($log, $http) {
         }
     }
 
+    function getDigest(digestId) {
+        var url = '/api/v1/feedback/digests/' + digestId + '/';
+        return $http.get(url)
+            .then(success)
+            .catch(fail);
+
+        function success(response) {
+            return response.data;
+        }
+
+        function fail(response) {
+            $log.error('getMyDigests failed');
+        }
+    }
 
     function getDigestsIveDelivered() {
         var url = '/api/v1/feedback/digests/delivered/';
