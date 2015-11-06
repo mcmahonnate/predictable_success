@@ -2,7 +2,7 @@
         .module('feedback')
         .controller('FeedbackDigestController', FeedbackDigestController);
 
-    function FeedbackDigestController($routeParams, $window, $location, $scope, analytics, FeedbackDigestService) {
+    function FeedbackDigestController($routeParams, $window, $location, $scope, analytics, FeedbackDigestService, Notification) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         var vm = this;
         vm.digestId = $routeParams.id;
@@ -20,6 +20,10 @@
                 .then(function (data) {
                     vm.digest = data;
                     return vm.digest;
+                })
+                .catch(function() {
+                    Notification.error("You don't have access to this feedback digest.");
+                    $location.path('/feedback/');
                 });
         }
 
