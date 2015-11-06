@@ -8,7 +8,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from serializers import *
 from org.models import Employee
-from org.api.permissions import UserIsEmployeesCoach, UserIsEmployeeOrCoachOfEmployee, UserIsEmployeeOrDigestDeliverer
+from org.api.permissions import UserIsEmployee, UserIsEmployeesCoach, UserIsEmployeeOrCoachOfEmployee, UserIsEmployeeOrDigestDeliverer
 from ..models import FeedbackRequest, FeedbackProgressReport, FeedbackProgressReports, FeedbackDigest
 
 
@@ -43,10 +43,13 @@ class RecentFeedbackRequestsIveSentList(ListAPIView):
 
 
 class RetrieveFeedbackRequest(RetrieveAPIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, UserIsEmployee)
     serializer_class = FeedbackRequestSerializer
     queryset = FeedbackRequest.objects.all()
 
+    def get_employee(self):
+        request = self.get_object()
+        return request.reviewer
 
 # FeedbackSubmission
 class CreateFeedbackSubmission(CreateAPIView):

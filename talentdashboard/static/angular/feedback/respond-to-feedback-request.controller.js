@@ -20,6 +20,10 @@
                     vm.feedbackRequest = feedbackRequest;
                     vm.subject = feedbackRequest.requester;
                     return vm.feedbackRequest;
+                })
+                .catch(function() {
+                    Notification.error("You don't have access to this feedback request.");
+                    $location.path('/feedback/');
                 });
         }
 
