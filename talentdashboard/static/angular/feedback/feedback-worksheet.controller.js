@@ -39,7 +39,11 @@
                         vm.showProgressReport = true;
                     }
                     return vm.progressReport;
-                });
+                })
+                .catch(function() {
+                    Notification.error("You don't have access to this digets.");
+                    $location.path('/feedback/');
+                });;
         }
 
         function save() {
