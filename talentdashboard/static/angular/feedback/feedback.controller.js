@@ -2,7 +2,11 @@ angular
     .module('feedback')
     .controller('FeedbackController', FeedbackController);
 
-function FeedbackController(FeedbackRequestService, FeedbackDigestService, $modal, $location) {
+function FeedbackController(FeedbackRequestService, FeedbackDigestService, analytics, $modal, $location, $scope) {
+    /* Since this page can be the root for some users let's make sure we capture the correct page */
+    var location_url = $location.url().indexOf('/feedback') < 0 ? '/feedback' : $location.url();
+    analytics.trackPage($scope, $location.absUrl(), location_url);
+
     var vm = this;
     vm.feedbackRequests = [];
     vm.myRecentlySentRequests = [];

@@ -2,7 +2,8 @@
         .module('feedback')
         .controller('FeedbackDigestController', FeedbackDigestController);
 
-    function FeedbackDigestController($routeParams, $window, FeedbackDigestService) {
+    function FeedbackDigestController($routeParams, $window, $location, $scope, analytics, FeedbackDigestService) {
+        analytics.trackPage($scope, $location.absUrl(), $location.url());
         var vm = this;
         vm.digestId = $routeParams.id;
         vm.digest = null;

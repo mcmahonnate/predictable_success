@@ -2,7 +2,8 @@
         .module('feedback')
         .controller('FeedbackWorksheetController', FeedbackWorksheetController);
 
-    function FeedbackWorksheetController($routeParams, $location, $window, Notification, FeedbackRequestService, FeedbackDigestService) {
+    function FeedbackWorksheetController($routeParams, $location, $window, $scope, analytics, Notification, FeedbackRequestService, FeedbackDigestService) {
+        analytics.trackPage($scope, $location.absUrl(), $location.url());
         var vm = this;
         vm.employeeId = $routeParams.id;
         vm.progressReport = null;
