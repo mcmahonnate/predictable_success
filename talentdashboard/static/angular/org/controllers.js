@@ -37,7 +37,9 @@ angular.module('tdb.org.controllers', [])
     }])
 
     .controller('MyTeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'Employee', 'SalaryReport', 'TalentReport', 'MyEmployees', 'TeamLeadEmployees', 'User', 'analytics', 'TemplatePreferences', function ($scope, $location, $routeParams, Employee, SalaryReport, TalentReport, MyEmployees, TeamLeadEmployees, User, analytics, TemplatePreferences) {
-        analytics.trackPage($scope, $location.absUrl(), $location.url());
+        /* Since this page can be the root for some users let's make sure we capture the correct page */
+        var location_url = $location.url().indexOf('/my-team') < 0 ? '/my-team' : $location.url();
+        analytics.trackPage($scope, $location.absUrl(), location_url);
 
         TemplatePreferences.getPreferredTemplate('team-lead-overview')
             .then(
@@ -125,7 +127,9 @@ angular.module('tdb.org.controllers', [])
     }])
 
     .controller('CoachDetailCtrl', ['$scope', 'Event', '$rootScope', '$location', '$routeParams', 'User', 'Employee', 'Coachees', 'SalaryReport', 'TalentReport', '$http', 'analytics', 'Engagement', 'TalentCategories', function ($scope, Event, $rootScope, $location, $routeParams, User, Employee, Coachees, SalaryReport, TalentReport, $http, analytics, Engagement, TalentCategories) {
-        analytics.trackPage($scope, $location.absUrl(), $location.url());
+        /* Since this page can be the root for some users let's make sure we capture the correct page */
+        var location_url = $location.url().indexOf('/my-coachees') < 0 ? '/my-coachees' : $location.url();
+        analytics.trackPage($scope, $location.absUrl(), location_url);
         $scope.coach = $rootScope.currentUser.employee;
         Coachees.query({ id: $routeParams.id }).$promise.then(function (response) {
 
