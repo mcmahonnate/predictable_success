@@ -2,7 +2,8 @@
         .module('feedback')
         .controller('RespondToFeedbackRequestController', RespondToFeedbackRequestController);
 
-    function RespondToFeedbackRequestController($routeParams, $location, $modal, Notification, FeedbackRequestService, FeedbackSubmissionService) {
+    function RespondToFeedbackRequestController($routeParams, $location, $scope, $modal, analytics, Notification, FeedbackRequestService, FeedbackSubmissionService) {
+        analytics.trackPage($scope, $location.absUrl(), $location.url());
         BaseSubmitFeedbackController.call(this, $location, $modal);
         var vm = this;
         vm.feedbackRequest = null;
@@ -19,6 +20,10 @@
                     vm.feedbackRequest = feedbackRequest;
                     vm.subject = feedbackRequest.requester;
                     return vm.feedbackRequest;
+                })
+                .catch(function() {
+                    Notification.error("You don't have access to this feedback request.");
+                    $location.path('/feedback/');
                 });
         }
 

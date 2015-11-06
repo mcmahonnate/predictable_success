@@ -2,7 +2,8 @@
         .module('feedback')
         .controller('FeedbackWorksheetController', FeedbackWorksheetController);
 
-    function FeedbackWorksheetController($routeParams, $location, $window, Notification, FeedbackRequestService, FeedbackDigestService) {
+    function FeedbackWorksheetController($routeParams, $location, $window, $scope, analytics, Notification, FeedbackRequestService, FeedbackDigestService) {
+        analytics.trackPage($scope, $location.absUrl(), $location.url());
         var vm = this;
         vm.employeeId = $routeParams.id;
         vm.progressReport = null;
@@ -38,7 +39,11 @@
                         vm.showProgressReport = true;
                     }
                     return vm.progressReport;
-                });
+                })
+                .catch(function() {
+                    Notification.error("You don't have access to this digest.");
+                    $location.path('/feedback/');
+                });;
         }
 
         function save() {
@@ -49,11 +54,13 @@
         }
 
         function deliverDigest() {
-            return FeedbackDigestService.deliverDigest(vm.digest)
-                .then(function (data) {
-                    Notification.success("The digest will be delivered to " + vm.digest.subject.full_name + ".");
-                    $location.path('/my-coachees/');
-                });
+            if($window.confirm("Are you sure you want to deliver this to " + vm.digest.subject.full_name + " now?")) {
+                return FeedbackDigestService.deliverDigest(vm.digest)
+                    .then(function (data) {
+                        Notification.success("The digest will be delivered to " + vm.digest.subject.full_name + ".");
+                        $location.path('/my-coachees/');
+                    });
+            }
         }
 
         function printDigest() {
