@@ -41,7 +41,7 @@
                     return vm.progressReport;
                 })
                 .catch(function() {
-                    Notification.error("You don't have access to this digets.");
+                    Notification.error("You don't have access to this digest.");
                     $location.path('/feedback/');
                 });;
         }
@@ -54,11 +54,13 @@
         }
 
         function deliverDigest() {
-            return FeedbackDigestService.deliverDigest(vm.digest)
-                .then(function (data) {
-                    Notification.success("The digest will be delivered to " + vm.digest.subject.full_name + ".");
-                    $location.path('/my-coachees/');
-                });
+            if($window.confirm("Are you sure you want to deliver this to " + vm.digest.subject.full_name + " now?")) {
+                return FeedbackDigestService.deliverDigest(vm.digest)
+                    .then(function (data) {
+                        Notification.success("The digest will be delivered to " + vm.digest.subject.full_name + ".");
+                        $location.path('/my-coachees/');
+                    });
+            }
         }
 
         function printDigest() {

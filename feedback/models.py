@@ -146,6 +146,9 @@ class FeedbackDigest(TimeStampedModel):
         self.submissions.all().update(has_been_delivered=True)
         self.save()
 
+    def __str__(self):
+        return "Feedback Digest for %s delivered by %s" % (self.subject, self.delivered_by)
+
 class FeedbackProgressReports(object):
     def __init__(self, coach):
         self.coach = coach
