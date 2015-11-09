@@ -135,8 +135,7 @@ class FeedbackProgressReportCountsSerializer(serializers.Serializer):
         return int(obj.recent_feedback_requests_ive_sent.count())
 
     def get_total_submissions_count(self, obj):
-        total = obj.solicited_submissions.count() + obj.unsolicited_submissions.count()
-        return int(total)
+        return int(obj.all_submissions_not_delivered.count())
 
 
 class FeedbackDigestSerializerForEmployee(serializers.ModelSerializer):
