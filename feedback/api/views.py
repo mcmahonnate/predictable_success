@@ -39,7 +39,7 @@ class RecentFeedbackRequestsIveSentList(ListAPIView):
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        return FeedbackRequest.objects.recent_feedback_requests_ive_sent(requester=self.request.user.employee)
+        return FeedbackRequest.objects.recent_feedback_requests_ive_sent_that_have_not_been_delivered(requester=self.request.user.employee)
 
 
 class RetrieveFeedbackRequest(RetrieveAPIView):
