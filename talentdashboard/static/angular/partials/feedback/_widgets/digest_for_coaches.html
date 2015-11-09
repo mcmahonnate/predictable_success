@@ -1,110 +1,96 @@
 <div class="panel" style="min-height:700px">
+    <h3 class="panel-title hide-for-print">Feedback Digest</h3>
+    <p ng-show="!feedbackWorksheet.digest.submissions.length" style="color:#888">You've not started a Feedback Digest for {{ feedbackWorksheet.progressReport.employee.full_name }}. A Feedback Digest is a collection of feedback that is curated and delivered to an employee by you.</p>
+    <form ng-show="feedbackWorksheet.digest.submissions.length>0">
 
-                <h3 class="panel-title">
-                    <span ng-show="view == 'delivered-view'">
-                        {{ feedbackWorksheet.digest.subject.full_name }}'s Feedback - {{ feedbackWorksheet.digest.delivery_date | date:'longDate' }}
+        <h3 class="panel-title show-for-print">Feedback Summary</h3>
+        <p class="show-for-print" style="margin-bottom:50px;">{{ feedbackWorksheet.digest.summary }}</p>
+
+
+        <h4 class="section-title">In what area do you think I'm awesome?</h4>
+        <div class="feedback-submission" ng-repeat="submission in feedbackWorksheet.digest.submissions">
+
+            <!-- Edit button -->
+            <a ng-href="#/feedback/submission/{{ submission.id }}/process" class="btn btn-xs btn-default pull-right"><i class="fa fa-pencil"></i> Edit</a>
+            
+            <!-- Headshot -->
+            <div ng-show="!submission.anonymous" class="pull-left">
+                <a href="#/employees/{{ submission.reviewer.id }}">
+                    <span class="headshot medium-headshot">
+                        <img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
                     </span>
-                    <span ng-show="view != 'delivered-view'">
-                        Feedback Digest
-                    </span>
-                </h3>
-
-                <p ng-show="!feedbackWorksheet.digest.submissions.length" style="color:#888">You've not started a Feedback Digest for {{ feedbackWorksheet.progressReport.employee.full_name }}. A Feedback Digest is a collection of feedback that is curated and delivered to an employee by you.</p>
-                <form ng-show="feedbackWorksheet.digest.submissions.length>0">
-                    <h4 class="section-title">In what area do you think I'm awesome?</h4>
-
-                    <div class="feedback-submission" ng-repeat="submission in feedbackWorksheet.digest.submissions">
-
-                        <!-- Edit button -->
-                        <a ng-href="#/feedback/submission/{{ submission.id }}/process" class="btn btn-xs btn-default pull-right">
-                            <span ng-show="view != 'delivered-view'"><i class="fa fa-pencil"></i> Edit</span>
-                            <span ng-show="view == 'delivered-view'">View</span>
-                        </a>
-
-                        <!-- Headshot -->
-                        <div ng-show="!submission.anonymous" class="pull-left">
-                            <a href="#/employees/{{ submission.reviewer.id }}">
-                                <span class="medium-headshot">
-                                    <img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
-                                </span>
-                            </a>
-                        </div>
-
-                        <!-- Anonyous Headshot -->
-                        <div ng-show="submission.anonymous" class="pull-left">
-                            <span class="medium-headshot">
-                                <img src="//hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg"/>
-                            </span>
-                        </div>
-
-                        <div style="padding-left:60px;">
-                            <div ng-show="!submission.anonymous">
-                                <a href="#/employees/{{ submission.reviewer.id }}"><strong>{{ submission.reviewer.full_name }}</strong></a> said:
-                            </div>
-                            <div ng-show="submission.anonymous">
-                                Anonymous
-                            </div>
-                            <div ng-show="submission.excels_at_summarized" style="white-space: pre-line;">
-                                {{ submission.excels_at_summarized }}
-                            </div>
-                            <div ng-show="!submission.excels_at_summarized" style="white-space: pre-line;">
-                                {{ submission.excels_at }}
-                            </div>
-                        </div>
-
-
-                    </div>
-
-                    <h4 class="section-title">In what area do you think I could be more awesome?</h4>
-                    <div class="feedback-submission" ng-repeat="submission in feedbackWorksheet.digest.submissions">
-                        
-                        <!-- Edit button -->
-                        <a ng-href="#/feedback/submission/{{ submission.id }}/process" class="btn btn-xs btn-default pull-right">
-                            <span ng-show="view != 'delivered-view'"><i class="fa fa-pencil"></i> Edit</span>
-                            <span ng-show="view == 'delivered-view'">View</span>
-                        </a>
-
-                        <!-- Headshot -->
-                        <div ng-show="!submission.anonymous" class="pull-left">
-                            <a href="#/employees/{{ submission.reviewer.id }}">
-                                <span class="medium-headshot">
-                                    <img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
-                                </span>
-                            </a>
-                        </div> 
-
-                        <!-- Anonyous Headshot -->
-                        <div ng-show="submission.anonymous" class="pull-left">
-                            <span class="medium-headshot">
-                                <img src="//hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg"/>
-                            </span>
-                        </div>
-
-                        <div style="padding-left:60px;">
-                            <div ng-show="!submission.anonymous">
-                                <a href="#/employees/{{ submission.reviewer.id }}"><strong>{{ submission.reviewer.full_name }}</strong></a> said:
-                            </div>
-                            <div ng-show="submission.anonymous">     
-                                Anonymous
-                            </div> 
-                            <div ng-show="submission.could_improve_on_summarized" style="white-space: pre-line;">
-                                {{ submission.could_improve_on_summarized }}
-                            </div>
-                            <div ng-show="!submission.could_improve_on_summarized" style="white-space: pre-line;">
-                                {{ submission.could_improve_on }}
-                            </div>
-                        </div>
-                    </div>
-                        
-
-                    <h2 class="panel-title" style="margin-top:40px;">Your Feedback Summary for {{ feedbackWorksheet.digest.subject.full_name }}</h2>
-                    <textarea ng-show="view != 'delivered-view'" class="form-control" ng-model="feedbackWorksheet.digest.summary" style="min-height:200px"></textarea>
-                    <p ng-show="view == 'delivered-view'" style="white-space: pre-line;">{{ feedbackWorksheet.digest.summary }}</p>
-                    <br>
-
-                    <button class="btn btn-success" ng-show="view != 'delivered-view'" type="button" ng-click="feedbackWorksheet.deliverDigest()"><i class="fa fa-paper-plane"></i> Send to {{ feedbackWorksheet.progressReport.employee.full_name }}</button>
-
-                    <button class="btn btn-default" ng-show="view != 'delivered-view'" type="button" ng-click="feedbackWorksheet.save()">Save</button>
-                    <button class="btn btn-default" type="button" ng-click="feedbackWorksheet.printDigest()">Print</button>
-                </form>
+                </a>
             </div>
+
+            <!-- Anonyous Headshot -->
+            <div ng-show="submission.anonymous" class="pull-left">
+                <span class="medium-headshot">
+                    <img src="//hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg"/>
+                </span>
+            </div>
+
+            <div style="padding-left:60px;">
+                <div ng-show="!submission.anonymous">
+                    <a href="#/employees/{{ submission.reviewer.id }}"><strong>{{ submission.reviewer.full_name }}</strong></a> said:
+                </div>
+                <div ng-show="submission.anonymous">     
+                    <strong>Anonymous</strong> said:
+                </div> 
+                <div ng-show="submission.excels_at_summarized" style="white-space: pre-line;">
+                    {{ submission.excels_at_summarized }}
+                </div>
+                <div ng-show="!submission.excels_at_summarized" style="white-space: pre-line;">
+                    {{ submission.excels_at }}
+                </div> 
+            </div> 
+        </div>
+
+        <div class="page-break"><!-- Used for printing --></div>
+
+        <h4 class="section-title">In what area do you think I could be more awesome?</h4>
+        <div class="feedback-submission" ng-repeat="submission in feedbackWorksheet.digest.submissions">
+            
+            <!-- Edit button -->
+            <a ng-href="#/feedback/submission/{{ submission.id }}/process" class="btn btn-xs btn-default pull-right"><i class="fa fa-pencil"></i> Edit</a>
+
+            <!-- Headshot -->
+            <div ng-show="!submission.anonymous" class="pull-left">
+                <a href="#/employees/{{ submission.reviewer.id }}">
+                    <span class="medium-headshot">
+                        <img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
+                    </span>
+                </a>
+            </div> 
+
+            <!-- Anonyous Headshot -->
+            <div ng-show="submission.anonymous" class="pull-left">
+                <span class="medium-headshot">
+                    <img src="//hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg"/>
+                </span>
+            </div>
+
+            <div style="padding-left:60px;">
+                <div ng-show="!submission.anonymous">
+                    <a href="#/employees/{{ submission.reviewer.id }}"><strong>{{ submission.reviewer.full_name }}</strong></a> said:
+                </div>
+                <div ng-show="submission.anonymous">     
+                    <strong>Anonymous</strong> said:
+                </div> 
+                <div ng-show="submission.could_improve_on_summarized" style="white-space: pre-line;">
+                    {{ submission.could_improve_on_summarized }}
+                </div>
+                <div ng-show="!submission.could_improve_on_summarized" style="white-space: pre-line;">
+                    {{ submission.could_improve_on }}
+                </div>
+            </div>
+        </div>
+
+        <h2 class="panel-title hide-for-print" style="margin-top:40px;">Feedback Summary for {{ feedbackWorksheet.progressReport.employee.full_name }}</h2>
+        <textarea class="form-control hide-for-print" ng-model="feedbackWorksheet.digest.summary" style="min-height:200px"></textarea>
+        <br>
+        <button class="btn btn-success" type="button" ng-click="feedbackWorksheet.deliverDigest()"><i class="fa fa-paper-plane"></i> Send to {{ feedbackWorksheet.progressReport.employee.full_name }}</button>
+
+        <button class="btn btn-default" type="button" ng-click="feedbackWorksheet.save()">Save</button>
+        <button class="btn btn-default" type="button" ng-click="feedbackWorksheet.printDigest()">Print</button>
+    </form>
+</div>

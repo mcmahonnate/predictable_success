@@ -1,8 +1,14 @@
 <div class="container">
-	<h1><a ng-href="#/my-coachees">Coaching</a> &raquo; Feedback for {{ feedbackWorksheet.progressReport.employee.full_name }}</h1>
+    <div class="row">
+        <div ng-class="feedbackWorksheet.progressReport.solicited_submissions.length==0 && 
+            feedbackWorksheet.progressReport.unanswered_requests.length==0 && 
+            feedbackWorksheet.progressReport.unsolicited_submissions.length==0 ? 'col col-md-8 col-md-offset-2' : 'col col-md-12'">
+	       <h1><span class="hide-for-print"><a ng-href="#/my-coachees">Coaching</a> &raquo;</span> Feedback for {{ feedbackWorksheet.progressReport.employee.full_name }}</h1>
+        </div>
+    </div>
     <div class="row">
         <div class="col col-md-5">
-			<div class="panel" ng-show="feedbackWorksheet.progressReport.solicited_submissions.length>0">
+			<div class="panel hide-for-print" ng-show="feedbackWorksheet.progressReport.solicited_submissions.length>0">
 				<h3 class="panel-title">Feedback Submissions</h3>
 				<table class="table" style="margin-bottom:0">
 					<thead>
@@ -13,7 +19,7 @@
 				        </tr>
 		      		</thead>
 		      		<tbody>
-						<tr ng-repeat="submission in feedbackWorksheet.progressReport.solicited_submissions">
+						<tr ng-repeat="submission in feedbackWorksheet.progressReport.solicited_submissions | orderBy:'-feedback_date' ">
 							<td>
 								<a href="#/employees/{{ submission.reviewer.id }}">
 									<span class="tiny-headshot">
@@ -30,7 +36,7 @@
 		      		</tbody>
 				</table>	
             </div>
-            <div class="panel" ng-show="feedbackWorksheet.progressReport.unsolicited_submissions.length>0">    
+            <div class="panel hide-for-print" ng-show="feedbackWorksheet.progressReport.unsolicited_submissions.length>0">    
 				<h3 class="panel-title">Unsolicited Feedback</h3>
 				<table class="table" style="margin-bottom:0">
 					<thead>
@@ -60,7 +66,7 @@
 		      		</tbody>
 				</table>	
             </div>
-            <div class="panel" ng-show="feedbackWorksheet.progressReport.unanswered_requests.length>0">    
+            <div class="panel hide-for-print" ng-show="feedbackWorksheet.progressReport.unanswered_requests.length>0">    
                 <h3 class="panel-title">Unanswered Requests</h3>
                 <table class="table" style="margin-bottom:0">
                     <thead>
@@ -87,12 +93,34 @@
 			</div>	
         </div>   	
 
-
         <div ng-class="feedbackWorksheet.progressReport.solicited_submissions.length==0 && 
         feedbackWorksheet.progressReport.unanswered_requests.length==0 && 
-        feedbackWorksheet.progressReport.unsolicited_submissions.length==0 ? 'col col-md-12' : 'col col-md-7'">
-
+        feedbackWorksheet.progressReport.unsolicited_submissions.length==0 ? 'col col-md-8 col-md-offset-2' : 'col col-md-7'">
             <div ng-include="'/static/angular/partials/feedback/_widgets/digest_for_coaches.html'"></div>
         </div>
     </div>    
 </div>
+
+<style>
+
+    .show-for-print {
+        display: none;
+    }
+
+    @media print {
+        .hide-for-print, nav, .btn, .account-menu {
+            display: none;
+        }
+        .show-for-print {
+            display: block;
+        }
+        .container {
+            padding: 0;
+        }
+        .page-break { 
+            display: block; 
+            page-break-before: always; 
+            padding-top: 45px;
+        }
+    }
+</style>

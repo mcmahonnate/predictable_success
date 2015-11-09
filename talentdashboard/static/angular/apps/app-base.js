@@ -37,12 +37,16 @@ var app = angular.module('tdb', [
         });
         Customers.get(function(data) {
             $rootScope.customer = data;
+            $rootScope.$broadcast('elastic:adjust');
         });
         $rootScope.talentCategories = TalentCategories.categories;
 
         $rootScope.$on('$routeChangeSuccess', function () {
             privacyMode($rootScope);
         });
+
+
+        
 
     }]);
 
