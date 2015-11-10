@@ -23,49 +23,92 @@
         <div class="modal-footer">
             <button ng-show="request.panel_index>0" type="button" ng-click="request.stepBack()" class="btn btn-default">Back</button>
             <button type="button" ng-click="request.cancel()" class="btn btn-default pull-left">Cancel</button>
-            <button ng-show="request.panel_index<3" ng-disabled="request.selectedReviewers.length==0" type="button" class="btn btn-success" ng-click="request.stepNext()">Next &rarr;</button>
+            <button ng-show="request.panel_index<3" ng-disabled="request.selectedReviewers.length==0" type="button" class="btn btn-success" ng-click="request.stepNext()">Questions &rarr;</button>
         </div>
     </div>
     <div class="form-group" ng-show="request.panel_index==1"> 
         <div class="modal-body">
             <panel>
-                <h3 class="modal-title">Here are the questions we will ask <span class="selected-requested-people" ng-repeat="reviewer in request.selectedReviewers">{{ reviewer.full_name }}<span ng-show="!$last">, </span></span></h3>
+                <h3 class="modal-title hide">People you've selected: <span class="selected-change-link" ng-click="request.stepBack()">Change</span></h3>      
+                <div class="hide selected-requested-people-container">
+                    <div class="selected-requested-people" ng-repeat="reviewer in request.selectedReviewers">
+                        <span class="tiny-headshot">
+                            <img ng-src="{{ reviewer.avatar_small }}" alt="{{ reviewer.full_name }}'s avatar" />
+                        </span>  
+                        <span class="selected-requested-name">{{ reviewer.full_name }}</span>
+                    </div>
+                </div>    
+                <h3 class="modal-title">Questions we'll ask:</h3>
                 <p>
                     <ol class="modal-question-list">
                         <li>In what areas are you awesome?</li>
                         <li>How can you be even more awesome?</li>
                     </ol>
                 </p>
-                <p>If you'd like you can add a few notes below on specific areas you'd like feedback on. (this is optional)</p>
+                <p>Add a few notes below on specific areas you'd like feedback on from the people you've selected. (optional)</p>
                 <textarea
                     ng-model="request.message"
                     msd-elastic
-                    class="form-control edit-textarea">
+                    class="form-control edit-textarea" style="min-height:80px">
                 </textarea>
             </panel>
         </div> 
         <div class="modal-footer">
             <button ng-show="request.panel_index>0" type="button" ng-click="request.stepBack()" class="btn btn-default">Back</button>
             <button type="button" ng-click="request.cancel()" class="btn btn-default pull-left">Cancel</button>
-            <button ng-show="request.panel_index<3" ng-disabled="request.selectedReviewers.length==0" type="button" class="btn btn-success" ng-click="request.stepNext()">Next &rarr;</button>
+            <button ng-show="request.panel_index<3" ng-disabled="request.selectedReviewers.length==0" type="button" class="btn btn-success" ng-click="request.stepNext()">Choose Coach &rarr;</button>
         </div>
     </div>    
     <div class="form-group" ng-show="request.panel_index==2">    
         <div class="modal-body">
             <panel>
-                <h3 class="modal-title">Feedback Delivery</h3>
-                <p class="centered" style="font-size: 14px;">Your current coach {{ request.currentCoach.full_name }} will deliver your feeback.</p>
+                <h3 class="modal-title">Choose Feedback Coach</h3>
                 <span class="xxxlarge-headshot">
                     <img ng-src="{{request.currentCoach.avatar}}" alt="{{request.currentCoach.full_name}}" class="headshot-image">
                 </span>
                 <h3 class="centered"><strong>{{request.currentCoach.full_name}}</strong></h3>
-                <p class="centered" style="margin-top:5px"><a ng-click="request.changeCoach()">Select a different coach</a></p>
+                <p class="centered change-coach-message">{{ request.currentCoach.full_name }} will deliver your feeback. If you'd like you may <a href="" class="underlined" ng-click="request.changeCoach()">select a different coach</a>.</p>
             </panel>
         </div>
         <div class="modal-footer">
-            <button ng-show="request.panel_index>0" type="button" ng-click="request.stepBack()" class="btn btn-default">Back</button>
+            <button type="button" ng-click="request.stepBack()" class="btn btn-default">Back</button>
             <button type="button" ng-click="request.cancel()" class="btn btn-default pull-left">Cancel</button>
-            <button ng-show="request.panel_index<3" ng-disabled="request.selectedReviewers.length==0 || request.enableSend==false" type="button" class="btn btn-success" ng-click="request.sendFeedbackRequests()">Submit</button>
+            <button type="button" class="btn btn-success" ng-disabled="!request.currentCoach" ng-click="request.stepNext()">Preview &rarr;</button>            
+        </div>
+    </div> 
+    <div class="form-group" ng-show="request.panel_index==3">    
+        <div class="modal-body">
+            <panel>
+                <h3 class="modal-title">Feedback Preview</h3>
+
+                <div class="confirmation-block">
+                    <h4>People you've selected: <span class="selected-change-link" ng-click="request.panel_index=0">Edit</span></h4>      
+                    <div class="selected-requested-people-container">
+                        <div class="selected-requested-people" ng-repeat="reviewer in request.selectedReviewers">
+                            <span class="tiny-headshot">
+                                <img ng-src="{{ reviewer.avatar_small }}" alt="{{ reviewer.full_name }}'s avatar" />
+                            </span>  
+                            <span class="selected-requested-name">{{ reviewer.full_name }}</span>
+                        </div>
+                    </div> 
+                </div>    
+                <div class="confirmation-block">
+                    <h4>Specific areas you'd like feedback on <span class="selected-change-link" ng-click="request.panel_index=1">Edit</span></h4>
+                    <p>{{ request.message }}<span ng-show="!request.message">Crickets...</span></p>
+                </div>
+                <div class="confirmation-block">    
+                    <h4>Your Feedback Coach <span class="selected-change-link" ng-click="request.panel_index=2">Edit</span></h4>
+                    <span class="tiny-headshot">
+                        <img ng-src="{{request.currentCoach.avatar_small}}" alt="{{request.currentCoach.full_name}}" class="headshot-image">
+                    </span>
+                    <span class="feedback-coach-name">{{request.currentCoach.full_name}}</span>
+                </div>    
+            </panel>
+        </div>
+        <div class="modal-footer">
+            <button type="button" ng-click="request.stepBack()" class="btn btn-default">Back</button>
+            <button type="button" ng-click="request.cancel()" class="btn btn-default pull-left">Cancel</button>
+            <button ng-disabled="request.selectedReviewers.length==0 || request.enableSend==false" type="button" class="btn btn-success" ng-click="request.sendFeedbackRequests()">Submit Requests</button>
         </div>
     </div>   
 </form>

@@ -5,7 +5,7 @@
         <h3 class="panel-title show-for-print">Feedback Summary</h3>
         <p class="show-for-print" style="margin-bottom:50px;">{{ feedbackWorksheet.digest.summary }}</p>
 
-        <h4 class="section-title">In what area do you think I'm awesome?</h4>
+        <h4 class="section-title">{{ feedbackWorksheet.questions.excelsAtQuestion }}</h4>
         <div class="feedback-submission" ng-repeat="submission in feedbackWorksheet.digest.submissions">
 
             <!-- Edit button -->
@@ -45,7 +45,7 @@
 
         <div class="page-break"><!-- Used for printing --></div>
 
-        <h4 class="section-title">In what area do you think I could be more awesome?</h4>
+        <h4 class="section-title">{{ feedbackWorksheet.questions.couldImproveOnQuestion }}</h4>
         <div class="feedback-submission" ng-repeat="submission in feedbackWorksheet.digest.submissions">
             
             <!-- Edit button -->
