@@ -18,6 +18,11 @@ class FeedbackRequestManager(models.Manager):
         return self.filter(requester=requester)\
             .exclude(expiration_date__lt=datetime.today())
 
+    def recent_feedback_requests_ive_sent_that_have_not_been_delivered(self, requester):
+        return self.filter(requester=requester)\
+            .exclude(expiration_date__lt=datetime.today())\
+            .filter(Q(was_responded_to=False) | (Q(was_responded_to=True) & Q(submission__has_been_delivered=False)))\
+
     def ready_for_processing(self, requester):
         has_no_digest = Q(submission__feedback_digest=None)
         has_no_submission = Q(submission=None)
@@ -55,6 +60,9 @@ class FeedbackRequest(models.Model):
 
 
 class FeedbackSubmissionManager(models.Manager):
+    def received_not_delivered(self, subject):
+        return self.filter(subject=subject).filter(has_been_delivered=False)
+
     def ready_for_processing(self, subject):
         return self.filter(subject=subject).filter(feedback_digest=None)
 
@@ -146,6 +154,9 @@ class FeedbackDigest(TimeStampedModel):
         self.submissions.all().update(has_been_delivered=True)
         self.save()
 
+    def __str__(self):
+        return "Feedback Digest for %s delivered by %s" % (self.subject, self.delivered_by)
+
 class FeedbackProgressReports(object):
     def __init__(self, coach):
         self.coach = coach
@@ -169,9 +180,11 @@ class FeedbackProgressReport(object):
         self.solicited_submissions = []
         self.unsolicited_submissions = []
         self.recent_feedback_requests_ive_sent = []
+        self.all_submissions_not_delivered = []
 
     def load(self):
         self.unanswered_requests = FeedbackRequest.objects.unanswered_for_requester(self.employee)
         self.solicited_submissions = FeedbackSubmission.objects.solicited_and_ready_for_processing(self.employee)
         self.unsolicited_submissions = FeedbackSubmission.objects.unsolicited_and_ready_for_processing(self.employee)
-        self.recent_feedback_requests_ive_sent = FeedbackRequest.objects.recent_feedback_requests_ive_sent(self.employee)
+        self.recent_feedback_requests_ive_sent = FeedbackRequest.objects.recent_feedback_requests_ive_sent_that_have_not_been_delivered(self.employee)
+        self.all_submissions_not_delivered = FeedbackSubmission.objects.received_not_delivered(self.employee)

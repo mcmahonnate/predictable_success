@@ -54,7 +54,8 @@ function FeedbackDigestService($log, $http) {
         }
 
         function fail(response) {
-            $log.error('getMyDigests failed');
+            $log.error('getDigest failed');
+            throw response.statusText;
         }
     }
 

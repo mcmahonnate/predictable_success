@@ -14,6 +14,7 @@
         vm.stepBack = stepBack;
         vm.cancel = cancel;
         vm.panel_index = 0;
+        vm.enableSend = true;
 
         activate();
 
@@ -31,6 +32,7 @@
         }
 
         function sendFeedbackRequests() {
+            vm.enableSend = false;
             FeedbackRequestService.sendFeedbackRequests(vm.selectedReviewers, vm.message)
                 .then(function(sentFeedbackRequests) {
                     Notification.success("Your feedback requests have been sent.");

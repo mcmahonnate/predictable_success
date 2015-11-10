@@ -8,7 +8,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from serializers import *
 from org.models import Employee
-from org.api.permissions import UserIsEmployeesCoach, UserIsEmployeeOrCoachOfEmployee, UserIsEmployeeOrDigestDeliverer
+from org.api.permissions import UserIsEmployee, UserIsEmployeesCoach, UserIsEmployeeOrCoachOfEmployee, UserIsEmployeeOrDigestDeliverer
 from ..models import FeedbackRequest, FeedbackProgressReport, FeedbackProgressReports, FeedbackDigest
 
 
@@ -39,14 +39,17 @@ class RecentFeedbackRequestsIveSentList(ListAPIView):
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        return FeedbackRequest.objects.recent_feedback_requests_ive_sent(requester=self.request.user.employee)
+        return FeedbackRequest.objects.recent_feedback_requests_ive_sent_that_have_not_been_delivered(requester=self.request.user.employee)
 
 
 class RetrieveFeedbackRequest(RetrieveAPIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, UserIsEmployee)
     serializer_class = FeedbackRequestSerializer
     queryset = FeedbackRequest.objects.all()
 
+    def get_employee(self):
+        request = self.get_object()
+        return request.reviewer
 
 # FeedbackSubmission
 class CreateFeedbackSubmission(CreateAPIView):
@@ -91,7 +94,7 @@ class PotentialReviewers(ListAPIView):
         requester = Employee.objects.get_from_user(self.request.user)
         employees_to_exclude.append(requester)
         ids_to_exclude = [e.id for e in employees_to_exclude]
-        return Employee.objects.get_current_employees().exclude(id__in=ids_to_exclude)
+        return Employee.objects.get_current_employees(show_hidden=True).exclude(id__in=ids_to_exclude)
 
 
 class FeedbackRequestsToDoList(ListAPIView):

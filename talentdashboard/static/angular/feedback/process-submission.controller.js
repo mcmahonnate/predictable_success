@@ -2,7 +2,8 @@
         .module('feedback')
         .controller('ProcessSubmissionController', ProcessSubmissionController);
 
-    function ProcessSubmissionController($routeParams, $location, $window, Notification, FeedbackSubmissionService, FeedbackDigestService) {
+    function ProcessSubmissionController($routeParams, $location, $window, $scope, analytics, Notification, FeedbackSubmissionService, FeedbackDigestService) {
+        analytics.trackPage($scope, $location.absUrl(), $location.url());
         var vm = this;
         vm.submissionId = $routeParams.id;
         vm.submission = null;
