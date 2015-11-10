@@ -201,7 +201,9 @@ class Employee(MPTTModel):
         return CoachCapacity.objects.filter(employee=self).exists()
 
     def is_lead(self):
-        leadership_count = Leadership.objects.filter(leader__id=self.id, end_date__isnull=True).count()
+        if not self.user.has_perm('org.view_employees_I_lead'):
+            return False
+        leadership_count = Employee.objects.filter(leader__id=self.id, departure_date__isnull=True).count()
         return leadership_count > 0
 
     def is_viewable_by_user(self, user, allowCoach=True):
@@ -389,6 +391,7 @@ class Employee(MPTTModel):
             ("view_employees", "Can view employees"),
             ("create_employee_comments", "Can create comments on employees"),
             ("view_employee_comments", "Can view comments on employees"),
+            ("view_employees_I_lead", "Can view employees I lead"),
         )
 
     class MPTTMeta:
