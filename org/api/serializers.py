@@ -248,6 +248,8 @@ class UserSerializer(serializers.ModelSerializer):
                 return True
         return False
     def get_is_team_lead(self, obj):
+        if not obj.has_perm('org.view_employee_I_lead'):
+            return False
         return obj.employee.is_lead()
 
     class Meta:

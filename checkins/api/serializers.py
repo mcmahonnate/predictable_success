@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from org.api.serializers import MinimalEmployeeSerializer, UserSerializer
+from org.api.serializers import MinimalEmployeeSerializer
 from org.models import Employee
 from engagement.models import Happiness
 from engagement.api.serializers import HappinessSerializer
