@@ -12,7 +12,6 @@
         vm.changeCoach = changeCoach;
         vm.stepNext = stepNext;
         vm.stepBack = stepBack;
-        vm.gotoFeedbackRequestSelection = gotoFeedbackRequestSelection;
         vm.cancel = cancel;
         vm.panel_index = 0;
         vm.enableSend = true;
