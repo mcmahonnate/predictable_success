@@ -16,7 +16,6 @@
             excelsAtQuestion: $rootScope.customer.feedback_excels_at_question,
             couldImproveOnQuestion: $rootScope.customer.feedback_could_improve_on_question
         };
-        console.log(vm.questions);
         function cancel() {
             returnToDashboard();
         }
