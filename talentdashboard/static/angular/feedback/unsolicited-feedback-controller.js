@@ -2,9 +2,9 @@
         .module('feedback')
         .controller('UnsolicitedFeedbackController', UnsolicitedFeedbackController);
 
-    function UnsolicitedFeedbackController($location, $modal, $scope, analytics, Notification, FeedbackSubmissionService) {
+    function UnsolicitedFeedbackController($location, $modal, $scope, $rootScope, analytics, Notification, FeedbackSubmissionService) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
-        BaseSubmitFeedbackController.call(this, $location, $modal);
+        BaseSubmitFeedbackController.call(this, $location, $modal, $rootScope);
         var vm = this;
         vm.employees = [];
         vm.subject = null;
