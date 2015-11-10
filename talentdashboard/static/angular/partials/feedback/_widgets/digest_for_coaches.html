@@ -2,10 +2,8 @@
     <h3 class="panel-title hide-for-print">Feedback Digest</h3>
     <p ng-show="!feedbackWorksheet.digest.submissions.length" style="color:#888">You've not started a Feedback Digest for {{ feedbackWorksheet.progressReport.employee.full_name }}. A Feedback Digest is a collection of feedback that is curated and delivered to an employee by you.</p>
     <form ng-show="feedbackWorksheet.digest.submissions.length>0">
-
         <h3 class="panel-title show-for-print">Feedback Summary</h3>
         <p class="show-for-print" style="margin-bottom:50px;">{{ feedbackWorksheet.digest.summary }}</p>
-
 
         <h4 class="section-title">In what area do you think I'm awesome?</h4>
         <div class="feedback-submission" ng-repeat="submission in feedbackWorksheet.digest.submissions">
