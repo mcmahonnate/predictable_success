@@ -17,6 +17,8 @@ class Customer(TenantMixin):
         blank=True,
     )
     survey_email_body = models.TextField(blank=True)
+    feedback_excels_at_question = models.TextField(default="What does this individual do when they are at their best?")
+    feedback_could_improve_on_question = models.TextField(default="What, if anything, is holding them back?")
 
     def is_public_tenant(self):
         return self.schema_name == 'public'
