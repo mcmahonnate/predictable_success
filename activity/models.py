@@ -40,7 +40,7 @@ class Event(models.Model):
     event_id = models.PositiveIntegerField('object id', db_index=True)
     user = models.ForeignKey(User, related_name='+')
     employee = models.ForeignKey(Employee, related_name='+')
-    date = models.DateTimeField(null=False, blank=False, default=datetime.datetime.now())
+    date = models.DateTimeField(null=False, blank=False, default=datetime.datetime.now)
 
     objects = EventManager()
 
