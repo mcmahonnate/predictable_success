@@ -201,8 +201,6 @@ class Employee(MPTTModel):
         return CoachCapacity.objects.filter(employee=self).exists()
 
     def is_lead(self):
-        if not self.user.has_perm('org.view_employees_I_lead'):
-            return False
         leadership_count = Employee.objects.filter(leader__id=self.id, departure_date__isnull=True).count()
         return leadership_count > 0
 

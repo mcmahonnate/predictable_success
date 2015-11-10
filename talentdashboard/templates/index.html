@@ -7,7 +7,7 @@
 
         {% if perms.org.view_employees %}
             <div ng-include="'/static/angular/partials/_widgets/navigation/nav-all-access.html'"></div>
-        {% elif user.employee.is_lead %}
+        {% elif user.employee.is_lead and perms.org.view_employees_I_lead %}
             <div ng-include="'/static/angular/partials/_widgets/navigation/nav-lead.html'"></div>
         {% elif user.employee.is_coach %}
             <div ng-include="'/static/angular/partials/_widgets/navigation/nav-coach.html'"></div>

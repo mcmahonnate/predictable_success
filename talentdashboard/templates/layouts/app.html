@@ -76,9 +76,9 @@
     <script src="{% static 'angular/apps/app-base.js' %}"></script>
     {% if perms.org.view_employees %}
         <script src="{% static 'angular/apps/app-all-access.js' %}"></script>
-    {% elif user.employee.is_lead and user.employee.is_coach%}
+    {% elif user.employee.is_lead and perms.org.view_employees_I_lead and user.employee.is_coach %}
         <script src="{% static 'angular/apps/app-lead-coach.js' %}"></script>
-    {% elif user.employee.is_lead %}
+    {% elif user.employee.is_lead and perms.org.view_employees_I_lead %}
             <script src="{% static 'angular/apps/app-lead.js' %}"></script>
     {% elif user.employee.is_coach %}
             <script src="{% static 'angular/apps/app-coach.js' %}"></script>
