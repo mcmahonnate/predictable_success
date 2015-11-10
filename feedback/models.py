@@ -167,9 +167,7 @@ class FeedbackProgressReports(object):
         for employee in employees:
             progress_report = FeedbackProgressReport(employee)
             progress_report.load()
-            if progress_report.unsolicited_submissions.count() > 0 or \
-                progress_report.solicited_submissions.count() > 0 or \
-                progress_report.unanswered_requests.count() > 0:
+            if progress_report.self.all_submissions_not_delivered.count() > 0:
                 self.progress_reports.append(progress_report)
 
 
