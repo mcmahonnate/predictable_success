@@ -8,6 +8,7 @@
             restrict: 'E',
             scope: {
                 feedback: '=',
+                questions: '=',
                 subject: '=',
                 submit: '&',
                 toggle: '&',
