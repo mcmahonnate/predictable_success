@@ -3,7 +3,8 @@
         <div ng-class="feedbackWorksheet.progressReport.solicited_submissions.length==0 && 
             feedbackWorksheet.progressReport.unanswered_requests.length==0 && 
             feedbackWorksheet.progressReport.unsolicited_submissions.length==0 ? 'col col-md-8 col-md-offset-2' : 'col col-md-12'">
-	       <h1><span class="hide-for-print"><a ng-href="#/my-coachees">Coaching</a> &raquo;</span> Feedback for {{ feedbackWorksheet.progressReport.employee.full_name }}</h1>
+	       <p class="pull-right">Coach: {{ currentUser.employee.full_name }} | Date: </p> 
+           <h1><span class="hide-for-print"><a ng-href="#/my-coachees">Coaching</a> &raquo;</span> Feedback for {{ feedbackWorksheet.progressReport.employee.full_name }}</h1>
         </div>
     </div>
     <div class="row">
