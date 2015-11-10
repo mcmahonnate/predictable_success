@@ -2,7 +2,7 @@
         .module('feedback')
         .controller('FeedbackWorksheetController', FeedbackWorksheetController);
 
-    function FeedbackWorksheetController($routeParams, $location, $window, $scope, analytics, Notification, FeedbackRequestService, FeedbackDigestService) {
+    function FeedbackWorksheetController($routeParams, $location, $window, $scope, $rootScope, analytics, Notification, FeedbackRequestService, FeedbackDigestService) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         var vm = this;
         vm.employeeId = $routeParams.id;
@@ -14,6 +14,10 @@
         vm.deliverDigest = deliverDigest;
         vm.printDigest = printDigest;
         vm.showProgressReport = true;
+        vm.questions = {
+            excelsAtQuestion: $rootScope.customer.feedback_excels_at_question,
+            couldImproveOnQuestion: $rootScope.customer.feedback_could_improve_on_question
+        };
         activate();
 
         function activate() {

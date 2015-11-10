@@ -2,7 +2,7 @@
         .module('feedback')
         .controller('ProcessSubmissionController', ProcessSubmissionController);
 
-    function ProcessSubmissionController($routeParams, $location, $window, $scope, analytics, Notification, FeedbackSubmissionService, FeedbackDigestService) {
+    function ProcessSubmissionController($routeParams, $location, $window, $scope, $rootScope, analytics, Notification, FeedbackSubmissionService, FeedbackDigestService) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         var vm = this;
         vm.submissionId = $routeParams.id;
@@ -12,7 +12,10 @@
         vm.save = save;
         vm.close = close;
         vm.back = back;
-
+        vm.questions = {
+            excelsAtQuestion: $rootScope.customer.feedback_excels_at_question,
+            couldImproveOnQuestion: $rootScope.customer.feedback_could_improve_on_question
+        };
         activate();
 
         function activate() {
