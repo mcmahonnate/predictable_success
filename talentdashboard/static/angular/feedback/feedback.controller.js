@@ -8,6 +8,7 @@ function FeedbackController(FeedbackRequestService, FeedbackDigestService, analy
     analytics.trackPage($scope, $location.absUrl(), location_url);
 
     var vm = this;
+    vm.showWelcome = false;
     vm.feedbackRequests = [];
     vm.myRecentlySentRequests = [];
     vm.myDigests = [];
@@ -38,7 +39,8 @@ function FeedbackController(FeedbackRequestService, FeedbackDigestService, analy
         FeedbackRequestService.getMyRecentlySentRequests()
             .then(function (data) {
                 vm.myRecentlySentRequests = data;
-
+                if (!vm.myRecentlySentRequests.length)
+                    vm.showWelcome = true;
                 return vm.myRecentlySentRequests;
             });
     }

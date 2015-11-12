@@ -1,37 +1,32 @@
 <div id="feedback" class="container">
-
     <div ng-show="feedback.myRecentlySentRequests.length">
         <h1>Feedback
             <button class="btn btn-success btn-feedback" ng-click="feedback.requestFeedback()" type="button">Ask for Feedback</button>
             <button class="btn btn-success btn-feedback" ng-click="feedback.giveUnsolicitedFeedback()" type="button">Give Feedback</button>
         </h1>
     </div>   
+    <div class="ng-hide panel feedback-welcome-panel" ng-show="feedback.showWelcomeMessage(feedback.myRecentlySentRequests.length)">
+        <div class="row">
+            <div class="col-md-8">
+                <h1 class="feedback-welcome-title">Welcome to 360 Feedback!</h1>
+                <p class="get-started-text" ng-bind-html="customer.feedback_welcome">
 
-
-<div class="ng-hide panel feedback-welcome-panel" ng-show="feedback.showWelcomeMessage(feedback.myRecentlySentRequests.length)">
-    <div class="row">
-        <div class="col-md-8">
-            <h1 class="feedback-welcome-title">Welcome to 360 Feedback!</h1>
-            <p class="get-started-text" ng-bind-html="customer.feedback_welcome">
-
-            </p>
-            <h2 class="get-started-title">Get started</h2>
-            <div class="get-started-btns">
-                <button class="btn btn-success btn-lg" ng-click="feedback.requestFeedback()" type="button">
-                    Ask for Feedback
-                </button>
-                <button class="btn btn-success btn-lg" ng-click="feedback.giveUnsolicitedFeedback()" type="button">
-                    Give Feedback
-                </button>
-            </div>
+                </p>
+                <h2 class="get-started-title">Get started</h2>
+                <div class="get-started-btns">
+                    <button class="btn btn-success btn-lg" ng-click="feedback.requestFeedback()" type="button">
+                        Ask for Feedback
+                    </button>
+                    <button class="btn btn-success btn-lg" ng-click="feedback.giveUnsolicitedFeedback()" type="button">
+                        Give Feedback
+                    </button>
+                </div>
+            </div> 
+            <div class="col-md-4 welcome-image">
+                <img src="../static/images/bubbles-alpha.png" style="width:100%; margin-bottom:35px; opacity:.4;"/>
+            </div>                   
         </div> 
-        <div class="col-md-4 welcome-image">
-            <img src="../static/images/bubbles-alpha.png" style="width:100%; margin-bottom:35px; opacity:.4;"/>
-        </div>                   
-    </div> 
-</div>
-
-
+    </div>
     <div class="panel" ng-show="feedback.feedbackRequests.length>0">
         <h2 class="panel-title">
             {{ feedback.feedbackRequests.length }} 

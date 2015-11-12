@@ -2,7 +2,7 @@
         .module('feedback')
         .controller('RequestFeedbackController', RequestFeedbackController);
 
-    function RequestFeedbackController(FeedbackRequestService, CoachService, Notification, $modal, $modalInstance) {
+    function RequestFeedbackController(FeedbackRequestService, CoachService, Notification, $modal, $modalInstance, $rootScope) {
         var vm = this;
         vm.potentialReviewers = [];
         vm.selectedReviewers = [];
@@ -15,6 +15,11 @@
         vm.cancel = cancel;
         vm.panel_index = 0;
         vm.enableSend = true;
+        vm.questions = {
+            excelsAtQuestion: $rootScope.customer.feedback_excels_at_question,
+            couldImproveOnQuestion: $rootScope.customer.feedback_could_improve_on_question
+        };
+        vm.tips = $rootScope.customer.feedback_tips;
 
         activate();
 
