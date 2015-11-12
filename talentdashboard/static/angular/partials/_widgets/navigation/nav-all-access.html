@@ -237,7 +237,7 @@
             <ul ng-show="isMyStuffOpen" class="mobile-sub-menu" role="menu">
                 <li ng-if="currentUser.is_team_lead"><a ng-href="#/my-team" ng-click="toggleMenu()">My Team</a></li>
                 <li ng-if="currentUser.can_coach_employees"><a ng-href="#/my-coachees" ng-click="toggleMenu()">My Coachees</a></li>
-                <li><a ng-href="#/feedback" ng-click="toggleMenu()">My Feedback</a></li>
+                <li ng-show="customer.show_beta_features"><a ng-href="#/feedback" ng-click="toggleMenu()">My Feedback</a></li>
             </ul>
         </li>
         <li ng-show="!activeEmployee.is_lead">
