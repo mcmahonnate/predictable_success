@@ -144,7 +144,7 @@ angular.module('tdb.org.controllers', [])
         $scope.employee = angular.copy(employee);
         $scope.leadership = angular.copy(leadership);
         $scope.teams = teams;
-        $scope.employees = employees;
+        $scope.employees = Employee.query({show_hidden: true}).$promise;
 
         // $scope.preview = $scope.employee.avatar;
         $scope.image = {
