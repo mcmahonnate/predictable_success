@@ -37,7 +37,7 @@ function FeedbackSubmissionService($log, FeedbackSubmissionResource, Employee) {
 
 
     function getEmployees() {
-        return Employee.query(null, success, fail).$promise;
+        return Employee.query({show_hidden: true}, success, fail).$promise;
 
         function success(response) {
             return response;
