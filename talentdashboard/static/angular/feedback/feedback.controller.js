@@ -38,6 +38,7 @@ function FeedbackController(FeedbackRequestService, FeedbackDigestService, analy
         FeedbackRequestService.getMyRecentlySentRequests()
             .then(function (data) {
                 vm.myRecentlySentRequests = data;
+
                 return vm.myRecentlySentRequests;
             });
     }

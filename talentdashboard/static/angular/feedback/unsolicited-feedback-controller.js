@@ -9,6 +9,11 @@
         vm.employees = [];
         vm.subject = null;
 
+        $('.modal').modal('show');
+        vm.go = function (path) {
+            $location.path(path);
+        };
+
         activate();
 
         function activate() {
@@ -33,4 +38,5 @@
                 });
         }
     }
+
     UnsolicitedFeedbackController.prototype = Object.create(BaseSubmitFeedbackController.prototype);

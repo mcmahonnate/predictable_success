@@ -1,36 +1,76 @@
-<div id="feedback" class="container">
+<div id="feedback" class="container" ng-show="submitFeedback.subject">
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
-        <h1 class="page-title">Submit Feedback</h1>
-        <div class="panel">
-            <div class="panel-body">
-                <h2 class="panel-title">Who would you like to give feedback to?</h2>
-                <ui-select
-                    id="to"
-                    ng-model="submitFeedback.subject"
-                    reset-search-input="false"
-                    theme="bootstrap"
-                    style="max-width:300px"
-                    >
-                    <ui-select-match placeholder="Type an employee's name">
-                        {{ $select.selected.full_name }}
-                    </ui-select-match>
-                    <ui-select-choices repeat="employee in submitFeedback.employees | filter: {full_name: $select.search}">
-                        <div ng-bind-html="employee.full_name | highlight: $select.search"></div>
-                    </ui-select-choices>
-                </ui-select>
+            <h1 class="page-title">Feedback for {{ submitFeedback.subject.full_name }} <a href="" data-toggle="modal" data-target=".modal" class="change">Change</a></h1>
+            <div class="panel">
+                <div class="panel-body">
+                    <sm-feedback-submission-form ng-show="submitFeedback.subject" feedback="submitFeedback.feedback" subject="submitFeedback.subject" questions="submitFeedback.questions" submit="submitFeedback.submitFeedback(form)" cancel="submitFeedback.cancel()" toggle="submitFeedback.toggleAnonymous(submitFeedback.feedback.anonymous, submitFeedback.subject)" />
+                </div>
+                
             </div>
-            <sm-feedback-submission-form ng-show="submitFeedback.subject" feedback="submitFeedback.feedback" subject="submitFeedback.subject" questions="submitFeedback.questions" submit="submitFeedback.submitFeedback(form)" cancel="submitFeedback.cancel()" toggle="submitFeedback.toggleAnonymous(submitFeedback.feedback.anonymous, submitFeedback.subject)" />
+        </div>    
+    </div>
+</div>    
+
+
+
+
+<!-- modal -->
+<div 
+    tabindex="-1" 
+    role="dialog" 
+    class="modal fade" 
+    modal-animation-class="fade" 
+
+    animate="animate" 
+    modal-animation="true">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="feedback-modal" novalidate="novalidate">
+                <a class="close" href="#/feedback" data-dismiss="modal">&times;</a>
+                <div class="modal-body">
+                    <h3 class="modal-title centered">Select person to give feedback to</h3>
+                    <ui-select
+                        id="to"
+                        ng-model="submitFeedback.subject"
+                        reset-search-input="false"
+                        theme="bootstrap"
+                        style="max-width:300px;margin: 0 auto;"
+                        >
+                        <ui-select-match placeholder="Type an employee's name">
+                            {{ $select.selected.full_name }}
+                        </ui-select-match>
+                        <ui-select-choices repeat="employee in submitFeedback.employees | filter: {full_name: $select.search}">
+                            <div ng-bind-html="employee.full_name | highlight: $select.search" data-toggle="modal" data-target=".modal"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div class="modal-footer centered">
+                    <a class="underlined" ng-click="go('#/feedback')" data-dismiss="modal" data-target=".modal"  href="#/feedback">No thanks, I'll do it a later.</a>
+                </div>
+            </form>  
         </div>
-    </div>    
+    </div>                  
 </div>
+
 <style>
-    .form-group {margin-top: 45px;margin-bottom: 15px;}
+    .form-group {margin-bottom: 15px;}
     .form-control {margin-top: 10px;}
     .form-group label {
         font-size: 14px;
     }
     .form-group textarea {
         margin-bottom: 35px;
+    }
+    .change {
+        color: #888;
+        text-decoration: underline;
+        font-size: 18px;
+        margin-left: 8px;
+    }
+    .change:hover {
+        text-decoration: none;
+        color: #888;
     }
 </style>

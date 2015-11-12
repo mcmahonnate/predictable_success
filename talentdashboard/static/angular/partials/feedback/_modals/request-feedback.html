@@ -66,8 +66,15 @@
                 <span class="xxxlarge-headshot">
                     <img ng-src="{{request.currentCoach.avatar}}" alt="{{request.currentCoach.full_name}}" class="headshot-image">
                 </span>
-                <h3 class="centered"><strong>{{request.currentCoach.full_name}}</strong></h3>
-                <p class="centered change-coach-message">{{ request.currentCoach.full_name }} will deliver your feeback. If you'd like you may <a href="" class="underlined" ng-click="request.changeCoach()">select a different coach</a>.</p>
+                <div ng-show="!request.currentCoach">
+                    <p class="centered change-coach-message">
+                        You currently don't have a Feedback Coach. <br />Please <a href="" class="underlined" ng-click="request.changeCoach()">select a coach</a>.
+                    </p>
+                </div>
+                <div ng-show="request.currentCoach">
+                    <h3 class="centered"><strong>{{request.currentCoach.full_name}}</strong></h3>
+                    <p class="centered change-coach-message">{{ request.currentCoach.full_name }} will deliver your feeback. If you'd like you may <a href="" class="underlined" ng-click="request.changeCoach()">select a different coach</a>.</p>
+                </div>
             </panel>
         </div>
         <div class="modal-footer">
