@@ -200,6 +200,7 @@ angular.module('tdb.controllers', [])
         $scope.reportsTab = 'reports';
         $scope.settingsTab = 'settings';
         $scope.searchTab = 'search';
+        $scope.feedbackTab = 'feedback';
 
         $scope.setActiveTab = function (tab) {
             $('.nav-item').tooltip('hide');
@@ -212,6 +213,10 @@ angular.module('tdb.controllers', [])
                 $rootScope.activeTab = tab;
             }
         };
+
+        $scope.gotoFeedback = function() {
+            $location.path('/feedback');
+        }
     }])
 
     .controller('CompanyOverviewCtrl', ['$rootScope', '$scope', '$location', '$routeParams', 'KPIIndicator', 'KPIPerformance', 'analytics', 'SalaryReport', 'TalentReport', 'TemplatePreferences', function ($rootScope, $scope, $location, $routeParams, KPIIndicator, KPIPerformance, analytics, SalaryReport, TalentReport, TemplatePreferences) {

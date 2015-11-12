@@ -19,13 +19,13 @@
         </div>
         <div role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == myTab}" ng-click="setActiveTab(myTab)" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="My Stuff">
             <span class="glyphicon glyphicon-user team_menu nav-item-icon"></span>
+             My Stuff
             <div class="subnav" role="menu">
                 <div>
                     <div class="subnav-title">My Stuff</div>
                     <ul>
                         <li ng-if="currentUser.is_team_lead"><a ng-href="#/my-team">My Team</a></li>
                         <li ng-if="currentUser.can_coach_employees"><a ng-href="#/my-coachees">My Coachees</a></li>
-                        <li><a ng-show="customer.show_beta_features" ng-href="#/feedback">My Feedback</a></li>
                     </ul>
                 </div>
             </div>
@@ -45,7 +45,13 @@
                     </ul>
                 </div>
             </div>
-        </div> 
+        </div>
+        <div role="menuitem" ng-show="customer.show_beta_features" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == feedbackTab}" ng-click="setActiveTab(feedbackTab)" >
+            <div ng-click="gotoFeedback()">
+                <span class="fa fa-comments team_menu nav-item-icon"></span>
+                Feedback
+            </div>
+        </div>
     </div>    
 </nav>
 
@@ -95,7 +101,7 @@
                 <li><a ng-href="#/feedback" ng-click="toggleMenu()">My Feedback</a></li>
             </ul>
         </li>
-        <li>
+        <li ng-show="customer.show_beta_features">
             <a href="#/feedback" ng-click="toggleMenu()">
                 <span class="fa fa-comments team_menu nav-item-icon"></span>
                 360 Feedback

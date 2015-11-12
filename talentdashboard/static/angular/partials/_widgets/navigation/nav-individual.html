@@ -18,10 +18,10 @@
             <a href="#/"><img src="../static/images/compass-logo-white.png" class="logo" alt="Home" /></a>
         </div>
         <div role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == myTab}" ng-click="setActiveTab(myTab)">
-            <a href="#/feedback">
+            <div ng-click="gotoFeedback()">
                 <span class="fa fa-comments team_menu nav-item-icon"></span>
                 Feedback
-            </a>
+            </div>
         </div>        
     </div>
 </nav>
