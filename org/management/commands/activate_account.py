@@ -39,6 +39,7 @@ class Command(BaseCommand):
                     'token': default_token_generator.make_token(user),
                     'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                     'user': user,
+                    'message': tenant.activation_email,
                     'site': tenant.domain_url,
                 })
                 from_email = 'Scoutmap<scoutmap@dfrntlabs.com>'
