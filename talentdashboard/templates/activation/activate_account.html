@@ -1,35 +1,35 @@
 {% extends "layouts/blank.html" %}
 {% load staticfiles %}
 
-{% block title %}Set New password{% endblock title %}
+{% block title %}Activate Your Account{% endblock title %}
 
 {% block content %}
 <div class="login-form">
     <a href="{% url 'index' %}"><img class="logo" src="{% static 'images/compass-logo-green.png' %}" /></a>
     {% if validlink %}
 
-        <h2>Set New Password</h2>
+        <h2>Activate Your Account</h2>
 
         <form action="" method="post">
                 {% csrf_token %}
-                <p style="margin:15px 0">Please enter your new password twice.
-                   So we can verify you typed it in correctly.</p>
+                <p style="margin:15px 0">Please create a password.
+                   Enter it twice so we can verify you typed it in correctly.</p>
 
                 <div style="margin-bottom: 15px;">
-                    <input id="new_password1" class="form-control input-lg" name="new_password1" placeholder="New Password" type="password">
+                    <input id="new_password1" class="form-control input-lg" name="new_password1" placeholder="Create Password" type="password">
                     {% if form.new_password1.errors %}<div class="error-message">{{ form.new_password1.errors }}</div>{% endif %}
                 </div>
                 <div style="margin-bottom: 15px;">
-                    <input id="new_password2" class="form-control input-lg" name="new_password2" placeholder="Re-enter New Password" type="password">
+                    <input id="new_password2" class="form-control input-lg" name="new_password2" placeholder="Re-enter Password" type="password">
                     {% if form.new_password2.errors %}<div class="error-message">{{ form.new_password2.errors }}</div>{% endif %}
                 </div>
                 <div style="margin-bottom: 20px;">
-                    <button class="btn btn-lg btn-success btn-block" type="submit">Change my password</button>
+                    <button class="btn btn-lg btn-success btn-block" type="submit">Activate</button>
                 </div>
         </form>
     {% else %}
-        <h2>Reset unsuccessful</h2>
-        <p style="margin:15px 0">This password reset link is invalid,
+        <h2>Activation unsuccessful</h2>
+        <p style="margin:15px 0">This activation link is invalid,
            possibly because it has already been used.
            Click the button below to get a new one.</p>
         <div style="margin-bottom: 20px">
