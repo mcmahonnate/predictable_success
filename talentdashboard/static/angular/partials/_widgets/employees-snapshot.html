@@ -36,7 +36,7 @@
     </div> 
     <h2 class="panel-title" ng-show="view == 'team-view'">{{ employees.length }} Team Leads</h2>
     <h2 class="panel-title" ng-show="view == 'lead-view'">{{ employees.length }} Direct Reports</h2>
-    <h2 class="panel-title" ng-show="view == 'coach-view'">{{ employees.length }} People I Coach</h2>
+    <h2 class="panel-title" ng-show="view == 'coach-view'">People I Coach ({{ employees.length }})</h2>
     <div class="employees">
         <div class="employee" ng-repeat="employee in employees | orderBy:sortorder | filter:{talent_category: filteredZoneType, happiness: filteredHappinessType}" >    
             <i ng-show="!employee.last_checkin_date" class="fa fa-exclamation-circle pull-right alert-no-checkins" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{ employee.full_name }} has not had a check-in."></i>

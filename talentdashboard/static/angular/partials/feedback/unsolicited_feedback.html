@@ -1,34 +1,70 @@
 <div id="feedback" class="container">
+    <h1 class="page-title">
+        <a ng-href="#/feedback">Feedback</a> 
+        <span ng-show="submitFeedback.subject">&raquo; for</span> 
+        {{ submitFeedback.subject.full_name }} 
+        <a ng-show="submitFeedback.subject" href="" data-toggle="modal" data-target=".modal" class="change">Change</a>
+    </h1>   
     <div class="row">
-        <div class="col-md-10 col-md-offset-1">
-        <h1 class="page-title">Submit Feedback</h1>
-        <div class="panel">
-            <div class="panel-body">
-                <h2 class="panel-title">Who would you like to give feedback to?</h2>
-                <ui-select
-                    id="to"
-                    ng-model="submitFeedback.subject"
-                    reset-search-input="false"
-                    theme="bootstrap"
-                    style="max-width:300px"
-                    >
-                    <ui-select-match placeholder="Type an employee's name">
-                        {{ $select.selected.full_name }}
-                    </ui-select-match>
-                    <ui-select-choices repeat="employee in submitFeedback.employees | filter: {full_name: $select.search}">
-                        <div ng-bind-html="employee.full_name | highlight: $select.search"></div>
-                    </ui-select-choices>
-                </ui-select>
+        <div class="col-md-8">
+            <div class="panel">
+                <div class="panel-body">
+                    <sm-feedback-submission-form feedback="submitFeedback.feedback" subject="submitFeedback.subject" questions="submitFeedback.questions" submit="submitFeedback.submitFeedback(form)" cancel="submitFeedback.cancel()" toggle="submitFeedback.toggleAnonymous(submitFeedback.feedback.anonymous, submitFeedback.subject)" />
+                </div> 
             </div>
-            <sm-feedback-submission-form ng-show="submitFeedback.subject" feedback="submitFeedback.feedback" subject="submitFeedback.subject" questions="submitFeedback.questions" submit="submitFeedback.submitFeedback(form)" cancel="submitFeedback.cancel()" toggle="submitFeedback.toggleAnonymous(submitFeedback.feedback.anonymous, submitFeedback.subject)" />
         </div>
-    </div>    
+        <div class="col-md-4"> 
+            <div ng-bind-html="customer.feedback_tips" class="tips"></div>
+        </div>   
+    </div>
+</div>    
+
+<!-- Select person modal -->
+<div 
+    tabindex="-1" 
+    role="dialog" 
+    class="modal send-request-modal fade zoom"
+    data-backdrop="static"  
+    data-keyboard="false">
+
+    <div class="modal-dialog" style="z-index:99999">
+        <div class="modal-content">
+            <form id="feedback-modal" novalidate="novalidate">
+                <a ng-show="submitFeedback.subject" class="close" href="#/feedback" data-dismiss="modal">&times;</a>
+                <div class="modal-body">
+                    <h3 class="modal-title">Select a person to give feedback to</h3>
+                    <p style="margin:-10px 0 30px;color:#888;">You should think of people you've worked with recently.</p>
+                    <ui-select
+                        id="to"
+                        ng-model="submitFeedback.subject"
+                        reset-search-input="false"
+                        theme="bootstrap"
+                        style="max-width:300px;"
+                        >
+                        <ui-select-match placeholder="Type an employee's name">
+                            {{ $select.selected.full_name }}
+                        </ui-select-match>
+                        <ui-select-choices repeat="employee in submitFeedback.employees | filter: {full_name: $select.search}">
+                            <div ng-bind-html="employee.full_name | highlight: $select.search" data-toggle="modal" data-target=".modal"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" ng-show="!submitFeedback.subject" ng-click="submitFeedback.goTo('feedback')" class="btn btn-default pull-left">Cancel</button>
+                    <button type="button" ng-show="submitFeedback.subject" data-dismiss="modal"  class="btn btn-default pull-left">Cancel</button>
+                    <button ng-disabled="!submitFeedback.subject" type="button" class="btn btn-success" data-dismiss="modal"><i class="fa fa-pencil"></i> Give Feedback</button>
+                </div>
+            </form>  
+        </div>
+    </div>                  
 </div>
+
 <style>
-    .form-group {margin-top: 45px;margin-bottom: 15px;}
+    .form-group {margin-bottom: 15px;}
     .form-control {margin-top: 10px;}
     .form-group label {
-        font-size: 14px;
+        font-size: 15px;
+        margin-bottom: 5px;
     }
     .form-group textarea {
         margin-bottom: 35px;

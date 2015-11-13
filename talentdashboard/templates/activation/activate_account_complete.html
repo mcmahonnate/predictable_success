@@ -1,13 +1,13 @@
 {% extends "layouts/blank.html" %}
 {% load staticfiles %}
 
-{% block title %}Password reset complete{% endblock title %}
+{% block title %}You're Ready To Go{% endblock title %}
 
 {% block content %}
 <div class="login-form">
     <a href="{% url 'index' %}"><img class="logo" src="{% static 'images/compass-logo-green.png' %}" /></a>
-    <h2>Reset Complete</h2>
-    <p style="margin: 15px 0">Your password has been set. Click the button below to sign in.</p>
+    <h2>You're Ready To Go!</h2>
+    <p style="margin: 15px 0">Click the button below to get started.</p>
 <a href="{% url 'django.contrib.auth.views.login' %}" class="btn btn-lg btn-success btn-block">Sign in</a>
 </div>
 {% endblock %}

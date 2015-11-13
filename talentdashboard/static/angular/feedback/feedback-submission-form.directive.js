@@ -19,7 +19,11 @@
                     $scope.submit({form: form});
                 };
                 $scope.cancelForm = function() {
-                    $scope.cancel();
+                    
+                    var cancel = confirm("Are you sure you want to lose all the great feedback you've already written?");
+                    if (cancel == true) {
+                        $scope.cancel();
+                    }    
                 }
                 $scope.toggleValue = function(anonymous, subject) {
                     $scope.toggle(anonymous, subject);

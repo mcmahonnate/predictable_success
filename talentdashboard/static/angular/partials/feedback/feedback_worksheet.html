@@ -3,7 +3,7 @@
         <div ng-class="feedbackWorksheet.progressReport.solicited_submissions.length==0 && 
             feedbackWorksheet.progressReport.unanswered_requests.length==0 && 
             feedbackWorksheet.progressReport.unsolicited_submissions.length==0 ? 'col col-md-8 col-md-offset-2' : 'col col-md-12'">
-	       <p class="pull-right">Coach: {{ currentUser.employee.full_name }} | Date: </p> 
+	       <p class="pull-right show-for-print"><strong>Coach: {{ currentUser.employee.full_name }}</strong></p> 
            <h1><span class="hide-for-print"><a ng-href="#/my-coachees">Coaching</a> &raquo;</span> Feedback for {{ feedbackWorksheet.progressReport.employee.full_name }}</h1>
         </div>
     </div>
@@ -103,11 +103,12 @@
 </div>
 
 <style>
-
+    /* Use this class to hide elements intented for printing only */
     .show-for-print {
         display: none;
     }
 
+    /* Print styles */
     @media print {
         .hide-for-print, nav, .btn, .account-menu {
             display: none;

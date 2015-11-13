@@ -1,7 +1,7 @@
 <div class="container">
+    <h1><a ng-href="#/feedback">Feedback</a> &raquo;</span> for {{ submitFeedback.subject.full_name }}</h1>
     <div class="row">
-        <div class="col-md-10 col-md-offset-1">
-            <h1>Feedback for {{ submitFeedback.subject.full_name }}</h1>
+        <div class="col-md-8">
             <div class="panel">
                 <div ng-if="submitFeedback.feedbackRequest.message">
                     <h3 class="panel-title">Here are specific areas I'd like feedback on:</h3>
@@ -9,11 +9,21 @@
                 </div>
                 <sm-feedback-submission-form feedback="submitFeedback.feedback" subject="submitFeedback.subject" questions="submitFeedback.questions" submit="submitFeedback.submitFeedback(form)" cancel="submitFeedback.cancel()" toggle="submitFeedback.toggleAnonymous(submitFeedback.feedback.anonymous, submitFeedback.subject)"/>
             </div>
-        </div>    
+        </div> 
+         <div class="col-md-4"> 
+            <div ng-bind-html="customer.feedback_tips" class="tips"></div>
+        </div>             
     </div>    
 </div>
 <style>
-    .form-group {margin-top: 45px;margin-bottom: 15px;}
+    .form-group {margin-bottom: 15px;}
     .form-control {margin-top: 10px;}
+    .form-group label {
+        font-size: 15px;
+        margin-bottom: 5px;
+    }
+    .form-group textarea {
+        margin-bottom: 35px;
+    }
     .feedback-message {margin-top: 15px;margin-bottom: 15px;}
 </style>

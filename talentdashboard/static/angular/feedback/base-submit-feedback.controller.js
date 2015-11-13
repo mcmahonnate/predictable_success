@@ -39,13 +39,13 @@
         function showAnonymousWarning(subject) {
             var modalInstance = $modal.open({
                 animation: true,
-                windowClass: 'xx-dialog',
+                windowClass: 'xx-dialog fade zoom',
                 backdrop: 'static',
                 templateUrl: '/static/angular/partials/feedback/_modals/anonymous-warning.html',
                 controller: ['$scope', '$modalInstance', 'subject', function($scope, $modalInstance, subject) {
                     $scope.subject = subject;
                     $scope.cancel = function() {
-                        $modalInstance.dismiss();
+                        $modalInstance.close();
                     }
                 }],
                 resolve: {

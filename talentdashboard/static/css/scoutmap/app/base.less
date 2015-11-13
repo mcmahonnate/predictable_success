@@ -31,6 +31,11 @@ strong {font-weight: bold;}
   display: none !important;
 }
 
+.ui-select-search {
+    display:block !important;
+}
+
+
 /* Layout ==================================== */
 .container {
 	margin-top:40px;
@@ -153,7 +158,9 @@ ul, ol {
 .close {
     z-index: 9;
     position: relative;
-    margin: 5px 10px;
+    margin: 5px 13px;
+    font-size: 30px;
+    font-weight: normal;
 }
 
 
@@ -222,32 +229,40 @@ textarea.expandable:focus {
 }
 
 
+
+
+
+.modal-backdrop.in {
+  opacity: 0.9;
+  filter: alpha(opacity=90);
+}
+
+
+
 .modal {
   text-align: center;
   padding: 0!important;
 }
-.modal-content {
-    transition: 1s;
-}    
+   
 .modal:before {
     content: '';
     display: inline-block;
     height: 100%;
     vertical-align: middle;
-    margin-right: -4px; /* Adjusts for spacing */
-    margin-top: -8%;
 }
 .modal-dialog {
     display: inline-block;
     text-align: left;
     vertical-align: middle;
     max-width: 475px;
+    margin-right: -4px; /* Adjusts for spacing */
+    margin-top: -8%;    
 }
 
     
 .modal-body {
     position: relative;
-    padding: 30px;
+    padding: 20px 30px;
 
     textarea {
         font-size: 16px;
@@ -314,5 +329,26 @@ textarea.expandable:focus {
         }
 
 
+
+.smooth {
+    opacity: 1;
+}
+.smooth.ng-enter,
+.fade.ng-leave {
+    -webkit-transition: all 1s ease;
+    transition: all 1s ease;
+}
+.smooth.ng-enter {
+    opacity: 0;
+}
+.smooth.ng-enter-active {
+    opacity: 1;
+}
+.smooth.ng-leave {
+    opacity: 1;
+}
+.smooth.ng-leave-active {
+    opacity: 0;
+}
 
     

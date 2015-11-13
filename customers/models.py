@@ -17,6 +17,7 @@ class Customer(TenantMixin):
         blank=True,
     )
     survey_email_body = models.TextField(blank=True)
+    activation_email = models.TextField(default="Welcome to Scoutmap!")
     feedback_welcome = models.TextField(default="Welcome, we hope you like our new feedback app. It's a safe place to ask for and give feedback. You can do it whenever, with whomever, and about whatever you'd like. The best part is, it's just between you and your coach. &mdash;The Scoutmap Team")
     feedback_excels_at_question = models.TextField(default="What does this individual do when they are at their best?")
     feedback_could_improve_on_question = models.TextField(default="What, if anything, is holding them back?")

@@ -5,11 +5,20 @@
     function UnsolicitedFeedbackController($location, $modal, $scope, $rootScope, analytics, Notification, FeedbackSubmissionService) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         BaseSubmitFeedbackController.call(this, $location, $modal, $rootScope);
+        
         var vm = this;
         vm.employees = [];
         vm.subject = null;
-
+        vm.goTo = goTo;
         activate();
+
+        $('.send-request-modal').modal('show');
+        
+        function goTo(path) {
+            $location.path(path);
+            $('.modal').modal('hide');
+            $('.modal-backdrop').remove();
+        };
 
         function activate() {
             getEmployees();
@@ -33,4 +42,5 @@
                 });
         }
     }
+
     UnsolicitedFeedbackController.prototype = Object.create(BaseSubmitFeedbackController.prototype);

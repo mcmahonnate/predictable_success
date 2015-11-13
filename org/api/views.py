@@ -1,3 +1,5 @@
+from django.contrib.auth.views import password_reset_confirm
+from django.core.urlresolvers import reverse
 from django.db.models import F
 from django.http import Http404
 from rest_framework.generics import RetrieveAPIView
@@ -180,3 +182,7 @@ def change_coach(request):
         return Response(status=status.HTTP_202_ACCEPTED)
     except CoachCapacity.DoesNotExist:
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+def account_activate(request, uidb64=None, token=None, template_name=None, set_password_form=None):
+    return password_reset_confirm(request, uidb64=uidb64, token=token, template_name=template_name, set_password_form=set_password_form, post_reset_redirect=reverse('account_activate_login'))

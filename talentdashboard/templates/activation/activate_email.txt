@@ -1,0 +1,3 @@
+{{ message }}
+
+https://{{site}}{% url 'account_activate' uidb64=uid token=token %}
