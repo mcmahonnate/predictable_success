@@ -1,4 +1,4 @@
-<div id="feedback" class="container">
+<div id="feedback" class="container" style="transition:.2s">
     <div ng-show="feedback.myRecentlySentRequests.length">
         <h1>Feedback
             <button class="btn btn-success btn-feedback" ng-click="feedback.requestFeedback()" type="button">Ask for Feedback</button>
@@ -10,7 +10,6 @@
             <div class="col-md-8">
                 <h1 class="feedback-welcome-title">Welcome to 360 Feedback!</h1>
                 <p class="get-started-text" ng-bind-html="customer.feedback_welcome">
-
                 </p>
                 <h2 class="get-started-title">Get started</h2>
                 <div class="get-started-btns">
@@ -37,10 +36,10 @@
         <table class="table responsive-table">
             <thead>
                 <tr>
-                  <th class="width-percent-30">Person</th>
-                  <th class="width-percent-15">Sent</th>
-                  <th class="width-percent-30">Where they'd like feedback</th>
-                  <th class="width-percent-10"></th>
+                  <th class="width-15-percent">Person</th>
+                  <th class="width-15-percent">Sent</th>
+                  <th class="width-40-percent">Where they'd like feedback</th>
+                  <th class="width-15-percent centered">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -54,8 +53,8 @@
                     <td class="timeago">{{ request.request_date | fromNow }}</td>
                     <td class="message">{{ request.message }}</td>    
                     <td class="right-align">
-                        <a class="btn btn-default btn-sm give-feedback-btn text-bolded" ng-href="#/feedback/request/{{ request.id }}/reply/" type="button">
-                            Give Feedback
+                        <a class="btn btn-default btn-md give-feedback-btn" ng-href="#/feedback/request/{{ request.id }}/reply/" type="button">
+                            <i class="fa fa-pencil"></i> Give Feedback
                         </a>
                     </td>
                 </tr>
@@ -71,10 +70,10 @@
         <table class="table responsive-table">
             <thead>
                 <tr>
-                  <th class="width-percent-30">Person</th>
-                  <th class="width-percent-15">Sent</th>
-                  <th class="width-percent-30">Where you'd like feedback</th>
-                  <th class="width-percent-10 centered">Completed</th>
+                  <th class="width-15-percent">Person</th>
+                  <th class="width-15-percent">Sent</th>
+                  <th class="width-40-percent">Where you'd like feedback</th>
+                  <th class="width-15-percent centered">Completed</th>
                 </tr>
             </thead>
             <tbody>

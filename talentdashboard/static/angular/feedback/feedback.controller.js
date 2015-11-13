@@ -56,7 +56,7 @@ function FeedbackController(FeedbackRequestService, FeedbackDigestService, analy
     function requestFeedback() {
         var modalInstance = $modal.open({
             animation: true,
-            windowClass: 'xx-dialog',
+            windowClass: 'xx-dialog fade zoom',
             backdrop: 'static',
             templateUrl: '/static/angular/partials/feedback/_modals/request-feedback.html',
             controller: 'RequestFeedbackController as request',
