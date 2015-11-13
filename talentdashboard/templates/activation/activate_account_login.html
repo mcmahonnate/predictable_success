@@ -1,0 +1,29 @@
+{% extends "layouts/blank.html" %}
+{% load staticfiles %}
+{% block title %}Sign in{% endblock title %}
+
+{% block content %}
+    <div class="login-form {% if form.errors %}has-error{% endif %}">
+        <form method="post" action="{% url 'django.contrib.auth.views.login' %}">
+            {% csrf_token %}
+            <a href="{% url 'index' %}"><img class="logo" src="{% static 'images/compass-logo-green.png' %}" /></a>
+            <h1>You're Ready To Go!</h1>
+
+            <form class="form-signin">
+
+
+            {{ form.instance.id_username }}
+
+                <input autofocus autocomplete="off" class="form-control input-lg" id="id_username" name="username" placeholder="Email" type="text">
+                <input id="id_password" class="form-control input-lg" name="password" placeholder="Password" type="password">
+                <button class="btn btn-lg btn-success btn-block" type="submit">Login</button>
+
+                    <input type="hidden" name="next" id="next" value="/#{{ next }}"/>
+
+            </form>
+            <a href="{% url 'django.contrib.auth.views.password_reset' %}" class="forgot-password">
+                Forgot your password already?
+            </a>
+        </form>    
+    </div>
+{% endblock %}

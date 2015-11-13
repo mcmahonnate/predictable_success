@@ -1,7 +1,5 @@
-from django.conf import settings
 from django.conf.urls import *
 from django.contrib import admin
-from django.views.generic import TemplateView
 from django.views.decorators.cache import cache_page
 from django.contrib.auth.views import password_reset, password_reset_confirm, password_reset_done, password_reset_complete, login, logout
 from views.views import *
@@ -10,12 +8,12 @@ from forms import *
 from rest_framework import routers
 from views.payment import ChargeView, PaymentView
 from views.homepage import IndexView
-from org.api.views import Profile, team_lead_employees, my_employees, EmployeeDetail, employee_support_team
 from insights.views import Signup, Report, Survey, Confirmation
 from engagement.api.views import RetrieveUpdateDestroyHappiness, CreateHappiness, EmployeeHappinessList
 from activity.api.views import EventList, EmployeeEventList, TeamEventList, CoachEventList, LeadEventList, MyTeamEventList, CheckInEventList, CommentEvent
 from blah.api.views import CommentDetail
-from org.api.views import EmployeeCommentList
+from org.api.views import EmployeeCommentList, Profile, team_lead_employees, my_employees, EmployeeDetail, employee_support_team, account_activate
+
 router = routers.DefaultRouter()
 router.register(r'^api/v1/teams', TeamViewSet)
 router.register(r'^api/v1/mentorships', MentorshipViewSet)
@@ -26,19 +24,21 @@ admin.autodiscover()
 
 urlpatterns = [
     url(r'^$', IndexView.as_view(), name='index'),
-	url(r'^404/?$', TemplateView.as_view(template_name="404.html"), name='404'),
-	url(r'^error/?$', TemplateView.as_view(template_name="error.html"), name='error'),
+    url(r'^404/?$', TemplateView.as_view(template_name="404.html"), name='404'),
+    url(r'^error/?$', TemplateView.as_view(template_name="error.html"), name='error'),
     url(r'^confirmation/?$', TemplateView.as_view(template_name="confirmation.html"), name='confirmation'),
     url(r'^feedback/$', TemplateView.as_view(template_name="feedback.html"), name='feedback_home'),
     url(r'^logout/$', logout,{'next_page': '/account/login/'}),
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^org/chart/$', 'org.api.views.show_org_chart'),
+    url(r'^account/activate/(?P<uidb64>[0-9A-Za-z]+)/(?P<token>.+)/$', account_activate, {'template_name': 'activation/activate_account.html', 'set_password_form': CustomSetPasswordForm}, name='account_activate'),
+    url(r'^account/activate/login/$', login, {'template_name': 'activation/activate_account_login.html'}, name='account_activate_login'),
     url(r'^account/payment/?$', PaymentView.as_view(), name='payment'),
     url(r'^account/thanks/?$',ChargeView.as_view(), name='charge'),
     url(r'^account/login/?$',login,{'template_name':'login.html', 'authentication_form':CustomAuthenticationForm}, name='login'),
     url(r'^account/password_reset/done/$', password_reset_done, {'template_name': 'password_reset_done.html'}),
-    url(r'^account/reset/(?P<uidb64>[0-9A-Za-z]+)/(?P<token>.+)/$', password_reset_confirm, {'template_name': 'password_reset_confirm.html', 'set_password_form':CustomSetPasswordForm}),
+    url(r'^account/reset/(?P<uidb64>[0-9A-Za-z]+)/(?P<token>.+)/$', password_reset_confirm, {'template_name': 'password_reset_confirm.html', 'set_password_form': CustomSetPasswordForm}),
     url(r'^account/reset/complete/$', password_reset_complete, {'template_name': 'password_reset_complete.html'}),
     url(r'^account/reset/done/$', password_reset_complete, {'template_name': 'password_reset_complete.html'}),
     url(r'^account/', include('django.contrib.auth.urls')),
