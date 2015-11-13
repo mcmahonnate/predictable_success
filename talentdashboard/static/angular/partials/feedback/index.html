@@ -27,19 +27,19 @@
         </div> 
     </div>
     <div class="panel" ng-show="feedback.feedbackRequests.length>0">
-        <h2 class="panel-title">
-            {{ feedback.feedbackRequests.length }} 
-            <span ng-show="feedback.feedbackRequests.length == 1">Person wants</span> 
-            <span ng-show="feedback.feedbackRequests.length != 1">People want</span> 
-            feedback
-        </h2>
         <table class="table responsive-table">
+            <caption class="panel-title">
+                {{ feedback.feedbackRequests.length }} 
+                <span ng-show="feedback.feedbackRequests.length == 1">Person wants</span> 
+                <span ng-show="feedback.feedbackRequests.length != 1">People want</span> 
+                feedback
+            </caption>
             <thead>
                 <tr>
-                  <th class="width-15-percent">Person</th>
-                  <th class="width-15-percent">Sent</th>
-                  <th class="width-40-percent">Where they'd like feedback</th>
-                  <th class="width-15-percent centered">Action</th>
+                  <th scope="col" class="width-15-percent">Person</th>
+                  <th scope="col" class="width-15-percent">Sent</th>
+                  <th scope="col" class="width-40-percent">Where they'd like feedback</th>
+                  <th scope="col" class="width-15-percent centered">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -64,16 +64,15 @@
             </tbody>
         </table>
     </div>
-
     <div class="panel" ng-show="feedback.myRecentlySentRequests.length">
-        <h2 class="panel-title">People I've asked for feedback</h2>
         <table class="table responsive-table">
+            <caption class="panel-title">People I've asked for feedback</caption>
             <thead>
                 <tr>
-                  <th class="width-15-percent">Person</th>
-                  <th class="width-15-percent">Sent</th>
-                  <th class="width-40-percent">Where you'd like feedback</th>
-                  <th class="width-15-percent centered">Completed</th>
+                  <th scope="col" class="width-15-percent">Person</th>
+                  <th scope="col" class="width-15-percent">Sent</th>
+                  <th scope="col" class="width-40-percent">Where you'd like feedback</th>
+                  <th scope="col" class="width-15-percent centered">Completed</th>
                 </tr>
             </thead>
             <tbody>
@@ -100,7 +99,6 @@
     <div style="padding-top:20px" ng-repeat="digest in feedback.myDigests | orderBy:'delivery_date':true">
 
         <div class="panel">
-
             <h2 class="panel-title" style="margin-bottom:0">360 Feedback- {{ digest.delivery_date | date:'longDate' }}</h2>
             <span style="color: #aaa;font-style: italic;">Delivered by: {{ digest.delivered_by.full_name }}</span>
                 <div ng-show="digest.summary">

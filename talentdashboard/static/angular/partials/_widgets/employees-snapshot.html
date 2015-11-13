@@ -1,11 +1,11 @@
 <div class="panel employees-snapshot" ng-controller="EmployeesSnapshotCtrl" ng-show="!busy">
     <div class="pull-right" style="margin:-5px;">
         <div class="dropdown" style="display:inline">
-            <button class="btn btn-sm btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+            <button class="btn btn-sm btn-default dropdown-toggle" type="button" id="dropdownMenuZones" data-toggle="dropdown" aria-expanded="true">
                 <span ng-if="!filteredZoneType">All Zones</span> {{ talentCategories[filteredZoneType].label }}
                 <span class="caret"></span>
             </button>
-            <ul class="dropdown-menu employee-happiness-list" role="menu" aria-labelledby="dropdownMenu1">
+            <ul class="dropdown-menu employee-happiness-list" role="menu" aria-labelledby="dropdownMenuZones">
                 <li ng-click="filteredZoneType = 1" role="presentation"><a role="menuitem" tabindex="-1">Unleash</a></li>
                 <li ng-click="filteredZoneType = 2" role="presentation"><a role="menuitem" tabindex="-1">Challenge</a></li>
                 <li ng-click="filteredZoneType = 3" role="presentation"><a role="menuitem" tabindex="-1">Push</a></li> 
@@ -18,11 +18,11 @@
             </ul>
         </div>
         <div class="dropdown" style="display:inline">
-            <button class="btn btn-sm btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+            <button class="btn btn-sm btn-default dropdown-toggle" type="button" id="dropdownMenuMood" data-toggle="dropdown" aria-expanded="true">
                 <span ng-if="!filteredHappinessType">All Moods</span> {{ filteredHappinessName }}
                 <span class="caret"></span>
             </button>
-            <ul class="dropdown-menu employee-happiness-list" role="menu" aria-labelledby="dropdownMenu1">
+            <ul class="dropdown-menu employee-happiness-list" role="menu" aria-labelledby="dropdownMenuMood">
                 <li ng-click="filteredHappinessType = 5; filteredHappinessName = 'Very Happy'" role="presentation"><a role="menuitem" tabindex="-1">Very Happy</a></li>
                 <li ng-click="filteredHappinessType = 4; filteredHappinessName = 'Happy'" role="presentation"><a role="menuitem" tabindex="-1">Happy</a></li>
                 <li ng-click="filteredHappinessType = 3; filteredHappinessName = 'Indeifferent'" role="presentation"><a role="menuitem" tabindex="-1">Indifferent</a></li>
