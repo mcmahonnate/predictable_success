@@ -1,6 +1,6 @@
 <div id="feedback" class="container">
     <h1 class="page-title">
-        <a ng-href="#/feedback">Feedback</a> 
+        <a href="" ng-click="submitFeedback.goTo('feedback')">Feedback</a> 
         <span ng-show="submitFeedback.subject">&raquo; for</span> 
         {{ submitFeedback.subject.full_name }} 
         <a ng-show="submitFeedback.subject" href="" data-toggle="modal" data-target=".modal" class="change">Change</a>
@@ -27,7 +27,7 @@
     data-backdrop="static"  
     data-keyboard="false">
 
-    <div class="modal-dialog" style="z-index:99999">
+    <div class="modal-dialog">
         <div class="modal-content">
             <form id="feedback-modal" novalidate="novalidate">
                 <a ng-show="submitFeedback.subject" class="close" href="#/feedback" data-dismiss="modal">&times;</a>
