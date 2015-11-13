@@ -14,7 +14,7 @@
                         >
                     <ui-select-match placeholder="Type an employee name">{{$item.full_name}}</ui-select-match>
                     <ui-select-choices
-                            repeat="reviewer in request.potentialReviewers | filter: {full_name: $select.search}">
+                            repeat="reviewer in request.potentialReviewers | filter: {full_name: $select.search} | orderBy: 'full_name'">
                         <div ng-bind-html="reviewer.full_name | highlight: $select.search"></div>
                     </ui-select-choices>
                 </ui-select>

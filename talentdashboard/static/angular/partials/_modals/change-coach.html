@@ -13,7 +13,7 @@
                         theme="bootstrap">
                         <ui-select-match placeholder="Type an employee name">{{$select.selected.full_name}}</ui-select-match>
                         <ui-select-choices
-                            repeat="coach in changeCoach.availableCoaches | filter: { full_name: $select.search }">
+                            repeat="coach in changeCoach.availableCoaches | filter: { full_name: $select.search } | orderBy: 'full_name'">
                             <div ng-bind-html="coach.full_name"></div>
                         </ui-select-choices>
                     </ui-select>
