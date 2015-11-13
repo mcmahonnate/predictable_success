@@ -39,7 +39,7 @@ function FeedbackController(FeedbackRequestService, FeedbackDigestService, analy
         FeedbackRequestService.getMyRecentlySentRequests()
             .then(function (data) {
                 vm.myRecentlySentRequests = data;
-                if (!vm.myRecentlySentRequests.length)
+                if (vm.myRecentlySentRequests.length==0)
                     vm.showWelcome = true;
                 return vm.myRecentlySentRequests;
             });
