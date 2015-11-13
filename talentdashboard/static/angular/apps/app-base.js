@@ -32,13 +32,9 @@ var app = angular.module('tdb', [
             otherwise({redirectTo: '/'});
     }])
     .run(['$rootScope', 'User', 'TalentCategories', 'Customers', 'privacyMode', function($rootScope, User, TalentCategories, Customers, privacyMode) {
-        User.get(function(data) {
-            $rootScope.currentUser = data;
-        });
-        Customers.get(function(data) {
-            $rootScope.customer = data;
-            $rootScope.$broadcast('elastic:adjust');
-        });
+        $rootScope.customer = Customers.get();
+        $rootScope.currentUser = User.get();
+        $rootScope.$broadcast('elastic:adjust');
         $rootScope.talentCategories = TalentCategories.categories;
 
         $rootScope.$on('$routeChangeSuccess', function () {
