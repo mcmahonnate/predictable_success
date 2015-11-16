@@ -81,6 +81,7 @@ angular.module('tdb.org.controllers', [])
             {id: $routeParams.teamId},
             function (data) {
                 $scope.team = data;
+                $scope.teamId = data.id;
                 $scope.team_name = data.name;
             }
         );
