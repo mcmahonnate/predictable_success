@@ -60,6 +60,9 @@ class FeedbackRequest(models.Model):
 
 
 class FeedbackSubmissionManager(models.Manager):
+    def submitted_not_delivered(self, reviewer):
+        return self.filter(reviewer=reviewer).filter(has_been_delivered=False)
+
     def received_not_delivered(self, subject):
         return self.filter(subject=subject).filter(has_been_delivered=False)
 

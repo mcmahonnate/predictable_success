@@ -78,6 +78,19 @@ class RetrieveFeedbackSubmission(RetrieveAPIView):
         raise Exception("Can't determine which serializer class to use")
 
 
+class RetrieveMyFeedbackSubmissions(ListAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = FeedbackSubmissionSerializerForReviewer
+
+    def get_queryset(self):
+        try:
+            employee = self.request.user.employee
+            submissions = FeedbackSubmission.objects.submitted_not_delivered(reviewer=employee)
+            return submissions
+        except FeedbackSubmission.DoesNotExist:
+            raise Http404()
+
+
 # Miscellaneous
 class PotentialReviewers(ListAPIView):
     serializer_class = SanitizedEmployeeSerializer
