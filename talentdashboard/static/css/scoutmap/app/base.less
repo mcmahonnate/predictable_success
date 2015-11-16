@@ -20,6 +20,9 @@ a {color: #1a7f7e;}
 a:hover {color: #156766;}
 p {line-height: 18px;font-size: 14px;}
 strong {font-weight: bold;}
+th {color: #666;}
+
+
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak],
 .ng-cloak, .x-ng-cloak,
@@ -34,6 +37,33 @@ strong {font-weight: bold;}
 .ui-select-search {
     display:block !important;
 }
+
+
+
+/* Confirmations */
+.confirmation {
+    background: #fff;
+    border-radius: 10px;
+    padding: 35px;
+    margin-top: 10%;
+}
+.confirmation-message {
+    margin-top: 20px;
+    font-size: 16px;
+    line-height: 24px;
+}
+.confirmation-thanks {
+    margin-top: 35px;
+    font-size: 16px;
+    line-height: 24px;
+}
+.email-confirmation {
+    .logo {
+        margin: 0 0 50px;
+        width: 250px;
+    }
+}
+
 
 
 /* Layout ==================================== */
@@ -92,7 +122,6 @@ ul, ol {
     margin-bottom: 14px; 
     font-size: 14px;       
 }
-
 
 
 /* Popover Edit/Delete ==================================== */
@@ -222,10 +251,23 @@ textarea.expandable:focus {
 }
 
 
+/* UI Select  */
+.ui-select-bootstrap .ui-select-choices-row>a{
+    padding: 3px 12px; 
+    
+    .names {
+        padding-top: 4px;
+    } 
+}
+
 
 /* Bootstrap Overrides */
 .btn-default {
     background-color: #f1f1f1;
+}
+
+.btn-success {
+    background-color: #0d874c;
 }
 
 
