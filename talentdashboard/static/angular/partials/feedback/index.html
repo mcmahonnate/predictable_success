@@ -103,7 +103,7 @@
                 <tr>
                   <th scope="col" class="width-15-percent">Person</th>
                   <th scope="col" class="width-15-percent">Sent</th>
-                  <th scope="col" class="width-15-percent centered">Anonymous</th>
+                  <th scope="col" class="width-40-percent left-aligned">Anonymous</th>
                   <th scope="col" class="width-15-percent centered">Action</th>
                 </tr>
             </thead>
@@ -118,12 +118,12 @@
                     <td class="timeago">
                         {{ submission.feedback_date | fromNow }}
                     </td>
-                    <td class="centered">
+                    <td class="left-aligned">
                         <i ng-show="{{ submission.anonymous }}" class="fa fa-check" title="Anonymous"></i>
                     </td>
                     <td class="centered">
                         <a class="btn btn-default btn-md" ng-href="#/feedback/submission/{{ submission.id }}/" type="button">
-                            View
+                            <i class="fa fa-eye"></i> View Feedback
                         </a>
                     </td>
                 </tr>
@@ -131,7 +131,6 @@
         </table>
     </div>
     <div style="padding-top:20px" ng-repeat="digest in feedback.myDigests | orderBy:'delivery_date':true">
-
         <div class="panel">
             <h2 class="panel-title" style="margin-bottom:0">360 Feedback- {{ digest.delivery_date | date:'longDate' }}</h2>
             <span style="color: #aaa;font-style: italic;">Delivered by: {{ digest.delivered_by.full_name }}</span>
