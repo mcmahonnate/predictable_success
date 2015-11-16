@@ -188,7 +188,7 @@ def change_coach(request):
 
 
 def account_activate(request, uidb64=None, token=None, template_name=None, set_password_form=None):
-    return password_reset_confirm(request, uidb64=uidb64, token=token, template_name=template_name, set_password_form=set_password_form, post_reset_redirect=reverse('account_activate_login') + uidb64)
+    return password_reset_confirm(request, uidb64=uidb64, token=token, template_name=template_name, set_password_form=set_password_form, post_reset_redirect=reverse('account_activate_login', kwargs={'uidb64': uidb64}))
 
 def account_activate_login(request, uidb64=None, template_name=None, authentication_form=None):
     uid = urlsafe_base64_decode(uidb64)
