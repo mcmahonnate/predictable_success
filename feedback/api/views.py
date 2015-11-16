@@ -8,9 +8,9 @@ from rest_framework import status
 from rest_framework.response import Response
 from serializers import *
 from org.models import Employee
-from org.api.permissions import UserIsEmployee, UserIsEmployeesCoach, UserIsEmployeeOrCoachOfEmployee, UserIsEmployeeOrDigestDeliverer
+from org.api.permissions import UserIsEmployee, UserIsEmployeesCoach, UserIsEmployeeOrCoachOfEmployee
 from ..models import FeedbackRequest, FeedbackProgressReport, FeedbackProgressReports, FeedbackDigest
-
+from permissions import UserIsEmployeeOrDigestDeliverer, UserIsSubjectOrReviewerOrCoach
 
 # FeedbackRequest
 class CreateFeedbackRequest(CreateAPIView):
@@ -61,12 +61,11 @@ class CreateFeedbackSubmission(CreateAPIView):
 
 
 class RetrieveFeedbackSubmission(RetrieveAPIView):
-    permission_classes = (IsAuthenticated, UserIsEmployeeOrCoachOfEmployee,)
+    permission_classes = (IsAuthenticated, UserIsSubjectOrReviewerOrCoach)
     queryset = FeedbackSubmission.objects.all()
 
-    def get_employee(self):
-        submission = self.get_object()
-        return submission.subject
+    def get_submission(self):
+        return self.get_object()
 
     def get_serializer_class(self):
         employee_making_the_request = self.request.user.employee
@@ -75,6 +74,8 @@ class RetrieveFeedbackSubmission(RetrieveAPIView):
             return FeedbackSubmissionSerializerForCoaches
         if employee_making_the_request == submission.subject:
             return FeedbackSubmissionSerializerForEmployee
+        if employee_making_the_request == submission.reviewer:
+            return FeedbackSubmissionSerializerForReviewer
         raise Exception("Can't determine which serializer class to use")
 
 
