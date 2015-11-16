@@ -1345,7 +1345,7 @@ def happiness_reports(request):
 def team_leads(request):
     team_id = request.QUERY_PARAMS.get('team_id', None)
     leaders = Leadership.objects.filter(leader__team_id=int(team_id)).values('leader_id')
-    employees = Employee.objects.filter(id__in=leaders)
+    employees = Employee.objects.filter(id__in=leaders, departure_date__isnull=True)
     serializer = EmployeeSerializer(employees, many=True, context={'request': request})
     
     return Response(serializer.data)
