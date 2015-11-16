@@ -104,6 +104,7 @@
                   <th scope="col" class="width-15-percent">Person</th>
                   <th scope="col" class="width-15-percent">Sent</th>
                   <th scope="col" class="width-15-percent centered">Anonymous</th>
+                  <th scope="col" class="width-15-percent centered">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -119,6 +120,11 @@
                     </td>
                     <td class="centered">
                         <i ng-show="{{ submission.anonymous }}" class="fa fa-check" title="Anonymous"></i>
+                    </td>
+                    <td class="centered">
+                        <a class="btn btn-default btn-md" ng-href="#/feedback/submission/{{ submission.id }}/" type="button">
+                            View
+                        </a>
                     </td>
                 </tr>
             </tbody>

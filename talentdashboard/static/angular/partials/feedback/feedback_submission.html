@@ -1,0 +1,54 @@
+<div class="container">
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<h1>Feedback for {{ processFeedback.submission.subject.full_name }}</h1>
+			<div class="panel activity" style="min-height:auto">
+                <form name="processFeedback.form">
+                    <div class="panel-body">
+                        <div class="activity-items">
+                            <div class="activity-item">
+                                <h2 class="panel-title">{{ processFeedback.questions.excelsAtQuestion }}</h2>
+                                <div class="activity-header">
+                                    <div class="activity-owner-avatar-container">
+                                        <span class="medium-headshot">
+                                            <img ng-src="{{ processFeedback.submission.reviewer.avatar_small }}" class="headshot-image">
+                                        </span>
+                                    </div>
+                                    <div class="activity-description">
+                                        <span class="activity-title-employee-name">{{ processFeedback.submission.reviewer.full_name }}</span> said
+                                        <span class="timestamp" data-toggle="tooltip" data-placement="top" title="{{ event.date | date:'MMM d, yyyy h:mma' }}">{{ processFeedback.submission.feedback_date | fromNow }}</span>
+                                        <span ng-show="processFeedback.submission.anonymous" class="tag tag-anonymous pull-right">Anonymous</span>
+                                    </div>
+                                </div>
+                                <div class="comment-copy" style="padding-top: 15px">
+                                    <div class="activity-comment comment-text">{{ processFeedback.submission.excels_at }}</div>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <h2 class="panel-title">{{ processFeedback.questions.couldImproveOnQuestion }}</h2>
+                                <div class="activity-header">
+                                    <div class="activity-owner-avatar-container">
+                                        <span class="medium-headshot">
+                                            <img ng-src="{{ processFeedback.submission.reviewer.avatar_small }}" class="headshot-image">
+                                        </span>
+                                    </div>
+                                    <div class="activity-description">
+                                        <span class="activity-title-employee-name">{{ processFeedback.submission.reviewer.full_name }}</span> said
+                                        <span class="timestamp" data-toggle="tooltip" data-placement="top" title="{{ event.date | date:'MMM d, yyyy h:mma' }}">{{ processFeedback.submission.feedback_date | fromNow }}</span>
+                                        <span ng-show="processFeedback.submission.anonymous" class="tag tag-anonymous pull-right">Anonymous</span>
+                                    </div>
+                                </div>
+                                <div class="comment-copy" style="padding-top: 15px">
+                                    <div class="activity-comment comment-text">{{ processFeedback.submission.could_improve_on }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-success pull-right" type="button" ng-click="processFeedback.back()">Back</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -24,6 +24,7 @@ var app = angular.module('tdb', [
             when('/engagement-survey/:employeeId/:surveyId', {templateUrl: '/static/angular/partials/engagement-survey.html', controller: 'EngagementSurveyCtrl'}).
             when('/feedback/request/:id/reply', {templateUrl: '/static/angular/partials/feedback/respond_to_request.html', controller: 'RespondToFeedbackRequestController as submitFeedback', resolve: {authorizeRoute: authorizeRoute}}).
             when('/feedback/submit', {templateUrl: '/static/angular/partials/feedback/unsolicited_feedback.html', controller: 'UnsolicitedFeedbackController as submitFeedback', resolve: {authorizeRoute: authorizeRoute}}).
+            when('/feedback/submission/:id', {templateUrl: '/static/angular/partials/feedback/feedback_submission.html', controller: 'ProcessSubmissionController as processFeedback', resolve: {authorizeRoute: authorizeRoute}}).
             when('/feedback/submission/:id/process', {templateUrl: '/static/angular/partials/feedback/process_feedback.html', controller: 'ProcessSubmissionController as processFeedback', resolve: {authorizeRoute: authorizeRoute}}).
             when('/feedback', {templateUrl: '/static/angular/partials/feedback/index.html', controller: 'FeedbackController as feedback', resolve: {authorizeRoute: authorizeRoute}}).
             when('/feedback/:id/worksheet', {templateUrl: '/static/angular/partials/feedback/feedback_worksheet.html', controller: 'FeedbackWorksheetController as feedbackWorksheet', resolve: {authorizeRoute: authorizeRoute}}).
