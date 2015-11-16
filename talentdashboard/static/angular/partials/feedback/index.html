@@ -96,6 +96,40 @@
             </tbody>
         </table>
     </div>
+    <div class="panel" ng-show="feedback.mySubmissions.length">
+        <table class="table responsive-table">
+            <caption class="panel-title">People I've given feedback to</caption>
+            <thead>
+                <tr>
+                  <th scope="col" class="width-15-percent">Person</th>
+                  <th scope="col" class="width-15-percent">Sent</th>
+                  <th scope="col" class="width-15-percent centered">Anonymous</th>
+                  <th scope="col" class="width-15-percent centered">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="submission in feedback.mySubmissions | reverse">
+                    <td>
+                        <span class="tiny-headshot">
+                            <img ng-src="{{ submission.subject.avatar_small }}" alt="{{ submission.subject.full_name }}'s avatar" />
+                        </span>
+                        {{ submission.subject.full_name }}
+                    </td>
+                    <td class="timeago">
+                        {{ submission.feedback_date | fromNow }}
+                    </td>
+                    <td class="centered">
+                        <i ng-show="{{ submission.anonymous }}" class="fa fa-check" title="Anonymous"></i>
+                    </td>
+                    <td class="centered">
+                        <a class="btn btn-default btn-md" ng-href="#/feedback/submission/{{ submission.id }}/" type="button">
+                            View
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
     <div style="padding-top:20px" ng-repeat="digest in feedback.myDigests | orderBy:'delivery_date':true">
 
         <div class="panel">

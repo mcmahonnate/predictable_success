@@ -74,6 +74,18 @@ class WriteableFeedbackSubmissionSerializer(serializers.ModelSerializer):
         model = FeedbackSubmission
 
 
+class FeedbackSubmissionSerializerForReviewer(serializers.ModelSerializer):
+    feedback_date = serializers.DateTimeField(required=False)
+    subject = SanitizedEmployeeSerializer()
+    reviewer = SanitizedEmployeeSerializer()
+
+    class Meta:
+        model = FeedbackSubmission
+        fields = ('id', 'feedback_date', 'subject', 'reviewer',
+                  'excels_at', 'could_improve_on', 'unread',
+                  'has_been_delivered', 'anonymous')
+
+
 class FeedbackSubmissionSerializerForCoaches(serializers.ModelSerializer):
     feedback_date = serializers.DateTimeField(required=False)
     subject = SanitizedEmployeeSerializer()

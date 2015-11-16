@@ -2,14 +2,30 @@ angular
     .module('feedback')
     .factory('FeedbackSubmissionService', FeedbackSubmissionService);
 
-function FeedbackSubmissionService($log, FeedbackSubmissionResource, Employee) {
+function FeedbackSubmissionService($http, $log, FeedbackSubmissionResource, Employee) {
     return {
         getFeedbackSubmission: getFeedbackSubmission,
         updateCoachSummary: updateCoachSummary,
         getEmployees: getEmployees,
         respondToFeedbackRequest: respondToFeedbackRequest,
-        giveUnsolicitedFeedback: giveUnsolicitedFeedback
+        giveUnsolicitedFeedback: giveUnsolicitedFeedback,
+        getFeedbackIveSubmitted: getFeedbackIveSubmitted
     };
+
+    function getFeedbackIveSubmitted() {
+        var url = '/api/v1/feedback/submissions/my/';
+        return $http.get(url)
+            .then(success)
+            .catch(fail);
+
+        function success(response) {
+            return response.data;
+        }
+
+        function fail(response) {
+            $log.error('getFeedbackIveSubmitted failed');
+        }
+    }
 
     function getFeedbackSubmission(id) {
         return FeedbackSubmissionResource.get({id: id}, success, fail).$promise;

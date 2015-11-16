@@ -1,7 +1,9 @@
-from django.contrib.auth.views import password_reset_confirm
+from django.contrib.auth.views import password_reset_confirm, login
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db.models import F
 from django.http import Http404
+from django.utils.http import urlsafe_base64_decode
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -18,6 +20,7 @@ from talentdashboard.views.views import add_salary_to_employee, PermissionsViewT
 from .serializers import EmployeeSerializer, CreateEmployeeSerializer, EditEmployeeSerializer, CoachChangeRequestSerializer, SanitizedEmployeeSerializer
 from ..models import Employee, CoachCapacity
 from django.utils.log import getLogger
+
 
 logger = getLogger('talentdashboard')
 
@@ -185,4 +188,9 @@ def change_coach(request):
 
 
 def account_activate(request, uidb64=None, token=None, template_name=None, set_password_form=None):
-    return password_reset_confirm(request, uidb64=uidb64, token=token, template_name=template_name, set_password_form=set_password_form, post_reset_redirect=reverse('account_activate_login'))
+    return password_reset_confirm(request, uidb64=uidb64, token=token, template_name=template_name, set_password_form=set_password_form, post_reset_redirect=reverse('account_activate_login', kwargs={'uidb64': uidb64}))
+
+def account_activate_login(request, uidb64=None, template_name=None, authentication_form=None):
+    uid = urlsafe_base64_decode(uidb64)
+    user = User.objects.get(pk=uid)
+    return login(request, template_name=template_name, extra_context={'email': user.email}, authentication_form=authentication_form)

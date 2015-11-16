@@ -2,7 +2,7 @@ angular
     .module('feedback')
     .controller('FeedbackController', FeedbackController);
 
-function FeedbackController(FeedbackRequestService, FeedbackDigestService, analytics, $modal, $location, $scope, $rootScope, $sce) {
+function FeedbackController(FeedbackRequestService, FeedbackDigestService, FeedbackSubmissionService, analytics, $modal, $location, $scope, $rootScope, $sce) {
     /* Since this page can be the root for some users let's make sure we capture the correct page */
     var location_url = $location.url().indexOf('/feedback') < 0 ? '/feedback' : $location.url();
     analytics.trackPage($scope, $location.absUrl(), location_url);
@@ -12,6 +12,7 @@ function FeedbackController(FeedbackRequestService, FeedbackDigestService, analy
     vm.feedbackRequests = [];
     vm.myRecentlySentRequests = [];
     vm.myDigests = [];
+    vm.mySubmissions = [];
     vm.requestFeedback = requestFeedback;
     vm.giveUnsolicitedFeedback = giveUnsolicitedFeedback;
     vm.welcome = $sce.trustAsHtml($rootScope.customer.feedback_welcome);
@@ -24,7 +25,16 @@ function FeedbackController(FeedbackRequestService, FeedbackDigestService, analy
     function activate() {
         getMyRecentlySentRequests();
         getFeedbackRequests();
+        getMySubmissions();
         getMyDigests();
+    }
+
+    function getMySubmissions() {
+        FeedbackSubmissionService.getFeedbackIveSubmitted()
+            .then(function (data) {
+                vm.mySubmissions = data;
+                return vm.mySubmissions;
+            });
     }
 
     function getFeedbackRequests() {

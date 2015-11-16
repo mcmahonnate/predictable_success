@@ -61,6 +61,7 @@ angular.module('tdb.search.controllers', [])
         };
 
         $scope.setHappyFilter = function(happiness) {
+            if (happiness == 0) {happiness="0"}
             $location.search('happiness', happiness);
         };
 
