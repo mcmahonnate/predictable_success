@@ -11,6 +11,7 @@
                         ng-model="request.selectedReviewers"
                         reset-search-input="true"
                         theme="bootstrap"
+                        style="max-width:300px"
                         >
                     <ui-select-match placeholder="Type an employee name">{{$item.full_name}}</ui-select-match>
                     <ui-select-choices
@@ -24,8 +25,8 @@
             </panel>    
         </div>    
         <div class="modal-footer">
-            <button ng-show="request.panel_index>0" type="button" ng-click="request.stepBack()" class="btn btn-default">Back</button>
-            <button type="button" ng-click="request.cancel()" data-dismiss="modal" class="btn btn-default pull-left">Cancel</button>
+            <button ng-show="request.panel_index>0" type="button" ng-click="request.stepBack()" class="btn btn-light">&larr; Back</button>
+            <button type="button" ng-click="request.cancel()" data-dismiss="modal" class="btn btn-light pull-left">Cancel</button>
             <button ng-show="request.panel_index<3" ng-disabled="request.selectedReviewers.length==0" type="button" class="btn btn-success" ng-click="request.stepNext()">Questions &rarr;</button>
         </div>
     </div>
@@ -57,8 +58,8 @@
             </panel>
         </div> 
         <div class="modal-footer">
-            <button ng-show="request.panel_index>0" type="button" ng-click="request.stepBack()" class="btn btn-default">Back</button>
-            <button type="button" ng-click="request.cancel()" class="btn btn-default pull-left">Cancel</button>
+            <button ng-show="request.panel_index>0" type="button" ng-click="request.stepBack()" class="btn btn-light">&larr; Back</button>
+            <button type="button" ng-click="request.cancel()" class="btn btn-light pull-left">Cancel</button>
             <button ng-show="request.panel_index<3" ng-disabled="request.selectedReviewers.length==0" type="button" class="btn btn-success" ng-click="request.stepNext()">Choose Coach &rarr;</button>
         </div>
     </div>    
@@ -81,8 +82,8 @@
             </panel>
         </div>
         <div class="modal-footer">
-            <button type="button" ng-click="request.stepBack()" class="btn btn-default">Back</button>
-            <button type="button" ng-click="request.cancel()" class="btn btn-default pull-left">Cancel</button>
+            <button type="button" ng-click="request.stepBack()" class="btn btn-light">&larr; Back</button>
+            <button type="button" ng-click="request.cancel()" class="btn btn-light pull-left">Cancel</button>
             <button type="button" class="btn btn-success" ng-disabled="!request.currentCoach" ng-click="request.stepNext()">Preview &rarr;</button>            
         </div>
     </div> 
@@ -116,8 +117,8 @@
             </panel>
         </div>
         <div class="modal-footer">
-            <button type="button" ng-click="request.stepBack()" class="btn btn-default">Back</button>
-            <button type="button" ng-click="request.cancel()" class="btn btn-default pull-left">Cancel</button>
+            <button type="button" ng-click="request.stepBack()" class="btn btn-light">Back</button>
+            <button type="button" ng-click="request.cancel()" class="btn btn-light pull-left">Cancel</button>
             <button ng-disabled="request.selectedReviewers.length==0 || request.enableSend==false" type="button" class="btn btn-success" ng-click="request.sendFeedbackRequests()">Submit Requests</button>
         </div>
     </div>   

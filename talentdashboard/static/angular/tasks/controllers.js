@@ -87,6 +87,7 @@ angular.module('tdb.tasks.controllers', [])
                 animation: true,
                 templateUrl: '/static/angular/partials/_modals/add-edit-task.html',
                 controller: 'AddEditTaskCtrl',
+                windowClass: 'zoom',
                 resolve: {
                     task: function () {
                         return new Task({employee: employee_id});

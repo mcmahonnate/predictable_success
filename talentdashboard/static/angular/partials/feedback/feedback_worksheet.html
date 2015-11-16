@@ -8,8 +8,8 @@
         </div>
     </div>
     <div class="row">
-        <div class="col col-md-5">
-			<div class="panel hide-for-print" ng-show="feedbackWorksheet.progressReport.solicited_submissions.length>0">
+        <div class="col col-md-5 hide-for-print">
+			<div class="panel" ng-show="feedbackWorksheet.progressReport.solicited_submissions.length>0">
 				<h3 class="panel-title">Feedback Submissions</h3>
 				<table class="table" style="margin-bottom:0">
 					<thead>
@@ -37,7 +37,7 @@
 		      		</tbody>
 				</table>	
             </div>
-            <div class="panel hide-for-print" ng-show="feedbackWorksheet.progressReport.unsolicited_submissions.length>0">    
+            <div class="panel" ng-show="feedbackWorksheet.progressReport.unsolicited_submissions.length>0">    
 				<h3 class="panel-title">Unsolicited Feedback</h3>
 				<table class="table" style="margin-bottom:0">
 					<thead>
@@ -67,7 +67,7 @@
 		      		</tbody>
 				</table>	
             </div>
-            <div class="panel hide-for-print" ng-show="feedbackWorksheet.progressReport.unanswered_requests.length>0">    
+            <div class="panel" ng-show="feedbackWorksheet.progressReport.unanswered_requests.length>0">    
                 <h3 class="panel-title">Unanswered Requests</h3>
                 <table class="table" style="margin-bottom:0">
                     <thead>
@@ -96,7 +96,7 @@
 
         <div ng-class="feedbackWorksheet.progressReport.solicited_submissions.length==0 && 
         feedbackWorksheet.progressReport.unanswered_requests.length==0 && 
-        feedbackWorksheet.progressReport.unsolicited_submissions.length==0 ? 'col col-md-8 col-md-offset-2' : 'col col-md-7'">
+        feedbackWorksheet.progressReport.unsolicited_submissions.length==0 ? 'col col-md-8 col-md-offset-2' : 'col col-md-7'" class="full-width-column-print">
             <div ng-include="'/static/angular/partials/feedback/_widgets/digest_for_coaches.html'"></div>
         </div>
     </div>    
@@ -112,6 +112,9 @@
     @media print {
         .hide-for-print, nav, .btn, .account-menu {
             display: none;
+        }
+        .full-width-column-print {
+            width: 100%;
         }
         .show-for-print {
             display: block;
