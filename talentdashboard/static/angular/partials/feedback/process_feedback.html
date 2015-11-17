@@ -15,15 +15,15 @@
                                         </span>
                                     </div>
                                     <div class="activity-description">
-                                        <span class="activity-title-employee-name">{{ processFeedback.submission.reviewer.full_name }}</span> said
-                                        <span class="timestamp" data-toggle="tooltip" data-placement="top" title="{{ event.date | date:'MMM d, yyyy h:mma' }}">{{ processFeedback.submission.feedback_date | fromNow }}</span>
+                                        <span class="activity-title-employee-name">{{ processFeedback.submission.reviewer.full_name }}</span>
+                                        <span class="time timestamp" data-toggle="tooltip" data-placement="top" title="{{ event.date | date:'MMM d, yyyy h:mma' }}">{{ processFeedback.submission.feedback_date | fromNow }}</span>
                                         <span ng-show="processFeedback.submission.anonymous" class="tag tag-anonymous pull-right">Anonymous</span>
                                     </div>
                                 </div>
                                 <div class="comment-copy" style="padding-top: 15px">
                                     <div class="activity-comment comment-text">{{ processFeedback.submission.excels_at }}</div>
                                     <label for="editFeedbackQuestion1"  style="font-size:12px;font-weight:bold;cursor:pointer">
-                                        <input ng-disabled="processFeedback.submission.has_been_delivered" ng-click="isEditFeedbackCollapsed1 = !isEditFeedbackCollapsed1" id="editFeedbackQuestion1" ng-checked="processFeedback.submission.excels_at_summarized.length" type="checkbox"> Edit Feedback
+                                        <input ng-disabled="processFeedback.submission.has_been_delivered" ng-click="isEditFeedbackCollapsed1 = !isEditFeedbackCollapsed1" id="editFeedbackQuestion1" ng-checked="processFeedback.submission.excels_at_summarized.length" type="checkbox"> Summarize Feedback
                                     </label>
                                 </div>
                                 <div ng-show="isEditFeedbackCollapsed1 || processFeedback.submission.excels_at_summarized.length" class="comment-editor">
@@ -41,15 +41,15 @@
                                         </span>
                                     </div>
                                     <div class="activity-description">
-                                        <span class="activity-title-employee-name">{{ processFeedback.submission.reviewer.full_name }}</span> said
-                                        <span class="timestamp" data-toggle="tooltip" data-placement="top" title="{{ event.date | date:'MMM d, yyyy h:mma' }}">{{ processFeedback.submission.feedback_date | fromNow }}</span>
+                                        <span class="activity-title-employee-name">{{ processFeedback.submission.reviewer.full_name }}</span>
+                                        <span class="time timestamp" data-toggle="tooltip" data-placement="top" title="{{ event.date | date:'MMM d, yyyy h:mma' }}">{{ processFeedback.submission.feedback_date | fromNow }}</span>
                                         <span ng-show="processFeedback.submission.anonymous" class="tag tag-anonymous pull-right">Anonymous</span>
                                     </div>
                                 </div>
                                 <div class="comment-copy" style="padding-top: 15px">
                                     <div class="activity-comment comment-text">{{ processFeedback.submission.could_improve_on }}</div>
                                     <label for="editFeedbackQuestion2"  style="font-size:12px;font-weight:bold;cursor:pointer">
-                                        <input ng-disabled="processFeedback.submission.has_been_delivered" ng-click="isEditFeedbackCollapsed2 = !isEditFeedbackCollapsed2" id="editFeedbackQuestion2" type="checkbox" ng-checked="processFeedback.submission.could_improve_on_summarized.length"> Edit Feedback
+                                        <input ng-disabled="processFeedback.submission.has_been_delivered" ng-click="isEditFeedbackCollapsed2 = !isEditFeedbackCollapsed2" id="editFeedbackQuestion2" type="checkbox" ng-checked="processFeedback.submission.could_improve_on_summarized.length"> Summarize Feedback
                                     </label>                           
                                 </div>
                                 <div ng-show="isEditFeedbackCollapsed2 || processFeedback.submission.could_improve_on_summarized.length" class="comment-editor">
@@ -60,8 +60,8 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <button ng-show="processFeedback.submission.has_been_delivered" class="btn btn-success pull-right" type="button" ng-click="processFeedback.back()">Back</button>
-                            <button ng-show="!processFeedback.submission.has_been_delivered"class="btn btn-default" type="button" ng-click="processFeedback.close()">Cancel</button>
+                            <button ng-show="processFeedback.submission.has_been_delivered" class="btn btn-success pull-right" type="button" ng-click="processFeedback.back()">&larr; Back</button>
+                            <button ng-show="!processFeedback.submission.has_been_delivered"class="btn btn-default" type="button" ng-click="processFeedback.close()">&larr; Back</button>
                             <button ng-show="!processFeedback.submission.has_been_delivered" class="btn btn-success pull-right" type="button" ng-click="processFeedback.addToDigest()">Add to Digest</button>
                             <button ng-show="!processFeedback.submission.has_been_delivered" ng-disabled="processFeedback.form.$pristine" class="btn btn-default pull-right" type="button" ng-click="processFeedback.save()" style="margin-right:5px;">Save</button>
                         </div>

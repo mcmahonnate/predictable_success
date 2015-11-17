@@ -26,12 +26,15 @@
             </div>
 
             <div style="padding-left:60px;">
-                <div ng-show="!submission.anonymous">
-                    <strong>{{ submission.reviewer.full_name }}</strong> said:
-                </div>
-                <div ng-show="submission.anonymous">     
-                    <strong>Anonymous</strong> said:
-                </div> 
+                <div>
+                    <span ng-show="!submission.anonymous">
+                        <strong>{{ submission.reviewer.full_name }}</strong> 
+                    </span>
+                    <span ng-show="submission.anonymous">     
+                        <strong>Anonymous</strong>
+                    </span> 
+                    <span class="time timestamp" data-toggle="tooltip" data-placement="top" title="{{ submission.date | date:'MMM d, yyyy h:mma' }}">{{ submission.feedback_date | fromNow }}</span>
+                </div>    
                 <div ng-show="submission.excels_at_summarized" style="white-space: pre-line;">
                     {{ submission.excels_at_summarized }}
                 </div>
@@ -64,12 +67,15 @@
             </div>
 
             <div style="padding-left:60px;">
-                <div ng-show="!submission.anonymous">
-                    <strong>{{ submission.reviewer.full_name }}</strong> said:
-                </div>
-                <div ng-show="submission.anonymous">     
-                    <strong>Anonymous</strong> said:
-                </div> 
+                <div>
+                    <span ng-show="!submission.anonymous">
+                        <strong>{{ submission.reviewer.full_name }}</strong> said:
+                    </span>
+                    <span ng-show="submission.anonymous">     
+                        <strong>Anonymous</strong> said:
+                    </span> 
+                    <span class="time timestamp" data-toggle="tooltip" data-placement="top" title="{{ submission.date | date:'MMM d, yyyy h:mma' }}">{{ submission.feedback_date | fromNow }}</span>
+                </div>                        
                 <div ng-show="submission.could_improve_on_summarized" style="white-space: pre-line;">
                     {{ submission.could_improve_on_summarized }}
                 </div>

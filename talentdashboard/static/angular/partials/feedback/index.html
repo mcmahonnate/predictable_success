@@ -87,7 +87,7 @@
                         {{ request.request_date | fromNow }}
                     </td>
                     <td class="message">
-                        {{ request.message }}
+                        <p style="white-space:pre-line">{{ request.message }}</p>
                     </td>                          
                     <td class="centered">
                         <i ng-show="{{ request.has_been_answered }}" class="fa fa-check" title="Completed"></i>

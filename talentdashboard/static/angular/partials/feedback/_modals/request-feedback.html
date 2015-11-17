@@ -105,7 +105,7 @@
                 </div>    
                 <div class="confirmation-block">
                     <h4>Specific areas you'd like feedback on <span class="selected-change-link" ng-click="request.panel_index=1">Change</span></h4>
-                    <p>{{ request.message }}<span ng-show="!request.message">Crickets...</span></p>
+                    <p style="white-space:pre-line">{{ request.message }}<span ng-show="!request.message">Crickets...</span></p>
                 </div>
                 <div class="confirmation-block">    
                     <h4>Your Feedback Coach <span class="selected-change-link" ng-click="request.panel_index=2">Change</span></h4>
@@ -117,7 +117,7 @@
             </panel>
         </div>
         <div class="modal-footer">
-            <button type="button" ng-click="request.stepBack()" class="btn btn-light">Back</button>
+            <button type="button" ng-click="request.stepBack()" class="btn btn-light">&larr; Back</button>
             <button type="button" ng-click="request.cancel()" class="btn btn-light pull-left">Cancel</button>
             <button ng-disabled="request.selectedReviewers.length==0 || request.enableSend==false" type="button" class="btn btn-success" ng-click="request.sendFeedbackRequests()">Submit Requests</button>
         </div>
