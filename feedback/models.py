@@ -193,10 +193,10 @@ class FeedbackProgressReport(object):
 
 
 class EmployeeFeedbackReports(object):
-    def __init__(self):
+    def __init__(self, object):
         self.employee_report = []
-        self.start_date = datetime.today()
-        self.end_date = datetime.today()
+        self.start_date = object.get('start_date', datetime.today() - timedelta(days=365))
+        self.end_date = object.get('end_date', datetime.today())
 
     def load(self):
         def dictfetchall(cursor):
@@ -207,19 +207,19 @@ class EmployeeFeedbackReports(object):
                 for row in cursor.fetchall()
             ]
         cursor = connection.cursor()
-        cursor.execute('SELECT requester_id as employee_id, count(requester_id) as total_i_requested FROM feedback_feedbackrequest GROUP BY requester_id')
+        cursor.execute("SELECT requester_id as employee_id, count(requester_id) as total_i_requested FROM feedback_feedbackrequest WHERE (request_date >= '%s' AND request_date <= '%s') GROUP BY requester_id" % (self.start_date, self.end_date))
         total_i_requested = dictfetchall(cursor)
-        cursor.execute('SELECT reviewer_id as employee_id, count(reviewer_id) as total_requested_of_me FROM feedback_feedbackrequest GROUP BY reviewer_id')
+        cursor.execute("SELECT reviewer_id as employee_id, count(reviewer_id) as total_requested_of_me FROM feedback_feedbackrequest WHERE (request_date >= '%s' AND request_date <= '%s') GROUP BY reviewer_id" % (self.start_date, self.end_date))
         total_requested_of_me = dictfetchall(cursor)
-        cursor.execute('SELECT reviewer_id as employee_id, count(reviewer_id) as total_i_responded_to FROM feedback_feedbacksubmission WHERE feedback_request_id IS NOT NULL GROUP BY reviewer_id')
+        cursor.execute("SELECT reviewer_id as employee_id, count(reviewer_id) as total_i_responded_to FROM feedback_feedbacksubmission WHERE feedback_request_id IS NOT NULL AND (feedback_date >= '%s' AND feedback_date <= '%s') GROUP BY reviewer_id" % (self.start_date, self.end_date))
         total_i_responded_to = dictfetchall(cursor)
-        cursor.execute('SELECT subject_id as employee_id, count(subject_id) as total_responded_to_me FROM feedback_feedbacksubmission WHERE feedback_request_id IS NOT NULL GROUP BY subject_id')
+        cursor.execute("SELECT subject_id as employee_id, count(subject_id) as total_responded_to_me FROM feedback_feedbacksubmission WHERE feedback_request_id IS NOT NULL AND (feedback_date >= '%s' AND feedback_date <= '%s') GROUP BY subject_id" % (self.start_date, self.end_date))
         total_responded_to_me = dictfetchall(cursor)
-        cursor.execute('SELECT reviewer_id as employee_id, count(reviewer_id) as total_unrequested_i_gave FROM feedback_feedbacksubmission WHERE feedback_request_id IS NULL GROUP BY reviewer_id')
+        cursor.execute("SELECT reviewer_id as employee_id, count(reviewer_id) as total_unrequested_i_gave FROM feedback_feedbacksubmission WHERE feedback_request_id IS NULL AND (feedback_date >= '%s' AND feedback_date <= '%s') GROUP BY reviewer_id" % (self.start_date, self.end_date))
         total_unrequested_i_gave = dictfetchall(cursor)
-        cursor.execute('SELECT subject_id as employee_id, count(subject_id) as total_unrequested_given_to_me FROM feedback_feedbacksubmission WHERE feedback_request_id IS NULL GROUP BY subject_id')
+        cursor.execute("SELECT subject_id as employee_id, count(subject_id) as total_unrequested_given_to_me FROM feedback_feedbacksubmission WHERE feedback_request_id IS NULL AND (feedback_date >= '%s' AND feedback_date <= '%s') GROUP BY subject_id" % (self.start_date, self.end_date))
         total_unrequested_given_to_me = dictfetchall(cursor)
-        cursor.execute('SELECT delivered_by_id as employee_id, count(delivered_by_id) as total_digests_i_delivered FROM feedback_feedbackdigest WHERE has_been_delivered=TRUE GROUP BY delivered_by_id')
+        cursor.execute("SELECT delivered_by_id as employee_id, count(delivered_by_id) as total_digests_i_delivered FROM feedback_feedbackdigest WHERE has_been_delivered=TRUE AND (delivery_date >= '%s' AND delivery_date <= '%s') GROUP BY delivered_by_id" % (self.start_date, self.end_date))
         total_digests_i_delivered = dictfetchall(cursor)
 
         lst = sorted(chain(total_i_requested,total_requested_of_me,total_i_responded_to,total_responded_to_me,total_unrequested_i_gave,total_unrequested_given_to_me,total_digests_i_delivered), key=lambda x:x['employee_id'])
