@@ -62,7 +62,7 @@
                         <div class="form-group">
                             <button ng-show="processFeedback.submission.has_been_delivered" class="btn btn-success pull-right" type="button" ng-click="processFeedback.back()">Back</button>
                             <button ng-show="!processFeedback.submission.has_been_delivered"class="btn btn-default" type="button" ng-click="processFeedback.close()">Cancel</button>
-                            <button ng-show="!processFeedback.submission.has_been_delivered" class="btn btn-success pull-right" type="button" ng-click="processFeedback.addToDigest()" rel="tooltip" data-toggle="tooltip" data-placement="top" data-original-title="A digest is a summary all of the feedback submitted to an individual.">Add to Digest</button>
+                            <button ng-show="!processFeedback.submission.has_been_delivered" class="btn btn-success pull-right" type="button" ng-click="processFeedback.addToDigest()">Add to Digest</button>
                             <button ng-show="!processFeedback.submission.has_been_delivered" ng-disabled="processFeedback.form.$pristine" class="btn btn-default pull-right" type="button" ng-click="processFeedback.save()" style="margin-right:5px;">Save</button>
                         </div>
                     </div>

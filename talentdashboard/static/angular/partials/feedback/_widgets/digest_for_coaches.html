@@ -13,11 +13,9 @@
             
             <!-- Headshot -->
             <div ng-show="!submission.anonymous" class="pull-left">
-                <a href="#/employees/{{ submission.reviewer.id }}">
-                    <span class="headshot medium-headshot">
-                        <img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
-                    </span>
-                </a>
+                <span class="headshot medium-headshot">
+                    <img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
+                </span>
             </div>
 
             <!-- Anonyous Headshot -->
@@ -29,7 +27,7 @@
 
             <div style="padding-left:60px;">
                 <div ng-show="!submission.anonymous">
-                    <a href="#/employees/{{ submission.reviewer.id }}"><strong>{{ submission.reviewer.full_name }}</strong></a> said:
+                    <strong>{{ submission.reviewer.full_name }}</strong> said:
                 </div>
                 <div ng-show="submission.anonymous">     
                     <strong>Anonymous</strong> said:
@@ -53,11 +51,9 @@
 
             <!-- Headshot -->
             <div ng-show="!submission.anonymous" class="pull-left">
-                <a href="#/employees/{{ submission.reviewer.id }}">
-                    <span class="medium-headshot">
-                        <img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
-                    </span>
-                </a>
+                <span class="medium-headshot">
+                    <img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
+                </span>
             </div> 
 
             <!-- Anonyous Headshot -->
@@ -69,7 +65,7 @@
 
             <div style="padding-left:60px;">
                 <div ng-show="!submission.anonymous">
-                    <a href="#/employees/{{ submission.reviewer.id }}"><strong>{{ submission.reviewer.full_name }}</strong></a> said:
+                    <strong>{{ submission.reviewer.full_name }}</strong> said:
                 </div>
                 <div ng-show="submission.anonymous">     
                     <strong>Anonymous</strong> said:

@@ -22,12 +22,10 @@
 		      		<tbody>
 						<tr ng-repeat="submission in feedbackWorksheet.progressReport.solicited_submissions | orderBy:'-feedback_date' ">
 							<td>
-								<a href="#/employees/{{ submission.reviewer.id }}">
-									<span class="tiny-headshot">
-										<img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
-									</span> 
-								</a>	
-								<a href="#/employees/{{ submission.reviewer.id }}">{{ submission.reviewer.full_name }}</a> <span ng-show="{{ submission.anonymous }}">(Anonymous)</span>
+								<span class="tiny-headshot">
+									<img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
+								</span> 					
+								<strong>{{ submission.reviewer.full_name }}</strong> <span ng-show="{{ submission.anonymous }}">(Anonymous)</span>
 							</td>
 							<td>{{ submission.feedback_date | fromNow }}</td>
 							<td>
@@ -50,12 +48,10 @@
 		      		<tbody>
 						<tr ng-repeat="submission in feedbackWorksheet.progressReport.unsolicited_submissions">
 							<td>
-								<a href="#/employees/{{ submission.reviewer.id }}">
-									<span class="tiny-headshot">
-										<img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
-									</span> 
-								</a>	
-								<a href="#/employees/{{ submission.reviewer.id }}">{{ submission.reviewer.full_name }}</a> 
+								<span class="tiny-headshot">
+									<img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
+								</span> 	
+								<strong>{{ submission.reviewer.full_name }}</strong>
 							</td>
 							<td>
 								{{ submission.feedback_date | fromNow }}
@@ -83,7 +79,7 @@
                                 <span class="tiny-headshot">
                                     <img ng-src="{{ request.reviewer.avatar_small }}" alt="{{ request.reviewer.full_name }}'s avatar" />
                                 </span>
-                                {{ request.reviewer.full_name }}
+                                <strong>{{ request.reviewer.full_name }}</strong>
                             </td>
                             <td class="timeago">
                                 {{ request.request_date | fromNow }}
