@@ -127,6 +127,7 @@ class EmployeeFeedbackReportSerializer(serializers.Serializer):
     total_responded_to_me = serializers.IntegerField()
     total_unrequested_i_gave = serializers.IntegerField()
     total_unrequested_given_to_me = serializers.IntegerField()
+    total_digests_i_received = serializers.IntegerField()
     total_digests_i_delivered = serializers.IntegerField()
 
 
