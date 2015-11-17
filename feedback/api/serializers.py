@@ -119,6 +119,23 @@ class FeedbackSubmissionSerializerForEmployee(serializers.ModelSerializer):
                   'has_been_delivered', 'anonymous')
 
 
+class EmployeeFeedbackReportSerializer(serializers.Serializer):
+    employee = SanitizedEmployeeSerializer()
+    total_i_requested = serializers.IntegerField()
+    total_requested_of_me = serializers.IntegerField()
+    total_i_responded_to = serializers.IntegerField()
+    total_responded_to_me = serializers.IntegerField()
+    total_unrequested_i_gave = serializers.IntegerField()
+    total_unrequested_given_to_me = serializers.IntegerField()
+    total_digests_i_delivered = serializers.IntegerField()
+
+
+class EmployeeFeedbackReportsSerializer(serializers.Serializer):
+    start_date = serializers.DateTimeField()
+    end_date = serializers.DateTimeField()
+    employee_report = EmployeeFeedbackReportSerializer(many=True)
+
+
 class FeedbackProgressReportSerializer(serializers.Serializer):
     employee = SanitizedEmployeeSerializer()
     unanswered_requests = FeedbackRequestSerializer(many=True)

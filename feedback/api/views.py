@@ -8,8 +8,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from serializers import *
 from org.models import Employee
-from org.api.permissions import UserIsEmployee, UserIsEmployeesCoach, UserIsEmployeeOrCoachOfEmployee
-from ..models import FeedbackRequest, FeedbackProgressReport, FeedbackProgressReports, FeedbackDigest
+from org.api.permissions import UserIsEmployee, UserIsEmployeesCoach
+from ..models import FeedbackRequest, FeedbackProgressReport, FeedbackProgressReports, FeedbackDigest, EmployeeFeedbackReports
 from permissions import UserIsEmployeeOrDigestDeliverer, UserIsSubjectOrReviewerOrCoach
 
 # FeedbackRequest
@@ -135,9 +135,9 @@ def feedback_progress_reports(request):
 
 @api_view(['GET'])
 @permission_classes((IsAuthenticated, ))
-def feedback_progress_report(request, pk):
+def feedback_progress_report(request, employee_id):
     try:
-        employee = Employee.objects.get(pk=pk)
+        employee = Employee.objects.get(pk=employee_id)
         if not request.user.employee == employee.coach:
             raise PermissionDenied
         report = FeedbackProgressReport(employee)
@@ -146,6 +146,15 @@ def feedback_progress_report(request, pk):
         return Response(serializer.data)
     except Employee.DoesNotExist:
         raise Http404()
+
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated, ))
+def employee_feedback_report(request):
+    report = EmployeeFeedbackReports()
+    report.load()
+    serializer = EmployeeFeedbackReportsSerializer(report)
+    return Response(serializer.data)
 
 
 class CoachUpdateFeedbackSubmission(generics.UpdateAPIView):

@@ -3,5 +3,5 @@ angular
     .factory('FeedbackProgressReportResource', FeedbackProgressReportResource);
 
 function FeedbackProgressReportResource($resource) {
-    return $resource('/api/v1/feedback/progress-reports/:id/');
+    return $resource('/api/v1/feedback/reports/coachees/:id/');
 }
