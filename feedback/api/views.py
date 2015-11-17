@@ -6,10 +6,11 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status
 from rest_framework.response import Response
+from dateutil import parser
 from serializers import *
 from org.models import Employee
-from org.api.permissions import UserIsEmployee, UserIsEmployeesCoach, UserIsEmployeeOrCoachOfEmployee
-from ..models import FeedbackRequest, FeedbackProgressReport, FeedbackProgressReports, FeedbackDigest
+from org.api.permissions import UserIsEmployee, UserIsEmployeesCoach
+from ..models import FeedbackRequest, FeedbackProgressReport, FeedbackProgressReports, FeedbackDigest, EmployeeFeedbackReports
 from permissions import UserIsEmployeeOrDigestDeliverer, UserIsSubjectOrReviewerOrCoach
 
 # FeedbackRequest
@@ -135,9 +136,9 @@ def feedback_progress_reports(request):
 
 @api_view(['GET'])
 @permission_classes((IsAuthenticated, ))
-def feedback_progress_report(request, pk):
+def feedback_progress_report(request, employee_id):
     try:
-        employee = Employee.objects.get(pk=pk)
+        employee = Employee.objects.get(pk=employee_id)
         if not request.user.employee == employee.coach:
             raise PermissionDenied
         report = FeedbackProgressReport(employee)
@@ -147,6 +148,21 @@ def feedback_progress_report(request, pk):
     except Employee.DoesNotExist:
         raise Http404()
 
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated, ))
+def employee_feedback_report(request):
+    try:
+        start_date = request.QUERY_PARAMS.get('start_date', None)
+        end_date = request.QUERY_PARAMS.get('end_date', None)
+        start_date = parser.parse(start_date).date()
+        end_date = parser.parse(end_date).date()
+        report = EmployeeFeedbackReports({'start_date': start_date, 'end_date': end_date})
+        report.load()
+        serializer = EmployeeFeedbackReportsSerializer(report)
+        return Response(serializer.data)
+    except AttributeError:
+        raise Http404()
 
 class CoachUpdateFeedbackSubmission(generics.UpdateAPIView):
     queryset = FeedbackSubmission.objects.all()

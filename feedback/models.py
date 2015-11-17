@@ -1,9 +1,10 @@
 from datetime import datetime, timedelta
-from django.db import models
+from django.db import models, connection
 from django.utils import timezone
 from model_utils.models import TimeStampedModel
 from org.models import Employee
 from django.db.models import Q
+from itertools import chain, groupby
 from .tasks import send_feedback_request_email
 
 
@@ -189,3 +190,54 @@ class FeedbackProgressReport(object):
         self.unsolicited_submissions = FeedbackSubmission.objects.unsolicited_and_ready_for_processing(self.employee)
         self.recent_feedback_requests_ive_sent = FeedbackRequest.objects.recent_feedback_requests_ive_sent_that_have_not_been_delivered(self.employee)
         self.all_submissions_not_delivered = FeedbackSubmission.objects.received_not_delivered(self.employee)
+
+
+class EmployeeFeedbackReports(object):
+    def __init__(self, object):
+        self.employee_report = []
+        self.start_date = object.get('start_date', datetime.today() - timedelta(days=365))
+        self.end_date = object.get('end_date', datetime.today())
+
+    def load(self):
+        def dictfetchall(cursor):
+            "Return all rows from a cursor as a dict"
+            columns = [col[0] for col in cursor.description]
+            return [
+                dict(zip(columns, row))
+                for row in cursor.fetchall()
+            ]
+        cursor = connection.cursor()
+        cursor.execute("SELECT requester_id as employee_id, count(requester_id) as total_i_requested FROM feedback_feedbackrequest WHERE (request_date >= '%s' AND request_date <= '%s') GROUP BY requester_id" % (self.start_date, self.end_date))
+        total_i_requested = dictfetchall(cursor)
+        cursor.execute("SELECT reviewer_id as employee_id, count(reviewer_id) as total_requested_of_me FROM feedback_feedbackrequest WHERE (request_date >= '%s' AND request_date <= '%s') GROUP BY reviewer_id" % (self.start_date, self.end_date))
+        total_requested_of_me = dictfetchall(cursor)
+        cursor.execute("SELECT reviewer_id as employee_id, count(reviewer_id) as total_i_responded_to FROM feedback_feedbacksubmission WHERE feedback_request_id IS NOT NULL AND (feedback_date >= '%s' AND feedback_date <= '%s') GROUP BY reviewer_id" % (self.start_date, self.end_date))
+        total_i_responded_to = dictfetchall(cursor)
+        cursor.execute("SELECT subject_id as employee_id, count(subject_id) as total_responded_to_me FROM feedback_feedbacksubmission WHERE feedback_request_id IS NOT NULL AND (feedback_date >= '%s' AND feedback_date <= '%s') GROUP BY subject_id" % (self.start_date, self.end_date))
+        total_responded_to_me = dictfetchall(cursor)
+        cursor.execute("SELECT reviewer_id as employee_id, count(reviewer_id) as total_unrequested_i_gave FROM feedback_feedbacksubmission WHERE feedback_request_id IS NULL AND (feedback_date >= '%s' AND feedback_date <= '%s') GROUP BY reviewer_id" % (self.start_date, self.end_date))
+        total_unrequested_i_gave = dictfetchall(cursor)
+        cursor.execute("SELECT subject_id as employee_id, count(subject_id) as total_unrequested_given_to_me FROM feedback_feedbacksubmission WHERE feedback_request_id IS NULL AND (feedback_date >= '%s' AND feedback_date <= '%s') GROUP BY subject_id" % (self.start_date, self.end_date))
+        total_unrequested_given_to_me = dictfetchall(cursor)
+        cursor.execute("SELECT delivered_by_id as employee_id, count(delivered_by_id) as total_digests_i_delivered FROM feedback_feedbackdigest WHERE has_been_delivered=TRUE AND (delivery_date >= '%s' AND delivery_date <= '%s') GROUP BY delivered_by_id" % (self.start_date, self.end_date))
+        total_digests_i_delivered = dictfetchall(cursor)
+
+        lst = sorted(chain(total_i_requested,total_requested_of_me,total_i_responded_to,total_responded_to_me,total_unrequested_i_gave,total_unrequested_given_to_me,total_digests_i_delivered), key=lambda x:x['employee_id'])
+        for k,v in groupby(lst, key=lambda x:x['employee_id']):
+            d = {}
+            for dct in v:
+                d.update(dct)
+            self.employee_report.append(EmployeeFeedbackReport(d))
+
+
+class EmployeeFeedbackReport(object):
+    def __init__(self, object):
+        employee_id = object['employee_id']
+        self.employee = Employee.objects.get(pk=employee_id)
+        self.total_i_requested = object.get('total_i_requested', 0)
+        self.total_requested_of_me = object.get('total_requested_of_me', 0)
+        self.total_i_responded_to = object.get('total_i_responded_to', 0)
+        self.total_responded_to_me = object.get('total_responded_to_me', 0)
+        self.total_unrequested_i_gave = object.get('total_unrequested_i_gave', 0)
+        self.total_unrequested_given_to_me = object.get('total_unrequested_given_to_me', 0)
+        self.total_digests_i_delivered = object.get('total_digests_i_delivered', 0)
