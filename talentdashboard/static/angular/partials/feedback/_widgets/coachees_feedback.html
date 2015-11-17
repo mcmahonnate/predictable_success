@@ -18,12 +18,12 @@
                     <tbody>
                         <tr ng-repeat="progressReport in feedbackCoachWidget.progressReports">
                             <td>
-                                <a href="/#/feedback/{{progressReport.employee.id}}/worksheet/">
+                                <a href="#/employees/{{ progressReport.employee.id }}">
                                     <span class="tiny-headshot">
                                         <img ng-src="{{ progressReport.employee.avatar_small }}" alt="{{ progressReport.employee.full_name }}'s avatar" />
                                     </span>
                                 </a>
-                                <a href="/#/feedback/{{progressReport.employee.id}}/worksheet/">{{ progressReport.employee.full_name }}</a>
+                                <a href="#/employees/{{ progressReport.employee.id }}">{{ progressReport.employee.full_name }}</a>
                             </td>
                             <td class="centered">
                                 {{ progressReport.recent_feedback_requests_ive_sent_count }}

@@ -20,6 +20,8 @@
                 $location.path(path);
                 $('.modal').modal('hide');
                 $('.modal-backdrop').remove();
+                $('body').removeClass('modal-open');
+
             } 
 
         };

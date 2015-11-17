@@ -13,11 +13,9 @@
             
             <!-- Headshot -->
             <div ng-show="!submission.anonymous" class="pull-left">
-                <a href="#/employees/{{ submission.reviewer.id }}">
-                    <span class="headshot medium-headshot">
-                        <img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
-                    </span>
-                </a>
+                <span class="headshot medium-headshot">
+                    <img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
+                </span>
             </div>
 
             <!-- Anonyous Headshot -->
@@ -28,12 +26,15 @@
             </div>
 
             <div style="padding-left:60px;">
-                <div ng-show="!submission.anonymous">
-                    <a href="#/employees/{{ submission.reviewer.id }}"><strong>{{ submission.reviewer.full_name }}</strong></a> said:
-                </div>
-                <div ng-show="submission.anonymous">     
-                    <strong>Anonymous</strong> said:
-                </div> 
+                <div>
+                    <span ng-show="!submission.anonymous">
+                        <strong>{{ submission.reviewer.full_name }}</strong> 
+                    </span>
+                    <span ng-show="submission.anonymous">     
+                        <strong>Anonymous</strong>
+                    </span> 
+                    <span class="time timestamp" data-toggle="tooltip" data-placement="top" title="{{ submission.date | date:'MMM d, yyyy h:mma' }}">{{ submission.feedback_date | fromNow }}</span>
+                </div>    
                 <div ng-show="submission.excels_at_summarized" style="white-space: pre-line;">
                     {{ submission.excels_at_summarized }}
                 </div>
@@ -53,11 +54,9 @@
 
             <!-- Headshot -->
             <div ng-show="!submission.anonymous" class="pull-left">
-                <a href="#/employees/{{ submission.reviewer.id }}">
-                    <span class="medium-headshot">
-                        <img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
-                    </span>
-                </a>
+                <span class="medium-headshot">
+                    <img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
+                </span>
             </div> 
 
             <!-- Anonyous Headshot -->
@@ -68,12 +67,15 @@
             </div>
 
             <div style="padding-left:60px;">
-                <div ng-show="!submission.anonymous">
-                    <a href="#/employees/{{ submission.reviewer.id }}"><strong>{{ submission.reviewer.full_name }}</strong></a> said:
-                </div>
-                <div ng-show="submission.anonymous">     
-                    <strong>Anonymous</strong> said:
-                </div> 
+                <div>
+                    <span ng-show="!submission.anonymous">
+                        <strong>{{ submission.reviewer.full_name }}</strong> said:
+                    </span>
+                    <span ng-show="submission.anonymous">     
+                        <strong>Anonymous</strong> said:
+                    </span> 
+                    <span class="time timestamp" data-toggle="tooltip" data-placement="top" title="{{ submission.date | date:'MMM d, yyyy h:mma' }}">{{ submission.feedback_date | fromNow }}</span>
+                </div>                        
                 <div ng-show="submission.could_improve_on_summarized" style="white-space: pre-line;">
                     {{ submission.could_improve_on_summarized }}
                 </div>
@@ -84,7 +86,7 @@
         </div>
 
         <h2 class="panel-title hide-for-print" style="margin-top:40px;">Feedback Summary for {{ feedbackWorksheet.progressReport.employee.full_name }}</h2>
-        <textarea class="form-control hide-for-print" ng-model="feedbackWorksheet.digest.summary" style="min-height:200px"></textarea>
+        <textarea auto-grow class="form-control hide-for-print" ng-model="feedbackWorksheet.digest.summary" style="min-height:200px"></textarea>
         <br>
         <button class="btn btn-success" type="button" ng-click="feedbackWorksheet.deliverDigest()"><i class="fa fa-paper-plane"></i> Send to {{ feedbackWorksheet.progressReport.employee.full_name }}</button>
 

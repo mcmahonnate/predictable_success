@@ -1095,13 +1095,12 @@ angular.module('tdb.directives', ['ngTouch'])
                     element[0].style.height = $scope.initialHeight;
                     element[0].style.height = "" + element[0].scrollHeight + "px";
                 };
-                element.on("input change", resize);
+                element.on("load", resize);
                 $timeout(resize, 0);
             }
         };
     }
 ])
-
 
 .directive("masonry", function () {
     var NGREPEAT_SOURCE_RE = '<!-- ngRepeat: ((.*) in ((.*?)( track by (.*))?)) -->';
@@ -1158,6 +1157,8 @@ angular.module('tdb.directives', ['ngTouch'])
         }
     };
 });
+
+
 
 /**
  * Created by Mariandi on 16/04/2014.

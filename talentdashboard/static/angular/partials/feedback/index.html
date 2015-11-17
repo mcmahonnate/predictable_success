@@ -1,8 +1,8 @@
 <div id="feedback" class="container" style="transition:.2s">
     <div ng-show="feedback.myRecentlySentRequests.length">
         <h1>Feedback
-            <button class="btn btn-success btn-feedback" ng-click="feedback.requestFeedback()" type="button">Ask for Feedback</button>
-            <button class="btn btn-success btn-feedback" ng-click="feedback.giveUnsolicitedFeedback()" type="button">Give Feedback</button>
+            <button class="btn btn-success btn-feedback" ng-click="feedback.requestFeedback()" type="button"><i class="fa fa-comment"></i> Ask for Feedback</button>
+            <button class="btn btn-success btn-feedback" ng-click="feedback.giveUnsolicitedFeedback()" type="button"><i class="fa fa-pencil"></i> Give Feedback</button>
         </h1>
     </div>   
     <div class="ng-hide panel feedback-welcome-panel" ng-show="feedback.showWelcome">
@@ -14,10 +14,10 @@
                 <h2 class="get-started-title">Get started</h2>
                 <div class="get-started-btns">
                     <button class="btn btn-success btn-lg" ng-click="feedback.requestFeedback()" type="button">
-                        Ask for Feedback
+                        <i class="fa fa-comment"></i> Ask for Feedback
                     </button>
                     <button class="btn btn-success btn-lg" ng-click="feedback.giveUnsolicitedFeedback()" type="button">
-                        Give Feedback
+                        <i class="fa fa-pencil"></i> Give Feedback
                     </button>
                 </div>
             </div> 
@@ -46,9 +46,9 @@
                 <tr ng-repeat="request in feedback.feedbackRequests | orderBy:'request.requester.full_name'">
                     <td>
                         <span class="tiny-headshot">
-                            <img ng-src="{{ request.requester.avatar_small }}" alt="{{ request.requester.full_name }}'s avatar" />
+                            <img class="headshot-image" ng-src="{{ request.requester.avatar_small }}" alt="{{ request.requester.full_name }}'s avatar" />
                         </span>  
-                        {{ request.requester.full_name }}
+                        <span class="sensitive-text">{{ request.requester.full_name }}</span>
                     </td>
                     <td class="timeago">{{ request.request_date | fromNow }}</td>
                     <td class="message">{{ request.message }}</td>    
@@ -79,15 +79,15 @@
                 <tr ng-repeat="request in feedback.myRecentlySentRequests | reverse">
                     <td>
                         <span class="tiny-headshot">
-                            <img ng-src="{{ request.reviewer.avatar_small }}" alt="{{ request.reviewer.full_name }}'s avatar" />
+                            <img class="headshot-image" ng-src="{{ request.reviewer.avatar_small }}" alt="{{ request.reviewer.full_name }}'s avatar" />
                         </span>
-                        {{ request.reviewer.full_name }}
+                        <span class="sensitive-text">{{ request.reviewer.full_name }}</span>
                     </td>
                     <td class="timeago">
                         {{ request.request_date | fromNow }}
                     </td>
                     <td class="message">
-                        {{ request.message }}
+                        <p style="white-space:pre-line">{{ request.message }}</p>
                     </td>                          
                     <td class="centered">
                         <i ng-show="{{ request.has_been_answered }}" class="fa fa-check" title="Completed"></i>
@@ -103,7 +103,7 @@
                 <tr>
                   <th scope="col" class="width-15-percent">Person</th>
                   <th scope="col" class="width-15-percent">Sent</th>
-                  <th scope="col" class="width-15-percent centered">Anonymous</th>
+                  <th scope="col" class="width-40-percent left-aligned">Anonymous</th>
                   <th scope="col" class="width-15-percent centered">Action</th>
                 </tr>
             </thead>
@@ -118,12 +118,12 @@
                     <td class="timeago">
                         {{ submission.feedback_date | fromNow }}
                     </td>
-                    <td class="centered">
+                    <td class="left-aligned">
                         <i ng-show="{{ submission.anonymous }}" class="fa fa-check" title="Anonymous"></i>
                     </td>
                     <td class="centered">
                         <a class="btn btn-default btn-md" ng-href="#/feedback/submission/{{ submission.id }}/" type="button">
-                            View
+                            <i class="fa fa-eye"></i> View Feedback
                         </a>
                     </td>
                 </tr>
@@ -131,7 +131,6 @@
         </table>
     </div>
     <div style="padding-top:20px" ng-repeat="digest in feedback.myDigests | orderBy:'delivery_date':true">
-
         <div class="panel">
             <h2 class="panel-title" style="margin-bottom:0">360 Feedback- {{ digest.delivery_date | date:'longDate' }}</h2>
             <span style="color: #aaa;font-style: italic;">Delivered by: {{ digest.delivered_by.full_name }}</span>

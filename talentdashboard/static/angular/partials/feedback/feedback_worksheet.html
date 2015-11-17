@@ -8,8 +8,8 @@
         </div>
     </div>
     <div class="row">
-        <div class="col col-md-5">
-			<div class="panel hide-for-print" ng-show="feedbackWorksheet.progressReport.solicited_submissions.length>0">
+        <div class="col col-md-5 hide-for-print">
+			<div class="panel" ng-show="feedbackWorksheet.progressReport.solicited_submissions.length>0">
 				<h3 class="panel-title">Feedback Submissions</h3>
 				<table class="table" style="margin-bottom:0">
 					<thead>
@@ -22,12 +22,10 @@
 		      		<tbody>
 						<tr ng-repeat="submission in feedbackWorksheet.progressReport.solicited_submissions | orderBy:'-feedback_date' ">
 							<td>
-								<a href="#/employees/{{ submission.reviewer.id }}">
-									<span class="tiny-headshot">
-										<img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
-									</span> 
-								</a>	
-								<a href="#/employees/{{ submission.reviewer.id }}">{{ submission.reviewer.full_name }}</a> <span ng-show="{{ submission.anonymous }}">(Anonymous)</span>
+								<span class="tiny-headshot">
+									<img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
+								</span> 					
+								<strong>{{ submission.reviewer.full_name }}</strong> <span ng-show="{{ submission.anonymous }}">(Anonymous)</span>
 							</td>
 							<td>{{ submission.feedback_date | fromNow }}</td>
 							<td>
@@ -37,7 +35,7 @@
 		      		</tbody>
 				</table>	
             </div>
-            <div class="panel hide-for-print" ng-show="feedbackWorksheet.progressReport.unsolicited_submissions.length>0">    
+            <div class="panel" ng-show="feedbackWorksheet.progressReport.unsolicited_submissions.length>0">    
 				<h3 class="panel-title">Unsolicited Feedback</h3>
 				<table class="table" style="margin-bottom:0">
 					<thead>
@@ -50,12 +48,10 @@
 		      		<tbody>
 						<tr ng-repeat="submission in feedbackWorksheet.progressReport.unsolicited_submissions">
 							<td>
-								<a href="#/employees/{{ submission.reviewer.id }}">
-									<span class="tiny-headshot">
-										<img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
-									</span> 
-								</a>	
-								<a href="#/employees/{{ submission.reviewer.id }}">{{ submission.reviewer.full_name }}</a> 
+								<span class="tiny-headshot">
+									<img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
+								</span> 	
+								<strong>{{ submission.reviewer.full_name }}</strong>
 							</td>
 							<td>
 								{{ submission.feedback_date | fromNow }}
@@ -67,7 +63,7 @@
 		      		</tbody>
 				</table>	
             </div>
-            <div class="panel hide-for-print" ng-show="feedbackWorksheet.progressReport.unanswered_requests.length>0">    
+            <div class="panel" ng-show="feedbackWorksheet.progressReport.unanswered_requests.length>0">    
                 <h3 class="panel-title">Unanswered Requests</h3>
                 <table class="table" style="margin-bottom:0">
                     <thead>
@@ -83,7 +79,7 @@
                                 <span class="tiny-headshot">
                                     <img ng-src="{{ request.reviewer.avatar_small }}" alt="{{ request.reviewer.full_name }}'s avatar" />
                                 </span>
-                                {{ request.reviewer.full_name }}
+                                <strong>{{ request.reviewer.full_name }}</strong>
                             </td>
                             <td class="timeago">
                                 {{ request.request_date | fromNow }}
@@ -96,7 +92,7 @@
 
         <div ng-class="feedbackWorksheet.progressReport.solicited_submissions.length==0 && 
         feedbackWorksheet.progressReport.unanswered_requests.length==0 && 
-        feedbackWorksheet.progressReport.unsolicited_submissions.length==0 ? 'col col-md-8 col-md-offset-2' : 'col col-md-7'">
+        feedbackWorksheet.progressReport.unsolicited_submissions.length==0 ? 'col col-md-8 col-md-offset-2' : 'col col-md-7'" class="full-width-column-print">
             <div ng-include="'/static/angular/partials/feedback/_widgets/digest_for_coaches.html'"></div>
         </div>
     </div>    
@@ -112,6 +108,9 @@
     @media print {
         .hide-for-print, nav, .btn, .account-menu {
             display: none;
+        }
+        .full-width-column-print {
+            width: 100%;
         }
         .show-for-print {
             display: block;

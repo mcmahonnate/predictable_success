@@ -8,7 +8,7 @@
                 , speed: 200 //speed of animation
                 , fixMinHeight: true //if you don't want the box to shrink below its initial size
                 , cloneClass: 'autogrowclone' //helper CSS class for clone if you need to add special rules
-                , onInitialize: false //resizes the textareas when the plugin is initialized
+                , onInitialize: true //resizes the textareas when the plugin is initialized
             }
         ;
         opts = $.isPlainObject(opts) ? opts : {context: opts ? opts : $(document)};
