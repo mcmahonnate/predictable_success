@@ -133,6 +133,41 @@ ul, ol {
 }
 
 
+/* Modal Headshot box ==================================== */
+    
+.headshot-box {
+    position: absolute;
+    top: 60px;
+    right: -172px;
+    z-index: 9;
+    width: 150px;
+    color: #fff;
+
+    .headshot {
+        width: 85px;
+        border-radius: 80px;
+        display: block;
+    }
+
+    .headshot-name {
+        font-weight: bold;
+        font-size: 16px;
+        display: block;
+    }
+} 
+.arrow-right {
+    width: 0;
+    height: 0;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-left: 15px solid#fff;
+    position: absolute;
+    right: -14px;
+    top: 85px;
+    z-index: 10;
+}
+
+
 /* Popover Edit/Delete ==================================== */
 .popover-items {
     background: #fff;
@@ -271,6 +306,28 @@ textarea.expandable:focus {
 
 
 /* Bootstrap Overrides */
+
+
+.alert {
+    padding: 20px;
+    margin-bottom: 25px;
+
+    h2 {
+        font-weight: bold;
+        font-size: 20px;
+        margin-bottom: 6px;
+    }
+    .sent-icon {
+        float: left;
+        font-size: 38px;
+        margin-right: 12px;
+        opacity: .3;
+    }
+}
+
+
+
+
 .modal-backdrop.in {
   opacity: 0.9;
   filter: alpha(opacity=90);

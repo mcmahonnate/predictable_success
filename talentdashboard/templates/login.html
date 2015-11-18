@@ -15,10 +15,8 @@
 
                 <input autofocus autocomplete="off" class="form-control input-lg" id="id_username" name="username" placeholder="Username or Email" type="text">
                 <input id="id_password" class="form-control input-lg" name="password" placeholder="Password" type="password">
-                <button class="btn btn-lg btn-success btn-block" type="submit">Login</button>
-
-                    <input type="hidden" name="next" id="next" value="/#{{ next }}"/>
-
+                <button class="btn btn-success btn-block" type="submit">Login</button>
+                <input type="hidden" name="next" id="next" value="/#{{ next }}"/>
             </form>
             <a href="{% url 'django.contrib.auth.views.password_reset' %}" class="forgot-password">
                 Forgot your password?
