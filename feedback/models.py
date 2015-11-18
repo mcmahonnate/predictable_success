@@ -221,8 +221,10 @@ class EmployeeFeedbackReports(object):
         total_unrequested_given_to_me = dictfetchall(cursor)
         cursor.execute("SELECT delivered_by_id as employee_id, count(delivered_by_id) as total_digests_i_delivered FROM feedback_feedbackdigest WHERE has_been_delivered=TRUE AND (delivery_date >= '%s' AND delivery_date <= '%s') GROUP BY delivered_by_id" % (self.start_date, self.end_date))
         total_digests_i_delivered = dictfetchall(cursor)
+        cursor.execute("SELECT subject_id as employee_id, count(subject_id) as total_digests_i_received FROM feedback_feedbackdigest WHERE has_been_delivered=TRUE AND (delivery_date >= '%s' AND delivery_date <= '%s') GROUP BY subject_id" % (self.start_date, self.end_date))
+        total_digests_i_received = dictfetchall(cursor)
 
-        lst = sorted(chain(total_i_requested,total_requested_of_me,total_i_responded_to,total_responded_to_me,total_unrequested_i_gave,total_unrequested_given_to_me,total_digests_i_delivered), key=lambda x:x['employee_id'])
+        lst = sorted(chain(total_i_requested,total_requested_of_me,total_i_responded_to,total_responded_to_me,total_unrequested_i_gave,total_unrequested_given_to_me,total_digests_i_delivered,total_digests_i_received), key=lambda x:x['employee_id'])
         for k,v in groupby(lst, key=lambda x:x['employee_id']):
             d = {}
             for dct in v:
@@ -240,4 +242,5 @@ class EmployeeFeedbackReport(object):
         self.total_responded_to_me = object.get('total_responded_to_me', 0)
         self.total_unrequested_i_gave = object.get('total_unrequested_i_gave', 0)
         self.total_unrequested_given_to_me = object.get('total_unrequested_given_to_me', 0)
+        self.total_digests_i_received = object.get('total_digests_i_received', 0)
         self.total_digests_i_delivered = object.get('total_digests_i_delivered', 0)
