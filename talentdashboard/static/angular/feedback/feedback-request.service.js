@@ -82,7 +82,7 @@ function FeedbackRequestService($http, $log, FeedbackRequestResource) {
     }
 
     function getFeedbackProgressReportForEmployee(employee_id) {
-        var url = '/api/v1/feedback/progress-reports/' + employee_id + '/';
+        var url = '/api/v1/feedback/reports/coachees/' + employee_id + '/';
         return $http.get(url)
             .then(success)
             .catch(fail);
@@ -97,7 +97,7 @@ function FeedbackRequestService($http, $log, FeedbackRequestResource) {
     }
 
     function getFeedbackProgressReportForEmployees() {
-        var url = '/api/v1/feedback/progress-reports/';
+        var url = '/api/v1/feedback/reports/coachees/';
         return $http.get(url)
             .then(success)
             .catch(fail);
