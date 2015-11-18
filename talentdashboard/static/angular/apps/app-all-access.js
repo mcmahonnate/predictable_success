@@ -20,6 +20,7 @@ app.config(['$routeProvider', function($routeProvider) {
       when('/reports/self-assess', {templateUrl: '/static/angular/partials/self-assess-report.html', controller: 'SelfAssessReportCtrl', resolve: {authorizeRoute: authorizeRoute}}).
       when('/reports/timespan', {templateUrl: '/static/angular/partials/timespan-report.html', controller: 'TimespanReportCtrl', resolve: {authorizeRoute: authorizeRoute}}).
       when('/reports/activity', {templateUrl: '/static/angular/partials/activity-report.html', controller: 'ReportsCtrl', resolve: {authorizeRoute: authorizeRoute}}).
+      when('/reports/feedback', {templateUrl: '/static/angular/partials/feedback/report.html', controller: 'FeedbackReportController as feedbackReport', resolve: {authorizeRoute: authorizeRoute}}).
       when('/tasks', {templateUrl: '/static/angular/partials/tasks.html', controller: 'TasksCtrl', resolve: {authorizeRoute: authorizeRoute}}).
       when('/checkin/:id', {templateUrl: '/static/angular/partials/checkin.html', controller: 'AddEditCheckInCtrl', resolve: {authorizeRoute: authorizeRoute}}).
       when('/checkin', {templateUrl: '/static/angular/partials/checkin.html', controller: 'AddEditCheckInCtrl', resolve: {authorizeRoute: authorizeRoute}}).
