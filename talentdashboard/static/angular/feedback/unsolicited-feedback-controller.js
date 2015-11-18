@@ -22,7 +22,7 @@
             var cancel = confirm("Are you sure you want to lose all the great feedback you've already written?");
             if (cancel == true) {
                 $location.path(path);
-                $('.modal').modal('toggle');
+                $('.modal').modal('hide');
                 $('.modal-backdrop').remove();
                 $('body').removeClass('modal-open');
             } 
