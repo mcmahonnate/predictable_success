@@ -1,31 +1,20 @@
-<div id="feedback" class="container" style="transition:.2s">
-    <div ng-show="feedback.myRecentlySentRequests.length">
+<div id="feedback" class="container">
+    <div>
+        <a href="" data-toggle="modal" data-target=".feedback-welcome-modal" class="pull-right show-welcome-modal">Show welcome message</a>
         <h1>Feedback
             <button class="btn btn-success btn-feedback" ng-click="feedback.requestFeedback()" type="button"><i class="fa fa-comment"></i> Ask for Feedback</button>
             <button class="btn btn-success btn-feedback" ng-click="feedback.giveUnsolicitedFeedback()" type="button"><i class="fa fa-pencil"></i> Give Feedback</button>
         </h1>
-    </div>   
-    <div class="ng-hide panel feedback-welcome-panel" ng-show="feedback.showWelcome">
-        <div class="row">
-            <div class="col-md-8">
-                <h1 class="feedback-welcome-title">Welcome to 360 Feedback!</h1>
-                <p class="get-started-text" ng-bind-html="feedback.welcome">
-                </p>
-                <h2 class="get-started-title">Get started</h2>
-                <div class="get-started-btns">
-                    <button class="btn btn-success btn-lg" ng-click="feedback.requestFeedback()" type="button">
-                        <i class="fa fa-comment"></i> Ask for Feedback
-                    </button>
-                    <button class="btn btn-success btn-lg" ng-click="feedback.giveUnsolicitedFeedback()" type="button">
-                        <i class="fa fa-pencil"></i> Give Feedback
-                    </button>
-                </div>
-            </div> 
-            <div class="col-md-4 welcome-image">
-                <img src="../static/images/bubbles-alpha.png" style="width:100%; margin-bottom:35px; opacity:.4;"/>
-            </div>                   
-        </div> 
-    </div>
+    </div>  
+
+    <div class="panel panel-empty" ng-show="feedback.feedbackRequests.length==0 && feedback.myRecentlySentRequests.length==0 && feedback.mySubmissions.length==0">
+        <img class="grumpycat" src="../static/images/grumpycat.png" alt="Grumpy Cat" />
+        <h2>"Mmmmeeh... i see you don't have any activity yet. Use the buttons above or these links to 
+            <a href="" ng-click="feedback.requestFeedback()">ask for feedback</a> or 
+            <a href="" ng-click="feedback.giveUnsolicitedFeedback()">give someone feedback</a>.""
+        </h2>
+    </div>    
+
     <div class="panel" ng-show="feedback.feedbackRequests.length>0">
         <table class="table responsive-table">
             <caption class="panel-title">
@@ -97,6 +86,12 @@
         </table>
     </div>
     <div class="panel" ng-show="feedback.mySubmissions.length">
+        <div class="alert alert-success" role="alert" ng-show="successMessage">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <i class="fa fa-paper-plane sent-icon"></i>
+            <h2>Congratulations!</h2>
+            <p>Your feedback is in-flight and will be delivered to {{ successMessageRecipient.full_name }}'s feedback coach.</p>
+        </div>
         <table class="table responsive-table">
             <caption class="panel-title">People I've given feedback to</caption>
             <thead>
@@ -134,70 +129,69 @@
         <div class="panel">
             <h2 class="panel-title" style="margin-bottom:0">360 Feedback- {{ digest.delivery_date | date:'longDate' }}</h2>
             <span style="color: #aaa;font-style: italic;">Delivered by: {{ digest.delivered_by.full_name }}</span>
-                <div ng-show="digest.summary">
-                    <h3 style="margin-top:25px;margin-bottom:15px;">Summary from your Coach</h3>
-                    <p style="white-space: pre-line;">{{ digest.summary }}</p>
-                </div>
-                <h3 style="margin-top:25px">{{ feedback.questions.excelsAtQuestion }}</h3>
-                <table class="table table-striped" style="margin-bottom:45px">
-                    <thead>
-                        <tr>
-                          <th style="width:20%"></th>
-                          <th class="centered" style="width:70%"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="submission in digest.submissions">
-                            <td ng-show="!submission.anonymous">
+            <div ng-show="digest.summary">
+                <h3 style="margin-top:25px;margin-bottom:15px;">Summary from your Coach</h3>
+                <p style="white-space: pre-line;">{{ digest.summary }}</p>
+            </div>
+            <h3 style="margin-top:25px">{{ feedback.questions.excelsAtQuestion }}</h3>
+            <table class="table table-striped" style="margin-bottom:45px">
+                <thead>
+                    <tr>
+                      <th style="width:20%"></th>
+                      <th class="centered" style="width:70%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="submission in digest.submissions">
+                        <td ng-show="!submission.anonymous">
+                            <span class="tiny-headshot">
+                                <img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
+                            </span>
+                            {{ submission.reviewer.full_name }}
+                            {{ submission.requester.full_name }}
+                        </td>
+                        <td ng-show="submission.anonymous">
                                 <span class="tiny-headshot">
-                                    <img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
+                                    <img src="//hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg"/>
                                 </span>
-                                {{ submission.reviewer.full_name }}
-                                {{ submission.requester.full_name }}
-                            </td>
-                            <td ng-show="submission.anonymous">
-                                    <span class="tiny-headshot">
-                                        <img src="//hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg"/>
-                                    </span>
-                                Anonymous
-                            </td>
-                            <td style="white-space: pre-line;">
-                                {{ submission.excels_at }}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <h3>{{ feedback.questions.couldImproveOnQuestion }}</h3>
-
-                <table class="table table-striped" style="margin-bottom:45px">
-                    <thead>
-                        <tr>
-                          <th style="width:20%"></th>
-                          <th class="centered" style="width:70%"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="submission in digest.submissions">
-                            <td ng-show="!submission.anonymous">
+                            Anonymous
+                        </td>
+                        <td style="white-space: pre-line;">
+                            {{ submission.excels_at }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <h3>{{ feedback.questions.couldImproveOnQuestion }}</h3>
+            <table class="table table-striped" style="margin-bottom:45px">
+                <thead>
+                    <tr>
+                      <th style="width:20%"></th>
+                      <th class="centered" style="width:70%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="submission in digest.submissions">
+                        <td ng-show="!submission.anonymous">
+                            <span class="tiny-headshot">
+                                <img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
+                            </span>
+                            {{ submission.reviewer.full_name }}
+                            {{ submission.requester.full_name }}
+                        </td>
+                        <td ng-show="submission.anonymous">
                                 <span class="tiny-headshot">
-                                    <img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
+                                    <img src="//hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg"/>
                                 </span>
-                                {{ submission.reviewer.full_name }}
-                                {{ submission.requester.full_name }}
-                            </td>
-                            <td ng-show="submission.anonymous">
-                                    <span class="tiny-headshot">
-                                        <img src="//hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg"/>
-                                    </span>
-                                Anonymous
-                            </td>
-                            <td style="white-space: pre-line;">
-                                {{ submission.could_improve_on }}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                            Anonymous
+                        </td>
+                        <td style="white-space: pre-line;">
+                            {{ submission.could_improve_on }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
+    <div ng-include="'/static/angular/partials/feedback/_modals/welcome-message.html'"></div>
 </div>    
