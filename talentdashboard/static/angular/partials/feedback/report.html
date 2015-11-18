@@ -1,0 +1,94 @@
+<div class="container">
+    <div class="panel">
+			<div class="form-group">
+				<label for="startDate"><strong>Start Date</strong></label>
+				<input id="startDate" ng-model="feedbackReport.startDate" name="startDate" class="form-control" />
+			</div>
+			<div class="form-group" style="margin:15px 0;">	
+				<label for="endDate"><strong>End Date</strong></label>
+				<input id="endDate" ng-model="feedbackReport.endDate" name="endDate" class="form-control" />
+			</div>
+			<span ng-click="feedbackReport.getFeedbackReport()" class="btn btn-primary">Submit</span>
+
+    </div>
+    <div>
+
+        <div class="pull-right">
+            <div class="dropdown pull-left">
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                    <li><a ng-click="predicate = 'full_name'; orderValue = 'Name'">Name</a></li>
+                    <li><a ng-click="predicate = 'talent_category'; orderValue = 'Development Zones'">Development Zones</a></li>
+                    <li><a ng-click="predicate = 'happiness'; orderValue = 'Happiness'">Happiness</a></li>
+                    <li><a ng-click="predicate = 'last_checkin_about'; orderValue = 'Last Check-in'">Last Check-in</a></li>
+                    <li><a ng-click="predicate = 'last_comment_about'; orderValue = 'Last Comment'">Last Comment</a></li>
+                    <li><a ng-click="predicate = 'coach_full_name'; orderValue = 'Coach'">Coach</a></li>
+                </ul>
+            </div>
+            <button class="btn btn-default pull-left" type="button" ng-csv="csv" filename="scoutmap.csv" csv-header="['Id', 'Employee','Team','Email','Development Zone','Development Zone Date','Happiness', 'Happiness Date', 'Last Checkin', 'Last Checkin Type', 'Last Comment', 'Coach', 'Hire Date']">
+                <span class="fa fa-download"></span> Download
+            </button>
+        </div>
+        <h1>Employee Feedback Report</h1>
+        <div class="panel">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <a href="" ng-click="order('full_name'); orderValue = 'Name'"><strong>Employee</strong></a>
+                            <span class="sortorder fa" ng-show="predicate === 'full_name'" ng-class="reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                        </th>
+                        <th>
+                            <a href="" ng-click="order('talent_category'); orderValue = 'Development Zones'"><strong>Total I Requested</strong></a>
+                            <span class="sortorder fa" ng-show="predicate === 'talent_category'" ng-class="reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                        </th>
+                        <th>
+                            <a href="" ng-click="order('happiness'); orderValue = 'Happiness'"><strong>Total Responded to Me</strong></a>
+                            <span class="sortorder fa" ng-show="predicate === 'happiness'" ng-class="reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                        </th>
+                        <th>
+                            <a href="" ng-click="order('last_checkin_about'); orderValue = 'Last Check-in'"><strong>Total Requested of Me</strong></a>
+                            <span class="sortorder fa" ng-show="predicate === 'last_checkin_about'" ng-class="reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                        </th>
+                        <th>
+                            <a href="" ng-click="order('last_comment_about'); orderValue = 'Last Comment'"><strong>Total I Responded To</strong></a>
+                            <span class="sortorder fa" ng-show="predicate === 'last_comment_about'" ng-class="reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                        </th>
+                        <th>
+                            <a href="" ng-click="order('coach_full_name'); orderValue = 'Coach'"><strong>Total Unsolicited I Gave</strong></a>
+                            <span class="sortorder fa" ng-show="predicate === 'coach_full_name'" ng-class="reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                        </th>
+                        <th>
+                            <a href="" ng-click="order('coach_full_name'); orderValue = 'Coach'"><strong>Total Unsolicited I Received</strong></a>
+                            <span class="sortorder fa" ng-show="predicate === 'coach_full_name'" ng-class="reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                        </th>
+                        <th>
+                            <a href="" ng-click="order('coach_full_name'); orderValue = 'Coach'"><strong>Total Digests I Delivered</strong></a>
+                            <span class="sortorder fa" ng-show="predicate === 'coach_full_name'" ng-class="reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                        </th>
+                        <th>
+                            <a href="" ng-click="order('coach_full_name'); orderValue = 'Coach'"><strong>Total Digests I Received</strong></a>
+                            <span class="sortorder fa" ng-show="predicate === 'coach_full_name'" ng-class="reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="report in feedbackReport.report | orderBy:predicate:reverse">
+                        <td>
+                            <a ng-href="#/employees/{{report.employee.id}}" class="tiny-headshot pull-left"><img ng-src="{{ report.employee.avatar_small }}" alt="{{ report.employee.full_name }}'s avatar"/></a>
+                            <a href="#/employees/{{report.employee.id}}">{{report.employee.full_name}}</a>
+                        </td>
+                        <td>{{report.total_i_requested}}</td>
+                        <td>{{report.total_responded_to_me}}</td>
+                        <td>{{report.total_requested_of_me}}</td>
+                        <td>{{report.total_i_responded_to}}</td>
+                        <td>{{report.total_unrequested_i_gave}}</td>
+                        <td>{{report.total_unrequested_given_to_me}}</td>
+                        <td>{{report.total_digests_i_delivered}}</td>
+                        <td>{{report.total_digests_i_received}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
+        </div>
+    </div>
+</div>
