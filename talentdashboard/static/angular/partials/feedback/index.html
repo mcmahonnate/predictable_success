@@ -6,8 +6,6 @@
             <button class="btn btn-success btn-feedback" ng-click="feedback.giveUnsolicitedFeedback()" type="button"><i class="fa fa-pencil"></i> Give Feedback</button>
         </h1>
     </div>  
-
-
     <div class="panel panel-empty fade-in" ng-show="feedback.showEmptyScreen">
         <img class="grumpycat" src="../static/images/grumpycat.png" alt="Grumpy Cat" />
         <h2>"Mmmmeeh... i see you don't have any activity yet. Use the buttons above or these links to 
@@ -15,7 +13,12 @@
             <a href="" ng-click="feedback.giveUnsolicitedFeedback()">give someone feedback</a>.""
         </h2>
     </div>    
-
+    <div class="alert alert-success foo" role="alert" ng-show="successMessage">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <i class="fa fa-paper-plane sent-icon"></i>
+        <h2>Congratulations!</h2>
+        <p>Your feedback is in-flight and will be delivered to {{ successMessageRecipient.full_name }}'s feedback coach.</p>    
+    </div>
     <div class="panel" ng-show="feedback.feedbackRequests.length>0">
         <table class="table responsive-table">
             <caption class="panel-title">
@@ -87,12 +90,6 @@
         </table>
     </div>
     <div class="panel" ng-show="feedback.mySubmissions.length">
-        <div class="alert alert-success" role="alert" ng-show="successMessage">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <i class="fa fa-paper-plane sent-icon"></i>
-            <h2>Congratulations!</h2>
-            <p>Your feedback is in-flight and will be delivered to {{ successMessageRecipient.full_name }}'s feedback coach.</p>
-        </div>
         <table class="table responsive-table">
             <caption class="panel-title">People I've given feedback to</caption>
             <thead>
