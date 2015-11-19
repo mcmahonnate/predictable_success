@@ -2,7 +2,7 @@ angular
     .module('feedback')
     .controller('FeedbackController', FeedbackController);
 
-function FeedbackController(FeedbackRequestService, FeedbackDigestService, FeedbackSubmissionService, analytics, $modal, $location, $scope, $rootScope, $sce) {
+function FeedbackController(FeedbackRequestService, FeedbackDigestService, FeedbackSubmissionService, analytics, $modal, $location, $scope, $rootScope, $sce, $timeout) {
     /* Since this page can be the root for some users let's make sure we capture the correct page */
     var location_url = $location.url().indexOf('/feedback') < 0 ? '/feedback' : $location.url();
     analytics.trackPage($scope, $location.absUrl(), location_url);
@@ -12,6 +12,7 @@ function FeedbackController(FeedbackRequestService, FeedbackDigestService, Feedb
     vm.feedbackRequests = [];
     vm.myRecentlySentRequests = [];
     vm.myDigests = [];
+    vm.showEmptyScreen = false;
     vm.mySubmissions = [];
     vm.requestFeedback = requestFeedback;
     vm.giveUnsolicitedFeedback = giveUnsolicitedFeedback;
@@ -23,12 +24,24 @@ function FeedbackController(FeedbackRequestService, FeedbackDigestService, Feedb
     activate();
 
     function activate() {
-        getMyRecentlySentRequests();
+        getMyRecentlySentRequests()
         getFeedbackRequests();
         getMySubmissions();
         getMyDigests();
-    }
+        toggleEmptyScreenMode();
+    };
 
+    function toggleEmptyScreenMode() {
+        setTimeout(function () {
+            if(!vm.myRecentlySentRequests.length && !vm.feedbackRequests.length && !vm.mySubmissions.length) {
+                $scope.$apply(function() {
+                   vm.showEmptyScreen = true; 
+                });
+                console.log('Welcome to Scoutmap! "There is always space for improvement, no matter how long you’ve been in the business." -Oscar De La Hoya');
+            }
+        }, 500);
+    }
+    
     function getMySubmissions() {
         FeedbackSubmissionService.getFeedbackIveSubmitted()
             .then(function (data) {
@@ -49,8 +62,6 @@ function FeedbackController(FeedbackRequestService, FeedbackDigestService, Feedb
         FeedbackRequestService.getMyRecentlySentRequests()
             .then(function (data) {
                 vm.myRecentlySentRequests = data;
-                if (vm.myRecentlySentRequests.length==0)
-                    vm.showWelcome = true;
                 return vm.myRecentlySentRequests;
             });
     }
