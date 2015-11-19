@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from org.models import Employee
-from org.api.serializers import SanitizedEmployeeSerializer
+from org.api.serializers import SanitizedEmployeeSerializer, MinimalEmployeeSerializer
 from ..models import FeedbackRequest, FeedbackSubmission, FeedbackDigest
 
 
@@ -120,7 +120,7 @@ class FeedbackSubmissionSerializerForEmployee(serializers.ModelSerializer):
 
 
 class EmployeeFeedbackReportSerializer(serializers.Serializer):
-    employee = SanitizedEmployeeSerializer()
+    employee = MinimalEmployeeSerializer()
     total_i_requested = serializers.IntegerField()
     total_requested_of_me = serializers.IntegerField()
     total_i_responded_to = serializers.IntegerField()

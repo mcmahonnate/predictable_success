@@ -11,8 +11,7 @@ from views.homepage import IndexView
 from insights.views import Signup, Report, Survey, Confirmation
 from engagement.api.views import RetrieveUpdateDestroyHappiness, CreateHappiness, EmployeeHappinessList
 from activity.api.views import EventList, EmployeeEventList, TeamEventList, CoachEventList, LeadEventList, MyTeamEventList, CheckInEventList, CommentEvent
-from blah.api.views import CommentDetail
-from org.api.views import EmployeeCommentList, Profile, team_lead_employees, my_employees, EmployeeDetail, employee_support_team, account_activate, account_activate_login
+from org.api.views import Profile, team_lead_employees, my_employees, EmployeeDetail, employee_support_team, account_activate, account_activate_login
 
 router = routers.DefaultRouter()
 router.register(r'^api/v1/teams', TeamViewSet)
@@ -69,19 +68,19 @@ urlpatterns = [
     url(r'^api/v1/happiness-reports/$', happiness_reports),
     url(r'^api/v1/engagement/employees/(?P<pk>[0-9]+)/$', EmployeeEngagement.as_view()),
 
-    url(r'^api/v1/happiness/employees/(?P<employee_id>[0-9]+)/$', EmployeeHappinessList.as_view()),
+    url(r'^api/v1/happiness/employees/(?P<pk>[0-9]+)/$', EmployeeHappinessList.as_view()),
     url(r'^api/v1/happiness/(?P<pk>[0-9]+)/$', RetrieveUpdateDestroyHappiness.as_view()),
     url(r'^api/v1/happiness/$', CreateHappiness.as_view()),
 
     url(r'^api/v1/assessment/employees/(?P<pk>[0-9]+)/$', Assessment.as_view()),
     url(r'^api/v1/assessment/mbti/employees/(?P<pk>[0-9]+)/$', EmployeeMBTI.as_view()),
     url(r'^api/v1/assessment/mbti/teams/(?P<pk>[0-9]+)/$', TeamMBTIReportDetail.as_view()),
-    url(r'^api/v1/team-leads/$', cache_page(60*1440)(team_leads)),
+    url(r'^api/v1/team-leads/$', team_leads),
     url(r'^api/v1/team-lead/employees/$', my_employees),
     url(r'^api/v1/team-lead/employees/(?P<pk>[0-9]+)/$', team_lead_employees),
     url(r'^api/v1/team-members/(?P<pk>[0-9]+)/$', TeamMemberList.as_view(), name='employee-list'),
     url(r'^api/v1/compensation-summaries/employees/(?P<pk>[0-9]+)/$', EmployeeCompensationSummaries.as_view()),
-    url(r'^api/v1/compensation-summaries/$', cache_page(60*1440)(compensation_summaries)),
+    url(r'^api/v1/compensation-summaries/$', compensation_summaries),
     url(r'^api/v1/talent-category-reports/teams/(?P<pk>[0-9]+)/$', cache_page(60*1440)(TeamTalentCategoryReportDetail.as_view())),
     url(r'^api/v1/talent-category-reports/lead/$', LeadTalentCategoryReportDetail.as_view()),
     url(r'^api/v1/talent-category-reports/coach/$', CoachTalentCategoryReportDetail.as_view()),
@@ -91,13 +90,7 @@ urlpatterns = [
     url(r'^api/v1/salary-reports/teams/(?P<pk>[0-9]+)/$', cache_page(60*1440)(TeamSalaryReportDetail.as_view())),
     url(r'^api/v1/salary-reports/lead/$', LeadSalaryReportDetail.as_view()),
     url(r'^api/v1/salary-reports/company/$', cache_page(60*1440)(get_company_salary_report)),
-    url(r'^api/v1/comments/employees/(?P<pk>[0-9]+)/$', EmployeeCommentList.as_view()),
-    url(r'^api/v1/comments/teams/(?P<pk>[0-9]+)/$', TeamCommentList.as_view()),
-    url(r'^api/v1/comments/leads/$', LeadCommentList.as_view()),
-    url(r'^api/v1/comments/coaches/$', CoachCommentList.as_view()),
-    url(r'^api/v1/comments/subcomments/(?P<pk>[0-9]+)/$', SubCommentList.as_view()),
-    url(r'^api/v1/comments/$', CommentList.as_view()),
-    url(r'^api/v1/comments/(?P<pk>[0-9]+)/$', CommentDetail.as_view()),
+
     url(r'^api/v1/prospect/$', ProspectDetail.as_view()),
     url(r'^api/v1/prospects/$', ProspectList.as_view()),
     url(r'^api/v1/tasks/mine/$', (MyTaskList.as_view())),
