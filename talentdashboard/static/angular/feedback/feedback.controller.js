@@ -33,7 +33,7 @@ function FeedbackController(FeedbackRequestService, FeedbackDigestService, Feedb
 
     function toggleEmptyScreenMode() {
         setTimeout(function () {
-            if(!vm.myRecentlySentRequests.length && !vm.feedbackRequests.length && !vm.mySubmissions.length) {
+            if(!vm.myRecentlySentRequests.length && !vm.feedbackRequests.length && !vm.mySubmissions.length && !vm.myDigests) {
                 $scope.$apply(function() {
                    vm.showEmptyScreen = true; 
                 });
