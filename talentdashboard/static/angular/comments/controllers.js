@@ -79,7 +79,7 @@ angular.module('tdb.comments.controllers', [])
         };
 
         $scope.loadNextPage = function() {
-            Comment.getCheckInComments({id:$routeParams.id, page: $scope.nextPage}, function(page) {
+            Comment.getCheckInComments({id:$routeParams.checkinId, page: $scope.nextPage}, function(page) {
                 $scope.comments = $scope.comments.concat(page.results);
                 $scope.nextPage++;
                 $scope.hasNextPage = page.has_next;
@@ -91,7 +91,7 @@ angular.module('tdb.comments.controllers', [])
 
         $scope.add = function(form) {
             if (form.$invalid) return;
-            Comment.addToCheckIn({ id:$routeParams.id}, $scope.newComment, function(comment) {
+            Comment.addToCheckIn({ id:$routeParams.checkinId}, $scope.newComment, function(comment) {
                 $scope.comments.push(comment);
                 initialize();
                 $rootScope.$broadcast("comments.commentCreated", comment);
