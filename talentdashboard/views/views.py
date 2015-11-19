@@ -48,7 +48,6 @@ from org.models import Mentorship, Team, Leadership, Attribute, Employee
 from org.api.serializers import SanitizedEmployeeSerializer, UserSerializer, EmployeeSerializer, TeamSerializer, MentorshipSerializer, LeadershipSerializer, AttributeSerializer, MinimalEmployeeSerializer, EditEmployeeSerializer, CreateEmployeeSerializer
 from assessment.models import MBTI
 from assessment.api.serializers import MBTIReportSerializer, MBTISerializer
-from blah.api.serializers import SubCommentSerializer, EmployeeCommentSerializer, TeamCommentSerializer
 from pvp.models import PvpEvaluation, EvaluationRound
 from pvp.api.serializers import PvpEvaluationSerializer, PvPEmployeeSerializer, PvpToDoSerializer, PvpDescriptionSerializer
 from comp.models import CompensationSummary
@@ -87,6 +86,7 @@ class PermissionsViewThisEmployee(permissions.BasePermission):
             if not has_permission and requester.id == employee.coach.id:
                 has_permission = True
             return has_permission
+
 
 class UserList(generics.ListAPIView):
     serializer_class = SanitizedEmployeeSerializer
@@ -294,7 +294,7 @@ class TalentCategoryReportDetail(APIView):
 
 
 class TeamTalentCategoryReportDetail(APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, PermissionsViewAllEmployees)
 
     def get(self, request, pk, format=None):
         report = get_talent_category_report_for_team(pk)
@@ -333,7 +333,7 @@ class CoachTalentCategoryReportDetail(APIView):
 
 
 class TeamSalaryReportDetail(APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, PermissionsViewAllEmployees)
 
     def get(self, request, pk, format=None):
         report = get_salary_report_for_team(pk)
@@ -432,25 +432,13 @@ class EmployeeList(APIView):
 
 
 class TeamMemberList(APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, PermissionsViewAllEmployees)
 
     def get(self, request, pk, format=None):
         employees = Employee.objects.get_current_employees()
         employees = employees.filter(team__id=pk)
 
         serializer = EmployeeSerializer(employees, many=True, context={'request': request})
-        return Response(serializer.data)
-
-
-class SubCommentList(APIView):
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request, pk, format=None):
-        comment_type = ContentType.objects.get(model="comment")
-        comments = Comment.objects.filter(object_id=pk)
-        comments = comments.filter(content_type=comment_type)
-        comments = comments.extra(order_by=['-created_date'])
-        serializer = SubCommentSerializer(comments, many=True, context={'request': request})
         return Response(serializer.data)
 
 
@@ -646,6 +634,8 @@ class EmployeeEngagement(APIView):
 
     def get(self, request, pk, format=None):
         employee = Employee.objects.get(id=pk)
+        if not employee.is_viewable_by_user(request.user):
+            raise PermissionDenied
         current = request.QUERY_PARAMS.get('current', None)
         if employee is None:
             return Response(None, status=status.HTTP_404_NOT_FOUND)
@@ -710,7 +700,7 @@ class EmployeeEngagement(APIView):
 
 
 class Assessment(APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, PermissionsViewThisEmployee)
 
     def get(self, request, pk, format=None):
         employee = Employee.objects.get(id=pk)
@@ -727,7 +717,7 @@ class Assessment(APIView):
 
 
 class EmployeeMBTI(APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, PermissionsViewThisEmployee)
 
     def get(self, request, pk, format=None):
         employee = Employee.objects.get(id=pk)
@@ -754,63 +744,6 @@ class StandardResultsSetPagination(PageNumberPagination):
                          'has_next': self.page.has_next(),
                          'page' : self.page.number,
                          'results': data})
-
-
-class CommentList(APIView):
-    permission_classes = (IsAuthenticated, PermissionsViewAllEmployees)
-
-    def get(self, request, format=None):
-        requester = Employee.objects.get(user__id=request.user.id)
-        comments = Comment.objects.get_comments_for_all_employees(requester)
-        paginator = StandardResultsSetPagination()
-        result_page = paginator.paginate_queryset(comments, request)
-        serializer = EmployeeCommentSerializer(result_page, many=True, context={'request': request})
-        return paginator.get_paginated_response(serializer.data)
-
-
-class LeadCommentList(APIView):
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request, format=None):
-        requester = Employee.objects.get(user__id=request.user.id)
-        employee_ids = Employee.objects.get_current_employees_by_team_lead(lead_id=requester.id).values('id')
-        if not employee_ids:
-            return Response(None, status=status.HTTP_404_NOT_FOUND)
-        comments = Comment.objects.get_comments_for_employees(requester=requester, employee_ids=employee_ids)
-        paginator = StandardResultsSetPagination()
-        result_page = paginator.paginate_queryset(comments, request)
-        serializer = TeamCommentSerializer(result_page, many=True, context={'request': request})
-        return paginator.get_paginated_response(serializer.data)
-
-
-class CoachCommentList(APIView):
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request, format=None):
-        requester = Employee.objects.get(user__id=request.user.id)
-        employee_ids = Employee.objects.get_current_employees_by_coach(coach_id=requester.id).values('id')
-        if not employee_ids:
-            return Response(None, status=status.HTTP_404_NOT_FOUND)
-        comments = Comment.objects.get_comments_for_employees(requester=requester, employee_ids=employee_ids)
-        paginator = StandardResultsSetPagination()
-        result_page = paginator.paginate_queryset(comments, request)
-        serializer = TeamCommentSerializer(result_page, many=True, context={'request': request})
-        return paginator.get_paginated_response(serializer.data)
-
-
-class TeamCommentList(APIView):
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request, pk, format=None):
-        requester = Employee.objects.get(user__id=request.user.id)
-        employee_ids = Employee.objects.get_current_employees_by_team(team_id=pk).values('id')
-        if not employee_ids:
-            return Response(None, status=status.HTTP_404_NOT_FOUND)
-        comments = Comment.objects.get_comments_for_employees(requester=requester, employee_ids=employee_ids)
-        paginator = StandardResultsSetPagination()
-        result_page = paginator.paginate_queryset(comments, request)
-        serializer = TeamCommentSerializer(result_page, many=True, context={'request': request})
-        return paginator.get_paginated_response(serializer.data)
 
 
 class LeadershipDetail(APIView):
@@ -1140,7 +1073,7 @@ def current_kpi_performance(request):
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
-@permission_classes((IsAuthenticated,))
+@permission_classes((IsAuthenticated, PermissionsViewAllEmployees))
 def get_company_salary_report(request):
     report = get_salary_report_for_all_employees()
     serializer = SalaryReportSerializer(report, context={'request': request})
@@ -1253,7 +1186,7 @@ class AnnotationChartData(APIView):
         return HttpResponse(json.dumps(chart_data), content_type='application/json')
 
 @api_view(['GET'])
-@permission_classes((IsAuthenticated,))
+@permission_classes((IsAuthenticated, PermissionsViewAllEmployees))
 def pvp_evaluations(request):
     team_id = request.QUERY_PARAMS.get('team_id', None)
     if team_id is not None:
@@ -1302,7 +1235,7 @@ def pvp_descriptions(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
-@permission_classes((IsAuthenticated,))
+@permission_classes((IsAuthenticated,PermissionsViewAllEmployees))
 def happiness_reports(request):
     talent_category = request.QUERY_PARAMS.get('talent_category', None)
     days_ago = request.QUERY_PARAMS.get('days_ago', None)
@@ -1341,7 +1274,7 @@ def happiness_reports(request):
     return Response(data)
 
 @api_view(['GET'])
-@permission_classes((IsAuthenticated,))
+@permission_classes((IsAuthenticated, PermissionsViewAllEmployees))
 def team_leads(request):
     team_id = request.QUERY_PARAMS.get('team_id', None)
     leaders = Leadership.objects.filter(leader__team_id=int(team_id)).values('leader_id')

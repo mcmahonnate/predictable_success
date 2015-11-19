@@ -7,8 +7,6 @@ from django.utils.http import urlsafe_base64_decode
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from blah.api.serializers import CommentSerializer
-from blah.api.views import CommentList
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -24,6 +22,7 @@ from django.utils.log import getLogger
 
 logger = getLogger('talentdashboard')
 
+@permission_classes((IsAuthenticated,))
 class EmployeeDetail(APIView):
     def get(self, request, pk, format=None):
         try:
@@ -91,13 +90,6 @@ class EmployeeDetail(APIView):
         else:
             return Response(serializer.errors, status=400)
 
-class EmployeeCommentList(CommentList):
-    serializer_class = CommentSerializer
-    permission_classes = (IsAuthenticated, PermissionsViewThisEmployee)
-
-    def get_object(self):
-        pk = self.kwargs['pk']
-        return Employee.objects.get(pk=pk)
 
 class Profile(APIView):
     permission_classes = (IsAuthenticated,)
