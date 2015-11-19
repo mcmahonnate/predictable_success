@@ -7,7 +7,8 @@
         </h1>
     </div>  
 
-    <div class="panel panel-empty" ng-show="feedback.feedbackRequests.length==0 && feedback.myRecentlySentRequests.length==0 && feedback.mySubmissions.length==0">
+
+    <div class="panel panel-empty fade-in" ng-show="feedback.showEmptyScreen">
         <img class="grumpycat" src="../static/images/grumpycat.png" alt="Grumpy Cat" />
         <h2>"Mmmmeeh... i see you don't have any activity yet. Use the buttons above or these links to 
             <a href="" ng-click="feedback.requestFeedback()">ask for feedback</a> or 

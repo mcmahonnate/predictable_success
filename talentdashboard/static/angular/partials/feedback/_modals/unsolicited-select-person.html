@@ -23,10 +23,10 @@
                             {{ $select.selected.full_name }}
                         </ui-select-match>
                         <ui-select-choices repeat="employee in submitFeedback.employees | filter: {full_name: $select.search} | orderBy:'full_name'">                        
-                            <span class="tiny-headshot" data-toggle="modal" data-target=".modal">
+                            <span class="tiny-headshot">
                                 <img ng-src="{{ employee.avatar_small }}" alt="{{ employee.full_name }}'s avatar" />
                             </span> 
-                            <div class="names" ng-bind-html="employee.full_name | highlight: $select.search" data-toggle="modal" data-target=".modal"></div>
+                            <div class="names" ng-bind-html="employee.full_name | highlight: $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
                 </div>

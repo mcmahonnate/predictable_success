@@ -11,7 +11,7 @@ angular.module('tdb.controllers', [])
 
         $document.on('click', function (event) {
             element = angular.element(event.target);
-            if ((!element.hasClass('nav-item-icon') && !element.hasClass('nav-input')) && $rootScope.activeTab) {
+            if ((!element.hasClass('nav-item') && !element.hasClass('nav-input')) && $rootScope.activeTab && !element.hasClass('nav-item-icon')) {
                 $rootScope.activeTab = null
                 $rootScope.$apply();
             }
