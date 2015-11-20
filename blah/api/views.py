@@ -27,16 +27,23 @@ class PermissionsViewThisComment(permissions.BasePermission):
             return has_permission
 
 
-class CommentList(APIView):
-    permission_classes = (IsAuthenticated, PermissionsViewAllEmployees)
+class CommentList(generics.ListCreateAPIView):
+    serializer_class = CommentSerializer
 
-    def get(self, request, format=None):
-        requester = Employee.objects.get(user__id=request.user.id)
-        comments = Comment.objects.get_comments_for_all_employees(requester)
-        paginator = StandardResultsSetPagination()
-        result_page = paginator.paginate_queryset(comments, request)
-        serializer = EmployeeCommentSerializer(result_page, many=True, context={'request': request})
-        return paginator.get_paginated_response(serializer.data)
+    def get_queryset(self):
+
+        subject = self.get_object()
+        return Comment.objects.get_for_object(subject)
+
+    def create(self, request, *args, **kwargs):
+        deserializer = CreateCommentSerializer(data=request.data)
+        deserializer.is_valid(raise_exception=True)
+        owner = request.user
+        subject = self.get_object()
+        comment = Comment.objects.add_comment(subject, deserializer.data['content'], deserializer.data.get('visibility', 3), deserializer.data['include_in_daily_digest'], owner)
+        serializer = CommentSerializer(comment, context={'request': request})
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 
