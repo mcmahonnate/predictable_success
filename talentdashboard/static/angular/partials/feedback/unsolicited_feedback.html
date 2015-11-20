@@ -14,49 +14,7 @@
             </div>
         </div>
         <div class="col-md-4"> 
-            <div id="feedbackCarousel" class="carousel slide">
-                <div class="carousel-inner">
-                    <div class="item active">
-                        <h3>
-                            "Take the time to thoughtfully think through the feedback you give each Fool. When we rush, we’re more likely to rely on the cognitive shortcuts that lead to bias."
-                        </h3>
-                        <div class="headshot medium-headshot pull-left">
-                            <img src="https://media.licdn.com/mpr/mpr/shrinknp_400_400/p/2/000/198/000/23d6f6e.jpg" alt="Diane Morris" class="headshot-image" />
-                        </div>
-                        <cite>
-                            Diane Morris
-                            <span class="role">Office Operations</span>
-                        </cite>
-                    </div> 
-                    <div class="item">
-                        <h3>"What do you rely on this Fool for? What seems to come naturally to them? Where do you see them showing promise?"</h3>
-                       <div class="headshot medium-headshot pull-left">
-                            <img src="https://scontent-mia1-1.xx.fbcdn.net/hphotos-xpa1/v/t1.0-9/30759_10152130639445121_935633870_n.jpg?oh=6db2086da34761defe5f1b3ab571123b&oe=56B59F4B" alt="Diane Morris" class="headshot-image" />
-                        </div>
-                        <cite>
-                            Kara Chambers
-                            <span class="role">VP, People Insights</span>
-                        </cite>                    
-                    </div>                     
-                    <div class="item">
-                        <h3>"Giving people ideas on how to get better is an awesome way to give feedback. Here’s an example, “Try working on your diplomatic skills so you can better drive home that vision of yours, it has real potential."</h3>
-                       <div class="headshot medium-headshot pull-left">
-                            <img src="/static/images/blake.png" alt="Diane Morris" class="headshot-image" />
-                        </div>
-                        <cite>
-                            Blake Bos
-                            <span class="role">Project Jujitsu</span>
-                        </cite>                    
-                    </div>                     
-                </div>
-                <ol class="carousel-indicators">
-                    <li data-target="#feedbackCarousel" data-slide-to="0" class="active"></li>
-                    <li data-target="#feedbackCarousel" data-slide-to="1"></li>
-                    <li data-target="#feedbackCarousel" data-slide-to="2"></li>
-                </ol>
-            </div>
-    
-                 
+            <div ng-bind-html="customer.feedback_tips"></div>         
         </div>   
     </div>
 </div>    
@@ -65,18 +23,13 @@
 <script type="text/javascript">   
     $(document).ready(function(){
 
-        $('#feedbackCarousel').carousel({
-            interval: 20000
-        }).on('slide.bs.carousel', function (e) {
-            var nextH = $(e.relatedTarget).height();
-            console.log(nextH)
-            console.log( $(this).find('.active.item').parent() )
-            $(this).find('.active.item').parent().animate({
-                height: nextH
-            }, 500);
-        });
+        setTimeout(function(){
+            $('.carousel').carousel({
+              interval: 20000
+            });
+        }, 2000);
 
-
+        $('.carousel').carousel('cycle');
     });    
 </script>
 

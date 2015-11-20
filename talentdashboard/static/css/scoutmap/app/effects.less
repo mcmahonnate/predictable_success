@@ -44,6 +44,11 @@
         -ms-animation: fadeout 1s; /* Internet Explorer */
          -o-animation: fadeout 1s; /* Opera < 12.1 */
             animation: fadeout 1s;
+
+    animation-delay:5s;
+    -webkit-animation-delay:5s; /* Safari and Chrome */
+    -webkit-animation-fill-mode: forwards;
+
 }
 
 @keyframes fadeout {
@@ -73,4 +78,38 @@
 @-o-keyframes fadeout {
     from { opacity: 1; }
     to   { opacity: 0; }
+}
+
+
+
+.carousel-fade {
+    .carousel-inner {
+        .item {
+            transition-property: opacity;
+        }
+        
+        .item,
+        .active.left,
+        .active.right {
+            opacity: 0;
+        }
+
+        .active,
+        .next.left,
+        .prev.right {
+            opacity: 1;
+        }
+
+        .next,
+        .prev,
+        .active.left,
+        .active.right {
+            left: 0;
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+    .carousel-control {
+        z-index: 2;
+    }
 }

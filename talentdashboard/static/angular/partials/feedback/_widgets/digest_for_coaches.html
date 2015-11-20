@@ -9,7 +9,8 @@
         <div class="feedback-submission" ng-repeat="submission in feedbackWorksheet.digest.submissions">
 
             <!-- Edit button -->
-            <a ng-href="#/feedback/submission/{{ submission.id }}/process" class="btn btn-xs btn-default pull-right"><i class="fa fa-pencil"></i> Edit</a>
+            <a ng-show="view != 'delivered-view'" ng-href="#/feedback/submission/{{ submission.id }}/process" class="btn btn-xs btn-default pull-right"><i class="fa fa-pencil"></i> Edit</a>
+            <a ng-show="view == 'delivered-view'" ng-href="#/feedback/submission/{{ submission.id }}/process" class="btn btn-xs btn-default pull-right"><i class="fa fa-eye"></i> View</a>
             
             <!-- Headshot -->
             <div ng-show="!submission.anonymous" class="pull-left">
@@ -50,7 +51,8 @@
         <div class="feedback-submission" ng-repeat="submission in feedbackWorksheet.digest.submissions">
             
             <!-- Edit button -->
-            <a ng-href="#/feedback/submission/{{ submission.id }}/process" class="btn btn-xs btn-default pull-right"><i class="fa fa-pencil"></i> Edit</a>
+            <a ng-show="view != 'delivered-view'" ng-href="#/feedback/submission/{{ submission.id }}/process" class="btn btn-xs btn-default pull-right"><i class="fa fa-pencil"></i> Edit</a>
+            <a ng-show="view == 'delivered-view'" ng-href="#/feedback/submission/{{ submission.id }}/process" class="btn btn-xs btn-default pull-right"><i class="fa fa-eye"></i> View</a>
 
             <!-- Headshot -->
             <div ng-show="!submission.anonymous" class="pull-left">
@@ -85,12 +87,12 @@
             </div>
         </div>
 
-        <h2 class="panel-title hide-for-print" style="margin-top:40px;">Feedback Summary for {{ feedbackWorksheet.progressReport.employee.full_name }}</h2>
-        <textarea auto-grow class="form-control hide-for-print" ng-model="feedbackWorksheet.digest.summary" style="min-height:200px"></textarea>
+        <h2 class="panel-title hide-for-print" ng-show="view != 'delivered-view'" style="margin-top:40px;">Feedback Summary for {{ feedbackWorksheet.progressReport.employee.full_name }}</h2>
+        <textarea auto-grow class="form-control hide-for-print" ng-show="view != 'delivered-view'" ng-model="feedbackWorksheet.digest.summary" style="min-height:200px"></textarea>
         <br>
-        <button class="btn btn-success" type="button" ng-click="feedbackWorksheet.deliverDigest()"><i class="fa fa-paper-plane"></i> Send to {{ feedbackWorksheet.progressReport.employee.full_name }}</button>
+        <button class="btn btn-success" ng-show="view != 'delivered-view'" type="button" ng-click="feedbackWorksheet.deliverDigest()"><i class="fa fa-paper-plane"></i> Send to {{ feedbackWorksheet.progressReport.employee.full_name }}</button>
 
-        <button class="btn btn-default" type="button" ng-click="feedbackWorksheet.save()">Save</button>
+        <button class="btn btn-default" ng-show="view != 'delivered-view'" type="button" ng-click="feedbackWorksheet.save()">Save</button>
         <button class="btn btn-default" type="button" ng-click="feedbackWorksheet.printDigest()">Print</button>
     </form>
 </div>
