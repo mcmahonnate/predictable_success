@@ -9,6 +9,7 @@
         vm.submission = null;
         vm.form = null;
         vm.addToDigest = addToDigest;
+        vm.removeFromDigest = removeFromDigest;
         vm.save = save;
         vm.close = close;
         vm.back = back;
@@ -43,6 +44,14 @@
             FeedbackDigestService.addSubmissionToCurrentDigest(vm.submission)
                 .then(function() {
                     Notification.success("The feedback has been added to the digest.");
+                    close();
+            });
+        }
+
+        function removeFromDigest() {
+            FeedbackDigestService.removeSubmissionFromCurrentDigest(vm.submission)
+                .then(function() {
+                    Notification.success("The feedback has been removed from the digest.");
                     close();
             });
         }

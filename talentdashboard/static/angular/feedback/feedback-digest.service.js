@@ -9,6 +9,7 @@ function FeedbackDigestService($log, $http) {
         getDigestsIveDelivered: getDigestsIveDelivered,
         getDigest: getDigest,
         addSubmissionToCurrentDigest: addSubmissionToCurrentDigest,
+        removeSubmissionFromCurrentDigest: removeSubmissionFromCurrentDigest,
         deliverDigest: deliverDigest,
         save: save
     };
@@ -87,6 +88,21 @@ function FeedbackDigestService($log, $http) {
 
         function fail(response) {
             $log.error('addSubmissionToDigest failed');
+        }
+    }
+
+    function removeSubmissionFromCurrentDigest(submission) {
+        var url = '/api/v1/feedback/coachees/' + submission.subject.id + '/digests/current/submissions/';
+        return $http.put(url, {'submission': submission.id})
+            .then(success)
+            .catch(fail);
+
+        function success(response) {
+            return response.data;
+        }
+
+        function fail(response) {
+            $log.error('removeSubmissionFromCurrentDigest failed');
         }
     }
 

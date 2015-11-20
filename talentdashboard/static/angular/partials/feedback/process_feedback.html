@@ -63,6 +63,8 @@
                             <button ng-show="processFeedback.submission.has_been_delivered" class="btn btn-success pull-right" type="button" ng-click="processFeedback.back()">&larr; Back</button>
                             <button ng-show="!processFeedback.submission.has_been_delivered"class="btn btn-default" type="button" ng-click="processFeedback.close()">&larr; Back</button>
                             <button ng-show="!processFeedback.submission.has_been_delivered" class="btn btn-success pull-right" type="button" ng-click="processFeedback.addToDigest()">Add to Digest</button>
+                            <button ng-show="!processFeedback.submission.has_been_delivered" class="btn btn-success pull-right" type="button" ng-click="processFeedback.removeFromDigest()">Remove from Digest</button>
+
                             <button ng-show="!processFeedback.submission.has_been_delivered" ng-disabled="processFeedback.form.$pristine" class="btn btn-default pull-right" type="button" ng-click="processFeedback.save()" style="margin-right:5px;">Save</button>
                         </div>
                     </div>

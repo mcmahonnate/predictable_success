@@ -195,7 +195,7 @@ class SummarizedFeedbackDigestSerializer(serializers.ModelSerializer):
         fields = ('id', 'subject', 'delivered_by', 'delivery_date')
 
 
-class AddSubmissionToDigestSerializer(serializers.Serializer):
+class AddRemoveSubmissionToDigestSerializer(serializers.Serializer):
     submission = serializers.PrimaryKeyRelatedField(queryset=FeedbackSubmission.objects.all())
 
     class Meta:
