@@ -90,13 +90,20 @@ class FeedbackSubmissionSerializerForCoaches(serializers.ModelSerializer):
     feedback_date = serializers.DateTimeField(required=False)
     subject = SanitizedEmployeeSerializer()
     reviewer = SanitizedEmployeeSerializer()
+    has_digest = serializers.SerializerMethodField()
+
+    def get_has_digest(selfself, submission):
+        if submission.feedback_digest:
+            return True
+        else:
+            return False
 
     class Meta:
         model = FeedbackSubmission
         fields = ('id', 'feedback_date', 'subject', 'reviewer',
                   'excels_at', 'could_improve_on', 'excels_at_summarized',
                   'could_improve_on_summarized', 'unread',
-                  'has_been_delivered', 'anonymous')
+                  'has_been_delivered', 'anonymous', 'has_digest')
 
 
 class FeedbackSubmissionSerializerForEmployee(serializers.ModelSerializer):
