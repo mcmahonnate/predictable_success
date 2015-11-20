@@ -2,7 +2,7 @@
         .module('feedback')
         .controller('ProcessSubmissionController', ProcessSubmissionController);
 
-    function ProcessSubmissionController($routeParams, $location, $window, $scope, $rootScope, analytics, Notification, FeedbackSubmissionService, FeedbackDigestService) {
+    function ProcessSubmissionController($routeParams, $location, $modal, $scope, $rootScope, $window, analytics, Notification, FeedbackSubmissionService, FeedbackDigestService) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         var vm = this;
         vm.submissionId = $routeParams.id;
@@ -31,45 +31,84 @@
                 });
         }
 
-        function checkForUnsavedChanges() {
-            if(vm.form.$dirty) {
-                if($window.confirm("You have unsaved changes. Would you like to save your changes before closing?")) {
-                    save();
-                }
-            }
+        function _addToDigest() {
+            FeedbackDigestService.addSubmissionToCurrentDigest(vm.submission)
+                .then(function () {
+                    Notification.success("The feedback has been added to the digest.");
+                    back();
+                });
+        }
+
+        function _removeFromDigest() {
+            FeedbackDigestService.removeSubmissionFromCurrentDigest(vm.submission)
+                .then(function () {
+                    Notification.success("The feedback has been removed from the digest.");
+                    back();
+                });
         }
 
         function addToDigest() {
-            checkForUnsavedChanges();
-            FeedbackDigestService.addSubmissionToCurrentDigest(vm.submission)
-                .then(function() {
-                    Notification.success("The feedback has been added to the digest.");
-                    close();
-            });
+            if(vm.form.$dirty) {
+                save(_addToDigest);
+            } else {
+                _addToDigest()
+            }
         }
 
         function removeFromDigest() {
-            FeedbackDigestService.removeSubmissionFromCurrentDigest(vm.submission)
-                .then(function() {
-                    Notification.success("The feedback has been removed from the digest.");
-                    close();
-            });
+            if(vm.form.$dirty) {
+                confirm(_removeFromDigest);
+            } else {
+                _removeFromDigest()
+            }
         }
 
-        function save() {
+        function save(callbackFunction) {
             FeedbackSubmissionService.updateCoachSummary(vm.submission)
                 .then(function() {
                     vm.form.$setPristine();
                     Notification.success("Your changes were saved.");
+                    if (callbackFunction) {
+                        callbackFunction();
+                    };
                 });
         }
 
         function close() {
-            checkForUnsavedChanges();
-            $location.path('/feedback/' + vm.submission.subject.id + '/worksheet');
+            if(vm.form.$dirty) {
+                confirm(back);
+            } else {
+                back()
+            }
         }
 
         function back() {
+            console.log('BACK');
             $window.history.back();
+        }
+
+
+        function confirm(callbackFunction) {
+            var modalInstance = $modal.open({
+                animation: true,
+                windowClass: 'xx-dialog fade zoom',
+                backdrop: 'static',
+                templateUrl: '/static/angular/partials/feedback/_modals/submission-is-dirty.html',
+                controller: ['$scope', '$modalInstance', function($scope, $modalInstance) {
+                    $scope.close = function(value) {
+                        $modalInstance.close(value);
+                    }
+                }],
+                resolve: {}
+            });
+            modalInstance.result.then(
+                function (value) {
+                    if (value) {
+                        save(callbackFunction)
+                    } else {
+                        callbackFunction()
+                    }
+                }
+            );
         }
     }
