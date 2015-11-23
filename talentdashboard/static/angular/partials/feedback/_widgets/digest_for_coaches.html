@@ -71,10 +71,10 @@
             <div style="padding-left:60px;">
                 <div>
                     <span ng-show="!submission.anonymous">
-                        <strong>{{ submission.reviewer.full_name }}</strong> said:
+                        <strong>{{ submission.reviewer.full_name }}</strong>
                     </span>
                     <span ng-show="submission.anonymous">     
-                        <strong>Anonymous</strong> said:
+                        <strong>Anonymous</strong>
                     </span> 
                     <span class="time timestamp" data-toggle="tooltip" data-placement="top" title="{{ submission.date | date:'MMM d, yyyy h:mma' }}">{{ submission.feedback_date | fromNow }}</span>
                 </div>                        
