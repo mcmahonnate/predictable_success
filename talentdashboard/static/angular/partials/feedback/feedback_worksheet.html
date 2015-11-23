@@ -10,61 +10,37 @@
     </div>
     <div class="row">
         <div class="col col-md-5 hide-for-print">
-			<div class="panel" ng-show="feedbackWorksheet.progressReport.solicited_submissions.length>0">
-				<h3 class="panel-title">Feedback Submissions</h3>
+			<div class="panel" ng-show="feedbackWorksheet.progressReport.all_submissions_not_delivered.length>0">
+				<h3 class="panel-title">{{ feedbackWorksheet.progressReport.employee.first_name }}'s Feedback</h3>
 				<table class="table" style="margin-bottom:0">
 					<thead>
 				        <tr>
-				          <th class="width-65-percent">From</th>
-				          <th class="width-30-percent">Submitted</th>
+				          <th class="width-55-percent">From</th>
+                          <th class="width-20-percent">Requested</th>
+				          <th class="width-20-percent">Submitted</th>
 				          <th></th>
 				        </tr>
 		      		</thead>
 		      		<tbody>
-						<tr ng-repeat="submission in feedbackWorksheet.progressReport.solicited_submissions | orderBy:'-feedback_date' ">
+						<tr ng-repeat="submission in feedbackWorksheet.progressReport.all_submissions_not_delivered | orderBy:'-feedback_date' ">
 							<td>
 								<span class="tiny-headshot">
 									<img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
 								</span> 					
 								<strong>{{ submission.reviewer.full_name }}</strong> <span ng-show="{{ submission.anonymous }}">(Anonymous)</span>
 							</td>
+                            <td style="text-align: center">
+                                <i ng-show="submission.was_requested" class="fa fa-check center"></i>
+                            </td>
 							<td>{{ submission.feedback_date | fromNow }}</td>
 							<td>
-								<a ng-href="#/feedback/submission/{{ submission.id }}/process" class="btn btn-sm btn-success pull-right">View</a>
+								<a ng-href="#/feedback/submission/{{ submission.id }}/process" class="btn btn-sm btn-success pull-right">Add</a>
 							</td>
 						</tr>
 		      		</tbody>
 				</table>	
             </div>
-            <div class="panel" ng-show="feedbackWorksheet.progressReport.unsolicited_submissions.length>0">    
-				<h3 class="panel-title">Unsolicited Feedback</h3>
-				<table class="table" style="margin-bottom:0">
-					<thead>
-				        <tr>
-				          <th class="width-65-percent">From</th>
-				          <th class="width-30-percent">Submitted</th>
-				          <th></th>
-				        </tr>
-		      		</thead>
-		      		<tbody>
-						<tr ng-repeat="submission in feedbackWorksheet.progressReport.unsolicited_submissions">
-							<td>
-								<span class="tiny-headshot">
-									<img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
-								</span> 	
-								<strong>{{ submission.reviewer.full_name }}</strong>
-							</td>
-							<td>
-								{{ submission.feedback_date | fromNow }}
-							</td>
-							<td>
-								<a ng-href="#/feedback/submission/{{ submission.id }}/process" class="btn btn-sm btn-success pull-right">View</a>
-							</td>
-						</tr>
-		      		</tbody>
-				</table>	
-            </div>
-            <div class="panel" ng-show="feedbackWorksheet.progressReport.unanswered_requests.length>0">    
+            <div class="panel" ng-show="feedbackWorksheet.progressReport.unanswered_requests.length>0">
                 <h3 class="panel-title">Unanswered Requests</h3>
                 <table class="table" style="margin-bottom:0">
                     <thead>

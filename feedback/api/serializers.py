@@ -91,9 +91,16 @@ class FeedbackSubmissionSerializerForCoaches(serializers.ModelSerializer):
     subject = SanitizedEmployeeSerializer()
     reviewer = SanitizedEmployeeSerializer()
     has_digest = serializers.SerializerMethodField()
+    was_requested = serializers.SerializerMethodField()
 
-    def get_has_digest(selfself, submission):
+    def get_has_digest(self, submission):
         if submission.feedback_digest:
+            return True
+        else:
+            return False
+
+    def get_was_requested(self, submission):
+        if submission.feedback_request:
             return True
         else:
             return False
@@ -103,7 +110,7 @@ class FeedbackSubmissionSerializerForCoaches(serializers.ModelSerializer):
         fields = ('id', 'feedback_date', 'subject', 'reviewer',
                   'excels_at', 'could_improve_on', 'excels_at_summarized',
                   'could_improve_on_summarized', 'unread',
-                  'has_been_delivered', 'anonymous', 'has_digest')
+                  'has_been_delivered', 'anonymous', 'has_digest', 'was_requested')
 
 
 class FeedbackSubmissionSerializerForEmployee(serializers.ModelSerializer):
@@ -147,8 +154,7 @@ class EmployeeFeedbackReportsSerializer(serializers.Serializer):
 class FeedbackProgressReportSerializer(serializers.Serializer):
     employee = SanitizedEmployeeSerializer()
     unanswered_requests = FeedbackRequestSerializer(many=True)
-    solicited_submissions = FeedbackSubmissionSerializerForCoaches(many=True)
-    unsolicited_submissions = FeedbackSubmissionSerializerForCoaches(many=True)
+    all_submissions_not_delivered = FeedbackSubmissionSerializerForCoaches(many=True)
 
 
 class FeedbackProgressReportCountsSerializer(serializers.Serializer):
