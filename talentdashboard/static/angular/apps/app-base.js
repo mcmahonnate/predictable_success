@@ -32,18 +32,12 @@ var app = angular.module('tdb', [
             when('/my-profile', {templateUrl: '/static/angular/partials/profile.html', controller: 'ProfileCtrl', resolve: {authorizeRoute: authorizeRoute}}).
             otherwise({redirectTo: '/'});
     }])
-    .run(['$rootScope', '$anchorScroll', '$location', '$timeout', 'User', 'TalentCategories', 'Customers', 'privacyMode', function($rootScope, $anchorScroll, $location, $timeout, User, TalentCategories, Customers, privacyMode) {
+    .run(['$rootScope', 'User', 'TalentCategories', 'Customers', 'privacyMode', function($rootScope, User, TalentCategories, Customers, privacyMode) {
         $rootScope.customer = Customers.get();
         $rootScope.currentUser = User.get();
         $rootScope.talentCategories = TalentCategories.categories;
 
         $rootScope.$on('$routeChangeSuccess', function () {
-            $timeout(function() {
-                if ($location.hash()) {
-                    console.log($location.hash());
-                    $anchorScroll();
-                }
-            });
             privacyMode($rootScope);
         });
 
