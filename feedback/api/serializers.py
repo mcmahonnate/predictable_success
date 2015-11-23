@@ -154,7 +154,7 @@ class EmployeeFeedbackReportsSerializer(serializers.Serializer):
 class FeedbackProgressReportSerializer(serializers.Serializer):
     employee = SanitizedEmployeeSerializer()
     unanswered_requests = FeedbackRequestSerializer(many=True)
-    all_submissions_not_delivered = FeedbackSubmissionSerializerForCoaches(many=True)
+    all_submissions_not_delivered_and_not_in_digest = FeedbackSubmissionSerializerForCoaches(many=True)
 
 
 class FeedbackProgressReportCountsSerializer(serializers.Serializer):

@@ -39,7 +39,7 @@
             return FeedbackRequestService.getFeedbackProgressReportForEmployee(vm.employeeId)
                 .then(function (data) {
                     vm.progressReport = data;
-                    if (vm.progressReport.all_submissions_not_delivered.length>0 ||
+                    if (vm.progressReport.all_submissions_not_delivered_and_not_in_digest.length>0 ||
                         vm.progressReport.unanswered_requests.length>0) {
                         vm.showProgressReport = true;
                     }
