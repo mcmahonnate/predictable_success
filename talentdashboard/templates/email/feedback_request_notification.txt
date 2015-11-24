@@ -1,10 +1,6 @@
 Hi, {{ recipient_first_name }}!
 
 {{ requester_full_name }} has asked you for feedback.
-{% if custom_message %}
-They included the following message in their request:
 
-{{ custom_message }}
-{% endif %}
 To leave feedback for {{ requester_full_name }}, please visit this page: {{ response_url }}
 
