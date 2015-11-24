@@ -9,6 +9,8 @@
         vm.digest = null;
         vm.getDigest = getDigest;
         vm.printDigest = printDigest;
+        vm.coach = null;
+        vm.employee = null;
         vm.questions = {
             excelsAtQuestion: $rootScope.customer.feedback_excels_at_question,
             couldImproveOnQuestion: $rootScope.customer.feedback_could_improve_on_question
@@ -23,6 +25,8 @@
             return FeedbackDigestService.getDigest(vm.digestId)
                 .then(function (data) {
                     vm.digest = data;
+                    vm.coach = vm.digest.delivered_by;
+                    vm.employee = vm.digest.subject;
                     return vm.digest;
                 })
                 .catch(function() {
