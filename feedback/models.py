@@ -67,6 +67,9 @@ class FeedbackSubmissionManager(models.Manager):
     def received_not_delivered(self, subject):
         return self.filter(subject=subject).filter(has_been_delivered=False)
 
+    def received_not_delivered_and_not_in_digest(self, subject):
+        return self.received_not_delivered(subject).filter(feedback_digest__isnull=True)
+
     def ready_for_processing(self, subject):
         return self.filter(subject=subject).filter(feedback_digest=None)
 
@@ -183,6 +186,7 @@ class FeedbackProgressReport(object):
         self.unsolicited_submissions = []
         self.recent_feedback_requests_ive_sent = []
         self.all_submissions_not_delivered = []
+        self.all_submissions_not_delivered_and_not_in_digest = []
 
     def load(self):
         self.unanswered_requests = FeedbackRequest.objects.unanswered_for_requester(self.employee)
@@ -190,6 +194,7 @@ class FeedbackProgressReport(object):
         self.unsolicited_submissions = FeedbackSubmission.objects.unsolicited_and_ready_for_processing(self.employee)
         self.recent_feedback_requests_ive_sent = FeedbackRequest.objects.recent_feedback_requests_ive_sent_that_have_not_been_delivered(self.employee)
         self.all_submissions_not_delivered = FeedbackSubmission.objects.received_not_delivered(self.employee)
+        self.all_submissions_not_delivered_and_not_in_digest = FeedbackSubmission.objects.received_not_delivered_and_not_in_digest(self.employee)
 
 
 class EmployeeFeedbackReports(object):

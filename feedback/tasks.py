@@ -27,3 +27,25 @@ def send_feedback_request_email(request_id):
     msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
     msg.attach_alternative(html_content, "text/html")
     msg.send()
+
+
+@app.task
+def send_feedback_digest_email(digest_id):
+    from feedback.models import FeedbackDigest
+    feedback_digest = FeedbackDigest.objects.get(id=digest_id)
+    recipient_email = feedback_digest.subject.email
+    if not recipient_email:
+        return
+    tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
+    digest_url = 'https://%s/#/feedback/' % (tenant.domain_url, feedback_digest.id)
+    context = {
+        'recipient_first_name': feedback_digest.subject.first_name,
+        'delivered_by_full_name': feedback_digest.delivered_by.full_name,
+        'digest_url': digest_url,
+    }
+    subject = "Your feedback is ready!"
+    text_content = render_to_string('email/feedback_digest_notification.txt', context)
+    html_content = render_to_string('email/feedback_digest_notification.html', context)
+    msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()

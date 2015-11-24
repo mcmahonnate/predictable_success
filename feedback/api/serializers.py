@@ -90,13 +90,27 @@ class FeedbackSubmissionSerializerForCoaches(serializers.ModelSerializer):
     feedback_date = serializers.DateTimeField(required=False)
     subject = SanitizedEmployeeSerializer()
     reviewer = SanitizedEmployeeSerializer()
+    has_digest = serializers.SerializerMethodField()
+    was_requested = serializers.SerializerMethodField()
+
+    def get_has_digest(self, submission):
+        if submission.feedback_digest:
+            return True
+        else:
+            return False
+
+    def get_was_requested(self, submission):
+        if submission.feedback_request:
+            return True
+        else:
+            return False
 
     class Meta:
         model = FeedbackSubmission
         fields = ('id', 'feedback_date', 'subject', 'reviewer',
                   'excels_at', 'could_improve_on', 'excels_at_summarized',
                   'could_improve_on_summarized', 'unread',
-                  'has_been_delivered', 'anonymous')
+                  'has_been_delivered', 'anonymous', 'has_digest', 'was_requested')
 
 
 class FeedbackSubmissionSerializerForEmployee(serializers.ModelSerializer):
@@ -140,8 +154,7 @@ class EmployeeFeedbackReportsSerializer(serializers.Serializer):
 class FeedbackProgressReportSerializer(serializers.Serializer):
     employee = SanitizedEmployeeSerializer()
     unanswered_requests = FeedbackRequestSerializer(many=True)
-    solicited_submissions = FeedbackSubmissionSerializerForCoaches(many=True)
-    unsolicited_submissions = FeedbackSubmissionSerializerForCoaches(many=True)
+    all_submissions_not_delivered_and_not_in_digest = FeedbackSubmissionSerializerForCoaches(many=True)
 
 
 class FeedbackProgressReportCountsSerializer(serializers.Serializer):
@@ -195,7 +208,7 @@ class SummarizedFeedbackDigestSerializer(serializers.ModelSerializer):
         fields = ('id', 'subject', 'delivered_by', 'delivery_date')
 
 
-class AddSubmissionToDigestSerializer(serializers.Serializer):
+class AddRemoveSubmissionToDigestSerializer(serializers.Serializer):
     submission = serializers.PrimaryKeyRelatedField(queryset=FeedbackSubmission.objects.all())
 
     class Meta:

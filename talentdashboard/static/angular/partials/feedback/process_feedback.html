@@ -21,14 +21,15 @@
                                     </div>
                                 </div>
                                 <div class="comment-copy" style="padding-top: 15px">
-                                    <div class="activity-comment comment-text">{{ processFeedback.submission.excels_at }}</div>
-                                    <label for="editFeedbackQuestion1"  style="font-size:12px;font-weight:bold;cursor:pointer">
-                                        <input ng-disabled="processFeedback.submission.has_been_delivered" ng-click="isEditFeedbackCollapsed1 = !isEditFeedbackCollapsed1" id="editFeedbackQuestion1" ng-checked="processFeedback.submission.excels_at_summarized.length" type="checkbox"> Summarize Feedback
-                                    </label>
+                                    <div class="activity-comment comment-text" ng-class="{'comment-disabled': processFeedback.submission.excels_at_summarized.length}" >{{ processFeedback.submission.excels_at }}</div>
                                 </div>
-                                <div ng-show="isEditFeedbackCollapsed1 || processFeedback.submission.excels_at_summarized.length" class="comment-editor">
-                                    <div class="comment-reply-copy">
-                                        <textarea ng-disabled="processFeedback.submission.has_been_delivered" name="excels_at_summarized" ng-model="processFeedback.submission.excels_at_summarized" msd-elastic class="form-control edit-textarea"></textarea>
+                                <div class="comment-editor" ng-show="!processFeedback.submission.has_been_delivered || processFeedback.submission.excels_at_summarized.length">
+                                    <div class="comment-reply-copy" style="padding: 10px; background-color: #efefef; border-radius: 5px">
+                                        <span style="margin: 0 0 10px 10px">Summarize</span>
+                                        <textarea ng-show="!processFeedback.submission.has_been_delivered" placeholder="If {{ processFeedback.submission.reviewer.first_name }} has asked that you summarize their feedback you can do that here." name="excels_at_summarized" ng-model="processFeedback.submission.excels_at_summarized" class="form-control msd-elastic" style="margin: 5px; width: 98%;" rows="1"></textarea>
+                                        <div ng-show="processFeedback.submission.has_been_delivered">
+                                            <div class="comment-summarized">{{ processFeedback.submission.excels_at_summarized }}</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -47,14 +48,16 @@
                                     </div>
                                 </div>
                                 <div class="comment-copy" style="padding-top: 15px">
-                                    <div class="activity-comment comment-text">{{ processFeedback.submission.could_improve_on }}</div>
-                                    <label for="editFeedbackQuestion2"  style="font-size:12px;font-weight:bold;cursor:pointer">
-                                        <input ng-disabled="processFeedback.submission.has_been_delivered" ng-click="isEditFeedbackCollapsed2 = !isEditFeedbackCollapsed2" id="editFeedbackQuestion2" type="checkbox" ng-checked="processFeedback.submission.could_improve_on_summarized.length"> Summarize Feedback
-                                    </label>                           
+                                    <div class="activity-comment comment-text" ng-class="{'comment-disabled': processFeedback.submission.could_improve_on_summarized.length}">{{ processFeedback.submission.could_improve_on }}</div>
                                 </div>
-                                <div ng-show="isEditFeedbackCollapsed2 || processFeedback.submission.could_improve_on_summarized.length" class="comment-editor">
-                                    <div class="comment-reply-copy">
-                                        <textarea ng-disabled="processFeedback.submission.has_been_delivered" name="could_improve_on_summarized" ng-model="processFeedback.submission.could_improve_on_summarized" msd-elastic class="form-control edit-textarea"></textarea>
+                                <div class="comment-editor" ng-show="!processFeedback.submission.has_been_delivered || processFeedback.submission.could_improve_on_summarized.length">
+                                    <div class="comment-reply-copy" style="padding: 10px; background-color: #efefef; border-radius: 5px">
+                                        <span style="margin: 0 0 10px 10px">Summarize</span>
+                                        <textarea ng-show="!processFeedback.submission.has_been_delivered" placeholder="If {{ processFeedback.submission.reviewer.first_name }} has asked that you summarize their feedback you can do that here." name="could_improve_on_summarized" ng-model="processFeedback.submission.could_improve_on_summarized" msd-elastic class="form-control" style="min-height: 15px; margin: 5px; width: 98%;" rows="1"></textarea>
+                                        <div ng-show="processFeedback.submission.has_been_delivered">
+
+                                            <div class="comment-summarized">{{ processFeedback.submission.could_improve_on_summarized }}</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -62,7 +65,9 @@
                         <div class="form-group">
                             <button ng-show="processFeedback.submission.has_been_delivered" class="btn btn-success pull-right" type="button" ng-click="processFeedback.back()">&larr; Back</button>
                             <button ng-show="!processFeedback.submission.has_been_delivered"class="btn btn-default" type="button" ng-click="processFeedback.close()">&larr; Back</button>
-                            <button ng-show="!processFeedback.submission.has_been_delivered" class="btn btn-success pull-right" type="button" ng-click="processFeedback.addToDigest()">Add to Digest</button>
+                            <button ng-show="!processFeedback.submission.has_been_delivered && !processFeedback.submission.has_digest" class="btn btn-success pull-right" type="button" ng-click="processFeedback.addToDigest()">Add to Digest</button>
+                            <button ng-show="!processFeedback.submission.has_been_delivered && processFeedback.submission.has_digest" class="btn btn-success pull-right" type="button" ng-click="processFeedback.removeFromDigest()">Remove from Digest</button>
+
                             <button ng-show="!processFeedback.submission.has_been_delivered" ng-disabled="processFeedback.form.$pristine" class="btn btn-default pull-right" type="button" ng-click="processFeedback.save()" style="margin-right:5px;">Save</button>
                         </div>
                     </div>

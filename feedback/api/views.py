@@ -255,24 +255,36 @@ class RetrieveUpdateCurrentFeedbackDigest(APIView):
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['POST'])
-def add_submission_to_digest(request, employee_id):
-    employee = Employee.objects.get(pk=employee_id)
-    if not request.user.employee == employee.coach:
-        raise PermissionDenied
-    if not FeedbackDigest.objects.filter(subject=employee, has_been_delivered=False).exists():
-        digest = FeedbackDigest(subject=employee)
-        digest.save()
-        success_status_code = status.HTTP_201_CREATED
-    else:
-        digest = FeedbackDigest.objects.filter(subject=employee, has_been_delivered=False).first()
-        success_status_code = status.HTTP_204_NO_CONTENT
+class AddRemoveDigestSubmission(APIView):
+    permission_classes = (IsAuthenticated, UserIsEmployeesCoach)
 
-    serializer = AddSubmissionToDigestSerializer(data=request.data)
+    def get_employee(self):
+        try:
+            return Employee.objects.get(pk=self.kwargs['employee_id'])
+        except Employee.DoesNotExist:
+            raise Http404()
 
-    if serializer.is_valid():
-        digest.submissions.add(serializer.validated_data['submission'])
-        return Response(status=success_status_code)
-    return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def get_digest(self):
+        employee = self.get_employee()
+        if not FeedbackDigest.objects.filter(subject=employee, has_been_delivered=False).exists():
+            digest = FeedbackDigest(subject=employee)
+            digest.save()
+        else:
+            digest = FeedbackDigest.objects.filter(subject=employee, has_been_delivered=False).first()
+        return digest
 
+    def post(self, request, employee_id):
+        digest = self.get_digest()
+        serializer = AddRemoveSubmissionToDigestSerializer(data=request.data)
+        if serializer.is_valid():
+            digest.submissions.add(serializer.validated_data['submission'])
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def put(self, request, employee_id):
+        digest = self.get_digest()
+        serializer = AddRemoveSubmissionToDigestSerializer(data=request.data)
+        if serializer.is_valid():
+            digest.submissions.remove(serializer.validated_data['submission'])
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
