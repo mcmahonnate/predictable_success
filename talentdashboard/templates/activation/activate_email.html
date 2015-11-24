@@ -1,3 +1,5 @@
-{{ message }}
+Dear {{ first_name }},
 
-<a href="https://{{site}}{% url 'account_activate' uidb64=uid token=token %}">https://{{site}}{% url 'account_activate' uidb64=uid token=token %}</a>
+{{ message |safe }}
+
+<a href="{{activation_link}}">{{activation_link}}</a>
