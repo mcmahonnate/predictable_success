@@ -4,14 +4,15 @@
         <div class="modal-body">
             <panel>
                 <h3 class="modal-title">Who would you like feedback from?</h3>
-                <p style="margin:-10px 0 30px;color:#888;">You can select multiple people by clicking into the input after making each selection.</p>
+                <p class="modal-subtext">Select someone you work with on a regular basis, or who you've worked with recently.</p>
                 <ui-select
                         id="to"
                         multiple
+                        autofocus
                         ng-model="request.selectedReviewers"
                         reset-search-input="true"
                         theme="bootstrap"
-                        style="max-width:300px"
+                        style="max-width:300px;font-size:16px;"
                         >
                     <ui-select-match placeholder="Type an employee name">{{$item.full_name}}</ui-select-match>
                     <ui-select-choices
@@ -27,42 +28,37 @@
         <div class="modal-footer">
             <button ng-show="request.panel_index>0" type="button" ng-click="request.stepBack()" class="btn btn-light">&larr; Back</button>
             <button type="button" ng-click="request.cancel()" data-dismiss="modal" class="btn btn-light pull-left">Cancel</button>
-            <button ng-show="request.panel_index<3" ng-disabled="request.selectedReviewers.length==0" type="button" class="btn btn-success" ng-click="request.stepNext()">Questions &rarr;</button>
+            <button ng-show="request.panel_index<3" ng-disabled="!request.selectedReviewers" type="button" class="btn btn-success" ng-click="request.stepNext()">Questions &rarr;</button>
         </div>
     </div>
-    <div class="form-group" ng-show="request.panel_index==1"> 
+    <div class="form-group" ng-show="request.panel_index==1">
         <div class="modal-body">
             <panel>
-                <h3 class="modal-title hide">People you've selected: <span class="selected-change-link" ng-click="request.stepBack()">Change</span></h3>      
-                <div class="hide selected-requested-people-container">
-                    <div class="selected-requested-people" ng-repeat="reviewer in request.selectedReviewers">
-                        <span class="tiny-headshot">
-                            <img ng-src="{{ reviewer.avatar_small }}" alt="{{ reviewer.full_name }}'s avatar" />
-                        </span>  
-                        <span class="selected-requested-name">{{ reviewer.full_name }}</span>
-                    </div>
-                </div>    
-                <h3 class="modal-title">Questions we'll ask:</h3>
-                <p>
-                    <ol class="modal-question-list">
-                        <li>{{ request.questions.excelsAtQuestion }}</li>
-                        <li>{{ request.questions.couldImproveOnQuestion }}</li>
-                    </ol>
-                </p>
-                <p>Add a few notes below on specific areas you'd like feedback on from the people you've selected. (optional)</p>
-                <textarea
-                    ng-model="request.message"
-                    msd-elastic
-                    class="form-control edit-textarea" style="min-height:80px">
-                </textarea>
-            </panel>
-        </div> 
+                <h3 class="modal-title">Feedback Questions</h3>
+                <p class="modal-subtext">Here's the two questions we'll ask the people you select.</p>
+                <ol class="modal-question-list">
+                    <li>{{ request.questions.excelsAtQuestion }} <span class="focus-areas">(Please focus on <span ng-class="highlight ? 'flash' : ''">{{ areas }}</span>)</span></li>
+                    <li>{{ request.questions.couldImproveOnQuestion }} <span class="focus-areas">(Please focus on <span ng-class="highlight ? 'flash' : ''">{{ areas }}</span>)</span></li>
+                </ol>
+                <h4>Add focus areas (optional)</h4> 
+                <p style="margin:-10px 0 15px;color:#888;">Adding specific areas makes your feedback more useful.</p>   
+                
+                <input 
+                    name="focusAreas" 
+                    ng-keyup="highlightFocusAreas(); areas=request.message"
+                    ng-model="request.message" 
+                    style="max-width:350px; margin-bottom: 25px;" 
+                    class="form-control edit-textarea" 
+                    placeholder="Examples: code quality, recent campaign, etc..." 
+                    />
+            </panel>    
+        </div>    
         <div class="modal-footer">
             <button ng-show="request.panel_index>0" type="button" ng-click="request.stepBack()" class="btn btn-light">&larr; Back</button>
-            <button type="button" ng-click="request.cancel()" class="btn btn-light pull-left">Cancel</button>
-            <button ng-show="request.panel_index<3" ng-disabled="request.selectedReviewers.length==0" type="button" class="btn btn-success" ng-click="request.stepNext()">Choose Coach &rarr;</button>
+            <button type="button" ng-click="request.cancel()" data-dismiss="modal" class="btn btn-light pull-left">Cancel</button>
+            <button ng-show="request.panel_index<3" ng-disabled="request.selectedReviewers.length==0" type="button" class="btn btn-success" ng-click="request.stepNext()">Choose coach &rarr;</button>
         </div>
-    </div>    
+    </div>
     <div class="form-group" ng-show="request.panel_index==2">    
         <div class="modal-body">
             <panel>
@@ -103,16 +99,20 @@
                     </div> 
                 </div>    
                 <div class="confirmation-block">
-                    <h4>Specific areas you'd like feedback on <span class="selected-change-link" ng-click="request.panel_index=1">Change</span></h4>
-                    <p style="white-space:pre-line">{{ request.message }}<span ng-show="!request.message">Crickets...</span></p>
+                    <h4>Questions <span class="selected-change-link" ng-click="request.panel_index=1">Change</span></h4>
+                    <ol class="modal-question-list" style="margin-bottom:0">
+                        <li>{{ request.questions.excelsAtQuestion }} <span class="focus-areas">(Please focus on: {{ request.message }}<a href="" ng-click="request.panel_index=1" ng-show="!request.message">Add</a>)</span></li>
+                        <li>{{ request.questions.couldImproveOnQuestion }} <span class="focus-areas">(Please focus on: {{ request.message }}<a ng-click="request.panel_index=1" ng-show="!request.message">Add</a>)</span></li>
+                    </ol>    
                 </div>
-                <div class="confirmation-block">    
+                <div class="confirmation-block" style="border-bottom:0;margin-bottom:0">    
                     <h4>Your Feedback Coach <span class="selected-change-link" ng-click="request.panel_index=2">Change</span></h4>
                     <span class="tiny-headshot">
                         <img ng-src="{{request.currentCoach.avatar_small}}" alt="{{request.currentCoach.full_name}}" class="headshot-image">
                     </span>
                     <span class="feedback-coach-name">{{request.currentCoach.full_name}}</span>
-                </div>    
+                </div> 
+                <br />   
             </panel>
         </div>
         <div class="modal-footer">

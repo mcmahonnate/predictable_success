@@ -87,7 +87,7 @@ function FeedbackController(FeedbackRequestService, FeedbackDigestService, Feedb
         });
         modalInstance.result.then(
             function (sentFeedbackRequests) {
-                getMyRecentlySentRequests();
+                getMyRecentlySentRequests(); 
             }
         );
     }

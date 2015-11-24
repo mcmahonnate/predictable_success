@@ -45,8 +45,8 @@
          -o-animation: fadeout 1s; /* Opera < 12.1 */
             animation: fadeout 1s;
 
-    animation-delay:5s;
-    -webkit-animation-delay:5s; /* Safari and Chrome */
+    animation-delay:10s;
+    -webkit-animation-delay:10s; /* Safari and Chrome */
     -webkit-animation-fill-mode: forwards;
 
 }
@@ -112,4 +112,44 @@
     .carousel-control {
         z-index: 2;
     }
+}
+
+.flash {
+  -moz-animation: flash 2s ease-out;
+  -moz-animation-iteration-count: 1;
+
+  -webkit-animation: flash 2s ease-out;
+  -webkit-animation-iteration-count: 1;
+
+  -ms-animation: flash 2s ease-out;
+  -ms-animation-iteration-count: 1;
+}
+
+@-webkit-keyframes flash {
+    0% { background-color: none; }
+    50% { background-color: #fbf22b; }
+    100% { background-color: none; }
+}
+
+@-moz-keyframes flash {
+    0% { background-color: none; }
+    50% { background-color: #fbf22b; }
+    100% { background-color: none; }
+}
+
+@-ms-keyframes flash {
+    0% { background-color: none; }
+    50% { background-color: #fbf22b; }
+    100% { background-color: none; }
+}
+
+
+.changing-animation {
+    -webkit-transition: 0.5s linear all;
+    transition: 0.5s linear all;
+    background-color: none;
+}
+
+.changing-animation.on {
+    background-color: #33C3F0;
 }

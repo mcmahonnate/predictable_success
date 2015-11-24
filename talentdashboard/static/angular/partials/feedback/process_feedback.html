@@ -25,8 +25,8 @@
                                 </div>
                                 <div class="comment-editor" ng-show="!processFeedback.submission.has_been_delivered || processFeedback.submission.excels_at_summarized.length">
                                     <div class="comment-reply-copy" style="padding: 10px; background-color: #efefef; border-radius: 5px">
-                                        <span style="margin: 0 0 10px 10px">Your Summary</span>
-                                        <textarea id="excels_at_summarized" ng-show="!processFeedback.submission.has_been_delivered" placeholder="Summarize Feedback..." name="excels_at_summarized" ng-model="processFeedback.submission.excels_at_summarized" class="form-control msd-elastic" style="margin: 5px; width: 98%;" rows="1"></textarea>
+                                        <span style="margin: 0 0 10px 10px">Summarize</span>
+                                        <textarea ng-show="!processFeedback.submission.has_been_delivered" placeholder="If {{ processFeedback.submission.reviewer.first_name }} has asked that you summarize their feedback you can do that here." name="excels_at_summarized" ng-model="processFeedback.submission.excels_at_summarized" class="form-control msd-elastic" style="margin: 5px; width: 98%;" rows="1"></textarea>
                                         <div ng-show="processFeedback.submission.has_been_delivered">
                                             <div class="comment-summarized">{{ processFeedback.submission.excels_at_summarized }}</div>
                                         </div>
@@ -52,8 +52,8 @@
                                 </div>
                                 <div class="comment-editor" ng-show="!processFeedback.submission.has_been_delivered || processFeedback.submission.could_improve_on_summarized.length">
                                     <div class="comment-reply-copy" style="padding: 10px; background-color: #efefef; border-radius: 5px">
-                                        <span style="margin: 0 0 10px 10px">Your Summary</span>
-                                        <textarea ng-show="!processFeedback.submission.has_been_delivered" placeholder="Summarize Feedback..." name="could_improve_on_summarized" ng-model="processFeedback.submission.could_improve_on_summarized" msd-elastic class="form-control" style="min-height: 15px; margin: 5px; width: 98%;" rows="1"></textarea>
+                                        <span style="margin: 0 0 10px 10px">Summarize</span>
+                                        <textarea ng-show="!processFeedback.submission.has_been_delivered" placeholder="If {{ processFeedback.submission.reviewer.first_name }} has asked that you summarize their feedback you can do that here." name="could_improve_on_summarized" ng-model="processFeedback.submission.could_improve_on_summarized" msd-elastic class="form-control" style="min-height: 15px; margin: 5px; width: 98%;" rows="1"></textarea>
                                         <div ng-show="processFeedback.submission.has_been_delivered">
 
                                             <div class="comment-summarized">{{ processFeedback.submission.could_improve_on_summarized }}</div>

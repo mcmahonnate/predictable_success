@@ -13,7 +13,7 @@
             <a href="" ng-click="feedback.giveUnsolicitedFeedback()">give someone feedback</a>.""
         </h2>
     </div>    
-    <div class="alert alert-success foo" role="alert" ng-show="successMessage">
+    <div class="alert alert-success fade-out" role="alert" ng-show="successMessage">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <i class="fa fa-paper-plane sent-icon"></i>
         <h2>Congratulations!</h2>
@@ -125,6 +125,7 @@
     </div>
     <div style="padding-top:20px" ng-repeat="digest in feedback.myDigests | orderBy:'delivery_date':true">
         <div class="panel">
+            <a id="digest{{ digest.id }}"></a>
             <h2 class="panel-title" style="margin-bottom:0">360 Feedback- {{ digest.delivery_date | date:'longDate' }}</h2>
             <span style="color: #aaa;font-style: italic;">Delivered by: {{ digest.delivered_by.full_name }}</span>
             <div ng-show="digest.summary">
@@ -192,4 +193,4 @@
         </div>
     </div>
     <div ng-include="'/static/angular/partials/feedback/_modals/welcome-message.html'"></div>
-</div>    
+</div>

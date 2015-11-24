@@ -2,10 +2,10 @@
         .module('feedback')
         .controller('RequestFeedbackController', RequestFeedbackController);
 
-    function RequestFeedbackController(FeedbackRequestService, CoachService, Notification, $modal, $modalInstance, $rootScope) {
+    function RequestFeedbackController(FeedbackRequestService, CoachService, Notification, $modal, $timeout, $modalInstance, $rootScope) {
         var vm = this;
         vm.potentialReviewers = [];
-        vm.selectedReviewers = [];
+        //vm.selectedReviewers = [];
         vm.message = '';
         vm.currentCoach = null;
         vm.sendFeedbackRequests = sendFeedbackRequests;
@@ -20,6 +20,7 @@
             couldImproveOnQuestion: $rootScope.customer.feedback_could_improve_on_question
         };
         vm.tips = $rootScope.customer.feedback_tips;
+        $rootScope.highlightFocusAreas = highlightFocusAreas;
 
         activate();
 
@@ -28,6 +29,13 @@
             getCurrentCoach();
         }
 
+        function highlightFocusAreas(){
+            $rootScope.highlight = true;
+            $timeout(function() {
+                $rootScope.highlight = false;
+            }, 2000);
+        };
+
         function getPotentialReviewers() {
             return FeedbackRequestService.getPotentialReviewers()
                 .then(function (data) {
@@ -35,6 +43,7 @@
                     return vm.potentialReviewers;
                 });
         }
+
 
         function sendFeedbackRequests() {
             vm.enableSend = false;
