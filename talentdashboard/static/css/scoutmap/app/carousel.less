@@ -1,9 +1,17 @@
 .carousel {
-    padding: 20px;
+    padding: 15px;
+
+    .headshot {
+        width: 60px;
+        height: 60px;
+        border: 2px;
+        margin-top: 4px;
+    }
 }
 .carousel h3{
-    line-height: 26px;
+    line-height: 24px;
     margin-bottom: 20px;
+    font-size:16px
 }
 .carousel .headshot {
     margin-right: 10px;
@@ -13,6 +21,8 @@
     font-weight: bold;
     display: block;
     padding-top: 5px;
+    float: left;
+    max-width: 180px;
 }
 .carousel cite .role {
     display: block;
@@ -21,4 +31,23 @@
 }
 .carousel-indicators {
     bottom: -5px;
+}
+.carousel-controls {
+    margin-top: 30px;
+    font-size:12px;
+
+    a {
+        margin-right:5px;
+    }
+}
+.slack-chat-link {
+    font-weight: normal;
+    font-size: 14px;
+    background: transparent url("/static/images/slacklogo.png");
+    background-size: 15px;
+    background-repeat: no-repeat;
+    padding-left: 18px;
+    display: block;
+    margin-top: 6px;
+    background-position: 0px;
 }

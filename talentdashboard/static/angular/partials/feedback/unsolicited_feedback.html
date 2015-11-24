@@ -3,7 +3,7 @@
         <a href="" ng-click="submitFeedback.goTo('feedback')">Feedback</a> 
         <span ng-show="submitFeedback.subject">&raquo; for</span> 
         {{ submitFeedback.subject.full_name }} 
-        <a ng-show="submitFeedback.subject" href="" data-toggle="modal" data-target=".modal" class="change">Change</a>
+        <a ng-show="submitFeedback.subject" href="" data-toggle="modal" data-target=".modal" class="change">Change Person</a>
     </h1>   
     <div class="row">
         <div class="col-md-8">
@@ -28,20 +28,26 @@
     $(document).ready(function(){
 
         setTimeout(function(){
+
+            /* Start carousel */
             $('.carousel').carousel({
               interval: 20000
+            });
+
+            /* Next tip */
+            $('.control-next').bind('click', function(e) {
+                e.preventDefault();
+                $('.carousel').carousel('next');
+            });
+
+            /* Prev tip */
+            $('.control-prev').bind('click', function(e) {
+                e.preventDefault();
+                $('.carousel').carousel('prev');
             });
         }, 2000);
 
         $('.carousel').carousel('cycle');
-
-        $('.control-prev').click(function() {
-            $('.carousel').carousel('prev');
-        });
-
-        $('.control-next').click(function() {
-            $('.carousel').carousel('next');
-        });
     });    
 </script>
 
@@ -50,8 +56,8 @@
     .form-group {margin-bottom: 15px;}
     .form-control {margin-top: 10px;}
     .form-group label {
-        font-size: 15px;
-        margin-bottom: 5px;
+        font-size: 16px;
+        margin-bottom: 0;
     }
     .form-group textarea {
         margin-bottom: 35px;

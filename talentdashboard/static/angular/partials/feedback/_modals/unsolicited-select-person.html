@@ -10,8 +10,8 @@
             <form id="feedback-modal" novalidate="novalidate">
                 <a ng-show="submitFeedback.subject" class="close" href="#/feedback" data-dismiss="modal">&times;</a>
                 <div class="modal-body">
-                    <h3 class="modal-title">Select a person to give feedback to</h3>
-                    <p style="margin:-10px 0 30px;color:#888;">You should think of people you've worked with recently.</p>
+                    <h3 class="modal-title">Who do you want to give feedback to?</h3>
+                    <p style="margin:-10px 0 30px;color:#888;">Select someone you work with on a regular basis, or who you've worked with recently.</p>
                     <ui-select
                         id="to"
                         ng-model="submitFeedback.subject"

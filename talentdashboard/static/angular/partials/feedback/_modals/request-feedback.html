@@ -12,13 +12,13 @@
                         ng-model="request.selectedReviewers"
                         reset-search-input="true"
                         theme="bootstrap"
-                        style="max-width:300px;font-size:16px;"
+                        style="max-width:350px;font-size:16px;"
                         >
                     <ui-select-match placeholder="Type an employee name">{{$item.full_name}}</ui-select-match>
                     <ui-select-choices
                             repeat="reviewer in request.potentialReviewers | filter: {full_name: $select.search} | orderBy: 'full_name'">
                         <span class="tiny-headshot">
-                            <img ng-src="{{ reviewer.avatar_small }}" alt="{{ reviewer.full_name }}'s avatar" />
+                            <img class="headshot-image" ng-src="{{ reviewer.avatar_small }}" alt="{{ reviewer.full_name }}'s avatar" />
                         </span> 
                         <div class="names" ng-bind-html="reviewer.full_name | highlight: $select.search"></div>
                     </ui-select-choices>
@@ -37,12 +37,25 @@
                 <h3 class="modal-title">Feedback Questions</h3>
                 <p class="modal-subtext">Here's the two questions we'll ask the people you select.</p>
                 <ol class="modal-question-list">
-                    <li>{{ request.questions.excelsAtQuestion }} <span class="focus-areas">(Please focus on <span ng-class="highlight ? 'flash' : ''">{{ areas }}</span>)</span></li>
-                    <li>{{ request.questions.couldImproveOnQuestion }} <span class="focus-areas">(Please focus on <span ng-class="highlight ? 'flash' : ''">{{ areas }}</span>)</span></li>
+                    <li>
+                        {{ request.questions.excelsAtQuestion }} 
+                        <span ng-show="areas" class="focus-areas">(Please consider these areas: 
+                            <span ng-class="highlight ? 'flash' : ''">{{ areas }}</span> 
+                            <span ng-show="currentUser.employee.first_name">&mdash;{{currentUser.employee.first_name}})</span>
+                            <span ng-show="!currentUser.employee.first_name">&mdash;{{currentUser.employee.full_name}})</span>
+                        </span>
+                    </li>
+                    <li>
+                        {{ request.questions.couldImproveOnQuestion }} 
+                        <span ng-show="areas" class="focus-areas">(Please consider these areas: 
+                            <span ng-class="highlight ? 'flash' : ''">{{ areas }}</span> 
+                            <span ng-show="currentUser.employee.first_name">&mdash;{{currentUser.employee.first_name}})</span>
+                            <span ng-show="!currentUser.employee.first_name">&mdash;{{currentUser.employee.full_name}})</span>
+                        </span>
+                    </li>
                 </ol>
                 <h4>Add focus areas (optional)</h4> 
-                <p style="margin:-10px 0 15px;color:#888;">Adding specific areas makes your feedback more useful.</p>   
-                
+                <p style="margin:-10px 0 15px;color:#888;">Adding focus areas makes your feedback more useful.</p>   
                 <input 
                     name="focusAreas" 
                     ng-keyup="highlightFocusAreas(); areas=request.message"
@@ -92,7 +105,7 @@
                     <div class="selected-requested-people-container">
                         <div class="selected-requested-people" ng-repeat="reviewer in request.selectedReviewers">
                             <span class="tiny-headshot">
-                                <img ng-src="{{ reviewer.avatar_small }}" alt="{{ reviewer.full_name }}'s avatar" />
+                                <img ng-src="{{ reviewer.avatar_small }}" alt="{{ reviewer.full_name }}'s avatar" class="headshot-image" />
                             </span>  
                             <span class="selected-requested-name">{{ reviewer.full_name }}</span>
                         </div>
@@ -101,8 +114,22 @@
                 <div class="confirmation-block">
                     <h4>Questions <span class="selected-change-link" ng-click="request.panel_index=1">Change</span></h4>
                     <ol class="modal-question-list" style="margin-bottom:0">
-                        <li>{{ request.questions.excelsAtQuestion }} <span class="focus-areas">(Please focus on: {{ request.message }}<a href="" ng-click="request.panel_index=1" ng-show="!request.message">Add</a>)</span></li>
-                        <li>{{ request.questions.couldImproveOnQuestion }} <span class="focus-areas">(Please focus on: {{ request.message }}<a ng-click="request.panel_index=1" ng-show="!request.message">Add</a>)</span></li>
+                        <li>
+                            {{ request.questions.excelsAtQuestion }} 
+                            <span ng-show="areas" class="focus-areas">(Please consider these areas: 
+                                <span ng-class="highlight ? 'flash' : ''">{{ areas }}</span> 
+                                <span ng-show="currentUser.employee.first_name">&mdash;{{currentUser.employee.first_name}})</span>
+                                <span ng-show="!currentUser.employee.first_name">&mdash;{{currentUser.employee.full_name}})</span>
+                            </span>
+                        </li>
+                        <li>
+                            {{ request.questions.couldImproveOnQuestion }} 
+                            <span ng-show="areas" class="focus-areas">(Please consider these areas: 
+                                <span ng-class="highlight ? 'flash' : ''">{{ areas }}</span> 
+                                <span ng-show="currentUser.employee.first_name">&mdash;{{currentUser.employee.first_name}})</span>
+                                <span ng-show="!currentUser.employee.first_name">&mdash;{{currentUser.employee.full_name}})</span>
+                            </span>
+                        </li>
                     </ol>    
                 </div>
                 <div class="confirmation-block" style="border-bottom:0;margin-bottom:0">    
