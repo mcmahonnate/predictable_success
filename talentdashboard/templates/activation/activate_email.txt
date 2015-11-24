@@ -1,3 +1,5 @@
-{{ message }}
+Dear {{ first_name }},
 
-https://{{site}}{% url 'account_activate' uidb64=uid token=token %}
+{{ message |safe }}
+
+{{activation_link}}
