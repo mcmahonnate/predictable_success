@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module('tdb.directives', ['ngTouch'])
+angular.module('tdb.directives', ['ngTouch','ngAnimate'])
 
 .directive('mySlideController', ['$swipe', function($swipe) {
     return {

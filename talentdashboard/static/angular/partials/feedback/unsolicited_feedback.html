@@ -14,7 +14,11 @@
             </div>
         </div>
         <div class="col-md-4"> 
-            <div ng-bind-html="customer.feedback_tips"></div>         
+            <div class="panel">
+                <div class="panel-body">
+                    <div ng-bind-html="customer.feedback_tips"></div>
+                </div>
+            </div>        
         </div>   
     </div>
 </div>    
@@ -30,6 +34,14 @@
         }, 2000);
 
         $('.carousel').carousel('cycle');
+
+        $('.control-prev').click(function() {
+            $('.carousel').carousel('prev');
+        });
+
+        $('.control-next').click(function() {
+            $('.carousel').carousel('next');
+        });
     });    
 </script>
 
@@ -43,32 +55,6 @@
     }
     .form-group textarea {
         margin-bottom: 35px;
-    }
-
-
-    .carousel h3{
-        line-height: 26px;
-        margin-bottom: 20px;
-    }
-    .carousel {
-        padding: 50px;
-    }
-    .carousel .headshot {
-        margin-right: 10px;
-    }
-    .carousel cite {
-        font-size: 16px;
-        font-weight: bold;
-        display: block;
-        padding-top: 5px;
-    }
-    .carousel cite .role {
-        display: block;
-        font-weight: normal;
-        font-size: 14px;
-    }
-    .carousel-indicators {
-        bottom: -5px;
     }
 
 </style>

@@ -2,22 +2,17 @@
         .module('feedback')
         .controller('UnsolicitedFeedbackController', UnsolicitedFeedbackController);
 
-    function UnsolicitedFeedbackController($location, $modal, $scope, $rootScope, analytics, Notification, FeedbackSubmissionService) {
+    function UnsolicitedFeedbackController($location, $modal, $scope, $rootScope, $timeout, analytics, Notification, FeedbackSubmissionService) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         BaseSubmitFeedbackController.call(this, $location, $modal, $rootScope);
         
         var vm = this;
-        var successMessageGreetings = [{greeting: "Nice job!"},{greeting: "Excellent!"},{greeting: "Alright, alright!"}];
         vm.employees = [];
         vm.subject = null;
         vm.goTo = goTo;
         activate();
  
-        function randomGreeting(){
-            $rootScope.greeting = successMessageGreetings[Math.floor(Math.random()*successMessageGreetings.length)];
-        };
 
-   
         function goTo(path) {
             var cancel = confirm("Are you sure you want to lose all the great feedback you've already written?");
             if (cancel == true) {
@@ -47,6 +42,12 @@
                     //Notification.success('Your feedback was saved.');
                     $rootScope.successMessage = true;
                     $rootScope.successMessageRecipient = vm.subject;
+                    
+                    $timeout(function() {
+                        $rootScope.successMessage = false;
+                    }, 10000);
+
+                    
                 })
                 .catch(function(response) {
                     Notification.error('An error occurred when saving your feedback. Please try again.');
