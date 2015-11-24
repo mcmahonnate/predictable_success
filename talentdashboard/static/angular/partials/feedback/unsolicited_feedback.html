@@ -27,26 +27,22 @@
 <script type="text/javascript">   
     $(document).ready(function(){
 
+        /* TODO: move to angular */
         setTimeout(function(){
 
             /* Start carousel */
             $('.carousel').carousel({
               interval: 20000
             });
-
-            /* Next tip */
-            $('.control-next').bind('click', function(e) {
+            $('.control-next').bind('click', function(e) { /* Next tip */
                 e.preventDefault();
                 $('.carousel').carousel('next');
             });
-
-            /* Prev tip */
-            $('.control-prev').bind('click', function(e) {
+            $('.control-prev').bind('click', function(e) { /* Prev tip */
                 e.preventDefault();
                 $('.carousel').carousel('prev');
             });
         }, 2000);
-
         $('.carousel').carousel('cycle');
     });    
 </script>

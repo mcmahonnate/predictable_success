@@ -15,11 +15,35 @@
         </div>             
     </div>    
 </div>
+
+<script type="text/javascript">   
+    $(document).ready(function(){
+
+        /* TODO: move to angular */
+        setTimeout(function(){
+
+            /* Start carousel */
+            $('.carousel').carousel({
+              interval: 20000
+            });
+            $('.control-next').bind('click', function(e) { /* Next tip */
+                e.preventDefault();
+                $('.carousel').carousel('next');
+            });
+            $('.control-prev').bind('click', function(e) { /* Prev tip */
+                e.preventDefault();
+                $('.carousel').carousel('prev');
+            });
+        }, 2000);
+        $('.carousel').carousel('cycle');
+    });    
+</script>
+
 <style>
     .form-group {margin-bottom: 15px;}
     .form-control {margin-top: 10px;}
     .form-group label {
-        font-size: 15px;
+        font-size: 16px;
         margin-bottom: 5px;
     }
     .form-group textarea {
