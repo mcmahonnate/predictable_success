@@ -10,6 +10,7 @@
                 feedback: '=',
                 questions: '=',
                 subject: '=',
+                message: '=',
                 submit: '&',
                 toggle: '&',
                 cancel: '&'

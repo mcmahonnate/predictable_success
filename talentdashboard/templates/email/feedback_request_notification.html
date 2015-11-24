@@ -8,15 +8,6 @@
         <p>
             {{ requester_full_name }} has asked you for feedback.
         </p>
-        {% if custom_message %}
-            <p>
-            Here are the specific areas they'd like feedback on:
-            </p>
-            <p>
-            "{{ custom_message }}"
-            <p>
-        {% endif %}
-
         <p>
             To leave feedback for {{ requester_full_name }}, please visit this page: <a href="{{ response_url }}">{{ response_url }}</a>
         </p>

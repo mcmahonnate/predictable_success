@@ -23,7 +23,7 @@
 
                 <!-- Edit button -->
                 <a ng-show="view != 'delivered-view'" ng-href="#/feedback/submission/{{ submission.id }}/process" class="btn btn-xs btn-default pull-right"><i class="fa fa-pencil"></i> Edit</a>
-                <a ng-show="view == 'delivered-view'" ng-href="#/feedback/submission/{{ submission.id }}/process" class="btn btn-xs btn-default pull-right"><i class="fa fa-eye"></i> View</a>
+                <a ng-show="view == 'delivered-view'" ng-href="#/feedback/submission/{{ submission.id }}/process" class="btn btn-xs btn-default pull-right hide-for-print"><i class="fa fa-eye"></i> View</a>
 
                 <!-- Headshot -->
                 <div ng-show="!submission.anonymous" class="pull-left">

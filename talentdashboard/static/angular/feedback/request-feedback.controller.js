@@ -6,6 +6,7 @@
         var vm = this;
         vm.potentialReviewers = [];
         //vm.selectedReviewers = [];
+        vm.subject = $rootScope.currentUser.employee;
         vm.message = '';
         vm.currentCoach = null;
         vm.sendFeedbackRequests = sendFeedbackRequests;
