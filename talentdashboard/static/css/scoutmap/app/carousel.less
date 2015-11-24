@@ -36,9 +36,40 @@
     margin-top: 30px;
     font-size:12px;
 
-    a {
-        margin-right:5px;
+    a.submit-tip {
+        margin: 20px 0 0;
+        border: 1px solid #ccc;
+        padding: 7px 10px;
+        border-radius: 20px;
+        color: #aaa;
+        display: inline-block;
     }
+    a.submit-tip:hover {
+        background: #fafafa;
+        text-decoration: none;
+    }
+
+    .control-prev, .control-next {
+        position: absolute;
+        top: -15px;
+        right: 1px;
+        font-size: 9px;
+        color: #ddd;
+        width: 15px;
+        height: 15px;
+        line-height: 0;
+        padding: 6px 3.5px 6px 3.5px;
+        font-weight: bold;
+        border: 1px solid #eee;
+        border-radius: 50px;
+    }
+    .control-next {
+       right: -15px; 
+    }
+    .control-prev:hover, .control-next:hover {
+        background: #fafafa;
+        text-decoration: none;
+    } 
 }
 .slack-chat-link {
     font-weight: normal;
