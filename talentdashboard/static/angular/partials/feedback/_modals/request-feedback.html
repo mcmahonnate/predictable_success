@@ -105,7 +105,7 @@
                     <div class="selected-requested-people-container">
                         <div class="selected-requested-people" ng-repeat="reviewer in request.selectedReviewers">
                             <span class="tiny-headshot">
-                                <img ng-src="{{ reviewer.avatar_small }}" alt="{{ reviewer.full_name }}'s avatar" class="headshot-image" />
+                                <img class="headshot-image" ng-src="{{ reviewer.avatar_small }}" alt="{{ reviewer.full_name }}'s avatar" class="headshot-image" />
                             </span>  
                             <span class="selected-requested-name">{{ reviewer.full_name }}</span>
                         </div>
@@ -135,7 +135,7 @@
                 <div class="confirmation-block" style="border-bottom:0;margin-bottom:0">    
                     <h4>Your Feedback Coach <span class="selected-change-link" ng-click="request.panel_index=2">Change</span></h4>
                     <span class="tiny-headshot">
-                        <img ng-src="{{request.currentCoach.avatar_small}}" alt="{{request.currentCoach.full_name}}" class="headshot-image">
+                        <img class="headshot-image" ng-src="{{request.currentCoach.avatar_small}}" alt="{{request.currentCoach.full_name}}" class="headshot-image">
                     </span>
                     <span class="feedback-coach-name">{{request.currentCoach.full_name}}</span>
                 </div> 
