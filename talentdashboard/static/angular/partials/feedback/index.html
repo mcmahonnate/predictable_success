@@ -1,6 +1,9 @@
 <div id="feedback" class="container">
     <div>
-        <a href="" data-toggle="modal" data-target=".feedback-welcome-modal" class="pull-right show-welcome-modal">Show welcome message</a>
+        <div class="header-links pull-right">
+            <i class="fa fa-sticky-note-o"></i> <a href="" data-toggle="modal" data-target=".feedback-welcome-modal" class="show-welcome-modal">Show welcome message</a> | 
+            <i class="fa fa-comments"></i> <a target="_blank" href="https://fool.slack.com/messages/scoutmap-feedback/">Have app feedback?</a>
+        </div>
         <h1>Feedback
             <button class="btn btn-success btn-feedback" ng-click="feedback.requestFeedback()" type="button"><i class="fa fa-comment"></i> Ask for Feedback</button>
             <button class="btn btn-success btn-feedback" ng-click="feedback.giveUnsolicitedFeedback()" type="button"><i class="fa fa-pencil"></i> Give Feedback</button>
@@ -41,7 +44,7 @@
                         <span class="tiny-headshot">
                             <img class="headshot-image" ng-src="{{ request.requester.avatar_small }}" alt="{{ request.requester.full_name }}'s avatar" />
                         </span>  
-                        <span class="sensitive-text">{{ request.requester.full_name }}</span>
+                        <span>{{ request.requester.full_name }}</span>
                     </td>
                     <td class="timeago">{{ request.request_date | fromNow }}</td>
                     <td class="message">{{ request.message }}</td>    
@@ -74,7 +77,7 @@
                         <span class="tiny-headshot">
                             <img class="headshot-image" ng-src="{{ request.reviewer.avatar_small }}" alt="{{ request.reviewer.full_name }}'s avatar" />
                         </span>
-                        <span class="sensitive-text">{{ request.reviewer.full_name }}</span>
+                        <span>{{ request.reviewer.full_name }}</span>
                     </td>
                     <td class="timeago">
                         {{ request.request_date | fromNow }}
@@ -104,7 +107,7 @@
                 <tr ng-repeat="submission in feedback.mySubmissions | reverse">
                     <td>
                         <span class="tiny-headshot">
-                            <img ng-src="{{ submission.subject.avatar_small }}" alt="{{ submission.subject.full_name }}'s avatar" />
+                            <img class="headshot-image" ng-src="{{ submission.subject.avatar_small }}" alt="{{ submission.subject.full_name }}'s avatar" />
                         </span>
                         {{ submission.subject.full_name }}
                     </td>
@@ -144,7 +147,7 @@
                     <tr ng-repeat="submission in digest.submissions">
                         <td ng-show="!submission.anonymous">
                             <span class="tiny-headshot">
-                                <img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
+                                <img class="headshot-image" ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
                             </span>
                             {{ submission.reviewer.full_name }}
                             {{ submission.requester.full_name }}
@@ -173,7 +176,7 @@
                     <tr ng-repeat="submission in digest.submissions">
                         <td ng-show="!submission.anonymous">
                             <span class="tiny-headshot">
-                                <img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
+                                <img class="headshot-image" ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
                             </span>
                             {{ submission.reviewer.full_name }}
                             {{ submission.requester.full_name }}

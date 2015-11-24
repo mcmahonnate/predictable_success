@@ -1,0 +1,25 @@
+/* Use this class to hide elements intented for printing only */
+.show-for-print {
+    display: none;
+}
+
+/* Print styles */
+@media print {
+    .hide-for-print, nav, .btn, .account-menu {
+        display: none;
+    }
+    .full-width-column-print {
+        width: 100%;
+    }
+    .show-for-print {
+        display: block;
+    }
+    .container {
+        padding: 0;
+    }
+    .page-break { 
+        display: block; 
+        page-break-before: always; 
+        padding-top: 45px;
+    }
+}
