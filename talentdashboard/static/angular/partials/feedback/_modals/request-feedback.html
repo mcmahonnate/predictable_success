@@ -37,8 +37,8 @@
                 <h3 class="modal-title">Feedback Questions</h3>
                 <p class="modal-subtext">Here's the two questions we'll ask the people you select.</p>
                 <ol class="modal-question-list">
-                    <li>{{ request.questions.excelsAtQuestion }} <span class="focus-areas">(Please focus on <span ng-class="highlight ? 'flash' : ''">{{ areas }}</span>)</span></li>
-                    <li>{{ request.questions.couldImproveOnQuestion }} <span class="focus-areas">(Please focus on <span ng-class="highlight ? 'flash' : ''">{{ areas }}</span>)</span></li>
+                    <li>{{ request.questions.excelsAtQuestion }} <span class="focus-areas">(Please consider these areas: <span ng-class="highlight ? 'flash' : ''">{{ areas }}</span>)</span></li>
+                    <li>{{ request.questions.couldImproveOnQuestion }} <span class="focus-areas">(Please consider these areas: <span ng-class="highlight ? 'flash' : ''">{{ areas }}</span>)</span></li>
                 </ol>
                 <h4>Add focus areas (optional)</h4> 
                 <p style="margin:-10px 0 15px;color:#888;">Adding specific areas makes your feedback more useful.</p>   
@@ -101,8 +101,8 @@
                 <div class="confirmation-block">
                     <h4>Questions <span class="selected-change-link" ng-click="request.panel_index=1">Change</span></h4>
                     <ol class="modal-question-list" style="margin-bottom:0">
-                        <li>{{ request.questions.excelsAtQuestion }} <span class="focus-areas">(Please focus on: {{ request.message }}<a href="" ng-click="request.panel_index=1" ng-show="!request.message">Add</a>)</span></li>
-                        <li>{{ request.questions.couldImproveOnQuestion }} <span class="focus-areas">(Please focus on: {{ request.message }}<a ng-click="request.panel_index=1" ng-show="!request.message">Add</a>)</span></li>
+                        <li>{{ request.questions.excelsAtQuestion }} <span class="focus-areas">(Please consider these areas: {{ request.message }}<a href="" ng-click="request.panel_index=1" ng-show="!request.message">Add</a>)</span></li>
+                        <li>{{ request.questions.couldImproveOnQuestion }} <span class="focus-areas">(Please consider these areas: {{ request.message }}<a ng-click="request.panel_index=1" ng-show="!request.message">Add</a>)</span></li>
                     </ol>    
                 </div>
                 <div class="confirmation-block" style="border-bottom:0;margin-bottom:0">    
