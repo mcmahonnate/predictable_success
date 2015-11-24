@@ -15,6 +15,7 @@
         vm.printDigest = printDigest;
         vm.showProgressReport = true;
         vm.coach = $rootScope.currentUser.employee;
+        vm.employee = null;
         vm.questions = {
             excelsAtQuestion: $rootScope.customer.feedback_excels_at_question,
             couldImproveOnQuestion: $rootScope.customer.feedback_could_improve_on_question
@@ -30,15 +31,19 @@
             return FeedbackDigestService.getCurrentDigestForEmployee(vm.employeeId)
                 .then(function (data) {
                     vm.digest = data;
-                    vm.coach= vm.digest.delivered_by ? vm.digest.delivered_by : $rootScope.currentUser.employee;
+                    vm.coach = vm.digest.delivered_by ? vm.digest.delivered_by : $rootScope.currentUser.employee;
                     return vm.digest;
-                });
+                })
+                .catch(function() {
+                    vm.coach = $rootScope.currentUser.employee;
+                });;
         }
 
         function getFeedbackProgressReport() {
             return FeedbackRequestService.getFeedbackProgressReportForEmployee(vm.employeeId)
                 .then(function (data) {
                     vm.progressReport = data;
+                    vm.employee = vm.progressReport.employee;
                     if (vm.progressReport.all_submissions_not_delivered_and_not_in_digest.length>0 ||
                         vm.progressReport.unanswered_requests.length>0) {
                         vm.showProgressReport = true;
