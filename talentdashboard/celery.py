@@ -7,7 +7,7 @@ from django.conf import settings
 # os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'talentdashboard.settings')
 
 # Creates the instance of the Celery app.
-app = CeleryApp('talentdashboard',include=['feedback.tasks'],)
+app = CeleryApp('talentdashboard',include=['feedback.tasks', 'org.tasks'],)
 
 app.config_from_object('django.conf:settings')
 
