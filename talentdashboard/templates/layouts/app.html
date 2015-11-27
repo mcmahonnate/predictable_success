@@ -83,6 +83,34 @@
             <script src="{% static 'angular/apps/app-coach.js' %}"></script>
     {% endif %}
 
+
+
+<script type="text/javascript">   
+    $(document).ready(function(){
+
+        setTimeout(function(){
+
+            /* Start carousel */
+            $('.carousel').carousel({
+              interval: 20000
+            });
+
+            /* Next tip */
+            $('.control-next').bind('click', function(e) {
+                e.preventDefault();
+                $('.carousel').carousel('next');
+            });
+
+            /* Prev tip */
+            $('.control-prev').bind('click', function(e) {
+                e.preventDefault();
+                $('.carousel').carousel('prev');
+            });
+        }, 2000);
+
+        $('.carousel').carousel('cycle');
+    });    
+</script>
     <script>
     
         // Add the CSRF Token to all http requests.
