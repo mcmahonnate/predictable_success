@@ -1,12 +1,14 @@
 <div id="feedback" class="container">
     <div>
-        <div class="header-links pull-right">
+        <div class="header-links hide-for-mobile-and-tablet pull-right">
             <a href="" data-toggle="modal" data-target=".feedback-welcome-modal" class="show-welcome-modal">Show welcome message</a>
             <a target="_blank" href="https://fool.slack.com/messages/scoutmap-feedback/">Tell us what you think!</a>
         </div>
         <h1>Feedback
-            <button class="btn btn-success btn-feedback" ng-click="feedback.requestFeedback()" type="button"><i class="fa fa-comment"></i> Ask for Feedback</button>
-            <button class="btn btn-success btn-feedback" ng-click="feedback.giveUnsolicitedFeedback()" type="button"><i class="fa fa-pencil"></i> Give Feedback</button>
+            <div class="button-group">
+                <button class="btn btn-success btn-feedback" ng-click="feedback.requestFeedback()" type="button"><i class="fa fa-comment"></i> Ask <span class="hide-for-mobile">for Feedback</span></button>
+                <button class="btn btn-success btn-feedback" ng-click="feedback.giveUnsolicitedFeedback()" type="button"><i class="fa fa-pencil"></i> Give <span class="hide-for-mobile">Feedback</div></button>
+            </div>
         </h1>
     </div>  
     <div class="panel panel-empty fade-in" ng-show="feedback.showEmptyScreen">
@@ -34,7 +36,7 @@
                 <tr>
                   <th scope="col" class="width-15-percent">Person</th>
                   <th scope="col" class="width-15-percent">Sent</th>
-                  <th scope="col" class="width-40-percent">Where they'd like feedback</th>
+                  <th scope="col" class="width-40-percent hide-for-mobile-and-tablet">Where they'd like feedback</th>
                   <th scope="col" class="width-15-percent centered">Action</th>
                 </tr>
             </thead>
@@ -47,7 +49,7 @@
                         <span>{{ request.requester.full_name }}</span>
                     </td>
                     <td class="timeago">{{ request.request_date | fromNow }}</td>
-                    <td class="message">{{ request.message }}</td>    
+                    <td class="message hide-for-mobile-and-tablet">{{ request.message }}</td>    
                     <td class="right-align">
                         <a class="btn btn-default btn-md give-feedback-btn" ng-href="#/feedback/request/{{ request.id }}/reply/" type="button">
                             <i class="fa fa-pencil"></i> Give Feedback
@@ -67,7 +69,7 @@
                 <tr>
                   <th scope="col" class="width-15-percent">Person</th>
                   <th scope="col" class="width-15-percent">Sent</th>
-                  <th scope="col" class="width-40-percent">Where you'd like feedback</th>
+                  <th scope="col" class="width-40-percent hide-for-mobile-and-tablet">Where you'd like feedback</th>
                   <th scope="col" class="width-15-percent centered">Completed</th>
                 </tr>
             </thead>
@@ -82,7 +84,7 @@
                     <td class="timeago">
                         {{ request.request_date | fromNow }}
                     </td>
-                    <td class="message">
+                    <td class="message hide-for-mobile-and-tablet">
                         <p style="white-space:pre-line">{{ request.message }}</p>
                     </td>                          
                     <td class="centered">
