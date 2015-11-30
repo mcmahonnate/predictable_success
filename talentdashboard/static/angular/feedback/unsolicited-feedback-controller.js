@@ -41,13 +41,14 @@
             return FeedbackSubmissionService.giveUnsolicitedFeedback(vm.subject, vm.feedback)
                 .then(function(response) {
 
+                    /* Big succes message */
                     $rootScope.successMessage = true;
                     $rootScope.successMessageRecipient = vm.subject;
                     
                     /* Hide success message after a few seconds */
                     $timeout(function() {
-                        $rootScope.successMessage = false;
-                    }, 15000); 
+                        $rootScope.hideMessage = true;
+                    }, 10000); 
                 })
                 .catch(function(response) {
                     Notification.error('An error occurred when saving your feedback. Please try again.');

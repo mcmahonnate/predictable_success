@@ -21,6 +21,10 @@ function FeedbackController(FeedbackRequestService, FeedbackDigestService, Feedb
         excelsAtQuestion: $rootScope.customer.feedback_excels_at_question,
         couldImproveOnQuestion: $rootScope.customer.feedback_could_improve_on_question
     };
+    $rootScope.successRequestMessage = false;
+    $rootScope.hideMessage = false;
+    $rootScope.hideRequestMessage = false;
+
     activate();
 
     function activate() {

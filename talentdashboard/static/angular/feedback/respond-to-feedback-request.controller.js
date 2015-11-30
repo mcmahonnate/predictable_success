@@ -41,8 +41,15 @@
         this._submitFeedback = function() {
             return FeedbackSubmissionService.respondToFeedbackRequest(vm.feedbackRequest, vm.feedback)
                 .then(function() {
-                    Notification.success('Your feedback was saved.');
 
+                    /* Big succes message */
+                    $rootScope.successMessage = true;
+                    $rootScope.successMessageRecipient = vm.feedbackRequest.requester;
+                    
+                    /* Hide success message after 10 seconds */
+                    $timeout(function() {
+                        $rootScope.hideMessage = true;
+                    }, 15000); 
                 })
                 .catch(function() {
                     Notification.error('An error occurred when saving your feedback. Please try again.');

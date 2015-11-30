@@ -19,13 +19,24 @@
         </h2>
     </div>    
     
-    <!-- Feedback sent message -->
-    <div class="alert alert-success fade-out" role="alert" ng-show="successMessage">
+    <!-- Feedback successfully sent message -->
+    <div ng-class="{'slide-up-active': hideMessage}" class="alert alert-success slide-up" role="alert" ng-show="successMessage">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <i class="fa fa-paper-plane sent-icon"></i>
         <h2 class="alert-title">Congratulations!</h2>
         <p class="alert-message">Your feedback is in-flight and will be delivered to {{ successMessageRecipient.full_name }}'s feedback coach.</p>    
     </div>
+
+    <!-- Feedback request message -->
+    <div ng-class="{'slide-up-active': hideRequestMessage}" class="alert alert-success slide-up" role="alert" ng-show="successRequestMessage">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <i class="fa fa-paper-plane sent-icon"></i>
+        <h2 class="alert-title">Request<span ng-show="successRequestMessageRecipient.length>1">s</span> Sent!</h2>
+        <p class="alert-message">
+            Your request for feedback has been sent to 
+            <span ng-repeat="employee in successRequestMessageRecipient">{{ employee.full_name }}{{$last ? '' : ($index==successRequestMessageRecipient.length-2) ? ' and ' : ', '}}</span>.
+        </p>    
+    </div>    
 
     <div class="panel" ng-show="feedback.feedbackRequests.length>0">
         <table class="table responsive-table">
