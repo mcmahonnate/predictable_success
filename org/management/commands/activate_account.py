@@ -39,7 +39,7 @@ class Command(BaseCommand):
                 confirm = raw_input('Are you sure you want to activate all current employee accounts for %s? (Y/N):' % tenant.name)
                 if confirm == 'N':
                     return
-                activate_ids = User.objects.filter(is_active=False, employee__departure_date__isnull=True).values_list('id', flat=True)
+                activate_ids = User.objects.filter(last_login__range=["2015-11-11", "2015-11-13"], groups__isnull=True, employee__departure_date__isnull=True).values_list('id', flat=True)
                 print activate_ids
                 for activate_id in activate_ids:
                     activate(activate_id=activate_id, tenant=tenant)
