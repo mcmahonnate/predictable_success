@@ -28,7 +28,7 @@ def send_activation_email(user_id, customer_id):
         'message': tenant.activation_email,
     })
     from_email = 'Scoutmap<scoutmap@dfrntlabs.com>'
-    subject = 'Welcome to Scoutmap'
+    subject = 'Welcome to 360 Feedback with Scoutmap'
     text_content = text_template.render(context)
     html_content = html_template.render(context)
     text_content = string.replace(text_content, '[ACTIVATION LINK]', activation_link)
