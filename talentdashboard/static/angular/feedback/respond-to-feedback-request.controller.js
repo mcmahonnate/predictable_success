@@ -2,7 +2,7 @@
         .module('feedback')
         .controller('RespondToFeedbackRequestController', RespondToFeedbackRequestController);
 
-    function RespondToFeedbackRequestController($routeParams, $location, $scope, $modal, $rootScope, analytics, Notification, FeedbackRequestService, FeedbackSubmissionService) {
+    function RespondToFeedbackRequestController($routeParams, $location, $scope, $modal, $rootScope, $timeout, analytics, Notification, FeedbackRequestService, FeedbackSubmissionService) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         BaseSubmitFeedbackController.call(this, $location, $modal, $rootScope);
         var vm = this;
@@ -42,6 +42,7 @@
             return FeedbackSubmissionService.respondToFeedbackRequest(vm.feedbackRequest, vm.feedback)
                 .then(function() {
                     Notification.success('Your feedback was saved.');
+
                 })
                 .catch(function() {
                     Notification.error('An error occurred when saving your feedback. Please try again.');

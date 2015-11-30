@@ -33,11 +33,11 @@ function FeedbackController(FeedbackRequestService, FeedbackDigestService, Feedb
 
     function toggleEmptyScreenMode() {
         setTimeout(function () {
-            if(!vm.myRecentlySentRequests.length && !vm.feedbackRequests.length && !vm.mySubmissions.length && !vm.myDigests) {
+            if(vm.myRecentlySentRequests.length == 0 && vm.feedbackRequests.length == 0 && vm.mySubmissions.length == 0 && vm.myDigests == 0) {
                 $scope.$apply(function() {
                    vm.showEmptyScreen = true; 
                 });
-                console.log('Welcome to Scoutmap! "There is always space for improvement, no matter how long you’ve been in the business." -Oscar De La Hoya');
+                console.log('Hello! "There is always space for improvement, no matter how long you’ve been in the business." -Oscar De La Hoya');
             }
         }, 500);
     }

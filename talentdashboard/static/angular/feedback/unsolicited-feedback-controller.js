@@ -17,6 +17,8 @@
             var cancel = confirm("Are you sure you want to lose all the great feedback you've already written?");
             if (cancel == true) {
                 $location.path(path);
+
+                /* Cancel out and remove modal */
                 $('.modal').modal('hide');
                 $('.modal-backdrop').remove();
                 $('body').removeClass('modal-open');
@@ -39,15 +41,13 @@
             return FeedbackSubmissionService.giveUnsolicitedFeedback(vm.subject, vm.feedback)
                 .then(function(response) {
 
-                    //Notification.success('Your feedback was saved.');
                     $rootScope.successMessage = true;
                     $rootScope.successMessageRecipient = vm.subject;
                     
+                    /* Hide success message after a few seconds */
                     $timeout(function() {
                         $rootScope.successMessage = false;
-                    }, 10000);
-
-                    
+                    }, 15000); 
                 })
                 .catch(function(response) {
                     Notification.error('An error occurred when saving your feedback. Please try again.');
