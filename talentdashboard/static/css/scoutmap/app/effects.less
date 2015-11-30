@@ -1,3 +1,20 @@
+.slide-up {
+    overflow-y: hidden;
+    max-height: 500px; /* approximate max height */
+
+    transition-property: all;
+    transition-duration: .5s;
+    transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+}
+.slide-up-active {
+    max-height: 0;
+    padding: 0 20px;
+    animation: fadeout 1s;
+    margin-top: -20px;
+    -webkit-animation-fill-mode: forwards;
+}
+
+
 /* Fade in */
 .fade-in{
     -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
@@ -5,6 +22,17 @@
         -ms-animation: fadein 1s; /* Internet Explorer */
          -o-animation: fadein 1s; /* Opera < 12.1 */
             animation: fadein 1s;
+}
+.fade-in-long-delay{
+    -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: fadein 1s; /* Firefox < 16 */
+        -ms-animation: fadein 1s; /* Internet Explorer */
+         -o-animation: fadein 1s; /* Opera < 12.1 */
+            animation: fadein 1s;
+
+    animation-delay:10s;
+    -webkit-animation-delay:10s; /* Safari and Chrome */
+    -webkit-animation-fill-mode: forwards;
 }
 
 @keyframes fadein {
@@ -35,6 +63,8 @@
     from { opacity: 0; }
     to   { opacity: 1; }
 }
+
+
 
 
 /* Fade out */

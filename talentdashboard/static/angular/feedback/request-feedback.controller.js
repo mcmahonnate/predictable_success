@@ -50,7 +50,16 @@
             vm.enableSend = false;
             FeedbackRequestService.sendFeedbackRequests(vm.selectedReviewers, vm.message)
                 .then(function(sentFeedbackRequests) {
-                    Notification.success("Your feedback requests have been sent.");
+
+                    /* Big succes message */
+                    $rootScope.successRequestMessage = true;
+                    $rootScope.successRequestMessageRecipient = vm.selectedReviewers;
+                    
+                    /* Hide success message after a few seconds */
+                    $timeout(function() {
+                        $rootScope.hideRequestMessage = true;
+                    }, 10000); 
+
                     $modalInstance.close(sentFeedbackRequests)
                 });
         }

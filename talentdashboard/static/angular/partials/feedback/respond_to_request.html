@@ -7,8 +7,9 @@
             </div>
         </div> 
          <div class="col-md-4"> 
-            <div class="panel">
+            <div class="panel fade-in-long-delay">
                 <div class="panel-body">
+                    <h2 class="panel-title">Feedback Tips</h2>
                     <div ng-bind-html="customer.feedback_tips"></div>
                 </div>
             </div>  
@@ -34,6 +35,16 @@
                 e.preventDefault();
                 $('.carousel').carousel('prev');
             });
+
+            $('.form-control').focus(function() {
+                $('.carousel').carousel('pause');
+                console.log('Carousel Paused');
+            });
+            $('.form-control').blur(function() {
+                $('.carousel').carousel('cycle');
+                console.log('Carousel Start');
+            });
+
         }, 2000);
         $('.carousel').carousel('cycle');
     });    

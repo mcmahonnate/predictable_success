@@ -1,24 +1,3 @@
-.fadein > * {
-    display:none;
-}
-.simple-form-control {
-    box-shadow: none;
-    border: none;
-}
-.mobile-show {
-    display: none;
-    
-    @media only screen and (max-width : 640px) {
-        display: block; 
-    }
-}
-.mobile-hide {
-    @media only screen and (max-width : 640px) {
-        display:none;
-    }    
-}
-
-
 /* Alignments */
 .centered {
     text-align: center;
@@ -30,30 +9,29 @@
     text-align: right;
 }
 
+
+/* Highlights & fills */
 .highlight {
     background: floralwhite;
 }
-
 .filled-light {
     background: #fff;
 }
-.rounded {
-    border-radius: 5px;
-}
+
+
+/* Text styles */
 .underlined {
     text-decoration: underline;
 }
-
 .text-bolded, .bold {
     font-weight: bold;
 }
 
+
+/* Table styles */
 .stripes div:nth-child(even), .stripes li:nth-child(odd) {
    background-color: #efefef;
 }
-
-
-/* Used for widths of table th */
 
 .width-5-percent {width:5%;}
 .width-10-percent {width:10%;}
@@ -68,3 +46,35 @@
 .width-55-percent {width:55%}
 .width-60-percent {width:60%}
 .width-65-percent {width:65%}
+
+
+
+.fadein > * {
+    display:none;
+}
+.simple-form-control {
+    box-shadow: none;
+    border: none;
+}
+.mobile-show {
+    display: none;
+    
+    @media only screen and (max-width : 640px) {
+        display: block; 
+    }
+}
+.mobile-hide, .hide-for-mobile {
+    @media only screen and (max-width : 640px) {
+        display:none;
+    }    
+}
+
+.hide-for-mobile-and-tablet {
+    @media only screen and (max-width : 1024px) {
+        display:none;
+    }    
+}
+
+.rounded {
+    border-radius: 5px;
+}

@@ -33,6 +33,13 @@ textarea {overflow:hidden;}
 .ng-hide-remove {
   display: none !important;
 }
+.button-group {
+    display:inline-block;
+
+    @media only screen and (max-width : 640px) {
+        display:block;
+    } 
+}
 
 
 
@@ -331,12 +338,16 @@ textarea.expandable:focus {
 /* Bootstrap Overrides */
 .alert {
     padding: 20px;
-    margin-bottom: 25px;
+    margin-bottom: 15px;
+    position: relative;
 
-    h2 {
+    .alert-title {
         font-weight: bold;
         font-size: 20px;
         margin-bottom: 6px;
+    }
+    .alert-message {
+        padding-left: 50px;
     }
     .sent-icon {
         float: left;
@@ -411,6 +422,7 @@ textarea.expandable:focus {
     font-size: 22px;
     margin-bottom: 15px;
     font-weight: bold;
+    line-height: 26px;
 }
 .modal-body p {
   margin: 15px 0;
