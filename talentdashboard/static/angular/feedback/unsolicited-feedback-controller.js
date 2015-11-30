@@ -48,6 +48,7 @@
                     /* Hide success message after a few seconds */
                     $timeout(function() {
                         $rootScope.hideMessage = true;
+                        $rootScope.successMessage = false;
                     }, 10000); 
                 })
                 .catch(function(response) {
