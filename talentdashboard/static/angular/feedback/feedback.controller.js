@@ -17,6 +17,10 @@ function FeedbackController(FeedbackRequestService, FeedbackDigestService, Feedb
     vm.requestFeedback = requestFeedback;
     vm.giveUnsolicitedFeedback = giveUnsolicitedFeedback;
     vm.welcome = $sce.trustAsHtml($rootScope.customer.feedback_welcome);
+    vm.myRecentlySentRequestsLoaded = false;
+    vm.feedbackRequestsLoaded = false;
+    vm.mySubmissionsLoaded = false;
+    vm.myDigestsLoaded = false;
     vm.questions = {
         excelsAtQuestion: $rootScope.customer.feedback_excels_at_question,
         couldImproveOnQuestion: $rootScope.customer.feedback_could_improve_on_question
@@ -32,24 +36,25 @@ function FeedbackController(FeedbackRequestService, FeedbackDigestService, Feedb
         getFeedbackRequests();
         getMySubmissions();
         getMyDigests();
-        toggleEmptyScreenMode();
     };
 
-    function toggleEmptyScreenMode() {
-        setTimeout(function () {
-            if(vm.myRecentlySentRequests.length == 0 && vm.feedbackRequests.length == 0 && vm.mySubmissions.length == 0 && vm.myDigests == 0) {
-                $scope.$apply(function() {
-                   vm.showEmptyScreen = true; 
-                });
-                console.log('Hello! "There is always space for improvement, no matter how long you’ve been in the business." -Oscar De La Hoya');
+
+    function checkIsEmpty() {
+        if (vm.mySubmissionsLoaded && vm.feedbackRequestsLoaded && vm.myRecentlySentRequestsLoaded && vm.myDigestsLoaded) {
+            if (vm.myRecentlySentRequests.length == 0 && vm.feedbackRequests.length == 0 && vm.mySubmissions.length == 0 && vm.myDigests.length == 0) {
+                vm.showEmptyScreen = true;
+            } else {
+                vm.showEmptyScreen = false;
             }
-        }, 500);
+        }
     }
     
     function getMySubmissions() {
         FeedbackSubmissionService.getFeedbackIveSubmitted()
             .then(function (data) {
                 vm.mySubmissions = data;
+                vm.mySubmissionsLoaded = true;
+                checkIsEmpty();
                 return vm.mySubmissions;
             });
     }
@@ -58,6 +63,8 @@ function FeedbackController(FeedbackRequestService, FeedbackDigestService, Feedb
         FeedbackRequestService.getFeedbackRequests()
             .then(function (data) {
                 vm.feedbackRequests = data;
+                vm.feedbackRequestsLoaded = true;
+                checkIsEmpty();
                 return vm.feedbackRequests;
             });
     }
@@ -66,6 +73,8 @@ function FeedbackController(FeedbackRequestService, FeedbackDigestService, Feedb
         FeedbackRequestService.getMyRecentlySentRequests()
             .then(function (data) {
                 vm.myRecentlySentRequests = data;
+                vm.myRecentlySentRequestsLoaded = true;
+                checkIsEmpty();
                 return vm.myRecentlySentRequests;
             });
     }
@@ -74,6 +83,8 @@ function FeedbackController(FeedbackRequestService, FeedbackDigestService, Feedb
         FeedbackDigestService.getMyDigests()
             .then(function (data) {
                 vm.myDigests = data;
+                vm.myDigestsLoaded = true;
+                checkIsEmpty();
                 return vm.myDigests;
             });
     }
