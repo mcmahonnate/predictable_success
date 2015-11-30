@@ -3,7 +3,9 @@
 	<h3 class="modal-title">
         <span>About Anonymous Feedback</span>
     </h3>
-    <p>Heads up! While your feedback will be anonymous to {{subject.full_name}} it will <strong>NOT</strong> be anonymous to {{subject.full_name}}'s coach.
+    <p>Heads up! While your feedback will be anonymous to {{subject.full_name}} it will <strong>NOT</strong> be anonymous to {{subject.first_name}}'s coach. Also be aware that it's possible that {{subject.first_name}} will be able to deduce who gave them this feedback.</p>
+    <p><strong>Example:</strong> If {{subject.first_name}} asked you and 4 others for feedback and you are the only one that replied anonymously.</p>
+
 </div>
 <div class="modal-footer">
     <button type="button" ng-click="cancel()" class="btn btn-light">Got it, thanks!</button>
