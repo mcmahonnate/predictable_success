@@ -263,7 +263,7 @@ angular.module('tdb.org.controllers', [])
         };
     }])
 
-    .controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', '$modal', 'User', 'Employee', 'EmployeeSearch', 'Team', 'Engagement', 'SendEngagementSurvey', 'EmployeeLeader', 'Attribute', '$http', 'Customers', 'analytics', 'EmployeeMBTI', 'Notification', 'CompSummary', function ($rootScope, $scope, $location, $routeParams, $window, $modal, User, Employee, EmployeeSearch, Team, Engagement, SendEngagementSurvey, EmployeeLeader, Attribute, $http, Customers, analytics, EmployeeMBTI, Notification, CompSummary) {
+    .controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', '$modal', 'User', 'Employee', 'Team', 'Engagement', 'SendEngagementSurvey', 'EmployeeLeader', 'Attribute', '$http', 'Customers', 'analytics', 'EmployeeMBTI', 'Notification', 'CompSummary', function ($rootScope, $scope, $location, $routeParams, $window, $modal, User, Employee, Team, Engagement, SendEngagementSurvey, EmployeeLeader, Attribute, $http, Customers, analytics, EmployeeMBTI, Notification, CompSummary) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         Customers.get(function (data) {
             $scope.customer = data;
@@ -288,8 +288,8 @@ angular.module('tdb.org.controllers', [])
         Team.query(function (data) {
             $scope.teams = data;
         });
-        if (!$scope.employees && $rootScope.currentUser && $rootScope.currentUser.can_view_company_dashboard) {
-            $scope.employees = EmployeeSearch.query();;
+        if (!$scope.employees && $rootScope.currentUser) {
+            $scope.employees = Employee.query();
         }
         Employee.get(
             {id: $routeParams.id},

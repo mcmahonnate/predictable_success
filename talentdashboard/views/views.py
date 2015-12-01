@@ -374,7 +374,7 @@ class EmployeeList(APIView):
             employees = Employee.objects.filter(full_name=full_name)
             if employees:
                 employee = employees[0]
-                serializer = EmployeeSerializer(employee, context={'request':request})
+                serializer = SanitizedEmployeeSerializer(employee, context={'request':request})
                 return Response(serializer.data)
             else:
                 return Response({'leader': 'field error'}, status=400)
