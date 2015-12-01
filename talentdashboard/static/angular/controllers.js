@@ -314,6 +314,7 @@ angular.module('tdb.controllers', [])
                 row.last_comment = $rootScope.scrubDate(employee.last_comment_about);
                 row.coach = employee.coach_full_name;
                 row.hire_date = $rootScope.scrubDate(employee.hire_date);
+                row.last_login = $rootScope.scrubDate(employee.last_login);
                 $scope.csv.push(row);
             });
         }
