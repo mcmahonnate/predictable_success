@@ -1,6 +1,6 @@
 angular.module('tdb.checkins.controllers', [])
 
-    .controller('AddEditCheckInCtrl', ['$rootScope', '$scope', '$q', '$routeParams', '$location', '$modal', 'CheckIn', 'CheckInType', 'Happiness', 'Task', 'Employee', 'EmployeeSearch', 'Notification', '$window', 'analytics', function ($rootScope, $scope, $q, $routeParams, $location, $modal, CheckIn, CheckInType, Happiness, Task, Employee, EmployeeSearch, Notification, $window, analytics) {
+    .controller('AddEditCheckInCtrl', ['$rootScope', '$scope', '$q', '$routeParams', '$location', '$modal', 'CheckIn', 'CheckInType', 'Happiness', 'Task', 'Employee', 'Notification', '$window', 'analytics', function ($rootScope, $scope, $q, $routeParams, $location, $modal, CheckIn, CheckInType, Happiness, Task, Employee, Notification, $window, analytics) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         var initialize = function() {
             $scope.checkin = new CheckIn({date: new Date(Date.now())});
@@ -18,7 +18,7 @@ angular.module('tdb.checkins.controllers', [])
 
         // TODO: Solr-ize this
         if (!$scope.employees) {
-            EmployeeSearch.query({}, function(data) {
+            Employee.query({show_hidden: true, u: $rootScope.currentUser.id}, function(data) {
                 $scope.employees = data;
             });
         }

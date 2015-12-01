@@ -1,6 +1,6 @@
 angular.module('tdb.search.controllers', [])
 
-    .controller('SearchCtrl', ['$scope', '$rootScope', '$routeParams', '$location', '$modal', 'EmployeeSearch', 'Customers', 'Team', function ($scope, $rootScope, $routeParams, $location, $modal, EmployeeSearch, Customers, Team) {
+    .controller('SearchCtrl', ['$scope', '$rootScope', '$routeParams', '$location', '$modal', 'Employee', 'Customers', 'Team', function ($scope, $rootScope, $routeParams, $location, $modal, Employee, Customers, Team) {
 
         //clear search
         $scope.navQuery = '';
@@ -9,11 +9,8 @@ angular.module('tdb.search.controllers', [])
             $scope.customer = data;
         });
 
-        if (!$scope.employees && $rootScope.currentUser.can_view_company_dashboard) {
-            $scope.employees = EmployeeSearch.query();
-        } else if (!$scope.employees && $rootScope.currentUser.is_team_lead) {
-            $scope.employees = EmployeeSearch.myTeam()
-        }
+        $scope.employees = Employee.query({show_hidden: false, u: $rootScope.currentUser.id});
+
  	}])
 
     .controller('EmployeeSearchCtrl', ['$scope', '$routeParams', '$location', '$filter', 'HappinessOptions', 'EmployeeSearch', 'TalentCategories', 'Team', 'view', 'analytics', function ($scope, $routeParams, $location, $filter, HappinessOptions, EmployeeSearch, TalentCategories, Team, view, analytics) {

@@ -124,8 +124,10 @@ angular.module('tdb.controllers', [])
 
     }])
 
-    .controller('NavigationCtrl', ['$scope', '$rootScope', '$routeParams', '$location', '$modal', 'Employee', 'EmployeeSearch', 'Customers', 'Team', function ($scope, $rootScope, $routeParams, $location, $modal, Employee, EmployeeSearch, Customers, Team) {
-        $scope.employees = EmployeeSearch.query();
+    .controller('NavigationCtrl', ['$scope', '$rootScope', '$routeParams', '$location', '$modal', 'Employee', 'Customers', 'Team', function ($scope, $rootScope, $routeParams, $location, $modal, Employee, Customers, Team) {
+        Employee.query({show_hidden: false, u: $rootScope.currentUser.id}, function(data) {
+                $scope.employees = data;
+        });
         $scope.teams = Team.query();
         $scope.modalEmployeeShown = false;
         $scope.newEmployee = {

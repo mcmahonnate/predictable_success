@@ -36,7 +36,7 @@ angular.module('tdb.org.controllers', [])
         $scope.salaryReport = SalaryReport.leadEmployees({id: $routeParams.id});
     }])
 
-    .controller('MyTeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'Employee', 'SalaryReport', 'TalentReport', 'MyEmployees', 'TeamLeadEmployees', 'User', 'analytics', 'TemplatePreferences', function ($scope, $location, $routeParams, Employee, SalaryReport, TalentReport, MyEmployees, TeamLeadEmployees, User, analytics, TemplatePreferences) {
+    .controller('MyTeamOverviewCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'Employee', 'SalaryReport', 'TalentReport', 'MyEmployees', 'TeamLeadEmployees', 'User', 'analytics', 'TemplatePreferences', function ($scope, $rootScope, $location, $routeParams, Employee, SalaryReport, TalentReport, MyEmployees, TeamLeadEmployees, User, analytics, TemplatePreferences) {
         /* Since this page can be the root for some users let's make sure we capture the correct page */
         var location_url = $location.url().indexOf('/my-team') < 0 ? '/my-team' : $location.url();
         analytics.trackPage($scope, $location.absUrl(), location_url);
@@ -52,7 +52,7 @@ angular.module('tdb.org.controllers', [])
             function (data) {
                 $scope.myTeam = true;
                 $scope.lead = data.employee;
-                $scope.employees =  MyEmployees.query();
+                $scope.employees =  Employee.query({show_hidden: true, u: $rootScope.currentUser.id});
             }
         );
 
@@ -145,7 +145,7 @@ angular.module('tdb.org.controllers', [])
         $scope.employee = angular.copy(employee);
         $scope.leadership = angular.copy(leadership);
         $scope.teams = teams;
-        $scope.employees = Employee.query({show_hidden: true}).$promise;
+        $scope.employees = Employee.query({show_hidden: true, u: $rootScope.currentUser.id}).$promise;
 
         // $scope.preview = $scope.employee.avatar;
         $scope.image = {
@@ -263,7 +263,7 @@ angular.module('tdb.org.controllers', [])
         };
     }])
 
-    .controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', '$modal', 'User', 'Employee', 'EmployeeSearch', 'Team', 'Engagement', 'SendEngagementSurvey', 'EmployeeLeader', 'Attribute', '$http', 'Customers', 'analytics', 'EmployeeMBTI', 'Notification', 'CompSummary', function ($rootScope, $scope, $location, $routeParams, $window, $modal, User, Employee, EmployeeSearch, Team, Engagement, SendEngagementSurvey, EmployeeLeader, Attribute, $http, Customers, analytics, EmployeeMBTI, Notification, CompSummary) {
+    .controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', '$modal', 'User', 'Employee', 'Team', 'Engagement', 'SendEngagementSurvey', 'EmployeeLeader', 'Attribute', '$http', 'Customers', 'analytics', 'EmployeeMBTI', 'Notification', 'CompSummary', function ($rootScope, $scope, $location, $routeParams, $window, $modal, User, Employee, Team, Engagement, SendEngagementSurvey, EmployeeLeader, Attribute, $http, Customers, analytics, EmployeeMBTI, Notification, CompSummary) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         Customers.get(function (data) {
             $scope.customer = data;
@@ -288,9 +288,9 @@ angular.module('tdb.org.controllers', [])
         Team.query(function (data) {
             $scope.teams = data;
         });
-        if (!$scope.employees && $rootScope.currentUser && $rootScope.currentUser.can_view_company_dashboard) {
-            $scope.employees = EmployeeSearch.query();;
-        }
+
+        $scope.employees = Employee.query({u: $rootScope.currentUser.id});
+
         Employee.get(
             {id: $routeParams.id},
             function (data) {
@@ -439,14 +439,18 @@ angular.module('tdb.org.controllers', [])
         };
     }])
 
-    .controller('EmployeesSnapshotCtrl', ['$scope', '$routeParams', 'Event', '$rootScope', '$location', 'User', 'Employee', 'Coachees', 'TeamLeads', function ($scope, $routeParams, Event, $rootScope, $location, User, Employee, Coachees, TeamLeads) {
+    .controller('EmployeesSnapshotCtrl', ['$scope', '$routeParams', 'Event', '$rootScope', '$location', 'User', 'Employee', 'MyEmployees', 'Coachees', 'TeamLeads', function ($scope, $routeParams, Event, $rootScope, $location, User, Employee, MyEmployees, Coachees, TeamLeads) {
         $scope.busy = true;
 
         if ($scope.view == 'team-view') {
             $scope.teamId = $routeParams.teamId;
             TeamLeads.getCurrentEvaluationsForTeamLeads($scope.teamId).$promise.then(function(response) {
-                $scope.employees = TeamLeads.getCurrentEvaluationsForTeamLeads($scope.teamId)
+                $scope.snapshotEmployees = TeamLeads.getCurrentEvaluationsForTeamLeads($scope.teamId)
             });
+        } else if ($scope.view == 'lead-view') {
+            $scope.snapshotEmployees = MyEmployees.query();
+        } else if ($scope.view == 'coach-view') {
+            $scope.snapshotEmployees = Coachees.query();
         }
 
         $scope.filteredZoneType = '';

@@ -363,18 +363,22 @@ class EmployeeList(APIView):
     def get(self, request, format=None):
         group_name = request.QUERY_PARAMS.get('group_name', None)
         show_hidden = request.QUERY_PARAMS.get('show_hidden', False)
+        view_all = request.QUERY_PARAMS.get('view_all', False)
         full_name = request.QUERY_PARAMS.get('full_name', None)
-        logger.debug(group_name)
-        logger.debug(show_hidden)
-        if group_name:
-            employees = Employee.objects.get_current_employees_by_group_name(name=group_name,show_hidden=show_hidden)
+
+        if not view_all:
+            employees = Employee.objects.get_current_employees_employee_has_access_to(request.user.employee)
         else:
             employees = Employee.objects.get_current_employees(show_hidden=show_hidden)
+
+        if group_name:
+            employees = Employee.objects.get_current_employees_by_group_name(name=group_name,show_hidden=show_hidden)
+
         if full_name:
             employees = Employee.objects.filter(full_name=full_name)
             if employees:
                 employee = employees[0]
-                serializer = EmployeeSerializer(employee, context={'request':request})
+                serializer = SanitizedEmployeeSerializer(employee, context={'request':request})
                 return Response(serializer.data)
             else:
                 return Response({'leader': 'field error'}, status=400)
