@@ -42,7 +42,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Email settings
 EMAIL_USE_SSL = True
-EMAIL_HOST = 'mail.dfrntlabs.com'
+EMAIL_HOST = 'smtp.mandrillapp.com'
 EMAIL_PORT = 465
 EMAIL_HOST_USER = os.environ.get("EMAIL_ADDRESS", '')
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD", '')

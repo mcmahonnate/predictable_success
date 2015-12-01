@@ -46,6 +46,16 @@ class EmployeeManager(TreeManager):
             employees = employees.filter(team_id=team_id)
         return employees
 
+    def get_current_employees_employee_has_access_to(self, employee, show_hidden=False):
+        employees = self.get_current_employees(show_hidden=show_hidden)
+        if (employee.user.has_perm('org.view_employees')):
+            return employees
+
+        coachee_ids = self.get_current_employees_by_coach(coach_id=employee.id).values_list('id', flat=True)
+        descendant_ids = employee.get_descendants().values_list('id', flat=True)
+        employees = employees.filter(Q(id__in=coachee_ids) | Q(id__in=descendant_ids))
+        return employees
+
     def get_current_employees_by_group_name(self, name, show_hidden=False):
         employees = self.get_current_employees(show_hidden=show_hidden)
         employees = employees.filter(user__groups__name=name)

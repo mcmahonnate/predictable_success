@@ -5,10 +5,11 @@ from ..indexes import EmployeeIndex
 from org.models import Employee
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
-from talentdashboard.views.views import PermissionsViewThisEmployee
+from talentdashboard.views.views import PermissionsViewThisEmployee, PermissionsViewAllEmployees
 
 
 @api_view(['GET'])
+@permission_classes((IsAuthenticated, PermissionsViewAllEmployees))
 def employee_search(request):
     return _find_employees(request)
 
