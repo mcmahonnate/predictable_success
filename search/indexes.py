@@ -74,6 +74,7 @@ class EmployeeIndex(object):
                     'lft': employee.lft,
                     'rght': employee.rght,
                     'tree_id': employee.tree_id,
+                    'last_login': employee.user.last_login if employee.user else None
                 }
                 documents.append(document)
 

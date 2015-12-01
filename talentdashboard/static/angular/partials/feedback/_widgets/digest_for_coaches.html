@@ -1,8 +1,10 @@
-<div ng-show="view != 'delivered-view'" style="margin-bottom: 15px">
-    <h3 class="panel-title hide-for-print">What will {{ feedbackWorksheet.digest.subject.first_name }} see?</h3>
-    <p class="hide-for-print" style="color:#888">This area below is a preview of what {{ feedbackWorksheet.progressReport.employee.first_name }} will see once you've delivered their feedback.</p>
-</div>
 <div class="panel" style="min-height:700px">
+
+    <div ng-show="view != 'delivered-view'" class="worksheet-message">
+        <h3 class="panel-title hide-for-print">What will {{ feedbackWorksheet.digest.subject.first_name }} see?</h3>
+        <p class="hide-for-print" style="color:#888">The area below is a preview of what {{ feedbackWorksheet.progressReport.employee.first_name }} will see once you've delivered their feedback.</p>
+    </div>
+
     <div style="margin-bottom: 15px">
         <h2 class="panel-title" style="margin-bottom:0">360 Feedback - {{ feedbackWorksheet.employee.full_name }}</h2>
         <span style="color: #aaa;font-style: italic;">Delivered by: {{ feedbackWorksheet.coach.full_name }}</span>
