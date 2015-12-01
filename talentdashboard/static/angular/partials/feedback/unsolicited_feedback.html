@@ -16,38 +16,13 @@
         <div class="col-md-4"> 
             <div class="panel">
                 <div class="panel-body">
-                    <h2 class="panel-title">Feedback Tips</h2>
-                    <div ng-bind-html="customer.feedback_tips"></div>
+                    <div ng-include="'/static/angular/partials/feedback/_widgets/feedback_tips.html'"></div>
                 </div>
             </div>        
         </div>   
     </div>
 </div>    
 <div ng-include="'/static/angular/partials/feedback/_modals/unsolicited-select-person.html'"></div>
-
-<script type="text/javascript">   
-    $(document).ready(function(){
-
-        /* TODO: move to angular */
-        setTimeout(function(){
-
-            /* Start carousel */
-            $('.carousel').carousel({
-              interval: 20000
-            });
-            $('.control-next').bind('click', function(e) { /* Next tip */
-                e.preventDefault();
-                $('.carousel').carousel('next');
-            });
-            $('.control-prev').bind('click', function(e) { /* Prev tip */
-                e.preventDefault();
-                $('.carousel').carousel('prev');
-            });
-        }, 2000);
-        $('.carousel').carousel('cycle');
-    });    
-</script>
-
 
 <style>
     .form-group {margin-bottom: 15px;}
