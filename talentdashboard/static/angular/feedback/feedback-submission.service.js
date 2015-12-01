@@ -53,7 +53,7 @@ function FeedbackSubmissionService($http, $log, FeedbackSubmissionResource, Empl
 
 
     function getEmployees() {
-        return Employee.query({show_hidden: true}, success, fail).$promise;
+        return Employee.query({show_hidden: true, view_all: true}, success, fail).$promise;
 
         function success(response) {
             return response;

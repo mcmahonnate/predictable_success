@@ -18,7 +18,7 @@ angular.module('tdb.checkins.controllers', [])
 
         // TODO: Solr-ize this
         if (!$scope.employees) {
-            Employee.query({show_hidden: true}, function(data) {
+            Employee.query({show_hidden: true, u: $rootScope.currentUser.id}, function(data) {
                 $scope.employees = data;
             });
         }
