@@ -31,11 +31,9 @@
             </div>
         </div>
         <div  ng-show="currentUser.is_team_lead && activeEmployee.is_lead"  role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == employeeTab}" ng-click="setActiveTab(employeeTab)" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{activeEmployee.full_name}}">
-
             <div class="small-headshot team_menu">
-                    <img ng-src="{{ activeEmployee.avatar_small }}" class="headshot-image nav-input">
+                <img ng-src="{{ activeEmployee.avatar_small }}" class="headshot-image nav-input">
             </div>
-
             <div class="subnav" role="menu">
                 <div>
                     <div class="subnav-title">{{ activeEmployee.full_name }}</div>
@@ -48,7 +46,7 @@
         </div>
         <div role="menuitem" ng-show="customer.show_beta_features" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == feedbackTab}" ng-click="setActiveTab(feedbackTab)" >
             <div ng-click="gotoFeedback()">
-                <span class="fa fa-comments team_menu nav-item-icon"></span>
+                <span class="fa fa-send team_menu nav-item-icon"></span>
                 Feedback
             </div>
         </div>
@@ -104,8 +102,8 @@
         </li>
         <li ng-show="customer.show_beta_features">
             <a href="#/feedback" ng-click="toggleMenu()">
-                <span class="fa fa-comments team_menu nav-item-icon"></span>
-                360 Feedback
+                <span class="fa fa-send team_menu nav-item-icon"></span>
+                Feedback
             </a>
         </li>
         <li>
