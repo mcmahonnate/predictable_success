@@ -439,7 +439,7 @@ angular.module('tdb.org.controllers', [])
         };
     }])
 
-    .controller('EmployeesSnapshotCtrl', ['$scope', '$routeParams', 'Event', '$rootScope', '$location', 'User', 'Employee', 'MyEmployees', 'Coachees', 'TeamLeads', function ($scope, $routeParams, Event, $rootScope, $location, User, Employee, MyEmployees, Coachees, TeamLeads) {
+    .controller('EmployeesSnapshotCtrl', ['$scope', '$routeParams', 'Event', '$rootScope', '$location', 'User', 'Employee', 'MyEmployees', 'Coachees', 'TeamLeads', 'TeamLeadEmployees', function ($scope, $routeParams, Event, $rootScope, $location, User, Employee, MyEmployees, Coachees, TeamLeads, TeamLeadEmployees) {
         $scope.busy = true;
 
         if ($scope.view == 'team-view') {
@@ -448,7 +448,11 @@ angular.module('tdb.org.controllers', [])
                 $scope.snapshotEmployees = TeamLeads.getCurrentEvaluationsForTeamLeads($scope.teamId)
             });
         } else if ($scope.view == 'lead-view') {
-            $scope.snapshotEmployees = MyEmployees.query();
+            if ($routeParams.id) {
+                $scope.snapshotEmployees = TeamLeadEmployees.query({id: $routeParams.id});
+            } else {
+                $scope.snapshotEmployees = MyEmployees.query();
+            }
         } else if ($scope.view == 'coach-view') {
             $scope.snapshotEmployees = Coachees.query();
         }
