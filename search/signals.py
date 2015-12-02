@@ -1,10 +1,17 @@
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
+from django.contrib.auth.signals import user_logged_in
+from django.contrib.auth.models import User
 from org.models import Employee, Leadership
 from customers.models import Customer, current_customer
 from pvp.models import PvpEvaluation
 from indexes import EmployeeIndex
 
+
+@receiver(user_logged_in)
+def user_logged_in_handler(sender, request, user, **kwargs):
+    if user.employee is not None:
+        _index([user.employee])
 
 @receiver(post_save, sender=Employee)
 def employee_save_handler(sender, **kwargs):
