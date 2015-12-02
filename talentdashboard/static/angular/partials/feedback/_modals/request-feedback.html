@@ -101,7 +101,7 @@
             <panel>
                 <h3 class="modal-title">Feedback Preview</h3>
                 <div class="confirmation-block">
-                    <h4>People you've selected: <span class="selected-change-link" ng-click="request.panel_index=0">Change</span></h4>      
+                    <h4>People you've selected: <span class="selected-change-link" ng-click="request.panel_index=0">Change people</span></h4>      
                     <div class="selected-requested-people-container">
                         <div class="selected-requested-people" ng-repeat="reviewer in request.selectedReviewers">
                             <span class="tiny-headshot">
@@ -112,7 +112,7 @@
                     </div> 
                 </div>    
                 <div class="confirmation-block">
-                    <h4>Questions <span class="selected-change-link" ng-click="request.panel_index=1">Change</span></h4>
+                    <h4>Questions <span class="selected-change-link" ng-click="request.panel_index=1">Change focus areas</span></h4>
                     <ol class="modal-question-list" style="margin-bottom:0">
                         <li>
                             {{ request.questions.excelsAtQuestion }} 
@@ -133,7 +133,7 @@
                     </ol>    
                 </div>
                 <div class="confirmation-block" style="border-bottom:0;margin-bottom:0">    
-                    <h4>Your Feedback Coach <span class="selected-change-link" ng-click="request.panel_index=2">Change</span></h4>
+                    <h4>Your Feedback Coach <span class="selected-change-link" ng-click="request.panel_index=2">Change coach</span></h4>
                     <span class="tiny-headshot">
                         <img class="headshot-image" ng-src="{{request.currentCoach.avatar_small}}" alt="{{request.currentCoach.full_name}}" class="headshot-image">
                     </span>
