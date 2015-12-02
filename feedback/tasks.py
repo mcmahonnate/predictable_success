@@ -18,6 +18,7 @@ def send_feedback_request_email(request_id):
     context = {
         'recipient_first_name': feedback_request.reviewer.first_name,
         'requester_full_name': feedback_request.requester.full_name,
+        'requester_first_name': feedback_request.requester.first_name,
         'custom_message': feedback_request.message,
         'response_url': response_url,
     }
