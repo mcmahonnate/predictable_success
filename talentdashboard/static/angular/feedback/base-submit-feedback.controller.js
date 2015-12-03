@@ -5,8 +5,8 @@
     function BaseSubmitFeedbackController($location, $modal, $rootScope) {
         var vm = this;
         vm.feedback = {
-            excelsAt: null,
-            couldImproveOn: null,
+            excelsAt: '',
+            couldImproveOn: '',
             anonymous: false
         };
         vm.cancel = cancel;
