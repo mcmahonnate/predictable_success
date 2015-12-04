@@ -145,7 +145,11 @@ angular.module('tdb.org.controllers', [])
         $scope.employee = angular.copy(employee);
         $scope.leadership = angular.copy(leadership);
         $scope.teams = teams;
-        $scope.employees = Employee.query({show_hidden: true, u: $rootScope.currentUser.id}).$promise;
+
+        Employee.query({show_hidden: true, u: $rootScope.currentUser.id}, function(data) {
+                $scope.employees = data;
+                $scope.coaches = angular.copy($scope.employees);
+        });
 
         // $scope.preview = $scope.employee.avatar;
         $scope.image = {
@@ -261,6 +265,15 @@ angular.module('tdb.org.controllers', [])
             $location.path(url); //use $location.path(url).replace() if you want to replace the location instead
             $scope = $scope || angular.element(document).scope();
         };
+
+
+        $scope.startsWith = function (expected, actual) {
+            if (expected && actual) {
+                console.log(actual);
+                return expected.toLowerCase().indexOf(actual.toLowerCase()) == 0;
+            }
+            return true;
+        }
     }])
 
     .controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', '$modal', 'User', 'Employee', 'Team', 'Engagement', 'SendEngagementSurvey', 'EmployeeLeader', 'Attribute', '$http', 'Customers', 'analytics', 'EmployeeMBTI', 'Notification', 'CompSummary', function ($rootScope, $scope, $location, $routeParams, $window, $modal, User, Employee, Team, Engagement, SendEngagementSurvey, EmployeeLeader, Attribute, $http, Customers, analytics, EmployeeMBTI, Notification, CompSummary) {
