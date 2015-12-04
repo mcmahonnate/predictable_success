@@ -1,7 +1,7 @@
 
 Hi, {{ recipient.first_name }}!
 
-Don't forget {% if feedback_request_count > 1%}these Fools are {% else %}this Fool is {% endif %}waiting for your feedback:
+The deadline for giving feedback is December 11th. Don't forget {% if feedback_request_count > 1%}these Fools are {% else %}this Fool is {% endif %}waiting for your feedback:
 
 
 {% for request in feedback_requests %}
