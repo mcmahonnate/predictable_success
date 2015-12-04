@@ -10,8 +10,11 @@ from indexes import EmployeeIndex
 
 @receiver(user_logged_in)
 def user_logged_in_handler(sender, request, user, **kwargs):
-    if user.employee is not None:
-        _index([user.employee])
+    try:
+        if user.employee is not None:
+            _index([user.employee])
+    except Exception:
+        pass
 
 @receiver(post_save, sender=Employee)
 def employee_save_handler(sender, **kwargs):
