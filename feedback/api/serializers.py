@@ -92,6 +92,13 @@ class FeedbackSubmissionSerializerForCoaches(serializers.ModelSerializer):
     reviewer = SanitizedEmployeeSerializer()
     has_digest = serializers.SerializerMethodField()
     was_requested = serializers.SerializerMethodField()
+    message = serializers.SerializerMethodField()
+
+    def get_message(self, submission):
+        if submission.feedback_request:
+            return submission.feedback_request.message
+        else:
+            return None
 
     def get_has_digest(self, submission):
         if submission.feedback_digest:
@@ -110,7 +117,8 @@ class FeedbackSubmissionSerializerForCoaches(serializers.ModelSerializer):
         fields = ('id', 'feedback_date', 'subject', 'reviewer',
                   'excels_at', 'could_improve_on', 'excels_at_summarized',
                   'could_improve_on_summarized', 'unread',
-                  'has_been_delivered', 'anonymous', 'has_digest', 'was_requested')
+                  'has_been_delivered', 'anonymous', 'has_digest',
+                  'was_requested', 'message')
 
 
 class FeedbackSubmissionSerializerForEmployee(serializers.ModelSerializer):
