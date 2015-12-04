@@ -10,10 +10,12 @@ from .tasks import send_feedback_request_email
 
 class FeedbackRequestManager(models.Manager):
     def pending_for_reviewer(self, reviewer):
-        return self.filter(reviewer=reviewer).filter(submission=None)
+        return self.filter(reviewer=reviewer).filter(submission=None)\
+            .exclude(expiration_date__lt=datetime.today())
 
     def unanswered_for_requester(self, requester):
-        return self.filter(requester=requester).filter(submission=None)
+        return self.filter(requester=requester).filter(submission=None)\
+            .exclude(expiration_date__lt=datetime.today())
 
     def recent_feedback_requests_ive_sent(self, requester):
         return self.filter(requester=requester)\
@@ -174,7 +176,8 @@ class FeedbackProgressReports(object):
         for employee in employees:
             progress_report = FeedbackProgressReport(employee)
             progress_report.load()
-            if progress_report.all_submissions_not_delivered.count() > 0:
+            if progress_report.all_submissions_not_delivered.count() > 0 or\
+                            progress_report.unanswered_requests.count() > 0:
                 self.progress_reports.append(progress_report)
 
 
