@@ -1,7 +1,7 @@
 <div class="panel" style="min-height:700px">
     <div ng-show="view != 'delivered-view'" class="worksheet-message hide-for-print">
         <i class="fa fa-info-circle"></i>
-        <h3 class="panel-title">What will {{ feedbackWorksheet.digest.subject.first_name }} see?</h3>
+        <h3 class="panel-title">What will {{ feedbackWorksheet.employee.first_name }} see?</h3>
         <p class="panel-subtext">The area below is a preview of what {{ feedbackWorksheet.progressReport.employee.first_name }} will see once you've delivered their feedback.</p>
     </div>
     <div style="margin-bottom:15px" class="hide-for-print">
@@ -19,8 +19,8 @@
         </div>
         <p class="hide-for-print" ng-show="!feedbackWorksheet.digest" style="color:#888">Click the 'Add' button on someone's feedback to get started.</p>
         <div ng-show="feedbackWorksheet.digest.submissions.length>0">
-            <h4 class="section-title">{{ feedbackWorksheet.questions.excelsAtQuestion }}</h4>
             <div class="feedback-submission" ng-repeat="submission in feedbackWorksheet.digest.submissions">
+                <h4 class="section-title">{{ feedbackWorksheet.questions.excelsAtQuestion }} <span class="focus-areas" ng-show="submission.message">Please consider these areas: {{ submission.message }}</span></h4>
 
                 <!-- Edit button -->
                 <a ng-show="view != 'delivered-view'" ng-href="#/feedback/submission/{{ submission.id }}/process" class="btn btn-xs btn-default pull-right"><i class="fa fa-pencil"></i> Edit</a>
@@ -48,7 +48,7 @@
                         <span ng-show="submission.anonymous">
                             <strong>Anonymous</strong>
                         </span>
-                        <span class="time timestamp" data-toggle="tooltip" data-placement="top" title="{{ submission.date | date:'MMM d, yyyy h:mma' }}">{{ submission.feedback_date | fromNow }}</span>
+                        <span class="time timestamp" data-toggle="tooltip" data-placement="top" title="{{ submission.date | date:'MMM d, yyyy h:mma' }}"> {{ submission.feedback_date | fromNow }}</span>
                     </div>
                     <div ng-show="submission.excels_at_summarized" style="white-space: pre-line;">
                         {{ submission.excels_at_summarized }}
@@ -61,8 +61,9 @@
 
             <div class="page-break"><!-- Used for printing --></div>
 
-            <h4 class="section-title">{{ feedbackWorksheet.questions.couldImproveOnQuestion }}</h4>
+            
             <div class="feedback-submission" ng-repeat="submission in feedbackWorksheet.digest.submissions">
+                <h4 class="section-title">{{ feedbackWorksheet.questions.couldImproveOnQuestion }} <span class="focus-areas" ng-show="submission.message">Please consider these areas: {{ submission.message }}</span></h4>
 
                 <!-- Edit button -->
                 <a ng-show="view != 'delivered-view'" ng-href="#/feedback/submission/{{ submission.id }}/process" class="btn btn-xs btn-default pull-right"><i class="fa fa-pencil"></i> Edit</a>
@@ -90,7 +91,7 @@
                         <span ng-show="submission.anonymous">
                             <strong>Anonymous</strong>
                         </span>
-                        <span class="time timestamp" data-toggle="tooltip" data-placement="top" title="{{ submission.date | date:'MMM d, yyyy h:mma' }}">{{ submission.feedback_date | fromNow }}</span>
+                        <span class="time timestamp" data-toggle="tooltip" data-placement="top" title="{{ submission.date | date:'MMM d, yyyy h:mma' }}"> {{ submission.feedback_date | fromNow }}</span>
                     </div>
                     <div ng-show="submission.could_improve_on_summarized" style="white-space: pre-line;">
                         {{ submission.could_improve_on_summarized }}
