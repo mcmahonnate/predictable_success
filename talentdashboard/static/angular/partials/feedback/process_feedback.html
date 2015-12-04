@@ -7,7 +7,7 @@
                     <div class="panel-body">
                         <div class="activity-items">
                             <div class="activity-item">
-                                <h2 class="panel-title">{{ processFeedback.questions.excelsAtQuestion }}</h2>
+                                <h2 class="panel-title">{{ processFeedback.questions.excelsAtQuestion }} <span class="focus-areas" ng-show="processFeedback.submission.message">Please consider these areas: {{ processFeedback.submission.message }}</span></h2>
                                 <div class="activity-header">
                                     <div class="activity-owner-avatar-container">
                                         <span class="medium-headshot">
@@ -34,7 +34,7 @@
                                 </div>
                             </div>
                             <div class="activity-item">
-                                <h2 class="panel-title">{{ processFeedback.questions.couldImproveOnQuestion }}</h2>
+                                <h2 class="panel-title">{{ processFeedback.questions.couldImproveOnQuestion }} <span class="focus-areas" ng-show="processFeedback.submission.message">Please consider these areas: {{ processFeedback.submission.message }}</span></h2>
                                 <div class="activity-header">
                                     <div class="activity-owner-avatar-container">
                                         <span class="medium-headshot">
