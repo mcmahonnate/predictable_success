@@ -31,6 +31,34 @@ def send_feedback_request_email(request_id):
 
 
 @app.task
+def send_feedback_request_reminder_email(employee_id, customer_id):
+
+    from customers.models import Customer
+    tenant = Customer.objects.get(id=customer_id)
+
+    from org.models import Employee
+    employee = Employee.objects.get(id=employee_id)
+    recipient_email = employee.user.email
+
+    from feedback.models import FeedbackRequest
+    feedback_requests = FeedbackRequest.objects.pending_for_reviewer(reviewer=employee)
+
+    domain_url = 'https://%s/#' % (tenant.domain_url)
+    context = {
+        'recipient': employee,
+        'feedback_requests': feedback_requests,
+        'feedback_request_count': feedback_requests.count(),
+        'domain_url': domain_url,
+    }
+    subject = "Don't forget! You have %s %s waiting for your feedback!" % (feedback_requests.count(), ('people' if feedback_requests.count() > 1 else 'person'))
+    text_content = render_to_string('email/feedback_request_reminder_email.txt', context)
+    html_content = render_to_string('email/feedback_request_reminder_email.html', context)
+    msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
+
+
+@app.task
 def send_feedback_digest_email(digest_id):
     from feedback.models import FeedbackDigest
     feedback_digest = FeedbackDigest.objects.get(id=digest_id)

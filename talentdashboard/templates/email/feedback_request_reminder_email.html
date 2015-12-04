@@ -1,0 +1,21 @@
+<html>
+    <head>
+    </head>
+    <body>
+        <p>
+            Hi, {{ recipient.first_name }}!
+        </p>
+        <p>
+            Don't forget {% if feedback_request_count > 1%}these Fools are {% else %}this Fool is {% endif %}waiting for your feedback:
+
+            <ul>
+            {% for request in feedback_requests %}
+                <li>{{ request.requester.full_name }} <a href="{{ domain_url }}/feedback/request/{{ request.id }}/reply">Give feedback for {{ request.requester.first_name }}</a></li>
+            {% endfor %}
+            </ul>
+        </p>
+        <p>
+            This can take as little as three minutes{% if feedback_request_count %} each{% endif %}, and it will really matter to them!
+        </p>
+    </body>
+</html>

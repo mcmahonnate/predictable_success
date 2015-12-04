@@ -1,0 +1,11 @@
+
+Hi, {{ recipient.first_name }}!
+
+Don't forget {% if feedback_request_count > 1%}these Fools are {% else %}this Fool is {% endif %}waiting for your feedback:
+
+
+{% for request in feedback_requests %}
+    {{ request.requester.full_name }} {{ domain_url }}/feedback/request/{{ request.id }}/reply
+{% endfor %}
+
+This can take as little as three minutes{% if feedback_request_count > 1 %} each{% endif %}, and it will really matter to them!
