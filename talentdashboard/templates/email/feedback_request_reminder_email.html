@@ -10,7 +10,7 @@
 
             <ul>
             {% for request in feedback_requests %}
-                <li>{{ request.requester.full_name }} <a href="{{ domain_url }}/feedback/request/{{ request.id }}/reply">Give feedback for {{ request.requester.first_name }}</a></li>
+                <li>{{ request.requester.full_name }} <a href="{{ domain_url }}/feedback/request/{{ request.id }}/reply">Leave feedback for {{ request.requester.first_name }}</a></li>
             {% endfor %}
             </ul>
         </p>
