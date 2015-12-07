@@ -205,6 +205,14 @@ class EmployeeFeedbackReports(object):
         self.employee_report = []
         self.start_date = object.get('start_date', datetime.today() - timedelta(days=365))
         self.end_date = object.get('end_date', datetime.today())
+        self.total_i_requested_total = 0
+        self.total_requested_of_me_total = 0
+        self.total_i_responded_to_total = 0
+        self.total_responded_to_me_total = 0
+        self.total_unrequested_i_gave_total = 0
+        self.total_unrequested_given_to_me_total = 0
+        self.total_digests_i_received_total = 0
+        self.total_digests_i_delivered_total = 0
 
     def load(self):
         def dictfetchall(cursor):
@@ -237,7 +245,17 @@ class EmployeeFeedbackReports(object):
             d = {}
             for dct in v:
                 d.update(dct)
-            self.employee_report.append(EmployeeFeedbackReport(d))
+            report = EmployeeFeedbackReport(d)
+            self.employee_report.append(report)
+            self.total_i_requested_total += report.total_i_requested
+            self.total_requested_of_me_total += report.total_requested_of_me
+            self.total_i_responded_to_total += report.total_i_responded_to
+            self.total_responded_to_me_total += report.total_responded_to_me
+            self.total_unrequested_i_gave_total += report.total_unrequested_i_gave
+            self.total_unrequested_given_to_me_total += report.total_unrequested_given_to_me
+            self.total_digests_i_received_total += report.total_digests_i_received
+            self.total_digests_i_delivered_total += report.total_digests_i_delivered
+
 
 
 class EmployeeFeedbackReport(object):

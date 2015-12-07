@@ -23,6 +23,7 @@
             <table class="table">
                 <thead>
                     <tr>
+                        <th></th>
                         <th>
                             <a href="" ng-click="feedbackReport.order('employee.full_name');"><strong>Employee</strong></a>
                             <span class="sortorder fa" ng-show="feedbackReport.predicate === 'employee.full_name'" ng-class="feedbackReport.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
@@ -63,6 +64,7 @@
                 </thead>
                 <tbody>
                     <tr ng-repeat="report in feedbackReport.report | orderBy:feedbackReport.predicate:feedbackReport.reverse">
+                        <td>{{ $index+1 }}.</td>
                         <td>
                             <a ng-href="#/employees/{{report.employee.id}}" class="tiny-headshot pull-left"><img ng-src="{{ report.employee.avatar_small }}" alt="{{ report.employee.full_name }}'s avatar"/></a>
                             <a href="#/employees/{{report.employee.id}}">{{report.employee.full_name}}</a>
@@ -75,6 +77,19 @@
                         <td style="text-align: center">{{report.total_unrequested_given_to_me}}</td>
                         <td style="text-align: center">{{report.total_digests_i_delivered}}</td>
                         <td style="text-align: center">{{report.total_digests_i_received}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Totals</strong></td>
+                        <td>
+                        </td>
+                        <td style="text-align: center"><strong>{{feedbackReport.total_i_requested_total}}</strong></td>
+                        <td style="text-align: center"><strong>{{feedbackReport.total_responded_to_me_total}}</strong></td>
+                        <td style="text-align: center"><strong>{{feedbackReport.total_requested_of_me_total}}</strong></td>
+                        <td style="text-align: center"><strong>{{feedbackReport.total_i_responded_to_total}}</strong></td>
+                        <td style="text-align: center"><strong>{{feedbackReport.total_unrequested_i_gave_total}}</strong></td>
+                        <td style="text-align: center"><strong>{{feedbackReport.total_unrequested_given_to_me_total}}</strong></td>
+                        <td style="text-align: center"><strong>{{feedbackReport.total_digests_i_delivered_total}}</strong></td>
+                        <td style="text-align: center"><strong>{{feedbackReport.total_digests_i_received_total}}</strong></td>
                     </tr>
                 </tbody>
             </table>

@@ -156,6 +156,14 @@ class EmployeeFeedbackReportSerializer(serializers.Serializer):
 class EmployeeFeedbackReportsSerializer(serializers.Serializer):
     start_date = serializers.DateTimeField()
     end_date = serializers.DateTimeField()
+    total_i_requested_total = serializers.IntegerField()
+    total_requested_of_me_total = serializers.IntegerField()
+    total_i_responded_to_total = serializers.IntegerField()
+    total_responded_to_me_total = serializers.IntegerField()
+    total_unrequested_i_gave_total = serializers.IntegerField()
+    total_unrequested_given_to_me_total = serializers.IntegerField()
+    total_digests_i_received_total = serializers.IntegerField()
+    total_digests_i_delivered_total = serializers.IntegerField()
     employee_report = EmployeeFeedbackReportSerializer(many=True)
 
 

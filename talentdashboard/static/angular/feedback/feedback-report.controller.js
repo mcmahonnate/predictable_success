@@ -27,6 +27,14 @@ function FeedbackReportController(FeedbackReportService, $scope, $location, anal
                 vm.report = data.employee_report;
                 vm.startDate = data.start_date;
                 vm.endDate = data.end_date;
+                vm.total_i_requested_total = data.total_i_requested_total;
+                vm.total_responded_to_me_total = data.total_responded_to_me_total;
+                vm.total_requested_of_me_total = data.total_requested_of_me_total;
+                vm.total_i_responded_to_total = data.total_i_responded_to_total;
+                vm.total_unrequested_i_gave_total = data.total_unrequested_i_gave_total;
+                vm.total_unrequested_given_to_me_total = data.total_unrequested_given_to_me_total;
+                vm.total_digests_i_delivered_total = data.total_digests_i_delivered_total;
+                vm.total_digests_i_received_total = data.total_digests_i_received_total;
                 vm.showResults = true;
                 vm.csv = [];
                 buildCSV();
