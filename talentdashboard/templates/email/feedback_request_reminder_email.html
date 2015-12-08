@@ -10,7 +10,9 @@
 
             <ul>
             {% for request in feedback_requests %}
-                <li ng-if="$index<2">{{ request.requester.full_name }} <a href="{{ domain_url }}/feedback/request/{{ request.id }}/reply">Leave feedback for {{ request.requester.first_name }}</a></li>
+                {% if forloop.counter0 < 2 %}
+                    <li>{{ request.requester.full_name }} <a href="{{ domain_url }}/feedback/request/{{ request.id }}/reply">Leave feedback for {{ request.requester.first_name }}</a></li>
+                {% endif %}
             {% endfor %}
             </ul>
         </p>
