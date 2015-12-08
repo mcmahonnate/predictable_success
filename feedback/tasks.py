@@ -50,7 +50,7 @@ def send_feedback_request_reminder_email(employee_id, customer_id):
         'feedback_request_count': feedback_requests.count(),
         'domain_url': domain_url,
     }
-    subject = "Don't forget! You have %s %s waiting for your feedback!" % (feedback_requests.count(), ('people' if feedback_requests.count() > 1 else 'person'))
+    subject = "%s you can take right now!" % ('2 Quick actions' if feedback_requests.count() > 1 else '1 Quick action')
     text_content = render_to_string('email/feedback_request_reminder_email.txt', context)
     html_content = render_to_string('email/feedback_request_reminder_email.html', context)
     msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])

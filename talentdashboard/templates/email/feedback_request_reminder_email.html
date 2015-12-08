@@ -6,16 +6,16 @@
             Hi, {{ recipient.first_name }}!
         </p>
         <p>
-            The deadline for giving feedback is December 11th. Don't forget {% if feedback_request_count > 1%}these Fools are {% else %}this Fool is {% endif %}waiting for your feedback:
+            {% if feedback_request_count > 1%}Here are 2 pieces of feedback you can knock out right now:{% else %}You have one last person waiting for feedback!.  You can knock it out right now in as little as 3 minutes:{% endif %}:
 
             <ul>
             {% for request in feedback_requests %}
-                <li>{{ request.requester.full_name }} <a href="{{ domain_url }}/feedback/request/{{ request.id }}/reply">Leave feedback for {{ request.requester.first_name }}</a></li>
+                <li ng-if="$index>2">{{ request.requester.full_name }} <a href="{{ domain_url }}/feedback/request/{{ request.id }}/reply">Leave feedback for {{ request.requester.first_name }}</a></li>
             {% endfor %}
             </ul>
         </p>
         <p>
-            This can take as little as three minutes{% if feedback_request_count %} each{% endif %}, and it will really matter to them!
+           The deadline for giving feedback is this Friday.
         </p>
     </body>
 </html>
