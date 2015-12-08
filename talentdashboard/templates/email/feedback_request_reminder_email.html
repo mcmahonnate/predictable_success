@@ -6,7 +6,7 @@
             Hi, {{ recipient.first_name }}!
         </p>
         <p>
-            {% if feedback_request_count > 1%}Here are 2 pieces of feedback you can knock out right now:{% else %}You have one last person waiting for feedback!.  You can knock it out right now in as little as 3 minutes:{% endif %}:
+            {% if feedback_request_count > 1%}Here are 2 pieces of feedback you can knock out right now:{% else %}You have one last person waiting for feedback!.  You can knock it out right now in as little as 3 minutes:{% endif %}
 
             <ul>
             {% for request in feedback_requests %}
@@ -17,7 +17,7 @@
             </ul>
         </p>
         <p>
-           The deadline for giving feedback is this Friday.
+           The deadline for giving feedback is this Friday. If you have any questions hit us up on slack <a href="https://fool.slack.com/messages/360-feedback-help/details/">#360-feedback-help</a>.
         </p>
     </body>
 </html>
