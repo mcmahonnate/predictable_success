@@ -9,6 +9,14 @@
         <div class="col-md-8">
             <div class="panel">
                 <div class="panel-body">
+                    <div class="alert alert-info alert-previous-feedback" ng-repeat="previousFeedback in submitFeedback.mySubmissions | filter: {subject:{id:submitFeedback.subject.id}} | limitTo:1">
+                        <i class="fa fa-info-circle"></i>
+                        You gave {{ previousFeedback.subject.first_name }} feedback {{ previousFeedback.feedback_date | fromNow }} 
+                        <a href="/#/feedback/submission/{{ previousFeedback.id}}" target="_blank">View your feedback</a>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>    
                     <sm-feedback-submission-form feedback="submitFeedback.feedback" subject="submitFeedback.subject" questions="submitFeedback.questions" submit="submitFeedback.submitFeedback(form)" cancel="submitFeedback.cancel()" toggle="submitFeedback.toggleAnonymous(submitFeedback.feedback.anonymous, submitFeedback.subject)" />
                 </div> 
             </div>

@@ -7,11 +7,16 @@
         BaseSubmitFeedbackController.call(this, $location, $modal, $rootScope);
         
         var vm = this;
+        vm.mySubmissions = [];
         vm.employees = [];
         vm.subject = null;
         vm.goTo = goTo;
         activate();
  
+        function activate() {
+            getEmployees();
+            getMySubmissions();
+        }
 
         function goTo(path) {
             var cancel = confirm("Are you sure you want to lose all the great feedback you've already written?");
@@ -25,10 +30,6 @@
             } 
         };
 
-        function activate() {
-            getEmployees();
-        }
-
         function getEmployees() {
             return FeedbackSubmissionService.getEmployees()
                 .then(function (employees) {
@@ -36,6 +37,16 @@
                     return vm.employees;
                 });
         }
+
+        function getMySubmissions() {
+            FeedbackSubmissionService.getFeedbackIveSubmitted()
+                .then(function (data) {
+                    vm.mySubmissions = data;
+                    vm.mySubmissionsLoaded = true;
+                    return vm.mySubmissions;
+                });
+        }
+
 
         this._submitFeedback = function() {
             return FeedbackSubmissionService.giveUnsolicitedFeedback(vm.subject, vm.feedback)

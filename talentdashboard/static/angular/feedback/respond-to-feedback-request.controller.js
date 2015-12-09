@@ -6,6 +6,7 @@
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         BaseSubmitFeedbackController.call(this, $location, $modal, $rootScope);
         var vm = this;
+        vm.mySubmissions = [];
         vm.feedbackRequest = null;
         vm.goTo = goTo;
 
@@ -13,6 +14,7 @@
 
         function activate() {
             getFeedbackRequest();
+            getMySubmissions();
         }
 
         function goTo(path) {
@@ -35,6 +37,15 @@
                 .catch(function() {
                     Notification.error("You don't have access to this feedback request.");
                     $location.path('/feedback/');
+                });
+        }
+
+        function getMySubmissions() {
+            FeedbackSubmissionService.getFeedbackIveSubmitted()
+                .then(function (data) {
+                    vm.mySubmissions = data;
+                    vm.mySubmissionsLoaded = true;
+                    return vm.mySubmissions;
                 });
         }
 
