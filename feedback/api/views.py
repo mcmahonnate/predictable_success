@@ -173,6 +173,14 @@ class CoachUpdateFeedbackSubmission(generics.UpdateAPIView):
         submission = self.get_object()
         return submission.subject
 
+class EmployeeUpdateFeedbackSubmission(generics.UpdateAPIView):
+    queryset = FeedbackSubmission.objects.all()
+    permission_classes = (IsAuthenticated, UserIsEmployee)
+    serializer_class = EmployeeEditFeedbackSubmissionSerializer
+
+    def get_employee(self):
+        submission = self.get_object()
+        return submission.subject
 
 class RetrieveMyFeedbackDigests(ListAPIView):
     permission_classes = (IsAuthenticated,)
