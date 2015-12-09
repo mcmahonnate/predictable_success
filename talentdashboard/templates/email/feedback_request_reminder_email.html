@@ -6,18 +6,17 @@
             Hi, {{ recipient.first_name }}!
         </p>
         <p>
-            {% if feedback_request_count > 1%}Here are 2 pieces of feedback you can knock out right now:{% else %}You have one last person waiting for feedback!.  You can knock it out right now in as little as 3 minutes:{% endif %}:
+            The deadline for giving feedback is December 11th. Don't forget {% if feedback_request_count > 1%}these Fools are {% else %}this Fool is {% endif %}waiting for your feedback:
 
             <ul>
             {% for request in feedback_requests %}
-                {% if forloop.counter0 < 2 %}
-                    <li>{{ request.requester.full_name }} <a href="{{ domain_url }}/feedback/request/{{ request.id }}/reply">Leave feedback for {{ request.requester.first_name }}</a></li>
-                {% endif %}
+                <li>{{ request.requester.full_name }} <a href="{{ domain_url }}/feedback/request/{{ request.id }}/reply">Leave feedback for {{ request.requester.first_name }}</a></li>
             {% endfor %}
             </ul>
         </p>
         <p>
-           The deadline for giving feedback is this Friday.
+            This can take as little as three minutes{% if feedback_request_count %} each{% endif %}, and it will really matter to them! Hit us up on slack <a href="https://fool.slack.com/messages/360-feedback-help/details/">#360-feedback-help</a> if you have any questions.
         </p>
+
     </body>
 </html>
