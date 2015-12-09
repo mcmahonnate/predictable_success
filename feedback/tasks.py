@@ -66,7 +66,7 @@ def send_feedback_digest_email(digest_id):
     if not recipient_email:
         return
     tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
-    digest_url = 'https://%s/#/feedback/' % (tenant.domain_url, feedback_digest.id)
+    digest_url = 'https://%s/#/feedback/%s' % (tenant.domain_url, feedback_digest.id)
     context = {
         'recipient_first_name': feedback_digest.subject.first_name,
         'delivered_by_full_name': feedback_digest.delivered_by.full_name,

@@ -5,7 +5,7 @@ from model_utils.models import TimeStampedModel
 from org.models import Employee
 from django.db.models import Q
 from itertools import chain, groupby
-from .tasks import send_feedback_request_email
+from .tasks import send_feedback_request_email, send_feedback_digest_email
 
 
 class FeedbackRequestManager(models.Manager):
@@ -162,6 +162,7 @@ class FeedbackDigest(TimeStampedModel):
         self.delivery_date = timezone.now()
         self.submissions.all().update(has_been_delivered=True)
         self.save()
+        send_feedback_digest_email.subtask((self.id,)).apply_async()
 
     def __str__(self):
         return "Feedback Digest for %s delivered by %s" % (self.subject, self.delivered_by)
