@@ -9,7 +9,8 @@ function FeedbackSubmissionService($http, $log, FeedbackSubmissionResource, Empl
         getEmployees: getEmployees,
         respondToFeedbackRequest: respondToFeedbackRequest,
         giveUnsolicitedFeedback: giveUnsolicitedFeedback,
-        getFeedbackIveSubmitted: getFeedbackIveSubmitted
+        getFeedbackIveSubmitted: getFeedbackIveSubmitted,
+        updateWasHelpful: updateWasHelpful
     };
 
     function getFeedbackIveSubmitted() {
@@ -48,6 +49,18 @@ function FeedbackSubmissionService($http, $log, FeedbackSubmissionResource, Empl
 
         function fail(response) {
             $log.error('updateCoachSummary');
+        }
+    }
+
+    function updateWasHelpful(submission) {
+        return FeedbackSubmissionResource.updateWasHelpful({id: submission.id}, submission, success, fail).$promise;
+
+        function success(response) {
+            return response;
+        }
+
+        function fail(response) {
+            $log.error('updateWasHelpful');
         }
     }
 
