@@ -10,7 +10,8 @@ function FeedbackSubmissionService($http, $log, FeedbackSubmissionResource, Empl
         respondToFeedbackRequest: respondToFeedbackRequest,
         giveUnsolicitedFeedback: giveUnsolicitedFeedback,
         getFeedbackIveSubmitted: getFeedbackIveSubmitted,
-        updateWasHelpful: updateWasHelpful
+        updateExcelsWasHelpful: updateExcelsWasHelpful,
+        updateCouldImproveOnWasHelpful: updateCouldImproveOnWasHelpful
     };
 
     function getFeedbackIveSubmitted() {
@@ -52,7 +53,8 @@ function FeedbackSubmissionService($http, $log, FeedbackSubmissionResource, Empl
         }
     }
 
-    function updateWasHelpful(submission) {
+    function updateExcelsWasHelpful(submission) {
+        submission.excels_at_was_helpful = !submission.excels_at_was_helpful;
         return FeedbackSubmissionResource.updateWasHelpful({id: submission.id}, submission, success, fail).$promise;
 
         function success(response) {
@@ -64,6 +66,18 @@ function FeedbackSubmissionService($http, $log, FeedbackSubmissionResource, Empl
         }
     }
 
+    function updateCouldImproveOnWasHelpful(submission) {
+        submission.could_improve_on_was_helpful = !submission.could_improve_on_was_helpful;
+        return FeedbackSubmissionResource.updateWasHelpful({id: submission.id}, submission, success, fail).$promise;
+
+        function success(response) {
+            return response;
+        }
+
+        function fail(response) {
+            $log.error('updateWasHelpful');
+        }
+    }    
 
     function getEmployees() {
         return Employee.query({show_hidden: true, view_all: true}, success, fail).$promise;

@@ -1,4 +1,8 @@
 <div id="feedback" class="container" data-hj-masked>
+    <div class="pull-right">
+        <h2 class="panel-title" style="margin-bottom:0">{{ feedback.digest.delivery_date | date:'longDate' }}</h2>
+        <span style="color: #aaa;font-style: italic;">Delivered by: {{ feedback.digest.delivered_by.full_name }}</span>
+    </div>    
     <h1 class="page-title">
         <a href="" ng-click="feedback.goTo('feedback')">Feedback</a>
         <span>&raquo; for</span>
@@ -6,18 +10,15 @@
     </h1>
     <div style="padding-top:20px">
         <div class="panel">
-            <a id="digest{{ digest.id }}"></a>
-            <h2 class="panel-title" style="margin-bottom:0">{{ feedback.digest.delivery_date | date:'longDate' }}</h2>
-            <span style="color: #aaa;font-style: italic;">Delivered by: {{ feedback.digest.delivered_by.full_name }}</span>
             <div ng-show="feedback.digest.summary">
-                <h3 style="margin-top:25px;margin-bottom:15px;">Summary from your Coach</h3>
+                <h3 class="panel-title">Summary from your Coach</h3>
                 <p style="white-space: pre-line;">{{ feedback.digest.summary }}</p>
             </div>
-            <h3 style="margin-top:25px">{{ feedback.questions.excelsAtQuestion }}</h3>
+            <h3 class="panel-title" >{{ feedback.questions.excelsAtQuestion }}</h3>
             <table class="table table-striped" style="margin-bottom:45px">
                 <thead>
                     <tr>
-                      <th style="width:20%"></th>
+                      <th style="width:15%"></th>
                       <th class="centered" style="width:65%"></th>
                       <th></th>
                     </tr>
@@ -25,28 +26,30 @@
                 <tbody>
                     <tr ng-repeat="submission in feedback.digest.submissions">
                         <td ng-show="!submission.anonymous" class="centered">
-                            <span class="large-headshot" style="margin: 20px auto 5px;">
+                            <span class="large-headshot" style="margin: 10px auto 5px;">
                                 <img class="headshot-image" ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
                             </span>
-                            {{ submission.reviewer.full_name }}
-                            {{ submission.requester.full_name }}
+                            <strong>{{ submission.reviewer.full_name }}</strong>
                         </td>
                         <td ng-show="submission.anonymous">
                                 <span class="tiny-headshot">
                                     <img src="//hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg"/>
                                 </span>
-                            Anonymous
+                            <strong>Anonymous</strong>
                         </td>
-                        <td style="white-space: pre-line;">{{ submission.excels_at }} <div class="helpfulness">Was this feedback helpful? <a href="" class="btn btn-default btn-sm">Yes</a></div></td>
+                        <td style="white-space: pre-line; padding:20px">{{ submission.excels_at }} 
+                            <div class="helpfulness">Was this feedback helpful? <button type="button" ng-class="{ishelpful: submission.excels_at_was_helpful == true}" ng-model="submission.id.excels_at_was_helpful" ng-click="feedback.updateExcelsAtHelpfulness(submission)" class="btn btn-default btn-sm"><i class="fa fa-thumbs-up"></i></button>
+                            </div>
+                        </td>
                         <td></td>
                     </tr>
                 </tbody>
             </table>
-            <h3>{{ feedback.questions.couldImproveOnQuestion }}</h3>
+            <h3 class="panel-title">{{ feedback.questions.couldImproveOnQuestion }}</h3>
             <table class="table table-striped" style="margin-bottom:45px">
                 <thead>
                     <tr>
-                      <th style="width:20%"></th>
+                      <th style="width:15%"></th>
                       <th class="centered" style="width:65%"></th>
                       <th></th>
                     </tr>
@@ -54,20 +57,22 @@
                 <tbody>
                     <tr ng-repeat="submission in feedback.digest.submissions">
                         <td ng-show="!submission.anonymous" class="centered">
-                            <span class="large-headshot" style="margin: 20px auto 5px;">
+                            <span class="large-headshot" style="margin: 10px auto 5px;">
                                 <img class="headshot-image" ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
                             </span>
-                            {{ submission.reviewer.full_name }}
-                            {{ submission.requester.full_name }}
+                            <strong>{{ submission.reviewer.full_name }}</strong>
                         </td>
                         <td ng-show="submission.anonymous">
                                 <span class="tiny-headshot">
                                     <img src="//hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg"/>
                                 </span>
-                            Anonymous
+                            <strong>Anonymous</strong>
                         </td>
-                        <td style="white-space: pre-line;">{{ submission.could_improve_on }} <div class="helpfulness">Was this feedback helpful? <a href="" class="btn btn-default btn-sm">Yes</a></div></td>
-                        <td></td>
+                        <td style="white-space: pre-line;padding:20px">{{ submission.could_improve_on }} 
+                            <div class="helpfulness">Was this feedback helpful? <button type="button" ng-class="{ishelpful: submission.could_improve_on_was_helpful == true}" ng-click="feedback.updateCouldImproveOnWasHelpful(submission)" class="btn btn-default btn-sm"><i class="fa fa-thumbs-up"></i></button></div>
+                        </td>
+                        <td>
+                        </td>
                     </tr>
                 </tbody>
             </table>

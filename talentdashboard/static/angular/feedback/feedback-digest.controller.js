@@ -2,9 +2,11 @@
         .module('feedback')
         .controller('FeedbackDigestController', FeedbackDigestController);
 
-    function FeedbackDigestController($routeParams, $window, $location, $scope, $rootScope, analytics, FeedbackDigestService, Notification) {
+    function FeedbackDigestController($routeParams, $window, $location, $scope, $rootScope, analytics, FeedbackSubmissionService, FeedbackDigestService, Notification) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         var vm = this;
+        vm.updateExcelsAtHelpfulness = updateExcelsAtHelpfulness;
+        vm.updateCouldImproveOnWasHelpful = updateCouldImproveOnWasHelpful;
         vm.digestId = $routeParams.id;
         vm.digest = null;
         vm.getDigest = getDigest;
@@ -35,6 +37,27 @@
                     $location.path('/feedback/');
                 });
         }
+
+        function updateExcelsAtHelpfulness(submission) {
+            FeedbackSubmissionService.updateExcelsWasHelpful(submission)
+                .then(function (data) {
+                    console.log(data);
+                })
+                .catch(function() {
+                    Notification.error("Something went wrong.");
+                });
+        }
+
+        function updateCouldImproveOnWasHelpful(submission) {
+            FeedbackSubmissionService.updateCouldImproveOnWasHelpful(submission)
+                .then(function (data) {
+                    console.log(data);
+                })
+                .catch(function() {
+                    Notification.error("Something went wrong.");
+                });
+        }        
+
 
         function printDigest() {
             $window.print();
