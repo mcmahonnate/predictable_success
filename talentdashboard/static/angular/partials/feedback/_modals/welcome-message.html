@@ -17,18 +17,3 @@
         </div>
     </div>                  
 </div>
-
-<script type="text/javascript">
-
-    $(function() {
-
-        if (!Cookies.get('welcome')) {
-
-            /* Auto luanch the modal if no welcome cookie */
-            $('.feedback-welcome-modal').delay(750).queue(function(){ $(this).modal('show').dequeue(); });
-        }
-
-        /* Set a welcome cookie */
-        Cookies.set('welcome', 'true');        
-    });
-</script>
