@@ -18,13 +18,14 @@
                 <thead>
                     <tr>
                       <th style="width:20%"></th>
-                      <th class="centered" style="width:70%"></th>
+                      <th class="centered" style="width:65%"></th>
+                      <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="submission in feedback.digest.submissions">
-                        <td ng-show="!submission.anonymous">
-                            <span class="tiny-headshot">
+                        <td ng-show="!submission.anonymous" class="centered">
+                            <span class="large-headshot" style="margin: 20px auto 5px;">
                                 <img class="headshot-image" ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
                             </span>
                             {{ submission.reviewer.full_name }}
@@ -36,9 +37,8 @@
                                 </span>
                             Anonymous
                         </td>
-                        <td style="white-space: pre-line;">
-                            {{ submission.excels_at }}
-                        </td>
+                        <td style="white-space: pre-line;">{{ submission.excels_at }} <div class="helpfulness">Was this feedback helpful? <a href="" class="btn btn-default btn-sm">Yes</a></div></td>
+                        <td></td>
                     </tr>
                 </tbody>
             </table>
@@ -47,13 +47,14 @@
                 <thead>
                     <tr>
                       <th style="width:20%"></th>
-                      <th class="centered" style="width:70%"></th>
+                      <th class="centered" style="width:65%"></th>
+                      <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="submission in feedback.digest.submissions">
-                        <td ng-show="!submission.anonymous">
-                            <span class="tiny-headshot">
+                        <td ng-show="!submission.anonymous" class="centered">
+                            <span class="large-headshot" style="margin: 20px auto 5px;">
                                 <img class="headshot-image" ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
                             </span>
                             {{ submission.reviewer.full_name }}
@@ -65,9 +66,8 @@
                                 </span>
                             Anonymous
                         </td>
-                        <td style="white-space: pre-line;">
-                            {{ submission.could_improve_on }}
-                        </td>
+                        <td style="white-space: pre-line;">{{ submission.could_improve_on }} <div class="helpfulness">Was this feedback helpful? <a href="" class="btn btn-default btn-sm">Yes</a></div></td>
+                        <td></td>
                     </tr>
                 </tbody>
             </table>
