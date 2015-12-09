@@ -1,0 +1,79 @@
+<div id="feedback" class="container" data-hj-masked>
+    <h1 class="page-title">
+        <a href="" ng-click="feedback.goTo('feedback')">Feedback</a>
+        <span>&raquo; for</span>
+        <span data-hj-masked>{{ feedback.digest.subject.full_name }}</span>
+    </h1>
+    <div style="padding-top:20px">
+        <div class="panel">
+            <a id="digest{{ digest.id }}"></a>
+            <h2 class="panel-title" style="margin-bottom:0">{{ feedback.digest.delivery_date | date:'longDate' }}</h2>
+            <span style="color: #aaa;font-style: italic;">Delivered by: {{ feedback.digest.delivered_by.full_name }}</span>
+            <div ng-show="feedback.digest.summary">
+                <h3 style="margin-top:25px;margin-bottom:15px;">Summary from your Coach</h3>
+                <p style="white-space: pre-line;">{{ feedback.digest.summary }}</p>
+            </div>
+            <h3 style="margin-top:25px">{{ feedback.questions.excelsAtQuestion }}</h3>
+            <table class="table table-striped" style="margin-bottom:45px">
+                <thead>
+                    <tr>
+                      <th style="width:20%"></th>
+                      <th class="centered" style="width:70%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="submission in feedback.digest.submissions">
+                        <td ng-show="!submission.anonymous">
+                            <span class="tiny-headshot">
+                                <img class="headshot-image" ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
+                            </span>
+                            {{ submission.reviewer.full_name }}
+                            {{ submission.requester.full_name }}
+                        </td>
+                        <td ng-show="submission.anonymous">
+                                <span class="tiny-headshot">
+                                    <img src="//hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg"/>
+                                </span>
+                            Anonymous
+                        </td>
+                        <td style="white-space: pre-line;">
+                            {{ submission.excels_at }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <h3>{{ feedback.questions.couldImproveOnQuestion }}</h3>
+            <table class="table table-striped" style="margin-bottom:45px">
+                <thead>
+                    <tr>
+                      <th style="width:20%"></th>
+                      <th class="centered" style="width:70%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="submission in feedback.digest.submissions">
+                        <td ng-show="!submission.anonymous">
+                            <span class="tiny-headshot">
+                                <img class="headshot-image" ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
+                            </span>
+                            {{ submission.reviewer.full_name }}
+                            {{ submission.requester.full_name }}
+                        </td>
+                        <td ng-show="submission.anonymous">
+                                <span class="tiny-headshot">
+                                    <img src="//hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg"/>
+                                </span>
+                            Anonymous
+                        </td>
+                        <td style="white-space: pre-line;">
+                            {{ submission.could_improve_on }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <br/>
+            <button class="btn btn-default" type="button" ng-click="feedback.goTo('feedback')">&larr; Back</button>
+            <button class="btn btn-default pull-right" type="button" ng-click="feedback.printDigest()">Print</button>
+        </div>
+    </div>
+</div>

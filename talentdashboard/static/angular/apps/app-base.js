@@ -29,6 +29,7 @@ var app = angular.module('tdb', [
             when('/feedback', {templateUrl: '/static/angular/partials/feedback/index.html', controller: 'FeedbackController as feedback', resolve: {authorizeRoute: authorizeRoute}}).
             when('/feedback/:id/worksheet', {templateUrl: '/static/angular/partials/feedback/feedback_worksheet.html', controller: 'FeedbackWorksheetController as feedbackWorksheet', resolve: {authorizeRoute: authorizeRoute}}).
             when('/feedback/digest/:id', {templateUrl: '/static/angular/partials/feedback/feedback_digest_for_coaches.html', controller: 'FeedbackDigestController as feedbackWorksheet', resolve: {authorizeRoute: authorizeRoute}}).
+            when('/feedback/:id', {templateUrl: '/static/angular/partials/feedback/my_feedback.html', controller: 'FeedbackDigestController as feedback', resolve: {authorizeRoute: authorizeRoute}}).
             when('/my-profile', {templateUrl: '/static/angular/partials/profile.html', controller: 'ProfileCtrl', resolve: {authorizeRoute: authorizeRoute}}).
             otherwise({redirectTo: '/'});
     }])

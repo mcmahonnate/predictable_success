@@ -9,6 +9,7 @@
         vm.digest = null;
         vm.getDigest = getDigest;
         vm.printDigest = printDigest;
+        vm.goTo = goTo;
         vm.coach = null;
         vm.employee = null;
         vm.questions = {
@@ -38,4 +39,8 @@
         function printDigest() {
             $window.print();
         }
+
+        function goTo(path) {
+            $location.path(path);
+        };
     }

@@ -36,7 +36,39 @@
             Your request for feedback has been sent to 
             <span ng-repeat="employee in successRequestMessageRecipient">{{ employee.full_name }}{{$last ? '' : ($index==successRequestMessageRecipient.length-2) ? ' and ' : ', '}}</span>.
         </p>    
-    </div>    
+    </div>
+    <div class="panel" ng-show="feedback.myDigests.length>0">
+        <table class="table responsive-table">
+            <caption class="panel-title">
+                My Feedback
+            </caption>
+            <thead>
+                <tr>
+                    <th scope="col" class="width-15-percent">When</th>
+                    <th scope="col" class="width-45-percent">Summary</th>
+                    <th scope="col" class="width-15-percent">Coach</th>
+                    <th scope="col" class="width-15-percent centered">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="digest in feedback.myDigests | orderBy:'delivery_date':true">
+                    <td class="timeago">{{ digest.delivery_date | fromNow }}</td>
+                    <td>{{ digest.summary }}</td>
+                    <td>
+                        <span class="tiny-headshot">
+                            <img class="headshot-image" ng-src="{{ digest.delivered_by.avatar_small }}" alt="{{ digest.delivered_by.full_name }}'s avatar" />
+                        </span>
+                        <span>{{ digest.delivered_by.full_name }}</span>
+                    </td>
+                    <td class="centered">
+                        <a class="btn btn-default btn-md give-feedback-btn" ng-href="#/feedback/{{ digest.id }}" type="button">
+                            <i class="fa fa-eye"></i> View
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
     <div class="panel" ng-show="feedback.feedbackRequests.length>0">
         <table class="table responsive-table">
@@ -141,75 +173,6 @@
                 </tr>
             </tbody>
         </table>
-    </div>
-    <div style="padding-top:20px" ng-repeat="digest in feedback.myDigests | orderBy:'delivery_date':true">
-        <div class="panel">
-            <a id="digest{{ digest.id }}"></a>
-            <h2 class="panel-title" style="margin-bottom:0">360 Feedback- {{ digest.delivery_date | date:'longDate' }}</h2>
-            <span style="color: #aaa;font-style: italic;">Delivered by: {{ digest.delivered_by.full_name }}</span>
-            <div ng-show="digest.summary">
-                <h3 style="margin-top:25px;margin-bottom:15px;">Summary from your Coach</h3>
-                <p style="white-space: pre-line;">{{ digest.summary }}</p>
-            </div>
-            <h3 style="margin-top:25px">{{ feedback.questions.excelsAtQuestion }}</h3>
-            <table class="table table-striped" style="margin-bottom:45px">
-                <thead>
-                    <tr>
-                      <th style="width:20%"></th>
-                      <th class="centered" style="width:70%"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="submission in digest.submissions">
-                        <td ng-show="!submission.anonymous">
-                            <span class="tiny-headshot">
-                                <img class="headshot-image" ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
-                            </span>
-                            {{ submission.reviewer.full_name }}
-                            {{ submission.requester.full_name }}
-                        </td>
-                        <td ng-show="submission.anonymous">
-                                <span class="tiny-headshot">
-                                    <img src="//hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg"/>
-                                </span>
-                            Anonymous
-                        </td>
-                        <td style="white-space: pre-line;">
-                            {{ submission.excels_at }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <h3>{{ feedback.questions.couldImproveOnQuestion }}</h3>
-            <table class="table table-striped" style="margin-bottom:45px">
-                <thead>
-                    <tr>
-                      <th style="width:20%"></th>
-                      <th class="centered" style="width:70%"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="submission in digest.submissions">
-                        <td ng-show="!submission.anonymous">
-                            <span class="tiny-headshot">
-                                <img class="headshot-image" ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
-                            </span>
-                            {{ submission.reviewer.full_name }}
-                            {{ submission.requester.full_name }}
-                        </td>
-                        <td ng-show="submission.anonymous">
-                                <span class="tiny-headshot">
-                                    <img src="//hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg"/>
-                                </span>
-                            Anonymous
-                        </td>
-                        <td style="white-space: pre-line;">
-                            {{ submission.could_improve_on }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
     </div>
     <div ng-include="'/static/angular/partials/feedback/_modals/welcome-message.html'"></div>
 </div>
