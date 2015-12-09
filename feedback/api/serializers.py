@@ -51,6 +51,13 @@ class CoachEditFeedbackSubmissionSerializer(serializers.ModelSerializer):
         read_only_fields = ['id',]
 
 
+class EmployeeEditFeedbackSubmissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FeedbackSubmission
+        fields = ['id', 'excels_at_was_helpful', 'could_improve_on_was_helpful',]
+        read_only_fields = ['id',]
+
+
 class WriteableFeedbackSubmissionSerializer(serializers.ModelSerializer):
     feedback_date = serializers.DateTimeField(required=False)
     subject = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
@@ -83,7 +90,7 @@ class FeedbackSubmissionSerializerForReviewer(serializers.ModelSerializer):
         model = FeedbackSubmission
         fields = ('id', 'feedback_date', 'subject', 'reviewer',
                   'excels_at', 'could_improve_on', 'unread',
-                  'has_been_delivered', 'anonymous')
+                  'has_been_delivered', 'anonymous', 'excels_at_was_helpful', 'could_improve_on_was_helpful')
 
 
 class FeedbackSubmissionSerializerForCoaches(serializers.ModelSerializer):
@@ -118,7 +125,7 @@ class FeedbackSubmissionSerializerForCoaches(serializers.ModelSerializer):
                   'excels_at', 'could_improve_on', 'excels_at_summarized',
                   'could_improve_on_summarized', 'unread',
                   'has_been_delivered', 'anonymous', 'has_digest',
-                  'was_requested', 'message')
+                  'was_requested', 'message', 'excels_at_was_helpful', 'could_improve_on_was_helpful')
 
 
 class FeedbackSubmissionSerializerForEmployee(serializers.ModelSerializer):
@@ -138,7 +145,7 @@ class FeedbackSubmissionSerializerForEmployee(serializers.ModelSerializer):
         model = FeedbackSubmission
         fields = ('id', 'feedback_date', 'subject', 'reviewer',
                   'excels_at', 'could_improve_on', 'unread',
-                  'has_been_delivered', 'anonymous')
+                  'has_been_delivered', 'anonymous', 'excels_at_was_helpful', 'could_improve_on_was_helpful')
 
 
 class EmployeeFeedbackReportSerializer(serializers.Serializer):

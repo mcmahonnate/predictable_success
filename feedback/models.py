@@ -93,6 +93,8 @@ class FeedbackSubmission(models.Model):
     could_improve_on = models.TextField(blank=True)
     excels_at_summarized = models.TextField(blank=True)
     could_improve_on_summarized = models.TextField(blank=True)
+    excels_at_was_helpful = models.BooleanField(default=False)
+    could_improve_on_was_helpful = models.BooleanField(default=False)
     has_been_delivered = models.BooleanField(default=False)
     unread = models.BooleanField(default=True)
     anonymous = models.BooleanField(default=False)
