@@ -14,6 +14,7 @@
                 <h3 class="panel-title">Summary from your Coach</h3>
                 <p style="white-space: pre-line;">{{ feedback.digest.summary }}</p>
             </div>
+            <br/>
             <h3 class="panel-title" >{{ feedback.questions.excelsAtQuestion }}</h3>
             <table class="table table-striped" style="margin-bottom:45px">
                 <thead>
@@ -78,6 +79,7 @@
             </table>
             <br/>
             <button class="btn btn-default" type="button" ng-click="feedback.goTo('feedback')">&larr; Back</button>
+            <button class="btn btn-success pull-right" type="button" ng-click="feedback.shareDigest()"><i class="fa fa-paper-plane"></i> Share</button>
             <button class="btn btn-default pull-right" type="button" ng-click="feedback.printDigest()">Print</button>
         </div>
     </div>

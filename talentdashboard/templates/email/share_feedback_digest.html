@@ -1,0 +1,83 @@
+<div id="feedback" class="container" data-hj-masked>
+
+    <div style="padding-top:20px">
+        <div class="panel">
+            <h2 class="panel-title" style="margin-bottom:0">{{ digest.delivery_date | date:'longDate' }}</h2>
+            <span style="color: #aaa;font-style: italic;">Delivered by: {{ digest.delivered_by.full_name }}</span>
+            {% if digest.summary %}
+            <div>
+                <h3 style="margin-top:25px;margin-bottom:15px;">Summary from your Coach</h3>
+                <p style="white-space: pre-line;">{{ digest.summary }}</p>
+            </div>
+            {% endif %}
+            <h3 style="margin-top:25px">{{ questions.excelsAtQuestion }}</h3>
+            <table class="table table-striped" style="margin-bottom:45px">
+                <thead>
+                    <tr>
+                      <th style="width:20%"></th>
+                      <th class="centered" style="width:70%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for submission in digest.submissions %}
+                    <tr>
+                        {% if submission.anonymous %}
+                        <td>
+                                <span class="tiny-headshot">
+                                    <img src="//hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg"/>
+                                </span>
+                            Anonymous
+                        </td>
+                        {% else %}
+                        <td>
+                            <span class="tiny-headshot">
+                                <img class="headshot-image" src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
+                            </span>
+                            {{ submission.reviewer.full_name }}
+                            {{ submission.requester.full_name }}
+                        </td>
+                        {% endif %}
+                        <td style="white-space: pre-line;">
+                            {{ submission.excels_at }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <h3>{{ feedback.questions.couldImproveOnQuestion }}</h3>
+            <table class="table table-striped" style="margin-bottom:45px">
+                <thead>
+                    <tr>
+                      <th style="width:20%"></th>
+                      <th class="centered" style="width:70%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for submission in digest.submissions %}
+                    <tr>
+                        {% if submission.anonymous %}
+                        <td>
+                                <span class="tiny-headshot">
+                                    <img src="//hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg"/>
+                                </span>
+                            Anonymous
+                        </td>
+                        {% else %}
+                        <td>
+                            <span class="tiny-headshot">
+                                <img class="headshot-image" src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
+                            </span>
+                            {{ submission.reviewer.full_name }}
+                            {{ submission.requester.full_name }}
+                        </td>
+                        {% endif %}
+                        <td style="white-space: pre-line;">
+                            {{ submission.could_improve_on }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

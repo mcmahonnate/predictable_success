@@ -1,0 +1,27 @@
+<form id="feedback-modal" novalidate="novalidate" data-hj-masked>
+    <button ng-click="share.cancel()" class="close">&times;</button>
+    <div class="modal-body">
+        <h3 class="modal-title">Who would you like to share your feedback with?</h3>
+        <ui-select
+            id="to"
+            ng-model="share.send_to"
+            reset-search-input="false"
+            theme="selectize"
+            style="max-width:300px;"
+            >
+            <ui-select-match placeholder="Type an employee's name">
+                {{ $select.selected.full_name }}
+            </ui-select-match>
+            <ui-select-choices repeat="employee in share.employees | filter: {full_name: $select.search} | orderBy:'full_name'">
+                <span class="tiny-headshot">
+                    <img ng-src="{{ employee.avatar_small }}" alt="{{ employee.full_name }}'s avatar" />
+                </span>
+                <div class="names" ng-bind-html="employee.full_name | highlight: $select.search"></div>
+            </ui-select-choices>
+        </ui-select>
+    </div>
+    <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-light pull-left" ng-click="share.cancel()">Cancel</button>
+        <button ng-disabled="!share.send_to" type="button" class="btn btn-success" ng-click="share.shareDigest()" data-dismiss="modal"><i class="fa fa-paper-plane"></i> Share Feedback</button>
+    </div>
+</form>

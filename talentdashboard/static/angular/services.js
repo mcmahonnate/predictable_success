@@ -94,7 +94,20 @@ angular.module('analytics', ['ng'])
               $window.ga('send', 'pageview', locationPath);
             });
           } else {
-            console.log('not tracked', locationPath);
+            console.log('Page not tracked', locationPath);
+          }
+        },
+        trackEvent: function (scope, absoluteUrl, category, action, label) {
+
+          if (absoluteUrl.indexOf("0.0.0.0") < 0 && absoluteUrl.indexOf("localhost") < 0) {
+              $window.ga('send', {
+                hitType: 'event',
+                eventCategory: category,
+                eventAction: action,
+                eventLabel: label
+              });
+          } else {
+            console.log('Event not tracked', label);
           }
         }
     };

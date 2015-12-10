@@ -2,7 +2,7 @@
         .module('feedback')
         .controller('FeedbackDigestController', FeedbackDigestController);
 
-    function FeedbackDigestController($routeParams, $window, $location, $scope, $rootScope, analytics, FeedbackSubmissionService, FeedbackDigestService, Notification) {
+    function FeedbackDigestController($routeParams, $window, $location, $scope, $rootScope, $modal, analytics, FeedbackSubmissionService, FeedbackDigestService, Notification) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         var vm = this;
         vm.updateExcelsAtHelpfulness = updateExcelsAtHelpfulness;
@@ -11,6 +11,7 @@
         vm.digest = null;
         vm.getDigest = getDigest;
         vm.printDigest = printDigest;
+        vm.shareDigest = shareDigest;
         vm.goTo = goTo;
         vm.coach = null;
         vm.employee = null;
@@ -58,6 +59,21 @@
                 });
         }        
 
+        function shareDigest() {
+            analytics.trackEvent($scope, $location.absUrl(), 'Feedback Share', 'click', vm.employee.id);
+            var modalInstance = $modal.open({
+                animation: true,
+                windowClass: 'xx-dialog fade zoom',
+                backdrop: 'static',
+                templateUrl: '/static/angular/partials/feedback/_modals/share-feedback.html',
+                controller: 'ShareFeedbackController as share',
+                resolve: {
+                    digest: function () {
+                        return vm.digest
+                    }
+                }
+            });
+        }
 
         function printDigest() {
             $window.print();
