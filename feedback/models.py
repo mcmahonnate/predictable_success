@@ -166,6 +166,9 @@ class FeedbackDigest(TimeStampedModel):
         self.save()
         send_feedback_digest_email.subtask((self.id,)).apply_async()
 
+    def share(self, send_to):
+        send_share_feedback_digest_email.subtask((self.id, send_to.id)).apply_async()
+
     def __str__(self):
         return "Feedback Digest for %s delivered by %s" % (self.subject, self.delivered_by)
 

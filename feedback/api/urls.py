@@ -20,4 +20,5 @@ urlpatterns = [
     url(r'^my/digests/$', RetrieveMyFeedbackDigests.as_view()),
     url(r'^digests/delivered/$', RetrieveFeedbackDigestsIveDelivered.as_view()),
     url(r'^digests/(?P<pk>[0-9]*)/$', RetrieveFeedbackDigest.as_view()),
+    url(r'^digests/(?P<pk>[0-9]*)/share/$', ShareFeedbackDigest.as_view()),
 ]

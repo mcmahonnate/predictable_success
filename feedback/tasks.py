@@ -5,6 +5,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 from django.db import connection
 from customers.models import Customer
+from org.models import Employee
 
 @app.task
 def send_feedback_request_email(request_id):
@@ -75,6 +76,26 @@ def send_feedback_digest_email(digest_id):
     subject = "Your feedback is ready!"
     text_content = render_to_string('email/feedback_digest_notification.txt', context)
     html_content = render_to_string('email/feedback_digest_notification.html', context)
+    msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
+
+
+@app.task
+def send_share_feedback_digest_email(digest_id, employee_id):
+    from feedback.models import FeedbackDigest
+    feedback_digest = FeedbackDigest.objects.get(id=digest_id)
+    employee = Employee.objects.get(id=employee_id)
+    recipient_email = employee.email
+    if not employee:
+        return
+    context = {
+        'recipient': employee,
+        'digest': feedback_digest,
+    }
+    subject = "%s has shared their feedback with you" % employee.full_name
+    text_content = render_to_string('email/share_feedback_digest.txt', context)
+    html_content = render_to_string('email/share_feedback_digest.html', context)
     msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
     msg.attach_alternative(html_content, "text/html")
     msg.send()

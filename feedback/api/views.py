@@ -228,6 +228,20 @@ class RetrieveFeedbackDigest(RetrieveAPIView):
         raise Exception("Can't determine which serializer class to use")
 
 
+class ShareFeedbackDigest(APIView):
+    permission_classes = (IsAuthenticated, UserIsEmployee)
+    queryset = FeedbackDigest.objects.all()
+
+    def get_employee(self):
+        digest = self.get_object()
+        return digest.subject
+
+    def post(self, request, pk):
+        digest = self.get_digest()
+        digest.share()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 class RetrieveUpdateCurrentFeedbackDigest(APIView):
     permission_classes = (IsAuthenticated, UserIsEmployeesCoach)
 
