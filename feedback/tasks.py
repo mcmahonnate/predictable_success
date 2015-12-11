@@ -87,12 +87,20 @@ def send_share_feedback_digest_email(digest_id, employee_id):
     feedback_digest = FeedbackDigest.objects.get(id=digest_id)
     employee = Employee.objects.get(id=employee_id)
     recipient_email = employee.email
+    customer = Customer.objects.filter(schema_name=connection.schema_name).first()
+    excels_at_question = customer.feedback_excels_at_question
+    could_improve_on_question = customer.feedback_could_improve_on_question
+
     if not employee:
         return
+
     context = {
         'recipient': employee,
         'digest': feedback_digest,
+        'excels_at_question': excels_at_question,
+        'could_improve_on_question': could_improve_on_question,
     }
+
     subject = "%s has shared their feedback with you" % employee.full_name
     text_content = render_to_string('email/share_feedback_digest.txt', context)
     html_content = render_to_string('email/share_feedback_digest.html', context)

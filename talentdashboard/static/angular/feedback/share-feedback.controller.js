@@ -8,7 +8,7 @@ angular
         vm.shareDigest = shareDigest;
         vm.cancel = cancel;
         vm.employees = [];
-        vm.send_to = null;
+        vm.share_with = null;
 
         activate();
 
@@ -28,9 +28,12 @@ angular
                 });
         }
 
-        function shareDigest(employee) {
+        function shareDigest() {
             analytics.trackEvent($scope, $location.absUrl(), 'Feedback Share', 'sent', vm.digest.subject.id);
-            Notification.success("Your feedback has been sent to " + vm.send_to.full_name);
-            $modalInstance.close();
+            return FeedbackDigestService.shareDigest(vm.digest, vm.share_with)
+                .then(function () {
+                    Notification.success("Your feedback has been sent to " + vm.share_with.full_name);
+                    $modalInstance.close();
+                });
         }
     }

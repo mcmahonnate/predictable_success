@@ -11,6 +11,7 @@ function FeedbackDigestService($log, $http) {
         addSubmissionToCurrentDigest: addSubmissionToCurrentDigest,
         removeSubmissionFromCurrentDigest: removeSubmissionFromCurrentDigest,
         deliverDigest: deliverDigest,
+        shareDigest: shareDigest,
         save: save
     };
 
@@ -109,6 +110,22 @@ function FeedbackDigestService($log, $http) {
     function deliverDigest(digest) {
         digest.has_been_delivered = true;
         return save(digest);
+    }
+
+    function shareDigest(digest, share_with) {
+        var url = '/api/v1/feedback/digests/' + digest.id + '/share/';
+        return $http.post(url, {'share_with_id': share_with.id})
+            .then(success)
+            .catch(fail);
+
+        function success(response) {
+            return response.data;
+        }
+
+        function fail(response) {
+            $log.error('getDigest failed');
+            throw response.statusText;
+        }
     }
 
     function save(digest) {
