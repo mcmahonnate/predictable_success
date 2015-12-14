@@ -322,4 +322,5 @@ class EmployeeSubmissionReport(object):
         cursor.execute("SELECT reviewer_id as total_could_improve_i_gave_that_was_helpful FROM feedback_feedbacksubmission WHERE could_improve_on_was_helpful AND reviewer_id = '%s'" % self.employee.id)
         self.total_could_improve_i_gave_that_was_helpful = cursor.rowcount
         self.total_i_gave_that_was_helpful = self.total_excels_at_i_gave_that_was_helpful + self.total_could_improve_i_gave_that_was_helpful
-        self.total_percent_helpful = self.total_i_gave_that_was_helpful / self.total_i_gave * 100
+        if self.total_i_gave > 0:
+            self.total_percent_helpful = (self.total_i_gave_that_was_helpful / self.total_i_gave) * 100
