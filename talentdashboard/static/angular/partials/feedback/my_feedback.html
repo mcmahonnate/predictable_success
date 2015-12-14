@@ -25,7 +25,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="submission in feedback.digest.submissions">
+                    <tr ng-repeat="submission in feedback.digest.submissions" ng-show="submission.excels_at">
                         <td ng-show="!submission.anonymous" class="centered">
                             <span class="large-headshot" style="margin: 10px auto 5px;">
                                 <img class="headshot-image" ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
@@ -56,7 +56,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="submission in feedback.digest.submissions">
+                    <tr ng-repeat="submission in feedback.digest.submissions" ng-show="submission.could_improve_on">
                         <td ng-show="!submission.anonymous" class="centered">
                             <span class="large-headshot" style="margin: 10px auto 5px;">
                                 <img class="headshot-image" ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />

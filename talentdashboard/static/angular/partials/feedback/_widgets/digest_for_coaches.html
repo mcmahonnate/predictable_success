@@ -20,7 +20,7 @@
         <p class="hide-for-print" ng-show="!feedbackWorksheet.digest" style="color:#888">Click the 'Add' button on someone's feedback to get started.</p>
         <div ng-show="feedbackWorksheet.digest.submissions.length>0">
             <div class="feedback-submission" ng-repeat="submission in feedbackWorksheet.digest.submissions">
-                <h4 class="section-title">{{ feedbackWorksheet.questions.excelsAtQuestion }}</h4>
+                <h4 ng-show="$first" class="section-title">{{ feedbackWorksheet.questions.excelsAtQuestion }}</h4>
 
                 <!-- Edit button -->
                 <a ng-show="view != 'delivered-view'" ng-href="#/feedback/submission/{{ submission.id }}/process" class="btn btn-xs btn-default pull-right"><i class="fa fa-pencil"></i> Edit</a>
@@ -62,8 +62,8 @@
             <div class="page-break"><!-- Used for printing --></div>
 
             
-            <div class="feedback-submission" ng-repeat="submission in feedbackWorksheet.digest.submissions">
-                <h4 class="section-title">{{ feedbackWorksheet.questions.couldImproveOnQuestion }}</h4>
+            <div class="feedback-submission" ng-repeat="submission in feedbackWorksheet.digest.submissions" ng-show="submission.could_improve_on || submission.could_improve_on_summarized">
+                <h4 ng-show="$first" class="section-title">{{ feedbackWorksheet.questions.couldImproveOnQuestion }}</h4>
 
                 <!-- Edit button -->
                 <a ng-show="view != 'delivered-view'" ng-href="#/feedback/submission/{{ submission.id }}/process" class="btn btn-xs btn-default pull-right"><i class="fa fa-pencil"></i> Edit</a>
