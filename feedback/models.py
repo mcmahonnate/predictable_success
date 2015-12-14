@@ -277,7 +277,6 @@ class EmployeeFeedbackReports(object):
             self.total_excels_at_i_gave_that_was_helpful += report.total_excels_at_i_gave_that_was_helpful
             self.total_could_improve_i_gave_that_was_helpful += report.total_could_improve_i_gave_that_was_helpful
             self.total_i_gave_that_was_helpful += report.total_i_gave_that_was_helpful
-            self.total_percent_helpful += report.percent_helpful
 
 
 class EmployeeFeedbackReport(object):
