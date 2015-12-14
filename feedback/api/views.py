@@ -87,7 +87,7 @@ class RetrieveMyFeedbackSubmissions(ListAPIView):
     def get_queryset(self):
         try:
             employee = self.request.user.employee
-            submissions = FeedbackSubmission.objects.submitted_not_delivered(reviewer=employee)
+            submissions = FeedbackSubmission.objects.submitted(reviewer=employee)
             return submissions
         except FeedbackSubmission.DoesNotExist:
             raise Http404()

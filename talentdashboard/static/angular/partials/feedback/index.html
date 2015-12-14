@@ -147,7 +147,8 @@
                 <tr>
                   <th scope="col" class="width-15-percent">Person</th>
                   <th scope="col" class="width-15-percent">Sent</th>
-                  <th scope="col" class="width-40-percent hide-for-mobile-and-tablet left-aligned">Anonymous</th>
+                  <th scope="col" class="width-40-percent hide-for-mobile-and-tablet centered">Anonymous</th>
+                  <th scope="col" class="width-40-percent hide-for-mobile-and-tablet centered">Delivered</th>
                   <th scope="col" class="width-15-percent centered">Action</th>
                 </tr>
             </thead>
@@ -162,8 +163,11 @@
                     <td class="timeago">
                         {{ submission.feedback_date | fromNow }}
                     </td>
-                    <td class="left-aligned hide-for-mobile-and-tablet">
+                    <td class="centered hide-for-mobile-and-tablet">
                         <i ng-show="{{ submission.anonymous }}" class="fa fa-check" title="Anonymous"></i>
+                    </td>
+                    <td class="centered hide-for-mobile-and-tablet">
+                        <i ng-show="{{ submission.has_been_delivered }}" class="fa fa-check" title="Delivered"></i>
                     </td>
                     <td class="centered">
                         <a class="btn btn-default btn-md btn-view-feedback" ng-href="#/feedback/submission/{{ submission.id }}/" type="button">
