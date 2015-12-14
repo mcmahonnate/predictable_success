@@ -1,8 +1,10 @@
 <div id="feedback" class="container" data-hj-masked>
     <div>
-        <div class="header-links hide-for-mobile-and-tablet pull-right">
-            <a href="" data-toggle="modal" data-target=".feedback-welcome-modal" class="show-welcome-modal">Show welcome message</a>
-            <a target="_blank" href="https://fool.slack.com/messages/feedback_for_scoutmap/">Tell us what you think!</a>
+        <div ng-show="feedback.myHelpfulness.total_percent_helpful" class="feedback-helpfulness-total hide-for-mobile-and-tablet pull-right">
+            <img ng-show="feedback.myHelpfulness.total_percent_helpful >= 90" src="static/images/medal_award_gold.png" class="award" alt="You've earned the gold award!" />
+            <img ng-show="feedback.myHelpfulness.total_percent_helpful <= 89 && feedback.myHelpfulness.total_percent_helpful >= 80" src="static/images/medal_award_silver.png" class="award" alt="You've earned the silver award!" />
+            <img ng-show="feedback.myHelpfulness.total_percent_helpful <= 79" src="static/images/medal_award_bronze.png" class="award" alt="You've earned the bronze award!" />
+            {{ feedback.myHelpfulness.total_percent_helpful }}% of the feedback you've given has been helpful.
         </div>
         <h1>Feedback
             <div class="button-group">

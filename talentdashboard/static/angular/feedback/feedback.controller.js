@@ -14,6 +14,7 @@ function FeedbackController(FeedbackRequestService, FeedbackDigestService, Feedb
     vm.myDigests = [];
     vm.showEmptyScreen = false;
     vm.mySubmissions = [];
+    vm.myHelpfulness = [];
     vm.requestFeedback = requestFeedback;
     vm.giveUnsolicitedFeedback = giveUnsolicitedFeedback;
     vm.welcome = $sce.trustAsHtml($rootScope.customer.feedback_welcome);
@@ -36,6 +37,7 @@ function FeedbackController(FeedbackRequestService, FeedbackDigestService, Feedb
         getFeedbackRequests();
         getMySubmissions();
         getMyDigests();
+        getMyHelpfulnessReport();
     };
 
 
@@ -88,6 +90,14 @@ function FeedbackController(FeedbackRequestService, FeedbackDigestService, Feedb
                 return vm.myDigests;
             });
     }
+
+    function getMyHelpfulnessReport() {
+        FeedbackSubmissionService.getMyHelpfulnessReport()
+            .then(function (data) {
+                vm.myHelpfulness = data;
+                return vm.myHelpfulness;
+            });
+    }    
 
     function requestFeedback() {
         var modalInstance = $modal.open({

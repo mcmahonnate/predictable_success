@@ -1,3 +1,4 @@
+from __future__ import division
 from datetime import datetime, timedelta
 from django.db import models, connection
 from django.utils import timezone
@@ -6,7 +7,6 @@ from org.models import Employee
 from django.db.models import Q
 from itertools import chain, groupby
 from .tasks import send_feedback_request_email, send_feedback_digest_email, send_share_feedback_digest_email
-
 
 class FeedbackRequestManager(models.Manager):
     def pending_for_reviewer(self, reviewer):
@@ -226,6 +226,7 @@ class EmployeeFeedbackReports(object):
         self.total_excels_at_i_gave_that_was_helpful = 0
         self.total_could_improve_i_gave_that_was_helpful = 0
         self.total_i_gave_that_was_helpful = 0
+        self.total_percent_helpful = 0
 
     def load(self):
         def dictfetchall(cursor):
@@ -276,6 +277,7 @@ class EmployeeFeedbackReports(object):
             self.total_excels_at_i_gave_that_was_helpful += report.total_excels_at_i_gave_that_was_helpful
             self.total_could_improve_i_gave_that_was_helpful += report.total_could_improve_i_gave_that_was_helpful
             self.total_i_gave_that_was_helpful += report.total_i_gave_that_was_helpful
+            self.total_percent_helpful += report.percent_helpful
 
 
 class EmployeeFeedbackReport(object):
@@ -305,6 +307,8 @@ class EmployeeSubmissionReport(object):
         self.total_excels_at_i_gave_that_was_helpful = 0
         self.total_could_improve_i_gave = 0
         self.total_could_improve_i_gave_that_was_helpful = 0
+        self.total_percent_helpful = 0
+
 
     def load(self):
         cursor = connection.cursor()
@@ -318,3 +322,4 @@ class EmployeeSubmissionReport(object):
         cursor.execute("SELECT reviewer_id as total_could_improve_i_gave_that_was_helpful FROM feedback_feedbacksubmission WHERE could_improve_on_was_helpful AND reviewer_id = '%s'" % self.employee.id)
         self.total_could_improve_i_gave_that_was_helpful = cursor.rowcount
         self.total_i_gave_that_was_helpful = self.total_excels_at_i_gave_that_was_helpful + self.total_could_improve_i_gave_that_was_helpful
+        self.total_percent_helpful = self.total_i_gave_that_was_helpful / self.total_i_gave * 100

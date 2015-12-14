@@ -11,7 +11,8 @@ function FeedbackSubmissionService($http, $log, FeedbackSubmissionResource, Empl
         giveUnsolicitedFeedback: giveUnsolicitedFeedback,
         getFeedbackIveSubmitted: getFeedbackIveSubmitted,
         updateExcelsWasHelpful: updateExcelsWasHelpful,
-        updateCouldImproveOnWasHelpful: updateCouldImproveOnWasHelpful
+        updateCouldImproveOnWasHelpful: updateCouldImproveOnWasHelpful,
+        getMyHelpfulnessReport: getMyHelpfulnessReport
     };
 
     function getFeedbackIveSubmitted() {
@@ -38,6 +39,21 @@ function FeedbackSubmissionService($http, $log, FeedbackSubmissionResource, Empl
 
         function fail(response) {
             $log.error('getFeedbackSubmission failed');
+        }
+    }
+
+    function getMyHelpfulnessReport() {
+        var url = '/api/v1/feedback/reports/submissions/my/';
+        return $http.get(url)
+            .then(success)
+            .catch(fail);
+
+        function success(response) {
+            return response.data;
+        }
+
+        function fail(response) {
+            $log.error('getMyHelpfulnessReport failed');
         }
     }
 

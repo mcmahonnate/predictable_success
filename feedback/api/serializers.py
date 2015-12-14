@@ -188,6 +188,7 @@ class EmployeeSubmissionReportSerializer(serializers.Serializer):
     total_excels_at_i_gave_that_was_helpful = serializers.IntegerField()
     total_could_improve_i_gave_that_was_helpful = serializers.IntegerField()
     total_i_gave_that_was_helpful = serializers.IntegerField()
+    total_percent_helpful = serializers.IntegerField()
 
 
 class FeedbackProgressReportSerializer(serializers.Serializer):
