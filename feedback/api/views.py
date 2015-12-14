@@ -10,7 +10,7 @@ from dateutil import parser
 from serializers import *
 from org.models import Employee
 from org.api.permissions import UserIsEmployee, UserIsEmployeesCoach
-from ..models import FeedbackRequest, FeedbackProgressReport, FeedbackProgressReports, FeedbackDigest, EmployeeFeedbackReports
+from ..models import FeedbackRequest, FeedbackProgressReport, FeedbackProgressReports, FeedbackDigest, EmployeeFeedbackReports, EmployeeSubmissionReport
 from permissions import UserIsEmployeeOrDigestDeliverer, UserIsSubjectOrReviewerOrCoach
 
 # FeedbackRequest
@@ -152,17 +152,30 @@ def feedback_progress_report(request, employee_id):
 @api_view(['GET'])
 @permission_classes((IsAuthenticated, ))
 def employee_feedback_report(request):
+    try:
+        start_date = request.QUERY_PARAMS.get('start_date', None)
+        end_date = request.QUERY_PARAMS.get('end_date', None)
+        start_date = parser.parse(start_date).date()
+        end_date = parser.parse(end_date).date()
+        report = EmployeeFeedbackReports({'start_date': start_date, 'end_date': end_date})
+        report.load()
+        serializer = EmployeeFeedbackReportsSerializer(report)
+        return Response(serializer.data)
+    except AttributeError:
+        raise Http404()
+
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated, ))
+def employee_submission_report(request):
     #try:
-    start_date = request.QUERY_PARAMS.get('start_date', None)
-    end_date = request.QUERY_PARAMS.get('end_date', None)
-    start_date = parser.parse(start_date).date()
-    end_date = parser.parse(end_date).date()
-    report = EmployeeFeedbackReports({'start_date': start_date, 'end_date': end_date})
+    report = EmployeeSubmissionReport({'employee_id': request.user.employee.id})
     report.load()
-    serializer = EmployeeFeedbackReportsSerializer(report)
+    serializer = EmployeeSubmissionReportSerializer(report)
     return Response(serializer.data)
     #except AttributeError:
     #    raise Http404()
+
 
 class CoachUpdateFeedbackSubmission(generics.UpdateAPIView):
     queryset = FeedbackSubmission.objects.all()

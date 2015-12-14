@@ -181,6 +181,15 @@ class EmployeeFeedbackReportsSerializer(serializers.Serializer):
     employee_report = EmployeeFeedbackReportSerializer(many=True)
 
 
+class EmployeeSubmissionReportSerializer(serializers.Serializer):
+    total_excels_at_i_gave = serializers.IntegerField()
+    total_could_improve_i_gave = serializers.IntegerField()
+    total_i_gave = serializers.IntegerField()
+    total_excels_at_i_gave_that_was_helpful = serializers.IntegerField()
+    total_could_improve_i_gave_that_was_helpful = serializers.IntegerField()
+    total_i_gave_that_was_helpful = serializers.IntegerField()
+
+
 class FeedbackProgressReportSerializer(serializers.Serializer):
     employee = SanitizedEmployeeSerializer()
     unanswered_requests = FeedbackRequestSerializer(many=True)
