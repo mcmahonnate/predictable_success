@@ -17,7 +17,7 @@ function FeedbackReportController(FeedbackReportService, $scope, $location, anal
     vm.csv = [];
 
     vm.order = function (predicate) {
-        vm.reverse = (vm.predicate === predicate) ? !vm.reverse : false;
+        vm.reverse = (vm.predicate === predicate) ? !vm.reverse : true;
         vm.predicate = predicate;
     };
 
@@ -35,6 +35,7 @@ function FeedbackReportController(FeedbackReportService, $scope, $location, anal
                 vm.total_unrequested_given_to_me_total = data.total_unrequested_given_to_me_total;
                 vm.total_digests_i_delivered_total = data.total_digests_i_delivered_total;
                 vm.total_digests_i_received_total = data.total_digests_i_received_total;
+                vm.total_i_gave_that_was_helpful = data.total_i_gave_that_was_helpful;
                 vm.showResults = true;
                 vm.csv = [];
                 buildCSV();
@@ -60,6 +61,9 @@ function FeedbackReportController(FeedbackReportService, $scope, $location, anal
             row.total_unrequested_given_to_me = report.total_unrequested_given_to_me;
             row.total_digests_i_delivered = report.total_digests_i_delivered;
             row.total_digests_i_received = report.total_digests_i_received;
+            row.total_excels_at_i_gave_that_was_helpful = report.total_excels_at_i_gave_that_was_helpful;
+            row.total_could_improve_i_gave_that_was_helpful = report.total_could_improve_i_gave_that_was_helpful;
+            row.total_i_gave_that_was_helpful = report.total_i_gave_that_was_helpful;
             vm.csv.push(row);
         });
     }

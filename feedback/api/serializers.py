@@ -158,6 +158,9 @@ class EmployeeFeedbackReportSerializer(serializers.Serializer):
     total_unrequested_given_to_me = serializers.IntegerField()
     total_digests_i_received = serializers.IntegerField()
     total_digests_i_delivered = serializers.IntegerField()
+    total_excels_at_i_gave_that_was_helpful = serializers.IntegerField()
+    total_could_improve_i_gave_that_was_helpful = serializers.IntegerField()
+    total_i_gave_that_was_helpful = serializers.IntegerField()
 
 
 class EmployeeFeedbackReportsSerializer(serializers.Serializer):
@@ -171,6 +174,10 @@ class EmployeeFeedbackReportsSerializer(serializers.Serializer):
     total_unrequested_given_to_me_total = serializers.IntegerField()
     total_digests_i_received_total = serializers.IntegerField()
     total_digests_i_delivered_total = serializers.IntegerField()
+    total_excels_at_i_gave_that_was_helpful = serializers.IntegerField()
+    total_could_improve_i_gave_that_was_helpful = serializers.IntegerField()
+    total_i_gave_that_was_helpful = serializers.IntegerField()
+
     employee_report = EmployeeFeedbackReportSerializer(many=True)
 
 

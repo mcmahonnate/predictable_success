@@ -16,7 +16,7 @@
     <div>
 
         <div class="panel" ng-show="feedbackReport.showResults">
-            <button class="btn btn-default pull-right" type="button" ng-csv="feedbackReport.csv" filename="scoutmap.csv" csv-header="['Id', 'Employee', 'Total I Requested', 'Total Responded to Me', 'Total Requested of Me',  'Total I Responded To', 'Total Unsolicited I Gave', 'Total Unsolicited I Received', 'Total Digests I Delivered', 'Total Digests I Received']">
+            <button class="btn btn-default pull-right" type="button" ng-csv="feedbackReport.csv" filename="scoutmap.csv" csv-header="['Id', 'Employee', 'Total I Requested', 'Total Responded to Me', 'Total Requested of Me',  'Total I Responded To', 'Total Unsolicited I Gave', 'Total Unsolicited I Received', 'Total Digests I Delivered', 'Total Digests I Received', 'Total Excels At Feedback I Gave That Was Helpful', 'Total Could Improve On Feedback I Gave That Was Helpful', 'Total Feedback I Gave That Was Helpful' ]">
                 <span class="fa fa-download"></span> Download
             </button>
 
@@ -29,36 +29,40 @@
                             <span class="sortorder fa" ng-show="feedbackReport.predicate === 'employee.full_name'" ng-class="feedbackReport.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
                         </th>
                         <th>
-                            <a href="" ng-click="feedbackReport.order('total_i_requested');"><strong>Total I Requested</strong></a>
-                            <span class="sortorder fa" ng-show="feedbackReport.predicate === 'total_i_requested'" ng-class="reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                            <a href="" ng-click="feedbackReport.order('total_i_requested');"><strong>I Requested</strong></a>
+                            <span class="sortorder fa" ng-show="feedbackReport.predicate === 'total_i_requested'" ng-class="feedbackReport.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
                         </th>
                         <th>
-                            <a href="" ng-click="feedbackReport.order('total_responded_to_me');"><strong>Total Responded to Me</strong></a>
-                            <span class="sortorder fa" ng-show="feedbackReport.predicate === 'total_responded_to_me'" ng-class="reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                            <a href="" ng-click="feedbackReport.order('total_responded_to_me');"><strong>Responded to Me</strong></a>
+                            <span class="sortorder fa" ng-show="feedbackReport.predicate === 'total_responded_to_me'" ng-class="feedbackReport.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
                         </th>
                         <th>
-                            <a href="" ng-click="feedbackReport.order('total_requested_of_me');"><strong>Total Requested of Me</strong></a>
-                            <span class="sortorder fa" ng-show="feedbackReport.predicate === 'total_requested_of_me'" ng-class="reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                            <a href="" ng-click="feedbackReport.order('total_requested_of_me');"><strong>Requested of Me</strong></a>
+                            <span class="sortorder fa" ng-show="feedbackReport.predicate === 'total_requested_of_me'" ng-class="feedbackReport.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
                         </th>
                         <th>
-                            <a href="" ng-click="feedbackReport.order('total_i_responded_to');"><strong>Total I Responded To</strong></a>
-                            <span class="sortorder fa" ng-show="feedbackReport.predicate === 'total_i_responded_to'" ng-class="reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                            <a href="" ng-click="feedbackReport.order('total_i_responded_to');"><strong>I Responded To</strong></a>
+                            <span class="sortorder fa" ng-show="feedbackReport.predicate === 'total_i_responded_to'" ng-class="feedbackReport.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
                         </th>
                         <th>
-                            <a href="" ng-click="feedbackReport.order('total_unrequested_i_gave');"><strong>Total Unsolicited I Gave</strong></a>
-                            <span class="sortorder fa" ng-show="feedbackReport.predicate === 'total_unrequested_i_gave'" ng-class="reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                            <a href="" ng-click="feedbackReport.order('total_unrequested_i_gave');"><strong>Unsolicited I Gave</strong></a>
+                            <span class="sortorder fa" ng-show="feedbackReport.predicate === 'total_unrequested_i_gave'" ng-class="feedbackReport.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
                         </th>
                         <th>
-                            <a href="" ng-click="feedbackReport.order('total_unrequested_given_to_me');"><strong>Total Unsolicited I Received</strong></a>
-                            <span class="sortorder fa" ng-show="feedbackReport.predicate === 'total_unrequested_given_to_me'" ng-class="reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                            <a href="" ng-click="feedbackReport.order('total_unrequested_given_to_me');"><strong>Unsolicited I Received</strong></a>
+                            <span class="sortorder fa" ng-show="feedbackReport.predicate === 'total_unrequested_given_to_me'" ng-class="feedbackReport.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
                         </th>
                         <th>
-                            <a href="" ng-click="feedbackReport.order('total_digests_i_delivered');"><strong>Total Digests I Delivered</strong></a>
-                            <span class="sortorder fa" ng-show="feedbackReport.predicate === 'total_digests_i_delivered'" ng-class="reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                            <a href="" ng-click="feedbackReport.order('total_digests_i_delivered');"><strong>Digests I Delivered</strong></a>
+                            <span class="sortorder fa" ng-show="feedbackReport.predicate === 'total_digests_i_delivered'" ng-class="feedbackReport.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
                         </th>
                         <th>
-                            <a href="" ng-click="feedbackReport.order('total_digests_i_received');"><strong>Total Digests I Received</strong></a>
-                            <span class="sortorder fa" ng-show="feedbackReport.predicate === 'total_digests_i_received'" ng-class="reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                            <a href="" ng-click="feedbackReport.order('total_digests_i_received');"><strong>Digests I Received</strong></a>
+                            <span class="sortorder fa" ng-show="feedbackReport.predicate === 'total_digests_i_received'" ng-class="feedbackReport.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                        </th>
+                        <th>
+                            <a href="" ng-click="feedbackReport.order('total_i_gave_that_was_helpful');"><strong>I Gave Helpful Feedback</strong></a>
+                            <span class="sortorder fa" ng-show="feedbackReport.predicate === 'total_i_gave_that_was_helpful'" ng-class="feedbackReport.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
                         </th>
                     </tr>
                 </thead>
@@ -77,6 +81,7 @@
                         <td style="text-align: center">{{report.total_unrequested_given_to_me}}</td>
                         <td style="text-align: center">{{report.total_digests_i_delivered}}</td>
                         <td style="text-align: center">{{report.total_digests_i_received}}</td>
+                        <td style="text-align: center">{{report.total_i_gave_that_was_helpful}}</td>
                     </tr>
                     <tr>
                         <td><strong>Totals</strong></td>
@@ -90,6 +95,7 @@
                         <td style="text-align: center"><strong>{{feedbackReport.total_unrequested_given_to_me_total}}</strong></td>
                         <td style="text-align: center"><strong>{{feedbackReport.total_digests_i_delivered_total}}</strong></td>
                         <td style="text-align: center"><strong>{{feedbackReport.total_digests_i_received_total}}</strong></td>
+                        <td style="text-align: center"><strong>{{feedbackReport.total_i_gave_that_was_helpful}}</strong></td>
                     </tr>
                 </tbody>
             </table>

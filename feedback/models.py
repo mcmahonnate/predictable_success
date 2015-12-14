@@ -222,6 +222,9 @@ class EmployeeFeedbackReports(object):
         self.total_unrequested_given_to_me_total = 0
         self.total_digests_i_received_total = 0
         self.total_digests_i_delivered_total = 0
+        self.total_excels_at_i_gave_that_was_helpful = 0
+        self.total_could_improve_i_gave_that_was_helpful = 0
+        self.total_i_gave_that_was_helpful = 0
 
     def load(self):
         def dictfetchall(cursor):
@@ -248,8 +251,13 @@ class EmployeeFeedbackReports(object):
         total_digests_i_delivered = dictfetchall(cursor)
         cursor.execute("SELECT subject_id as employee_id, count(subject_id) as total_digests_i_received FROM feedback_feedbackdigest WHERE has_been_delivered=TRUE AND (delivery_date >= '%s' AND delivery_date <= '%s') GROUP BY subject_id" % (self.start_date, self.end_date))
         total_digests_i_received = dictfetchall(cursor)
+        cursor.execute("SELECT reviewer_id as employee_id, count(reviewer_id) as total_excels_at_i_gave_that_was_helpful FROM feedback_feedbacksubmission WHERE excels_at_was_helpful AND (feedback_date >= '%s' AND feedback_date <= '%s') GROUP BY reviewer_id" % (self.start_date, self.end_date))
+        total_excels_at_i_gave_that_was_helpful = dictfetchall(cursor)
+        cursor.execute("SELECT reviewer_id as employee_id, count(reviewer_id) as total_could_improve_i_gave_that_was_helpful FROM feedback_feedbacksubmission WHERE could_improve_on_was_helpful AND (feedback_date >= '%s' AND feedback_date <= '%s') GROUP BY reviewer_id" % (self.start_date, self.end_date))
+        total_could_improve_i_gave_that_was_helpful = dictfetchall(cursor)
 
-        lst = sorted(chain(total_i_requested,total_requested_of_me,total_i_responded_to,total_responded_to_me,total_unrequested_i_gave,total_unrequested_given_to_me,total_digests_i_delivered,total_digests_i_received), key=lambda x:x['employee_id'])
+
+        lst = sorted(chain(total_i_requested,total_requested_of_me,total_i_responded_to,total_responded_to_me,total_unrequested_i_gave,total_unrequested_given_to_me,total_digests_i_delivered,total_digests_i_received,total_excels_at_i_gave_that_was_helpful,total_could_improve_i_gave_that_was_helpful), key=lambda x:x['employee_id'])
         for k,v in groupby(lst, key=lambda x:x['employee_id']):
             d = {}
             for dct in v:
@@ -264,7 +272,9 @@ class EmployeeFeedbackReports(object):
             self.total_unrequested_given_to_me_total += report.total_unrequested_given_to_me
             self.total_digests_i_received_total += report.total_digests_i_received
             self.total_digests_i_delivered_total += report.total_digests_i_delivered
-
+            self.total_excels_at_i_gave_that_was_helpful += report.total_excels_at_i_gave_that_was_helpful
+            self.total_could_improve_i_gave_that_was_helpful += report.total_could_improve_i_gave_that_was_helpful
+            self.total_i_gave_that_was_helpful += report.total_i_gave_that_was_helpful
 
 
 class EmployeeFeedbackReport(object):
@@ -279,3 +289,6 @@ class EmployeeFeedbackReport(object):
         self.total_unrequested_given_to_me = object.get('total_unrequested_given_to_me', 0)
         self.total_digests_i_received = object.get('total_digests_i_received', 0)
         self.total_digests_i_delivered = object.get('total_digests_i_delivered', 0)
+        self.total_excels_at_i_gave_that_was_helpful = object.get('total_excels_at_i_gave_that_was_helpful', 0)
+        self.total_could_improve_i_gave_that_was_helpful = object.get('total_could_improve_i_gave_that_was_helpful', 0)
+        self.total_i_gave_that_was_helpful = self.total_excels_at_i_gave_that_was_helpful + self.total_could_improve_i_gave_that_was_helpful
