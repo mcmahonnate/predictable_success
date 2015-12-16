@@ -101,7 +101,7 @@ def send_share_feedback_digest_email(digest_id, employee_id):
         'could_improve_on_question': could_improve_on_question,
     }
 
-    subject = "%s has shared their feedback with you" % employee.full_name
+    subject = "%s has shared their feedback with you" % feedback_digest.subject.full_name
     text_content = render_to_string('email/share_feedback_digest.txt', context)
     html_content = render_to_string('email/share_feedback_digest.html', context)
     msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
