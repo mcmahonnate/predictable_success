@@ -18,12 +18,10 @@
                     <tbody>
                         <tr ng-repeat="progressReport in feedbackCoachWidget.progressReports">
                             <td>
-                                <a href="#/employees/{{ progressReport.employee.id }}">
-                                    <span class="tiny-headshot">
-                                        <img ng-src="{{ progressReport.employee.avatar_small }}" alt="{{ progressReport.employee.full_name }}'s avatar" />
-                                    </span>
-                                </a>
-                                <a href="#/employees/{{ progressReport.employee.id }}">{{ progressReport.employee.full_name }}</a>
+                                <span class="tiny-headshot">
+                                    <img ng-src="{{ progressReport.employee.avatar_small }}" alt="{{ progressReport.employee.full_name }}'s avatar" />
+                                </span>
+                                {{ progressReport.employee.full_name }}
                             </td>
                             <td class="centered">
                                 {{ progressReport.recent_feedback_requests_ive_sent_count }}
@@ -55,12 +53,10 @@
                     <tbody>
                         <tr ng-repeat="digest in feedbackCoachWidget.digests">
                             <td>
-                                <a href="/#/feedback/{{digest.subject.id}}/worksheet/">
-                                    <span class="tiny-headshot">
-                                        <img ng-src="{{ digest.subject.avatar_small }}" alt="{{ digest.subject.full_name }}'s avatar" />
-                                    </span>
-                                </a>
-                                <a href="/#/feedback/{{digest.subject.id}}/worksheet/">{{ digest.subject.full_name }}</a>
+                                <span class="tiny-headshot">
+                                    <img ng-src="{{ digest.subject.avatar_small }}" alt="{{ digest.subject.full_name }}'s avatar" />
+                                </span>
+                                {{ digest.subject.full_name }}
                             </td>
                             <td class="centered">
                                 {{ digest.delivery_date | fromNow }}

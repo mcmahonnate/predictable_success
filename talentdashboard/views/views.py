@@ -1041,7 +1041,7 @@ class ImageUploadView(APIView):
 @api_view(['GET'])
 def coachee_list(request):
     employee = Employee.objects.get(user__id=request.user.id)
-    employees = Employee.objects.get_current_employees()
+    employees = Employee.objects.get_current_employees(show_hidden=True)
     employees = employees.filter(coach__id=employee.id)
     serializer = EmployeeSerializer(employees, many=True, context={'request': request})
     return Response(serializer.data)
