@@ -182,7 +182,7 @@ class FeedbackProgressReports(object):
         self.progress_reports = []
 
     def load(self):
-        employees = Employee.objects.get_current_employees_by_coach(self.coach.id, show_hidden=True)
+        employees = Employee.objects.get_current_employees_by_coach(coach_id=self.coach.id, show_hidden=True)
         for employee in employees:
             progress_report = FeedbackProgressReport(employee)
             progress_report.load()
