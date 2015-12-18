@@ -26,7 +26,7 @@ angular.module('tdb.checkins.controllers', [])
         $scope.selectEmployee = function(employee) {
             $scope.employeeSearch = employee.full_name;
             $scope.selectedEmployee = employee;
-            $scope.checkin.employee = $scope.happiness.employee = employee.pk;
+            $scope.checkin.employee = $scope.happiness.employee = employee.id;
             $scope.showSearch = false;
         };
 
