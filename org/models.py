@@ -72,9 +72,9 @@ class EmployeeManager(TreeManager):
         return employees
 
     def get_current_employees_by_coach(self, coach_id, show_hidden=False):
-        employees = self.get_current_employees()
+        employees = self.get_current_employees(show_hidden=show_hidden)
         employees = employees.filter(coach_id=coach_id)
-        return employees.exclude(display=show_hidden)
+        return employees
 
     def get_from_user(self, user):
         return self.filter(user=user).get()
