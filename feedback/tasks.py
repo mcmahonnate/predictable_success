@@ -73,7 +73,7 @@ def send_feedback_digest_email(digest_id):
         'delivered_by_full_name': feedback_digest.delivered_by.full_name,
         'digest_url': digest_url,
     }
-    subject = "Your feedback is ready!"
+    subject = "Your feedback is ready"
     text_content = render_to_string('email/feedback_digest_notification.txt', context)
     html_content = render_to_string('email/feedback_digest_notification.html', context)
     msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
