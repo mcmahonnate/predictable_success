@@ -182,12 +182,11 @@ class FeedbackProgressReports(object):
         self.progress_reports = []
 
     def load(self):
-        employees = Employee.objects.get_current_employees_by_coach(self.coach.id)
+        employees = Employee.objects.get_current_employees_by_coach(coach_id=self.coach.id, show_hidden=True)
         for employee in employees:
             progress_report = FeedbackProgressReport(employee)
             progress_report.load()
-            if progress_report.all_submissions_not_delivered.count() > 0 or\
-                            progress_report.unanswered_requests.count() > 0:
+            if progress_report.all_submissions_not_delivered.count() > 0:
                 self.progress_reports.append(progress_report)
 
 
