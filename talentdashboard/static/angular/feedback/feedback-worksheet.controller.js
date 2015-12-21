@@ -64,6 +64,7 @@
         }
 
         function deliverDigest() {
+            console.log('Deliver Digest');
             if($window.confirm("Are you sure you want to deliver this to " + vm.digest.subject.full_name + " now?")) {
                 return FeedbackDigestService.deliverDigest(vm.digest)
                     .then(function (data) {
