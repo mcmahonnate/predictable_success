@@ -85,7 +85,7 @@ class FeedbackSubmissionManager(models.Manager):
         return self.ready_for_processing(subject).filter(feedback_request=None)
 
     def was_helpful(self, start_date, end_date):
-        submissions = self.filter(feedback_date__range=[start_date, end_date])
+        submissions = self.filter(Q(excels_at_was_helpful_date__range=[start_date, end_date]) | Q(could_improve_on_was_helpful_date__range=[start_date, end_date]))
         return submissions.filter(Q(excels_at_was_helpful=True) | Q(could_improve_on_was_helpful=True))
 
 
@@ -101,7 +101,9 @@ class FeedbackSubmission(models.Model):
     excels_at_summarized = models.TextField(blank=True)
     could_improve_on_summarized = models.TextField(blank=True)
     excels_at_was_helpful = models.BooleanField(default=False)
+    excels_at_was_helpful_date = models.DateTimeField(null=True, blank=True)
     could_improve_on_was_helpful = models.BooleanField(default=False)
+    could_improve_on_was_helpful_date = models.DateTimeField(null=True, blank=True)
     has_been_delivered = models.BooleanField(default=False)
     unread = models.BooleanField(default=True)
     anonymous = models.BooleanField(default=False)
@@ -115,6 +117,12 @@ class FeedbackSubmission(models.Model):
         if self.feedback_request and not self.feedback_request.was_responded_to:
             self.feedback_request.was_responded_to = True
             self.feedback_request.save()
+        if self.pk is not None:
+            orig = FeedbackSubmission.objects.get(pk=self.pk)
+            if orig.excels_at_was_helpful != self.excels_at_was_helpful:
+                self.excels_at_was_helpful_date = datetime.now()
+            if orig.could_improve_on_was_helpful != self.could_improve_on_was_helpful:
+                self.could_improve_on_was_helpful_date = datetime.now()
         super(FeedbackSubmission, self).save(*args, **kwargs)
 
     @property

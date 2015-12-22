@@ -8,4 +8,7 @@ We thought you'd like to know that within the last {{ days_ago }}
 {% endif %}
 thought your feedback was helpful.
 Thanks for making a difference.
+
+Did you find any of your feedback helpful? If so please let us know by
+using the 'Was this feedback helpful?' thumbs up button in your feedback.
 {{  feedback_url }}

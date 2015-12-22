@@ -1,12 +1,11 @@
-<html>
-    <head>
-    </head>
-    <body>
+{% extends "layouts/email.html" %}
+
+{% block content %}
         <p>
             Hi, {{ recipient_first_name }}!
         </p>
         <p>
-            We thought you'd like to know that within the last {{ days_ago }}
+            We thought you'd like to know that within the last {{ days_ago }} days
             {% if helpful_count == 1 %}
                 someone
             {% else %}
@@ -15,8 +14,10 @@
             thought your feedback was helpful.
         </p>
         <p>
-            Thanks for making a <a href="{{ feedback_url }}">difference</a>.
+            Thank you for making a difference.
         </p>
-
-    </body>
-</html>
+        <p>
+            Did you find any of your feedback helpful? If so please let us know by
+            using the 'Was this feedback helpful?' thumbs up button in your <a href="{{ feedback_url }}">feedback.</a>
+        </p>
+{% endblock content%}
