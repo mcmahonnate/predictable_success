@@ -19,7 +19,7 @@ class Command(BaseCommand):
             action='store',
             dest='user_id',
             default='',
-            help='The uid of the account to activate. Use ALL to activate all current employee accounts that are not currently active.'),
+            help='The uid of the account to send the email to. Use ALL to email all accounts that having pending requests.'),
     )
 
     def handle(self, *args, **options):

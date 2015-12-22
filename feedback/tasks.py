@@ -107,3 +107,26 @@ def send_share_feedback_digest_email(digest_id, employee_id):
     msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
     msg.attach_alternative(html_content, "text/html")
     msg.send()
+
+
+@app.task
+def send_feedback_was_helpful_email(employee_id, helpful_count, days_ago):
+    from org.models import Employee
+    employee = Employee.objects.get(id=employee_id)
+    recipient_email = employee.email
+    if not recipient_email:
+        return
+    tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
+    feedback_url = 'https://%s/#/feedback/' % tenant.domain_url
+    context = {
+        'recipient_first_name': employee.first_name,
+        'feedback_url': feedback_url,
+        'helpful_count': helpful_count,
+        'days_ago': days_ago
+    }
+    subject = "Someone thought your feedback was helpful"
+    text_content = render_to_string('email/feedback_was_helpful_notification.txt', context)
+    html_content = render_to_string('email/feedback_was_helpful_notification.html', context)
+    msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()

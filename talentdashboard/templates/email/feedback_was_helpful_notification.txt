@@ -1,0 +1,11 @@
+
+Hi, {{ recipient_first_name }}!
+We thought you'd like to know that within the last {{ days_ago }}
+{% if helpful_count == 1 %}
+    someone
+{% else %}
+    {{ helpful_count }} people
+{% endif %}
+thought your feedback was helpful.
+Thanks for making a difference.
+{{  feedback_url }}

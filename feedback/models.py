@@ -84,6 +84,10 @@ class FeedbackSubmissionManager(models.Manager):
     def unsolicited_and_ready_for_processing(self, subject):
         return self.ready_for_processing(subject).filter(feedback_request=None)
 
+    def was_helpful(self, start_date, end_date):
+        submissions = self.filter(feedback_date__range=[start_date, end_date])
+        return submissions.filter(Q(excels_at_was_helpful=True) | Q(could_improve_on_was_helpful=True))
+
 
 class FeedbackSubmission(models.Model):
     objects = FeedbackSubmissionManager()

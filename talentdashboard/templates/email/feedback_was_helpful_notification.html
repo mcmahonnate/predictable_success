@@ -1,0 +1,22 @@
+<html>
+    <head>
+    </head>
+    <body>
+        <p>
+            Hi, {{ recipient_first_name }}!
+        </p>
+        <p>
+            We thought you'd like to know that within the last {{ days_ago }}
+            {% if helpful_count == 1 %}
+                someone
+            {% else %}
+                {{ helpful_count }} people
+            {% endif %}
+            thought your feedback was helpful.
+        </p>
+        <p>
+            Thanks for making a <a href="{{ feedback_url }}">difference</a>.
+        </p>
+
+    </body>
+</html>
