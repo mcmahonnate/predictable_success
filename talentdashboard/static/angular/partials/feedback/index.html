@@ -4,7 +4,7 @@
             <img ng-show="feedback.myHelpfulness.total_percent_helpful >= 90" src="static/images/medal_award_gold.png" class="award" alt="You've earned the gold award!" />
             <img ng-show="feedback.myHelpfulness.total_percent_helpful <= 89 && feedback.myHelpfulness.total_percent_helpful >= 80" src="static/images/medal_award_silver.png" class="award" alt="You've earned the silver award!" />
             <img ng-show="feedback.myHelpfulness.total_percent_helpful <= 79" src="static/images/medal_award_bronze.png" class="award" alt="You've earned the bronze award!" />
-            {{ feedback.myHelpfulness.total_percent_helpful }}% of the feedback you've given has been helpful.
+            So far {{ feedback.myHelpfulness.total_percent_helpful }}% of the feedback you've given has been helpful.
         </div>
         <h1>Feedback
             <div class="button-group">
