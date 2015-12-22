@@ -39,7 +39,24 @@
                             <strong>Anonymous</strong>
                         </td>
                         <td style="white-space: pre-line; padding:20px">{{ submission.excels_at }} 
-                            <div class="helpfulness">Was this feedback helpful? <button type="button" ng-class="{ishelpful: submission.excels_at_was_helpful == true}" ng-model="submission.id.excels_at_was_helpful" ng-click="feedback.updateExcelsAtHelpfulness(submission)" class="btn btn-default btn-sm"><i class="fa fa-thumbs-up"></i></button>
+                            <div class="helpfulness">
+                                <label>Was this feedback helpful?</label>
+                                
+                                <select ng-model="helpfulness" class="form-control" style="margin: 5px 0 0;width:200px;">
+                                    <option value="">--select--</option>
+                                    <option value="5">Extremely helpful</option>
+                                    <option value="4">Very helpful</option>
+                                    <option value="3">Somewhat helpful</option>
+                                    <option value="2">Slightly helpful</option>
+                                </select>  
+                                <a href="">Who will see this?</a>
+
+                                <div ng-show="helpfulness">
+                                    hi
+
+                                </div>    
+
+                                <button type="button" class="hide" ng-class="{ishelpful: submission.excels_at_was_helpful == true}" ng-model="submission.id.excels_at_was_helpful" ng-click="feedback.updateExcelsAtHelpfulness(submission)" class="btn btn-default btn-sm"><i class="fa fa-thumbs-up"></i></button>
                             </div>
                         </td>
                         <td></td>
