@@ -8,6 +8,13 @@ from django.db.models import Q
 from itertools import chain, groupby
 from .tasks import send_feedback_request_email, send_feedback_digest_email, send_share_feedback_digest_email
 
+HELPFULNESS_CHOICES = (
+    (0, 'Not assessed'),
+    (1, 'Some what helpful'),
+    (2, 'Helpful'),
+    (3, 'Very helpful'),
+)
+
 class FeedbackRequestManager(models.Manager):
     def pending_for_reviewer(self, reviewer):
         return self.filter(reviewer=reviewer).filter(submission=None)\
@@ -104,6 +111,9 @@ class FeedbackSubmission(models.Model):
     excels_at_was_helpful_date = models.DateTimeField(null=True, blank=True)
     could_improve_on_was_helpful = models.BooleanField(default=False)
     could_improve_on_was_helpful_date = models.DateTimeField(null=True, blank=True)
+    excels_at_helpful = models.ForeignKey('FeedbackHelpful', null=True, blank=True, related_name='excels_at_submission')
+    could_improve_on_helpful = models.ForeignKey('FeedbackHelpful', null=True, blank=True, related_name='could_improve_on_submission')
+
     has_been_delivered = models.BooleanField(default=False)
     unread = models.BooleanField(default=True)
     anonymous = models.BooleanField(default=False)
@@ -133,6 +143,15 @@ class FeedbackSubmission(models.Model):
 
     def __str__(self):
         return "Feedback submission by %s for %s" % (self.reviewer, self.subject)
+
+
+class FeedbackHelpful(models.Model):
+    helpfulness = models.IntegerField(choices=HELPFULNESS_CHOICES, default=0)
+    date = models.DateTimeField(auto_now_add=True)
+    reason = models.TextField(blank=True)
+
+    def __str__(self):
+        return "%s helpfulness on %s" % (self.helpfulness, self.date)
 
 
 class OnlyOneCurrentFeedbackDigestAllowed(Exception):
