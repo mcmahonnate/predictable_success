@@ -23,6 +23,10 @@
                                 <div class="comment-copy" style="padding-top: 15px">
                                     <div class="activity-comment comment-text">{{ processFeedback.submission.excels_at }}</div>
                                 </div>
+                                <div ng-show="processFeedback.submission.excels_at_helpful.date">
+                                    <i class="fa fa-thumbs-up"></i> {{ processFeedback.submission.excels_at_helpful.helpfulness_verbose }}
+                                    <p>{{ processFeedback.submission.excels_at_helpful.reason }}</p>
+                                </div>
                             </div>
                             <div class="activity-item">
                                 <h2 class="panel-title">{{ processFeedback.questions.couldImproveOnQuestion }}</h2>
@@ -40,6 +44,10 @@
                                 </div>
                                 <div class="comment-copy" style="padding-top: 15px">
                                     <div class="activity-comment comment-text">{{ processFeedback.submission.could_improve_on }}</div>
+                                </div>
+                                <div ng-show="processFeedback.submission.could_improve_on_helpful.date">
+                                    <i class="fa fa-thumbs-up"></i> {{ processFeedback.submission.could_improve_on_helpful.helpfulness_verbose }}
+                                    <p>{{ processFeedback.submission.could_improve_on_helpful.reason }}</p>
                                 </div>
                             </div>
                         </div>

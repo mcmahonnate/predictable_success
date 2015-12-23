@@ -15,6 +15,18 @@ HELPFULNESS_CHOICES = (
     (3, 'Very helpful'),
 )
 
+
+def get_display(key, choices):
+    d = dict(choices)
+    if key in d:
+        return d[key]
+    return None
+
+
+def default_feedback_request_expiration_date():
+    return datetime.now() + timedelta(weeks=6)
+
+
 class FeedbackRequestManager(models.Manager):
     def pending_for_reviewer(self, reviewer):
         return self.filter(reviewer=reviewer).filter(submission=None)\
@@ -39,9 +51,6 @@ class FeedbackRequestManager(models.Manager):
         return self.filter(requester=requester)\
             .filter(has_no_submission | has_no_digest)\
             .filter(was_declined=False)
-
-def default_feedback_request_expiration_date():
-    return datetime.now() + timedelta(weeks=6)
 
 
 class FeedbackRequest(models.Model):
@@ -149,6 +158,9 @@ class FeedbackHelpful(models.Model):
     helpfulness = models.IntegerField(choices=HELPFULNESS_CHOICES, default=0)
     date = models.DateTimeField(auto_now_add=True)
     reason = models.TextField(blank=True)
+
+    def helpfulness_verbose(self):
+        return get_display(self.helpfulness, HELPFULNESS_CHOICES)
 
     def __str__(self):
         return "%s helpfulness on %s" % (self.helpfulness, self.date)

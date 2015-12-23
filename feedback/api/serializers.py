@@ -54,7 +54,7 @@ class CoachEditFeedbackSubmissionSerializer(serializers.ModelSerializer):
 class FeedbackHelpfulSerializer(serializers.ModelSerializer):
     class Meta:
         model = FeedbackHelpful
-        fields = ('id', 'helpfulness', 'reason', 'date')
+        fields = ('id', 'helpfulness', 'helpfulness_verbose', 'reason', 'date')
 
 
 class EmployeeEditFeedbackSubmissionSerializer(serializers.ModelSerializer):

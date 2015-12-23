@@ -40,18 +40,23 @@
                         </td>
                         <td style="white-space: pre-line; padding:20px">{{ submission.excels_at }} 
                             <div class="helpfulness">
-                                <label>Was this feedback helpful?</label>
-                                <select ng-model="submission.excels_at_helpful.helpfulness" class="form-control" style="margin: 5px 0 0;width:200px;">
-                                    <option value="0">--select--</option>
-                                    <option value="3">Very helpful</option>
-                                    <option value="2">Helpful</option>
-                                    <option value="1">Somewhat helpful</option>
-                                </select><div ng-show="submission.excels_at_helpful.helpfulness">
-                                    <label>Explain why (optional, but appreciated)</label>
-                                    <textarea ng-model="submission.excels_at_helpful.reason" class="form-control" style="margin: 5px 0 0;height:100px"></textarea>
-                                    <button ng-click="feedback.updateExcelsAtHelpfulness(submission)" class="btn btn-success">Send to <span ng-show="submission.anonymous">Anonymous</span> <span ng-show="!submission.anonymous">{{ submission.reviewer.first_name }}</span></button>
-                                </div>    
-                                <button type="button" class="hide" ng-class="{ishelpful: submission.excels_at_was_helpful == true}" ng-model="submission.id.excels_at_was_helpful" ng-click="feedback.updateExcelsAtHelpfulness(submission)" class="btn btn-default btn-sm"><i class="fa fa-thumbs-up"></i></button>
+                                <div ng-show="!submission.excels_at_helpful.date">
+                                    <label>Was this feedback helpful?</label>
+                                    <select ng-model="submission.excels_at_helpful.helpfulness" class="form-control" style="margin: 5px 0 0;width:200px;">
+                                        <option value="0">--select--</option>
+                                        <option value="3">Very helpful</option>
+                                        <option value="2">Helpful</option>
+                                        <option value="1">Somewhat helpful</option>
+                                    </select><div ng-show="submission.excels_at_helpful.helpfulness">
+                                        <label>Explain why (optional, but appreciated)</label>
+                                        <textarea ng-model="submission.excels_at_helpful.reason" class="form-control" style="margin: 5px 0 0;height:100px"></textarea>
+                                        <button ng-click="feedback.updateExcelsAtHelpfulness(submission)" class="btn btn-success">Send to <span ng-show="submission.anonymous">Anonymous</span> <span ng-show="!submission.anonymous">{{ submission.reviewer.first_name }}</span></button>
+                                    </div>
+                                </div>
+                                <div ng-show="submission.excels_at_helpful.date">
+                                    <i class="fa fa-thumbs-up"></i> {{ submission.excels_at_helpful.helpfulness_verbose }}
+                                    <p>{{ submission.excels_at_helpful.reason }}</p>
+                                </div>
                             </div>
                         </td>
                         <td></td>
@@ -83,18 +88,23 @@
                         </td>
                         <td style="white-space: pre-line;padding:20px">{{ submission.could_improve_on }} 
                             <div class="helpfulness">
-                                <label>Was this feedback helpful?</label>
-                                <select ng-model="submission.could_improve_on_helpful.helpfulness" class="form-control" style="margin: 5px 0 0;width:200px;">
-                                    <option value="0">--select--</option>
-                                    <option value="3">Very helpful</option>
-                                    <option value="2">Helpful</option>
-                                    <option value="1">Somewhat helpful</option>
-                                </select><div ng-show="submission.could_improve_on_helpful.helpfulness">
-                                    <label>Explain why (optional, but appreciated)</label>
-                                    <textarea ng-model="submission.could_improve_on_helpful.reason" class="form-control" style="margin: 5px 0 0;height:100px"></textarea>
-                                    <button ng-click="feedback.updateCouldImproveOnWasHelpful(submission)" class="btn btn-success">Send to <span ng-show="submission.anonymous">Anonymous</span> <span ng-show="!submission.anonymous">{{ submission.reviewer.first_name }}</span></button>
-                                </div>    
-                                <button type="button" class="hide" ng-class="{ishelpful: submission.excels_at_was_helpful == true}" ng-model="submission.id.excels_at_was_helpful" ng-click="feedback.updateCouldImproveOnWasHelpful(submission)" class="btn btn-default btn-sm"><i class="fa fa-thumbs-up"></i></button>
+                                <div ng-show="!submission.could_improve_on_helpful.date">
+                                    <label>Was this feedback helpful?</label>
+                                    <select ng-model="submission.could_improve_on_helpful.helpfulness" class="form-control" style="margin: 5px 0 0;width:200px;">
+                                        <option value="0">--select--</option>
+                                        <option value="3">Very helpful</option>
+                                        <option value="2">Helpful</option>
+                                        <option value="1">Somewhat helpful</option>
+                                    </select><div ng-show="submission.could_improve_on_helpful.helpfulness">
+                                        <label>Explain why (optional, but appreciated)</label>
+                                        <textarea ng-model="submission.could_improve_on_helpful.reason" class="form-control" style="margin: 5px 0 0;height:100px"></textarea>
+                                        <button ng-click="feedback.updateCouldImproveOnWasHelpful(submission)" class="btn btn-success">Send to <span ng-show="submission.anonymous">Anonymous</span> <span ng-show="!submission.anonymous">{{ submission.reviewer.first_name }}</span></button>
+                                    </div>
+                                </div>
+                                <div ng-show="submission.could_improve_on_helpful.date">
+                                    <i class="fa fa-thumbs-up"></i> {{ submission.could_improve_on_helpful.helpfulness_verbose }}
+                                    <p>{{ submission.could_improve_on_helpful.reason }}</p>
+                                </div>
                             </div>
                         </td>
                         <td>
