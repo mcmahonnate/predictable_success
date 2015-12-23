@@ -42,7 +42,7 @@
         function updateExcelsAtHelpfulness(submission) {
             FeedbackSubmissionService.updateExcelsWasHelpful(submission)
                 .then(function (data) {
-                    console.log(data);
+                    Notification.success("Thanks! We'll get that to " + submission.reviewer.first_name + " right away.");
                 })
                 .catch(function() {
                     Notification.error("Something went wrong.");
@@ -52,7 +52,7 @@
         function updateCouldImproveOnWasHelpful(submission) {
             FeedbackSubmissionService.updateCouldImproveOnWasHelpful(submission)
                 .then(function (data) {
-                    console.log(data);
+                    Notification.success("Thanks! We'll get that to " + submission.reviewer.first_name + " right away.");
                 })
                 .catch(function() {
                     Notification.error("Something went wrong.");
