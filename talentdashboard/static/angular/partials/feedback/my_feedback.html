@@ -49,7 +49,7 @@
                                 </select><div ng-show="submission.excels_at_helpful.helpfulness">
                                     <label>Explain why (optional, but appreciated)</label>
                                     <textarea ng-model="submission.excels_at_helpful.reason" class="form-control" style="margin: 5px 0 0;height:100px"></textarea>
-                                    <button ng-click="feedback.updateExcelsAtHelpfulness(submission)" class="btn btn-success">Send to {{ submission.reviewer.first_name }}</button>
+                                    <button ng-click="feedback.updateExcelsAtHelpfulness(submission)" class="btn btn-success">Send to <span ng-show="submission.anonymous">Anonymous</span> <span ng-show="!submission.anonymous">{{ submission.reviewer.first_name }}</span></button>
                                 </div>    
                                 <button type="button" class="hide" ng-class="{ishelpful: submission.excels_at_was_helpful == true}" ng-model="submission.id.excels_at_was_helpful" ng-click="feedback.updateExcelsAtHelpfulness(submission)" class="btn btn-default btn-sm"><i class="fa fa-thumbs-up"></i></button>
                             </div>
@@ -92,7 +92,7 @@
                                 </select><div ng-show="submission.could_improve_on_helpful.helpfulness">
                                     <label>Explain why (optional, but appreciated)</label>
                                     <textarea ng-model="submission.could_improve_on_helpful.reason" class="form-control" style="margin: 5px 0 0;height:100px"></textarea>
-                                    <button ng-click="feedback.updateCouldImproveOnWasHelpful(submission)" class="btn btn-success">Send to {{ submission.reviewer.first_name }}</button>
+                                    <button ng-click="feedback.updateCouldImproveOnWasHelpful(submission)" class="btn btn-success">Send to <span ng-show="submission.anonymous">Anonymous</span> <span ng-show="!submission.anonymous">{{ submission.reviewer.first_name }}</span></button>
                                 </div>    
                                 <button type="button" class="hide" ng-class="{ishelpful: submission.excels_at_was_helpful == true}" ng-model="submission.id.excels_at_was_helpful" ng-click="feedback.updateCouldImproveOnWasHelpful(submission)" class="btn btn-default btn-sm"><i class="fa fa-thumbs-up"></i></button>
                             </div>
