@@ -52,7 +52,8 @@
         function updateCouldImproveOnWasHelpful(submission) {
             FeedbackSubmissionService.updateCouldImproveOnWasHelpful(submission)
                 .then(function (data) {
-                    Notification.success("Thanks! We'll get that to " + submission.reviewer.first_name + " right away.");
+                    var reviewer = submission.reviewer ? submission.reviewer.first_name : 'Anonymous';
+                    Notification.success("Thanks! We'll get that to " + reviewer + " right away.");
                 })
                 .catch(function() {
                     Notification.error("Something went wrong.");
