@@ -10,7 +10,7 @@ from .tasks import send_feedback_request_email, send_feedback_digest_email, send
 
 HELPFULNESS_CHOICES = (
     (0, 'Not assessed'),
-    (1, 'Some what helpful'),
+    (1, 'Somewhat helpful'),
     (2, 'Helpful'),
     (3, 'Very helpful'),
 )
