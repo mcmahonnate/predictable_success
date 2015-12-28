@@ -1,8 +1,8 @@
 <div class="container">
-	<div class="row">
-		<div class="col-md-8 col-md-offset-2">
-			<h1><a href="#/feedback">Feedback</a> &raquo; for {{ processFeedback.submission.subject.full_name }}</h1>
-			<div class="panel activity" style="min-height:auto">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <h1><a href="#/feedback">Feedback</a> &raquo; for {{ processFeedback.submission.subject.full_name }}</h1>
+            <div class="panel activity" style="min-height:auto">
                 <form name="processFeedback.form">
                     <div class="panel-body">
                         <div class="activity-items">
@@ -20,13 +20,20 @@
                                         <span ng-show="processFeedback.submission.anonymous" class="tag tag-anonymous pull-right">Anonymous</span>
                                     </div>
                                 </div>
-                                <div class="comment-copy" style="padding-top: 15px">
-                                    <div class="activity-comment comment-text">{{ processFeedback.submission.excels_at }}</div>
-                                </div>
-                                <div ng-show="processFeedback.submission.excels_at_helpful.date">
-                                    <i class="fa fa-thumbs-up"></i> {{ processFeedback.submission.excels_at_helpful.helpfulness_verbose }}
-                                    <p>{{ processFeedback.submission.excels_at_helpful.reason }}</p>
-                                </div>
+                                <div class="feedback-activity-comment comment-text">
+                                    <span ng-bind-html="processFeedback.submission.excels_at | new_line"></span>
+                                    <div ng-show="processFeedback.submission.excels_at_helpful.date" style="background:#f1f1f1;padding:20px; margin-top:25px">
+                                        <div class="activity-header">
+                                            <div class="activity-owner-avatar-container">
+                                                <span class="medium-headshot"><img class="headshot-image" ng-src="{{ processFeedback.submission.subject.avatar_small }}" alt="{{ processFeedback.submission.subject.full_name }}'s avatar" /></span>
+                                            </div>
+                                        </div>               
+                                        <div class="activity-description">
+                                            <strong>{{ processFeedback.submission.subject.full_name }}</strong> said {{ processFeedback.submission.excels_at_helpful.date | fromNow }}  <div class="helpfulness-tag">{{ processFeedback.submission.excels_at_helpful.helpfulness_verbose }}</div>
+                                            <p style="margin: 15px 0 15px 68px;">{{ processFeedback.submission.excels_at_helpful.reason }}</p>
+                                        </div>
+                                    </div>
+                                </div>    
                             </div>
                             <div class="activity-item">
                                 <h2 class="panel-title">{{ processFeedback.questions.couldImproveOnQuestion }}</h2>
@@ -42,13 +49,22 @@
                                         <span ng-show="processFeedback.submission.anonymous" class="tag tag-anonymous pull-right">Anonymous</span>
                                     </div>
                                 </div>
-                                <div class="comment-copy" style="padding-top: 15px">
-                                    <div class="activity-comment comment-text">{{ processFeedback.submission.could_improve_on }}</div>
-                                </div>
-                                <div ng-show="processFeedback.submission.could_improve_on_helpful.date">
-                                    <i class="fa fa-thumbs-up"></i> {{ processFeedback.submission.could_improve_on_helpful.helpfulness_verbose }}
-                                    <p>{{ processFeedback.submission.could_improve_on_helpful.reason }}</p>
-                                </div>
+
+                                <div class="feedback-activity-comment comment-text">
+                                    <span ng-bind-html="processFeedback.submission.could_improve_on | new_line"></span>
+                                    <div ng-show="processFeedback.submission.could_improve_on_helpful.date" style="background:#f1f1f1;padding:20px; margin-top:25px">
+                                        <div class="activity-header">
+                                            <div class="activity-owner-avatar-container">
+                                                <span class="medium-headshot"><img class="headshot-image" ng-src="{{ processFeedback.submission.subject.avatar_small }}" alt="{{ processFeedback.submission.subject.full_name }}'s avatar" /></span>
+                                            </div>
+                                        </div>               
+                                        <div class="activity-description">
+                                            <strong>{{ processFeedback.submission.subject.full_name }}</strong> said {{ processFeedback.submission.could_improve_on_helpful.date | fromNow }}
+                                            <div class="helpfulness-tag">{{ processFeedback.submission.could_improve_on_helpful.helpfulness_verbose }}</div>
+                                            <p style="margin: 15px 0 15px 68px;">{{ processFeedback.submission.could_improve_on_helpful.reason }}</p>
+                                        </div>
+                                    </div>
+                                </div> 
                             </div>
                         </div>
                         <div class="form-group">

@@ -33,12 +33,13 @@
                             <strong>{{ submission.reviewer.full_name }}</strong>
                         </td>
                         <td ng-show="submission.anonymous" class="centered">
-                                <span class="large-headshot" style="margin: 10px auto 5px;">
-                                    <img src="//hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg"/>
-                                </span>
+                            <span class="large-headshot" style="margin: 10px auto 5px;">
+                                <img src="//hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg"/>
+                            </span>
                             <strong>Anonymous</strong>
                         </td>
-                        <td style="white-space: pre-line; padding:20px">{{ submission.excels_at }} 
+                        <td style="padding:20px">
+                            <span ng-bind-html="submission.excels_at | new_line"></span>
                             <div class="helpfulness">
                                 <div ng-show="!submission.excels_at_helpful.date">
                                     <label>Was this feedback helpful?</label>
@@ -54,8 +55,21 @@
                                     </div>
                                 </div>
                                 <div ng-show="submission.excels_at_helpful.date">
-                                    <i class="fa fa-thumbs-up"></i> {{ submission.excels_at_helpful.helpfulness_verbose }}
-                                    <p>{{ submission.excels_at_helpful.reason }}</p>
+                                    <div class="comment-text">
+                                        <div ng-show="submission.excels_at_helpful.date" style="background:#fff;padding:20px; margin-top:25px">
+                                            <div class="activity-header pull-left">
+                                                <div class="activity-owner-avatar-container">
+                                                    <span class="medium-headshot"><img class="headshot-image" ng-src="{{ submission.subject.avatar_small }}" alt="{{ submission.subject.full_name }}'s avatar" /></span>
+                                                </div>
+                                            </div>               
+                                            <div class="activity-description" style="margin: 0 0 15px 68px;">
+                                                <strong>{{ submission.subject.full_name }}</strong> said {{ submission.excels_at_helpful.date | fromNow }}
+                                                <div class="helpfulness-tag">{{ submission.excels_at_helpful.helpfulness_verbose }}</div>
+
+                                                <p style="margin-top:15px;">{{ submission.excels_at_helpful.reason }}</p>
+                                            </div>
+                                        </div>
+                                    </div>   
                                 </div>
                             </div>
                         </td>
@@ -86,7 +100,8 @@
                                 </span>
                             <strong>Anonymous</strong>
                         </td>
-                        <td style="white-space: pre-line;padding:20px">{{ submission.could_improve_on }} 
+                        <td style="padding:20px">
+                            <span ng-bind-html="submission.could_improve_on | new_line"></span>
                             <div class="helpfulness">
                                 <div ng-show="!submission.could_improve_on_helpful.date">
                                     <label>Was this feedback helpful?</label>
@@ -102,9 +117,22 @@
                                     </div>
                                 </div>
                                 <div ng-show="submission.could_improve_on_helpful.date">
-                                    <i class="fa fa-thumbs-up"></i> {{ submission.could_improve_on_helpful.helpfulness_verbose }}
-                                    <p>{{ submission.could_improve_on_helpful.reason }}</p>
-                                </div>
+                                    <div class="comment-text">
+                                        <div ng-show="submission.could_improve_on_helpful.date" style="background:#fff;padding:20px; margin-top:25px">
+                                            <div class="activity-header pull-left">
+                                                <div class="activity-owner-avatar-container">
+                                                    <span class="medium-headshot"><img class="headshot-image" ng-src="{{ submission.subject.avatar_small }}" alt="{{ submission.subject.full_name }}'s avatar" /></span>
+                                                </div>
+                                            </div>               
+                                            <div class="activity-description" style="margin: 0 0 15px 68px;">
+                                                <strong>{{ submission.subject.full_name }}</strong> said {{ submission.could_improve_on_helpful.date | fromNow }}
+                                                <div class="helpfulness-tag">{{ submission.could_improve_on_helpful.helpfulness_verbose }}</div>
+
+                                                <p style="margin-top:15px;">{{ submission.could_improve_on_helpful.reason }}</p>
+                                            </div>
+                                        </div>
+                                    </div>   
+                                </div>         
                             </div>
                         </td>
                         <td>
