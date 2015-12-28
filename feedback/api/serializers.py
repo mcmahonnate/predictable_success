@@ -62,18 +62,22 @@ class EmployeeEditFeedbackSubmissionSerializer(serializers.ModelSerializer):
         if validated_data['excels_at_helpful']:
             print validated_data['excels_at_helpful']
             if instance.excels_at_helpful is None:
-                print 'else'
                 excels_at_helpful = FeedbackHelpful.objects.create(**validated_data['excels_at_helpful'])
+                excels_at_helpful.given_by = instance.reviewer
+                excels_at_helpful.received_by = instance.subject
+                excels_at_helpful.save()
                 instance.excels_at_helpful = excels_at_helpful
             else:
-                print validated_data['excels_at_helpful']['helpfulness']
                 instance.excels_at_helpful.helpfulness = validated_data['excels_at_helpful']['helpfulness']
                 instance.excels_at_helpful.reason = validated_data['excels_at_helpful']['reason']
                 instance.excels_at_helpful.save()
             instance.save()
         if validated_data['could_improve_on_helpful']:
-            if instance.could_improve_on is None:
+            if instance.could_improve_on_helpful is None:
                 could_improve_on_helpful = FeedbackHelpful.objects.create(**validated_data['could_improve_on_helpful'])
+                could_improve_on_helpful.given_by = instance.reviewer
+                could_improve_on_helpful.received_by = instance.subject
+                could_improve_on_helpful.save()
                 instance.could_improve_on_helpful = could_improve_on_helpful
             else:
                 instance.could_improve_on_helpful.helpfulness = validated_data['could_improve_on_helpful']['helpfulness']

@@ -10,7 +10,7 @@ from .tasks import send_feedback_request_email, send_feedback_digest_email, send
 
 HELPFULNESS_CHOICES = (
     (0, 'Not assessed'),
-    (1, 'Some what helpful'),
+    (1, 'Somewhat helpful'),
     (2, 'Helpful'),
     (3, 'Very helpful'),
 )
@@ -100,10 +100,6 @@ class FeedbackSubmissionManager(models.Manager):
     def unsolicited_and_ready_for_processing(self, subject):
         return self.ready_for_processing(subject).filter(feedback_request=None)
 
-    def was_helpful(self, start_date, end_date):
-        submissions = self.filter(Q(excels_at_was_helpful_date__range=[start_date, end_date]) | Q(could_improve_on_was_helpful_date__range=[start_date, end_date]))
-        return submissions.filter(Q(excels_at_was_helpful=True) | Q(could_improve_on_was_helpful=True))
-
 
 class FeedbackSubmission(models.Model):
     objects = FeedbackSubmissionManager()
@@ -120,8 +116,8 @@ class FeedbackSubmission(models.Model):
     excels_at_was_helpful_date = models.DateTimeField(null=True, blank=True)
     could_improve_on_was_helpful = models.BooleanField(default=False)
     could_improve_on_was_helpful_date = models.DateTimeField(null=True, blank=True)
-    excels_at_helpful = models.ForeignKey('FeedbackHelpful', null=True, blank=True, related_name='excels_at_submission')
-    could_improve_on_helpful = models.ForeignKey('FeedbackHelpful', null=True, blank=True, related_name='could_improve_on_submission')
+    excels_at_helpful = models.OneToOneField('FeedbackHelpful', null=True, blank=True, related_name='excels_at_submission')
+    could_improve_on_helpful = models.OneToOneField('FeedbackHelpful', null=True, blank=True, related_name='could_improve_on_submission')
 
     has_been_delivered = models.BooleanField(default=False)
     unread = models.BooleanField(default=True)
@@ -155,6 +151,8 @@ class FeedbackSubmission(models.Model):
 
 
 class FeedbackHelpful(models.Model):
+    received_by = models.ForeignKey(Employee, related_name='helpful_feedback_received', null=True)
+    given_by = models.ForeignKey(Employee, related_name='helpful_feedback_given', null=True)
     helpfulness = models.IntegerField(choices=HELPFULNESS_CHOICES, default=0)
     date = models.DateTimeField(auto_now_add=True)
     reason = models.TextField(blank=True)
@@ -163,7 +161,7 @@ class FeedbackHelpful(models.Model):
         return get_display(self.helpfulness, HELPFULNESS_CHOICES)
 
     def __str__(self):
-        return "%s helpfulness on %s" % (self.helpfulness, self.date)
+        return "%s found %s's feedback %s" % (self.received_by, self.given_by, self.helpfulness_verbose())
 
 
 class OnlyOneCurrentFeedbackDigestAllowed(Exception):
