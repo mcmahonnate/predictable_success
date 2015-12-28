@@ -116,8 +116,8 @@ class FeedbackSubmission(models.Model):
     excels_at_was_helpful_date = models.DateTimeField(null=True, blank=True)
     could_improve_on_was_helpful = models.BooleanField(default=False)
     could_improve_on_was_helpful_date = models.DateTimeField(null=True, blank=True)
-    excels_at_helpful = models.ForeignKey('FeedbackHelpful', null=True, blank=True, related_name='excels_at_submission')
-    could_improve_on_helpful = models.ForeignKey('FeedbackHelpful', null=True, blank=True, related_name='could_improve_on_submission')
+    excels_at_helpful = models.OneToOneField('FeedbackHelpful', null=True, blank=True, related_name='excels_at_submission')
+    could_improve_on_helpful = models.OneToOneField('FeedbackHelpful', null=True, blank=True, related_name='could_improve_on_submission')
 
     has_been_delivered = models.BooleanField(default=False)
     unread = models.BooleanField(default=True)
