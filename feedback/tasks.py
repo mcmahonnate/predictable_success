@@ -4,6 +4,7 @@ from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 from django.db import connection
+from django.db.models import Max
 from customers.models import Customer
 from org.models import Employee
 from datetime import datetime, timedelta
@@ -111,7 +112,7 @@ def send_share_feedback_digest_email(digest_id, employee_id):
 
 
 @app.task
-def send_feedback_was_helpful_email(employee_id, helpful_count, days_ago):
+def send_feedback_was_helpful_email(employee_id, days_ago):
     from org.models import Employee
     employee = Employee.objects.get(id=employee_id)
     recipient_email = employee.email
@@ -121,7 +122,8 @@ def send_feedback_was_helpful_email(employee_id, helpful_count, days_ago):
     date_days_ago = date_now - timedelta(days=int(days_ago))
     helpful_submissions = employee.helpful_feedback_given
     helpful_submissions = helpful_submissions.filter(date__range=[date_days_ago, date_now])
-
+    helpful_submissions = helpful_submissions.order_by('received_by__id').distinct('received_by__id')
+    helpful_count = helpful_submissions.count()
     tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
     feedback_url = 'https://%s/#/feedback/submission/' % tenant.domain_url
     context = {

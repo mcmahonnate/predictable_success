@@ -39,7 +39,6 @@ class Command(BaseCommand):
             helpful_submissions = helpful_submissions.order_by().values('given_by').annotate(helpful=models.Count("pk"))
             for helpful_submission in helpful_submissions:
                 employee_id = helpful_submission['given_by']
-                helpful_count = helpful_submission['helpful']
-                send_feedback_was_helpful_email.subtask((employee_id, helpful_count, days_ago)).apply_async()
+                send_feedback_was_helpful_email.subtask((employee_id, days_ago)).apply_async()
                 print helpful_submission['given_by']
         return
