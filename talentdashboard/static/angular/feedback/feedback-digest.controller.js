@@ -42,7 +42,9 @@
         function updateExcelsAtHelpfulness(submission) {
             FeedbackSubmissionService.updateExcelsWasHelpful(submission)
                 .then(function (data) {
-                    console.log(data);
+                    submission.excels_at_helpful = data.excels_at_helpful;
+                    var reviewer = submission.reviewer ? submission.reviewer.first_name : 'Anonymous';
+                    Notification.success("Thanks! We'll get that to " + reviewer + " right away.");
                 })
                 .catch(function() {
                     Notification.error("Something went wrong.");
@@ -52,7 +54,9 @@
         function updateCouldImproveOnWasHelpful(submission) {
             FeedbackSubmissionService.updateCouldImproveOnWasHelpful(submission)
                 .then(function (data) {
-                    console.log(data);
+                    submission.could_improve_on_helpful = data.could_improve_on_helpful;
+                    var reviewer = submission.reviewer ? submission.reviewer.first_name : 'Anonymous';
+                    Notification.success("Thanks! We'll get that to " + reviewer + " right away.");
                 })
                 .catch(function() {
                     Notification.error("Something went wrong.");

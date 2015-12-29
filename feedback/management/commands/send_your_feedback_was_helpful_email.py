@@ -3,9 +3,9 @@ from django.core.management.base import BaseCommand
 from django.db import connection
 from django.db import models
 from optparse import make_option
-from feedback.models import FeedbackSubmission
+from feedback.models import FeedbackHelpful
 from feedback.tasks import send_feedback_was_helpful_email
-
+from django.db.models import Q
 
 class Command(BaseCommand):
 
@@ -33,13 +33,12 @@ class Command(BaseCommand):
             days_ago = options['days_ago']
             date_now = datetime.now()
             date_days_ago = date_now - timedelta(days=int(days_ago))
-            helpful_submissions = FeedbackSubmission.objects.was_helpful(start_date=date_days_ago, end_date=date_now)
+            helpful_submissions = FeedbackHelpful.objects.filter(date__range=[date_days_ago, date_now])
             if user_id != 'ALL':
-                helpful_submissions = helpful_submissions.filter(reviewer__user__id=user_id)
-            helpful_submissions = helpful_submissions.order_by().values('reviewer').annotate(helpful=models.Count("pk"))
+                helpful_submissions = helpful_submissions.filter(Q(given_by__user__id=user_id) | Q(given_by__user__id=user_id))
+            helpful_submissions = helpful_submissions.order_by().values('given_by').annotate(helpful=models.Count("pk"))
             for helpful_submission in helpful_submissions:
-                employee_id = helpful_submission['reviewer']
-                helpful_count = helpful_submission['helpful']
-                send_feedback_was_helpful_email.subtask((employee_id, helpful_count, days_ago)).apply_async()
-                print helpful_submission['reviewer']
+                employee_id = helpful_submission['given_by']
+                send_feedback_was_helpful_email.subtask((employee_id, days_ago)).apply_async()
+                print helpful_submission['given_by']
         return

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from org.models import Employee
 from org.api.serializers import SanitizedEmployeeSerializer, MinimalEmployeeSerializer
-from ..models import FeedbackRequest, FeedbackSubmission, FeedbackDigest
+from ..models import FeedbackRequest, FeedbackSubmission, FeedbackDigest, FeedbackHelpful
 
 
 class FeedbackRequestSerializer(serializers.ModelSerializer):
@@ -51,10 +51,46 @@ class CoachEditFeedbackSubmissionSerializer(serializers.ModelSerializer):
         read_only_fields = ['id',]
 
 
+class FeedbackHelpfulSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FeedbackHelpful
+        fields = ('id', 'helpfulness', 'helpfulness_verbose', 'reason', 'date')
+
+
 class EmployeeEditFeedbackSubmissionSerializer(serializers.ModelSerializer):
+    def update(self, instance, validated_data):
+        if validated_data['excels_at_helpful']:
+            print validated_data['excels_at_helpful']
+            if instance.excels_at_helpful is None:
+                excels_at_helpful = FeedbackHelpful.objects.create(**validated_data['excels_at_helpful'])
+                excels_at_helpful.given_by = instance.reviewer
+                excels_at_helpful.received_by = instance.subject
+                excels_at_helpful.save()
+                instance.excels_at_helpful = excels_at_helpful
+            else:
+                instance.excels_at_helpful.helpfulness = validated_data['excels_at_helpful']['helpfulness']
+                instance.excels_at_helpful.reason = validated_data['excels_at_helpful']['reason']
+                instance.excels_at_helpful.save()
+            instance.save()
+        if validated_data['could_improve_on_helpful']:
+            if instance.could_improve_on_helpful is None:
+                could_improve_on_helpful = FeedbackHelpful.objects.create(**validated_data['could_improve_on_helpful'])
+                could_improve_on_helpful.given_by = instance.reviewer
+                could_improve_on_helpful.received_by = instance.subject
+                could_improve_on_helpful.save()
+                instance.could_improve_on_helpful = could_improve_on_helpful
+            else:
+                instance.could_improve_on_helpful.helpfulness = validated_data['could_improve_on_helpful']['helpfulness']
+                instance.could_improve_on_helpful.reason = validated_data['could_improve_on_helpful']['reason']
+                instance.could_improve_on_helpful.save()
+            instance.save()
+        return instance
+
+    excels_at_helpful = FeedbackHelpfulSerializer(required=False, allow_null=True)
+    could_improve_on_helpful = FeedbackHelpfulSerializer(required=False, allow_null=True)
     class Meta:
         model = FeedbackSubmission
-        fields = ['id', 'excels_at_was_helpful', 'could_improve_on_was_helpful',]
+        fields = ['id', 'excels_at_helpful', 'could_improve_on_helpful',]
         read_only_fields = ['id',]
 
 
@@ -85,12 +121,14 @@ class FeedbackSubmissionSerializerForReviewer(serializers.ModelSerializer):
     feedback_date = serializers.DateTimeField(required=False)
     subject = SanitizedEmployeeSerializer()
     reviewer = SanitizedEmployeeSerializer()
+    excels_at_helpful = FeedbackHelpfulSerializer()
+    could_improve_on_helpful = FeedbackHelpfulSerializer()
 
     class Meta:
         model = FeedbackSubmission
         fields = ('id', 'feedback_date', 'subject', 'reviewer',
                   'excels_at', 'could_improve_on', 'unread',
-                  'has_been_delivered', 'anonymous', 'excels_at_was_helpful', 'could_improve_on_was_helpful')
+                  'has_been_delivered', 'anonymous', 'excels_at_helpful', 'could_improve_on_helpful')
 
 
 class FeedbackSubmissionSerializerForCoaches(serializers.ModelSerializer):
@@ -100,6 +138,8 @@ class FeedbackSubmissionSerializerForCoaches(serializers.ModelSerializer):
     has_digest = serializers.SerializerMethodField()
     was_requested = serializers.SerializerMethodField()
     message = serializers.SerializerMethodField()
+    excels_at_helpful = FeedbackHelpfulSerializer()
+    could_improve_on_helpful = FeedbackHelpfulSerializer()
 
     def get_message(self, submission):
         if submission.feedback_request:
@@ -125,7 +165,7 @@ class FeedbackSubmissionSerializerForCoaches(serializers.ModelSerializer):
                   'excels_at', 'could_improve_on', 'excels_at_summarized',
                   'could_improve_on_summarized', 'unread',
                   'has_been_delivered', 'anonymous', 'has_digest',
-                  'was_requested', 'message', 'excels_at_was_helpful', 'could_improve_on_was_helpful')
+                  'was_requested', 'message', 'excels_at_helpful', 'could_improve_on_helpful')
 
 
 class FeedbackSubmissionSerializerForEmployee(serializers.ModelSerializer):
@@ -134,6 +174,8 @@ class FeedbackSubmissionSerializerForEmployee(serializers.ModelSerializer):
     reviewer = SanitizedEmployeeSerializer(source='anonymized_reviewer')
     excels_at = serializers.SerializerMethodField()
     could_improve_on = serializers.SerializerMethodField()
+    excels_at_helpful = FeedbackHelpfulSerializer()
+    could_improve_on_helpful = FeedbackHelpfulSerializer()
 
     def get_could_improve_on(self, submission):
         return submission.could_improve_on_summarized if submission.could_improve_on_summarized else submission.could_improve_on
@@ -145,7 +187,7 @@ class FeedbackSubmissionSerializerForEmployee(serializers.ModelSerializer):
         model = FeedbackSubmission
         fields = ('id', 'feedback_date', 'subject', 'reviewer',
                   'excels_at', 'could_improve_on', 'unread',
-                  'has_been_delivered', 'anonymous', 'excels_at_was_helpful', 'could_improve_on_was_helpful')
+                  'has_been_delivered', 'anonymous', 'excels_at_helpful', 'could_improve_on_helpful')
 
 
 class EmployeeFeedbackReportSerializer(serializers.Serializer):

@@ -147,11 +147,12 @@
             <caption class="panel-title">People I've given feedback to</caption>
             <thead>
                 <tr>
-                  <th scope="col" class="width-15-percent">Person</th>
-                  <th scope="col" class="width-15-percent">Sent</th>
-                  <th scope="col" class="width-40-percent hide-for-mobile-and-tablet centered">Anonymous</th>
-                  <th scope="col" class="width-40-percent hide-for-mobile-and-tablet centered">Delivered</th>
-                  <th scope="col" class="width-15-percent centered">Action</th>
+                  <th scope="col" class="width-20-percent">Person</th>
+                  <th scope="col" class="width-20-percent">Sent</th>
+                  <th scope="col" class="width-10-percent hide-for-mobile-and-tablet centered">Anonymous</th>
+                  <th scope="col" class="width-10-percent hide-for-mobile-and-tablet centered">Delivered</th>
+                  <th scope="col" class="width-20-percent hide-for-mobile-and-tablet centered">Helpful?</th>
+                  <th scope="col" class="width-20-percent centered">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -170,6 +171,11 @@
                     </td>
                     <td class="centered hide-for-mobile-and-tablet">
                         <i ng-show="{{ submission.has_been_delivered }}" class="fa fa-check" title="Delivered"></i>
+                    </td>
+                    <td class="centered hide-for-mobile-and-tablet">
+                        <span ng-show="submission.excels_at_helpful || submission.could_improve_on_helpful">
+                            <a href="#/feedback/submission/{{ submission.id }}/">yes</a>
+                        </span>
                     </td>
                     <td class="centered">
                         <a class="btn btn-default btn-md btn-view-feedback" ng-href="#/feedback/submission/{{ submission.id }}/" type="button">
