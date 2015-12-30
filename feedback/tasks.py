@@ -4,7 +4,6 @@ from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 from django.db import connection
-from django.db.models import Max
 from customers.models import Customer
 from org.models import Employee
 from datetime import datetime, timedelta

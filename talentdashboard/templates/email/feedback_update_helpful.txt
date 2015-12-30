@@ -1,0 +1,32 @@
+{% extends "layouts/email.html" %}
+
+{% block content %}
+Hi, {{ recipient_first_name }}!
+
+We've gotten some good feedback from you on...uh well feedback...and we've tweaked somethings because of it.
+
+If you find someone's feedback helpful you can now tell them how helpful it was as well as give explanation (optional) as to why it was helpful.
+
+
+{% if helpful_submissions.count > 0 %}
+
+There is one catch though. We can't carry over the data for the feedback you previously indicated was helpful. I know! We're sorry. We just didn't want to misrepresent how helpful your feedback was to you. For convenience here are the people you previously said gave you helpful feedback. Click change below to tell them how helpful it was:
+{% for helpful_submission in helpful_submissions %}
+       {% if helpful_submission.anonymous %}
+       Anonymous - {{ feedback_url }}{{helpful_submission.feedback_digest.id}}
+       {% else %}
+       {{ helpful_submission.reviewer.full_name }} - {{ feedback_url }}{{helpful_submission.feedback_digest.id}}
+       {% endif %}
+{% endfor %}
+
+{% else %}
+<strong>You can get started here {{ feedback_url }}{{feedback_digest_id}}</strong>
+
+{% endif %}
+Thanks!
+--The Scoutmap Team
+
+P.S. Do you have more feedback or ideas for us? Let us know on the Feedback for Scoutmap Slack Channel:
+https://fool.slack.com/messages/feedback_for_scoutmap/
+
+{% endblock content%}
