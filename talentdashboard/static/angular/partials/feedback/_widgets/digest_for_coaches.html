@@ -10,8 +10,9 @@
     </div>
     <form>
         <div style="margin:35px 0;" ng-show="feedbackWorksheet.digest">
-            <h2 class="panel-title hide-for-print" ng-show="view != 'delivered-view'">Summary</h2>
+            <h2 class="panel-title hide-for-print" ng-show="feedbackWorksheet.digest.summary">Summary</h2>
             <textarea auto-grow class="form-control hide-for-print" ng-show="view != 'delivered-view'" placeholder="This is your opportunity to add your thoughts from the feedback you've gathered for {{ feedbackWorksheet.progressReport.employee.first_name }}. What patterns did you see? What strengths surfaced? Where might there be opportunities?" ng-model="feedbackWorksheet.digest.summary" style="min-height:150px"></textarea>
+            <p ng-show="view == 'delivered-view'">{{ feedbackWorksheet.digest.summary }}</p>
         </div>
         <div ng-show="feedbackWorksheet.digest.submissions.length>0 || feedbackWorksheet.digest.summary">
             <h3 class="panel-title show-for-print">Summary</h3>
