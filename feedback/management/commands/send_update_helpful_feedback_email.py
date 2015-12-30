@@ -37,6 +37,7 @@ class Command(BaseCommand):
 
             for employee in employees:
                 try:
+                    print employee.full_name
                     current_digest = FeedbackDigest.objects.get_current_delivered_for_employee(employee)
                     helpful_submissions = FeedbackSubmission.objects.filter(Q(excels_at_was_helpful=True) | Q(could_improve_on_was_helpful=True))
                     helpful_submissions = helpful_submissions.filter(subject__id=employee.id)
