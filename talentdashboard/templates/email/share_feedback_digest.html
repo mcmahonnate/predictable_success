@@ -1,6 +1,53 @@
 <html>
     <head>
+    <style>
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 13.5px;
+            line-height: 18px;
+            background-color: #ebedf3;
+        }
+        .panel {
+            text-align: left !important;
+            padding: 25px;
+            margin-bottom: 15px !important;
+            background-color: #ffffff;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+        }
+        .panel-title {
+            margin-bottom: 10px;
+            font-size: 18px;
+            color: inherit;
+            font-weight: bold;
+            line-height: 22px;
+        }
+        .large-headshot {
+            border-radius: 90px;
+            width: 75px;
+            height: 75px;
+            border: 5px solid #f1f1f1;
+            transition: .3s;
+            overflow: hidden;
+            display: block;
+        }
+        .large-headshot img {
+            width: 100%;
+        }
+        .centered {
+            text-align: center;
+        }
+        .table {
+            width: 100%;
+            max-width: 100%;
+        }
+        .table-striped > tbody > tr:nth-of-type(odd) {
+          background-color: #f9f9f9;
+        }
 
+    </style>
     </head>
     <body>
         <div id="feedback" class="container" data-hj-masked>
@@ -98,52 +145,4 @@
             </div>
         </div>
     </body>
-    <style>
-        body {
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-            font-size: 13.5px;
-            line-height: 18px;
-            background-color: #ebedf3;
-        }
-        .panel {
-            text-align: left !important;
-            padding: 25px;
-            margin-bottom: 15px !important;
-            background-color: #ffffff;
-            border: 1px solid transparent;
-            border-radius: 4px;
-            -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-        }
-        .panel-title {
-            margin-bottom: 10px;
-            font-size: 18px;
-            color: inherit;
-            font-weight: bold;
-            line-height: 22px;
-        }
-        .large-headshot {
-            border-radius: 90px;
-            width: 75px;
-            height: 75px;
-            border: 5px solid #f1f1f1;
-            transition: .3s;
-            overflow: hidden;
-            display: block;
-        }
-        .large-headshot img {
-            width: 100%;
-        }
-        .centered {
-            text-align: center;
-        }
-        .table {
-            width: 100%;
-            max-width: 100%;
-        }
-        .table-striped > tbody > tr:nth-of-type(odd) {
-          background-color: #f9f9f9;
-        }
-
-    </style>
 </html>
