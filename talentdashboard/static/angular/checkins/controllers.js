@@ -31,11 +31,22 @@ angular.module('tdb.checkins.controllers', [])
         };
 
 
+
         // View switch
         $scope.$watch('view', function () {
 
             // New Check-in
-            if ($scope.view == 'new') { 
+            if ($scope.view == 'new') {
+
+                $scope.$on('$locationChangeStart', function( event ) {
+                    if (document.getElementsByName('summary')[0].value) {
+                        var answer = confirm("Are you sure you want to leave this page? You will lose anything you have typed.")
+                        if (!answer) {
+                            event.preventDefault();
+                        }
+                    }    
+                });   
+
                 if ($routeParams.id) { 
                     Employee.get({id:$routeParams.id})
                         .$promise.then(
