@@ -12,6 +12,7 @@ class Customer(TenantMixin):
     show_timeline = models.BooleanField(default=False)
     show_kpi = models.BooleanField(default=False)
     show_beta_features = models.BooleanField(default=False)
+    show_individual_comp = models.BooleanField(default=True)
     survey_email_subject = models.CharField(
         max_length=255,
         blank=True,

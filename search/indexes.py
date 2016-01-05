@@ -80,7 +80,7 @@ class EmployeeIndex(object):
 
         self._index_documents(documents)
 
-    def find_employees(self, tenant,
+    def find_employees(self, tenant, sanitize=True,
                        talent_categories=None,
                        team_ids=None,
                        happiness=None,
@@ -100,6 +100,8 @@ class EmployeeIndex(object):
             'fq': self._get_filters(tenant, talent_categories=talent_categories, team_ids=team_ids,
                                     happiness=happiness, coach_ids=coach_ids, leader_ids=leader_ids),
         }
+        if sanitize:
+            query.update({'fl':'pk, first_name, last_name, full_name, avatar_small, avatar'})
         if vops:
             query['fq'].append('vops_%s:[260 TO *]' % vops.lower())
 

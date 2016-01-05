@@ -1113,6 +1113,8 @@ class EmployeeCompensationSummaries(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk, format=None):
+        if not request.tenant.show_individual_comp:
+            return Response(None, status=status.HTTP_404_NOT_FOUND)
         employee = Employee.objects.get(pk=pk)
         if not employee.is_viewable_by_user(user=request.user, allowCoach=False):
             raise PermissionDenied

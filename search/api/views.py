@@ -5,11 +5,11 @@ from ..indexes import EmployeeIndex
 from org.models import Employee
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
-from talentdashboard.views.views import PermissionsViewThisEmployee, PermissionsViewAllEmployees
+from talentdashboard.views.views import PermissionsViewThisEmployee
 
 
 @api_view(['GET'])
-@permission_classes((IsAuthenticated, PermissionsViewAllEmployees))
+@permission_classes((IsAuthenticated,))
 def employee_search(request):
     return _find_employees(request)
 
@@ -50,7 +50,8 @@ def _find_employees(request, **kwargs):
         'rows': 500
     }
     filters.update(kwargs)
-    results = index.find_employees(request.tenant, **filters)
+    sanitize = not(request.user.has_perm('org.view_employees'))
+    results = index.find_employees(request.tenant, sanitize=sanitize, **filters)
     return Response(results)
 
 
