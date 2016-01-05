@@ -293,9 +293,9 @@ class EmployeeFeedbackReports(object):
         total_digests_i_delivered = dictfetchall(cursor)
         cursor.execute("SELECT subject_id as employee_id, count(subject_id) as total_digests_i_received FROM feedback_feedbackdigest WHERE has_been_delivered=TRUE AND (delivery_date >= '%s' AND delivery_date <= '%s') GROUP BY subject_id" % (self.start_date, self.end_date))
         total_digests_i_received = dictfetchall(cursor)
-        cursor.execute("SELECT reviewer_id as employee_id, count(reviewer_id) as total_excels_at_i_gave_that_was_helpful FROM feedback_feedbacksubmission WHERE excels_at_was_helpful AND (feedback_date >= '%s' AND feedback_date <= '%s') GROUP BY reviewer_id" % (self.start_date, self.end_date))
+        cursor.execute("SELECT reviewer_id as employee_id, count(reviewer_id) as total_excels_at_i_gave_that_was_helpful FROM feedback_feedbacksubmission WHERE excels_at_helpful_id IS NOT NULL AND (feedback_date >= '%s' AND feedback_date <= '%s') GROUP BY reviewer_id" % (self.start_date, self.end_date))
         total_excels_at_i_gave_that_was_helpful = dictfetchall(cursor)
-        cursor.execute("SELECT reviewer_id as employee_id, count(reviewer_id) as total_could_improve_i_gave_that_was_helpful FROM feedback_feedbacksubmission WHERE could_improve_on_was_helpful AND (feedback_date >= '%s' AND feedback_date <= '%s') GROUP BY reviewer_id" % (self.start_date, self.end_date))
+        cursor.execute("SELECT reviewer_id as employee_id, count(reviewer_id) as total_could_improve_i_gave_that_was_helpful FROM feedback_feedbacksubmission WHERE could_improve_on_helpful_id IS NOT NULL AND (feedback_date >= '%s' AND feedback_date <= '%s') GROUP BY reviewer_id" % (self.start_date, self.end_date))
         total_could_improve_i_gave_that_was_helpful = dictfetchall(cursor)
 
 
@@ -356,9 +356,9 @@ class EmployeeSubmissionReport(object):
         cursor.execute("SELECT reviewer_id as total_could_improve_i_gave FROM feedback_feedbacksubmission WHERE could_improve_on IS NOT NULL AND reviewer_id='%s'" % self.employee.id)
         self.total_could_improve_i_gave = cursor.rowcount
         self.total_i_gave = self.total_could_improve_i_gave + self.total_excels_at_i_gave
-        cursor.execute("SELECT reviewer_id as total_excels_at_i_gave_that_was_helpful FROM feedback_feedbacksubmission WHERE excels_at_was_helpful AND reviewer_id='%s'" % self.employee.id)
+        cursor.execute("SELECT reviewer_id as total_excels_at_i_gave_that_was_helpful FROM feedback_feedbacksubmission WHERE excels_at_helpful_id IS NOT NULL AND reviewer_id='%s'" % self.employee.id)
         self.total_excels_at_i_gave_that_was_helpful = cursor.rowcount
-        cursor.execute("SELECT reviewer_id as total_could_improve_i_gave_that_was_helpful FROM feedback_feedbacksubmission WHERE could_improve_on_was_helpful AND reviewer_id = '%s'" % self.employee.id)
+        cursor.execute("SELECT reviewer_id as total_could_improve_i_gave_that_was_helpful FROM feedback_feedbacksubmission WHERE could_improve_on_helpful_id IS NOT NULL AND reviewer_id = '%s'" % self.employee.id)
         self.total_could_improve_i_gave_that_was_helpful = cursor.rowcount
         self.total_i_gave_that_was_helpful = self.total_excels_at_i_gave_that_was_helpful + self.total_could_improve_i_gave_that_was_helpful
         if self.total_i_gave > 0:
