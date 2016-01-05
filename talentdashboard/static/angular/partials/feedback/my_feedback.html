@@ -64,7 +64,7 @@
                                             </div>               
                                             <div class="activity-description" style="margin: 0 0 15px 68px;">
                                                 <strong>{{ submission.subject.full_name }}</strong> said {{ submission.excels_at_helpful.date | fromNow }}
-                                                <div class="helpfulness-tag">👍 {{ submission.excels_at_helpful.helpfulness_verbose }}</div>
+                                                <div class="helpfulness-tag">👍{{ submission.excels_at_helpful.helpfulness_verbose }}</div>
 
                                                 <p style="margin-top:15px;">{{ submission.excels_at_helpful.reason }}</p>
                                             </div>
@@ -126,7 +126,7 @@
                                             </div>               
                                             <div class="activity-description" style="margin: 0 0 15px 68px;">
                                                 <strong>{{ submission.subject.full_name }}</strong> said {{ submission.could_improve_on_helpful.date | fromNow }}
-                                                <div class="helpfulness-tag">👍 {{ submission.could_improve_on_helpful.helpfulness_verbose }}</div>
+                                                <div class="helpfulness-tag">👍{{ submission.could_improve_on_helpful.helpfulness_verbose }}</div>
 
                                                 <p style="margin-top:15px;">{{ submission.could_improve_on_helpful.reason }}</p>
                                             </div>
