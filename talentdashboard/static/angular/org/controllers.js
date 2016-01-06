@@ -276,8 +276,12 @@ angular.module('tdb.org.controllers', [])
 
     .controller('EmployeeDetailCtrl', ['$rootScope', '$scope', '$location', '$routeParams', '$window', '$modal', 'User', 'Employee', 'Team', 'Engagement', 'SendEngagementSurvey', 'EmployeeLeader', 'Attribute', '$http', 'Customers', 'analytics', 'EmployeeMBTI', 'Notification', 'CompSummary', function ($rootScope, $scope, $location, $routeParams, $window, $modal, User, Employee, Team, Engagement, SendEngagementSurvey, EmployeeLeader, Attribute, $http, Customers, analytics, EmployeeMBTI, Notification, CompSummary) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
+        $scope.compSummaries = {};
         Customers.get(function (data) {
             $scope.customer = data;
+            if ($scope.customer.show_individual_comp) {
+                $scope.compSummaries = CompSummary.getAllSummariesForEmployee($routeParams.id);
+            }
         });
         $rootScope.$watch('currentUser', function (newVal, oldVal) {
             if (newVal != oldVal) {
@@ -309,7 +313,7 @@ angular.module('tdb.org.controllers', [])
                 $scope.employee.hire_date = $rootScope.parseDate($scope.employee.hire_date);
             }
         );
-        $scope.compSummaries = CompSummary.getAllSummariesForEmployee($routeParams.id);
+
         $scope.happyIndex = 0;
         Engagement.query(
             {id: $routeParams.id},
