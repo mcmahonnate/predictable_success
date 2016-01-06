@@ -141,12 +141,12 @@ angular.module('tdb.org.controllers', [])
         $scope.salaryReport = SalaryReport.myCoachees();
     }])
 
-    .controller('AddEditBioCtrl', ['$scope', '$rootScope', '$routeParams', '$modalInstance', '$location', 'employee', 'leadership', 'employees', 'teams', 'Employee', 'EmployeeLeader', 'fileReader', 'PhotoUpload', function($scope, $rootScope, $routeParams, $modalInstance, $location, employee, leadership, employees, teams, Employee, EmployeeLeader, fileReader, PhotoUpload) {
+    .controller('AddEditBioCtrl', ['$scope', '$rootScope', '$routeParams', '$modalInstance', '$location', 'employee', 'leadership', 'employees', 'teams', 'Employee', 'EmployeeLeader', 'EmployeeSearch', 'fileReader', 'PhotoUpload', function($scope, $rootScope, $routeParams, $modalInstance, $location, employee, leadership, employees, teams, Employee, EmployeeLeader, EmployeeSearch, fileReader, PhotoUpload) {
         $scope.employee = angular.copy(employee);
         $scope.leadership = angular.copy(leadership);
         $scope.teams = teams;
 
-        Employee.query({show_hidden: true, u: $rootScope.currentUser.id}, function(data) {
+        EmployeeSearch.query(function(data) {
                 $scope.employees = data;
                 $scope.coaches = angular.copy($scope.employees);
         });
@@ -200,7 +200,6 @@ angular.module('tdb.org.controllers', [])
 
         $scope.saveEmployee = function () {
             var data = getData();
-            console.log(data);
             if ($scope.employee.id > 0) {
                 Employee.update(data, function (response) {
                     $scope.employee = response;
@@ -269,7 +268,6 @@ angular.module('tdb.org.controllers', [])
 
         $scope.startsWith = function (expected, actual) {
             if (expected && actual) {
-                console.log(actual);
                 return expected.toLowerCase().indexOf(actual.toLowerCase()) == 0;
             }
             return true;

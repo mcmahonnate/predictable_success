@@ -79,7 +79,7 @@
                 <div class="search-results" ng-show="navQuery != ''">
                     <ul ng-if="navQuery!=''">
                         <li ng-repeat="employee in filteredEmployees = (employees |filter:{full_name:navQuery}:startsWith) | orderBy:'full_name'">
-                            <a ng-click="toggleMenu();navQuery='';" class="search-result" href="#/employees/{{employee.pk}}">
+                            <a ng-click="toggleMenu();navQuery='';" class="search-result" href="#/employees/{{employee.pk ? employee.pk : employee.id}}">
                                 <span class="tiny-headshot">
                                     <img ng-src="{{employee.avatar_small}}" alt="{{employee.full_name}}'s avatar" />
                                 </span>
