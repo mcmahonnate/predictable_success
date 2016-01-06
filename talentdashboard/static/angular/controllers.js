@@ -155,6 +155,7 @@ angular.module('tdb.controllers', [])
             leader: {full_name: ''}
         };
 
+        $scope.navQuery = '';
         $scope.startsWith = function (expected, actual) {
             if (expected && actual) {
                 return expected.toLowerCase().indexOf(actual.toLowerCase()) == 0;
