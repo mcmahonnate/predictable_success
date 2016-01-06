@@ -16,7 +16,12 @@ class CheckInType(models.Model):
         ordering = ['sort_weight']
 
 
+class CheckInManager(models.Manager):
+    def get_all_for_employee(self, employee):
+        return self.filter(employee=employee)
+
 class CheckIn(models.Model):
+    objects = CheckInManager()
     employee = models.ForeignKey(Employee, related_name='checkins', null=False, blank=False)
     host = models.ForeignKey(Employee, related_name='checkins_hosted', null=False, blank=False)
     date = models.DateTimeField(null=True, blank=True)

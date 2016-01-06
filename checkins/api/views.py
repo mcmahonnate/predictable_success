@@ -1,15 +1,16 @@
-from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
+from rest_framework.generics import *
 from blah.api.views import CommentList, CreateComment
 from blah.api.serializers import CommentSerializer
 from ..models import CheckIn, CheckInType
 from .serializers import CheckInSerializer, AddEditCheckInSerializer, CheckInTypeSerializer
+from .permissions import *
 from talentdashboard.views.views import StandardResultsSetPagination
 
 
 # CheckIn views
-class CreateCheckIn(generics.CreateAPIView):
+class CreateCheckIn(CreateAPIView):
     """ Create a CheckIn via POST.
     """
     serializer_class = AddEditCheckInSerializer
@@ -20,12 +21,18 @@ class CreateCheckIn(generics.CreateAPIView):
         serializer.save(host=self.request.user.employee)
 
 
-class RetrieveUpdateDestroyCheckIn(generics.RetrieveUpdateDestroyAPIView):
+class RetrieveUpdateDestroyCheckIn(RetrieveUpdateDestroyAPIView):
     """ Retrieve, Update, or Delete a CheckIn via GET, PUT, DELETE.
     """
     queryset = CheckIn.objects.all()
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, UserIsEmployeeOrHost)
     serializer_class = AddEditCheckInSerializer
+
+    def get_checkin(self):
+        try:
+            return self.get_object()
+        except CheckIn.DoesNotExist:
+            raise Http404()
 
     def get(self, request, pk, format=None):
         check_in = CheckIn.objects.get(id=pk)
@@ -33,7 +40,20 @@ class RetrieveUpdateDestroyCheckIn(generics.RetrieveUpdateDestroyAPIView):
         return Response(serializer.data)
 
 
-class EmployeeCheckInList(generics.ListAPIView):
+class RetrieveMyCheckIns(ListAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = CheckInSerializer
+
+    def get_queryset(self):
+        try:
+            employee = self.request.user.employee
+            checkins = CheckIn.objects.get_all_for_employee(employee=employee)
+            return checkins
+        except CheckIn.DoesNotExist:
+            raise Http404()
+
+
+class EmployeeCheckInList(ListAPIView):
     """ Get a list of CheckIns for a given employee via employee_id query param.
     """
     serializer_class = CheckInSerializer
@@ -44,7 +64,7 @@ class EmployeeCheckInList(generics.ListAPIView):
         return CheckIn.objects.filter(employee_id=employee_id)
 
 
-class HostCheckInList(generics.ListAPIView):
+class HostCheckInList(ListAPIView):
     """ Get a list of CheckIns where the current user is the host.
     """
     serializer_class = CheckInSerializer
@@ -56,7 +76,7 @@ class HostCheckInList(generics.ListAPIView):
 
 
 # CheckInType views
-class CheckInTypeList(generics.ListAPIView):
+class CheckInTypeList(ListAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = CheckInTypeSerializer
     queryset = CheckInType.objects.all()
