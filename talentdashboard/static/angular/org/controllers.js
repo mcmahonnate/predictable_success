@@ -1,17 +1,5 @@
 angular.module('tdb.org.controllers', [])
 
-    .controller('TeamListCtrl', ['$scope', 'Team', '$cookies', '$cookieStore', function ($scope, Team, $cookies, $cookieStore) {
-        $scope.teams = Team.query();
-        $scope.teamQuery = $scope.teams[0];
-        $scope.teamMenu = {show: false};
-        $scope.startsWith = function (expected, actual) {
-            if (expected && actual) {
-                return expected.toLowerCase().indexOf(actual.toLowerCase()) == 0;
-            }
-            return true;
-        }
-    }])
-
     .controller('LeaderOverviewCtrl', ['$scope', '$location', '$routeParams', 'Employee', 'SalaryReport', 'TalentReport', 'MyEmployees', 'TeamLeadEmployees', 'User', 'analytics', 'TemplatePreferences', function ($scope, $location, $routeParams, Employee, SalaryReport, TalentReport, MyEmployees, TeamLeadEmployees, User, analytics, TemplatePreferences) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
 

@@ -1,116 +1,118 @@
-<nav role="navigation" aria-label="Main menu">
+<div ng-controller="NavigationCtrl">
+    <nav role="navigation" aria-label="Main menu">
 
-    <!-- Mobile -->
-    <div class="mobile-navigation"> 
-        <div ng-click="toggleMenu();" class="mobile-menu-btn pull-right">
-            Menu
+        <!-- Mobile -->
+        <div class="mobile-navigation">
+            <div ng-click="toggleMenu();" class="mobile-menu-btn pull-right">
+                Menu
+            </div>
+            <div class="mobile-logo-container">
+                <a href="#/">
+                    <img src="../static/images/compass-logo-white.png" class="logo" alt="Home" />
+                </a>
+            </div>
         </div>
-        <div class="mobile-logo-container">
-            <a href="#/">
-                <img src="../static/images/compass-logo-white.png" class="logo" alt="Home" />
-            </a>
-        </div> 
-    </div>    
 
-    <!-- Desktop/large screen formats -->
-    <div class="desktop-navigation" role="menubar" ng-controller="NavigationCtrl">
-        <div role="menuitem" class="logo-container" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Home">
-            <a href="#/"><img src="../static/images/compass-logo-white.png" class="logo" alt="Home" /></a>
-        </div>
-        <div role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == myTab}" ng-click="setActiveTab(myTab)" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="My Stuff">
-            <span class="glyphicon glyphicon-user team_menu nav-item-icon"></span>
-             My Stuff
-            <div class="subnav" role="menu">
-                <div>
-                    <div class="subnav-title">My Stuff</div>
-                    <ul>
-                        <li ng-if="currentUser.is_team_lead"><a ng-href="#/my-team">My Team</a></li>
-                        <li ng-if="currentUser.can_coach_employees"><a ng-href="#/my-coachees">My Coachees</a></li>
-                    </ul>
-                </div>
+        <!-- Desktop/large screen formats -->
+        <div class="desktop-navigation" role="menubar" ng-controller="NavigationCtrl">
+            <div role="menuitem" class="logo-container" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Home">
+                <a href="#/"><img src="../static/images/compass-logo-white.png" class="logo" alt="Home" /></a>
             </div>
-        </div>
-        <div  ng-show="currentUser.is_team_lead && activeEmployee.is_lead"  role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == employeeTab}" ng-click="setActiveTab(employeeTab)" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{activeEmployee.full_name}}">
-            <div class="small-headshot team_menu">
-                <img ng-src="{{ activeEmployee.avatar_small }}" class="headshot-image nav-input">
-            </div>
-            <div class="subnav" role="menu">
-                <div>
-                    <div class="subnav-title">{{ activeEmployee.full_name }}</div>
-                    <ul>
-                        <li><a ng-href="#/employees/{{ activeEmployee.id }}">Profile</a></li>
-                        <li><a ng-href="#/team-lead/{{ activeEmployee.id }}">Team</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div role="menuitem" ng-show="customer.show_beta_features" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == feedbackTab}" ng-click="setActiveTab(feedbackTab)" >
-            <div ng-click="gotoFeedback()">
-                <span class="fa fa-send team_menu nav-item-icon"></span>
-                Feedback
-            </div>
-        </div>
-        <a href="" ng-click="setPrivacyMode()" class="privacy-mode" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Cat Mode">Cat Mode</a>
-    </div>    
-</nav>
-
-<!-- User Menu -->
-<div class="account-menu" data-hj-masked>
-    <div class="show-account-menu tiny-headshot">
-        <img ng-src="{{currentUser.employee.avatar_small}}" alt="Your avatar" />
-    </div>    
-    <ul class="account-action-items">
-        <li>
-            <i class="fa fa-sign-out"></i> <a class="dashboard" href="/logout">Sign Out</a>
-        </li>
-    </ul>
-</div>
-
-<!-- Left Menu -->
-<div id="menuleft" ng-class="{retract:!showmenu,slide:showmenu}">
-    <ul>
-        <li ng-controller="SearchCtrl">
-            <div class="subnav-search-input">
-                <div class="subnav-search-input-container">
-                    <input ng-model="navQuery" type="text" placeholder="Search Employees..." class="form-control nav-input" />
-                </div>    
-                <div class="search-results" ng-show="navQuery != ''">
-                    <ul ng-if="navQuery!=''">
-                        <li ng-repeat="employee in filteredEmployees = (employees |filter:{full_name:navQuery}:startsWith) | orderBy:'full_name'">
-                            <a ng-click="toggleMenu();navQuery='';" class="search-result" href="#/employees/{{employee.pk ? employee.pk : employee.id}}">
-                                <span class="tiny-headshot">
-                                    <img ng-src="{{employee.avatar_small}}" alt="{{employee.full_name}}'s avatar" />
-                                </span>
-                                <span class="employee-name">{{employee.full_name}}</span>
-                            </a>
-                        </li>
-                        <li ng-show="!filteredEmployees.length">No Results</li>
-                    </ul>
-                </div>
-            </div>
-        </li>
-        <li>
-            <div ng-click="isMyStuffOpen = !isMyStuffOpen" class="mobile-menu-item">
+            <div role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == myTab}" ng-click="setActiveTab(myTab)" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="My Stuff">
                 <span class="glyphicon glyphicon-user team_menu nav-item-icon"></span>
-                My Stuff
-            </div>    
-            <ul ng-show="isMyStuffOpen" class="mobile-sub-menu" role="menu">
-                <li ng-if="currentUser.is_team_lead"><a ng-href="#/my-team" ng-click="toggleMenu()">My Team</a></li>
-                <li ng-if="currentUser.can_coach_employees"><a ng-href="#/my-coachees" ng-click="toggleMenu()">My Coachees</a></li>
-                <li><a ng-href="#/feedback" ng-click="toggleMenu()">My Feedback</a></li>
-            </ul>
-        </li>
-        <li ng-show="customer.show_beta_features">
-            <a href="#/feedback" ng-click="toggleMenu()">
-                <span class="fa fa-send team_menu nav-item-icon"></span>
-                Feedback
-            </a>
-        </li>
-        <li>
-            <a href="/logout" ng-click="toggleMenu()">
-                <span class="fa fa-sign-out team_menu nav-item-icon"></span>
-                Log Out
-            </a>
-        </li>
-    </ul>
+                 My Stuff
+                <div class="subnav" role="menu">
+                    <div>
+                        <div class="subnav-title">My Stuff</div>
+                        <ul>
+                            <li ng-if="currentUser.is_team_lead"><a ng-href="#/my-team">My Team</a></li>
+                            <li ng-if="currentUser.can_coach_employees"><a ng-href="#/my-coachees">My Coachees</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div  ng-show="currentUser.is_team_lead && activeEmployee.is_lead"  role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == employeeTab}" ng-click="setActiveTab(employeeTab)" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{activeEmployee.full_name}}">
+                <div class="small-headshot team_menu">
+                    <img ng-src="{{ activeEmployee.avatar_small }}" class="headshot-image nav-input">
+                </div>
+                <div class="subnav" role="menu">
+                    <div>
+                        <div class="subnav-title">{{ activeEmployee.full_name }}</div>
+                        <ul>
+                            <li><a ng-href="#/employees/{{ activeEmployee.id }}">Profile</a></li>
+                            <li><a ng-href="#/team-lead/{{ activeEmployee.id }}">Team</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div role="menuitem" ng-show="customer.show_beta_features" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == feedbackTab}" ng-click="setActiveTab(feedbackTab)" >
+                <div ng-click="gotoFeedback()">
+                    <span class="fa fa-send team_menu nav-item-icon"></span>
+                    Feedback
+                </div>
+            </div>
+            <a href="" ng-click="setPrivacyMode()" class="privacy-mode" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Cat Mode">Cat Mode</a>
+        </div>
+    </nav>
+
+    <!-- User Menu -->
+    <div class="account-menu" data-hj-masked>
+        <div class="show-account-menu tiny-headshot">
+            <img ng-src="{{currentUser.employee.avatar_small}}" alt="Your avatar" />
+        </div>
+        <ul class="account-action-items">
+            <li>
+                <i class="fa fa-sign-out"></i> <a class="dashboard" href="/logout">Sign Out</a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Left Menu -->
+    <div id="menuleft" ng-class="{retract:!showmenu,slide:showmenu}">
+        <ul>
+            <li>
+                <div class="subnav-search-input">
+                    <div class="subnav-search-input-container">
+                        <input ng-model="navQuery" type="text" placeholder="Search Employees..." class="form-control nav-input" />
+                    </div>
+                    <div class="search-results" ng-show="navQuery != ''">
+                        <ul ng-if="navQuery!=''">
+                            <li ng-repeat="employee in filteredEmployees = (employees |filter:{full_name:navQuery}:startsWith) | orderBy:'full_name'">
+                                <a ng-click="toggleMenu();navQuery='';" class="search-result" href="#/employees/{{employee.pk ? employee.pk : employee.id}}">
+                                    <span class="tiny-headshot">
+                                        <img ng-src="{{employee.avatar_small}}" alt="{{employee.full_name}}'s avatar" />
+                                    </span>
+                                    <span class="employee-name">{{employee.full_name}}</span>
+                                </a>
+                            </li>
+                            <li ng-show="!filteredEmployees.length">No Results</li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div ng-click="isMyStuffOpen = !isMyStuffOpen" class="mobile-menu-item">
+                    <span class="glyphicon glyphicon-user team_menu nav-item-icon"></span>
+                    My Stuff
+                </div>
+                <ul ng-show="isMyStuffOpen" class="mobile-sub-menu" role="menu">
+                    <li ng-if="currentUser.is_team_lead"><a ng-href="#/my-team" ng-click="toggleMenu()">My Team</a></li>
+                    <li ng-if="currentUser.can_coach_employees"><a ng-href="#/my-coachees" ng-click="toggleMenu()">My Coachees</a></li>
+                    <li><a ng-href="#/feedback" ng-click="toggleMenu()">My Feedback</a></li>
+                </ul>
+            </li>
+            <li ng-show="customer.show_beta_features">
+                <a href="#/feedback" ng-click="toggleMenu()">
+                    <span class="fa fa-send team_menu nav-item-icon"></span>
+                    Feedback
+                </a>
+            </li>
+            <li>
+                <a href="/logout" ng-click="toggleMenu()">
+                    <span class="fa fa-sign-out team_menu nav-item-icon"></span>
+                    Log Out
+                </a>
+            </li>
+        </ul>
+    </div>
 </div>
