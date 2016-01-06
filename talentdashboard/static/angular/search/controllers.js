@@ -1,16 +1,10 @@
 angular.module('tdb.search.controllers', [])
 
-    .controller('SearchCtrl', ['$scope', '$rootScope', '$routeParams', '$location', '$modal', 'EmployeeSearch', 'Customers', function ($scope, $rootScope, $routeParams, $location, $modal, EmployeeSearch, Customers) {
-
+    .controller('SearchCtrl', ['$scope', '$rootScope', '$routeParams', '$location', '$modal', 'EmployeeSearch', 'Customers', function ($scope, $rootScope, $routeParams, $location, $modal, EmployeeSearch) {
         //clear search
         $scope.navQuery = '';
 
-        Customers.get(function (data) {
-            $scope.customer = data;
-        });
-
         $scope.employees = EmployeeSearch.query();
-
  	}])
 
     .controller('EmployeeSearchCtrl', ['$scope', '$routeParams', '$location', '$filter', 'HappinessOptions', 'EmployeeSearch', 'TalentCategories', 'Team', 'view', 'analytics', function ($scope, $routeParams, $location, $filter, HappinessOptions, EmployeeSearch, TalentCategories, Team, view, analytics) {
