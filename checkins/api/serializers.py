@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from org.api.serializers import MinimalEmployeeSerializer
+from org.api.serializers import MinimalEmployeeSerializer, SanitizedEmployeeSerializer
 from org.models import Employee
 from engagement.models import Happiness
 from engagement.api.serializers import HappinessSerializer
@@ -15,16 +15,12 @@ class CheckInTypeSerializer(serializers.ModelSerializer):
 
 
 class CheckInSerializer(serializers.ModelSerializer):
-    employee = MinimalEmployeeSerializer(required=False)
-    host = MinimalEmployeeSerializer(required=False)
+    employee = SanitizedEmployeeSerializer(required=False)
+    host = SanitizedEmployeeSerializer(required=False)
     type = CheckInTypeSerializer(required=False)
     happiness = HappinessSerializer(required=False)
     tasks = TaskSerializer(required=False, many=True)
-    summary = serializers.SerializerMethodField()
     comments = CommentSerializer(required=False, many=True)
-
-    def get_summary(self, obj):
-        return obj.get_summary(self.context['request'].user)
 
     class Meta:
         model = CheckIn

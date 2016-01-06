@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from org.api.serializers import MinimalEmployeeSerializer
+from org.api.serializers import SanitizedEmployeeSerializer
 from org.models import Employee
 from blah.api.serializers import EmployeeCommentSerializer
 from ..models import Happiness, SurveyUrl
@@ -28,8 +28,8 @@ class AddEditHappinessSerializer(serializers.ModelSerializer):
 
 
 class SurveyUrlSerializer(serializers.HyperlinkedModelSerializer):
-    sent_from = MinimalEmployeeSerializer()
-    sent_to = MinimalEmployeeSerializer()
+    sent_from = SanitizedEmployeeSerializer()
+    sent_to = SanitizedEmployeeSerializer()
 
     class Meta:
         model = SurveyUrl
@@ -37,8 +37,8 @@ class SurveyUrlSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class HappinessSerializer(serializers.HyperlinkedModelSerializer):
-    assessed_by = MinimalEmployeeSerializer()
-    employee = MinimalEmployeeSerializer()
+    assessed_by = SanitizedEmployeeSerializer()
+    employee = SanitizedEmployeeSerializer()
     comment = EmployeeCommentSerializer()
 
     def get_assessment_verbose(self, obj):
