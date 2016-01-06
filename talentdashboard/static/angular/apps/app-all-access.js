@@ -22,8 +22,8 @@ app.config(['$routeProvider', function($routeProvider) {
       when('/reports/activity', {templateUrl: '/static/angular/partials/activity-report.html', controller: 'ReportsCtrl', resolve: {authorizeRoute: authorizeRoute}}).
       when('/reports/feedback', {templateUrl: '/static/angular/partials/feedback/report.html', controller: 'FeedbackReportController as feedbackReport', resolve: {authorizeRoute: authorizeRoute}}).
       when('/tasks', {templateUrl: '/static/angular/partials/tasks.html', controller: 'TasksCtrl', resolve: {authorizeRoute: authorizeRoute}}).
-      when('/checkin/:id', {templateUrl: '/static/angular/partials/checkin.html', controller: 'AddEditCheckInCtrl', resolve: {authorizeRoute: authorizeRoute}}).
-      when('/checkin', {templateUrl: '/static/angular/partials/checkin.html', controller: 'AddEditCheckInCtrl', resolve: {authorizeRoute: authorizeRoute}}).
-      when('/checkins/:checkinId', {templateUrl: '/static/angular/partials/checkin-detail.html', controller: 'AddEditCheckInCtrl', resolve: {authorizeRoute: authorizeRoute}}).
+      when('/checkin/:id', {templateUrl: '/static/angular/checkins/partials/checkin.html', controller: 'AddEditCheckInCtrl', resolve: {authorizeRoute: authorizeRoute}}).
+      when('/checkin', {templateUrl: '/static/angular/checkins/partials/checkin.html', controller: 'AddEditCheckInCtrl', resolve: {authorizeRoute: authorizeRoute}}).
+      when('/checkins/:checkinId', {templateUrl: '/static/angular/checkins/partials/checkin-detail.html', controller: 'AddEditCheckInCtrl', resolve: {authorizeRoute: authorizeRoute}}).
       otherwise({redirectTo: '/'});
 }]);
