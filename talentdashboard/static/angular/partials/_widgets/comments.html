@@ -1,4 +1,4 @@
-<div class="activity panel activity-checkins" ng-if="comments.length > 0 && currentUser.can_view_comments" >
+<div class="activity panel activity-checkins" ng-if="comments.length > 0" >
     <h2 class="panel-title">Comments</h2>
     <div class="activity-items">
         <div class="activity-item" ng-controller="CommentCtrl" ng-repeat="comment in comments | orderBy:'-created_date':true">

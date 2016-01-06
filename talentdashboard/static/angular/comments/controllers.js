@@ -70,42 +70,13 @@ angular.module('tdb.comments.controllers', [])
         };
     }])
 
-    .controller('AddCheckInCommentCtrl', ['$scope', '$rootScope', '$routeParams', 'Comment', function($scope, $rootScope, $routeParams, Comment) {
-        $scope.nextPage = 1;
-        $scope.hasNextPage = false;
-        $scope.comments = [];
-        var initialize = function() {
-            $scope.newComment = new Comment({content:'', include_in_daily_digest:true});
-        };
-
-        $scope.loadNextPage = function() {
-            Comment.getCheckInComments({id:$routeParams.checkinId, page: $scope.nextPage}, function(page) {
-                $scope.comments = $scope.comments.concat(page.results);
-                $scope.nextPage++;
-                $scope.hasNextPage = page.has_next;
-            })
-        };
-
-        initialize();
-        $scope.loadNextPage();
-
-        $scope.add = function(form) {
-            if (form.$invalid) return;
-            Comment.addToCheckIn({ id:$routeParams.checkinId}, $scope.newComment, function(comment) {
-                $scope.comments.push(comment);
-                initialize();
-                $rootScope.$broadcast("comments.commentCreated", comment);
-            });
-        };
-    }])
-
     .controller('AddEmployeeCommentCtrl', ['$scope', '$rootScope', '$routeParams', 'Comment', function($scope, $rootScope, $routeParams, Comment) {
         var resetNewComment = function() {
             $scope.newComment = new Comment({content:'', include_in_daily_digest:true});
         };
         resetNewComment();
 
-        $scope.add = function(form) {
+        $scope.addComment = function(form) {
             if (form.$invalid) return;
             Comment.addToEmployee({ id:$routeParams.id}, $scope.newComment, function(comment) {
                 $rootScope.$broadcast("comments.commentCreated", comment);

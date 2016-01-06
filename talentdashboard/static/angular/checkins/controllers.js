@@ -1,16 +1,17 @@
 angular.module('tdb.checkins.controllers', [])
 
-    .controller('AddEditCheckInCtrl', ['$rootScope', '$scope', '$q', '$routeParams', '$location', '$modal', 'CheckIn', 'CheckInType', 'Happiness', 'Task', 'Employee', 'Notification', '$window', 'analytics', function ($rootScope, $scope, $q, $routeParams, $location, $modal, CheckIn, CheckInType, Happiness, Task, Employee, Notification, $window, analytics) {
+    .controller('AddEditCheckInCtrl', ['$rootScope', '$scope', '$q', '$routeParams', '$location', '$modal', 'CheckIn', 'CheckInType', 'Comment', 'Happiness', 'Task', 'Employee', 'Notification', '$window', 'analytics', function ($rootScope, $scope, $q, $routeParams, $location, $modal, CheckIn, CheckInType, Comment, Happiness, Task, Employee, Notification, $window, analytics) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         var initialize = function() {
             $scope.checkin = new CheckIn({date: new Date(Date.now())});
+            $scope.newComment = new Comment({content:'', include_in_daily_digest:true});
             $scope.happiness = new Happiness({assessment: 0});
+            $scope.comments = [];
             $scope.tasks = [];
             $scope.employeeSearch = '';
 
         };
         initialize();
-
 
         CheckInType.query({}, function(data) {
             $scope.checkinTypes = data;
@@ -30,11 +31,8 @@ angular.module('tdb.checkins.controllers', [])
             $scope.showSearch = false;
         };
 
-
-
         // View switch
         $scope.$watch('view', function () {
-
             // New Check-in
             if ($scope.view == 'new') {
 
@@ -69,6 +67,7 @@ angular.module('tdb.checkins.controllers', [])
             if ($scope.view == 'detail') { 
                 $scope.loadCheckin = CheckIn.get({ id : $routeParams.checkinId }, function(data) {
                     $scope.checkin = data;
+                    $scope.comments = $scope.checkin.comments;
                 }, function(response) {
                     if(response.status === 404) {
                          $location.url('checkin');
@@ -184,9 +183,17 @@ angular.module('tdb.checkins.controllers', [])
             }
         };
 
+        $scope.addComment = function(form) {
+            console.log('comment');
+            if (form.$invalid) return;
+            Comment.addToCheckIn({ id:$routeParams.checkinId}, $scope.newComment, function(comment) {
+                $scope.comments.push(comment);
+            });
+        };
+
         $scope.cancel = function() {
             initialize();
         };
 
         $scope.busy = false;
-    }]);
+    }])
