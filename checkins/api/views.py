@@ -41,13 +41,13 @@ class RetrieveUpdateDestroyCheckIn(RetrieveUpdateDestroyAPIView):
 
 
 class RetrieveMyCheckIns(ListAPIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, CheckInsAreShareable)
     serializer_class = CheckInSerializer
 
     def get_queryset(self):
         try:
             employee = self.request.user.employee
-            checkins = CheckIn.objects.get_all_for_employee(employee=employee)
+            checkins = CheckIn.objects.get_all_visible_to_employee(employee=employee)
             return checkins
         except CheckIn.DoesNotExist:
             raise Http404()

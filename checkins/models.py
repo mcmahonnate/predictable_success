@@ -20,6 +20,10 @@ class CheckInManager(models.Manager):
     def get_all_for_employee(self, employee):
         return self.filter(employee=employee)
 
+    def get_all_visible_to_employee(self, employee):
+        checkins = self.get_all_for_employee(employee)
+        return checkins.filter(visible_to_employee=True)
+
 class CheckIn(models.Model):
     objects = CheckInManager()
     employee = models.ForeignKey(Employee, related_name='checkins', null=False, blank=False)
@@ -29,6 +33,8 @@ class CheckIn(models.Model):
     type = models.ForeignKey(CheckInType, related_name='+', null=True)
     other_type_description = models.CharField(max_length=100, null=True, blank=True)
     happiness = models.ForeignKey(Happiness, null=True, blank=True)
+    published = models.BooleanField(default=False)
+    visible_to_employee = models.BooleanField(default=False)
 
     class Meta:
         get_latest_by = "date"
