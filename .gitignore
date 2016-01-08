@@ -65,3 +65,5 @@ venv/pysqlite2-doc/install-source.txt
 talentdashboard/static/feedback.js
 
 talentdashboard/static/qualities.js
+
+talentdashboard/static/checkins.js
