@@ -1,18 +1,18 @@
-<div class="container checkin" ng-controller="AddEditCheckInCtrl" ng-init="view='new'">
-    <form name="checkinForm" novalidate="novalidate" ng-submit="saveCheckin(checkinForm)">
+<div class="container checkin">
+    <form name="checkinForm" novalidate="novalidate" ng-submit="viewCheckin.saveCheckin(checkinForm)">
 
     	<!-- Employee Search -->
-    	<div ng-show="showSearch" class="checkin-search">
+    	<div ng-show="viewCheckin.showSearch" class="checkin-search">
 	    	<h1>Check-in with:</h1>
 	    	<div class="row">
-				<div ng-class="{open: employeeSearch!=''}" class="search dropdown">
+				<div ng-class="{open: viewCheckin.employeeSearch!=''}" class="search dropdown">
 				    <div class="search-input-container">
 				        <div class="glyphicon glyphicon-search search-icon"></div>
-				        <input class="search-input nav_query" ng-model="employeeSearch" type="text" placeholder="Search Employees..."  name="selectedEmplyeeName"  value="{{selectedEmployee.full_name}}" />
+				        <input class="search-input nav_query" ng-model="viewCheckin.employeeSearch" type="text" placeholder="Search Employees..."  name="viewCheckin.selectedEmplyeeName"  value="{{viewCheckin.selectedEmployee.full_name}}" />
 				    </div>
-				    <ul class="dropdown-menu" ng-hide="selectedEmployee || !employeeSearch" role="menu" aria-labelledby="dLabel">     
-			            <li ng-repeat="employee in filteredEmployees = (employees |filter:{full_name:employeeSearch}:startsWith) | orderBy:'full_name'" >
-			                <a ng-click="selectEmployee({{employee}})" class="dashboard" href="">
+				    <ul class="dropdown-menu" ng-hide="viewCheckin.selectedEmployee || !viewCheckin.employeeSearch" role="menu" aria-labelledby="dLabel">
+			            <li ng-repeat="employee in filteredEmployees = (viewCheckin.employees |filter:{full_name:viewCheckin.employeeSearch}:startsWith) | orderBy:'full_name'" >
+			                <a ng-click="viewCheckin.selectEmployee({{employee}})" class="dashboard" href="">
 			                    <div class="tiny-headshot"><img ng-src="{{employee.avatar_small}}"/></div>
 			                    <span class="employee-name">{{employee.full_name}}</span>
 			                </a>
@@ -24,13 +24,13 @@
 		</div>	
 
 		<!-- Check-in -->
-		<div ng-show="selectedEmployee">
+		<div ng-show="viewCheckin.selectedEmployee">
 			<div class="checkin-header">
-				<a href="#/employees/{{employee.id}}">
-					<img ng-src="{{ selectedEmployee.avatar_small }}" class="headshot medium-headshot pull-left"/>
+				<a href="#/employees/{{viewCheckin.employee.id}}">
+					<img ng-src="{{ viewCheckin.selectedEmployee.avatar_small }}" class="headshot medium-headshot pull-left"/>
 				</a>
 				<div class="pull-left">
-					<h1><a href="#/employees/{{ selectedEmployee.pk }}">{{ selectedEmployee.full_name }}</a></h1>
+					<h1><a href="#/employees/{{ viewCheckin.selectedEmployee.pk }}">{{ viewCheckin.selectedEmployee.full_name }}</a></h1>
 					<p class="timestamp">You're checking in now</p>
 				</div>
 			</div>	
@@ -38,34 +38,34 @@
                 <div ng-show="checkinForm.$submitted" ng-messages="checkinForm.type.$error">
                     <div class="help-block" ng-message="required">You must specify the type</div>
                 </div>
-		    	<select class="form-control simple-form-control" ng-options="type as type.name for type in checkinTypes" ng-model="checkin.type" name="type" required>
+		    	<select class="form-control simple-form-control" ng-options="type as type.name for type in viewCheckin.checkinTypes" ng-model="viewCheckin.checkin.type" name="type" required>
 		    		<option value="">--Select Check-In Type--</option>
 		    	</select>
-                <div ng-if="checkinForm.$submitted && checkin.type.name==='Other'" ng-messages="checkinForm.other_type_description.$error">
+                <div ng-if="checkinForm.$submitted && viewCheckin.checkin.type.name==='Other'" ng-messages="checkinForm.other_type_description.$error">
                     <div class="help-block" ng-message="required">You must specify the description</div>
                 </div>
-		    	<input class="form-control simple-form-control custom-checkin-type" ng-if="checkin.type.name==='Other'" name="other_type_description" ng-model="checkin.other_type" required class="form-control" placeholder="Enter check in type..." />
+		    	<input class="form-control simple-form-control custom-checkin-type" ng-if="viewCheckin.checkin.type.name==='Other'" name="other_type_description" ng-model="viewCheckin.checkin.other_type" required class="form-control" placeholder="Enter check in type..." />
 		    </div>
 		    <div class="checkin-summary panel">
-	        	<textarea required placeholder="Enter check-in summary here..." class="form-control" name="summary" ng-model="checkin.summary" style="min-height:150px;"></textarea>
+	        	<textarea required placeholder="Enter check-in summary here..." class="form-control" name="summary" ng-model="viewCheckin.checkin.summary" style="min-height:150px;"></textarea>
 			</div>
 			<div class="checkin-happiness panel" style="overflow:hidden;">
 				<h4 class="panel-title pull-left">Happiness</h4>
 		        <div class="checkin-engagement pull-right">
                     <div class="employee-happiness-container">
-                        <div class="employee-happiness employee-happiness-5" rel="tooltip" data-toggle="tooltip" data-placement="top" data-original-title="Very Happy" ng-click="happiness.assessment=5" ng-class="{selected: happiness.assessment==5}">
+                        <div class="employee-happiness employee-happiness-5" rel="tooltip" data-toggle="tooltip" data-placement="top" data-original-title="Very Happy" ng-click="viewCheckin.happiness.assessment=5" ng-class="{selected: viewCheckin.happiness.assessment==5}">
                             <span class="happiness-5"></span>
                         </div>
-                        <div class="employee-happiness employee-happiness-4" rel="tooltip" data-toggle="tooltip" data-placement="top" data-original-title="Happy" ng-click="happiness.assessment=4" ng-class="{selected: happiness.assessment==4}">
+                        <div class="employee-happiness employee-happiness-4" rel="tooltip" data-toggle="tooltip" data-placement="top" data-original-title="Happy" ng-click="viewCheckin.happiness.assessment=4" ng-class="{selected: viewCheckin.happiness.assessment==4}">
                             <span class="happiness-4"></span>
                         </div>
-                        <div class="employee-happiness employee-happiness-3" rel="tooltip" data-toggle="tooltip" data-placement="top" data-original-title="Indifferent" ng-click="happiness.assessment=3" ng-class="{selected: happiness.assessment==3}">
+                        <div class="employee-happiness employee-happiness-3" rel="tooltip" data-toggle="tooltip" data-placement="top" data-original-title="Indifferent" ng-click="viewCheckin.happiness.assessment=3" ng-class="{selected: viewCheckin.happiness.assessment==3}">
                             <span class="happiness-3"></span>
                         </div>
-                        <div class="employee-happiness employee-happiness-2" rel="tooltip" data-toggle="tooltip" data-placement="top" data-original-title="Unhappy" ng-click="happiness.assessment=2" ng-class="{selected: happiness.assessment==2}">
+                        <div class="employee-happiness employee-happiness-2" rel="tooltip" data-toggle="tooltip" data-placement="top" data-original-title="Unhappy" ng-click="viewCheckin.happiness.assessment=2" ng-class="{selected: viewCheckin.happiness.assessment==2}">
                             <span class="happiness-2"></span>
                         </div>
-                        <div class="employee-happiness employee-happiness-1" rel="tooltip" data-toggle="tooltip" data-placement="top" data-original-title="Very Unhappy" ng-click="happiness.assessment=1" ng-class="{selected: happiness.assessment==1}">
+                        <div class="employee-happiness employee-happiness-1" rel="tooltip" data-toggle="tooltip" data-placement="top" data-original-title="Very Unhappy" ng-click="viewCheckin.happiness.assessment=1" ng-class="{selected: viewCheckin.happiness.assessment==1}">
                             <span class="happiness-1"></span>
                         </div>
                     </div>

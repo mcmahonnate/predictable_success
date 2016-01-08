@@ -1,85 +1,85 @@
-<div class="container checkin" ng-controller="AddEditCheckInCtrl" ng-init="view='detail'">
+<div class="container checkin">
 	<div class="checkin-header">
 		<div class="type-tag">
-			<span ng-show="!checkin.other_type_description">{{ checkin.type.name }}</span> 
-			<span ng-show="checkin.other_type_description">{{ checkin.other_type_description }}</span>
+			<span ng-show="!viewCheckin.checkin.other_type_description">{{ viewCheckin.checkin.type.name }}</span>
+			<span ng-show="viewCheckin.checkin.other_type_description">{{ viewCheckin.checkin.other_type_description }}</span>
 		</div>
 		<a href="#/employees/{{employee.id}}">
-			<img ng-src="{{ checkin.employee.avatar_small }}" class="headshot medium-headshot pull-left" alt="{{ checkin.employee.full_name }}'s avatar" />
+			<img ng-src="{{ viewCheckin.checkin.employee.avatar_small }}" class="headshot medium-headshot pull-left" alt="{{ viewCheckin.checkin.employee.full_name }}'s avatar" />
 		</a>
 		<div class="pull-left">
-			<h1><a href="#/employees/{{ checkin.employee.id }}">{{ checkin.employee.full_name }}</a></h1>
-			<p class="timestamp">{{ checkin.host.full_name }} checked in {{ checkin.date | fromNow }}</p>
+			<h1><a href="#/employees/{{ viewCheckin.checkin.employee.id }}">{{ viewCheckin.checkin.employee.full_name }}</a></h1>
+			<p class="timestamp">{{ viewCheckin.checkin.host.full_name }} checked in {{ viewCheckin.checkin.date | fromNow }}</p>
 		</div>
 	</div>	
     <div class="checkin-summary panel">
-        <div class="pull-right" style="margin-left: 20px;" ng-hide="showSummaryEdit" ng-show="checkin.host.id == currentUser.employee.id">
+        <div class="pull-right" style="margin-left: 20px;" ng-hide="viewCheckin.showSummaryEdit" ng-show="viewCheckin.checkin.host.id == currentUser.employee.id">
             <i class="fa fa-cog show-popover"></i>
             <ul class="popover-items" style="display:none">
                 <li class="popover-item">
-                    <a ng-click="showSummaryEdit=true" class="edit"><i class="fa fa-pencil-square-o"></i> Edit</a>
+                    <a ng-click="viewCheckin.showSummaryEdit=true" class="edit"><i class="fa fa-pencil-square-o"></i> Edit</a>
                 </li>
                 <li class="popover-item">
-                    <a ng-click="deleteCheckin(checkin)"><i class="fa fa-trash-o"></i> Delete</a>
+                    <a ng-click="viewCheckin.deleteCheckin(checkin)"><i class="fa fa-trash-o"></i> Delete</a>
                 </li>
             </ul>
         </div> 
-    	<div ng-hide="showSummaryEdit">
+    	<div ng-hide="viewCheckin.showSummaryEdit">
     		<!-- <span class="checkin-summary-instance" data-ng-bind-html="checkin.summary | new_line | cut:true:length"></span> -->
     		<!-- preserve white space and newlines -->
-    		<span class="checkin-summary-instance">{{ checkin.summary }}</span>
+    		<span class="checkin-summary-instance">{{ viewCheckin.checkin.summary }}</span>
     	</div>	
-	    <div ng-show="showSummaryEdit">
+	    <div ng-show="viewCheckin.showSummaryEdit">
             <textarea 
-               	ng-bind-html="checkin.summary" ng-model="checkin.summary" class="form-control edit-textarea" style="min-height:250px;">
+               	ng-bind-html="viewCheckin.checkin.summary" ng-model="viewCheckin.checkin.summary" class="form-control edit-textarea" style="min-height:250px;">
             </textarea>
-        	<button class="btn btn-primary btn-sm" ng-click="saveSummary(checkin);">Save Edits</button>
-        	<button class="btn btn-link btn-sm" ng-click="cancelEditComment(comment);showSummaryEdit=false">Cancel</button>
+        	<button class="btn btn-primary btn-sm" ng-click="viewCheckin.saveSummary(viewCheckin.checkin);">Save Edits</button>
+        	<button class="btn btn-link btn-sm" ng-click="viewCheckin.cancelEditComment(comment);viewCheckin.showSummaryEdit=false">Cancel</button>
         </div>
 	</div>
-	<div class="checkin-happiness panel" ng-show="checkin.happiness">
+	<div class="checkin-happiness panel" ng-show="viewCheckin.checkin.happiness">
 		<h2 class="panel-title pull-left">Happiness: 
-			<span class="employee-happiness-color-{{checkin.happiness.assessment}}">{{ checkin.happiness.assessment_verbose }}</span>
+			<span class="employee-happiness-color-{{viewCheckin.checkin.happiness.assessment}}">{{ viewCheckin.checkin.happiness.assessment_verbose }}</span>
 		</h2>
 	</div>	
-    <div class="checkin-tasks panel todos" ng-if="checkin.tasks.length > 0">
+    <div class="checkin-tasks panel todos" ng-if="viewCheckin.checkin.tasks.length > 0">
 		<h2 class="panel-title">Tasks</h2>
-	    <tabset ng-show="checkin.tasks.length > 0">
+	    <tabset ng-show="viewCheckin.checkin.tasks.length > 0">
 	        <tab heading="To Do" active="true">
-	            <div ng-show="checkin.tasks.length === 0 && !busy" class="todos-empty">
+	            <div ng-show="viewCheckin.checkin.tasks.length === 0 && !viewCheckin.busy" class="todos-empty">
 	                <p ng-show="view == 'my-view'">You currently don't have any tasks. Add tasks on employee profile pages.</p>
-	                <p ng-show="view == 'employee-view'">There are no tasks for {{ employee.full_name }}.</p>
+	                <p ng-show="view == 'employee-view'">There are no tasks for {{ viewCheckin.employee.full_name }}.</p>
 	            </div>
-	            <div ng-if="checkin.tasks.length > 0">
+	            <div ng-if="viewCheckin.checkin.tasks.length > 0">
 	                <div class="row shaded tab-header">
 	                    <div class="col-xs-6"></div>
 	                    <div class="col-xs-3">Assigned To</div>
 	                    <div class="col-xs-2">Due Date</div>
 	                </div>
-			        <div class="row todo" ng-repeat="task in checkin.tasks">
+			        <div class="row todo" ng-repeat="task in viewCheckin.checkin.tasks">
 			            <div ng-include="'/static/angular/partials/_widgets/task-list-item.html'" ng-init="mode='simple'"></div>
 			        </div>
-	                <button class="btn btn-link btn-sm" ng-show="checkin.tasks.length > 5 && !busy" ng-click="loadTasks(false)">Load More Tasks</button>
+	                <button class="btn btn-link btn-sm" ng-show="viewCheckin.checkin.tasks.length > 5 && !busy" ng-click="viewCheckin.loadTasks(false)">Load More Tasks</button>
 	            </div>
-	            <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
+	            <div ng-show="viewCheckin.busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
 	        </tab>
 	        <tab heading="Done">
-	            <div ng-show="done.length === 0 && !busy" class="todos-empty">
+	            <div ng-show="viewCheckin.checkin.done.length === 0 && !viewCheckin.busy" class="todos-empty">
 	                <p ng-show="view == 'my-view'">You don't have any completed tasks.</p>
 	                <p ng-show="view == 'employee-view'">There are no completed tasks for {{ employee.full_name }}.</p>
 	            </div>
-	            <div ng-if="done.length > 0">
+	            <div ng-if="viewCheckin.checkin.done.length > 0">
 	                <div class="row shaded tab-header">
 	                    <div class="col-xs-6"></div>
 	                    <div class="col-xs-3">Assigned To</div>
 	                    <div class="col-xs-2">Due Date</div>
 	                </div>
-			        <div class="row todo" ng-repeat="task in checkin.done">
+			        <div class="row todo" ng-repeat="task in viewCheckin.checkin.done">
 			            <div ng-include="'/static/angular/partials/_widgets/task-list-item.html'" ng-init="mode='simple'"></div>
 			        </div>
-	                <button class="btn btn-link btn-sm" ng-show="done_has_next && !busy" ng-click="loadTasks(true)">Load More Tasks</button>
+	                <button class="btn btn-link btn-sm" ng-show="done_has_next && !busy" ng-click="viewCheckin.loadTasks(true)">Load More Tasks</button>
 	            </div>
-	            <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
+	            <div ng-show="viewCheckin.busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
 	        </tab>
 	    </tabset>
     </div>
