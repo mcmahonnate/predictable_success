@@ -15,7 +15,6 @@ class CreateCheckIn(CreateAPIView):
     """
     serializer_class = AddEditCheckInSerializer
     permission_classes = (IsAuthenticated,)
-    model = CheckIn
 
     def perform_create(self, serializer):
         serializer.save(host=self.request.user.employee)
