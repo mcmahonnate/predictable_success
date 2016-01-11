@@ -2,14 +2,14 @@ angular
     .module('checkins')
     .controller('CheckInController', CheckInController);
 
-function CheckInController(CheckInsService, Comment, Employee, EmployeeSearch, Happiness, Notification, analytics, $location, $modal, $q, $routeParams, $scope, $window) {
+function CheckInController(CheckInsService, Comment, Employee, EmployeeSearch, Happiness, Notification, Task, analytics, $location, $modal, $q, $rootScope, $routeParams, $scope, $window) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
 
     var vm = this;
     vm.employees = []
     vm.checkin = {date: new Date(Date.now())};
     vm.checkinTypes = [];
-    vm.newComment = new Comment({content:'', include_in_daily_digest:true});
+    vm.newComment = null;
     vm.happiness = new Happiness({assessment: 0});
     vm.comments = [];
     vm.tasks = [];
@@ -27,6 +27,7 @@ function CheckInController(CheckInsService, Comment, Employee, EmployeeSearch, H
     activate();
 
     function activate() {
+        initializeNewComment()
         getEmployees();
         getCheckInTypes();
         if ($routeParams.checkinId) {
@@ -35,6 +36,12 @@ function CheckInController(CheckInsService, Comment, Employee, EmployeeSearch, H
             getEmployee();
         }
     }
+
+    function initializeNewComment() {
+        vm.newComment = new Comment({content:'', include_in_daily_digest:true});
+        vm.newComment.expandTextArea = false;
+    }
+
 
     function getEmployee() {
         if ($routeParams.id) {
@@ -55,6 +62,7 @@ function CheckInController(CheckInsService, Comment, Employee, EmployeeSearch, H
         CheckInsService.getCheckIn($routeParams.checkinId)
             .then(function(checkin){
                     vm.checkin = checkin;
+                    vm.comments = vm.checkin.comments;
                 }, function(error){
                     Notification.success("Sorry we had a problem opening this checkin.");
                 }
@@ -92,7 +100,7 @@ function CheckInController(CheckInsService, Comment, Employee, EmployeeSearch, H
             controller: 'AddEditTaskCtrl',
             resolve: {
                 task: function () {
-                    return new Task({employee: vm.selectedEmployee.id});
+                    return new Task({employee: vm.checkin.employee});
                 }
             }
         });
@@ -122,7 +130,6 @@ function CheckInController(CheckInsService, Comment, Employee, EmployeeSearch, H
     };
 
     function saveSummary(checkin) {
-        console.log(checkin);
         var data = {summary: checkin.summary, id: checkin.id, employee: checkin.employee.id, type: checkin.type.id};
         CheckInsService.update(data)
             .then(function () {
@@ -189,6 +196,7 @@ function CheckInController(CheckInsService, Comment, Employee, EmployeeSearch, H
     function addComment(form) {
         if (form.$invalid) return;
         Comment.addToCheckIn({ id:$routeParams.checkinId}, vm.newComment, function(comment) {
+            initializeNewComment();
             vm.comments.push(comment);
         });
     }

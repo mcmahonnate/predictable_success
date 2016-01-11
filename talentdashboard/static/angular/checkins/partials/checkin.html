@@ -74,7 +74,7 @@
 
             <!-- Tasks -->
             <div class="panel panel-tasks todos">
-            	<button type="button" ng-click="newTask()" class="pull-right btn btn-sm btn-success btn-add-task"><span class="glyphicon glyphicon-plus"></span> Task</button>
+            	<button type="button" ng-click="viewCheckin.newTask()" class="pull-right btn btn-sm btn-success btn-add-task"><span class="glyphicon glyphicon-plus"></span> Task</button>
 				<h4 class="panel-title">Tasks</h4>
 				<tabset ng-show="tasks.length > 0">
         			<tab heading="To Do" active="true">
@@ -85,8 +85,8 @@
 		                </div>
 		            </tab>
 		        </tabset>        
-	            <div class="row todo" ng-repeat="task in tasks">
-	                <div ng-include="'/static/angular/partials/_widgets/task-list-item.html'"></div>
+	            <div class="row todo" ng-repeat="task in viewCheckin.tasks">
+	                <div ng-include="'/static/angular/checkins/partials/task-list-item.html'"></div>
 	            </div>
             </div>    
 	        <button type="submit" class="btn btn-success btn-lg btn-publish">Publish to Profile</button>

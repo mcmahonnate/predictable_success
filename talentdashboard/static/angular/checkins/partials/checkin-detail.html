@@ -75,7 +75,7 @@
 	                    <div class="col-xs-2">Due Date</div>
 	                </div>
 			        <div class="row todo" ng-repeat="task in viewCheckin.checkin.done">
-			            <div ng-include="'/static/angular/partials/_widgets/task-list-item.html'" ng-init="mode='simple'"></div>
+			            <div ng-include="'/static/angular/checkins/partials/task-list-item.html'" ng-init="mode='simple'"></div>
 			        </div>
 	                <button class="btn btn-link btn-sm" ng-show="done_has_next && !busy" ng-click="viewCheckin.loadTasks(true)">Load More Tasks</button>
 	            </div>
@@ -83,7 +83,7 @@
 	        </tab>
 	    </tabset>
     </div>
-    <div ng-include="'/static/angular/partials/_widgets/add-comment.html'"></div>
-    <div ng-include="'/static/angular/partials/_widgets/comments.html'"></div>
+    <div ng-include="'/static/angular/checkins/partials/add-comment.html'"></div>
+    <div ng-include="'/static/angular/checkins/partials/comments.html'"></div>
 
 </div>
