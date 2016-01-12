@@ -35,7 +35,26 @@
             <span class="activity-checkin-summary  comment-text" read-more ng-model="event.description" words="false" length="400"></span>
         </div>
     </a>
-
+    <div class="activity-checkin row" ng-if="!event.show_conversation">
+        <div class="avatar-container col-xs-2">
+            <span class="large-headshot">
+                <img ng-src="{{ event.related_object.employee.avatar_small }}" alt="{{ event.related_object.employee.full_name }}" class="headshot-image"/>
+            </span>
+            <div class="employee-attribute" rel="tooltip" data-toggle="tooltip" data-placement="right"
+                 data-original-title="{{ talentCategories[event.related_object.employee.current_talent_category].label }}">
+                <span class="segment employee-segment-background-color-{{ event.related_object.employee.current_talent_category }}"></span>
+            </div>
+        </div>
+        <div class="activity-checkin-details" ng-class="{'col-xs-12 col-sm-10': view='employee-view', 'col-xs-12 col-sm-10': view='team'}">
+            <div class="activity-checkin-type pull-right">
+                <span class="glyphicon glyphicon-top glyphicon-user"></span>
+                <span class="glyphicon glyphicon-outline glyphicon-user"></span>
+                <span class="glyphicon glyphicon-user"></span>
+            </div>
+            <h3 class="comment-title-employee-name"><strong><span class="sensitive-text">{{ event.employee.full_name }}</span></strong></h3>
+            <div class="checkin-type">{{ event.related_object.type.name }} Check-in <span ng-show="{{ event.related_object.happiness }}">&rarr; {{ event.related_object.happiness.assessment_verbose }}</span></div>
+        </div>
+    </div>
 
     <!-- Comment replies -->
     <div ng-if="event.show_conversation" class="comment-replies">
