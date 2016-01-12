@@ -98,15 +98,6 @@ urlpatterns = [
     url(r'^api/v1/tasks/(?P<pk>[0-9]+)?/$', TaskDetail.as_view()),
     url(r'^api/v1/tasks/$', TaskDetail.as_view()),
 
-    url(r'^api/v1/events/employees/(?P<employee_id>[0-9]+)/$', EmployeeEventList.as_view()),
-    url(r'^api/v1/events/teams/(?P<pk>[0-9]+)/$', TeamEventList.as_view()),
-    url(r'^api/v1/events/leads/$', MyTeamEventList.as_view()),
-    url(r'^api/v1/events/leads/(?P<pk>[0-9]+)/$', LeadEventList.as_view()),
-    url(r'^api/v1/events/coaches/$', CoachEventList.as_view()),
-    url(r'^api/v1/events/checkins/(?P<pk>[0-9]+)/$', CheckInEventList.as_view()),
-    url(r'^api/v1/events/$', EventList.as_view()),
-    url(r'^api/v1/events/sources/comments/(?P<pk>[0-9]+)/$', CommentEvent.as_view()),
-
     url(r'^api/v1/image-upload/employees/(?P<pk>[0-9]+)/$', ImageUploadView.as_view()),
     url(r'^api/v1/talent-categories/$', talent_categories),
 
@@ -125,10 +116,11 @@ urlpatterns = [
 
     url(r'^api/v1/reports/activity$', last_activity_report),
 
-    url(r'^api/v1/search/', include('search.api.urls')),
     url(r'^api/v1/checkins/', include('checkins.api.urls')),
-    url(r'^api/v1/org/', include('org.api.urls')),
     url(r'^api/v1/comments/', include('blah.api.urls')),
+    url(r'^api/v1/events/', include('activity.api.urls')),
+    url(r'^api/v1/org/', include('org.api.urls')),
+    url(r'^api/v1/search/', include('search.api.urls')),
 
     url(r'^api/v1/feedback/', include('feedback.api.urls')),
 

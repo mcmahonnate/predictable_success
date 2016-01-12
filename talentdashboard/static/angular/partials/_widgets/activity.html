@@ -3,8 +3,8 @@
 
     <!-- Activity stream -->
     <div class="activity-items" ng-repeat="event in events | orderBy:'date':true">
-        <div ng-include="'/static/angular/partials/_widgets/activity/activity-comment.html'"></div>
-        <div ng-include="'/static/angular/partials/_widgets/activity/activity-checkin.html'"></div>
+        <div ng-if="event.type == 'comment'" ng-include="'/static/angular/partials/_widgets/activity/activity-comment.html'"></div>
+        <div ng-if="event.type == 'check in'" ng-include="'/static/angular/partials/_widgets/activity/activity-checkin.html'"></div>
     </div>
 
     <!-- No activity message -->

@@ -1,4 +1,4 @@
-<div class="activity-item" ng-show="event.type == 'check in'">
+<div class="activity-item">
     <div class="activity-header">
         <div class="activity-owner-avatar-container">
             <a ng-href="#/employees/{{ event.user.employee.id }}" class="medium-headshot">
@@ -8,12 +8,13 @@
         <div class="activity-description">
             <a ng-href="#/employees/{{ event.user.employee.id }}" class="activity-title-employee-name">{{ event.user.employee.full_name }}</a>
             {{ event.verb }}
-            <span ng-show="event.type == 'check in'">with</span>
-            <a ng-href="#/employees/{{ event.employee.id }}" class="activity-title-employee-name">{{ event.employee.full_name }}</a>
+            <span ng-show="event.employee.id != event.user.employee.id">
+                with <a ng-href="#/employees/{{ event.employee.id }}" class="activity-title-employee-name">{{ event.employee.full_name }}</a>
+            </span>
             <span class="timestamp" data-toggle="tooltip" data-placement="top" title="{{ event.date | date:'MMM d, yyyy h:mma' }}">{{ event.date | fromNow }}</span>
         </div>    
     </div>
-    <a class="activity-checkin row" ng-show="event.type == 'check in'" href="#/checkins/{{ event.event_id }}">
+    <a class="activity-checkin row" ng-if="event.show_conversation" href="#/checkins/{{ event.event_id }}">
         <div class="avatar-container col-xs-2">
             <span class="large-headshot">
                 <img ng-src="{{ event.related_object.employee.avatar_small }}" alt="{{ event.related_object.employee.full_name }}" class="headshot-image"/>
@@ -37,7 +38,7 @@
 
 
     <!-- Comment replies -->
-    <div class="comment-replies">
+    <div ng-if="event.show_conversation" class="comment-replies">
         <span class="total-replies" ng-show="event.related_object.comments.length == 1" style="margin-top:20px;">
             {{event.related_object.comments.length}} reply
         </span>

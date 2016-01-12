@@ -1,7 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
 from rest_framework.generics import *
-from rest_framework.views import APIView
 from blah.api.views import CommentList, CreateComment
 from blah.api.serializers import CommentSerializer
 from ..models import CheckIn, CheckInType
@@ -117,7 +116,7 @@ class SendCheckInToEmployee(GenericAPIView):
     def put(self, request, pk, format=None):
         checkin = self.get_checkin()
         checkin.visible_to_employee = True
-        checkin.save()
+        checkin.save(update_fields=['visible_to_employee'])
         serializer = CheckInSerializer(checkin, context={'request':request})
         return Response(serializer.data)
 
@@ -135,6 +134,6 @@ class ShareCheckIn(GenericAPIView):
     def put(self, request, pk, format=None):
         checkin = self.get_checkin()
         checkin.published = True
-        checkin.save()
+        checkin.save(update_fields=['published'])
         serializer = SharedEmployeeCheckInSerializer(checkin, context={'request':request})
         return Response(serializer.data)
