@@ -9,7 +9,9 @@ function CheckInsService($http, $log, CheckInsResource) {
         getTypes: getTypes,
         save: save,
         update: update,
-        destroy: destroy
+        destroy: destroy,
+        send: send,
+        share: share
     };
 
     function getCheckIn(checkinId) {
@@ -87,5 +89,31 @@ function CheckInsService($http, $log, CheckInsResource) {
             $log.error('delete failed');
         }
     }
+
+    function send(checkin) {
+        return CheckInsResource.send({id: checkin.id}, checkin, success, fail).$promise;
+
+        function success(response) {
+            return response.data;
+        }
+
+        function fail(response) {
+            $log.error('send failed');
+        }
+    }
+
+
+    function share(checkin) {
+        return CheckInsResource.share({id: checkin.id}, checkin, success, fail).$promise;
+
+        function success(response) {
+            return response.data;
+        }
+
+        function fail(response) {
+            $log.error('share failed');
+        }
+    }
+
 
 }

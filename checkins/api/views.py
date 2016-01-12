@@ -1,10 +1,11 @@
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
 from rest_framework.generics import *
+from rest_framework.views import APIView
 from blah.api.views import CommentList, CreateComment
 from blah.api.serializers import CommentSerializer
 from ..models import CheckIn, CheckInType
-from .serializers import CheckInSerializer, AddEditCheckInSerializer, CheckInTypeSerializer
+from .serializers import *
 from .permissions import *
 from talentdashboard.views.views import StandardResultsSetPagination
 
@@ -24,7 +25,7 @@ class RetrieveUpdateDestroyCheckIn(RetrieveUpdateDestroyAPIView):
     """ Retrieve, Update, or Delete a CheckIn via GET, PUT, DELETE.
     """
     queryset = CheckIn.objects.all()
-    permission_classes = (IsAuthenticated, UserIsEmployeeOrHost)
+    permission_classes = (IsAuthenticated, UserIsEmployeeOrHostOfCheckIn)
     serializer_class = AddEditCheckInSerializer
 
     def get_checkin(self):
@@ -35,13 +36,19 @@ class RetrieveUpdateDestroyCheckIn(RetrieveUpdateDestroyAPIView):
 
     def get(self, request, pk, format=None):
         check_in = CheckIn.objects.get(id=pk)
-        serializer = CheckInSerializer(check_in, context={'request': request})
+        if request.user.employee.id == check_in.employee.id:
+            if check_in.published:
+                serializer = SharedEmployeeCheckInSerializer(check_in, context={'request': request})
+            else:
+                serializer = EmployeeCheckInSerializer(check_in, context={'request': request})
+        else:
+            serializer = CheckInSerializer(check_in, context={'request': request})
         return Response(serializer.data)
 
 
 class RetrieveMyCheckIns(ListAPIView):
     permission_classes = (IsAuthenticated, CheckInsAreShareable)
-    serializer_class = CheckInSerializer
+    serializer_class = EmployeeCheckInSerializer
 
     def get_queryset(self):
         try:
@@ -96,3 +103,38 @@ class CheckInCommentList(CommentList):
         return CheckIn.objects.get(pk=pk)
 
 
+class SendCheckInToEmployee(GenericAPIView):
+    queryset = CheckIn.objects.all()
+    serializer_class = CheckInSerializer
+    permission_classes = (IsAuthenticated, UserIsHostOfCheckIn)
+
+    def get_checkin(self):
+        try:
+            return self.get_object()
+        except CheckIn.DoesNotExist:
+            raise Http404()
+
+    def put(self, request, pk, format=None):
+        checkin = self.get_checkin()
+        checkin.visible_to_employee = True
+        checkin.save()
+        serializer = CheckInSerializer(checkin, context={'request':request})
+        return Response(serializer.data)
+
+class ShareCheckIn(GenericAPIView):
+    queryset = CheckIn.objects.all()
+    serializer_class = SharedEmployeeCheckInSerializer
+    permission_classes = (IsAuthenticated, UserIsEmployeeOfCheckIn)
+
+    def get_checkin(self):
+        try:
+            return self.get_object()
+        except CheckIn.DoesNotExist:
+            raise Http404()
+
+    def put(self, request, pk, format=None):
+        checkin = self.get_checkin()
+        checkin.published = True
+        checkin.save()
+        serializer = SharedEmployeeCheckInSerializer(checkin, context={'request':request})
+        return Response(serializer.data)

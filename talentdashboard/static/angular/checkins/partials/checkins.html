@@ -6,4 +6,42 @@
             </div>
         </h1>
     </div>
+    <div class="panel" ng-show="myCheckins.checkins.length>0">
+        <table class="table responsive-table">
+            <caption class="panel-title">
+                My Check-Ins
+            </caption>
+            <thead>
+                <tr>
+                    <th scope="col" class="width-10-percent">Date</th>
+                    <th scope="col" class="width-10-percent">Type</th>
+                    <th scope="col" class="width-40-percent">Summary</th>
+                    <th scope="col" class="width-15-percent">Coach</th>
+                    <th scope="col" class="width-10-percent">Shared</th>
+                    <th scope="col" class="width-10-percent centered">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="checkin in myCheckins.checkins | orderBy:'date':true">
+                    <td class="timeago">{{ checkin.date | fromNow }}</td>
+                    <td>{{ checkin.type.name }}</td>
+                    <td><span class="activity-checkin-summary comment-text" read-more ng-model="checkin.summary" words="false" length="400" label="View" link="/checkins/{{ checkin.id }}"></span></td>
+
+                    <td>
+                        <span class="tiny-headshot">
+                            <img class="headshot-image" ng-src="{{ checkin.host.avatar_small }}" alt="{{ checkin.host.full_name }}'s avatar" />
+                        </span>
+                        <span>{{ checkin.host.full_name }}</span>
+                    </td>
+                    <td><i ng-show="checkin.published" class="fa fa-check" title="Shared"></i></td>
+                    <td class="centered">
+                        <a class="btn btn-default btn-md give-feedback-btn" ng-href="#/checkins/{{ checkin.id }}" type="button">
+                            <i class="fa fa-eye"></i> View Check-In
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
 </div>

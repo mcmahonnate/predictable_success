@@ -23,6 +23,8 @@ function CheckInController(CheckInsService, Comment, Employee, EmployeeSearch, H
     vm.deleteCheckin = deleteCheckin;
     vm.showSearch = false;
     vm.addComment = addComment;
+    vm.sendToEmployee = sendToEmployee;
+    vm.shareWithLeadership = shareWithLeadership;
 
     activate();
 
@@ -35,12 +37,29 @@ function CheckInController(CheckInsService, Comment, Employee, EmployeeSearch, H
         } else {
             getEmployee();
         }
-    }
+    };
+
+    function sendToEmployee() {
+        CheckInsService.send(vm.checkin)
+            .then(function(checkin){
+                console.log('success');
+                vm.checkin = checkin
+                Notification.success("Your check-in was sent to " + vm.checkin.employee.first_name);
+        });
+    };
+
+    function shareWithLeadership() {
+        CheckInsService.share(vm.checkin)
+            .then(function(checkin){
+                vm.checkin = checkin;
+                Notification.success("Thanks for sharing yor Check-In!");
+        });
+    };
 
     function initializeNewComment() {
         vm.newComment = new Comment({content:'', include_in_daily_digest:true});
         vm.newComment.expandTextArea = false;
-    }
+    };
 
 
     function getEmployee() {
@@ -56,7 +75,7 @@ function CheckInController(CheckInsService, Comment, Employee, EmployeeSearch, H
         } else {
             vm.showSearch = true;
         }
-    }
+    };
 
     function getCheckIn() {
         CheckInsService.getCheckIn($routeParams.checkinId)
@@ -67,7 +86,7 @@ function CheckInController(CheckInsService, Comment, Employee, EmployeeSearch, H
                     Notification.success("Sorry we had a problem opening this checkin.");
                 }
             );
-    }
+    };
 
     function getEmployees() {
         return EmployeeSearch.query().$promise
@@ -75,7 +94,7 @@ function CheckInController(CheckInsService, Comment, Employee, EmployeeSearch, H
                 vm.employees = data;
                 return vm.employees;
             });
-    }
+    };
 
     function getCheckInTypes() {
         CheckInsService.getTypes()
@@ -83,7 +102,7 @@ function CheckInController(CheckInsService, Comment, Employee, EmployeeSearch, H
                 vm.checkinTypes = data;
                 return vm.checkinTypes;
             });
-    }
+    };
 
     function selectEmployee(employee) {
         employee.id = employee.pk;
@@ -91,7 +110,7 @@ function CheckInController(CheckInsService, Comment, Employee, EmployeeSearch, H
         vm.selectedEmployee = employee;
         vm.checkin.employee = vm.happiness.employee = employee.id;
         vm.showSearch = false;
-    }
+    };
 
     function newTask() {
         var modalInstance = $modal.open({
@@ -138,7 +157,7 @@ function CheckInController(CheckInsService, Comment, Employee, EmployeeSearch, H
             }, function(error){
                 Notification.success("Uh oh! We had a problem saving your edits!");
             });
-    }
+    };
 
     function saveCheckin(form) {
         if(form.$invalid) return;
@@ -180,7 +199,7 @@ function CheckInController(CheckInsService, Comment, Employee, EmployeeSearch, H
 
     function deleteTask(task) {
         $rootScope.removeItemFromList(vm.tasks, task);
-    }
+    };
 
     function deleteCheckin(checkin) {
         if ($window.confirm('Are you sure you want to delete this check-in?')) {
@@ -191,7 +210,7 @@ function CheckInController(CheckInsService, Comment, Employee, EmployeeSearch, H
                 Notification.success("Successfully deleted check-in!");
             });
         }
-    }
+    };
 
     function addComment(form) {
         if (form.$invalid) return;
@@ -199,5 +218,7 @@ function CheckInController(CheckInsService, Comment, Employee, EmployeeSearch, H
             initializeNewComment();
             vm.comments.push(comment);
         });
-    }
+    };
+
+
 }

@@ -57,6 +57,6 @@ class CheckIn(models.Model):
         return self.other_type_description
 
     def __unicode__(self):
-        return u'{0} "{1}" Check-in with {2} on {3}'.format(self.host, self.get_type_description(), self.employee, self.date.strftime('%x'))
+        return u'{0} "{1}" Check-in with {2}'.format(self.host, self.get_type_description(), self.employee)
 
 blah.register(CheckIn, attr_name='_comments')

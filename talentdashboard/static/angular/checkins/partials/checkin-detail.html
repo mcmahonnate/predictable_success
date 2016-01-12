@@ -1,19 +1,22 @@
 <div class="container checkin">
+    <h1 class="page-title">
+        <a href="#/checkins">Check-Ins</a>
+    </h1>
 	<div class="checkin-header">
 		<div class="type-tag">
 			<span ng-show="!viewCheckin.checkin.other_type_description">{{ viewCheckin.checkin.type.name }}</span>
 			<span ng-show="viewCheckin.checkin.other_type_description">{{ viewCheckin.checkin.other_type_description }}</span>
 		</div>
-		<a href="#/employees/{{employee.id}}">
+
 			<img ng-src="{{ viewCheckin.checkin.employee.avatar_small }}" class="headshot medium-headshot pull-left" alt="{{ viewCheckin.checkin.employee.full_name }}'s avatar" />
-		</a>
+
 		<div class="pull-left">
-			<h1><a href="#/employees/{{ viewCheckin.checkin.employee.id }}">{{ viewCheckin.checkin.employee.full_name }}</a></h1>
+			<h1>{{ viewCheckin.checkin.employee.full_name }}</h1>
 			<p class="timestamp">{{ viewCheckin.checkin.host.full_name }} checked in {{ viewCheckin.checkin.date | fromNow }}</p>
 		</div>
 	</div>	
     <div class="checkin-summary panel">
-        <div class="pull-right" style="margin-left: 20px;" ng-hide="viewCheckin.showSummaryEdit" ng-show="viewCheckin.checkin.host.id == currentUser.employee.id">
+        <div class="pull-right" style="margin-left: 20px;" ng-show="(viewCheckin.checkin.host.id == currentUser.employee.id) && !viewCheckin.showSummaryEdit">
             <i class="fa fa-cog show-popover"></i>
             <ul class="popover-items" style="display:none">
                 <li class="popover-item">
@@ -23,18 +26,29 @@
                     <a ng-click="viewCheckin.deleteCheckin(checkin)"><i class="fa fa-trash-o"></i> Delete</a>
                 </li>
             </ul>
-        </div> 
+        </div>
     	<div ng-hide="viewCheckin.showSummaryEdit">
     		<!-- <span class="checkin-summary-instance" data-ng-bind-html="checkin.summary | new_line | cut:true:length"></span> -->
     		<!-- preserve white space and newlines -->
     		<span class="checkin-summary-instance">{{ viewCheckin.checkin.summary }}</span>
+            <div ng-show="(viewCheckin.checkin.employee.id == currentUser.employee.id) && !viewCheckin.checkin.published">
+                <br/>
+                <button class="btn" type="button" ng-click="viewCheckin.showSummaryEdit=true"><i class="fa fa-pencil"></i> Edit Check-In</button>
+                <button class="btn btn-success pull-right" type="button" ng-click="viewCheckin.shareWithLeadership();"><i class="fa fa-paper-plane"></i> Share Check-In</button>
+            </div>
+            <div ng-show="(viewCheckin.checkin.host.id == currentUser.employee.id) && !viewCheckin.checkin.visible_to_employee && customer.show_shareable_checkins">
+                <br/>
+                <button class="btn btn-success" type="button" ng-click="viewCheckin.sendToEmployee();"><i class="fa fa-paper-plane"></i> Send to {{ viewCheckin.checkin.employee.full_name }}</button>
+            </div>
     	</div>	
 	    <div ng-show="viewCheckin.showSummaryEdit">
             <textarea 
                	ng-bind-html="viewCheckin.checkin.summary" ng-model="viewCheckin.checkin.summary" class="form-control edit-textarea" style="min-height:250px;">
             </textarea>
-        	<button class="btn btn-primary btn-sm" ng-click="viewCheckin.saveSummary(viewCheckin.checkin);">Save Edits</button>
-        	<button class="btn btn-link btn-sm" ng-click="viewCheckin.cancelEditComment(comment);viewCheckin.showSummaryEdit=false">Cancel</button>
+            <div>
+                <button class="btn" ng-click="viewCheckin.cancelEditComment(comment);viewCheckin.showSummaryEdit=false">Cancel</button>
+        	    <button class="btn btn-success pull-right" ng-click="viewCheckin.saveSummary(viewCheckin.checkin);">Save Edits</button>
+            </div>
         </div>
 	</div>
 	<div class="checkin-happiness panel" ng-show="viewCheckin.checkin.happiness">
@@ -83,7 +97,7 @@
 	        </tab>
 	    </tabset>
     </div>
-    <div ng-include="'/static/angular/checkins/partials/add-comment.html'"></div>
-    <div ng-include="'/static/angular/checkins/partials/comments.html'"></div>
 
+    <div ng-show="viewCheckin.checkin.published" ng-include="'/static/angular/checkins/partials/add-comment.html'"></div>
+    <div ng-show="viewCheckin.checkin.published" ng-include="'/static/angular/checkins/partials/comments.html'"></div>
 </div>

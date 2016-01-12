@@ -24,7 +24,28 @@ class CheckInSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CheckIn
-        fields = ('id', 'employee', 'host', 'date', 'summary', 'happiness', 'type', 'other_type_description', 'tasks', 'comments')
+        fields = ('id', 'employee', 'host', 'date', 'summary', 'happiness', 'type', 'other_type_description', 'tasks', 'comments', 'published', 'visible_to_employee')
+
+
+class EmployeeCheckInSerializer(serializers.ModelSerializer):
+    employee = SanitizedEmployeeSerializer(required=False)
+    host = SanitizedEmployeeSerializer(required=False)
+    type = CheckInTypeSerializer(required=False)
+
+    class Meta:
+        model = CheckIn
+        fields = ('id', 'employee', 'host', 'date', 'summary', 'type', 'other_type_description', 'published')
+
+
+class SharedEmployeeCheckInSerializer(serializers.ModelSerializer):
+    employee = SanitizedEmployeeSerializer(required=False)
+    host = SanitizedEmployeeSerializer(required=False)
+    type = CheckInTypeSerializer(required=False)
+    comments = CommentSerializer(required=False, many=True)
+
+    class Meta:
+        model = CheckIn
+        fields = ('id', 'employee', 'host', 'date', 'summary', 'type', 'other_type_description', 'comments', 'published')
 
 
 class AddEditCheckInSerializer(serializers.ModelSerializer):
@@ -35,5 +56,5 @@ class AddEditCheckInSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CheckIn
-        fields = ('id', 'host', 'employee', 'summary', 'happiness', 'date', 'type', 'other_type_description')
+        fields = ('id', 'host', 'employee', 'summary', 'happiness', 'date', 'type', 'other_type_description', 'published')
 

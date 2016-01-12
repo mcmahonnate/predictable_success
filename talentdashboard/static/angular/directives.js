@@ -1181,13 +1181,14 @@ readMore.directive('readMore', function() {
             text: '=ngModel'
         },
         template:  "<p>{{text | readMoreFilter:[text, countingWords, textLength] }}" +
-            "<a ng-show='showLinks' ng-click='changeLength()'>" +
-            "<strong ng-show='isExpanded'>  Show Less</strong>" +
-            "<strong ng-show='!isExpanded'>  Show More</strong>" +
+            "<a ng-show='showLinks' ng-click='performAction()'>" +
+            "<strong ng-show='isExpanded'>  {{ label }} Less</strong>" +
+            "<strong ng-show='!isExpanded'>  {{ label }} More</strong>" +
             "</a>" +
             "</p>",
-        controller: ['$scope', '$attrs', '$element',
-            function($scope, $attrs) {
+        controller: ['$scope', '$attrs', '$location',
+            function($scope, $attrs, $location) {
+                $scope.label = $attrs.label ? $attrs.label : 'Show';
                 $scope.textLength = $attrs.length;
                 $scope.isExpanded = false; // initialise extended status
                 $scope.countingWords = $attrs.words !== undefined ? ($attrs.words === 'true') : true; //if this attr is not defined the we are counting words not characters
@@ -1200,9 +1201,14 @@ readMore.directive('readMore', function() {
                     $scope.showLinks = false;
                 }
 
-                $scope.changeLength = function (card) {
-                    $scope.isExpanded = !$scope.isExpanded;
-                    $scope.textLength = $scope.textLength !== $attrs.length ?  $attrs.length : $scope.text.length;
+                $scope.performAction = function (card) {
+                    if ($attrs.link) {
+                        console.log($attrs.link);
+                        $location.path($attrs.link);
+                    } else {
+                        $scope.isExpanded = !$scope.isExpanded;
+                        $scope.textLength = $scope.textLength !== $attrs.length ? $attrs.length : $scope.text.length;
+                    }
                 };
             }]
     };

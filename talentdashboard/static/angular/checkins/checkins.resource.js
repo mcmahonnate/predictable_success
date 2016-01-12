@@ -23,6 +23,14 @@ function CheckInsResource($resource) {
         },
         'delete': {
             'method': 'DELETE'
+        },
+        'send': {
+            method: 'PUT',
+            url: '/api/v1/checkins/:id/send/'
+        },
+        'share': {
+            method: 'PUT',
+            url: '/api/v1/checkins/:id/share/'
         }
     };
     return $resource('/api/v1/checkins/:id/', null, actions);
