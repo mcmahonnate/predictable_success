@@ -16,7 +16,7 @@ def send_host_sent_employee_checkin_notification(checkin_id):
     if not recipient_email:
         return
     tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
-    response_url = 'https://%s/#/checkin/%d' % (tenant.domain_url, checkin.id)
+    response_url = 'https://%s/#/checkins/%d' % (tenant.domain_url, checkin.id)
     context = {
         'recipient_first_name': checkin.employee.first_name,
         'host_full_name': checkin.host.full_name,
@@ -38,7 +38,7 @@ def send_employee_shared_checkin_notification(checkin_id):
     if not recipient_email:
         return
     tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
-    response_url = 'https://%s/#/checkin/%d' % (tenant.domain_url, checkin.id)
+    response_url = 'https://%s/#/checkins/%d' % (tenant.domain_url, checkin.id)
     context = {
         'recipient_first_name': checkin.host.first_name,
         'employee_full_name': checkin.employee.full_name,
