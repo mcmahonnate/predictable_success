@@ -1,0 +1,9 @@
+Hi, {{ recipient_first_name }}!
+
+{{ host_full_name }} has sent you the notes from your last check-in.  You can view them here:
+{{ response_url }}
+
+Thanks!
+--The Scoutmap Team
+
+P.S. Do you have more feedback or ideas for us? Let us know on the Feedback for Scoutmap Slack Channel https://fool.slack.com/messages/feedback_for_scoutmap/

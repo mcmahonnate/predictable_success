@@ -1,0 +1,14 @@
+{% extends "layouts/email.html" %}
+
+{% block content %}
+        <p>
+            Hi, {{ recipient_first_name }}!
+        </p>
+        <p>
+            {{ host_full_name }} has sent you the notes from your last check-in.  You can view them <a href="{{ response_url }}">here.</a>
+        </p>
+        <p>Thanks! <br>--The Scoutmap Team</p>
+        <p>
+            P.S. Do you have more feedback or ideas for us? Let us know on the <a href="https://fool.slack.com/messages/feedback_for_scoutmap/">Feedback for Scoutmap Slack Channel.</a>
+        </p>
+{% endblock content%}
