@@ -1,134 +1,125 @@
+{% extends "layouts/email.html" %}
 
-<html>
-    <head>
-    </head>
-    <body>
+{% block content %}
     <h2>Daily Recap {{date}}</h2>
-    <strong>Discussions</strong>
-    <br/>
-    <br/>
-    <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;border-spacing:0;width:100%;text-align:justify;margin:0;padding:0;border-width:0;">
-        <tbody>
-    {% for comment in comments %}
-        <tr>
-        <font face="Helvetica Neue,helvetica,arial,sans-serif" size="2">
-            {% if comment.content_type == comment_type %}
-                {% if comment.associated_object.object_id != recipient.employee.id %}
-                    <td valign="top" style="height:80px;width:60px">
-                        {% if comment.associated_object.content_type == employee_type %}
-                            <a href="http://{{site}}/#/employees/{{comment.associated_object.associated_object.id}}"><img height="48" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;" src="{{comment.associated_object.associated_object.avatar_small.url}}"/></a>
+    {% if comments %}
+        <strong>Discussions</strong>
+        <br/>
+        <br/>
+        <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;border-spacing:0;width:100%;text-align:justify;margin:0;padding:0;border-width:0;">
+            <tbody>
+            {% for comment in comments %}
+                <tr>
+                <font face="Helvetica Neue,helvetica,arial,sans-serif" size="2">
+                    {% if comment.content_type == comment_type %}
+                        {% if comment.associated_object.object_id != recipient.employee.id %}
+                            <td valign="top" style="height:80px;width:60px">
+                                {% if comment.associated_object.content_type == employee_type %}
+                                    <a href="http://{{site}}/#/employees/{{comment.associated_object.associated_object.id}}"><img height="48" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;" src="{{comment.associated_object.associated_object.avatar_small.url}}"/></a>
+                                {% endif %}
+                            </td>
+                            <td valign="top">
+                                <p>
+                                {% if comment.associated_object.content_type == employee_type %}
+                                    <a href="http://{{site}}/#/employees/{{comment.associated_object.associated_object.id}}"><b>{{comment.associated_object.associated_object.full_name}}</b></a>
+                                {% else %}
+                                    <a href="http://{{site}}/#/teams/{{comment.associated_object.associated_object.id}}"><b>{{comment.associated_object.associated_object.name}}</b></a>
+                                {% endif %}
+                                <br/>
+                                <pre style="font-family: inherit;"><span style="font-size:14px;white-space: pre-wrap;">{{comment.content}}</span></pre>
+                                <span style="font-size:14px;color:#AA9C84"><b>from {{comment.owner.employee.full_name}}</b></span>
+                                <br/>
+                                <a href="http://{{site}}/#/employees/{{comment.associated_object.associated_object.id}}">leave a comment</a>
+                                </p>
+                                <br />
+                            </td>
                         {% endif %}
+                    {% else %}
+                        <td valign="top" style="height:80px;width:50px">
+                            {% if comment.content_type == employee_type %}
+                                <a href="http://{{site}}/#/employees/{{comment.associated_object.id}}"><img height="48" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;" src="{{comment.associated_object.avatar_small.url}}"/></a>
+                            {% endif %}
+                        </td>
+                        <td valign="top">
+                            <p>
+                            {% if comment.content_type == employee_type %}
+                                <a href="http://{{site}}/#/employees/{{comment.associated_object.id}}"><b>{{comment.associated_object.full_name}}</b></a>
+                            {% else %}
+                                <a href="http://{{site}}/#/teams/{{comment.associated_object.id}}"><b>{{comment.associated_object.name}}</b></a>
+                            {% endif %}
+                            <br/>
+                            <pre style="font-family: inherit;"><span style="font-size:14px;white-space: pre-wrap;">{{comment.content}}</span></pre>
+                            <span style="font-size:14px;color:#AA9C84"><b>from {{comment.owner.employee.full_name}}</b></span>
+                            <br/>
+                            <a href="http://{{site}}/#/employees/{{comment.associated_object.id}}">leave a comment</a>
+                            </p>
+                            <br />
+                        </td>
+                    {% endif %}
+                </font>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <br />
+    {% endif %}
+    {% if checkins %}
+        <strong>Check-Ins</strong>
+        <br/>
+        <br/>
+        <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;border-spacing:0;width:100%;text-align:justify;margin:0;padding:0;border-width:0;">
+            <tbody>
+            {% load checkin_extras %}
+            {% for checkin in checkins %}
+                <tr>
+                <font face="Helvetica Neue,helvetica,arial,sans-serif" size="2">
+                    <td valign="top" style="height:80px;width:50px">
+                        <a href="http://{{site}}/#/employees/{{checkin.employee.id}}"><img height="48" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;" src="{{checkin.employee.avatar_small.url}}"/></a>
                     </td>
                     <td valign="top">
                         <p>
-                        {% if comment.associated_object.content_type == employee_type %}
-                            <a href="http://{{site}}/#/employees/{{comment.associated_object.associated_object.id}}"><b>{{comment.associated_object.associated_object.full_name}}</b></a>
-                        {% else %}
-                            <a href="http://{{site}}/#/teams/{{comment.associated_object.associated_object.id}}"><b>{{comment.associated_object.associated_object.name}}</b></a>
-                        {% endif %}
+                        <a href="http://{{site}}/#/employees/{{checkin.employee.id}}"><b>{{checkin.employee.full_name}}</b></a> had a {{checkin.get_type_description}} check-in.
                         <br/>
-                        <pre style="font-family: inherit;"><span style="font-size:14px;white-space: pre-wrap;">{{comment.content}}</span></pre>
-                        <span style="font-size:14px;color:#AA9C84"><b>from {{comment.owner.employee.full_name}}</b></span>
+                        <pre style="font-family: inherit;"><span style="font-size:14px;white-space: pre-wrap;">{{ checkin | get_summary:recipient | default_if_none:"" }}</span></pre>
+                        <span style="font-size:14px;color:#AA9C84"><b>from {{checkin.host.full_name}}</b></span>
                         <br/>
-                        <a href="http://{{site}}/#/employees/{{comment.associated_object.associated_object.id}}">leave a comment</a>
                         </p>
                         <br />
                     </td>
-                {% endif %}
-            {% else %}
-                <td valign="top" style="height:80px;width:50px">
-                    {% if comment.content_type == employee_type %}
-                        <a href="http://{{site}}/#/employees/{{comment.associated_object.id}}"><img height="48" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;" src="{{comment.associated_object.avatar_small.url}}"/></a>
-                    {% endif %}
-                </td>
-                <td valign="top">
-                    <p>
-                    {% if comment.content_type == employee_type %}
-                        <a href="http://{{site}}/#/employees/{{comment.associated_object.id}}"><b>{{comment.associated_object.full_name}}</b></a>
-                    {% else %}
-                        <a href="http://{{site}}/#/teams/{{comment.associated_object.id}}"><b>{{comment.associated_object.name}}</b></a>
-                    {% endif %}
-                    <br/>
-                    <pre style="font-family: inherit;"><span style="font-size:14px;white-space: pre-wrap;">{{comment.content}}</span></pre>
-                    <span style="font-size:14px;color:#AA9C84"><b>from {{comment.owner.employee.full_name}}</b></span>
-                    <br/>
-                    <a href="http://{{site}}/#/employees/{{comment.associated_object.id}}">leave a comment</a>
-                    </p>
-                    <br />
-                </td>
-            {% endif %}
-        </font>
-        </tr>
-    {% empty %}
-        No Discussions
-    {% endfor %}
-        </tbody>
-    </table>
-    <br />
-
-
-    <strong>Check-Ins</strong>
-    <br/>
-    <br/>
-    <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;border-spacing:0;width:100%;text-align:justify;margin:0;padding:0;border-width:0;">
-        <tbody>
-    {% load checkin_extras %}
-    {% for checkin in checkins %}
-        <tr>
-        <font face="Helvetica Neue,helvetica,arial,sans-serif" size="2">
-            <td valign="top" style="height:80px;width:50px">
-                <a href="http://{{site}}/#/employees/{{checkin.employee.id}}"><img height="48" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;" src="{{checkin.employee.avatar_small.url}}"/></a>
-            </td>
-            <td valign="top">
-                <p>
-                <a href="http://{{site}}/#/employees/{{checkin.employee.id}}"><b>{{checkin.employee.full_name}}</b></a> had a {{checkin.get_type_description}} check-in.
-                <br/>
-                <pre style="font-family: inherit;"><span style="font-size:14px;white-space: pre-wrap;">{{ checkin | get_summary:recipient | default_if_none:"" }}</span></pre>
-                <span style="font-size:14px;color:#AA9C84"><b>from {{checkin.host.full_name}}</b></span>
-                <br/>
-                </p>
-                <br />
-            </td>
-        </font>
-        </tr>
-    {% empty %}
-        No Checkins
-    {% endfor %}
-        </tbody>
-    </table>
-    <br />
-
-
-    <strong>Tasks</strong>
-    <br/>
-    <br/>
-    <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;border-spacing:0;width:100%;text-align:justify;margin:0;padding:0;border-width:0;">
-        <tbody>
-
-        {% for todo in todos %}
-            <tr>
-            <font face="Helvetica Neue,helvetica,arial,sans-serif" size="2">
-                <td valign="top" style="height:80px;width:60px">
-                    <a href="http://{{site}}/#/employees/{{todo.employee.id}}"><img height="48" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;" src="{{todo.employee.avatar_small.url}}"/></a>
-                </td>
-                <td valign="top">
-                    <p>
-                    <a href="http://{{site}}/#/employees/{{todo.employee.id}}">{{todo.employee.full_name}}</a>
-                    <br/>
-                    <pre style="font-family: inherit;"><span style="font-size:14px;white-space: pre-wrap;">{{todo.description}}</span></pre>
-                    <span style="font-size:14px;color:#AA9C84"><b>created by {{todo.created_by.full_name}}</b></span>
-                    <br/>
-                    <a href="http://{{site}}/#/employees/{{todo.employee.id}}">get it done</a>
-                    </p>
-                    <br />
-                </td>
-            </font>
-           </tr>
-        {% empty %}
-            No To-dos
-        {% endfor %}
-
-        </tbody>
-    </table>
-    </body>
-</html>
+                </font>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <br />
+    {% endif %}
+    {% if todos %}
+        <strong>Tasks</strong>
+        <br/>
+        <br/>
+        <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;border-spacing:0;width:100%;text-align:justify;margin:0;padding:0;border-width:0;">
+            <tbody>
+            {% for todo in todos %}
+                <tr>
+                <font face="Helvetica Neue,helvetica,arial,sans-serif" size="2">
+                    <td valign="top" style="height:80px;width:60px">
+                        <a href="http://{{site}}/#/employees/{{todo.employee.id}}"><img height="48" style="display: inline-block; margin-left: auto; margin-right: auto; height: 48px; vertical-align:text-top;" src="{{todo.employee.avatar_small.url}}"/></a>
+                    </td>
+                    <td valign="top">
+                        <p>
+                        <a href="http://{{site}}/#/employees/{{todo.employee.id}}">{{todo.employee.full_name}}</a>
+                        <br/>
+                        <pre style="font-family: inherit;"><span style="font-size:14px;white-space: pre-wrap;">{{todo.description}}</span></pre>
+                        <span style="font-size:14px;color:#AA9C84"><b>created by {{todo.created_by.full_name}}</b></span>
+                        <br/>
+                        <a href="http://{{site}}/#/employees/{{todo.employee.id}}">get it done</a>
+                        </p>
+                        <br />
+                    </td>
+                </font>
+               </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock content%}

@@ -6,4 +6,4 @@ class CheckinsConfig(AppConfig):
     verbose_name = 'Check-ins'
 
     def ready(self):
-        pass
+        import checkins.signals
