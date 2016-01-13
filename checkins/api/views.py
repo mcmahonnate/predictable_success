@@ -58,17 +58,6 @@ class RetrieveMyCheckIns(ListAPIView):
             raise Http404()
 
 
-class EmployeeCheckInList(ListAPIView):
-    """ Get a list of CheckIns for a given employee via employee_id query param.
-    """
-    serializer_class = CheckInSerializer
-    permission_classes = (IsAuthenticated,)
-
-    def get_queryset(self):
-        employee_id = self.kwargs['employee_id']
-        return CheckIn.objects.filter(employee_id=employee_id)
-
-
 class HostCheckInList(ListAPIView):
     """ Get a list of CheckIns where the current user is the host.
     """
@@ -94,8 +83,14 @@ class CreateCheckinComment(CreateComment):
 
 class CheckInCommentList(CommentList):
     serializer_class = CommentSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, UserCanSeeCheckInConversation)
     pagination_class = StandardResultsSetPagination
+
+    def get_checkin(self):
+        try:
+            return self.get_object()
+        except CheckIn.DoesNotExist:
+            raise Http404()
 
     def get_object(self):
         pk = self.kwargs['pk']
