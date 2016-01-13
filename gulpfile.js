@@ -8,11 +8,22 @@ var inject = require('gulp-inject');
 var iife = require('gulp-iife');
 var sourcemaps = require('gulp-sourcemaps');
 
-gulp.task('scripts', function() {
+gulp.task('feedback-scripts', function() {
     return gulp.src('./talentdashboard/static/angular/feedback/**/*.js')
         .pipe(sourcemaps.init())
         .pipe(angularFilesort())
         .pipe(concat('feedback.js'))
+        .pipe(iife())
+        .pipe(ngAnnotate())
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest('./talentdashboard/static/'));
+});
+
+gulp.task('checkins-scripts', function() {
+    return gulp.src('./talentdashboard/static/angular/checkins/**/*.js')
+        .pipe(sourcemaps.init())
+        .pipe(angularFilesort())
+        .pipe(concat('checkins.js'))
         .pipe(iife())
         .pipe(ngAnnotate())
         .pipe(sourcemaps.write())
@@ -30,5 +41,7 @@ gulp.task('less', function () {
 gulp.task('watch', function() {
     gulp.watch('./talentdashboard/**/*.js', ['scripts']);
 });
+
+gulp.task('scripts', ['checkins-scripts', 'feedback-scripts']);
 
 gulp.task('default', ['watch']);

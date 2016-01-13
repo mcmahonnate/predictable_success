@@ -13,6 +13,7 @@ class Customer(TenantMixin):
     show_kpi = models.BooleanField(default=False)
     show_beta_features = models.BooleanField(default=False)
     show_individual_comp = models.BooleanField(default=True)
+    show_shareable_checkins = models.BooleanField(default=False)
     survey_email_subject = models.CharField(
         max_length=255,
         blank=True,

@@ -41,7 +41,7 @@ class Event(models.Model):
     user = models.ForeignKey(User, related_name='+')
     employee = models.ForeignKey(Employee, related_name='+')
     date = models.DateTimeField(null=False, blank=False, default=datetime.datetime.now)
-
+    show_conversation = models.BooleanField(default=True)
     objects = EventManager()
 
     def __str__(self):

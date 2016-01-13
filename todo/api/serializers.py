@@ -1,15 +1,15 @@
 from rest_framework import serializers
 from ..models import Task
 from org.models import Employee
-from org.api.serializers import MinimalEmployeeSerializer
+from org.api.serializers import SanitizedEmployeeSerializer
 from checkins.models import CheckIn
 
 
 class TaskSerializer(serializers.HyperlinkedModelSerializer):
-    created_by = MinimalEmployeeSerializer()
-    assigned_to = MinimalEmployeeSerializer()
-    assigned_by = MinimalEmployeeSerializer()
-    employee = MinimalEmployeeSerializer()
+    created_by = SanitizedEmployeeSerializer()
+    assigned_to = SanitizedEmployeeSerializer()
+    assigned_by = SanitizedEmployeeSerializer()
+    employee = SanitizedEmployeeSerializer()
 
     class Meta:
         model = Task

@@ -1,0 +1,32 @@
+<i class="fa fa-cog show-popover pull-right"></i>
+<ul class="popover-items" style="display:none">
+    <li class="popover-item">
+        <a ng-click="viewCheckin.editTask(task)"><i class="fa fa-pencil-square-o"></i> Edit</a>
+    </li>
+    <li class="popover-item">
+        <a ng-click="viewCheckin.deleteTask(task)"><i class="fa fa-trash-o"></i> Delete</a>
+    </li>
+</ul>
+
+<div class="col-md-3 col-lg-3 first">
+    <input class="todo-checkbox" type="checkbox" ng-click="viewCheckin.toggleCompleted(task)" ng-model="task.completed">
+    <a ng-href="/#/employees/{{task.employee.id}}" class="small-headshot">
+        <img alt="{{task.employee.full_name}}'s avatar" title="{{task.employee.full_name}}" ng-src="{{ task.employee.avatar_small }}" class="headshot-image" />
+    </a>
+</div>
+<div class="col-md-5 col-lg-6 todo-description-container">
+    <p class="todo-description" ng-class="{'todo-completed': task.completed}">{{task.description}}</p>
+    <span class="timestamp">Created by <span ng-show="task.created_by.full_name">{{task.created_by.full_name}}</span> <span ng-show="!task.created_by.full_name">you</span> {{ task.created_date | fromNow }}</span>
+</div>
+<div class="col-md-4 col-lg-4">
+    <div ng-show="task.assigned_to.full_name">
+        <span class="mobile-show">Assigned to: </span>
+        <a href="javascript:void(0);" ng-href="/#/employees/{{task.assigned_to.id}}">{{task.assigned_to.full_name}}</a>
+    </div>
+    <div ng-show="!task.assigned_to.full_name">
+        <span class="mobile-show">Assigned to:</span>
+        Unassigned
+    </div>
+    <span class="mobile-show">Due Date: </span>
+    {{(task.due_date | date:'MMM d') || "No Date"}}    
+</div>

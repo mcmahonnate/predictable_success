@@ -197,6 +197,7 @@ angular.module('tdb.controllers', [])
         //tabs
         $scope.homeTab = 'home';
         $scope.myTab = 'my';
+        $scope.checkinTab = 'checkin';
         $scope.employeeTab = 'employee';
         $scope.dashboardsTab = 'dashboards';
         $scope.screenerTab = 'screener';
@@ -219,6 +220,10 @@ angular.module('tdb.controllers', [])
 
         $scope.gotoFeedback = function() {
             $location.path('/feedback');
+        }
+
+        $scope.gotoCheckIns = function() {
+            $location.path('/checkins');
         }
     }])
 

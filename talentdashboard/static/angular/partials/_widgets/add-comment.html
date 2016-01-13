@@ -6,7 +6,7 @@
             <label>
                 <input name="include_in_daily_digest" ng-model="newComment.include_in_daily_digest" type="checkbox"> Include in <span ng-controller="ShowDailyDigestCtrl"><a ng-click="showMembers()">Daily Digest Email</a></span>
             </label>
-            <button class="btn btn-primary pull-right" ng-disabled="!newComment.content" ng-click="add(addCommentForm);">Comment</button>
+            <button class="btn btn-primary pull-right" ng-disabled="!newComment.content" ng-click="addComment(addCommentForm);">Comment</button>
         </div> 
     </form>        
 </div>    

@@ -70,6 +70,8 @@ class EventSerializer(serializers.ModelSerializer):
         return obj.event_type.name
 
     def get_description(self, obj):
+        if not obj.show_conversation:
+            return None
         comment_type = ContentType.objects.get_for_model(Comment)
         checkin_type = ContentType.objects.get_for_model(CheckIn)
         if obj.event_type.id is comment_type.id:
@@ -87,9 +89,12 @@ class EventSerializer(serializers.ModelSerializer):
             return 'commented'
         elif obj.event_type.id is checkin_type.id:
             check_in = CheckIn.objects.get(id=obj.event_id)
-            return 'had a %s check-in' % check_in.get_type_description()
+            if check_in.employee.user == obj.user:
+                return 'shared their %s check-in' % check_in.get_type_description()
+            else:
+                return 'had a %s check-in' % check_in.get_type_description()
         return None
 
     class Meta:
         model = Event
-        fields = ('id', 'type', 'employee', 'user', 'event_type', 'event_id', 'date', 'verb', 'description', 'related_object')
+        fields = ('id', 'type', 'employee', 'user', 'event_type', 'event_id', 'date', 'verb', 'description', 'related_object', 'show_conversation')
