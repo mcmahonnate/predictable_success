@@ -32,6 +32,8 @@ class Command(BaseCommand):
             comments = comments.exclude(object_id=recipient.employee.id, content_type=employee_type)
             comments = comments.exclude(content_type=employee_type, visibility=1)
             check_ins = CheckIn.objects.filter(date__range=[start_dt,dt])
+            if tenant.show_shareable_checkins:
+                check_ins = CheckIn.objects.filter(published=True)
             check_ins = check_ins.exclude(employee__id=recipient.employee.id)
             todos = Task.objects.filter(created_date__range=[start_dt,dt])
             todos = todos.exclude(employee__id=recipient.employee.id)
