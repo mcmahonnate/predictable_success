@@ -23,7 +23,7 @@
                 Check-Ins
             </div>
         </div>
-        <div role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == feedbackTab}" ng-click="setActiveTab(feedbackTab)">
+        <div ng-show="customer.show_feedback" role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == feedbackTab}" ng-click="setActiveTab(feedbackTab)">
             <div ng-click="gotoFeedback()">
                 <span class="fa fa-send team_menu nav-item-icon"></span>
                 Feedback
@@ -56,7 +56,7 @@
                 Check-Ins
             </a>
         </li>
-        <li>
+        <li ng-show="customer.show_feedback">
             <a href="#/feedback" ng-click="toggleMenu()">
                 <span class="fa fa-comments team_menu nav-item-icon"></span>
                 Feedback
