@@ -1,5 +1,5 @@
 Daily Recap {{date}}
-
+{% if comments %}
 Discussions
 --------------------
 {% for comment in comments %}
@@ -14,27 +14,24 @@ http://{{site}}/#/discussions/{{comment.object_id}}
 {{comment.content}} --{{comment.owner.employee.full_name}}
 http://{{site}}/#/discussions/{{comment.id}}
 {% endif %}
-{% empty %}
-No Discussions
 {% endfor %}
-
+{% endif %}
+{% if checkins %}
 Check-Ins
 --------------------
 {% load checkin_extras %}
 {% for checkin in checkins %}
 {{checkin.employee.full_name}} had a {{checkin.get_type_description}} check-in.
 {{ checkin | get_summary:recipient | default_if_none:"" }} --{{checkin.host.full_name}}
-{% empty %}
-No Check-ins
-{% endfor %}
 
+{% endfor %}
+{% endif %}
+{% if todos %}
 Tasks
 --------------------
 {% for todo in todos %}
 {{todo.employee.full_name}}
 {{todo.description|truncatechars:140}} --created by {{todo.created_by.full_name}}
 http://{{site}}/#/employees/{{todo.employee.id}}
-
-{% empty %}
-No To-dos
 {% endfor %}
+{% endif %}
