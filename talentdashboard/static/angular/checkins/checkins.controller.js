@@ -2,7 +2,7 @@ angular
     .module('checkins')
     .controller('CheckInsController', CheckInsController);
 
-function CheckInsController(CheckInsService, analytics, $location, $scope) {
+function CheckInsController(CheckInsService, analytics, $location, $scope, $sce, $rootScope) {
     /* Since this page can be the root for some users let's make sure we capture the correct page */
     var location_url = $location.url().indexOf('/checkins') < 0 ? '/checkins' : $location.url();
     analytics.trackPage($scope, $location.absUrl(), location_url);
@@ -13,6 +13,7 @@ function CheckInsController(CheckInsService, analytics, $location, $scope) {
     vm.checkinsLoaded = false;
     vm.hostedCheckinsLoaded = false;
     vm.showEmptyScreen = false;
+    vm.welcome = $sce.trustAsHtml($rootScope.customer.checkin_welcome);
     vm.requestCheckIn = requestCheckIn;
 
     activate();

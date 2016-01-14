@@ -1,5 +1,6 @@
 <div id="checkins" class="container" data-hj-masked>
     <div>
+        <a href="" data-toggle="modal" data-target=".checkin-welcome-modal" class="pull-right show-welcome-modal">Show welcome message</a>
         <h1>Check-Ins
             <div class="button-group">
                 <button class="btn btn-success btn-feedback" ng-click="myCheckins.requestCheckIn()" type="button"><i class="fa fa-comment"></i> Request <span class="hide-for-mobile">Check-In</span></button>
@@ -89,5 +90,5 @@
             </tbody>
         </table>
     </div>
-
+    <div ng-include="'/static/angular/checkins/partials/_modals/welcome-message.html'"></div>
 </div>
