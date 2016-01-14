@@ -44,7 +44,7 @@ def send_employee_shared_checkin_notification(checkin_id):
         'employee_full_name': checkin.employee.full_name,
         'response_url': response_url,
     }
-    subject = "% share their notes with leadership" % checkin.employee.full_name
+    subject = "%s shared their notes with leadership" % checkin.employee.full_name
     text_content = render_to_string('checkins/email/checkin_share_notification.txt', context)
     html_content = render_to_string('checkins/email/checkin_share_notification.html', context)
     msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
