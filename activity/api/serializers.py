@@ -4,7 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 from blah.models import Comment
 from blah.api.serializers import CommentSerializer
 from checkins.models import CheckIn
-from checkins.api.serializers import CheckInSerializer
+from checkins.api.serializers import CheckInSerializer, SanitizedCheckInSerializer
 from ..models import Event
 from django.utils.log import getLogger
 
@@ -59,11 +59,13 @@ class EventSerializer(serializers.ModelSerializer):
         if related_object is None:
             return None
 
-        serializer = self.get_serializer_for_related_object(related_object)
+        serializer = self.get_serializer_for_related_object(related_object, obj.show_conversation)
         return serializer.to_representation(related_object)
 
-    def get_serializer_for_related_object(self, obj):
+    def get_serializer_for_related_object(self, obj, show_conversation):
         serializer = self.related_object_serializers[obj.__class__]
+        if serializer is CheckInSerializer and not show_conversation:
+            serializer = SanitizedCheckInSerializer
         return serializer(context=self.context)
 
     def get_type(self, obj):
