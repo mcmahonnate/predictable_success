@@ -9,7 +9,11 @@ function CheckInsController(CheckInsService, analytics, $location, $scope) {
 
     var vm = this;
     vm.checkins = [];
-    vm.hostedCheckins = []
+    vm.hostedCheckins = [];
+    vm.checkinsLoaded = false;
+    vm.hostedCheckinsLoaded = false;
+    vm.showEmptyScreen = false;
+    vm.requestCheckIn = requestCheckIn;
 
     activate();
 
@@ -22,6 +26,8 @@ function CheckInsController(CheckInsService, analytics, $location, $scope) {
         CheckInsService.getMyCheckIns()
             .then(function (data) {
                 vm.checkins = data;
+                vm.checkinsLoaded = true;
+                checkIsEmpty();
                 return vm.checkins;
             });
     }
@@ -30,8 +36,23 @@ function CheckInsController(CheckInsService, analytics, $location, $scope) {
         CheckInsService.getCheckInsIveConducted()
             .then(function (data) {
                 vm.hostedCheckins = data;
+                vm.hostedCheckinsLoaded = true;
+                checkIsEmpty();
                 return vm.hostedCheckins;
             });
     }
 
+    function checkIsEmpty() {
+        if (vm.checkinsLoaded && vm.hostedCheckinsLoaded) {
+            if (vm.checkins.length == 0 && vm.hostedCheckins.length == 0) {
+                vm.showEmptyScreen = true;
+            } else {
+                vm.showEmptyScreen = false;
+            }
+        }
+    }
+
+    function requestCheckIn() {
+        console.log('Request Check In');
+    }
 }
