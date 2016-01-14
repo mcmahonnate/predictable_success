@@ -5,6 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from blah.models import Comment
 from checkins.models import CheckIn
+from feedback.models import FeedbackDigest
 from customers.models import Customer
 from org.models import Employee
 from .models import Event
@@ -41,6 +42,18 @@ def checkin_save_handler(sender, instance, created, update_fields, **kwargs):
             if 'published' in update_fields:
                 event = Event(event_type=content_type, event_id=instance.id, employee=employee, user=employee.user, show_conversation=show_conversation)
                 event.save()
+
+
+@receiver(post_save, sender=FeedbackDigest)
+def feedback_digest_save_handler(sender, instance, created, update_fields, **kwargs):
+    if not created and (update_fields is not None and 'has_been_delivered' in update_fields):
+        show_conversation = False
+        content_type = ContentType.objects.get_for_model(sender)
+        employee = instance.subject
+        user = instance.delivered_by.user
+        date = instance.delivery_date
+        event = Event(event_type=content_type, event_id=instance.id, employee=employee, user=user, show_conversation=show_conversation, date=date)
+        event.save()
 
 
 @receiver(post_delete, sender=Comment)
