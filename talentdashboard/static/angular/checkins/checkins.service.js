@@ -6,6 +6,7 @@ function CheckInsService($http, $log, CheckInsResource) {
     return {
         getCheckIn: getCheckIn,
         getMyCheckIns: getMyCheckIns,
+        getCheckInsIveConducted: getCheckInsIveConducted,
         getTypes: getTypes,
         save: save,
         update: update,
@@ -37,6 +38,19 @@ function CheckInsService($http, $log, CheckInsResource) {
             $log.error('getMyCheckIns failed');
         }
     }
+
+    function getCheckInsIveConducted() {
+        return CheckInsResource.getMyCheckIns({id: 'hosted'}, success, fail).$promise;
+
+        function success(response) {
+            return response;
+        }
+
+        function fail(response) {
+            $log.error('getMyCheckIns failed');
+        }
+    }
+
 
     function getTypes() {
         var url = '/api/v1/checkins/checkin-types/';

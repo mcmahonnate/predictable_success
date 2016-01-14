@@ -9,11 +9,13 @@ function CheckInsController(CheckInsService, analytics, $location, $scope) {
 
     var vm = this;
     vm.checkins = [];
+    vm.hostedCheckins = []
 
     activate();
 
     function activate() {
-        getCheckIns()
+        getCheckIns();
+        getHostedCheckIns()
     };
 
     function getCheckIns() {
@@ -23,4 +25,13 @@ function CheckInsController(CheckInsService, analytics, $location, $scope) {
                 return vm.checkins;
             });
     }
+
+    function getHostedCheckIns() {
+        CheckInsService.getCheckInsIveConducted()
+            .then(function (data) {
+                vm.hostedCheckins = data;
+                return vm.hostedCheckins;
+            });
+    }
+
 }
