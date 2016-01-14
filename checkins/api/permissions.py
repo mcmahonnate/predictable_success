@@ -12,6 +12,8 @@ class UserIsEmployeeOrHostOfCheckIn(permissions.BasePermission):
     def has_permission(self, request, view):
         checkin = view.get_checkin()
         employee = checkin.employee
+        if (request.tenant.show_shareable_checkins and request.user.employee.is_ancestor_of(employee)):
+            return True
         host = checkin.host
         can_show_checkin = (request.tenant.show_shareable_checkins and checkin.visible_to_employee)
         return request.user.employee == host or (request.user.employee == employee and can_show_checkin)
