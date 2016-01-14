@@ -1,10 +1,12 @@
 from rest_framework import serializers
-from org.api.serializers import SanitizedEmployeeSerializer, SimpleUserSerializer
+from org.api.serializers import SanitizedEmployeeSerializer, SimpleUserSerializer, MinimalEmployeeSerializer
 from django.contrib.contenttypes.models import ContentType
 from blah.models import Comment
 from blah.api.serializers import CommentSerializer
 from checkins.models import CheckIn
 from checkins.api.serializers import CheckInSerializer, SanitizedCheckInSerializer
+from feedback.models import FeedbackDigest
+from feedback.api.serializers import SummarizedFeedbackDigestSerializer
 from ..models import Event
 from django.utils.log import getLogger
 
@@ -12,7 +14,7 @@ logger = getLogger('talentdashboard')
 
 
 class EventSerializer(serializers.ModelSerializer):
-    employee = SanitizedEmployeeSerializer()
+    employee = MinimalEmployeeSerializer()
     user = SimpleUserSerializer()
     type = serializers.SerializerMethodField()
     description = serializers.SerializerMethodField()
@@ -25,6 +27,7 @@ class EventSerializer(serializers.ModelSerializer):
         self.related_object_serializers = {
             Comment: CommentSerializer,
             CheckIn: CheckInSerializer,
+            FeedbackDigest: SummarizedFeedbackDigestSerializer
         }
 
     def get_related_objects(self, instance):
@@ -87,8 +90,11 @@ class EventSerializer(serializers.ModelSerializer):
     def get_verb(self, obj):
         comment_type = ContentType.objects.get_for_model(Comment)
         checkin_type = ContentType.objects.get_for_model(CheckIn)
+        feedback_digest_type = ContentType.objects.get_for_model(FeedbackDigest)
         if obj.event_type.id is comment_type.id:
             return 'commented'
+        elif obj.event_type.id is feedback_digest_type.id:
+            return 'delivered feedback'
         elif obj.event_type.id is checkin_type.id:
             check_in = CheckIn.objects.get(id=obj.event_id)
             if check_in.employee.user == obj.user:

@@ -20,8 +20,8 @@
                 <img ng-src="{{ event.related_object.employee.avatar_small }}" alt="{{ event.related_object.employee.full_name }}" class="headshot-image"/>
             </span>
             <div class="employee-attribute" rel="tooltip" data-toggle="tooltip" data-placement="right"
-                 data-original-title="{{ talentCategories[event.related_object.employee.current_talent_category].label }}">
-                <span class="segment employee-segment-background-color-{{ event.related_object.employee.current_talent_category }}"></span>
+                 data-original-title="{{ talentCategories[event.employee.current_talent_category].label }}">
+                <span class="segment employee-segment-background-color-{{ event.employee.current_talent_category }}"></span>
             </div>
         </div>
         <div class="activity-checkin-details" ng-class="{'col-xs-12 col-sm-10': view='employee-view', 'col-xs-12 col-sm-10': view='team'}">
@@ -40,7 +40,7 @@
             </span>
             <div class="employee-attribute" rel="tooltip" data-toggle="tooltip" data-placement="right"
                  data-original-title="{{ talentCategories[event.related_object.employee.current_talent_category].label }}">
-                <span class="segment employee-segment-background-color-{{ event.related_object.employee.current_talent_category }}"></span>
+                <span class="segment employee-segment-background-color-{{ event.employee.current_talent_category }}"></span>
             </div>
         </div>
         <div class="activity-checkin-details" ng-class="{'col-xs-12 col-sm-10': view='employee-view', 'col-xs-12 col-sm-10': view='team'}">
