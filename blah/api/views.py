@@ -20,11 +20,18 @@ class PermissionsViewThisComment(permissions.BasePermission):
             pk = view.kwargs['pk']
             requester = Employee.objects.get(user=request.user)
             comment = Comment.objects.get(id=pk)
-            employee = comment.owner.employee
-            has_permission = requester.is_ancestor_of(employee)
-            if not has_permission and requester.id == employee.coach.id:
-                has_permission = True
-            return has_permission
+            owner = comment.owner.employee
+            if owner.id == requester.id:
+                return True
+
+            employee_type = ContentType.objects.get_for_model(Employee)
+            if comment.content_type == employee_type:
+                employee = comment.associated_object()
+                has_permission = requester.is_ancestor_of(employee)
+                if not has_permission and requester.id == employee.coach.id:
+                    has_permission = True
+                return has_permission
+            return False
 
 
 class CommentList(generics.ListCreateAPIView):

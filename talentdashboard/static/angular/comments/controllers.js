@@ -5,9 +5,6 @@ angular.module('tdb.comments.controllers', [])
         $scope.newReply = new Comment();
         $scope.editMode = false;
 
-        $scope.foo = function(comment) {
-            console.log(comment);
-        };
         $scope.edit = function(comment) {
             $scope.editingComment = angular.copy(comment);
             $scope.editMode = true;
