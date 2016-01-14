@@ -14,6 +14,17 @@ class CheckInTypeSerializer(serializers.ModelSerializer):
         fields = ('id', 'name')
 
 
+class SanitizedCheckInSerializer(serializers.ModelSerializer):
+    employee = SanitizedEmployeeSerializer(required=False)
+    host = SanitizedEmployeeSerializer(required=False)
+    type = CheckInTypeSerializer(required=False)
+    happiness = HappinessSerializer(required=False)
+
+    class Meta:
+        model = CheckIn
+        fields = ('id', 'employee', 'host', 'date', 'happiness', 'type', 'other_type_description', 'published', 'visible_to_employee')
+
+
 class CheckInSerializer(serializers.ModelSerializer):
     employee = SanitizedEmployeeSerializer(required=False)
     host = SanitizedEmployeeSerializer(required=False)

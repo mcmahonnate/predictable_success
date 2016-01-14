@@ -27,7 +27,7 @@
                         <ul>
                             <li ng-if="currentUser.is_team_lead"><a ng-href="#/my-team">Team</a></li>
                             <li ng-if="currentUser.can_coach_employees"><a ng-href="#/my-coachees">Coaching</a></li>
-                            <li><a ng-show="customer.show_beta_features" ng-href="#/feedback">Feedback</a></li>
+                            <li><a ng-show="customer.show_feedback" ng-href="#/feedback">Feedback</a></li>
                             <li><a ng-show="customer.show_shareable_checkins" ng-href="#/checkins">Check-Ins</a></li>
                         </ul>
                     </div>
@@ -148,7 +148,7 @@
                                     Timespan Report
                                 </a>
                             </li>
-                            <li ng-show="customer.show_beta_features" >
+                            <li ng-show="customer.show_feedback" >
                                 <a class="dashboard employee_menu" href="#/reports/feedback">
                                     Feedback Report
                                 </a>
@@ -244,7 +244,7 @@
                 <ul ng-show="isMyStuffOpen" class="mobile-sub-menu" role="menu">
                     <li ng-if="currentUser.is_team_lead"><a ng-href="#/my-team" ng-click="toggleMenu()">My Team</a></li>
                     <li ng-if="currentUser.can_coach_employees"><a ng-href="#/my-coachees" ng-click="toggleMenu()">My Coachees</a></li>
-                    <li ng-show="customer.show_beta_features"><a ng-href="#/feedback" ng-click="toggleMenu()">My Feedback</a></li>
+                    <li ng-show="customer.show_feedback"><a ng-href="#/feedback" ng-click="toggleMenu()">My Feedback</a></li>
                     <li ng-show="customer.show_shareable_checkins">
                         <a href="#/checkins" ng-click="toggleMenu()">
                             My Check-Ins
@@ -348,6 +348,12 @@
                         </a>
                     </li>
                 </ul>
+            </li>
+            <li>
+                <a href="/logout" ng-click="toggleMenu()">
+                    <span class="fa fa-sign-out team_menu nav-item-icon"></span>
+                    Log Out
+                </a>
             </li>
         </ul>
     </div>

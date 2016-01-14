@@ -1,10 +1,12 @@
 from __future__ import absolute_import
 from talentdashboard.celery import app
-from django.contrib.contenttypes.models import ContentType
-from django.template import Context
-from django.template.loader import get_template
+from django.conf import settings
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.models import ContentType
 from django.core.mail import EmailMultiAlternatives
+from django.db.models import Q
+from django.template import Context
+from django.template.loader import get_template, render_to_string
 from org.models import Employee
 from checkins.models import CheckIn
 from customers.models import current_customer
@@ -58,5 +60,40 @@ def send_comment_reply_notification(comment_id):
         text_content = 'View comment here:\r\n http://' + tenant.domain_url + '/#/employees/' + str(employee.id)
         mail_from = sub_commenter.full_name + '<notify@dfrntlabs.com>'
         msg = EmailMultiAlternatives(subject, text_content, mail_from, mail_to)
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
+
+
+@app.task
+def send_checkin_reply_notification(comment_id):
+    comment = Comment.objects.get(id=comment_id)
+    commenter = Employee.objects.get(user__id=comment.owner.id)
+    checkin = CheckIn.objects.get(id=comment.object_id)
+    employee = checkin.employee
+    host = checkin.host
+    other_commenters = Comment.objects.get_for_object(checkin)
+    other_commenters = other_commenters.values('owner_id')
+    users = User.objects.filter(Q(id__in=other_commenters) | Q(id=host.user.id) | Q(id=employee.user.id))
+    users = users.filter(is_active=True)
+    users = users.exclude(id=comment.owner.id)
+    tenant = current_customer()
+    response_url = 'https://%s/#/checkins/%d' % (tenant.domain_url, checkin.id)
+    for user in users:
+        if user.id == employee.user.id:
+            employee_name = 'you'
+        elif commenter.id == checkin.employee.id:
+            employee_name = 'themself'
+        else:
+            employee_name = checkin.employee.full_name
+        subject = "%s commented on a check-in about %s" % (commenter.full_name, employee_name)
+        context = {
+            'recipient_first_name': user.employee.first_name,
+            'commenter_full_name': commenter.full_name,
+            'employee_full_name': employee_name,
+            'response_url': response_url,
+        }
+        text_content = render_to_string('checkins/email/checkin_comment_notification.txt', context)
+        html_content = render_to_string('checkins/email/checkin_comment_notification.html', context)
+        msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [employee.user.email])
         msg.attach_alternative(html_content, "text/html")
         msg.send()

@@ -26,9 +26,7 @@
         </div>
         <div class="activity-checkin-details" ng-class="{'col-xs-12 col-sm-10': view='employee-view', 'col-xs-12 col-sm-10': view='team'}">
             <div class="activity-checkin-type pull-right">
-                <span class="glyphicon glyphicon-top glyphicon-user"></span>
-                <span class="glyphicon glyphicon-outline glyphicon-user"></span>
-                <span class="glyphicon glyphicon-user"></span>
+                <div class="fa fa-check-circle activity-icon"></div>
             </div>
             <h3 class="comment-title-employee-name"><strong><span class="sensitive-text">{{ event.employee.full_name }}</span></strong></h3>
             <div class="checkin-type">{{ event.related_object.type.name }} Check-in <span ng-show="{{ event.related_object.happiness }}">&rarr; {{ event.related_object.happiness.assessment_verbose }}</span></div>
@@ -47,9 +45,7 @@
         </div>
         <div class="activity-checkin-details" ng-class="{'col-xs-12 col-sm-10': view='employee-view', 'col-xs-12 col-sm-10': view='team'}">
             <div class="activity-checkin-type pull-right">
-                <span class="glyphicon glyphicon-top glyphicon-user"></span>
-                <span class="glyphicon glyphicon-outline glyphicon-user"></span>
-                <span class="glyphicon glyphicon-user"></span>
+                <div class="fa fa-check-circle activity-icon"></div>
             </div>
             <h3 class="comment-title-employee-name"><strong><span class="sensitive-text">{{ event.employee.full_name }}</span></strong></h3>
             <div class="checkin-type">{{ event.related_object.type.name }} Check-in <span ng-show="{{ event.related_object.happiness }}">&rarr; {{ event.related_object.happiness.assessment_verbose }}</span></div>
