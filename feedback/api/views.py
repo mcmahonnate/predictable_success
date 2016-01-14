@@ -280,18 +280,14 @@ class RetrieveUpdateCurrentFeedbackDigest(APIView):
         if serializer.is_valid():
             employee = self.get_employee()
             digest = FeedbackDigest.objects.get(subject=employee, has_been_delivered=False)
-            print 'view post'
             if 'summary' in serializer.validated_data:
-                print 'summary?'
                 digest.summary = serializer.validated_data['summary']
                 digest.save(update_fields=['summary'])
             if digest.has_been_delivered is False and 'has_been_delivered' in serializer.validated_data:
-                print 'delivered?'
                 has_been_delivered = serializer.validated_data['has_been_delivered']
                 if has_been_delivered:
                     digest.deliver(request.user.employee)
                     digest.save(update_fields=['has_been_delivered'])
-            print 'end if'
             serializer = FeedbackDigestSerializerForEmployee(digest)
             return Response(serializer.data)
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)

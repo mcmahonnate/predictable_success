@@ -46,7 +46,6 @@ def checkin_save_handler(sender, instance, created, update_fields, **kwargs):
 
 @receiver(post_save, sender=FeedbackDigest)
 def feedback_digest_save_handler(sender, instance, created, update_fields, **kwargs):
-    print 'feedback digest delivered event'
     if not created and (update_fields is not None and 'has_been_delivered' in update_fields):
         show_conversation = False
         content_type = ContentType.objects.get_for_model(sender)
