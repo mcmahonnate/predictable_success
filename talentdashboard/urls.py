@@ -10,8 +10,7 @@ from views.payment import ChargeView, PaymentView
 from views.homepage import IndexView
 from insights.views import Signup, Report, Survey, Confirmation
 from engagement.api.views import RetrieveUpdateDestroyHappiness, CreateHappiness, EmployeeHappinessList
-from activity.api.views import EventList, EmployeeEventList, TeamEventList, CoachEventList, LeadEventList, MyTeamEventList, CheckInEventList, CommentEvent
-from org.api.views import Profile, team_lead_employees, my_employees, EmployeeDetail, employee_support_team, account_activate, account_activate_login
+from org.api.views import Profile, EmployeeDetail, employee_support_team, account_activate, account_activate_login
 
 router = routers.DefaultRouter()
 router.register(r'^api/v1/teams', TeamViewSet)
