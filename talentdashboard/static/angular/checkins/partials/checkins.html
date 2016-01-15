@@ -13,60 +13,30 @@
             <a href="" ng-click="myCheckins.requestCheckIn()">request a check-in from your Team Lead or Coach</a>."
         </h2>
     </div>
-    <div class="panel" ng-show="myCheckins.myRequests.length>0">
-        <table class="table responsive-table">
-            <caption class="panel-title">
-                My Requests
-            </caption>
-            <thead>
-                <tr>
-                    <th scope="col" class="width-10-percent">Date</th>
-                    <th scope="col" class="width-15-percent">Who</th>
-                    <th scope="col" class="width-10-percent centered">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="request in myCheckins.myRequests | orderBy:'date':true">
-                    <td class="timeago">{{ request.request_date | fromNow }}</td>
-                    <td>
-                        <span class="tiny-headshot">
-                            <img class="headshot-image" ng-src="{{ request.host.avatar_small }}" alt="{{ request.host.full_name }}'s avatar" />
-                        </span>
-                        <span>{{ request.host.full_name }}</span>
-                    </td>
-                    <td class="centered">
-                        <a class="btn btn-default btn-md give-feedback-btn" ng-href="#/checkins/{{ checkin.id }}" type="button">
-                            <i class="fa fa-eye"></i> Cancel
-                        </a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+
+    <div ng-repeat="request in myCheckins.myToDos" ng-class="{'slide-up-active': hideMessage}" class="alert alert-success slide-up" role="alert">
+        <a class="btn btn-success btn-feedback pull-right" ng-href="#/checkin/{{ request.requester.id }}" type="button">
+            <i class="glyphicon glyphicon-plus"></i> Check-In
+        </a>
+        <i class="fa fa-comment sent-icon"></i>
+        <h2 class="alert-title">Check In Request</h2>
+        <p class="alert-message">
+
+            {{ request.requester.full_name }} requested a check in from you {{ request.request_date | fromNow }}.
+        </p>
     </div>
-    <div class="panel" ng-show="myCheckins.myToDos.length>0">
-        <table class="table responsive-table">
-            <caption class="panel-title">
-                Check-Ins To Do
-            </caption>
-            <thead>
-                <tr>
-                    <th scope="col" class="width-10-percent">Date</th>
-                    <th scope="col" class="width-15-percent">Who</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="request in myCheckins.myToDos | orderBy:'date':true">
-                    <td class="timeago">{{ request.request_date | fromNow }}</td>
-                    <td>
-                        <span class="tiny-headshot">
-                            <img class="headshot-image" ng-src="{{ request.requester.avatar_small }}" alt="{{ request.requester.full_name }}'s avatar" />
-                        </span>
-                        <span>{{ request.requester.full_name }}</span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+
+    <div ng-repeat="request in myCheckins.myRequests" ng-class="{'slide-up-active': hideMessage}" class="alert alert-info slide-up" role="alert">
+        <a class="btn btn-info btn-feedback pull-right" ng-href="#/checkin/{{ request.requester.id }}" type="button">
+            Cancel Request
+        </a>
+        <i class="fa fa-comment sent-icon"></i>
+        <h2 class="alert-title">Check In Pending</h2>
+        <p class="alert-message">
+            You requested a check-in from {{ request.host.full_name }} {{ request.request_date | fromNow }}.
+        </p>
     </div>
+
     <div class="panel" ng-show="myCheckins.checkins.length>0">
         <table class="table responsive-table">
             <caption class="panel-title">
