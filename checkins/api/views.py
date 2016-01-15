@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
 from rest_framework.generics import *
 from blah.api.views import CommentList, CreateComment
 from blah.api.serializers import CommentSerializer
-from ..models import CheckIn, CheckInType
+from ..models import CheckIn, CheckInType, CheckInRequest
 from .serializers import *
 from .permissions import *
 from talentdashboard.views.views import StandardResultsSetPagination
@@ -18,6 +18,34 @@ class CreateCheckIn(CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(host=self.request.user.employee)
+
+
+class CreateCheckInRequest(CreateAPIView):
+    serializer_class = CreateCheckInRequestSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def perform_create(self, serializer):
+        serializer.save(requester=self.request.user.employee)
+
+
+class MyCheckInRequests(ListAPIView):
+    serializer_class = CheckInRequestSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        print 'get queryset'
+        return CheckInRequest.objects.unanswered_for_requester(requester=self.request.user.employee)
+
+
+class CheckInRequestToDos(ListAPIView):
+    serializer_class = CheckInRequestSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        """
+        Return all CheckInRequests sent to the user that haven't been completed.
+        """
+        return CheckInRequest.objects.pending_for_host(host=self.request.user.employee)
 
 
 class RetrieveUpdateDestroyCheckIn(RetrieveUpdateDestroyAPIView):

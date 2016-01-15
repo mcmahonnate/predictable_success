@@ -50,3 +50,24 @@ def send_employee_shared_checkin_notification(checkin_id):
     msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
     msg.attach_alternative(html_content, "text/html")
     msg.send()
+
+@app.task
+def send_checkin_request_notification(checkin_id):
+    from checkins.models import CheckIn
+    checkin = CheckIn.objects.get(id=checkin_id)
+    recipient_email = checkin.host.email
+    if not recipient_email:
+        return
+    tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
+    response_url = 'https://%s/#/checkins/%d' % (tenant.domain_url, checkin.id)
+    context = {
+        'recipient_first_name': checkin.host.first_name,
+        'employee_full_name': checkin.employee.full_name,
+        'response_url': response_url,
+    }
+    subject = "%s shared their notes with leadership" % checkin.employee.full_name
+    text_content = render_to_string('checkins/email/checkin_share_notification.txt', context)
+    html_content = render_to_string('checkins/email/checkin_share_notification.html', context)
+    msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()

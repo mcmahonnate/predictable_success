@@ -3,20 +3,22 @@
     <div class="form-group">
         <div class="modal-body">
             <panel>
-                <h3 class="modal-title">Who would you like to check in with?</h3>
-                <span class="large-headshot">
-                    <img ng-src="{{request.currentCoach.avatar}}" alt="{{request.currentCoach.full_name}}" class="headshot-image">
-                </span>
-                <div ng-show="!request.currentCoach">
-                    <p class="centered change-coach-message">
-                        You currently don't have a Feedback Coach. <br />Please <a href="" class="underlined" ng-click="request.changeCoach()">select a coach</a>.
-                    </p>
-                </div>
-                <div ng-show="request.currentCoach">
-                    <h3><strong>{{request.currentCoach.full_name}}</strong></h3>
-                    <a href="" class="underlined" ng-click="request.changeCoach()">Pick a new coach</a></p>
-                </div>
 
+                <h3 class="modal-title">Who would you like to check in with?</h3>
+                <div ng-show="customer.show_coaches">
+                    <span class="large-headshot">
+                        <img ng-src="{{request.currentCoach.avatar}}" alt="{{request.currentCoach.full_name}}" class="headshot-image">
+                    </span>
+                    <div ng-show="!request.currentCoach">
+                        <p class="centered change-coach-message">
+                            You currently don't have a Feedback Coach. <br />Please <a href="" class="underlined" ng-click="request.changeCoach()">select a coach</a>.
+                        </p>
+                    </div>
+                    <div ng-show="request.currentCoach">
+                        <h3><strong>{{request.currentCoach.full_name}}</strong></h3>
+                        <a href="" class="underlined" ng-click="request.changeCoach()">Pick a new coach</a></p>
+                    </div>
+                </div>
 
                 <span class="large-headshot">
                     <img ng-src="{{request.teamLead.avatar}}" alt="{{request.teamLead.full_name}}" class="headshot-image">

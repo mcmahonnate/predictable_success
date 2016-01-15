@@ -3,7 +3,10 @@ from views import *
 
 urlpatterns = patterns('',
     url(r'^$', CreateCheckIn.as_view()),
-    url(r'my/$', RetrieveMyCheckIns.as_view()),
+    url(r'^my/$', RetrieveMyCheckIns.as_view()),
+    url(r'^requests/$', CreateCheckInRequest.as_view()),
+    url(r'^requests/my/$', MyCheckInRequests.as_view()),
+    url(r'^requests/todo/$', CheckInRequestToDos.as_view()),
     url(r'^(?P<pk>[0-9]+)/send/$', SendCheckInToEmployee.as_view()),
     url(r'^(?P<pk>[0-9]+)/share/$', ShareCheckIn.as_view()),
     url(r'^(?P<pk>[0-9]+)/$', RetrieveUpdateDestroyCheckIn.as_view()),

@@ -16,6 +16,29 @@ class CheckInType(models.Model):
         ordering = ['sort_weight']
 
 
+class CheckInRequestManager(models.Manager):
+    def pending_for_host(self, host):
+        return self.filter(host=host, was_responded_to=False)
+
+    def unanswered_for_requester(self, requester):
+        return self.filter(requester=requester, was_responded_to=False)
+
+
+class CheckInRequest(models.Model):
+    objects = CheckInRequestManager()
+    request_date = models.DateTimeField(auto_now_add=True)
+    requester = models.ForeignKey(Employee, related_name='checkin_requests')
+    host = models.ForeignKey(Employee, related_name='requests_for_checkin')
+    was_responded_to = models.BooleanField(default=False)
+
+    @property
+    def has_been_answered(self):
+        return hasattr(self, 'checkin')
+
+    def __str__(self):
+        return "Check-in request from %s for %s" % (self.requester, self.host)
+
+
 class CheckInManager(models.Manager):
     def get_all_for_employee(self, employee):
         return self.filter(employee=employee)
@@ -23,6 +46,7 @@ class CheckInManager(models.Manager):
     def get_all_visible_to_employee(self, employee):
         checkins = self.get_all_for_employee(employee)
         return checkins.filter(visible_to_employee=True)
+
 
 class CheckIn(models.Model):
     objects = CheckInManager()
@@ -35,6 +59,7 @@ class CheckIn(models.Model):
     happiness = models.ForeignKey(Happiness, null=True, blank=True)
     published = models.BooleanField(default=False)
     visible_to_employee = models.BooleanField(default=False)
+    checkin_request = models.OneToOneField(CheckInRequest, null=True, blank=True, related_name='checkin')
 
     class Meta:
         get_latest_by = "date"
