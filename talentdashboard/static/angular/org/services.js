@@ -42,11 +42,6 @@ angular.module('tdb.org.services', ['ngResource'])
         return res;
     }])
 
-    .factory('TeamMembers', ['$resource', '$http', function($resource, $http) {
-        var res = $resource('/api/v1/team-members/:id/', {id:'@id'});
-        return res;
-    }])
-
     .factory('Coachees', ['$resource', '$http', function($resource, $http) {
         var res = $resource('/api/v1/coachees/');
         return res;
@@ -129,6 +124,10 @@ angular.module('tdb.org.services', ['ngResource'])
         return Team;
     }])
 
+    .factory('TeamMembers', ['$resource', '$http', function($resource, $http) {
+        var res = $resource('/api/v1/org/team/:id/members/', {id:'@id'});
+        return res;
+    }])
 
     .factory('TeamLeadService', ['$http', function($http) {
         return {

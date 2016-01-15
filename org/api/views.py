@@ -110,6 +110,16 @@ class CurrentCoach(RetrieveAPIView):
             raise Http404
         return coach
 
+class TeamMemberList(APIView):
+    permission_classes = (IsAuthenticated, PermissionsViewAllEmployees)
+
+    def get(self, request, pk, format=None):
+        employees = Employee.objects.get_current_employees()
+        employees = employees.filter(team__id=pk)
+
+        serializer = EmployeeSerializer(employees, many=True, context={'request': request})
+        return Response(serializer.data)
+
 @api_view(['GET'])
 @permission_classes((AllowAny, ))
 def employee_support_team(request, pk):

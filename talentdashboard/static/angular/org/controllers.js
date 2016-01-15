@@ -46,7 +46,7 @@ angular.module('tdb.org.controllers', [])
         $scope.salaryReport = SalaryReport.myTeam();
     }])
 
-    .controller('TeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'Team', 'TeamMembers', 'TeamMBTI', 'Customers', 'analytics', 'SalaryReport', 'TalentReport', 'TemplatePreferences', function ($scope, $location, $routeParams, Team, TeamMembers, TeamMBTI, Customers, analytics, SalaryReport, TalentReport, TemplatePreferences) {
+    .controller('TeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'Team', 'TeamMBTI', 'Customers', 'analytics', 'SalaryReport', 'TalentReport', 'TemplatePreferences', function ($scope, $location, $routeParams, Team, TeamMBTI, Customers, analytics, SalaryReport, TalentReport, TemplatePreferences) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
 
         TemplatePreferences.getPreferredTemplate('team-overview')

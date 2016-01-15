@@ -405,18 +405,6 @@ class EmployeeList(APIView):
             return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
-
-class TeamMemberList(APIView):
-    permission_classes = (IsAuthenticated, PermissionsViewAllEmployees)
-
-    def get(self, request, pk, format=None):
-        employees = Employee.objects.get_current_employees()
-        employees = employees.filter(team__id=pk)
-
-        serializer = EmployeeSerializer(employees, many=True, context={'request': request})
-        return Response(serializer.data)
-
-
 class PvpEvaluationDetail(APIView):
     def get_object(self, pk):
         try:
