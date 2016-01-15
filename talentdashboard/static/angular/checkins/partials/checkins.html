@@ -13,6 +13,60 @@
             <a href="" ng-click="myCheckins.requestCheckIn()">request a check-in from your Team Lead or Coach</a>."
         </h2>
     </div>
+    <div class="panel" ng-show="myCheckins.myRequests.length>0">
+        <table class="table responsive-table">
+            <caption class="panel-title">
+                My Requests
+            </caption>
+            <thead>
+                <tr>
+                    <th scope="col" class="width-10-percent">Date</th>
+                    <th scope="col" class="width-15-percent">Who</th>
+                    <th scope="col" class="width-10-percent centered">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="request in myCheckins.myRequests | orderBy:'date':true">
+                    <td class="timeago">{{ request.request_date | fromNow }}</td>
+                    <td>
+                        <span class="tiny-headshot">
+                            <img class="headshot-image" ng-src="{{ request.host.avatar_small }}" alt="{{ request.host.full_name }}'s avatar" />
+                        </span>
+                        <span>{{ request.host.full_name }}</span>
+                    </td>
+                    <td class="centered">
+                        <a class="btn btn-default btn-md give-feedback-btn" ng-href="#/checkins/{{ checkin.id }}" type="button">
+                            <i class="fa fa-eye"></i> Cancel
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="panel" ng-show="myCheckins.myToDos.length>0">
+        <table class="table responsive-table">
+            <caption class="panel-title">
+                Check-Ins To Do
+            </caption>
+            <thead>
+                <tr>
+                    <th scope="col" class="width-10-percent">Date</th>
+                    <th scope="col" class="width-15-percent">Who</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="request in myCheckins.myToDos | orderBy:'date':true">
+                    <td class="timeago">{{ request.request_date | fromNow }}</td>
+                    <td>
+                        <span class="tiny-headshot">
+                            <img class="headshot-image" ng-src="{{ request.requester.avatar_small }}" alt="{{ request.requester.full_name }}'s avatar" />
+                        </span>
+                        <span>{{ request.requester.full_name }}</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
     <div class="panel" ng-show="myCheckins.checkins.length>0">
         <table class="table responsive-table">
             <caption class="panel-title">

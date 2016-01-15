@@ -2,12 +2,14 @@
         .module('feedback')
         .controller('RequestCheckInController', RequestCheckInController);
 
-    function RequestCheckInController(CoachService, Notification, TeamLeadService, $modal, $modalInstance, $rootScope) {
+    function RequestCheckInController(CheckInRequestService, CoachService, Notification, TeamLeadService, $modal, $modalInstance, $rootScope) {
         var vm = this;
+        vm.request = {requester: null, host: null};
         vm.employee = $rootScope.currentUser.employee;
         vm.currentCoach = null;
         vm.teamLead = null;
         vm.changeCoach = changeCoach;
+        vm.sendCheckInRequest = sendCheckInRequest;
         vm.cancel = cancel;
 
         activate();
@@ -31,6 +33,10 @@
                     vm.teamLead = data;
                     return vm.teamLead;
                 });
+        }
+
+        function sendCheckInRequest(host) {
+            CheckInRequestService.sendCheckInRequest(host);
         }
 
         function changeCoach() {

@@ -42,7 +42,6 @@ function CheckInController(CheckInsService, Comment, Employee, EmployeeSearch, H
     function sendToEmployee() {
         CheckInsService.send(vm.checkin)
             .then(function(checkin){
-                console.log('success');
                 vm.checkin = checkin
                 Notification.success("Your check-in was sent to " + vm.checkin.employee.first_name);
         });
