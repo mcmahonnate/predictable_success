@@ -15,7 +15,6 @@ from pvp.salaryreports import get_salary_report_for_team, get_salary_report_for_
 from pvp.models import PvpDescription
 from blah.commentreports import get_employees_with_comments
 from engagement.engagementreports import get_employees_with_happiness_scores
-from blah.models import Comment
 from todo.models import Task
 from checkins.models import CheckIn
 from engagement.models import Happiness, SurveyUrl, generate_survey
@@ -23,19 +22,13 @@ from kpi.models import Performance, Indicator
 from assessment.models import EmployeeAssessment
 from org.teamreports import get_mbti_report_for_team
 from insights.models import Prospect
-import datetime
 import json
 from datetime import date, timedelta
-from django.contrib.auth.models import User
 from django.core.signing import Signer
-from django.utils.log import getLogger
 from django.core.mail import send_mail, EmailMultiAlternatives
-from django.contrib.contenttypes.models import ContentType
 from django.http import Http404, HttpResponse
 from django.template.loader import get_template
 from django.template import Context
-from django.db.models import Q
-from rest_framework import permissions
 from PIL import Image, ExifTags
 import StringIO
 from decimal import Decimal
@@ -44,7 +37,6 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from collections import defaultdict
 import collections
 import dateutil.parser, copy
-from org.models import Mentorship, Team, Leadership, Attribute, Employee
 from org.api.serializers import SanitizedEmployeeSerializer, UserSerializer, EmployeeSerializer, TeamSerializer, MentorshipSerializer, LeadershipSerializer, AttributeSerializer, MinimalEmployeeSerializer, EditEmployeeSerializer, CreateEmployeeSerializer
 from assessment.models import MBTI
 from assessment.api.serializers import MBTIReportSerializer, MBTISerializer
@@ -58,34 +50,13 @@ from todo.api.serializers import TaskSerializer, CreateTaskSerializer, EditTaskS
 from customers.api.serializers import CustomerSerializer
 from kpi.api.serializers import KPIIndicatorSerializer, KPIPerformanceSerializer
 from insights.api.serializers import ProspectSerializer
+from org.api.permissions import *
 
 logger = getLogger('talentdashboard')
 
 
 def parseBoolString(theString):
     return theString[0].upper() == 'T'
-
-
-class PermissionsViewAllEmployees(permissions.BasePermission):
-    def has_permission(self, request, view):
-        if request.user.has_perm('org.view_employees'):
-            return True
-        else:
-            return False
-
-
-class PermissionsViewThisEmployee(permissions.BasePermission):
-    def has_permission(self, request, view):
-        if request.user.has_perm('org.view_employees'):
-            return True
-        else:
-            pk = view.kwargs['pk']
-            requester = Employee.objects.get(user=request.user)
-            employee = Employee.objects.get(id=pk)
-            has_permission = requester.is_ancestor_of(employee)
-            if not has_permission and requester.id == employee.coach.id:
-                has_permission = True
-            return has_permission
 
 
 class UserList(generics.ListAPIView):
@@ -1279,15 +1250,6 @@ def happiness_reports(request):
 
     return Response(data)
 
-@api_view(['GET'])
-@permission_classes((IsAuthenticated, PermissionsViewAllEmployees))
-def team_leads(request):
-    team_id = request.QUERY_PARAMS.get('team_id', None)
-    leaders = Leadership.objects.filter(leader__team_id=int(team_id)).values('leader_id')
-    employees = Employee.objects.filter(id__in=leaders, departure_date__isnull=True)
-    serializer = EmployeeSerializer(employees, many=True, context={'request': request})
-    
-    return Response(serializer.data)
 
 @api_view(['GET'])
 def talent_categories(request):

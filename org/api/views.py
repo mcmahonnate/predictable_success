@@ -1,5 +1,4 @@
 from django.contrib.auth.views import password_reset_confirm, login
-from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db.models import F
 from django.http import Http404
@@ -14,9 +13,10 @@ from rest_framework.exceptions import PermissionDenied
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 import dateutil.parser
-from talentdashboard.views.views import add_salary_to_employee, PermissionsViewThisEmployee
+from talentdashboard.views.views import add_salary_to_employee
 from .serializers import EmployeeSerializer, CreateEmployeeSerializer, EditEmployeeSerializer, CoachChangeRequestSerializer, SanitizedEmployeeSerializer
-from ..models import Employee, CoachCapacity
+from .permissions import *
+from ..models import *
 from django.utils.log import getLogger
 
 
@@ -126,6 +126,18 @@ def employee_support_team(request, pk):
         return Response(None)
 
 @api_view(['GET'])
+def my_team_lead(request):
+    current_user = request.user
+    employee = Employee.objects.get(user=current_user)
+    if employee.user == current_user or current_user.is_superuser:
+        lead = employee.leader
+        serializer = EmployeeSerializer(lead, many=False, context={'request': request})
+
+        return Response(serializer.data)
+    else:
+        return Response(None, status=status.HTTP_403_FORBIDDEN)
+
+@api_view(['GET'])
 def my_employees(request):
     current_user = request.user
     lead = Employee.objects.get(user=current_user)
@@ -152,6 +164,14 @@ def team_lead_employees(request, pk):
     else:
         return Response(None, status=status.HTTP_403_FORBIDDEN)
 
+@api_view(['GET'])
+@permission_classes((IsAuthenticated, PermissionsViewAllEmployees))
+def team_leads(request, pk):
+    leaders = Leadership.objects.filter(leader__team_id=pk).values('leader_id')
+    employees = Employee.objects.filter(id__in=leaders, departure_date__isnull=True)
+    serializer = EmployeeSerializer(employees, many=True, context={'request': request})
+
+    return Response(serializer.data)
 
 def show_org_chart(request):
     return render_to_response("org_chart.html",

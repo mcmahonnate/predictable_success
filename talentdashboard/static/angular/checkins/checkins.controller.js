@@ -2,7 +2,7 @@ angular
     .module('checkins')
     .controller('CheckInsController', CheckInsController);
 
-function CheckInsController(CheckInsService, analytics, $location, $scope, $sce, $rootScope) {
+function CheckInsController(CheckInsService, analytics, $location, $modal, $scope, $sce, $rootScope) {
     /* Since this page can be the root for some users let's make sure we capture the correct page */
     var location_url = $location.url().indexOf('/checkins') < 0 ? '/checkins' : $location.url();
     analytics.trackPage($scope, $location.absUrl(), location_url);
@@ -54,6 +54,21 @@ function CheckInsController(CheckInsService, analytics, $location, $scope, $sce,
     }
 
     function requestCheckIn() {
-        console.log('Request Check In');
+        var modalInstance = $modal.open({
+            animation: true,
+            windowClass: 'xx-dialog fade zoom',
+            backdrop: 'static',
+            templateUrl: '/static/angular/checkins/partials/_modals/request-checkin.html',
+            controller: 'RequestCheckInController as request',
+            resolve: {
+
+            }
+        });
+        modalInstance.result.then(
+            function (sentFeedbackRequests) {
+                getMyRecentlySentRequests();
+            }
+        );
     }
+
 }

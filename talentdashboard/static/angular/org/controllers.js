@@ -1,6 +1,6 @@
 angular.module('tdb.org.controllers', [])
 
-    .controller('LeaderOverviewCtrl', ['$scope', '$location', '$routeParams', 'Employee', 'SalaryReport', 'TalentReport', 'MyEmployees', 'TeamLeadEmployees', 'User', 'analytics', 'TemplatePreferences', function ($scope, $location, $routeParams, Employee, SalaryReport, TalentReport, MyEmployees, TeamLeadEmployees, User, analytics, TemplatePreferences) {
+    .controller('LeaderOverviewCtrl', ['$scope', '$location', '$routeParams', 'Employee', 'SalaryReport', 'TalentReport', 'User', 'analytics', 'TemplatePreferences', function ($scope, $location, $routeParams, Employee, SalaryReport, TalentReport, User, analytics, TemplatePreferences) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
 
         TemplatePreferences.getPreferredTemplate('team-lead-overview')
@@ -10,13 +10,11 @@ angular.module('tdb.org.controllers', [])
             }
         );
 
-
         Employee.get(
             {id: $routeParams.id},
             function (data) {
                 $scope.myTeam = false;
                 $scope.lead = data;
-                $scope.employees = TeamLeadEmployees.query({id: $routeParams.id});
             }
         );
 
@@ -24,7 +22,7 @@ angular.module('tdb.org.controllers', [])
         $scope.salaryReport = SalaryReport.leadEmployees({id: $routeParams.id});
     }])
 
-    .controller('MyTeamOverviewCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'Employee', 'SalaryReport', 'TalentReport', 'MyEmployees', 'TeamLeadEmployees', 'User', 'analytics', 'TemplatePreferences', function ($scope, $rootScope, $location, $routeParams, Employee, SalaryReport, TalentReport, MyEmployees, TeamLeadEmployees, User, analytics, TemplatePreferences) {
+    .controller('MyTeamOverviewCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'Employee', 'SalaryReport', 'TalentReport', 'User', 'analytics', 'TemplatePreferences', function ($scope, $rootScope, $location, $routeParams, Employee, SalaryReport, TalentReport, User, analytics, TemplatePreferences) {
         /* Since this page can be the root for some users let's make sure we capture the correct page */
         var location_url = $location.url().indexOf('/my-team') < 0 ? '/my-team' : $location.url();
         analytics.trackPage($scope, $location.absUrl(), location_url);
@@ -48,7 +46,7 @@ angular.module('tdb.org.controllers', [])
         $scope.salaryReport = SalaryReport.myTeam();
     }])
 
-    .controller('TeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'Team', 'TeamMembers', 'TeamMBTI', 'Customers', 'TeamLeads', 'analytics', 'SalaryReport', 'TalentReport', 'TemplatePreferences', function ($scope, $location, $routeParams, Team, TeamMembers, TeamMBTI, Customers, TeamLeads, analytics, SalaryReport, TalentReport, TemplatePreferences) {
+    .controller('TeamOverviewCtrl', ['$scope', '$location', '$routeParams', 'Team', 'TeamMembers', 'TeamMBTI', 'Customers', 'analytics', 'SalaryReport', 'TalentReport', 'TemplatePreferences', function ($scope, $location, $routeParams, Team, TeamMembers, TeamMBTI, Customers, analytics, SalaryReport, TalentReport, TemplatePreferences) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
 
         TemplatePreferences.getPreferredTemplate('team-overview')
@@ -442,21 +440,32 @@ angular.module('tdb.org.controllers', [])
         };
     }])
 
-    .controller('EmployeesSnapshotCtrl', ['$scope', '$routeParams', 'Event', '$rootScope', '$location', 'User', 'Employee', 'MyEmployees', 'Coachees', 'TeamLeads', 'TeamLeadEmployees', function ($scope, $routeParams, Event, $rootScope, $location, User, Employee, MyEmployees, Coachees, TeamLeads, TeamLeadEmployees) {
+    .controller('EmployeesSnapshotCtrl', ['$scope', '$routeParams', 'Event', '$rootScope', '$location', 'User', 'Employee', 'TeamLeadService', 'Coachees', function ($scope, $routeParams, Event, $rootScope, $location, User, Employee, TeamLeadService, Coachees) {
         $scope.busy = true;
 
         if ($scope.view == 'team-view') {
             $scope.teamId = $routeParams.teamId;
-            TeamLeads.getCurrentEvaluationsForTeamLeads($scope.teamId).$promise.then(function(response) {
-                $scope.snapshotEmployees = TeamLeads.getCurrentEvaluationsForTeamLeads($scope.teamId)
-            });
-        } else if ($scope.view == 'lead-view') {
+            TeamLeadService.getLeadsForTeam($routeParams.teamId)
+                .then(function (data) {
+                    $scope.snapshotEmployees = data;
+                }
+        ); }
+        else if ($scope.view == 'lead-view') {
             if ($routeParams.id) {
-                $scope.snapshotEmployees = TeamLeadEmployees.query({id: $routeParams.id});
+                TeamLeadService.getEmployeesForTeamLead($routeParams.id)
+                    .then(function (data) {
+                        $scope.snapshotEmployees = data;
+                    }
+                );
             } else {
-                $scope.snapshotEmployees = MyEmployees.query();
+                TeamLeadService.getMyEmployees()
+                    .then(function (data) {
+                        $scope.snapshotEmployees = data;
+                        return $scope.snapshotEmployees;
+                    });
             }
-        } else if ($scope.view == 'coach-view') {
+        }
+        else if ($scope.view == 'coach-view') {
             $scope.snapshotEmployees = Coachees.query();
         }
 
