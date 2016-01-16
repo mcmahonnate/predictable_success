@@ -5,7 +5,7 @@ from ..indexes import EmployeeIndex
 from org.models import Employee
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
-from talentdashboard.views.views import PermissionsViewThisEmployee
+from org.api.permissions import PermissionsViewThisEmployee
 
 
 @api_view(['GET'])

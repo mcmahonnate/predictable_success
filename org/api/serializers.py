@@ -212,7 +212,7 @@ class SimpleUserSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    employee = MinimalEmployeeSerializer()
+    employee = SanitizedEmployeeSerializer()
     can_edit_employees = serializers.SerializerMethodField()
     can_view_comments = serializers.SerializerMethodField()
     can_coach_employees = serializers.SerializerMethodField()

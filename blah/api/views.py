@@ -9,8 +9,8 @@ from django.contrib.contenttypes.models import ContentType
 from .serializers import CreateCommentSerializer, CommentSerializer, SubCommentSerializer, TeamCommentSerializer, EmployeeCommentSerializer
 from blah.models import Comment
 from org.models import Employee
-from talentdashboard.views.views import PermissionsViewThisEmployee, PermissionsViewAllEmployees, StandardResultsSetPagination
-
+from talentdashboard.views.views import StandardResultsSetPagination
+from org.api.permissions import PermissionsViewThisEmployee, PermissionsViewAllEmployees
 
 class PermissionsViewThisComment(permissions.BasePermission):
     def has_permission(self, request, view):

@@ -10,8 +10,7 @@ from views.payment import ChargeView, PaymentView
 from views.homepage import IndexView
 from insights.views import Signup, Report, Survey, Confirmation
 from engagement.api.views import RetrieveUpdateDestroyHappiness, CreateHappiness, EmployeeHappinessList
-from activity.api.views import EventList, EmployeeEventList, TeamEventList, CoachEventList, LeadEventList, MyTeamEventList, CheckInEventList, CommentEvent
-from org.api.views import Profile, team_lead_employees, my_employees, EmployeeDetail, employee_support_team, account_activate, account_activate_login
+from org.api.views import Profile, EmployeeDetail, employee_support_team, account_activate, account_activate_login
 
 router = routers.DefaultRouter()
 router.register(r'^api/v1/teams', TeamViewSet)
@@ -75,10 +74,6 @@ urlpatterns = [
     url(r'^api/v1/assessment/employees/(?P<pk>[0-9]+)/$', Assessment.as_view()),
     url(r'^api/v1/assessment/mbti/employees/(?P<pk>[0-9]+)/$', EmployeeMBTI.as_view()),
     url(r'^api/v1/assessment/mbti/teams/(?P<pk>[0-9]+)/$', TeamMBTIReportDetail.as_view()),
-    url(r'^api/v1/team-leads/$', team_leads),
-    url(r'^api/v1/team-lead/employees/$', my_employees),
-    url(r'^api/v1/team-lead/employees/(?P<pk>[0-9]+)/$', team_lead_employees),
-    url(r'^api/v1/team-members/(?P<pk>[0-9]+)/$', TeamMemberList.as_view(), name='employee-list'),
     url(r'^api/v1/compensation-summaries/employees/(?P<pk>[0-9]+)/$', EmployeeCompensationSummaries.as_view()),
     url(r'^api/v1/compensation-summaries/$', compensation_summaries),
     url(r'^api/v1/talent-category-reports/teams/(?P<pk>[0-9]+)/$', cache_page(60*1440)(TeamTalentCategoryReportDetail.as_view())),

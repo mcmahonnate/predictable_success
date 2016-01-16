@@ -25,6 +25,7 @@ class Customer(TenantMixin):
     feedback_excels_at_question = models.TextField(default="What does this individual do when they are at their best?")
     feedback_could_improve_on_question = models.TextField(default="What, if anything, is holding them back?")
     feedback_tips = models.TextField(blank=True)
+    checkin_welcome = models.TextField(default="Welcome, we hope you like our new checkin feature. It's a safe place to ask for help from your Coach or Team Lead. The best part is, it's just between you and them. &mdash;The Scoutmap Team")
 
     def is_public_tenant(self):
         return self.schema_name == 'public'

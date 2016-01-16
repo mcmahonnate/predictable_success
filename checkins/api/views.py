@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
 from rest_framework.generics import *
 from blah.api.views import CommentList, CreateComment
 from blah.api.serializers import CommentSerializer
-from ..models import CheckIn, CheckInType
+from ..models import CheckIn, CheckInType, CheckInRequest
 from .serializers import *
 from .permissions import *
 from talentdashboard.views.views import StandardResultsSetPagination
@@ -18,6 +18,33 @@ class CreateCheckIn(CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(host=self.request.user.employee)
+
+
+class CreateCheckInRequest(CreateAPIView):
+    serializer_class = CreateCheckInRequestSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def perform_create(self, serializer):
+        serializer.save(requester=self.request.user.employee)
+
+
+class MyCheckInRequests(ListAPIView):
+    serializer_class = CheckInRequestSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        return CheckInRequest.objects.unanswered_for_requester(requester=self.request.user.employee)
+
+
+class CheckInRequestToDos(ListAPIView):
+    serializer_class = CheckInRequestSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        """
+        Return all CheckInRequests sent to the user that haven't been completed.
+        """
+        return CheckInRequest.objects.pending_for_host(host=self.request.user.employee)
 
 
 class RetrieveUpdateDestroyCheckIn(RetrieveUpdateDestroyAPIView):
@@ -115,6 +142,7 @@ class SendCheckInToEmployee(GenericAPIView):
         serializer = CheckInSerializer(checkin, context={'request':request})
         return Response(serializer.data)
 
+
 class ShareCheckIn(GenericAPIView):
     queryset = CheckIn.objects.all()
     serializer_class = SharedEmployeeCheckInSerializer
@@ -131,4 +159,23 @@ class ShareCheckIn(GenericAPIView):
         checkin.published = True
         checkin.save(update_fields=['published'])
         serializer = SharedEmployeeCheckInSerializer(checkin, context={'request':request})
+        return Response(serializer.data)
+
+
+class CancelCheckInRequest(GenericAPIView):
+    queryset = CheckInRequest.objects.all()
+    serializer_class = CheckInRequestSerializer
+    permission_classes = (IsAuthenticated, UserIsRequesterOfCheckInRequest)
+
+    def get_checkin_request(self):
+        try:
+            return self.get_object()
+        except CheckInRequest.DoesNotExist:
+            raise Http404()
+
+    def put(self, request, pk, format=None):
+        checkin_request = self.get_checkin_request()
+        checkin_request.was_canceled = True
+        checkin_request.save(update_fields=['was_canceled'])
+        serializer = CheckInRequestSerializer(checkin_request, context={'request':request})
         return Response(serializer.data)

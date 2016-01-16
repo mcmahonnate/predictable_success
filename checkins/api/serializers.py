@@ -1,9 +1,9 @@
 from rest_framework import serializers
-from org.api.serializers import MinimalEmployeeSerializer, SanitizedEmployeeSerializer
+from org.api.serializers import SanitizedEmployeeSerializer
 from org.models import Employee
 from engagement.models import Happiness
 from engagement.api.serializers import HappinessSerializer
-from ..models import CheckIn, CheckInType
+from ..models import CheckIn, CheckInType, CheckInRequest
 from todo.api.serializers import TaskSerializer
 from blah.api.serializers import CommentSerializer
 
@@ -25,6 +25,14 @@ class SanitizedCheckInSerializer(serializers.ModelSerializer):
         fields = ('id', 'employee', 'host', 'date', 'happiness', 'type', 'other_type_description', 'published', 'visible_to_employee')
 
 
+class CreateCheckInRequestSerializer(serializers.ModelSerializer):
+    host = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
+
+    class Meta:
+        model = CheckInRequest
+        fields = ['host']
+
+
 class CheckInSerializer(serializers.ModelSerializer):
     employee = SanitizedEmployeeSerializer(required=False)
     host = SanitizedEmployeeSerializer(required=False)
@@ -36,6 +44,16 @@ class CheckInSerializer(serializers.ModelSerializer):
     class Meta:
         model = CheckIn
         fields = ('id', 'employee', 'host', 'date', 'summary', 'happiness', 'type', 'other_type_description', 'tasks', 'comments', 'published', 'visible_to_employee')
+
+
+class CheckInRequestSerializer(serializers.ModelSerializer):
+    request_date = serializers.DateTimeField(required=False)
+    requester = SanitizedEmployeeSerializer()
+    host = SanitizedEmployeeSerializer()
+
+    class Meta:
+        model = CheckInRequest
+        fields = ['id', 'request_date', 'requester', 'host', 'has_been_answered']
 
 
 class EmployeeCheckInSerializer(serializers.ModelSerializer):

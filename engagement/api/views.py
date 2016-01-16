@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from org.models import Employee
 from ..models import Happiness
 from .serializers import HappinessSerializer, AddEditHappinessSerializer
-from talentdashboard.views.views import PermissionsViewThisEmployee
+from org.api.permissions import PermissionsViewThisEmployee
 
 
 class PermissionsViewThisHappiness(permissions.BasePermission):

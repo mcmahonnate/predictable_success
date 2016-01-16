@@ -42,11 +42,6 @@ angular.module('tdb.org.services', ['ngResource'])
         return res;
     }])
 
-    .factory('TeamMembers', ['$resource', '$http', function($resource, $http) {
-        var res = $resource('/api/v1/team-members/:id/', {id:'@id'});
-        return res;
-    }])
-
     .factory('Coachees', ['$resource', '$http', function($resource, $http) {
         var res = $resource('/api/v1/coachees/');
         return res;
@@ -92,21 +87,6 @@ angular.module('tdb.org.services', ['ngResource'])
         return Attribute;
     }])
 
-    .factory('Team', ['$resource', '$http', function($resource, $http) {
-        var Team = $resource('/api/v1/teams/:id/');
-
-        return Team;
-    }])
-
-    .factory('TeamLeads', ['$resource', '$http', function($resource, $http) {
-        var TeamLeads = $resource('/api/v1/team-leads/');
-
-        TeamLeads.getCurrentEvaluationsForTeamLeads = function(team_id) {
-            return this.query({team_id: team_id});
-        };
-        return TeamLeads;
-    }])
-
     .factory('PhotoUpload', ['$resource', '$http', function($resource, $http) {
         return function(model, files) {
             var actions = {
@@ -138,14 +118,88 @@ angular.module('tdb.org.services', ['ngResource'])
         }
     }])
 
-    .factory('TeamLeadEmployees', ['$resource', '$http', function($resource, $http) {
-        var res = $resource('/api/v1/team-lead/employees/:id', {id:'@id'});
+    .factory('Team', ['$resource', '$http', function($resource, $http) {
+        var Team = $resource('/api/v1/teams/:id/');
+
+        return Team;
+    }])
+
+    .factory('TeamMembers', ['$resource', '$http', function($resource, $http) {
+        var res = $resource('/api/v1/org/team/:id/members/', {id:'@id'});
         return res;
     }])
 
-    .factory('MyEmployees', ['$resource', '$http', function($resource, $http) {
-        var res = $resource('/api/v1/team-lead/employees/');
-        return res;
+    .factory('TeamLeadService', ['$http', function($http) {
+        return {
+            getCurrentTeamLead: getCurrentTeamLead,
+            getEmployeesForTeamLead: getEmployeesForTeamLead,
+            getLeadsForTeam: getLeadsForTeam,
+            getMyEmployees: getMyEmployees
+        };
+
+        function getLeadsForTeam(id) {
+            return $http.get('/api/v1/org/team/' + id + '/leads/')
+                .then(complete)
+                .catch(failed);
+
+            function complete(response) {
+                return response.data;
+            }
+
+            function failed(response) {
+                if(response.status == 404) {
+                    return null;
+                }
+            }
+        }
+
+        function getCurrentTeamLead() {
+            return $http.get('/api/v1/org/team-lead/my/')
+                .then(complete)
+                .catch(failed);
+
+            function complete(response) {
+                return response.data;
+            }
+
+            function failed(response) {
+                if(response.status == 404) {
+                    return null;
+                }
+            }
+        }
+
+        function getEmployeesForTeamLead(id) {
+            return $http.get('/api/v1/org/team-lead/' + id + '/employees/')
+                .then(complete)
+                .catch(failed);
+
+            function complete(response) {
+                return response.data;
+            }
+
+            function failed(response) {
+                if(response.status == 404) {
+                    return null;
+                }
+            }
+        }
+
+        function getMyEmployees() {
+            return $http.get('/api/v1/org/team-lead/my/employees/')
+                .then(complete)
+                .catch(failed);
+
+            function complete(response) {
+                return response.data;
+            }
+
+            function failed(response) {
+                if(response.status == 404) {
+                    return null;
+                }
+            }
+        }
     }])
 
     .factory('CoachService', ['$http', function($http) {

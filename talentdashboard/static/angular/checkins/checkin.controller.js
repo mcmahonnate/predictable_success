@@ -25,6 +25,7 @@ function CheckInController(CheckInsService, Comment, Employee, EmployeeSearch, H
     vm.addComment = addComment;
     vm.sendToEmployee = sendToEmployee;
     vm.shareWithLeadership = shareWithLeadership;
+    vm.showWhoCanSeeThis = showWhoCanSeeThis;
 
     activate();
 
@@ -39,10 +40,23 @@ function CheckInController(CheckInsService, Comment, Employee, EmployeeSearch, H
         }
     };
 
+    function showWhoCanSeeThis(employee_id) {
+        $modal.open({
+            animation: true,
+            backdrop: 'static',
+            templateUrl: '/static/angular/partials/_modals/who-can-see-this.html',
+            controller: 'SupportTeamCtrl',
+            resolve: {
+                employee_id: function () {
+                    return employee_id
+                }
+            }
+        });
+    }
+
     function sendToEmployee() {
         CheckInsService.send(vm.checkin)
             .then(function(checkin){
-                console.log('success');
                 vm.checkin = checkin
                 Notification.success("Your check-in was sent to " + vm.checkin.employee.first_name);
         });

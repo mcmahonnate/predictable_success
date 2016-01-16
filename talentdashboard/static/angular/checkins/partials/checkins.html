@@ -1,11 +1,42 @@
 <div id="checkins" class="container" data-hj-masked>
     <div>
+        <a href="" data-toggle="modal" data-target=".checkin-welcome-modal" class="pull-right show-welcome-modal">Show welcome message</a>
         <h1>Check-Ins
             <div class="button-group">
-                <button class="btn btn-success btn-feedback" ng-click="feedback.requestFeedback()" type="button"><i class="fa fa-comment"></i> Request <span class="hide-for-mobile">Check-In</span></button>
+                <button class="btn btn-success btn-feedback" ng-click="myCheckins.requestCheckIn()" type="button"><i class="fa fa-comment"></i> Request <span class="hide-for-mobile">Check-In</span></button>
             </div>
         </h1>
     </div>
+    <div class="panel panel-empty fade-in" ng-show="myCheckins.showEmptyScreen">
+        <img class="grumpycat" src="../static/images/grumpycat.png" alt="Grumpy Cat" />
+        <h2>"Mmmmeeh... i see you don't have any activity yet. Use the button above or this link to
+            <a href="" ng-click="myCheckins.requestCheckIn()">request a check-in from your Team Lead or Coach</a>."
+        </h2>
+    </div>
+
+    <div ng-repeat="request in myCheckins.myToDos" ng-class="{'slide-up-active': hideMessage}" class="alert alert-success slide-up" role="alert">
+        <a class="btn btn-success btn-feedback pull-right" ng-href="#/checkin/{{ request.requester.id }}" type="button">
+            <i class="glyphicon glyphicon-plus"></i> Check-In
+        </a>
+        <i class="fa fa-comment sent-icon"></i>
+        <h2 class="alert-title">Check In Requested</h2>
+        <p class="alert-message">
+
+            {{ request.requester.full_name }} requested a check in from you {{ request.request_date | fromNow }}.
+        </p>
+    </div>
+
+    <div ng-repeat="request in myCheckins.myRequests" ng-class="{'slide-up-active': hideMessage}" class="alert alert-info slide-up" role="alert">
+        <button class="btn btn-info btn-feedback pull-right" ng-click="myCheckins.cancelRequest(request)" type="button">
+            Cancel Request
+        </button>
+        <i class="fa fa-comment sent-icon"></i>
+        <h2 class="alert-title">Check In Pending</h2>
+        <p class="alert-message">
+            You requested a check-in from {{ request.host.full_name }} {{ request.request_date | fromNow }}.
+        </p>
+    </div>
+
     <div class="panel" ng-show="myCheckins.checkins.length>0">
         <table class="table responsive-table">
             <caption class="panel-title">
@@ -43,5 +74,45 @@
             </tbody>
         </table>
     </div>
-
+    <div class="panel" ng-show="myCheckins.hostedCheckins.length>0">
+        <table class="table responsive-table">
+            <caption class="panel-title">
+                People I've Checked-In With
+            </caption>
+            <thead>
+                <tr>
+                    <th scope="col" class="width-10-percent">Date</th>
+                    <th scope="col" class="width-15-percent">Who</th>
+                    <th scope="col" class="width-10-percent">Type</th>
+                    <th scope="col" class="width-40-percent">Summary</th>
+                    <th scope="col" class="width-10-percent">Status</th>
+                    <th scope="col" class="width-10-percent centered">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="checkin in myCheckins.hostedCheckins | orderBy:'date':true">
+                    <td class="timeago">{{ checkin.date | fromNow }}</td>
+                    <td>
+                        <span class="tiny-headshot">
+                            <img class="headshot-image" ng-src="{{ checkin.employee.avatar_small }}" alt="{{ checkin.employee.full_name }}'s avatar" />
+                        </span>
+                        <span>{{ checkin.employee.full_name }}</span>
+                    </td>
+                    <td>{{ checkin.type.name }}</td>
+                    <td><span class="activity-checkin-summary comment-text" read-more ng-model="checkin.summary" words="false" length="400" label="View" link="/checkins/{{ checkin.id }}"></span></td>
+                    <td>
+                        <span ng-show="!checkin.visible_to_employee && !checkin.published" title="To be sent">Draft</span>
+                        <span ng-show="checkin.visible_to_employee && !checkin.published" title="Visible">Visible</span>
+                        <span ng-show="checkin.visible_to_employee && checkin.published" title="Shared">Shared</span>
+                    </td>
+                    <td class="centered">
+                        <a class="btn btn-default btn-md give-feedback-btn" ng-href="#/checkins/{{ checkin.id }}" type="button">
+                            <i class="fa fa-eye"></i> View Check-In
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div ng-include="'/static/angular/checkins/partials/_modals/welcome-message.html'"></div>
 </div>
