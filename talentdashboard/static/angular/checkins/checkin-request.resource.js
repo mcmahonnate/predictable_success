@@ -5,8 +5,11 @@ angular
 function CheckInRequestResource($resource) {
     var actions = {
         'sendCheckInRequest': {
-            method: 'POST',
-            isArray: true
+            method: 'POST'
+        },
+        'cancelRequest': {
+            method: 'PUT',
+            url: '/api/v1/checkins/requests/:id/cancel/'
         },
         'getMyCheckInToDos': {
             url: '/api/v1/checkins/requests/todo/',

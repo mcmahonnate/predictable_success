@@ -6,7 +6,8 @@ function CheckInRequestService($http, $log, CheckInRequestResource) {
     return {
         getMyCheckInRequests: getMyCheckInRequests,
         getMyCheckInToDos: getMyCheckInToDos,
-        sendCheckInRequest: sendCheckInRequest
+        sendCheckInRequest: sendCheckInRequest,
+        cancelRequest: cancelRequest
     };
 
     function getMyCheckInRequests() {
@@ -44,4 +45,17 @@ function CheckInRequestService($http, $log, CheckInRequestResource) {
             $log.error('sendCheckInRequest failed');
         }
     }
+
+    function cancelRequest(request) {
+        return CheckInRequestResource.cancelRequest({'id': request.id}, request, success, fail).$promise;
+
+        function success(response) {
+            return response;
+        }
+
+        function fail(response) {
+            $log.error('cancelRequest failed');
+        }
+    }
+
 }

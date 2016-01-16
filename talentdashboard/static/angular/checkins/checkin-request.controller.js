@@ -7,6 +7,7 @@
         vm.request = {requester: null, host: null};
         vm.employee = $rootScope.currentUser.employee;
         vm.currentCoach = null;
+        vm.selectedEmployee = null;
         vm.teamLead = null;
         vm.changeCoach = changeCoach;
         vm.sendCheckInRequest = sendCheckInRequest;
@@ -35,8 +36,12 @@
                 });
         }
 
-        function sendCheckInRequest(host) {
-            CheckInRequestService.sendCheckInRequest(host);
+        function sendCheckInRequest() {
+            CheckInRequestService.sendCheckInRequest(vm.selectedEmployee.id)
+                .then(function() {
+                    Notification.success("Your request was sent to " + vm.selectedEmployee.first_name);
+                    $modalInstance.close();
+                });
         }
 
         function changeCoach() {

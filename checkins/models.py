@@ -18,10 +18,10 @@ class CheckInType(models.Model):
 
 class CheckInRequestManager(models.Manager):
     def pending_for_host(self, host):
-        return self.filter(host=host, was_responded_to=False)
+        return self.filter(host=host, was_responded_to=False, was_canceled=False)
 
     def unanswered_for_requester(self, requester):
-        return self.filter(requester=requester, was_responded_to=False)
+        return self.filter(requester=requester, was_responded_to=False, was_canceled=False)
 
 
 class CheckInRequest(models.Model):
@@ -30,6 +30,7 @@ class CheckInRequest(models.Model):
     requester = models.ForeignKey(Employee, related_name='checkin_requests')
     host = models.ForeignKey(Employee, related_name='requests_for_checkin')
     was_responded_to = models.BooleanField(default=False)
+    was_canceled = models.BooleanField(default=False)
 
     @property
     def has_been_answered(self):

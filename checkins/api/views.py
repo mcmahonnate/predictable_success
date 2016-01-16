@@ -33,7 +33,6 @@ class MyCheckInRequests(ListAPIView):
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        print 'get queryset'
         return CheckInRequest.objects.unanswered_for_requester(requester=self.request.user.employee)
 
 
@@ -143,6 +142,7 @@ class SendCheckInToEmployee(GenericAPIView):
         serializer = CheckInSerializer(checkin, context={'request':request})
         return Response(serializer.data)
 
+
 class ShareCheckIn(GenericAPIView):
     queryset = CheckIn.objects.all()
     serializer_class = SharedEmployeeCheckInSerializer
@@ -159,4 +159,23 @@ class ShareCheckIn(GenericAPIView):
         checkin.published = True
         checkin.save(update_fields=['published'])
         serializer = SharedEmployeeCheckInSerializer(checkin, context={'request':request})
+        return Response(serializer.data)
+
+
+class CancelCheckInRequest(GenericAPIView):
+    queryset = CheckInRequest.objects.all()
+    serializer_class = CheckInRequestSerializer
+    permission_classes = (IsAuthenticated, UserIsRequesterOfCheckInRequest)
+
+    def get_checkin_request(self):
+        try:
+            return self.get_object()
+        except CheckInRequest.DoesNotExist:
+            raise Http404()
+
+    def put(self, request, pk, format=None):
+        checkin_request = self.get_checkin_request()
+        checkin_request.was_canceled = True
+        checkin_request.save(update_fields=['was_canceled'])
+        serializer = CheckInRequestSerializer(checkin_request, context={'request':request})
         return Response(serializer.data)

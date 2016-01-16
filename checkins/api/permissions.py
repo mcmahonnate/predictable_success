@@ -1,6 +1,20 @@
 from rest_framework import permissions
 
 
+class UserIsRequesterOfCheckInRequest(permissions.BasePermission):
+    """ Ensures that the current user is the requester of
+    the check-in request.
+
+    Any view that uses this permission needs to implement
+    the get_checkin_request() method that should return the check-in
+    that the request is related to.
+    """
+    def has_permission(self, request, view):
+        checkin_request = view.get_checkin_request()
+        requester = checkin_request.requester
+        return request.user.employee == requester
+
+
 class UserIsEmployeeOrHostOfCheckIn(permissions.BasePermission):
     """ Ensures that the current user is either the employee or host of
     the check-in.

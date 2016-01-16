@@ -27,9 +27,9 @@
     </div>
 
     <div ng-repeat="request in myCheckins.myRequests" ng-class="{'slide-up-active': hideMessage}" class="alert alert-info slide-up" role="alert">
-        <a class="btn btn-info btn-feedback pull-right" ng-href="#/checkin/{{ request.requester.id }}" type="button">
+        <button class="btn btn-info btn-feedback pull-right" ng-click="myCheckins.cancelRequest(request)" type="button">
             Cancel Request
-        </a>
+        </button>
         <i class="fa fa-comment sent-icon"></i>
         <h2 class="alert-title">Check In Pending</h2>
         <p class="alert-message">
