@@ -1,5 +1,5 @@
     angular
-        .module('feedback')
+        .module('checkins')
         .controller('RequestCheckInController', RequestCheckInController);
 
     function RequestCheckInController(CheckInRequestService, CoachService, Notification, TeamLeadService, $modal, $modalInstance, $rootScope) {
