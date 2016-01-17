@@ -10,4 +10,5 @@ urlpatterns = patterns('',
     url(r'^sponsored/my/$', ProjectsBySponsor.as_view()),
     url(r'^team-member/(?P<pk>[0-9]+)/$', ProjectsByTeamMember.as_view()),
     url(r'^team-member/my/$', ProjectsByTeamMember.as_view()),
+    url(r'^(?P<pk>[0-9]+)/comments/$', ProjectCommentList.as_view()),
 )

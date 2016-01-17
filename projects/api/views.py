@@ -1,10 +1,7 @@
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import *
-from blah.api.views import CommentList, CreateComment
-from blah.api.serializers import CommentSerializer
+from blah.api.views import CommentList
 from org.models import Employee
-from ..models import Project
 from .serializers import *
 from talentdashboard.views.views import StandardResultsSetPagination
 
@@ -65,3 +62,13 @@ class RetrieveUpdateDestroyProject(RetrieveUpdateDestroyAPIView):
     queryset = Project.objects.all()
     permission_classes = (IsAuthenticated, )
     serializer_class = ProjectSerializer
+
+
+class ProjectCommentList(CommentList):
+    serializer_class = CommentSerializer
+    permission_classes = (IsAuthenticated,)
+    pagination_class = StandardResultsSetPagination
+
+    def get_object(self):
+        pk = self.kwargs['pk']
+        return Project.objects.get(pk=pk)

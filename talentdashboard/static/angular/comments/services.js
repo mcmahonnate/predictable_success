@@ -14,6 +14,10 @@ angular.module('tdb.comments.services', ['ngResource'])
                 'method': 'POST',
                 'url': '/api/v1/checkins/:id/comments/'
             },
+            'addToProject': {
+                'method': 'POST',
+                'url': '/api/v1/projects/:id/comments/'
+            },
             'addToEmployee': {
                 'method': 'POST',
                 'url': '/api/v1/comments/employees/:id/'
