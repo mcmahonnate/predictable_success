@@ -6,13 +6,13 @@ from org.models import Employee
 
 class ProjectManager(models.Manager):
     def get_for_owner(self, owner):
-        return self.filter(owner=owner)
+        return self.filter(owners=owner)
 
     def get_for_sponsor(self, sponsor):
-        return self.filter(sponsor=sponsor)
+        return self.filter(sponsors=sponsor)
 
     def get_for_team_member(self, team_member):
-        return self.filter(team_member=team_member)
+        return self.filter(team_members=team_member)
 
 
 class Project(models.Model):
@@ -30,6 +30,6 @@ class Project(models.Model):
         return list(Comment.objects.get_for_object(self))
 
     def __unicode__(self):
-        return u'{0} "{1}" Check-in with {2}'.format(self.host, self.get_type_description(), self.employee)
+        return self.name
 
 blah.register(Project, attr_name='_comments')

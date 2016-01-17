@@ -114,6 +114,7 @@ urlpatterns = [
     url(r'^api/v1/checkins/', include('checkins.api.urls')),
     url(r'^api/v1/comments/', include('blah.api.urls')),
     url(r'^api/v1/events/', include('activity.api.urls')),
+    url(r'^api/v1/projects/', include('projects.api.urls')),
     url(r'^api/v1/org/', include('org.api.urls')),
     url(r'^api/v1/search/', include('search.api.urls')),
 
