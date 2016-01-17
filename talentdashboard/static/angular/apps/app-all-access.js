@@ -13,6 +13,8 @@ app.config(['$routeProvider', function($routeProvider) {
       when('/employees/:id', {templateUrl: '/static/angular/partials/employee-detail.html', controller: 'EmployeeDetailCtrl', resolve: {authorizeRoute: authorizeRoute}}).
       when('/employees', {templateUrl: '/static/angular/partials/employee-list.html', controller: 'EmployeeSearchCtrl', resolve: {authorizeRoute: authorizeRoute, view: function() {return '';}}}).
       when('/my-coachees', {templateUrl: '/static/angular/partials/coach-overview.html', controller: 'CoachDetailCtrl', resolve: {authorizeRoute: authorizeRoute}}).
+      when('/projects/:projectId', {templateUrl: '/static/angular/projects/partials/project-detail.html', controller: 'ProjectController as viewProject', resolve: {authorizeRoute: authorizeRoute}}).
+      when('/projects', {templateUrl: '/static/angular/projects/partials/projects.html', controller: 'ProjectsController as projects', resolve: {authorizeRoute: authorizeRoute}}).
       when('/pvp/todo', {templateUrl: '/static/angular/partials/pvp-todo.html', controller: 'PvpEvaluationTodosCtrl', resolve: {authorizeRoute: authorizeRoute}}).
       when('/pvp/todos', {templateUrl: '/static/angular/partials/pvp-todo-list.html', controller: 'PvpTodoListCtrl', resolve: {authorizeRoute: authorizeRoute}}).
       when('/my-team', {template: '<div ng-include src="templateUrl"></div>', controller: 'MyTeamOverviewCtrl', resolve: {authorizeRoute: authorizeRoute}}).

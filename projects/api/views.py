@@ -10,11 +10,12 @@ from talentdashboard.views.views import StandardResultsSetPagination
 
 
 # CheckIn views
-class CreateProject(CreateAPIView):
+class CreateProject(ListCreateAPIView):
     """ Create a CheckIn via POST.
     """
     serializer_class = ProjectSerializer
     permission_classes = (IsAuthenticated,)
+    queryset = Project.objects.all()
 
     def perform_create(self, serializer):
         serializer.save(host=self.request.user.employee)

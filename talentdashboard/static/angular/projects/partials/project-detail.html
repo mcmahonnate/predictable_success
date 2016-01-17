@@ -1,0 +1,71 @@
+<div class="container project">
+    <h1 class="page-title">
+        <a href="#/projects">Projects</a>
+    </h1>
+	<div class="project-header">
+		<div class="pull-left">
+			<h1>{{ viewProject.project.name }}</h1>
+		</div>
+	</div>	
+    <div class="project-summary panel">
+        <div class="pull-right" ng-show="!viewProject.showSummaryEdit" style="margin-left: 20px;">
+            <i class="fa fa-cog show-popover"></i>
+            <ul class="popover-items" style="display:none">
+                <li class="popover-item">
+                    <a ng-click="viewProject.showSummaryEdit=true" class="edit"><i class="fa fa-pencil-square-o"></i> Edit</a>
+                </li>
+            </ul>
+        </div>
+    	<div ng-hide="viewProject.showSummaryEdit">
+    		<!-- preserve white space and newlines -->
+    		<span class="project-summary-instance">{{ viewProject.project.description }}</span>
+    	</div>
+	    <div ng-show="viewProject.showSummaryEdit">
+            <textarea 
+               	ng-bind-html="viewProject.project.description" ng-model="viewProject.project.description" class="form-control edit-textarea" style="min-height:250px;">
+            </textarea>
+            <div>
+                <button class="btn" ng-click="viewProject.showSummaryEdit=false">Cancel</button>
+        	    <button class="btn btn-success pull-right" ng-click="viewProject.saveSummary(viewProject.project);">Save Edits</button>
+            </div>
+        </div>
+	</div>
+    <div class="checkin-happiness panel" style="overflow:hidden;" ng-show="viewProject.project.owners.length > 0">
+        <h4 class="panel-title pull-left">Owners</h4>
+        <div class="checkin-engagement pull-left">
+            <div class="">
+                <div ng-repeat="owner in viewProject.project.owners" rel="tooltip" data-toggle="tooltip" data-placement="top" data-original-title="{{owner.full_name}}">
+                    <span class="large-headshot">
+                        <img class="headshot-image" ng-src="{{ owner.avatar_small }}" alt="{{ owner.full_name }}" />
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="checkin-happiness panel" style="overflow:hidden;" ng-show="viewProject.project.sponsors.length > 0">
+        <h4 class="panel-title pull-left">Sponsors</h4>
+        <div class="checkin-engagement pull-left">
+            <div class="">
+                <div ng-repeat="sponsor in viewProject.project.sponsors" rel="tooltip" data-toggle="tooltip" data-placement="top" data-original-title="{{sponsor.full_name}}">
+                    <span class="large-headshot">
+                        <img class="headshot-image" ng-src="{{ sponsor.avatar_small }}" alt="{{ sponsor.full_name }}" />
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="checkin-happiness panel" style="overflow:hidden;" ng-show="viewProject.project.team_members.length > 0">
+        <h4 class="panel-title pull-left">Team Members</h4>
+        <div class="checkin-engagement pull-left">
+            <div class="">
+                <div ng-repeat="team_member in viewProject.project.team_members" rel="tooltip" data-toggle="tooltip" data-placement="top" data-original-title="{{team_member.full_name}}">
+                    <span class="large-headshot">
+                        <img class="headshot-image" ng-src="{{ team_member.avatar_small }}" alt="{{ team_member.full_name }}" />
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-include="'/static/angular/checkins/partials/add-comment.html'"></div>
+    <div ng-include="'/static/angular/checkins/partials/comments.html'"></div>
+</div>

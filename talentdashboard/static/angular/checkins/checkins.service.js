@@ -68,7 +68,6 @@ function CheckInsService($http, $log, CheckInsResource) {
     }
 
     function save(checkin) {
-        console.log(checkin);
         return CheckInsResource.save(checkin, success, fail).$promise;
 
         function success(response) {

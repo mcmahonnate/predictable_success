@@ -8,6 +8,17 @@ var inject = require('gulp-inject');
 var iife = require('gulp-iife');
 var sourcemaps = require('gulp-sourcemaps');
 
+gulp.task('checkins-scripts', function() {
+    return gulp.src('./talentdashboard/static/angular/checkins/**/*.js')
+        .pipe(sourcemaps.init())
+        .pipe(angularFilesort())
+        .pipe(concat('checkins.js'))
+        .pipe(iife())
+        .pipe(ngAnnotate())
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest('./talentdashboard/static/'));
+});
+
 gulp.task('feedback-scripts', function() {
     return gulp.src('./talentdashboard/static/angular/feedback/**/*.js')
         .pipe(sourcemaps.init())
@@ -19,11 +30,11 @@ gulp.task('feedback-scripts', function() {
         .pipe(gulp.dest('./talentdashboard/static/'));
 });
 
-gulp.task('checkins-scripts', function() {
-    return gulp.src('./talentdashboard/static/angular/checkins/**/*.js')
+gulp.task('projects-scripts', function() {
+    return gulp.src('./talentdashboard/static/angular/projects/**/*.js')
         .pipe(sourcemaps.init())
         .pipe(angularFilesort())
-        .pipe(concat('checkins.js'))
+        .pipe(concat('projects.js'))
         .pipe(iife())
         .pipe(ngAnnotate())
         .pipe(sourcemaps.write())
@@ -42,6 +53,6 @@ gulp.task('watch', function() {
     gulp.watch('./talentdashboard/**/*.js', ['scripts']);
 });
 
-gulp.task('scripts', ['checkins-scripts', 'feedback-scripts']);
+gulp.task('scripts', ['checkins-scripts', 'feedback-scripts', 'projects-scripts']);
 
 gulp.task('default', ['watch']);
