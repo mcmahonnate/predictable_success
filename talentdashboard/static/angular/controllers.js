@@ -205,7 +205,7 @@ angular.module('tdb.controllers', [])
         $scope.settingsTab = 'settings';
         $scope.searchTab = 'search';
         $scope.feedbackTab = 'feedback';
-        $scope.projects = 'projects';
+        $scope.projectsTab = 'projects';
 
         $scope.setActiveTab = function (tab) {
             $('.nav-item').tooltip('hide');
