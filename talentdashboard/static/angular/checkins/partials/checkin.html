@@ -89,8 +89,8 @@
 	                <div ng-include="'/static/angular/checkins/partials/task-list-item.html'"></div>
 	            </div>
             </div>
-	        <button ng-show="!customer.show_shareable_checkins" type="submit" class="btn btn-success btn-lg btn-publish">Publish to Profile</button>
-            <button ng-show="customer.show_shareable_checkins" type="submit" class="btn btn-success btn-lg btn-publish">Save</button>
+	        <button ng-show="!customer.show_shareable_checkins" ng-disabled="!viewCheckin.checkin.summary || !viewCheckin.checkin.type" type="submit" class="btn btn-success btn-lg btn-publish">Publish to Profile</button>
+            <button ng-show="customer.show_shareable_checkins" ng-disabled="!viewCheckin.checkin.summary || !viewCheckin.checkin.type" type="submit" class="btn btn-success btn-lg btn-publish">Save</button>
 	    </div>    
 	</form>
 </div>
