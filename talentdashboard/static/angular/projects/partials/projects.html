@@ -27,7 +27,7 @@
                     <td><span class="activity-checkin-summary comment-text" read-more ng-model="project.description" words="false" length="400" label="View" link="/projects/{{ project.id }}"></span></td>
                     <td>
                         <span ng-repeat="owner in project.owners">
-                            <span class="tiny-headshot">
+                            <span class="tiny-headshot" rel="tooltip" data-toggle="tooltip" data-placement="top" data-original-title="{{owner.full_name}}">
                                 <img class="headshot-image" ng-src="{{ owner.avatar_small }}" alt="{{ owner.full_name }}" />
                             </span>
                         </span>
