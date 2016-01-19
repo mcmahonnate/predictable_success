@@ -93,7 +93,7 @@ class HostCheckInList(ListAPIView):
 
     def get_queryset(self):
         host = self.request.user.employee
-        return CheckIn.objects.filter(host=host)
+        return CheckIn.objects.get_all_for_host(host=host)
 
 
 # CheckInType views

@@ -101,8 +101,8 @@
                     <td>{{ checkin.type.name }}</td>
                     <td><span class="activity-checkin-summary comment-text" read-more ng-model="checkin.summary" words="false" length="400" label="View" link="/checkins/{{ checkin.id }}"></span></td>
                     <td>
-                        <span ng-show="!checkin.visible_to_employee && !checkin.published" title="To be sent">Draft</span>
-                        <span ng-show="checkin.visible_to_employee && !checkin.published" title="Visible">Visible</span>
+                        <span ng-show="!checkin.visible_to_employee && !checkin.published" title="Draft">Draft</span>
+                        <span ng-show="checkin.visible_to_employee && !checkin.published" title="Sent">Sent to {{ checkin.employee.first_name}}</span>
                         <span ng-show="checkin.visible_to_employee && checkin.published" title="Shared">Shared</span>
                     </td>
                     <td class="centered">
