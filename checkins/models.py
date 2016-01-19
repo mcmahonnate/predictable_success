@@ -3,6 +3,7 @@ from blah.models import Comment
 from django.db import models
 from org.models import Employee
 from engagement.models import Happiness
+from customers.models import current_customer
 
 
 class CheckInType(models.Model):
@@ -44,6 +45,11 @@ class CheckInManager(models.Manager):
     def get_all_for_employee(self, employee):
         return self.filter(employee=employee)
 
+    def get_all_for_host(self, host):
+        checkins = self.filter(host=host)
+        checkins = checkins.filter(shareable=True)
+        return checkins
+
     def get_all_visible_to_employee(self, employee):
         checkins = self.get_all_for_employee(employee)
         return checkins.filter(visible_to_employee=True)
@@ -60,6 +66,7 @@ class CheckIn(models.Model):
     happiness = models.ForeignKey(Happiness, null=True, blank=True)
     published = models.BooleanField(default=False)
     visible_to_employee = models.BooleanField(default=False)
+    shareable = models.BooleanField(default=False)
     checkin_request = models.OneToOneField(CheckInRequest, null=True, blank=True, related_name='checkin')
 
     class Meta:
@@ -67,6 +74,12 @@ class CheckIn(models.Model):
         permissions = (
             ("view_checkin_summary", "Can view the summary of the Check In."),
         )
+
+    def save(self, *args, **kwargs):
+        tenant = current_customer()
+        if tenant.show_shareable_checkins:
+            self.shareable = True
+        super(CheckIn, self).save(*args, **kwargs)
 
     @property
     def comments(self):

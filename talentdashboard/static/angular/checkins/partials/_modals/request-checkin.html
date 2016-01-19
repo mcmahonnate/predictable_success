@@ -5,16 +5,6 @@
             <panel class="checkin">
 
                 <h3 class="modal-title">Who would you like to check in with?</h3>
-                <div class="checkin-host well well-sm" ng-class="{'checkin-host-selected': request.selectedEmployee==request.teamLead, 'checkin-host':request.selectedEmployee!=request.teamLead}" ng-click="request.selectedEmployee=request.teamLead">
-                    <i class="fa fa-check-circle-o selected-icon pull-right" ng-show="request.selectedEmployee==request.teamLead"></i>
-                    <div class="large-headshot pull-left" style="display:inline-block">
-                        <img ng-src="{{request.teamLead.avatar}}" alt="{{request.teamLead.full_name}}" class="headshot-image">
-                    </div>
-                    <div class="checkin-host-label" ng-show="request.teamLead">
-                        <p>Your Team Lead</p>
-                        <h3><strong>{{request.teamLead.full_name}}</strong></h3>
-                    </div>
-                </div>
                 <div class="checkin-host well well-sm" ng-class="{'checkin-host-selected': request.selectedEmployee==request.currentCoach, 'checkin-host':request.selectedEmployee!=request.currentCoach}" ng-click="request.selectedEmployee=request.currentCoach" ng-show="customer.show_coaches">
                     <i class="fa fa-check-circle-o selected-icon pull-right" ng-show="request.selectedEmployee==request.currentCoach"></i>
                     <div class="large-headshot pull-left" style="display:inline-block">
@@ -28,9 +18,22 @@
                     <div class="checkin-host-label" ng-if="request.currentCoach">
                         <p>Your Coach</p>
                         <h3><strong>{{request.currentCoach.full_name}}</strong></h3>
-                        <p><a href="" class="underlined" ng-click="request.changeCoach()">Pick a new coach</a></p>
+                        <p><a href="" ng-show="false" class="underlined" ng-click="request.changeCoach()">Change your coach</a>
+                            <span ng-show="true"><span class="underlined">Change your coach</span> (Coming soon!)</span>
+                        </p>
                     </div>
                 </div>
+                <div class="checkin-host well well-sm" ng-class="{'checkin-host-selected': request.selectedEmployee==request.teamLead, 'checkin-host':request.selectedEmployee!=request.teamLead}" ng-click="request.selectedEmployee=request.teamLead">
+                    <i class="fa fa-check-circle-o selected-icon pull-right" ng-show="request.selectedEmployee==request.teamLead"></i>
+                    <div class="large-headshot pull-left" style="display:inline-block">
+                        <img ng-src="{{request.teamLead.avatar}}" alt="{{request.teamLead.full_name}}" class="headshot-image">
+                    </div>
+                    <div class="checkin-host-label" ng-show="request.teamLead">
+                        <p>Your Team Lead</p>
+                        <h3><strong>{{request.teamLead.full_name}}</strong></h3>
+                    </div>
+                </div>
+
             </panel>    
         </div>    
         <div class="modal-footer">

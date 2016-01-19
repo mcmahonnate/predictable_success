@@ -50,11 +50,8 @@ angular.module('tdb.engagement.controllers', [])
     }])
 
     .controller('SupportTeamCtrl', ['$scope', '$modalInstance', 'Employee', 'employee_id', 'employee_view', function ($scope, $modalInstance, Employee, employee_id, employee_view) {
-        console.log(employee_id);
-        console.log(employee_view);
-        console.log('test');
         $scope.members = Employee.supportTeam({id: employee_id});
-        console.log($scope.members);
+        $scope.employee = Employee.get({id: employee_id});
         $scope.employee_view = employee_view;
         $scope.cancel = function () {
             $modalInstance.dismiss();
