@@ -3,7 +3,13 @@
 	<h3 class="modal-title">
         <span>Your Support Team</span>
     </h3>
-    <p>Heads up! Before you continue we want to let you know who will be able to see your response.  This is your support team.  They are comprised of your Leadership Team, the People Team, <span ng-if="customer.show_coaches">your Coach and</span> your Team lead.  They really, really, care about you.  Let them know how they can help.
+    <span ng-show="employee_view">
+        <p>These are the people that this will be shared with.  They are comprised of your Leadership Team<span ng-if="customer.show_coaches">,</span><span ng-if="!customer.show_coaches"> and</span> the People Team <span ng-if="customer.show_coaches">and your Coach</span>.</p>
+    </span>
+
+    <span ng-show="!employee_view">
+        <p>These are the people that this will be shared with.  They are comprised of {{employee.first_name}}'s Leadership Team<span ng-if="customer.show_coaches">,</span><span ng-if="!customer.show_coaches"> and</span> the People Team <span ng-if="customer.show_coaches">and their Coach</span>.</p>
+    </span>
     <div class="recipients">
         <div ng-repeat="employee in members" class="recipient">
             <div class="headshot xlarge-headshot">

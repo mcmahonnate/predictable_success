@@ -8,11 +8,11 @@ from tasks import *
 def checkin_save_handler(sender, instance, created, update_fields, **kwargs):
     if created:
         # Close any outstanding Check-in requests
-        requests = CheckInRequest.objects.filter(requester=instance.employee, host=instance.host)
-        requests.update(was_responded_to=True)
-        request = requests.order_by('date').first()
-        if request is not None:
-            instance.checkin_request = request
+        checkin_requests = CheckInRequest.objects.filter(requester=instance.employee, host=instance.host)
+        checkin_requests.update(was_responded_to=True)
+        checkin_request = checkin_requests.order_by('request_date').first()
+        if checkin_request is not None:
+            instance.checkin_request = checkin_request
             instance.save()
     elif update_fields:
         if 'published' in update_fields and instance.published:
@@ -22,6 +22,6 @@ def checkin_save_handler(sender, instance, created, update_fields, **kwargs):
 
 
 @receiver(post_save, sender=CheckInRequest)
-def checkin_save_handler(sender, instance, created, update_fields, **kwargs):
+def checkin_request_save_handler(sender, instance, created, update_fields, **kwargs):
     if created:
         send_checkin_request_notification.subtask((instance.id,)).apply_async()
