@@ -41,7 +41,6 @@ function CheckInController(CheckInsService, Comment, Employee, EmployeeSearch, H
     };
 
     function showWhoCanSeeThis(employee_id, employee_view) {
-        console.log(employee_id);
         $modal.open({
             animation: true,
             backdrop: 'static',
