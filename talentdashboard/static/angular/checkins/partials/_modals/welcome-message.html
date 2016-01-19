@@ -18,11 +18,11 @@
 </div>
 <script type="text/javascript">
     $(function() {
-        if (!Cookies.get('welcome')) {
+        if (!Cookies.get('checkin-welcome')) {
             /* Auto luanch the modal if no welcome cookie */
             $('.checkin-welcome-modal').delay(750).queue(function(){ $(this).modal('show').dequeue(); });
         }
         /* Set a welcome cookie */
-        Cookies.set('welcome', 'true');
+        Cookies.set('checkin-welcome', 'true');
     });
 </script>

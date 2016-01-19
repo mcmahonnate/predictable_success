@@ -40,13 +40,16 @@ function CheckInController(CheckInsService, Comment, Employee, EmployeeSearch, H
         }
     };
 
-    function showWhoCanSeeThis(employee_id) {
+    function showWhoCanSeeThis(employee_id, employee_view) {
         $modal.open({
             animation: true,
             backdrop: 'static',
             templateUrl: '/static/angular/partials/_modals/who-can-see-this.html',
             controller: 'SupportTeamCtrl',
             resolve: {
+                employee_view: function () {
+                    return employee_view
+                },
                 employee_id: function () {
                     return employee_id
                 }
