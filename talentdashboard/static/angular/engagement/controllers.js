@@ -9,7 +9,7 @@ angular.module('tdb.engagement.controllers', [])
         EngagementSurvey.getSurvey($scope.employee_id, $scope.survey_id).$promise.then(function (response) {
                 $scope.survey = response;
                 if ($scope.survey.active && !$scope.survey.complete){
-                    showWhoCanSeeThis($scope.employee_id);
+                    showWhoCanSeeThis($scope.employee_id, true);
                 }
             }, function (response) {
                 $scope.error = true
@@ -18,7 +18,7 @@ angular.module('tdb.engagement.controllers', [])
         $scope.happy = {assessment: 0};
         $scope.happy.comment = {visibility: 3, content: ''};
 
-        showWhoCanSeeThis = function (employee_id) {
+        showWhoCanSeeThis = function (employee_id, employee_view) {
             is_signed_id = employee_id.indexOf(":");
             if (is_signed_id > -1)
                 employee_id = employee_id.substring(0, is_signed_id);
@@ -28,6 +28,9 @@ angular.module('tdb.engagement.controllers', [])
                 templateUrl: '/static/angular/partials/_modals/who-can-see-this.html',
                 controller: 'SupportTeamCtrl',
                 resolve: {
+                    employee_view: function () {
+                        return employee_view
+                    },
                     employee_id: function () {
                         return employee_id
                     }
@@ -46,9 +49,13 @@ angular.module('tdb.engagement.controllers', [])
         };
     }])
 
-    .controller('SupportTeamCtrl', ['$scope', '$modalInstance', 'Employee', 'employee_id', function ($scope, $modalInstance, Employee, employee_id) {
+    .controller('SupportTeamCtrl', ['$scope', '$modalInstance', 'Employee', 'employee_id', 'employee_view', function ($scope, $modalInstance, Employee, employee_id, employee_view) {
         console.log(employee_id);
+        console.log(employee_view);
+        console.log('test');
         $scope.members = Employee.supportTeam({id: employee_id});
+        console.log($scope.members);
+        $scope.employee_view = employee_view;
         $scope.cancel = function () {
             $modalInstance.dismiss();
         }

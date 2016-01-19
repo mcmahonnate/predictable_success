@@ -36,8 +36,8 @@
                 <button class="btn" type="button" ng-click="viewCheckin.showSummaryEdit=true"><i class="fa fa-pencil"></i> Edit Check-In</button>
                 <button class="btn btn-success pull-right" type="button" ng-click="viewCheckin.shareWithLeadership();"><i class="fa fa-paper-plane"></i> Share Check-In</button>
             </div>
-            <div class="pull-right">
-                <a ng-click="viewCheckin.showWhoCanSeeThis(currentUser.employee.id)">Who will it be shared with?</a>
+            <div class="pull-right" ng-show="(viewCheckin.checkin.employee.id == currentUser.employee.id) && !viewCheckin.checkin.published">
+                <a ng-click="viewCheckin.showWhoCanSeeThis(currentUser.employee.id, true)">Who will it be shared with?</a>
             </div>
             <div ng-show="(viewCheckin.checkin.host.id == currentUser.employee.id) && !viewCheckin.checkin.visible_to_employee && customer.show_shareable_checkins">
                 <br/>
