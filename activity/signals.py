@@ -58,6 +58,7 @@ def feedback_digest_save_handler(sender, instance, created, update_fields, **kwa
 
 @receiver(post_delete, sender=Comment)
 @receiver(post_delete, sender=CheckIn)
+@receiver(post_delete, sender=FeedbackDigest)
 def object_delete_handler(sender, instance, **kwargs):
     content_type = ContentType.objects.get_for_model(sender)
     comment_type = ContentType.objects.get_for_model(Comment)
@@ -66,7 +67,6 @@ def object_delete_handler(sender, instance, **kwargs):
         if instance.content_type.id is comment_type.id:
             return
     try:
-        event = Event.objects.get(event_type=content_type, event_id=instance.id)
-        event.delete()
+        event = Event.objects.filter(event_type=content_type, event_id=instance.id).delete()
     except:
         return
