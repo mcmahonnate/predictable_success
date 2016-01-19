@@ -1,9 +1,11 @@
 import blah
 from blah.models import Comment
+from datetime import datetime
 from django.db import models
 from org.models import Employee
 from engagement.models import Happiness
 from customers.models import current_customer
+from model_utils import FieldTracker
 
 
 class CheckInType(models.Model):
@@ -65,9 +67,11 @@ class CheckIn(models.Model):
     other_type_description = models.CharField(max_length=100, null=True, blank=True)
     happiness = models.ForeignKey(Happiness, null=True, blank=True)
     published = models.BooleanField(default=False)
+    published_date = models.DateTimeField(null=True, blank=True)
     visible_to_employee = models.BooleanField(default=False)
     shareable = models.BooleanField(default=False)
     checkin_request = models.OneToOneField(CheckInRequest, null=True, blank=True, related_name='checkin')
+    field_tracker = FieldTracker(fields=['published'])
 
     class Meta:
         get_latest_by = "date"
@@ -79,6 +83,10 @@ class CheckIn(models.Model):
         tenant = current_customer()
         if tenant.show_shareable_checkins:
             self.shareable = True
+        if self.field_tracker.has_changed('published') and self.published:
+            self.published_date = datetime.now()
+            print self.published_date
+
         super(CheckIn, self).save(*args, **kwargs)
 
     @property

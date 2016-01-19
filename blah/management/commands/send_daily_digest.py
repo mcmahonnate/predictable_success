@@ -27,13 +27,14 @@ class Command(BaseCommand):
         htmly = get_template('email/daily_digest_email.html')
         recipients = User.objects.filter(groups__id=3)
         for recipient in recipients:
-            comments = Comment.objects.filter(created_date__range=[start_dt,dt])
+            comments = Comment.objects.filter(created_date__range=[start_dt,dt], content_type=employee_type)
             comments = comments.exclude(include_in_daily_digest=False)
             comments = comments.exclude(object_id=recipient.employee.id, content_type=employee_type)
             comments = comments.exclude(content_type=employee_type, visibility=1)
-            check_ins = CheckIn.objects.filter(date__range=[start_dt,dt])
             if tenant.show_shareable_checkins:
-                check_ins = CheckIn.objects.filter(published=True)
+                check_ins = CheckIn.objects.filter(published=True, published_date__range=[start_dt,dt])
+            else:
+                check_ins = CheckIn.objects.filter(date__range=[start_dt,dt])
             check_ins = check_ins.exclude(employee__id=recipient.employee.id)
             todos = Task.objects.filter(created_date__range=[start_dt,dt])
             todos = todos.exclude(employee__id=recipient.employee.id)
