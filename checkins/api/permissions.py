@@ -84,7 +84,7 @@ class UserCanSeeCheckInConversation(permissions.BasePermission):
         is_employee = (request.user.employee == employee)
         is_host = (request.user.employee == host)
         has_all_access = request.user.has_perm('org.view_employees')
-        if request.tenant.show_shareable_checkins:
+        if checkin.shareable:
             can_show_checkin = checkin.published
         else:
             can_show_checkin = True
