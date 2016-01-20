@@ -157,7 +157,7 @@ class ShareCheckIn(GenericAPIView):
     def put(self, request, pk, format=None):
         checkin = self.get_checkin()
         checkin.published = True
-        checkin.save(update_fields=['published'])
+        checkin.save(update_fields=['published', 'published_date'])
         serializer = SharedEmployeeCheckInSerializer(checkin, context={'request':request})
         return Response(serializer.data)
 
