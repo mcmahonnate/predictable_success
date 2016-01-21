@@ -11,7 +11,7 @@
         <p>These are the people that this will be shared with.  They are comprised of {{employee.first_name}}'s Leadership Team<span ng-if="customer.show_coaches">,</span><span ng-if="!customer.show_coaches"> and</span> the People Team <span ng-if="customer.show_coaches">and their Coach</span>.</p>
     </span>
     <div class="recipients">
-        <div ng-repeat="member in members | unique:'id'" class="recipient">
+        <div ng-repeat="member in members | unique:'full_name'" class="recipient">
             <div class="headshot xlarge-headshot">
                 <img ng-src="{{ member.avatar_small }}" alt="{{ member.full_name }}'s avatar" />
             </div>

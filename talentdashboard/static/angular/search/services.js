@@ -5,7 +5,7 @@ angular.module('tdb.search.services', ['ngResource'])
             myTeam: {method: 'GET', isArray: true, url: '/api/v1/search/employees/my-team/'},
             leadEmployees: {method: 'GET', isArray: true, url: '/api/v1/search/employees/lead/:id'},
             myCoachees: {method: 'GET', isArray: true, url: '/api/v1/search/employees/my-coachees/'},
-            myLeaders: {method: 'GET', isArray: true, url: '/api/v1/search/employees/my-leaders/'}
+            getLeaders: {method: 'GET', isArray: true, url: '/api/v1/search/employees/:id/leaders/'}
         };
 
         var EmployeeSearch = $resource('/api/v1/search/employees/', null, actions);

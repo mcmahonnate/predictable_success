@@ -15,9 +15,9 @@ def employee_search(request):
 
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
-def my_leaders(request):
-    current_employee = Employee.objects.get(user=request.user)
-    return _find_employees_filtered_by_employee_ancestors(request, current_employee)
+def employee_leaders_search(request, pk):
+    employee = Employee.objects.get(id=pk)
+    return _find_employees_filtered_by_employee_ancestors(request, employee)
 
 @api_view(['GET'])
 def my_team_employee_search(request):
