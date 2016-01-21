@@ -16,7 +16,7 @@ angular.module('tdb.org.services', ['ngResource'])
             'addNew': { method:'POST', data:{full_name:'@full_name', hire_date: '@hire_date', coach_id: '@coach_id'}, isArray: false },
             'update': { method:'PUT', data:{full_name:'@full_name', hire_date: '@hire_date', departure_date: '@departure_date', coach_id: '@coach_id'}, isArray: false },
             'potentialReviewers': { method:'GET', url: '/api/v1/feedback/potential-reviewers/', isArray: true },
-            'supportTeam': { method:'GET', url: '/api/v1/employees/:id/support-team/', isArray: true }
+            'getAllAccess': { method:'GET', url: '/api/v1/org/employees/all-access/', isArray: true }
         };
         var res = $resource('/api/v1/employees/:id/', {id:'@id'}, actions);
         return res;

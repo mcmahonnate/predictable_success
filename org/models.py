@@ -79,22 +79,12 @@ class EmployeeManager(TreeManager):
     def get_from_user(self, user):
         return self.filter(user=user).get()
 
-
-    def get_employees_that_have_access_to_employee(self, employee):
-        employees = self.get_current_employees(show_hidden=True)
-        coach_id = None
-        #get coach id
-        if employee.coach:
-            coach_id = employee.coach.id
-        #get ancestors id
-        ancestor_ids = employee.get_ancestors().values_list('id', flat=True)
-
-        #get all access users
+    def get_all_access_employees(self):
         content_type = ContentType.objects.get_for_model(Employee)
         perm = Permission.objects.get(content_type=content_type, codename='view_employees')
         users = User.objects.filter(Q(groups__permissions=perm) | Q(user_permissions=perm)).distinct()
 
-        employees = employees.filter(Q(id=coach_id) | Q(user__in=users) | Q(id__in=ancestor_ids))
+        employees = self.filter(user__in=users)
         return employees
 
 

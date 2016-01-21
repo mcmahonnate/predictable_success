@@ -10,7 +10,7 @@ from views.payment import ChargeView, PaymentView
 from views.homepage import IndexView
 from insights.views import Signup, Report, Survey, Confirmation
 from engagement.api.views import RetrieveUpdateDestroyHappiness, CreateHappiness, EmployeeHappinessList
-from org.api.views import Profile, EmployeeDetail, employee_support_team, account_activate, account_activate_login
+from org.api.views import Profile, EmployeeDetail, account_activate, account_activate_login
 
 router = routers.DefaultRouter()
 router.register(r'^api/v1/teams', TeamViewSet)
@@ -54,7 +54,6 @@ urlpatterns = [
 
     url(r'^api/v1/employees/$', (cache_page(60*1440)(EmployeeList.as_view())), name='employee-list'),
     url(r'^api/v1/employees/(?P<pk>[0-9]+)/$', EmployeeDetail.as_view(), name='employee-detail'),
-    url(r'^api/v1/employees/(?P<pk>[0-9]+)/support-team/$', employee_support_team),
     url(r'^api/v1/employee-names/$', EmployeeNames.as_view(), name='employee-name-list'),
     url(r'^api/v1/leaderships/employees/(?P<pk>[0-9]+)/$', LeadershipDetail.as_view()),
     url(r'^api/v1/pvp-descriptions/$', pvp_descriptions),

@@ -13,6 +13,11 @@ from org.api.permissions import PermissionsViewThisEmployee
 def employee_search(request):
     return _find_employees(request)
 
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def my_leaders(request):
+    current_employee = Employee.objects.get(user=request.user)
+    return _find_employees_filtered_by_employee_ancestors(request, current_employee)
 
 @api_view(['GET'])
 def my_team_employee_search(request):
@@ -31,6 +36,10 @@ def my_coachees_employee_search(request):
 
 def _find_employees_filtered_by_employee_descendants(request, employee):
     kwargs = {'tree_id': employee.tree_id, 'lft': "[%d TO *]" % employee.lft, 'rght': "[* TO %d]" % employee.rght, 'pk': employee.pk}
+    return _find_employees(request, **kwargs)
+
+def _find_employees_filtered_by_employee_ancestors(request, employee):
+    kwargs = {'tree_id': employee.tree_id, 'lft': "[* TO %d]" % employee.lft, 'rght': "[%d TO *]" % employee.rght, 'pk': employee.pk}
     return _find_employees(request, **kwargs)
 
 def _find_employees_filtered_by_relationship_to_current_user(request, relationship_field):

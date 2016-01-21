@@ -49,9 +49,39 @@ angular.module('tdb.engagement.controllers', [])
         };
     }])
 
-    .controller('SupportTeamCtrl', ['$scope', '$modalInstance', 'Employee', 'employee_id', 'employee_view', function ($scope, $modalInstance, Employee, employee_id, employee_view) {
-        $scope.members = Employee.supportTeam({id: employee_id});
-        $scope.employee = Employee.get({id: employee_id});
+    .controller('SupportTeamCtrl', ['$scope', '$modalInstance', 'Employee', 'EmployeeSearch', 'employee_id', 'employee_view', function ($scope, $modalInstance, Employee, EmployeeSearch, employee_id, employee_view) {
+        $scope.leaders = [];
+        $scope.all_access_employees = [];
+        $scope.members = [];
+        $scope.employee = null;
+        var leaders_loaded = false;
+        var all_access_employees_loaded = false;
+        var employee_loaded = false;
+        Employee.get({id: employee_id}, function(data){
+            $scope.employee = data;
+            employee_loaded = true;
+            buildList();
+        });
+        EmployeeSearch.myLeaders(null, function(data) {
+            $scope.leaders = data;
+            leaders_loaded = true;
+            buildList();
+        });
+        Employee.getAllAccess(null, function(data) {
+            $scope.all_access_employees = data;
+            all_access_employees_loaded = true;
+            buildList();
+        })
+
+        function buildList() {
+            if (leaders_loaded && all_access_employees_loaded && employee_loaded) {
+                $scope.members = angular.extend($scope.leaders, $scope.all_access_employees);
+                if ($scope.employee.coach) {
+                    $scope.members.push($scope.employee.coach);
+                }
+            }
+        }
+
         $scope.employee_view = employee_view;
         $scope.cancel = function () {
             $modalInstance.dismiss();
