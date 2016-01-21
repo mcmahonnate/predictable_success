@@ -138,7 +138,7 @@ class SendCheckInToEmployee(GenericAPIView):
     def put(self, request, pk, format=None):
         checkin = self.get_checkin()
         checkin.visible_to_employee = True
-        checkin.save(update_fields=['visible_to_employee'])
+        checkin.save(update_fields=['visible_to_employee', 'visible_to_employee_date'])
         serializer = CheckInSerializer(checkin, context={'request':request})
         return Response(serializer.data)
 

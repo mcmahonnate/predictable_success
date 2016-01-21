@@ -1,0 +1,11 @@
+Hi, {{ recipient_first_name }}!
+
+Don't forget to share your notes from your last check-in. It's a great opportunity for you to start a dialog about what your development needs are with leadership.
+
+You can start the conversation by sharing your notes here:
+{{ response_url }}
+
+Thanks!
+--The Scoutmap Team
+
+P.S. Do you have more feedback or ideas for us? Let us know on the <a href="https://fool.slack.com/messages/feedback_for_scoutmap/">Feedback for Scoutmap Slack Channel.</a>

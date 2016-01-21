@@ -56,6 +56,10 @@ class CheckInManager(models.Manager):
         checkins = self.get_all_for_employee(employee)
         return checkins.filter(visible_to_employee=True)
 
+    def get_all_publish_reminders(self):
+        checkins = self.filter(visible_to_employee=True, published=False, sent_publish_reminder=False)
+        return checkins
+
 
 class CheckIn(models.Model):
     objects = CheckInManager()
@@ -68,10 +72,12 @@ class CheckIn(models.Model):
     happiness = models.ForeignKey(Happiness, null=True, blank=True)
     published = models.BooleanField(default=False)
     published_date = models.DateTimeField(null=True, blank=True)
+    sent_publish_reminder = models.BooleanField(default=False)
     visible_to_employee = models.BooleanField(default=False)
+    visible_to_employee_date = models.DateTimeField(null=True, blank=True)
     shareable = models.BooleanField(default=False)
     checkin_request = models.OneToOneField(CheckInRequest, null=True, blank=True, related_name='checkin')
-    field_tracker = FieldTracker(fields=['published'])
+    field_tracker = FieldTracker(fields=['published', 'visible_to_employee'])
 
     class Meta:
         get_latest_by = "date"
@@ -85,7 +91,8 @@ class CheckIn(models.Model):
             self.shareable = True
         if self.field_tracker.has_changed('published') and self.published:
             self.published_date = datetime.now()
-            print self.published_date
+        if self.field_tracker.has_changed('visible_to_employee') and self.visible_to_employee:
+            self.visible_to_employee_date = datetime.now()
 
         super(CheckIn, self).save(*args, **kwargs)
 
