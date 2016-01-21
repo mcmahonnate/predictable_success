@@ -1,6 +1,6 @@
 Hi, {{ recipient_first_name }}!
 
-{{ employee_full_name }} has shared their notes from your check-in with leadership. You can view their notes here:
+{{ employee_full_name }} has shared their notes from your check-in with leadership. They have also been published to their profile. You can view their notes here:
 {{ response_url }}
 
 Thanks!
