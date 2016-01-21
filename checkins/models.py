@@ -60,6 +60,10 @@ class CheckInManager(models.Manager):
         checkins = self.filter(visible_to_employee=True, published=False, sent_publish_reminder=False)
         return checkins
 
+    def get_all_send_reminders(self):
+        checkins = self.filter(shareable=True, visible_to_employee=False)
+        return checkins
+
 
 class CheckIn(models.Model):
     objects = CheckInManager()

@@ -22,24 +22,20 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         if connection.schema_name == options['schema_name']:
             tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
-            reminder_date = date.today()-timedelta(days=2)
-            checkins = CheckIn.objects.get_all_publish_reminders()
-            checkins = checkins.filter(visible_to_employee_date__lt=reminder_date)
+            checkins = CheckIn.objects.get_all_send_reminders()
             for checkin in checkins:
-                print checkin.employee.full_name
+                print checkin.host.full_name
                 response_url = 'https://%s/#/checkins/%d/' % (tenant.domain_url, checkin.id)
-                recipient_email = checkin.employee.email
+                recipient_email = checkin.host.email
                 context = {
-                    'recipient_first_name': checkin.employee.first_name,
-                    'host_full_name': checkin.host.full_name,
+                    'recipient_first_name': checkin.host.first_name,
+                    'employee_full_name': checkin.employee.full_name,
                     'response_url': response_url,
                 }
-                subject = "Share your check-in"
-                text_content = render_to_string('checkins/email/checkin_share_reminder_notification.txt', context)
-                html_content = render_to_string('checkins/email/checkin_share_reminder_notification.html', context)
+                subject = "%s is waiting for their check-in notes" % checkin.employee.full_name
+                text_content = render_to_string('checkins/email/checkin_send_to_employee_reminder_notification.txt', context)
+                html_content = render_to_string('checkins/email/checkin_send_to_employee_reminder_notification.html', context)
                 msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
                 msg.attach_alternative(html_content, "text/html")
                 msg.send()
-                checkin.sent_publish_reminder = True
-                checkin.save()
         return
