@@ -2,12 +2,12 @@ angular
     .module('feedback')
     .controller('FeedbackReportController', FeedbackReportController);
 
-function FeedbackReportController(FeedbackReportService, $scope, $location, analytics) {
+function FeedbackReportController(FeedbackReportService, $scope, $location, $routeParams, analytics) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
 
     var vm = this;
-    vm.startDate = null;
-    vm.endDate = null;
+    vm.startDate = $routeParams.startDate ? $routeParams.startDate : null;
+    vm.endDate = $routeParams.endDate ? $routeParams.endDate : null;
     vm.report = [];
     vm.getFeedbackReport = getFeedbackReport;
     vm.showResults = false;
@@ -21,12 +21,18 @@ function FeedbackReportController(FeedbackReportService, $scope, $location, anal
         vm.predicate = predicate;
     };
 
+    activate()
+
+    function activate() {
+        if (vm.startDate && vm.endDate) {
+            getFeedbackReport();
+        }
+    }
+
     function getFeedbackReport() {
         return FeedbackReportService.getFeedbackReport(vm.startDate, vm.endDate)
             .then(function (data) {
                 vm.report = data.employee_report;
-                vm.startDate = data.start_date;
-                vm.endDate = data.end_date;
                 vm.total_i_requested_total = data.total_i_requested_total;
                 vm.total_responded_to_me_total = data.total_responded_to_me_total;
                 vm.total_requested_of_me_total = data.total_requested_of_me_total;

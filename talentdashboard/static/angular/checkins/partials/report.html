@@ -1,0 +1,76 @@
+<div class="container" data-hj-masked>
+    <h1>Check-Ins Report</h1>
+    <div class="panel">
+        <div style="width:300px;">
+			<div class="form-group">
+				<label for="startDate"><strong>Start Date</strong></label>
+				<input id="startDate" ng-model="checkinsReport.startDate" name="startDate" class="form-control" />
+			</div>
+			<div class="form-group" style="margin:15px 0;">	
+				<label for="endDate"><strong>End Date</strong></label>
+				<input id="endDate" ng-model="checkinsReport.endDate" name="endDate" class="form-control" />
+			</div>
+			<span ng-click="checkinsReport.getCheckInsReport()" class="btn btn-primary">Submit</span>
+        </div>
+    </div>
+    <div>
+
+        <div class="panel" ng-show="checkinsReport.showResults">
+            <button class="btn btn-default pull-right" type="button" ng-csv="checkinsReport.csv" filename="checkin-report{{checkinsReport.startDate | date:'yyyy-MM-dd'}}to{{checkinsReport.endDate | date:'yyyy-MM-dd'}}.csv" csv-header="['Id', 'Employee', 'Email', 'Team', 'Check-in Type',  'Other Type Description', 'Host', 'Happiness', 'Check-in Date', 'Sent To Employee', 'Sent To Employee Date', 'Published', 'Published Date', 'Total Comments', 'Total Tasks']">
+                <span class="fa fa-download"></span> Download
+            </button>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>
+                            <a href="" ng-click="checkinsReport.order('employee.full_name');"><strong>Employee</strong></a>
+                            <span class="sortorder fa" ng-show="checkinsReport.predicate === 'employee.full_name'" ng-class="checkinsReport.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                        </th>
+                        <th>
+                            <a href="" ng-click="checkinsReport.order('type.name');"><strong>Check-in Type</strong></a>
+                            <span class="sortorder fa" ng-show="checkinsReport.predicate === 'type.name'" ng-class="checkinsReport.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                        </th>
+                        <th>
+                            <a href="" ng-click="checkinsReport.order('host.full_name');"><strong>Host</strong></a>
+                            <span class="sortorder fa" ng-show="checkinsReport.predicate === 'host.full_name'" ng-class="checkinsReport.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                        </th>
+                        <th>
+                            <a href="" ng-click="checkinsReport.order('happiness.assessment_verbose');"><strong>Happiness</strong></a>
+                            <span class="sortorder fa" ng-show="checkinsReport.predicate === 'happiness.assessment_verbose'" ng-class="checkinsReport.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                        </th>
+                        <th>
+                            <a href="" ng-click="checkinsReport.order('date');"><strong>Check-in Date</strong></a>
+                            <span class="sortorder fa" ng-show="checkinsReport.predicate === 'date'" ng-class="checkinsReport.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                        </th>
+                        <th>
+                            <a href="" ng-click="checkinsReport.order('visible_to_employee_date');"><strong>Sent to Employee Date</strong></a>
+                            <span class="sortorder fa" ng-show="checkinsReport.predicate === 'visible_to_employee_date'" ng-class="checkinsReport.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                        </th>
+                        <th>
+                            <a href="" ng-click="checkinsReport.order('published_date');"><strong>Published Date</strong></a>
+                            <span class="sortorder fa" ng-show="checkinsReport.predicate === 'published_date'" ng-class="checkinsReport.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="report in checkinsReport.report | orderBy:checkinsReport.predicate:checkinsReport.reverse">
+                        <td>{{ $index+1 }}.</td>
+                        <td>
+                            <a ng-href="#/employees/{{report.employee.id}}" class="tiny-headshot pull-left"><img ng-src="{{ report.employee.avatar_small }}" alt="{{ report.employee.full_name }}'s avatar"/></a>
+                            <a href="#/employees/{{report.employee.id}}">{{report.employee.full_name}}</a>
+                        </td>
+                        <td style="text-align: center">{{report.type.name}}</td>
+                        <td style="text-align: center">{{report.host.full_name}}</td>
+                        <td style="text-align: center">{{report.happiness.assessment_verbose}}</td>
+                        <td style="text-align: center">{{report.date | date:'MM/dd/yyyy'}}</td>
+                        <td style="text-align: center">{{report.visible_to_employee_date | date:'MM/dd/yyyy'}}</td>
+                        <td style="text-align: center">{{report.published_date | date:'MM/dd/yyyy'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
+        </div>
+    </div>
+</div>

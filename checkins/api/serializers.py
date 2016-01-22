@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from org.api.serializers import SanitizedEmployeeSerializer
+from org.api.serializers import SanitizedEmployeeSerializer, EmployeeSerializer
 from org.models import Employee
 from engagement.models import Happiness
 from engagement.api.serializers import HappinessSerializer
@@ -23,6 +23,25 @@ class SanitizedCheckInSerializer(serializers.ModelSerializer):
     class Meta:
         model = CheckIn
         fields = ('id', 'employee', 'host', 'date', 'happiness', 'type', 'other_type_description', 'published', 'visible_to_employee')
+
+
+class CheckInReportSerializer(serializers.ModelSerializer):
+    employee = EmployeeSerializer(required=False)
+    host = SanitizedEmployeeSerializer(required=False)
+    type = CheckInTypeSerializer(required=False)
+    happiness = HappinessSerializer(required=False)
+    total_comments = serializers.SerializerMethodField()
+    total_tasks = serializers.SerializerMethodField()
+
+    def get_total_comments(self, checkin):
+        return len(checkin.comments)
+
+    def get_total_tasks(self, checkin):
+        return checkin.tasks.count()
+
+    class Meta:
+        model = CheckIn
+        fields = ('id', 'employee', 'host', 'date', 'happiness', 'type', 'other_type_description', 'visible_to_employee_date', 'published', 'published_date', 'visible_to_employee', 'total_tasks', 'total_comments')
 
 
 class CreateCheckInRequestSerializer(serializers.ModelSerializer):

@@ -1,11 +1,14 @@
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
 from rest_framework.generics import *
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
+from rest_framework.response import Response
 from blah.api.views import CommentList, CreateComment
 from blah.api.serializers import CommentSerializer
+from dateutil import parser
 from ..models import CheckIn, CheckInType, CheckInRequest
 from .serializers import *
 from .permissions import *
+from org.api.permissions import PermissionsViewAllEmployees
 from talentdashboard.views.views import StandardResultsSetPagination
 
 
@@ -179,3 +182,20 @@ class CancelCheckInRequest(GenericAPIView):
         checkin_request.save(update_fields=['was_canceled'])
         serializer = CheckInRequestSerializer(checkin_request, context={'request':request})
         return Response(serializer.data)
+
+
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated, PermissionsViewAllEmployees))
+def checkin_report(request):
+    #try:
+    start_date = request.QUERY_PARAMS.get('start_date', None)
+    end_date = request.QUERY_PARAMS.get('end_date', None)
+    start_date = parser.parse(start_date).date()
+    end_date = parser.parse(end_date).date()
+    checkins = CheckIn.objects.filter(date__lte=end_date, date__gte=start_date)
+    serializer = CheckInReportSerializer(checkins, context={'request':request}, many=True)
+    return Response(serializer.data)
+    #except AttributeError:
+    #    raise Http404()
+
