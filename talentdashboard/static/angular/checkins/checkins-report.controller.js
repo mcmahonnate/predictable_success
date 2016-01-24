@@ -53,7 +53,7 @@ function CheckInsReportController(CheckInsReportService, Notification, analytics
             row.type = report.type.name;
             row.other_type_description = report.other_type_description;
             row.host = report.host.full_name;
-            row.happiness = report.happiness.assessment_verbose;
+            row.happiness = report.happiness ? report.happiness.assessment_verbose : null;
             row.checkin_date = report.date;
             row.sent_to_employee = report.visible_to_employee;
             row.sent_to_employee_date = report.visible_to_employee_date;
