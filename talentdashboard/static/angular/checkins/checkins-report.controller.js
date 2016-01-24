@@ -2,7 +2,7 @@ angular
     .module('checkins')
     .controller('CheckInsReportController', CheckInsReportController);
 
-function CheckInsReportController(CheckInsReportService, analytics, $location, $scope, $routeParams) {
+function CheckInsReportController(CheckInsReportService, Notification, analytics, $location, $scope, $routeParams) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
 
     var vm = this;
