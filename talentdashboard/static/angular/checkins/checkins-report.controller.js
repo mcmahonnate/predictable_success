@@ -11,6 +11,7 @@ function CheckInsReportController(CheckInsReportService, Notification, analytics
     vm.report = [];
     vm.getCheckInsReport = getCheckInsReport;
     vm.showResults = false;
+    vm.busy = false;
     vm.predicate = 'employee.full_name';
     vm.reverse = false;
     vm.buildCSV = buildCSV;
@@ -29,15 +30,18 @@ function CheckInsReportController(CheckInsReportService, Notification, analytics
     }
 
     function getCheckInsReport() {
+        vm.busy = true;
+        vm.showResults = true;
         return CheckInsReportService.getCheckInsReport(vm.startDate, vm.endDate)
             .then(function (data) {
                 vm.report = data;
-                vm.showResults = true;
                 vm.csv = [];
                 buildCSV();
+                vm.busy = false;
                 return vm.report;
             })
             .catch(function () {
+                vm.busy = false;
                 Notification.error("We had an error processing your report.");
             });
     }
