@@ -1,0 +1,12 @@
+Hi, {{ recipient_first_name }}!
+
+Don't forget to send {{ employee_full_name }} their check-in notes. Go here:
+
+{{ response_url }}
+
+and click the send button.
+
+Thanks!
+--The Scoutmap Team
+
+P.S. If you have feedback or ideas for Scoutmap please let us know on the <a href="https://fool.slack.com/messages/feedback_for_scoutmap/">Feedback for Scoutmap Slack Channel.</a>

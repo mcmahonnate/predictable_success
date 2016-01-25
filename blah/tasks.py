@@ -69,6 +69,8 @@ def send_checkin_reply_notification(comment_id):
     comment = Comment.objects.get(id=comment_id)
     commenter = Employee.objects.get(user__id=comment.owner.id)
     checkin = CheckIn.objects.get(id=comment.object_id)
+    if not checkin.published:
+        return
     employee = checkin.employee
     host = checkin.host
     other_commenters = Comment.objects.get_for_object(checkin)

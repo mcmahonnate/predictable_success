@@ -153,6 +153,11 @@
                                     Feedback Report
                                 </a>
                             </li>
+                            <li ng-show="customer.show_shareable_checkins" >
+                                <a class="dashboard employee_menu" href="#/reports/checkins">
+                                    Check-Ins Report
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -333,6 +338,17 @@
                             Timespan Report
                         </a>
                     </li>
+                    <li>
+                        <a ng-click="toggleMenu()" ng-show="customer.show_feedback" class="dashboard employee_menu" href="#/reports/feedback">
+                            Feedback Report
+                        </a>
+                    </li>
+                    <li>
+                        <a ng-click="toggleMenu()" ng-show="customer.show_shareable_checkins" class="dashboard employee_menu" href="#/reports/checkins">
+                            Check-Ins Report
+                        </a>
+                    </li>
+
                 </ul>
             </li>
             <li>

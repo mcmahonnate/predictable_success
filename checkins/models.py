@@ -1,8 +1,11 @@
 import blah
 from blah.models import Comment
+from datetime import datetime
 from django.db import models
 from org.models import Employee
 from engagement.models import Happiness
+from customers.models import current_customer
+from model_utils import FieldTracker
 
 
 class CheckInType(models.Model):
@@ -44,9 +47,22 @@ class CheckInManager(models.Manager):
     def get_all_for_employee(self, employee):
         return self.filter(employee=employee)
 
+    def get_all_for_host(self, host):
+        checkins = self.filter(host=host)
+        checkins = checkins.filter(shareable=True)
+        return checkins
+
     def get_all_visible_to_employee(self, employee):
         checkins = self.get_all_for_employee(employee)
         return checkins.filter(visible_to_employee=True)
+
+    def get_all_publish_reminders(self):
+        checkins = self.filter(visible_to_employee=True, published=False, sent_publish_reminder=False)
+        return checkins
+
+    def get_all_send_reminders(self):
+        checkins = self.filter(shareable=True, visible_to_employee=False)
+        return checkins
 
 
 class CheckIn(models.Model):
@@ -59,14 +75,30 @@ class CheckIn(models.Model):
     other_type_description = models.CharField(max_length=100, null=True, blank=True)
     happiness = models.ForeignKey(Happiness, null=True, blank=True)
     published = models.BooleanField(default=False)
+    published_date = models.DateTimeField(null=True, blank=True)
+    sent_publish_reminder = models.BooleanField(default=False)
     visible_to_employee = models.BooleanField(default=False)
+    visible_to_employee_date = models.DateTimeField(null=True, blank=True)
+    shareable = models.BooleanField(default=False)
     checkin_request = models.OneToOneField(CheckInRequest, null=True, blank=True, related_name='checkin')
+    field_tracker = FieldTracker(fields=['published', 'visible_to_employee'])
 
     class Meta:
         get_latest_by = "date"
         permissions = (
             ("view_checkin_summary", "Can view the summary of the Check In."),
         )
+
+    def save(self, *args, **kwargs):
+        tenant = current_customer()
+        if tenant.show_shareable_checkins:
+            self.shareable = True
+        if self.field_tracker.has_changed('published') and self.published:
+            self.published_date = datetime.now()
+        if self.field_tracker.has_changed('visible_to_employee') and self.visible_to_employee:
+            self.visible_to_employee_date = datetime.now()
+
+        super(CheckIn, self).save(*args, **kwargs)
 
     @property
     def comments(self):

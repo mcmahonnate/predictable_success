@@ -8,9 +8,9 @@ from tasks import *
 def checkin_save_handler(sender, instance, created, update_fields, **kwargs):
     if created:
         # Close any outstanding Check-in requests
-        checkin_requests = CheckInRequest.objects.filter(requester=instance.employee, host=instance.host)
+        checkin_requests = CheckInRequest.objects.filter(requester=instance.employee, host=instance.host, was_responded_to=False)
         checkin_requests.update(was_responded_to=True)
-        checkin_request = checkin_requests.order_by('request_date').first()
+        checkin_request = checkin_requests.order_by('request_date').last()
         if checkin_request is not None:
             instance.checkin_request = checkin_request
             instance.save()

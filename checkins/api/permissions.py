@@ -26,6 +26,14 @@ class UserIsEmployeeOrHostOfCheckIn(permissions.BasePermission):
     def has_permission(self, request, view):
         checkin = view.get_checkin()
         employee = checkin.employee
+        if (not request.tenant.show_shareable_checkins):
+            if request.user.has_perm('org.view_employees'):
+                return True
+            elif (request.user.employee.is_ancestor_of(employee) or checkin.host == employee):
+                return True
+            else:
+                return False
+
         if (request.tenant.show_shareable_checkins and request.user.employee.is_ancestor_of(employee)):
             return True
         host = checkin.host
@@ -76,7 +84,7 @@ class UserCanSeeCheckInConversation(permissions.BasePermission):
         is_employee = (request.user.employee == employee)
         is_host = (request.user.employee == host)
         has_all_access = request.user.has_perm('org.view_employees')
-        if request.tenant.show_shareable_checkins:
+        if checkin.shareable:
             can_show_checkin = checkin.published
         else:
             can_show_checkin = True

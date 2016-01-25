@@ -2,7 +2,7 @@ angular
     .module('checkins')
     .controller('CheckInController', CheckInController);
 
-function CheckInController(CheckInsService, Comment, Employee, EmployeeSearch, Happiness, Notification, Task, analytics, $location, $modal, $q, $rootScope, $routeParams, $scope, $window) {
+function CheckInController(CheckInsService, Comment, Employee, EmployeeSearch, Happiness, Notification, Task, analytics, $location, $modal, $q, $rootScope, $routeParams, $scope, $window, $cookies) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
 
     var vm = this;
@@ -55,6 +55,27 @@ function CheckInController(CheckInsService, Comment, Employee, EmployeeSearch, H
                 }
             }
         });
+    }
+
+    function showSaveInfo() {
+        var modalInstance = $modal.open({
+            animation: true,
+            backdrop: 'static',
+            templateUrl: '/static/angular/checkins/partials/_modals/save-info.html',
+            controller: 'SaveInfoController as saveInfo',
+            resolve: {
+                employee_name: function () {
+                    return vm.selectedEmployee.full_name
+                }
+            }
+        });
+        modalInstance.result.then(
+            function (dontShowModalAgain) {
+                if (dontShowModalAgain) {
+                    $cookies.checkinSave = 'true'
+                }
+            }
+        );
     }
 
     function sendToEmployee() {
@@ -206,8 +227,15 @@ function CheckInController(CheckInsService, Comment, Employee, EmployeeSearch, H
                    promises.push(task.$save());
                 });
                 $q.all(promises).then(function() {
-                    // Redirect to the CheckIn detail
-                    $location.path("/checkins/" + newCheckin.id);
+                    // Redirect to the CheckIn detail or CheckIns page
+                    if ($rootScope.customer.show_shareable_checkins) {
+                        if (!$cookies.checkinSave) {
+                            showSaveInfo()
+                        }
+                        $location.path("/checkins/");
+                    } else {
+                        $location.path("/checkins/" + newCheckin.id);
+                    }
                     Notification.success("Successfully created Check-in!");
                 });
             })

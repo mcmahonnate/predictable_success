@@ -16,7 +16,7 @@
     <div>
 
         <div class="panel" ng-show="feedbackReport.showResults">
-            <button class="btn btn-default pull-right" type="button" ng-csv="feedbackReport.csv" filename="scoutmap.csv" csv-header="['Id', 'Employee', 'Total I Requested', 'Total Responded to Me', 'Total Requested of Me',  'Total I Responded To', 'Total Unsolicited I Gave', 'Total Unsolicited I Received', 'Total Digests I Delivered', 'Total Digests I Received', 'Total Excels At Feedback I Gave That Was Helpful', 'Total Could Improve On Feedback I Gave That Was Helpful', 'Total Feedback I Gave That Was Helpful' ]">
+            <button class="btn btn-default pull-right" type="button" ng-csv="feedbackReport.csv" filename="feedback-report{{feedbackReport.startDate | date:'yyyy-MM-dd'}}to{{feedbackReport.endDate | date:'yyyy-MM-dd'}}.csv" csv-header="['Id', 'Employee', 'Total I Requested', 'Total Responded to Me', 'Total Requested of Me',  'Total I Responded To', 'Total Unsolicited I Gave', 'Total Unsolicited I Received', 'Total Digests I Delivered', 'Total Digests I Received', 'Total Excels At Feedback I Gave That Was Helpful', 'Total Could Improve On Feedback I Gave That Was Helpful', 'Total Feedback I Gave That Was Helpful' ]">
                 <span class="fa fa-download"></span> Download
             </button>
 

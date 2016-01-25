@@ -121,21 +121,6 @@ class TeamMemberList(APIView):
         return Response(serializer.data)
 
 @api_view(['GET'])
-@permission_classes((AllowAny, ))
-def employee_support_team(request, pk):
-    try:
-        employee = Employee.objects.get(id=pk)
-    except Employee.DoesNotExist:
-            return Response(None)
-    support_team = Employee.objects.get_employees_that_have_access_to_employee(employee)
-    if support_team:
-        serializer = EmployeeSerializer(support_team, many=True, context={'request': request})
-
-        return Response(serializer.data)
-    else:
-        return Response(None)
-
-@api_view(['GET'])
 def my_team_lead(request):
     current_user = request.user
     employee = Employee.objects.get(user=current_user)
@@ -173,6 +158,14 @@ def team_lead_employees(request, pk):
         return Response(serializer.data)
     else:
         return Response(None, status=status.HTTP_403_FORBIDDEN)
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def all_access_employees(request):
+    employees = Employee.objects.get_all_access_employees()
+    serializer = SanitizedEmployeeSerializer(employees, many=True, context={'request': request})
+
+    return Response(serializer.data)
 
 @api_view(['GET'])
 @permission_classes((IsAuthenticated, PermissionsViewAllEmployees))
