@@ -3,7 +3,7 @@
         <a href="" data-toggle="modal" data-target=".projects-welcome-modal" class="pull-right show-welcome-modal">Show welcome message</a>
         <h1>Projects
             <div class="button-group">
-                <button class="btn btn-success btn-feedback" ng-click="projects.requestCheckIn()" type="button"><i class="fa fa-comment"></i> Submit <span class="hide-for-mobile">a Project</span></button>
+                <button class="btn btn-success btn-feedback" ng-click="projects.submitProject()" type="button"><i class="fa fa-comment"></i> Submit <span class="hide-for-mobile">a Project</span></button>
             </div>
         </h1>
     </div>
@@ -22,7 +22,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="project in projects.activeProjects">
+                <tr ng-repeat="project in projects.activeProjects | orderBy:'total_score':true">
                     <td>{{ project.name }}</td>
                     <td><span class="activity-checkin-summary comment-text" read-more ng-model="project.description" words="false" length="400" label="View" link="/projects/{{ project.id }}"></span></td>
                     <td>

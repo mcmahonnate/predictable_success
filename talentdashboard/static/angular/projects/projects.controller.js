@@ -45,15 +45,15 @@ function ProjectsController(ProjectsService, Notification, analytics, $location,
             animation: true,
             windowClass: 'xx-dialog fade zoom',
             backdrop: 'static',
-            templateUrl: '/static/angular/checkins/partials/_modals/request-checkin.html',
-            controller: 'RequestCheckInController as request',
+            templateUrl: '/static/angular/projects/partials/_modals/add-project.html',
+            controller: 'AddProjectController as addProject',
             resolve: {
 
             }
         });
         modalInstance.result.then(
-            function (sentFeedbackRequests) {
-                getMyCheckInRequests();
+            function (project) {
+                vm.activeProjects.push(project);
             }
         );
     }

@@ -2,7 +2,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import *
 from blah.api.views import CommentList
 from org.models import Employee
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
 from .serializers import *
+from ..models import *
 from talentdashboard.views.views import StandardResultsSetPagination
 
 
@@ -72,3 +75,11 @@ class ProjectCommentList(CommentList):
     def get_object(self):
         pk = self.kwargs['pk']
         return Project.objects.get(pk=pk)
+
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def project_rules(request):
+    rule = PrioritizationRule.objects.get_current()
+    serializer = PrioritizationRuleSerializer(rule, context={'request': request})
+    return Response(serializer.data)

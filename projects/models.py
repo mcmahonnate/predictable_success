@@ -11,6 +11,7 @@ class ScoringCriteria(models.Model):
         max_length=255,
     )
     description = models.TextField()
+
     def __unicode__(self):
         return self.name
 
@@ -64,13 +65,19 @@ class Project(models.Model):
         return self.name
 
 
+class PrioritizationRuleManager(models.Manager):
+    def get_current(self):
+        return self.latest('date')
+
+
 class PrioritizationRule(models.Model):
+    objects = PrioritizationRuleManager()
     date = models.DateTimeField(null=False, blank=False, default=datetime.now)
     description = models.TextField()
     criteria = models.ManyToManyField(ScoringCriteria, related_name='rules', null=False, blank=False)
 
     def __unicode__(self):
-        return self.name
+        return '%s' % self.date
 
 
 blah.register(Project, attr_name='_comments')

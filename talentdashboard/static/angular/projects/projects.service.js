@@ -6,9 +6,24 @@ function ProjectsService($http, $log, ProjectsResource) {
     return {
         getProject: getProject,
         getActiveProjects: getActiveProjects,
+        getCurrentCriteria: getCurrentCriteria,
         save: save,
         update: update
     };
+
+    function getCurrentCriteria() {
+        return $http.get('/api/v1/projects/criteria/')
+            .then(success)
+            .catch(fail);
+
+        function success(response) {
+            return response.data;
+        }
+
+        function fail(response) {
+            $log.error('getCurrentCriteria failed');
+        }
+    }
 
     function getProject(projectId) {
         return ProjectsResource.get({id: projectId}, success, fail).$promise;
