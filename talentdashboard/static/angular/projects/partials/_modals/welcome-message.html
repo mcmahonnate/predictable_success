@@ -1,0 +1,28 @@
+<div 
+    tabindex="-1" 
+    role="dialog" 
+    class="modal projects-welcome-modal fade zoom"
+    data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <a class="close" ng-click="request.cancel()" data-dismiss="modal">&times;</a>
+            <form id="feedback-modal" novalidate="novalidate">
+                <div class="modal-body">
+                    <h3 class="modal-title">Welcome to Projects!</h3>
+                    <div ng-bind-html="projects.welcome"></div>
+                    <button type="button" class="btn btn-success" data-dismiss="modal"> Get Started &rarr;</button>
+                </div>
+            </form>  
+        </div>
+    </div>                  
+</div>
+<script type="text/javascript">
+    $(function() {
+        if (!Cookies.get('projects-welcome')) {
+            /* Auto luanch the modal if no welcome cookie */
+            $('.projects-welcome-modal').delay(750).queue(function(){ $(this).modal('show').dequeue(); });
+        }
+        /* Set a welcome cookie */
+        Cookies.set('projects-welcome', 'true');
+    });
+</script>

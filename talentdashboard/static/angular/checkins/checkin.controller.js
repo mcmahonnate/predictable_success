@@ -121,7 +121,7 @@ function CheckInController(CheckInsService, Comment, Employee, EmployeeSearch, H
                     vm.checkin = checkin;
                     vm.comments = vm.checkin.comments;
                 }, function(error){
-                    Notification.success("Sorry we had a problem opening this checkin.");
+                    Notification.error("Sorry we had a problem opening this checkin.");
                 }
             );
     };
@@ -193,7 +193,7 @@ function CheckInController(CheckInsService, Comment, Employee, EmployeeSearch, H
                 vm.showSummaryEdit = false;
                 Notification.success("Saved!");
             }, function(error){
-                Notification.success("Uh oh! We had a problem saving your edits!");
+                Notification.error("Uh oh! We had a problem saving your edits!");
             });
     };
 

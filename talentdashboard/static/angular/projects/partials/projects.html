@@ -1,0 +1,45 @@
+<div id="projects" class="container" data-hj-masked>
+    <div>
+        <a href="" data-toggle="modal" data-target=".projects-welcome-modal" class="pull-right show-welcome-modal">Show welcome message</a>
+        <h1>Projects
+            <div class="button-group">
+                <button class="btn btn-success btn-feedback" ng-click="projects.submitProject()" type="button"><i class="fa fa-comment"></i> Submit <span class="hide-for-mobile">a Project</span></button>
+            </div>
+        </h1>
+    </div>
+
+    <div class="panel" ng-show="projects.activeProjects.length>0">
+        <table class="table responsive-table">
+            <caption class="panel-title">
+                Active Projects
+            </caption>
+            <thead>
+                <tr>
+                    <th scope="col" class="width-10-percent">Name</th>
+                    <th scope="col" class="width-40-percent">Summary</th>
+                    <th scope="col" class="width-15-percent">Owners</th>
+                    <th scope="col" class="width-10-percent centered">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="project in projects.activeProjects | orderBy:'total_score':true">
+                    <td>{{ project.name }}</td>
+                    <td><span class="activity-checkin-summary comment-text" read-more ng-model="project.description" words="false" length="400" label="View" link="/projects/{{ project.id }}"></span></td>
+                    <td>
+                        <span ng-repeat="owner in project.owners">
+                            <span class="tiny-headshot" rel="tooltip" data-toggle="tooltip" data-placement="top" data-original-title="{{owner.full_name}}">
+                                <img class="headshot-image" ng-src="{{ owner.avatar_small }}" alt="{{ owner.full_name }}" />
+                            </span>
+                        </span>
+                    </td>
+                    <td class="centered">
+                        <a class="btn btn-default btn-md give-feedback-btn" ng-href="#/projects/{{ project.id }}" type="button">
+                            <i class="fa fa-eye"></i> View Project
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div ng-include="'/static/angular/projects/partials/_modals/welcome-message.html'"></div>
+</div>

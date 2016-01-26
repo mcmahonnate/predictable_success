@@ -57,6 +57,12 @@
                     Feedback
                 </div>
             </div>
+            <div ng-show="customer.show_projects && currentUser.can_view_projects" role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == projectsTab}" ng-click="setActiveTab(projectsTab)">
+                <div ng-click="gotoProjects()">
+                    <span class="fa fa-lightbulb-o team_menu nav-item-icon"></span>
+                    Projects
+                </div>
+            </div>
             <a href="" ng-click="setPrivacyMode()" class="privacy-mode" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Cat Mode">Cat Mode</a>
         </div>
     </nav>
