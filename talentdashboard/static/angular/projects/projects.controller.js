@@ -48,12 +48,14 @@ function ProjectsController(ProjectsService, Notification, analytics, $location,
             templateUrl: '/static/angular/projects/partials/_modals/add-project.html',
             controller: 'AddProjectController as addProject',
             resolve: {
-
+                    project: function () {
+                        return null
+                    }
             }
         });
         modalInstance.result.then(
             function (project) {
-                vm.activeProjects.push(project);
+                getActiveProjects();
             }
         );
     }

@@ -3,7 +3,8 @@ from views import *
 
 urlpatterns = patterns('',
     url(r'^$', ProjectList.as_view()),
-    url(r'^(?P<pk>[0-9]+)/$', RetrieveUpdateDestroyProject.as_view()),
+    url(r'^(?P<pk>[0-9]+)/$', RetrieveProject.as_view()),
+    url(r'^(?P<pk>[0-9]+)/update/$', UpdateProject.as_view()),
     url(r'^add/$', CreateProject.as_view()),
     url(r'^criteria/$', project_rules),
     url(r'^owned/(?P<pk>[0-9]+)/$', ProjectsByOwner.as_view()),

@@ -10,6 +10,7 @@ function ProjectController(ProjectsService, Comment, Notification, analytics, $l
     vm.showSummaryEdit = false;
     vm.comments = [];
     vm.addComment = addComment;
+    vm.editProject = editProject;
 
     activate();
 
@@ -41,4 +42,24 @@ function ProjectController(ProjectsService, Comment, Notification, analytics, $l
             vm.comments.push(comment);
         });
     };
+
+    function editProject() {
+        var modalInstance = $modal.open({
+            animation: true,
+            windowClass: 'xx-dialog fade zoom',
+            backdrop: 'static',
+            templateUrl: '/static/angular/projects/partials/_modals/add-project.html',
+            controller: 'AddProjectController as addProject',
+            resolve: {
+                    project: function () {
+                        return vm.project
+                    }
+            }
+        });
+        modalInstance.result.then(
+            function (project) {
+                getProject();
+            }
+        );
+    }
 }

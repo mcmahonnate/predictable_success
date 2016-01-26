@@ -62,6 +62,7 @@ function ProjectsService($http, $log, ProjectsResource) {
     }
 
     function update(project) {
+        console.log(project);
         return ProjectsResource.update({id: project.id}, project, success, fail).$promise;
 
         function success(response) {

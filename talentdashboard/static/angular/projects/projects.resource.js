@@ -46,7 +46,8 @@ function ProjectsResource($resource) {
             url: '/api/v1/projects/add/'
         },
         'update': {
-            method: 'PUT'
+            method: 'PUT',
+            url: '/api/v1/projects/:id/update/'
         },
         'delete': {
             'method': 'DELETE'

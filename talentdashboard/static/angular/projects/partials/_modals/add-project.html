@@ -102,7 +102,7 @@
                 <div style="margin: 15px 0" ng-repeat="rule in addProject.ruleSet">
                     <label class="control-label pull-left">{{rule.name}}:</label><br/>
                     <select class="form-control" name="singleSelect" ng-model="rule.selected">
-                        <option ng-repeat="option in rule.options" value="{{option.id}}">{{option.name}}</option>
+                        <option ng-repeat="option in rule.options" value="{{option.id}}" ng-selected="option.id == rule.selected">{{option.name}}</option>
                     </select>
                 </div>
             </panel>

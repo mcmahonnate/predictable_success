@@ -12,12 +12,9 @@ from talentdashboard.views.views import StandardResultsSetPagination
 class CreateProject(ListCreateAPIView):
     """ Create a Project via POST.
     """
-    serializer_class = CreateProjectSerializer
+    serializer_class = CreateUpdateProjectSerializer
     permission_classes = (IsAuthenticated,)
     queryset = Project.objects.all()
-
-    def perform_create(self, serializer):
-        serializer.save()
 
 
 class ProjectList(ListAPIView):
@@ -65,12 +62,18 @@ class ProjectsByTeamMember(ListAPIView):
             return Project.objects.get_for_team_member(self.request.user.employee)
 
 
-class RetrieveUpdateDestroyProject(RetrieveUpdateDestroyAPIView):
-    """ Retrieve, Update, or Delete a CheckIn via GET, PUT, DELETE.
+class RetrieveProject(RetrieveAPIView):
+    """ Retrieve a Project via GET.
     """
     queryset = Project.objects.all()
     permission_classes = (IsAuthenticated, )
     serializer_class = ProjectSerializer
+
+
+class UpdateProject(UpdateAPIView):
+    queryset = Project.objects.all()
+    permission_classes = (IsAuthenticated, )
+    serializer_class = CreateUpdateProjectSerializer
 
 
 class ProjectCommentList(CommentList):

@@ -44,7 +44,7 @@ class Project(models.Model):
     name = models.CharField(
         max_length=255,
     )
-    description = models.TextField(null=True, blank=True)
+    description = models.TextField(blank=True, default='')
     sponsors = models.ManyToManyField(Employee, related_name='projects_sponsored', null=False, blank=False)
     owners = models.ManyToManyField(Employee, related_name='projects_owned', null=False, blank=False)
     team_members = models.ManyToManyField(Employee, related_name='projects_team_member', null=False, blank=False)

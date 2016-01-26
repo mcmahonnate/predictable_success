@@ -2,11 +2,11 @@ angular
     .module('projects')
     .controller('AddProjectController', AddProjectController);
 
-function AddProjectController(ProjectsService, Notification, EmployeeSearch, $modalInstance) {
+function AddProjectController(project, ProjectsService, Notification, EmployeeSearch, $modalInstance) {
     var vm = this;
     vm.project = {
         name: null,
-        description: null,
+        description: '',
         owners: [],
         sponsors: [],
         team_members: [],
@@ -26,14 +26,37 @@ function AddProjectController(ProjectsService, Notification, EmployeeSearch, $mo
     activate()
 
     function activate() {
+        if (project) {
+            loadProject();
+        }
         getEmployees();
         getCriteria();
+    }
+
+    function loadProject() {
+        vm.project = angular.copy(project);
+        vm.selectedOwners = angular.copy(project.owners);
+        vm.selectedSponsors = angular.copy(project.sponsors);
+        vm.selectedTeamMembers = angular.copy(project.team_members);
+        vm.project.owners = [];
+        vm.project.sponsors = [];
+        vm.project.team_members = [];
     }
 
     function getCriteria() {
         ProjectsService.getCurrentCriteria()
             .then(function (data) {
                 vm.ruleSet = data.criteria;
+                if (vm.project.scores) {
+                    angular.forEach(vm.ruleSet, function (rule) {
+                        angular.forEach(vm.project.scores, function (score) {
+                            if (rule.id == score.criteria_id) {
+                                rule.selected = score.id;
+                            }
+                        });
+                    });
+                    vm.project.scores = [];
+                }
                 return vm.ruleSet;
         });
     }
@@ -58,25 +81,34 @@ function AddProjectController(ProjectsService, Notification, EmployeeSearch, $mo
 
     function save() {
         for(var i=0; i < vm.selectedOwners.length; i++) {
-            vm.project.owners.push(vm.selectedOwners[i].pk);
+            var pk = vm.selectedOwners[i].pk ? vm.selectedOwners[i].pk : vm.selectedOwners[i].id;
+            vm.project.owners.push(pk);
         }
         for(var i=0; i < vm.selectedSponsors.length; i++) {
-            vm.project.sponsors.push(vm.selectedSponsors[i].pk);
+            var pk = vm.selectedSponsors[i].pk ? vm.selectedSponsors[i].pk : vm.selectedSponsors[i].id
+            vm.project.sponsors.push(pk);
         }
         for(var i=0; i < vm.selectedTeamMembers.length; i++) {
-            vm.project.team_members.push(vm.selectedTeamMembers[i].pk);
+            var pk = vm.selectedTeamMembers[i].pk ? vm.selectedTeamMembers[i].pk : vm.selectedTeamMembers[i].id;
+            vm.project.team_members.push(pk);
         }
         angular.forEach(vm.ruleSet, function (rule) {
             if (rule.selected) {
                 vm.project.scores.push(rule.selected);
             }
         });
-
-        ProjectsService.save(vm.project)
-            .then(function(project) {
-                console.log(project.name);
-                Notification.success(project.name + ' was created.')
-                $modalInstance.close(project)
-        });
+        if (vm.project.id) {
+            ProjectsService.update(vm.project)
+                .then(function (project) {
+                    Notification.success(project.name + ' was saved.')
+                    $modalInstance.close(project)
+                });
+        } else {
+            ProjectsService.save(vm.project)
+                .then(function (project) {
+                    Notification.success(project.name + ' was created.')
+                    $modalInstance.close(project)
+                });
+        }
     }
 }
