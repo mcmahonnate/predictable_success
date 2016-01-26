@@ -21,7 +21,7 @@ class ScoringOption(models.Model):
         max_length=255,
     )
     criteria = models.ForeignKey(ScoringCriteria, related_name='options')
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
     value = models.IntegerField(default=0)
 
     def __unicode__(self):
@@ -44,7 +44,7 @@ class Project(models.Model):
     name = models.CharField(
         max_length=255,
     )
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
     sponsors = models.ManyToManyField(Employee, related_name='projects_sponsored', null=False, blank=False)
     owners = models.ManyToManyField(Employee, related_name='projects_owned', null=False, blank=False)
     team_members = models.ManyToManyField(Employee, related_name='projects_team_member', null=False, blank=False)
@@ -73,7 +73,7 @@ class PrioritizationRuleManager(models.Manager):
 class PrioritizationRule(models.Model):
     objects = PrioritizationRuleManager()
     date = models.DateTimeField(null=False, blank=False, default=datetime.now)
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
     criteria = models.ManyToManyField(ScoringCriteria, related_name='rules', null=False, blank=False)
 
     def __unicode__(self):

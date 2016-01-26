@@ -9,6 +9,7 @@ class CreateProjectSerializer(serializers.ModelSerializer):
     owners = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all(), many=True)
     team_members = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all(), many=True)
     scores = serializers.PrimaryKeyRelatedField(queryset=ScoringOption.objects.all(), many=True)
+    description = serializers.CharField(required=False, allow_blank=True, allow_null=True)
 
     class Meta:
         model = Project
@@ -20,6 +21,13 @@ class ProjectSerializer(serializers.ModelSerializer):
     owners = SanitizedEmployeeSerializer(required=False, many=True)
     team_members = SanitizedEmployeeSerializer(required=False, many=True)
     comments = CommentSerializer(required=False, many=True)
+    description = serializers.SerializerMethodField()
+
+    def get_description(self, obj):
+        if obj.description is None:
+            return ''
+        else:
+            return obj.description
 
     class Meta:
         model = Project

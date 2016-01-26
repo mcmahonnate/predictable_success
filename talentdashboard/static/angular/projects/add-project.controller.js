@@ -68,15 +68,14 @@ function AddProjectController(ProjectsService, Notification, EmployeeSearch, $mo
         }
         angular.forEach(vm.ruleSet, function (rule) {
             if (rule.selected) {
-                console.log(rule.selected);
                 vm.project.scores.push(rule.selected);
             }
         });
 
-        console.log(vm.project);
         ProjectsService.save(vm.project)
             .then(function(project) {
-                Notification.success('%s was created.' % project.name)
+                console.log(project.name);
+                Notification.success(project.name + ' was created.')
                 $modalInstance.close(project)
         });
     }
