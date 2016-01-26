@@ -4,6 +4,17 @@ from ..models import *
 from blah.api.serializers import CommentSerializer
 
 
+class CreateProjectSerializer(serializers.ModelSerializer):
+    sponsors = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all(), many=True)
+    owners = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all(), many=True)
+    team_members = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all(), many=True)
+    scores = serializers.PrimaryKeyRelatedField(queryset=ScoringOption.objects.all(), many=True)
+
+    class Meta:
+        model = Project
+        fields = ['id', 'name', 'description', 'sponsors', 'owners', 'team_members', 'scores']
+
+
 class ProjectSerializer(serializers.ModelSerializer):
     sponsors = SanitizedEmployeeSerializer(required=False, many=True)
     owners = SanitizedEmployeeSerializer(required=False, many=True)

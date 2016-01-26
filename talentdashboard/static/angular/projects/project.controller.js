@@ -29,7 +29,7 @@ function ProjectController(ProjectsService, Comment, Notification, analytics, $l
                 vm.project = data;
                 vm.comments = vm.project.comments;
             }, function(error){
-                    Notification.success("Sorry we had a problem opening this project.");
+                    Notification.error("Sorry we had a problem opening this project.");
             }
         );
     }

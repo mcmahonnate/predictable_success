@@ -9,16 +9,22 @@ from ..models import *
 from talentdashboard.views.views import StandardResultsSetPagination
 
 
-# CheckIn views
 class CreateProject(ListCreateAPIView):
-    """ Create a CheckIn via POST.
+    """ Create a Project via POST.
     """
-    serializer_class = ProjectSerializer
+    serializer_class = CreateProjectSerializer
     permission_classes = (IsAuthenticated,)
     queryset = Project.objects.all()
 
     def perform_create(self, serializer):
-        serializer.save(host=self.request.user.employee)
+        serializer.save()
+
+
+class ProjectList(ListAPIView):
+    serializer_class = ProjectSerializer
+    permission_classes = (IsAuthenticated,)
+    queryset = Project.objects.all()
+
 
 class ProjectsByOwner(ListAPIView):
     serializer_class = ProjectSerializer

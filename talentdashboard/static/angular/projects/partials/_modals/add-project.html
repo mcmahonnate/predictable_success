@@ -7,14 +7,14 @@
                 <p class="modal-subtext">Give your project a name and a description.</p>
                 <input
                     name="projectName"
-                    ng-model="addProject.name"
+                    ng-model="addProject.project.name"
                     style="max-width:350px; margin-bottom: 25px;"
                     class="form-control edit-textarea"
                     placeholder="Project Name"
                     />
                 <input
                     name="projectDescription"
-                    ng-model="addProject.description"
+                    ng-model="addProject.project.description"
                     style="max-width:350px; margin-bottom: 25px;"
                     class="form-control edit-textarea"
                     placeholder="Project Description"
@@ -23,7 +23,7 @@
         </div>    
         <div class="modal-footer">
             <button type="button" ng-click="addProject.cancel()" data-dismiss="modal" class="btn btn-light pull-left">Cancel</button>
-            <button ng-show="addProject.panel_index<3" ng-disabled="!addProject.name" type="button" class="btn btn-success" ng-click="addProject.stepNext()">Add People &rarr;</button>
+            <button ng-show="addProject.panel_index<3" ng-disabled="!addProject.project.name" type="button" class="btn btn-success" ng-click="addProject.stepNext()">Add People &rarr;</button>
         </div>
     </div>
     <div class="form-group" ng-show="addProject.panel_index==1">
@@ -101,8 +101,8 @@
                 <h3 class="modal-title">Score</h3>
                 <div style="margin: 15px 0" ng-repeat="rule in addProject.ruleSet">
                     <label class="control-label pull-left">{{rule.name}}:</label><br/>
-                    <select class="form-control" name="singleSelect" ng-model="data.singleSelect">
-                        <option ng-repeat="option in rule.options" value="{{option.value}}">{{option.name}}</option>
+                    <select class="form-control" name="singleSelect" ng-model="rule.selected">
+                        <option ng-repeat="option in rule.options" value="{{option.id}}">{{option.name}}</option>
                     </select>
                 </div>
             </panel>

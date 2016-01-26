@@ -42,7 +42,8 @@ function ProjectsResource($resource) {
             isArray: true
         },
         'save': {
-            method: 'POST'
+            method: 'POST',
+            url: '/api/v1/projects/add/'
         },
         'update': {
             method: 'PUT'
