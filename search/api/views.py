@@ -56,7 +56,7 @@ def _find_employees(request, **kwargs):
         'happiness': request.QUERY_PARAMS.getlist('happiness', None),
         'vops': request.QUERY_PARAMS.get('vops', None),
         'page': 1,
-        'rows': 500
+        'rows': 500,
     }
     filters.update(kwargs)
     sanitize = not(request.user.has_perm('org.view_employees'))

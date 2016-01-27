@@ -97,9 +97,10 @@ class EmployeeIndex(object):
             'sort': 'full_name asc',
             'rows': rows,
             'start': self._get_start(page, rows),
-            'fq': self._get_filters(tenant, talent_categories=talent_categories, team_ids=team_ids,
-                                    happiness=happiness, coach_ids=coach_ids, leader_ids=leader_ids),
+            'fq': self._get_filters(tenant, talent_categories=talent_categories, team_ids=team_ids, happiness=happiness,
+                                    coach_ids=coach_ids, leader_ids=leader_ids),
         }
+
         if sanitize:
             query.update({'fl':'pk, first_name, last_name, full_name, avatar_small, avatar'})
         if vops:
@@ -241,5 +242,4 @@ class EmployeeIndex(object):
         self._add_filters(filters, 'happiness', happiness)
         self._add_filters(filters, 'leader_id', leader_ids)
         self._add_filters(filters, 'coach_id', coach_ids)
-        self._add_filters(filters, 'display', ['true'] if display else ['false'])
         return filters
