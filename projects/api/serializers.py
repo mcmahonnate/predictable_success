@@ -18,13 +18,17 @@ class CreateUpdateProjectSerializer(serializers.ModelSerializer):
 
 class ScoringOptionSerializer(serializers.ModelSerializer):
     criteria_id = serializers.SerializerMethodField()
+    criteria_name = serializers.SerializerMethodField()
 
     def get_criteria_id(self, obj):
         return obj.criteria.id
 
+    def get_criteria_name(self, obj):
+        return obj.criteria.name
+
     class Meta:
         model = ScoringOption
-        fields = ('id', 'name', 'description', 'value', 'criteria_id')
+        fields = ('id', 'name', 'description', 'value', 'criteria_id', 'criteria_name')
 
 
 class ScoringCriteriaSerializer(serializers.ModelSerializer):

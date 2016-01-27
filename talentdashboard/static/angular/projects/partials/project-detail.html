@@ -1,30 +1,22 @@
 <div class="container project">
-    <h1 class="page-title">
+    <h1 class="page-title" style="margin: 10px 0px 25px;display: inline-block">
         <a href="#/projects">Projects</a>  &raquo; {{ viewProject.project.name }}
     </h1>
+    <button type="button" ng-click="viewProject.editProject()" class="btn btn-light pull-right"><i class="fa fa-pencil-square-o"></i> Edit</button>
     <div class="project-summary panel">
-        <div class="pull-right" ng-show="!viewProject.showSummaryEdit" style="margin-left: 20px;">
-            <i class="fa fa-cog show-popover"></i>
-            <ul class="popover-items" style="display:none">
-                <li class="popover-item">
-                    <a ng-click="viewProject.editProject()" class="edit"><i class="fa fa-pencil-square-o"></i> Edit</a>
-                </li>
-            </ul>
-        </div>
-    	<div ng-hide="viewProject.showSummaryEdit">
+        <h3 class="modal-title">Description</h3>
+    	<div>
     		<!-- preserve white space and newlines -->
     		<span class="project-summary-instance">{{ viewProject.project.description }}</span>
     	</div>
-	    <div ng-show="viewProject.showSummaryEdit">
-            <textarea 
-               	ng-bind-html="viewProject.project.description" ng-model="viewProject.project.description" class="form-control edit-textarea" style="min-height:250px;">
-            </textarea>
-            <div>
-                <button class="btn" ng-click="viewProject.showSummaryEdit=false">Cancel</button>
-        	    <button class="btn btn-success pull-right" ng-click="viewProject.saveSummary(viewProject.project);">Save Edits</button>
-            </div>
-        </div>
 	</div>
+    <div class="panel" style="overflow:hidden;">
+        <h3 class="modal-title">Score</h3>
+        <div style="margin: 15px 0" ng-repeat="score in viewProject.project.scores">
+            <label class="control-label pull-left"><strong>{{score.criteria_name}}:</strong></label><br/>
+            {{ score.value }} - {{ score.name }}
+        </div>
+    </div>
     <div class="panel" style="overflow:hidden;" ng-show="viewProject.project.owners.length > 0">
         <div>
             <h4 class="panel-title">Owners</h4>

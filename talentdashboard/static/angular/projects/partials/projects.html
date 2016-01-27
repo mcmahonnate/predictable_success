@@ -18,6 +18,7 @@
                     <th scope="col" class="width-10-percent">Name</th>
                     <th scope="col" class="width-40-percent">Summary</th>
                     <th scope="col" class="width-15-percent">Owners</th>
+                    <th scope="col" class="width-15-percent">Score</th>
                     <th scope="col" class="width-10-percent centered">Action</th>
                 </tr>
             </thead>
@@ -32,6 +33,7 @@
                             </span>
                         </span>
                     </td>
+                    <td>{{ project.total_score }}</td>
                     <td class="centered">
                         <a class="btn btn-default btn-md give-feedback-btn" ng-href="#/projects/{{ project.id }}" type="button">
                             <i class="fa fa-eye"></i> View Project
