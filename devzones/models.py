@@ -2,7 +2,6 @@ from django.db import models
 from org.models import Employee
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
-from random import choice
 
 
 class QuestionManager(models.Manager):
@@ -52,6 +51,12 @@ class Question(models.Model):
     def answers(self):
         return self._answers.order_by('?')
 
+    def has_siblings(self):
+        if self.previous_question and self.previous_question.next_questions:
+            if self.previous_question.next_questions.count > 1:
+                return True
+        return False
+
     def __str__(self):
         return self.text
 
@@ -62,6 +67,18 @@ class Zone(models.Model):
     )
     description = models.TextField(blank=True, default='')
     value = models.IntegerField(default=0)
+    tie_breaker = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        if self.tie_breaker:
+            try:
+                zone = Zone.objects.get(tie_breaker=True)
+                if self != zone:
+                    zone.tie_breaker = False
+                    zone.save()
+            except Zone.DoesNotExist:
+                pass
+        super(Zone, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
@@ -82,6 +99,7 @@ class EmployeeZone(models.Model):
     answers = models.ManyToManyField(Answer, related_name='+', null=True, blank=True)
     zone = models.ForeignKey(Zone, related_name='+', null=True, blank=True)
     new_employee = models.BooleanField(default=False)
+    completed = models.BooleanField(default=False)
     last_question_answered = models.ForeignKey(Question, related_name='+', null=True, blank=True)
 
     def next_question(self):
