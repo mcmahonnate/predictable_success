@@ -1,13 +1,56 @@
 from django.db import models
 from org.models import Employee
-import datetime
+from datetime import datetime, date
+from dateutil.relativedelta import relativedelta
+from random import choice
+
+
+class QuestionManager(models.Manager):
+    def get_next_question(self, employee_zone):
+        #get the last question answered
+        last_question_answered = employee_zone.last_question_answered
+
+        #if we have no answers start with the first question
+        if last_question_answered is None:
+            return self.get_first_question(employee_zone)
+        previous_question = last_question_answered.previous_question
+        if previous_question is None:
+            #if we have no previous question get the next question(s)
+            next_questions = last_question_answered.next_questions
+        else:
+            #get any of the previous question's next questions that have not been answered
+            next_questions = previous_question.next_questions.exclude(id__in=employee_zone.answers.values_list('question__id', flat=True))
+            if next_questions.count == 0:
+                #if we don't have any get the next question(s)
+                next_questions = last_question_answered.next_questions
+
+        if next_questions.count > 1:
+            #if we have multiple next questions get the next one at random
+            return next_questions.order_by('?').first()
+        elif next_questions.count == 1:
+            #if we only have one next question return it
+            return next_questions[0]
+        else:
+            #if we don't have anymore questions left return None
+            return None
+
+        return self.filter()
+
+    def get_first_question(self, employee_zone):
+        question = self.get(previous_question__isnull=True, for_new_employees=employee_zone.new_employee)
+        return question
 
 
 class Question(models.Model):
+    objects = QuestionManager()
     text = models.TextField()
     randomize_answers = models.BooleanField(default=False)
     previous_question = models.ForeignKey('Question', related_name='next_questions', null=True, blank=True)
     randomize_next_questions = models.BooleanField(default=False)
+    for_new_employees = models.BooleanField(default=False)
+
+    def answers(self):
+        return self._answers.order_by('?')
 
     def __str__(self):
         return self.text
@@ -27,7 +70,7 @@ class Zone(models.Model):
 class Answer(models.Model):
     text = models.TextField(blank=True, default='')
     zone = models.ForeignKey(Zone, related_name='+', null=True, blank=True)
-    question = models.ForeignKey(Question, related_name='answers', null=True)
+    question = models.ForeignKey(Question, related_name='_answers', null=True)
 
     def __str__(self):
         return self.text
@@ -35,9 +78,20 @@ class Answer(models.Model):
 
 class EmployeeZone(models.Model):
     employee = models.ForeignKey(Employee, related_name='development_zone')
-    date = models.DateTimeField(null=False, blank=False, default=datetime.datetime.now)
-    answers = models.ManyToManyField(Answer, related_name='+', null=False, blank=False)
+    date = models.DateTimeField(null=False, blank=False, default=datetime.now)
+    answers = models.ManyToManyField(Answer, related_name='+', null=True, blank=True)
     zone = models.ForeignKey(Zone, related_name='+', null=True, blank=True)
+    new_employee = models.BooleanField(default=False)
+    last_question_answered = models.ForeignKey(Question, related_name='+', null=True, blank=True)
+
+    def next_question(self):
+        return Question.objects.get_next_question(self)
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            if date.today() < (self.employee.hire_date + relativedelta(months=3)):
+                self.new_employee = True
+        super(EmployeeZone, self).save(*args, **kwargs)
 
     def __str__(self):
-        return "%s %s %s" % (self.employee.full_name, self.zone.name, self.date)
+        return "%s %s" % (self.employee.full_name, self.date)
