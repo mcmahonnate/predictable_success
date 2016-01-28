@@ -1,8 +1,5 @@
 from rest_framework.generics import *
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
-from rest_framework.response import Response
-from ..models import *
+from rest_framework.permissions import IsAuthenticated
 from .serializers import *
 from .permissions import *
 
@@ -13,7 +10,19 @@ class CreateEmployeeZone(CreateAPIView):
     permission_classes = (IsAuthenticated,)
 
 
-class RetrieveUpdateEmployeeZone(RetrieveUpdateAPIView):
+class RetrieveEmployeeZone(RetrieveAPIView):
     serializer_class = EmployeeZoneSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, UserIsEmployeeOfEmployeeZone)
     queryset = EmployeeZone.objects.all()
+
+    def get_employee_zone(self):
+        try:
+            return self.get_object()
+        except EmployeeZone.DoesNotExist:
+            raise Http404()
+
+
+class UpdateEmployeeZone(UpdateAPIView):
+    queryset = EmployeeZone.objects.all()
+    permission_classes = (IsAuthenticated, )
+    serializer_class = UpdateEmployeeZoneSerializer

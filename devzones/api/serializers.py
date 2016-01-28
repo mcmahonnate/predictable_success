@@ -37,7 +37,17 @@ class EmployeeZoneSerializer(serializers.ModelSerializer):
     employee = SanitizedEmployeeSerializer()
     zone = ZoneSerializer()
     next_question = QuestionSerializer()
+    answers = AnswerSerializer(many=True)
 
     class Meta:
         model = EmployeeZone
-        fields = ('id', 'employee', 'next_question', 'zone')
+        fields = ('id', 'employee', 'next_question', 'zone', 'notes', 'answers')
+        
+        
+class UpdateEmployeeZoneSerializer(serializers.ModelSerializer):
+    next_question = serializers.PrimaryKeyRelatedField(queryset=Question.objects.all())
+    answers = serializers.PrimaryKeyRelatedField(queryset=Answer.objects.all(), many=True)
+
+    class Meta:
+        model = EmployeeZone
+        fields = ('id', 'next_question', 'answers', 'notes')

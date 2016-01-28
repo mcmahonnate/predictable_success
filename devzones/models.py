@@ -101,6 +101,7 @@ class EmployeeZone(models.Model):
     new_employee = models.BooleanField(default=False)
     completed = models.BooleanField(default=False)
     last_question_answered = models.ForeignKey(Question, related_name='+', null=True, blank=True)
+    notes = models.TextField(blank=True, default='')
 
     def next_question(self):
         return Question.objects.get_next_question(self)
