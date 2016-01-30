@@ -37,7 +37,8 @@ class EmployeeZoneSerializer(serializers.ModelSerializer):
     employee = SanitizedEmployeeSerializer()
     zone = ZoneSerializer()
     next_question = QuestionSerializer()
-    answers = AnswerSerializer(many=True)
+    answers = serializers.PrimaryKeyRelatedField(queryset=Answer.objects.all(), many=True)
+    #retaken_count =
 
     class Meta:
         model = EmployeeZone
@@ -45,9 +46,9 @@ class EmployeeZoneSerializer(serializers.ModelSerializer):
         
         
 class UpdateEmployeeZoneSerializer(serializers.ModelSerializer):
-    next_question = serializers.PrimaryKeyRelatedField(queryset=Question.objects.all())
+    last_question_answered = serializers.PrimaryKeyRelatedField(queryset=Question.objects.all())
     answers = serializers.PrimaryKeyRelatedField(queryset=Answer.objects.all(), many=True)
 
     class Meta:
         model = EmployeeZone
-        fields = ('id', 'next_question', 'answers', 'notes')
+        fields = ('id', 'last_question_answered', 'answers')

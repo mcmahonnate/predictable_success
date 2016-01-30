@@ -15,13 +15,14 @@ var app = angular.module('tdb', [
         'tdb.search.controllers', 'tdb.search.services',
         'tdb.tasks.controllers', 'tdb.tasks.services',
         'angular.filter',
-        'feedback', 'checkins', 'projects',
+        'checkins', 'devzones', 'feedback', 'projects',
         'angular-carousel', 'analytics', 'ui.bootstrap', 'ngCsv','ngImgCrop', 'ngRoute', 'ngAnimate', 'ui-notification', 'ngMessages', 'readMore', 'ngCookies', 'ui.select', 'selectize','ngTouch'])
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.
             when('/', {templateUrl: '/static/angular/partials/feedback/index.html', controller: 'FeedbackController as feedback', resolve: {authorizeRoute: authorizeRoute}}).
             when('/checkins/:checkinId', {templateUrl: '/static/angular/checkins/partials/checkin-detail.html', controller: 'CheckInController as viewCheckin', resolve: {authorizeRoute: authorizeRoute}}).
             when('/checkins', {templateUrl: '/static/angular/checkins/partials/checkins.html', controller: 'CheckInsController as myCheckins', resolve: {authorizeRoute: authorizeRoute}}).
+            when('/devzones', {templateUrl: '/static/angular/devzones/partials/devzones.html', controller: 'DevZonesController as devzones', resolve: {authorizeRoute: authorizeRoute}}).
             when('/engagement-survey/:employeeId/:surveyId', {templateUrl: '/static/angular/partials/engagement-survey.html', controller: 'EngagementSurveyCtrl'}).
             when('/feedback/request/:id/reply', {templateUrl: '/static/angular/partials/feedback/respond_to_request.html', controller: 'RespondToFeedbackRequestController as submitFeedback', resolve: {authorizeRoute: authorizeRoute}}).
             when('/feedback/submit', {templateUrl: '/static/angular/partials/feedback/unsolicited_feedback.html', controller: 'UnsolicitedFeedbackController as submitFeedback', resolve: {authorizeRoute: authorizeRoute}}).

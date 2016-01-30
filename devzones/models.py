@@ -9,7 +9,7 @@ class QuestionManager(models.Manager):
         #get the last question answered
         last_question_answered = employee_zone.last_question_answered
 
-        #if we have no answers start with the first question
+        #if we have not answered any questions start with the first question
         if last_question_answered is None:
             return self.get_first_question(employee_zone)
         previous_question = last_question_answered.previous_question
@@ -19,16 +19,13 @@ class QuestionManager(models.Manager):
         else:
             #get any of the previous question's next questions that have not been answered
             next_questions = previous_question.next_questions.exclude(id__in=employee_zone.answers.values_list('question__id', flat=True))
-            if next_questions.count == 0:
+            if next_questions.count() == 0:
                 #if we don't have any get the next question(s)
                 next_questions = last_question_answered.next_questions
 
-        if next_questions.count > 1:
-            #if we have multiple next questions get the next one at random
+        if next_questions.count() > 0:
+            #get the next question at random
             return next_questions.order_by('?').first()
-        elif next_questions.count == 1:
-            #if we only have one next question return it
-            return next_questions[0]
         else:
             #if we don't have anymore questions left return None
             return None
@@ -53,7 +50,7 @@ class Question(models.Model):
 
     def has_siblings(self):
         if self.previous_question and self.previous_question.next_questions:
-            if self.previous_question.next_questions.count > 1:
+            if self.previous_question.next_questions.count() > 1:
                 return True
         return False
 
@@ -93,7 +90,12 @@ class Answer(models.Model):
         return self.text
 
 
+class EmployeeZoneManager(models.Manager):
+    def get_unfinished(self, employee):
+        return self.get(employee=employee, completed=False)
+
 class EmployeeZone(models.Model):
+    objects = EmployeeZoneManager()
     employee = models.ForeignKey(Employee, related_name='development_zone')
     date = models.DateTimeField(null=False, blank=False, default=datetime.now)
     answers = models.ManyToManyField(Answer, related_name='+', null=True, blank=True)
@@ -105,6 +107,15 @@ class EmployeeZone(models.Model):
 
     def next_question(self):
         return Question.objects.get_next_question(self)
+
+    def all_questions_answered(self):
+        if self.last_question_answered.has_siblings():
+            previous_question = self.last_question_answered.previous_question
+            questions_answered_ids = self.answers.values_list('question__id', flat=True)
+            sibling_ids = previous_question.next_questions.values_list('id', flat=True)
+            return set(sibling_ids).issubset(questions_answered_ids)
+        else:
+            return self.last_question_answered.next_questions.count() == 0
 
     def save(self, *args, **kwargs):
         if not self.pk:

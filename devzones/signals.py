@@ -7,7 +7,7 @@ from django.db.models import Count
 @receiver(m2m_changed, sender=EmployeeZone.answers.through)
 def employee_zone_save_handler(sender, instance, action, **kwargs):
     if action == 'post_add':
-        if not instance.completed and instance.next_question() is None and instance.answers.count() > 0:
+        if not instance.completed and instance.all_questions_answered() and instance.answers.count() > 0:
             if not instance.last_question_answered.has_siblings():
                 last_answers = instance.answers.filter(question__id=instance.last_question_answered.id)
             else:

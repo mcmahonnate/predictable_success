@@ -16,6 +16,7 @@ class Customer(TenantMixin):
     show_shareable_checkins = models.BooleanField(default=False)
     show_feedback = models.BooleanField(default=False)
     show_projects = models.BooleanField(default=False)
+    show_devzones = models.BooleanField(default=False)
     survey_email_subject = models.CharField(
         max_length=255,
         blank=True,
@@ -28,6 +29,7 @@ class Customer(TenantMixin):
     feedback_tips = models.TextField(blank=True)
     checkin_welcome = models.TextField(default="Welcome, we hope you like our new checkin feature. It's a safe place to ask for help from your Coach or Team Lead. The best part is, it's just between you and them. &mdash;The Scoutmap Team")
     projects_welcome = models.TextField(default="Welcome, we hope you like our new projects feature. It's a safe place to ask for help from your Coach or Team Lead. The best part is, it's just between you and them. &mdash;The Scoutmap Team")
+    devzones_welcome = models.TextField(default="Welcome to Development Zones, this is the place to let us know where you think you are on your development path. The information you share here will be used to help us find ways to help you on your professional development. &mdash;The Scoutmap Team")
 
     def is_public_tenant(self):
         return self.schema_name == 'public'
