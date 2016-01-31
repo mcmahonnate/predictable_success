@@ -9,6 +9,8 @@
         vm.cancel = cancel;
         vm.startSelfie = startSelfie;
         vm.answerQuestion = answerQuestion;
+        vm.startOver = startOver;
+        vm.clickedStartOver = false;
         vm.employee = $rootScope.currentUser.employee;
         vm.selectedAnswer = null;
         vm.selfie = null;
@@ -16,6 +18,7 @@
         activate();
 
         function activate() {
+            getUnfinishedSelfie();
         }
 
 
@@ -23,31 +26,47 @@
             $modalInstance.dismiss();
         }
 
-        function startSelfie() {
-            vm.panel_index = 2;
+        function getUnfinishedSelfie() {
             DevZoneService.getUnfinished()
                 .then(function(selfie){
                     vm.selfie = selfie;
-                }, function(error){
-                    DevZoneService.saveEmployeeZone({employee: vm.employee.id})
-                        .then(function(selfie){
-                            vm.selfie = selfie;
-                    })
+                }
+            )
+        }
+
+        function startSelfie() {
+            vm.panel_index = 2;
+            if (!vm.selfie) {
+                DevZoneService.saveEmployeeZone({employee: vm.employee.id})
+                    .then(function(selfie){
+                        vm.selfie = selfie;
+                })
+            }
+        }
+
+        function answerQuestion(answer) {
+            vm.selfie.last_question_answered = vm.selfie.next_question.id;
+            vm.selfie.answers.push(answer.id);
+            DevZoneService.updateEmployeeZone(vm.selfie)
+                .then(function(selfie){
+                    vm.selectedAnswer = null;
+                    vm.selfie = selfie;
                 }
             );
         }
 
-        function answerQuestion() {
-            vm.selfie.last_question_answered = vm.selfie.next_question.id
-            vm.selfie.answers.push(vm.selectedAnswer.id);
-            console.log(vm.selfie);
+        function startOver() {
+            vm.selfie.last_question_answered = null;
+            vm.selfie.answers = [];
             DevZoneService.updateEmployeeZone(vm.selfie)
                 .then(function(selfie){
+                    vm.panel_index=0;
+                    vm.clickedStartOver = true;
+                    vm.selectedAnswer=null;
                     vm.selfie = selfie;
-                    console.log('answered');
-                    console.log(vm.selfie);
                 }
             );
         }
+
 
     }

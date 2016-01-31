@@ -19,5 +19,4 @@ def employee_zone_save_handler(sender, instance, action, **kwargs):
             else:
                 zone_id = zone_count[0]['zone']
                 instance.zone = Zone.objects.get(id=zone_id)
-            instance.completed = True
             instance.save()
