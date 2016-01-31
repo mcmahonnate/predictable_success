@@ -68,7 +68,7 @@
             </panel>
         </div>
         <div class="modal-footer">
-            <button type="button" ng-click="selfie.cancel()" data-dismiss="modal" class="btn btn-light pull-left">Cancel</button>
+            <button type="button" ng-click="selfie.close()" data-dismiss="modal" class="btn btn-light">Save &amp; Close</button>
             <button type="button" ng-show="selfie.selfie.next_question.answers.length>1" class="btn btn-success" ng-disabled="!selfie.selectedAnswer" ng-click="selfie.answerQuestion(selfie.selectedAnswer)">Next &rarr;</button>
             <button type="button" ng-show="selfie.selfie.next_question.answers.length==1" class="btn btn-success" ng-click="selfie.answerQuestion(selfie.selfie.next_question.answers[0])">Next &rarr;</button>
         </div>
@@ -81,7 +81,7 @@
             </panel>
         </div>
         <div class="modal-footer">
-            <button type="button" ng-click="selfie.cancel()" data-dismiss="modal" class="btn btn-light pull-left">Cancel</button>
+            <button type="button" ng-click="selfie.close()" data-dismiss="modal" class="btn btn-light">Save &amp; Close</button>
             <button type="button" class="btn btn-success" ng-click="selfie.panel_index=3">Next &rarr;</button>
         </div>
     </div>
@@ -109,18 +109,25 @@
         </div>
         <div class="modal-footer">
             <button type="button" ng-click="selfie.panel_index=2" class="btn btn-light pull-left">&larr; Back</button>
+            <button type="button" ng-click="selfie.close()" data-dismiss="modal" class="btn btn-light">Save &amp; Close</button>
             <button type="button" class="btn btn-success" ng-disabled="!selfie.selectedAnswer" ng-click="selfie.panel_index=selfie.selectedAnswer">Next &rarr;</button>
         </div>
     </div>
     <div class="form-group" ng-show="selfie.panel_index==4">
         <div class="modal-body">
             <panel class="devzone">
-                <p>Okay.If you would like to add some context to your response, you can do so here. We’d love to hear how you think you’re doing in your own words.</p>
-                <textarea style="min-height:120px;" class="form-control" cols="30" rows="5" ng-model="selfie.selfie.notes" placeholder="Add some context to your response."></textarea>
+                <p>Okay! To summarize, here’s what we have for you right now.</p>
+                <div class="well">
+                    <h3 class="modal-title">{{ selfie.selfie.zone.name }}</h3>
+                    <p>{{ selfie.selfie.zone.description }}</p>
+                </div>
+                <p>What's next?  Your zone and notes will be shared with the Org Dev team.Your zone will also be visible to your manager, coach, and senior leadership.  <a ng-click="selfie.showWhoCanSeeThis(currentUser.employee.id, true)">Who is that exactly?</a></p>
             </panel>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-success" ng-click="selfie.submitSelfie()">Next &rarr;</button>
+            <button type="button" ng-click="selfie.panel_index=3" class="btn btn-light pull-left">&larr; Back</button>
+            <button type="button" ng-click="selfie.close()" data-dismiss="modal" class="btn btn-light">Save &amp; Close</button>
+            <button type="button" class="btn btn-success" ng-click="selfie.panel_index=6">Next &rarr;</button>
         </div>
     </div>
     <div class="form-group" ng-show="selfie.panel_index==5">
@@ -131,7 +138,20 @@
             </panel>
         </div>
         <div class="modal-footer">
+            <button type="button" ng-click="selfie.panel_index=3" class="btn btn-light pull-left">&larr; Back</button>
             <button type="button" class="btn btn-success" ng-click="selfie.startOver()">Start Over &rarr;</button>
+        </div>
+    </div>
+    <div class="form-group" ng-show="selfie.panel_index==6">
+        <div class="modal-body">
+            <panel class="devzone">
+                <p>If you would like, before you share, you can add some context to your result. We’d love to hear how you think you’re doing in your own words.</p>
+                <textarea style="min-height:120px;" class="form-control" cols="30" rows="5" ng-model="selfie.selfie.notes" placeholder="Add some context to your response."></textarea>
+            </panel>
+        </div>
+        <div class="modal-footer">
+            <button type="button" ng-click="selfie.panel_index=4" class="btn btn-light pull-left">&larr; Back</button>
+            <button type="button" class="btn btn-success" ng-click="selfie.finish()">Submit</button>
         </div>
     </div>
 </form>

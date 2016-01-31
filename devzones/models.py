@@ -92,7 +92,10 @@ class Answer(models.Model):
 
 class EmployeeZoneManager(models.Manager):
     def get_unfinished(self, employee):
-        return self.get(employee=employee, completed=False)
+        try:
+            return self.get(employee=employee, completed=False)
+        except EmployeeZone.DoesNotExist:
+            return None
 
 class EmployeeZone(models.Model):
     objects = EmployeeZoneManager()

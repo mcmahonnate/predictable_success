@@ -2,14 +2,17 @@
         .module('devzones')
         .controller('SelfieController', SelfieController);
 
-    function SelfieController(DevZoneService, Notification, $modalInstance, $rootScope) {
+    function SelfieController(DevZoneService, Notification, $modal, $modalInstance, $rootScope) {
         var vm = this;
 
         vm.panel_index = 0;
         vm.cancel = cancel;
+        vm.close = close;
         vm.startSelfie = startSelfie;
         vm.answerQuestion = answerQuestion;
         vm.startOver = startOver;
+        vm.showWhoCanSeeThis = showWhoCanSeeThis;
+        vm.finish = finish;
         vm.clickedStartOver = false;
         vm.employee = $rootScope.currentUser.employee;
         vm.selectedAnswer = null;
@@ -26,21 +29,30 @@
             $modalInstance.dismiss();
         }
 
+        function close() {
+            $modalInstance.close()
+            Notification.success('Your progress has been saved.')
+        }
+
         function getUnfinishedSelfie() {
             DevZoneService.getUnfinished()
                 .then(function(selfie){
+
                     vm.selfie = selfie;
                 }
             )
         }
 
         function startSelfie() {
-            vm.panel_index = 2;
             if (!vm.selfie) {
                 DevZoneService.saveEmployeeZone({employee: vm.employee.id})
-                    .then(function(selfie){
+                    .then(function (selfie) {
                         vm.selfie = selfie;
-                })
+                        vm.panel_index = 2;
+                    })
+            }
+            else {
+                vm.panel_index = 2
             }
         }
 
@@ -69,5 +81,30 @@
             );
         }
 
+        function finish() {
+            DevZoneService.updateEmployeeZone({id: vm.selfie.id, notes: vm.selfie.notes, completed: true})
+                .then(function(selfie){
+                    vm.selfie = selfie;
+                    Notification.success('Your selfie has been submitted.')
+                    $modalInstance.close(selfie);
+                }
+            );
+        }
 
+        function showWhoCanSeeThis(employee_id, employee_view) {
+            $modal.open({
+                animation: true,
+                backdrop: 'static',
+                templateUrl: '/static/angular/partials/_modals/who-can-see-this.html',
+                controller: 'SupportTeamCtrl',
+                resolve: {
+                    employee_view: function () {
+                        return employee_view
+                    },
+                    employee_id: function () {
+                        return employee_id
+                    }
+                }
+        });
+    }
     }
