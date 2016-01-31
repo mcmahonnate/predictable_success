@@ -58,6 +58,7 @@
         function startOver() {
             vm.selfie.last_question_answered = null;
             vm.selfie.answers = [];
+            vm.selfie.zone = null;
             DevZoneService.updateEmployeeZone(vm.selfie)
                 .then(function(selfie){
                     vm.panel_index=0;

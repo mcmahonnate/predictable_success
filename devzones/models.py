@@ -115,7 +115,11 @@ class EmployeeZone(models.Model):
             sibling_ids = previous_question.next_questions.values_list('id', flat=True)
             return set(sibling_ids).issubset(questions_answered_ids)
         else:
-            return self.last_question_answered.next_questions.count() == 0
+            try:
+                answer = self.answers.get(question__id=self.last_question_answered.id)
+                return answer.zone is not None
+            except Answer.DoesNoExist:
+                return self.last_question_answered.next_questions.count() == 0
 
     def save(self, *args, **kwargs):
         if not self.pk:
