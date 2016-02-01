@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from dateutil import parser
 from serializers import *
 from org.models import Employee
-from org.api.permissions import UserIsEmployee, UserIsEmployeesCoach
+from org.api.permissions import UserIsEmployee, UserIsCoachOfEmployee
 from ..models import FeedbackRequest, FeedbackProgressReport, FeedbackProgressReports, FeedbackDigest, EmployeeFeedbackReports, EmployeeSubmissionReport
 from permissions import UserIsEmployeeOrDigestDeliverer, UserIsSubjectOrReviewerOrCoach
 
@@ -179,7 +179,7 @@ def employee_submission_report(request):
 
 class CoachUpdateFeedbackSubmission(generics.UpdateAPIView):
     queryset = FeedbackSubmission.objects.all()
-    permission_classes = (IsAuthenticated, UserIsEmployeesCoach,)
+    permission_classes = (IsAuthenticated, UserIsCoachOfEmployee,)
     serializer_class = CoachEditFeedbackSubmissionSerializer
 
     def get_employee(self):
@@ -258,7 +258,7 @@ class ShareFeedbackDigest(GenericAPIView):
 
 
 class RetrieveUpdateCurrentFeedbackDigest(APIView):
-    permission_classes = (IsAuthenticated, UserIsEmployeesCoach)
+    permission_classes = (IsAuthenticated, UserIsCoachOfEmployee)
 
     def get_employee(self):
         try:
@@ -294,7 +294,7 @@ class RetrieveUpdateCurrentFeedbackDigest(APIView):
 
 
 class AddRemoveDigestSubmission(APIView):
-    permission_classes = (IsAuthenticated, UserIsEmployeesCoach)
+    permission_classes = (IsAuthenticated, UserIsCoachOfEmployee)
 
     def get_employee(self):
         try:

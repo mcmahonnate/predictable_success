@@ -91,6 +91,9 @@ class Answer(models.Model):
 
 
 class EmployeeZoneManager(models.Manager):
+    def get_all_finished_for_employee(self, employee):
+        return self.filter(employee=employee, completed=True)
+
     def get_unfinished(self, employee):
         try:
             return self.get(employee=employee, completed=False)

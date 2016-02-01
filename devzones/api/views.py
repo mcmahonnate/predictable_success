@@ -1,8 +1,8 @@
+from org.api.permissions import UserIsEmployeeOrLeaderOrCoachOfEmployee, UserIsEmployee
 from rest_framework.generics import *
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .serializers import *
-from .permissions import *
 
 
 # CheckIn views
@@ -13,12 +13,29 @@ class CreateEmployeeZone(CreateAPIView):
 
 class RetrieveEmployeeZone(RetrieveAPIView):
     serializer_class = EmployeeZoneSerializer
-    permission_classes = (IsAuthenticated, UserIsEmployeeOfEmployeeZone)
+    permission_classes = (IsAuthenticated, UserIsEmployeeOrLeaderOrCoachOfEmployee)
     queryset = EmployeeZone.objects.all()
+
+    def get_employee(self):
+        zone = self.get_employee_zone()
+        return zone.employee
 
     def get_employee_zone(self):
         try:
             return self.get_object()
+        except EmployeeZone.DoesNotExist:
+            raise Http404()
+
+
+class RetrieveMyEmployeeZones(ListAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = EmployeeZoneSerializer
+
+    def get_queryset(self):
+        try:
+            employee = self.request.user.employee
+            zones = EmployeeZone.objects.get_all_finished_for_employee(employee=employee)
+            return zones
         except EmployeeZone.DoesNotExist:
             raise Http404()
 
@@ -37,8 +54,12 @@ class RetrieveUnfinishedEmployeeZone(RetrieveAPIView):
 
 class UpdateEmployeeZone(RetrieveUpdateAPIView):
     queryset = EmployeeZone.objects.all()
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, UserIsEmployee)
     serializer_class = UpdateEmployeeZoneSerializer
+
+    def get_employee(self):
+        zone = self.get_object()
+        return zone.employee
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
