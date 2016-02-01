@@ -7,10 +7,6 @@ function DevZoneResource($resource) {
         'get': {
             method: 'GET'
         },
-        'query': {
-            method: 'GET',
-            isArray: true
-        },
         'save': {
             method: 'POST',
             url: '/api/v1/devzones/selfies/start/'
@@ -22,6 +18,11 @@ function DevZoneResource($resource) {
         'getUnfinished': {
             method: 'GET',
             url: '/api/v1/devzones/selfies/unfinished/'
+        },
+        'getMyZones': {
+            method: 'GET',
+            url: '/api/v1/devzones/selfies/',
+            isArray: true
         }
     };
     return $resource('/api/v1/devzones/:id/', null, actions);

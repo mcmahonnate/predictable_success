@@ -3,17 +3,16 @@
     <div class="form-group" ng-show="selfie.panel_index==0 && (!selfie.selfie || selfie.clickedStartOver)">
         <div class="modal-body">
             <panel class="checkin">
-
                 <h3 class="modal-title">Welcome to the DevZone quiz!</h3>
-                <p>Thank you for taking the time to participate.</p>
-                <p>This quiz is designed to help you with two things:
+                <p>Thank you for taking the time to participate.</p>
+                <p>This quiz is designed to help you with two things:
                     <ol style="list-style: decimal;padding-left: 20px;">
-                        <li>Identify how you think you’re doing here at the Fool.</li>
+                        <li>Identify how you think you're doing here at the Fool.</li>
                         <li>Give you an opportunity to share your current thoughts about your development with your team leader, coach, the Org Dev team, and Fool Squad.</li>
                     </ol>
                 </p>
                 <p>
-                    This is an opportunity to think about how you’re doing, share some of those insights with others, and open up a dialogue about how the Fool can better support you. It’s not a formal performance review.
+                    This is an opportunity to think about how you're doing, share some of those insights with others, and open up a dialogue about how the Fool can better support you. It's not a formal performance review.
                 </p>
             </panel>
         </div>    
@@ -99,7 +98,7 @@
                 </div>
                 <div class="selfie-answer well well-sm" style="display:flex" ng-class="{'selfie-answer-selected': selfie.selectedAnswer==5, 'selfie-answer':selfie.selectedAnswer!=5}" ng-click="selfie.selectedAnswer=5">
                     <div class="selfie-answer-label" style="width: 91%;">
-                        <h4><strong>This doesn’t feel right at all. I’d like to take the quiz again.</strong></h4>
+                        <h4><strong>This doesn't feel right at all. I'd like to take the quiz again.</strong></h4>
                     </div>
                     <div style="margin: auto 0px;">
                         <i class="fa fa-check-circle-o selected-icon" ng-show="selfie.selectedAnswer==5"></i>
@@ -116,7 +115,7 @@
     <div class="form-group" ng-show="selfie.panel_index==4">
         <div class="modal-body">
             <panel class="devzone">
-                <p>Okay! To summarize, here’s what we have for you right now.</p>
+                <p>Okay! To summarize, here's what we have for you right now.</p>
                 <div class="well">
                     <h3 class="modal-title">{{ selfie.selfie.zone.name }}</h3>
                     <p>{{ selfie.selfie.zone.description }}</p>
@@ -133,7 +132,7 @@
     <div class="form-group" ng-show="selfie.panel_index==5">
         <div class="modal-body">
             <panel class="devzone">
-                <p>Not a problem. Let’s go back to the beginning.</p>
+                <p>Not a problem. Let's go back to the beginning.</p>
 
             </panel>
         </div>
@@ -145,7 +144,7 @@
     <div class="form-group" ng-show="selfie.panel_index==6">
         <div class="modal-body">
             <panel class="devzone">
-                <p>If you would like, before you share, you can add some context to your result. We’d love to hear how you think you’re doing in your own words.</p>
+                <p>If you would like, before you share, you can add some context to your result. We'd love to hear how you think you're doing in your own words.</p>
                 <textarea style="min-height:120px;" class="form-control" cols="30" rows="5" ng-model="selfie.selfie.notes" placeholder="Add some context to your response."></textarea>
             </panel>
         </div>

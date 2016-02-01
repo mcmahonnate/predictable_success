@@ -10,13 +10,22 @@ function DevZonesController(DevZoneService, Notification, analytics, $location, 
     var vm = this;
     vm.showEmptyScreen = false;
     vm.welcome = $sce.trustAsHtml($rootScope.customer.devzones_welcome);
+    vm.mySelfies = [];
     vm.submitDevZone = submitDevZone;
 
     activate();
 
     function activate() {
-
+        getMySelfies();
     };
+
+    function getMySelfies() {
+        DevZoneService.getMyEmployeeZones()
+            .then(function(selfies){
+                vm.mySelfies = selfies;
+            }
+        )
+    }
 
     function submitDevZone() {
         var modalInstance = $modal.open({

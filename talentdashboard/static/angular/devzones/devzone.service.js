@@ -7,7 +7,8 @@ function DevZoneService($http, $log, DevZoneResource) {
         getEmployeeZone: getEmployeeZone,
         saveEmployeeZone: saveEmployeeZone,
         updateEmployeeZone: updateEmployeeZone,
-        getUnfinished: getUnfinished
+        getUnfinished: getUnfinished,
+        getMyEmployeeZones: getMyEmployeeZones
     };
 
     function getEmployeeZone(employeeZoneId) {
@@ -56,6 +57,18 @@ function DevZoneService($http, $log, DevZoneResource) {
 
         function fail(response) {
             $log.error('getUnfinished failed');
+        }
+    }
+
+    function getMyEmployeeZones() {
+        return DevZoneResource.getMyZones({id: 'my'}, success, fail).$promise;
+
+        function success(response) {
+            return response;
+        }
+
+        function fail(response) {
+            $log.error('getMyZones failed');
         }
     }
 }
