@@ -1,5 +1,5 @@
 <div class="panel new-comment">
-    <h2 class="panel-title">Add Comment</h2>
+    <h2 class="panel-title">Add a Note</h2>
     <form name="addCommentForm">
         <textarea class="form-control" ng-model="newComment.content" name="content" ng-class="{'expand': comment.expandTextArea, 'compress': !comment.expandTextArea}" ng-click="comment.expandTextArea=true;toggleCommentTextExpander(comment)" rows="1" cols="40" placeholder="Add a comment about {{employee.full_name}}..."></textarea>
         <div class="visibility" style="display:none;">

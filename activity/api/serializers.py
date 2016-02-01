@@ -92,7 +92,7 @@ class EventSerializer(serializers.ModelSerializer):
         checkin_type = ContentType.objects.get_for_model(CheckIn)
         feedback_digest_type = ContentType.objects.get_for_model(FeedbackDigest)
         if obj.event_type.id is comment_type.id:
-            return 'commented'
+            return 'wrote a note'
         elif obj.event_type.id is feedback_digest_type.id:
             return 'delivered feedback'
         elif obj.event_type.id is checkin_type.id:
