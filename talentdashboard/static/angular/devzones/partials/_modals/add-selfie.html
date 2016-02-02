@@ -3,22 +3,15 @@
     <div class="form-group" ng-show="selfie.panel_index==0 && (!selfie.selfie || selfie.clickedStartOver)">
         <div class="modal-body">
             <panel class="checkin">
-                <h3 class="modal-title">Welcome to the DevZone quiz!</h3>
-                <p>Thank you for taking the time to participate.</p>
-                <p>This quiz is designed to help you with two things:
-                    <ol style="list-style: decimal;padding-left: 20px;">
-                        <li>Identify how you think you're doing here at the Fool.</li>
-                        <li>Give you an opportunity to share your current thoughts about your development with your team leader, coach, the Org Dev team, and Fool Squad.</li>
-                    </ol>
-                </p>
-                <p>
-                    This is an opportunity to think about how you're doing, share some of those insights with others, and open up a dialogue about how the Fool can better support you. It's not a formal performance review.
-                </p>
+                <h3 class="modal-title">Selfie Introduction</h3>
+                <p>This series of questions will lead you to one of 5 development zones. If you aren’t happy with where it ends up you can retake it if you like. At the end, you’ll also have the opportunity to share your current thoughts about your development.</p>
+                <p>This isn’t designed for perfection, instead it is directional. This is a chance for you to tell your team leaders where you might be on your development journey and open up a dialogue about how the Fool can better support you.</p>
+                <p>This is only our second time trying this process of self-reporting, so enjoy and please give feedback or ask questions.</p>
             </panel>
         </div>    
         <div class="modal-footer">
             <button type="button" ng-click="selfie.cancel()" data-dismiss="modal" class="btn btn-light pull-left">Cancel</button>
-            <button type="button" class="btn btn-success" ng-click="selfie.panel_index=1">I have more questions</button>
+            <button ng-show="false" type="button" class="btn btn-success" ng-click="selfie.panel_index=1">I have more questions</button>
             <button type="button" class="btn btn-success" ng-click="selfie.startSelfie()">Get Started &rarr;</button>
         </div>
     </div>

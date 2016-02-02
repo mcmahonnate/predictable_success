@@ -62,7 +62,8 @@ class Zone(models.Model):
     name = models.CharField(
         max_length=255,
     )
-    description = models.TextField(blank=True, default='')
+    short_description = models.TextField(blank=True, default='')
+    long_description = models.TextField(blank=True, default='')
     value = models.IntegerField(default=0)
     tie_breaker = models.BooleanField(default=False)
 
@@ -100,9 +101,11 @@ class EmployeeZoneManager(models.Manager):
         except EmployeeZone.DoesNotExist:
             return None
 
+
 class EmployeeZone(models.Model):
     objects = EmployeeZoneManager()
-    employee = models.ForeignKey(Employee, related_name='development_zone')
+    assessor = models.ForeignKey(Employee, related_name='+')
+    employee = models.ForeignKey(Employee, related_name='development_zones')
     date = models.DateTimeField(null=False, blank=False, default=datetime.now)
     answers = models.ManyToManyField(Answer, related_name='+', null=True, blank=True)
     zone = models.ForeignKey(Zone, related_name='+', null=True, blank=True)
@@ -135,3 +138,32 @@ class EmployeeZone(models.Model):
 
     def __str__(self):
         return "%s %s" % (self.employee.full_name, self.date)
+
+
+class ConversationManager(models.Manager):
+    def get_conversations_for_lead(self, development_lead):
+        return self.filter(development_lead=development_lead, completed=False)
+
+
+class Conversation(models.Model):
+    objects = ConversationManager()
+    employee = models.ForeignKey(Employee, related_name='development_conversations')
+    development_lead = models.ForeignKey(Employee, related_name='people_ive_had_development_conversations_about')
+    employee_assessment = models.OneToOneField(EmployeeZone, related_name='development_conversation', null=True, blank=True)
+    development_lead_assessment = models.OneToOneField(EmployeeZone, related_name='+', null=True, blank=True)
+    completed = models.BooleanField(default=False)
+
+    def __str__(self):
+        return "%s's development conversation about %s" % (self.development_lead.full_name, self.employee.full_name)
+
+
+class Advice(models.Model):
+    employee_zone = models.ForeignKey(Zone, related_name='+')
+    development_lead_zone = models.ForeignKey(Zone, related_name='+')
+    advice_name_for_employee = models.CharField(max_length=255, blank=True, default='')
+    advice_description_for_employee = models.TextField(blank=True, default='')
+    advice_name_for_development_leader = models.CharField(max_length=255, blank=True, default='')
+    advice_description_for_development_leader = models.TextField(blank=True, default='')
+
+    def __str__(self):
+        return "Advice when employee says %s and lead says %s" % (self.employee_zone.name, self.development_lead_zone.name)

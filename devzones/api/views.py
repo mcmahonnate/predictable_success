@@ -69,3 +69,16 @@ class UpdateEmployeeZone(RetrieveUpdateAPIView):
         self.perform_update(serializer)
         serializer = EmployeeZoneSerializer(instance, context={'request': request})
         return Response(serializer.data)
+
+
+class RetrieveMyConversations(ListAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ConversationSerializer
+
+    def get_queryset(self):
+        try:
+            employee = self.request.user.employee
+            zones = Conversation.objects.get_conversations_for_lead(development_lead=employee)
+            return zones
+        except Conversation.DoesNotExist:
+            raise Http404()

@@ -22,7 +22,7 @@ class ZoneSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Zone
-        fields = ('id', 'name', 'description')
+        fields = ('id', 'name', 'short_description', 'long_description')
 
 
 class CreateEmployeeZoneSerializer(serializers.ModelSerializer):
@@ -61,3 +61,14 @@ class UpdateEmployeeZoneSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmployeeZone
         fields = ('id', 'last_question_answered', 'answers', 'zone', 'notes', 'completed', 'date')
+
+
+class ConversationSerializer(serializers.ModelSerializer):
+    employee = SanitizedEmployeeSerializer()
+    development_lead = SanitizedEmployeeSerializer()
+    employee_assessment = EmployeeZoneSerializer()
+    development_lead_assessment = EmployeeZoneSerializer()
+
+    class Meta:
+        model = Conversation
+        fields = ('id', 'employee', 'development_lead', 'employee_assessment', 'development_lead_assessment', 'completed')
