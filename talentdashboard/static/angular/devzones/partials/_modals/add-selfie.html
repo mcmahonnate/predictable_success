@@ -12,7 +12,7 @@
         <div class="modal-footer">
             <button type="button" ng-click="selfie.cancel()" data-dismiss="modal" class="btn btn-light pull-left">Cancel</button>
             <button ng-show="false" type="button" class="btn btn-success" ng-click="selfie.panel_index=1">I have more questions</button>
-            <button type="button" class="btn btn-success" ng-click="selfie.startSelfie()">Get Started &rarr;</button>
+            <button type="button" class="btn btn-success" ng-disabled="selfie.busy" ng-click="selfie.startSelfie()">Get Started &rarr;</button>
         </div>
     </div>
     <div class="form-group" ng-show="selfie.panel_index==0 && selfie.selfie && !selfie.clickedStartOver">
@@ -27,7 +27,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" ng-click="selfie.cancel()" data-dismiss="modal" class="btn btn-light pull-left">Cancel</button>
-            <button type="button" class="btn btn-success" ng-click="selfie.startSelfie()">Continue &rarr;</button>
+            <button type="button" ng-disabled="selfie.busy" class="btn btn-success" ng-click="selfie.startSelfie()">Continue &rarr;</button>
         </div>
     </div>
     <div class="form-group" ng-show="selfie.panel_index==1">
@@ -61,8 +61,8 @@
         </div>
         <div class="modal-footer">
             <button type="button" ng-click="selfie.close()" data-dismiss="modal" class="btn btn-light">Save &amp; Close</button>
-            <button type="button" ng-show="selfie.selfie.next_question.answers.length>1" class="btn btn-success" ng-disabled="!selfie.selectedAnswer" ng-click="selfie.answerQuestion(selfie.selectedAnswer)">Next &rarr;</button>
-            <button type="button" ng-show="selfie.selfie.next_question.answers.length==1" class="btn btn-success" ng-click="selfie.answerQuestion(selfie.selfie.next_question.answers[0])">Next &rarr;</button>
+            <button type="button" ng-show="selfie.selfie.next_question.answers.length==1" class="btn btn-success" ng-disabled="selfie.busy" ng-click="selfie.answerQuestion(selfie.selfie.next_question.answers[0])">Next &rarr;</button>
+            <button type="button" ng-show="selfie.selfie.next_question.answers.length>1" class="btn btn-success" ng-disabled="!selfie.selectedAnswer || selfie.busy" ng-click="selfie.answerQuestion(selfie.selectedAnswer)">Next &rarr;</button>
         </div>
     </div>
     <div class="form-group" ng-show="selfie.selfie.zone && selfie.panel_index>0 && selfie.panel_index<3">
@@ -102,7 +102,7 @@
         <div class="modal-footer">
             <button type="button" ng-click="selfie.panel_index=2" class="btn btn-light pull-left">&larr; Back</button>
             <button type="button" ng-click="selfie.close()" data-dismiss="modal" class="btn btn-light">Save &amp; Close</button>
-            <button type="button" class="btn btn-success" ng-disabled="!selfie.selectedAnswer" ng-click="selfie.panel_index=selfie.selectedAnswer">Next &rarr;</button>
+            <button type="button" class="btn btn-success" ng-disabled="!selfie.selectedAnswer || selfie.busy" ng-click="selfie.panel_index=selfie.selectedAnswer">Next &rarr;</button>
         </div>
     </div>
     <div class="form-group" ng-show="selfie.panel_index==4">
@@ -143,7 +143,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" ng-click="selfie.panel_index=4" class="btn btn-light pull-left">&larr; Back</button>
-            <button type="button" class="btn btn-success" ng-click="selfie.finish()">Submit</button>
+            <button type="button" ng-disabled="selfie.busy" class="btn btn-success" ng-click="selfie.finish()">Submit</button>
         </div>
     </div>
 </form>
