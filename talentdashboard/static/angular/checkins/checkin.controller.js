@@ -250,9 +250,10 @@ function CheckInController(CheckInsService, Comment, Employee, EmployeeSearch, H
         if ($window.confirm('Are you sure you want to delete this check-in?')) {
             var data = {id: checkin.id};
 
-            CheckIn.remove(data, function() {
-                $location.path("/checkin");
-                Notification.success("Successfully deleted check-in!");
+            CheckInsService.destroy(data)
+                .then(function() {
+                    $location.path("/checkins");
+                    Notification.success("Successfully deleted check-in!");
             });
         }
     };
