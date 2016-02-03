@@ -45,7 +45,7 @@
 
         function startSelfie() {
             if (!vm.selfie) {
-                DevZoneService.saveEmployeeZone({employee: vm.employee.id})
+                DevZoneService.saveEmployeeZone({employee: vm.employee.id, assessor: vm.employee.id})
                     .then(function (selfie) {
                         vm.selfie = selfie;
                         vm.panel_index = 2;

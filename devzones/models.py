@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 from org.models import Employee
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
@@ -62,8 +63,7 @@ class Zone(models.Model):
     name = models.CharField(
         max_length=255,
     )
-    short_description = models.TextField(blank=True, default='')
-    long_description = models.TextField(blank=True, default='')
+    description = models.TextField(blank=True, default='')
     value = models.IntegerField(default=0)
     tie_breaker = models.BooleanField(default=False)
 
@@ -114,6 +114,9 @@ class EmployeeZone(models.Model):
     last_question_answered = models.ForeignKey(Question, related_name='+', null=True, blank=True)
     notes = models.TextField(blank=True, default='')
 
+    def advice(self):
+        return Advice.objects.get_advice(employee_zone=self)
+
     def next_question(self):
         return Question.objects.get_next_question(self)
 
@@ -157,13 +160,32 @@ class Conversation(models.Model):
         return "%s's development conversation about %s" % (self.development_lead.full_name, self.employee.full_name)
 
 
+class AdviceManager(models.Manager):
+    def get_advice(self, employee_zone):
+        if employee_zone.zone is None:
+            return None
+        try:
+            if employee_zone.development_conversation is not None\
+                            and employee_zone.development_conversation.development_lead_assessment is not None\
+                            and employee_zone.development_conversation.development_lead_assessment.zone is not None:
+                        return self.filter(Q(employee_zone=employee_zone.zone) &
+                                           (Q(development_lead_zone__isnull=True) |
+                                            Q(employee_zone.development_conversation.development_lead_assessment.zone)))
+        except AttributeError:
+            pass
+        return self.filter(employee_zone=employee_zone.zone, development_lead_zone__isnull=True)
+
+
+
+
 class Advice(models.Model):
+    objects = AdviceManager()
     employee_zone = models.ForeignKey(Zone, related_name='+')
-    development_lead_zone = models.ForeignKey(Zone, related_name='+')
+    development_lead_zone = models.ForeignKey(Zone, related_name='+', blank=True, null=True)
     advice_name_for_employee = models.CharField(max_length=255, blank=True, default='')
     advice_description_for_employee = models.TextField(blank=True, default='')
     advice_name_for_development_leader = models.CharField(max_length=255, blank=True, default='')
     advice_description_for_development_leader = models.TextField(blank=True, default='')
 
     def __str__(self):
-        return "Advice when employee says %s and lead says %s" % (self.employee_zone.name, self.development_lead_zone.name)
+        return "Advice when employee says %s" % self.employee_zone.name
