@@ -6,4 +6,4 @@ class DevZonesConfig(AppConfig):
     verbose_name = 'DevZones'
 
     def ready(self):
-        import devzones.signals
+        pass

@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import Q
+from django.db.models import Count
 from org.models import Employee
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
@@ -117,21 +118,40 @@ class EmployeeZone(models.Model):
     def advice(self):
         return Advice.objects.get_advice(employee_zone=self)
 
+    def _calculate_zone(self):
+        if not self.completed and self.all_questions_answered() and self.answers.count() > 0:
+            if not self.last_question_answered.has_siblings():
+                last_answers = self.answers.filter(question__id=self.last_question_answered.id)
+            else:
+                last_answers = self.answers.filter(question__previous_question__id=self.last_question_answered.previous_question.id)
+            zone_count = last_answers.values('zone__name', 'zone').annotate(count=Count('zone__name')).order_by('-count')
+            if len(zone_count) > 1 and zone_count[0]['count'] == 1:
+                self.zone = Zone.objects.get(tie_breaker=True)
+            else:
+                zone_id = zone_count[0]['zone']
+                self.zone = Zone.objects.get(id=zone_id)
+            self.save()
+
     def next_question(self):
+        self._calculate_zone()
+        if self.completed:
+            return None
         return Question.objects.get_next_question(self)
 
     def all_questions_answered(self):
-        if self.last_question_answered.has_siblings():
-            previous_question = self.last_question_answered.previous_question
-            questions_answered_ids = self.answers.values_list('question__id', flat=True)
-            sibling_ids = previous_question.next_questions.values_list('id', flat=True)
-            return set(sibling_ids).issubset(questions_answered_ids)
-        else:
-            try:
-                answer = self.answers.get(question__id=self.last_question_answered.id)
-                return answer.zone is not None
-            except Answer.DoesNoExist:
-                return self.last_question_answered.next_questions.count() == 0
+        if self.last_question_answered is not None:
+            if self.last_question_answered.has_siblings():
+                previous_question = self.last_question_answered.previous_question
+                questions_answered_ids = self.answers.values_list('question__id', flat=True)
+                sibling_ids = previous_question.next_questions.values_list('id', flat=True)
+                return set(sibling_ids).issubset(questions_answered_ids)
+            else:
+                try:
+                    answer = self.answers.get(question__id=self.last_question_answered.id)
+                    return answer.zone is not None
+                except Answer.DoesNotExist:
+                    return self.last_question_answered.next_questions.count() == 0
+        return False
 
     def save(self, *args, **kwargs):
         if not self.pk:
