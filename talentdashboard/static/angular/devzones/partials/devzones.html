@@ -1,0 +1,37 @@
+<div id="devzones" class="container" data-hj-masked>
+    <div>
+        <a href="" data-toggle="modal" data-target=".devzones-welcome-modal" class="pull-right show-welcome-modal">Show welcome message</a>
+        <h1>Development Zones
+            <div class="button-group">
+                <button class="btn btn-success btn-feedback" ng-click="devzones.submitDevZone()" type="button"><i class="fa fa-comment"></i> <span class="hide-for-mobile">Take a </span>Selfie</button>
+            </div>
+        </h1>
+    </div>
+    <div class="panel panel-empty fade-in" ng-show="devzones.mySelfies.length==0">
+        <img class="grumpycat" src="../static/images/grumpycat.png" alt="Grumpy Cat" />
+        <h2>"Mmmmeeh... i see you don't have any activity yet. Use the button above or this link to
+            <a href="" ng-click="devzones.submitDevZone()">take a selfie</a>."
+        </h2>
+    </div>
+    <div class="panel" ng-show="devzones.mySelfies.length>0">
+        <table class="table responsive-table">
+            <caption class="panel-title">
+                My Selfies
+            </caption>
+            <thead>
+                <tr>
+                    <th scope="col" class="width-10-percent">Date</th>
+                    <th scope="col" class="width-10-percent">Zone</th>
+                    <th scope="col" class="width-40-percent">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="selfie in devzones.mySelfies | orderBy:'date':true">
+                    <td class="timeago">{{ selfie.date | fromNow }}</td>
+                    <td>{{ selfie.zone.name }}</td>
+                    <td>{{ selfie.zone.description }}</td>
+            </tbody>
+        </table>
+    </div>
+    <div ng-include="'/static/angular/devzones/partials/_modals/welcome-message.html'"></div>
+</div>

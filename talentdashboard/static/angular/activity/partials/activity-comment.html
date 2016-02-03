@@ -19,29 +19,34 @@
         <div class="activity-description">
             <a ng-href="#/employees/{{ event.user.employee.id }}" class="activity-title-employee-name">{{ event.user.employee.full_name }}</a>
             {{ event.verb }}
-            <span ng-show="event.type == 'comment'">on</span>
+            <span ng-show="event.type == 'comment'">about</span>
             <a ng-href="#/employees/{{ event.employee.id }}" class="activity-title-employee-name">{{ event.employee.full_name }}</a>
             <span class="timestamp" data-toggle="tooltip" data-placement="top" title="{{ event.date | date:'MMM d, yyyy h:mma' }}">{{ event.date | fromNow }}</span>
         </div>    
     </div>
 
     <!-- Comment -->
-    <div class="comment-copy" ng-show="!editMode">
-        <div class="avatar-container pull-right hide">
-            <a class="large-headshot" ng-show="view != 'employee-view'"
-               ng-href="#/employees/{{ event.employee.id }}">
-                <img ng-src="{{ event.employee.avatar_small }}" alt="{{ event.employee.full_name }}'s avatar" class="headshot-image"/>
-            </a>
-
-            <div class="employee-attribute">
+    <div class="activity-checkin row" ng-show="!editMode">
+        <div class="avatar-container col-xs-2">
+            <span class="large-headshot">
+                <img ng-src="{{ event.employee.avatar_small }}" alt="{{ event.employee.full_name }}" class="headshot-image"/>
+            </span>
+            <div class="employee-attribute" rel="tooltip" data-toggle="tooltip" data-placement="right"
+                 data-original-title="{{ talentCategories[event.employee.current_talent_category].label }}">
                 <span class="segment employee-segment-background-color-{{ event.employee.current_talent_category }}"></span>
             </div>
         </div>
-        <div class="activity-comment comment-text" ng-show="!editMode" read-more ng-model="event.description" words="false" length="400"></div> 
+        <div class="activity-checkin-details" ng-class="{'col-xs-12 col-sm-10': view='employee-view', 'col-xs-12 col-sm-10': view='team'}">
+            <div class="activity-checkin-type pull-right">
+                <div class="fa fa-pencil-square-o activity-icon"></div>
+            </div>
+            <h3 class="comment-title-employee-name"><strong><span class="sensitive-text">{{ event.employee.full_name }}</span></strong></h3>
+            <div class="activity-comment comment-text" ng-show="!editMode" read-more ng-model="event.description" words="false" length="400"></div>
+        </div>
     </div>
 
     <!-- Comment Editor -->
-    <div ng-show="editMode" class="comment-editor">
+    <div ng-show="editMode" class="activity-checkin row">
         <form name="commentEditForm">
             <div class="comment-reply-copy">
                 <textarea ng-model="editingComment.content" msd-elastic class="form-control edit-textarea"></textarea>

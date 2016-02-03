@@ -17,6 +17,12 @@
         <div role="menuitem" class="logo-container" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Home">
             <a href="#/"><img src="../static/images/compass-logo-white.png" class="logo" alt="Home" /></a>
         </div>
+        <div ng-show="customer.show_devzones" role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == devzonesTab}" ng-click="setActiveTab(devzonesTab)">
+            <div ng-click="gotoDevZones()">
+                <span class="fa fa-heartbeat team_menu nav-item-icon"></span>
+                ID
+            </div>
+        </div>
         <div ng-show="customer.show_shareable_checkins" role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == checkinTab}" ng-click="setActiveTab(checkinTab)">
             <div ng-click="gotoCheckIns()">
                 <span class="fa fa-check team_menu nav-item-icon"></span>

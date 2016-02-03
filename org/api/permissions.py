@@ -24,6 +24,19 @@ class PermissionsViewThisEmployee(permissions.BasePermission):
             return has_permission
 
 
+class PermissionsViewThisEmployeeOrAllEmployees(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.user.has_perm('org.view_employees'):
+            return True
+        else:
+            employee = view.get_employee()
+            requester = Employee.objects.get(user=request.user)
+            has_permission = requester.is_ancestor_of(employee)
+            if not has_permission and requester.id == employee.coach.id:
+                has_permission = True
+            return has_permission
+
+
 class UserIsEmployee(permissions.BasePermission):
     """ Ensures that the current user is the
     employee that the request is related to.
@@ -37,7 +50,7 @@ class UserIsEmployee(permissions.BasePermission):
         return request.user.employee == employee
 
 
-class UserIsEmployeesCoach(permissions.BasePermission):
+class UserIsCoachOfEmployee(permissions.BasePermission):
     """ Ensures that the current user is the coach of
     the employee that the request is related to.
 
@@ -61,3 +74,18 @@ class UserIsEmployeeOrCoachOfEmployee(permissions.BasePermission):
     def has_permission(self, request, view):
         employee = view.get_employee()
         return request.user.employee == employee.coach or request.user.employee == employee
+
+
+class UserIsEmployeeOrLeaderOrCoachOfEmployee(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.user.has_perm('org.view_employees'):
+            return True
+        else:
+            requester = Employee.objects.get(user=request.user)
+            employee = view.get_employee()
+            has_permission = requester.is_ancestor_of(employee)
+            if not has_permission and requester.id == employee.coach.id:
+                has_permission = True
+            elif not has_permission and requester.id == employee.id:
+                has_permission = True
+            return has_permission

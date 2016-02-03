@@ -92,7 +92,7 @@ function CheckInsService($http, $log, CheckInsResource) {
     }
 
     function destroy(checkin) {
-        return CheckInsResource.delete(checkin, success, fail).$promise;
+        return CheckInsResource.delete({id: checkin.id}, checkin, success, fail).$promise;
 
         function success(response) {
             return response.data;
