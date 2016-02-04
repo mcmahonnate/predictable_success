@@ -30,6 +30,21 @@
             </div>
         </div>
     </div>
+    <div class="panel panel-empty fade-in" ng-show="devzones.mySelfies.length==0">
+        <img class="grumpycat" src="../static/images/grumpycat.png" alt="Grumpy Cat" />
+        <h2>"Mmmmeeh... i see you don't have any activity yet.
+            <span ng-show="devzones.selfie && !devzones.selfie.completed">Use the button above or this link to
+                <a ng-click="devzones.submitDevZone()" type="button">
+                    <span ng-if="!devzones.selfie.answers.length>0">take your </span>
+                    <span ng-if="devzones.selfie.answers.length>0">finish your </span>
+                    Selfie."
+                </a>
+            </span>
+            <span ng-show="!devzones.selfie || devzones.selfie.completed">
+                Hang in there.
+            </span>
+        </h2>
+    </div>
     <div class="panel devzones" ng-show="devzones.mySelfies.length>0">
         <h2 class="panel-title ng-binding">Your Selfies</h2>
 
