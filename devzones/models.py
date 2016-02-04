@@ -164,17 +164,28 @@ class EmployeeZone(models.Model):
 
 
 class ConversationManager(models.Manager):
+    def get_current_for_employee(self, employee):
+        conversations = self.get_all_for_employee(employee=employee)
+        if conversations.count() > 0:
+            return conversations.latest('date')
+        return None
+
+    def get_all_for_employee(self, employee):
+        return self.filter(employee=employee)
+
     def get_conversations_for_lead(self, development_lead):
         return self.filter(development_lead=development_lead, completed=False)
 
 
 class Conversation(models.Model):
     objects = ConversationManager()
+    date = models.DateTimeField(null=False, blank=False, default=datetime.now)
     employee = models.ForeignKey(Employee, related_name='development_conversations')
     development_lead = models.ForeignKey(Employee, related_name='people_ive_had_development_conversations_about')
     employee_assessment = models.OneToOneField(EmployeeZone, related_name='development_conversation', null=True, blank=True)
     development_lead_assessment = models.OneToOneField(EmployeeZone, related_name='+', null=True, blank=True)
     completed = models.BooleanField(default=False)
+    completed_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return "%s's development conversation about %s" % (self.development_lead.full_name, self.employee.full_name)

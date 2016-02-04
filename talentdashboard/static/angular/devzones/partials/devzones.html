@@ -1,11 +1,30 @@
 <div id="devzones" class="container" data-hj-masked>
     <div>
         <a href="" data-toggle="modal" data-target=".devzones-welcome-modal" class="pull-right show-welcome-modal">Show welcome message</a>
-        <h1>Development Zones
-            <div class="button-group">
-                <button class="btn btn-success btn-feedback" ng-click="devzones.submitDevZone()" type="button"><i class="fa fa-comment"></i> <span class="hide-for-mobile">Take a </span>Selfie</button>
+        <h1>ID</h1>
+    </div>
+
+    <div ng-show="devzones.myConversation" ng-class="{'slide-up-active': hideMessage}" class="alert alert-success slide-up" role="alert">
+        <a class="btn btn-success btn-feedback pull-right" ng-click="devzones.submitDevZone()" type="button">
+            <i class="fa fa-comment"></i> <span class="hide-for-mobile">Take a </span>Selfie
+        </a>
+        <i class="fa fa-comment sent-icon"></i>
+        <h2 class="alert-title">Your ID Session is Coming Up!</h2>
+        <div class="alert-message">
+
+            <div>
+                <div class="avatar-container pull hide-for-mobile">
+                    <span class="large-headshot">
+                        <img ng-src="{{devzones.myConversation.development_lead.avatar}}" alt="{{devzones.myConversation.development_lead.full_name}}" class="headshot-image">
+                    </span>
+                </div>
+                <div style="width:80%">
+                    <div class="comment-text">
+                        {{ devzones.myConversation.development_lead.full_name }} is the Department lead taht will be representing you.
+                    </div>
+                </div>
             </div>
-        </h1>
+        </div>
     </div>
     <div class="panel panel-empty fade-in" ng-show="devzones.mySelfies.length==0">
         <img class="grumpycat" src="../static/images/grumpycat.png" alt="Grumpy Cat" />
@@ -14,24 +33,13 @@
         </h2>
     </div>
     <div class="panel" ng-show="devzones.mySelfies.length>0">
-        <table class="table responsive-table">
-            <caption class="panel-title">
-                My Selfies
-            </caption>
-            <thead>
-                <tr>
-                    <th scope="col" class="width-10-percent">Date</th>
-                    <th scope="col" class="width-10-percent">Zone</th>
-                    <th scope="col" class="width-40-percent">Description</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="selfie in devzones.mySelfies | orderBy:'date':true">
-                    <td class="timeago">{{ selfie.date | fromNow }}</td>
-                    <td>{{ selfie.zone.name }}</td>
-                    <td>{{ selfie.zone.description }}</td>
-            </tbody>
-        </table>
+
+                <div ng-repeat="selfie in devzones.mySelfies | orderBy:'date':true">
+                    <p class="timeago">{{ selfie.date | fromNow }}</p>
+                    <p>{{ selfie.zone.name }}</p>
+                    <p ng-repeat="advice in selfie.advice " ng-bind-html="advice.advice_description_for_employee"></p>
+                </div>
+
     </div>
     <div ng-include="'/static/angular/devzones/partials/_modals/welcome-message.html'"></div>
 </div>

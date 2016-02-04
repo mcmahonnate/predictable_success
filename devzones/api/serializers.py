@@ -83,4 +83,4 @@ class ConversationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Conversation
-        fields = ('id', 'employee', 'development_lead', 'employee_assessment', 'development_lead_assessment', 'completed')
+        fields = ('id', 'employee', 'date', 'development_lead', 'employee_assessment', 'development_lead_assessment', 'completed', 'completed_date')

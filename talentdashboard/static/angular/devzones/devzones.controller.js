@@ -11,14 +11,23 @@ function DevZonesController(DevZoneService, Notification, analytics, $location, 
     vm.showEmptyScreen = false;
     vm.welcome = $sce.trustAsHtml($rootScope.customer.devzones_welcome);
     vm.mySelfies = [];
+    vm.myConversation = null;
     vm.submitDevZone = submitDevZone;
 
     activate();
 
     function activate() {
+        getConversation();
         getMySelfies();
     };
 
+    function getConversation() {
+        DevZoneService.getMyConversation()
+            .then(function(conversation){
+                vm.myConversation = conversation;
+            }
+        )
+    };
     function getMySelfies() {
         DevZoneService.getMyEmployeeZones()
             .then(function(selfies){
@@ -42,7 +51,7 @@ function DevZonesController(DevZoneService, Notification, analytics, $location, 
         });
         modalInstance.result.then(
             function (selfie) {
-                //getActiveProjects();
+                vm.mySelfies.push(selfie);
             }
         );
     }

@@ -23,7 +23,12 @@ function DevZoneResource($resource) {
             method: 'GET',
             url: '/api/v1/devzones/selfies/',
             isArray: true
+        },
+        'getMyConversation': {
+            method: 'GET',
+            url: '/api/v1/devzones/conversations/current/'
         }
+
     };
     return $resource('/api/v1/devzones/:id/', null, actions);
 }
