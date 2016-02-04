@@ -2,9 +2,10 @@
         .module('devzones')
         .controller('SelfieController', SelfieController);
 
-    function SelfieController(DevZoneService, Notification, $modal, $modalInstance, $rootScope) {
+    function SelfieController(DevZoneService, Notification, selfie, $modal, $modalInstance, $rootScope) {
         var vm = this;
 
+        vm.selfie = selfie;
         vm.panel_index = 0;
         vm.busy = false;
         vm.cancel = cancel;
@@ -14,15 +15,13 @@
         vm.startOver = startOver;
         vm.showWhoCanSeeThis = showWhoCanSeeThis;
         vm.finish = finish;
-        vm.clickedStartOver = false;
         vm.employee = $rootScope.currentUser.employee;
         vm.selectedAnswer = null;
-        vm.selfie = null;
 
         activate();
 
         function activate() {
-            getUnfinishedSelfie();
+
         }
 
 
@@ -31,20 +30,8 @@
         }
 
         function close() {
-            $modalInstance.close()
+            $modalInstance.close(vm.selfie)
             Notification.success('Your progress has been saved.')
-        }
-
-        function getUnfinishedSelfie() {
-            vm.busy = true;
-            DevZoneService.getUnfinished()
-                .then(function(selfie){
-                    vm.selfie = selfie;
-                    vm.busy = false;
-                }, function(){
-                    vm.busy = false;
-                }
-            )
         }
 
         function startSelfie() {
@@ -84,7 +71,6 @@
             DevZoneService.updateEmployeeZone(vm.selfie)
                 .then(function(selfie){
                     vm.panel_index=0;
-                    vm.clickedStartOver = true;
                     vm.selectedAnswer=null;
                     vm.selfie = selfie;
                     vm.busy = false;
@@ -97,7 +83,7 @@
             DevZoneService.updateEmployeeZone({id: vm.selfie.id, notes: vm.selfie.notes, completed: true})
                 .then(function(selfie){
                     vm.selfie = selfie;
-                    Notification.success('Your selfie has been submitted.')
+                    Notification.success('Your selfie has been shared.')
                     $modalInstance.close(selfie);
                     vm.busy = false;
                 }

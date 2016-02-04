@@ -1,6 +1,5 @@
 <form id="selfie-modal" novalidate="novalidate">
-    <a class="close" ng-click="selfie.cancel()" data-dismiss="modal">&times;</a>
-    <div class="form-group" ng-show="selfie.panel_index==0 && (!selfie.selfie || selfie.clickedStartOver)">
+    <div class="form-group" ng-show="selfie.panel_index==0 && !selfie.selfie.answers.length>0">
         <div class="modal-body">
             <panel class="checkin">
                 <h3 class="modal-title">Selfie Introduction</h3>
@@ -15,13 +14,13 @@
             <button type="button" class="btn btn-success" ng-disabled="selfie.busy" ng-click="selfie.startSelfie()">Get Started &rarr;</button>
         </div>
     </div>
-    <div class="form-group" ng-show="selfie.panel_index==0 && selfie.selfie && !selfie.clickedStartOver">
+    <div class="form-group" ng-show="selfie.panel_index==0 && selfie.selfie.answers.length>0">
         <div class="modal-body">
             <panel class="checkin">
 
-                <h3 class="modal-title">Welcome to the DevZone quiz!</h3>
+                <h3 class="modal-title">Selfie</h3>
                 <p>
-                    We noticed you haven't finished your quiz yet. Click the button below to continue where you left off.
+                    Let's take you back to where you left off.
                 </p>
             </panel>
         </div>
@@ -68,8 +67,10 @@
     <div class="form-group" ng-show="selfie.selfie.zone && selfie.panel_index>0 && selfie.panel_index<3">
         <div class="modal-body">
             <panel class="devzone">
-                <h3 class="modal-title">{{ selfie.selfie.zone.name }}</h3>
-                <p>{{ selfie.selfie.zone.description }}</p>
+                <h3 class="modal-title">Ok great!</h3>
+                <p>We've got what we need. On the following screen we'll show you what we came up with for you.</p>
+                <p>If you don't agree with the results you'll have the opportunity to retake it.</p>
+                <p>Once you think your selfie results represent where you are on your development journey you'll be asked to share your results. You will also have the opportuntiy to add any comments you have before sharing it.</p>
             </panel>
         </div>
         <div class="modal-footer">
@@ -80,6 +81,11 @@
     <div class="form-group" ng-show="selfie.panel_index==3">
         <div class="modal-body">
             <panel class="devzone">
+                <h3 class="modal-title">Your Selfie Results</h3>
+                <div class="well">
+                    <h3 class="modal-title">{{ selfie.selfie.zone.name }}</h3>
+                    <p>{{ selfie.selfie.zone.description }}</p>
+                </div>
                 <p>Does this feel like an accurate description of how you're doing?</p>
                 <div class="selfie-answer well well-sm" style="display:flex" ng-class="{'selfie-answer-selected': selfie.selectedAnswer==4, 'selfie-answer':selfie.selectedAnswer!=4}" ng-click="selfie.selectedAnswer=4">
                     <div class="selfie-answer-label" style="width: 91%;">
@@ -94,13 +100,12 @@
                         <h4><strong>This doesn't feel right at all. I'd like to take the quiz again.</strong></h4>
                     </div>
                     <div style="margin: auto 0px;">
-                        <i class="fa fa-check-circle-o selected-icon" ng-show="selfie.selectedAnswer==5"></i>
+                        <i class="fa fa-check-circle-o selected-icon" ng-show="selfie.selectedAnswer==6"></i>
                     </div>
                 </div>
             </panel>
         </div>
         <div class="modal-footer">
-            <button type="button" ng-click="selfie.panel_index=2" class="btn btn-light pull-left">&larr; Back</button>
             <button type="button" ng-click="selfie.close()" data-dismiss="modal" class="btn btn-light">Save &amp; Close</button>
             <button type="button" class="btn btn-success" ng-disabled="!selfie.selectedAnswer || selfie.busy" ng-click="selfie.panel_index=selfie.selectedAnswer">Next &rarr;</button>
         </div>
@@ -108,18 +113,15 @@
     <div class="form-group" ng-show="selfie.panel_index==4">
         <div class="modal-body">
             <panel class="devzone">
-                <p>Okay! To summarize, here's what we have for you right now.</p>
-                <div class="well">
-                    <h3 class="modal-title">{{ selfie.selfie.zone.name }}</h3>
-                    <p>{{ selfie.selfie.zone.description }}</p>
-                </div>
-                <p>What's next?  Your zone and notes will be shared with the Org Dev team.Your zone will also be visible to your manager, coach, and senior leadership.  <a ng-click="selfie.showWhoCanSeeThis(currentUser.employee.id, true)">Who is that exactly?</a></p>
+                <h3 class="modal-title">Share Your Results</h3>
+                <p>Before sharing your selfie results add some context. We'd love to hear how you think you're doing in your own words.</p>
+                <textarea style="min-height:120px;" class="form-control" cols="30" rows="5" ng-model="selfie.selfie.notes" placeholder="Add some context to your selfie."></textarea>
+                <p>Your results will be shared with your manager, your coach, senior leadership and the org dev team.  <a ng-click="selfie.showWhoCanSeeThis(currentUser.employee.id, true)">Who is that exactly?</a>
             </panel>
         </div>
         <div class="modal-footer">
             <button type="button" ng-click="selfie.panel_index=3" class="btn btn-light pull-left">&larr; Back</button>
-            <button type="button" ng-click="selfie.close()" data-dismiss="modal" class="btn btn-light">Save &amp; Close</button>
-            <button type="button" class="btn btn-success" ng-click="selfie.panel_index=6">Next &rarr;</button>
+            <button type="button" ng-disabled="selfie.busy" class="btn btn-success" ng-click="selfie.finish()">Share</button>
         </div>
     </div>
     <div class="form-group" ng-show="selfie.panel_index==5">
@@ -134,16 +136,5 @@
             <button type="button" class="btn btn-success" ng-click="selfie.startOver()">Start Over &rarr;</button>
         </div>
     </div>
-    <div class="form-group" ng-show="selfie.panel_index==6">
-        <div class="modal-body">
-            <panel class="devzone">
-                <p>If you would like, before you share, you can add some context to your result. We'd love to hear how you think you're doing in your own words.</p>
-                <textarea style="min-height:120px;" class="form-control" cols="30" rows="5" ng-model="selfie.selfie.notes" placeholder="Add some context to your response."></textarea>
-            </panel>
-        </div>
-        <div class="modal-footer">
-            <button type="button" ng-click="selfie.panel_index=4" class="btn btn-light pull-left">&larr; Back</button>
-            <button type="button" ng-disabled="selfie.busy" class="btn btn-success" ng-click="selfie.finish()">Submit</button>
-        </div>
-    </div>
+
 </form>

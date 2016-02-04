@@ -8,11 +8,15 @@ function DevZonesController(DevZoneService, Notification, analytics, $location, 
     analytics.trackPage($scope, $location.absUrl(), location_url);
 
     var vm = this;
+    vm.busy = false;
     vm.showEmptyScreen = false;
+    vm.selfie = null;
     vm.welcome = $sce.trustAsHtml($rootScope.customer.devzones_welcome);
     vm.mySelfies = [];
     vm.myConversation = null;
     vm.submitDevZone = submitDevZone;
+    vm.requestCheckIn = requestCheckIn;
+    vm.requestFeedback = requestFeedback;
 
     activate();
 
@@ -22,12 +26,19 @@ function DevZonesController(DevZoneService, Notification, analytics, $location, 
     };
 
     function getConversation() {
+        vm.busy = true;
         DevZoneService.getMyConversation()
             .then(function(conversation){
                 vm.myConversation = conversation;
+                vm.selfie = conversation.employee_assessment;
+                vm.busy = false;
+            }, function(){
+                vm.busy = false;
             }
         )
     };
+
+
     function getMySelfies() {
         DevZoneService.getMyEmployeeZones()
             .then(function(selfies){
@@ -45,13 +56,53 @@ function DevZonesController(DevZoneService, Notification, analytics, $location, 
             controller: 'SelfieController as selfie',
             resolve: {
                     selfie: function () {
-                        return null
+                        return vm.selfie
                     }
             }
         });
         modalInstance.result.then(
             function (selfie) {
-                vm.mySelfies.push(selfie);
+                vm.selfie = selfie;
+                if (selfie.completed) {
+                    vm.mySelfies.push(selfie)
+                }
+            }
+        );
+    }
+
+    function requestCheckIn() {
+        var modalInstance = $modal.open({
+            animation: true,
+            windowClass: 'xx-dialog fade zoom',
+            backdrop: 'static',
+            templateUrl: '/static/angular/checkins/partials/_modals/request-checkin.html',
+            controller: 'RequestCheckInController as request',
+            resolve: {
+
+            }
+        });
+        modalInstance.result.then(
+            function (sentFeedbackRequests) {
+                $location.path("/checkins");
+            }
+        );
+    }
+
+    function requestFeedback() {
+        var modalInstance = $modal.open({
+            animation: true,
+            windowClass: 'xx-dialog fade zoom',
+            backdrop: 'static',
+            templateUrl: '/static/angular/partials/feedback/_modals/request-feedback.html',
+            controller: 'RequestFeedbackController as request',
+            resolve: {
+
+            }
+        });
+        modalInstance.result.then(
+            function (sentFeedbackRequests) {
+                 Notification.success('Your feedback request have been sent!')
+                $location.path("/feedback");
             }
         );
     }

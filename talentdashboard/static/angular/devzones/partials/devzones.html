@@ -4,23 +4,27 @@
         <h1>ID</h1>
     </div>
 
-    <div ng-show="devzones.myConversation" ng-class="{'slide-up-active': hideMessage}" class="alert alert-success slide-up" role="alert">
-        <a class="btn btn-success btn-feedback pull-right" ng-click="devzones.submitDevZone()" type="button">
-            <i class="fa fa-comment"></i> <span class="hide-for-mobile">Take a </span>Selfie
+    <div ng-show="devzones.myConversation && !devzones.busy " ng-class="{'slide-up-active': hideMessage}" class="alert alert-success slide-up" role="alert">
+        <a class="btn btn-success btn-feedback pull-right" ng-show="!devzones.selfie.completed" ng-click="devzones.submitDevZone()" type="button">
+            <i class="fa fa-comment"></i>
+            <span ng-if="!devzones.selfie.answers.length>0" class="hide-for-mobile">Take your </span>
+            <span ng-if="devzones.selfie.answers.length>0" class="hide-for-mobile">Finish your </span>
+            Selfie
         </a>
-        <i class="fa fa-comment sent-icon"></i>
         <h2 class="alert-title">Your ID Session is Coming Up!</h2>
-        <div class="alert-message">
+        <div class="alert-message" style="padding-left:0; padding-top: 10px">
 
             <div>
-                <div class="avatar-container pull hide-for-mobile">
+                <div class="avatar-container pull-left hide-for-mobile" style="padding-right:10px;">
                     <span class="large-headshot">
                         <img ng-src="{{devzones.myConversation.development_lead.avatar}}" alt="{{devzones.myConversation.development_lead.full_name}}" class="headshot-image">
                     </span>
                 </div>
-                <div style="width:80%">
+                <div style="width:80%;">
                     <div class="comment-text">
-                        {{ devzones.myConversation.development_lead.full_name }} is the Department lead taht will be representing you.
+                        ID sessions will begin in the next couple of weeks.  In your session we currently have {{ devzones.myConversation.development_lead.full_name }} representing you. If you don't think {{ devzones.myConversation.development_lead.first_name }} can adequately represent you please let us know.
+                        <span ng-show="!devzones.selfie.completed">In the meantime please take your selfie.</span>
+                        <span ng-show="devzones.selfie.completed">Thanks for completing your selfie!</span>
                     </div>
                 </div>
             </div>
@@ -32,13 +36,20 @@
             <a href="" ng-click="devzones.submitDevZone()">take a selfie</a>."
         </h2>
     </div>
-    <div class="panel" ng-show="devzones.mySelfies.length>0">
+    <div class="panel devzones" ng-show="devzones.mySelfies.length>0">
+        <h2 class="panel-title ng-binding">Your Selfies</h2>
 
-                <div ng-repeat="selfie in devzones.mySelfies | orderBy:'date':true">
-                    <p class="timeago">{{ selfie.date | fromNow }}</p>
-                    <p>{{ selfie.zone.name }}</p>
-                    <p ng-repeat="advice in selfie.advice " ng-bind-html="advice.advice_description_for_employee"></p>
-                </div>
+        <div class="well" ng-repeat="selfie in devzones.mySelfies | orderBy:'date':true">
+            <h3 class="modal-title">{{ selfie.zone.name }}</h3>
+            <span class="timeago">{{ selfie.date | fromNow }}</span>
+            <p ng-repeat="advice in selfie.advice " ng-bind-html="advice.advice_description_for_employee"></p>
+            <p class="advice-description"><strong>What else can I do?</strong></p>
+            <p class="advice-description">Don't forget you can always ask your peers for feedback or request a check-in from your Coach or Team Lead at anytime. Just click a button below to get started.</p>
+            <div class="button-group">
+                <button class="btn btn-success btn-feedback" ng-click="devzones.requestFeedback()" type="button"><i class="fa fa-send"></i> Ask for Feedback</button>
+                <button class="btn btn-success btn-feedback" ng-click="devzones.requestCheckIn()" type="button"><i class="fa fa-check"></i> Request Check-In</button>
+            </div>
+        </div>
 
     </div>
     <div ng-include="'/static/angular/devzones/partials/_modals/welcome-message.html'"></div>
