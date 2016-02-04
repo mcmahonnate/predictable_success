@@ -82,3 +82,14 @@ class RetrieveMyConversations(ListAPIView):
             return zones
         except Conversation.DoesNotExist:
             raise Http404()
+
+class RetrieveMyCurrentConversation(RetrieveAPIView):
+    permission_classes = (IsAuthenticated, )
+
+    def get(self, request, format=None):
+        employee = self.request.user.employee
+        conversation = Conversation.objects.get_current_for_employee(employee=employee)
+        if conversation is None:
+            raise Http404()
+        serializer = ConversationSerializer(conversation, context={'request': request})
+        return Response(serializer.data)

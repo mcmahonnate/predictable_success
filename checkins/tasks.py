@@ -67,7 +67,7 @@ def send_checkin_request_notification(checkin_request_id):
         'employee_full_name': checkin_request.requester.full_name,
         'response_url': response_url,
     }
-    subject = "%s would like you to check in with them" % checkin_request.requester.full_name
+    subject = "%s has requested a check in with you" % checkin_request.requester.full_name
     text_content = render_to_string('checkins/email/checkin_request_notification.txt', context)
     html_content = render_to_string('checkins/email/checkin_request_notification.html', context)
     msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
