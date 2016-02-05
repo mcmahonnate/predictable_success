@@ -15,6 +15,8 @@ function FeedbackController(FeedbackRequestService, FeedbackDigestService, Feedb
     vm.showEmptyScreen = false;
     vm.mySubmissions = [];
     vm.myHelpfulness = [];
+    vm.collapseFeedbackGiven = true;
+    vm.toggleCollapse = toggleCollapse;
     vm.requestFeedback = requestFeedback;
     vm.giveUnsolicitedFeedback = giveUnsolicitedFeedback;
     vm.welcome = $sce.trustAsHtml($rootScope.customer.feedback_welcome);
@@ -40,6 +42,9 @@ function FeedbackController(FeedbackRequestService, FeedbackDigestService, Feedb
         getMyHelpfulnessReport();
     };
 
+    function toggleCollapse() {
+        vm.collapseFeedbackGiven = !vm.collapseFeedbackGiven;
+    }
 
     function checkIsEmpty() {
         if (vm.mySubmissionsLoaded && vm.feedbackRequestsLoaded && vm.myRecentlySentRequestsLoaded && vm.myDigestsLoaded) {

@@ -1,3 +1,25 @@
+.collapsible-panel {
+    max-height: 5000px;
+    -webkit-transition: max-height 0.25s ease-out;
+	-o-transition: max-height 0.25s ease-out;
+	-ms-transition: max-height 0.25s ease-out;
+	transition: max-height 0.25s ease-out;
+}
+.collapse-panel {
+    max-height: 68px;
+    overflow: hidden;
+    -webkit-transition: max-height 0.25s ease-in;
+	-o-transition: max-height 0.25s ease-in;
+	-ms-transition: max-height 0.25s ease-in;
+    transition: max-height 0.25s ease-in;
+}
+.collapse-toggle {
+    opacity: 0.5;
+    cursor: pointer;
+}
+.collapse-toggle:hover {
+    opacity: 1;
+}
 .slide-up {
     overflow-y: hidden;
     max-height: 500px; /* approximate max height */

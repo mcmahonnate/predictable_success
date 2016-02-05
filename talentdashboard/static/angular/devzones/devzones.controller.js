@@ -9,21 +9,25 @@ function DevZonesController(DevZoneService, Notification, analytics, $location, 
 
     var vm = this;
     vm.busy = false;
+    vm.collapse = false;
     vm.showEmptyScreen = false;
     vm.selfie = null;
     vm.idSessionIntro = $rootScope.customer.devzones_id_session_intro;
     vm.welcome = $sce.trustAsHtml($rootScope.customer.devzones_welcome);
     vm.mySelfies = [];
     vm.myConversation = null;
+    vm.myTeamLeadConversations = []
     vm.submitDevZone = submitDevZone;
     vm.requestCheckIn = requestCheckIn;
     vm.requestFeedback = requestFeedback;
+    vm.toggleCollapse = toggleCollapse;
 
     activate();
 
     function activate() {
         getConversation();
         getMySelfies();
+        getMyTeamLeadConversations();
     };
 
     function getConversation() {
@@ -39,14 +43,21 @@ function DevZonesController(DevZoneService, Notification, analytics, $location, 
         )
     };
 
-
     function getMySelfies() {
         DevZoneService.getMyEmployeeZones()
             .then(function(selfies){
                 vm.mySelfies = selfies;
             }
         )
-    }
+    };
+
+    function getMyTeamLeadConversations() {
+        DevZoneService.getMyTeamLeadConversations()
+            .then(function(conversations){
+                vm.myTeamLeadConversations = conversations;
+            }
+        )
+    };
 
     function submitDevZone() {
         var modalInstance = $modal.open({
@@ -69,7 +80,7 @@ function DevZonesController(DevZoneService, Notification, analytics, $location, 
                 }
             }
         );
-    }
+    };
 
     function requestCheckIn() {
         var modalInstance = $modal.open({
@@ -87,7 +98,7 @@ function DevZonesController(DevZoneService, Notification, analytics, $location, 
                 $location.path("/checkins");
             }
         );
-    }
+    };
 
     function requestFeedback() {
         var modalInstance = $modal.open({
@@ -106,6 +117,9 @@ function DevZonesController(DevZoneService, Notification, analytics, $location, 
                 $location.path("/feedback");
             }
         );
-    }
+    };
 
+    function toggleCollapse() {
+        vm.collapse = !vm.collapse;
+    }
 }

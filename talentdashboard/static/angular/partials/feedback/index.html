@@ -137,9 +137,12 @@
             </tbody>
         </table>
     </div>
-    <div class="panel" ng-show="feedback.mySubmissions.length">
+    <div class="panel collapsible-panel" ng-class="{'collapse-panel': feedback.collapseFeedbackGiven}" ng-show="feedback.mySubmissions.length">
+        <h2 class="panel-title">People I've given feedback to
+            <i class="fa fa-chevron-up pull-right collapse-toggle" ng-show="!feedback.collapseFeedbackGiven" ng-click="feedback.toggleCollapse()"></i>
+            <i class="fa fa-chevron-down pull-right collapse-toggle" ng-show="feedback.collapseFeedbackGiven" ng-click="feedback.toggleCollapse()"></i>
+        </h2>
         <table class="table responsive-table">
-            <caption class="panel-title">People I've given feedback to</caption>
             <thead>
                 <tr>
                   <th scope="col" class="width-20-percent">Person</th>

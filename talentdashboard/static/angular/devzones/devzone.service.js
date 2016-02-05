@@ -9,7 +9,8 @@ function DevZoneService($http, $log, DevZoneResource) {
         updateEmployeeZone: updateEmployeeZone,
         getUnfinished: getUnfinished,
         getMyEmployeeZones: getMyEmployeeZones,
-        getMyConversation: getMyConversation
+        getMyConversation: getMyConversation,
+        getMyTeamLeadConversations: getMyTeamLeadConversations
     };
 
     function getMyConversation() {
@@ -21,6 +22,18 @@ function DevZoneService($http, $log, DevZoneResource) {
 
         function fail(response) {
             $log.error('getMyConversation failed');
+        }
+    }
+
+    function getMyTeamLeadConversations() {
+        return DevZoneResource.getMyTeamLeadConversations(null, success, fail).$promise;
+
+        function success(response) {
+            return response;
+        }
+
+        function fail(response) {
+            $log.error('getMyTeamLeadConversations failed');
         }
     }
 

@@ -29,7 +29,7 @@
             </div>
         </div>
     </div>
-    <div class="panel panel-empty fade-in" ng-show="devzones.mySelfies.length==0">
+    <div class="panel panel-empty fade-in" ng-show="devzones.mySelfies.length==0 && devzones.myTeamLeadConversations.length==0">
         <img class="grumpycat" src="../static/images/grumpycat.png" alt="Grumpy Cat" />
         <h2>"Mmmmeeh... i see you don't have any activity yet.
             <span ng-show="devzones.selfie && !devzones.selfie.completed">Use the button above or this link to
@@ -44,6 +44,37 @@
             </span>
         </h2>
     </div>
+    <div class="panel devzones collapsible-panel" ng-class="{'collapse-panel': devzones.collapse}" ng-show="devzones.myTeamLeadConversations.length>0">
+        <h2 class="panel-title ng-binding">Team Selfies
+            <i class="fa fa-chevron-up pull-right collapse-toggle" ng-show="!devzones.collapse" ng-click="devzones.toggleCollapse()"></i>
+            <i class="fa fa-chevron-down pull-right collapse-toggle" ng-show="devzones.collapse" ng-click="devzones.toggleCollapse()"></i>
+        </h2>
+        <table class="table responsive-table">
+            <thead>
+                <tr>
+                    <th scope="col" class="width-20-percent">Employee</th>
+                    <th scope="col" class="width-10-percent">Finished</th>
+                    <th scope="col" class="width-15-percent">Zone</th>
+                    <th scope="col" class="width-40-percent">Their Words</th>
+                    <th scope="col" class="width-10-percent centered">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="conversation in devzones.myTeamLeadConversations | orderBy:'employee.full_name':true">
+                    <td><span class="tiny-headshot pull-left"><img ng-src="{{ conversation.employee_assessment.employee.avatar_small }}" alt="{{ conversation.employee_assessment.employee.full_name }}" /></span>{{ conversation.employee_assessment.employee.full_name }}</td>
+                    <td><i ng-show="conversation.employee_assessment.completed" class="fa fa-check" title="Shared"></i></td>
+                    <td>{{ conversation.employee_assessment.zone.name }}</td>
+                    <td><span class="activity-checkin-summary comment-text" read-more ng-model="conversation.employee_assessment.notes" words="false" length="400" label="View" link="/checkins/{{ checkin.id }}"></span></td>
+                    <td class="centered">
+                        <a class="btn btn-default btn-md give-feedback-btn" ng-href="#/checkins/{{ checkin.id }}" type="button">
+                            <i class="fa fa-eye"></i> View Selfie
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
     <div class="panel devzones" ng-show="devzones.mySelfies.length>0">
         <h2 class="panel-title ng-binding">Your Selfies</h2>
 

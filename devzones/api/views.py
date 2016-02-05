@@ -71,7 +71,7 @@ class UpdateEmployeeZone(RetrieveUpdateAPIView):
         return Response(serializer.data)
 
 
-class RetrieveMyConversations(ListAPIView):
+class RetrieveMyTeamLeadConversations(ListAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = ConversationSerializer
 
