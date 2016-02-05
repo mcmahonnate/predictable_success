@@ -22,9 +22,8 @@
                 </div>
                 <div style="width:80%;">
                     <div class="comment-text">
-                        ID sessions will begin in the next couple of weeks.  In your session we currently have {{ devzones.myConversation.development_lead.full_name }} representing you. If you don't think {{ devzones.myConversation.development_lead.first_name }} can adequately represent you please let us know.
-                        <span ng-show="!devzones.selfie.completed">In the meantime please take your selfie.</span>
-                        <span ng-show="devzones.selfie.completed">Thanks for completing your selfie!</span>
+                        {{ devzones.myConversation.development_lead.full_name }} {{ devzones.idSessionIntro }}
+
                     </div>
                 </div>
             </div>

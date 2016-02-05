@@ -30,6 +30,7 @@ class Customer(TenantMixin):
     checkin_welcome = models.TextField(default="Welcome, we hope you like our new checkin feature. It's a safe place to ask for help from your Coach or Team Lead. The best part is, it's just between you and them. &mdash;The Scoutmap Team")
     projects_welcome = models.TextField(default="Welcome, we hope you like our new projects feature. It's a safe place to ask for help from your Coach or Team Lead. The best part is, it's just between you and them. &mdash;The Scoutmap Team")
     devzones_welcome = models.TextField(default="Welcome to Development Zones, this is the place to let us know where you think you are on your development path. The information you share here will be used to help us find ways to help you on your professional development. &mdash;The Scoutmap Team")
+    devzones_id_session_intro = models.TextField(default="will be representing you at your ID meeting. What's that you say? It's a meeting where senior leaders in your department discuss the development needs of everyone on your team. Hold up...don't I get a say about what my development needs are? You do now! In fact you'll be leading it. We've built and tested a brief Selfie survey designed to help you find the best development area suited to your needs. When you're done your leadership team will see your results, which will help you and them shape the kind of development and support you want and need.")
 
     def is_public_tenant(self):
         return self.schema_name == 'public'

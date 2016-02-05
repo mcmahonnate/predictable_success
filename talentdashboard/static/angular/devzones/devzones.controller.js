@@ -11,6 +11,7 @@ function DevZonesController(DevZoneService, Notification, analytics, $location, 
     vm.busy = false;
     vm.showEmptyScreen = false;
     vm.selfie = null;
+    vm.idSessionIntro = $rootScope.customer.devzones_id_session_intro;
     vm.welcome = $sce.trustAsHtml($rootScope.customer.devzones_welcome);
     vm.mySelfies = [];
     vm.myConversation = null;
