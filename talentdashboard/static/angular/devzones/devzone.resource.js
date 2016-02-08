@@ -5,7 +5,8 @@ angular
 function DevZoneResource($resource) {
     var actions = {
         'get': {
-            method: 'GET'
+            method: 'GET',
+            url: '/api/v1/devzones/selfies/:id/'
         },
         'save': {
             method: 'POST',

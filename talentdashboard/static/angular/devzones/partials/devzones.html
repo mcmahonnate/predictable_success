@@ -64,9 +64,9 @@
                     <td><span class="tiny-headshot pull-left"><img ng-src="{{ conversation.employee_assessment.employee.avatar_small }}" alt="{{ conversation.employee_assessment.employee.full_name }}" /></span>{{ conversation.employee_assessment.employee.full_name }}</td>
                     <td><i ng-show="conversation.employee_assessment.completed" class="fa fa-check" title="Shared"></i></td>
                     <td>{{ conversation.employee_assessment.zone.name }}</td>
-                    <td><span class="activity-checkin-summary comment-text" read-more ng-model="conversation.employee_assessment.notes" words="false" length="400" label="View" link="/checkins/{{ checkin.id }}"></span></td>
+                    <td><span class="activity-checkin-summary comment-text" read-more ng-model="conversation.employee_assessment.notes" words="false" length="400" label="View" link="/devzones/selfies/{{ conversation.employee_assessment.id }}"></span></td>
                     <td class="centered">
-                        <a class="btn btn-default btn-md give-feedback-btn" ng-href="#/checkins/{{ checkin.id }}" type="button">
+                        <a ng-disabled="!conversation.employee_assessment.completed" class="btn btn-default btn-md give-feedback-btn" ng-href="#/devzones/selfies/{{ conversation.employee_assessment.id }}" type="button">
                             <i class="fa fa-eye"></i> View Selfie
                         </a>
                     </td>

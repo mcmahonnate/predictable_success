@@ -65,7 +65,7 @@ function DevZonesController(DevZoneService, Notification, analytics, $location, 
             windowClass: 'xx-dialog fade zoom',
             backdrop: 'static',
             templateUrl: '/static/angular/devzones/partials/_modals/add-selfie.html',
-            controller: 'SelfieController as selfie',
+            controller: 'TakeSelfieController as selfie',
             resolve: {
                     selfie: function () {
                         return vm.selfie

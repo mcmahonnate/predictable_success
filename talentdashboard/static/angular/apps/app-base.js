@@ -23,6 +23,7 @@ var app = angular.module('tdb', [
             when('/checkins/:checkinId', {templateUrl: '/static/angular/checkins/partials/checkin-detail.html', controller: 'CheckInController as viewCheckin', resolve: {authorizeRoute: authorizeRoute}}).
             when('/checkins', {templateUrl: '/static/angular/checkins/partials/checkins.html', controller: 'CheckInsController as myCheckins', resolve: {authorizeRoute: authorizeRoute}}).
             when('/devzones', {templateUrl: '/static/angular/devzones/partials/devzones.html', controller: 'DevZonesController as devzones', resolve: {authorizeRoute: authorizeRoute}}).
+            when('/devzones/selfies/:selfieId', {templateUrl: '/static/angular/devzones/partials/selfie.html', controller: 'SelfieController as selfieDetail', resolve: {authorizeRoute: authorizeRoute}}).
             when('/engagement-survey/:employeeId/:surveyId', {templateUrl: '/static/angular/partials/engagement-survey.html', controller: 'EngagementSurveyCtrl'}).
             when('/feedback/request/:id/reply', {templateUrl: '/static/angular/partials/feedback/respond_to_request.html', controller: 'RespondToFeedbackRequestController as submitFeedback', resolve: {authorizeRoute: authorizeRoute}}).
             when('/feedback/submit', {templateUrl: '/static/angular/partials/feedback/unsolicited_feedback.html', controller: 'UnsolicitedFeedbackController as submitFeedback', resolve: {authorizeRoute: authorizeRoute}}).
