@@ -84,7 +84,7 @@
                 <h3 class="modal-title">Your Selfie Results</h3>
                 <div class="well">
                     <h3 class="modal-title">{{ selfie.selfie.zone.name }}</h3>
-                    <p>{{ selfie.selfie.zone.description }}</p>
+                    <p ng-bind-html="selfie.selfie.zone.description"></p>
                 </div>
                 <p>Does this feel like an accurate description of how you're doing?</p>
                 <div class="selfie-answer well well-sm" style="display:flex" ng-class="{'selfie-answer-selected': selfie.selectedAnswer==4, 'selfie-answer':selfie.selectedAnswer!=4}" ng-click="selfie.selectedAnswer=4">
