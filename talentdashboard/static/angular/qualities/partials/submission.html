@@ -1,0 +1,62 @@
+<div id="feedback" class="container">
+
+    <h1 class="page-title" ng-show="assessQualities.cluster">
+         <a href="" ng-click="assessQualities.goTo('qualities/perception/my')">Strengths</a>
+        <span>&raquo; {{ assessQualities.cluster.name }}</span>
+        <span ng-show="assessQualities.subject">&raquo; for</span>
+        <span data-hj-masked>{{ assessQualities.subject.full_name }}</span>
+        <a ng-show="assessQualities.subject" href="" data-toggle="modal" data-target=".modal" class="change">Change</a>
+    </h1>   
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel" ng-repeat="quality in assessQualities.cluster.qualities | filter: {selected: '!true'}" ng-class="{'selected': quality.selected}">
+                <div class="panel-body">
+                    <h2 class="panel-title">{{ quality.name }}</h2>
+                    <div><p>{{ quality.description }}</p></div>
+                    <div style="margin-top: 10px; min-height: 42px">
+                        <button ng-click="assessQualities.select(quality)" class="btn btn-default pull-right">Add</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-4">
+
+            <div class="panel" ng-repeat="quality in assessQualities.selectedQualities" ng-class="{'selected': quality.selected}">
+                <div class="panel-body">
+                    <h2 class="panel-title">{{ quality.name }}</h2>
+                    <div><p>{{ quality.description }}</p></div>
+                    <div style="margin-top: 10px; min-height: 42px">
+                        <button ng-click="assessQualities.unselect($index)" class="btn btn-default pull-right">Remove</button>
+                    </div>
+                </div>
+            </div>
+            <button ng-show="assessQualities.selectedQualities.length" ng-click="assessQualities.save()" class="btn btn-success pull-right">Submit</button>
+
+        </div>
+    </div>
+
+
+
+
+</div>
+<div ng-include="'/static/angular/partials/qualities/_modals/unsolicited-select-person.html'"></div>
+
+
+<style>
+    .form-group {margin-bottom: 15px;}
+    .form-control {margin-top: 10px;}
+    .form-group label {
+        font-size: 16px;
+        margin-bottom: 0;
+    }
+    .form-group textarea {
+        margin-bottom: 35px;
+    }
+    .selected {
+        border-color: #4cae4c;
+        border-width: 2px;
+    }
+
+</style>
