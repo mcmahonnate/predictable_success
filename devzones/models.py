@@ -160,7 +160,7 @@ class EmployeeZone(models.Model):
         super(EmployeeZone, self).save(*args, **kwargs)
 
     def __str__(self):
-        return "%s %s" % (self.employee.full_name, self.date)
+        return "%s %s %s" % (self.employee.full_name, self.date, self.completed)
 
 
 class ConversationManager(models.Manager):
