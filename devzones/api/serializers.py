@@ -87,7 +87,7 @@ class ConversationSerializer(serializers.ModelSerializer):
 
 
 class MeetingSerializer(serializers.ModelSerializer):
-    participants = EmployeeZoneSerializer(many=True)
+    participants = SanitizedEmployeeSerializer(many=True)
     conversations = ConversationSerializer(many=True)
 
     class Meta:
