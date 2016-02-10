@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import Q
 from django.db.models import Count
-from org.models import Employee
+from org.models import Employee, Team
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 
@@ -163,6 +163,26 @@ class EmployeeZone(models.Model):
         return "%s %s %s" % (self.employee.full_name, self.date, self.completed)
 
 
+class MeetingManager(models.Manager):
+    def get_all_current(self):
+        return self.filter(completed=False)
+
+    def get_all_for_employee(self, employee):
+        meetings = self.get_all_current()
+        return meetings.filter(participants__id=employee.id)
+
+
+class Meeting(models.Model):
+    objects = MeetingManager()
+    name = models.CharField(max_length=255)
+    date = models.DateTimeField(null=False, blank=False, default=datetime.now)
+    participants = models.ManyToManyField(Employee,related_name='+', null=True, blank=True)
+    completed = models.BooleanField(default=False)
+
+    def __str__(self):
+        return "%s %s" % (self.name, self.date)
+
+
 class ConversationManager(models.Manager):
     def get_current_for_employee(self, employee):
         conversations = self.get_all_for_employee(employee=employee)
@@ -170,15 +190,27 @@ class ConversationManager(models.Manager):
             return conversations.latest('date')
         return None
 
+    def get_for_meeting(self, meeting):
+        return self.filter(meeting__id=meeting.id)
+
     def get_all_for_employee(self, employee):
         return self.filter(employee=employee)
 
     def get_conversations_for_lead(self, development_lead):
-        return self.filter(development_lead=development_lead, completed=False)
+        # Get everyone that reports up to the development lead.
+        descendant_ids = development_lead.get_descendants().values_list('id', flat=True)
+        # Get all the meetings where development lead is a participant.
+        meeting_ids = Meeting.objects.get_all_for_employee(development_lead).values_list('id', flat=True)
+        # Get all the conversations where the development lead is participating.
+        conversations = self.filter(Q(development_lead__id=development_lead.id) | Q(meeting__id__in=meeting_ids))
+        # Of the conversations remaining only return the ones about the people that report to the development lead.
+        conversations = conversations.filter(employee__id__in=descendant_ids)
+        return conversations.filter(completed=False)
 
 
 class Conversation(models.Model):
     objects = ConversationManager()
+    meeting = models.ForeignKey(Meeting, related_name='conversations', null=True)
     date = models.DateTimeField(null=False, blank=False, default=datetime.now)
     employee = models.ForeignKey(Employee, related_name='development_conversations')
     development_lead = models.ForeignKey(Employee, related_name='people_ive_had_development_conversations_about')
@@ -205,8 +237,6 @@ class AdviceManager(models.Manager):
         except AttributeError:
             pass
         return self.filter(employee_zone=employee_zone.zone, development_lead_zone__isnull=True)
-
-
 
 
 class Advice(models.Model):
