@@ -2,6 +2,7 @@ from org.api.permissions import UserIsEmployeeOrLeaderOrCoachOfEmployee, UserIsE
 from rest_framework.generics import *
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from org.api.permissions import PermissionsViewAllEmployees
 from .serializers import *
 
 
@@ -25,6 +26,12 @@ class RetrieveEmployeeZone(RetrieveAPIView):
             return self.get_object()
         except EmployeeZone.DoesNotExist:
             raise Http404()
+
+
+class RetrieveMeeting(RetrieveAPIView):
+    serializer_class = MeetingSerializer
+    permission_classes = (IsAuthenticated, PermissionsViewAllEmployees)
+    queryset = Meeting.objects.all()
 
 
 class RetrieveMyEmployeeZones(ListAPIView):

@@ -88,7 +88,8 @@ class ConversationSerializer(serializers.ModelSerializer):
 
 class MeetingSerializer(serializers.ModelSerializer):
     participants = EmployeeZoneSerializer(many=True)
+    conversations = ConversationSerializer(many=True)
 
     class Meta:
         model = Meeting
-        fields = ('id', 'name', 'date', 'participants', 'completed')
+        fields = ('id', 'name', 'date', 'participants', 'conversations', 'completed')
