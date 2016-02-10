@@ -16,6 +16,10 @@ function DevZoneResource($resource) {
             method: 'PUT',
             url: '/api/v1/devzones/selfies/:id/update/'
         },
+        'retake': {
+            method: 'PUT',
+            url: '/api/v1/devzones/selfies/:id/retake/'
+        },
         'getUnfinished': {
             method: 'GET',
             url: '/api/v1/devzones/selfies/unfinished/'

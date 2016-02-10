@@ -11,5 +11,6 @@ urlpatterns = [
     url(r'^selfies/unfinished/$', RetrieveUnfinishedEmployeeZone.as_view()),
     url(r'^selfies/(?P<pk>[0-9]*)/$', RetrieveEmployeeZone.as_view()),
     url(r'^selfies/(?P<pk>[0-9]+)/update/$', UpdateEmployeeZone.as_view()),
+    url(r'^selfies/(?P<pk>[0-9]+)/retake/$', RetakeEmployeeZone.as_view()),
     url(r'^selfies/$', RetrieveMyEmployeeZones.as_view()),
 ]

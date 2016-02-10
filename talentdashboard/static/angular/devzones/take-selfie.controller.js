@@ -65,10 +65,7 @@
 
         function startOver() {
             vm.busy = true;
-            vm.selfie.last_question_answered = null;
-            vm.selfie.answers = [];
-            vm.selfie.zone = null;
-            DevZoneService.updateEmployeeZone(vm.selfie)
+            DevZoneService.retakeEmployeeZone(vm.selfie)
                 .then(function(selfie){
                     vm.panel_index=0;
                     vm.selectedAnswer=null;

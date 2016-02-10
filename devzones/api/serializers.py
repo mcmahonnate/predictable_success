@@ -59,7 +59,7 @@ class EmployeeZoneSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmployeeZone
-        fields = ('id', 'employee', 'next_question', 'zone', 'notes', 'answers', 'date', 'advice', 'completed')
+        fields = ('id', 'employee', 'next_question', 'zone', 'notes', 'answers', 'date', 'advice', 'completed', 'times_retaken')
         
         
 class UpdateEmployeeZoneSerializer(serializers.ModelSerializer):

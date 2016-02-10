@@ -7,6 +7,7 @@ function DevZoneService($http, $log, DevZoneResource) {
         getEmployeeZone: getEmployeeZone,
         saveEmployeeZone: saveEmployeeZone,
         updateEmployeeZone: updateEmployeeZone,
+        retakeEmployeeZone: retakeEmployeeZone,
         getUnfinished: getUnfinished,
         getMyEmployeeZones: getMyEmployeeZones,
         getMyConversation: getMyConversation,
@@ -71,6 +72,18 @@ function DevZoneService($http, $log, DevZoneResource) {
 
         function fail(response) {
             $log.error('updateEmployeeZone failed');
+        }
+    }
+
+    function retakeEmployeeZone(devzone) {
+        return DevZoneResource.retake({id: devzone.id}, devzone, success, fail).$promise;
+
+        function success(response) {
+            return response;
+        }
+
+        function fail(response) {
+            $log.error('retakeEmployeeZone failed');
         }
     }
 

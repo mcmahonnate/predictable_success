@@ -6,7 +6,7 @@ from org.api.permissions import PermissionsViewAllEmployees
 from .serializers import *
 
 
-# CheckIn views
+# DevZone views
 class CreateEmployeeZone(CreateAPIView):
     serializer_class = CreateEmployeeZoneSerializer
     permission_classes = (IsAuthenticated,)
@@ -75,6 +75,27 @@ class UpdateEmployeeZone(RetrieveUpdateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         serializer = EmployeeZoneSerializer(instance, context={'request': request})
+        return Response(serializer.data)
+
+
+class RetakeEmployeeZone(GenericAPIView):
+    queryset = EmployeeZone.objects.all()
+    serializer_class = EmployeeZoneSerializer
+    permission_classes = (IsAuthenticated, UserIsEmployee)
+
+    def get_employee(self):
+        employee_zone = self.get_object()
+        return employee_zone.employee
+
+    def put(self, request, pk, format=None):
+        employee_zone = self.get_object()
+        employee_zone.answers = []
+        employee_zone.last_question_answered = None
+        employee_zone.zone = None
+        employee_zone.notes = ''
+        employee_zone.times_retaken += 1
+        employee_zone.save()
+        serializer = EmployeeZoneSerializer(employee_zone, context={'request':request})
         return Response(serializer.data)
 
 

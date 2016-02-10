@@ -114,6 +114,7 @@ class EmployeeZone(models.Model):
     completed = models.BooleanField(default=False)
     last_question_answered = models.ForeignKey(Question, related_name='+', null=True, blank=True)
     notes = models.TextField(blank=True, default='')
+    times_retaken = models.IntegerField(default=0)
 
     def advice(self):
         return Advice.objects.get_advice(employee_zone=self)
