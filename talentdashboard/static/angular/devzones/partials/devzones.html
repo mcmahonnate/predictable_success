@@ -13,7 +13,6 @@
         </a>
         <h2 class="alert-title">Your ID Session is Coming Up!</h2>
         <div class="alert-message" style="padding-left:0; padding-top: 10px">
-
             <div>
                 <div class="avatar-container pull-left hide-for-mobile" style="padding-right:10px;">
                     <span class="large-headshot">
@@ -22,7 +21,7 @@
                 </div>
                 <div style="width:80%;">
                     <div class="comment-text">
-                        {{ devzones.myConversation.development_lead.full_name }} {{ devzones.idSessionIntro }}
+                        {{ devzones.myConversation.development_lead.full_name }} {{ devzones.idSessionIntro }} Click <a style="text-decoration: underline; cursor: pointer" ng-click="devzones.showMeetingParticipants(devzones.myConversation.meeting_participants)">here</a> to find out who else will be at your meeting.
 
                     </div>
                 </div>
@@ -55,8 +54,6 @@
                     <th scope="col" class="width-20-percent">Employee</th>
                     <th scope="col" class="width-20-percent">Represented By</th>
                     <th scope="col" class="width-10-percent">Finished</th>
-                    <th scope="col" class="width-15-percent">Zone</th>
-                    <th scope="col" class="width-40-percent">Their Words</th>
                     <th scope="col" class="width-10-percent centered">Action</th>
                 </tr>
             </thead>
@@ -65,8 +62,6 @@
                     <td><span class="tiny-headshot pull-left"><img ng-src="{{ conversation.employee_assessment.employee.avatar_small }}" alt="{{ conversation.employee_assessment.employee.full_name }}" /></span>{{ conversation.employee_assessment.employee.full_name }}</td>
                     <td>{{ conversation.development_lead.full_name }}</td>
                     <td><i ng-show="conversation.employee_assessment.completed" class="fa fa-check" title="Completed"></i></td>
-                    <td>{{ conversation.employee_assessment.zone.name }}</td>
-                    <td><span class="activity-checkin-summary comment-text" read-more ng-model="conversation.employee_assessment.notes" words="false" length="400" label="View" link="/devzones/selfies/{{ conversation.employee_assessment.id }}"></span></td>
                     <td class="centered">
                         <a ng-disabled="!conversation.employee_assessment.completed" class="btn btn-default btn-md give-feedback-btn" ng-href="#/devzones/selfies/{{ conversation.employee_assessment.id }}" type="button">
                             <i class="fa fa-eye"></i> View Selfie

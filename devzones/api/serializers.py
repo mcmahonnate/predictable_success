@@ -55,7 +55,6 @@ class EmployeeZoneSerializer(serializers.ModelSerializer):
     next_question = QuestionSerializer()
     answers = serializers.PrimaryKeyRelatedField(queryset=Answer.objects.all(), many=True)
     advice = AdviceSerializer(many=True)
-    #retaken_count =
 
     class Meta:
         model = EmployeeZone
@@ -80,10 +79,17 @@ class ConversationSerializer(serializers.ModelSerializer):
     development_lead = SanitizedEmployeeSerializer()
     employee_assessment = EmployeeZoneSerializer()
     development_lead_assessment = EmployeeZoneSerializer()
+    meeting_participants = serializers.SerializerMethodField()
+
+    def get_meeting_participants(self, obj):
+        if obj.meeting is None or obj.meeting.participants is None:
+            return None
+        serializer = SanitizedEmployeeSerializer(context=self.context, many=True)
+        return serializer.to_representation(obj.meeting.participants)
 
     class Meta:
         model = Conversation
-        fields = ('id', 'employee', 'date', 'development_lead', 'employee_assessment', 'development_lead_assessment', 'completed', 'completed_date')
+        fields = ('id', 'employee', 'date', 'development_lead', 'meeting_participants', 'employee_assessment', 'development_lead_assessment', 'completed', 'completed_date')
 
 
 class MeetingSerializer(serializers.ModelSerializer):
