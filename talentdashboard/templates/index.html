@@ -3,7 +3,7 @@
 {% block title %}Scoutmap{% endblock title %}
 
 {% block content %}
-    <div ng-app="tdb" ng-controller="BaseAppCtrl">
+    <div ng-controller="BaseAppCtrl">
 
         {% if perms.org.view_employees %}
             <div ng-include="'/static/angular/partials/_widgets/navigation/nav-all-access.html'"></div>

@@ -16,6 +16,10 @@ function DevZoneResource($resource) {
             method: 'PUT',
             url: '/api/v1/devzones/selfies/:id/update/'
         },
+        'retake': {
+            method: 'PUT',
+            url: '/api/v1/devzones/selfies/:id/retake/'
+        },
         'getUnfinished': {
             method: 'GET',
             url: '/api/v1/devzones/selfies/unfinished/'
@@ -32,6 +36,11 @@ function DevZoneResource($resource) {
         'getMyTeamLeadConversations': {
             method: 'GET',
             url: '/api/v1/devzones/conversations/team-lead/',
+            isArray: true
+        },
+        'getZones' : {
+            method: 'GET',
+            url: '/api/v1/devzones/zones/',
             isArray: true
         }
     };

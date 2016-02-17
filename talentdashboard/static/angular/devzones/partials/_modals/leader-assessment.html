@@ -1,0 +1,26 @@
+<form id="leader-assessment-modal" novalidate="novalidate">
+    <div class="form-group">
+        <div class="modal-body">
+            <panel class="devzone">
+                <p>Some text</p>
+
+                <div ng-show="leaderAssessment.zones.length>1" class="selfie-answer well well-sm" style="display:flex" ng-repeat="zone in leaderAssessment.zones" ng-class="{'selfie-answer-selected': leaderAssessment.selectedAnswer==zone, 'selfie-answer':leaderAssessment.selectedAnswer!=zone}" ng-click="leaderAssessment.selectedAnswer=zone">
+                    <div class="selfie-answer-label" style="width: 91%;">
+                        <h4><strong>{{ zone.name }}</strong></h4>
+                        <div collapse="leaderAssessment.isCollapsed(zone)">
+                            <p ng-bind-html="zone.description" style="margin-top:5px;"></p>
+                        </div>
+                    </div>
+                    <div style="margin: auto 0px;">
+                        <i class="fa fa-check-circle-o selected-icon" ng-show="leaderAssessment.selectedAnswer==zone"></i>
+                    </div>
+                </div>
+
+            </panel>
+        </div>
+        <div class="modal-footer">
+            <button type="button" ng-click="leaderAssessment.cancel()" data-dismiss="modal" class="btn btn-light">Cancel</button>
+            <button type="button" class="btn btn-success" ng-disabled="!leaderAssessment.selectedAnswer || leaderAssessment.busy" ng-click="">Save</button>
+        </div>
+    </div>
+</form>

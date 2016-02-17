@@ -1,0 +1,20 @@
+<div class="modal-body daily-digest-modal">
+    <button ng-click="cancel()" class="close">&times;</button>
+	<h3 class="modal-title">
+        <span>Meeting Participants</span>
+    </h3>
+    <p>These are the people that will be at you meeting.</p>
+    <div class="recipients">
+        <div ng-repeat="participant in participants | unique:'full_name'" class="recipient">
+            <div class="headshot xlarge-headshot">
+                <img ng-src="{{ participant.avatar_small }}" alt="{{ participant.full_name }}'s avatar" />
+            </div>
+            <span class="recipients-name">
+                {{participant.full_name}}
+            </span>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" ng-click="cancel()" class="btn btn-light">Got it, thanks!</button>
+</div>
