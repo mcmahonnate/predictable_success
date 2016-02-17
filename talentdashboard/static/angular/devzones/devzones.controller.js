@@ -22,6 +22,7 @@ function DevZonesController(DevZoneService, Notification, analytics, $location, 
     vm.requestFeedback = requestFeedback;
     vm.toggleCollapse = toggleCollapse;
     vm.showMeetingParticipants = showMeetingParticipants;
+    vm.takeLeaderAssessment = takeLeaderAssessment;
 
     activate();
 
@@ -140,6 +141,16 @@ function DevZonesController(DevZoneService, Notification, analytics, $location, 
         });
     }
 
+
+    function takeLeaderAssessment() {
+        $modal.open({
+            animation: true,
+            backdrop: 'static',
+            templateUrl: '/static/angular/devzones/partials/_modals/leader-assessment.html',
+            controller: 'LeaderAssessmentController as leaderAssessment',
+            resolve: {}
+        });
+    }
 
     function toggleCollapse() {
         vm.collapse = !vm.collapse;

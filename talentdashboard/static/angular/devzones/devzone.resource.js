@@ -37,6 +37,11 @@ function DevZoneResource($resource) {
             method: 'GET',
             url: '/api/v1/devzones/conversations/team-lead/',
             isArray: true
+        },
+        'getZones' : {
+            method: 'GET',
+            url: '/api/v1/devzones/zones/',
+            isArray: true
         }
     };
     return $resource('/api/v1/devzones/:id/', null, actions);

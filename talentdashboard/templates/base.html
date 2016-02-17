@@ -31,7 +31,7 @@
         <script src="{% static 'javascript/less.js' %}"></script>
         {% endif %}
     </head>
-    <body class="{% block mainclass %}{% endblock %}">
+    <body class="{% block mainclass %}{% endblock %}" ng-app="tdb">
         {% block navigation %}{% endblock navigation %}
         {% block content %}{% endblock content%}
         <div class="javascripts">

@@ -137,52 +137,54 @@
             </tbody>
         </table>
     </div>
-    <div class="panel collapsible-panel" ng-class="{'collapse-panel': feedback.collapseFeedbackGiven}" ng-show="feedback.mySubmissions.length">
+    <div class="panel" ng-show="feedback.mySubmissions.length">
         <h2 class="panel-title">People I've given feedback to
             <i class="fa fa-chevron-up pull-right collapse-toggle" ng-show="!feedback.collapseFeedbackGiven" ng-click="feedback.toggleCollapse()"></i>
             <i class="fa fa-chevron-down pull-right collapse-toggle" ng-show="feedback.collapseFeedbackGiven" ng-click="feedback.toggleCollapse()"></i>
         </h2>
-        <table class="table responsive-table">
-            <thead>
-                <tr>
-                  <th scope="col" class="width-20-percent">Person</th>
-                  <th scope="col" class="width-20-percent">Sent</th>
-                  <th scope="col" class="width-10-percent hide-for-mobile-and-tablet centered">Anonymous</th>
-                  <th scope="col" class="width-10-percent hide-for-mobile-and-tablet centered">Delivered</th>
-                  <th scope="col" class="width-20-percent hide-for-mobile-and-tablet centered">Helpful?</th>
-                  <th scope="col" class="width-20-percent centered">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="submission in feedback.mySubmissions | reverse">
-                    <td>
-                        <span class="tiny-headshot">
-                            <img class="headshot-image" ng-src="{{ submission.subject.avatar_small }}" alt="{{ submission.subject.full_name }}'s avatar" />
-                        </span>
-                        {{ submission.subject.full_name }}
-                    </td>
-                    <td class="timeago">
-                        {{ submission.feedback_date | fromNow }}
-                    </td>
-                    <td class="centered hide-for-mobile-and-tablet">
-                        <i ng-show="{{ submission.anonymous }}" class="fa fa-check" title="Anonymous"></i>
-                    </td>
-                    <td class="centered hide-for-mobile-and-tablet">
-                        <i ng-show="{{ submission.has_been_delivered }}" class="fa fa-check" title="Delivered"></i>
-                    </td>
-                    <td class="centered hide-for-mobile-and-tablet">
-                        <span ng-show="submission.excels_at_helpful || submission.could_improve_on_helpful">
-                            <a href="#/feedback/submission/{{ submission.id }}/">yes</a>
-                        </span>
-                    </td>
-                    <td class="centered">
-                        <a class="btn btn-default btn-md btn-view-feedback" ng-href="#/feedback/submission/{{ submission.id }}/" type="button">
-                            <i class="fa fa-eye"></i> View Feedback
-                        </a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div collapse="feedback.collapseFeedbackGiven">
+            <table class="table responsive-table">
+                <thead>
+                    <tr>
+                      <th scope="col" class="width-20-percent">Person</th>
+                      <th scope="col" class="width-20-percent">Sent</th>
+                      <th scope="col" class="width-10-percent hide-for-mobile-and-tablet centered">Anonymous</th>
+                      <th scope="col" class="width-10-percent hide-for-mobile-and-tablet centered">Delivered</th>
+                      <th scope="col" class="width-20-percent hide-for-mobile-and-tablet centered">Helpful?</th>
+                      <th scope="col" class="width-20-percent centered">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="submission in feedback.mySubmissions | reverse">
+                        <td>
+                            <span class="tiny-headshot">
+                                <img class="headshot-image" ng-src="{{ submission.subject.avatar_small }}" alt="{{ submission.subject.full_name }}'s avatar" />
+                            </span>
+                            {{ submission.subject.full_name }}
+                        </td>
+                        <td class="timeago">
+                            {{ submission.feedback_date | fromNow }}
+                        </td>
+                        <td class="centered hide-for-mobile-and-tablet">
+                            <i ng-show="{{ submission.anonymous }}" class="fa fa-check" title="Anonymous"></i>
+                        </td>
+                        <td class="centered hide-for-mobile-and-tablet">
+                            <i ng-show="{{ submission.has_been_delivered }}" class="fa fa-check" title="Delivered"></i>
+                        </td>
+                        <td class="centered hide-for-mobile-and-tablet">
+                            <span ng-show="submission.excels_at_helpful || submission.could_improve_on_helpful">
+                                <a href="#/feedback/submission/{{ submission.id }}/">yes</a>
+                            </span>
+                        </td>
+                        <td class="centered">
+                            <a class="btn btn-default btn-md btn-view-feedback" ng-href="#/feedback/submission/{{ submission.id }}/" type="button">
+                                <i class="fa fa-eye"></i> View Feedback
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
     <div ng-include="'/static/angular/partials/feedback/_modals/welcome-message.html'"></div>
 </div>

@@ -47,6 +47,12 @@ class RetrieveMyEmployeeZones(ListAPIView):
             raise Http404()
 
 
+class RetrieveZones(ListAPIView):
+    queryset = Zone.objects.all()
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ZoneSerializer
+
+
 class RetrieveUnfinishedEmployeeZone(RetrieveAPIView):
     permission_classes = (IsAuthenticated, )
 
