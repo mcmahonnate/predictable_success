@@ -17,6 +17,7 @@ class Customer(TenantMixin):
     show_feedback = models.BooleanField(default=False)
     show_projects = models.BooleanField(default=False)
     show_devzones = models.BooleanField(default=False)
+    show_qualities = models.BooleanField(default=False)
     survey_email_subject = models.CharField(
         max_length=255,
         blank=True,

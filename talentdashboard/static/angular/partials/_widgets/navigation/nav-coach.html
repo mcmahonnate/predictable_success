@@ -59,6 +59,12 @@
                     Feedback
                 </div>
             </div>
+            <div ng-show="customer.show_qualities" role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == strengthsTab}" ng-click="setActiveTab(strengthsTab)">
+                <div ng-click="gotoStrengths()">
+                    <span class="glyphicon-regular glyphicon-dumbell team_menu nav-item-icon"></span>
+                    Strengths
+                </div>
+            </div>
             <div ng-show="customer.show_projects && currentUser.can_view_projects" role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == projectsTab}" ng-click="setActiveTab(projectsTab)">
                 <div ng-click="gotoProjects()">
                     <span class="fa fa-lightbulb-o team_menu nav-item-icon"></span>
@@ -131,6 +137,12 @@
                 <a href="#/feedback" ng-click="toggleMenu()">
                     <span class="fa fa-send team_menu nav-item-icon"></span>
                     Feedback
+                </a>
+            </li>
+            <li ng-show="customer.show_qualities">
+                <a href="#/qualities" ng-click="toggleMenu()">
+                    <span class="glyphicon-regular glyphicon-dumbell team_menu nav-item-icon"></span>
+                    Strengths
                 </a>
             </li>
             <li>

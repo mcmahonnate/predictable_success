@@ -207,6 +207,7 @@ angular.module('tdb.controllers', [])
         $scope.feedbackTab = 'feedback';
         $scope.projectsTab = 'projects';
         $scope.devzonesTab = 'devzones';
+        $scope.strenghtsTab = 'strengths';
 
         $scope.setActiveTab = function (tab) {
             $('.nav-item').tooltip('hide');
@@ -230,6 +231,10 @@ angular.module('tdb.controllers', [])
 
         $scope.gotoProjects = function() {
             $location.path('/projects');
+        }
+
+        $scope.gotoStrengths = function() {
+            $location.path('/qualities/perception/my');
         }
 
         $scope.gotoDevZones = function() {
