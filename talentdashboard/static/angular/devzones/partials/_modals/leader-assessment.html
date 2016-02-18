@@ -1,10 +1,12 @@
 <form id="leader-assessment-modal" novalidate="novalidate">
+    <a class="close" ng-click="leaderAssessment.cancel()" data-dismiss="modal">&times;</a>
     <div class="form-group">
         <div class="modal-body">
             <panel class="devzone">
-                <p>Some text</p>
+                <h3 class="modal-title">Development Area</h3>
+                <p>What development area do you think best describes <strong>{{leaderAssessment.conversation.employee.first_name}}'s</strong> needs?</p>
 
-                <div ng-show="leaderAssessment.zones.length>1" class="selfie-answer well well-sm" style="display:flex" ng-repeat="zone in leaderAssessment.zones" ng-class="{'selfie-answer-selected': leaderAssessment.selectedAnswer==zone, 'selfie-answer':leaderAssessment.selectedAnswer!=zone}" ng-click="leaderAssessment.selectedAnswer=zone">
+                <div ng-show="leaderAssessment.zones.length>1" class="selfie-answer well well-sm" style="display:flex" ng-repeat="zone in leaderAssessment.zones | orderBy:'order' " ng-class="{'selfie-answer-selected': leaderAssessment.selectedAnswer==zone.id, 'selfie-answer':leaderAssessment.selectedAnswer!=zone.id}" ng-click="leaderAssessment.selectedAnswer=zone.id">
                     <div class="selfie-answer-label" style="width: 91%;">
                         <h4><strong>{{ zone.name }}</strong></h4>
                         <div collapse="leaderAssessment.isCollapsed(zone)">
@@ -12,7 +14,7 @@
                         </div>
                     </div>
                     <div style="margin: auto 0px;">
-                        <i class="fa fa-check-circle-o selected-icon" ng-show="leaderAssessment.selectedAnswer==zone"></i>
+                        <i class="fa fa-check-circle-o selected-icon" ng-show="leaderAssessment.selectedAnswer==zone.id"></i>
                     </div>
                 </div>
 
@@ -20,7 +22,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" ng-click="leaderAssessment.cancel()" data-dismiss="modal" class="btn btn-light">Cancel</button>
-            <button type="button" class="btn btn-success" ng-disabled="!leaderAssessment.selectedAnswer || leaderAssessment.busy" ng-click="">Save</button>
+            <button type="button" class="btn btn-success" ng-disabled="!leaderAssessment.selectedAnswer || leaderAssessment.busy" ng-click="leaderAssessment.saveAssessment()">Save</button>
         </div>
     </div>
 </form>

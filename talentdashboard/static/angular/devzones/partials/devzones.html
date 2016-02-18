@@ -54,8 +54,9 @@
                     <tr>
                         <th scope="col" class="width-20-percent">Employee</th>
                         <th scope="col" class="width-20-percent">Represented By</th>
-                        <th scope="col" class="width-10-percent">Finished</th>
-                        <th scope="col" class="width-10-percent centered">Action</th>
+                        <th scope="col" class="width-20-percent">Finished</th>
+                        <th scope="col" class="width-20-percent">Leadership Assessment</th>
+                        <th scope="col" class="width-20-percent centered">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -63,10 +64,17 @@
                         <td><span class="tiny-headshot pull-left"><img ng-src="{{ conversation.employee_assessment.employee.avatar_small }}" alt="{{ conversation.employee_assessment.employee.full_name }}" /></span>{{ conversation.employee_assessment.employee.full_name }}</td>
                         <td>{{ conversation.development_lead.full_name }}</td>
                         <td><i ng-show="conversation.employee_assessment.completed" class="fa fa-check" title="Completed"></i></td>
-                        <td class="centered">
-                            <a class="btn btn-default btn-md give-feedback-btn" ng-show="false" ng-click="devzones.takeLeaderAssessment()" type="button">
-                                Assess
+                        <td>
+                            <a ng-show="!conversation.development_lead_assessment" class="btn btn-default btn-md give-feedback-btn" ng-click="devzones.takeLeaderAssessment(conversation)" type="button">
+                                <i class="fa fa-heartbeat"></i>
+                                Give Assessment
                             </a>
+                            <a ng-show="conversation.development_lead_assessment" ng-click="devzones.takeLeaderAssessment(conversation)" style="cursor: pointer">
+                                {{ conversation.development_lead_assessment.zone.name }}
+                            </a>
+                        </td>
+                        <td class="centered">
+
                             <a ng-disabled="!conversation.employee_assessment.completed" class="btn btn-default btn-md give-feedback-btn" ng-href="#/devzones/selfies/{{ conversation.employee_assessment.id }}" type="button">
                                 <i class="fa fa-eye"></i> View Selfie
                             </a>

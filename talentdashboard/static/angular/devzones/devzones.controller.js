@@ -129,7 +129,6 @@ function DevZonesController(DevZoneService, Notification, analytics, $location, 
             controller: ['$scope', '$modalInstance', 'participants', function($scope, $modalInstance, participants) {
                 $scope.participants = participants;
                 $scope.cancel = function(){
-                    console.log('test');
                     $modalInstance.dismiss();
                 };
             }],
@@ -142,14 +141,22 @@ function DevZonesController(DevZoneService, Notification, analytics, $location, 
     }
 
 
-    function takeLeaderAssessment() {
-        $modal.open({
+    function takeLeaderAssessment(conversation) {
+        var modalInstance = $modal.open({
             animation: true,
             backdrop: 'static',
             templateUrl: '/static/angular/devzones/partials/_modals/leader-assessment.html',
             controller: 'LeaderAssessmentController as leaderAssessment',
-            resolve: {}
+            resolve: {
+                conversation: function () {
+                    return conversation
+                },}
         });
+        modalInstance.result.then(
+            function (employeeZone) {
+                conversation.development_lead_assessment = employeeZone;
+            }
+        );
     }
 
     function toggleCollapse() {

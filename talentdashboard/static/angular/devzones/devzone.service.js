@@ -5,13 +5,14 @@ angular
 function DevZoneService($http, $log, DevZoneResource) {
     return {
         getEmployeeZone: getEmployeeZone,
-        saveEmployeeZone: saveEmployeeZone,
+        createEmployeeZone: createEmployeeZone,
         updateEmployeeZone: updateEmployeeZone,
         retakeEmployeeZone: retakeEmployeeZone,
         getUnfinished: getUnfinished,
         getMyEmployeeZones: getMyEmployeeZones,
         getMyConversation: getMyConversation,
         getMyTeamLeadConversations: getMyTeamLeadConversations,
+        updateConversation: updateConversation,
         getZones: getZones
     };
 
@@ -51,8 +52,8 @@ function DevZoneService($http, $log, DevZoneResource) {
         }
     }
 
-    function saveEmployeeZone(devzone) {
-        return DevZoneResource.save(devzone, success, fail).$promise;
+    function createEmployeeZone(devzone) {
+        return DevZoneResource.create(devzone, success, fail).$promise;
 
         function success(response) {
             return response;
@@ -63,7 +64,6 @@ function DevZoneService($http, $log, DevZoneResource) {
         }
     }
 
-
     function updateEmployeeZone(devzone) {
         return DevZoneResource.update({id: devzone.id}, devzone, success, fail).$promise;
 
@@ -73,6 +73,18 @@ function DevZoneService($http, $log, DevZoneResource) {
 
         function fail(response) {
             $log.error('updateEmployeeZone failed');
+        }
+    }
+
+    function updateConversation(conversation) {
+        return DevZoneResource.updateConversation({id: conversation.id}, conversation, success, fail).$promise;
+
+        function success(response) {
+            return response;
+        }
+
+        function fail(response) {
+            $log.error('updateConversation failed');
         }
     }
 

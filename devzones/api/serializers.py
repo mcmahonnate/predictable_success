@@ -22,7 +22,7 @@ class ZoneSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Zone
-        fields = ('id', 'name', 'description')
+        fields = ('id', 'name', 'description', 'order')
 
 
 class AdviceSerializer(serializers.ModelSerializer):
@@ -38,7 +38,7 @@ class AdviceSerializer(serializers.ModelSerializer):
 class CreateEmployeeZoneSerializer(serializers.ModelSerializer):
     employee = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
     assessor = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
-    zone = ZoneSerializer(required=False)
+    zone = serializers.PrimaryKeyRelatedField(queryset=Zone.objects.all(), required=False)
     next_question = QuestionSerializer(required=False)
     answers = serializers.PrimaryKeyRelatedField(queryset=Answer.objects.all(), many=True, required=False)
     notes = serializers.CharField(required=False)
@@ -46,7 +46,7 @@ class CreateEmployeeZoneSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmployeeZone
         fields = ('id', 'employee', 'assessor', 'next_question', 'zone', 'notes', 'answers')
-        read_only_fields = ('next_question', 'zone', 'notes', 'answers')
+        read_only_fields = ('next_question', 'notes', 'answers')
 
 
 class EmployeeZoneSerializer(serializers.ModelSerializer):
@@ -90,6 +90,14 @@ class ConversationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Conversation
         fields = ('id', 'employee', 'date', 'development_lead', 'meeting_participants', 'employee_assessment', 'development_lead_assessment', 'completed', 'completed_date')
+
+
+class UpdateConversationSerializer(serializers.ModelSerializer):
+    development_lead_assessment = serializers.PrimaryKeyRelatedField(queryset=EmployeeZone.objects.all())
+
+    class Meta:
+        model = Conversation
+        fields = ('id', 'development_lead_assessment')
 
 
 class MeetingSerializer(serializers.ModelSerializer):

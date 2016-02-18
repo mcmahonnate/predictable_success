@@ -10,7 +10,6 @@
         vm.busy = false;
         vm.cancel = cancel;
         vm.close = close;
-        vm.startSelfie = startSelfie;
         vm.answerQuestion = answerQuestion;
         vm.startOver = startOver;
         vm.showWhoCanSeeThis = showWhoCanSeeThis;
@@ -32,22 +31,6 @@
         function close() {
             $modalInstance.close(vm.selfie)
             Notification.success('Your progress has been saved.')
-        }
-
-        function startSelfie() {
-            vm.busy = true;
-            if (!vm.selfie) {
-                DevZoneService.saveEmployeeZone({employee: vm.employee.id, assessor: vm.employee.id})
-                    .then(function (selfie) {
-                        vm.selfie = selfie;
-                        vm.panel_index = 2;
-                        vm.busy = false;
-                    })
-            }
-            else {
-                vm.panel_index = 2
-                vm.busy = false;
-            }
         }
 
         function answerQuestion(answer) {

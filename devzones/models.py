@@ -65,8 +65,9 @@ class Zone(models.Model):
         max_length=255,
     )
     description = models.TextField(blank=True, default='')
-    value = models.IntegerField(default=0)
+    order = models.IntegerField(default=0)
     tie_breaker = models.BooleanField(default=False)
+    must_be_unanimous = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         if self.tie_breaker:
@@ -128,6 +129,13 @@ class EmployeeZone(models.Model):
             zone_count = last_answers.values('zone__name', 'zone').annotate(count=Count('zone__name')).order_by('-count')
             if len(zone_count) > 1 and zone_count[0]['count'] == 1:
                 self.zone = Zone.objects.get(tie_breaker=True)
+            elif len(zone_count) > 1:
+                zone_id = zone_count[0]['zone']
+                zone = Zone.objects.get(id=zone_id)
+                if zone.must_be_unanimous:
+                    zone_id = zone_count[1]['zone']
+                    zone = Zone.objects.get(id=zone_id)
+                self.zone = zone
             else:
                 zone_id = zone_count[0]['zone']
                 self.zone = Zone.objects.get(id=zone_id)
