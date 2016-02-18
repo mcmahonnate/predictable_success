@@ -8,9 +8,9 @@ function DevZoneResource($resource) {
             method: 'GET',
             url: '/api/v1/devzones/selfies/:id/'
         },
-        'save': {
+        'create': {
             method: 'POST',
-            url: '/api/v1/devzones/selfies/start/'
+            url: '/api/v1/devzones/selfies/create/'
         },
         'update': {
             method: 'PUT',
@@ -32,6 +32,10 @@ function DevZoneResource($resource) {
         'getMyConversation': {
             method: 'GET',
             url: '/api/v1/devzones/conversations/current/'
+        },
+        'updateConversation': {
+            method: 'PUT',
+            url: '/api/v1/devzones/conversations/:id/update/'
         },
         'getMyTeamLeadConversations': {
             method: 'GET',

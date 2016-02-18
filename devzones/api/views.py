@@ -3,6 +3,7 @@ from rest_framework.generics import *
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from org.api.permissions import PermissionsViewAllEmployees
+from .permissions import UserIsConversationParticipant, UserIsAssessor
 from .serializers import *
 
 
@@ -67,12 +68,11 @@ class RetrieveUnfinishedEmployeeZone(RetrieveAPIView):
 
 class UpdateEmployeeZone(RetrieveUpdateAPIView):
     queryset = EmployeeZone.objects.all()
-    permission_classes = (IsAuthenticated, UserIsEmployee)
+    permission_classes = (IsAuthenticated, UserIsAssessor)
     serializer_class = UpdateEmployeeZoneSerializer
 
-    def get_employee(self):
-        zone = self.get_object()
-        return zone.employee
+    def get_employee_zone(self):
+        return self.get_object()
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
@@ -82,6 +82,15 @@ class UpdateEmployeeZone(RetrieveUpdateAPIView):
         self.perform_update(serializer)
         serializer = EmployeeZoneSerializer(instance, context={'request': request})
         return Response(serializer.data)
+
+
+class UpdateConversation(RetrieveUpdateAPIView):
+    queryset = Conversation.objects.all()
+    permission_classes = (IsAuthenticated, UserIsConversationParticipant)
+    serializer_class = UpdateConversationSerializer
+
+    def get_conversation(self):
+        return self.get_object()
 
 
 class RetakeEmployeeZone(GenericAPIView):
