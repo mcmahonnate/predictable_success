@@ -139,6 +139,7 @@ class EmployeeZone(models.Model):
             else:
                 zone_id = zone_count[0]['zone']
                 self.zone = Zone.objects.get(id=zone_id)
+            self.date = datetime.now()
             self.save()
 
     def next_question(self):

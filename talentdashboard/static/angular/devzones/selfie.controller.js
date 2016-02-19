@@ -21,6 +21,10 @@
             DevZoneService.getEmployeeZone($routeParams.selfieId)
                 .then(function(selfie){
                     vm.selfie = selfie;
+                    if (!vm.selfie.zone) {
+                        gotoDevZones();
+                        Notification.error(vm.selfie.employee.first_name +  " has not finished their selfie.")
+                    }
                 },
                 function() {
                     Notification.error("You don't have access to this selfie.")
