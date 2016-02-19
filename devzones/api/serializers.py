@@ -4,10 +4,14 @@ from ..models import *
 
 
 class AnswerSerializer(serializers.ModelSerializer):
+    question_text = serializers.SerializerMethodField()
+
+    def get_question_text(self, obj):
+        return obj.question.text
 
     class Meta:
         model = Answer
-        fields = ('id', 'text')
+        fields = ('id', 'text', 'question_text')
 
 
 class QuestionSerializer(serializers.ModelSerializer):
@@ -53,7 +57,15 @@ class EmployeeZoneSerializer(serializers.ModelSerializer):
     employee = SanitizedEmployeeSerializer()
     zone = ZoneSerializer()
     next_question = QuestionSerializer()
-    answers = serializers.PrimaryKeyRelatedField(queryset=Answer.objects.all(), many=True)
+    answers = serializers.SerializerMethodField()
+
+    def get_answers(self, obj):
+        if obj.completed:
+            serializer = AnswerSerializer(context=self.context, many=True)
+            return serializer.to_representation(obj.answers)
+        else:
+            return [answer.id for answer in obj.answers.all()]
+
     advice = AdviceSerializer(many=True)
 
     class Meta:

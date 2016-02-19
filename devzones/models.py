@@ -95,11 +95,11 @@ class Answer(models.Model):
 
 class EmployeeZoneManager(models.Manager):
     def get_all_finished_for_employee(self, employee):
-        return self.filter(employee=employee, completed=True)
+        return self.filter(employee=employee, assessor=employee, completed=True)
 
     def get_unfinished(self, employee):
         try:
-            return self.get(employee=employee, completed=False)
+            return self.get(employee=employee, assessor=employee, completed=False)
         except EmployeeZone.DoesNotExist:
             return None
 
@@ -213,7 +213,7 @@ class ConversationManager(models.Manager):
         # Get all the conversations where the development lead is participating.
         conversations = self.filter(Q(development_lead__id=development_lead.id) | Q(meeting__id__in=meeting_ids))
         # Of the conversations remaining only return the ones about the people that report to the development lead.
-        conversations = conversations.filter(employee__id__in=descendant_ids)
+        conversations = conversations.filter(Q(employee__id__in=descendant_ids) | Q(development_lead__id=development_lead.id))
         return conversations.filter(completed=False)
 
 
@@ -242,9 +242,9 @@ class AdviceManager(models.Manager):
                             and employee_zone.development_conversation.development_lead_assessment.zone is not None:
                         return self.filter(Q(employee_zone=employee_zone.zone) &
                                            (Q(development_lead_zone__isnull=True) |
-                                            Q(employee_zone.development_conversation.development_lead_assessment.zone)))
+                                            Q(development_lead_zone = employee_zone.development_conversation.development_lead_assessment.zone)))
         except AttributeError:
-            pass
+                pass
         return self.filter(employee_zone=employee_zone.zone, development_lead_zone__isnull=True)
 
 
