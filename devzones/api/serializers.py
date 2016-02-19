@@ -55,9 +55,11 @@ class CreateEmployeeZoneSerializer(serializers.ModelSerializer):
 
 class EmployeeZoneSerializer(serializers.ModelSerializer):
     employee = SanitizedEmployeeSerializer()
+    assessor = SanitizedEmployeeSerializer()
     zone = ZoneSerializer()
     next_question = QuestionSerializer()
     answers = serializers.SerializerMethodField()
+    development_conversation = serializers.PrimaryKeyRelatedField(read_only=True)
 
     def get_answers(self, obj):
         if obj.completed:
@@ -70,7 +72,7 @@ class EmployeeZoneSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmployeeZone
-        fields = ('id', 'employee', 'next_question', 'zone', 'notes', 'answers', 'date', 'advice', 'completed', 'times_retaken')
+        fields = ('id', 'employee', 'assessor', 'next_question', 'zone', 'notes', 'answers', 'date', 'advice', 'completed', 'times_retaken', 'development_conversation')
         
         
 class UpdateEmployeeZoneSerializer(serializers.ModelSerializer):

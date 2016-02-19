@@ -2,7 +2,7 @@ angular
     .module('devzones')
     .controller('LeaderAssessmentController', LeaderAssessmentController);
 
-function LeaderAssessmentController(conversation, DevZoneService, Notification, $modalInstance, $rootScope) {
+function LeaderAssessmentController(conversation, ConversationService, DevZoneService, Notification, $modalInstance, $rootScope) {
     var vm = this;
     vm.conversation = conversation;
     vm.busy = false;
@@ -52,7 +52,7 @@ function LeaderAssessmentController(conversation, DevZoneService, Notification, 
             DevZoneService.createEmployeeZone({employee: vm.conversation.employee.id, assessor: $rootScope.currentUser.employee.id, zone: vm.selectedAnswer})
                 .then(function (employeeZone) {
                     vm.employeeZone = employeeZone;
-                    DevZoneService.updateConversation({id: vm.conversation.id, development_lead_assessment: vm.employeeZone.id})
+                    ConversationService.update({id: vm.conversation.id, development_lead_assessment: vm.employeeZone.id})
                         .then(function (conversation) {
                             vm.busy = false;
                             $modalInstance.close(vm.employeeZone);

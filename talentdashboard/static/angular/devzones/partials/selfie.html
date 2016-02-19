@@ -29,13 +29,37 @@
             </div>
         </div>
     </div>
-
+    <div class="panel devzones activity">
+        <h2 class="panel-title" style="margin-bottom: 10px;"><a ng-click="selfieDetail.collapseLeadershipPerception=!selfieDetail.collapseLeadershipPerception" style="cursor: pointer">{{ selfieDetail.conversation.development_lead_assessment.assessor.first_name}}'s Perception - {{ selfieDetail.conversation.development_lead_assessment.date | fromNow}}</a>
+            <i class="fa fa-chevron-down pull-right collapse-toggle" ng-show="!selfieDetail.collapseLeadershipPerception" ng-click="selfieDetail.collapseLeadershipPerception=true"></i>
+            <i class="fa fa-chevron-right pull-right collapse-toggle" ng-show="selfieDetail.collapseLeadershipPerception" ng-click="selfieDetail.collapseLeadershipPerception=false"></i>
+        </h2>
+        <div collapse="selfieDetail.collapseLeadershipPerception" style="padding-top:10px">
+            <div class="well">
+                <h3 class="modal-title">{{ selfieDetail.conversation.development_lead_assessment.zone.name }}</h3>
+                <p ng-bind-html="selfieDetail.conversation.development_lead_assessment.zone.description"></p>
+            </div>
+            <div class="activity-item" ng-show="selfieDetail.conversation.development_lead_assessment.notes">
+                <div class="activity-checkin row" style="margin: 20px 0px;">
+                    <div class="avatar-container col-xs-2">
+                        <span class="large-headshot">
+                            <img ng-src="{{ selfieDetail.conversation.development_lead_assessment.assessor.avatar_small }}" alt="{{ selfieDetail.conversation.development_lead_assessment.assessor.full_name }}" class="headshot-image"/>
+                        </span>
+                    </div>
+                    <div class="activity-checkin-details col-xs-12 col-sm-10" style="padding-left:0" ng-show="selfieDetail.selfie.notes">
+                        <h3 class="comment-title-employee-name"><strong><span class="sensitive-text">from {{ selfieDetail.conversation.development_lead_assessment.assessor.first_name }}</span></strong></h3>
+                        <div class="activity-comment comment-text">{{ selfieDetail.conversation.development_lead_assessment.notes }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="panel devzones">
         <h2 class="panel-title"><a ng-click="selfieDetail.collapseSelfieAnswers=!selfieDetail.collapseSelfieAnswers" style="cursor: pointer">{{ selfieDetail.selfie.employee.first_name}}'s Selfie Answers</a>
             <i class="fa fa-chevron-down pull-right collapse-toggle" ng-show="!selfieDetail.collapseSelfieAnswers" ng-click="selfieDetail.collapseSelfieAnswers=true"></i>
             <i class="fa fa-chevron-right pull-right collapse-toggle" ng-show="selfieDetail.collapseSelfieAnswers" ng-click="selfieDetail.collapseSelfieAnswers=false"></i>
         </h2>
-        <div class="devzone" style="max-width: inherit; margin: 20px auto;" collapse="selfieDetail.collapseSelfieAnswers">
+        <div class="devzone" style="max-width: inherit; padding-top: 10px; margin: 0px auto 20px auto;" collapse="selfieDetail.collapseSelfieAnswers">
             <div ng-repeat="answer in selfieDetail.selfie.answers">
                 <p style="margin: 15px 0;">{{ answer.question_text }}</p>
 
@@ -55,7 +79,7 @@
             <i class="fa fa-chevron-down pull-right collapse-toggle" ng-show="!selfieDetail.collapseLeadershipAdvice" ng-click="selfieDetail.collapseLeadershipAdvice=true"></i>
             <i class="fa fa-chevron-right pull-right collapse-toggle" ng-show="selfieDetail.collapseLeadershipAdvice" ng-click="selfieDetail.collapseLeadershipAdvice=false"></i>
         </h2>
-        <div style="margin-top:20px" collapse="selfieDetail.collapseLeadershipAdvice">
+        <div style="padding-top:10px" collapse="selfieDetail.collapseLeadershipAdvice">
             <p ng-repeat="advice in selfieDetail.selfie.advice " ng-bind-html="advice.advice_description_for_development_leader"></p>
         </div>
     </div>
@@ -64,7 +88,7 @@
             <i class="fa fa-chevron-down pull-right collapse-toggle" ng-show="!selfieDetail.collapseEmployeeAdvice" ng-click="selfieDetail.collapseEmployeeAdvice=true"></i>
             <i class="fa fa-chevron-right pull-right collapse-toggle" ng-show="selfieDetail.collapseEmployeeAdvice" ng-click="selfieDetail.collapseEmployeeAdvice=false"></i>
         </h2>
-        <div style="margin-top:20px" collapse="selfieDetail.collapseEmployeeAdvice">
+        <div style="padding-top:10px" collapse="selfieDetail.collapseEmployeeAdvice">
             <p ng-repeat="advice in selfieDetail.selfie.advice " ng-bind-html="advice.advice_description_for_employee"></p>
         </div>
     </div>

@@ -2,7 +2,7 @@
         .module('devzones')
         .controller('SelfieController', SelfieController);
 
-    function SelfieController(DevZoneService, Notification, $location, $routeParams) {
+    function SelfieController(ConversationService, DevZoneService, Notification, $location, $routeParams) {
         var vm = this;
 
         vm.selfie = null;
@@ -11,6 +11,7 @@
         vm.collapseLeadershipAdvice = true;
         vm.collapseEmployeeAdvice = true;
         vm.collapseSelfieAnswers = true;
+        vm.collapseLeadershipPerception = true;
         activate();
 
         function activate() {
@@ -24,6 +25,8 @@
                     if (!vm.selfie.zone) {
                         gotoDevZones();
                         Notification.error(vm.selfie.employee.first_name +  " has not finished their selfie.")
+                    } else {
+                        getConversation()
                     }
                 },
                 function() {
@@ -31,6 +34,13 @@
                 }
             )
 
+        }
+
+        function getConversation() {
+            ConversationService.get(vm.selfie.development_conversation)
+                .then(function(conversation){
+                    vm.conversation = conversation;
+                })
         }
 
         function gotoDevZones() {

@@ -84,13 +84,18 @@ class UpdateEmployeeZone(RetrieveUpdateAPIView):
         return Response(serializer.data)
 
 
-class UpdateConversation(RetrieveUpdateAPIView):
+class RetrieveUpdateConversation(RetrieveUpdateAPIView):
     queryset = Conversation.objects.all()
     permission_classes = (IsAuthenticated, UserIsConversationParticipant)
     serializer_class = UpdateConversationSerializer
 
     def get_conversation(self):
         return self.get_object()
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = ConversationSerializer(instance, context={'request': request})
+        return Response(serializer.data)
 
 
 class RetakeEmployeeZone(GenericAPIView):
