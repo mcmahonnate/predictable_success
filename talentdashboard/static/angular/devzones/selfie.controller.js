@@ -8,7 +8,9 @@
         vm.selfie = null;
         vm.busy = false;
         vm.gotoDevZones = gotoDevZones;
-
+        vm.collapseLeadershipAdvice = true;
+        vm.collapseEmployeeAdvice = true;
+        vm.collapseSelfieAnswers = true;
         activate();
 
         function activate() {

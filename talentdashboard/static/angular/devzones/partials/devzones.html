@@ -45,8 +45,8 @@
     </div>
     <div class="panel devzones" ng-show="devzones.myTeamLeadConversations.length>0">
         <h2 class="panel-title ng-binding">Team Selfies
-            <i class="fa fa-chevron-up pull-right collapse-toggle" ng-show="!devzones.collapse" ng-click="devzones.toggleCollapse()"></i>
-            <i class="fa fa-chevron-down pull-right collapse-toggle" ng-show="devzones.collapse" ng-click="devzones.toggleCollapse()"></i>
+            <i class="fa fa-chevron-down pull-right collapse-toggle" ng-show="!devzones.collapse" ng-click="devzones.toggleCollapse()"></i>
+            <i class="fa fa-chevron-right pull-right collapse-toggle" ng-show="devzones.collapse" ng-click="devzones.toggleCollapse()"></i>
         </h2>
         <div collapse="devzones.collapse">
             <table class="table responsive-table" >
@@ -55,7 +55,7 @@
                         <th scope="col" class="width-20-percent">Employee</th>
                         <th scope="col" class="width-20-percent">Represented By</th>
                         <th scope="col" class="width-20-percent">Finished</th>
-                        <th scope="col" class="width-20-percent">Leadership Assessment</th>
+                        <th scope="col" class="width-20-percent">Leadership's Perception</th>
                         <th scope="col" class="width-20-percent centered">Action</th>
                     </tr>
                 </thead>
@@ -67,7 +67,7 @@
                         <td>
                             <a ng-show="!conversation.development_lead_assessment" class="btn btn-default btn-md give-feedback-btn" ng-click="devzones.takeLeaderAssessment(conversation)" type="button">
                                 <i class="fa fa-heartbeat"></i>
-                                Give Assessment
+                                Give Perception
                             </a>
                             <a ng-show="conversation.development_lead_assessment" ng-click="devzones.takeLeaderAssessment(conversation)" style="cursor: pointer">
                                 {{ conversation.development_lead_assessment.zone.name }}
