@@ -2,25 +2,26 @@ angular
     .module('devzones')
     .controller('DevZonesController', DevZonesController);
 
-function DevZonesController(ConversationService, DevZoneService, Notification, analytics, $location, $modal, $scope, $sce, $rootScope) {
+function DevZonesController(ConversationService, DevZoneService, MeetingService, Notification, analytics, $location, $modal, $scope, $sce, $rootScope) {
     /* Since this page can be the root for some users let's make sure we capture the correct page */
     var location_url = $location.url().indexOf('/devzones') < 0 ? '/devzones' : $location.url();
     analytics.trackPage($scope, $location.absUrl(), location_url);
 
     var vm = this;
     vm.busy = false;
-    vm.collapse = false;
+    vm.teamSelfiesCollapse = false;
+    vm.meetingsCollapse = true;
     vm.showEmptyScreen = false;
     vm.selfie = null;
     vm.idSessionIntro = $rootScope.customer.devzones_id_session_intro;
     vm.welcome = $sce.trustAsHtml($rootScope.customer.devzones_welcome);
     vm.mySelfies = [];
     vm.myConversation = null;
-    vm.myTeamLeadConversations = []
+    vm.myTeamLeadConversations = [];
+    vm.meetings = [];
     vm.submitDevZone = submitDevZone;
     vm.requestCheckIn = requestCheckIn;
     vm.requestFeedback = requestFeedback;
-    vm.toggleCollapse = toggleCollapse;
     vm.showMeetingParticipants = showMeetingParticipants;
     vm.takeLeaderAssessment = takeLeaderAssessment;
 
@@ -30,6 +31,14 @@ function DevZonesController(ConversationService, DevZoneService, Notification, a
         getConversation();
         getMySelfies();
         getMyTeamLeadConversations();
+        getMyMeetings();
+    };
+
+    function getMyMeetings() {
+        MeetingService.getMyMeetings()
+            .then(function(meetings){
+                vm.meetings = meetings;
+            });
     };
 
     function getConversation() {
@@ -157,9 +166,5 @@ function DevZonesController(ConversationService, DevZoneService, Notification, a
                 conversation.development_lead_assessment = employeeZone;
             }
         );
-    }
-
-    function toggleCollapse() {
-        vm.collapse = !vm.collapse;
     }
 }

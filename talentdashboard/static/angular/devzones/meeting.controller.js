@@ -13,7 +13,7 @@ function MeetingController(MeetingService, Notification, analytics, $location, $
     };
 
     function getMeeting() {
-        MeetingService.getMeeting($routeParams.meetingId)
+        MeetingService.get($routeParams.meetingId)
             .then(function(meeting){
                     vm.meeting = meeting;
             }, function(error){

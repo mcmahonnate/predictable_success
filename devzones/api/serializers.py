@@ -138,3 +138,11 @@ class MeetingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Meeting
         fields = ('id', 'name', 'date', 'participants', 'conversations', 'completed')
+
+
+class SanitizedMeetingSerializer(serializers.ModelSerializer):
+    participants = SanitizedEmployeeSerializer(many=True)
+
+    class Meta:
+        model = Meeting
+        fields = ('id', 'name', 'date', 'participants', 'completed')

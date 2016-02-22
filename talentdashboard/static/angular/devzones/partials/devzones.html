@@ -44,11 +44,11 @@
         </h2>
     </div>
     <div class="panel devzones" ng-show="devzones.myTeamLeadConversations.length>0">
-        <h2 class="panel-title ng-binding">Team Selfies
-            <i class="fa fa-chevron-down pull-right collapse-toggle" ng-show="!devzones.collapse" ng-click="devzones.toggleCollapse()"></i>
-            <i class="fa fa-chevron-right pull-right collapse-toggle" ng-show="devzones.collapse" ng-click="devzones.toggleCollapse()"></i>
+        <h2 class="panel-title ng-binding"><a ng-click="devzones.teamSelfiesCollapse=!devzones.teamSelfiesCollapse" style="cursor: pointer">Team Selfies</a>
+            <i class="fa fa-chevron-down pull-right collapse-toggle" ng-show="!devzones.teamSelfiesCollapse" ng-click="devzones.teamSelfiesCollapse=true"></i>
+            <i class="fa fa-chevron-right pull-right collapse-toggle" ng-show="devzones.teamSelfiesCollapse" ng-click="devzones.teamSelfiesCollapse=false"></i>
         </h2>
-        <div collapse="devzones.collapse">
+        <div collapse="devzones.teamSelfiesCollapse">
             <table class="table responsive-table" >
                 <thead>
                     <tr>
@@ -74,7 +74,6 @@
                             </a>
                         </td>
                         <td class="centered">
-
                             <a ng-disabled="!conversation.employee_assessment.completed" class="btn btn-default btn-md give-feedback-btn" ng-href="#/devzones/selfies/{{ conversation.id }}" type="button">
                                 <i class="fa fa-eye"></i> View Selfie
                             </a>
@@ -84,7 +83,34 @@
             </table>
         </div>
     </div>
-
+    <div class="panel devzones" ng-show="devzones.meetings.length>0">
+        <h2 class="panel-title ng-binding"><a ng-click="devzones.meetingsCollapse=!devzones.meetingsCollapse" style="cursor: pointer">My Meetings</a>
+            <i class="fa fa-chevron-down pull-right collapse-toggle" ng-show="!devzones.meetingsCollapse" ng-click="devzones.meetingsCollapse=true"></i>
+            <i class="fa fa-chevron-right pull-right collapse-toggle" ng-show="devzones.meetingsCollapse" ng-click="devzones.meetingsCollapse=false"></i>
+        </h2>
+        <div collapse="devzones.meetingsCollapse">
+            <table class="table responsive-table" >
+                <thead>
+                    <tr>
+                        <th scope="col" class="width-20-percent">Meeting</th>
+                        <th scope="col" class="width-60-percent">Participants</th>
+                        <th scope="col" class="width-20-percent centered">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="meeting in devzones.meetings | orderBy:'name':false">
+                        <td>{{ meeting.name }}</td>
+                        <td><img class="tiny-headshot pull-left" ng-src="{{ participant.avatar_small }}" ng-attr-title="{{participant.full_name}}" ng-repeat="participant in meeting.participants"/></td>
+                        <td class="centered">
+                            <a class="btn btn-default btn-md give-feedback-btn" ng-href="#/devzones/meetings/{{ meeting.id }}" type="button">
+                                <i class="fa fa-eye"></i> View Meeting
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
     <div class="panel devzones" ng-show="devzones.mySelfies.length>0">
         <h2 class="panel-title ng-binding">Your Selfies</h2>
 

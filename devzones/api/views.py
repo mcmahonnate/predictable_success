@@ -1,10 +1,8 @@
 from org.api.permissions import UserIsEmployeeOrLeaderOrCoachOfEmployee, UserIsEmployee
-from rest_framework import status
 from rest_framework.generics import *
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from org.api.permissions import PermissionsViewAllEmployees
-from .permissions import UserIsConversationParticipant, UserIsAssessor
+from .permissions import UserIsConversationParticipant, UserIsAssessor, UserIsMeetingParticipantOrHasAllAccess
 from .serializers import *
 
 
@@ -44,8 +42,11 @@ class RetrieveEmployeeZone(RetrieveAPIView):
 
 class RetrieveMeeting(RetrieveAPIView):
     serializer_class = MeetingSerializer
-    permission_classes = (IsAuthenticated, PermissionsViewAllEmployees)
+    permission_classes = (IsAuthenticated, UserIsMeetingParticipantOrHasAllAccess)
     queryset = Meeting.objects.all()
+
+    def get_meeting(self):
+        return self.get_object()
 
 
 class RetrieveMyEmployeeZones(ListAPIView):
@@ -133,13 +134,18 @@ class RetakeEmployeeZone(GenericAPIView):
 
 
 class RetrieveMeetingConversations(ListAPIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, UserIsMeetingParticipantOrHasAllAccess)
     serializer_class = ConversationSerializer
+
+    def get_meeting(self):
+        return self.get_object()
 
     def get_queryset(self):
         try:
+            employee = self.request.user.employee
             meeting = Meeting.objects.get(id=self.kwargs['pk'])
             conversations = Conversation.objects.get_for_meeting(meeting=meeting)
+            conversations = conversations.exclude(employee=employee)
             return conversations
         except Conversation.DoesNotExist:
             raise Http404()
@@ -153,6 +159,7 @@ class RetrieveMyTeamLeadConversations(ListAPIView):
         try:
             employee = self.request.user.employee
             conversations = Conversation.objects.get_conversations_for_lead(development_lead=employee)
+            conversations = conversations.exclude(employee=employee)
             return conversations
         except Conversation.DoesNotExist:
             raise Http404()
@@ -172,12 +179,16 @@ class RetrieveMyCurrentConversation(RetrieveAPIView):
 
 class RetrieveMyCurrentMeetings(ListAPIView):
     permission_classes = (IsAuthenticated,)
-    serializer_class = MeetingSerializer
+    serializer_class = SanitizedMeetingSerializer
 
     def get_queryset(self):
         try:
             employee = self.request.user.employee
-            meetings = Meeting.objects.get_all_for_employee(employee)
+            if self.request.user.has_perm('org.view_employees'):
+                meetings = Meeting.objects.get_all_current()
+            else:
+                meetings = Meeting.objects.get_all_for_employee(employee)
+            meetings = meetings.exclude(conversations__employee__id=employee.id)
             return meetings
         except Meeting.DoesNotExist:
             raise Http404()
