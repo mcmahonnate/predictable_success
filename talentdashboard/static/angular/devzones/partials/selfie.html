@@ -4,7 +4,7 @@
         <h1><a href="#/devzones">ID</a> &raquo; Selfie for {{ selfieDetail.selfie.employee.full_name }}</h1>
     </div>
 
-    <div ng-repeat="advice in selfieDetail.selfie.advice" ng-class="{'slide-up-active': hideMessage}" class="alert {{advice.alert_type_for_development_lead}} slide-up" role="alert">
+    <div ng-repeat="advice in selfieDetail.selfie.advice" ng-class="{'slide-up-active': hideMessage}" ng-hide="!advice.alert_for_development_lead" class="alert {{advice.alert_type_for_development_lead}} slide-up" role="alert">
         <span ng-bind-html="advice.alert_for_development_lead"></span>
     </div>
 

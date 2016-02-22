@@ -5,10 +5,12 @@ angular
 function LeaderAssessmentController(conversation, ConversationService, DevZoneService, Notification, $modalInstance, $rootScope) {
     var vm = this;
     vm.conversation = conversation;
+    vm.panel_index = 0;
     vm.busy = false;
     vm.assessment = null;
     vm.employeeZone = null;
     vm.selectedAnswer = null;
+    vm.notes = '';
     vm.saveAssessment = saveAssessment;
     vm.zones = [];
     vm.cancel = cancel;
@@ -19,6 +21,7 @@ function LeaderAssessmentController(conversation, ConversationService, DevZoneSe
         if (vm.conversation.development_lead_assessment) {
             vm.selectedAnswer = vm.conversation.development_lead_assessment.zone.id;
             vm.assessment = vm.conversation.development_lead_assessment;
+            vm.notes = vm.assessment.notes;
         }
         getZones();
     }
@@ -49,7 +52,7 @@ function LeaderAssessmentController(conversation, ConversationService, DevZoneSe
     function saveAssessment() {
         vm.busy = true;
         if (!vm.assessment) {
-            DevZoneService.createEmployeeZone({employee: vm.conversation.employee.id, assessor: $rootScope.currentUser.employee.id, zone: vm.selectedAnswer})
+            DevZoneService.createEmployeeZone({employee: vm.conversation.employee.id, assessor: $rootScope.currentUser.employee.id, zone: vm.selectedAnswer, notes: vm.notes})
                 .then(function (employeeZone) {
                     vm.employeeZone = employeeZone;
                     ConversationService.update({id: vm.conversation.id, development_lead_assessment: vm.employeeZone.id})
@@ -60,7 +63,7 @@ function LeaderAssessmentController(conversation, ConversationService, DevZoneSe
                         })
                 })
         } else {
-            DevZoneService.updateEmployeeZone({id: vm.conversation.development_lead_assessment.id, zone: vm.selectedAnswer})
+            DevZoneService.updateEmployeeZone({id: vm.conversation.development_lead_assessment.id, zone: vm.selectedAnswer, notes: vm.notes})
                 .then(function (employeeZone) {
                     vm.busy = false;
                     $modalInstance.close(employeeZone);
