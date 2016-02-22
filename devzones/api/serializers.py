@@ -106,6 +106,23 @@ class ConversationSerializer(serializers.ModelSerializer):
         fields = ('id', 'employee', 'date', 'development_lead', 'meeting_participants', 'employee_assessment', 'development_lead_assessment', 'completed', 'completed_date')
 
 
+class SanitizedConversationSerializer(serializers.ModelSerializer):
+    employee = SanitizedEmployeeSerializer()
+    development_lead = SanitizedEmployeeSerializer()
+    employee_assessment = EmployeeZoneSerializer()
+    meeting_participants = serializers.SerializerMethodField()
+
+    def get_meeting_participants(self, obj):
+        if obj.meeting is None or obj.meeting.participants is None:
+            return None
+        serializer = SanitizedEmployeeSerializer(context=self.context, many=True)
+        return serializer.to_representation(obj.meeting.participants)
+
+    class Meta:
+        model = Conversation
+        fields = ('id', 'employee', 'date', 'development_lead', 'meeting_participants', 'employee_assessment', 'completed', 'completed_date')
+
+
 class UpdateConversationSerializer(serializers.ModelSerializer):
     development_lead_assessment = serializers.PrimaryKeyRelatedField(queryset=EmployeeZone.objects.all())
 

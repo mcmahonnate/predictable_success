@@ -153,7 +153,7 @@ class RetrieveMyCurrentConversation(RetrieveAPIView):
         conversation = Conversation.objects.get_current_for_employee(employee=employee)
         if conversation is None:
             raise Http404()
-        serializer = ConversationSerializer(conversation, context={'request': request})
+        serializer = SanitizedConversationSerializer(conversation, context={'request': request})
         return Response(serializer.data)
 
 
