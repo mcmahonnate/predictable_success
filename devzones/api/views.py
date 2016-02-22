@@ -1,4 +1,5 @@
 from org.api.permissions import UserIsEmployeeOrLeaderOrCoachOfEmployee, UserIsEmployee
+from rest_framework import status
 from rest_framework.generics import *
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -11,6 +12,18 @@ from .serializers import *
 class CreateEmployeeZone(CreateAPIView):
     serializer_class = CreateEmployeeZoneSerializer
     permission_classes = (IsAuthenticated,)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        saved = self.perform_create(serializer)
+        serializer = EmployeeZoneSerializer(instance=saved, context={'request': request})
+
+        return Response(serializer.data)
+
+    def perform_create(self, serializer):
+        return serializer.save()
 
 
 class RetrieveEmployeeZone(RetrieveAPIView):

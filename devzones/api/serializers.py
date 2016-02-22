@@ -45,12 +45,12 @@ class CreateEmployeeZoneSerializer(serializers.ModelSerializer):
     zone = serializers.PrimaryKeyRelatedField(queryset=Zone.objects.all(), required=False)
     next_question = QuestionSerializer(required=False)
     answers = serializers.PrimaryKeyRelatedField(queryset=Answer.objects.all(), many=True, required=False)
-    notes = serializers.CharField(required=False)
+    notes = serializers.CharField(required=False, allow_blank=True)
 
     class Meta:
         model = EmployeeZone
         fields = ('id', 'employee', 'assessor', 'next_question', 'zone', 'notes', 'answers')
-        read_only_fields = ('next_question', 'notes', 'answers')
+        read_only_fields = ('next_question', 'answers')
 
 
 class EmployeeZoneSerializer(serializers.ModelSerializer):
@@ -72,7 +72,7 @@ class EmployeeZoneSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmployeeZone
-        fields = ('id', 'employee', 'assessor', 'next_question', 'zone', 'notes', 'answers', 'date', 'advice', 'completed', 'times_retaken', 'development_conversation')
+        fields = ('id', 'employee', 'assessor', 'next_question', 'zone', 'notes', 'answers', 'date', 'advice', 'completed', 'times_retaken', 'development_conversation', 'new_employee')
         
         
 class UpdateEmployeeZoneSerializer(serializers.ModelSerializer):

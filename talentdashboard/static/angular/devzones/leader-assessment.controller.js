@@ -58,7 +58,7 @@ function LeaderAssessmentController(conversation, ConversationService, DevZoneSe
                     ConversationService.update({id: vm.conversation.id, development_lead_assessment: vm.employeeZone.id})
                         .then(function (conversation) {
                             vm.busy = false;
-                            $modalInstance.close(vm.employeeZone);
+                            $modalInstance.close(employeeZone);
                             Notification.success('Your assessment has been saved.')
                         })
                 })
