@@ -2,16 +2,19 @@
         .module('devzones')
         .controller('SelfieController', SelfieController);
 
-    function SelfieController(ConversationService, DevZoneService, Notification, $location, $routeParams) {
+    function SelfieController(ConversationService, DevZoneService, Notification, $location, $routeParams, $parse) {
         var vm = this;
 
         vm.selfie = null;
         vm.busy = false;
         vm.gotoDevZones = gotoDevZones;
+        vm.employee = null;
+        vm.development_lead = null;
         vm.collapseLeadershipAdvice = true;
         vm.collapseEmployeeAdvice = true;
         vm.collapseSelfieAnswers = true;
         vm.collapseLeadershipPerception = true;
+        vm.replaceTemplateTags = replaceTemplateTags;
         activate();
 
         function activate() {
@@ -40,6 +43,8 @@
             ConversationService.get(vm.selfie.development_conversation)
                 .then(function(conversation){
                     vm.conversation = conversation;
+                    vm.employee = vm.conversation.employee;
+                    vm.development_lead = vm.conversation.development_lead;
                 })
         }
 
@@ -47,5 +52,8 @@
             $location.path('/devzones/');
         }
 
-
+        function replaceTemplateTags(html) {
+            var template = $parse(html);
+            return template(vm);
+        }
     }
