@@ -2,7 +2,7 @@ from org.api.permissions import UserIsEmployeeOrLeaderOrCoachOfEmployee, UserIsE
 from rest_framework.generics import *
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .permissions import UserIsConversationParticipant, UserIsAssessor, UserIsMeetingParticipantOrHasAllAccess
+from .permissions import UserIsConversationParticipantOrHasAllAccess, UserIsAssessor, UserIsMeetingParticipantOrHasAllAccess
 from .serializers import *
 
 
@@ -100,7 +100,7 @@ class UpdateEmployeeZone(RetrieveUpdateAPIView):
 
 class RetrieveUpdateConversation(RetrieveUpdateAPIView):
     queryset = Conversation.objects.all()
-    permission_classes = (IsAuthenticated, UserIsConversationParticipant)
+    permission_classes = (IsAuthenticated, UserIsConversationParticipantOrHasAllAccess)
     serializer_class = UpdateConversationSerializer
 
     def get_conversation(self):

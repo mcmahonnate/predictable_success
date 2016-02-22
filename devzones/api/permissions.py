@@ -12,12 +12,11 @@ class UserIsMeetingParticipantOrHasAllAccess(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.user.has_perm('org.view_employees'):
             return True
-        else:
-            meeting = view.get_meeting()
-            return request.user.employee in meeting.participants.all()
+        meeting = view.get_meeting()
+        return request.user.employee in meeting.participants.all()
 
 
-class UserIsConversationParticipant(permissions.BasePermission):
+class UserIsConversationParticipantOrHasAllAccess(permissions.BasePermission):
     """ Ensures that the current user is a
     participant in the conversation.
 
@@ -26,6 +25,8 @@ class UserIsConversationParticipant(permissions.BasePermission):
     object.
     """
     def has_permission(self, request, view):
+        if request.user.has_perm('org.view_employees'):
+            return True
         conversation = view.get_conversation()
         if request.user.employee in conversation.meeting.participants.all():
             return True
