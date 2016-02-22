@@ -18,34 +18,27 @@
         activate();
 
         function activate() {
-            getSelfie();
+            getConversation();
         }
 
-        function getSelfie() {
-            DevZoneService.getEmployeeZone($routeParams.selfieId)
-                .then(function(selfie){
-                    vm.selfie = selfie;
+        function getConversation() {
+            ConversationService.get($routeParams.selfieId)
+                .then(function(conversation){
+                    vm.conversation = conversation;
+                    vm.selfie = vm.conversation.employee_assessment;
                     if (!vm.selfie.zone) {
                         gotoDevZones();
                         Notification.error(vm.selfie.employee.first_name +  " has not finished their selfie.")
-                    } else {
-                        getConversation()
                     }
+                    vm.employee = vm.conversation.employee;
+                    vm.development_lead = vm.conversation.development_lead;
+
+
                 },
                 function() {
                     Notification.error("You don't have access to this selfie.")
                 }
             )
-
-        }
-
-        function getConversation() {
-            ConversationService.get(vm.selfie.development_conversation)
-                .then(function(conversation){
-                    vm.conversation = conversation;
-                    vm.employee = vm.conversation.employee;
-                    vm.development_lead = vm.conversation.development_lead;
-                })
         }
 
         function gotoDevZones() {
