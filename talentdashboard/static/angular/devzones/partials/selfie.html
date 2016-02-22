@@ -29,7 +29,7 @@
             </div>
         </div>
     </div>
-    <div class="panel devzones activity">
+    <div class="panel devzones activity" ng-show="selfieDetail.conversation.development_lead_assessment">
         <h2 class="panel-title" style="margin-bottom: 10px;"><a ng-click="selfieDetail.collapseLeadershipPerception=!selfieDetail.collapseLeadershipPerception" style="cursor: pointer">{{ selfieDetail.conversation.development_lead_assessment.assessor.first_name}}'s Perception - {{ selfieDetail.conversation.development_lead_assessment.date | fromNow}}</a>
             <i class="fa fa-chevron-down pull-right collapse-toggle" ng-show="!selfieDetail.collapseLeadershipPerception" ng-click="selfieDetail.collapseLeadershipPerception=true"></i>
             <i class="fa fa-chevron-right pull-right collapse-toggle" ng-show="selfieDetail.collapseLeadershipPerception" ng-click="selfieDetail.collapseLeadershipPerception=false"></i>
