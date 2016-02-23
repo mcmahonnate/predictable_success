@@ -28,7 +28,7 @@
             </div>
         </div>
     </div>
-    <div class="panel panel-empty fade-in" ng-show="devzones.mySelfies.length==0 && devzones.myTeamLeadConversations.length==0">
+    <div class="panel panel-empty fade-in" ng-show="!devzones.busy && devzones.mySelfies.length==0 && devzones.myTeamLeadConversations.length==0 && devzones.meetings.length==0 && !devzones.myConversation">
         <img class="grumpycat" src="../static/images/grumpycat.png" alt="Grumpy Cat" />
         <h2>"Mmmmeeh... i see you don't have any activity yet.
             <span ng-show="devzones.selfie && !devzones.selfie.completed">Use the button above or this link to
@@ -85,8 +85,10 @@
     </div>
     <div class="panel devzones" ng-show="devzones.meetings.length>0">
         <h2 class="panel-title ng-binding"><a ng-click="devzones.meetingsCollapse=!devzones.meetingsCollapse" style="cursor: pointer">My Meetings</a>
+            <i class="fa fa-plus-circle collapse-toggle" ng-show="!devzones.meetingsCollapse && devzones.isAdmin" ng-click="" style="margin-left: 5px;"></i>
             <i class="fa fa-chevron-down pull-right collapse-toggle" ng-show="!devzones.meetingsCollapse" ng-click="devzones.meetingsCollapse=true"></i>
             <i class="fa fa-chevron-right pull-right collapse-toggle" ng-show="devzones.meetingsCollapse" ng-click="devzones.meetingsCollapse=false"></i>
+
         </h2>
         <div collapse="devzones.meetingsCollapse">
             <table class="table responsive-table" >

@@ -207,14 +207,7 @@ class ConversationManager(models.Manager):
         return self.filter(employee=employee)
 
     def get_conversations_for_lead(self, development_lead):
-        # Get everyone that reports up to the development lead.
-        descendant_ids = development_lead.get_descendants().values_list('id', flat=True)
-        # Get all the meetings where development lead is a participant.
-        meeting_ids = Meeting.objects.get_all_for_employee(development_lead).values_list('id', flat=True)
-        # Get all the conversations where the development lead is participating.
-        conversations = self.filter(Q(development_lead__id=development_lead.id) | Q(meeting__id__in=meeting_ids))
-        # Of the conversations remaining only return the ones about the people that report to the development lead.
-        conversations = conversations.filter(Q(employee__id__in=descendant_ids) | Q(development_lead__id=development_lead.id))
+        conversations = self.filter(development_lead__id=development_lead.id)
         return conversations.filter(completed=False)
 
 

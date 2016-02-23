@@ -8,17 +8,22 @@ function DevZonesController(ConversationService, DevZoneService, MeetingService,
     analytics.trackPage($scope, $location.absUrl(), location_url);
 
     var vm = this;
-    vm.busy = false;
+    vm.busy = true;
     vm.teamSelfiesCollapse = false;
     vm.meetingsCollapse = true;
     vm.showEmptyScreen = false;
     vm.selfie = null;
     vm.idSessionIntro = $rootScope.customer.devzones_id_session_intro;
     vm.welcome = $sce.trustAsHtml($rootScope.customer.devzones_welcome);
+    vm.isAdmin = $rootScope.currentUser.can_edit_employees;
     vm.mySelfies = [];
     vm.myConversation = null;
     vm.myTeamLeadConversations = [];
     vm.meetings = [];
+    vm.getConversationLoaded = false;
+    vm.getMySelifesLoaded = false;
+    vm.getMyTeamLeadConversationsLoaded = false;
+    vm.getMyMeetingsLoaded = false;
     vm.submitDevZone = submitDevZone;
     vm.requestCheckIn = requestCheckIn;
     vm.requestFeedback = requestFeedback;
@@ -34,11 +39,24 @@ function DevZonesController(ConversationService, DevZoneService, MeetingService,
         getMyMeetings();
     };
 
+    function isBusy() {
+        if (vm.getConversationLoaded && vm.getMySelifesLoaded && vm.getMyTeamLeadConversationsLoaded && vm.getMyMeetingsLoaded) {
+            vm.busy = false;
+        } else {
+            vm.busy = true;
+        }
+    }
     function getMyMeetings() {
         MeetingService.getMyMeetings()
             .then(function(meetings){
                 vm.meetings = meetings;
-            });
+                vm.getMyMeetingsLoaded = true;
+                isBusy();
+            }, function(){
+                vm.getMyMeetingsLoaded = true;
+                isBusy();
+            }
+        );
     };
 
     function getConversation() {
@@ -47,9 +65,11 @@ function DevZonesController(ConversationService, DevZoneService, MeetingService,
             .then(function(conversation){
                 vm.myConversation = conversation;
                 vm.selfie = conversation.employee_assessment;
-                vm.busy = false;
+                vm.getConversationLoaded = true;
+                isBusy();
             }, function(){
-                vm.busy = false;
+                vm.getConversationLoaded = true;
+                isBusy();
             }
         )
     };
@@ -58,6 +78,11 @@ function DevZonesController(ConversationService, DevZoneService, MeetingService,
         DevZoneService.getMyEmployeeZones()
             .then(function(selfies){
                 vm.mySelfies = selfies;
+                vm.getMySelifesLoaded = true;
+                isBusy();
+            }, function(){
+                vm.getMySelifesLoaded = true;
+                isBusy();
             }
         )
     };
@@ -66,6 +91,11 @@ function DevZonesController(ConversationService, DevZoneService, MeetingService,
         ConversationService.getMyTeamLeadConversations()
             .then(function(conversations){
                 vm.myTeamLeadConversations = conversations;
+                vm.getMyTeamLeadConversationsLoaded = true;
+                isBusy();
+            }, function(){
+                vm.getMyTeamLeadConversationsLoaded = true;
+                isBusy();
             }
         )
     };
