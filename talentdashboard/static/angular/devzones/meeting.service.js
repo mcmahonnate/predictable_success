@@ -2,23 +2,46 @@ angular
     .module('devzones')
     .factory('MeetingService', MeetingService);
 
-function MeetingService($http, $log, DevZoneResource) {
+function MeetingService($http, $log, MeetingResource) {
     return {
-        getMeeting: getMeeting
+        create: create,
+        get: get,
+        getMyMeetings: getMyMeetings
     }
 
-    function getMeeting(meetingId) {
-        var url = '/api/v1/devzones/meetings/' + meetingId + '/';
-        return $http.get(url)
-            .then(success)
-            .catch(fail);
+    function create(meeting) {
+        return MeetingResource.create(meeting, success, fail).$promise;
 
         function success(response) {
-            return response.data;
+            return response;
         }
 
         function fail(response) {
-            $log.error('getMeeting failed');
+            $log.error('create failed');
+        }
+    }
+
+    function get(meetingId) {
+        return MeetingResource.get({id: meetingId}, success, fail).$promise;
+
+        function success(response) {
+            return response;
+        }
+
+        function fail(response) {
+            $log.error('get failed');
+        }
+    }
+
+    function getMyMeetings() {
+        return MeetingResource.getMyMeetings(null, success, fail).$promise;
+
+        function success(response) {
+            return response;
+        }
+
+        function fail(response) {
+            $log.error('getMyMeetings failed');
         }
     }
 }

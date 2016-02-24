@@ -1,0 +1,70 @@
+<form id="leader-assessment-modal" novalidate="novalidate">
+    <a class="close" ng-click="addMeeting.cancel()" data-dismiss="modal">&times;</a>
+    <div class="form-group" ng-show="addMeeting.panel_index==-1">
+        <div class="modal-body">
+            <panel>
+                <h3 class="modal-title">Add a Meeting</h3>
+                <p class="modal-subtext">What's the name of the meeting?</p>
+                <input
+                    name="focusAreas"
+                    autofocus
+                    ng-model="addMeeting.name"
+                    style="max-width:350px; margin-bottom: 25px;"
+                    class="form-control edit-textarea"
+                    placeholder="Add the name of the meeting here..."
+                    />
+                <p class="modal-subtext">Who is participating in the meeting?</p>
+                <ui-select
+                        id="to"
+                        multiple
+                        ng-model="addMeeting.participants"
+                        reset-search-input="true"
+                        theme="bootstrap"
+                        style="max-width:350px;font-size:16px;"
+                        >
+                    <ui-select-match placeholder="Type an employee name">{{$item.full_name}}</ui-select-match>
+                    <ui-select-choices
+                            repeat="employee in addMeeting.employees | filter: {full_name: $select.search} | orderBy: 'full_name'">
+                        <span class="tiny-headshot">
+                            <img class="headshot-image" ng-src="{{ employee.avatar_small }}" alt="{{ employee.full_name }}'s avatar" />
+                        </span>
+                        <div class="names" ng-bind-html="employee.full_name | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
+            </panel>
+        </div>
+        <div class="modal-footer">
+            <button type="button" ng-click="addMeeting.cancel()" data-dismiss="modal" class="btn btn-light pull-left">Cancel</button>
+            <button ng-disabled="!addMeeting.participants.length > 0 || !addMeeting.name" type="button" class="btn btn-success" ng-click="addMeeting.panel_index=0">Next &rarr;</button>
+        </div>
+    </div>
+    <div class="form-group" ng-show="addMeeting.panel_index==$index" ng-repeat="participant in addMeeting.participants">
+        <div class="modal-body">
+            <panel class="devzone">
+                <h3 class="modal-title">Who is {{participant.full_name }} representing?</h3>
+                <ui-select
+                        id="to"
+                        multiple
+                        ng-model="participant.employeesRepresented"
+                        reset-search-input="true"
+                        theme="bootstrap"
+                        style="max-width:350px;font-size:16px;"
+                        >
+                    <ui-select-match placeholder="Type an employee name">{{$item.full_name}}</ui-select-match>
+                    <ui-select-choices
+                            repeat="employee in addMeeting.employees | filter: {full_name: $select.search} | orderBy: 'full_name'">
+                        <span class="tiny-headshot">
+                            <img class="headshot-image" ng-src="{{ employee.avatar_small }}" alt="{{ employee.full_name }}'s avatar" />
+                        </span>
+                        <div class="names" ng-bind-html="employee.full_name | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
+            </panel>
+        </div>
+        <div class="modal-footer">
+            <button type="button" ng-click="addMeeting.panel_index=$index-1" data-dismiss="modal" class="btn btn-light">&larr; Back</button>
+            <button ng-disabled="" ng-show="!$last" type="button" class="btn btn-success" ng-click="addMeeting.panel_index=$index+1">Next &rarr;</button>
+            <button ng-disabled="addMeeting.busy" ng-show="$last" type="button" class="btn btn-success" ng-click="addMeeting.save()">Save</button>
+        </div>
+    </div>
+</form>

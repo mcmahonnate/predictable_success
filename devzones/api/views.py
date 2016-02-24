@@ -1,9 +1,9 @@
 from org.api.permissions import UserIsEmployeeOrLeaderOrCoachOfEmployee, UserIsEmployee
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import *
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from org.api.permissions import PermissionsViewAllEmployees
-from .permissions import UserIsConversationParticipant, UserIsAssessor
+from .permissions import UserIsConversationParticipantOrHasAllAccess, UserIsAssessor, UserIsMeetingParticipantOrHasAllAccess
 from .serializers import *
 
 
@@ -11,6 +11,18 @@ from .serializers import *
 class CreateEmployeeZone(CreateAPIView):
     serializer_class = CreateEmployeeZoneSerializer
     permission_classes = (IsAuthenticated,)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        saved = self.perform_create(serializer)
+        serializer = EmployeeZoneSerializer(instance=saved, context={'request': request})
+
+        return Response(serializer.data)
+
+    def perform_create(self, serializer):
+        return serializer.save()
 
 
 class RetrieveEmployeeZone(RetrieveAPIView):
@@ -31,8 +43,28 @@ class RetrieveEmployeeZone(RetrieveAPIView):
 
 class RetrieveMeeting(RetrieveAPIView):
     serializer_class = MeetingSerializer
-    permission_classes = (IsAuthenticated, PermissionsViewAllEmployees)
+    permission_classes = (IsAuthenticated, UserIsMeetingParticipantOrHasAllAccess)
     queryset = Meeting.objects.all()
+
+    def get_meeting(self):
+        return self.get_object()
+
+
+class CreateMeeting(CreateAPIView):
+    serializer_class = CreateUpdateMeetingSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        saved = self.perform_create(serializer)
+        serializer = MeetingSerializer(instance=saved, context={'request': request})
+
+        return Response(serializer.data)
+
+    def perform_create(self, serializer):
+        return serializer.save()
 
 
 class RetrieveMyEmployeeZones(ListAPIView):
@@ -84,13 +116,33 @@ class UpdateEmployeeZone(RetrieveUpdateAPIView):
         return Response(serializer.data)
 
 
-class UpdateConversation(RetrieveUpdateAPIView):
+class CreateManyConversations(CreateAPIView):
+    serializer_class = CreateConversationSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, many=True)
+        serializer.is_valid(raise_exception=True)
+        saved = self.perform_create(serializer)
+        serializer = ConversationSerializer(instance=saved, many=True, context={'request': request})
+        return Response(serializer.data)
+
+    def perform_create(self, serializer):
+        return serializer.save()
+
+
+class RetrieveUpdateConversation(RetrieveUpdateAPIView):
     queryset = Conversation.objects.all()
-    permission_classes = (IsAuthenticated, UserIsConversationParticipant)
+    permission_classes = (IsAuthenticated, UserIsConversationParticipantOrHasAllAccess)
     serializer_class = UpdateConversationSerializer
 
     def get_conversation(self):
         return self.get_object()
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = ConversationSerializer(instance, context={'request': request})
+        return Response(serializer.data)
 
 
 class RetakeEmployeeZone(GenericAPIView):
@@ -115,13 +167,18 @@ class RetakeEmployeeZone(GenericAPIView):
 
 
 class RetrieveMeetingConversations(ListAPIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, UserIsMeetingParticipantOrHasAllAccess)
     serializer_class = ConversationSerializer
+
+    def get_meeting(self):
+        return self.get_object()
 
     def get_queryset(self):
         try:
+            employee = self.request.user.employee
             meeting = Meeting.objects.get(id=self.kwargs['pk'])
             conversations = Conversation.objects.get_for_meeting(meeting=meeting)
+            conversations = conversations.exclude(employee=employee)
             return conversations
         except Conversation.DoesNotExist:
             raise Http404()
@@ -135,6 +192,7 @@ class RetrieveMyTeamLeadConversations(ListAPIView):
         try:
             employee = self.request.user.employee
             conversations = Conversation.objects.get_conversations_for_lead(development_lead=employee)
+            conversations = conversations.exclude(employee=employee)
             return conversations
         except Conversation.DoesNotExist:
             raise Http404()
@@ -148,18 +206,22 @@ class RetrieveMyCurrentConversation(RetrieveAPIView):
         conversation = Conversation.objects.get_current_for_employee(employee=employee)
         if conversation is None:
             raise Http404()
-        serializer = ConversationSerializer(conversation, context={'request': request})
+        serializer = SanitizedConversationSerializer(conversation, context={'request': request})
         return Response(serializer.data)
 
 
 class RetrieveMyCurrentMeetings(ListAPIView):
     permission_classes = (IsAuthenticated,)
-    serializer_class = MeetingSerializer
+    serializer_class = SanitizedMeetingSerializer
 
     def get_queryset(self):
         try:
             employee = self.request.user.employee
-            meetings = Meeting.objects.get_all_for_employee(employee)
+            if self.request.user.has_perm('org.view_employees'):
+                meetings = Meeting.objects.get_all_current()
+            else:
+                meetings = Meeting.objects.get_all_for_employee(employee)
+            meetings = meetings.exclude(conversations__employee__id=employee.id)
             return meetings
         except Meeting.DoesNotExist:
             raise Http404()

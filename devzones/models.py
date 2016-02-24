@@ -95,11 +95,11 @@ class Answer(models.Model):
 
 class EmployeeZoneManager(models.Manager):
     def get_all_finished_for_employee(self, employee):
-        return self.filter(employee=employee, completed=True)
+        return self.filter(employee=employee, assessor=employee, completed=True)
 
     def get_unfinished(self, employee):
         try:
-            return self.get(employee=employee, completed=False)
+            return self.get(employee=employee, assessor=employee, completed=False)
         except EmployeeZone.DoesNotExist:
             return None
 
@@ -139,6 +139,7 @@ class EmployeeZone(models.Model):
             else:
                 zone_id = zone_count[0]['zone']
                 self.zone = Zone.objects.get(id=zone_id)
+            self.date = datetime.now()
             self.save()
 
     def next_question(self):
@@ -206,14 +207,7 @@ class ConversationManager(models.Manager):
         return self.filter(employee=employee)
 
     def get_conversations_for_lead(self, development_lead):
-        # Get everyone that reports up to the development lead.
-        descendant_ids = development_lead.get_descendants().values_list('id', flat=True)
-        # Get all the meetings where development lead is a participant.
-        meeting_ids = Meeting.objects.get_all_for_employee(development_lead).values_list('id', flat=True)
-        # Get all the conversations where the development lead is participating.
-        conversations = self.filter(Q(development_lead__id=development_lead.id) | Q(meeting__id__in=meeting_ids))
-        # Of the conversations remaining only return the ones about the people that report to the development lead.
-        conversations = conversations.filter(employee__id__in=descendant_ids)
+        conversations = self.filter(development_lead__id=development_lead.id)
         return conversations.filter(completed=False)
 
 
@@ -242,9 +236,9 @@ class AdviceManager(models.Manager):
                             and employee_zone.development_conversation.development_lead_assessment.zone is not None:
                         return self.filter(Q(employee_zone=employee_zone.zone) &
                                            (Q(development_lead_zone__isnull=True) |
-                                            Q(employee_zone.development_conversation.development_lead_assessment.zone)))
+                                            Q(development_lead_zone = employee_zone.development_conversation.development_lead_assessment.zone)))
         except AttributeError:
-            pass
+                pass
         return self.filter(employee_zone=employee_zone.zone, development_lead_zone__isnull=True)
 
 
@@ -252,10 +246,14 @@ class Advice(models.Model):
     objects = AdviceManager()
     employee_zone = models.ForeignKey(Zone, related_name='+')
     development_lead_zone = models.ForeignKey(Zone, related_name='+', blank=True, null=True)
+    alert_for_employee = models.TextField(blank=True, default='')
+    alert_type_for_employee = models.CharField(max_length=255, blank=True, default='')
+    alert_for_development_lead = models.TextField(blank=True, default='')
+    alert_type_for_development_lead = models.CharField(max_length=255, blank=True, default='')
     advice_name_for_employee = models.CharField(max_length=255, blank=True, default='')
     advice_description_for_employee = models.TextField(blank=True, default='')
     advice_name_for_development_leader = models.CharField(max_length=255, blank=True, default='')
     advice_description_for_development_leader = models.TextField(blank=True, default='')
 
     def __str__(self):
-        return "Advice when employee says %s" % self.employee_zone.name
+        return "Advice when employee says %s and manager says %s" % (self.employee_zone.name, (self.development_lead_zone.name if self.development_lead_zone else 'None'))

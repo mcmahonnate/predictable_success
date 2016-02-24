@@ -28,7 +28,7 @@
             </div>
         </div>
     </div>
-    <div class="panel panel-empty fade-in" ng-show="devzones.mySelfies.length==0 && devzones.myTeamLeadConversations.length==0">
+    <div class="panel panel-empty fade-in" ng-show="!devzones.busy && devzones.mySelfies.length==0 && devzones.myTeamLeadConversations.length==0 && devzones.meetings.length==0 && !devzones.myConversation">
         <img class="grumpycat" src="../static/images/grumpycat.png" alt="Grumpy Cat" />
         <h2>"Mmmmeeh... i see you don't have any activity yet.
             <span ng-show="devzones.selfie && !devzones.selfie.completed">Use the button above or this link to
@@ -44,18 +44,18 @@
         </h2>
     </div>
     <div class="panel devzones" ng-show="devzones.myTeamLeadConversations.length>0">
-        <h2 class="panel-title ng-binding">Team Selfies
-            <i class="fa fa-chevron-up pull-right collapse-toggle" ng-show="!devzones.collapse" ng-click="devzones.toggleCollapse()"></i>
-            <i class="fa fa-chevron-down pull-right collapse-toggle" ng-show="devzones.collapse" ng-click="devzones.toggleCollapse()"></i>
+        <h2 class="panel-title ng-binding"><a ng-click="devzones.teamSelfiesCollapse=!devzones.teamSelfiesCollapse" style="cursor: pointer">My Team's Selfies</a>
+            <i class="fa fa-chevron-down pull-right collapse-toggle" ng-show="!devzones.teamSelfiesCollapse" ng-click="devzones.teamSelfiesCollapse=true"></i>
+            <i class="fa fa-chevron-right pull-right collapse-toggle" ng-show="devzones.teamSelfiesCollapse" ng-click="devzones.teamSelfiesCollapse=false"></i>
         </h2>
-        <div collapse="devzones.collapse">
+        <div collapse="devzones.teamSelfiesCollapse">
             <table class="table responsive-table" >
                 <thead>
                     <tr>
                         <th scope="col" class="width-20-percent">Employee</th>
                         <th scope="col" class="width-20-percent">Represented By</th>
                         <th scope="col" class="width-20-percent">Finished</th>
-                        <th scope="col" class="width-20-percent">Leadership Assessment</th>
+                        <th scope="col" class="width-20-percent">My Perception</th>
                         <th scope="col" class="width-20-percent centered">Action</th>
                     </tr>
                 </thead>
@@ -65,17 +65,16 @@
                         <td>{{ conversation.development_lead.full_name }}</td>
                         <td><i ng-show="conversation.employee_assessment.completed" class="fa fa-check" title="Completed"></i></td>
                         <td>
-                            <a ng-show="!conversation.development_lead_assessment" class="btn btn-default btn-md give-feedback-btn" ng-click="devzones.takeLeaderAssessment(conversation)" type="button">
+                            <a ng-show="!conversation.development_lead_assessment" ng-disabled="true" class="btn btn-default btn-md give-feedback-btn" ng-click="devzones.takeLeaderAssessment(conversation)" type="button">
                                 <i class="fa fa-heartbeat"></i>
-                                Give Assessment
+                                Give Perception
                             </a>
                             <a ng-show="conversation.development_lead_assessment" ng-click="devzones.takeLeaderAssessment(conversation)" style="cursor: pointer">
                                 {{ conversation.development_lead_assessment.zone.name }}
                             </a>
                         </td>
                         <td class="centered">
-
-                            <a ng-disabled="!conversation.employee_assessment.completed" class="btn btn-default btn-md give-feedback-btn" ng-href="#/devzones/selfies/{{ conversation.employee_assessment.id }}" type="button">
+                            <a ng-disabled="!conversation.employee_assessment.completed" class="btn btn-default btn-md give-feedback-btn" ng-href="#/devzones/selfies/{{ conversation.id }}" type="button">
                                 <i class="fa fa-eye"></i> View Selfie
                             </a>
                         </td>
@@ -84,7 +83,36 @@
             </table>
         </div>
     </div>
+    <div class="panel devzones" ng-show="devzones.meetings.length>0">
+        <h2 class="panel-title ng-binding"><a ng-click="devzones.meetingsCollapse=!devzones.meetingsCollapse" style="cursor: pointer">My Meetings</a>
+            <i class="fa fa-plus-circle collapse-toggle" ng-show="!devzones.meetingsCollapse && devzones.isAdmin" ng-click="devzones.addMeeting()" style="margin-left: 5px;"></i>
+            <i class="fa fa-chevron-down pull-right collapse-toggle" ng-show="!devzones.meetingsCollapse" ng-click="devzones.meetingsCollapse=true"></i>
+            <i class="fa fa-chevron-right pull-right collapse-toggle" ng-show="devzones.meetingsCollapse" ng-click="devzones.meetingsCollapse=false"></i>
 
+        </h2>
+        <div collapse="devzones.meetingsCollapse">
+            <table class="table responsive-table" >
+                <thead>
+                    <tr>
+                        <th scope="col" class="width-20-percent">Meeting</th>
+                        <th scope="col" class="width-60-percent">Participants</th>
+                        <th scope="col" class="width-20-percent centered">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="meeting in devzones.meetings | orderBy:'name':false">
+                        <td>{{ meeting.name }}</td>
+                        <td><img class="tiny-headshot pull-left" ng-src="{{ participant.avatar_small }}" ng-attr-title="{{participant.full_name}}" ng-repeat="participant in meeting.participants"/></td>
+                        <td class="centered">
+                            <a class="btn btn-default btn-md give-feedback-btn" ng-href="#/devzones/meetings/{{ meeting.id }}" type="button">
+                                <i class="fa fa-eye"></i> View Meeting
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
     <div class="panel devzones" ng-show="devzones.mySelfies.length>0">
         <h2 class="panel-title ng-binding">Your Selfies</h2>
 

@@ -1,7 +1,22 @@
 from rest_framework import permissions
 
 
-class UserIsConversationParticipant(permissions.BasePermission):
+class UserIsMeetingParticipantOrHasAllAccess(permissions.BasePermission):
+    """ Ensures that the current user is a
+    participant in the meeting.
+
+    Any view that uses this permission needs to implement
+    the get_meeting() method that should return a Meeting
+    object.
+    """
+    def has_permission(self, request, view):
+        if request.user.has_perm('org.view_employees'):
+            return True
+        meeting = view.get_meeting()
+        return request.user.employee in meeting.participants.all()
+
+
+class UserIsConversationParticipantOrHasAllAccess(permissions.BasePermission):
     """ Ensures that the current user is a
     participant in the conversation.
 
@@ -10,6 +25,8 @@ class UserIsConversationParticipant(permissions.BasePermission):
     object.
     """
     def has_permission(self, request, view):
+        if request.user.has_perm('org.view_employees'):
+            return True
         conversation = view.get_conversation()
         if request.user.employee in conversation.meeting.participants.all():
             return True

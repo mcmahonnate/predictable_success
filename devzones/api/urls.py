@@ -2,11 +2,13 @@ from django.conf.urls import *
 from views import *
 
 urlpatterns = [
+    url(r'^conversations/create/$', CreateManyConversations.as_view()),
     url(r'^conversations/current/$', RetrieveMyCurrentConversation.as_view()),
     url(r'^conversations/team-lead/$', RetrieveMyTeamLeadConversations.as_view()),
-    url(r'^conversations/(?P<pk>[0-9]*)/update/$', UpdateConversation.as_view()),
+    url(r'^conversations/(?P<pk>[0-9]*)/$', RetrieveUpdateConversation.as_view()),
     url(r'^meetings/(?P<pk>[0-9]*)/conversations/$', RetrieveMeetingConversations.as_view()),
     url(r'^meetings/(?P<pk>[0-9]*)/$', RetrieveMeeting.as_view()),
+    url(r'^meetings/create/$', CreateMeeting.as_view()),
     url(r'^meetings/$', RetrieveMyCurrentMeetings.as_view()),
     url(r'^selfies/create/$', CreateEmployeeZone.as_view()),
     url(r'^selfies/unfinished/$', RetrieveUnfinishedEmployeeZone.as_view()),

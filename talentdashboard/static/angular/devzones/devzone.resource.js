@@ -29,19 +29,6 @@ function DevZoneResource($resource) {
             url: '/api/v1/devzones/selfies/',
             isArray: true
         },
-        'getMyConversation': {
-            method: 'GET',
-            url: '/api/v1/devzones/conversations/current/'
-        },
-        'updateConversation': {
-            method: 'PUT',
-            url: '/api/v1/devzones/conversations/:id/update/'
-        },
-        'getMyTeamLeadConversations': {
-            method: 'GET',
-            url: '/api/v1/devzones/conversations/team-lead/',
-            isArray: true
-        },
         'getZones' : {
             method: 'GET',
             url: '/api/v1/devzones/zones/',

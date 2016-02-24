@@ -2,27 +2,34 @@ angular
     .module('devzones')
     .controller('DevZonesController', DevZonesController);
 
-function DevZonesController(DevZoneService, Notification, analytics, $location, $modal, $scope, $sce, $rootScope) {
+function DevZonesController(ConversationService, DevZoneService, MeetingService, Notification, analytics, $location, $modal, $scope, $sce, $rootScope) {
     /* Since this page can be the root for some users let's make sure we capture the correct page */
     var location_url = $location.url().indexOf('/devzones') < 0 ? '/devzones' : $location.url();
     analytics.trackPage($scope, $location.absUrl(), location_url);
 
     var vm = this;
-    vm.busy = false;
-    vm.collapse = false;
+    vm.busy = true;
+    vm.teamSelfiesCollapse = false;
+    vm.meetingsCollapse = true;
     vm.showEmptyScreen = false;
     vm.selfie = null;
     vm.idSessionIntro = $rootScope.customer.devzones_id_session_intro;
     vm.welcome = $sce.trustAsHtml($rootScope.customer.devzones_welcome);
+    vm.isAdmin = $rootScope.currentUser.can_edit_employees;
     vm.mySelfies = [];
     vm.myConversation = null;
-    vm.myTeamLeadConversations = []
+    vm.myTeamLeadConversations = [];
+    vm.meetings = [];
+    vm.getConversationLoaded = false;
+    vm.getMySelifesLoaded = false;
+    vm.getMyTeamLeadConversationsLoaded = false;
+    vm.getMyMeetingsLoaded = false;
     vm.submitDevZone = submitDevZone;
     vm.requestCheckIn = requestCheckIn;
     vm.requestFeedback = requestFeedback;
-    vm.toggleCollapse = toggleCollapse;
     vm.showMeetingParticipants = showMeetingParticipants;
     vm.takeLeaderAssessment = takeLeaderAssessment;
+    vm.addMeeting = addMeeting;
 
     activate();
 
@@ -30,17 +37,41 @@ function DevZonesController(DevZoneService, Notification, analytics, $location, 
         getConversation();
         getMySelfies();
         getMyTeamLeadConversations();
+        getMyMeetings();
+    };
+
+    function isBusy() {
+        if (vm.getConversationLoaded && vm.getMySelifesLoaded && vm.getMyTeamLeadConversationsLoaded && vm.getMyMeetingsLoaded) {
+            vm.busy = false;
+        } else {
+            vm.busy = true;
+        }
+    }
+
+    function getMyMeetings() {
+        MeetingService.getMyMeetings()
+            .then(function(meetings){
+                vm.meetings = meetings;
+                vm.getMyMeetingsLoaded = true;
+                isBusy();
+            }, function(){
+                vm.getMyMeetingsLoaded = true;
+                isBusy();
+            }
+        );
     };
 
     function getConversation() {
         vm.busy = true;
-        DevZoneService.getMyConversation()
+        ConversationService.getMyConversation()
             .then(function(conversation){
                 vm.myConversation = conversation;
                 vm.selfie = conversation.employee_assessment;
-                vm.busy = false;
+                vm.getConversationLoaded = true;
+                isBusy();
             }, function(){
-                vm.busy = false;
+                vm.getConversationLoaded = true;
+                isBusy();
             }
         )
     };
@@ -49,14 +80,24 @@ function DevZonesController(DevZoneService, Notification, analytics, $location, 
         DevZoneService.getMyEmployeeZones()
             .then(function(selfies){
                 vm.mySelfies = selfies;
+                vm.getMySelifesLoaded = true;
+                isBusy();
+            }, function(){
+                vm.getMySelifesLoaded = true;
+                isBusy();
             }
         )
     };
 
     function getMyTeamLeadConversations() {
-        DevZoneService.getMyTeamLeadConversations()
+        ConversationService.getMyTeamLeadConversations()
             .then(function(conversations){
                 vm.myTeamLeadConversations = conversations;
+                vm.getMyTeamLeadConversationsLoaded = true;
+                isBusy();
+            }, function(){
+                vm.getMyTeamLeadConversationsLoaded = true;
+                isBusy();
             }
         )
     };
@@ -159,7 +200,19 @@ function DevZonesController(DevZoneService, Notification, analytics, $location, 
         );
     }
 
-    function toggleCollapse() {
-        vm.collapse = !vm.collapse;
+
+    function addMeeting() {
+        var modalInstance = $modal.open({
+            animation: true,
+            backdrop: 'static',
+            templateUrl: '/static/angular/devzones/partials/_modals/add-meeting.html',
+            controller: 'AddMeetingController as addMeeting',
+            resolve: {}
+        });
+        modalInstance.result.then(
+            function (meeting) {
+                vm.meetings.push(meeting);
+            }
+        );
     }
 }
