@@ -65,7 +65,7 @@
                         <td>{{ conversation.development_lead.full_name }}</td>
                         <td><i ng-show="conversation.employee_assessment.completed" class="fa fa-check" title="Completed"></i></td>
                         <td>
-                            <a ng-show="!conversation.development_lead_assessment" class="btn btn-default btn-md give-feedback-btn" ng-click="devzones.takeLeaderAssessment(conversation)" type="button">
+                            <a ng-show="!conversation.development_lead_assessment" ng-disabled="true" class="btn btn-default btn-md give-feedback-btn" ng-click="devzones.takeLeaderAssessment(conversation)" type="button">
                                 <i class="fa fa-heartbeat"></i>
                                 Give Perception
                             </a>
