@@ -29,6 +29,7 @@ function DevZonesController(ConversationService, DevZoneService, MeetingService,
     vm.requestFeedback = requestFeedback;
     vm.showMeetingParticipants = showMeetingParticipants;
     vm.takeLeaderAssessment = takeLeaderAssessment;
+    vm.addMeeting = addMeeting;
 
     activate();
 
@@ -46,6 +47,7 @@ function DevZonesController(ConversationService, DevZoneService, MeetingService,
             vm.busy = true;
         }
     }
+
     function getMyMeetings() {
         MeetingService.getMyMeetings()
             .then(function(meetings){
@@ -194,6 +196,22 @@ function DevZonesController(ConversationService, DevZoneService, MeetingService,
         modalInstance.result.then(
             function (employeeZone) {
                 conversation.development_lead_assessment = employeeZone;
+            }
+        );
+    }
+
+
+    function addMeeting() {
+        var modalInstance = $modal.open({
+            animation: true,
+            backdrop: 'static',
+            templateUrl: '/static/angular/devzones/partials/_modals/add-meeting.html',
+            controller: 'AddMeetingController as addMeeting',
+            resolve: {}
+        });
+        modalInstance.result.then(
+            function (meeting) {
+                vm.meetings.push(meeting);
             }
         );
     }

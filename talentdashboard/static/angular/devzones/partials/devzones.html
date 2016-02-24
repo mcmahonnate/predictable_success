@@ -85,7 +85,7 @@
     </div>
     <div class="panel devzones" ng-show="devzones.meetings.length>0">
         <h2 class="panel-title ng-binding"><a ng-click="devzones.meetingsCollapse=!devzones.meetingsCollapse" style="cursor: pointer">My Meetings</a>
-            <i class="fa fa-plus-circle collapse-toggle" ng-show="!devzones.meetingsCollapse && devzones.isAdmin" ng-click="" style="margin-left: 5px;"></i>
+            <i class="fa fa-plus-circle collapse-toggle" ng-show="!devzones.meetingsCollapse && devzones.isAdmin" ng-click="devzones.addMeeting()" style="margin-left: 5px;"></i>
             <i class="fa fa-chevron-down pull-right collapse-toggle" ng-show="!devzones.meetingsCollapse" ng-click="devzones.meetingsCollapse=true"></i>
             <i class="fa fa-chevron-right pull-right collapse-toggle" ng-show="devzones.meetingsCollapse" ng-click="devzones.meetingsCollapse=false"></i>
 

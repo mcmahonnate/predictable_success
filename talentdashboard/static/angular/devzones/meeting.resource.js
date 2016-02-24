@@ -7,6 +7,10 @@ function MeetingResource($resource) {
         'get': {
             method: 'GET',
         },
+        'create': {
+            url: '/api/v1/devzones/meetings/create/',
+            method: 'POST',
+        },
         'getMyMeetings': {
             method: 'GET',
             isArray: true

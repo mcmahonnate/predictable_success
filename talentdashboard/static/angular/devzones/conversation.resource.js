@@ -4,6 +4,10 @@ angular
 
 function ConversationResource($resource) {
     var actions = {
+        'create': {
+            method: 'POST',
+            isArray: true
+        },
         'get': {
             method: 'GET',
         },

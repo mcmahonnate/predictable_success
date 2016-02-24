@@ -131,6 +131,25 @@ class UpdateConversationSerializer(serializers.ModelSerializer):
         fields = ('id', 'development_lead_assessment')
 
 
+class CreateConversationSerializer(serializers.ModelSerializer):
+    employee = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
+    development_lead = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
+    meeting = serializers.PrimaryKeyRelatedField(queryset=Meeting.objects.all())
+
+    class Meta:
+        model = Conversation
+        fields = ('id', 'employee', 'development_lead', 'meeting')
+
+
+class CreateUpdateMeetingSerializer(serializers.ModelSerializer):
+    name = serializers.CharField()
+    participants = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all(), many=True)
+
+    class Meta:
+        model = Meeting
+        fields = ('id', 'name', 'participants')
+
+
 class MeetingSerializer(serializers.ModelSerializer):
     participants = SanitizedEmployeeSerializer(many=True)
     conversations = ConversationSerializer(many=True)

@@ -1,4 +1,5 @@
 from org.api.permissions import UserIsEmployeeOrLeaderOrCoachOfEmployee, UserIsEmployee
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import *
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -49,6 +50,23 @@ class RetrieveMeeting(RetrieveAPIView):
         return self.get_object()
 
 
+class CreateMeeting(CreateAPIView):
+    serializer_class = CreateUpdateMeetingSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        saved = self.perform_create(serializer)
+        serializer = MeetingSerializer(instance=saved, context={'request': request})
+
+        return Response(serializer.data)
+
+    def perform_create(self, serializer):
+        return serializer.save()
+
+
 class RetrieveMyEmployeeZones(ListAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = EmployeeZoneSerializer
@@ -96,6 +114,21 @@ class UpdateEmployeeZone(RetrieveUpdateAPIView):
         self.perform_update(serializer)
         serializer = EmployeeZoneSerializer(instance, context={'request': request})
         return Response(serializer.data)
+
+
+class CreateManyConversations(CreateAPIView):
+    serializer_class = CreateConversationSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, many=True)
+        serializer.is_valid(raise_exception=True)
+        saved = self.perform_create(serializer)
+        serializer = ConversationSerializer(instance=saved, many=True, context={'request': request})
+        return Response(serializer.data)
+
+    def perform_create(self, serializer):
+        return serializer.save()
 
 
 class RetrieveUpdateConversation(RetrieveUpdateAPIView):
