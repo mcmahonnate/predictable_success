@@ -82,6 +82,7 @@ function CheckInController(CheckInsService, Comment, Employee, EmployeeSearch, H
         CheckInsService.send(vm.checkin)
             .then(function(checkin){
                 vm.checkin = checkin
+                $location.path("/checkins/")
                 Notification.success("Your check-in was sent to " + vm.checkin.employee.first_name);
         });
     };
@@ -232,7 +233,7 @@ function CheckInController(CheckInsService, Comment, Employee, EmployeeSearch, H
                         if (!$cookies.checkinSave) {
                             showSaveInfo()
                         }
-                        $location.path("/checkins/");
+                        $location.path("/checkins/" + newCheckin.id);
                     } else {
                         $location.path("/checkins/" + newCheckin.id);
                     }
