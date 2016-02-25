@@ -92,18 +92,19 @@ function CheckInsController(CheckInsService, CheckInRequestService, Notification
             }
         });
         modalInstance.result.then(
-            function (sentFeedbackRequests) {
-                getMyCheckInRequests();
+            function (request) {
+                console.log(request);
+                vm.myRequests.push(request);
             }
         );
     }
 
-    function cancelRequest(request) {
+    function cancelRequest(request, index) {
         if ($window.confirm('Are you sure you want to cancel this request?')) {
             CheckInRequestService.cancelRequest(request)
                 .then(function () {
                     Notification.success("Your request for " + request.host.first_name + " has been canceled.");
-                    getMyCheckInRequests();
+                    vm.myRequests.splice(index,1);
                 });
         }
     }

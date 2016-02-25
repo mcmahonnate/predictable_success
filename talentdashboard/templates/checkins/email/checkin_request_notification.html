@@ -4,8 +4,15 @@
         <p>
             Hi, {{ recipient_first_name }}!
         </p>
+        <p>{{ employee_full_name }} would like you to check in with them.
+            {% if message %}
+            From {{ employee_first_name }}</p>
+            <p style="font-style: italic">"{{ message }}"
+            {% endif %}
+        </p>
+
         <p>
-            {{ employee_full_name }} would like you to check in with them. When you've met you can put your notes <a href="{{ response_url }}">here</a> and send them to {{ employee_first_name }}.
+        When you've met you can put your notes <a href="{{ response_url }}">here</a> and send them to {{ employee_first_name }}.
         </p>
         <p>Thanks! <br>--The Scoutmap Team</p>
         <p>

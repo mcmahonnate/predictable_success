@@ -65,6 +65,7 @@ def send_checkin_request_notification(checkin_request_id):
         'recipient_first_name': checkin_request.host.first_name,
         'employee_first_name': checkin_request.requester.first_name,
         'employee_full_name': checkin_request.requester.full_name,
+        'message': checkin_request.message,
         'response_url': response_url,
     }
     subject = "%s has requested a check in with you" % checkin_request.requester.full_name

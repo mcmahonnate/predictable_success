@@ -1,6 +1,6 @@
-<form id="feedback-modal" novalidate="novalidate">
+<form id="feedback-modal" novalidate="novalidate" ng-init="request.panel_index=0">
     <a class="close" ng-click="request.cancel()" data-dismiss="modal">&times;</a>
-    <div class="form-group">
+    <div class="form-group" ng-show="request.panel_index==0">
         <div class="modal-body">
             <panel class="checkin">
 
@@ -38,6 +38,18 @@
         </div>    
         <div class="modal-footer">
             <button type="button" ng-click="request.cancel()" data-dismiss="modal" class="btn btn-light pull-left">Cancel</button>
+            <button ng-disabled="request.selectedEmployee==null" type="button" class="btn btn-success" ng-click="request.panel_index=1">Next &rarr;</button>
+        </div>
+    </div>
+    <div class="form-group" ng-show="request.panel_index==1">
+        <div class="modal-body">
+            <panel class="checkin">
+                <h3 class="modal-title">Add a Message</h3>
+                <textarea style="min-height:120px;" class="form-control" cols="30" rows="5" ng-model="request.message" placeholder="If you'd like to add a reason for your check-in request you can do that here."></textarea>
+            </panel>
+        </div>
+        <div class="modal-footer">
+            <button type="button" ng-click="request.panel_index=0" data-dismiss="modal" class="btn btn-light pull-left">&larr; Back</button>
             <button ng-disabled="request.selectedEmployee==null" type="button" class="btn btn-success" ng-click="request.sendCheckInRequest()">Submit Request</button>
         </div>
     </div>

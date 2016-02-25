@@ -27,8 +27,16 @@ class CreateCheckInRequest(CreateAPIView):
     serializer_class = CreateCheckInRequestSerializer
     permission_classes = (IsAuthenticated,)
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        saved = self.perform_create(serializer)
+        serializer = CheckInRequestSerializer(instance=saved, context={'request': request})
+
+        return Response(serializer.data)
+
     def perform_create(self, serializer):
-        serializer.save(requester=self.request.user.employee)
+        return serializer.save(requester=self.request.user.employee)
 
 
 class MyCheckInRequests(ListAPIView):
