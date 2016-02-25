@@ -5,13 +5,17 @@ from ..models import *
 
 class AnswerSerializer(serializers.ModelSerializer):
     question_text = serializers.SerializerMethodField()
+    question_order = serializers.SerializerMethodField()
 
     def get_question_text(self, obj):
         return obj.question.text
 
+    def get_question_order(self, obj):
+        return obj.question.order
+
     class Meta:
         model = Answer
-        fields = ('id', 'text', 'question_text')
+        fields = ('id', 'text', 'question_text', 'question_order')
 
 
 class QuestionSerializer(serializers.ModelSerializer):

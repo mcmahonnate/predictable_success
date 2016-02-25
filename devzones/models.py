@@ -46,10 +46,14 @@ class Question(models.Model):
     previous_question = models.ForeignKey('Question', related_name='next_questions', null=True, blank=True)
     randomize_next_questions = models.BooleanField(default=False)
     for_new_employees = models.BooleanField(default=False)
+    order = models.IntegerField(default=0)
 
     def answers(self):
-        return self._answers.order_by('?')
-
+        if self.randomize_answers:
+            return self._answers.order_by('?')
+        else:
+            return self._answers.order_by('order')
+        
     def has_siblings(self):
         if self.previous_question and self.previous_question.next_questions:
             if self.previous_question.next_questions.count() > 1:
@@ -88,6 +92,7 @@ class Answer(models.Model):
     text = models.TextField(blank=True, default='')
     zone = models.ForeignKey(Zone, related_name='+', null=True, blank=True)
     question = models.ForeignKey(Question, related_name='_answers', null=True)
+    order = models.IntegerField(default=0)
 
     def __str__(self):
         return self.text

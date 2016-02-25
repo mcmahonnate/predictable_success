@@ -60,7 +60,7 @@
             <i class="fa fa-chevron-right pull-right collapse-toggle" ng-show="selfieDetail.collapseSelfieAnswers" ng-click="selfieDetail.collapseSelfieAnswers=false"></i>
         </h2>
         <div class="devzone" style="max-width: inherit; padding-top: 10px; margin: 0px auto 20px auto;" collapse="selfieDetail.collapseSelfieAnswers">
-            <div ng-repeat="answer in selfieDetail.selfie.answers">
+            <div ng-repeat="answer in selfieDetail.selfie.answers | orderBy:'question_order'">
                 <p style="margin: 15px 0;">{{ answer.question_text }}</p>
 
                 <div class="devzone selfie-answer well well-sm selfie-answer-selected" style="display:flex; margin:10px 0px; max-width: 500px;">
