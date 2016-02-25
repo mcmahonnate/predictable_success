@@ -21,6 +21,7 @@
         vm.stepNext = stepNext;
         vm.stepBack = stepBack;
         vm.goTo = goTo;
+        vm.getLimit = getLimit;
 
         activate();
 
@@ -47,6 +48,15 @@
             $('.modal-backdrop').remove();
             $('body').removeClass('modal-open');
         };
+
+        function getLimit(arrayLength) {
+            var limit = arrayLength/2;
+            if (!(arrayLength%2==0)) {
+                limit++;
+            }
+            return limit;
+
+        }
 
         function getEmployees() {
             return PerceivedQualityService.getEmployees()
