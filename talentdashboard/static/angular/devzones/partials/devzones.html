@@ -4,14 +4,14 @@
         <h1>ID</h1>
     </div>
 
-    <div ng-show="devzones.myConversation && !devzones.busy " ng-class="{'slide-up-active': hideMessage}" class="alert alert-success slide-up" role="alert">
+    <div ng-show="devzones.myConversation && !devzones.busy && !devzones.selfie.completed" ng-class="{'slide-up-active': hideMessage}" class="alert alert-success slide-up" role="alert">
         <a class="btn btn-success btn-feedback pull-right" ng-show="!devzones.selfie.completed" ng-click="devzones.submitDevZone()" type="button">
             <i class="fa fa-comment"></i>
             <span ng-if="!devzones.selfie.answers.length>0" class="hide-for-mobile">Take your </span>
             <span ng-if="devzones.selfie.answers.length>0" class="hide-for-mobile">Finish your </span>
             Selfie
         </a>
-        <h2 class="alert-title">Your ID Session is Coming Up!</h2>
+        <h2 class="alert-title">Take a Selfie!</h2>
         <div class="alert-message" style="padding-left:0; padding-top: 10px">
             <div>
                 <div class="avatar-container pull-left hide-for-mobile" style="padding-right:10px;">
