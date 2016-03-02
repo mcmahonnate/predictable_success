@@ -10,6 +10,7 @@
                 <tr>
                     <th scope="col" class="width-20-percent">Employee</th>
                     <th scope="col" class="width-20-percent">Represented By</th>
+                    <th scope="col" class="width-20-percent">Finished</th>
                     <th scope="col" class="width-15-percent">Leadership's Perception</th>
                     <th scope="col" class="width-10-percent centered">Action</th>
                 </tr>
@@ -18,6 +19,7 @@
                 <tr ng-repeat="conversation in meeting.meeting.conversations | orderBy:'employee.full_name':false">
                     <td><span class="tiny-headshot pull-left"><img ng-src="{{ conversation.employee_assessment.employee.avatar_small }}" alt="{{ conversation.employee_assessment.employee.full_name }}" /></span>{{ conversation.employee_assessment.employee.full_name }}</td>
                     <td>{{ conversation.development_lead.full_name }}</td>
+                    <td><i ng-show="conversation.employee_assessment.completed" class="fa fa-check" title="Completed"></i></td>
                     <td>{{ conversation.development_lead_assessment.zone.name }}</td>
                     <td class="centered">
                         <a ng-disabled="!conversation.employee_assessment.completed" class="btn btn-default btn-md give-feedback-btn" ng-href="#/devzones/selfies/{{ conversation.id }}" type="button">
