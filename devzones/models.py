@@ -1,8 +1,8 @@
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, F
 from django.db.models import Count
-from org.models import Employee, Team
-from datetime import datetime, date
+from org.models import Employee
+from datetime import datetime, date, timedelta
 from dateutil.relativedelta import relativedelta
 
 
@@ -107,6 +107,10 @@ class EmployeeZoneManager(models.Manager):
             return self.get(employee=employee, assessor=employee, completed=False)
         except EmployeeZone.DoesNotExist:
             return None
+
+    def get_all_unfinished(self):
+        reminder_date = date.today()-timedelta(weeks=2)
+        return self.filter(completed=False, date__gt=reminder_date, employee=F('assessor'))
 
 
 class EmployeeZone(models.Model):
