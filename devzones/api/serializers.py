@@ -78,9 +78,8 @@ class EmployeeZoneReportSerializer(serializers.ModelSerializer):
     def get_meeting_name(self, obj):
         try:
             return obj.development_conversation.meeting.name
-        except ObjectDoesNotExist:
+        except (AttributeError, ObjectDoesNotExist):
             return None
-
 
     class Meta:
         model = EmployeeZone
