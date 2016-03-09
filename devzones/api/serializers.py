@@ -1,5 +1,6 @@
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
-from org.api.serializers import SanitizedEmployeeSerializer
+from org.api.serializers import SanitizedEmployeeSerializer, EmployeeSerializer
 from ..models import *
 
 
@@ -55,6 +56,35 @@ class CreateEmployeeZoneSerializer(serializers.ModelSerializer):
         model = EmployeeZone
         fields = ('id', 'employee', 'assessor', 'next_question', 'zone', 'notes', 'answers')
         read_only_fields = ('next_question', 'answers')
+
+
+class EmployeeZoneReportSerializer(serializers.ModelSerializer):
+    employee = EmployeeSerializer()
+    assessor = SanitizedEmployeeSerializer()
+    zone = ZoneSerializer()
+    next_question = QuestionSerializer()
+    answers = serializers.SerializerMethodField()
+    meeting_name = serializers.SerializerMethodField()
+    development_conversation = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    def get_answers(self, obj):
+        if obj.completed:
+            serializer = AnswerSerializer(context=self.context, many=True)
+            return serializer.to_representation(obj.answers)
+        else:
+            return [answer.id for answer in obj.answers.all()]
+
+
+    def get_meeting_name(self, obj):
+        try:
+            return obj.development_conversation.meeting.name
+        except ObjectDoesNotExist:
+            return None
+
+
+    class Meta:
+        model = EmployeeZone
+        fields = ('id', 'employee', 'assessor', 'next_question', 'zone', 'notes', 'answers', 'date', 'completed', 'times_retaken', 'development_conversation', 'new_employee', 'meeting_name')
 
 
 class EmployeeZoneSerializer(serializers.ModelSerializer):

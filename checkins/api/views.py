@@ -196,14 +196,14 @@ class CancelCheckInRequest(GenericAPIView):
 @api_view(['GET'])
 @permission_classes((IsAuthenticated, PermissionsViewAllEmployees))
 def checkin_report(request):
-    #try:
-    start_date = request.QUERY_PARAMS.get('start_date', None)
-    end_date = request.QUERY_PARAMS.get('end_date', None)
-    start_date = parser.parse(start_date).date()
-    end_date = parser.parse(end_date).date()
-    checkins = CheckIn.objects.filter(date__lte=end_date, date__gte=start_date)
-    serializer = CheckInReportSerializer(checkins, context={'request':request}, many=True)
-    return Response(serializer.data)
-    #except AttributeError:
-    #    raise Http404()
+    try:
+        start_date = request.QUERY_PARAMS.get('start_date', None)
+        end_date = request.QUERY_PARAMS.get('end_date', None)
+        start_date = parser.parse(start_date).date()
+        end_date = parser.parse(end_date).date()
+        checkins = CheckIn.objects.filter(date__lte=end_date, date__gte=start_date)
+        serializer = CheckInReportSerializer(checkins, context={'request':request}, many=True)
+        return Response(serializer.data)
+    except AttributeError:
+        raise Http404()
 

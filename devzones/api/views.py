@@ -1,5 +1,7 @@
-from org.api.permissions import UserIsEmployeeOrLeaderOrCoachOfEmployee, UserIsEmployee
+from dateutil import parser
+from org.api.permissions import UserIsEmployeeOrLeaderOrCoachOfEmployee, UserIsEmployee, PermissionsViewAllEmployees
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import *
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -225,3 +227,18 @@ class RetrieveMyCurrentMeetings(ListAPIView):
             return meetings
         except Meeting.DoesNotExist:
             raise Http404()
+
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated, PermissionsViewAllEmployees))
+def devzone_report(request):
+    try:
+        start_date = request.QUERY_PARAMS.get('start_date', None)
+        end_date = request.QUERY_PARAMS.get('end_date', None)
+        start_date = parser.parse(start_date).date()
+        end_date = parser.parse(end_date).date()
+        zones = EmployeeZone.objects.filter(date__lte=end_date, date__gte=start_date, employee=F('assessor'))
+        serializer = EmployeeZoneReportSerializer(zones, context={'request':request}, many=True)
+        return Response(serializer.data)
+    except AttributeError:
+        raise Http404()
