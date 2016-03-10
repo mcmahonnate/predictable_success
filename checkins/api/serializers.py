@@ -46,10 +46,21 @@ class CheckInReportSerializer(serializers.ModelSerializer):
 
 class CreateCheckInRequestSerializer(serializers.ModelSerializer):
     host = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
+    message = serializers.CharField(allow_blank=True)
 
     class Meta:
         model = CheckInRequest
-        fields = ['host']
+        fields = ['host', 'message']
+
+
+class CheckInRequestSerializer(serializers.ModelSerializer):
+    request_date = serializers.DateTimeField(required=False)
+    requester = SanitizedEmployeeSerializer()
+    host = SanitizedEmployeeSerializer()
+
+    class Meta:
+        model = CheckInRequest
+        fields = ['id', 'request_date', 'requester', 'host', 'has_been_answered', 'message']
 
 
 class CheckInSerializer(serializers.ModelSerializer):
@@ -63,16 +74,6 @@ class CheckInSerializer(serializers.ModelSerializer):
     class Meta:
         model = CheckIn
         fields = ('id', 'employee', 'host', 'date', 'summary', 'happiness', 'type', 'other_type_description', 'tasks', 'comments', 'published', 'visible_to_employee')
-
-
-class CheckInRequestSerializer(serializers.ModelSerializer):
-    request_date = serializers.DateTimeField(required=False)
-    requester = SanitizedEmployeeSerializer()
-    host = SanitizedEmployeeSerializer()
-
-    class Meta:
-        model = CheckInRequest
-        fields = ['id', 'request_date', 'requester', 'host', 'has_been_answered']
 
 
 class EmployeeCheckInSerializer(serializers.ModelSerializer):

@@ -9,6 +9,7 @@
         vm.currentCoach = null;
         vm.selectedEmployee = null;
         vm.teamLead = null;
+        vm.message = '';
         vm.changeCoach = changeCoach;
         vm.sendCheckInRequest = sendCheckInRequest;
         vm.cancel = cancel;
@@ -37,10 +38,10 @@
         }
 
         function sendCheckInRequest() {
-            CheckInRequestService.sendCheckInRequest(vm.selectedEmployee.id)
-                .then(function() {
+            CheckInRequestService.sendCheckInRequest({host: vm.selectedEmployee.id, message: vm.message})
+                .then(function(request) {
                     Notification.success("Your request was sent to " + vm.selectedEmployee.first_name);
-                    $modalInstance.close();
+                    $modalInstance.close(request);
                 });
         }
 

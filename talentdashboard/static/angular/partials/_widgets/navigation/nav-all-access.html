@@ -140,14 +140,14 @@
                                     Activity Report
                                 </a>
                             </li>
-                            <li>
-                                <a class="dashboard employee_menu" href="#/reports">
-                                    Employee Report
+                            <li ng-show="customer.show_shareable_checkins" >
+                                <a class="dashboard employee_menu" href="#/reports/checkins">
+                                    Check-Ins Report
                                 </a>
                             </li>
                             <li>
-                                <a class="dashboard employee_menu" href="#/reports/timespan">
-                                    Timespan Report
+                                <a class="dashboard employee_menu" href="#/reports">
+                                    Employee Report
                                 </a>
                             </li>
                             <li ng-show="customer.show_feedback" >
@@ -156,8 +156,13 @@
                                 </a>
                             </li>
                             <li ng-show="customer.show_shareable_checkins" >
-                                <a class="dashboard employee_menu" href="#/reports/checkins">
-                                    Check-Ins Report
+                                <a class="dashboard employee_menu" href="#/reports/devzones">
+                                    ID Report
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dashboard employee_menu" href="#/reports/timespan">
+                                    Timespan Report
                                 </a>
                             </li>
                         </ul>

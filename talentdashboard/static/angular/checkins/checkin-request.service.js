@@ -34,8 +34,8 @@ function CheckInRequestService($http, $log, CheckInRequestResource) {
         }
     }
 
-    function sendCheckInRequest(host) {
-        return CheckInRequestResource.sendCheckInRequest({'host': host}, success, fail).$promise;
+    function sendCheckInRequest(request) {
+        return CheckInRequestResource.sendCheckInRequest(request, success, fail).$promise;
 
         function success(response) {
             return response;

@@ -34,6 +34,7 @@ class CheckInRequest(models.Model):
     host = models.ForeignKey(Employee, related_name='requests_for_checkin')
     was_responded_to = models.BooleanField(default=False)
     was_canceled = models.BooleanField(default=False)
+    message = models.TextField(blank=True)
 
     @property
     def has_been_answered(self):

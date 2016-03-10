@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^meetings/(?P<pk>[0-9]*)/$', RetrieveMeeting.as_view()),
     url(r'^meetings/create/$', CreateMeeting.as_view()),
     url(r'^meetings/$', RetrieveMyCurrentMeetings.as_view()),
+    url(r'^reports/$', devzone_report),
     url(r'^selfies/create/$', CreateEmployeeZone.as_view()),
     url(r'^selfies/unfinished/$', RetrieveUnfinishedEmployeeZone.as_view()),
     url(r'^selfies/(?P<pk>[0-9]*)/$', RetrieveEmployeeZone.as_view()),

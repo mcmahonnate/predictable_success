@@ -1,5 +1,11 @@
 Hi, {{ recipient_first_name }}!
-{{ employee_full_name }} would like you to check in with them. When you've met you can add put your notes here:
+{{ employee_full_name }} would like you to check in with them.
+
+{% if message %}
+From {{ employee_first_name }} "{{ message }}
+{% endif %}
+
+When you've met you can add put your notes here:
 
 {{ response_url }}
 

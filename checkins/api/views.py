@@ -27,8 +27,16 @@ class CreateCheckInRequest(CreateAPIView):
     serializer_class = CreateCheckInRequestSerializer
     permission_classes = (IsAuthenticated,)
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        saved = self.perform_create(serializer)
+        serializer = CheckInRequestSerializer(instance=saved, context={'request': request})
+
+        return Response(serializer.data)
+
     def perform_create(self, serializer):
-        serializer.save(requester=self.request.user.employee)
+        return serializer.save(requester=self.request.user.employee)
 
 
 class MyCheckInRequests(ListAPIView):
@@ -188,14 +196,14 @@ class CancelCheckInRequest(GenericAPIView):
 @api_view(['GET'])
 @permission_classes((IsAuthenticated, PermissionsViewAllEmployees))
 def checkin_report(request):
-    #try:
-    start_date = request.QUERY_PARAMS.get('start_date', None)
-    end_date = request.QUERY_PARAMS.get('end_date', None)
-    start_date = parser.parse(start_date).date()
-    end_date = parser.parse(end_date).date()
-    checkins = CheckIn.objects.filter(date__lte=end_date, date__gte=start_date)
-    serializer = CheckInReportSerializer(checkins, context={'request':request}, many=True)
-    return Response(serializer.data)
-    #except AttributeError:
-    #    raise Http404()
+    try:
+        start_date = request.QUERY_PARAMS.get('start_date', None)
+        end_date = request.QUERY_PARAMS.get('end_date', None)
+        start_date = parser.parse(start_date).date()
+        end_date = parser.parse(end_date).date()
+        checkins = CheckIn.objects.filter(date__lte=end_date, date__gte=start_date)
+        serializer = CheckInReportSerializer(checkins, context={'request':request}, many=True)
+        return Response(serializer.data)
+    except AttributeError:
+        raise Http404()
 

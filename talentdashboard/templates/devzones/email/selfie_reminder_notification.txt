@@ -1,0 +1,16 @@
+Hi, {{ recipient_first_name }}!
+
+{% if started %}
+Don't forget to complete your selfie. Click below to finish.
+{% else %}
+Don't forget to take a selfie. You can start by clicking the link below.
+{% endif %}
+
+{{ response_url }}
+
+Thanks!
+--The Scoutmap Team
+
+P.S. Do you have more feedback or ideas for us? Let us know on the <a href="https://fool.slack.com/messages/feedback_for_scoutmap/">Feedback for Scoutmap Slack Channel.</a>
+
+
