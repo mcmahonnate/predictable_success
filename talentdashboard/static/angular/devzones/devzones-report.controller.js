@@ -63,6 +63,10 @@ function DevZonesReportController(DevZonesReportService, Notification, analytics
             if (!report.completed) report.date = null;
             row.selfie_perception = report.zone ? report.zone.name : null;
             row.notes = report.notes;
+            angular.forEach(report.answers, function (answer) {
+                row['question_' + answer.id] = answer.question_text;
+                row['answer_' + answer.id] = answer.text;
+            });
             vm.csv.push(row);
 
         });
