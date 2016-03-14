@@ -44,9 +44,10 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 EMAIL_USE_TLS = True
 EMAIL_HOST = os.environ.get("EMAIL_HOST", '')
 EMAIL_PORT = os.environ.get("EMAIL_PORT", '')
-EMAIL_HOST_USER = os.environ.get("EMAIL_ADDRESS", '')
+EMAIL_HOST_USER = os.environ.get("EMAIL_USER", '')
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD", '')
-DEFAULT_FROM_EMAIL = 'Scoutmap Team <' + EMAIL_HOST_USER + '>'
+EMAIL_SENDING_DOMAIN = os.environ.get("EMAIL_SENDING_DOMAIN", '')
+DEFAULT_FROM_EMAIL = 'Scoutmap Team <support@' + EMAIL_SENDING_DOMAIN + '>'
 DEMO_REQUEST_EMAIL_TO = 'nate@fool.com'
 DEMO_REQUEST_EMAIL_SUBJECT = ' requested a demo'
 
