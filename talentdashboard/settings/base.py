@@ -42,15 +42,16 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Email settings
 EMAIL_USE_SSL = True
-EMAIL_HOST = 'smtp.mandrillapp.com'
-EMAIL_PORT = 465
-EMAIL_HOST_USER = os.environ.get("EMAIL_ADDRESS", '')
+EMAIL_HOST = os.environ.get("EMAIL_HOST", '')
+EMAIL_PORT = os.environ.get("EMAIL_PORT", '')
+EMAIL_HOST_USER = os.environ.get("EMAIL_USER", '')
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD", '')
-DEFAULT_FROM_EMAIL = 'Scoutmap Team <' + EMAIL_HOST_USER + '>'
+EMAIL_SENDING_DOMAIN = os.environ.get("EMAIL_SENDING_DOMAIN", '')
+DEFAULT_FROM_EMAIL = 'Scoutmap Team <support@' + EMAIL_SENDING_DOMAIN + '>'
 DEMO_REQUEST_EMAIL_TO = 'nate@fool.com'
 DEMO_REQUEST_EMAIL_SUBJECT = ' requested a demo'
 
-ALLOWED_HOSTS = ['.scoutmap.com']
+ALLOWED_HOSTS = ['.scoutmap.com', 'live-scoutmap.herokuapp.com', 'staging-scoutmap.herokuapp.com']
 INTERNAL_IPS = (
     '0.0.0.0',
     '127.0.0.1',

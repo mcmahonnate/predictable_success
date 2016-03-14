@@ -65,7 +65,7 @@ class EmployeeZoneReportSerializer(serializers.ModelSerializer):
     next_question = QuestionSerializer()
     answers = serializers.SerializerMethodField()
     meeting_name = serializers.SerializerMethodField()
-    development_conversation = serializers.PrimaryKeyRelatedField(read_only=True)
+    development_lead = serializers.SerializerMethodField()
 
     def get_answers(self, obj):
         if obj.completed:
@@ -74,6 +74,12 @@ class EmployeeZoneReportSerializer(serializers.ModelSerializer):
         else:
             return [answer.id for answer in obj.answers.all()]
 
+    def get_development_lead(self, obj):
+        try:
+            serializer = SanitizedEmployeeSerializer(context=self.context)
+            return serializer.to_representation(obj.development_conversation.development_lead)
+        except (AttributeError, ObjectDoesNotExist):
+            return None
 
     def get_meeting_name(self, obj):
         try:
@@ -83,7 +89,7 @@ class EmployeeZoneReportSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmployeeZone
-        fields = ('id', 'employee', 'assessor', 'next_question', 'zone', 'notes', 'answers', 'date', 'completed', 'times_retaken', 'development_conversation', 'new_employee', 'meeting_name')
+        fields = ('id', 'employee', 'assessor', 'next_question', 'zone', 'notes', 'answers', 'date', 'completed', 'times_retaken', 'development_lead', 'new_employee', 'meeting_name')
 
 
 class EmployeeZoneSerializer(serializers.ModelSerializer):

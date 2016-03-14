@@ -30,27 +30,27 @@
                         </th>
                         <th>
                             <a href="" ng-click="devzonesReport.order('employee.hire_date');"><strong>Hire Date</strong></a>
-                            <span class="sortorder fa" ng-show="devzonesReport.predicate === 'type.name'" ng-class="devzonesReport.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                            <span class="sortorder fa" ng-show="devzonesReport.predicate === 'employee.hire_date'" ng-class="devzonesReport.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
                         </th>
                         <th>
                             <a href="" ng-click="devzonesReport.order('meeting_name');"><strong>Meeting</strong></a>
-                            <span class="sortorder fa" ng-show="devzonesReport.predicate === 'host.full_name'" ng-class="devzonesReport.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                            <span class="sortorder fa" ng-show="devzonesReport.predicate === 'meeting_name'" ng-class="devzonesReport.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
                         </th>
                         <th>
-                            <a href="" ng-click="devzonesReport.order('assessor.full_name');"><strong>Represented by</strong></a>
-                            <span class="sortorder fa" ng-show="devzonesReport.predicate === 'happiness.assessment_verbose'" ng-class="devzonesReport.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                            <a href="" ng-click="devzonesReport.order('development_lead.full_name');"><strong>Represented by</strong></a>
+                            <span class="sortorder fa" ng-show="devzonesReport.predicate === 'development_lead.full_name'" ng-class="devzonesReport.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
                         </th>
                         <th>
                             <a href="" ng-click="devzonesReport.order('completed');"><strong>Finished Selfie</strong></a>
-                            <span class="sortorder fa" ng-show="devzonesReport.predicate === 'date'" ng-class="devzonesReport.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                            <span class="sortorder fa" ng-show="devzonesReport.predicate === 'completed'" ng-class="devzonesReport.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
                         </th>
                         <th>
                             <a href="" ng-click="devzonesReport.order('date');"><strong>Finished Selfie Date</strong></a>
-                            <span class="sortorder fa" ng-show="devzonesReport.predicate === 'visible_to_employee_date'" ng-class="devzonesReport.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                            <span class="sortorder fa" ng-show="devzonesReport.predicate === 'date'" ng-class="devzonesReport.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
                         </th>
                         <th>
                             <a href="" ng-click="devzonesReport.order('zone.name');"><strong>Selfie Perception</strong></a>
-                            <span class="sortorder fa" ng-show="devzonesReport.predicate === 'published_date'" ng-class="devzonesReport.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                            <span class="sortorder fa" ng-show="devzonesReport.predicate === 'zone.name'" ng-class="devzonesReport.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
                         </th>
                     </tr>
                 </thead>
@@ -63,7 +63,7 @@
                         </td>
                         <td style="text-align: center">{{report.employee.hire_date | date:'MM/dd/yyyy'}}</td>
                         <td style="text-align: center">{{report.meeting_name}}</td>
-                        <td style="text-align: center">{{report.assessor.full_name}}</td>
+                        <td style="text-align: center">{{report.development_lead.full_name}}</td>
                         <td style="text-align: center">{{report.completed}}</td>
                         <td style="text-align: center"><span ng-show="report.completed">{{report.date | date:'MM/dd/yyyy'}}</span></td>
                         <td style="text-align: center">{{report.zone.name}}</td>

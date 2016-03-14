@@ -2,7 +2,7 @@ angular
     .module('devzones')
     .controller('DevZonesReportController', DevZonesReportController);
 
-function DevZonesReportController(DevZonesReportService, Notification, analytics, $location, $scope, $routeParams) {
+function DevZonesReportController(DevZonesReportService, Notification, analytics, $location, $scope, $routeParams, $filter) {
     analytics.trackPage($scope, $location.absUrl(), $location.url());
 
     var vm = this;
@@ -17,7 +17,6 @@ function DevZonesReportController(DevZonesReportService, Notification, analytics
     vm.buildCSV = buildCSV;
     vm.csv = [];
     vm.order = function (predicate) {
-        console.log('test');
         vm.reverse = (vm.predicate === predicate) ? !vm.reverse : true;
         vm.predicate = predicate;
     };
@@ -57,12 +56,13 @@ function DevZonesReportController(DevZonesReportService, Notification, analytics
             row.team = report.employee.team.name;
             row.hire_date = report.employee.hire_date;
             row.meeting = report.meeting_name;
-            row.represented_by = report.assessor.full_name;
+            row.represented_by = report.development_lead ? report.development_lead.full_name : null;
             row.finished_selfie = report.completed;
             row.finished_date = report.completed ? report.date : null;
             if (!report.completed) report.date = null;
             row.selfie_perception = report.zone ? report.zone.name : null;
             row.notes = report.notes;
+            report.answers = $filter('orderBy')(report.answers, 'question_order', false)
             angular.forEach(report.answers, function (answer) {
                 row['question_' + answer.id] = answer.question_text;
                 row['answer_' + answer.id] = answer.text;
