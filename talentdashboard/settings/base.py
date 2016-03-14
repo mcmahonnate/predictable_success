@@ -51,7 +51,7 @@ DEFAULT_FROM_EMAIL = 'Scoutmap Team <support@' + EMAIL_SENDING_DOMAIN + '>'
 DEMO_REQUEST_EMAIL_TO = 'nate@fool.com'
 DEMO_REQUEST_EMAIL_SUBJECT = ' requested a demo'
 
-ALLOWED_HOSTS = ['.scoutmap.com']
+ALLOWED_HOSTS = ['.scoutmap.com', 'live-scoutmap.herokuapp.com', 'staging-scoutmap.herokuapp.com']
 INTERNAL_IPS = (
     '0.0.0.0',
     '127.0.0.1',
