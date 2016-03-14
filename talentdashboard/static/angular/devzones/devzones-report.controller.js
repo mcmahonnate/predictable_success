@@ -56,7 +56,7 @@ function DevZonesReportController(DevZonesReportService, Notification, analytics
             row.team = report.employee.team.name;
             row.hire_date = report.employee.hire_date;
             row.meeting = report.meeting_name;
-            row.represented_by = report.assessor.full_name;
+            row.represented_by = report.development_lead ? report.development_lead.full_name : null;
             row.finished_selfie = report.completed;
             row.finished_date = report.completed ? report.date : null;
             if (!report.completed) report.date = null;
