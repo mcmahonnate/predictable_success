@@ -11,51 +11,20 @@
         </h1>
     </div>
     <div class="qualities panel">
-        <h2 class="panel-title ng-binding"><a ng-click="qualitiesReport.collapse=!qualitiesReport.collapse" style="cursor: pointer">Strengths Report</a>
+        <h2 class="panel-title ng-binding"><a ng-click="qualitiesReport.collapse=!qualitiesReport.collapse" style="cursor: pointer">My Strengths</a>
             <i class="fa fa-chevron-down pull-right collapse-toggle" ng-show="!qualitiesReport.collapse" ng-click="qualitiesReport.collapse=true"></i>
             <i class="fa fa-chevron-right pull-right collapse-toggle" ng-show="qualitiesReport.collapse" ng-click="qualitiesReport.collapse=false"></i>
         </h2>
 
         <div collapse="qualitiesReport.collapse" class="row" style="margin-top: 20px;">
             <div class="col-md-4">
-                <h2 class="panel-title ng-binding">Shared</h2>
-                <div class="quality well well-sm" style="display:flex" ng-repeat="(key, value) in qualitiesReport.shared_qualities | groupBy: 'quality.name'" ng-class="{'quality-selected': leaderAssessment.selectedAnswer==zone.id, 'selfie-answer':leaderAssessment.selectedAnswer!=zone.id}" ng-click="collapse=!collapse">
+                <div ng-repeat="quality in qualitiesReport.qualities| orderBy:['-count', 'type', 'name']" class="quality well well-sm" style="display:flex" ng-class="{'quality-shared': quality.type=='shared', 'quality-blind': quality.type=='blind', 'quality-hidden': quality.type=='hidden'}" ng-click="collapse=!collapse">
                     <div class="quality-label" style="width: 100%;">
-                        <h4><strong>{{ key }}</strong> <span class="quality-badge badge pull-right">{{ value.length }}</span></h4>
+                        <h4><strong>{{ quality.name }}</strong> <span class="badge pull-right" ng-class="{'quality-badge-shared': quality.type=='shared', 'quality-badge-blind': quality.type=='blind', 'quality-badge-hidden': quality.type=='hidden'}">{{ quality.count }}</span></h4>
                         <div collapse="collapse" ng-init="collapse=true">
-                            <p ng-repeat="quality in value" ng-if="$first" ng-bind-html="quality.quality.description" style="margin-top:5px;"></p>
+                            <p ng-bind-html="quality.description" style="margin-top:5px;"></p>
                             <div style="margin-top: 10px; min-height: 42px">
-                                <img ng-attr-title="{{quality.reviewer.full_name}}" ng-repeat="quality in value" ng-src="{{quality.reviewer.avatar_small}}" class="tiny-headshot"/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <h2 class="panel-title ng-binding">Blind</h2>
-                <div class="quality well well-sm" style="display:flex" ng-repeat="(key, value) in qualitiesReport.blind_qualities  | groupBy: 'quality.name'" ng-class="{'quality-selected': leaderAssessment.selectedAnswer==zone.id, 'selfie-answer':leaderAssessment.selectedAnswer!=zone.id}" ng-click="collapse=!collapse">
-                    <div class="quality-label" style="width: 100%;">
-                        <h4><strong>{{ key }}</strong> <span class="quality-badge badge pull-right">{{ value.length }}</span></h4>
-                        <div collapse="collapse" ng-init="collapse=true">
-                            <p ng-repeat="quality in value" ng-if="$first" ng-bind-html="quality.quality.description" style="margin-top:5px;"></p>
-                            <div style="margin-top: 10px; min-height: 42px">
-                                <img ng-attr-title="{{quality.reviewer.full_name}}" ng-repeat="quality in value" ng-src="{{quality.reviewer.avatar_small}}" class="tiny-headshot"/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <h2 class="panel-title ng-binding">Hidden</h2>
-                <div class="quality well well-sm" style="display:flex" ng-repeat="(key, value) in qualitiesReport.hidden_qualities  | groupBy: 'quality.name'" ng-class="{'quality-selected': leaderAssessment.selectedAnswer==zone.id, 'selfie-answer':leaderAssessment.selectedAnswer!=zone.id}" ng-click="collapse=!collapse">
-                    <div class="quality-label" style="width: 100%;">
-                        <h4><strong>{{ key }}</strong> <span class="quality-badge badge pull-right">{{ value.length }}</span></h4>
-                        <div collapse="collapse" ng-init="collapse=true">
-                            <p ng-repeat="quality in value" ng-if="$first" ng-bind-html="quality.quality.description" style="margin-top:5px;"></p>
-                            <div style="margin-top: 10px; min-height: 42px">
-                                <img ng-attr-title="{{quality.reviewer.full_name}}" ng-repeat="quality in value" ng-src="{{quality.reviewer.avatar_small}}" class="tiny-headshot"/>
+                                <img ng-attr-title="{{perception.reviewer.full_name}}" ng-repeat="perception in quality.perceptions" ng-src="{{perception.reviewer.avatar_small}}" class="tiny-headshot"/>
                             </div>
                         </div>
                     </div>

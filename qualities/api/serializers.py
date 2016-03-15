@@ -43,8 +43,30 @@ class PerceivedQualitiesSerializer(serializers.ModelSerializer):
         fields = ('id', 'perception_date', 'reviewer', 'quality', 'cluster')
 
 
+class PerceptionSerializer(serializers.ModelSerializer):
+    cluster = QualityClusterListSerializer()
+    reviewer = SanitizedEmployeeSerializer()
+
+    class Meta:
+        model = PerceivedQuality
+        fields = ('id', 'perception_date', 'reviewer', 'cluster')
+
+
+class PerceivedQualitiesReportItemSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()
+    description = serializers.CharField()
+    type = serializers.SerializerMethodField()
+    count = serializers.SerializerMethodField()
+    perceptions = PerceptionSerializer(many=True)
+
+    def get_type(self, obj):
+        return obj.type
+
+    def get_count(self, obj):
+        return obj.count
+
+
 class PerceivedQualitiesReportSerializer(serializers.Serializer):
     employee = SanitizedEmployeeSerializer()
-    shared_qualities = PerceivedQualitiesSerializer(many=True)
-    hidden_qualities = PerceivedQualitiesSerializer(many=True)
-    blind_qualities = PerceivedQualitiesSerializer(many=True)
+    qualities = PerceivedQualitiesReportItemSerializer(many=True)

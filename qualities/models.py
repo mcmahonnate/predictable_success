@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from django.db import models
 from org.models import Employee
-from django.db.models import Q
+from django.db.models import Q, Count
 from .tasks import send_perception_request_email
 
 
@@ -70,6 +70,10 @@ class PerceivedQualityManager(models.Manager):
     def others_perception(self, subject):
         return self.filter(Q(subject=subject) & ~Q(reviewer=subject))
 
+    def all(self, subject):
+        all = self.filter(subject=subject)
+        return all
+
     def hidden(self, subject):
         self_perception = self.self_perception(subject).values_list('quality__id', flat=True).distinct()
         others_perception = self.others_perception(subject).values_list('quality__id', flat=True).distinct()
@@ -114,14 +118,39 @@ class PerceivedQuality(models.Model):
         return "%s recognizes %s for %s in %s" % (self.reviewer.full_name, self.subject.full_name, self.quality.name, self.cluster.name)
 
 
+class PerceivedQualitiesReportItem(object):
+    def __init__(self, id, name, description):
+        self.id = id
+        self.name = name
+        self.description = description
+        self.type = None
+        self.count = 0
+        self.perceptions = [];
+
+
 class PerceivedQualitiesReport(object):
     def __init__(self, employee):
         self.employee = employee
-        self.shared_qualities = []
-        self.hidden_qualities = []
-        self.blind_qualities = []
+        self.qualities = [];
 
     def load(self):
-        self.shared_qualities = PerceivedQuality.objects.shared(self.employee)
-        self.hidden_qualities = PerceivedQuality.objects.hidden(self.employee)
-        self.blind_qualities = PerceivedQuality.objects.blind(self.employee)
+        shared_qualities = PerceivedQuality.objects.shared(self.employee)
+        hidden_qualities = PerceivedQuality.objects.hidden(self.employee)
+        blind_qualities = PerceivedQuality.objects.blind(self.employee)
+        all_quality_ids = PerceivedQuality.objects.all(self.employee).values_list('quality__id', flat=True).distinct()
+        qualities = Quality.objects.filter(id__in=all_quality_ids)
+        for quality in qualities:
+            report_item = PerceivedQualitiesReportItem(id=quality.id, name=quality.name, description=quality.description)
+            if shared_qualities.filter(quality__id=quality.id).count() > 0:
+                report_item.perceptions = shared_qualities.filter(quality__id=quality.id)
+                report_item.type = 'shared'
+                report_item.count = shared_qualities.filter(quality__id=quality.id).count()
+            elif hidden_qualities.filter(quality__id=quality.id).count() > 0:
+                report_item.perceptions = hidden_qualities.filter(quality__id=quality.id)
+                report_item.type = 'hidden'
+                report_item.count = hidden_qualities.filter(quality__id=quality.id).count()
+            elif blind_qualities.filter(quality__id=quality.id).count() > 0:
+                report_item.perceptions = blind_qualities.filter(quality__id=quality.id)
+                report_item.type = 'blind'
+                report_item.count = blind_qualities.filter(quality__id=quality.id).count()
+            self.qualities.append(report_item)

@@ -5,10 +5,9 @@
     function QualitiesReportController(analytics, $location, $scope, Notification, PerceivedQualityService) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         var vm = this;
-        vm.shared_qualities = [];
-        vm.blind_qualities = [];
-        vm.hidden_qualities = [];
+        vm.qualities = [];
         vm.giveUnsolicited = giveUnsolicited;
+        vm.orderByGroupCount = orderByGroupCount;
         activate();
 
         function activate() {
@@ -22,10 +21,14 @@
         function getPerceivedQualities() {
             return PerceivedQualityService.getMyQualities()
                 .then(function (data) {
-                    vm.shared_qualities = data.shared_qualities;
-                    vm.blind_qualities = data.blind_qualities;
-                    vm.hidden_qualities = data.hidden_qualities;
+                    vm.qualities = data.qualities;
                     return null;
                 });
+        }
+
+        function orderByGroupCount(group) {
+            console.log(group);
+            console.log(group.length);
+            return group.length;
         }
     }
