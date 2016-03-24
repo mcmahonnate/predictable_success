@@ -2,7 +2,9 @@
         .module('devzones')
         .controller('TakeSelfieController', TakeSelfieController);
 
-    function TakeSelfieController(DevZoneService, Notification, selfie, $modal, $modalInstance, $rootScope) {
+    function TakeSelfieController(analytics, DevZoneService, Notification, selfie, $location, $modal, $modalInstance, $rootScope, $scope) {
+        var location_url = '/selfie/' + selfie.id;
+        analytics.trackPage($scope, $location.absUrl(), location_url);
         var vm = this;
 
         vm.selfie = selfie;
@@ -65,6 +67,10 @@
                     vm.selfie = selfie;
                     Notification.success('Your selfie has been shared.')
                     $modalInstance.close(selfie);
+                    console.log(selfie);
+                    if (selfie.development_conversation) {
+                        $location.path('/id/' + selfie.development_conversation);
+                    }
                     vm.busy = false;
                 }
             );

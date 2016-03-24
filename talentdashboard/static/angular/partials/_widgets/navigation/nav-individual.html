@@ -18,7 +18,7 @@
             <a href="#/"><img src="../static/images/compass-logo-white.png" class="logo" alt="Home" /></a>
         </div>
         <div ng-show="customer.show_devzones" role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == devzonesTab}" ng-click="setActiveTab(devzonesTab)">
-            <div ng-click="gotoDevZones()">
+            <div ng-click="gotoID()">
                 <span class="fa fa-heartbeat team_menu nav-item-icon"></span>
                 ID
             </div>
@@ -63,7 +63,7 @@
 <div id="menuleft" ng-class="{retract:!showmenu,slide:showmenu}">
     <ul>
         <li ng-show="customer.show_devzones">
-            <a href="#/devzones" ng-click="toggleMenu()">
+            <a href="#/id" ng-click="toggleMenu()">
                 <span class="fa fa-heartbeat team_menu nav-item-icon"></span>
                 ID
             </a>

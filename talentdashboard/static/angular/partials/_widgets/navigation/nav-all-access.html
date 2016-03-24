@@ -27,7 +27,7 @@
                         <ul>
                             <li ng-if="currentUser.is_team_lead"><a ng-href="#/my-team">Team</a></li>
                             <li ng-if="currentUser.can_coach_employees"><a ng-href="#/my-coachees">Coaching</a></li>
-                            <li><a ng-show="customer.show_devzones" ng-href="#/devzones"><span class="fa fa-heartbeat" style="margin-right: 5px;"></span> ID</a></li>
+                            <li><a ng-show="customer.show_devzones" ng-href="#/id"><span class="fa fa-heartbeat" style="margin-right: 5px;"></span> ID</a></li>
                             <li><a ng-show="customer.show_shareable_checkins" ng-href="#/checkins"><span class="fa fa-check" style="margin-right: 5px;"></span> Check-Ins</a></li>
                             <li><a ng-show="customer.show_feedback" ng-href="#/feedback"><span class="fa fa-send" style="margin-right: 5px;"></span> Feedback</a></li>
                         </ul>
@@ -155,7 +155,7 @@
                                 </a>
                             </li>
                             <li ng-show="customer.show_shareable_checkins" >
-                                <a class="dashboard employee_menu" href="#/reports/devzones">
+                                <a class="dashboard employee_menu" href="#/reports/id">
                                     ID Report
                                 </a>
                             </li>
@@ -261,7 +261,7 @@
                         </a>
                     </li>
                     <li ng-show="customer.show_feedback"><a ng-href="#/feedback" ng-click="toggleMenu()">My Feedback</a></li>
-                    <li ng-show="customer.show_devzones"><a ng-href="#/devzones" ng-click="toggleMenu()">My ID</a></li>
+                    <li ng-show="customer.show_devzones"><a ng-href="#/id" ng-click="toggleMenu()">My ID</a></li>
                 </ul>
             </li>
             <li ng-show="!activeEmployee.is_lead">

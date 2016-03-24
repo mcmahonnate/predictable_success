@@ -44,3 +44,5 @@ class UserIsAssessor(permissions.BasePermission):
     def has_permission(self, request, view):
         employee_zone = view.get_employee_zone()
         return request.user.employee.id == employee_zone.assessor.id
+
+

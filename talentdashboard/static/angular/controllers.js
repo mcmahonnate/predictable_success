@@ -232,8 +232,8 @@ angular.module('tdb.controllers', [])
             $location.path('/projects');
         }
 
-        $scope.gotoDevZones = function() {
-            $location.path('/devzones');
+        $scope.gotoID = function() {
+            $location.path('/id');
         }
     }])
 

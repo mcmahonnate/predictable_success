@@ -1,7 +1,7 @@
 <div id="devzones" class="container" data-hj-masked>
     <div>
         <a href="" data-toggle="modal" data-target=".devzones-welcome-modal" class="pull-right show-welcome-modal">Show welcome message</a>
-        <h1><a href="#/devzones">ID</a> &raquo; Meeting for {{ meeting.meeting.name }}</h1>
+        <h1><a href="#/id">ID</a> &raquo; Meeting for {{ meeting.meeting.name }}</h1>
     </div>
     <div class="panel devzones collapsible-panel">
         <h2 class="panel-title ng-binding">Team Selfies</h2>
@@ -22,7 +22,7 @@
                     <td><i ng-show="conversation.employee_assessment.completed" class="fa fa-check" title="Completed"></i></td>
                     <td>{{ conversation.development_lead_assessment.zone.name }}</td>
                     <td class="centered">
-                        <a ng-disabled="!conversation.employee_assessment.completed" class="btn btn-default btn-md give-feedback-btn" ng-href="#/devzones/selfies/{{ conversation.id }}" type="button">
+                        <a ng-disabled="!conversation.employee_assessment.completed" class="btn btn-default btn-md give-feedback-btn" ng-href="#/id/{{ conversation.id }}" type="button">
                             <i class="fa fa-eye"></i> View Selfie
                         </a>
                     </td>

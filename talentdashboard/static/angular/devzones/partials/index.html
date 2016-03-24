@@ -28,6 +28,7 @@
             </div>
         </div>
     </div>
+
     <div class="panel panel-empty fade-in" ng-show="!devzones.busy && devzones.mySelfies.length==0 && devzones.myTeamLeadConversations.length==0 && devzones.meetings.length==0 && !devzones.myConversation">
         <img class="grumpycat" src="../static/images/grumpycat.png" alt="Grumpy Cat" />
         <h2>"Mmmmeeh... i see you don't have any activity yet.
@@ -42,6 +43,9 @@
                 Hang in there.
             </span>
         </h2>
+    </div>
+    <div class="panel devzones activity" ng-show="devzones.mySelfies.length>0">
+        <h2 class="panel-title ng-binding">Your Selfies</h2>
     </div>
     <div class="panel devzones" ng-show="devzones.myTeamLeadConversations.length>0">
         <h2 class="panel-title ng-binding"><a ng-click="devzones.teamSelfiesCollapse=!devzones.teamSelfiesCollapse" style="cursor: pointer">My Team's Selfies</a>
@@ -74,7 +78,7 @@
                             </a>
                         </td>
                         <td class="centered">
-                            <a ng-disabled="!conversation.employee_assessment.completed" class="btn btn-default btn-md give-feedback-btn" ng-href="#/devzones/selfies/{{ conversation.id }}" type="button">
+                            <a ng-disabled="!conversation.employee_assessment.completed" class="btn btn-default btn-md give-feedback-btn" ng-href="#/id/{{ conversation.id }}" type="button">
                                 <i class="fa fa-eye"></i> View Selfie
                             </a>
                         </td>
@@ -104,7 +108,7 @@
                         <td>{{ meeting.name }}</td>
                         <td><img class="tiny-headshot pull-left" ng-src="{{ participant.avatar_small }}" ng-attr-title="{{participant.full_name}}" ng-repeat="participant in meeting.participants"/></td>
                         <td class="centered">
-                            <a class="btn btn-default btn-md give-feedback-btn" ng-href="#/devzones/meetings/{{ meeting.id }}" type="button">
+                            <a class="btn btn-default btn-md give-feedback-btn" ng-href="#/id/meetings/{{ meeting.id }}" type="button">
                                 <i class="fa fa-eye"></i> View Meeting
                             </a>
                         </td>
@@ -113,21 +117,6 @@
             </table>
         </div>
     </div>
-    <div class="panel devzones" ng-show="devzones.mySelfies.length>0">
-        <h2 class="panel-title ng-binding">Your Selfies</h2>
 
-        <div class="well" ng-repeat="selfie in devzones.mySelfies | orderBy:'date':true">
-            <h3 class="modal-title">{{ selfie.zone.name }}</h3>
-            <span class="timeago">{{ selfie.date | fromNow }}</span>
-            <p ng-repeat="advice in selfie.advice " ng-bind-html="advice.advice_description_for_employee"></p>
-            <p class="advice-description"><strong>What else can I do?</strong></p>
-            <p class="advice-description">Don't forget you can always ask your peers for feedback or request a check-in from your Coach or Team Lead at anytime. Just click a button below to get started.</p>
-            <div class="button-group">
-                <button class="btn btn-success btn-feedback" ng-click="devzones.requestFeedback()" type="button"><i class="fa fa-send"></i> Ask for Feedback</button>
-                <button class="btn btn-success btn-feedback" ng-click="devzones.requestCheckIn()" type="button"><i class="fa fa-check"></i> Request Check-In</button>
-            </div>
-        </div>
-
-    </div>
     <div ng-include="'/static/angular/devzones/partials/_modals/welcome-message.html'"></div>
 </div>
