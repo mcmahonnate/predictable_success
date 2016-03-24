@@ -86,7 +86,7 @@
 
 
                 <div ng-show="selfie.selfie.zones.length>1">
-                    <p>Hurray! It looks like you came up with 2 development zones. Pick the one that you think best fits?</p>
+                    <p>Hurray! It looks like you came up with 2 development zones. Pick the one that you think fits best.</p>
                     <div class="selfie-answer well well-sm" style="display:flex" ng-repeat="zone in selfie.selfie.zones | orderBy:'order' " ng-class="{'selfie-answer-selected': selfie.zone.id==zone.id, 'selfie-answer':selfie.zone.id!=zone.id}" ng-click="selfie.zone=zone;selfie.selectedAnswer=4;">
                         <div class="selfie-answer-label" style="width: 91%;">
                             <h4><strong>{{ zone.name }}</strong></h4>
