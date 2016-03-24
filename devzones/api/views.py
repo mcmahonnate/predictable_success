@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import *
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .permissions import UserIsConversationParticipantOrHasAllAccess, UserIsAssessor, UserIsMeetingParticipantOrHasAllAccess
+from .permissions import UserIsConversationParticipantOrHasAllAccess, UserIsAssessor, UserIsMeetingParticipantOrHasAllAccess, UserIsConversationParticipantOrHasAllAccessOrIsEmployee
 from .serializers import *
 
 
@@ -135,7 +135,7 @@ class CreateManyConversations(CreateAPIView):
 
 class RetrieveUpdateConversation(RetrieveUpdateAPIView):
     queryset = Conversation.objects.all()
-    permission_classes = (IsAuthenticated, UserIsConversationParticipantOrHasAllAccess)
+    permission_classes = (IsAuthenticated, UserIsConversationParticipantOrHasAllAccessOrIsEmployee)
     serializer_class = UpdateConversationSerializer
 
     def get_conversation(self):
