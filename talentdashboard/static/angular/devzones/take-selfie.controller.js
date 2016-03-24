@@ -22,7 +22,7 @@
         activate();
 
         function activate() {
-
+            console.log(selfie)
         }
 
 
@@ -62,7 +62,7 @@
 
         function finish() {
             vm.busy = true;
-            DevZoneService.updateEmployeeZone({id: vm.selfie.id, notes: vm.selfie.notes, completed: true})
+            DevZoneService.updateEmployeeZone({id: vm.selfie.id, zone: vm.zone.id, notes: vm.selfie.notes, completed: true})
                 .then(function(selfie){
                     vm.selfie = selfie;
                     Notification.success('Your selfie has been shared.')

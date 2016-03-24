@@ -97,6 +97,7 @@ class EmployeeZoneSerializer(serializers.ModelSerializer):
     employee = SanitizedEmployeeSerializer()
     assessor = SanitizedEmployeeSerializer()
     zone = ZoneSerializer()
+    zones = ZoneSerializer(many=True)
     next_question = QuestionSerializer()
     answers = serializers.SerializerMethodField()
     development_conversation = serializers.PrimaryKeyRelatedField(read_only=True)
@@ -118,7 +119,7 @@ class EmployeeZoneSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmployeeZone
-        fields = ('id', 'employee', 'assessor', 'next_question', 'zone', 'notes', 'answers', 'date', 'advice', 'completed', 'times_retaken', 'development_conversation', 'new_employee', 'development_lead')
+        fields = ('id', 'employee', 'assessor', 'next_question', 'zone', 'zones', 'notes', 'answers', 'date', 'advice', 'completed', 'times_retaken', 'development_conversation', 'new_employee', 'development_lead')
         
         
 class UpdateEmployeeZoneSerializer(serializers.ModelSerializer):

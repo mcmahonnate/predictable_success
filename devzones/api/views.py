@@ -161,6 +161,7 @@ class RetakeEmployeeZone(GenericAPIView):
         employee_zone.answers = []
         employee_zone.last_question_answered = None
         employee_zone.zone = None
+        employee_zone.zones = []
         employee_zone.notes = ''
         employee_zone.times_retaken += 1
         employee_zone.save()
