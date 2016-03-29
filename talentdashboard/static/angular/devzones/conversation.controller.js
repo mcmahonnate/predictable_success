@@ -2,11 +2,13 @@
         .module('devzones')
         .controller('ConversationController', ConversationController);
 
-    function ConversationController(analytics, ConversationService, DevZoneService, Notification, $location, $parse, $routeParams, $scope) {
+    function ConversationController(analytics, ConversationService, DevZoneService, Notification, $location, $parse, $rootScope, $routeParams, $scope) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
 
         var vm = this;
-
+        vm.is_employee = false;
+        vm.is_org_dev = false;
+        vm.is_development_lead = false;
         vm.selfie = null;
         vm.busy = false;
         vm.gotoID = gotoID;
@@ -35,8 +37,14 @@
                     }
                     vm.employee = conversation.employee;
                     vm.development_lead = conversation.development_lead;
-
-
+                    if (vm.employee.id == $rootScope.currentUser.employee.id) {
+                        vm.is_employee = true;
+                    } else if (vm.development_lead.id == $rootScope.currentUser.employee.id) {
+                        vm.is_development_lead = true;
+                    }
+                    if ($rootScope.currentUser.permissions.indexOf("org.view_employees") > -1) {
+                        vm.is_org_dev = true;
+                    }
                 },
                 function() {
                     Notification.error("You don't have access to this selfie.")

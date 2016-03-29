@@ -153,6 +153,28 @@ class ConversationSerializer(serializers.ModelSerializer):
         fields = ('id', 'employee', 'date', 'development_lead', 'meeting_participants', 'employee_assessment', 'development_lead_assessment', 'completed', 'completed_date')
 
 
+class ConversationDevelopmentLeadSerializer(ConversationSerializer):
+    development_lead_assessment = serializers.SerializerMethodField()
+
+    def get_development_lead_assessment(self, obj):
+        if obj.development_lead_assessment is not None and \
+                not obj.development_lead_assessment.is_draft:
+            serializer = EmployeeZoneSerializer(context=self.context, many=True)
+            return serializer.to_representation(obj.development_lead_assessment)
+        return None
+
+
+class ConversationForEmployeeSerializer(ConversationSerializer):
+    development_lead_assessment = serializers.SerializerMethodField()
+
+    def get_development_lead_assessment(self, obj):
+        if obj.development_lead_assessment is not None and \
+                obj.development_lead_assessment.share_with_employee:
+            serializer = EmployeeZoneSerializer(context=self.context, many=True)
+            return serializer.to_representation(obj.development_lead_assessment)
+        return None
+
+
 class SanitizedConversationSerializer(serializers.ModelSerializer):
     employee = SanitizedEmployeeSerializer()
     development_lead = SanitizedEmployeeSerializer()

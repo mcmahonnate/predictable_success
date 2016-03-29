@@ -143,7 +143,14 @@ class RetrieveUpdateConversation(RetrieveUpdateAPIView):
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
-        serializer = ConversationSerializer(instance, context={'request': request})
+        if request.user.employee.id == instance.employee.id:
+            serializer = ConversationForEmployeeSerializer(instance, context={'request': request})
+        elif request.user.employee.id == instance.development_lead.id:
+            serializer = ConversationDevelopmentLeadSerializer(instance, context={'request': request})
+        elif self.request.user.has_perm('org.view_employees'):
+            serializer = ConversationSerializer(instance, context={'request': request})
+        else:
+            serializer = ConversationForEmployeeSerializer(instance, context={'request': request})
         return Response(serializer.data)
 
 

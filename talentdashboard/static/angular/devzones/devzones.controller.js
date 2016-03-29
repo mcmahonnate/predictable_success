@@ -28,7 +28,7 @@ function DevZonesController(ConversationService, DevZoneService, MeetingService,
     vm.requestCheckIn = requestCheckIn;
     vm.requestFeedback = requestFeedback;
     vm.showMeetingParticipants = showMeetingParticipants;
-    vm.takeLeaderAssessment = takeLeaderAssessment;
+    vm.giveLeaderPerception = giveLeaderPerception;
     vm.addMeeting = addMeeting;
 
     activate();
@@ -182,7 +182,7 @@ function DevZonesController(ConversationService, DevZoneService, MeetingService,
     }
 
 
-    function takeLeaderAssessment(conversation) {
+    function giveLeaderPerception(conversation) {
         var modalInstance = $modal.open({
             animation: true,
             backdrop: 'static',
