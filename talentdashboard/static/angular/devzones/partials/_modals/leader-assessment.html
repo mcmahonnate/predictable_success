@@ -1,4 +1,4 @@
-<form id="leader-assessment-modal" novalidate="novalidate">
+<form ng-if="!leaderAssessment.compactView" id="leader-assessment-modal" novalidate="novalidate">
     <a class="close" ng-click="leaderAssessment.cancel()" data-dismiss="modal">&times;</a>
     <div class="form-group" ng-show="leaderAssessment.panel_index==0">
         <div class="modal-body">
@@ -37,6 +37,26 @@
         </div>
         <div class="modal-footer">
             <button type="button" ng-click="leaderAssessment.panel_index=0" data-dismiss="modal" class="btn btn-light">&larr; Back</button>
+            <button type="button" class="btn btn-success" ng-disabled="!leaderAssessment.selectedAnswer || leaderAssessment.busy" ng-click="leaderAssessment.saveAssessment()">Save</button>
+        </div>
+    </div>
+</form>
+<form ng-if="leaderAssessment.compactView" id="leader-assessment-modal" novalidate="novalidate">
+    <div class="form-group" ng-show="leaderAssessment.panel_index==0">
+        <div class="modal-body">
+            <panel class="devzone">
+                <h3 class="modal-title">Development Area</h3>
+                <p>What development area do you think best describes <strong>{{leaderAssessment.conversation.employee.first_name}}'s</strong> needs?</p>
+                <select ng-model="leaderAssessment.selectedAnswer" class="form-control">
+                    <option ng-repeat="zone in leaderAssessment.zones | orderBy:'order' " value="{{zone.id}}"><strong>{{ zone.name }}</strong></option>
+                </select>
+                <p><strong>Notes</strong></p>
+                <textarea style="min-height:120px;" class="form-control" cols="30" rows="5" ng-model="leaderAssessment.notes" placeholder="How is {{leaderAssessment.conversation.employee.first_name}} doing?"></textarea>
+
+            </panel>
+        </div>
+        <div class="modal-footer">
+            <button type="button" ng-click="leaderAssessment.cancel()" data-dismiss="modal" class="btn btn-light">Cancel</button>
             <button type="button" class="btn btn-success" ng-disabled="!leaderAssessment.selectedAnswer || leaderAssessment.busy" ng-click="leaderAssessment.saveAssessment()">Save</button>
         </div>
     </div>

@@ -189,6 +189,9 @@ function DevZonesController(ConversationService, DevZoneService, MeetingService,
             templateUrl: '/static/angular/devzones/partials/_modals/leader-assessment.html',
             controller: 'LeaderAssessmentController as leaderAssessment',
             resolve: {
+                compactView: function () {
+                    return false
+                },
                 conversation: function () {
                     return conversation
                 },}

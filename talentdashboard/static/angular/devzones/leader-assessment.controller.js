@@ -2,8 +2,9 @@ angular
     .module('devzones')
     .controller('LeaderAssessmentController', LeaderAssessmentController);
 
-function LeaderAssessmentController(conversation, ConversationService, DevZoneService, Notification, $modalInstance, $rootScope) {
+function LeaderAssessmentController(compactView, conversation, ConversationService, DevZoneService, Notification, $modalInstance, $rootScope) {
     var vm = this;
+    vm.compactView = compactView;
     vm.conversation = conversation;
     vm.panel_index = 0;
     vm.busy = false;
@@ -20,6 +21,8 @@ function LeaderAssessmentController(conversation, ConversationService, DevZoneSe
     function activate() {
         if (vm.conversation.development_lead_assessment) {
             vm.selectedAnswer = vm.conversation.development_lead_assessment.zone.id;
+            console.log(vm.selectedAnswer);
+            console.log(vm.conversation.development_lead_assessment.zone.name);
             vm.assessment = vm.conversation.development_lead_assessment;
             vm.notes = vm.assessment.notes;
         }

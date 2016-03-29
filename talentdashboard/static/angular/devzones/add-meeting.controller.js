@@ -53,7 +53,7 @@ function AddMeetingController(ConversationService, EmployeeSearch, MeetingServic
                 ConversationService.create(conversations)
                     .then(function (converstaions) {
                         $modalInstance.close(meeting);
-                        Notification.success('Your meeting haas been saved.')
+                        Notification.success('Your meeting has been saved.')
                     })
             })
     }
