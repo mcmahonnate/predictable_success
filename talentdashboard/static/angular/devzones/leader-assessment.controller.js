@@ -15,14 +15,13 @@ function LeaderAssessmentController(compactView, conversation, ConversationServi
     vm.saveAssessment = saveAssessment;
     vm.zones = [];
     vm.cancel = cancel;
+    vm.close = close;
     vm.isCollapsed = isCollapsed;
     activate();
 
     function activate() {
         if (vm.conversation.development_lead_assessment) {
             vm.selectedAnswer = vm.conversation.development_lead_assessment.zone.id;
-            console.log(vm.selectedAnswer);
-            console.log(vm.conversation.development_lead_assessment.zone.name);
             vm.assessment = vm.conversation.development_lead_assessment;
             vm.notes = vm.assessment.notes;
         }
@@ -60,18 +59,26 @@ function LeaderAssessmentController(compactView, conversation, ConversationServi
                     vm.employeeZone = employeeZone;
                     ConversationService.update({id: vm.conversation.id, development_lead_assessment: vm.employeeZone.id})
                         .then(function (conversation) {
+                            vm.conversation = conversation;
                             vm.busy = false;
-                            $modalInstance.close(employeeZone);
                             Notification.success('Your assessment has been saved.')
                         })
                 })
         } else {
             DevZoneService.updateEmployeeZone({id: vm.conversation.development_lead_assessment.id, zone: vm.selectedAnswer, notes: vm.notes})
                 .then(function (employeeZone) {
+                    vm.conversation.development_lead_assessment = employeeZone;
                     vm.busy = false;
-                    $modalInstance.close(employeeZone);
                     Notification.success('Your assessment has been saved.')
                 })
+        }
+    }
+
+    function close() {
+        if (vm.conversation.development_lead_assessment) {
+            $modalInstance.close(vm.conversation.development_lead_assessment);
+        } else {
+            $modalInstance.close();
         }
     }
 }
