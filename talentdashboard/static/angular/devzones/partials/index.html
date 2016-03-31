@@ -124,6 +124,7 @@
                     <tr>
                         <th scope="col" class="width-20-percent">Meeting</th>
                         <th scope="col" class="width-60-percent">Participants</th>
+                        <th scope="col" class="width-60-percent">Selfies Completed</th>
                         <th scope="col" class="width-20-percent centered">Action</th>
                     </tr>
                 </thead>
@@ -131,6 +132,7 @@
                     <tr ng-repeat="meeting in devzones.meetings | orderBy:'name':false">
                         <td>{{ meeting.name }}</td>
                         <td><img class="tiny-headshot pull-left" ng-src="{{ participant.avatar_small }}" ng-attr-title="{{participant.full_name}}" ng-repeat="participant in meeting.participants"/></td>
+                        <td>{{ meeting.selfies_completed}} out of {{ meeting.selfies_total}}</td>
                         <td class="centered">
                             <a class="btn btn-default btn-md give-feedback-btn" ng-href="#/id/meetings/{{ meeting.id }}" type="button">
                                 <i class="fa fa-eye"></i> View Meeting

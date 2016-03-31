@@ -230,7 +230,15 @@ class MeetingSerializer(serializers.ModelSerializer):
 
 class SanitizedMeetingSerializer(serializers.ModelSerializer):
     participants = SanitizedEmployeeSerializer(many=True)
+    selfies_completed = serializers.SerializerMethodField()
+    selfies_total = serializers.SerializerMethodField()
+
+    def get_selfies_completed(self, obj):
+        return obj.conversations.filter(employee_assessment__completed=True).count()
+
+    def get_selfies_total(self, obj):
+        return obj.conversations.count()
 
     class Meta:
         model = Meeting
-        fields = ('id', 'name', 'date', 'participants', 'completed')
+        fields = ('id', 'name', 'date', 'participants', 'completed', 'selfies_completed' , 'selfies_total')
