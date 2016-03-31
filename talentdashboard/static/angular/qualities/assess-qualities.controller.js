@@ -85,6 +85,7 @@
         function select(quality) {
             quality.selected = true;
             vm.selectedQualities.push(quality);
+            console.log(vm.selectedQualities);
         }
 
         function unselect(index) {
@@ -103,8 +104,10 @@
         }
 
         function save() {
+            console.log(vm.selectedQualities);
             PerceivedQualityService.createPerceivedQualities(vm.selectedQualities, vm.subject, vm.cluster)
                 .then(function (data) {
+                    console.log(data);
                      Notification.success("Thanks we'll get those to " + vm.subject.first_name + " pronto.");
                      goTo('qualities/perception/my');
             });

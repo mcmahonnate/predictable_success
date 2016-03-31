@@ -15,7 +15,7 @@ function PerceivedQualityService($http, $log, PerceivedQualityResource, Employee
         for (var i = 0; i < qualities.length; i++) {
             requests.push({quality: qualities[i].id, subject: subject.id, cluster: cluster.id});
         }
-
+        console.log(requests);
         return PerceivedQualityResource.createPerceivedQualities(requests, success, fail).$promise;
 
         function success(sentFeedbackRequests) {

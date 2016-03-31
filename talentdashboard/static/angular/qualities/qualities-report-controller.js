@@ -2,12 +2,12 @@
         .module('qualities')
         .controller('QualitiesReportController', QualitiesReportController);
 
-    function QualitiesReportController(analytics, $location, $scope, Notification, PerceivedQualityService) {
+    function QualitiesReportController(analytics, $location, $scope, $rootScope, Notification, PerceivedQualityService) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         var vm = this;
         vm.qualities = [];
         vm.giveUnsolicited = giveUnsolicited;
-        vm.orderByGroupCount = orderByGroupCount;
+        vm.resizeLayout = resizeLayout;
         activate();
 
         function activate() {
@@ -26,9 +26,13 @@
                 });
         }
 
-        function orderByGroupCount(group) {
-            console.log(group);
-            console.log(group.length);
-            return group.length;
+        function resizeLayout(event, collapse) {
+            console.log(collapse);
+            if (collapse) {
+                console.log('shiftLayout');
+                $rootScope.packery.shiftLayout();
+            } else {
+                $rootScope.packery.fit(event.currentTarget);
+            }
         }
     }
