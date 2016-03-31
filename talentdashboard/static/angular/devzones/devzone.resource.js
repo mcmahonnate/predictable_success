@@ -26,7 +26,7 @@ function DevZoneResource($resource) {
         },
         'getMyZones': {
             method: 'GET',
-            url: '/api/v1/devzones/selfies/',
+            url: '/api/v1/devzones/selfies/:id/',
             isArray: true
         },
         'getZones' : {

@@ -237,8 +237,8 @@ angular.module('tdb.controllers', [])
             $location.path('/qualities/perception/my');
         }
 
-        $scope.gotoDevZones = function() {
-            $location.path('/devzones');
+        $scope.gotoID = function() {
+            $location.path('/id');
         }
     }])
 

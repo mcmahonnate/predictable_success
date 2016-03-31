@@ -117,14 +117,17 @@ class EmployeeZone(models.Model):
     objects = EmployeeZoneManager()
     assessor = models.ForeignKey(Employee, related_name='+')
     employee = models.ForeignKey(Employee, related_name='development_zones')
+    new_employee = models.BooleanField(default=False)
     date = models.DateTimeField(null=False, blank=False, default=datetime.now)
     answers = models.ManyToManyField(Answer, related_name='+', null=True, blank=True)
-    zone = models.ForeignKey(Zone, related_name='+', null=True, blank=True)
-    new_employee = models.BooleanField(default=False)
-    completed = models.BooleanField(default=False)
     last_question_answered = models.ForeignKey(Question, related_name='+', null=True, blank=True)
-    notes = models.TextField(blank=True, default='')
     times_retaken = models.IntegerField(default=0)
+    zone = models.ForeignKey(Zone, related_name='+', null=True, blank=True)
+    zones = models.ManyToManyField(Zone, related_name='+', null=True, blank=True)
+    notes = models.TextField(blank=True, default='')
+    is_draft = models.BooleanField(default=False)
+    share_with_employee = models.BooleanField(default=False)
+    completed = models.BooleanField(default=False)
 
     def advice(self):
         return Advice.objects.get_advice(employee_zone=self)
@@ -144,7 +147,9 @@ class EmployeeZone(models.Model):
                 if zone.must_be_unanimous:
                     zone_id = zone_count[1]['zone']
                     zone = Zone.objects.get(id=zone_id)
-                self.zone = zone
+                    self.zones = Zone.objects.filter(id__in=[zone_count[0]['zone'], zone_count[1]['zone']])
+                else:
+                    self.zone = zone
             else:
                 zone_id = zone_count[0]['zone']
                 self.zone = Zone.objects.get(id=zone_id)

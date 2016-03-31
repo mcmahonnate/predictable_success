@@ -33,6 +33,25 @@ class UserIsConversationParticipantOrHasAllAccess(permissions.BasePermission):
         return request.user.employee.id == conversation.development_lead.id
 
 
+class UserIsConversationParticipantOrHasAllAccessOrIsEmployee(permissions.BasePermission):
+    """ Ensures that the current user is a
+    participant in the conversation.
+
+    Any view that uses this permission needs to implement
+    the get_converstaion() method that should return a Conversation
+    object.
+    """
+    def has_permission(self, request, view):
+        if request.user.has_perm('org.view_employees'):
+            return True
+        conversation = view.get_conversation()
+        if request.user.employee in conversation.meeting.participants.all():
+            return True
+        if request.user.employee.id == conversation.employee.id:
+            return True
+        return request.user.employee.id == conversation.development_lead.id
+
+
 class UserIsAssessor(permissions.BasePermission):
     """ Ensures that the current user is a
     participant in the conversation.
@@ -44,3 +63,5 @@ class UserIsAssessor(permissions.BasePermission):
     def has_permission(self, request, view):
         employee_zone = view.get_employee_zone()
         return request.user.employee.id == employee_zone.assessor.id
+
+

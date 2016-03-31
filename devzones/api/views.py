@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import *
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .permissions import UserIsConversationParticipantOrHasAllAccess, UserIsAssessor, UserIsMeetingParticipantOrHasAllAccess
+from .permissions import UserIsConversationParticipantOrHasAllAccess, UserIsAssessor, UserIsMeetingParticipantOrHasAllAccess, UserIsConversationParticipantOrHasAllAccessOrIsEmployee
 from .serializers import *
 
 
@@ -135,7 +135,7 @@ class CreateManyConversations(CreateAPIView):
 
 class RetrieveUpdateConversation(RetrieveUpdateAPIView):
     queryset = Conversation.objects.all()
-    permission_classes = (IsAuthenticated, UserIsConversationParticipantOrHasAllAccess)
+    permission_classes = (IsAuthenticated, UserIsConversationParticipantOrHasAllAccessOrIsEmployee)
     serializer_class = UpdateConversationSerializer
 
     def get_conversation(self):
@@ -143,7 +143,14 @@ class RetrieveUpdateConversation(RetrieveUpdateAPIView):
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
-        serializer = ConversationSerializer(instance, context={'request': request})
+        if request.user.employee.id == instance.employee.id:
+            serializer = ConversationForEmployeeSerializer(instance, context={'request': request})
+        elif request.user.employee.id == instance.development_lead.id:
+            serializer = ConversationDevelopmentLeadSerializer(instance, context={'request': request})
+        elif self.request.user.has_perm('org.view_employees'):
+            serializer = ConversationSerializer(instance, context={'request': request})
+        else:
+            serializer = ConversationForEmployeeSerializer(instance, context={'request': request})
         return Response(serializer.data)
 
 
@@ -161,6 +168,7 @@ class RetakeEmployeeZone(GenericAPIView):
         employee_zone.answers = []
         employee_zone.last_question_answered = None
         employee_zone.zone = None
+        employee_zone.zones = []
         employee_zone.notes = ''
         employee_zone.times_retaken += 1
         employee_zone.save()

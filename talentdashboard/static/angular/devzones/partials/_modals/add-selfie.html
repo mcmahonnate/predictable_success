@@ -3,8 +3,8 @@
         <div class="modal-body">
             <panel class="checkin">
                 <h3 class="modal-title">Selfie Introduction</h3>
-                <p>This series of questions will lead you to one of five development zones.</p>
-                <p>You can retake the survey if you don't think the results best match where you are in your development. At the end of the survey, you'll be able to add some of your thoughts to help provide additional context.</p>
+                <p>This series of questions will guide you to one of five development zones.</p>
+                <p>You can retake the questionnaire if you don't think the results match where you are in your development. At the end of the survey, you'll be able to add some of your thoughts to help provide additional context.</p>
                 <p>This is a chance for you to tell your team leaders where you might be on your development journey and open up a dialogue about how the Fool can better support you.</p>
                 <p>This process is always evolving, so we'd love to hear your feedback and questions.</p>
             </panel>
@@ -65,13 +65,13 @@
             <button type="button" ng-show="selfie.selfie.next_question.answers.length>1" class="btn btn-success" ng-disabled="!selfie.selectedAnswer || selfie.busy" ng-click="selfie.answerQuestion(selfie.selectedAnswer)">Next &rarr;</button>
         </div>
     </div>
-    <div class="form-group" ng-show="selfie.selfie.zone && selfie.panel_index>0 && selfie.panel_index<3">
+    <div class="form-group" ng-show="(selfie.selfie.zone || selfie.selfie.zones.length>1) && selfie.panel_index>0 && selfie.panel_index<3">
         <div class="modal-body">
             <panel class="devzone">
                 <h3 class="modal-title">Ok great!</h3>
-                <p>We've got what we need. On the following screen we'll show you what we came up with for you.</p>
-                <p>If you don't agree with the results you'll have the opportunity to retake it.</p>
-                <p>Once you think your selfie results represent where you are on your development journey you'll be asked to share your results. You will also have the opportuntiy to add any comments you have before sharing it.</p>
+                <p>On the following screen you'll see your development zone result.</p>
+                <p>If you don't agree with your result you'll have the opportunity to go back and retake the questionnaire.</p>
+                <p>Once you think your result represents where you are on your development journey you'll be asked to share your development zone. You will also have the opportunity to add any comments you have before sharing it.</p>
             </panel>
         </div>
         <div class="modal-footer">
@@ -83,25 +83,51 @@
         <div class="modal-body">
             <panel class="devzone">
                 <h3 class="modal-title">Your Selfie Results</h3>
-                <div class="well">
-                    <h3 class="modal-title">{{ selfie.selfie.zone.name }}</h3>
-                    <p ng-bind-html="selfie.selfie.zone.description"></p>
+
+
+                <div ng-show="selfie.selfie.zones.length>1">
+                    <p>Hurray! It looks like you came up with 2 development zones. Select the one that feels like the best fit for you.</p>
+                    <div class="selfie-answer well well-sm" style="display:flex" ng-repeat="zone in selfie.selfie.zones | orderBy:'order' " ng-class="{'selfie-answer-selected': selfie.zone.id==zone.id, 'selfie-answer':selfie.zone.id!=zone.id}" ng-click="selfie.zone=zone;selfie.selectedAnswer=4;">
+                        <div class="selfie-answer-label" style="width: 91%;">
+                            <h4><strong>{{ zone.name }}</strong></h4>
+                            <div collapse="selfie.zone.id!=zone.id">
+                                <p ng-bind-html="zone.description" style="margin-top:5px;"></p>
+                            </div>
+                        </div>
+                        <div style="margin: auto 0px;">
+                            <i class="fa fa-check-circle-o selected-icon" ng-show="selfie.zone.id==zone.id"></i>
+                        </div>
+                    </div>
+                    <div class="selfie-answer well well-sm" style="display:flex" ng-class="{'selfie-answer-selected': selfie.selectedAnswer==5, 'selfie-answer':selfie.selectedAnswer!=5}" ng-click="selfie.selectedAnswer=5;selfie.zone=null">
+                        <div class="selfie-answer-label" style="width: 91%;">
+                            <h4><strong>None of these feel right. I'd like to take the quiz again.</strong></h4>
+                        </div>
+                        <div style="margin: auto 0px;">
+                            <i class="fa fa-check-circle-o selected-icon" ng-show="selfie.selectedAnswer==5"></i>
+                        </div>
+                    </div>
                 </div>
-                <p>Does this feel like an accurate description of how you're doing?</p>
-                <div class="selfie-answer well well-sm" style="display:flex" ng-class="{'selfie-answer-selected': selfie.selectedAnswer==4, 'selfie-answer':selfie.selectedAnswer!=4}" ng-click="selfie.selectedAnswer=4">
-                    <div class="selfie-answer-label" style="width: 91%;">
-                        <h4><strong>This is right or pretty close.</strong></h4>
+                <div ng-show="selfie.selfie.zones.length==0">
+                    <div class="well">
+                        <h3 class="modal-title">{{ selfie.selfie.zone.name }}</h3>
+                        <p ng-bind-html="selfie.selfie.zone.description"></p>
                     </div>
-                    <div style="margin: auto 0px;">
-                        <i class="fa fa-check-circle-o selected-icon" ng-show="selfie.selectedAnswer==4"></i>
+                    <p>Does this feel like an accurate description of how you're doing?</p>
+                    <div class="selfie-answer well well-sm" style="display:flex" ng-class="{'selfie-answer-selected': selfie.selectedAnswer==4, 'selfie-answer':selfie.selectedAnswer!=4}" ng-click="selfie.selectedAnswer=4">
+                        <div class="selfie-answer-label" style="width: 91%;">
+                            <h4><strong>This is right or pretty close.</strong></h4>
+                        </div>
+                        <div style="margin: auto 0px;">
+                            <i class="fa fa-check-circle-o selected-icon" ng-show="selfie.selectedAnswer==4"></i>
+                        </div>
                     </div>
-                </div>
-                <div class="selfie-answer well well-sm" style="display:flex" ng-class="{'selfie-answer-selected': selfie.selectedAnswer==5, 'selfie-answer':selfie.selectedAnswer!=5}" ng-click="selfie.selectedAnswer=5">
-                    <div class="selfie-answer-label" style="width: 91%;">
-                        <h4><strong>This doesn't feel right at all. I'd like to take the quiz again.</strong></h4>
-                    </div>
-                    <div style="margin: auto 0px;">
-                        <i class="fa fa-check-circle-o selected-icon" ng-show="selfie.selectedAnswer==6"></i>
+                    <div class="selfie-answer well well-sm" style="display:flex" ng-class="{'selfie-answer-selected': selfie.selectedAnswer==5, 'selfie-answer':selfie.selectedAnswer!=5}" ng-click="selfie.selectedAnswer=5">
+                        <div class="selfie-answer-label" style="width: 91%;">
+                            <h4><strong>This doesn't feel right at all. I'd like to take the quiz again.</strong></h4>
+                        </div>
+                        <div style="margin: auto 0px;">
+                            <i class="fa fa-check-circle-o selected-icon" ng-show="selfie.selectedAnswer==5"></i>
+                        </div>
                     </div>
                 </div>
             </panel>
