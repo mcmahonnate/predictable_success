@@ -158,7 +158,7 @@ class ConversationDevelopmentLeadSerializer(ConversationSerializer):
 
     def get_development_lead_assessment(self, obj):
         if obj.development_lead_assessment is not None and \
-                not obj.development_lead_assessment.is_draft:
+                obj.development_lead_assessment.is_draft:
             serializer = EmployeeZoneSerializer(context=self.context, many=False)
             return serializer.to_representation(obj.development_lead_assessment)
         return None
@@ -169,7 +169,7 @@ class ConversationForEmployeeSerializer(ConversationSerializer):
 
     def get_development_lead_assessment(self, obj):
         if obj.development_lead_assessment is not None and \
-                obj.development_lead_assessment.share_with_employee:
+                obj.development_lead_assessment.completed:
             serializer = EmployeeZoneSerializer(context=self.context, many=False)
             return serializer.to_representation(obj.development_lead_assessment)
         return None

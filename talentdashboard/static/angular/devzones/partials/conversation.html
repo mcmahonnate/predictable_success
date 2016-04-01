@@ -12,59 +12,65 @@
 			<p class="timestamp">Took a selfie {{ conversation.selfie.date | fromNow }}</p>
 		</div>
 	</div>
-    <div ng-show="conversation.is_employee" ng-class="{'slide-up-active': hideMessage}" class="alert alert-success slide-up" role="alert">
+    <div ng-show="conversation.is_employee && !conversation.development_lead_assessment.completed" ng-class="{'slide-up-active': hideMessage}" class="alert alert-success slide-up" role="alert">
         <i class="fa fa-heartbeat sent-icon"></i>
         <h2 class="alert-title">Thanks for taking your Selfie!</h2>
         <p class="alert-message">In the next couple of weeks {{ conversation.development_lead.full_name }} will meet with you about your selfie.
     </div>
-    <div ng-repeat="advice in conversation.selfie.advice" ng-class="{'slide-up-active': hideMessage}" ng-hide="!advice.alert_for_development_lead" class="alert {{advice.alert_type_for_development_lead}} slide-up" role="alert">
-        <span ng-bind-html="conversation.replaceTemplateTags(advice.alert_for_development_lead)"></span>
-    </div>
-
-    <div ng-show="conversation.is_employee" class="panel devzones">
+    <div class="panel devzones">
         <h2 class="panel-title">Development Zone</h2>
 
         <div class="devzone activity" style="max-width: inherit; padding-top: 10px; margin: 0px auto 20px auto;">
-            <div class="well activity-items">
+            <div ng-show="!conversation.development_lead_assessment" class="well activity-items">
                 <h3 class="modal-title">{{ conversation.selfie.zone.name }}</h3>
                 <p ng-bind-html="conversation.selfie.zone.description"></p>
             </div>
+            <div ng-show="conversation.development_lead_assessment" class="well activity-items">
+                <h3 class="modal-title">{{ conversation.development_lead_assessment.zone.name }}</h3>
+                <p ng-bind-html="conversation.selfie.development_lead_assessment.description"></p>
+            </div>
         </div>
     </div>
-    <div ng-show="conversation.is_employee" class="checkin-summary panel activity" ng-show="conversation.development_lead">
-        <div class="worksheet-message" ng-show="!conversation.development_lead_assessment">
+    <div ng-show="conversation.development_lead_assessment.completed" class="checkin-summary panel activity">
+        <h2 class="panel-title">Development Conversation Notes</h2>
+        <div class="activity-item activity-items" ng-show="conversation.development_lead">
+            <div class="activity-checkin row" style="margin: 20px 0px;">
+                <p class="panel-subtext">{{ conversation.development_lead_assessment.notes }}</p>
+            </div>
+        </div>
+    </div>
+    <div ng-show="conversation.is_employee && !conversation.development_lead_assessment" class="checkin-summary panel activity">
+        <div class="worksheet-message">
             <h2 class="panel-title">Development Conversation Notes</h2>
         </div>
-        <h2 class="panel-title" ng-show="conversation.development_lead_assessment">Development Conversation Notes</h2>
-        <div class="activity-item activity-items" ng-show="conversation.development_lead">
+        <div class="activity-item activity-items">
             <div class="activity-checkin row" style="margin: 20px 0px; opacity: 0.5" ng-show="!conversation.development_lead_assessment">
-                    <i class="fa fa-info-circle pull-left" style="font-size: 40px;"></i>
-                    <p class="panel-subtext">We are waiting for {{ conversation.development_lead.first_name }} to enter their notes from your conversation.</p>
-            </div>
-            <div class="activity-checkin row" style="margin: 20px 0px;" ng-show="conversation.development_lead_assessment">
-                    <p class="panel-subtext">{{ conversation.development_lead_assessment.notes }}</p>
+                <i class="fa fa-info-circle pull-left" style="font-size: 40px;"></i>
+                <p class="panel-subtext">We are waiting for {{ conversation.development_lead.first_name }} to enter their notes from your conversation.</p>
             </div>
         </div>
     </div>
-
-    <div ng-show="!conversation.is_employee" class="panel devzones">
-        <h2 class="panel-title">{{ conversation.selfie.employee.first_name }}'s Selfie</h2>
-
-        <div class="devzone activity" style="max-width: inherit; padding-top: 10px; margin: 0px auto 20px auto;">
-            <div class="well activity-items">
-                <h3 class="modal-title">{{ conversation.selfie.zone.name }}</h3>
-                <p ng-bind-html="conversation.selfie.zone.description"></p>
-            </div>
+    <div ng-show="conversation.is_development_lead && !conversation.development_lead_assessment.completed" class="panel">
+        <h2 class="panel-title">Development Conversation Notes</h2>
+        <div style="padding-top: 10px">
+            <textarea style="min-height:120px;" class="form-control" cols="30" rows="5" ng-model="conversation.development_lead_assessment.notes" placeholder="How is {{conversation.employee.first_name}} doing?"></textarea>
+        </div>
+        <div style="height:50px">
+            <button class="btn btn-default pull-right" style="margin-top: 15px;" type="button" ng-click="">Save</button>
         </div>
     </div>
     <div class="checkin-summary panel" ng-show="conversation.selfie.notes">
-        <h2 class="panel-title">{{ conversation.selfie.employee.first_name }}'s Selfie Note</h2>
+        <h2 class="panel-title" ng-show="conversation.is_employee">Your Selfie Note</h2>
+        <h2 class="panel-title" ng-show="!conversation.is_employee">{{ conversation.selfie.employee.first_name }}'s Selfie Note</h2>
         <span class="checkin-summary-instance">{{ conversation.selfie.notes }}</span>
     </div>
-
-
     <div class="panel devzones">
-        <h2 class="panel-title"><a ng-click="conversation.collapseSelfieAnswers=!conversation.collapseSelfie" style="cursor: pointer">{{ conversation.selfie.employee.first_name }}'s Selfie Answers</a>
+        <h2 class="panel-title">
+            <a ng-click="conversation.collapseSelfieAnswers=!conversation.collapseSelfie" style="cursor: pointer">
+                <span ng-show="conversation.is_employee">Your Selfie Answers</span>
+                <span ng-show="!conversation.is_employee">{{ conversation.selfie.employee.first_name }}'s Selfie Answers</span>
+            </a>
+
             <i class="fa fa-chevron-down pull-right collapse-toggle" ng-show="!conversation.collapseSelfie" ng-click="conversation.collapseSelfie=true"></i>
             <i class="fa fa-chevron-right pull-right collapse-toggle" ng-show="conversation.collapseSelfie" ng-click="conversation.collapseSelfie=false"></i>
         </h2>
@@ -83,5 +89,6 @@
             </div>
         </div>
     </div>
-    <button class="btn btn-success" type="button" ng-click="conversation.gotoID()">&larr; Back</button>
+    <button class="btn btn-default" type="button" ng-click="conversation.gotoID()">&larr; Back</button>
+    <button ng-show="conversation.is_development_lead" class="btn btn-success pull-right" type="button" ng-click="">Send to {{ conversation.selfie.employee.first_name }}</button>
 </div>
