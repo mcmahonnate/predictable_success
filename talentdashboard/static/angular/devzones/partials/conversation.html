@@ -2,6 +2,9 @@
     <div>
         <h1><a href="#/id">ID</a></h1>
     </div>
+    <div ng-repeat="advice in conversation.advice" ng-class="{'slide-up-active': hideMessage}" ng-hide="!advice.alert_for_development_lead" class="alert {{advice.alert_type_for_development_lead}} slide-up" role="alert">
+        <span ng-bind-html="conversation.replaceTemplateTags(advice.alert_for_development_lead)"></span>
+    </div>
 	<div class="checkin-header">
 		<div class="type-tag">
 			<span>Development</span>

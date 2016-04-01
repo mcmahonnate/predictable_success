@@ -129,9 +129,6 @@ class EmployeeZone(models.Model):
     share_with_employee = models.BooleanField(default=False)
     completed = models.BooleanField(default=False)
 
-    def advice(self):
-        return Advice.objects.get_advice(employee_zone=self)
-
     def _calculate_zone(self):
         if not self.completed and self.all_questions_answered() and self.answers.count() > 0:
             if not self.last_question_answered.has_siblings():
@@ -236,24 +233,18 @@ class Conversation(models.Model):
     completed = models.BooleanField(default=False)
     completed_date = models.DateTimeField(null=True, blank=True)
 
+    def advice(self):
+        employee_zone = self.employee_assessment.zone if (self.employee_assessment and self.employee_assessment.zone) else None
+        development_lead_zone = self.development_lead_assessment.zone if (self.development_lead_assessment and self.development_lead_assessment.zone) else None
+        return Advice.objects.get_advice(employee_zone=employee_zone, development_lead_zone=development_lead_zone)
+
     def __str__(self):
         return "%s's development conversation about %s" % (self.development_lead.full_name, self.employee.full_name)
 
 
 class AdviceManager(models.Manager):
-    def get_advice(self, employee_zone):
-        if employee_zone.zone is None:
-            return None
-        try:
-            if employee_zone.development_conversation is not None\
-                            and employee_zone.development_conversation.development_lead_assessment is not None\
-                            and employee_zone.development_conversation.development_lead_assessment.zone is not None:
-                        return self.filter(Q(employee_zone=employee_zone.zone) &
-                                           (Q(development_lead_zone__isnull=True) |
-                                            Q(development_lead_zone = employee_zone.development_conversation.development_lead_assessment.zone)))
-        except AttributeError:
-                pass
-        return self.filter(employee_zone=employee_zone.zone, development_lead_zone__isnull=True)
+    def get_advice(self, employee_zone, development_lead_zone):
+        return self.filter(employee_zone=employee_zone, development_lead_zone=development_lead_zone)
 
 
 class Advice(models.Model):

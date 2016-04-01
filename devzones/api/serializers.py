@@ -34,6 +34,14 @@ class ZoneSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'description', 'order')
 
 
+class AdviceForEmployeeSerializer(serializers.ModelSerializer):
+    employee_zone = ZoneSerializer()
+
+    class Meta:
+        model = Advice
+        fields = ('id', 'employee_zone', 'advice_name_for_employee', 'advice_description_for_employee', 'alert_type_for_employee', 'alert_for_employee')
+
+
 class AdviceSerializer(serializers.ModelSerializer):
     employee_zone = ZoneSerializer()
     development_lead_zone = ZoneSerializer()
@@ -93,7 +101,6 @@ class EmployeeZoneReportSerializer(serializers.ModelSerializer):
 
 
 class EmployeeZoneSerializer(serializers.ModelSerializer):
-    advice = AdviceSerializer(many=True)
     employee = SanitizedEmployeeSerializer()
     assessor = SanitizedEmployeeSerializer()
     zone = ZoneSerializer()
@@ -119,7 +126,7 @@ class EmployeeZoneSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmployeeZone
-        fields = ('id', 'employee', 'assessor', 'next_question', 'zone', 'zones', 'notes', 'answers', 'date', 'advice', 'completed', 'times_retaken', 'development_conversation', 'new_employee', 'development_lead')
+        fields = ('id', 'employee', 'assessor', 'next_question', 'zone', 'zones', 'notes', 'answers', 'date', 'completed', 'times_retaken', 'development_conversation', 'new_employee', 'development_lead')
         
         
 class UpdateEmployeeZoneSerializer(serializers.ModelSerializer):
@@ -141,6 +148,7 @@ class ConversationSerializer(serializers.ModelSerializer):
     employee_assessment = EmployeeZoneSerializer()
     development_lead_assessment = EmployeeZoneSerializer()
     meeting_participants = serializers.SerializerMethodField()
+    advice = AdviceSerializer(many=True)
 
     def get_meeting_participants(self, obj):
         if obj.meeting is None or obj.meeting.participants is None:
@@ -150,7 +158,7 @@ class ConversationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Conversation
-        fields = ('id', 'employee', 'date', 'development_lead', 'meeting_participants', 'employee_assessment', 'development_lead_assessment', 'completed', 'completed_date')
+        fields = ('id', 'employee', 'date', 'development_lead', 'meeting_participants', 'employee_assessment', 'development_lead_assessment', 'advice', 'completed', 'completed_date')
 
 
 class ConversationDevelopmentLeadSerializer(ConversationSerializer):
@@ -166,6 +174,7 @@ class ConversationDevelopmentLeadSerializer(ConversationSerializer):
 
 class ConversationForEmployeeSerializer(ConversationSerializer):
     development_lead_assessment = serializers.SerializerMethodField()
+    advice = AdviceForEmployeeSerializer(many=True)
 
     def get_development_lead_assessment(self, obj):
         if obj.development_lead_assessment is not None and \
