@@ -28,7 +28,7 @@ angular.module('tdb.pvp.services', ['ngResource'])
     }])
 
     .factory('PvpDescriptions', ['$resource', '$http', function($resource, $http) {
-        var res = $resource('/api/v1/pvp-descriptions/');
+        var res = $resource('/api/v1/pvp/descriptions/');
         return res;
     }])
 
@@ -37,7 +37,7 @@ angular.module('tdb.pvp.services', ['ngResource'])
             'update': { method: 'PUT' }
         };
 
-        var PvpEvaluation = $resource('/api/v1/pvp-evaluations/:path/:employee_id/', {path: '@id' }, actions);
+        var PvpEvaluation = $resource('/api/v1/pvp/evaluations/:path/:employee_id/', {path: '@id' }, actions);
 
         PvpEvaluation.getAllEvaluationsForEmployee = function(id) {
             return this.query({ path:'employees', employee_id: id });

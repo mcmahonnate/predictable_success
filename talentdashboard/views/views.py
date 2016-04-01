@@ -1,56 +1,47 @@
-from rest_framework.decorators import api_view
-from rest_framework.views import APIView
-from rest_framework import generics
-from rest_framework import viewsets
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.decorators import permission_classes
-from rest_framework.exceptions import PermissionDenied
-from rest_framework.pagination import PageNumberPagination
-from .serializers import *
-from pvp.talentreports import get_talent_category_report_for_all_employees, get_talent_category_report_for_team, get_talent_category_report_for_lead, get_talent_category_report_for_coach
-from pvp.salaryreports import get_salary_report_for_team, get_salary_report_for_all_employees, get_salary_report_for_lead
-from pvp.models import PvpDescription
+from assessment.api.serializers import AssessmentSerializer, MBTIReportSerializer, MBTISerializer
+from assessment.models import EmployeeAssessment, MBTI
 from blah.commentreports import get_employees_with_comments
-from engagement.engagementreports import get_employees_with_happiness_scores
-from todo.models import Task
 from checkins.models import CheckIn
-from engagement.models import Happiness, SurveyUrl, generate_survey
-from kpi.models import Performance, Indicator
-from assessment.models import EmployeeAssessment
-from org.teamreports import get_mbti_report_for_team
-from insights.models import Prospect
-import json
+from comp.api.serializers import CompensationSummarySerializer
+from comp.models import CompensationSummary
+from customers.api.serializers import CustomerSerializer
 from datetime import date, timedelta
-from django.core.signing import Signer
+from dateutil import parser
+from decimal import Decimal
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.mail import send_mail, EmailMultiAlternatives
+from django.core.signing import Signer
 from django.http import Http404, HttpResponse
 from django.template.loader import get_template
 from django.template import Context
-from PIL import Image, ExifTags
-import StringIO
-from decimal import Decimal
-from re import sub
-from django.core.files.uploadedfile import InMemoryUploadedFile
-from collections import defaultdict
-import collections
-import dateutil.parser, copy
-from org.api.serializers import SanitizedEmployeeSerializer, UserSerializer, EmployeeSerializer, TeamSerializer, MentorshipSerializer, LeadershipSerializer, AttributeSerializer, MinimalEmployeeSerializer, EditEmployeeSerializer, CreateEmployeeSerializer
-from assessment.models import MBTI
-from assessment.api.serializers import MBTIReportSerializer, MBTISerializer
-from pvp.models import PvpEvaluation, EvaluationRound
-from pvp.api.serializers import PvpEvaluationSerializer, PvPEmployeeSerializer, PvpToDoSerializer, PvpDescriptionSerializer
-from comp.models import CompensationSummary
-from comp.api.serializers import CompensationSummarySerializer
 from engagement.api.serializers import SurveyUrlSerializer, HappinessSerializer
-from assessment.api.serializers import AssessmentSerializer
-from todo.api.serializers import TaskSerializer, CreateTaskSerializer, EditTaskSerializer
-from customers.api.serializers import CustomerSerializer
-from kpi.api.serializers import KPIIndicatorSerializer, KPIPerformanceSerializer
+from engagement.engagementreports import get_employees_with_happiness_scores
+from engagement.models import Happiness, SurveyUrl, generate_survey
 from insights.api.serializers import ProspectSerializer
+from insights.models import Prospect
+from json import dumps
+from kpi.api.serializers import KPIIndicatorSerializer, KPIPerformanceSerializer
+from kpi.models import Performance, Indicator
 from org.api.permissions import *
+from org.api.serializers import SanitizedEmployeeSerializer, UserSerializer, EmployeeSerializer, TeamSerializer, MentorshipSerializer, LeadershipSerializer, AttributeSerializer, MinimalEmployeeSerializer, EditEmployeeSerializer, CreateEmployeeSerializer
+from org.teamreports import get_mbti_report_for_team
+from PIL import Image, ExifTags
+from pvp.api.serializers import TalentCategoryReportSerializer
+from pvp.salaryreports import get_salary_report_for_team, get_salary_report_for_all_employees, get_salary_report_for_lead
+from re import sub
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.views import APIView
+from rest_framework import generics, viewsets, status
+from rest_framework.response import Response
+from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.exceptions import PermissionDenied
+from rest_framework.pagination import PageNumberPagination
+from .serializers import *
+from StringIO import StringIO
+from todo.api.serializers import TaskSerializer, CreateTaskSerializer, EditTaskSerializer
+from todo.models import Task
+
 
 logger = getLogger('talentdashboard')
 
@@ -142,8 +133,8 @@ def all_employee_comment_report(request):
 
 @api_view(['GET'])
 def comment_report_timespan(request):
-    start_date = dateutil.parser.parse(request.QUERY_PARAMS.get('start_date', None)).date()
-    end_date = dateutil.parser.parse(request.QUERY_PARAMS.get('end_date', None)).date()
+    start_date = parser.parse(request.QUERY_PARAMS.get('start_date', None)).date()
+    end_date = parser.parse(request.QUERY_PARAMS.get('end_date', None)).date()
 
     response_data = {}
     comments = Comment.objects.filter(created_date__range=[start_date, end_date])
@@ -161,8 +152,8 @@ def comment_report_timespan(request):
 
 @api_view(['GET'])
 def task_report_timespan(request):
-    start_date = dateutil.parser.parse(request.QUERY_PARAMS.get('start_date', None)).date()
-    end_date = dateutil.parser.parse(request.QUERY_PARAMS.get('end_date', None)).date()
+    start_date = parser.parse(request.QUERY_PARAMS.get('start_date', None)).date()
+    end_date = parser.parse(request.QUERY_PARAMS.get('end_date', None)).date()
     
     response_data = {}
     tasks = Task.objects.filter(created_date__range=[start_date, end_date])
@@ -180,8 +171,8 @@ def task_report_timespan(request):
 
 @api_view(['GET'])
 def checkin_report_timespan(request):
-    start_date = dateutil.parser.parse(request.QUERY_PARAMS.get('start_date', None)).date()
-    end_date = dateutil.parser.parse(request.QUERY_PARAMS.get('end_date', None)).date()
+    start_date = parser.parse(request.QUERY_PARAMS.get('start_date', None)).date()
+    end_date = parser.parse(request.QUERY_PARAMS.get('end_date', None)).date()
     
     response_data = {}
     checkins = CheckIn.objects.filter(date__range=[start_date, end_date])
@@ -251,58 +242,6 @@ def all_employee_engagement_report(request):
         return Response(serializer.data)
 
 
-class TalentCategoryReportDetail(APIView):
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request, pk, format=None):
-        report = None
-        if pk == 'all-employees':
-            report = get_talent_category_report_for_all_employees()
-        serializer = TalentCategoryReportSerializer(report, context={'request': request})
-        if report is not None:
-            return Response(serializer.data)
-        return Response(None, status=status.HTTP_404_NOT_FOUND)
-
-
-class TeamTalentCategoryReportDetail(APIView):
-    permission_classes = (IsAuthenticated, PermissionsViewAllEmployees)
-
-    def get(self, request, pk, format=None):
-        report = get_talent_category_report_for_team(pk)
-        serializer = TalentCategoryReportSerializer(report, context={'request': request})
-        if report is not None:
-            return Response(serializer.data)
-        return Response(None, status=status.HTTP_404_NOT_FOUND)
-
-
-class LeadTalentCategoryReportDetail(APIView):
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request, format=None):
-        current_user = request.user
-        lead = Employee.objects.get(user=current_user)
-        lead_id = lead.id
-        report = get_talent_category_report_for_lead(lead_id)
-        serializer = TalentCategoryReportSerializer(report, context={'request': request})
-        if report is not None:
-            return Response(serializer.data)
-        return Response(None, status=status.HTTP_404_NOT_FOUND)
-
-
-class CoachTalentCategoryReportDetail(APIView):
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request, format=None):
-        current_user = request.user
-        coach = Employee.objects.get(user=current_user)
-        coach_id = coach.id
-        report = get_talent_category_report_for_coach(coach_id)
-        serializer = TalentCategoryReportSerializer(report, context={'request': request})
-        if report is not None:
-            return Response(serializer.data)
-        return Response(None, status=status.HTTP_404_NOT_FOUND)
-
-
 class TeamSalaryReportDetail(APIView):
     permission_classes = (IsAuthenticated, PermissionsViewAllEmployees)
 
@@ -359,7 +298,7 @@ class EmployeeList(APIView):
     def post(self, request, format=None):
         if 'hire_date' in request.DATA and request.DATA['hire_date'] is not None:
             date_string = request.DATA['hire_date']
-            request.DATA['hire_date'] = dateutil.parser.parse(date_string).date()
+            request.DATA['hire_date'] = parser.parse(date_string).date()
 
         serializer = CreateEmployeeSerializer(data=request.DATA, context={'request': request})
         if serializer.is_valid():
@@ -378,11 +317,11 @@ class EmployeeList(APIView):
             employee.last_name = request.DATA["_last_name"]
             employee.email = request.DATA["_email"]
             if request.DATA["_hire_date"] is not None:
-                employee.hire_date = dateutil.parser.parse(request.DATA["_hire_date"])
+                employee.hire_date = parser.parse(request.DATA["_hire_date"])
             else:
                 employee.hire_date = None
             if request.DATA["_departure_date"] is not None:
-                employee.departure_date = dateutil.parser.parse(request.DATA["_departure_date"])
+                employee.departure_date = parser.parse(request.DATA["_departure_date"])
             else:
                 employee.departure_date = None
             if request.DATA["_team_id"] is not None:
@@ -405,41 +344,6 @@ class EmployeeList(APIView):
             return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
-class PvpEvaluationDetail(APIView):
-    def get_object(self, pk):
-        try:
-            return PvpEvaluation.objects.get(pk=pk)
-        except PvpEvaluation.DoesNotExist:
-            raise Http404
-
-    def get(self, request, pk, format=None):
-        pvp = self.get_object(pk)
-
-        if not pvp.employee.is_viewable_by_user(request.user):
-            raise PermissionDenied
-
-        serializer = PvpEvaluationSerializer(pvp, context={'request': request})
-        return Response(serializer.data)
-
-    def put(self, request, pk, format=None):
-        pvp_id = request.DATA["id"]
-        pvp = PvpEvaluation.objects.get(id=pvp_id)
-        pvp.performance = request.DATA["_performance"]
-        pvp.potential = request.DATA["_potential"]
-        pvp.evaluator = request.user
-        if "_content" in request.DATA:
-            content = request.DATA["_content"]
-            if pvp.comment is None:
-                visibility = 3
-                include_in_daily_digest = True
-                comment = pvp.employee.comments.add_comment(content, visibility, include_in_daily_digest, pvp.evaluator)
-                pvp.comment = comment
-            else:
-                pvp.comment.content = content
-                pvp.comment.save()
-        pvp.save()
-        serializer = PvpEvaluationSerializer(pvp,context={'request': request})
-        return Response(serializer.data)
 
 @api_view(['POST'])
 def upload_employee(request):
@@ -457,7 +361,7 @@ def upload_employee(request):
 
     if 'hire_date' in request.DATA:
         date_string = request.DATA['hire_date']
-        request.DATA['hire_date'] = dateutil.parser.parse(date_string).date()
+        request.DATA['hire_date'] = parser.parse(date_string).date()
 
     serializer = CreateEmployeeSerializer(data = request.DATA, context={'request':request})
     if serializer.is_valid():
@@ -506,7 +410,7 @@ class EmployeeNames(APIView):
         employees = Employee.objects.get_current_employees()
         employees = employees.values_list('full_name',flat=True)
         employees_list = list(employees)
-        return HttpResponse(json.dumps(employees_list), content_type='application/json')
+        return HttpResponse(dumps(employees_list), content_type='application/json')
 
 
 class SendEngagementSurvey(APIView):
@@ -959,7 +863,7 @@ class ImageUploadView(APIView):
     def post(self, request, pk, format=None):
         def resize(image, size, filename, extension, content_type):
             image.thumbnail(size, Image.ANTIALIAS)
-            image_io = StringIO.StringIO()
+            image_io = StringIO()
             image.save(image_io, format=extension)
             image_file = InMemoryUploadedFile(image_io, None, filename, content_type, image_io.len, None)
             return image_file
@@ -1084,172 +988,6 @@ class EmployeeCompensationSummaries(APIView):
             serializer = CompensationSummarySerializer(compensation_summaries, many=True, context={'request': request})
             return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
-
-class EmployeePvPEvaluations(APIView):
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request, pk, format=None):
-        employee = Employee.objects.get(pk=pk)
-        if not employee.is_viewable_by_user(request.user):
-            raise PermissionDenied
-
-        evaluations = PvpEvaluation.objects.get_evaluations_for_employee(int(pk))
-        if evaluations is not None:
-            serializer = PvpEvaluationSerializer(evaluations, many=True, context={'request': request})
-            return Response(serializer.data)
-        return Response(None, status=status.HTTP_404_NOT_FOUND)
-
-class AnnotationChartData(APIView):
-    def get(self, request, pk, format=None):
-        chart_data = defaultdict(list)
-        eval_rounds = EvaluationRound.objects.get_rounds_for_employee(pk)
-        for index, this_round in enumerate(eval_rounds):
-            if index < len(eval_rounds)-1:
-                next_round = eval_rounds[index+1]
-                dt = next_round.date - this_round.date
-                days = dt.days
-                this_eval = PvpEvaluation.objects.get(employee__id=int(pk), evaluation_round__id=this_round.id)
-                next_eval = PvpEvaluation.objects.get(employee__id=int(pk), evaluation_round__id=next_round.id)
-                performance_step = (next_eval.performance - this_eval.performance) / float(days)
-                potential_step = (next_eval.potential - this_eval.potential) / float(days)
-                for i in range(0, days):
-                    dt = timedelta(days=i)
-                    key = this_round.date + dt
-                    performance = this_eval.performance + (performance_step*i)
-                    potential = this_eval.potential + (potential_step*i)
-                    chart_data[key.strftime('%Y-%m-%d')].extend([key.strftime('%Y-%m-%d'),performance, None, None, potential, None, None])
-            else:
-                dt = datetime.date.today() - this_round.date
-                days = dt.days
-                for i in range(0, days):
-                    dt = timedelta(days=i)
-                    key = this_round.date + dt
-                    chart_data[key.strftime('%Y-%m-%d')].extend([key.strftime('%Y-%m-%d'),this_eval.performance, None, None, this_eval.potential, None, None])
-        employee_type = ContentType.objects.get(model='employee')
-        comments = Comment.objects.filter(content_type=employee_type)
-        comments = comments.filter(object_id=pk)
-        comments = comments.exclude(~Q(owner_id=request.user.id),content_type=employee_type,visibility=1)
-        happys = Happiness.objects.filter(employee__id=pk)
-
-        iterate_chart_data = copy.deepcopy(chart_data)
-        for key in iterate_chart_data:
-            date_parsed = dateutil.parser.parse(key)
-            comment = comments.filter(created_date__year=date_parsed.year,created_date__month=date_parsed.month,created_date__day=date_parsed.day).first()
-            if comment:
-                chart_data[key].extend([0, None, comment.content])
-            else:
-                chart_data[key].extend([0, None, None])
-            last_happy = copy.copy(happy)
-            happy = happys.filter(assessed_date=date_parsed).first()
-            if happy:
-                chart_data[key].extend([happy.assessment, None, None])
-            else:
-                chart_data[key].extend([0, None, None])
-
-        chart_data = collections.OrderedDict(sorted(chart_data.items()))
-
-        return HttpResponse(json.dumps(chart_data), content_type='application/json')
-
-@api_view(['GET'])
-@permission_classes((IsAuthenticated, PermissionsViewAllEmployees))
-def pvp_evaluations(request):
-    team_id = request.QUERY_PARAMS.get('team_id', None)
-    if team_id is not None:
-        team_id = int(team_id)
-    employees = Employee.objects.get_current_employees(team_id)
-
-    serializer = PvPEmployeeSerializer(employees, many=True, context={'request': request})
-    return Response(serializer.data)
-
-@api_view(['GET'])
-@permission_classes((IsAuthenticated,))
-def my_team_pvp_evaluations(request):
-    current_user = request.user
-    lead = Employee.objects.get(user=current_user)
-    lead_id = lead.id
-    employees = Employee.objects.get_current_employees_by_team_lead(lead_id)
-
-    serializer = PvPEmployeeSerializer(employees, many=True, context={'request': request})
-    return Response(serializer.data)
-
-@api_view(['GET'])
-@permission_classes((IsAuthenticated,))
-def my_coachees_pvp_evaluations(request):
-    current_user = request.user
-    coach = Employee.objects.get(user=current_user)
-    coach_id = coach.id
-    employees = Employee.objects.get_current_employees_by_coach(coach_id)
-
-    serializer = PvPEmployeeSerializer(employees, many=True, context={'request': request})
-    return Response(serializer.data)
-
-@api_view(['GET'])
-def pvp_todos(request):
-    evaluations = PvpEvaluation.objects.todos_for_user(request.user)
-    team_id = request.QUERY_PARAMS.get('team_id', None)
-    if team_id is not None:
-        evaluations = evaluations.filter(employee__team__id=team_id)
-    serializer = PvpToDoSerializer(evaluations, many=True, context={'request': request})
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
-def pvp_descriptions(request):
-    descriptions = PvpDescription.objects.all()
-    serializer = PvpDescriptionSerializer(descriptions, many=True, context={'request': request})
-    return Response(serializer.data)
-
-@api_view(['GET'])
-@permission_classes((IsAuthenticated,PermissionsViewAllEmployees))
-def happiness_reports(request):
-    talent_category = request.QUERY_PARAMS.get('talent_category', None)
-    days_ago = request.QUERY_PARAMS.get('days_ago', None)
-    neglected = request.QUERY_PARAMS.get('neglected', None)
-    if days_ago is None:
-        days_ago = 30
-    d = date.today()-timedelta(days=int(days_ago))
-    if neglected is not None:
-        neglected = parseBoolString(neglected)
-    else:
-        neglected = False
-    happys = Happiness.objects.filter(assessed_date__gt=d)
-    employees = []
-    for happy in happys:
-        employees.append(happy.employee)
-
-    evaluations = PvpEvaluation.objects.all()
-    current_round = EvaluationRound.objects.most_recent()
-    if neglected:
-        tasks = Task.objects.filter(completed = False).filter(due_date__isnull=False).filter(assigned_to__isnull=False)
-        for task in tasks:
-            employees.append(task.employee)
-        evaluations = evaluations.filter(evaluation_round__id = current_round.id).exclude(employee__in=employees)
-    else:
-        evaluations = evaluations.filter(evaluation_round__id = current_round.id).filter(employee__in=employees)
-
-    # The talent_category query executes the query, so it needs to happen after all other filters
-    if talent_category is not None:
-        evaluations = [item for item in evaluations if item.talent_category() == int(talent_category)]
-
-    data= [{'empty':1}]
-    if len(evaluations)>0:
-        serializer = PvpEvaluationSerializer(evaluations, many=True, context={'request': request})
-        data = serializer.data
-
-    return Response(data)
-
-
-@api_view(['GET'])
-def talent_categories(request):
-    values = {}
-    pvp = PvpEvaluation()
-    for potential in range(0, 5):
-        values[potential] = {}
-        for performance in range(0, 5):
-            pvp.potential = potential
-            pvp.performance = performance
-            values[potential][performance] = pvp.talent_category()
-    return Response(values)
 
 
 def add_current_employee_to_request(request, field_name):

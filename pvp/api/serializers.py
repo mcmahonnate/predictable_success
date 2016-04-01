@@ -148,3 +148,9 @@ class PvpToDoSerializer(serializers.ModelSerializer):
     class Meta:
         model = PvpEvaluation
         fields = ('id', 'talent_category', 'employee', 'potential', 'performance', 'evaluator', 'comment', 'description', 'too_new', 'is_complete')
+
+
+class TalentCategoryReportSerializer(serializers.Serializer):
+    evaluation_date = serializers.DateField()
+    categories = serializers.DictField()
+    total_evaluations = serializers.IntegerField()
