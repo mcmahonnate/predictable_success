@@ -16,7 +16,7 @@
                 <li><a ng-click="setTeamFilter(null)">All Teams</a></li>
             </ul>
         </div>
-        <div infinite-scroll="loadNextPage()" class="grid filled-light rounded">
+        <div infinite-scroll="loadNextPage()" infinite-scroll-distance="2" class="grid filled-light rounded">
             <ul masonry="true">
                 <li data-category="{{employee.team.name}}" class="employee" on-filter index="{{$index}}" stale-days="90" ng-repeat="pvp in pvps">
                     <div class="large-avatar-container">
