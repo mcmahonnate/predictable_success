@@ -24,6 +24,7 @@ def pvp_todos(request):
     team_id = request.QUERY_PARAMS.get('team_id', None)
     if team_id is not None:
         evaluations = evaluations.filter(employee__team__id=team_id)
+    evaluations = evaluations.order_by('employee__full_name')
     paginator = LargeResultsSetPagination()
     result_page = paginator.paginate_queryset(evaluations, request)
     serializer = PvpToDoSerializer(result_page, many=True, context={'request': request})
