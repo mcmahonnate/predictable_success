@@ -3,31 +3,36 @@ angular.module('tdb.activity.controllers', [])
         var view = $attrs.view;
         $scope.events = [];
         $scope.nextPage = 1;
-        $scope.hasNextPage = false;
+        $scope.hasNextPage = true;
+        $scope.busy = false;
         $scope.loadNextPage = function() {
-            var request = null;
-            switch(view) {
-                case 'employee':
-                    request = Event.getEmployeeEvents($routeParams.id, $scope.nextPage);
-                    break;
-                case 'company':
-                    request = Event.get({page: $scope.nextPage});
-                    break;
-                case 'leader':
-                    request = Event.getLeadEvents($routeParams.id, $scope.nextPage);
-                    break;
-                case 'team':
-                    request = Event.getTeamEvents($routeParams.teamId, $scope.nextPage);
-                    break;
-                case 'coach':
-                    request = Event.getCoachEvents($scope.nextPage);
-                    break;
+            if ($scope.hasNextPage && !$scope.busy) {
+                $scope.busy = true;
+                var request = null;
+                switch (view) {
+                    case 'employee':
+                        request = Event.getEmployeeEvents($routeParams.id, $scope.nextPage);
+                        break;
+                    case 'company':
+                        request = Event.get({page: $scope.nextPage});
+                        break;
+                    case 'leader':
+                        request = Event.getLeadEvents($routeParams.id, $scope.nextPage);
+                        break;
+                    case 'team':
+                        request = Event.getTeamEvents($routeParams.teamId, $scope.nextPage);
+                        break;
+                    case 'coach':
+                        request = Event.getCoachEvents($scope.nextPage);
+                        break;
+                }
+                request.$promise.then(function (page) {
+                    $scope.events = $scope.events.concat(page.results);
+                    $scope.nextPage++;
+                    $scope.hasNextPage = page.has_next;
+                    $scope.busy = false;
+                });
             }
-            request.$promise.then(function(page) {
-                $scope.events = $scope.events.concat(page.results);
-                $scope.nextPage++;
-                $scope.hasNextPage = page.has_next;
-            });
         };
 
         $scope.loadNextPage();

@@ -1,6 +1,6 @@
 from copy import copy, deepcopy
 from collections import defaultdict, OrderedDict
-from datetime import date, timedelta
+from datetime import timedelta
 from dateutil import parser
 from django.http import Http404, HttpResponse
 from engagement.models import Happiness
@@ -15,8 +15,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.views import APIView
 from rest_framework import status
-from talentdashboard.views.views import parseBoolString
-from todo.models import Task
+from talentdashboard.views.views import LargeResultsSetPagination
 
 
 @api_view(['GET'])
@@ -25,8 +24,10 @@ def pvp_todos(request):
     team_id = request.QUERY_PARAMS.get('team_id', None)
     if team_id is not None:
         evaluations = evaluations.filter(employee__team__id=team_id)
-    serializer = PvpToDoSerializer(evaluations, many=True, context={'request': request})
-    return Response(serializer.data)
+    paginator = LargeResultsSetPagination()
+    result_page = paginator.paginate_queryset(evaluations, request)
+    serializer = PvpToDoSerializer(result_page, many=True, context={'request': request})
+    return paginator.get_paginated_response(serializer.data)
 
 
 @api_view(['GET'])

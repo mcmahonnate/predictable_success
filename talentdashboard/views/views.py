@@ -613,6 +613,16 @@ class StandardResultsSetPagination(PageNumberPagination):
                          'results': data})
 
 
+class LargeResultsSetPagination(PageNumberPagination):
+    page_size = 16
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+    def get_paginated_response(self, data):
+        return Response({'count': self.page.paginator.count,
+                         'has_next': self.page.has_next(),
+                         'page' : self.page.number,
+                         'results': data})
+
 class LeadershipDetail(APIView):
     permission_classes = (IsAuthenticated,)
     model = Leadership

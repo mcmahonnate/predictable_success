@@ -8,8 +8,6 @@ angular.module('tdb.pvp.controllers', [])
         });
 
         $scope.selectPvP = function(index) {
-
-            console.log(index);
             $scope.pvpIndex = index;
             //updateSlidePosition();
         }
@@ -17,7 +15,7 @@ angular.module('tdb.pvp.controllers', [])
         $scope.editPvP = function (pvps, index) {
             var modalInstance = $modal.open({
                 animation: true,
-                templateUrl: '/static/angular/partials/_modals/edit-pvp.html',
+                templateUrl: '/static/angular/partials/_modals/add-edit-pvp.html',
                 controller: 'AddEditPvPCtrl',
                 resolve: {
                     pvp: function () {
@@ -102,6 +100,7 @@ angular.module('tdb.pvp.controllers', [])
         $scope.pvp_description = null;
         $scope.currentPvP = null;
         $scope.isAnimating = false;
+        $scope.busy = false;
 
         $scope.selfAssessment = null;
         setToIsClean = function (pvp) {
@@ -240,7 +239,8 @@ angular.module('tdb.pvp.controllers', [])
         };
         $scope.pvps = [];
         $scope.team_id = $scope.currentTeam ? $scope.currentTeam.id : 0;
-
+        $scope.nextPage = 1;
+        $scope.hasNextPage = true;
         $scope.setTeamFilter = function(teamId) {
             $location.search('team_id', teamId);
         };
@@ -255,7 +255,7 @@ angular.module('tdb.pvp.controllers', [])
             var modalInstance = $modal.open({
                 animation: true,
                 backdrop : 'static',
-                templateUrl: '/static/angular/partials/_modals/edit-pvp.html',
+                templateUrl: '/static/angular/partials/_modals/add-edit-pvp.html',
                 controller: 'AddEditPvPCtrl',
                 resolve: {
                     pvp: function () {
@@ -275,9 +275,17 @@ angular.module('tdb.pvp.controllers', [])
                 }
             );
         };
-        $scope.search = function() {
-            $scope.pvps = PvpEvaluation.getToDos($scope.filters.team_id);
+        $scope.loadNextPage = function() {
+            if ($scope.hasNextPage && !$scope.busy) {
+                $scope.busy = true;
+                PvpEvaluation.getToDos($scope.filters.team_id, $scope.nextPage).$promise.then(function (page) {
+                    $scope.pvps = $scope.pvps.concat(page.results);
+                    $scope.nextPage++;
+                    $scope.hasNextPage = page.has_next;
+                    $scope.busy = false;
+                })
+            }
         };
-        $scope.search();
+        $scope.loadNextPage();
     }])
 ;
