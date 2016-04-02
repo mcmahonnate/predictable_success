@@ -15,7 +15,8 @@ angular.module('tdb.pvp.controllers', [])
         $scope.editPvP = function (pvps, index) {
             var modalInstance = $modal.open({
                 animation: true,
-                templateUrl: '/static/angular/partials/_modals/add-edit-pvp.html',
+                windowClass: 'bigModal',
+                templateUrl: '/static/angular/pvp/partials/modals/add-edit-pvp.html',
                 controller: 'AddEditPvPCtrl',
                 resolve: {
                     pvp: function () {
@@ -254,8 +255,9 @@ angular.module('tdb.pvp.controllers', [])
         $scope.editPvP = function (pvps, index) {
             var modalInstance = $modal.open({
                 animation: true,
+                windowClass: 'bigModal',
                 backdrop : 'static',
-                templateUrl: '/static/angular/partials/_modals/add-edit-pvp.html',
+                templateUrl: '/static/angular/pvp/partials/modals/add-edit-pvp.html',
                 controller: 'AddEditPvPCtrl',
                 resolve: {
                     pvp: function () {
