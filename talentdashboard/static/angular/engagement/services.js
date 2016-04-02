@@ -55,7 +55,7 @@ angular.module('tdb.engagement.services', ['ngResource'])
     }])
 
     .factory('AnnotationChart', ['$resource', '$http', function($resource, $http) {
-        var AnnotationChart = $resource('/api/v1/annotation-chart/:id/');
+        var AnnotationChart = $resource('/api/v1/pvp/annotation-chart/:id/');
 
         AnnotationChart.getData = function(id) {
             return this.get({id: id});

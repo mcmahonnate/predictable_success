@@ -30,6 +30,7 @@
             ConversationService.get($routeParams.conversationId)
                 .then(function(conversation){
                     vm.development_lead_assessment = conversation.development_lead_assessment
+                    vm.advice = conversation.advice;
                     vm.selfie = conversation.employee_assessment;
                     if (!vm.selfie.zone) {
                         gotoID();

@@ -37,7 +37,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" ng-click="leaderAssessment.panel_index=0" data-dismiss="modal" class="btn btn-light">&larr; Back</button>
-            <button type="button" class="btn btn-success" ng-disabled="!leaderAssessment.selectedAnswer || leaderAssessment.busy" ng-click="leaderAssessment.saveAssessment()">Save</button>
+            <button type="button" class="btn btn-success" ng-disabled="!leaderAssessment.selectedAnswer || leaderAssessment.busy" ng-click="leaderAssessment.saveAssessment();leaderAssessment.close();">Save</button>
         </div>
     </div>
 </form>
@@ -46,9 +46,15 @@
         <div class="modal-body">
             <panel class="devzone">
                 <h3 class="modal-title">Development Area</h3>
-                <p>What development area do you think best describes <strong>{{leaderAssessment.conversation.employee.first_name}}'s</strong> needs?</p>
+                <p class="distributions">
+                    <span ng-show="leaderAssessment.conversation.employee_assessment.completed" class="distribution">
+                        <strong>{{leaderAssessment.conversation.employee.first_name}}</strong> selfied as <span class="tag employee-segment-background-color-{{leaderAssessment.conversation.employee_assessment.zone.id}}" style="display: inline-block;padding:0px;float:none;margin-right: 0px;">{{leaderAssessment.conversation.employee_assessment.zone.name}}</span>
+                        What development area do you think best describes {{leaderAssessment.conversation.employee.first_name}}'s needs?
+                    </span>
+                    <span ng-show="!leaderAssessment.conversation.employee_assessment.completed">What development area do you think best describes <strong>{{leaderAssessment.conversation.employee.first_name}}'s</strong> needs?</span>
+                </p>
                 <select ng-model="leaderAssessment.selectedAnswer" class="form-control">
-                    <option ng-repeat="zone in leaderAssessment.zones | orderBy:'order' " value="{{zone.id}}"><strong>{{ zone.name }}</strong></option>
+                    <option ng-repeat="zone in leaderAssessment.zones | orderBy:'order' " value="{{zone.id}}" ng-selected="zone.id==leaderAssessment.selectedAnswer"><strong>{{ zone.name }}</strong></option>
                 </select>
                 <p><strong>Notes</strong></p>
                 <textarea style="min-height:120px;" class="form-control" cols="30" rows="5" ng-model="leaderAssessment.notes" placeholder="How is {{leaderAssessment.conversation.employee.first_name}} doing?"></textarea>
@@ -56,8 +62,26 @@
             </panel>
         </div>
         <div class="modal-footer">
-            <button type="button" ng-click="leaderAssessment.cancel()" data-dismiss="modal" class="btn btn-light">Cancel</button>
+            <button type="button" ng-click="leaderAssessment.cancel()" data-dismiss="modal" class="btn btn-light pull-left">Close</button>
             <button type="button" class="btn btn-success" ng-disabled="!leaderAssessment.selectedAnswer || leaderAssessment.busy" ng-click="leaderAssessment.saveAssessment()">Save</button>
+            <button type="button" class="btn btn-success" ng-disabled="!leaderAssessment.conversation.development_lead_assessment || leaderAssessment.busy" ng-click="leaderAssessment.panel_index=1">Share &rarr;</button>
+        </div>
+    </div>
+    <div class="form-group" ng-show="leaderAssessment.panel_index==1">
+        <div class="modal-body">
+            <panel class="devzone">
+                <h3 class="modal-title">Share this with {{ leaderAssessment.conversation.development_lead.full_name }}</h3>
+                <span class="xxxlarge-headshot">
+                    <img ng-src="{{leaderAssessment.conversation.development_lead.avatar}}" alt="{{leaderAssessment.conversation.development_lead.full_name}}" class="headshot-image">
+                </span>
+                <div>
+                    <p class="centered change-coach-message"><a href="" class="underlined" ng-click="request.changeCoach()">Share this with someone else.</a></p>
+                </div>
+            </panel>
+        </div>
+        <div class="modal-footer">
+            <button type="button" ng-click="leaderAssessment.panel_index=0" data-dismiss="modal" class="btn btn-light">&larr; Back</button>
+            <button type="button" class="btn btn-success" ng-disabled="!leaderAssessment.selectedAnswer || leaderAssessment.busy" ng-click="leaderAssessment.saveAssessment()">Send this to {{leaderAssessment.conversation.development_lead.first_name}}</button>
         </div>
     </div>
 </form>

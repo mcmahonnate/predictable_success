@@ -16,7 +16,7 @@
                 <li><a ng-click="setTeamFilter(null)">All Teams</a></li>
             </ul>
         </div>
-        <div class="grid filled-light rounded">
+        <div infinite-scroll="loadNextPage()" class="grid filled-light rounded">
             <ul masonry="true">
                 <li data-category="{{employee.team.name}}" class="employee" on-filter index="{{$index}}" stale-days="90" ng-repeat="pvp in pvps">
                     <div class="large-avatar-container">
@@ -33,8 +33,8 @@
                     <div class="team-name centered "><a ng-click="editPvP(pvps, $index)" style="cursor:pointer">{{pvp.employee.team.name}}</a></div>
                 </li>
             </ul>
-            <div ng-if="pvps.$resolved && employees.length === 0" class="no-results">No Results</div>
-            <div ng-if="!pvps.$resolved" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
+            <div ng-if="!busy && employees.length === 0" class="no-results">No Results</div>
+            <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
         </div>
     </div>
 </div>

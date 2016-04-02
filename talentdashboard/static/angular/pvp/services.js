@@ -28,7 +28,7 @@ angular.module('tdb.pvp.services', ['ngResource'])
     }])
 
     .factory('PvpDescriptions', ['$resource', '$http', function($resource, $http) {
-        var res = $resource('/api/v1/pvp-descriptions/');
+        var res = $resource('/api/v1/pvp/descriptions/');
         return res;
     }])
 
@@ -37,7 +37,7 @@ angular.module('tdb.pvp.services', ['ngResource'])
             'update': { method: 'PUT' }
         };
 
-        var PvpEvaluation = $resource('/api/v1/pvp-evaluations/:path/:employee_id/', {path: '@id' }, actions);
+        var PvpEvaluation = $resource('/api/v1/pvp/evaluations/:path/:employee_id/', {path: '@id' }, actions);
 
         PvpEvaluation.getAllEvaluationsForEmployee = function(id) {
             return this.query({ path:'employees', employee_id: id });
@@ -56,11 +56,11 @@ angular.module('tdb.pvp.services', ['ngResource'])
             return this.query(params);
         };
 
-        PvpEvaluation.getToDos = function(team_id) {
+        PvpEvaluation.getToDos = function(team_id, page) {
             if (team_id != 0) {
-                return this.query({ path: 'todo', team_id: team_id });
+                return this.get({ path: 'todo', team_id: team_id, page: page });
             } else {
-                return this.query({ path: 'todo' });
+                return this.get({ path: 'todo', page: page });
             }
         };
 
