@@ -15,7 +15,6 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
         infiniteScrollListenForEvent: '@'
       },
       link: function(scope, elem, attrs) {
-        console.log('infiniteScroll');
         var changeContainer, checkInterval, checkWhenEnabled, container, handleInfiniteScrollContainer, handleInfiniteScrollDisabled, handleInfiniteScrollDistance, handleInfiniteScrollUseDocumentBottom, handler, height, immediateCheck, offsetTop, pageYOffset, scrollDistance, scrollEnabled, throttle, unregisterEventListener, useDocumentBottom, windowElement;
         windowElement = angular.element($window);
         scrollDistance = null;
