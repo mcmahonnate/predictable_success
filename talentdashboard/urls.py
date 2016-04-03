@@ -64,14 +64,10 @@ urlpatterns = [
     url(r'^api/v1/assessment/employees/(?P<pk>[0-9]+)/$', Assessment.as_view()),
     url(r'^api/v1/assessment/mbti/employees/(?P<pk>[0-9]+)/$', EmployeeMBTI.as_view()),
     url(r'^api/v1/assessment/mbti/teams/(?P<pk>[0-9]+)/$', TeamMBTIReportDetail.as_view()),
-    url(r'^api/v1/compensation-summaries/employees/(?P<pk>[0-9]+)/$', EmployeeCompensationSummaries.as_view()),
-    url(r'^api/v1/compensation-summaries/$', compensation_summaries),
+
 
     url(r'^api/v1/employee-comment-reports/all-employees/$', all_employee_comment_report),
     url(r'^api/v1/employee-engagement-reports/all-employees/$', all_employee_engagement_report),
-    url(r'^api/v1/salary-reports/teams/(?P<pk>[0-9]+)/$', cache_page(60*1440)(TeamSalaryReportDetail.as_view())),
-    url(r'^api/v1/salary-reports/lead/$', LeadSalaryReportDetail.as_view()),
-    url(r'^api/v1/salary-reports/company/$', cache_page(60*1440)(get_company_salary_report)),
 
     url(r'^api/v1/prospect/$', ProspectDetail.as_view()),
     url(r'^api/v1/prospects/$', ProspectList.as_view()),
@@ -99,14 +95,15 @@ urlpatterns = [
 
     url(r'^api/v1/checkins/', include('checkins.api.urls')),
     url(r'^api/v1/comments/', include('blah.api.urls')),
+    url(r'^api/v1/compensation/', include('comp.api.urls')),
     url(r'^api/v1/devzones/', include('devzones.api.urls')),
     url(r'^api/v1/events/', include('activity.api.urls')),
+    url(r'^api/v1/feedback/', include('feedback.api.urls')),
     url(r'^api/v1/pvp/', include('pvp.api.urls')),
     url(r'^api/v1/projects/', include('projects.api.urls')),
     url(r'^api/v1/org/', include('org.api.urls')),
     url(r'^api/v1/search/', include('search.api.urls')),
 
-    url(r'^api/v1/feedback/', include('feedback.api.urls')),
 
     url(r'^api/v1/profile/$', Profile.as_view()),
 
