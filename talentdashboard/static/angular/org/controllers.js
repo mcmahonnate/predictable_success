@@ -381,7 +381,7 @@ angular.module('tdb.org.controllers', [])
             var modalInstance = $modal.open({
                 animation: true,
                 backdrop: 'static',
-                templateUrl: '/static/angular/partials/_modals/edit-bio-modal.html',
+                templateUrl: '/static/angular/org/partials/modals/add-edit-employee.html',
                 controller: 'AddEditBioCtrl',
                 resolve: {
                     employee: function () {
