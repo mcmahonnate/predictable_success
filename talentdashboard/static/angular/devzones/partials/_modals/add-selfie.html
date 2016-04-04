@@ -87,18 +87,18 @@
 
                 <div ng-show="selfie.selfie.zones.length>1">
                     <p>Hurray! It looks like you came up with 2 development zones. Select the one that feels like the best fit for you.</p>
-                    <div class="selfie-answer well well-sm" style="display:flex" ng-repeat="zone in selfie.selfie.zones | orderBy:'order' " ng-class="{'selfie-answer-selected': selfie.zone.id==zone.id, 'selfie-answer':selfie.zone.id!=zone.id}" ng-click="selfie.selfie.zone=zone;selfie.selectedAnswer=4;">
+                    <div class="selfie-answer well well-sm" style="display:flex" ng-repeat="zone in selfie.selfie.zones | orderBy:'order' " ng-class="{'selfie-answer-selected': selfie.selfie.zone.id==zone.id, 'selfie-answer':selfie.selfie.zone.id!=zone.id}" ng-click="selfie.selfie.zone=zone;selfie.selectedAnswer=4;">
                         <div class="selfie-answer-label" style="width: 91%;">
                             <h4><strong>{{ zone.name }}</strong></h4>
-                            <div collapse="selfie.zone.id!=zone.id">
+                            <div collapse="selfie.selfie.zone.id!=zone.id">
                                 <p ng-bind-html="zone.description" style="margin-top:5px;"></p>
                             </div>
                         </div>
                         <div style="margin: auto 0px;">
-                            <i class="fa fa-check-circle-o selected-icon" ng-show="selfie.zone.id==zone.id"></i>
+                            <i class="fa fa-check-circle-o selected-icon" ng-show="selfie.selfie.zone.id==zone.id"></i>
                         </div>
                     </div>
-                    <div class="selfie-answer well well-sm" style="display:flex" ng-class="{'selfie-answer-selected': selfie.selectedAnswer==5, 'selfie-answer':selfie.selectedAnswer!=5}" ng-click="selfie.selectedAnswer=5;selfie.zone=null">
+                    <div class="selfie-answer well well-sm" style="display:flex" ng-class="{'selfie-answer-selected': selfie.selectedAnswer==5, 'selfie-answer':selfie.selectedAnswer!=5}" ng-click="selfie.selectedAnswer=5;selfie.selfie.zone=null">
                         <div class="selfie-answer-label" style="width: 91%;">
                             <h4><strong>None of these feel right. I'd like to take the quiz again.</strong></h4>
                         </div>

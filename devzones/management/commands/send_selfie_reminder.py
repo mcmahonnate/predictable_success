@@ -24,7 +24,7 @@ class Command(BaseCommand):
             employee_zones = EmployeeZone.objects.get_all_unfinished()
             for employee_zone in employee_zones:
                 print employee_zone.employee.full_name
-                response_url = 'https://%s/#/devzones/' % tenant.domain_url
+                response_url = 'https://%s/#/id/' % tenant.domain_url
                 recipient_email = employee_zone.employee.email
                 context = {
                     'recipient_first_name': employee_zone.employee.first_name,
