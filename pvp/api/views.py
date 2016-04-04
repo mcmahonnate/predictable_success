@@ -84,6 +84,9 @@ class PvpEvaluationDetail(APIView):
     def put(self, request, pk, format=None):
         pvp_id = request.DATA["id"]
         pvp = PvpEvaluation.objects.get(id=pvp_id)
+        if "_too_new" in request.DATA:
+            pvp.too_new = request.DATA["_too_new"]
+
         pvp.performance = request.DATA["_performance"]
         pvp.potential = request.DATA["_potential"]
         pvp.evaluator = request.user

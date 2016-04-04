@@ -878,7 +878,6 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
 
             var processData = function(data, filename) {
                 var ext = filename.split('.').pop().toLowerCase();
-                console.log(ext);
                 var handler = XLSX;
 
                 if (ext == "csv") {
@@ -890,7 +889,6 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
                 var worksheet = workbook.Sheets[first_sheet];
                 var json = XLSX.utils.sheet_to_json(worksheet);
 
-                console.log(json);
                 return addFirstRow(json);
                 // return json;
             }
@@ -1050,6 +1048,13 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
             drawSquare(findSquare(), pvp.potential, pvp.performance, square.color);
         }
 
+        scope.$watchGroup(['pvp.performance','pvp.potential'], function() {
+            if(pvp.potential == 0 && pvp.performance == 0 && currentSquare) {
+                findDescription();
+                clearSquare(currentSquare, currentSquare.potential, currentSquare.performance, offSquareColor);
+            }
+        });
+
         scope.click_pvp = function(e, save) {
             var squareID = e.target.id;
             var row = Math.floor(squareID / 4) + 1;
@@ -1096,8 +1101,6 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
         Customers.get(function (data) {
             $scope.customer = data;
         });
-
-        console.log('foo');
         
         $scope.$watch("employee.departure_date",function(newValue,OldValue,scope) {
             if (newValue) {
@@ -1147,9 +1150,7 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
                 // if ($scope.edit_leadership.leader.id != $scope.leadership.leader.id) {
 
                 if ($scope.edit_leadership.leader) {
-                    console.log($scope.edit_leadership.leader);
                     var data = {id: $scope.employee.id, leader_id: $scope.edit_leadership.leader.id};
-                    console.log(data);
                     EmployeeLeader.addNew(data, function (response) {
                         $scope.edit_leadership = response;
                         $scope.leadership = angular.copy($scope.edit_leadership);
@@ -1242,7 +1243,6 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
         }
         $scope.save = function (){
             var data = {id: $scope.employee.id, _assessed_by_id: $rootScope.currentUser.employee.id, _assessment: $scope.happy.assessment, _content:$scope.happy.comment.content, _include_in_daily_digest: $scope.happy.comment.include_in_daily_digest};
-            console.log(data);
             Engagement.addNew(data, function(response) {
                 var newHappy = response;
                 $scope.happys.unshift(newHappy);
@@ -1422,7 +1422,6 @@ readMore.directive('readMore', function() {
 
                 $scope.performAction = function (card) {
                     if ($attrs.link) {
-                        console.log($attrs.link);
                         $location.path($attrs.link);
                     } else {
                         $scope.isExpanded = !$scope.isExpanded;

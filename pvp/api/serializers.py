@@ -118,7 +118,7 @@ class PvpEvaluationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PvpEvaluation
-        fields = ('id', 'potential', 'performance', 'talent_category', 'employee', 'evaluation_round', 'evaluator', 'comment')
+        fields = ('id', 'potential', 'performance', 'talent_category', 'employee', 'evaluation_round', 'evaluator', 'comment', 'too_new')
 
 
 class PvpEvaluationEditSerializer(serializers.ModelSerializer):
