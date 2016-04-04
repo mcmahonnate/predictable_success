@@ -37,7 +37,7 @@ class EmployeeDetail(APIView):
 
     def post(self, request, pk, format=None):
         employee = None
-        if 'id' in request.DATA:
+        if 'id' in request.DATA and request.DATA['id'] != 0:
             id = request.DATA['id']
             employee = Employee.objects.get(id=id)
         else:
