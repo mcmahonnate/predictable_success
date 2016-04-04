@@ -699,18 +699,54 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
     }
   }
 })
-
-.directive('importTable', function() {
+.directive('importTable', ['EmployeeSearch', '$filter', function(EmployeeSearch, $filter) {
     return {
         restrict: 'E',
         replace: true,
-        templateUrl: "/static/angular/partials/import-table.html",
-        link: function (scope, element, attrs) {
+        templateUrl: "/static/angular/import/partials/widgets/import-table.html",
+        link: function (scope, element, attrs, filter) {
             scope.table;
             scope.headerOptions = ["Don't Import", "First name", "Last name", "Email", "Hire Date", "Job Title", "Current Salary", "Team Leader", "Team"];
             scope.selectedHeaders = [];
             scope.dataHeaders = [];
+            scope.employees = [];
+            scope.selectedFirstNameKey = null;
+            scope.selectedLastNameKey = null;
+            EmployeeSearch.query(function(data) {
+                scope.employees = data;
+            });
 
+            scope.startsWith = function (expected, actual) {
+                if (expected && actual) {
+                    return expected.toLowerCase().indexOf(actual.toLowerCase()) == 0;
+                }
+                return true;
+            }
+            scope.fetchEmployee = function(index) {
+                if (scope.selectedHeaders[index] == "First name") {
+                    scope.selectedFirstNameKey = Object.keys(scope.importData[0])[index];
+                } else if (scope.selectedHeaders[index] == "Last name"){
+                    scope.selectedLastNameKey = Object.keys(scope.importData[0])[index];
+                }
+
+                if (scope.selectedFirstNameKey && scope.selectedLastNameKey) {
+                    angular.forEach(scope.importData, function(employee) {
+                        var criteria = {};
+                        if (scope.selectedFirstNameKey) {
+                            criteria.first_name = employee[scope.selectedFirstNameKey];
+                        }
+                        if (scope.selectedLastNameKey) {
+                            criteria.last_name = employee[scope.selectedLastNameKey];
+                        }
+                        var found = $filter('filter')(scope.employees, criteria, true);
+                        if (found.length == 1) {
+                            employee.employee = found[0];
+                        }else if(found.length > 0 ) {
+                            employee.search = found;
+                        }
+                    })
+                }
+            }
             // update data to import based on selected headers
             scope.getData = function() {
                 var headers = scope.selectedHeaders;
@@ -718,6 +754,7 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
                 var newData = [];
                 scope.importData.map(function (obj) {
                     var nextRow = {};
+                    nextRow.id = obj.employee ? obj.employee.pk : 0;
                     for (var i = 0; i < headers.length; i++) {
                         // only include data if user selects it
                         if (headers[i] == "Don't Import" || headers[i] == "")
@@ -731,7 +768,6 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
                     if (Object.keys(nextRow).length > 0)
                         newData.push(nextRow);
                 });
-
                 return newData;
             }
 
@@ -761,7 +797,7 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
             })
         }
     };
-})
+}])
 
 .directive('dragDropFile', function() {
     return {
@@ -811,6 +847,7 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
                 var objArray = [];
                 for (var i = 1; i < array.length; i++) {
                     objArray[i - 1] = {};
+                    objArray[i - 1]['employee'] = null;
                     for (var k = 0; k < array[0].length && k < array[i].length; k++) {
                         var key = array[0][k];
                         objArray[i - 1][key] = array[i][k]
