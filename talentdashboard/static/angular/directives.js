@@ -729,7 +729,7 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
                     scope.selectedLastNameKey = Object.keys(scope.importData[0])[index];
                 }
 
-                if (scope.selectedFirstNameKey && scope.selectedLastNameKey) {
+                if (scope.selectedFirstNameKey || scope.selectedLastNameKey) {
                     angular.forEach(scope.importData, function(employee) {
                         var criteria = {};
                         if (scope.selectedFirstNameKey) {
