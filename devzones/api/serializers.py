@@ -126,7 +126,7 @@ class EmployeeZoneSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmployeeZone
-        fields = ('id', 'employee', 'assessor', 'next_question', 'zone', 'zones', 'notes', 'answers', 'date', 'completed', 'times_retaken', 'development_conversation', 'new_employee', 'development_lead')
+        fields = ('id', 'employee', 'assessor', 'next_question', 'zone', 'zones', 'notes', 'answers', 'date', 'completed', 'times_retaken', 'development_conversation', 'new_employee', 'development_lead', 'is_draft')
         
         
 class UpdateEmployeeZoneSerializer(serializers.ModelSerializer):
@@ -139,7 +139,7 @@ class UpdateEmployeeZoneSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmployeeZone
-        fields = ('id', 'last_question_answered', 'answers', 'zone', 'notes', 'completed', 'date')
+        fields = ('id', 'last_question_answered', 'answers', 'zone', 'notes', 'completed', 'date', 'is_draft')
 
 
 class ConversationSerializer(serializers.ModelSerializer):

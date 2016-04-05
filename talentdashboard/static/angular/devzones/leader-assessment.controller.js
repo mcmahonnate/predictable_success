@@ -12,7 +12,9 @@ function LeaderAssessmentController(compactView, conversation, ConversationServi
     vm.employeeZone = null;
     vm.selectedAnswer = null;
     vm.notes = '';
+    vm.is_draft = false;
     vm.saveAssessment = saveAssessment;
+    vm.sendDraft = sendDraft;
     vm.zones = [];
     vm.cancel = cancel;
     vm.close = close;
@@ -24,6 +26,7 @@ function LeaderAssessmentController(compactView, conversation, ConversationServi
             vm.selectedAnswer = vm.conversation.development_lead_assessment.zone.id;
             vm.assessment = vm.conversation.development_lead_assessment;
             vm.notes = vm.assessment.notes;
+            vm.is_draft = vm.assessment.is_draft;
         }
         getZones();
     }
@@ -72,6 +75,16 @@ function LeaderAssessmentController(compactView, conversation, ConversationServi
                     Notification.success('Your assessment has been saved.')
                 })
         }
+    }
+
+    function sendDraft() {
+        vm.busy = true;
+        vm.is_draft = true;
+        DevZoneService.updateEmployeeZone({id: vm.conversation.development_lead_assessment.id, zone: vm.selectedAnswer, notes: vm.notes, is_draft: vm.is_draft})
+                .then(function (employeeZone) {
+                    $modalInstance.close(employeeZone);
+                    Notification.success('This has been sent to ' + employeeZone.assessor.full_name);
+                })
     }
 
     function close() {
