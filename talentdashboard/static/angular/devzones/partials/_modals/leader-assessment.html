@@ -64,7 +64,7 @@
         <div class="modal-footer">
             <button type="button" ng-click="leaderAssessment.cancel()" data-dismiss="modal" class="btn btn-light pull-left">Close</button>
             <button type="button" class="btn btn-success" ng-disabled="!leaderAssessment.selectedAnswer || leaderAssessment.busy" ng-click="leaderAssessment.saveAssessment()">Save</button>
-            <button type="button" class="btn btn-success" ng-disabled="!leaderAssessment.conversation.development_lead_assessment || leaderAssessment.busy" ng-click="leaderAssessment.panel_index=1">Share &rarr;</button>
+            <button type="button" class="btn btn-success" ng-disabled="leaderAssessment.busy" ng-click="leaderAssessment.panel_index=1">Share &rarr;</button>
         </div>
     </div>
     <div class="form-group" ng-show="leaderAssessment.panel_index==1">

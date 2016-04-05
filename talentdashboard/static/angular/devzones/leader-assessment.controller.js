@@ -8,7 +8,6 @@ function LeaderAssessmentController(compactView, conversation, ConversationServi
     vm.conversation = conversation;
     vm.panel_index = 0;
     vm.busy = false;
-    vm.assessment = null;
     vm.employeeZone = null;
     vm.selectedAnswer = null;
     vm.notes = '';
@@ -24,9 +23,8 @@ function LeaderAssessmentController(compactView, conversation, ConversationServi
     function activate() {
         if (vm.conversation.development_lead_assessment) {
             vm.selectedAnswer = vm.conversation.development_lead_assessment.zone.id;
-            vm.assessment = vm.conversation.development_lead_assessment;
-            vm.notes = vm.assessment.notes;
-            vm.is_draft = vm.assessment.is_draft;
+            vm.notes = vm.conversation.development_lead_assessment.notes;
+            vm.is_draft = vm.conversation.development_lead_assessment.is_draft;
         }
         getZones();
     }
@@ -54,38 +52,42 @@ function LeaderAssessmentController(compactView, conversation, ConversationServi
         $modalInstance.dismiss();
     }
 
-    function saveAssessment() {
+    function saveAssessment(send) {
         vm.busy = true;
-        if (!vm.assessment) {
-            DevZoneService.createEmployeeZone({employee: vm.conversation.employee.id, assessor: $rootScope.currentUser.employee.id, zone: vm.selectedAnswer, notes: vm.notes})
+        var assessor_id = send ? vm.conversation.development_lead.id : $rootScope.currentUser.employee.id
+        if (!vm.conversation.development_lead_assessment) {
+            DevZoneService.createEmployeeZone({employee: vm.conversation.employee.id, assessor: assessor_id, zone: vm.selectedAnswer, notes: vm.notes, is_draft: vm.is_draft})
                 .then(function (employeeZone) {
                     vm.employeeZone = employeeZone;
                     vm.conversation.development_lead_assessment = employeeZone
                     ConversationService.update({id: vm.conversation.id, development_lead_assessment: vm.employeeZone.id})
                         .then(function (conversation) {
-                            vm.conversation = conversation;
                             vm.busy = false;
-                            Notification.success('Your assessment has been saved.')
+                            sendNotification(send);
                         })
                 })
         } else {
-            DevZoneService.updateEmployeeZone({id: vm.conversation.development_lead_assessment.id, zone: vm.selectedAnswer, notes: vm.notes})
+            DevZoneService.updateEmployeeZone({id: vm.conversation.development_lead_assessment.id, assessor: assessor_id, zone: vm.selectedAnswer, notes: vm.notes, is_draft: vm.is_draft})
                 .then(function (employeeZone) {
                     vm.conversation.development_lead_assessment = employeeZone;
                     vm.busy = false;
-                    Notification.success('Your assessment has been saved.')
+                    sendNotification(send);
                 })
         }
     }
 
     function sendDraft() {
-        vm.busy = true;
         vm.is_draft = true;
-        DevZoneService.updateEmployeeZone({id: vm.conversation.development_lead_assessment.id, zone: vm.selectedAnswer, notes: vm.notes, is_draft: vm.is_draft})
-                .then(function (employeeZone) {
-                    $modalInstance.close(employeeZone);
-                    Notification.success('This has been sent to ' + employeeZone.assessor.full_name);
-                })
+        saveAssessment(true);
+    }
+
+    function sendNotification(send) {
+        if (send) {
+            Notification.success('Your assessment has been saved and sent to ' + vm.conversation.development_lead.full_name)
+            $modalInstance.close(vm.conversation.development_lead_assessment);
+        } else {
+            Notification.success('Your assessment has been saved.')
+        }
     }
 
     function close() {

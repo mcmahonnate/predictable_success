@@ -139,7 +139,7 @@ class UpdateEmployeeZoneSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmployeeZone
-        fields = ('id', 'last_question_answered', 'answers', 'zone', 'notes', 'completed', 'date', 'is_draft')
+        fields = ('id', 'assessor', 'last_question_answered', 'answers', 'zone', 'notes', 'completed', 'date', 'is_draft')
 
 
 class ConversationSerializer(serializers.ModelSerializer):

@@ -2,7 +2,7 @@
     <div>
         <h1><a href="#/id">ID</a></h1>
     </div>
-    <div ng-repeat="advice in conversation.advice" ng-class="{'slide-up-active': hideMessage}" ng-hide="!advice.alert_for_development_lead" class="alert {{advice.alert_type_for_development_lead}} slide-up" role="alert">
+    <div ng-repeat="advice in conversation.advice" ng-class="{'slide-up-active': hideMessage}" ng-hide="!conversation.development_lead_assessment" class="alert {{advice.alert_type_for_development_lead}} slide-up" role="alert">
         <span ng-bind-html="conversation.replaceTemplateTags(advice.alert_for_development_lead)"></span>
     </div>
 	<div class="checkin-header">
@@ -21,7 +21,10 @@
         <p class="alert-message">In the next couple of weeks {{ conversation.development_lead.full_name }} will meet with you about your selfie.
     </div>
     <div class="panel devzones">
-        <h2 class="panel-title">Development Zone</h2>
+        <h2 class="panel-title">
+            Development Zone
+            <a ng-if="conversation.is_development_lead && conversation.development_lead_assessment" ng-click="conversation.giveLeaderPerception(conversation)" class="pull-right" style="cursor: pointer;text-decoration: underline;color: #2f742f;font-size: 14px;">Edit</a>
+        </h2>
 
         <div class="devzone activity" style="max-width: inherit; padding-top: 10px; margin: 0px auto 20px auto;">
             <div ng-show="!conversation.development_lead_assessment" class="well activity-items">
@@ -30,19 +33,21 @@
             </div>
             <div ng-show="conversation.development_lead_assessment" class="well activity-items">
                 <h3 class="modal-title">{{ conversation.development_lead_assessment.zone.name }}</h3>
-                <p ng-bind-html="conversation.selfie.development_lead_assessment.description"></p>
+                <p ng-bind-html="conversation.development_lead_assessment.zone.description"></p>
             </div>
         </div>
     </div>
-    <div ng-show="conversation.development_lead_assessment.completed" class="checkin-summary panel activity">
-        <h2 class="panel-title">Development Conversation Notes</h2>
+    <div ng-show="conversation.development_lead_assessment" class="checkin-summary panel activity">
+        <h2 class="panel-title">Development Conversation Notes
+            <a ng-click="conversation.giveLeaderPerception(conversation.conversation)" ng-if="conversation.is_development_lead && !conversation.development_lead_assessment.completed" class="pull-right" style="cursor: pointer;text-decoration: underline;color: #2f742f;font-size: 14px;">Edit</a>
+        </h2>
         <div class="activity-item activity-items" ng-show="conversation.development_lead">
             <div class="activity-checkin row" style="margin: 20px 0px;">
                 <p class="panel-subtext">{{ conversation.development_lead_assessment.notes }}</p>
             </div>
         </div>
     </div>
-    <div ng-show="conversation.is_employee && !conversation.development_lead_assessment" class="checkin-summary panel activity">
+    <div ng-show="!conversation.development_lead_assessment" class="checkin-summary panel activity">
         <div class="worksheet-message">
             <h2 class="panel-title">Development Conversation Notes</h2>
         </div>
@@ -51,15 +56,6 @@
                 <i class="fa fa-info-circle pull-left" style="font-size: 40px;"></i>
                 <p class="panel-subtext">We are waiting for {{ conversation.development_lead.first_name }} to enter their notes from your conversation.</p>
             </div>
-        </div>
-    </div>
-    <div ng-show="conversation.is_development_lead && !conversation.development_lead_assessment.completed" class="panel">
-        <h2 class="panel-title">Development Conversation Notes</h2>
-        <div style="padding-top: 10px">
-            <textarea style="min-height:120px;" class="form-control" cols="30" rows="5" ng-model="conversation.development_lead_assessment.notes" placeholder="How is {{conversation.employee.first_name}} doing?"></textarea>
-        </div>
-        <div style="height:50px">
-            <button class="btn btn-default pull-right" style="margin-top: 15px;" type="button" ng-click="">Save</button>
         </div>
     </div>
     <div class="checkin-summary panel" ng-show="conversation.selfie.notes">

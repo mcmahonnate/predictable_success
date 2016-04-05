@@ -102,7 +102,7 @@ class RetrieveUnfinishedEmployeeZone(RetrieveAPIView):
 
 class UpdateEmployeeZone(RetrieveUpdateAPIView):
     queryset = EmployeeZone.objects.all()
-    permission_classes = (IsAuthenticated, UserIsAssessor)
+    permission_classes = (IsAuthenticated, UserIsAssessor,)
     serializer_class = UpdateEmployeeZoneSerializer
 
     def get_employee_zone(self):
@@ -196,7 +196,7 @@ class RetrieveMeetingConversations(ListAPIView):
 
 class RetrieveMyTeamLeadConversations(ListAPIView):
     permission_classes = (IsAuthenticated,)
-    serializer_class = ConversationSerializer
+    serializer_class = ConversationDevelopmentLeadSerializer
 
     def get_queryset(self):
         try:
