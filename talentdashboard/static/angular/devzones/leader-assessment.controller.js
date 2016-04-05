@@ -60,6 +60,7 @@ function LeaderAssessmentController(compactView, conversation, ConversationServi
             DevZoneService.createEmployeeZone({employee: vm.conversation.employee.id, assessor: $rootScope.currentUser.employee.id, zone: vm.selectedAnswer, notes: vm.notes})
                 .then(function (employeeZone) {
                     vm.employeeZone = employeeZone;
+                    vm.conversation.development_lead_assessment = employeeZone
                     ConversationService.update({id: vm.conversation.id, development_lead_assessment: vm.employeeZone.id})
                         .then(function (conversation) {
                             vm.conversation = conversation;
