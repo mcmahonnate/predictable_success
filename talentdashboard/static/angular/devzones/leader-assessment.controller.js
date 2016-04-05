@@ -91,9 +91,9 @@ function LeaderAssessmentController(compactView, conversation, ConversationServi
 
     function sendNotification(send) {
         if (send) {
-            Notification.success('Your assessment has been saved and sent to ' + vm.conversation.development_lead.full_name)
+            Notification.success('Saved and sent to ' + vm.conversation.development_lead.full_name)
         } else {
-            Notification.success('Your assessment has been saved.')
+            Notification.success('Saved!')
         }
     }
 

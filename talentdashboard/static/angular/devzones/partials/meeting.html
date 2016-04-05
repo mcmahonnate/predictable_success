@@ -23,15 +23,15 @@
                     <td ng-show="meeting.is_org_dev">{{ conversation.employee_assessment.zone.name }}</td>
                     <td>
                         <span ng-show="meeting.is_org_dev">
-                            <a ng-show="!conversation.development_lead_assessment" class="btn btn-default btn-md give-feedback-btn" ng-click="meeting.giveLeaderPerception(conversation)" type="button">
+                            <a ng-show="!conversation.development_lead_assessment && meeting.is_org_dev" class="btn btn-default btn-md give-feedback-btn" ng-click="meeting.giveLeaderPerception(conversation)" type="button">
                                 <i class="fa fa-heartbeat"></i>
                                 Give Perception
                             </a>
-                            <a ng-show="conversation.development_lead_assessment" ng-click="meeting.giveLeaderPerception(conversation)" style="cursor: pointer">
+                            <a ng-show="meeting.is_org_dev && !conversation.development_lead_assessment.is_draft && !conversation.development_lead_assessment.completed" ng-click="meeting.giveLeaderPerception(conversation)" style="cursor: pointer">
                                 {{ conversation.development_lead_assessment.zone.name }}
                             </a>
                         </span>
-                        <span ng-show="!meeting.is_org_dev">{{ conversation.development_lead_assessment.zone.name }}</span>
+                        <span ng-show="conversation.development_lead_assessment.is_draft || conversation.development_lead_assessment.completed || !meeting.is_org_dev">{{ conversation.development_lead_assessment.zone.name }}</span>
                     </td>
                     <td class="centered">
                         <a ng-disabled="!conversation.employee_assessment.completed" class="btn btn-default btn-md give-feedback-btn" ng-href="#/id/{{ conversation.id }}" type="button">

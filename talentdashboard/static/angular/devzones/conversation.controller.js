@@ -20,6 +20,7 @@
         vm.collapseSelfie = true;
         vm.collapseLeadershipPerception = true;
         vm.giveLeaderPerception = giveLeaderPerception;
+        vm.sendToEmployee = sendToEmployee;
         vm.replaceTemplateTags = replaceTemplateTags;
         activate();
 
@@ -74,6 +75,14 @@
                     vm.conversation = conversation;
                 }
             );
+        }
+
+        function sendToEmployee() {
+            DevZoneService.updateEmployeeZone({id: vm.conversation.development_lead_assessment.id, completed: true, is_draft: false})
+                .then(function (employeeZone) {
+                    Notification.success('Saved and sent to ' + vm.conversation.employee.full_name)
+                    gotoID();
+                })
         }
 
         function gotoID() {

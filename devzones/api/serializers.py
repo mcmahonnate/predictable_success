@@ -130,6 +130,7 @@ class EmployeeZoneSerializer(serializers.ModelSerializer):
         
         
 class UpdateEmployeeZoneSerializer(serializers.ModelSerializer):
+    assessor = serializers.PrimaryKeyRelatedField(required=False, queryset=Employee.objects.all(), allow_null=False)
     last_question_answered = serializers.PrimaryKeyRelatedField(required=False, queryset=Question.objects.all(), allow_null=True)
     answers = serializers.PrimaryKeyRelatedField(required=False, queryset=Answer.objects.all(), many=True, allow_null=True)
     zone = serializers.PrimaryKeyRelatedField(required=False, queryset=Zone.objects.all(), allow_null=True)
@@ -166,7 +167,7 @@ class ConversationDevelopmentLeadSerializer(ConversationSerializer):
 
     def get_development_lead_assessment(self, obj):
         if obj.development_lead_assessment is not None and \
-                obj.development_lead_assessment.is_draft:
+                (obj.development_lead_assessment.is_draft or obj.development_lead_assessment.completed):
             serializer = EmployeeZoneSerializer(context=self.context, many=False)
             return serializer.to_representation(obj.development_lead_assessment)
         return None

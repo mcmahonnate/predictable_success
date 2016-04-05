@@ -93,9 +93,10 @@
                         <td>{{ conversation.development_lead.full_name }}</td>
                         <td><i ng-show="conversation.employee_assessment.completed" class="fa fa-check" title="Completed"></i></td>
                         <td>
-                            <a ng-show="conversation.development_lead_assessment" ng-click="devzones.giveLeaderPerception(conversation)" style="cursor: pointer">
+                            <a ng-show="conversation.development_lead_assessment && conversation.development_lead_assessment.is_draft" ng-click="devzones.giveLeaderPerception(conversation)" style="cursor: pointer">
                                 {{ conversation.development_lead_assessment.zone.name }}
                             </a>
+                            <span ng-show="conversation.development_lead_assessment && conversation.development_lead_assessment.completed">{{ conversation.development_lead_assessment.zone.name }}</span>
                         </td>
                         <td class="centered">
                             <a ng-disabled="!conversation.employee_assessment.completed" class="btn btn-default btn-md give-feedback-btn" ng-href="#/id/{{ conversation.id }}" type="button">
