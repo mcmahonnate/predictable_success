@@ -42,8 +42,8 @@ function MeetingController(MeetingService, Notification, analytics, $location, $
                 },}
         });
         modalInstance.result.then(
-            function (employeeZone) {
-                conversation.development_lead_assessment = employeeZone;
+            function (response) {
+                conversation = response;
             }
         );
     }

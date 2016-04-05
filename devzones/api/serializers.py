@@ -62,7 +62,7 @@ class CreateEmployeeZoneSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmployeeZone
-        fields = ('id', 'employee', 'assessor', 'next_question', 'zone', 'notes', 'answers')
+        fields = ('id', 'employee', 'assessor', 'next_question', 'zone', 'notes', 'answers', 'is_draft')
         read_only_fields = ('next_question', 'answers')
 
 

@@ -15,7 +15,6 @@
         vm.employee = null;
         vm.conversation = null;
         vm.development_lead = null;
-        vm.development_lead_assessment = null;
         vm.collapseLeadershipAdvice = true;
         vm.collapseEmployeeAdvice = true;
         vm.collapseSelfie = true;
@@ -32,7 +31,6 @@
             ConversationService.get($routeParams.conversationId)
                 .then(function(conversation){
                     vm.conversation = conversation;
-                    vm.development_lead_assessment = conversation.development_lead_assessment
                     vm.advice = conversation.advice;
                     vm.selfie = conversation.employee_assessment;
                     if (!vm.selfie.zone) {
@@ -71,8 +69,9 @@
                     },}
             });
             modalInstance.result.then(
-                function (employeeZone) {
-                    conversation.development_lead_assessment = employeeZone;
+                function (conversation) {
+                    console.log(conversation);
+                    vm.conversation = conversation;
                 }
             );
         }
