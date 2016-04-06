@@ -1,3 +1,7 @@
+{% extends "layouts/email.html" %}
+
+{% block content %}
 Dear {{ first_name }},
 
 {{ message |safe }}
+{% endblock content%}
