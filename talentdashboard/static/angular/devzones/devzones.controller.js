@@ -4,7 +4,7 @@ angular
 
 function DevZonesController(ConversationService, DevZoneService, MeetingService, Notification, analytics, $location, $modal, $scope, $sce, $rootScope) {
     /* Since this page can be the root for some users let's make sure we capture the correct page */
-    var location_url = $location.url().indexOf('/devzones') < 0 ? '/devzones' : $location.url();
+    var location_url = $location.url().indexOf('/id') < 0 ? '/id' : $location.url();
     analytics.trackPage($scope, $location.absUrl(), location_url);
 
     var vm = this;

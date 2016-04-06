@@ -82,21 +82,22 @@
                     <tr>
                         <th scope="col" class="width-20-percent">Employee</th>
                         <th scope="col" class="width-20-percent">Represented By</th>
-                        <th scope="col" class="width-20-percent">Finished</th>
+                        <th scope="col" class="width-10-percent centered">Alignment</th>
                         <th scope="col" class="width-20-percent">My Perception</th>
-                        <th scope="col" class="width-20-percent centered">Action</th>
+                        <th scope="col" class="width-10-percent centered">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="conversation in devzones.myTeamLeadConversations | orderBy:'employee.full_name':false">
                         <td><span class="tiny-headshot pull-left"><img ng-src="{{ conversation.employee_assessment.employee.avatar_small }}" alt="{{ conversation.employee_assessment.employee.full_name }}" /></span>{{ conversation.employee_assessment.employee.full_name }}</td>
                         <td>{{ conversation.development_lead.full_name }}</td>
-                        <td><i ng-show="conversation.employee_assessment.completed" class="fa fa-check" title="Completed"></i></td>
+                        <td style="text-align:center;">
+                            <div ng-repeat="advice in conversation.advice" ng-if="advice.alert_for_development_lead" class="alert {{advice.alert_type_for_development_lead}} slide-up" style="padding: 8px;margin-bottom: 0px">
+                                Gap
+                            </div>
+                        </td>
                         <td>
-                            <a ng-show="conversation.development_lead_assessment && conversation.development_lead_assessment.is_draft" ng-click="devzones.giveLeaderPerception(conversation)" style="cursor: pointer">
-                                {{ conversation.development_lead_assessment.zone.name }}
-                            </a>
-                            <span ng-show="conversation.development_lead_assessment && conversation.development_lead_assessment.completed">{{ conversation.development_lead_assessment.zone.name }}</span>
+                            <span ng-show="conversation.development_lead_assessment">{{ conversation.development_lead_assessment.zone.name }}</span>
                         </td>
                         <td class="centered">
                             <a ng-disabled="!conversation.employee_assessment.completed" class="btn btn-default btn-md give-feedback-btn" ng-href="#/id/{{ conversation.id }}" type="button">
