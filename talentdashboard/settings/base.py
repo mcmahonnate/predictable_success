@@ -199,6 +199,7 @@ TENANT_APPS = (
     'checkins',
     'projects',
     'devzones',
+    'qualities',
 )
 
 INSTALLED_APPS = list(set(SHARED_APPS + TENANT_APPS))

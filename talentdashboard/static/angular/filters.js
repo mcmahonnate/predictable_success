@@ -1,5 +1,11 @@
 var app = angular.module('tdb.filters', []);
 
+app.filter('slice', function() {
+  return function(arr, start, end) {
+    return (arr || []).slice(start, end);
+  };
+});
+
 app.filter('reverse', function() {
   return function(items) {
     return items.slice().reverse();

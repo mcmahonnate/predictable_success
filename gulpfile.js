@@ -53,6 +53,17 @@ gulp.task('projects-scripts', function() {
         .pipe(gulp.dest('./talentdashboard/static/'));
 });
 
+gulp.task('qualities-scripts', function() {
+    return gulp.src('./talentdashboard/static/angular/qualities/**/*.js')
+        .pipe(sourcemaps.init())
+        .pipe(angularFilesort())
+        .pipe(concat('qualities.js'))
+        .pipe(iife())
+        .pipe(ngAnnotate())
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest('./talentdashboard/static/'));
+});
+
 gulp.task('less', function () {
     return gulp.src('./talentdashboard/static/css/scoutmap/**/*.less')
         .pipe(less({
@@ -65,6 +76,6 @@ gulp.task('watch', function() {
     gulp.watch('./talentdashboard/**/*.js', ['scripts']);
 });
 
-gulp.task('scripts', ['checkins-scripts', 'devzones-scripts', 'feedback-scripts', 'projects-scripts']);
+gulp.task('scripts', ['checkins-scripts', 'devzones-scripts', 'feedback-scripts', 'projects-scripts', 'qualities-scripts']);
 
 gulp.task('default', ['watch']);

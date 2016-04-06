@@ -102,6 +102,7 @@ urlpatterns = [
     url(r'^api/v1/pvp/', include('pvp.api.urls')),
     url(r'^api/v1/projects/', include('projects.api.urls')),
     url(r'^api/v1/org/', include('org.api.urls')),
+    url(r'^api/v1/qualities/', include('qualities.api.urls')),
     url(r'^api/v1/search/', include('search.api.urls')),
 
 

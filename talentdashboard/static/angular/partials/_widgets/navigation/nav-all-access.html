@@ -30,6 +30,7 @@
                             <li><a ng-show="customer.show_devzones" ng-href="#/id"><span class="fa fa-heartbeat" style="margin-right: 5px;"></span> ID</a></li>
                             <li><a ng-show="customer.show_shareable_checkins" ng-href="#/checkins"><span class="fa fa-check" style="margin-right: 5px;"></span> Check-Ins</a></li>
                             <li><a ng-show="customer.show_feedback" ng-href="#/feedback"><span class="fa fa-send" style="margin-right: 5px;"></span> Feedback</a></li>
+                            <li><a ng-show="customer.show_qualities" ng-href="#/qualities/perception/my"><span class="glyphicon-regular glyphicon-dumbell" style="margin-right: 5px;font-size: 14px;"></span> Strengths</a></li>
                         </ul>
                     </div>
                 </div>
@@ -262,6 +263,7 @@
                     </li>
                     <li ng-show="customer.show_feedback"><a ng-href="#/feedback" ng-click="toggleMenu()">My Feedback</a></li>
                     <li ng-show="customer.show_devzones"><a ng-href="#/id" ng-click="toggleMenu()">My ID</a></li>
+                    <li ng-show="customer.show_qualities"><a ng-href="#/qualities/perception/my"My Strengths</li>
                 </ul>
             </li>
             <li ng-show="!activeEmployee.is_lead">
