@@ -15,7 +15,6 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
         infiniteScrollListenForEvent: '@'
       },
       link: function(scope, elem, attrs) {
-        console.log('infiniteScroll');
         var changeContainer, checkInterval, checkWhenEnabled, container, handleInfiniteScrollContainer, handleInfiniteScrollDisabled, handleInfiniteScrollDistance, handleInfiniteScrollUseDocumentBottom, handler, height, immediateCheck, offsetTop, pageYOffset, scrollDistance, scrollEnabled, throttle, unregisterEventListener, useDocumentBottom, windowElement;
         windowElement = angular.element($window);
         scrollDistance = null;
@@ -700,18 +699,54 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
     }
   }
 })
-
-.directive('importTable', function() {
+.directive('importTable', ['EmployeeSearch', '$filter', function(EmployeeSearch, $filter) {
     return {
         restrict: 'E',
         replace: true,
-        templateUrl: "/static/angular/partials/import-table.html",
-        link: function (scope, element, attrs) {
+        templateUrl: "/static/angular/import/partials/widgets/import-table.html",
+        link: function (scope, element, attrs, filter) {
             scope.table;
             scope.headerOptions = ["Don't Import", "First name", "Last name", "Email", "Hire Date", "Job Title", "Current Salary", "Team Leader", "Team"];
             scope.selectedHeaders = [];
             scope.dataHeaders = [];
+            scope.employees = [];
+            scope.selectedFirstNameKey = null;
+            scope.selectedLastNameKey = null;
+            EmployeeSearch.query(function(data) {
+                scope.employees = data;
+            });
 
+            scope.startsWith = function (expected, actual) {
+                if (expected && actual) {
+                    return expected.toLowerCase().indexOf(actual.toLowerCase()) == 0;
+                }
+                return true;
+            }
+            scope.fetchEmployee = function(index) {
+                if (scope.selectedHeaders[index] == "First name") {
+                    scope.selectedFirstNameKey = Object.keys(scope.importData[0])[index];
+                } else if (scope.selectedHeaders[index] == "Last name"){
+                    scope.selectedLastNameKey = Object.keys(scope.importData[0])[index];
+                }
+
+                if (scope.selectedFirstNameKey || scope.selectedLastNameKey) {
+                    angular.forEach(scope.importData, function(employee) {
+                        var criteria = {};
+                        if (scope.selectedFirstNameKey) {
+                            criteria.first_name = employee[scope.selectedFirstNameKey];
+                        }
+                        if (scope.selectedLastNameKey) {
+                            criteria.last_name = employee[scope.selectedLastNameKey];
+                        }
+                        var found = $filter('filter')(scope.employees, criteria, true);
+                        if (found.length == 1) {
+                            employee.employee = found[0];
+                        }else if(found.length > 0 ) {
+                            employee.search = found;
+                        }
+                    })
+                }
+            }
             // update data to import based on selected headers
             scope.getData = function() {
                 var headers = scope.selectedHeaders;
@@ -719,6 +754,7 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
                 var newData = [];
                 scope.importData.map(function (obj) {
                     var nextRow = {};
+                    nextRow.id = obj.employee ? obj.employee.pk : 0;
                     for (var i = 0; i < headers.length; i++) {
                         // only include data if user selects it
                         if (headers[i] == "Don't Import" || headers[i] == "")
@@ -732,7 +768,6 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
                     if (Object.keys(nextRow).length > 0)
                         newData.push(nextRow);
                 });
-
                 return newData;
             }
 
@@ -762,7 +797,7 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
             })
         }
     };
-})
+}])
 
 .directive('dragDropFile', function() {
     return {
@@ -812,6 +847,7 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
                 var objArray = [];
                 for (var i = 1; i < array.length; i++) {
                     objArray[i - 1] = {};
+                    objArray[i - 1]['employee'] = null;
                     for (var k = 0; k < array[0].length && k < array[i].length; k++) {
                         var key = array[0][k];
                         objArray[i - 1][key] = array[i][k]
@@ -842,7 +878,6 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
 
             var processData = function(data, filename) {
                 var ext = filename.split('.').pop().toLowerCase();
-                console.log(ext);
                 var handler = XLSX;
 
                 if (ext == "csv") {
@@ -854,7 +889,6 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
                 var worksheet = workbook.Sheets[first_sheet];
                 var json = XLSX.utils.sheet_to_json(worksheet);
 
-                console.log(json);
                 return addFirstRow(json);
                 // return json;
             }
@@ -1014,6 +1048,13 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
             drawSquare(findSquare(), pvp.potential, pvp.performance, square.color);
         }
 
+        scope.$watchGroup(['pvp.performance','pvp.potential'], function() {
+            if(pvp.potential == 0 && pvp.performance == 0 && currentSquare) {
+                findDescription();
+                clearSquare(currentSquare, currentSquare.potential, currentSquare.performance, offSquareColor);
+            }
+        });
+
         scope.click_pvp = function(e, save) {
             var squareID = e.target.id;
             var row = Math.floor(squareID / 4) + 1;
@@ -1060,8 +1101,6 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
         Customers.get(function (data) {
             $scope.customer = data;
         });
-
-        console.log('foo');
         
         $scope.$watch("employee.departure_date",function(newValue,OldValue,scope) {
             if (newValue) {
@@ -1111,9 +1150,7 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
                 // if ($scope.edit_leadership.leader.id != $scope.leadership.leader.id) {
 
                 if ($scope.edit_leadership.leader) {
-                    console.log($scope.edit_leadership.leader);
                     var data = {id: $scope.employee.id, leader_id: $scope.edit_leadership.leader.id};
-                    console.log(data);
                     EmployeeLeader.addNew(data, function (response) {
                         $scope.edit_leadership = response;
                         $scope.leadership = angular.copy($scope.edit_leadership);
@@ -1206,7 +1243,6 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
         }
         $scope.save = function (){
             var data = {id: $scope.employee.id, _assessed_by_id: $rootScope.currentUser.employee.id, _assessment: $scope.happy.assessment, _content:$scope.happy.comment.content, _include_in_daily_digest: $scope.happy.comment.include_in_daily_digest};
-            console.log(data);
             Engagement.addNew(data, function(response) {
                 var newHappy = response;
                 $scope.happys.unshift(newHappy);
@@ -1386,7 +1422,6 @@ readMore.directive('readMore', function() {
 
                 $scope.performAction = function (card) {
                     if ($attrs.link) {
-                        console.log($attrs.link);
                         $location.path($attrs.link);
                     } else {
                         $scope.isExpanded = !$scope.isExpanded;

@@ -24,6 +24,7 @@ def pvp_todos(request):
     team_id = request.QUERY_PARAMS.get('team_id', None)
     if team_id is not None:
         evaluations = evaluations.filter(employee__team__id=team_id)
+    evaluations = evaluations.order_by('employee__full_name')
     paginator = LargeResultsSetPagination()
     result_page = paginator.paginate_queryset(evaluations, request)
     serializer = PvpToDoSerializer(result_page, many=True, context={'request': request})
@@ -83,6 +84,9 @@ class PvpEvaluationDetail(APIView):
     def put(self, request, pk, format=None):
         pvp_id = request.DATA["id"]
         pvp = PvpEvaluation.objects.get(id=pvp_id)
+        if "_too_new" in request.DATA:
+            pvp.too_new = request.DATA["_too_new"]
+
         pvp.performance = request.DATA["_performance"]
         pvp.potential = request.DATA["_potential"]
         pvp.evaluator = request.user

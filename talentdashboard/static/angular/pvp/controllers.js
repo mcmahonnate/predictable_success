@@ -29,6 +29,7 @@ angular.module('tdb.pvp.controllers', [])
                     $scope.pvps[index].performance = pvp.performance;
                     $scope.pvps[index].potential = pvp.potential;
                     $scope.pvps[index].talent_category = pvp.talent_category;
+                    $scope.pvps[index].too_new = pvp.too_new;
                 }
             );
         };
@@ -39,6 +40,7 @@ angular.module('tdb.pvp.controllers', [])
             $modalInstance.dismiss();
         };
         $scope.pvp = angular.copy(pvp);
+        $scope.pvp.tooNew = $scope.pvp.too_new;
         Prospect.get({email: $scope.pvp.employee.email}, function(response) {
             $scope.selfAssessment = response;
             switch ($scope.selfAssessment.engagement) {
@@ -64,6 +66,15 @@ angular.module('tdb.pvp.controllers', [])
                 $scope.pvp.label = TalentCategories.getLabelByTalentCategory(newVal);
             }
         },true);
+        $scope.$watch('pvp.tooNew', function(newValue, oldValue) {
+            if (newValue) {
+                $scope.pvp.potential=0;
+                $scope.pvp.performance=0;
+                $scope.pvp.talent_category=7;
+            } else if ($scope.pvp.potential==0 && $scope.pvp.performance==0){
+                $scope.pvp.talent_category=0;
+            }
+        });
         PvpDescriptions.query().$promise.then(function(response) {
                 $scope.pvp_descriptions = response;
             }
@@ -71,15 +82,17 @@ angular.module('tdb.pvp.controllers', [])
 
         $scope.save = function() {
             if ($scope.pvp.comment && $scope.pvp.comment.content) {
-                var data = {id: $scope.pvp.id, _potential: $scope.pvp.potential, _performance: $scope.pvp.performance, _content: $scope.pvp.comment.content};
+                var data = {id: $scope.pvp.id, _potential: $scope.pvp.potential, _performance: $scope.pvp.performance, _content: $scope.pvp.comment.content, _too_new: $scope.pvp.tooNew};
                 PvpEvaluation.update(data, function (response) {
                     $scope.pvp = response;
+                    $scope.pvp.tooNew = $scope.pvp.too_new;
                     $modalInstance.close($scope.pvp);
                 });
             } else {
-                data = {id: $scope.pvp.id, _potential: $scope.pvp.potential, _performance: $scope.pvp.performance};
+                var data = {id: $scope.pvp.id, _potential: $scope.pvp.potential, _performance: $scope.pvp.performance, _too_new: $scope.pvp.tooNew};
                 PvpEvaluation.update(data, function (response) {
                     $scope.pvp = response;
+                    $scope.pvp.tooNew = $scope.pvp.too_new;
                     $modalInstance.close($scope.pvp);
                 });
             }
@@ -273,7 +286,10 @@ angular.module('tdb.pvp.controllers', [])
                     $scope.pvps[index].performance = pvp.performance;
                     $scope.pvps[index].potential = pvp.potential;
                     $scope.pvps[index].talent_category = pvp.talent_category;
-                    $scope.pvps[index].comment.content = pvp.comment.content;
+                    if (pvp.comment && pvp.comment.content) {
+                        $scope.pvps[index].comment.content = pvp.comment.content;
+                    }
+                    $scope.pvps[index].too_new = pvp.too_new;
                 }
             );
         };

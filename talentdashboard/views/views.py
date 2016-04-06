@@ -2,12 +2,10 @@ from assessment.api.serializers import AssessmentSerializer, MBTIReportSerialize
 from assessment.models import EmployeeAssessment, MBTI
 from blah.commentreports import get_employees_with_comments
 from checkins.models import CheckIn
-from comp.api.serializers import CompensationSummarySerializer
-from comp.models import CompensationSummary
+from comp.api.views import add_salary_to_employee
 from customers.api.serializers import CustomerSerializer
 from datetime import date, timedelta
 from dateutil import parser
-from decimal import Decimal
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.core.signing import Signer
@@ -27,8 +25,6 @@ from org.api.serializers import SanitizedEmployeeSerializer, UserSerializer, Emp
 from org.teamreports import get_mbti_report_for_team
 from PIL import Image, ExifTags
 from pvp.api.serializers import TalentCategoryReportSerializer
-from pvp.salaryreports import get_salary_report_for_team, get_salary_report_for_all_employees, get_salary_report_for_lead
-from re import sub
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.views import APIView
 from rest_framework import generics, viewsets, status
@@ -242,31 +238,6 @@ def all_employee_engagement_report(request):
         return Response(serializer.data)
 
 
-class TeamSalaryReportDetail(APIView):
-    permission_classes = (IsAuthenticated, PermissionsViewAllEmployees)
-
-    def get(self, request, pk, format=None):
-        report = get_salary_report_for_team(pk)
-        serializer = SalaryReportSerializer(report, context={'request': request})
-        if report is not None:
-            return Response(serializer.data)
-        return Response(None, status=status.HTTP_404_NOT_FOUND)
-
-
-class LeadSalaryReportDetail(APIView):
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request, format=None):
-        current_user = request.user
-        lead = Employee.objects.get(user=current_user)
-        lead_id = lead.id
-        report = get_salary_report_for_lead(lead_id)
-        serializer = SalaryReportSerializer(report, context={'request': request})
-        if report is not None:
-            return Response(serializer.data)
-        return Response(None, status=status.HTTP_404_NOT_FOUND)
-
-
 class EmployeeList(APIView):
     permission_classes = (IsAuthenticated,)
 
@@ -363,26 +334,21 @@ def upload_employee(request):
         date_string = request.DATA['hire_date']
         request.DATA['hire_date'] = parser.parse(date_string).date()
 
-    serializer = CreateEmployeeSerializer(data = request.DATA, context={'request':request})
-    if serializer.is_valid():
-        employee = serializer.save()
-        add_salary_to_employee(employee, request.DATA)
-        serializer = EmployeeSerializer(employee, context={'request':request})
-        return Response(serializer.data)
-    else:
-        print(serializer.errors)
-        return Response(serializer.errors, status=400)
+    if 'id' in request.DATA:
+        id = request.DATA['id']
+        employee = Employee.objects.get(id=id)
 
-def add_salary_to_employee(employee, data):
-    if 'current_salary' in data:
-        now = datetime.datetime.now()
-        year = int(now.year)
-        try:
-            comp = CompensationSummary.objects.get(employee_id=employee.id, year=year)
-        except CompensationSummary.DoesNotExist:
-            comp = CompensationSummary(employee=employee,fiscal_year=year,year=year)
-        comp.salary = Decimal(sub(r'[^\d\-.]', '', data['current_salary']))
-        comp.save()
+    else:
+        serializer = CreateEmployeeSerializer(data = request.DATA, context={'request':request})
+        if serializer.is_valid():
+            employee = serializer.save()
+        else:
+            print(serializer.errors)
+            return Response(serializer.errors, status=400)
+    add_salary_to_employee(employee, request.DATA)
+    serializer = EmployeeSerializer(employee, context={'request':request})
+    return Response(serializer.data)
+
 
 @api_view(['POST'])
 def upload_leadership(request):
@@ -947,56 +913,6 @@ def current_kpi_performance(request):
         serializer = KPIPerformanceSerializer(performance, context={'request': request})
         return Response(serializer.data)
     except Performance.DoesNotExist:
-        return Response(None, status=status.HTTP_404_NOT_FOUND)
-
-@api_view(['GET'])
-@permission_classes((IsAuthenticated, PermissionsViewAllEmployees))
-def get_company_salary_report(request):
-    report = get_salary_report_for_all_employees()
-    serializer = SalaryReportSerializer(report, context={'request': request})
-    if report is not None:
-        return Response(serializer.data)
-    return Response(None, status=status.HTTP_404_NOT_FOUND)
-
-@api_view(['GET'])
-@permission_classes((IsAuthenticated,))
-def compensation_summaries(request):
-    compensation_summaries = CompensationSummary.objects.all()
-
-    employee_id = request.QUERY_PARAMS.get('employee_id', None)
-    if employee_id is not None:
-        employee = Employee.objects.get(pk=employee_id)
-        if not employee.is_viewable_by_user(request.user):
-            raise PermissionDenied
-
-        compensation_summaries = compensation_summaries.filter(employee__id=employee_id)
-
-    most_recent = request.QUERY_PARAMS.get('most_recent', None)
-    if most_recent is not None:
-        if len(compensation_summaries) > 0:
-            most_recent_summary = compensation_summaries[0];
-            serializer = CompensationSummarySerializer(most_recent_summary, many=False, context={'request': request})
-            return Response(serializer.data)
-        return Response(None, status=status.HTTP_404_NOT_FOUND)
-
-    serializer = CompensationSummarySerializer(compensation_summaries, many=True, context={'request': request})
-    return Response(serializer.data)
-
-class EmployeeCompensationSummaries(APIView):
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request, pk, format=None):
-        if not request.tenant.show_individual_comp:
-            return Response(None, status=status.HTTP_404_NOT_FOUND)
-        employee = Employee.objects.get(pk=pk)
-        if not employee.is_viewable_by_user(user=request.user, allowCoach=False):
-            raise PermissionDenied
-
-        compensation_summaries = CompensationSummary.objects.all()
-        compensation_summaries = compensation_summaries.filter(employee__id=int(pk))
-        if compensation_summaries is not None:
-            serializer = CompensationSummarySerializer(compensation_summaries, many=True, context={'request': request})
-            return Response(serializer.data)
         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 

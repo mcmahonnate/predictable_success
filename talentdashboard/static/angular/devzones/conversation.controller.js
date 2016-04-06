@@ -2,7 +2,7 @@
         .module('devzones')
         .controller('ConversationController', ConversationController);
 
-    function ConversationController(analytics, ConversationService, DevZoneService, Notification, $location, $parse, $rootScope, $routeParams, $scope) {
+    function ConversationController(analytics, ConversationService, DevZoneService, Notification, $location, $modal, $parse, $rootScope, $routeParams, $scope) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
 
         var vm = this;
@@ -13,12 +13,14 @@
         vm.busy = false;
         vm.gotoID = gotoID;
         vm.employee = null;
+        vm.conversation = null;
         vm.development_lead = null;
-        vm.development_lead_assessment = null;
         vm.collapseLeadershipAdvice = true;
         vm.collapseEmployeeAdvice = true;
         vm.collapseSelfie = true;
         vm.collapseLeadershipPerception = true;
+        vm.giveLeaderPerception = giveLeaderPerception;
+        vm.sendToEmployee = sendToEmployee;
         vm.replaceTemplateTags = replaceTemplateTags;
         activate();
 
@@ -29,7 +31,7 @@
         function getConversation() {
             ConversationService.get($routeParams.conversationId)
                 .then(function(conversation){
-                    vm.development_lead_assessment = conversation.development_lead_assessment
+                    vm.conversation = conversation;
                     vm.advice = conversation.advice;
                     vm.selfie = conversation.employee_assessment;
                     if (!vm.selfie.zone) {
@@ -51,6 +53,36 @@
                     Notification.error("You don't have access to this selfie.")
                 }
             )
+        }
+
+        function giveLeaderPerception(conversation) {
+            var modalInstance = $modal.open({
+                animation: true,
+                backdrop: 'static',
+                templateUrl: '/static/angular/devzones/partials/_modals/leader-assessment.html',
+                controller: 'LeaderAssessmentController as leaderAssessment',
+                resolve: {
+                    compactView: function () {
+                        return false
+                    },
+                    conversation: function () {
+                        return conversation
+                    },}
+            });
+            modalInstance.result.then(
+                function (conversation) {
+                    console.log(conversation);
+                    vm.conversation = conversation;
+                }
+            );
+        }
+
+        function sendToEmployee() {
+            DevZoneService.updateEmployeeZone({id: vm.conversation.development_lead_assessment.id, completed: true, is_draft: false})
+                .then(function (employeeZone) {
+                    Notification.success('Saved and sent to ' + vm.conversation.employee.full_name)
+                    gotoID();
+                })
         }
 
         function gotoID() {

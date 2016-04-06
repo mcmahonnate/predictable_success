@@ -102,7 +102,7 @@ class RetrieveUnfinishedEmployeeZone(RetrieveAPIView):
 
 class UpdateEmployeeZone(RetrieveUpdateAPIView):
     queryset = EmployeeZone.objects.all()
-    permission_classes = (IsAuthenticated, UserIsAssessor)
+    permission_classes = (IsAuthenticated, UserIsAssessor,)
     serializer_class = UpdateEmployeeZoneSerializer
 
     def get_employee_zone(self):
@@ -140,6 +140,23 @@ class RetrieveUpdateConversation(RetrieveUpdateAPIView):
 
     def get_conversation(self):
         return self.get_object()
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        if request.user.employee.id == instance.employee.id:
+            serializer = ConversationForEmployeeSerializer(instance, context={'request': request})
+        elif request.user.employee.id == instance.development_lead.id:
+            serializer = ConversationDevelopmentLeadSerializer(instance, context={'request': request})
+        elif self.request.user.has_perm('org.view_employees'):
+            serializer = ConversationSerializer(instance, context={'request': request})
+        else:
+            serializer = ConversationForEmployeeSerializer(instance, context={'request': request})
+        return Response(serializer.data)
+
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -196,7 +213,7 @@ class RetrieveMeetingConversations(ListAPIView):
 
 class RetrieveMyTeamLeadConversations(ListAPIView):
     permission_classes = (IsAuthenticated,)
-    serializer_class = ConversationSerializer
+    serializer_class = ConversationDevelopmentLeadSerializer
 
     def get_queryset(self):
         try:

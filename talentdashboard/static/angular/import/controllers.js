@@ -57,7 +57,6 @@ angular.module('tdb.import.controllers', [])
                     data["team"] = team_ids[data.team];
                 else
                     data["team"] = null;
-                data.id = 0;
                 var employee = new Employee(data);
                 return employee.$save();
             }
@@ -109,7 +108,7 @@ angular.module('tdb.import.controllers', [])
             function openEditModal(employee, leadership, employees, teams, index, leaderUpload) {
                 var modalInstance = $modal.open({
                     animation: true,
-                    templateUrl: '/static/angular/partials/_modals/edit-bio-modal.html',
+                    templateUrl: '/static/angular/org/partials/modals/add-edit-employee.html',
                     controller: 'importModalCtrl',
                     resolve: {
                         employee: function () {

@@ -126,7 +126,6 @@ class EmployeeZone(models.Model):
     zones = models.ManyToManyField(Zone, related_name='+', null=True, blank=True)
     notes = models.TextField(blank=True, default='')
     is_draft = models.BooleanField(default=False)
-    share_with_employee = models.BooleanField(default=False)
     completed = models.BooleanField(default=False)
 
     def _calculate_zone(self):
@@ -234,8 +233,8 @@ class Conversation(models.Model):
     completed_date = models.DateTimeField(null=True, blank=True)
 
     def advice(self):
-        employee_zone = self.employee_assessment.zone if (self.employee_assessment and self.employee_assessment.zone) else None
-        development_lead_zone = self.development_lead_assessment.zone if (self.development_lead_assessment and self.development_lead_assessment.zone) else None
+        employee_zone = self.employee_assessment.zone if (self.employee_assessment and self.employee_assessment.zone and self.employee_assessment.completed) else None
+        development_lead_zone = self.development_lead_assessment.zone if (self.development_lead_assessment and self.development_lead_assessment.zone and self.development_lead_assessment.is_draft) else None
         return Advice.objects.get_advice(employee_zone=employee_zone, development_lead_zone=development_lead_zone)
 
     def __str__(self):

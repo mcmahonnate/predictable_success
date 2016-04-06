@@ -36,26 +36,29 @@ class EmployeeDetail(APIView):
             return Response(None)
 
     def post(self, request, pk, format=None):
-
+        employee = None
+        if 'id' in request.DATA and request.DATA['id'] != 0:
+            id = request.DATA['id']
+            employee = Employee.objects.get(id=id)
+        else:
+            serializer = CreateEmployeeSerializer(data = request.DATA, context={'request':request})
+            if serializer.is_valid():
+                employee = serializer.save()
+            else:
+                print(serializer.errors)
+                return Response(serializer.errors, status=400)
         if 'hire_date' in request.DATA and request.DATA['hire_date'] is not None:
             date_string = request.DATA['hire_date']
             request.DATA['hire_date'] = dateutil.parser.parse(date_string).date()
         if 'departure_date' in request.DATA and request.DATA['departure_date'] is not None:
             date_string = request.DATA['departure_date']
             request.DATA['departure_date'] = dateutil.parser.parse(date_string).date()
-
-        serializer = CreateEmployeeSerializer(data = request.DATA, context={'request':request})
-        if serializer.is_valid():
-            employee = serializer.save()
-            if 'leader_id' in request.DATA and request.DATA['leader_id'] is not None:
-                employee.current_leader = Employee.objects.get(id=request.DATA['leader_id'])
-                employee.save()
-            add_salary_to_employee(employee, request.DATA)
-            serializer = EmployeeSerializer(employee, context={'request':request})
-            return Response(serializer.data)
-        else:
-            return Response(serializer.errors, status=400)
-
+        if 'leader_id' in request.DATA and request.DATA['leader_id'] is not None:
+            employee.current_leader = Employee.objects.get(id=request.DATA['leader_id'])
+            employee.save()
+        add_salary_to_employee(employee, request.DATA)
+        serializer = EmployeeSerializer(employee, context={'request':request})
+        return Response(serializer.data)
 
     def put(self, request, pk, format=None):
         employee = Employee.objects.get(id=pk)

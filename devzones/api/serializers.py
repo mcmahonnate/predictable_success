@@ -62,7 +62,7 @@ class CreateEmployeeZoneSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmployeeZone
-        fields = ('id', 'employee', 'assessor', 'next_question', 'zone', 'notes', 'answers')
+        fields = ('id', 'employee', 'assessor', 'next_question', 'zone', 'notes', 'answers', 'is_draft')
         read_only_fields = ('next_question', 'answers')
 
 
@@ -126,10 +126,11 @@ class EmployeeZoneSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmployeeZone
-        fields = ('id', 'employee', 'assessor', 'next_question', 'zone', 'zones', 'notes', 'answers', 'date', 'completed', 'times_retaken', 'development_conversation', 'new_employee', 'development_lead')
+        fields = ('id', 'employee', 'assessor', 'next_question', 'zone', 'zones', 'notes', 'answers', 'date', 'completed', 'times_retaken', 'development_conversation', 'new_employee', 'development_lead', 'is_draft')
         
         
 class UpdateEmployeeZoneSerializer(serializers.ModelSerializer):
+    assessor = serializers.PrimaryKeyRelatedField(required=False, queryset=Employee.objects.all(), allow_null=False)
     last_question_answered = serializers.PrimaryKeyRelatedField(required=False, queryset=Question.objects.all(), allow_null=True)
     answers = serializers.PrimaryKeyRelatedField(required=False, queryset=Answer.objects.all(), many=True, allow_null=True)
     zone = serializers.PrimaryKeyRelatedField(required=False, queryset=Zone.objects.all(), allow_null=True)
@@ -139,7 +140,7 @@ class UpdateEmployeeZoneSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmployeeZone
-        fields = ('id', 'last_question_answered', 'answers', 'zone', 'notes', 'completed', 'date')
+        fields = ('id', 'assessor', 'last_question_answered', 'answers', 'zone', 'notes', 'completed', 'date', 'is_draft')
 
 
 class ConversationSerializer(serializers.ModelSerializer):
@@ -166,7 +167,7 @@ class ConversationDevelopmentLeadSerializer(ConversationSerializer):
 
     def get_development_lead_assessment(self, obj):
         if obj.development_lead_assessment is not None and \
-                obj.development_lead_assessment.is_draft:
+                (obj.development_lead_assessment.is_draft or obj.development_lead_assessment.completed):
             serializer = EmployeeZoneSerializer(context=self.context, many=False)
             return serializer.to_representation(obj.development_lead_assessment)
         return None
