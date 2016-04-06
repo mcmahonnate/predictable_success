@@ -39,6 +39,7 @@
             vm.busy = true;
             vm.selfie.last_question_answered = vm.selfie.next_question.id;
             vm.selfie.answers.push(answer.id);
+            vm.selfie.assessor = vm.selfie.assessor.id
             DevZoneService.updateEmployeeZone(vm.selfie)
                 .then(function(selfie){
                     vm.selectedAnswer = null;
