@@ -8,7 +8,10 @@
         <table class="table responsive-table">
             <thead>
                 <tr>
-                    <th scope="col" class="width-20-percent">Employee</th>
+                    <th scope="col" class="width-20-percent">
+                        <a href="" ng-click="meeting.order('employee.full_name');"><strong>Employee</strong></a>
+                        <span class="sortorder fa" ng-show="meeting.predicate === 'employee.full_name'" ng-class="meeting.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                    </th>
                     <th scope="col" class="width-20-percent">Represented By</th>
                     <th ng-show="meeting.is_org_dev" scope="col" class="width-15-percent">Employee Perception</th>
                     <th scope="col" class="width-15-percent">Leadership's Perception</th>
@@ -16,7 +19,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="conversation in meeting.meeting.conversations | orderBy:'employee.full_name':false">
+                <tr ng-repeat="conversation in meeting.meeting.conversations | orderBy:meeting.predicate:meeting.reverse">
                     <td><span class="tiny-headshot pull-left"><img ng-src="{{ conversation.employee_assessment.employee.avatar_small }}" alt="{{ conversation.employee_assessment.employee.full_name }}" /></span>{{ conversation.employee_assessment.employee.full_name }}</td>
                     <td>{{ conversation.development_lead.full_name }}</td>
 

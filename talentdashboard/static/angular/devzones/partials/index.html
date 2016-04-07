@@ -80,23 +80,32 @@
             <table class="table responsive-table" >
                 <thead>
                     <tr>
-                        <th scope="col" class="width-20-percent">Employee</th>
+                        <th scope="col" class="width-20-percent">
+                            <a href="" ng-click="devzones.order('employee.full_name');"><strong>Employee</strong></a>
+                            <span class="sortorder fa" ng-show="devzones.predicate === 'employee.full_name'" ng-class="devzones.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                        </th>
                         <th scope="col" class="width-20-percent">Represented By</th>
-                        <th scope="col" class="width-10-percent centered">Alignment</th>
-                        <th scope="col" class="width-20-percent">My Perception</th>
+                        <th scope="col" class="width-10-percent centered">
+                            <a href="" ng-click="devzones.order('advice[0].severity');"><strong>Alignment</strong></a>
+                            <span class="sortorder fa" ng-show="devzones.predicate === 'advice[0].severity'" ng-class="devzones.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                        </th>
+                        <th scope="col" class="width-20-percent centered">
+                            <a href="" ng-click="devzones.order('development_lead_assessment.zone.name');"><strong>My Perception</strong></a>
+                            <span class="sortorder fa" ng-show="devzones.predicate === 'development_lead_assessment.zone.name'" ng-class="devzones.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                        </th>
                         <th scope="col" class="width-10-percent centered">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="conversation in devzones.myTeamLeadConversations | orderBy:'employee.full_name':false">
+                    <tr ng-repeat="conversation in devzones.myTeamLeadConversations | orderBy:devzones.predicate:devzones.reverse">
                         <td><span class="tiny-headshot pull-left"><img ng-src="{{ conversation.employee_assessment.employee.avatar_small }}" alt="{{ conversation.employee_assessment.employee.full_name }}" /></span>{{ conversation.employee_assessment.employee.full_name }}</td>
                         <td>{{ conversation.development_lead.full_name }}</td>
                         <td style="text-align:center;">
-                            <div ng-repeat="advice in conversation.advice" ng-if="advice.alert_for_development_lead" class="alert {{advice.alert_type_for_development_lead}} slide-up" style="padding: 8px;margin-bottom: 0px">
-                                Gap
+                            <div ng-repeat="advice in conversation.advice" ng-if="advice.alert_for_development_lead_short" class="alert {{advice.alert_type_for_development_lead}} slide-up" style="padding: 8px;margin-bottom: 0px">
+                                {{ advice.alert_for_development_lead_short }}
                             </div>
                         </td>
-                        <td>
+                        <td style="text-align:center;">
                             <span ng-show="conversation.development_lead_assessment">{{ conversation.development_lead_assessment.zone.name }}</span>
                         </td>
                         <td class="centered">

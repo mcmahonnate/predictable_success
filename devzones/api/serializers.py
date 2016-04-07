@@ -48,7 +48,7 @@ class AdviceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Advice
-        fields = ('id', 'employee_zone', 'development_lead_zone', 'advice_name_for_employee', 'advice_description_for_employee', 'advice_name_for_development_leader', 'advice_description_for_development_leader', 'alert_type_for_employee', 'alert_for_employee', 'alert_type_for_development_lead', 'alert_for_development_lead')
+        fields = ('id', 'employee_zone', 'development_lead_zone', 'advice_name_for_employee', 'advice_description_for_employee', 'advice_name_for_development_leader', 'advice_description_for_development_leader', 'alert_type_for_employee', 'alert_for_employee', 'alert_for_employee_short', 'alert_type_for_development_lead', 'alert_for_development_lead', 'alert_for_development_lead_short', 'severity')
         read_only_fields = ('employee_zone', 'development_lead_zone')
 
 

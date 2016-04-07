@@ -24,13 +24,18 @@ function DevZonesController(ConversationService, DevZoneService, MeetingService,
     vm.getMySelifesLoaded = false;
     vm.getMyTeamLeadConversationsLoaded = false;
     vm.getMyMeetingsLoaded = false;
+    vm.predicate = 'advice[0].severity';
+    vm.reverse = true;
     vm.submitDevZone = submitDevZone;
     vm.requestCheckIn = requestCheckIn;
     vm.requestFeedback = requestFeedback;
     vm.showMeetingParticipants = showMeetingParticipants;
     vm.giveLeaderPerception = giveLeaderPerception;
     vm.addMeeting = addMeeting;
-
+    vm.order = function (predicate) {
+        vm.reverse = (vm.predicate === predicate) ? !vm.reverse : true;
+        vm.predicate = predicate;
+    };
     activate();
 
     function activate() {

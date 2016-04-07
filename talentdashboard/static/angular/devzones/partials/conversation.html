@@ -89,6 +89,6 @@
             </div>
         </div>
     </div>
-    <button class="btn btn-default" type="button" ng-click="conversation.gotoID()">&larr; Back</button>
+    <button class="btn btn-default" type="button" ng-click="conversation.goBack()">&larr; Back</button>
     <button ng-show="conversation.is_development_lead && !conversation.conversation.development_lead_assessment.completed" class="btn btn-success pull-right" type="button" ng-click="conversation.sendToEmployee()">Send to {{ conversation.selfie.employee.first_name }}</button>
 </div>

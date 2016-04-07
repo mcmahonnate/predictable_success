@@ -2,7 +2,7 @@
         .module('devzones')
         .controller('ConversationController', ConversationController);
 
-    function ConversationController(analytics, ConversationService, DevZoneService, Notification, $location, $modal, $parse, $rootScope, $routeParams, $scope) {
+    function ConversationController(analytics, ConversationService, DevZoneService, Notification, $location, $modal, $parse, $rootScope, $routeParams, $scope, $window) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
 
         var vm = this;
@@ -11,7 +11,6 @@
         vm.is_development_lead = false;
         vm.selfie = null;
         vm.busy = false;
-        vm.gotoID = gotoID;
         vm.employee = null;
         vm.conversation = null;
         vm.development_lead = null;
@@ -20,8 +19,11 @@
         vm.collapseSelfie = true;
         vm.collapseLeadershipPerception = true;
         vm.giveLeaderPerception = giveLeaderPerception;
+        vm.goBack = goBack;
+        vm.gotoID = gotoID;
         vm.sendToEmployee = sendToEmployee;
         vm.replaceTemplateTags = replaceTemplateTags;
+
         activate();
 
         function activate() {
@@ -87,6 +89,10 @@
 
         function gotoID() {
             $location.path('/id/');
+        }
+
+        function goBack() {
+            $window.history.back();
         }
 
         function replaceTemplateTags(html) {

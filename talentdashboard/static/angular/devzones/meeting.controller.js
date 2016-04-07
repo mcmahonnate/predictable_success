@@ -7,7 +7,13 @@ function MeetingController(MeetingService, Notification, analytics, $location, $
 
     var vm = this;
     vm.is_org_dev = false;
+    vm.predicate = 'employee.full_name';
+    vm.reverse = false;
     vm.giveLeaderPerception = giveLeaderPerception;
+    vm.order = function (predicate) {
+        vm.reverse = (vm.predicate === predicate) ? !vm.reverse : true;
+        vm.predicate = predicate;
+    };
     activate();
 
     function activate() {
