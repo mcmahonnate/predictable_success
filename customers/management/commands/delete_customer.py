@@ -7,6 +7,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         confirm = raw_input('Deleting your schema is irreversible. Enter your schema name (%s) to confirm you want to permanently delete it:' % connection.schema_name)
         if confirm != connection.schema_name:
+            print 'Delete canceled.'
             return
         tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
         tenant.delete(force_drop=True)
