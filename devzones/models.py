@@ -189,7 +189,7 @@ class MeetingManager(models.Manager):
 
     def get_all_for_employee(self, employee):
         meetings = self.get_all_current()
-        return meetings.filter(participants__id=employee.id)
+        return meetings.filter(participants__id=employee.id, active=True)
 
 
 class Meeting(models.Model):
@@ -197,6 +197,7 @@ class Meeting(models.Model):
     name = models.CharField(max_length=255)
     date = models.DateTimeField(null=False, blank=False, default=datetime.now)
     participants = models.ManyToManyField(Employee,related_name='+', null=True, blank=True)
+    active = models.BooleanField(default=False)
     completed = models.BooleanField(default=False)
 
     def __str__(self):

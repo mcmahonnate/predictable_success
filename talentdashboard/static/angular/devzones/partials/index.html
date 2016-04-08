@@ -120,7 +120,7 @@
     </div>
     <div class="panel devzones" ng-show="devzones.meetings.length>0">
         <h2 class="panel-title ng-binding"><a ng-click="devzones.meetingsCollapse=!devzones.meetingsCollapse" style="cursor: pointer">My Meetings</a>
-            <i class="fa fa-plus-circle collapse-toggle" ng-show="!devzones.meetingsCollapse && devzones.isAdmin" ng-click="devzones.addMeeting()" style="margin-left: 5px;"></i>
+            <i class="fa fa-plus-circle collapse-toggle" ng-show="!devzones.meetingsCollapse && devzones.is_org_dev" ng-click="devzones.addEditMeeting()" style="margin-left: 5px;"></i>
             <i class="fa fa-chevron-down pull-right collapse-toggle" ng-show="!devzones.meetingsCollapse" ng-click="devzones.meetingsCollapse=true"></i>
             <i class="fa fa-chevron-right pull-right collapse-toggle" ng-show="devzones.meetingsCollapse" ng-click="devzones.meetingsCollapse=false"></i>
 
@@ -130,15 +130,19 @@
                 <thead>
                     <tr>
                         <th scope="col" class="width-20-percent">Meeting</th>
-                        <th scope="col" class="width-60-percent">Participants</th>
-                        <th scope="col" class="width-60-percent">Selfies Completed</th>
-                        <th scope="col" class="width-20-percent centered">Action</th>
+                        <th scope="col" class="width-40-percent">Participants</th>
+                        <th ng-show="devzones.isAdmin" scope="col" class="width-10-percent centered">Active</th>
+                        <th scope="col" class="width-10-percent">Selfies Completed</th>
+                        <th scope="col" class="width-10-percent centered">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="meeting in devzones.meetings | orderBy:'name':false">
                         <td>{{ meeting.name }}</td>
                         <td><img class="tiny-headshot pull-left" ng-src="{{ participant.avatar_small }}" ng-attr-title="{{participant.full_name}}" ng-repeat="participant in meeting.participants"/></td>
+                        <td ng-show="devzones.isAdmin" class="centered">
+                            <i ng-show="{{ meeting.active }}" class="fa fa-check" title="Active"></i>
+                        </td>
                         <td>{{ meeting.selfies_completed}} out of {{ meeting.selfies_total}}</td>
                         <td class="centered">
                             <a class="btn btn-default btn-md give-feedback-btn" ng-href="#/id/meetings/{{ meeting.id }}" type="button">

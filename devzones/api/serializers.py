@@ -226,7 +226,7 @@ class CreateUpdateMeetingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Meeting
-        fields = ('id', 'name', 'participants')
+        fields = ('id', 'name', 'participants', 'active')
 
 
 class MeetingSerializer(serializers.ModelSerializer):
@@ -235,7 +235,7 @@ class MeetingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Meeting
-        fields = ('id', 'name', 'date', 'participants', 'conversations', 'completed')
+        fields = ('id', 'name', 'date', 'participants', 'conversations', 'completed', 'active')
 
 
 class SanitizedMeetingSerializer(serializers.ModelSerializer):
@@ -251,4 +251,4 @@ class SanitizedMeetingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Meeting
-        fields = ('id', 'name', 'date', 'participants', 'completed', 'selfies_completed' , 'selfies_total')
+        fields = ('id', 'name', 'date', 'participants', 'completed', 'selfies_completed' , 'selfies_total', 'active')

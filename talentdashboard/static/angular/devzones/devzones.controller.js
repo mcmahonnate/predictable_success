@@ -15,7 +15,7 @@ function DevZonesController(ConversationService, DevZoneService, MeetingService,
     vm.selfie = null;
     vm.idSessionIntro = $rootScope.customer.devzones_id_session_intro;
     vm.welcome = $sce.trustAsHtml($rootScope.customer.devzones_welcome);
-    vm.isAdmin = $rootScope.currentUser.can_edit_employees;
+    vm.is_org_dev = $rootScope.currentUser.can_edit_employees;
     vm.mySelfies = [];
     vm.myConversation = null;
     vm.myTeamLeadConversations = [];
@@ -31,7 +31,7 @@ function DevZonesController(ConversationService, DevZoneService, MeetingService,
     vm.requestFeedback = requestFeedback;
     vm.showMeetingParticipants = showMeetingParticipants;
     vm.giveLeaderPerception = giveLeaderPerception;
-    vm.addMeeting = addMeeting;
+    vm.addEditMeeting = addEditMeeting;
     vm.order = function (predicate) {
         vm.reverse = (vm.predicate === predicate) ? !vm.reverse : true;
         vm.predicate = predicate;
@@ -58,6 +58,9 @@ function DevZonesController(ConversationService, DevZoneService, MeetingService,
             .then(function(meetings){
                 vm.meetings = meetings;
                 vm.getMyMeetingsLoaded = true;
+                if ($rootScope.currentUser.permissions.indexOf("org.view_employees") > -1) {
+                    vm.is_org_dev = true;
+                }
                 isBusy();
             }, function(){
                 vm.getMyMeetingsLoaded = true;
@@ -209,12 +212,12 @@ function DevZonesController(ConversationService, DevZoneService, MeetingService,
     }
 
 
-    function addMeeting() {
+    function addEditMeeting(view) {
         var modalInstance = $modal.open({
             animation: true,
             backdrop: 'static',
-            templateUrl: '/static/angular/devzones/partials/_modals/add-meeting.html',
-            controller: 'AddMeetingController as addMeeting',
+            templateUrl: '/static/angular/devzones/partials/_modals/add-edit-meeting.html',
+            controller: 'AddEditMeetingController as addEditMeeting',
             resolve: {}
         });
         modalInstance.result.then(

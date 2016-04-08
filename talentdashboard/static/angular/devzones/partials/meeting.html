@@ -1,10 +1,11 @@
 <div id="devzones" class="container" data-hj-masked>
     <div>
-        <a href="" data-toggle="modal" data-target=".devzones-welcome-modal" class="pull-right show-welcome-modal">Show welcome message</a>
-        <h1><a href="#/id">ID</a> &raquo; Meeting for {{ meeting.meeting.name }}</h1>
+        <h1><a href="#/id">ID</a> &raquo; Meetings</h1>
     </div>
     <div class="panel devzones collapsible-panel">
-        <h2 class="panel-title ng-binding">Team Selfies</h2>
+        <h2 class="panel-title ng-binding">{{ meeting.meeting.name }}
+            <i class="fa fa-pencil collapse-toggle" ng-show="meeting.is_org_dev" ng-click="meeting.addEditMeeting('edit-view')" style="margin-left: 5px;"></i>
+        </h2>
         <table class="table responsive-table">
             <thead>
                 <tr>

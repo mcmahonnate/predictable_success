@@ -1,10 +1,10 @@
 angular
     .module('devzones')
-    .controller('AddMeetingController', AddMeetingController);
+    .controller('AddEditMeetingController', AddEditMeetingController);
 
-function AddMeetingController(ConversationService, EmployeeSearch, MeetingService, Notification, $modalInstance, $rootScope) {
+function AddEditMeetingController(ConversationService, EmployeeSearch, meeting, MeetingService, Notification, $modalInstance, $rootScope) {
     var vm = this;
-    vm.meeting = null;
+    vm.meeting = meeting;
     vm.panel_index = -1;
     vm.busy = false;
     vm.name = '';
@@ -51,7 +51,7 @@ function AddMeetingController(ConversationService, EmployeeSearch, MeetingServic
                     });
                 });
                 ConversationService.create(conversations)
-                    .then(function (converstaions) {
+                    .then(function (conversations) {
                         $modalInstance.close(meeting);
                         Notification.success('Your meeting has been saved.')
                     })

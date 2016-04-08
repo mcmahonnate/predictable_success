@@ -9,6 +9,7 @@ function MeetingController(MeetingService, Notification, analytics, $location, $
     vm.is_org_dev = false;
     vm.predicate = 'employee.full_name';
     vm.reverse = false;
+    vm.addEditMeeting = addEditMeeting;
     vm.giveLeaderPerception = giveLeaderPerception;
     vm.order = function (predicate) {
         vm.reverse = (vm.predicate === predicate) ? !vm.reverse : true;
@@ -32,6 +33,25 @@ function MeetingController(MeetingService, Notification, analytics, $location, $
                 }
             );
     };
+
+    function addEditMeeting() {
+        var modalInstance = $modal.open({
+            animation: true,
+            backdrop: 'static',
+            templateUrl: '/static/angular/devzones/partials/_modals/add-edit-meeting.html',
+            controller: 'AddEditMeetingController as addEditMeeting',
+            resolve: {
+                meeting: function () {
+                    return vm.meeting
+                }
+            }
+        });
+        modalInstance.result.then(
+            function (meeting) {
+                vm.meetings.push(meeting);
+            }
+        );
+    }
 
     function giveLeaderPerception(conversation) {
         var modalInstance = $modal.open({
