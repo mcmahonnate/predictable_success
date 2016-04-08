@@ -80,7 +80,7 @@
         }
 
         function sendToEmployee() {
-            DevZoneService.updateEmployeeZone({id: vm.conversation.development_lead_assessment.id, completed: true, is_draft: false})
+            DevZoneService.shareEmployeeZone({id: vm.conversation.development_lead_assessment.id})
                 .then(function (employeeZone) {
                     Notification.success('Saved and sent to ' + vm.conversation.employee.full_name)
                     gotoID();

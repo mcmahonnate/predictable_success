@@ -4,27 +4,15 @@ angular
 
 function DevZoneService($http, $log, DevZoneResource) {
     return {
-        getEmployeeZone: getEmployeeZone,
         createEmployeeZone: createEmployeeZone,
-        updateEmployeeZone: updateEmployeeZone,
-        retakeEmployeeZone: retakeEmployeeZone,
-        getUnfinished: getUnfinished,
+        getEmployeeZone: getEmployeeZone,
         getMyEmployeeZones: getMyEmployeeZones,
-        getZones: getZones
+        getUnfinished: getUnfinished,
+        getZones: getZones,
+        retakeEmployeeZone: retakeEmployeeZone,
+        shareEmployeeZone: shareEmployeeZone,
+        updateEmployeeZone: updateEmployeeZone
     };
-
-
-    function getEmployeeZone(employeeZoneId) {
-        return DevZoneResource.get({id: employeeZoneId}, success, fail).$promise;
-
-        function success(response) {
-            return response;
-        }
-
-        function fail(response) {
-            $log.error('getEmployeeZone failed');
-        }
-    }
 
     function createEmployeeZone(devzone) {
         return DevZoneResource.create(devzone, success, fail).$promise;
@@ -38,39 +26,15 @@ function DevZoneService($http, $log, DevZoneResource) {
         }
     }
 
-    function updateEmployeeZone(devzone) {
-        return DevZoneResource.update({id: devzone.id}, devzone, success, fail).$promise;
+    function getEmployeeZone(employeeZoneId) {
+        return DevZoneResource.get({id: employeeZoneId}, success, fail).$promise;
 
         function success(response) {
             return response;
         }
 
         function fail(response) {
-            $log.error('updateEmployeeZone failed');
-        }
-    }
-
-    function retakeEmployeeZone(devzone) {
-        return DevZoneResource.retake({id: devzone.id}, devzone, success, fail).$promise;
-
-        function success(response) {
-            return response;
-        }
-
-        function fail(response) {
-            $log.error('retakeEmployeeZone failed');
-        }
-    }
-
-    function getUnfinished() {
-        return DevZoneResource.getUnfinished(null, success, fail).$promise;
-
-        function success(response) {
-            return response;
-        }
-
-        function fail(response) {
-            $log.error('getUnfinished failed');
+            $log.error('getEmployeeZone failed');
         }
     }
 
@@ -86,6 +50,18 @@ function DevZoneService($http, $log, DevZoneResource) {
         }
     }
 
+    function getUnfinished() {
+        return DevZoneResource.getUnfinished(null, success, fail).$promise;
+
+        function success(response) {
+            return response;
+        }
+
+        function fail(response) {
+            $log.error('getUnfinished failed');
+        }
+    }
+
     function getZones() {
         return DevZoneResource.getZones(null, success, fail).$promise;
 
@@ -97,4 +73,41 @@ function DevZoneService($http, $log, DevZoneResource) {
             $log.error('getZones failed');
         }
     }
+
+    function retakeEmployeeZone(devzone) {
+        return DevZoneResource.retake({id: devzone.id}, devzone, success, fail).$promise;
+
+        function success(response) {
+            return response;
+        }
+
+        function fail(response) {
+            $log.error('retakeEmployeeZone failed');
+        }
+    }
+
+    function shareEmployeeZone(devzone) {
+        return DevZoneResource.share({id: devzone.id}, devzone, success, fail).$promise;
+
+        function success(response) {
+            return response;
+        }
+
+        function fail(response) {
+            $log.error('shareEmployeeZone failed');
+        }
+    }
+
+    function updateEmployeeZone(devzone) {
+        return DevZoneResource.update({id: devzone.id}, devzone, success, fail).$promise;
+
+        function success(response) {
+            return response;
+        }
+
+        function fail(response) {
+            $log.error('updateEmployeeZone failed');
+        }
+    }
+
 }

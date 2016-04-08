@@ -1,0 +1,9 @@
+Hi, {{ recipient_first_name }}!
+
+We thought you'd like to know that {{ leader_first_name }} shared their notes from your development conversation with you. You can check them out here:
+{{ response_url }}
+
+Thanks!
+-The Scoutmap Team
+
+P.S. Do you have more feedback or ideas for us? Let us know on the Feedback for Scoutmap Slack Channel https://fool.slack.com/messages/feedback_for_scoutmap/

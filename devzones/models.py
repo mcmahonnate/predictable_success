@@ -4,6 +4,7 @@ from django.db.models import Count
 from org.models import Employee
 from datetime import datetime, date, timedelta
 from dateutil.relativedelta import relativedelta
+from model_utils import FieldTracker
 
 
 class QuestionManager(models.Manager):
@@ -130,6 +131,7 @@ class EmployeeZone(models.Model):
     notes = models.TextField(blank=True, default='')
     is_draft = models.BooleanField(default=False)
     completed = models.BooleanField(default=False)
+    field_tracker = FieldTracker(fields=['completed'])
 
     def _calculate_zone(self):
         if not self.completed and self.all_questions_answered() and self.answers.count() > 0:
@@ -232,7 +234,7 @@ class Conversation(models.Model):
     employee = models.ForeignKey(Employee, related_name='development_conversations')
     development_lead = models.ForeignKey(Employee, related_name='people_ive_had_development_conversations_about')
     employee_assessment = models.OneToOneField(EmployeeZone, related_name='development_conversation', null=True, blank=True)
-    development_lead_assessment = models.OneToOneField(EmployeeZone, related_name='+', null=True, blank=True)
+    development_lead_assessment = models.OneToOneField(EmployeeZone, related_name='development_led_conversation', null=True, blank=True)
     completed = models.BooleanField(default=False)
     completed_date = models.DateTimeField(null=True, blank=True)
 

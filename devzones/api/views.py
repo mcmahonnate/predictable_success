@@ -118,6 +118,26 @@ class UpdateEmployeeZone(RetrieveUpdateAPIView):
         return Response(serializer.data)
 
 
+class ShareEmployeeZone(GenericAPIView):
+    queryset = EmployeeZone.objects.all()
+    serializer_class = EmployeeZoneSerializer
+    permission_classes = (IsAuthenticated, UserIsAssessor)
+
+    def get_employee_zone(self):
+        try:
+            return self.get_object()
+        except EmployeeZone.DoesNotExist:
+            raise Http404()
+
+    def put(self, request, pk, format=None):
+        employee_zone = self.get_employee_zone()
+        employee_zone.is_draft = False
+        employee_zone.completed = True
+        employee_zone.save(update_fields=['completed'])
+        serializer = EmployeeZoneSerializer(employee_zone, context={'request':request})
+        return Response(serializer.data)
+
+
 class CreateManyConversations(CreateAPIView):
     serializer_class = CreateConversationSerializer
     permission_classes = (IsAuthenticated,)
