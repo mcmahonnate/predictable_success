@@ -1,0 +1,58 @@
+{% extends "layouts/email.html" %}
+
+{% block content %}
+        <p>
+            Hi, {{ recipient.first_name }}!
+        </p>
+        <p>
+            It looks like you have development notes for your team.  We're sure your team is itching to hear from you about them. If you haven't done so already:</p>
+            <ol>
+                <li>Have a development conversation with each person below.</li>
+                <li>Afterwards, update your notes in Scoutmap to reflect the conversation you had.</li>
+                <li>Share your notes with them in Scoutmap.</li>
+            </ol>
+        </p>
+        <p>Here are your notes:</p>
+        {% if conversations.count > 0 %}
+        <table width="100%" cellspacing="0" cellpadding="8" style="border-collapse:collapse;border-spacing:0;width:100%;text-align:justify;margin:0;padding:0;border-width:0;">
+            <tbody>
+            {% for conversation in conversations %}
+                <tr>
+                <font face="Helvetica Neue,helvetica,arial,sans-serif" size="2">
+                    <td valign="top" style="height:80px;width:60px">
+                        <img class="medium-headshot" height="50" style="vertical-align:text-top;" src="{{conversation.employee.avatar_small.url}}"/>
+                    </td>
+                    <td valign="top">
+                        <p>
+                            <p><b>{{conversation.employee.full_name}}</b></p>
+                            <p>
+                                {% for advice in conversation.advice %}
+                                    {% if advice.alert_type_for_development_lead %}
+                                    <div class="alert {{advice.alert_type_for_development_lead}} slide-up" style="padding: 8px;width: 100px; text-align: center; display: inline-block; margin-right: 10px;">
+                                        {{ advice.alert_for_development_lead_short }}
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                                Leadership: {{ conversation.development_lead_assessment.zone.name }}
+                                {% if conversation.employee_assessment %}
+                                    | Selfie: {{ conversation.employee_assessment.zone.name }}
+                                {% endif %}
+                            </p>
+                            <pre style="font-family: inherit;"><span style="font-size:14px;white-space: pre-wrap;">{{conversation.development_lead_assessment.notes}}</span></pre>
+                        </p>
+                    </td>
+                    <td valign="top" >
+                        <a class="btn btn-default btn-md" href="{{ response_url }}{{ conversation.id }}" type="button">View</a>
+                    </td>
+                </font>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+
+        <p>Thanks! <br>-The Scoutmap Team</p>
+        <p>
+            P.S. Do you have feedback or ideas for us? Let us know on the <a href="https://fool.slack.com/messages/feedback_for_scoutmap/">Feedback for Scoutmap Slack Channel.</a>
+        </p>
+{% endblock content%}

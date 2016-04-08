@@ -102,6 +102,9 @@ class EmployeeZoneManager(models.Manager):
     def get_all_finished_for_employee(self, employee):
         return self.filter(employee=employee, assessor=employee, completed=True)
 
+    def get_all_drafts(self):
+        return self.filter(is_draft=True)
+
     def get_unfinished(self, employee):
         try:
             return self.get(employee=employee, assessor=employee, completed=False)
