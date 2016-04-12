@@ -5,6 +5,7 @@ angular
 function MeetingService($http, $log, MeetingResource) {
     return {
         create: create,
+        update: update,
         get: get,
         getMyMeetings: getMyMeetings
     }
@@ -17,7 +18,19 @@ function MeetingService($http, $log, MeetingResource) {
         }
 
         function fail(response) {
-            $log.error('create failed');
+            $log.error('create Meeting failed');
+        }
+    }
+
+    function update(meeting) {
+        return MeetingResource.update({id: meeting.id}, meeting, success, fail).$promise;
+
+        function success(response) {
+            return response;
+        }
+
+        function fail(response) {
+            $log.error('update Meeting failed');
         }
     }
 

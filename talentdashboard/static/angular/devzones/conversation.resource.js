@@ -14,6 +14,16 @@ function ConversationResource($resource) {
         'update': {
             method: 'PUT',
         },
+        'updateBulk': {
+            method: 'PUT',
+            url: '/api/v1/devzones/conversations/update/',
+            isArray: true
+        },
+        'deleteBulk': {
+            method: 'PUT',
+            url: '/api/v1/devzones/conversations/delete/',
+            isArray: true
+        },
         'getMyConversation': {
             method: 'GET',
             url: '/api/v1/devzones/conversations/current/'

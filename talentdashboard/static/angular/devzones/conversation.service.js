@@ -5,21 +5,60 @@ angular
 function ConversationService($http, $log, ConversationResource) {
     return {
         create: create,
+        update: update,
+        updateBulk: updateBulk,
+        deleteBulk: deleteBulk,
         get: get,
         getMyConversation: getMyConversation,
         getMyTeamLeadConversations: getMyTeamLeadConversations,
-        update: update
     };
 
-    function create(conversation) {
-        return ConversationResource.create({id: 'create'}, conversation, success, fail).$promise;
+    function create(conversations) {
+        return ConversationResource.create({id: 'create'}, conversations, success, fail).$promise;
 
         function success(response) {
             return response;
         }
 
         function fail(response) {
-            $log.error('get failed');
+            $log.error('created Conversations failed');
+        }
+    }
+
+    function update(conversation) {
+        return ConversationResource.update(conversation, success, fail).$promise;
+
+        function success(response) {
+            return response;
+        }
+
+        function fail(response) {
+            $log.error('update Conversation failed');
+        }
+    }
+
+
+    function updateBulk(conversations) {
+        return ConversationResource.updateBulk(conversations, success, fail).$promise;
+
+        function success(response) {
+            return response;
+        }
+
+        function fail(response) {
+            $log.error('bulk update Conversation failed');
+        }
+    }
+
+    function deleteBulk(conversations) {
+        return ConversationResource.deleteBulk(conversations, success, fail).$promise;
+
+        function success(response) {
+            return response;
+        }
+
+        function fail(response) {
+            $log.error('bulk delete Conversations failed');
         }
     }
 

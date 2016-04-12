@@ -203,11 +203,13 @@ class SanitizedConversationSerializer(serializers.ModelSerializer):
 
 
 class UpdateConversationSerializer(serializers.ModelSerializer):
-    development_lead_assessment = serializers.PrimaryKeyRelatedField(queryset=EmployeeZone.objects.all())
+    development_lead = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all(), required=False)
+    development_lead_assessment = serializers.PrimaryKeyRelatedField(queryset=EmployeeZone.objects.all(), required=False)
+    meeting = serializers.PrimaryKeyRelatedField(queryset=Meeting.objects.all(), required=False, allow_null=True)
 
     class Meta:
         model = Conversation
-        fields = ('id', 'development_lead_assessment')
+        fields = ('id', 'development_lead', 'development_lead_assessment', 'meeting')
 
 
 class CreateConversationSerializer(serializers.ModelSerializer):

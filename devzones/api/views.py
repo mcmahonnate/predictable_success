@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import *
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.status import HTTP_204_NO_CONTENT
 from .permissions import UserIsConversationParticipantOrHasAllAccess, UserIsAssessor, UserIsMeetingParticipantOrHasAllAccess, UserIsConversationParticipantOrHasAllAccessOrIsEmployee
 from .serializers import *
 
@@ -54,7 +55,7 @@ class RetrieveMeeting(RetrieveAPIView):
 
 class CreateMeeting(CreateAPIView):
     serializer_class = CreateUpdateMeetingSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, PermissionsViewAllEmployees)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -67,6 +68,21 @@ class CreateMeeting(CreateAPIView):
 
     def perform_create(self, serializer):
         return serializer.save()
+
+
+class UpdateMeeting(UpdateAPIView):
+    queryset = Meeting.objects.all()
+    serializer_class = CreateUpdateMeetingSerializer
+    permission_classes = (IsAuthenticated, PermissionsViewAllEmployees)
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        serializer = MeetingSerializer(instance, context={'request': request})
+        return Response(serializer.data)
 
 
 class RetrieveMyEmployeeZones(ListAPIView):
@@ -140,17 +156,62 @@ class ShareEmployeeZone(GenericAPIView):
 
 class CreateManyConversations(CreateAPIView):
     serializer_class = CreateConversationSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, PermissionsViewAllEmployees)
 
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data, many=True)
-        serializer.is_valid(raise_exception=True)
-        saved = self.perform_create(serializer)
-        serializer = ConversationSerializer(instance=saved, many=True, context={'request': request})
+        created = []
+        for conversation in request.data:
+            serializer = self.get_serializer(data=conversation, many=False)
+            serializer.is_valid(raise_exception=True)
+            try:
+                instance = Conversation.objects.filter(employee__id=conversation['employee'], completed=False).latest('date')
+                development_lead = Employee.objects.get(id=conversation['development_lead'])
+                instance.meeting = Meeting.objects.get(id=conversation['meeting'])
+                instance.development_lead = development_lead
+                instance.save()
+                if instance.development_lead_assessment:
+                    instance.development_lead_assessment.assessor = development_lead
+                    instance.development_lead_assessment.save()
+            except Conversation.DoesNotExist:
+                instance = self.perform_create(serializer)
+            created.append(instance)
+        serializer = ConversationSerializer(instance=created, many=True, context={'request': request})
         return Response(serializer.data)
 
     def perform_create(self, serializer):
         return serializer.save()
+
+
+class UpdateManyConversations(UpdateAPIView):
+    serializer_class = UpdateConversationSerializer
+    permission_classes = (IsAuthenticated, PermissionsViewAllEmployees)
+
+    def update(self, request, *args, **kwargs):
+        updated = []
+        for conversation in request.data:
+            instance = Conversation.objects.get(id=conversation['id'])
+            serializer = self.get_serializer(instance=instance, data=conversation, many=False, partial=True)
+            serializer.is_valid(raise_exception=True)
+            saved = self.perform_update(serializer)
+            updated.append(saved)
+        serializer = ConversationSerializer(instance=updated, many=True, context={'request': request})
+        return Response(serializer.data)
+
+    def perform_update(self, serializer):
+        return serializer.save()
+
+
+class DeleteManyConversations(DestroyAPIView):
+    serializer_class = UpdateConversationSerializer
+    permission_classes = (IsAuthenticated, PermissionsViewAllEmployees)
+
+    def destroy(self, request, *args, **kwargs):
+        print request.data
+        for conversation in request.data:
+            instance = Conversation.objects.get(id=conversation['id'])
+            print instance
+            instance.delete()
+        return Response(status=HTTP_204_NO_CONTENT)
 
 
 class RetrieveUpdateConversation(RetrieveUpdateAPIView):

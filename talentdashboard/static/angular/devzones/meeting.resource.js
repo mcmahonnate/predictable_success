@@ -11,6 +11,10 @@ function MeetingResource($resource) {
             url: '/api/v1/devzones/meetings/create/',
             method: 'POST',
         },
+        'update': {
+            url: '/api/v1/devzones/meetings/:id/update/',
+            method: 'PUT',
+        },
         'getMyMeetings': {
             method: 'GET',
             isArray: true

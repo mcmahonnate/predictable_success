@@ -48,7 +48,12 @@ function MeetingController(MeetingService, Notification, analytics, $location, $
         });
         modalInstance.result.then(
             function (meeting) {
-                vm.meetings.push(meeting);
+                if (vm.meeting) {
+                    vm.meeting = meeting;
+                }
+                if (vm.meetings) {
+                    vm.meetings.push(meeting);
+                }
             }
         );
     }
