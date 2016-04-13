@@ -24,9 +24,14 @@ function ConversationResource($resource) {
             url: '/api/v1/devzones/conversations/delete/',
             isArray: true
         },
-        'getMyConversation': {
+        'getMyConversations': {
             method: 'GET',
-            url: '/api/v1/devzones/conversations/current/'
+            url: '/api/v1/devzones/conversations/my/',
+            isArray: true
+        },
+        'getMyCurrentConversation': {
+            method: 'GET',
+            url: '/api/v1/devzones/conversations/my/current/'
         },
         'getMyTeamLeadConversations': {
             method: 'GET',

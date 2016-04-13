@@ -17,11 +17,8 @@ def conversation_save_handler(sender, instance, created, update_fields, **kwargs
 
 @receiver(post_save, sender=EmployeeZone)
 def employee_zone_save_handler(sender, instance, created, update_fields, **kwargs):
-    print 'employee_zone_save_handler'
     if not created and update_fields:
-        print 'update_fields'
         if 'completed' in update_fields and instance.completed and instance.development_led_conversation:
-            print 'completed'
             conversation = instance.development_led_conversation
             send_conversation_shared_notification.subtask((conversation.id,)).apply_async()
             conversation.is_draft = False

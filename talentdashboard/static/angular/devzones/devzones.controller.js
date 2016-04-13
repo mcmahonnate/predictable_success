@@ -16,12 +16,11 @@ function DevZonesController(ConversationService, DevZoneService, MeetingService,
     vm.idSessionIntro = $rootScope.customer.devzones_id_session_intro;
     vm.welcome = $sce.trustAsHtml($rootScope.customer.devzones_welcome);
     vm.is_org_dev = $rootScope.currentUser.can_edit_employees;
-    vm.mySelfies = [];
-    vm.myConversation = null;
+    vm.myConversations = null;
     vm.myTeamLeadConversations = [];
     vm.meetings = [];
-    vm.getConversationLoaded = false;
-    vm.getMySelifesLoaded = false;
+    vm.getMyCurrentConversationLoaded = false;
+    vm.getMyConversationsLoaded = false;
     vm.getMyTeamLeadConversationsLoaded = false;
     vm.getMyMeetingsLoaded = false;
     vm.predicate = 'advice[0].severity';
@@ -39,14 +38,14 @@ function DevZonesController(ConversationService, DevZoneService, MeetingService,
     activate();
 
     function activate() {
-        getConversation();
-        getMySelfies();
+        getMyConversations();
+        getMyCurrentConversation();
         getMyTeamLeadConversations();
         getMyMeetings();
     };
 
     function isBusy() {
-        if (vm.getConversationLoaded && vm.getMySelifesLoaded && vm.getMyTeamLeadConversationsLoaded && vm.getMyMeetingsLoaded) {
+        if (vm.getMyCurrentConversationLoaded && vm.getMyConversationsLoaded && vm.getMyTeamLeadConversationsLoaded && vm.getMyMeetingsLoaded) {
             vm.busy = false;
         } else {
             vm.busy = true;
@@ -69,33 +68,33 @@ function DevZonesController(ConversationService, DevZoneService, MeetingService,
         );
     };
 
-    function getConversation() {
+    function getMyConversations() {
         vm.busy = true;
-        ConversationService.getMyConversation()
-            .then(function(conversation){
-                vm.myConversation = conversation;
-                vm.selfie = conversation.employee_assessment;
-                vm.getConversationLoaded = true;
+        ConversationService.getMyConversations()
+            .then(function(conversations){
+                vm.myConversations = conversations;
+                vm.getMyConversationsLoaded = true;
                 isBusy();
             }, function(){
-                vm.getConversationLoaded = true;
+                vm.getMyConversationsLoaded = true;
                 isBusy();
             }
         )
     };
 
-    function getMySelfies() {
-        DevZoneService.getMyEmployeeZones()
-            .then(function(selfies){
-                vm.mySelfies = selfies;
-                vm.getMySelifesLoaded = true;
+    function getMyCurrentConversation() {
+        vm.busy = true;
+        ConversationService.getMyCurrentConversation()
+            .then(function(conversation){
+                vm.myCurrentConversation = conversation;
+                vm.getMyCurrentConversationLoaded = true;
                 isBusy();
             }, function(){
-                vm.getMySelifesLoaded = true;
+                vm.getMyCurrentConversationLoaded = true;
                 isBusy();
             }
         )
-    };
+    }
 
     function getMyTeamLeadConversations() {
         ConversationService.getMyTeamLeadConversations()
@@ -119,16 +118,13 @@ function DevZonesController(ConversationService, DevZoneService, MeetingService,
             controller: 'TakeSelfieController as selfie',
             resolve: {
                     selfie: function () {
-                        return vm.selfie
+                        return vm.myCurrentConversation.employee_assessment
                     }
             }
         });
         modalInstance.result.then(
             function (selfie) {
-                vm.selfie = selfie;
-                if (selfie.completed) {
-                    vm.mySelfies.push(selfie)
-                }
+                vm.myCurrentConversation.employee_assessment = selfie;
             }
         );
     };

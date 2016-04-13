@@ -6,7 +6,7 @@ from rest_framework.generics import *
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_204_NO_CONTENT
-from .permissions import UserIsConversationParticipantOrHasAllAccess, UserIsAssessor, UserIsMeetingParticipantOrHasAllAccess, UserIsConversationParticipantOrHasAllAccessOrIsEmployee
+from .permissions import UserIsConversationParticipantOrHasAllAccess, UserIsAssessorOrHasAllAccess, UserIsAssessor, UserIsMeetingParticipantOrHasAllAccess, UserIsConversationParticipantOrHasAllAccessOrIsEmployee
 from .serializers import *
 
 
@@ -85,6 +85,20 @@ class UpdateMeeting(UpdateAPIView):
         return Response(serializer.data)
 
 
+class ActivateMeeting(GenericAPIView):
+    queryset = Meeting.objects.all()
+    serializer_class = MeetingSerializer
+    permission_classes = (IsAuthenticated, PermissionsViewAllEmployees)
+
+    def put(self, request, pk, format=None):
+        meeting = self.get_object()
+        meeting.active = True
+        meeting.completed = True
+        meeting.save(update_fields=['active'])
+        serializer = MeetingSerializer(meeting, context={'request':request})
+        return Response(serializer.data)
+
+
 class RetrieveMyEmployeeZones(ListAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = EmployeeZoneSerializer
@@ -118,7 +132,7 @@ class RetrieveUnfinishedEmployeeZone(RetrieveAPIView):
 
 class UpdateEmployeeZone(RetrieveUpdateAPIView):
     queryset = EmployeeZone.objects.all()
-    permission_classes = (IsAuthenticated, UserIsAssessor,)
+    permission_classes = (IsAuthenticated, UserIsAssessorOrHasAllAccess,)
     serializer_class = UpdateEmployeeZoneSerializer
 
     def get_employee_zone(self):
@@ -312,10 +326,23 @@ class RetrieveMyCurrentConversation(RetrieveAPIView):
     def get(self, request, format=None):
         employee = self.request.user.employee
         conversation = Conversation.objects.get_current_for_employee(employee=employee)
-        if conversation is None:
+        if not conversation:
             raise Http404()
         serializer = SanitizedConversationSerializer(conversation, context={'request': request})
         return Response(serializer.data)
+
+
+class RetrieveMyConversations(ListAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ConversationForEmployeeSerializer
+
+    def get_queryset(self):
+        try:
+            employee = self.request.user.employee
+            conversations = Conversation.objects.get_all_completed_for_employee(employee)
+            return conversations
+        except Conversation.DoesNotExist:
+            raise Http404()
 
 
 class RetrieveMyCurrentMeetings(ListAPIView):

@@ -9,7 +9,8 @@ function ConversationService($http, $log, ConversationResource) {
         updateBulk: updateBulk,
         deleteBulk: deleteBulk,
         get: get,
-        getMyConversation: getMyConversation,
+        getMyConversations: getMyConversations,
+        getMyCurrentConversation: getMyCurrentConversation,
         getMyTeamLeadConversations: getMyTeamLeadConversations,
     };
 
@@ -74,15 +75,27 @@ function ConversationService($http, $log, ConversationResource) {
         }
     }
 
-    function getMyConversation() {
-        return ConversationResource.getMyConversation(null, success, fail).$promise;
+    function getMyConversations() {
+        return ConversationResource.getMyConversations(null, success, fail).$promise;
 
         function success(response) {
             return response;
         }
 
         function fail(response) {
-            $log.error('getMyConversation failed');
+            $log.error('getMyConversations failed');
+        }
+    }
+
+    function getMyCurrentConversation() {
+        return ConversationResource.getMyCurrentConversation(null, success, fail).$promise;
+
+        function success(response) {
+            return response;
+        }
+
+        function fail(response) {
+            $log.error('getMyCurrentConversation failed');
         }
     }
 

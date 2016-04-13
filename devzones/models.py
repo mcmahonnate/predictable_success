@@ -212,6 +212,7 @@ class Meeting(models.Model):
 class ConversationManager(models.Manager):
     def get_current_for_employee(self, employee):
         conversations = self.get_all_for_employee(employee=employee)
+        conversations = conversations.filter(employee_assessment__completed=False)
         if conversations.count() > 0:
             return conversations.latest('date')
         return None
@@ -222,9 +223,14 @@ class ConversationManager(models.Manager):
     def get_all_for_employee(self, employee):
         return self.filter(employee=employee)
 
+    def get_all_completed_for_employee(self, employee):
+        conversations = self.get_all_for_employee(employee=employee)
+        conversations = conversations.filter(employee_assessment__completed=True)
+        return conversations
+
     def get_conversations_for_lead(self, development_lead):
         conversations = self.filter(development_lead__id=development_lead.id)
-        return conversations.filter(completed=False)
+        return conversations.filter(completed=True)
 
 
 class Conversation(models.Model):

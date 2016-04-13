@@ -68,7 +68,6 @@
                     vm.selfie = selfie;
                     Notification.success('Your selfie has been shared.')
                     $modalInstance.close(selfie);
-                    console.log(selfie);
                     if (selfie.development_conversation) {
                         $location.path('/id/' + selfie.development_conversation);
                     }
