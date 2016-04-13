@@ -36,10 +36,6 @@
                     vm.conversation = conversation;
                     vm.advice = conversation.advice;
                     vm.selfie = conversation.employee_assessment;
-                    if (!vm.selfie.zone) {
-                        gotoID();
-                        Notification.error(vm.selfie.employee.first_name +  " has not finished their selfie.")
-                    }
                     vm.employee = conversation.employee;
                     vm.development_lead = conversation.development_lead;
                     if (vm.employee.id == $rootScope.currentUser.employee.id) {
