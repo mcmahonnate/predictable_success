@@ -194,7 +194,7 @@ class MeetingManager(models.Manager):
 
     def get_all_for_employee(self, employee):
         meetings = self.get_all_current()
-        return meetings.filter(participants__id=employee.id, active=True)
+        return meetings.filter(participants__id=employee.id, completed=False)
 
 
 class Meeting(models.Model):
@@ -240,7 +240,7 @@ class Conversation(models.Model):
 
     def advice(self):
         employee_zone = self.employee_assessment.zone if (self.employee_assessment and self.employee_assessment.zone and self.employee_assessment.completed) else None
-        development_lead_zone = self.development_lead_assessment.zone if (self.development_lead_assessment and self.development_lead_assessment.zone and self.development_lead_assessment.is_draft) else None
+        development_lead_zone = self.development_lead_assessment.zone if (self.development_lead_assessment and self.development_lead_assessment.zone) else None
         return Advice.objects.get_advice(employee_zone=employee_zone, development_lead_zone=development_lead_zone)
 
     def __str__(self):
