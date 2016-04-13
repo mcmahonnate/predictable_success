@@ -67,7 +67,7 @@
         <h2 class="panel-title" ng-show="!conversation.is_employee">{{ conversation.selfie.employee.first_name }}'s Selfie Note</h2>
         <span class="checkin-summary-instance">{{ conversation.selfie.notes }}</span>
     </div>
-    <div class="panel devzones">
+    <div class="panel devzones" ng-show="conversation.selfie.answers.length>0">
         <h2 class="panel-title">
             <a ng-click="conversation.collapseSelfie=!conversation.collapseSelfie" style="cursor: pointer">
                 <span ng-show="conversation.is_employee">Your Selfie Answers</span>
