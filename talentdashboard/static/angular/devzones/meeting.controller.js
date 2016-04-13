@@ -70,7 +70,11 @@ function MeetingController(MeetingService, Notification, analytics, $location, $
                 },
                 conversation: function () {
                     return conversation
-                },}
+                },
+                panel: function () {
+                    return 0
+                }
+            }
         });
         modalInstance.result.then(
             function (response) {
