@@ -130,6 +130,7 @@ class EmployeeZone(models.Model):
     zones = models.ManyToManyField(Zone, related_name='+', null=True, blank=True)
     notes = models.TextField(blank=True, default='')
     is_draft = models.BooleanField(default=False)
+    active = models.BooleanField(default=False)
     completed = models.BooleanField(default=False)
     field_tracker = FieldTracker(fields=['completed'])
 

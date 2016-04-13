@@ -57,7 +57,7 @@
             )
         }
 
-        function giveLeaderPerception(conversation) {
+        function giveLeaderPerception(conversation, compact, panel) {
             var modalInstance = $modal.open({
                 animation: true,
                 backdrop: 'static',
@@ -65,11 +65,15 @@
                 controller: 'LeaderAssessmentController as leaderAssessment',
                 resolve: {
                     compactView: function () {
-                        return false
+                        return compact
                     },
                     conversation: function () {
                         return conversation
-                    },}
+                    },
+                    panel: function () {
+                        return panel
+                    }
+                }
             });
             modalInstance.result.then(
                 function (conversation) {

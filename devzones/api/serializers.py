@@ -127,8 +127,18 @@ class EmployeeZoneSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmployeeZone
         fields = ('id', 'employee', 'assessor', 'next_question', 'zone', 'zones', 'notes', 'answers', 'date', 'completed', 'times_retaken', 'development_conversation', 'new_employee', 'development_lead', 'is_draft')
-        
-        
+
+
+class EmployeeZoneDevelopmentLeadSerializer(EmployeeZoneSerializer):
+    notes = serializers.SerializerMethodField()
+
+    def get_notes(self, obj):
+        if obj.is_draft or obj.completed:
+            return obj.notes
+        else:
+            return None
+
+
 class UpdateEmployeeZoneSerializer(serializers.ModelSerializer):
     assessor = serializers.PrimaryKeyRelatedField(required=False, queryset=Employee.objects.all(), allow_null=False)
     last_question_answered = serializers.PrimaryKeyRelatedField(required=False, queryset=Question.objects.all(), allow_null=True)
@@ -163,14 +173,7 @@ class ConversationSerializer(serializers.ModelSerializer):
 
 
 class ConversationDevelopmentLeadSerializer(ConversationSerializer):
-    development_lead_assessment = serializers.SerializerMethodField()
-
-    def get_development_lead_assessment(self, obj):
-        if obj.development_lead_assessment is not None and \
-                (obj.development_lead_assessment.is_draft or obj.development_lead_assessment.completed):
-            serializer = EmployeeZoneSerializer(context=self.context, many=False)
-            return serializer.to_representation(obj.development_lead_assessment)
-        return None
+    development_lead_assessment = EmployeeZoneDevelopmentLeadSerializer()
 
 
 class ConversationForEmployeeSerializer(ConversationSerializer):

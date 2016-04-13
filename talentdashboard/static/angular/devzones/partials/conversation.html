@@ -2,7 +2,7 @@
     <div>
         <h1><a href="#/id">ID</a></h1>
     </div>
-    <div ng-repeat="advice in conversation.conversation.advice" ng-class="{'slide-up-active': hideMessage}" ng-if="advice.alert_for_development_lead" class="alert {{advice.alert_type_for_development_lead}} slide-up" role="alert">
+    <div ng-repeat="advice in conversation.conversation.advice" ng-class="{'slide-up-active': hideMessage}" ng-if="advice.alert_for_development_lead && conversation.conversation.development_lead_assessment" class="alert {{advice.alert_type_for_development_lead}} slide-up" role="alert">
         <span ng-bind-html="conversation.replaceTemplateTags(advice.alert_for_development_lead)"></span>
     </div>
 	<div class="checkin-header">
@@ -20,9 +20,10 @@
         <h2 class="alert-title">Thanks for taking your Selfie!</h2>
         <p class="alert-message">In the next couple of weeks {{ conversation.development_lead.full_name }} will meet with you about your selfie.
     </div>
-    <div ng-show="conversation.conversation.development_lead_assessment" class="checkin-summary panel activity">
+    <div ng-show="conversation.conversation.development_lead_assessment.notes || conversation.is_org_dev" class="checkin-summary panel activity">
         <h2 class="panel-title">Development Conversation Notes
-            <a ng-click="conversation.giveLeaderPerception(conversation.conversation)" ng-if="conversation.is_development_lead && !conversation.conversation.development_lead_assessment.completed" class="pull-right" style="cursor: pointer;text-decoration: underline;color: #2f742f;font-size: 14px;">Edit</a>
+            <a ng-click="conversation.giveLeaderPerception(conversation.conversation, false, 1)" ng-if="(conversation.is_development_lead && conversation.conversation.development_lead_assessment.is_draft)" class="pull-right" style="cursor: pointer;text-decoration: underline;color: #2f742f;font-size: 14px;">Edit</a>
+            <a ng-click="conversation.giveLeaderPerception(conversation.conversation, true, 0)" ng-if="(conversation.is_org_dev && !conversation.conversation.development_lead_assessment.is_draft && !conversation.conversation.development_lead_assessment.completed)" class="pull-right" style="cursor: pointer;text-decoration: underline;color: #2f742f;font-size: 14px;">Edit</a>
         </h2>
         <div class="activity-item activity-items" ng-show="conversation.development_lead">
             <div class="activity-checkin row" style="margin: 20px 0px;">
@@ -30,21 +31,23 @@
             </div>
         </div>
     </div>
-    <div ng-show="!conversation.conversation.development_lead_assessment" class="checkin-summary panel activity">
+    <div ng-show="!conversation.conversation.development_lead_assessment.notes && !conversation.is_org_dev" class="checkin-summary panel activity">
         <div class="worksheet-message">
             <h2 class="panel-title">Development Conversation Notes</h2>
         </div>
         <div class="activity-item activity-items">
-            <div class="activity-checkin row" style="margin: 20px 0px; opacity: 0.5" ng-show="!conversation.conversation.development_lead_assessment">
+            <div class="activity-checkin row" style="margin: 20px 0px; opacity: 0.5">
                 <i class="fa fa-info-circle pull-left" style="font-size: 40px;"></i>
-                <p class="panel-subtext">We are waiting for {{ conversation.development_lead.first_name }} to enter their notes from your conversation.</p>
+                <p class="panel-subtext" ng-show="!conversation.is_development_lead && !conversation.conversation.development_lead_assessment">We are waiting for {{ conversation.development_lead.first_name }} to enter their notes from your conversation.</p>
+                <p class="panel-subtext" ng-show="conversation.is_development_lead && (!conversation.conversation.development_lead_assessment || (!conversation.conversation.development_lead_assessment.is_draft && !conversation.conversation.development_lead_assessment.completed))">We are waiting for your notes.</p>
             </div>
         </div>
     </div>
     <div class="panel devzones">
         <h2 class="panel-title">
             Development Zone
-            <a ng-if="conversation.is_development_lead && conversation.conversation.development_lead_assessment && !conversation.conversation.development_lead_assessment.completed" ng-click="conversation.giveLeaderPerception(conversation.conversation)" class="pull-right" style="cursor: pointer;text-decoration: underline;color: #2f742f;font-size: 14px;">Edit</a>
+            <a ng-click="conversation.giveLeaderPerception(conversation.conversation, false, 0)" ng-if="(conversation.is_development_lead && conversation.conversation.development_lead_assessment.is_draft)" class="pull-right" style="cursor: pointer;text-decoration: underline;color: #2f742f;font-size: 14px;">Edit</a>
+            <a ng-click="conversation.giveLeaderPerception(conversation.conversation, true, 0)" ng-if="(conversation.is_org_dev && !conversation.conversation.development_lead_assessment.is_draft && !conversation.conversation.development_lead_assessment.completed)" class="pull-right" style="cursor: pointer;text-decoration: underline;color: #2f742f;font-size: 14px;">Edit</a>
         </h2>
 
         <div class="devzone activity" style="max-width: inherit; padding-top: 10px; margin: 0px auto 20px auto;">
@@ -90,5 +93,6 @@
         </div>
     </div>
     <button class="btn btn-default" type="button" ng-click="conversation.goBack()">&larr; Back</button>
-    <button ng-show="conversation.is_development_lead && !conversation.conversation.development_lead_assessment.completed" class="btn btn-success pull-right" type="button" ng-click="conversation.sendToEmployee()">Send to {{ conversation.selfie.employee.first_name }}</button>
+    <button class="btn btn-success pull-right" type="button" ng-click="conversation.giveLeaderPerception(conversation.conversation, true, 1)" ng-if="(conversation.is_org_dev && !conversation.conversation.development_lead_assessment.is_draft && !conversation.conversation.development_lead_assessment.completed)">Send to {{ conversation.development_lead.first_name }}</button>
+    <button ng-show="conversation.is_development_lead && conversation.conversation.development_lead_assessment && !conversation.conversation.development_lead_assessment.completed" class="btn btn-success pull-right" type="button" ng-click="conversation.sendToEmployee()">Send to {{ conversation.selfie.employee.first_name }}</button>
 </div>

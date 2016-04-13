@@ -2,11 +2,11 @@ angular
     .module('devzones')
     .controller('LeaderAssessmentController', LeaderAssessmentController);
 
-function LeaderAssessmentController(compactView, conversation, ConversationService, DevZoneService, Notification, $modalInstance, $rootScope) {
+function LeaderAssessmentController(compactView, conversation, panel, ConversationService, DevZoneService, Notification, $modalInstance, $rootScope) {
     var vm = this;
     vm.compactView = compactView;
     vm.conversation = conversation;
-    vm.panel_index = 0;
+    vm.panel_index = panel ? panel : 0;
     vm.busy = false;
     vm.employeeZone = null;
     vm.selectedAnswer = null;

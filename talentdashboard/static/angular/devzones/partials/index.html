@@ -109,7 +109,7 @@
                             <span ng-show="conversation.development_lead_assessment">{{ conversation.development_lead_assessment.zone.name }}</span>
                         </td>
                         <td class="centered">
-                            <a ng-disabled="!conversation.employee_assessment.completed" class="btn btn-default btn-md give-feedback-btn" ng-href="#/id/{{ conversation.id }}" type="button">
+                            <a ng-disabled="(!conversation.employee_assessment.completed && !conversation.development_lead_assessment)" class="btn btn-default btn-md give-feedback-btn" ng-href="#/id/{{ conversation.id }}" type="button">
                                 <i class="fa fa-eye"></i> View
                             </a>
                         </td>
