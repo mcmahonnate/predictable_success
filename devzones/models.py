@@ -230,7 +230,7 @@ class ConversationManager(models.Manager):
 
     def get_conversations_for_lead(self, development_lead):
         conversations = self.filter(development_lead__id=development_lead.id)
-        return conversations.filter(completed=True)
+        return conversations
 
 
 class Conversation(models.Model):

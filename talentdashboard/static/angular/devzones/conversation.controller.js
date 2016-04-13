@@ -80,11 +80,13 @@
         }
 
         function sendToEmployee() {
-            DevZoneService.shareEmployeeZone({id: vm.conversation.development_lead_assessment.id})
-                .then(function (employeeZone) {
-                    Notification.success('Saved and sent to ' + vm.conversation.employee.full_name)
-                    gotoID();
-                })
+            if ($window.confirm("Be sure you've had your development conversation with " + vm.conversation.employee.first_name + " before sending them your notes.  You can't edit your notes or development zone once you've sent them. Are you sure you want to proceed?")) {
+                DevZoneService.shareEmployeeZone({id: vm.conversation.development_lead_assessment.id})
+                    .then(function (employeeZone) {
+                        Notification.success('Saved and sent to ' + vm.conversation.employee.full_name)
+                        gotoID();
+                    })
+            }
         }
 
         function gotoID() {

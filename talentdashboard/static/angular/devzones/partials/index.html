@@ -94,6 +94,7 @@
                             <a href="" ng-click="devzones.order('development_lead_assessment.zone.name');"><strong>My Perception</strong></a>
                             <span class="sortorder fa" ng-show="devzones.predicate === 'development_lead_assessment.zone.name'" ng-class="devzones.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
                         </th>
+                        <th scope="col" class="width-10-percent">Sent To Employee</th>
                         <th scope="col" class="width-10-percent centered">Action</th>
                     </tr>
                 </thead>
@@ -108,6 +109,9 @@
                         </td>
                         <td style="text-align:center;">
                             <span ng-show="conversation.development_lead_assessment">{{ conversation.development_lead_assessment.zone.name }}</span>
+                        </td>
+                         <td>
+                             <i ng-show="conversation.development_lead_assessment.completed" class="fa fa-check" title="Shared"></i>
                         </td>
                         <td class="centered">
                             <a ng-disabled="(!conversation.employee_assessment.completed && !conversation.development_lead_assessment)" class="btn btn-default btn-md give-feedback-btn" ng-href="#/id/{{ conversation.id }}" type="button">

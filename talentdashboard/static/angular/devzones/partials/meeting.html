@@ -23,6 +23,8 @@
                     </th>
                     <th ng-show="meeting.is_org_dev" scope="col" class="width-15-percent">Employee Perception</th>
                     <th scope="col" class="width-15-percent">Leadership's Perception</th>
+                    <th ng-show="meeting.is_org_dev" scope="col" class="width-10-percent">Sent To Development Lead</th>
+                    <th scope="col" class="width-10-percent">Sent To Employee</th>
                     <th scope="col" class="width-10-percent centered">Action</th>
                 </tr>
             </thead>
@@ -47,6 +49,12 @@
                             </a>
                         </span>
                         <span ng-show="conversation.development_lead_assessment.is_draft || conversation.development_lead_assessment.completed || !meeting.is_org_dev">{{ conversation.development_lead_assessment.zone.name }}</span>
+                    </td>
+                    <td ng-show="meeting.is_org_dev">
+                        <i ng-show="conversation.development_lead_assessment.is_draft || conversation.development_lead_assessment.completed" class="fa fa-check" title="Shared"></i>
+                    </td>
+                    <td>
+                        <i ng-show="conversation.development_lead_assessment.completed" class="fa fa-check" title="Shared"></i>
                     </td>
                     <td class="centered">
                         <a ng-disabled="(!conversation.employee_assessment.completed && !conversation.development_lead_assessment)" class="btn btn-default btn-md give-feedback-btn" ng-href="#/id/{{ conversation.id }}" type="button">
