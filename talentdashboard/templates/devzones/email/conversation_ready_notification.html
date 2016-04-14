@@ -18,6 +18,7 @@
             <tbody>
             {% for conversation in conversations %}
                 <tr>
+                <font face="Helvetica Neue,helvetica,arial,sans-serif" size="2">
                     <td valign="top" style="height:80px;width:60px">
                         <img class="medium-headshot" height="50" style="vertical-align:text-top;" src="{{conversation.employee.avatar_small.url}}"/>
                     </td>
@@ -27,7 +28,7 @@
                             <p>
                                 {% for advice in conversation.advice %}
                                     {% if advice.alert_type_for_development_lead %}
-                                    <div class="alert {{advice.alert_type_for_development_lead}}" style="padding: 8px;width: 100px; text-align: center; display: inline-block; margin-right: 10px;">
+                                    <div class="alert {{advice.alert_type_for_development_lead}} slide-up" style="padding: 8px;width: 100px; text-align: center; display: inline-block; margin-right: 10px;">
                                         {{ advice.alert_for_development_lead_short }}
                                     </div>
                                     {% endif %}
@@ -41,8 +42,9 @@
                         </p>
                     </td>
                     <td valign="top" >
-                        <a class="btn btn-default btn-md" href="{{ response_url }}{{ conversation.id }}" type="button">View</a>
+                        <a class="btn btn-default btn-md" href="{{ response_url }}{{ conversation.id }}" type="button">View Notes</a>
                     </td>
+                </font>
                 </tr>
             {% endfor %}
             </tbody>
