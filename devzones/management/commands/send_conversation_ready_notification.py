@@ -14,27 +14,14 @@ from org.models import Employee
 
 class Command(BaseCommand):
 
-    option_list = BaseCommand.option_list + (
-        make_option('--user_id',
-            action='store',
-            dest='user_id',
-            default='',
-            help='The uid of the account to activate. Use ALL to activate all current employee accounts that are not currently active.'),
-    )
-
     def handle(self, *args, **options):
         tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
         if tenant.is_public_tenant():
             return
-        if options['user_id']:
-            user_id = options['user_id']
-            user = User.objects.get(id=user_id)
         employee_ids = EmployeeZone.objects.get_all_drafts()
         employee_ids = employee_ids.filter(is_draft=True).exclude(employee__id=F('assessor__id')).values('assessor__id').annotate(count=Count('assessor__id'))
         print employee_ids
         for employee_id in employee_ids:
-            if user is not None and user.employee.id != employee.id:
-                continue
             employee = Employee.objects.get(id=employee_id['assessor__id'])
             print employee.full_name
             conversations = Conversation.objects.filter(development_lead__id=employee.id, development_lead_assessment__is_draft=True)
