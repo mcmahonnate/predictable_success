@@ -18,7 +18,6 @@
             <tbody>
             {% for conversation in conversations %}
                 <tr>
-                <font face="Helvetica Neue,helvetica,arial,sans-serif" size="2">
                     <td valign="top" style="height:80px;width:60px">
                         <img class="medium-headshot" height="50" style="vertical-align:text-top;" src="{{conversation.employee.avatar_small.url}}"/>
                     </td>
@@ -42,9 +41,8 @@
                         </p>
                     </td>
                     <td valign="top" >
-                        <a class="btn btn-default btn-md" href="{{ response_url }}{{ conversation.id }}" type="button">View Notes</a>
+                        <a class="btn btn-default btn-md" href="{{ response_url }}{{ conversation.id }}" type="button">View</a>
                     </td>
-                </font>
                 </tr>
             {% endfor %}
             </tbody>
