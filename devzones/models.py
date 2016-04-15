@@ -213,7 +213,7 @@ class Meeting(models.Model):
 class ConversationManager(models.Manager):
     def get_current_for_employee(self, employee):
         conversations = self.get_all_for_employee(employee=employee)
-        conversations = conversations.filter(employee_assessment__completed=False)
+        conversations = conversations.filter(employee_assessment__completed=False, employee_assessment__active=True)
         if conversations.count() > 0:
             return conversations.latest('date')
         return None
@@ -230,7 +230,7 @@ class ConversationManager(models.Manager):
         return conversations
 
     def get_conversations_for_lead(self, development_lead):
-        conversations = self.filter(development_lead__id=development_lead.id)
+        conversations = self.filter(development_lead__id=development_lead.id, employee_assessment__active=True)
         return conversations
 
 
