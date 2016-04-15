@@ -108,13 +108,13 @@ class EmployeeZoneManager(models.Manager):
 
     def get_unfinished(self, employee):
         try:
-            return self.get(employee=employee, assessor=employee, completed=False)
+            return self.get(employee=employee, assessor=employee, active=True, completed=False)
         except EmployeeZone.DoesNotExist:
             return None
 
     def get_all_unfinished(self):
         reminder_date = date.today()-timedelta(weeks=2)
-        return self.filter(completed=False, date__gt=reminder_date, employee=F('assessor'))
+        return self.filter(active=True, completed=False, date__gt=reminder_date, employee=F('assessor'))
 
 
 class EmployeeZone(models.Model):
