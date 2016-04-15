@@ -4,8 +4,9 @@ angular
 
 function MeetingResource($resource) {
     var actions = {
-        'get': {
-            method: 'GET',
+        'activate': {
+            url: '/api/v1/devzones/meetings/:id/activate/',
+            method: 'PUT',
         },
         'create': {
             url: '/api/v1/devzones/meetings/create/',
@@ -14,6 +15,9 @@ function MeetingResource($resource) {
         'update': {
             url: '/api/v1/devzones/meetings/:id/update/',
             method: 'PUT',
+        },
+        'get': {
+            method: 'GET',
         },
         'getMyMeetings': {
             method: 'GET',

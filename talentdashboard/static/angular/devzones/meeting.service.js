@@ -4,10 +4,23 @@ angular
 
 function MeetingService($http, $log, MeetingResource) {
     return {
+        activate: activate,
         create: create,
         update: update,
         get: get,
         getMyMeetings: getMyMeetings
+    }
+
+    function activate(meeting) {
+        return MeetingResource.activate({id: meeting.id}, null, success, fail).$promise;
+
+        function success(response) {
+            return response;
+        }
+
+        function fail(response) {
+            $log.error('activate Meeting failed');
+        }
     }
 
     function create(meeting) {

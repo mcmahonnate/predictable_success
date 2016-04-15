@@ -65,7 +65,40 @@
         <div class="modal-footer">
             <button type="button" ng-click="addEditMeeting.panel_index=$index-1" data-dismiss="modal" class="btn btn-light">&larr; Back</button>
             <button ng-disabled="" ng-show="!$last" type="button" class="btn btn-success" ng-click="addEditMeeting.panel_index=$index+1">Next &rarr;</button>
-            <button ng-disabled="addEditMeeting.busy" ng-show="$last" type="button" class="btn btn-success" ng-click="addEditMeeting.save()">Save</button>
+            <button ng-disabled="" ng-show="$last" type="button" class="btn btn-success" ng-click="addEditMeeting.panel_index=addEditMeeting.participants.length">Next &rarr;</button>
+        </div>
+    </div>
+    <div class="form-group" ng-show="addEditMeeting.panel_index==addEditMeeting.participants.length">
+        <div class="modal-body">
+            <panel class="devzone">
+                <h3 class="modal-title">Send Selfies?</h3>
+                    <div ng-hide="addEditMeeting.meeting && addEditMeeting.meeting.active">
+                        <p>Would you like to send Selfies for this meeting now?</p>
+                        <div class="selfie-answer well well-sm" style="display:flex" ng-class="{'selfie-answer-selected': addEditMeeting.active, 'selfie-answer':!addEditMeeting.active}" ng-click="addEditMeeting.active=true">
+                            <div class="selfie-answer-label" style="width: 91%;">
+                                <h4><strong>Yes</strong></h4>
+                            </div>
+                            <div style="margin: auto 0px;">
+                                <i class="fa fa-check-circle-o selected-icon" ng-show="addEditMeeting.active"></i>
+                            </div>
+                        </div>
+                        <div class="selfie-answer well well-sm" style="display:flex" ng-class="{'selfie-answer-selected': !addEditMeeting.active, 'selfie-answer':addEditMeeting.active}" ng-click="addEditMeeting.active=false">
+                            <div class="selfie-answer-label" style="width: 91%;">
+                                <h4><strong>No</strong></h4>
+                            </div>
+                            <div style="margin: auto 0px;">
+                                <i class="fa fa-check-circle-o selected-icon" ng-show="!addEditMeeting.active"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-show="addEditMeeting.meeting && addEditMeeting.meeting.active">
+                        <p>Selfies for this meeting have already been sent. Any newly created selfies will be sent immediately after you click the 'Save' button below.</p>
+                    </div>
+            </panel>
+        </div>
+        <div class="modal-footer">
+            <button type="button" ng-click="addEditMeeting.panel_index=addEditMeeting.participants.length-1" data-dismiss="modal" class="btn btn-light">&larr; Back</button>
+            <button ng-disabled="addEditMeeting.busy" type="button" class="btn btn-success" ng-click="addEditMeeting.save()">Save</button>
         </div>
     </div>
 </form>

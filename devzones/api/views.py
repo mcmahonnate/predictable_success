@@ -93,7 +93,6 @@ class ActivateMeeting(GenericAPIView):
     def put(self, request, pk, format=None):
         meeting = self.get_object()
         meeting.active = True
-        meeting.completed = True
         meeting.save(update_fields=['active'])
         serializer = MeetingSerializer(meeting, context={'request':request})
         return Response(serializer.data)

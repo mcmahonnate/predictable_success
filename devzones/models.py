@@ -130,8 +130,9 @@ class EmployeeZone(models.Model):
     zones = models.ManyToManyField(Zone, related_name='+', null=True, blank=True)
     notes = models.TextField(blank=True, default='')
     is_draft = models.BooleanField(default=False)
+    active = models.BooleanField(default=False)
     completed = models.BooleanField(default=False)
-    field_tracker = FieldTracker(fields=['completed'])
+    field_tracker = FieldTracker(fields=['active', 'completed'])
 
     def _calculate_zone(self):
         if not self.completed and self.all_questions_answered() and self.answers.count() > 0:
@@ -260,7 +261,7 @@ class AdviceManager(models.Manager):
 
 class Advice(models.Model):
     objects = AdviceManager()
-    employee_zone = models.ForeignKey(Zone, related_name='+')
+    employee_zone = models.ForeignKey(Zone, related_name='+', blank=True, null=True)
     development_lead_zone = models.ForeignKey(Zone, related_name='+', blank=True, null=True)
     severity = models.IntegerField(default=0)
     alert_for_employee = models.TextField(blank=True, default='')

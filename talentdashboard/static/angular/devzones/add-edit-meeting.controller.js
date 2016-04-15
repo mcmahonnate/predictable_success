@@ -7,10 +7,12 @@ function AddEditMeetingController(ConversationService, EmployeeSearch, meeting, 
     vm.meeting = meeting;
     vm.panel_index = -1;
     vm.busy = false;
+    vm.active = false;
     vm.name = '';
     vm.employees = [];
     vm.participants = [];
-    vm.conversations = [];
+    vm.newConversations = [];
+    vm.updatedConversations = [];
     vm.cancel = cancel;
     vm.save = save;
     activate();
@@ -57,11 +59,39 @@ function AddEditMeetingController(ConversationService, EmployeeSearch, meeting, 
         return array_index!=null ? vm.meeting.conversations[array_index] : null;
     }
 
+    function getConversations(meeting) {
+        angular.forEach(vm.participants, function (participant, key) {
+            angular.forEach(participant.employeesRepresented, function (employee, key) {
+                var participant_id = participant.pk ? participant.pk : participant.id;
+                var employee_id = employee.pk ? employee.pk : employee.id;
+                var conversation = getConversationByEmployee(employee_id);
+                if (conversation) { conversation.keep = true};
+                if (!conversation) {
+                    var newConversation = {
+                        meeting: meeting.id,
+                        development_lead: participant_id,
+                        employee: employee_id
+                    }
+                    vm.newConversations.push(newConversation);
+                } else if (conversation.development_lead.id != participant_id) {
+                    vm.updatedConversations.push({
+                        id: conversation.id,
+                        meeting: meeting.id,
+                        development_lead: participant_id,
+                        employee: employee_id
+                    });
+                }
+            });
+        });
+        var deletedConversations = getConversatonsToDelete();
+        vm.updatedConversations = vm.updatedConversations.concat(deletedConversations);
+    }
+
     function getConversatonsToDelete() {
         var conversations= [];
         angular.forEach(vm.meeting.conversations, function(conversation, key) {
             if (!conversation.keep) {
-                conversations.push({id: conversation.id, meeting: null});
+                vm.deletedConversations.push({id: conversation.id, meeting: null});
             }
         });
         return conversations;
@@ -76,65 +106,44 @@ function AddEditMeetingController(ConversationService, EmployeeSearch, meeting, 
         if (!vm.meeting) {
             MeetingService.create({name: vm.name, participants: participant_ids})
                 .then(function (meeting) {
-                    var conversations = [];
-                    angular.forEach(vm.participants, function (participant, key) {
-                        angular.forEach(participant.employeesRepresented, function (employee, key) {
-                            var conversation = {
-                                meeting: meeting.id,
-                                development_lead: participant.pk ? participant.pk : participant.id,
-                                employee: employee.pk ? employee.pk : employee.id
-                            }
-                            conversations.push(conversation);
-                        });
-                    });
-                    ConversationService.create(conversations)
+                    getConversations(meeting);
+                    ConversationService.create(vm.newConversations)
                         .then(function (conversations) {
-                            $modalInstance.close(meeting);
-                            Notification.success('Your meeting has been saved.')
+                            if (vm.active || vm.meeting.active) {
+                                MeetingService.activate(meeting)
+                                    .then(function() {
+                                        $modalInstance.close(meeting);
+                                        Notification.success('Your meeting has been saved and selfies have been sent.')
+                                    })
+                            } else {
+                                $modalInstance.close(meeting);
+                                Notification.success('Your meeting has been saved.')
+                            }
                         })
                 })
         }
         else {
             MeetingService.update({id: vm.meeting.id, name: vm.name, participants: participant_ids})
                 .then(function (meeting) {
-                    var newConversations = [];
-                    var updatedConversations = [];
-                    angular.forEach(vm.participants, function (participant, key) {
-                        angular.forEach(participant.employeesRepresented, function (employee, key) {
-                            var participant_id = participant.pk ? participant.pk : participant.id;
-                            var employee_id = employee.pk ? employee.pk : employee.id;
-                            var conversation = getConversationByEmployee(employee_id);
-                            if (conversation) { conversation.keep = true};
-                            if (!conversation) {
-                                var newConversation = {
-                                    meeting: meeting.id,
-                                    development_lead: participant_id,
-                                    employee: employee_id
-                                }
-                                newConversations.push(newConversation);
-                            } else if (conversation.development_lead.id != participant_id) {
-                                updatedConversations.push({
-                                    id: conversation.id,
-                                    meeting: meeting.id,
-                                    development_lead: participant_id,
-                                    employee: employee_id
-                                });
-                            }
-                        });
-                    });
-                    var deletedConversations = getConversatonsToDelete();
-                    ConversationService.create(newConversations)
+                    getConversations(meeting);
+                    ConversationService.create(vm.newConversations)
                         .then(function (newConversations) {
-                            ConversationService.updateBulk(updatedConversations)
+                            ConversationService.updateBulk(vm.updatedConversations)
                                 .then(function (updatedConversations) {
-                                    ConversationService.updateBulk(deletedConversations)
-                                        .then(function (deletedConversations) {
-                                            MeetingService.get(meeting.id)
-                                                .then(function(response) {
+                                    MeetingService.get(meeting.id)
+                                        .then(function(response) {
+                                            if (vm.active || vm.meeting.active) {
+                                                MeetingService.activate(meeting)
+                                                .then(function() {
                                                     $modalInstance.close(response);
-                                                    Notification.success('Your meeting has been updated.')
-                                            })
-                                        })
+                                                    Notification.success('Your meeting has been saved and selfies have been sent.')
+                                                })
+                                            } else {
+                                                $modalInstance.close(response);
+                                                Notification.success('Your meeting has been saved.')
+                                            }
+                                    })
+
                                 })
                         })
 
