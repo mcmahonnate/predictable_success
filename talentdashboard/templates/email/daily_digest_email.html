@@ -15,7 +15,7 @@
                         {% if comment.associated_object.object_id != recipient.employee.id %}
                             <td valign="top" style="height:80px;width:60px">
                                 {% if comment.associated_object.content_type == employee_type %}
-                                    <a href="http://{{site}}/#/employees/{{comment.associated_object.associated_object.id}}"><img class="medium-headshot" height="50" style="vertical-align:text-top;" src="{{comment.associated_object.associated_object.avatar_small.url}}"/></a>
+                                    <a href="http://{{site}}/#/employees/{{comment.associated_object.associated_object.id}}"><img class="medium-headshot" height="50" style="vertical-align:text-top;vertical-align:text-top;border-radius: 90px;width: 50px;height: 50px;border: 2px solid #f1f1f1;transition: .3s;overflow: hidden;display: block;" src="{{comment.associated_object.associated_object.avatar_small.url}}"/></a>
                                 {% endif %}
                             </td>
                             <td valign="top">
