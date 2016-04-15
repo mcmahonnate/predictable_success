@@ -25,15 +25,8 @@
                         <p>
                             <p><b>{{conversation.employee.full_name}}</b></p>
                             <p>
-                                {% for advice in conversation.advice %}
-                                    {% if advice.alert_type_for_development_lead %}
-                                    <div class="alert {{advice.alert_type_for_development_lead}} slide-up" style="padding: 8px;width: 100px; text-align: center; display: inline-block; margin-right: 10px;">
-                                        {{ advice.alert_for_development_lead_short }}
-                                    </div>
-                                    {% endif %}
-                                {% endfor %}
                                 Leadership: {{ conversation.development_lead_assessment.zone.name }}
-                                {% if conversation.employee_assessment %}
+                                {% if conversation.employee_assessment.zone %}
                                     | Selfie: {{ conversation.employee_assessment.zone.name }}
                                 {% endif %}
                             </p>
@@ -41,7 +34,7 @@
                         </p>
                     </td>
                     <td valign="top" >
-                        <a class="btn btn-default btn-md" href="{{ response_url }}{{ conversation.id }}" type="button">View</a>
+                        <a class="btn btn-default btn-md" style="background-image: linear-gradient(#f1f1f1, #f3f3f3);border-color: #d9d9d9 !important;font-family: 'Open Sans', sans-serif;font-weight: 700;-webkit-font-smoothing: antialiased;margin: 0.2em 0.1em;border: none;border-bottom: 0.15em solid;border-radius: 3px;padding: 0.65em 1.3em;color: #333333;cursor: pointer;font-size: 13px;margin: 0;" href="{{ response_url }}{{ conversation.id }}" type="button">View</a>
                     </td>
                 </tr>
             {% endfor %}
