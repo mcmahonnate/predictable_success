@@ -18,12 +18,18 @@
         .centered {
             text-align: center;
         }
+        .medium-headshot {
+            border-radius: 90px;
+            width: 50px;
+            height: 50px;
+            border: 2px solid #f1f1f1;
+            transition: .3s;
+            overflow: hidden;
+            display: block;
+        }
         .table {
             width: 100%;
             max-width: 100%;
-        }
-        tbody > tr:nth-of-type(odd) {
-          background-color: #f9f9f9;
         }
         td {
             padding: 20px;
@@ -76,16 +82,20 @@
     </style>
     </head>
     <body>
-        <div class="message-body" style="font-family: 'Helvetica Neue',  Helvetica, Arial, sans-serif;font-size: 13.5px;color: #323940;line-height: 18px;background: #ebedf3; padding: 10px;">
-            <div class="header" style="border-top-left-radius: 4px;border-top-right-radius: 4px;background-color: #323940;background-size: cover;text-align: left;color: #fff;font-family: 'Open Sans', sans-serif;padding: 10px 10px;">
+        <table class="message-body" style="font-family: 'Helvetica Neue',  Helvetica, Arial, sans-serif;font-size: 13.5px;color: #323940;line-height: 18px;background: #ebedf3; padding: 10px;">
+            <tr>
+            <td class="header" style="border-top-left-radius: 4px;border-top-right-radius: 4px;background-color: #323940;background-size: cover;text-align: left;color: #fff;font-family: 'Open Sans', sans-serif;padding: 10px 10px;">
                 <img src="https://www.scoutmap.com/static/images/logo-light.07113e2a6be5.png" alt="ScoutMap" class="logo footer-logo" style="height: 45px;">
-            </div>
-            <div class="panel" style="text-align: left !important;padding: 25px;margin-bottom: 15px !important;background-color: #ffffff;border: 1px solid transparent;border-bottom-left-radius: 4px;border-bottom-right-radius: 4px;-webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);">
+            </td>
+            </tr>
+            <tr>
+            <td class="panel" style="text-align: left !important;padding: 25px;margin-bottom: 15px !important;background-color: #ffffff;border: 1px solid transparent;border-bottom-left-radius: 4px;border-bottom-right-radius: 4px;-webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);">
                 {% block content %}{% endblock content%}
                 <div class="footer" style="border-top: 1px solid #ebedf3;margin-top: 20px;">
                     <p style="font-size: 13px;color: #bbb;" align="center">&#169; Copyright 2016, TMF Works, LLC. All rights reserved.</p>
                 </div>
-            </div>
-        </div>
+            </td>
+            </tr>
+        </table>
     </body>
 </html>

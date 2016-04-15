@@ -14,27 +14,28 @@
         </p>
         <p>Here are your notes:</p>
         {% if conversations.count > 0 %}
-        <table width="100%" cellspacing="0" cellpadding="8" style="border-collapse:collapse;border-spacing:0;width:100%;text-align:justify;margin:0;padding:0;border-width:0;">
+        <table width="100%" cellspacing="0" cellpadding="8" style="font-family: 'Helvetica Neue',  Helvetica, Arial, sans-serif;font-size: 13.5px;color: #323940;line-height: 18px;border-collapse:collapse;border-spacing:0;width:100%;text-align:justify;margin:0;padding:0;border-width:0;">
             <tbody>
             {% for conversation in conversations %}
+                {% if forloop.counter|divisibleby:2 %}
                 <tr>
+                {% else %}
+                <tr style="background-color: #f9f9f9;">
+                {% endif %}
                     <td valign="top" style="height:80px;width:60px">
                         <img class="medium-headshot" height="50" style="vertical-align:text-top;border-radius: 90px;width: 50px;height: 50px;border: 2px solid #f1f1f1;transition: .3s;overflow: hidden;display: block;" src="{{conversation.employee.avatar_small.url}}"/>
                     </td>
                     <td valign="top">
                         <p>
-                            <p><b>{{conversation.employee.full_name}}</b></p>
+                            <p><b><a href="{{ response_url }}{{ conversation.id }}" style="color: #2f742f;text-decoration: none;">{{conversation.employee.full_name}}</a></b> <a href="{{ response_url }}{{ conversation.id }}" style="color: #2f742f;text-decoration: none;">(View Notes)</a></p>
                             <p>
                                 Leadership: {{ conversation.development_lead_assessment.zone.name }}
                                 {% if conversation.employee_assessment.zone %}
                                     | Selfie: {{ conversation.employee_assessment.zone.name }}
                                 {% endif %}
                             </p>
-                            <pre style="font-family: inherit;"><span style="font-size:14px;white-space: pre-wrap;">{{conversation.development_lead_assessment.notes}}</span></pre>
+                            <pre style="font-family: 'Helvetica Neue',  Helvetica, Arial, sans-serif;"><span style="font-size:14px;white-space: pre-wrap;">{{conversation.development_lead_assessment.notes}}</span></pre>
                         </p>
-                    </td>
-                    <td valign="top" >
-                        <a class="btn btn-default btn-md" style="background-image: linear-gradient(#f1f1f1, #f3f3f3);border-color: #d9d9d9 !important;font-family: 'Open Sans', sans-serif;font-weight: 700;-webkit-font-smoothing: antialiased;margin: 0.2em 0.1em;border: none;border-bottom: 0.15em solid;border-radius: 3px;padding: 0.65em 1.3em;color: #333333;cursor: pointer;font-size: 13px;margin: 0;" href="{{ response_url }}{{ conversation.id }}" type="button">View</a>
                     </td>
                 </tr>
             {% endfor %}

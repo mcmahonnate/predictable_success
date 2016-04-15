@@ -6,10 +6,14 @@
         <strong>Discussions</strong>
         <br/>
         <br/>
-        <table width="100%" cellspacing="0" cellpadding="8" style="border-collapse:collapse;border-spacing:0;width:100%;text-align:justify;margin:0;padding:0;border-width:0;">
+        <table width="100%" cellspacing="0" cellpadding="8" style="font-family: 'Helvetica Neue',  Helvetica, Arial, sans-serif;font-size: 13.5px;color: #323940;line-height: 18px;border-collapse:collapse;border-spacing:0;width:100%;text-align:justify;margin:0;padding:0;border-width:0;">
             <tbody>
             {% for comment in comments %}
+                {% if forloop.counter|divisibleby:2 %}
                 <tr>
+                {% else %}
+                <tr style="background-color: #f9f9f9;">
+                {% endif %}
                 <font face="Helvetica Neue,helvetica,arial,sans-serif" size="2">
                     {% if comment.content_type == comment_type %}
                         {% if comment.associated_object.object_id != recipient.employee.id %}
@@ -26,7 +30,7 @@
                                     <a href="http://{{site}}/#/teams/{{comment.associated_object.associated_object.id}}"><b>{{comment.associated_object.associated_object.name}}</b></a>
                                 {% endif %}
                                 <br/>
-                                <pre style="font-family: inherit;"><span style="font-size:14px;white-space: pre-wrap;">{{comment.content}}</span></pre>
+                                <pre style="font-family: 'Helvetica Neue',  Helvetica, Arial, sans-serif;"><span style="font-size:14px;white-space: pre-wrap;">{{comment.content}}</span></pre>
                                 <span style="font-size:14px;color:#AA9C84"><b>from {{comment.owner.employee.full_name}}</b></span>
                                 <br/>
                                 <a href="http://{{site}}/#/employees/{{comment.associated_object.associated_object.id}}">leave a comment</a>
