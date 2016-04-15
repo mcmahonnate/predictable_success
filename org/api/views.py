@@ -29,8 +29,10 @@ class EmployeeDetail(APIView):
             employee = Employee.objects.get(id=pk)
             if not employee.is_viewable_by_user(request.user):
                 raise PermissionDenied
-
-            serializer = EmployeeSerializer(employee,context={'request': request})
+            if request.user.employee == employee:
+                serializer = SanitizedEmployeeSerializer(employee,context={'request': request})
+            else:
+                serializer = EmployeeSerializer(employee,context={'request': request})
             return Response(serializer.data)
         except Employee.DoesNotExist:
             return Response(None)
