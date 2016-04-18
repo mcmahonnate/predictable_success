@@ -16,7 +16,7 @@ class CustomerSerializer(serializers.ModelSerializer):
         if not instance.show_shareable_checkins:
             remove_fields.extend(['checkin_welcome'])
         if not instance.show_devzones:
-            remove_fields.extend(['devzones_welcome','devzones_id_session_intro'])
+            remove_fields.extend(['devzones_welcome','devzones_id_session_intro', 'devzone_selfie_email_subject', 'devzone_selfie_email_body'])
         if not instance.show_feedback:
             remove_fields.extend(['feedback_welcome', 'feedback_tips', 'feedback_excels_at_question', 'feedback_could_improve_on_question'])
         if not instance.show_projects:
@@ -36,5 +36,5 @@ class CustomerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Customer
-        fields = ('id', 'name', 'domain_url', 'show_kolbe', 'show_vops', 'show_mbti', 'show_coaches', 'show_timeline', 'show_kpi', 'show_beta_features', 'show_individual_comp', 'show_shareable_checkins', 'show_feedback', 'show_projects', 'show_devzones', 'show_qualities', 'survey_email_subject', 'survey_email_body', 'feedback_welcome', 'feedback_tips', 'feedback_excels_at_question', 'feedback_could_improve_on_question', 'checkin_welcome', 'projects_welcome', 'devzones_welcome', 'devzones_id_session_intro')
+        fields = ('id', 'name', 'domain_url', 'show_kolbe', 'show_vops', 'show_mbti', 'show_coaches', 'show_timeline', 'show_kpi', 'show_beta_features', 'show_individual_comp', 'show_shareable_checkins', 'show_feedback', 'show_projects', 'show_devzones', 'show_qualities', 'survey_email_subject', 'survey_email_body', 'feedback_welcome', 'feedback_tips', 'feedback_excels_at_question', 'feedback_could_improve_on_question', 'checkin_welcome', 'projects_welcome', 'devzones_welcome', 'devzones_id_session_intro', 'devzone_selfie_email_subject', 'devzone_selfie_email_body')
 
