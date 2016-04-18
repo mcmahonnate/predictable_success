@@ -1,7 +1,7 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from devzones.models import Conversation, EmployeeZone, Meeting
-from devzones.tasks import send_conversation_shared_notification
+from devzones.tasks import send_conversation_shared_notification, send_selfie_notification
 
 
 @receiver(post_save, sender=Conversation)
@@ -25,7 +25,7 @@ def employee_zone_save_handler(sender, instance, created, update_fields, **kwarg
             conversation.completed = True
             conversation.save()
         if 'active' in update_fields and instance.active:
-            print instance.employee.full_name
+            send_selfie_notification.subtask((instance.id,)).apply_async()
 
 
 @receiver(post_save, sender=Meeting)

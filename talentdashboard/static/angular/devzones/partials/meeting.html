@@ -37,7 +37,11 @@
                             {{ advice.alert_for_development_lead_short }}
                         </div>
                     </td>
-                    <td ng-show="meeting.is_org_dev">{{ conversation.employee_assessment.zone.name }}</td>
+                    <td ng-show="meeting.is_org_dev">
+                        <span ng-show="conversation.employee_assessment.zone">{{ conversation.employee_assessment.zone.name }}</span>
+                        <span ng-show="!conversation.employee_assessment.zone && conversation.employee_assessment.active" style="color:#bbb;">Pending</span>
+                        <span ng-show="!conversation.employee_assessment.zone && !conversation.employee_assessment.active" style="color:#bbb;">Not Sent</span>
+                    </td>
                     <td>
                         <span ng-show="meeting.is_org_dev">
                             <a ng-show="!conversation.development_lead_assessment && meeting.is_org_dev" class="btn btn-default btn-md give-feedback-btn" ng-click="meeting.giveLeaderPerception(conversation)" type="button">

@@ -126,7 +126,7 @@ class EmployeeZoneSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmployeeZone
-        fields = ('id', 'employee', 'assessor', 'next_question', 'zone', 'zones', 'notes', 'answers', 'date', 'completed', 'times_retaken', 'development_conversation', 'new_employee', 'development_lead', 'is_draft')
+        fields = ('id', 'active', 'employee', 'assessor', 'next_question', 'zone', 'zones', 'notes', 'answers', 'date', 'completed', 'times_retaken', 'development_conversation', 'new_employee', 'development_lead', 'is_draft')
 
 
 class EmployeeZoneDevelopmentLeadSerializer(EmployeeZoneSerializer):
