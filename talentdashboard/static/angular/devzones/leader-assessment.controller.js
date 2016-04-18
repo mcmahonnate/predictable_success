@@ -2,7 +2,7 @@ angular
     .module('devzones')
     .controller('LeaderAssessmentController', LeaderAssessmentController);
 
-function LeaderAssessmentController(compactView, conversation, panel, ConversationService, DevZoneService, Notification, $modalInstance, $rootScope) {
+function LeaderAssessmentController(compactView, conversation, panel, ConversationService, DevZoneService, Notification, $modal, $modalInstance, $rootScope) {
     var vm = this;
     vm.compactView = compactView;
     vm.conversation = conversation;
@@ -13,6 +13,7 @@ function LeaderAssessmentController(compactView, conversation, panel, Conversati
     vm.notes = '';
     vm.is_draft = false;
     vm.saveAssessment = saveAssessment;
+    vm.changeDevelopmentLead = changeDevelopmentLead;
     vm.sendDraft = sendDraft;
     vm.zones = [];
     vm.cancel = cancel;
@@ -73,7 +74,7 @@ function LeaderAssessmentController(compactView, conversation, panel, Conversati
     }
 
     function updateConversation(close, send) {
-        ConversationService.update({id: vm.conversation.id, development_lead_assessment: vm.employeeZone.id})
+        ConversationService.update({id: vm.conversation.id, development_lead: vm.conversation.development_lead.id, development_lead_assessment: vm.employeeZone.id})
             .then(function (conversation) {
                 vm.conversation = conversation;
                 vm.busy = false;
@@ -95,6 +96,21 @@ function LeaderAssessmentController(compactView, conversation, panel, Conversati
         } else {
             Notification.success('Saved!')
         }
+    }
+
+    function changeDevelopmentLead() {
+        var modalInstance = $modal.open({
+            animation: true,
+            templateUrl: '/static/angular/devzones/partials/_modals/change-development-lead.html',
+            controller: 'ChangeDevelopmentLeadController',
+            controllerAs: 'changeDevelopmentLead',
+        });
+        modalInstance.result.then(
+            function (newDevelopmentLead) {
+                vm.conversation.development_lead = newDevelopmentLead;
+                vm.conversation.development_lead.id = vm.conversation.development_lead.pk ? vm.conversation.development_lead.pk : vm.conversation.development_lead.id
+            }
+        );
     }
 
     function close() {
