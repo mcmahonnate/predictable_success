@@ -31,7 +31,7 @@ class ZoneSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Zone
-        fields = ('id', 'name', 'description', 'order')
+        fields = ('id', 'name', 'description', 'order', 'value')
 
 
 class AdviceForEmployeeSerializer(serializers.ModelSerializer):
