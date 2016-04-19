@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from org.models import Employee, Leadership
 from customers.models import Customer, current_customer
 from pvp.models import PvpEvaluation
+from devzones.models import EmployeeZone
 from indexes import EmployeeIndex
 
 
@@ -46,6 +47,20 @@ def pvp_evaluation_save_handler(sender, **kwargs):
 def pvp_evaluation_delete_handler(sender, **kwargs):
     pvp = kwargs['instance']
     _index([pvp.employee])
+
+
+@receiver(post_save, sender=EmployeeZone)
+def employee_zone_save_handler(sender, **kwargs):
+    employee_zone = kwargs['instance']
+    if employee_zone.development_led_conversation is not None \
+            and employee_zone.completed:
+        _index([employee_zone.employee])
+
+
+@receiver(post_delete, sender=EmployeeZone)
+def employee_zone_delete_handler(sender, **kwargs):
+    employee_zone = kwargs['instance']
+    _index([employee_zone.employee])
 
 
 def _index(employees):

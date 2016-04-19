@@ -71,6 +71,7 @@ class Zone(models.Model):
     )
     description = models.TextField(blank=True, default='')
     order = models.IntegerField(default=0)
+    value = models.IntegerField(default=0)
     tie_breaker = models.BooleanField(default=False)
     must_be_unanimous = models.BooleanField(default=False)
 

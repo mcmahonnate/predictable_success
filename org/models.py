@@ -296,14 +296,30 @@ class Employee(MPTTModel):
         except:
             return None
 
+    def _get_current_dev_zone(self):
+        try:
+            conversations = self.development_conversations.exclude(Q(completed=False) & Q(development_lead_assessment__isnull=False))
+            conversation = conversations.latest('development_lead_assessment__date')
+            return conversation.development_lead_assessment
+        except:
+            return None
+
     def __str__(self):
         return self.full_name
 
     def current_talent_category(self):
         pvp = self._get_current_pvp()
+        devzone = self._get_current_dev_zone()
         talent_category = 0
-        if pvp is not None:
+        if pvp is not None and devzone is not None:
+            if pvp.evaluation_round.date > devzone.date.date():
+                talent_category = pvp.talent_category()
+            else:
+                talent_category = devzone.zone.value
+        elif pvp is not None:
             talent_category = pvp.talent_category()
+        elif devzone is not None:
+            talent_category = devzone.zone.value
         return talent_category
 
     def current_talent_category_date(self):
