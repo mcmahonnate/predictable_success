@@ -1,0 +1,36 @@
+<div class="activity-item">
+    <div class="activity-header">
+        <div class="activity-owner-avatar-container">
+            <a ng-href="#/employees/{{ event.user.employee.id }}" class="medium-headshot">
+                <img ng-src="{{ event.user.employee.avatar_small }}" alt="{{ event.user.employee.full_name }}'s avatar" class="headshot-image"/>
+            </a>
+        </div>
+        <div class="activity-description">
+            <a ng-href="#/employees/{{ event.user.employee.id }}" class="activity-title-employee-name">{{ event.user.employee.full_name }}</a>
+            {{ event.verb }}
+            <span ng-show="event.employee.id != event.user.employee.id">
+                with <a ng-href="#/employees/{{ event.employee.id }}" class="activity-title-employee-name">{{ event.employee.full_name }}</a>
+            </span>
+            <span class="timestamp" data-toggle="tooltip" data-placement="top" title="{{ event.date | date:'MMM d, yyyy h:mma' }}">{{ event.date | fromNow }}</span>
+        </div>
+    </div>
+    <div class="activity-checkin row" >
+        <div class="avatar-container col-xs-2">
+            <span class="large-headshot">
+                <img ng-src="{{ event.employee.avatar_small }}" alt="{{ event.employee.full_name }}" class="headshot-image"/>
+            </span>
+            <div class="employee-attribute" rel="tooltip" data-toggle="tooltip" data-placement="right"
+                 data-original-title="{{ talentCategories[event.employee.current_talent_category].label }}">
+                <span class="segment employee-segment-background-color-{{ event.employee.current_talent_category }}"></span>
+            </div>
+        </div>
+        <div class="activity-checkin-details" ng-class="{'col-xs-12 col-sm-10': view='employee-view', 'col-xs-12 col-sm-10': view='team'}">
+            <div class="activity-checkin-type pull-right">
+                <div class="fa fa fa-heartbeat activity-icon"></div>
+            </div>
+            <h3 class="comment-title-employee-name"><strong><span class="sensitive-text">{{ event.employee.full_name }}</span></strong></h3>
+            <div class="activity-comment comment-text" ng-show="!editMode" read-more ng-model="event.description" words="false" length="400"></div>
+        </div>
+    </div>
+
+</div>

@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from devzones.models import Conversation, EmployeeZone, Meeting
@@ -22,6 +23,7 @@ def employee_zone_save_handler(sender, instance, created, update_fields, **kwarg
             conversation = instance.development_led_conversation
             send_conversation_shared_notification.subtask((conversation.id,)).apply_async()
             conversation.is_draft = False
+            conversation.date = datetime.now()
             conversation.completed = True
             conversation.save()
         if 'active' in update_fields and instance.active:

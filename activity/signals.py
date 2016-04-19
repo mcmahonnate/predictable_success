@@ -5,6 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from blah.models import Comment
 from checkins.models import CheckIn
+from devzones.models import EmployeeZone, Conversation
 from feedback.models import FeedbackDigest
 from customers.models import Customer
 from org.models import Employee
@@ -56,8 +57,27 @@ def feedback_digest_save_handler(sender, instance, created, update_fields, **kwa
         event.save()
 
 
+@receiver(post_save, sender=EmployeeZone)
+def employee_zone_save_handler(sender, instance, created, update_fields, **kwargs):
+    if instance.completed:
+        try:
+            conversation = instance.development_led_conversation
+        except Conversation.DoesNotExist:
+            conversation = None
+        if conversation is not None \
+            or instance.employee.id == instance.assessor.id:
+            show_conversation = True
+            content_type = ContentType.objects.get_for_model(sender)
+            employee = instance.employee
+            user = instance.assessor.user
+            date = instance.date
+            event = Event(event_type=content_type, event_id=instance.id, employee=employee, user=user, show_conversation=show_conversation, date=date)
+            event.save()
+
+
 @receiver(post_delete, sender=Comment)
 @receiver(post_delete, sender=CheckIn)
+@receiver(post_delete, sender=EmployeeZone)
 @receiver(post_delete, sender=FeedbackDigest)
 def object_delete_handler(sender, instance, **kwargs):
     content_type = ContentType.objects.get_for_model(sender)

@@ -298,7 +298,7 @@ class Employee(MPTTModel):
 
     def _get_current_dev_zone(self):
         try:
-            conversations = self.development_conversations.exclude(Q(completed=False) & Q(development_lead_assessment__isnull=False))
+            conversations = self.development_conversations.filter(Q(completed=True) & Q(development_lead_assessment__isnull=False))
             conversation = conversations.latest('development_lead_assessment__date')
             return conversation.development_lead_assessment
         except:

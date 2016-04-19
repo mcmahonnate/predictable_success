@@ -129,6 +129,16 @@ class EmployeeZoneSerializer(serializers.ModelSerializer):
         fields = ('id', 'active', 'employee', 'assessor', 'next_question', 'zone', 'zones', 'notes', 'answers', 'date', 'completed', 'times_retaken', 'development_conversation', 'new_employee', 'development_lead', 'is_draft')
 
 
+class EmployeeZoneForActivityFeedSerializer(serializers.ModelSerializer):
+    employee = SanitizedEmployeeSerializer()
+    assessor = SanitizedEmployeeSerializer()
+    zone = ZoneSerializer()
+
+    class Meta:
+        model = EmployeeZone
+        fields = ('id', 'employee', 'assessor', 'zone', 'notes', 'date')
+
+
 class EmployeeZoneDevelopmentLeadSerializer(EmployeeZoneSerializer):
     notes = serializers.SerializerMethodField()
 

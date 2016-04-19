@@ -5,6 +5,8 @@ from blah.models import Comment
 from blah.api.serializers import CommentSerializer
 from checkins.models import CheckIn
 from checkins.api.serializers import CheckInSerializer, SanitizedCheckInSerializer
+from devzones.models import EmployeeZone
+from devzones.api.serializers import EmployeeZoneForActivityFeedSerializer
 from feedback.models import FeedbackDigest
 from feedback.api.serializers import SummarizedFeedbackDigestSerializer
 from ..models import Event
@@ -27,6 +29,7 @@ class EventSerializer(serializers.ModelSerializer):
         self.related_object_serializers = {
             Comment: CommentSerializer,
             CheckIn: CheckInSerializer,
+            EmployeeZone: EmployeeZoneForActivityFeedSerializer,
             FeedbackDigest: SummarizedFeedbackDigestSerializer
         }
 
@@ -79,9 +82,13 @@ class EventSerializer(serializers.ModelSerializer):
             return None
         comment_type = ContentType.objects.get_for_model(Comment)
         checkin_type = ContentType.objects.get_for_model(CheckIn)
+        employee_zone_type = ContentType.objects.get_for_model(EmployeeZone)
         if obj.event_type.id is comment_type.id:
             comment = Comment.objects.get(pk=obj.event_id)
             return comment.content
+        elif obj.event_type.id is employee_zone_type.id:
+            employee_zone = EmployeeZone.objects.get(pk=obj.event_id)
+            return employee_zone.notes
         elif obj.event_type.id is checkin_type.id:
             checkin = CheckIn.objects.get(pk=obj.event_id)
             return checkin.get_summary(self.context['request'].user)
@@ -91,8 +98,15 @@ class EventSerializer(serializers.ModelSerializer):
         comment_type = ContentType.objects.get_for_model(Comment)
         checkin_type = ContentType.objects.get_for_model(CheckIn)
         feedback_digest_type = ContentType.objects.get_for_model(FeedbackDigest)
+        employee_zone_type = ContentType.objects.get_for_model(EmployeeZone)
         if obj.event_type.id is comment_type.id:
             return 'wrote a note'
+        elif obj.event_type.id is employee_zone_type.id:
+            employee_zone = EmployeeZone.objects.get(pk=obj.event_id)
+            if employee_zone.employee.id == employee_zone.assessor.id:
+                return 'took a selfie'
+            else:
+                return 'had a development conversation'
         elif obj.event_type.id is feedback_digest_type.id:
             return 'delivered feedback'
         elif obj.event_type.id is checkin_type.id:

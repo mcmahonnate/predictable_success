@@ -180,10 +180,13 @@ class EmployeeZone(models.Model):
                     return self.last_question_answered.next_questions.count() == 0
         return False
 
-    def save(self, *args, **kwargs):
+    def save(self, update_fields=None, *args, **kwargs):
         if not self.pk:
             if date.today() < (self.employee.hire_date + relativedelta(months=3)):
                 self.new_employee = True
+        if self.completed and update_fields and 'completed' in update_fields:
+            self.date = datetime.now()
+
         super(EmployeeZone, self).save(*args, **kwargs)
 
     def __str__(self):

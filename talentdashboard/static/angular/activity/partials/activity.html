@@ -5,6 +5,7 @@
     <div class="activity-items" ng-repeat="event in events | orderBy:'date':true">
         <div ng-if="event.type == 'comment'" ng-include="'/static/angular/activity/partials/activity-comment.html'"></div>
         <div ng-if="event.type == 'check in'" ng-include="'/static/angular/activity/partials/activity-checkin.html'"></div>
+        <div ng-if="event.type == 'employee zone'" ng-include="'/static/angular/activity/partials/activity-employee-zone.html'"></div>
         <div ng-if="event.type == 'feedback digest'" ng-include="'/static/angular/activity/partials/activity-feedback-digest.html'"></div>
     </div>
 
