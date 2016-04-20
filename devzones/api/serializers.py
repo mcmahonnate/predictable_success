@@ -136,7 +136,7 @@ class EmployeeZoneForActivityFeedSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmployeeZone
-        fields = ('id', 'employee', 'assessor', 'zone', 'notes', 'date', 'active')
+        fields = ('id', 'employee', 'assessor', 'zone', 'notes', 'date', 'active', 'is_draft', 'completed')
 
 
 class EmployeeZoneDevelopmentLeadSerializer(EmployeeZoneSerializer):
