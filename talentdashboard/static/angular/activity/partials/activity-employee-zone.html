@@ -29,6 +29,8 @@
                 <div class="fa fa fa-heartbeat activity-icon"></div>
             </div>
             <h3 class="comment-title-employee-name"><strong><span class="sensitive-text">{{ event.employee.full_name }}</span></strong></h3>
+            <div class="distribution comment-text" style="font-size: 14px" ng-show="event.employee.id == event.user.employee.id">Selfied as <span class="tag employee-segment-background-color-{{event.related_object.zone.value}}" style="display: inline-block;padding:0px;float:none;margin-right: 0px;font-size:12px;">{{event.related_object.zone.name}}</span></div>
+            <div class="distribution comment-text" style="font-size: 14px" ng-show="event.employee.id != event.user.employee.id"><span class="tag employee-segment-background-color-{{event.related_object.zone.value}}" style="display: inline-block;padding:0px;float:none;margin-right: 0px;font-size:12px;">{{event.related_object.zone.name}}</span></div>
             <div class="activity-comment comment-text" ng-show="!editMode" read-more ng-model="event.description" words="false" length="400"></div>
         </div>
     </div>
