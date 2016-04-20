@@ -133,7 +133,7 @@ class EmployeeZone(models.Model):
     is_draft = models.BooleanField(default=False)
     active = models.BooleanField(default=False)
     completed = models.BooleanField(default=False)
-    field_tracker = FieldTracker(fields=['active', 'completed'])
+    field_tracker = FieldTracker(fields=['active', 'is_draft', 'completed'])
 
     def _calculate_zone(self):
         if not self.completed and self.all_questions_answered() and self.answers.count() > 0:
@@ -180,11 +180,11 @@ class EmployeeZone(models.Model):
                     return self.last_question_answered.next_questions.count() == 0
         return False
 
-    def save(self, update_fields=None, *args, **kwargs):
+    def save(self, *args, **kwargs):
         if not self.pk:
             if date.today() < (self.employee.hire_date + relativedelta(months=3)):
                 self.new_employee = True
-        if self.completed and update_fields and 'completed' in update_fields:
+        if self.completed and 'update_fields' in kwargs and 'completed' in kwargs['update_fields']:
             self.date = datetime.now()
 
         super(EmployeeZone, self).save(*args, **kwargs)

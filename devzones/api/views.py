@@ -162,7 +162,7 @@ class ShareEmployeeZone(GenericAPIView):
         employee_zone = self.get_employee_zone()
         employee_zone.is_draft = False
         employee_zone.completed = True
-        employee_zone.save(update_fields=['completed'])
+        employee_zone.save(update_fields=['completed', 'is_draft'])
         serializer = EmployeeZoneSerializer(employee_zone, context={'request':request})
         return Response(serializer.data)
 
