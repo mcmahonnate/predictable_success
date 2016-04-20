@@ -113,4 +113,19 @@ angular.module('tdb.comments.controllers', [])
             });
         };
     }])
+
+    .controller('AddDevZoneActivityCommentCtrl', ['$scope', '$rootScope', 'Comment', function($scope, $rootScope, Comment) {
+        var blankComment = new Comment({content:'', include_in_daily_digest:true});
+        angular.copy(blankComment, $scope.newComment);
+
+        $scope.add = function(form, checkInId, comments) {
+            if (form.$invalid) return;
+            Comment.addToDevzone({ id:checkInId}, $scope.newComment, function(comment) {
+                if(comments) {
+                    comments.push(comment);
+                }
+                angular.copy(blankComment, $scope.newComment);
+            });
+        };
+    }])
 ;
