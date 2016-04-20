@@ -136,7 +136,7 @@ class EmployeeZoneForActivityFeedSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmployeeZone
-        fields = ('id', 'employee', 'assessor', 'zone', 'notes', 'date')
+        fields = ('id', 'employee', 'assessor', 'zone', 'notes', 'date', 'active')
 
 
 class EmployeeZoneDevelopmentLeadSerializer(EmployeeZoneSerializer):
@@ -161,6 +161,18 @@ class UpdateEmployeeZoneSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmployeeZone
         fields = ('id', 'assessor', 'last_question_answered', 'answers', 'zone', 'notes', 'completed', 'date', 'is_draft')
+
+
+class MinimalConversationSerializer(serializers.ModelSerializer):
+    employee = SanitizedEmployeeSerializer()
+    development_lead = SanitizedEmployeeSerializer()
+    employee_assessment = EmployeeZoneForActivityFeedSerializer()
+    development_lead_assessment = EmployeeZoneForActivityFeedSerializer()
+    advice = AdviceSerializer(many=True)
+
+    class Meta:
+        model = Conversation
+        fields = ('id', 'employee', 'date', 'development_lead', 'employee_assessment', 'development_lead_assessment', 'advice', 'completed', 'completed_date')
 
 
 class ConversationSerializer(serializers.ModelSerializer):
@@ -246,7 +258,7 @@ class CreateUpdateMeetingSerializer(serializers.ModelSerializer):
 
 class MeetingSerializer(serializers.ModelSerializer):
     participants = SanitizedEmployeeSerializer(many=True)
-    conversations = ConversationSerializer(many=True)
+    conversations = MinimalConversationSerializer(many=True)
 
     class Meta:
         model = Meeting
