@@ -11,23 +11,24 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'name', 'leader')
 
 
-class EmployeeRelationshipSerializer(serializers.HyperlinkedModelSerializer):
-    ''' Contains only information about an employee that can be displayed to any user.
-    '''
-    class Meta:
-        model = Employee
-        fields = ('id', 'full_name', 'first_name', 'last_name', 'avatar', 'avatar_small',)
-
-
 class SanitizedEmployeeSerializer(serializers.HyperlinkedModelSerializer):
     ''' Contains only information about an employee that can be displayed to any user.
     '''
-    coach = EmployeeRelationshipSerializer()
-    leader = EmployeeRelationshipSerializer()
 
     class Meta:
         model = Employee
-        fields = ('id', 'full_name', 'first_name', 'last_name', 'avatar', 'avatar_small', 'coach', 'leader')
+        fields = ('id', 'full_name', 'first_name', 'last_name', 'avatar', 'avatar_small')
+
+
+class SanitizedEmployeeWithRelationshpsSerializer(serializers.HyperlinkedModelSerializer):
+    ''' Contains only information about an employee that can be displayed to any user.
+    '''
+    coach = SanitizedEmployeeSerializer()
+    leader = SanitizedEmployeeSerializer()
+
+    class Meta:
+        model = Employee
+        fields = ('id', 'full_name', 'first_name', 'last_name', 'avatar', 'avatar_small')
 
 
 class MinimalEmployeeSerializer(serializers.HyperlinkedModelSerializer):

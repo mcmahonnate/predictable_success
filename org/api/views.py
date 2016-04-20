@@ -14,7 +14,7 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 import dateutil.parser
 from talentdashboard.views.views import add_salary_to_employee
-from .serializers import EmployeeSerializer, CreateEmployeeSerializer, EditEmployeeSerializer, CoachChangeRequestSerializer, SanitizedEmployeeSerializer
+from .serializers import EmployeeSerializer, CreateEmployeeSerializer, EditEmployeeSerializer, CoachChangeRequestSerializer, SanitizedEmployeeSerializer, SanitizedEmployeeWithRelationshpsSerializer
 from .permissions import *
 from ..models import *
 from django.utils.log import getLogger
@@ -30,7 +30,7 @@ class EmployeeDetail(APIView):
             if not employee.is_viewable_by_user(request.user):
                 raise PermissionDenied
             if request.user.employee == employee:
-                serializer = SanitizedEmployeeSerializer(employee,context={'request': request})
+                serializer = SanitizedEmployeeWithRelationshpsSerializer(employee,context={'request': request})
             else:
                 serializer = EmployeeSerializer(employee,context={'request': request})
             return Response(serializer.data)
