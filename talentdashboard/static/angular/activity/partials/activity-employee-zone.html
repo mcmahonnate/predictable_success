@@ -34,5 +34,65 @@
             <div class="activity-comment comment-text" style="white-space: pre-wrap;" ng-show="!editMode" read-more ng-model="event.description" words="false" length="400"></div>
         </div>
     </div>
+    <!-- Comment replies -->
+    <div ng-if="event.show_conversation" class="comment-replies">
+        <span class="total-replies" ng-show="event.related_object.comments.length == 1" style="margin-top:20px;">
+            {{event.related_object.comments.length}} reply
+        </span>
+        <span class="total-replies" ng-show="event.related_object.comments.length > 1" style="margin-top:20px;">
+            {{event.related_object.comments.length}} replies
+        </span>
 
+        <div class="comment-reply" ng-repeat="comment in event.related_object.comments | orderBy:'created_date'">
+            <div ng-controller="CommentCtrl">
+                <div class="comment-actions pull-right" ng-show="comment.owner.id==currentUser.id">
+                    <i class="fa fa-cog show-popover"></i>
+                    <ul class="popover-items" style="display:none">
+                        <li class="popover-item">
+                            <a ng-click="edit(comment)" class="edit"><i class="fa fa-pencil-square-o"></i>
+                                Edit</a>
+                        </li>
+                        <li class="popover-item">
+                            <a ng-click="delete(comment, event.related_object.comments)"><i class="fa fa-trash-o"></i>
+                                Delete</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="comment-reply-avatar-container">
+                    <a ng-href="#/employees/{{ comment.owner.employee.id }}" class="small-headshot">
+                        <img ng-src="{{ comment.owner.employee.avatar_small }}"
+                             alt="{{ comment.owner.employee.full_name }}'s avatar" class="headshot-image"/>
+                    </a>
+                </div>
+                <a class="comment-reply-name"
+                   ng-href="#/employees/{{ comment.owner.employee.id }}">{{ comment.owner.employee.full_name }}</a>
+                   replied
+                <span class="timestamp"
+                      title="{{ comment.created_date | date:'MMM d, yyyy h:mma' }}">{{ comment.created_date | fromNow }}</span>
+
+                <div style="padding-left:50px;" ng-show="editMode">
+                    <form name="replyEditForm">
+                        <textarea
+                                ng-model="editingComment.content"
+                                msd-elastic
+                                class="form-control edit-textarea">
+                        </textarea>
+                        <button class="btn btn-primary btn-sm" ng-disabled="!editingComment.content"
+                                ng-click="update(replyEditForm, comment)">Save Edits
+                        </button>
+                        <button class="btn btn-link btn-sm"
+                                ng-click="cancelEdit()">Cancel
+                        </button>
+                    </form>
+                </div>
+                <div class="comment-reply-copy comment-text" ng-show="!editMode" read-more ng-model="comment.content" words="false" length="400"></div>
+            </div>
+        </div>
+        <div class="comment-reply-textarea">
+            <form name="replyForm" ng-controller="AddEmployeeZoneActivityCommentCtrl">
+                <textarea class="form-control" name="content" msd-elastic ng-model="newComment.content" rows="1" cols="40" placeholder="Add a reply..."></textarea>
+                <button class="small-comment" ng-disabled="!newComment.content" ng-click="add(replyForm, event.related_object.id, event.related_object.comments)">Comment</button>
+            </form>
+        </div>
+    </div>
 </div>

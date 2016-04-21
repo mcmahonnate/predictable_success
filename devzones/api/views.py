@@ -1,3 +1,5 @@
+from blah.api.views import CommentList
+from blah.api.serializers import CommentSerializer
 from dateutil import parser
 from org.api.permissions import UserIsEmployeeOrLeaderOrCoachOfEmployee, UserIsEmployee, PermissionsViewAllEmployees
 from rest_framework.viewsets import ModelViewSet
@@ -6,6 +8,7 @@ from rest_framework.generics import *
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_204_NO_CONTENT
+from talentdashboard.views.views import StandardResultsSetPagination
 from .permissions import UserIsConversationParticipantOrHasAllAccess, UserIsAssessorOrHasAllAccess, UserIsAssessor, UserIsMeetingParticipantOrHasAllAccess, UserIsConversationParticipantOrHasAllAccessOrIsEmployee
 from .serializers import *
 
@@ -251,7 +254,6 @@ class RetrieveUpdateConversation(RetrieveUpdateAPIView):
             serializer = ConversationForEmployeeSerializer(instance, context={'request': request})
         return Response(serializer.data)
 
-
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         if request.user.employee.id == instance.employee.id:
@@ -263,6 +265,26 @@ class RetrieveUpdateConversation(RetrieveUpdateAPIView):
         else:
             serializer = ConversationForEmployeeSerializer(instance, context={'request': request})
         return Response(serializer.data)
+
+
+class EmployeeZoneCommentList(CommentList):
+    serializer_class = CommentSerializer
+    permission_classes = (IsAuthenticated, UserIsEmployeeOrLeaderOrCoachOfEmployee)
+    pagination_class = StandardResultsSetPagination
+
+    def get_employee(self):
+        employee_zone = self.get_employee_zone()
+        return employee_zone.employee
+
+    def get_employee_zone(self):
+        try:
+            return self.get_object()
+        except EmployeeZone.DoesNotExist:
+            raise Http404()
+
+    def get_object(self):
+        pk = self.kwargs['pk']
+        return EmployeeZone.objects.get(pk=pk)
 
 
 class RetakeEmployeeZone(GenericAPIView):

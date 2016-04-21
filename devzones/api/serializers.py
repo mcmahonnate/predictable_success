@@ -1,3 +1,4 @@
+from blah.api.serializers import CommentSerializer
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
 from org.api.serializers import SanitizedEmployeeSerializer, EmployeeSerializer
@@ -109,6 +110,7 @@ class EmployeeZoneSerializer(serializers.ModelSerializer):
     answers = serializers.SerializerMethodField()
     development_conversation = serializers.PrimaryKeyRelatedField(read_only=True)
     development_lead = serializers.SerializerMethodField()
+    comments = CommentSerializer(many=True, read_only=True)
 
     def get_answers(self, obj):
         if obj.completed:
@@ -126,17 +128,29 @@ class EmployeeZoneSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmployeeZone
-        fields = ('id', 'active', 'employee', 'assessor', 'next_question', 'zone', 'zones', 'notes', 'answers', 'date', 'completed', 'times_retaken', 'development_conversation', 'new_employee', 'development_lead', 'is_draft')
+        fields = ('id', 'active', 'employee', 'assessor', 'next_question', 'zone', 'zones', 'notes', 'answers', 'date', 'completed', 'times_retaken', 'development_conversation', 'new_employee', 'development_lead', 'is_draft', 'comments')
 
 
 class EmployeeZoneForActivityFeedSerializer(serializers.ModelSerializer):
-    employee = SanitizedEmployeeSerializer()
     assessor = SanitizedEmployeeSerializer()
+    comments = CommentSerializer(many=True)
+    conversation_id = serializers.SerializerMethodField()
+    employee = SanitizedEmployeeSerializer()
     zone = ZoneSerializer()
+
+    def get_conversation_id(self, obj):
+        try:
+            if obj.employee.id == obj.assessor.id:
+                conversation = obj.development_conversation
+            else:
+                conversation = obj.development_led_conversation
+        except Conversation.DoesNotExist:
+            return None
+        return conversation.id
 
     class Meta:
         model = EmployeeZone
-        fields = ('id', 'employee', 'assessor', 'zone', 'notes', 'date', 'active', 'is_draft', 'completed')
+        fields = ('id', 'employee', 'assessor', 'zone', 'notes', 'date', 'active', 'is_draft', 'completed', 'conversation_id', 'comments')
 
 
 class EmployeeZoneDevelopmentLeadSerializer(EmployeeZoneSerializer):

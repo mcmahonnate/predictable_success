@@ -62,10 +62,14 @@
         </div>
     </div>
 
-    <div class="checkin-summary panel" ng-show="conversation.selfie.notes">
+    <div class="checkin-summary panel activity" ng-show="conversation.selfie.notes">
         <h2 class="panel-title" ng-show="conversation.is_employee">Your Selfie Note</h2>
         <h2 class="panel-title" ng-show="!conversation.is_employee">{{ conversation.selfie.employee.first_name }}'s Selfie Note</h2>
-        <span class="checkin-summary-instance">{{ conversation.selfie.notes }}</span>
+        <div class="activity-item activity-items">
+            <div class="activity-checkin row" style="margin: 20px 0px;">
+                <p class="panel-subtext">{{ conversation.selfie.notes }}</p>
+            </div>
+        </div>
     </div>
     <div class="panel devzones" ng-show="conversation.selfie.answers.length>0">
         <h2 class="panel-title">

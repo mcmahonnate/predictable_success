@@ -1,3 +1,5 @@
+import blah
+from blah.models import Comment
 from django.db import models
 from django.db.models import Q, F
 from django.db.models import Count
@@ -189,6 +191,10 @@ class EmployeeZone(models.Model):
 
         super(EmployeeZone, self).save(*args, **kwargs)
 
+    @property
+    def comments(self):
+        return list(Comment.objects.get_for_object(self))
+
     def __str__(self):
         return "%s %s %s" % (self.employee.full_name, self.date, self.completed)
 
@@ -281,3 +287,5 @@ class Advice(models.Model):
 
     def __str__(self):
         return "Advice when employee says %s and manager says %s" % (self.employee_zone.name, (self.development_lead_zone.name if self.development_lead_zone else 'None'))
+
+blah.register(EmployeeZone, attr_name='_comments')
