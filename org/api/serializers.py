@@ -28,7 +28,7 @@ class SanitizedEmployeeWithRelationshpsSerializer(serializers.HyperlinkedModelSe
 
     class Meta:
         model = Employee
-        fields = ('id', 'full_name', 'first_name', 'last_name', 'avatar', 'avatar_small')
+        fields = ('id', 'full_name', 'first_name', 'last_name', 'avatar', 'avatar_small', 'coach', 'leader')
 
 
 class MinimalEmployeeSerializer(serializers.HyperlinkedModelSerializer):
