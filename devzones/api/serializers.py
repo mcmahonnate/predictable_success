@@ -131,9 +131,8 @@ class EmployeeZoneSerializer(serializers.ModelSerializer):
         fields = ('id', 'active', 'employee', 'assessor', 'next_question', 'zone', 'zones', 'notes', 'answers', 'date', 'completed', 'times_retaken', 'development_conversation', 'new_employee', 'development_lead', 'is_draft', 'comments')
 
 
-class EmployeeZoneForActivityFeedSerializer(serializers.ModelSerializer):
+class MinimalEmployeeZoneSerializer(serializers.ModelSerializer):
     assessor = SanitizedEmployeeSerializer()
-    comments = CommentSerializer(many=True)
     conversation_id = serializers.SerializerMethodField()
     employee = SanitizedEmployeeSerializer()
     zone = ZoneSerializer()
@@ -147,6 +146,14 @@ class EmployeeZoneForActivityFeedSerializer(serializers.ModelSerializer):
         except Conversation.DoesNotExist:
             return None
         return conversation.id
+
+    class Meta:
+        model = EmployeeZone
+        fields = ('id', 'employee', 'assessor', 'zone', 'notes', 'date', 'active', 'is_draft', 'completed', 'conversation_id')
+
+
+class EmployeeZoneForActivityFeedSerializer(MinimalEmployeeZoneSerializer):
+    comments = CommentSerializer(many=True)
 
     class Meta:
         model = EmployeeZone
@@ -180,8 +187,8 @@ class UpdateEmployeeZoneSerializer(serializers.ModelSerializer):
 class MinimalConversationSerializer(serializers.ModelSerializer):
     employee = SanitizedEmployeeSerializer()
     development_lead = SanitizedEmployeeSerializer()
-    employee_assessment = EmployeeZoneForActivityFeedSerializer()
-    development_lead_assessment = EmployeeZoneForActivityFeedSerializer()
+    employee_assessment = MinimalEmployeeZoneSerializer()
+    development_lead_assessment = MinimalEmployeeZoneSerializer()
     advice = AdviceSerializer(many=True)
 
     class Meta:

@@ -1,5 +1,7 @@
 from __future__ import absolute_import
-from talentdashboard.celery import app
+from checkins.models import CheckIn
+from customers.models import current_customer
+from devzones.models import EmployeeZone, Conversation
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
@@ -8,8 +10,7 @@ from django.db.models import Q
 from django.template import Context
 from django.template.loader import get_template, render_to_string
 from org.models import Employee
-from checkins.models import CheckIn
-from customers.models import current_customer
+from talentdashboard.celery import app
 from .models import Comment
 
 
@@ -96,6 +97,56 @@ def send_checkin_reply_notification(comment_id):
         }
         text_content = render_to_string('checkins/email/checkin_comment_notification.txt', context)
         html_content = render_to_string('checkins/email/checkin_comment_notification.html', context)
+        msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [employee.user.email])
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
+
+
+@app.task
+def send_employee_zone_reply_notification(employee_zone_id):
+    comment = Comment.objects.get(id=employee_zone_id)
+    commenter = Employee.objects.get(user__id=comment.owner.id)
+    employee_zone = EmployeeZone.objects.get(id=comment.object_id)
+    if not employee_zone.completed:
+        return
+    employee = employee_zone.employee
+    assessor = employee_zone.assessor
+    try:
+        conversation = employee_zone.development_led_conversation
+        development_lead = conversation.development_lead
+    except Conversation.DoesNotExist:
+        pass
+    try:
+        conversation = employee_zone.development_conversation
+        development_lead = conversation.development_lead
+    except Conversation.DoesNotExist:
+        pass
+    other_commenters = Comment.objects.get_for_object(employee_zone)
+    other_commenters = other_commenters.values('owner_id')
+    if development_lead:
+        users = User.objects.filter(Q(id__in=other_commenters) | Q(id=assessor.user.id) | Q(id=employee.user.id) | Q(id=employee.user.id) | Q(id=development_lead.user.id))
+    else:
+        users = User.objects.filter(Q(id__in=other_commenters) | Q(id=assessor.user.id) | Q(id=employee.user.id) | Q(id=employee.user.id))
+    users = users.filter(is_active=True)
+    users = users.exclude(id=comment.owner.id)
+    tenant = current_customer()
+    response_url = 'https://%s/#/id/%d' % (tenant.domain_url, conversation.id)
+    for user in users:
+        if user.id == employee.user.id:
+            employee_name = 'you'
+        elif commenter.id == employee_zone.employee.id:
+            employee_name = 'themself'
+        else:
+            employee_name = employee_zone.employee.full_name
+        subject = "%s commented on a ID Conversation about %s" % (commenter.full_name, employee_name)
+        context = {
+            'recipient_first_name': user.employee.first_name,
+            'commenter_full_name': commenter.full_name,
+            'employee_full_name': employee_name,
+            'response_url': response_url,
+        }
+        text_content = render_to_string('devzones/email/employee_zone_comment_notification.txt', context)
+        html_content = render_to_string('devzones/email/employee_zone_comment_notification.html', context)
         msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [employee.user.email])
         msg.attach_alternative(html_content, "text/html")
         msg.send()
