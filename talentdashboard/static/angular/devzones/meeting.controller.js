@@ -41,7 +41,7 @@ function MeetingController(MeetingService, Notification, analytics, $location, $
             templateUrl: '/static/angular/devzones/partials/_modals/add-edit-meeting.html',
             controller: 'AddEditMeetingController as addEditMeeting',
             resolve: {
-                meeting: function () {
+                meetingToEdit: function () {
                     return vm.meeting
                 }
             }

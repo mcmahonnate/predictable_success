@@ -2,9 +2,9 @@ angular
     .module('devzones')
     .controller('AddEditMeetingController', AddEditMeetingController);
 
-function AddEditMeetingController(ConversationService, EmployeeSearch, meeting, MeetingService, Notification, $modalInstance, $rootScope) {
+function AddEditMeetingController(ConversationService, EmployeeSearch, meetingToEdit, MeetingService, Notification, $modalInstance, $rootScope) {
     var vm = this;
-    vm.meeting = meeting;
+    vm.meeting = meetingToEdit;
     vm.panel_index = -1;
     vm.busy = false;
     vm.active = false;
@@ -49,7 +49,10 @@ function AddEditMeetingController(ConversationService, EmployeeSearch, meeting, 
         });
     }
 
-    function getConversationByEmployee(employee_id) {
+    function getConversationByEmployee(employee_id, meeting) {
+        if (!vm.meeting || !vm.meeting.conversations) {
+            return null;
+        }
         var array_index = null;
         angular.forEach(vm.meeting.conversations, function(conversation, index) {
             if (conversation.employee.id == employee_id) {
@@ -89,11 +92,13 @@ function AddEditMeetingController(ConversationService, EmployeeSearch, meeting, 
 
     function getConversatonsToDelete() {
         var conversations= [];
-        angular.forEach(vm.meeting.conversations, function(conversation, key) {
-            if (!conversation.keep) {
-                vm.deletedConversations.push({id: conversation.id, meeting: null});
-            }
-        });
+        if (vm.meeting && vm.meeting.conversations) {
+            angular.forEach(vm.meeting.conversations, function (conversation, key) {
+                if (!conversation.keep) {
+                    vm.deletedConversations.push({id: conversation.id, meeting: null});
+                }
+            });
+        }
         return conversations;
     }
 

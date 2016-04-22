@@ -214,7 +214,11 @@ function DevZonesController(ConversationService, DevZoneService, MeetingService,
             backdrop: 'static',
             templateUrl: '/static/angular/devzones/partials/_modals/add-edit-meeting.html',
             controller: 'AddEditMeetingController as addEditMeeting',
-            resolve: {}
+            resolve: {
+                meetingToEdit: function () {
+                    return null
+                }
+            }
         });
         modalInstance.result.then(
             function (meeting) {
