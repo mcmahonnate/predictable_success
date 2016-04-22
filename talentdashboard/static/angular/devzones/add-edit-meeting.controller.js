@@ -114,7 +114,7 @@ function AddEditMeetingController(ConversationService, EmployeeSearch, meetingTo
                     getConversations(meeting);
                     ConversationService.create(vm.newConversations)
                         .then(function (conversations) {
-                            if (vm.active || vm.meeting.active) {
+                            if (vm.active || meeting.active) {
                                 MeetingService.activate(meeting)
                                     .then(function() {
                                         $modalInstance.close(meeting);
