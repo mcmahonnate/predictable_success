@@ -1,4 +1,4 @@
-<div class="activity-item">
+<a class="activity-item">
     <div class="activity-header">
         <div class="activity-owner-avatar-container">
             <a ng-href="#/employees/{{ event.user.employee.id }}" class="medium-headshot">
@@ -14,7 +14,7 @@
             <span class="timestamp" data-toggle="tooltip" data-placement="top" title="{{ event.date | date:'MMM d, yyyy h:mma' }}">{{ event.date | fromNow }}</span>
         </div>
     </div>
-    <div class="activity-checkin row" >
+    <a class="activity-checkin row" href="#/id/{{ event.related_object.conversation_id }}">
         <div class="avatar-container col-xs-2">
             <span class="large-headshot">
                 <img ng-src="{{ event.employee.avatar_small }}" alt="{{ event.employee.full_name }}" class="headshot-image"/>
@@ -29,11 +29,11 @@
                 <div class="fa fa fa-heartbeat activity-icon"></div>
             </div>
             <h3 class="comment-title-employee-name"><strong><span class="sensitive-text">{{ event.employee.full_name }}</span></strong></h3>
-            <div class="distribution comment-text" style="font-size: 14px" ng-show="event.employee.id == event.user.employee.id">Selfied as <span class="tag employee-segment-background-color-{{event.related_object.zone.value}}" style="display: inline-block;padding:0px;float:none;margin-right: 0px;font-size:12px;">{{event.related_object.zone.name}}</span></div>
+            <div class="distribution checkin-type" style="font-size: 14px" ng-show="event.employee.id == event.user.employee.id">Selfied as <span class="tag employee-segment-background-color-{{event.related_object.zone.value}}" style="display: inline-block;padding:0px;float:none;margin-right: 0px;font-size:12px;">{{event.related_object.zone.name}}</span></div>
             <div class="distribution comment-text" style="font-size: 14px" ng-show="event.employee.id != event.user.employee.id"><span class="tag employee-segment-background-color-{{event.related_object.zone.value}}" style="display: inline-block;padding:0px;float:none;margin-right: 0px;font-size:12px;">{{event.related_object.zone.name}}</span></div>
-            <div class="activity-comment comment-text" style="white-space: pre-wrap;" ng-show="!editMode" read-more ng-model="event.description" words="false" length="400"></div>
+            <div class="activity-checkin-summary comment-text" style="white-space: pre-wrap;" ng-show="!editMode" read-more ng-model="event.description" words="false" length="400"></div>
         </div>
-    </div>
+    </a>
     <!-- Comment replies -->
     <div ng-if="event.show_conversation" class="comment-replies">
         <span class="total-replies" ng-show="event.related_object.comments.length == 1" style="margin-top:20px;">
