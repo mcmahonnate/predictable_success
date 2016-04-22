@@ -30,7 +30,7 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="quality well well-sm" style="display:flex" ng-repeat="quality in assessQualities.cluster.qualities | limitTo:assessQualities.getLimit(assessQualities.cluster.qualities.length)"  ng-class="{'quality-selected': quality.selected, 'selfie-answer':!quality.selected}" ng-click="assessQualities.select(quality)">
+                        <div class="quality well well-sm" style="display:flex;height: auto;" ng-repeat="quality in assessQualities.cluster.qualities | limitTo:assessQualities.getLimit(assessQualities.cluster.qualities.length)"  ng-class="{'quality-selected': quality.selected, 'selfie-answer':!quality.selected}" ng-click="assessQualities.select(quality)">
                             <div class="quality-label" style="width: 100%;">
                                 <h4><strong>{{ quality.name }}</strong></h4>
                                 <div collapse="!quality.selected">
@@ -43,7 +43,7 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="quality well well-sm" style="display:flex" ng-repeat="quality in assessQualities.cluster.qualities | slice:assessQualities.getLimit(assessQualities.cluster.qualities.length):assessQualities.cluster.qualities.length"  ng-class="{'quality-selected': quality.selected, 'selfie-answer':!quality.selected}" ng-click="quality.selected=!quality.selected">
+                        <div class="quality well well-sm" style="display:flex;height: auto;" ng-repeat="quality in assessQualities.cluster.qualities | slice:assessQualities.getLimit(assessQualities.cluster.qualities.length):assessQualities.cluster.qualities.length"  ng-class="{'quality-selected': quality.selected, 'selfie-answer':!quality.selected}" ng-click="assessQualities.select(quality)">
                             <div class="quality-label" style="width: 100%;">
                                 <h4><strong>{{ quality.name }}</strong></h4>
                                 <div collapse="!quality.selected">

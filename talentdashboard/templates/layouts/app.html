@@ -72,8 +72,6 @@
     <script src="{% static 'angular/directives.js' %}"></script>
     <script src="{% static 'angular/filters.js' %}"></script>
     <script src="{% static 'angular/apps/app-base.js' %}"></script>
-    <script src="https://npmcdn.com/packery@2.0/dist/packery.pkgd.min.js"></script>
-    <script src="https://npmcdn.com/draggabilly@2.1/dist/draggabilly.pkgd.min.js"></script>
     {% if perms.org.view_employees %}
         <script src="{% static 'angular/apps/app-all-access.js' %}"></script>
     {% elif user.employee.is_lead and perms.org.view_employees_I_lead and user.employee.is_coach %}

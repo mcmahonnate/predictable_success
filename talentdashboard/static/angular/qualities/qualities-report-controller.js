@@ -7,7 +7,6 @@
         var vm = this;
         vm.qualities = [];
         vm.giveUnsolicited = giveUnsolicited;
-        vm.resizeLayout = resizeLayout;
         activate();
 
         function activate() {
@@ -24,15 +23,5 @@
                     vm.qualities = data.qualities;
                     return null;
                 });
-        }
-
-        function resizeLayout(event, collapse) {
-            console.log(collapse);
-            if (collapse) {
-                console.log('shiftLayout');
-                $rootScope.packery.shiftLayout();
-            } else {
-                $rootScope.packery.fit(event.currentTarget);
-            }
         }
     }

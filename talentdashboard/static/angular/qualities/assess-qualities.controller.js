@@ -83,24 +83,29 @@
         }
 
         function select(quality) {
-            quality.selected = true;
-            vm.selectedQualities.push(quality);
-            console.log(vm.selectedQualities);
+            if (!quality.selected) {
+                console.log('select');
+                quality.selected = true;
+                vm.selectedQualities.push(quality);
+                console.log(vm.selectedQualities);
+            } else {
+                console.log('unselect');
+                unselect(quality)
+                console.log(vm.selectedQualities);
+            }
         }
 
-        function unselect(index) {
-            var quality = vm.selectedQualities[index];
-            for (var q in vm.cluster.qualities) {
+        function unselect(quality)
+        {
+            var index;
+            quality.selected = false;
+            angular.forEach(vm.selectedQualities, function(q, key) {
                 if (q.id === quality.id) {
-                    q.selected = false;
-                }
-            }
-            vm.selectedQualities.splice(index);
-            angular.forEach(vm.cluster.qualities, function(q, key) {
-                if (q.id === quality.id) {
-                    q.selected = false;
+                    index = key;
+                    console.log(index);
                 }
             });
+            vm.selectedQualities.splice(index, 1);
         }
 
         function save() {
