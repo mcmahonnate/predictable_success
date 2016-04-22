@@ -30,6 +30,7 @@
                 <p class="panel-subtext">{{ conversation.conversation.development_lead_assessment.notes }}</p>
             </div>
         </div>
+        <devzone-comments id="conversation.conversation.development_lead_assessment.id" comments="conversation.conversation.development_lead_assessment.comments"></devzone-comments>
     </div>
     <div ng-show="!conversation.conversation.development_lead_assessment.notes && !conversation.is_org_dev" class="checkin-summary panel activity">
         <div class="worksheet-message">
@@ -70,6 +71,7 @@
                 <p class="panel-subtext">{{ conversation.selfie.notes }}</p>
             </div>
         </div>
+        <devzone-comments id="conversation.selfie.id" comments="conversation.selfie.comments"></devzone-comments>
     </div>
     <div class="panel devzones" ng-show="conversation.selfie.answers.length>0">
         <h2 class="panel-title">
