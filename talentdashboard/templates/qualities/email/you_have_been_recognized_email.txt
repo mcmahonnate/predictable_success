@@ -1,0 +1,6 @@
+Hi, {{ recipient_first_name }}!
+
+We thought you'd like to know that {{ reviewer_full_name }} just recognized you for skills related to {{ category }}.
+
+Click here to check out your skillz:
+{{ response_url }}

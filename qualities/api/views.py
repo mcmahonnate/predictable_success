@@ -2,6 +2,7 @@ from rest_framework.decorators import api_view
 from rest_framework.generics import *
 from rest_framework import status
 from ..models import PerceivedQualitiesReport, QualityCluster, PerceptionRequest
+from ..tasks import send_you_have_been_recognized_email
 from serializers import *
 from org.api.permissions import UserIsEmployee
 from org.models import Employee
@@ -52,6 +53,9 @@ class CreatePerceivedQuality(CreateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
+        subject_id =  serializer.data[0]['subject']
+        cluster_id = serializer.data[0]['cluster']
+        send_you_have_been_recognized_email.subtask((cluster_id, subject_id, request.user.employee.id)).apply_async()
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
