@@ -34,16 +34,22 @@ class PerceptionRequestManager(models.Manager):
     def unanswered_for_requester(self, requester):
         return self.filter(requester=requester).filter(submission=None)
 
-    def recent_feedback_requests_ive_sent(self, requester):
+    def recent_perception_requests_ive_sent(self, requester):
         return self.filter(requester=requester)\
             .exclude(expiration_date__lt=datetime.today())
+
+    def recent_perception_requests_ive_sent_that_have_not_been_completed(self, requester):
+        requests = self.recent_perception_requests_ive_sent(requester)
+        return requests.filter(was_responded_to=False)
 
 
 class PerceptionRequest(models.Model):
     objects = PerceptionRequestManager()
-    request_date = models.DateTimeField(auto_now_add=True)
+    category = models.ForeignKey(QualityCluster, null=True)
     expiration_date = models.DateField(null=True, blank=True, default=default_perception_request_expiration_date)
+    message = models.TextField(blank=True)
     requester = models.ForeignKey(Employee, related_name='perception_requests')
+    request_date = models.DateTimeField(auto_now_add=True)
     reviewer = models.ForeignKey(Employee, related_name='requests_for_perception')
     was_declined = models.BooleanField(default=False)
     was_responded_to = models.BooleanField(default=False)
@@ -60,7 +66,7 @@ class PerceptionRequest(models.Model):
         return hasattr(self, 'submission')
 
     def __str__(self):
-        return "Feedback request from %s for %s" % (self.requester, self.reviewer)
+        return "Perception request from %s for %s" % (self.requester, self.reviewer)
 
 
 class PerceivedQualityManager(models.Manager):
@@ -101,7 +107,7 @@ class PerceivedQualityManager(models.Manager):
 
 class PerceivedQuality(models.Model):
     objects = PerceivedQualityManager()
-    perception_request = models.ForeignKey(PerceptionRequest, null=True, blank=True, related_name='qualities')
+    perception_request = models.ForeignKey(PerceptionRequest, null=True, blank=True, related_name='submission')
     perception_date = models.DateTimeField(auto_now_add=True)
     subject = models.ForeignKey(Employee, related_name='+')
     reviewer = models.ForeignKey(Employee, related_name='+')

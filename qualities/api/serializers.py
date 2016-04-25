@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import Quality, QualityCluster, PerceivedQuality
+from ..models import Quality, QualityCluster, PerceivedQuality, PerceptionRequest
 from org.api.serializers import SanitizedEmployeeSerializer
 from org.models import Employee
 
@@ -70,3 +70,25 @@ class PerceivedQualitiesReportItemSerializer(serializers.Serializer):
 class PerceivedQualitiesReportSerializer(serializers.Serializer):
     employee = SanitizedEmployeeSerializer()
     qualities = PerceivedQualitiesReportItemSerializer(many=True)
+
+
+class PerceptionRequestSerializer(serializers.ModelSerializer):
+    request_date = serializers.DateTimeField(required=False)
+    expiration_date = serializers.DateField(required=False)
+    requester = SanitizedEmployeeSerializer()
+    reviewer = SanitizedEmployeeSerializer()
+    category = serializers.PrimaryKeyRelatedField(queryset=QualityCluster.objects.all())
+
+    class Meta:
+        model = PerceptionRequest
+        fields = ['id', 'request_date', 'expiration_date', 'requester', 'reviewer', 'message', 'has_been_answered', 'was_declined', 'category']
+
+
+class CreatePerceptionRequestSerializer(serializers.ModelSerializer):
+    reviewer = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
+    message = serializers.CharField(required=False, allow_blank=True)
+    category = serializers.PrimaryKeyRelatedField(queryset=QualityCluster.objects.all())
+
+    class Meta:
+        model = PerceptionRequest
+        fields = ['reviewer', 'message', 'category']

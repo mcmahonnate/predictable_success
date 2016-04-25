@@ -19,11 +19,12 @@ def send_perception_request_email(request_id):
         'recipient_first_name': perception_request.reviewer.first_name,
         'requester_full_name': perception_request.requester.full_name,
         'custom_message': perception_request.message,
+        'category': perception_request.category.name,
         'response_url': response_url,
     }
-    subject = "Someone wants your feedback!"
-    text_content = render_to_string('email/perception_request_notification.txt', context)
-    html_content = render_to_string('email/perception_request_notification.html', context)
+    subject = "Someone needs your quick input"
+    text_content = render_to_string('qualities/email/perception_request_notification.txt', context)
+    html_content = render_to_string('qualities/email/perception_request_notification.html', context)
     msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
     msg.attach_alternative(html_content, "text/html")
     msg.send()

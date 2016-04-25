@@ -5,11 +5,23 @@
         </div>
         <h1>Strengths
             <div class="button-group">
-                <button class="btn btn-success btn-feedback" ng-click="feedback.requestFeedback()" type="button"><i class="fa fa-comment"></i> Ask</button>
+                <button class="btn btn-success btn-feedback" ng-click="qualitiesReport.requestPerception()" type="button"><i class="fa fa-comment"></i> Ask</button>
                 <button class="btn btn-success btn-feedback" ng-click="qualitiesReport.giveUnsolicited()" type="button"><i class="fa fa-pencil"></i> Give</button>
             </div>
         </h1>
     </div>
+
+    <!-- Perception request message -->
+    <div ng-class="{'slide-up-active': hideRequestMessage}" class="alert alert-success slide-up" role="alert" ng-show="successRequestMessage">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <i class="fa fa-paper-plane sent-icon"></i>
+        <h2 class="alert-title">Request<span ng-show="successRequestMessageRecipient.length>1">s</span> Sent!</h2>
+        <p class="alert-message">
+            Your request has been sent to
+            <span ng-repeat="employee in successRequestMessageRecipient">{{ employee.full_name }}{{$last ? '' : ($index==successRequestMessageRecipient.length-2) ? ' and ' : ', '}}</span>.
+        </p>
+    </div>
+
     <div class="qualities panel">
         <h2 class="panel-title ng-binding">Super Powers</h2>
 
