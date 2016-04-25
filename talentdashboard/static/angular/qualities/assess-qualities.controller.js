@@ -24,8 +24,12 @@
         vm.stepNext = stepNext;
         vm.stepBack = stepBack;
         vm.goTo = goTo;
-        vm.getLimit = getLimit;
-
+        vm.array1Start = 0;
+        vm.array1End = 0;
+        vm.array2Start = 0;
+        vm.array2End = 0;
+        vm.array3Start = 0;
+        vm.array3End = 0;
         activate();
 
         function activate() {
@@ -60,12 +64,10 @@
 
         function stepNext() {
             vm.panel_index++;
-            console.log(vm.panel_index);
         }
 
         function stepBack() {
             vm.panel_index--;
-            console.log(vm.panel_index);
         }
 
         function goTo(path) {
@@ -77,12 +79,24 @@
             $('body').removeClass('modal-open');
         };
 
-        function getLimit(arrayLength) {
-            var limit = arrayLength/2;
-            if (!(arrayLength%2==0)) {
-                limit++;
+        function setArrayLimits(arrayLength) {
+            var arrayLimit = Math.floor(arrayLength/3);;
+            if (!(arrayLength%3==0)) {
+                arrayLimit++;
+                vm.array1Start = 0;
+                vm.array1End = arrayLimit;
+                vm.array2Start = vm.array1End;
+                vm.array2End = arrayLimit + arrayLimit;
+                vm.array3Start = vm.array2End;
+                vm.array3End = arrayLength;
+            } else {
+                vm.array1Start = 0;
+                vm.array1End = arrayLimit;
+                vm.array2Start = vm.array1End;
+                vm.array2End = arrayLength - arrayLimit;
+                vm.array3Start = vm.array2End;
+                vm.array3End = arrayLength;
             }
-            return limit;
 
         }
 
@@ -106,20 +120,17 @@
             QualityClusterService.getQualityCluster(clusterId)
                 .then(function (data) {
                     vm.cluster = data;
+                    setArrayLimits(vm.cluster.qualities.length);
                     return vm.cluster;
                 });
         }
 
         function select(quality) {
             if (!quality.selected) {
-                console.log('select');
                 quality.selected = true;
                 vm.selectedQualities.push(quality);
-                console.log(vm.selectedQualities);
             } else {
-                console.log('unselect');
                 unselect(quality)
-                console.log(vm.selectedQualities);
             }
         }
 
@@ -130,7 +141,6 @@
             angular.forEach(vm.selectedQualities, function(q, key) {
                 if (q.id === quality.id) {
                     index = key;
-                    console.log(index);
                 }
             });
             vm.selectedQualities.splice(index, 1);

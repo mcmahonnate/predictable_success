@@ -6,9 +6,25 @@
         <span ng-show="assessQualities.subject">&raquo; for</span>
         <span data-hj-masked>{{ assessQualities.subject.full_name }}</span>
         <a ng-show="assessQualities.subject && assessQualities.unsolicited" href="" data-toggle="modal" data-target=".modal" class="change">Change</a>
-    </h1>   
-
-    <div class="qualities panel" ng-show="assessQualities.subject && assessQualities.cluster" style="padding: 0px;">
+    </h1>
+    <div ng-show="assessQualities.message" class="alert alert-info slide-up" role="alert">
+        <h2 class="alert-title">From {{ assessQualities.subject.first_name }}</h2>
+        <div class="alert-message" style="padding-left:0; padding-top: 10px">
+            <div>
+                <div class="avatar-container pull-left hide-for-mobile" style="padding-right:10px;">
+                    <span class="large-headshot">
+                        <img ng-src="{{assessQualities.subject.avatar}}" alt="{{assessQualities.subject.full_name}}'s avatar" class="headshot-image">
+                    </span>
+                </div>
+                <div>
+                    <div class="comment-text">
+                        {{ assessQualities.message }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="qualities panel" ng-show="assessQualities.subject && assessQualities.cluster" style="padding: 0px; margin: 0">
         <div class="panel-heading" style="padding: 25px;">
             <h2 class="panel-title ng-binding">{{ assessQualities.subject.full_name }} on {{ assessQualities.cluster.name }}</h2>
         </div>
@@ -16,18 +32,7 @@
             <div class="panel-body" style="padding: 0 25px;">
                 <div class="row">
                     <div class="col-md-4">
-                        <div>
-                            <p style="font-style: italic;">
-                                <div class="large-headshot pull-left" style="display: inline-block; vertical-align: top; margin-right: 10px;">
-                                    <img ng-src="{{ assessQualities.subject.avatar }}" alt="{{assessQualities.subject.avatar}}'s avatar" class="headshot-image">
-                                </div>
-                                <span>{{ assessQualities.message }}</span>
-                            </p>
-                            <p style="margin-top: 5px;" ng-show="assessQualities.message"><strong>-{{ assessQualities.subject.first_name }}</strong></p>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="quality well well-sm" style="display:flex;height: auto;" ng-repeat="quality in assessQualities.cluster.qualities | limitTo:assessQualities.getLimit(assessQualities.cluster.qualities.length)"  ng-class="{'quality-selected': quality.selected, 'selfie-answer':!quality.selected}" ng-click="assessQualities.select(quality)">
+                        <div class="quality well well-sm" style="display:flex;height: auto;" ng-repeat="quality in assessQualities.cluster.qualities | slice:assessQualities.array1Start:assessQualities.array1End"  ng-class="{'quality-selected': quality.selected, 'selfie-answer':!quality.selected}" ng-click="assessQualities.select(quality)">
                             <div class="quality-label" style="width: 100%;">
                                 <h4><strong>{{ quality.name }}</strong></h4>
                                 <div collapse="!quality.selected">
@@ -40,7 +45,20 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="quality well well-sm" style="display:flex;height: auto;" ng-repeat="quality in assessQualities.cluster.qualities | slice:assessQualities.getLimit(assessQualities.cluster.qualities.length):assessQualities.cluster.qualities.length"  ng-class="{'quality-selected': quality.selected, 'selfie-answer':!quality.selected}" ng-click="assessQualities.select(quality)">
+                        <div class="quality well well-sm" style="display:flex;height: auto;" ng-repeat="quality in assessQualities.cluster.qualities | slice:assessQualities.array2Start:assessQualities.array2End"  ng-class="{'quality-selected': quality.selected, 'selfie-answer':!quality.selected}" ng-click="assessQualities.select(quality)">
+                            <div class="quality-label" style="width: 100%;">
+                                <h4><strong>{{ quality.name }}</strong></h4>
+                                <div collapse="!quality.selected">
+                                    <p ng-bind-html="quality.description" style="margin-top:5px;"></p>
+                                </div>
+                            </div>
+                            <div style="margin: auto 0px;">
+                                <i class="fa fa-check-circle-o selected-icon" ng-show="quality.selected"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="quality well well-sm" style="display:flex;height: auto;" ng-repeat="quality in assessQualities.cluster.qualities | slice:assessQualities.array3Start:assessQualities.array3End"  ng-class="{'quality-selected': quality.selected, 'selfie-answer':!quality.selected}" ng-click="assessQualities.select(quality)">
                             <div class="quality-label" style="width: 100%;">
                                 <h4><strong>{{ quality.name }}</strong></h4>
                                 <div collapse="!quality.selected">
