@@ -36,7 +36,7 @@ var app = angular.module('tdb', [
             when('/my-profile', {templateUrl: '/static/angular/partials/profile.html', controller: 'ProfileCtrl', resolve: {authorizeRoute: authorizeRoute}}).
             when('/projects/:projectId', {templateUrl: '/static/angular/projects/partials/project-detail.html', controller: 'ProjectController as viewProject', resolve: {authorizeRoute: authorizeRoute}}).
             when('/projects', {templateUrl: '/static/angular/projects/partials/projects.html', controller: 'ProjectsController as projects', resolve: {authorizeRoute: authorizeRoute}}).
-            when('/qualities/perception/request/:id/reply', {templateUrl: '/static/angular/partials/qualities/respond_to_request.html', controller: 'RespondToPerceptionRequestController as submitPerception', resolve: {authorizeRoute: authorizeRoute}}).
+            when('/qualities/perception/request/:requestId/reply', {templateUrl: '/static/angular/qualities/partials/submission.html', controller: 'AssessQualitiesController as assessQualities', resolve: {authorizeRoute: authorizeRoute}}).
             when('/qualities/perception/submission', {templateUrl: '/static/angular/qualities/partials/submission.html', controller: 'AssessQualitiesController as assessQualities', resolve: {authorizeRoute: authorizeRoute}}).
             when('/qualities/perception/my', {templateUrl: '/static/angular/qualities/partials/strengths-report.html', controller: 'QualitiesReportController as qualitiesReport', resolve: {authorizeRoute: authorizeRoute}}).
             otherwise({redirectTo: '/'});

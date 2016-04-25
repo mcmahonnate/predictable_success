@@ -2,12 +2,14 @@
         .module('qualities')
         .controller('AssessQualitiesController', AssessQualitiesController);
 
-    function AssessQualitiesController(analytics, $location, $scope, Notification, QualityClusterService, PerceivedQualityService) {
+    function AssessQualitiesController(analytics, $location, $scope, $routeParams, Notification, QualityClusterService, PerceivedQualityService, PerceptionRequestService) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         var vm = this;
 
         vm.clusters = []
         vm.cluster = null;
+        vm.message = '';
+        vm.unsolicited = false;
         vm.selectedCluster = null;
         vm.employees = [];
         vm.qualities = [];
@@ -26,8 +28,27 @@
         activate();
 
         function activate() {
-            getEmployees();
-            getClusters();
+            if ($routeParams.requestId) {
+                getRequest();
+            }
+            else {
+                vm.unsolicited = true;
+                getEmployees();
+                getClusters();
+            }
+        }
+
+        function getRequest() {
+            PerceptionRequestService.getRequest($routeParams.requestId)
+                .then(function(request){
+                    getCluster(request.category);
+                    vm.subject = request.requester;
+                    vm.message = request.message;
+                },
+                function() {
+                    Notification.error("You don't have access to this request.")
+                }
+            )
         }
 
         function stepNext() {

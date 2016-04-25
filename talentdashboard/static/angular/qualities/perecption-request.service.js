@@ -5,7 +5,8 @@ angular
 function PerceptionRequestService($log, PerceptionRequestResource) {
     return {
         sendPerceptionRequests: sendPerceptionRequests,
-        getMyRecentlySentRequests: getMyRecentlySentRequests
+        getMyRecentlySentRequests: getMyRecentlySentRequests,
+        getRequest: getRequest
     };
 
     function sendPerceptionRequests(reviewers, message, category) {
@@ -36,6 +37,18 @@ function PerceptionRequestService($log, PerceptionRequestResource) {
 
         function fail(response) {
             $log.error('getMyRecentlySentRequests failed');
+        }
+    }
+
+    function getRequest(id) {
+        return PerceptionRequestResource.getRequest({id: id}, null, success, fail).$promise;
+
+        function success(response) {
+            return response;
+        }
+
+        function fail(response) {
+            $log.error('getRequest failed');
         }
     }
 }

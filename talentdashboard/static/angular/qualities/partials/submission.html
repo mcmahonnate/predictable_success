@@ -24,7 +24,7 @@
                                 <div class="large-headshot pull-left" style="display: inline-block; vertical-align: top; margin-right: 10px;">
                                     <img ng-src="{{ assessQualities.subject.avatar }}" alt="{{assessQualities.subject.avatar}}'s avatar" class="headshot-image">
                                 </div>
-                                <span>"Sed tortor turpis, fermentum non dolor sed, porta lacinia tortor. Vestibulum pretium dui ut orci iaculis, non tincidunt ex varius. Cras cursus urna vitae sodales interdum. Nullam fringilla diam commodo ante hendrerit, vel efficitur libero elementum. Sed ut volutpat enim, at gravida lorem."</span>
+                                <span>{{ assessQualities.message }}</span>
                             </p>
                             <p style="margin-top: 5px;"><strong>-{{ assessQualities.subject.first_name }}</strong></p>
                         </div>
@@ -64,7 +64,7 @@
     </div>
 
 </div>
-<div ng-include="'/static/angular/partials/qualities/_modals/unsolicited-select-person.html'"></div>
+<div ng-if="assessQualities.unsolicited" ng-include="'/static/angular/partials/qualities/_modals/unsolicited-select-person.html'"></div>
 
 
 <style>

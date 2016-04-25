@@ -4,8 +4,9 @@ angular
 
 function PerceptionRequestResource($resource) {
     var actions = {
-        'sendPerceptionRequests': {
-            method: 'POST',
+        'getMyRecentlySentRequests': {
+            url: '/api/v1/qualities/requests/recently-sent/',
+            method: 'GET',
             isArray: true
         },
         'getPerceptionRequests': {
@@ -13,11 +14,13 @@ function PerceptionRequestResource($resource) {
             method: 'GET',
             isArray: true
         },
-        'getMyRecentlySentRequests': {
-            url: '/api/v1/qualities/requests/recently-sent/',
+        'getRequest': {
             method: 'GET',
+        },
+        'sendPerceptionRequests': {
+            method: 'POST',
             isArray: true
-        }
+        },
     };
     return $resource('/api/v1/qualities/requests/:id/', null, actions);
 }
