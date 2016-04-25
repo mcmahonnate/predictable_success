@@ -24,7 +24,7 @@ class Command(BaseCommand):
         for employee_id in employee_ids:
             employee = Employee.objects.get(id=employee_id['assessor__id'])
             print employee.full_name
-            conversations = Conversation.objects.filter(development_lead__id=employee.id, development_lead_assessment__is_draft=True)
+            conversations = Conversation.objects.filter(development_lead__id=employee.id, development_lead_assessment__is_draft=True, development_lead_assessment__completed=False)
             if conversations.all().count() > 0:
                 response_url = 'https://%s/#/id/' % tenant.domain_url
                 recipient_email = employee.email
