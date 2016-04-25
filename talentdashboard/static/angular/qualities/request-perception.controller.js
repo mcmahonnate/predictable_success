@@ -2,7 +2,7 @@
         .module('qualities')
         .controller('RequestPerceptionController', RequestPerceptionController);
 
-    function RequestPerceptionController(PerceptionRequestService, QualityClusterService, EmployeeSearch, Notification, $modal, $timeout, $modalInstance, $rootScope) {
+    function RequestPerceptionController(panel, PerceptionRequestService, QualityClusterService, EmployeeSearch, Notification, $modal, $timeout, $modalInstance, $rootScope) {
         var vm = this;
         vm.category = null;
         vm.categories = [];
@@ -13,7 +13,7 @@
         vm.stepNext = stepNext;
         vm.stepBack = stepBack;
         vm.cancel = cancel;
-        vm.panel_index = 0;
+        vm.panel_index = panel;
         vm.enableSend = true;
 
         activate();

@@ -1,5 +1,16 @@
 <form id="feedback-modal" novalidate="novalidate">
     <a class="close" ng-click="request.cancel()" data-dismiss="modal">&times;</a>
+    <div class="form-group" ng-show="request.panel_index==-1">
+        <div class="modal-body">
+            <panel>
+                <h3 class="modal-title">Let's get started</h3>
+                <p class="modal-subtext">We'll ask your peers where you think you are crushing it.</p>
+            </panel>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success" ng-click="request.stepNext()">Get Started &rarr;</button>
+        </div>
+    </div>
     <div class="form-group" ng-show="request.panel_index==0">
         <div class="modal-body">
             <panel>

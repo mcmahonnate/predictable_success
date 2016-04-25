@@ -22,9 +22,9 @@
         }
 
         function checkIsEmpty() {
-            if (vm.qualitiesLoaded && vm.myRecentlySentRequestsLoaded) {
-                if (vm.qualities.length == 0 && vm.myRecentlySentRequests.length == 0) {
-                    vm.showEmptyScreen = true;
+            if (vm.qualitiesLoaded) {
+                if (vm.qualities.length == 0) {
+                    vm.requestPerception(-1);
                 } else {
                     vm.showEmptyScreen = false;
                 }
@@ -55,7 +55,7 @@
                 });
         }
 
-        function requestPerception() {
+        function requestPerception(panel) {
             var modalInstance = $modal.open({
                 animation: true,
                 windowClass: 'xx-dialog fade zoom',
@@ -63,7 +63,9 @@
                 templateUrl: '/static/angular/qualities/partials/_modals/request-perception.html',
                 controller: 'RequestPerceptionController as request',
                 resolve: {
-
+                    panel: function () {
+                        return panel
+                    }
                 }
             });
             modalInstance.result.then(
