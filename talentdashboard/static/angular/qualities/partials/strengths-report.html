@@ -1,8 +1,5 @@
 <div id="feedback" class="container checkin">
     <div>
-        <div class="header-links hide-for-mobile-and-tablet pull-right">
-            <a href="" data-toggle="modal" data-target=".feedback-welcome-modal" class="show-welcome-modal">Show welcome message</a>
-        </div>
         <h1>Strengths
             <div class="button-group">
                 <button class="btn btn-success btn-feedback" ng-click="qualitiesReport.requestPerception(0)" type="button"><i class="fa fa-comment"></i> Ask</button>
@@ -22,7 +19,25 @@
         </p>
     </div>
 
-    <div class="qualities panel">
+    <div class="alert alert-success slide-up" role="alert" ng-repeat="prompt in qualitiesReport.prompts">
+        <a class="btn btn-success btn-feedback pull-right" ng-href="#/qualities/perception/submission/{{prompt.id}}/self" type="button">
+            Start
+        </a>
+        <i class="glyphicon-regular glyphicon-dumbell sent-icon alert-success"></i>
+        <h2 class="alert-title">You've Been Recognized!</h2>
+        <p class="alert-message">
+            Your peers have recognized you for {{ prompt.name }}. You're just one step away from uncovering your awesome sauce. Before we show you the goods we first need you to complete this quick self assessment.
+        </p>
+    </div>
+
+
+    <div class="panel panel-empty fade-in" ng-show="qualitiesReport.showEmptyScreen">
+        <img class="grumpycat" src="../static/images/grumpycat.png" alt="Grumpy Cat" />
+        <h2>"Mmmmeeh... i see you don't have any activity yet. Use the buttons above to get started."
+        </h2>
+    </div>
+
+    <div class="qualities panel" ng-show="!qualitiesReport.showEmptyScreen">
         <h2 class="panel-title ng-binding">Super Powers</h2>
 
         <div style="margin-top: 30px;">
@@ -41,7 +56,7 @@
             </div>
         </div>
     </div>
-    <div class="qualities panel">
+    <div class="qualities panel" ng-show="!qualitiesReport.showEmptyScreen">
         <h2 class="panel-title ng-binding">Blind Spots</h2>
 
         <div style="margin-top: 30px;">
@@ -60,7 +75,7 @@
             </div>
         </div>
     </div>
-    <div class="qualities panel">
+    <div class="qualities panel" ng-show="!qualitiesReport.showEmptyScreen">
         <h2 class="panel-title ng-binding">Proving Grounds</h2>
 
         <div style="margin-top: 30px;">

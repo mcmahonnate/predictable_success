@@ -17,7 +17,7 @@ class QualityClusterSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'min_choice', 'max_choice', 'qualities')
 
 
-class QualityClusterListSerializer(serializers.ModelSerializer):
+class MinimalQualityClusterSerializer(serializers.ModelSerializer):
     class Meta:
         model = QualityCluster
         fields = ('id', 'name')
@@ -35,7 +35,7 @@ class CreatePerceivedQualitySerializer(serializers.ModelSerializer):
 
 class PerceivedQualitiesSerializer(serializers.ModelSerializer):
     quality = QualitySerializer()
-    cluster = QualityClusterListSerializer()
+    cluster = MinimalQualityClusterSerializer()
     reviewer = SanitizedEmployeeSerializer()
 
     class Meta:
@@ -44,7 +44,7 @@ class PerceivedQualitiesSerializer(serializers.ModelSerializer):
 
 
 class PerceptionSerializer(serializers.ModelSerializer):
-    cluster = QualityClusterListSerializer()
+    cluster = MinimalQualityClusterSerializer()
     reviewer = SanitizedEmployeeSerializer()
 
     class Meta:
@@ -69,6 +69,7 @@ class PerceivedQualitiesReportItemSerializer(serializers.Serializer):
 
 class PerceivedQualitiesReportSerializer(serializers.Serializer):
     employee = SanitizedEmployeeSerializer()
+    prompts = MinimalQualityClusterSerializer(many=True)
     qualities = PerceivedQualitiesReportItemSerializer(many=True)
 
 

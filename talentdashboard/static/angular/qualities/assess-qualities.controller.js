@@ -10,6 +10,7 @@
         vm.cluster = null;
         vm.message = '';
         vm.unsolicited = false;
+        vm.selfAssessment = false;
         vm.selectedCluster = null;
         vm.employees = [];
         vm.qualities = [];
@@ -34,6 +35,7 @@
                 if ($routeParams.employeeId = 'self') {
                     getCluster($routeParams.categoryId);
                     vm.subject = $rootScope.currentUser.employee;
+                    vm.selfAssessment = true;
                 }
             }
             else {
@@ -138,9 +140,12 @@
             console.log(vm.selectedQualities);
             PerceivedQualityService.createPerceivedQualities(vm.selectedQualities, vm.subject, vm.cluster)
                 .then(function (data) {
-                    console.log(data);
-                     Notification.success("Thanks we'll get those to " + vm.subject.first_name + " pronto.");
-                     goTo('qualities/perception/my');
+                    if (vm.selfAssessment) {
+                        Notification.success("Thanks!");
+                    } else {
+                        Notification.success("Thanks we'll get those to " + vm.subject.first_name + " pronto.");
+                    }
+                    goTo('qualities/perception/my');
             });
         }
     }

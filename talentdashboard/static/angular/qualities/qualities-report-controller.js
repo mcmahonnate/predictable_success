@@ -5,7 +5,9 @@
     function QualitiesReportController(analytics, $location, $scope, $modal, $rootScope, Notification, PerceivedQualityService, PerceptionRequestService) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         var vm = this;
+        vm.showEmptyScreen = false;
         vm.qualities = [];
+        vm.prompts = [];
         vm.myRecentlySentRequests = [];
         vm.qualitiesLoaded = false;
         vm.myRecentlySentRequestsLoaded = false;
@@ -22,11 +24,14 @@
         }
 
         function checkIsEmpty() {
-            if (vm.qualitiesLoaded) {
+            if (vm.qualitiesLoaded & vm.myRecentlySentRequestsLoaded) {
                 if (vm.qualities.length == 0) {
-                    vm.requestPerception(-1);
+                    vm.showEmptyScreen = true;
                 } else {
                     vm.showEmptyScreen = false;
+                }
+                if (vm.myRecentlySentRequests.length == 0) {
+                    vm.requestPerception(-1);
                 }
             }
         }
@@ -39,6 +44,7 @@
             return PerceivedQualityService.getMyQualities()
                 .then(function (data) {
                     vm.qualities = data.qualities;
+                    vm.prompts = data.prompts;
                     vm.qualitiesLoaded = true;
                     checkIsEmpty();
                     return null;

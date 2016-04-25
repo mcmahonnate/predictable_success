@@ -13,11 +13,22 @@ class Quality(models.Model):
         return self.name
 
 
+class QualityClusterManager(models.Manager):
+    def need_self_assessment(self, employee):
+        self_perceptions = PerceivedQuality.objects.self_perception(subject=employee)
+        self_cluster_ids = self_perceptions.values_list('cluster__id', flat=True).distinct()
+        blind_perceptions = PerceivedQuality.objects.blind(subject=employee)
+        blind_cluster_ids = blind_perceptions.values_list('cluster__id', flat=True).distinct()
+
+        return self.filter(id__in=blind_cluster_ids).exclude(id__in=self_cluster_ids)
+
+
 class QualityCluster(models.Model):
+    objects = QualityClusterManager()
     name = models.CharField(max_length=255, blank=True,)
     min_choice = models.IntegerField(default=0)
     max_choice = models.IntegerField(default=0)
-    qualities = models.ManyToManyField(Quality)
+    qualities = models.ManyToManyField(Quality, related_name='clusters')
 
     def __str__(self):
         return self.name
@@ -70,35 +81,35 @@ class PerceptionRequest(models.Model):
 
 
 class PerceivedQualityManager(models.Manager):
-    def self_perception(self, subject):
-        return self.filter(subject=subject, reviewer=subject)
+    def self_perception(self, subject, exclude_clusters=[]):
+        return self.filter(subject=subject, reviewer=subject).exclude(cluster__id__in=exclude_clusters)
 
-    def others_perception(self, subject):
-        return self.filter(Q(subject=subject) & ~Q(reviewer=subject))
+    def others_perception(self, subject, exclude_clusters=[]):
+        return self.filter(Q(subject=subject) & ~Q(reviewer=subject)).exclude(cluster__id__in=exclude_clusters)
 
-    def all(self, subject):
-        all = self.filter(subject=subject)
+    def all(self, subject, exclude_clusters=[]):
+        all = self.filter(subject=subject).exclude(cluster__id__in=exclude_clusters)
         return all
 
-    def hidden(self, subject):
-        self_perception = self.self_perception(subject).values_list('quality__id', flat=True).distinct()
-        others_perception = self.others_perception(subject).values_list('quality__id', flat=True).distinct()
+    def hidden(self, subject, exclude_clusters=[]):
+        self_perception = self.self_perception(subject, exclude_clusters).values_list('quality__id', flat=True).distinct()
+        others_perception = self.others_perception(subject, exclude_clusters).values_list('quality__id', flat=True).distinct()
         hidden_ids = Quality.objects.filter(Q(id__in=self_perception) & ~Q(id__in=others_perception))\
             .values_list('id', flat=True)
         hidden = self.filter(quality__id__in=hidden_ids, subject=subject)
         return hidden
 
-    def shared(self, subject):
-        self_perception = self.self_perception(subject).values_list('quality__id', flat=True).distinct()
-        others_perception = self.others_perception(subject).values_list('quality__id', flat=True).distinct()
+    def shared(self, subject, exclude_clusters=[]):
+        self_perception = self.self_perception(subject, exclude_clusters).values_list('quality__id', flat=True).distinct()
+        others_perception = self.others_perception(subject, exclude_clusters).values_list('quality__id', flat=True).distinct()
         shared_ids = Quality.objects.filter(Q(id__in=self_perception) & Q(id__in=others_perception))\
             .values_list('id', flat=True)
         shared = self.filter(quality__id__in=shared_ids, subject=subject)
         return shared
 
-    def blind(self, subject):
-        self_perception = self.self_perception(subject).values_list('quality__id', flat=True).distinct()
-        others_perception = self.others_perception(subject).values_list('quality__id', flat=True).distinct()
+    def blind(self, subject, exclude_clusters=[]):
+        self_perception = self.self_perception(subject, exclude_clusters).values_list('quality__id', flat=True).distinct()
+        others_perception = self.others_perception(subject, exclude_clusters).values_list('quality__id', flat=True).distinct()
         blind_ids = Quality.objects.filter(~Q(id__in=self_perception) & Q(id__in=others_perception))\
             .values_list('id', flat=True)
         blind = self.filter(quality__id__in=blind_ids, subject=subject)
@@ -137,13 +148,16 @@ class PerceivedQualitiesReportItem(object):
 class PerceivedQualitiesReport(object):
     def __init__(self, employee):
         self.employee = employee
-        self.qualities = [];
+        self.qualities = []
+        self.prompts = []
 
     def load(self):
-        shared_qualities = PerceivedQuality.objects.shared(self.employee)
-        hidden_qualities = PerceivedQuality.objects.hidden(self.employee)
-        blind_qualities = PerceivedQuality.objects.blind(self.employee)
-        all_quality_ids = PerceivedQuality.objects.all(self.employee).values_list('quality__id', flat=True).distinct()
+        self.prompts = QualityCluster.objects.need_self_assessment(employee=self.employee)
+        exclude_clusters = self.prompts.values_list('id', flat=True)
+        shared_qualities = PerceivedQuality.objects.shared(subject=self.employee, exclude_clusters=exclude_clusters)
+        hidden_qualities = PerceivedQuality.objects.hidden(subject=self.employee, exclude_clusters=exclude_clusters)
+        blind_qualities = PerceivedQuality.objects.blind(subject=self.employee, exclude_clusters=exclude_clusters)
+        all_quality_ids = PerceivedQuality.objects.all(subject=self.employee, exclude_clusters=exclude_clusters).values_list('quality__id', flat=True).distinct()
         qualities = Quality.objects.filter(id__in=all_quality_ids)
         for quality in qualities:
             report_item = PerceivedQualitiesReportItem(id=quality.id, name=quality.name, description=quality.description)

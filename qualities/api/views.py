@@ -23,7 +23,7 @@ def perceived_qualities_report(request):
 
 # QualityCluster
 class QualityClusters(ListAPIView):
-    serializer_class = QualityClusterListSerializer
+    serializer_class = MinimalQualityClusterSerializer
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
