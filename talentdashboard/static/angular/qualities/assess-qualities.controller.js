@@ -2,7 +2,7 @@
         .module('qualities')
         .controller('AssessQualitiesController', AssessQualitiesController);
 
-    function AssessQualitiesController(analytics, $location, $scope, $routeParams, Notification, QualityClusterService, PerceivedQualityService, PerceptionRequestService) {
+    function AssessQualitiesController(analytics, $location, $scope, $routeParams, $rootScope, Notification, QualityClusterService, PerceivedQualityService, PerceptionRequestService) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         var vm = this;
 
@@ -30,6 +30,11 @@
         function activate() {
             if ($routeParams.requestId) {
                 getRequest();
+            } else if ($routeParams.employeeId && $routeParams.categoryId) {
+                if ($routeParams.employeeId = 'self') {
+                    getCluster($routeParams.categoryId);
+                    vm.subject = $rootScope.currentUser.employee;
+                }
             }
             else {
                 vm.unsolicited = true;

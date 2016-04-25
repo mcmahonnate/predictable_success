@@ -5,17 +5,14 @@
         <span>&raquo; {{ assessQualities.cluster.name }}</span>
         <span ng-show="assessQualities.subject">&raquo; for</span>
         <span data-hj-masked>{{ assessQualities.subject.full_name }}</span>
-        <a ng-show="assessQualities.subject" href="" data-toggle="modal" data-target=".modal" class="change">Change</a>
+        <a ng-show="assessQualities.subject && assessQualities.unsolicited" href="" data-toggle="modal" data-target=".modal" class="change">Change</a>
     </h1>   
 
     <div class="qualities panel" ng-show="assessQualities.subject && assessQualities.cluster" style="padding: 0px;">
         <div class="panel-heading" style="padding: 25px;">
-            <h2 class="panel-title ng-binding"><a ng-click="assessQualities.collapse=!assessQualities.collapse" style="cursor: pointer">{{ assessQualities.subject.full_name }} on {{ assessQualities.cluster.name }}</a>
-                <i class="fa fa-chevron-down pull-right collapse-toggle" ng-show="!assessQualities.collapse" ng-click="assessQualities.collapse=true"></i>
-                <i class="fa fa-chevron-right pull-right collapse-toggle" ng-show="assessQualities.collapse" ng-click="assessQualities.collapse=false"></i>
-            </h2>
+            <h2 class="panel-title ng-binding">{{ assessQualities.subject.full_name }} on {{ assessQualities.cluster.name }}</h2>
         </div>
-        <div collapse="assessQualities.collapse" ng-init="assessQualities.collapse=false">
+        <div>
             <div class="panel-body" style="padding: 0 25px;">
                 <div class="row">
                     <div class="col-md-4">
@@ -26,7 +23,7 @@
                                 </div>
                                 <span>{{ assessQualities.message }}</span>
                             </p>
-                            <p style="margin-top: 5px;"><strong>-{{ assessQualities.subject.first_name }}</strong></p>
+                            <p style="margin-top: 5px;" ng-show="assessQualities.message"><strong>-{{ assessQualities.subject.first_name }}</strong></p>
                         </div>
                     </div>
                     <div class="col-md-4">
