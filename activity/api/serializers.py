@@ -78,44 +78,10 @@ class EventSerializer(serializers.ModelSerializer):
         return obj.event_type.name
 
     def get_description(self, obj):
-        if not obj.show_conversation:
-            return None
-        comment_type = ContentType.objects.get_for_model(Comment)
-        checkin_type = ContentType.objects.get_for_model(CheckIn)
-        employee_zone_type = ContentType.objects.get_for_model(EmployeeZone)
-        if obj.event_type.id is comment_type.id:
-            comment = Comment.objects.get(pk=obj.event_id)
-            return comment.content
-        elif obj.event_type.id is employee_zone_type.id:
-            employee_zone = EmployeeZone.objects.get(pk=obj.event_id)
-            return employee_zone.notes
-        elif obj.event_type.id is checkin_type.id:
-            checkin = CheckIn.objects.get(pk=obj.event_id)
-            return checkin.get_summary(self.context['request'].user)
-        return None
+        return obj.description(self.context['request'].user)
 
     def get_verb(self, obj):
-        comment_type = ContentType.objects.get_for_model(Comment)
-        checkin_type = ContentType.objects.get_for_model(CheckIn)
-        feedback_digest_type = ContentType.objects.get_for_model(FeedbackDigest)
-        employee_zone_type = ContentType.objects.get_for_model(EmployeeZone)
-        if obj.event_type.id is comment_type.id:
-            return 'wrote a note'
-        elif obj.event_type.id is employee_zone_type.id:
-            employee_zone = EmployeeZone.objects.get(pk=obj.event_id)
-            if employee_zone.employee.id == employee_zone.assessor.id:
-                return 'took a selfie'
-            else:
-                return 'had a development conversation'
-        elif obj.event_type.id is feedback_digest_type.id:
-            return 'delivered feedback'
-        elif obj.event_type.id is checkin_type.id:
-            check_in = CheckIn.objects.get(id=obj.event_id)
-            if check_in.employee.user == obj.user:
-                return 'shared their %s check-in' % check_in.get_type_description()
-            else:
-                return 'had a %s check-in' % check_in.get_type_description()
-        return None
+        return obj.verb()
 
     class Meta:
         model = Event

@@ -1,9 +1,13 @@
+from blah.models import Comment
+from checkins.models import CheckIn
+from devzones.models import EmployeeZone
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
-from org.models import Employee
 from django.contrib.auth.models import User
-import datetime
 from django.utils.log import getLogger
+from feedback.models import FeedbackDigest
+from org.models import Employee
+import datetime
 
 logger = getLogger('talentdashboard')
 
@@ -43,6 +47,46 @@ class Event(models.Model):
     date = models.DateTimeField(null=False, blank=False, default=datetime.datetime.now)
     show_conversation = models.BooleanField(default=True)
     objects = EventManager()
+
+    def description(self, user):
+        if not self.show_conversation:
+            return None
+        comment_type = ContentType.objects.get_for_model(Comment)
+        checkin_type = ContentType.objects.get_for_model(CheckIn)
+        employee_zone_type = ContentType.objects.get_for_model(EmployeeZone)
+        if self.event_type.id is comment_type.id:
+            comment = Comment.objects.get(pk=self.event_id)
+            return comment.content
+        elif self.event_type.id is employee_zone_type.id:
+            employee_zone = EmployeeZone.objects.get(pk=self.event_id)
+            return employee_zone.notes
+        elif self.event_type.id is checkin_type.id:
+            checkin = CheckIn.objects.get(pk=self.event_id)
+            return checkin.get_summary(user)
+        return None
+
+    def verb(self):
+        comment_type = ContentType.objects.get_for_model(Comment)
+        checkin_type = ContentType.objects.get_for_model(CheckIn)
+        feedback_digest_type = ContentType.objects.get_for_model(FeedbackDigest)
+        employee_zone_type = ContentType.objects.get_for_model(EmployeeZone)
+        if self.event_type.id is comment_type.id:
+            return 'wrote a note'
+        elif self.event_type.id is employee_zone_type.id:
+            employee_zone = EmployeeZone.objects.get(pk=self.event_id)
+            if employee_zone.employee.id == employee_zone.assessor.id:
+                return 'took a selfie'
+            else:
+                return 'had a development conversation'
+        elif self.event_type.id is feedback_digest_type.id:
+            return 'delivered feedback'
+        elif self.event_type.id is checkin_type.id:
+            check_in = CheckIn.objects.get(id=self.event_id)
+            if check_in.employee.user == self.user:
+                return 'shared their %s check-in' % check_in.get_type_description()
+            else:
+                return 'had a %s check-in' % check_in.get_type_description()
+        return None
 
     def __str__(self):
         return "%s created a %s about %s" % (self.user.email, self.event_type.name, self.employee.full_name)
