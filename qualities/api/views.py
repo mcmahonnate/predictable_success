@@ -53,9 +53,10 @@ class CreatePerceivedQuality(CreateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-        subject_id =  serializer.data[0]['subject']
-        cluster_id = serializer.data[0]['cluster']
-        send_you_have_been_recognized_email.subtask((cluster_id, subject_id, request.user.employee.id)).apply_async()
+        subject_id = serializer.data[0]['subject']
+        if request.user.employee.id != subject_id:
+            cluster_id = serializer.data[0]['cluster']
+            send_you_have_been_recognized_email.subtask((cluster_id, subject_id, request.user.employee.id)).apply_async()
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
