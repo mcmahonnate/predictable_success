@@ -9,13 +9,12 @@ function PerceivedQualityService($http, $log, PerceivedQualityResource, Employee
         getMyQualities: getMyQualities
     };
 
-    function createPerceivedQualities(qualities, subject, cluster) {
+    function createPerceivedQualities(qualities, subject, cluster, perception_request_id) {
         var requests = [];
 
         for (var i = 0; i < qualities.length; i++) {
-            requests.push({quality: qualities[i].id, subject: subject.id, cluster: cluster.id});
+            requests.push({quality: qualities[i].id, subject: subject.id, cluster: cluster.id, perception_request: perception_request_id});
         }
-        console.log(requests);
         return PerceivedQualityResource.createPerceivedQualities(requests, success, fail).$promise;
 
         function success(sentFeedbackRequests) {

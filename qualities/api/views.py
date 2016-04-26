@@ -51,6 +51,11 @@ class CreatePerceivedQuality(CreateAPIView):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        if serializer.data[0]['perception_request']:
+            perception_request_id = serializer.data[0]['perception_request']
+            perception_request = PerceptionRequest.objects.get(id=perception_request_id)
+            if perception_request.was_responded_to:
+                return Response("This request has already been answered.", status=status.HTTP_403_FORBIDDEN)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         subject_id = serializer.data[0]['subject']

@@ -9,6 +9,7 @@
         vm.clusters = []
         vm.cluster = null;
         vm.message = '';
+        vm.perception_request_id = null;
         vm.unsolicited = false;
         vm.selfAssessment = false;
         vm.selectedCluster = null;
@@ -53,11 +54,17 @@
             PerceptionRequestService.getRequest($routeParams.requestId)
                 .then(function(request){
                     getCluster(request.category);
+                    if (request.was_responded_to) {
+                        Notification.error("You've already answered this request.");
+                        goTo('qualities/perception/my');
+                    }
+                    vm.perception_request_id = request.id;
                     vm.subject = request.requester;
                     vm.message = request.message;
                 },
                 function() {
-                    Notification.error("You don't have access to this request.")
+                    Notification.error("You don't have access to this request.");
+                    goTo('qualities/perception/my');
                 }
             )
         }
@@ -147,8 +154,7 @@
         }
 
         function save() {
-            console.log(vm.selectedQualities);
-            PerceivedQualityService.createPerceivedQualities(vm.selectedQualities, vm.subject, vm.cluster)
+            PerceivedQualityService.createPerceivedQualities(vm.selectedQualities, vm.subject, vm.cluster, vm.perception_request_id)
                 .then(function (data) {
                     if (vm.selfAssessment) {
                         Notification.success("Thanks!");

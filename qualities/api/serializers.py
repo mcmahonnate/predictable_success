@@ -27,10 +27,11 @@ class CreatePerceivedQualitySerializer(serializers.ModelSerializer):
     subject = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
     quality = serializers.PrimaryKeyRelatedField(queryset=Quality.objects.all())
     cluster = serializers.PrimaryKeyRelatedField(queryset=QualityCluster.objects.all())
+    perception_request = serializers.PrimaryKeyRelatedField(queryset=PerceptionRequest.objects.all(), required=False, allow_null=True)
 
     class Meta:
         model = PerceivedQuality
-        fields = ['subject', 'quality', 'cluster']
+        fields = ['subject', 'quality', 'cluster', 'perception_request']
 
 
 class PerceivedQualitiesSerializer(serializers.ModelSerializer):
@@ -82,7 +83,7 @@ class PerceptionRequestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PerceptionRequest
-        fields = ['id', 'request_date', 'expiration_date', 'requester', 'reviewer', 'message', 'has_been_answered', 'was_declined', 'category']
+        fields = ['id', 'request_date', 'expiration_date', 'requester', 'reviewer', 'message', 'was_responded_to', 'was_declined', 'category']
 
 
 class CreatePerceptionRequestSerializer(serializers.ModelSerializer):
