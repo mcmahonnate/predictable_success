@@ -1,7 +1,6 @@
-<html>
-    <head>
-    </head>
-    <body>
+{% extends "layouts/email.html" %}
+
+{% block content %}
         <p>
             Hi, {{ recipient_first_name }}!
         </p>
@@ -11,5 +10,4 @@
         <p>
             Click here to get it done: <a href="{{ response_url }}">{{ response_url }}</a>
         </p>
-    </body>
-</html>
+{% endblock content%}
