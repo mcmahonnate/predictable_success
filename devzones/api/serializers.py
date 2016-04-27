@@ -68,7 +68,7 @@ class CreateEmployeeZoneSerializer(serializers.ModelSerializer):
 
 
 class EmployeeZoneReportSerializer(serializers.ModelSerializer):
-    employee = EmployeeSerializer()
+    employee = SanitizedEmployeeSerializer()
     assessor = SanitizedEmployeeSerializer()
     zone = ZoneSerializer()
     next_question = QuestionSerializer()

@@ -52,9 +52,6 @@ function DevZonesReportController(DevZonesReportService, Notification, analytics
             var row = {};
             row.id = report.employee.id;
             row.name = report.employee.full_name;
-            row.email = report.employee.email;
-            row.team = report.employee.team.name;
-            row.hire_date = report.employee.hire_date;
             row.meeting = report.meeting_name;
             row.represented_by = report.development_lead ? report.development_lead.full_name : null;
             row.finished_selfie = report.completed;
