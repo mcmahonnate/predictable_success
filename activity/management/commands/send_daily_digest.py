@@ -60,5 +60,5 @@ class Command(BaseCommand):
                 msg.send()
                 self.stdout.write('Successfully sent Daily Digest.')
             else:
-                self.stdout.write('Daily Digest had no new comments to send.')
+                self.stdout.write('Daily Digest had no new events to send.')
 

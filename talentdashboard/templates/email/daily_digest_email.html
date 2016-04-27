@@ -48,7 +48,7 @@
                             <pre style="font-family: inherit;"><span style="font-size:14px;white-space: pre-wrap;">{{ event | get_description:recipient | default_if_none:"" }}</span></pre>
                             <span style="font-size:14px;color:#AA9C84"><b>from {{event.user.employee.full_name}}</b></span>
                             <br/>
-                            <a href="http://{{site}}/#/employees/{{event.associated_object.id}}">leave a comment</a>
+                            <a href="http://{{site}}/#/employees/{{event.employee.id}}">leave a comment</a>
                         </p>
                         <br />
                     </td>
