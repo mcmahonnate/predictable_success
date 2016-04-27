@@ -65,6 +65,7 @@ class Event(models.Model):
             return checkin.get_summary(user)
         return None
 
+    @property
     def verb(self):
         comment_type = ContentType.objects.get_for_model(Comment)
         checkin_type = ContentType.objects.get_for_model(CheckIn)
@@ -87,6 +88,18 @@ class Event(models.Model):
             else:
                 return 'had a %s check-in' % check_in.get_type_description()
         return None
+
+    @property
+    def associated_object(self):
+        if self.event_type is not None and self.event_id is not None:
+            return self.event_type.get_object_for_this_type(pk=self.event_id)
+        else:
+            return None
+
+    class Meta:
+        permissions = (
+            ("receive_daily_digest", "Receive daily digest of events"),
+        )
 
     def __str__(self):
         return "%s created a %s about %s" % (self.user.email, self.event_type.name, self.employee.full_name)

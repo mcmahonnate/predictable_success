@@ -1,37 +1,14 @@
+{% load activity_extras %}
 Daily Recap {{date}}
-{% if comments %}
-Discussions
+{% if events %}
 --------------------
-{% for comment in comments %}
-{% if comment.content_type == comment_type %}
-{% if comment.associated_object.object_id != recipient.employee.id %}
-{{comment.associated_object.associated_object.full_name}}
-{{comment.content}} --{{comment.owner.employee.full_name}}
-http://{{site}}/#/discussions/{{comment.object_id}}
-{% endif %}
-{% else %}
-{{comment.associated_object.full_name}}
-{{comment.content}} --{{comment.owner.employee.full_name}}
-http://{{site}}/#/discussions/{{comment.id}}
-{% endif %}
-{% endfor %}
-{% endif %}
-{% if checkins %}
-Check-Ins
---------------------
-{% load checkin_extras %}
-{% for checkin in checkins %}
-{{checkin.employee.full_name}} had a {{checkin.get_type_description}} check-in.
-{{ checkin | get_summary:recipient | default_if_none:"" }} --{{checkin.host.full_name}}
+{% for event in events %}
+{{event.employee.full_name}}
+http://{{site}}/#/employees/{{event.employee.id}}
 
-{% endfor %}
-{% endif %}
-{% if todos %}
-Tasks
---------------------
-{% for todo in todos %}
-{{todo.employee.full_name}}
-{{todo.description|truncatechars:140}} --created by {{todo.created_by.full_name}}
-http://{{site}}/#/employees/{{todo.employee.id}}
+{{ event | get_description:recipient | default_if_none:"" }}
+
+From {{event.user.employee.full_name}}
+
 {% endfor %}
 {% endif %}

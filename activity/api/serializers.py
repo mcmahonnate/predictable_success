@@ -81,7 +81,7 @@ class EventSerializer(serializers.ModelSerializer):
         return obj.description(self.context['request'].user)
 
     def get_verb(self, obj):
-        return obj.verb()
+        return obj.verb
 
     class Meta:
         model = Event
