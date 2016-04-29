@@ -255,6 +255,7 @@ class Conversation(models.Model):
     completed = models.BooleanField(default=False)
     completed_date = models.DateTimeField(null=True, blank=True)
 
+    @property
     def advice(self):
         employee_zone = self.employee_assessment.zone if (self.employee_assessment and self.employee_assessment.zone and self.employee_assessment.completed) else None
         development_lead_zone = self.development_lead_assessment.zone if (self.development_lead_assessment and self.development_lead_assessment.zone) else None

@@ -75,6 +75,61 @@ class EmployeeZoneReportSerializer(serializers.ModelSerializer):
     answers = serializers.SerializerMethodField()
     meeting_name = serializers.SerializerMethodField()
     development_lead = serializers.SerializerMethodField()
+    conversation_zone = serializers.SerializerMethodField()
+    conversation_completed = serializers.SerializerMethodField()
+    conversation_completed_date = serializers.SerializerMethodField()
+    conversation_gap = serializers.SerializerMethodField()
+    conversation_gap_severity = serializers.SerializerMethodField()
+    date = serializers.SerializerMethodField()
+
+    def get_date(self, obj):
+        if obj.completed:
+            return obj.date
+        return None
+
+
+    def get_conversation_zone(self, obj):
+        try:
+            serializer = ZoneSerializer(context=self.context)
+            if obj.development_conversation.development_lead_assessment and \
+                    obj.development_conversation.development_lead_assessment.zone:
+                return serializer.to_representation(obj.development_conversation.development_lead_assessment.zone)
+        except Conversation.DoesNotExist:
+            return None
+        except EmployeeZone.DoesNotExist:
+            return None
+        except Zone.DoesNotExist:
+            return None
+
+    def get_conversation_gap(self, obj):
+        try:
+            if obj.development_conversation.advice.count() > 0:
+                return obj.development_conversation.advice[0].alert_for_development_lead_short
+            return None
+        except Conversation.DoesNotExist:
+            return None
+
+    def get_conversation_gap_severity(self, obj):
+        try:
+            if obj.development_conversation.advice.count() > 0:
+                return obj.development_conversation.advice[0].severity
+            return None
+        except Conversation.DoesNotExist:
+            return None
+
+    def get_conversation_completed(self, obj):
+        try:
+            return obj.development_conversation.completed
+        except Conversation.DoesNotExist:
+            return None
+
+    def get_conversation_completed_date(self, obj):
+        try:
+            if obj.development_conversation.completed:
+                return obj.development_conversation.date
+            return None
+        except Conversation.DoesNotExist:
+            return None
 
     def get_answers(self, obj):
         if obj.completed:
@@ -98,7 +153,7 @@ class EmployeeZoneReportSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmployeeZone
-        fields = ('id', 'employee', 'assessor', 'next_question', 'zone', 'notes', 'answers', 'date', 'completed', 'times_retaken', 'development_lead', 'new_employee', 'meeting_name')
+        fields = ('id', 'employee', 'assessor', 'next_question', 'zone', 'answers', 'date', 'completed', 'times_retaken', 'development_lead', 'new_employee', 'meeting_name', 'conversation_completed', 'conversation_completed_date', 'conversation_gap', 'conversation_gap_severity', 'conversation_zone')
 
 
 class EmployeeZoneSerializer(serializers.ModelSerializer):

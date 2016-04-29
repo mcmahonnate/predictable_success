@@ -58,7 +58,10 @@ function DevZonesReportController(DevZonesReportService, Notification, analytics
             row.finished_date = report.completed ? report.date : null;
             if (!report.completed) report.date = null;
             row.selfie_perception = report.zone ? report.zone.name : null;
-            row.notes = report.notes;
+            row.leader_perception = report.conversation_zone ? report.conversation_zone.name : null;
+            row.gap = report.conversation_gap;
+            row.conversation_completed = report.conversation_completed;
+            row.conversation_completed_date = report.conversation_completed_date;
             report.answers = $filter('orderBy')(report.answers, 'question_order', false)
             angular.forEach(report.answers, function (answer) {
                 row['question_' + answer.id] = answer.question_text;
