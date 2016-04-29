@@ -27,16 +27,16 @@
                         <ul>
                             <li ng-if="currentUser.is_team_lead"><a ng-href="#/my-team">Team</a></li>
                             <li ng-if="currentUser.can_coach_employees"><a ng-href="#/my-coachees">Coaching</a></li>
-                            <li><a ng-show="customer.show_devzones" ng-href="#/id"><span class="fa fa-heartbeat" style="margin-right: 5px;"></span> ID</a></li>
-                            <li><a ng-show="customer.show_shareable_checkins" ng-href="#/checkins"><span class="fa fa-check" style="margin-right: 5px;"></span> Check-Ins</a></li>
-                            <li><a ng-show="customer.show_feedback" ng-href="#/feedback"><span class="fa fa-send" style="margin-right: 5px;"></span> Feedback</a></li>
-                            <li><a ng-show="customer.show_qualities" ng-href="#/qualities/perception/my"><span class="glyphicon-regular glyphicon-dumbell" style="margin-right: 5px;font-size: 14px;"></span> Strengths</a></li>
+                            <li><a ng-if="customer.show_devzones" ng-href="#/id"><span class="fa fa-heartbeat" style="margin-right: 5px;"></span> ID</a></li>
+                            <li><a ng-if="customer.show_shareable_checkins" ng-href="#/checkins"><span class="fa fa-check" style="margin-right: 5px;"></span> Check-Ins</a></li>
+                            <li><a ng-if="customer.show_feedback" ng-href="#/feedback"><span class="fa fa-send" style="margin-right: 5px;"></span> Feedback</a></li>
+                            <li><a ng-if="customer.show_qualities" ng-href="#/qualities/perception/my"><span class="glyphicon-regular glyphicon-dumbell" style="margin-right: 5px;font-size: 14px;"></span> Strengths</a></li>
                         </ul>
                     </div>
                 </div>
             </div>
             <div ng-show="activeEmployee.is_lead" role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == employeeTab}" ng-click="setActiveTab(employeeTab)">
-                <div class="small-headshot team_menu">
+                <div class="small-headshot team_menu" style="margin: auto;">
                     <img ng-src="{{ activeEmployee.avatar_small }}" class="headshot-image nav-input">
                 </div>
                 <div class="subnav" role="menu">
@@ -256,14 +256,14 @@
                 <ul ng-show="isMyStuffOpen" class="mobile-sub-menu" role="menu">
                     <li ng-if="currentUser.is_team_lead"><a ng-href="#/my-team" ng-click="toggleMenu()">My Team</a></li>
                     <li ng-if="currentUser.can_coach_employees"><a ng-href="#/my-coachees" ng-click="toggleMenu()">My Coachees</a></li>
-                    <li ng-show="customer.show_shareable_checkins">
+                    <li ng-if="customer.show_shareable_checkins">
                         <a href="#/checkins" ng-click="toggleMenu()">
                             My Check-Ins
                         </a>
                     </li>
-                    <li ng-show="customer.show_feedback"><a ng-href="#/feedback" ng-click="toggleMenu()">My Feedback</a></li>
-                    <li ng-show="customer.show_devzones"><a ng-href="#/id" ng-click="toggleMenu()">My ID</a></li>
-                    <li ng-show="customer.show_qualities"><a ng-href="#/qualities/perception/my"My Strengths</li>
+                    <li ng-if="customer.show_feedback"><a ng-href="#/feedback" ng-click="toggleMenu()">My Feedback</a></li>
+                    <li ng-if="customer.show_devzones"><a ng-href="#/id" ng-click="toggleMenu()">My ID</a></li>
+                    <li ng-if="customer.show_qualities"><a ng-href="#/qualities/perception/my"My Strengths</li>
                 </ul>
             </li>
             <li ng-show="!activeEmployee.is_lead">
@@ -348,12 +348,12 @@
                         </a>
                     </li>
                     <li>
-                        <a ng-click="toggleMenu()" ng-show="customer.show_feedback" class="dashboard employee_menu" href="#/reports/feedback">
+                        <a ng-click="toggleMenu()" ng-if="customer.show_feedback" class="dashboard employee_menu" href="#/reports/feedback">
                             Feedback Report
                         </a>
                     </li>
                     <li>
-                        <a ng-click="toggleMenu()" ng-show="customer.show_shareable_checkins" class="dashboard employee_menu" href="#/reports/checkins">
+                        <a ng-click="toggleMenu()" ng-if="customer.show_shareable_checkins" class="dashboard employee_menu" href="#/reports/checkins">
                             Check-Ins Report
                         </a>
                     </li>

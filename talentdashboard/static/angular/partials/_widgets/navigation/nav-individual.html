@@ -17,31 +17,31 @@
         <div role="menuitem" class="logo-container" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="Home">
             <a href="#/"><img src="../static/images/compass-logo-white.png" class="logo" alt="Home" /></a>
         </div>
-        <div ng-show="customer.show_devzones" role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == devzonesTab}" ng-click="setActiveTab(devzonesTab)">
+        <div ng-if="customer.show_devzones" role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == devzonesTab}" ng-click="setActiveTab(devzonesTab)">
             <div ng-click="gotoID()">
                 <span class="fa fa-heartbeat team_menu nav-item-icon"></span>
                 ID
             </div>
         </div>
-        <div ng-show="customer.show_shareable_checkins" role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == checkinTab}" ng-click="setActiveTab(checkinTab)">
+        <div ng-if="customer.show_shareable_checkins" role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == checkinTab}" ng-click="setActiveTab(checkinTab)">
             <div ng-click="gotoCheckIns()">
                 <span class="fa fa-check team_menu nav-item-icon"></span>
                 Check-Ins
             </div>
         </div>
-        <div ng-show="customer.show_feedback" role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == feedbackTab}" ng-click="setActiveTab(feedbackTab)">
+        <div ng-if="customer.show_feedback" role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == feedbackTab}" ng-click="setActiveTab(feedbackTab)">
             <div ng-click="gotoFeedback()">
                 <span class="fa fa-send team_menu nav-item-icon"></span>
                 Feedback
             </div>
         </div>
-        <div ng-show="customer.show_qualities" role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == strengthsTab}" ng-click="setActiveTab(strengthsTab)">
+        <div ng-if="customer.show_qualities" role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == strengthsTab}" ng-click="setActiveTab(strengthsTab)">
             <div ng-click="gotoStrengths()">
                 <span class="glyphicon-regular glyphicon-dumbell team_menu nav-item-icon"></span>
                 Strengths
             </div>
         </div>
-        <div ng-show="customer.show_projects && currentUser.can_view_projects" role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == projectsTab}" ng-click="setActiveTab(projectsTab)">
+        <div ng-if="customer.show_projects && currentUser.can_view_projects" role="menuitem" aria-haspopup="true" class="nav-item" ng-class="{'nav-item-active': $root.activeTab == projectsTab}" ng-click="setActiveTab(projectsTab)">
             <div ng-click="gotoProjects()">
                 <span class="fa fa-lightbulb-o team_menu nav-item-icon"></span>
                 Projects
@@ -68,25 +68,25 @@
 <!-- Left Menu -->
 <div id="menuleft" ng-class="{retract:!showmenu,slide:showmenu}">
     <ul>
-        <li ng-show="customer.show_devzones">
+        <li ng-if="customer.show_devzones">
             <a href="#/id" ng-click="toggleMenu()">
                 <span class="fa fa-heartbeat team_menu nav-item-icon"></span>
                 ID
             </a>
         </li>
-        <li ng-show="customer.show_shareable_checkins">
+        <li ng-if="customer.show_shareable_checkins">
             <a href="#/checkins" ng-click="toggleMenu()">
                 <span class="fa fa-check team_menu nav-item-icon"></span>
                 Check-Ins
             </a>
         </li>
-        <li ng-show="customer.show_feedback">
+        <li ng-if="customer.show_feedback">
             <a href="#/feedback" ng-click="toggleMenu()">
                 <span class="fa fa-comments team_menu nav-item-icon"></span>
                 Feedback
             </a>
         </li>
-        <li ng-show="customer.show_qualities">
+        <li ng-if="customer.show_qualities">
             <a href="#/qualities" ng-click="toggleMenu()">
                 <span class="glyphicon-regular glyphicon-dumbell team_menu nav-item-icon"></span>
                 Strengths
