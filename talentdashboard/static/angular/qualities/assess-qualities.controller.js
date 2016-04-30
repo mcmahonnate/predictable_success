@@ -2,7 +2,7 @@
         .module('qualities')
         .controller('AssessQualitiesController', AssessQualitiesController);
 
-    function AssessQualitiesController(analytics, $location, $scope, $routeParams, $rootScope, Notification, QualityClusterService, PerceivedQualityService, PerceptionRequestService) {
+    function AssessQualitiesController(analytics, $location, $scope, $routeParams, $modal, $rootScope, Notification, QualityClusterService, PerceivedQualityService, PerceptionRequestService) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         var vm = this;
 
@@ -134,8 +134,12 @@
 
         function select(quality) {
             if (!quality.selected) {
-                quality.selected = true;
-                vm.selectedQualities.push(quality);
+                if (vm.selectedQualities.length < vm.cluster.max_choice) {
+                    quality.selected = true;
+                    vm.selectedQualities.push(quality);
+                } else {
+                    alertMax();
+                }
             } else {
                 unselect(quality)
             }
@@ -162,6 +166,26 @@
                         Notification.success("Thanks we'll get those to " + vm.subject.first_name + " pronto.");
                     }
                     goTo('qualities/perception/my');
-            });
+                },
+                function(response) {
+                    Notification.error(response.data);
+                });
         }
+
+        function alertMax() {
+            var modalInstance = $modal.open({
+                animation: true,
+                windowClass: 'xx-dialog fade zoom',
+                backdrop: 'static',
+                templateUrl: '/static/angular/qualities/partials/_modals/submission-max.html',
+                controller: ['$scope', '$modalInstance', function($scope, $modalInstance) {
+                    $scope.close = function(value) {
+                        $modalInstance.close(value);
+                    }
+                    $scope.maxChoices = vm.cluster.max_choice;
+                }],
+                controllerAs: 'submission-max',
+                resolve: {
+                }
+            });}
     }

@@ -56,6 +56,13 @@ class CreatePerceivedQuality(CreateAPIView):
             perception_request = PerceptionRequest.objects.get(id=perception_request_id)
             if perception_request.was_responded_to:
                 return Response("This request has already been answered.", status=status.HTTP_403_FORBIDDEN)
+        if serializer.data[0]['cluster']:
+            cluster_id = serializer.data[0]['cluster']
+            cluster = QualityCluster.objects.get(id=cluster_id)
+            max_choice = cluster.max_choice
+            if len(serializer.data) > max_choice:
+                return Response("The maximum number of choices is %s. %s were given." %
+                                (max_choice, len(serializer.data)), status=status.HTTP_406_NOT_ACCEPTABLE)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         subject_id = serializer.data[0]['subject']
