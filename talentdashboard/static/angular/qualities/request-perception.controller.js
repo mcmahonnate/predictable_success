@@ -2,7 +2,7 @@
         .module('qualities')
         .controller('RequestPerceptionController', RequestPerceptionController);
 
-    function RequestPerceptionController(panel, PerceptionRequestService, QualityClusterService, EmployeeSearch, Notification, $modal, $timeout, $modalInstance, $rootScope) {
+    function RequestPerceptionController(panel, PerceptionRequestService, QualityClusterService, Users, Notification, $modal, $timeout, $modalInstance, $rootScope) {
         var vm = this;
         vm.category = null;
         vm.categories = [];
@@ -24,7 +24,7 @@
         }
 
         function getPotentialReviewers() {
-            return EmployeeSearch.query().$promise
+            return Users.query().$promise
                 .then(function(data) {
                     vm.potentialReviewers = data;
                     return vm.potentialReviewers;

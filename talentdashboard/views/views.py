@@ -49,7 +49,7 @@ def parseBoolString(theString):
 class UserList(generics.ListAPIView):
     serializer_class = SanitizedEmployeeSerializer
     queryset = Employee.objects.get_current_employees(show_hidden=True)
-    queryset = queryset.filter(user__isnull=False)
+    queryset = queryset.exclude(user__isnull=True).filter(user__is_active=True)
     permission_classes = (IsAuthenticated,)
 
 

@@ -26,7 +26,7 @@
     </div>
     <div class="qualities panel" ng-show="assessQualities.subject && assessQualities.cluster" style="padding: 0px; margin: 0">
         <div class="panel-heading" style="padding: 25px;">
-            <h2 class="panel-title ng-binding">{{ assessQualities.subject.full_name }} on {{ assessQualities.cluster.name }}</h2>
+            <h2 class="panel-title ng-binding">{{ assessQualities.subject.full_name }} on {{ assessQualities.cluster.name }} <span style="color: #bbb;">(Pick up to {{assessQualities.cluster.max_choice}})</span></h2>
         </div>
         <div>
             <div class="panel-body" style="padding: 0 25px;">

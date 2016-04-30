@@ -2,7 +2,7 @@
         .module('qualities')
         .controller('AssessQualitiesController', AssessQualitiesController);
 
-    function AssessQualitiesController(analytics, $location, $scope, $routeParams, $modal, $rootScope, Notification, QualityClusterService, PerceivedQualityService, PerceptionRequestService) {
+    function AssessQualitiesController(analytics, $location, $scope, $routeParams, $modal, $rootScope, Notification, QualityClusterService, PerceivedQualityService, PerceptionRequestService, Users) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         var vm = this;
 
@@ -108,9 +108,9 @@
         }
 
         function getEmployees() {
-            return PerceivedQualityService.getEmployees()
-                .then(function (employees) {
-                    vm.employees = employees;
+            return Users.query().$promise
+                .then(function(data) {
+                    vm.employees = data;
                     return vm.employees;
                 });
         }

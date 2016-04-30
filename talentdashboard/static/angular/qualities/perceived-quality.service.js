@@ -2,10 +2,9 @@ angular
     .module('qualities')
     .factory('PerceivedQualityService', PerceivedQualityService);
 
-function PerceivedQualityService($http, $log, PerceivedQualityResource, Employee) {
+function PerceivedQualityService($http, $log, PerceivedQualityResource) {
     return {
         createPerceivedQualities: createPerceivedQualities,
-        getEmployees: getEmployees,
         getMyQualities: getMyQualities
     };
 
@@ -23,18 +22,6 @@ function PerceivedQualityService($http, $log, PerceivedQualityResource, Employee
 
         function fail(response) {
             $log.error('createPerceivedQualities failed');
-        }
-    }
-
-    function getEmployees() {
-        return Employee.query({show_hidden: true}, success, fail).$promise;
-
-        function success(response) {
-            return response;
-        }
-
-        function fail(response) {
-            $log.error('getEmployees failed');
         }
     }
 
