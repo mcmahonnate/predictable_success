@@ -59,11 +59,7 @@
                     <td valign="top">
                         <p>
                         <a href="http://{{site}}/#/employees/{{event.employee.id}}"><b>{{event.employee.full_name}}</b></a>
-                            {% if event.user.employee.id == event.employee.id %}
-                            took a selfie.
-                            {% else %}
                             had a development conversation.
-                            {% endif %}
                         <br/>
                         {% if event.associated_object.zone %}
                         <strong>{{ event.associated_object.zone.name }}</strong>

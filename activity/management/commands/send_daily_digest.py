@@ -6,7 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.management.base import BaseCommand
 from django.core.mail import EmailMultiAlternatives
 from django.db import connection
-from django.db.models import Q
+from django.db.models import F, Q
 from django.template import Context
 from django.template.loader import get_template
 from django.utils.dateformat import DateFormat
@@ -35,6 +35,7 @@ class Command(BaseCommand):
         for recipient in recipients:
             # Get past days worth of activity items subscriber is allowed to see
             events = Event.objects.get_events_for_all_employees(requester=recipient)
+            events = events.exclude(event_type=employeezone_type,user__employee__id=F("employee__id"))
             events = events.filter(date__range=[start_dt,dt])
             if events.count() > 0:
                 df = DateFormat(dt)
