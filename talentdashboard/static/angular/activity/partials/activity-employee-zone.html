@@ -35,7 +35,7 @@
         </div>
     </a>
     <!-- Comment replies -->
-    <div ng-if="event.show_conversation" class="comment-replies">
+    <div ng-if="event.employee.id != event.user.employee.id" class="comment-replies">
         <span class="total-replies" ng-show="event.related_object.comments.length == 1" style="margin-top:20px;">
             {{event.related_object.comments.length}} reply
         </span>
