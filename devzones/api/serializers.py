@@ -165,7 +165,14 @@ class EmployeeZoneSerializer(serializers.ModelSerializer):
     answers = serializers.SerializerMethodField()
     development_conversation = serializers.PrimaryKeyRelatedField(read_only=True)
     development_lead = serializers.SerializerMethodField()
-    comments = CommentSerializer(many=True, read_only=True)
+    comments = serializers.SerializerMethodField()
+
+    def get_comments(self, obj):
+        if obj.completed:
+            serializer = CommentSerializer(context=self.context, many=True, read_only=True)
+            return serializer.to_representation(obj.comments)
+        else:
+            return None
 
     def get_answers(self, obj):
         if obj.completed:

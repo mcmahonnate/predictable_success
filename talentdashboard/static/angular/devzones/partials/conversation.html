@@ -96,8 +96,8 @@
             </div>
         </div>
     </div>
-    <div ng-show="conversation.conversation.development_lead_assessment.notes || conversation.is_org_dev" class="checkin-summary panel activity">
-        <h2 class="panel-title">Development Conversation Notes</h2>
+    <div ng-show="conversation.conversation.development_lead_assessment.comments" class="checkin-summary panel activity">
+        <h2 class="panel-title">Comments</h2>
         <devzone-comments id="conversation.conversation.development_lead_assessment.id" comments="conversation.conversation.development_lead_assessment.comments"></devzone-comments>
     </div>
     <button class="btn btn-default" type="button" ng-click="conversation.goBack()">&larr; Back</button>
