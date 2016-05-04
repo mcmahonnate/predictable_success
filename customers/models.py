@@ -4,6 +4,8 @@ from tenant_schemas.models import TenantMixin
 
 class Customer(TenantMixin):
     name = models.CharField(max_length=100)
+    namely_api_url = models.CharField(max_length=255, blank=True)
+    namely_api_token = models.CharField(max_length=255, blank=True)
     created_on = models.DateField(auto_now_add=True)
     show_kolbe = models.BooleanField(default=False)
     show_vops = models.BooleanField(default=False)

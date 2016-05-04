@@ -105,7 +105,7 @@ class Employee(MPTTModel):
         null=True,
         blank=True,
     )
-    linkedin_id = models.CharField(
+    namely_id = models.CharField(
         max_length=255,
         null=True,
         blank=True,
