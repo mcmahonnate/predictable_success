@@ -287,6 +287,6 @@ class Advice(models.Model):
     advice_description_for_development_leader = models.TextField(blank=True, default='')
 
     def __str__(self):
-        return "Advice when employee says %s and manager says %s" % (self.employee_zone.name, (self.development_lead_zone.name if self.development_lead_zone else 'None'))
+        return "Advice when employee says %s and manager says %s" % ((self.employee_zone.name if self.employee_zone else 'None'), (self.development_lead_zone.name if self.development_lead_zone else 'None'))
 
 blah.register(EmployeeZone, attr_name='_comments')
