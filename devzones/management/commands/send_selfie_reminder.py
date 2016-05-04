@@ -32,7 +32,7 @@ class Command(BaseCommand):
                     'response_url': response_url,
                     'started': (employee_zone.answers.all().count() > 0)
                 }
-                subject = "Don't forget to take a selife"
+                subject = "Don't forget to take a selfie"
                 if employee_zone.answers.all().count() > 0:
                     subject = "Don't forget to finish your selife"
                 text_content = render_to_string('devzones/email/selfie_reminder_notification.txt', context)
