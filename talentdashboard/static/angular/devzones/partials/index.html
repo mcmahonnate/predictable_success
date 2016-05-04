@@ -91,10 +91,13 @@
                             <span class="sortorder fa" ng-show="devzones.predicate === 'advice[0].severity'" ng-class="devzones.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
                         </th>
                         <th scope="col" class="width-20-percent centered">
-                            <a href="" ng-click="devzones.order('development_lead_assessment.zone.name');"><strong>My Perception</strong></a>
-                            <span class="sortorder fa" ng-show="devzones.predicate === 'development_lead_assessment.zone.name'" ng-class="devzones.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                            <a href="" ng-click="devzones.order('development_lead_assessment.zone.value');"><strong>My Perception</strong></a>
+                            <span class="sortorder fa" ng-show="devzones.predicate === 'development_lead_assessment.zone.value'" ng-class="devzones.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
                         </th>
-                        <th scope="col" class="width-10-percent">Sent To Employee</th>
+                        <th scope="col" class="width-10-percent">
+                            <a href="" ng-click="devzones.order('development_lead_assessment.completed');"><strong>Sent To Employee</strong></a>
+                            <span class="sortorder fa" ng-show="devzones.predicate === 'development_lead_assessment.completed'" ng-class="devzones.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                        </th>
                         <th scope="col" class="width-10-percent centered">Action</th>
                     </tr>
                 </thead>

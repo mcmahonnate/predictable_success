@@ -21,10 +21,22 @@
                         <a href="" ng-click="meeting.order('advice[0].severity');"><strong>Alignment</strong></a>
                         <span class="sortorder fa" ng-show="meeting.predicate === 'advice[0].severity'" ng-class="meeting.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
                     </th>
-                    <th ng-show="meeting.is_org_dev" scope="col" class="width-15-percent">Employee Perception</th>
-                    <th scope="col" class="width-15-percent">Leadership's Perception</th>
-                    <th ng-show="meeting.is_org_dev" scope="col" class="width-10-percent">Sent To Development Lead</th>
-                    <th scope="col" class="width-10-percent">Sent To Employee</th>
+                    <th ng-show="meeting.is_org_dev" scope="col" class="width-15-percent">
+                        <a href="" ng-click="meeting.order('employee_assessment.zone.value');"><strong>Employee Perception</strong></a>
+                        <span class="sortorder fa" ng-show="meeting.predicate === 'employee_assessment.zone.value'" ng-class="meeting.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                    </th>
+                    <th scope="col" class="width-15-percent">
+                        <a href="" ng-click="meeting.order('development_lead_assessment.zone.value');"><strong>Leadership's Perception</strong></a>
+                        <span class="sortorder fa" ng-show="meeting.predicate === 'development_lead_assessment.zone.value'" ng-class="meeting.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                    </th>
+                    <th ng-show="meeting.is_org_dev" scope="col" class="width-10-percent">
+                        <a href="" ng-click="meeting.order('development_lead_assessment.is_draft');"><strong>Sent To Development Lead</strong></a>
+                        <span class="sortorder fa" ng-show="meeting.predicate === 'development_lead_assessment.is_draft'" ng-class="meeting.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                    </th>
+                    <th scope="col" class="width-10-percent">
+                        <a href="" ng-click="meeting.order('development_lead_assessment.completed');"><strong>Sent To Employee</strong></a>
+                        <span class="sortorder fa" ng-show="meeting.predicate === 'development_lead_assessment.completed'" ng-class="meeting.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                    </th>
                     <th scope="col" class="width-10-percent centered">Action</th>
                 </tr>
             </thead>
