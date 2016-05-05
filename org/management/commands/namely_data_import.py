@@ -20,7 +20,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         limit = 25
         tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
-        if tenant.is_public_tenant():
+        if tenant.is_public_tenant() or \
+                tenant.namely_api_url is None or \
+                tenant.namely_api_token is None:
             return
         # Get namely feed
         api_url = "https://%s/profiles.json?filter[user_status]=active&sort=first_name&limit=%s" % (tenant.namely_api_url, limit)
@@ -39,8 +41,8 @@ class Command(BaseCommand):
                     namely_id = profile['id']
                     reports_to_id = profile['reports_to'][0]['id']
                     try:
-                        employee = Employee.objects.get(namely_id=namely_id)
-                        lead = Employee.objects.get(namely_id=reports_to_id)
+                        employee = Employee.objects.get(namely_id=namely_id, departure_date__is_null=True)
+                        lead = Employee.objects.get(namely_id=reports_to_id, departure_date__is_null=True)
                         if employee.current_leader.id != lead.id:
                             employee.current_leader = lead
                             employee.save()
