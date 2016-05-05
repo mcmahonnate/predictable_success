@@ -90,61 +90,27 @@ class EmployeeManager(TreeManager):
 
 class Employee(MPTTModel):
     objects = EmployeeManager()
+    MALE = 'M'
+    FEMALE = 'F'
+    GENDER_CHOICES = (
+        (MALE, 'Male'),
+        (FEMALE, 'Female'),
+    )
+
     _current_leadership = None
 
-    full_name = models.CharField(
-        max_length=255,
-    )
-    first_name = models.CharField(
-        max_length=255,
-        null=True,
-        blank=True,
-    )
-    last_name = models.CharField(
-        max_length=255,
-        null=True,
-        blank=True,
-    )
-    namely_id = models.CharField(
-        max_length=255,
-        null=True,
-        blank=True,
-    )
-    avatar = models.ImageField(
-        upload_to="media/avatars/%Y/%m/%d",
-        max_length=100,
-        blank=True,
-        default="/media/avatars/geneRick.jpg"
-    )
-    avatar_small = models.ImageField(
-        upload_to="media/avatars/small/%Y/%m/%d",
-        max_length=100,
-        null=True,
-        blank=True,
-        default="/media/avatars/small/geneRick.jpeg"
-    )
-    job_title = models.CharField(
-        max_length=255,
-        blank=True,
-    )
-    email = models.CharField(
-        max_length=255,
-        blank=True,
-    )
-    hire_date = models.DateField(
-        null=True,
-    )
-    departure_date = models.DateField(
-        null=True,
-        blank=True,
-        default=None
-    )
-    team = models.ForeignKey(
-        'Team',
-        null=True,
-        blank=True,
-        default=None
-    )
+    full_name = models.CharField(max_length=255,)
+    first_name = models.CharField(max_length=255, null=True, blank=True,)
+    last_name = models.CharField(max_length=255, null=True, blank=True,)
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, null=True, blank=True)
+    namely_id = models.CharField(max_length=255, null=True, blank=True,)
+    avatar = models.ImageField(upload_to="media/avatars/%Y/%m/%d", max_length=100, blank=True, default="/media/avatars/geneRick.jpg")
+    avatar_small = models.ImageField(upload_to="media/avatars/small/%Y/%m/%d", max_length=100, null=True, blank=True, default="/media/avatars/small/geneRick.jpeg")
+    job_title = models.CharField(max_length=255, blank=True,)
+    email = models.CharField(max_length=255, blank=True,)
+    hire_date = models.DateField(null=True,)
+    departure_date = models.DateField(null=True, blank=True, default=None)
+    team = models.ForeignKey('Team', null=True, blank=True, default=None)
     display = models.BooleanField(default=False)
     user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='employee')
     coach = models.ForeignKey('Employee', related_name='coachees', null=True, blank=True)

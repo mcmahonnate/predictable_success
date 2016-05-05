@@ -1,9 +1,12 @@
+from comp.models import CompensationSummary
 from customers.models import Customer
-from django.contrib.auth.models import User
+from datetime import datetime
+from decimal import Decimal
 from django.core.management.base import BaseCommand
 from django.db import connection
 from optparse import make_option
 from org.models import Employee
+from re import sub
 import requests
 
 
@@ -39,17 +42,48 @@ class Command(BaseCommand):
             if len(json['profiles']) > 0:
                 for profile in json['profiles']:
                     namely_id = profile['id']
-                    reports_to_id = profile['reports_to'][0]['id']
+                    reports_to_id = profile['reports_to'][0]['id'] if len(profile['reports_to']) > 0 else None
+                    gender = profile['gender'][0] if profile['gender'] else None
+                    salary_yearly_amount = profile['salary']['yearly_amount'] if profile['salary'] else None
+                    salary_date = profile['salary']['date'] if profile['salary'] else None
+                    salary_currency_type = profile['salary']['currency_type'] if profile['salary'] else None
+                    job_title = profile['job_title']['title'] if profile['job_title'] else None
+                    try:
+                        lead = Employee.objects.get(namely_id=reports_to_id, departure_date__isnull=True)
+                    except Employee.DoesNotExist:
+                        lead = None
+
                     try:
                         employee = Employee.objects.get(namely_id=namely_id, departure_date__isnull=True)
-                        lead = Employee.objects.get(namely_id=reports_to_id, departure_date__isnull=True)
-                        if employee and lead:
+                    except Employee.DoesNotExist:
+                        employee = None
+
+                    if employee:
+                        print employee
+                        if lead:
                             if employee.leader is None or employee.leader.id != lead.id:
                                 employee.leader = lead
                                 employee.save()
                                 print "Updated %s's manager to %s" % (employee.full_name, lead.full_name)
-                    except Employee.DoesNotExist:
-                        pass
+                        if gender and (employee.gender is None or employee.gender != gender):
+                            print "Updating gender"
+                            employee.gender = gender
+                            employee.save()
+                            print "Updated %s's gender" % employee.full_name
+                        if job_title != employee.job_title:
+                            employee.job_title = job_title
+                            employee.save()
+                            print "Updated %s's job title" % employee.job_title
+                        if salary_yearly_amount and salary_date:
+                            print salary_yearly_amount
+                            if employee.comp.count == 0 or salary_yearly_amount != employee.comp.order_by('-year', '-pk')[0].salary:
+                                salary_date = datetime.strptime(salary_date, '%Y-%m-%d').date()
+                                compensation = CompensationSummary(employee=employee, fiscal_year=salary_date.year, year=salary_date.year)
+                                compensation.date = salary_date
+                                compensation.currency_type = salary_currency_type
+                                compensation.salary = salary_yearly_amount
+                                compensation.save()
+                                print "Updated %s's compensation" % employee.full_name
                     last_record = namely_id
             else:
                 keep_alive = False
