@@ -76,7 +76,7 @@ class Command(BaseCommand):
                             print "Updated %s's job title" % employee.job_title
                         if salary_yearly_amount and salary_date:
                             print salary_yearly_amount
-                            if employee.comp.count == 0 or salary_yearly_amount != employee.comp.order_by('-year', '-pk')[0].salary:
+                            if employee.comp.count() == 0 or salary_yearly_amount != employee.comp.order_by('-year', '-pk')[0].salary:
                                 salary_date = datetime.strptime(salary_date, '%Y-%m-%d').date()
                                 compensation = CompensationSummary(employee=employee, fiscal_year=salary_date.year, year=salary_date.year)
                                 compensation.date = salary_date
