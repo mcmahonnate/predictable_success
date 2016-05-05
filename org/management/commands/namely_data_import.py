@@ -44,8 +44,8 @@ class Command(BaseCommand):
                         employee = Employee.objects.get(namely_id=namely_id, departure_date__isnull=True)
                         lead = Employee.objects.get(namely_id=reports_to_id, departure_date__isnull=True)
                         if employee and lead:
-                            if employee.current_leader is None or employee.current_leader.id != lead.id:
-                                employee.current_leader = lead
+                            if employee.leader is None or employee.leader.id != lead.id:
+                                employee.leader = lead
                                 employee.save()
                                 print "Updated %s's manager to %s" % (employee.full_name, lead.full_name)
                     except Employee.DoesNotExist:
