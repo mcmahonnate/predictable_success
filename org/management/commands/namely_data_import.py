@@ -41,8 +41,8 @@ class Command(BaseCommand):
                     namely_id = profile['id']
                     reports_to_id = profile['reports_to'][0]['id']
                     try:
-                        employee = Employee.objects.get(namely_id=namely_id, departure_date__is_null=True)
-                        lead = Employee.objects.get(namely_id=reports_to_id, departure_date__is_null=True)
+                        employee = Employee.objects.get(namely_id=namely_id, departure_date__isnull=True)
+                        lead = Employee.objects.get(namely_id=reports_to_id, departure_date__isnull=True)
                         if employee.current_leader.id != lead.id:
                             employee.current_leader = lead
                             employee.save()

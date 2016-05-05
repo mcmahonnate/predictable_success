@@ -43,12 +43,12 @@ class Command(BaseCommand):
                     print email
                     employee = None
                     try:
-                        employee = Employee.objects.get(namely_id=namely_id, departure_date__is_null=True)
+                        employee = Employee.objects.get(namely_id=namely_id, departure_date__isnull=True)
                     except Employee.DoesNotExist:
                         pass
                     if employee is None:
                         try:
-                            employee = Employee.objects.get(email=email, departure_date__is_null=True)
+                            employee = Employee.objects.get(email=email, departure_date__isnull=True)
                             employee.namely_id = namely_id
                             employee.save()
                             print '%s updated' % email
