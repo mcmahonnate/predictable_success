@@ -46,7 +46,7 @@ class Command(BaseCommand):
                         if employee.current_leader.id != lead.id:
                             employee.current_leader = lead
                             employee.save()
-                            print "Updated %s's manager to %s" % (employee.full_name % lead.full_name)
+                            print "Updated %s's manager to %s" % (employee.full_name, lead.full_name)
                     except Employee.DoesNotExist:
                         pass
                     last_record = namely_id
