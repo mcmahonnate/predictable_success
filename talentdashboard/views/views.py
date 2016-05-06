@@ -138,11 +138,14 @@ def comment_report_timespan(request):
     response_data['by_user'] = {}
 
     for comment in comments:
-        user = comment.owner.username
-        if user in response_data['by_user']:
-            response_data['by_user'][user] += 1
-        else:
-            response_data['by_user'][user] = 1
+        try:
+            user = comment.owner.username if comment.owner else None
+            if user in response_data['by_user']:
+                response_data['by_user'][user] += 1
+            else:
+                response_data['by_user'][user] = 1
+        except User.DoesNotExist:
+            pass
 
     return Response(response_data)
 
@@ -176,7 +179,7 @@ def checkin_report_timespan(request):
     response_data['by_user'] = {}
 
     for checkin in checkins:
-        user = checkin.host.user.username
+        user = checkin.host.user.username if checkin.host.user else None
         if user in response_data['by_user']:
             response_data['by_user'][user] += 1
         else:

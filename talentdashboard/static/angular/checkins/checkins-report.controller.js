@@ -52,6 +52,7 @@ function CheckInsReportController(CheckInsReportService, Notification, analytics
             var row = {};
             row.id = report.employee.id;
             row.name = report.employee.full_name;
+            row.gender = report.employee.gender;
             row.email = report.employee.email;
             row.team = report.employee.team.name;
             row.type = report.type.name;

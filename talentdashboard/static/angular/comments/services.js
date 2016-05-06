@@ -47,4 +47,9 @@ angular.module('tdb.comments.services', ['ngResource'])
         var res = $resource('/api/v1/reports/comments');
         return res;
     }])
+
+    .factory('CheckInReport', ['$resource', '$http', function($resource, $http) {
+        var res = $resource('/api/v1/reports/checkins');
+        return res;
+    }])
 ;

@@ -41,6 +41,7 @@ class EmployeeIndex(object):
                     'full_name': employee.full_name,
                     'first_name': employee.first_name,
                     'last_name': employee.last_name,
+                    'gender': employee.gender,
                     'email': employee.email,
                     'avatar': employee.avatar.url if employee.avatar else '',
                     'avatar_small': employee.avatar_small.url if employee.avatar_small else '',

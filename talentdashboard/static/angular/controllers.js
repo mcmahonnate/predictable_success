@@ -324,6 +324,7 @@ angular.module('tdb.controllers', [])
                 var row = {};
                 row.id = employee.pk;
                 row.name = employee.full_name;
+                row.gender = employee.gender;
                 row.team = employee.team_name;
                 row.email = employee.email;
                 row.talent = TalentCategories.getLabelByTalentCategory(employee.talent_category);
