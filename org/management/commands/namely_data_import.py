@@ -59,6 +59,7 @@ class Command(BaseCommand):
             if len(json['profiles']) > 0:
                 for profile in json['profiles']:
                     namely_id = profile['id']
+                    email = profile['email']
                     reports_to_id = profile['reports_to'][0]['id'] if len(profile['reports_to']) > 0 else None
                     gender = profile['gender'][0] if profile['gender'] else None
                     salary_yearly_amount = profile['salary']['yearly_amount'] if profile['salary'] else None
@@ -88,8 +89,11 @@ class Command(BaseCommand):
                                 employee.leader = lead
                                 employee.save()
                                 print "Updated %s's manager to %s" % (employee.full_name, lead.full_name)
+                        if email and (employee.email is None or employee.email != email):
+                            employee.email = email
+                            employee.save()
+                            print "Updated %s's email" % employee.full_name
                         if gender and (employee.gender is None or employee.gender != gender):
-                            print "Updating gender"
                             employee.gender = gender
                             employee.save()
                             print "Updated %s's gender" % employee.full_name
