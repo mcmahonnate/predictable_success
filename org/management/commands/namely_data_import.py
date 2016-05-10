@@ -89,25 +89,26 @@ class Command(BaseCommand):
                     try:
                         employee = Employee.objects.get(namely_id=namely_id)
                     except Employee.DoesNotExist:
-                        try:
-                            employee = Employee.objects.get(email=email)
-                        except Employee.DoesNotExist:
-                            if user_status == 'active' and job_title.lower() != 'contractor':
-                                employee = Employee(first_name=first_name,
-                                                    last_name=last_name,
-                                                    display=True,
-                                                    namely_id=namely_id,
-                                                    email=email)
-                                employee.save()
-                                print "Added new employee %s" % employee.full_name
-                                if avatar_path and avatar_mime_type:
-                                    avatar_url = "https://%s%s" % (tenant.namely_api_url, avatar_path)
-                                    print avatar_url
-                                    req = urllib.Request(avatar_url, None, headers)
-                                    fd = urllib.urlopen(req, )
-                                    image_file = io.BytesIO(fd.read())
-                                    employee.upload_avatar(file=image_file, mime_type=avatar_mime_type)
-                                    print "Uploaded avatar for %s" % employee.full_name
+                        if user_status == 'active':
+                            try:
+                                employee = Employee.objects.get(email=email)
+                            except Employee.DoesNotExist:
+                                if user_status == 'active' and job_title.lower() != 'contractor':
+                                    employee = Employee(first_name=first_name,
+                                                        last_name=last_name,
+                                                        display=True,
+                                                        namely_id=namely_id,
+                                                        email=email)
+                                    employee.save()
+                                    print "Added new employee %s" % employee.full_name
+                                    if avatar_path and avatar_mime_type:
+                                        avatar_url = "https://%s%s" % (tenant.namely_api_url, avatar_path)
+                                        print avatar_url
+                                        req = urllib.Request(avatar_url, None, headers)
+                                        fd = urllib.urlopen(req, )
+                                        image_file = io.BytesIO(fd.read())
+                                        employee.upload_avatar(file=image_file, mime_type=avatar_mime_type)
+                                        print "Uploaded avatar for %s" % employee.full_name
 
                     if employee:
                         print employee
