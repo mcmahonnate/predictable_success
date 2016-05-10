@@ -6,7 +6,6 @@ from comp.api.views import add_salary_to_employee
 from customers.api.serializers import CustomerSerializer
 from datetime import date, timedelta
 from dateutil import parser
-from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.core.signing import Signer
 from django.http import Http404, HttpResponse
@@ -23,7 +22,6 @@ from kpi.models import Performance, Indicator
 from org.api.permissions import *
 from org.api.serializers import SanitizedEmployeeSerializer, UserSerializer, EmployeeSerializer, TeamSerializer, MentorshipSerializer, LeadershipSerializer, AttributeSerializer, MinimalEmployeeSerializer, EditEmployeeSerializer, CreateEmployeeSerializer
 from org.teamreports import get_mbti_report_for_team
-from PIL import Image, ExifTags
 from pvp.api.serializers import TalentCategoryReportSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.views import APIView
@@ -34,7 +32,6 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.pagination import PageNumberPagination
 from .serializers import *
-from StringIO import StringIO
 from todo.api.serializers import TaskSerializer, CreateTaskSerializer, EditTaskSerializer
 from todo.models import Task
 
@@ -836,46 +833,15 @@ def upload_teams(request):
         response_data.append(serializer.data)
     return Response(response_data)
 
+
 class ImageUploadView(APIView):
     parser_classes = (MultiPartParser,FormParser)
 
     def post(self, request, pk, format=None):
-        def resize(image, size, filename, extension, content_type):
-            image.thumbnail(size, Image.ANTIALIAS)
-            image_io = StringIO()
-            image.save(image_io, format=extension)
-            image_file = InMemoryUploadedFile(image_io, None, filename, content_type, image_io.len, None)
-            return image_file
         employee = Employee.objects.get(id=pk)
         image_obj = request.FILES['file0']
-        image = Image.open(image_obj)
-        extension = image.format
-
-        if hasattr(image, '_getexif'): # only present in JPEGs
-            for orientation in ExifTags.TAGS.keys():
-                if ExifTags.TAGS[orientation] == 'Orientation':
-                    break
-            e = image._getexif()       # returns None if no EXIF data
-            if e is not None:
-                exif=dict(e.items())
-                orientation = exif.get(orientation, None)
-                if orientation == 3: image = image.transpose(Image.ROTATE_180)
-                elif orientation == 6: image = image.transpose(Image.ROTATE_270)
-                elif orientation == 8: image = image.transpose(Image.ROTATE_90)
-
-        filename = str(request.tenant.pk) + ' ' + str(employee.id)
-        content_type = image_obj.content_type
-        #resize to avatar size
-        avatar_size = (215, 215)
-        avatar_file = resize(image, avatar_size, filename, extension, content_type)
-        employee.avatar = avatar_file
-
-        #resize to small avatar size
-        avatar_small_size = (75, 75)
-        avatar_small_file = resize(image, avatar_small_size, filename, extension, content_type)
-        employee.avatar_small = avatar_small_file
-
-        employee.save()
+        print 'uploading'
+        employee.upload_avatar(file=image_obj, mime_type=image_obj.content_type)
         serializer = MinimalEmployeeSerializer(employee, context={'request': request})
         return Response(serializer.data)
 

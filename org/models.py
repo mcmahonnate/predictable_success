@@ -1,14 +1,18 @@
-from django.db import models
-from django.contrib.auth.models import User, Permission
-from django.db.models import Q
-from django.utils.translation import ugettext as _
-import datetime
-import blah
 from blah.models import Comment
+from customers.models import Customer
+from django.contrib.auth.models import User, Permission
+from django.contrib.contenttypes.models import ContentType
+from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.db import connection, models
+from django.db.models import Q
+from django.utils.log import getLogger
+from django.utils.translation import ugettext as _
 from model_utils import Choices, FieldTracker
 from mptt.models import MPTTModel, TreeForeignKey, TreeManager
-from django.utils.log import getLogger
-from django.contrib.contenttypes.models import ContentType
+from StringIO import StringIO
+from PIL import Image, ExifTags
+import datetime
+import blah
 
 logger = getLogger(__name__)
 
@@ -116,6 +120,41 @@ class Employee(MPTTModel):
     coach = models.ForeignKey('Employee', related_name='coachees', null=True, blank=True)
     leader = TreeForeignKey('self', null=True, blank=True, related_name='employees', db_index=True)
     field_tracker = FieldTracker(fields=['coach', 'departure_date'])
+
+    def upload_avatar(self, file, mime_type):
+        def resize(image, size, filename, extension, content_type):
+            image.thumbnail(size, Image.ANTIALIAS)
+            image_io = StringIO()
+            image.save(image_io, format=extension)
+            image_file = InMemoryUploadedFile(image_io, None, filename, content_type, image_io.len, None)
+            return image_file
+        tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
+        image = Image.open(file)
+        extension = image.format
+
+        if hasattr(image, '_getexif'): # only present in JPEGs
+            for orientation in ExifTags.TAGS.keys():
+                if ExifTags.TAGS[orientation] == 'Orientation':
+                    break
+            e = image._getexif()       # returns None if no EXIF data
+            if e is not None:
+                exif=dict(e.items())
+                orientation = exif.get(orientation, None)
+                if orientation == 3: image = image.transpose(Image.ROTATE_180)
+                elif orientation == 6: image = image.transpose(Image.ROTATE_270)
+                elif orientation == 8: image = image.transpose(Image.ROTATE_90)
+
+        filename = str(tenant.pk) + ' ' + str(self.id)
+        #resize to avatar size
+        avatar_size = (215, 215)
+        avatar_file = resize(image, avatar_size, filename, extension, mime_type)
+        self.avatar = avatar_file
+
+        #resize to small avatar size
+        avatar_small_size = (75, 75)
+        avatar_small_file = resize(image, avatar_small_size, filename, extension, mime_type)
+        self.avatar_small = avatar_small_file
+        self.save()
 
     def update_coach(self, coach):
         try:

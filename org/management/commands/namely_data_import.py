@@ -6,7 +6,9 @@ from django.core.management.base import BaseCommand
 from django.db import connection
 from optparse import make_option
 from org.models import Employee
+import io
 import requests
+import urllib2 as urllib
 
 
 class Command(BaseCommand):
@@ -36,7 +38,6 @@ class Command(BaseCommand):
                 assessment.save()
                 print "Updated %s's %s" % (employee.full_name, assessment.category.name)
             return
-        active_ids = []
         limit = 25
         tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
         if tenant.is_public_tenant() or \
@@ -44,7 +45,7 @@ class Command(BaseCommand):
                 tenant.namely_api_token is None:
             return
         # Get namely feed
-        profiles_api_url = "https://%s/profiles.json?filter[user_status]=active&sort=first_name&limit=%s" % (tenant.namely_api_url, limit)
+        profiles_api_url = "https://%s/api/v1/profiles.json?sort=first_name&limit=%s" % (tenant.namely_api_url, limit)
         headers = {'Authorization': 'Bearer %s' % tenant.namely_api_token}
         response_code = None
         keep_alive = True
@@ -57,15 +58,17 @@ class Command(BaseCommand):
             response_code = response.status_code
             if len(json['profiles']) > 0:
                 for profile in json['profiles']:
+                    employee = None
                     namely_id = profile['id']
-                    active_ids.append(namely_id)
-
                     email = profile['email']
+                    user_status = profile['user_status']
                     preferred_name = profile['preferred_name']
                     first_name = profile['first_name']
                     last_name = profile['last_name']
                     start_date = profile['start_date']
                     departure_date = profile['departure_date']
+                    avatar_path = profile['image']['thumbs']['300x300'] if profile['image'] else None
+                    avatar_mime_type = profile['image']['mime_type'] if profile['image'] else None
                     reports_to_id = profile['reports_to'][0]['id'] if len(profile['reports_to']) > 0 else None
                     gender = profile['gender'][0] if profile['gender'] else None
                     salary_yearly_amount = profile['salary']['yearly_amount'] if profile['salary'] else None
@@ -89,13 +92,22 @@ class Command(BaseCommand):
                         try:
                             employee = Employee.objects.get(email=email)
                         except Employee.DoesNotExist:
-                            employee = Employee(first_name=first_name,
-                                                last_name=last_name,
-                                                display=True,
-                                                namely_id=namely_id,
-                                                email=email)
-                            employee.save()
-                            print "Added new employee %s" % employee.full_name
+                            if user_status == 'active' and job_title.lower() != 'contractor':
+                                employee = Employee(first_name=first_name,
+                                                    last_name=last_name,
+                                                    display=True,
+                                                    namely_id=namely_id,
+                                                    email=email)
+                                employee.save()
+                                print "Added new employee %s" % employee.full_name
+                                if avatar_path and avatar_mime_type:
+                                    avatar_url = "https://%s%s" % (tenant.namely_api_url, avatar_path)
+                                    print avatar_url
+                                    req = urllib.Request(avatar_url, None, headers)
+                                    fd = urllib.urlopen(req, )
+                                    image_file = io.BytesIO(fd.read())
+                                    employee.upload_avatar(file=image_file, mime_type=avatar_mime_type)
+                                    print "Uploaded avatar for %s" % employee.full_name
 
                     if employee:
                         print employee
@@ -106,6 +118,11 @@ class Command(BaseCommand):
                                 print "Updated %s's manager to %s" % (employee.full_name, lead.full_name)
                         if start_date:
                             employee.hire_date = datetime.strptime(start_date, '%Y-%m-%d').date()
+                        if departure_date:
+                            departure_date = datetime.strptime(departure_date, '%Y-%m-%d').date()
+                            employee.departure_date = departure_date
+                            employee.save()
+                            print "Updated %s's departure date to %s" % (employee.full_name, employee.departure_date)
                         if employee.departure_date and departure_date is None:
                             employee.departure_date = 'None'
                             employee.save()
@@ -118,7 +135,6 @@ class Command(BaseCommand):
                             print "Updating %s's last name to %s" % (employee.full_name, last_name)
                             employee.last_name = last_name
                             employee.save()
-
                         if email and (employee.email is None or employee.email != email):
                             employee.email = email
                             employee.save()
@@ -162,20 +178,4 @@ class Command(BaseCommand):
                     last_record = namely_id
             else:
                 keep_alive = False
-
-        # Update any employee departures
-        departed_employees = Employee.objects.filter(departure_date__isnull=True, namely_id__isnull=False).exclude(namely_id__in=active_ids)
-        for departed_employee in departed_employees:
-            profile_api_url = "https://%s/profiles/%s.json" % (tenant.namely_api_url, departed_employee.namely_id)
-            response = requests.get(profile_api_url, headers=headers)
-            if response.status_code == 200:
-                json = response.json()
-                if len(json['profiles']) > 0:
-                    profile = json['profiles'][0]
-                    departure_date = profile['departure_date']
-                    if departure_date:
-                        departure_date = datetime.strptime(departure_date, '%Y-%m-%d').date()
-                        departed_employee.departure_date = departure_date
-                        departed_employee.save()
-                        print "Updated %s's departure date to %s" % (departed_employee.full_name, departed_employee.departure_date)
         return
