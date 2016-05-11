@@ -80,13 +80,28 @@
                         <td style="text-align: center">{{report.meeting_name}}</td>
                         <td style="text-align: center">{{report.development_lead.full_name}}</td>
                         <td style="text-align: center">{{report.completed}}</td>
-                        <td style="text-align: center"><span ng-show="report.completed">{{report.date | date:'MM/dd/yyyy'}}</span></td>
-                        <td style="text-align: center">{{report.zone.name}}</td>
-                        <td style="text-align: center">{{report.conversation_zone.name}}</td>
-                        <td style="text-align: center">{{report.conversation_gap}}</td>
+                        <td style="text-align: center">
+                            <span ng-show="!report.completed" style="color:#bbb;">--</span>
+                            <span ng-show="report.completed">{{report.date | date:'MM/dd/yyyy'}}</span>
+                        </td>
+                        <td style="text-align: center">
+                            <span ng-show="!report.zone" style="color:#bbb;">--</span>
+                            {{report.zone.name}}
+                        </td>
+                        <td style="text-align: center">
+                            <span ng-show="!report.conversation_zone" style="color:#bbb;">--</span>
+                            {{report.conversation_zone.name}}
+                        </td>
+                        <td style="text-align: center">
+                            <span ng-show="!report.conversation_gap" style="color:#bbb;">--</span>
+                            {{report.conversation_gap}}
+                        </td>
                         <td style="text-align: center">{{report.conversation_sent_to_development_lead}}</td>
                         <td style="text-align: center">{{report.conversation_completed}}</td>
-                        <td style="text-align: center">{{report.conversation_completed_date | date:'MM/dd/yyyy'}}</td>
+                        <td style="text-align: center">
+                            <span ng-show="!report.conversation_completed_date" style="color:#bbb;">--</span>
+                            {{report.conversation_completed_date | date:'MM/dd/yyyy'}}
+                        </td>
                     </tr>
                 </tbody>
             </table>

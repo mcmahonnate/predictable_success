@@ -150,7 +150,7 @@ class EmployeeZoneReportSerializer(serializers.ModelSerializer):
         if obj.development_conversation.development_lead_assessment:
             return obj.development_conversation.development_lead_assessment.is_draft
         else:
-            return None
+            return False
 
     def get_meeting_name(self, obj):
         try:
