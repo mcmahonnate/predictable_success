@@ -60,6 +60,7 @@ function DevZonesReportController(DevZonesReportService, Notification, analytics
             row.selfie_perception = report.zone ? report.zone.name : null;
             row.leader_perception = report.conversation_zone ? report.conversation_zone.name : null;
             row.gap = report.conversation_gap;
+            row.conversation_sent_to_development_lead = report.conversation_sent_to_development_lead;
             row.conversation_completed = report.conversation_completed;
             row.conversation_completed_date = report.conversation_completed_date;
             report.answers = $filter('orderBy')(report.answers, 'question_order', false)

@@ -126,7 +126,7 @@ class Command(BaseCommand):
                                         employee.upload_avatar(file=image_file, mime_type=avatar_mime_type)
                                         print "Uploaded avatar for %s" % employee.full_name
 
-                    if employee:
+                    if employee and 'contractor' not in job_title.lower():
                         print employee
                         if lead:
                             if employee.leader is None or employee.leader.id != lead.id:
@@ -141,7 +141,7 @@ class Command(BaseCommand):
                             employee.save()
                             print "Updated %s's departure date to %s" % (employee.full_name, employee.departure_date)
                         if employee.departure_date and departure_date is None:
-                            employee.departure_date = 'None'
+                            employee.departure_date = None
                             employee.save()
                             print "Welcoming back %s" % employee.full_name
                         if preferred_name and preferred_name != employee.first_name:
@@ -174,7 +174,6 @@ class Command(BaseCommand):
                                 compensation.save()
                                 print "Updated %s's compensation" % employee.full_name
                         if groups and len(groups) > 0:
-                            print 'Groups count'
                             for group in groups:
                                 if group['id'] in department_ids:
                                     if employee.team is None or employee.team.name != group['name']:

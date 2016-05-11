@@ -75,6 +75,7 @@ class EmployeeZoneReportSerializer(serializers.ModelSerializer):
     answers = serializers.SerializerMethodField()
     meeting_name = serializers.SerializerMethodField()
     development_lead = serializers.SerializerMethodField()
+    conversation_sent_to_development_lead = serializers.SerializerMethodField()
     conversation_zone = serializers.SerializerMethodField()
     conversation_completed = serializers.SerializerMethodField()
     conversation_completed_date = serializers.SerializerMethodField()
@@ -145,6 +146,12 @@ class EmployeeZoneReportSerializer(serializers.ModelSerializer):
         except (AttributeError, ObjectDoesNotExist):
             return None
 
+    def get_conversation_sent_to_development_lead(self, obj):
+        if obj.development_conversation.development_lead_assessment:
+            return obj.development_conversation.development_lead_assessment.is_draft
+        else:
+            return None
+
     def get_meeting_name(self, obj):
         try:
             return obj.development_conversation.meeting.name
@@ -153,7 +160,7 @@ class EmployeeZoneReportSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmployeeZone
-        fields = ('id', 'employee', 'assessor', 'next_question', 'zone', 'answers', 'date', 'completed', 'times_retaken', 'development_lead', 'new_employee', 'meeting_name', 'conversation_completed', 'conversation_completed_date', 'conversation_gap', 'conversation_gap_severity', 'conversation_zone')
+        fields = ('id', 'employee', 'assessor', 'next_question', 'zone', 'answers', 'date', 'completed', 'times_retaken', 'development_lead', 'conversation_sent_to_development_lead', 'new_employee', 'meeting_name', 'conversation_completed', 'conversation_completed_date', 'conversation_gap', 'conversation_gap_severity', 'conversation_zone')
 
 
 class EmployeeZoneSerializer(serializers.ModelSerializer):
