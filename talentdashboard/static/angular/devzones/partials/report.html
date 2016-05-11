@@ -16,7 +16,7 @@
     <div>
 
         <div class="panel" ng-show="devzonesReport.showResults">
-            <button ng-disabled="devzonesReport.busy" class="btn btn-default pull-right" type="button" ng-csv="devzonesReport.csv" filename="id-report{{devzonesReport.startDate | date:'yyyy-MM-dd'}}to{{devzonesReport.endDate | date:'yyyy-MM-dd'}}.csv" csv-header="['Id', 'Employee', 'Meeting', 'Represented By', 'Finished Selfie', 'Finished Selfie Date', 'Selfie Perception', 'Leader Perception', 'Alignment', 'Conversation Sent to Leader', 'Conversation Sent to Employee', 'Conversation Sent to Employee Date', 'Question', 'Answer', 'Question', 'Answer', 'Question', 'Answer', 'Question', 'Answer', 'Question', 'Answer', 'Question', 'Answer']">
+            <button ng-disabled="devzonesReport.busy" class="btn btn-default pull-right" type="button" ng-csv="devzonesReport.csv" filename="id-report{{devzonesReport.startDate | date:'yyyy-MM-dd'}}to{{devzonesReport.endDate | date:'yyyy-MM-dd'}}.csv" csv-header="['Id', 'Employee', 'Meeting', 'Represented By', 'Finished Selfie', 'Finished Selfie Date', 'Selfie Perception', 'Leader Perception', 'Alignment', 'Meeting Notes Sent to Leader', 'Meeting Notes Sent to Employee', 'Meeting Notes Sent to Employee Date', 'Question', 'Answer', 'Question', 'Answer', 'Question', 'Answer', 'Question', 'Answer', 'Question', 'Answer', 'Question', 'Answer']">
                 <span class="fa fa-download"></span> Download
             </button>
 
@@ -57,15 +57,15 @@
                             <span class="sortorder fa" ng-show="devzonesReport.predicate === 'conversation_gap_severity'" ng-class="devzonesReport.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
                         </th>
                         <th>
-                            <a href="" ng-click="devzonesReport.order('conversation_sent_to_development_lead');"><strong>Conversation Sent to Leader</strong></a>
+                            <a href="" ng-click="devzonesReport.order('conversation_sent_to_development_lead');"><strong>Meeting Notes Sent to Leader</strong></a>
                             <span class="sortorder fa" ng-show="devzonesReport.predicate === 'conversation_sent_to_development_lead'" ng-class="devzonesReport.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
                         </th>
                         <th>
-                            <a href="" ng-click="devzonesReport.order('conversation_completed');"><strong>Conversation Sent to Employee</strong></a>
+                            <a href="" ng-click="devzonesReport.order('conversation_completed');"><strong>Meeting Notes Sent to Employee</strong></a>
                             <span class="sortorder fa" ng-show="devzonesReport.predicate === 'conversation_completed'" ng-class="devzonesReport.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
                         </th>
                         <th>
-                            <a href="" ng-click="devzonesReport.order('conversation_completed_date');"><strong>Conversation Sent to Employee Date</strong></a>
+                            <a href="" ng-click="devzonesReport.order('conversation_completed_date');"><strong>Meeting Notes Sent to Employee Date</strong></a>
                             <span class="sortorder fa" ng-show="devzonesReport.predicate === 'conversation_completed_date'" ng-class="devzonesReport.reverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
                         </th>
                     </tr>
