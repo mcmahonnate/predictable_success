@@ -109,7 +109,7 @@ class Command(BaseCommand):
                             try:
                                 employee = Employee.objects.get(email=email)
                             except Employee.DoesNotExist:
-                                if user_status == 'active' and job_title.lower() != 'contractor':
+                                if user_status == 'active' and 'contractor' not in job_title.lower() and 'intern' not in job_title.lower():
                                     employee = Employee(first_name=first_name,
                                                         last_name=last_name,
                                                         display=True,
