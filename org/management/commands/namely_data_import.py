@@ -5,7 +5,7 @@ from datetime import datetime
 from django.core.management.base import BaseCommand
 from django.db import connection
 from optparse import make_option
-from org.models import Employee
+from org.models import Employee, Team
 import io
 import requests
 import urllib2 as urllib
@@ -38,15 +38,30 @@ class Command(BaseCommand):
                 assessment.save()
                 print "Updated %s's %s" % (employee.full_name, assessment.category.name)
             return
+        department_ids = []
         limit = 25
         tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
         if tenant.is_public_tenant() or \
                 tenant.namely_api_url is None or \
                 tenant.namely_api_token is None:
             return
+        # Get namely Groups
+        print "Loading groups..."
+        headers = {'Authorization': 'Bearer %s' % tenant.namely_api_token}
+        groups_api_url = "https://%s/api/v1/groups.json" % tenant.namely_api_url
+        print groups_api_url
+        response = requests.get(groups_api_url, headers=headers)
+        json = response.json()
+        if len(json['groups']) > 0:
+            for group in json['groups']:
+                group_id = group['id']
+                group_type = group['type']
+                if group_type == 'Departments':
+                    department_ids.append(group_id)
+            print department_ids
+        print "Finished loading groups"
         # Get namely feed
         profiles_api_url = "https://%s/api/v1/profiles.json?sort=first_name&limit=%s" % (tenant.namely_api_url, limit)
-        headers = {'Authorization': 'Bearer %s' % tenant.namely_api_token}
         response_code = None
         keep_alive = True
         last_record = None
@@ -75,6 +90,7 @@ class Command(BaseCommand):
                     salary_date = profile['salary']['date'] if profile['salary'] else None
                     salary_currency_type = profile['salary']['currency_type'] if profile['salary'] else None
                     job_title = profile['job_title']['title'] if profile['job_title'] else None
+                    groups = profile['links']['groups']
                     meyers_briggs_type = profile['meyers_briggs_type'].lower() if profile['meyers_briggs_type'] else None
                     kolbe_fact_finder_score = profile['kolbe_fact_finder_score'] if profile['kolbe_fact_finder_score'] else None
                     kolbe_follow_thru_score = profile['kolbe_follow_thru_score'] if profile['kolbe_follow_thru_score'] else None
@@ -157,6 +173,23 @@ class Command(BaseCommand):
                                 compensation.salary = salary_yearly_amount
                                 compensation.save()
                                 print "Updated %s's compensation" % employee.full_name
+                        if groups and len(groups) > 0:
+                            print 'Groups count'
+                            for group in groups:
+                                if group['id'] in department_ids:
+                                    if employee.team is None or employee.team.name != group['name']:
+                                        try:
+                                            # Find Scoutmap team by group name
+                                            team = Team.objects.get(name=group['name'])
+                                        except Team.DoesNotExist:
+                                            # If it doesn't exist create team
+                                            team = Team(name=group['name'])
+                                            team.save()
+                                            print "Created team %s" % team.name
+                                        # Update employee team
+                                        employee.team = team
+                                        employee.save()
+                                        print "Updated %s's team to %s" % (employee.full_name, team.name)
                         if meyers_briggs_type:
                             mbtis = MBTI.objects.filter(employee__id=employee.id)
                             if mbtis.count() == 0 or mbtis[0].type != meyers_briggs_type:
