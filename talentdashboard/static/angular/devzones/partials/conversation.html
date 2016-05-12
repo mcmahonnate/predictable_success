@@ -6,9 +6,7 @@
         <span ng-bind-html="conversation.replaceTemplateTags(advice.alert_for_development_lead)"></span>
     </div>
 	<div class="checkin-header">
-		<div class="type-tag">
-			<span>Development</span>
-		</div>
+		<button ng-show="conversation.is_development_lead && conversation.conversation.development_lead_assessment && !conversation.conversation.development_lead_assessment.completed" class="btn btn-success pull-right" type="button" ng-click="conversation.sendToEmployee()">Send to {{ conversation.selfie.employee.first_name }}</button>
         <img ng-src="{{ conversation.selfie.employee.avatar_small }}" class="headshot medium-headshot pull-left" alt="{{ conversation.selfie.employee.full_name }}'s avatar" />
         <div class="pull-left">
 			<h1>{{ conversation.selfie.employee.full_name }}</h1>
