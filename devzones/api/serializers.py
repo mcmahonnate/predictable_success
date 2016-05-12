@@ -148,7 +148,8 @@ class EmployeeZoneReportSerializer(serializers.ModelSerializer):
 
     def get_conversation_sent_to_development_lead(self, obj):
         if obj.development_conversation.development_lead_assessment:
-            return obj.development_conversation.development_lead_assessment.is_draft
+            return (obj.development_conversation.development_lead_assessment.completed or
+                    obj.development_conversation.development_lead_assessment.is_draft)
         else:
             return False
 
