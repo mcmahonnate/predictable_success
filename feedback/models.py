@@ -85,8 +85,11 @@ class FeedbackSubmissionManager(models.Manager):
     def submitted(self, reviewer):
         return self.filter(reviewer=reviewer)
 
-    def received_not_delivered(self, subject):
-        return self.filter(subject=subject).filter(has_been_delivered=False)
+    def received_not_delivered(self, subject=None):
+        if subject:
+            return self.filter(subject=subject, has_been_delivered=False)
+        else:
+            return self.filter(has_been_delivered=False)
 
     def received_not_delivered_and_not_in_digest(self, subject):
         return self.received_not_delivered(subject).filter(feedback_digest__isnull=True)

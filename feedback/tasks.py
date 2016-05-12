@@ -25,8 +25,8 @@ def send_feedback_request_email(request_id):
         'response_url': response_url,
     }
     subject = "Someone wants your feedback!"
-    text_content = render_to_string('email/feedback_request_notification.txt', context)
-    html_content = render_to_string('email/feedback_request_notification.html', context)
+    text_content = render_to_string('feedback/email/feedback_request_notification.txt', context)
+    html_content = render_to_string('feedback/email/feedback_request_notification.html', context)
     msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
     msg.attach_alternative(html_content, "text/html")
     msg.send()
@@ -53,8 +53,8 @@ def send_feedback_request_reminder_email(employee_id, customer_id):
         'domain_url': domain_url,
     }
     subject = "Don't forget! You have %s %s waiting for your feedback!" % (feedback_requests.count(), ('people' if feedback_requests.count() > 1 else 'person'))
-    text_content = render_to_string('email/feedback_request_reminder_email.txt', context)
-    html_content = render_to_string('email/feedback_request_reminder_email.html', context)
+    text_content = render_to_string('feedback/email/feedback_request_reminder_email.txt', context)
+    html_content = render_to_string('feedback/email/feedback_request_reminder_email.html', context)
     msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
     msg.attach_alternative(html_content, "text/html")
     msg.send()
@@ -75,8 +75,8 @@ def send_feedback_digest_email(digest_id):
         'digest_url': digest_url,
     }
     subject = "Your feedback is ready"
-    text_content = render_to_string('email/feedback_digest_notification.txt', context)
-    html_content = render_to_string('email/feedback_digest_notification.html', context)
+    text_content = render_to_string('feedback/email/feedback_digest_notification.txt', context)
+    html_content = render_to_string('feedback/email/feedback_digest_notification.html', context)
     msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
     msg.attach_alternative(html_content, "text/html")
     msg.send()
@@ -103,8 +103,8 @@ def send_share_feedback_digest_email(digest_id, employee_id):
     }
 
     subject = "%s has shared their feedback with you" % feedback_digest.subject.full_name
-    text_content = render_to_string('email/share_feedback_digest.txt', context)
-    html_content = render_to_string('email/share_feedback_digest.html', context)
+    text_content = render_to_string('feedback/email/share_feedback_digest.txt', context)
+    html_content = render_to_string('feedback/email/share_feedback_digest.html', context)
     msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
     msg.attach_alternative(html_content, "text/html")
     msg.send()
@@ -136,8 +136,8 @@ def send_feedback_was_helpful_email(employee_id, days_ago):
         subject = '%s people thought your feedback was helpful' % helpful_count
     else:
         subject = '%s person thought your feedback was helpful' % helpful_count
-    text_content = render_to_string('email/feedback_was_helpful_notification.txt', context)
-    html_content = render_to_string('email/feedback_was_helpful_notification.html', context)
+    text_content = render_to_string('feedback/email/feedback_was_helpful_notification.txt', context)
+    html_content = render_to_string('feedback/email/feedback_was_helpful_notification.html', context)
     msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
     msg.attach_alternative(html_content, "text/html")
     msg.send()

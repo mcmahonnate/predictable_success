@@ -4,7 +4,7 @@
 
     function feedbackSubmissionForm() {
         return {
-            templateUrl: '/static/angular/partials/feedback/_feedback_submission_form.html',
+            templateUrl: '/static/angular/feedback/partials/_feedback_submission_form.html',
             restrict: 'E',
             scope: {
                 feedback: '=',

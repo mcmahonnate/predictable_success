@@ -69,7 +69,7 @@
                 animation: true,
                 windowClass: 'xx-dialog fade zoom',
                 backdrop: 'static',
-                templateUrl: '/static/angular/partials/feedback/_modals/share-feedback.html',
+                templateUrl: '/static/angular/feedback/partials/_modals/share-feedback.html',
                 controller: 'ShareFeedbackController as share',
                 resolve: {
                     digest: function () {

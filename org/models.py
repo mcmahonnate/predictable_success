@@ -5,7 +5,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import connection, models
 from django.db.models import Q
-from django.utils.log import getLogger
 from django.utils.translation import ugettext as _
 from model_utils import Choices, FieldTracker
 from mptt.models import MPTTModel, TreeForeignKey, TreeManager
@@ -14,9 +13,6 @@ from PIL import Image, ExifTags
 import datetime
 import blah
 
-logger = getLogger(__name__)
-
-COACHES_GROUP = 'CoachAccess'
 
 
 class Relationship(models.Model):
@@ -39,8 +35,9 @@ class Relationship(models.Model):
 
 
 class EmployeeManager(TreeManager):
-    def coaches(self):
-        return self.filter(user__groups__name=COACHES_GROUP).order_by('full_name')
+    def get_coaches(self):
+        coaches = self.get_current_employees()
+        return coaches.filter(coachees__isnull=False).order_by('full_name')
 
     def get_current_employees(self, team_id=None, show_hidden=False):
         employees = self.filter(departure_date__isnull=True)

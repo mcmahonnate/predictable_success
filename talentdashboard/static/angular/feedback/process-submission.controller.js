@@ -93,7 +93,7 @@
                 animation: true,
                 windowClass: 'xx-dialog fade zoom',
                 backdrop: 'static',
-                templateUrl: '/static/angular/partials/feedback/_modals/submission-is-dirty.html',
+                templateUrl: '/static/angular/feedback/partials/_modals/submission-is-dirty.html',
                 controller: ['$scope', '$modalInstance', function($scope, $modalInstance) {
                     $scope.close = function(value) {
                         $modalInstance.close(value);

@@ -41,7 +41,7 @@
                 animation: true,
                 windowClass: 'xx-dialog fade zoom',
                 backdrop: 'static',
-                templateUrl: '/static/angular/partials/feedback/_modals/anonymous-warning.html',
+                templateUrl: '/static/angular/feedback/partials/_modals/anonymous-warning.html',
                 controller: ['$scope', '$modalInstance', 'subject', function($scope, $modalInstance, subject) {
                     $scope.subject = subject;
                     $scope.cancel = function() {

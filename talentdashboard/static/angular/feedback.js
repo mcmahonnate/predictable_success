@@ -9,14 +9,14 @@ var app = angular.module('feedback', [
         .config(['$routeProvider',
             function ($routeProvider) {
                 $routeProvider.
-                    when('/request/', {templateUrl: '/static/angular/partials/feedback/request.html', controller: 'RequestFeedbackCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
-                    when('/submit/', {templateUrl: '/static/angular/partials/feedback/submit.html', controller: 'FeedbackRequestsCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
-                    when('/submit/unsolicited/', {templateUrl: '/static/angular/partials/feedback/unsolicited_feedback.html', controller: 'SubmitFeedbackCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
-                    when('/submit/:id', {templateUrl: '/static/angular/partials/feedback/respond_to_request.html', controller: 'ReplyToFeedbackRequestCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
-                    when('/my/', {templateUrl: '/static/angular/partials/feedback/mine.html', controller: 'MyFeedbackCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
-                    when('/my/:id', {templateUrl: '/static/angular/partials/feedback/read-feedback.html', controller: 'ViewFeedbackCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
-                    when('/deliver/', {templateUrl: '/static/angular/partials/feedback/coach_report.html', controller: 'CoacheesReportCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
-                    when('/deliver/:id', {templateUrl: '/static/angular/partials/feedback/compiled_feedback.html', controller: 'CoacheeFeedbackCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
+                    when('/request/', {templateUrl: '/static/angular/feedback/partials/request.html', controller: 'RequestFeedbackCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
+                    when('/submit/', {templateUrl: '/static/angular/feedback/partials/submit.html', controller: 'FeedbackRequestsCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
+                    when('/submit/unsolicited/', {templateUrl: '/static/angular/feedback/partials/unsolicited_feedback.html', controller: 'SubmitFeedbackCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
+                    when('/submit/:id', {templateUrl: '/static/angular/feedback/partials/respond_to_request.html', controller: 'ReplyToFeedbackRequestCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
+                    when('/my/', {templateUrl: '/static/angular/feedback/partials/mine.html', controller: 'MyFeedbackCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
+                    when('/my/:id', {templateUrl: '/static/angular/feedback/partials/read-feedback.html', controller: 'ViewFeedbackCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
+                    when('/deliver/', {templateUrl: '/static/angular/feedback/partials/coach_report.html', controller: 'CoacheesReportCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
+                    when('/deliver/:id', {templateUrl: '/static/angular/feedback/partials/compiled_feedback.html', controller: 'CoacheeFeedbackCtrl', resolve: {authorizeRoute: authorizeRoute, factory: reRoute}}).
                     otherwise({redirectTo: '/my'});
             }])
         .config(['$resourceProvider', function($resourceProvider) {

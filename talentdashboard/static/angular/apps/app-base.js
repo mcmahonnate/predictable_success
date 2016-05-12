@@ -19,20 +19,20 @@ var app = angular.module('tdb', [
         'angular-carousel', 'analytics', 'ui.bootstrap', 'ngCsv','ngImgCrop', 'ngRoute', 'ngAnimate', 'ui-notification', 'ngMessages', 'readMore', 'ngCookies', 'ui.select', 'selectize','ngTouch'])
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.
-            when('/', {templateUrl: '/static/angular/partials/feedback/index.html', controller: 'FeedbackController as feedback', resolve: {authorizeRoute: authorizeRoute}}).
+            when('/', {templateUrl: '/static/angular/feedback/partials/index.html', controller: 'FeedbackController as feedback', resolve: {authorizeRoute: authorizeRoute}}).
             when('/checkins/:checkinId', {templateUrl: '/static/angular/checkins/partials/checkin-detail.html', controller: 'CheckInController as viewCheckin', resolve: {authorizeRoute: authorizeRoute}}).
             when('/checkins', {templateUrl: '/static/angular/checkins/partials/checkins.html', controller: 'CheckInsController as myCheckins', resolve: {authorizeRoute: authorizeRoute}}).
             when('/id', {templateUrl: '/static/angular/devzones/partials/index.html', controller: 'DevZonesController as devzones', resolve: {authorizeRoute: authorizeRoute}}).
             when('/id/:conversationId', {templateUrl: '/static/angular/devzones/partials/conversation.html', controller: 'ConversationController as conversation', resolve: {authorizeRoute: authorizeRoute}}).
             when('/engagement-survey/:employeeId/:surveyId', {templateUrl: '/static/angular/partials/engagement-survey.html', controller: 'EngagementSurveyCtrl'}).
-            when('/feedback/request/:id/reply', {templateUrl: '/static/angular/partials/feedback/respond_to_request.html', controller: 'RespondToFeedbackRequestController as submitFeedback', resolve: {authorizeRoute: authorizeRoute}}).
-            when('/feedback/submit', {templateUrl: '/static/angular/partials/feedback/unsolicited_feedback.html', controller: 'UnsolicitedFeedbackController as submitFeedback', resolve: {authorizeRoute: authorizeRoute}}).
-            when('/feedback/submission/:id', {templateUrl: '/static/angular/partials/feedback/feedback_submission.html', controller: 'ProcessSubmissionController as processFeedback', resolve: {authorizeRoute: authorizeRoute}}).
-            when('/feedback/submission/:id/process', {templateUrl: '/static/angular/partials/feedback/process_feedback.html', controller: 'ProcessSubmissionController as processFeedback', resolve: {authorizeRoute: authorizeRoute}}).
-            when('/feedback', {templateUrl: '/static/angular/partials/feedback/index.html', controller: 'FeedbackController as feedback', resolve: {authorizeRoute: authorizeRoute}}).
-            when('/feedback/:id/worksheet', {templateUrl: '/static/angular/partials/feedback/feedback_worksheet.html', controller: 'FeedbackWorksheetController as feedbackWorksheet', resolve: {authorizeRoute: authorizeRoute}}).
-            when('/feedback/digest/:id', {templateUrl: '/static/angular/partials/feedback/feedback_digest_for_coaches.html', controller: 'FeedbackDigestController as feedbackWorksheet', resolve: {authorizeRoute: authorizeRoute}}).
-            when('/feedback/:id', {templateUrl: '/static/angular/partials/feedback/my_feedback.html', controller: 'FeedbackDigestController as feedback', resolve: {authorizeRoute: authorizeRoute}}).
+            when('/feedback/request/:id/reply', {templateUrl: '/static/angular/feedback/partials/respond_to_request.html', controller: 'RespondToFeedbackRequestController as submitFeedback', resolve: {authorizeRoute: authorizeRoute}}).
+            when('/feedback/submit', {templateUrl: '/static/angular/feedback/partials/unsolicited_feedback.html', controller: 'UnsolicitedFeedbackController as submitFeedback', resolve: {authorizeRoute: authorizeRoute}}).
+            when('/feedback/submission/:id', {templateUrl: '/static/angular/feedback/partials/feedback_submission.html', controller: 'ProcessSubmissionController as processFeedback', resolve: {authorizeRoute: authorizeRoute}}).
+            when('/feedback/submission/:id/process', {templateUrl: '/static/angular/feedback/partials/process_feedback.html', controller: 'ProcessSubmissionController as processFeedback', resolve: {authorizeRoute: authorizeRoute}}).
+            when('/feedback', {templateUrl: '/static/angular/feedback/partials/index.html', controller: 'FeedbackController as feedback', resolve: {authorizeRoute: authorizeRoute}}).
+            when('/feedback/:id/worksheet', {templateUrl: '/static/angular/feedback/partials/feedback_worksheet.html', controller: 'FeedbackWorksheetController as feedbackWorksheet', resolve: {authorizeRoute: authorizeRoute}}).
+            when('/feedback/digest/:id', {templateUrl: '/static/angular/feedback/partials/feedback_digest_for_coaches.html', controller: 'FeedbackDigestController as feedbackWorksheet', resolve: {authorizeRoute: authorizeRoute}}).
+            when('/feedback/:id', {templateUrl: '/static/angular/feedback/partials/my_feedback.html', controller: 'FeedbackDigestController as feedback', resolve: {authorizeRoute: authorizeRoute}}).
             when('/my-profile', {templateUrl: '/static/angular/partials/profile.html', controller: 'ProfileCtrl', resolve: {authorizeRoute: authorizeRoute}}).
             when('/projects/:projectId', {templateUrl: '/static/angular/projects/partials/project-detail.html', controller: 'ProjectController as viewProject', resolve: {authorizeRoute: authorizeRoute}}).
             when('/projects', {templateUrl: '/static/angular/projects/partials/projects.html', controller: 'ProjectsController as projects', resolve: {authorizeRoute: authorizeRoute}}).

@@ -109,7 +109,7 @@ function FeedbackController(FeedbackRequestService, FeedbackDigestService, Feedb
             animation: true,
             windowClass: 'xx-dialog fade zoom',
             backdrop: 'static',
-            templateUrl: '/static/angular/partials/feedback/_modals/request-feedback.html',
+            templateUrl: '/static/angular/feedback/partials/_modals/request-feedback.html',
             controller: 'RequestFeedbackController as request',
             resolve: {
 
