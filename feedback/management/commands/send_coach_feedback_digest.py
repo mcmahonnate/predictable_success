@@ -31,8 +31,8 @@ class Command(BaseCommand):
                         'coach': coach
                     }
                 )
-                text_content = render_to_string('checkins/email/checkin_share_reminder_notification.txt', context)
-                html_content = render_to_string('checkins/email/checkin_share_reminder_notification.html', context)
+                text_content = render_to_string('feedback/email/feedback_weekly_report_notification.txt', context)
+                html_content = render_to_string('feedback/email/feedback_weekly_report_notification.html', context)
 
                 msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [coach.email])
                 msg.attach_alternative(html_content, "text/html")

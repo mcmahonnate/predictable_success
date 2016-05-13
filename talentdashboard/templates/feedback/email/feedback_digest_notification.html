@@ -1,12 +1,10 @@
-<html>
-    <head>
-    </head>
-    <body>
+{% extends "layouts/email.html" %}
+
+{% block content %}
         <p>
             Hi, {{ recipient_first_name }}!
         </p>
         <p>
             Your coach, {{ delivered_by_full_name }}, has finished compiling your feedback. Click <a href="{{ digest_url }}">HERE</a> to give it a look.
         </p>
-    </body>
-</html>
+{% endblock content%}

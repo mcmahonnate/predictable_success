@@ -1,7 +1,6 @@
-<html>
-    <head>
-    </head>
-    <body>
+{% extends "layouts/email.html" %}
+
+{% block content %}
         <p>
             Hi, {{ recipient.first_name }}!
         </p>
@@ -17,6 +16,4 @@
         <p>
             This can take as little as three minutes{% if feedback_request_count %} each{% endif %}, and it will really matter to them! Hit us up on slack <a href="https://fool.slack.com/messages/360-feedback-help/details/">#360-feedback-help</a> if you have any questions.
         </p>
-
-    </body>
-</html>
+{% endblock content%}
