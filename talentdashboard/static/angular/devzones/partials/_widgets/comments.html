@@ -1,11 +1,10 @@
 <!-- Comment replies -->
 <div class="activity">
     <div class="activity-items distributions" style="margin-bottom: 0;border: none">
+        <span class="total-replies" ng-show="devzoneComments.comments.length > 0" style="margin-top:5px;">
+            <i class="fa fa-comment-o"></i> {{devzoneComments.comments.length}}
+        </span>
         <div class="comment-replies">
-            <span class="total-replies" ng-show="devzoneComments.comments.length > 0" style="margin-top:5px;">
-                <i class="fa fa-comment-o"></i> {{devzoneComments.comments.length}}
-            </span>
-
             <div class="comment-reply" ng-repeat="comment in devzoneComments.comments | orderBy:'created_date'">
                 <div ng-controller="CommentCtrl">
                     <div class="comment-actions pull-right">

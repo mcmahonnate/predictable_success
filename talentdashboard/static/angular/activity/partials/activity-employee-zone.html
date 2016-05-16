@@ -30,10 +30,10 @@
         </div>
     </a>
     <!-- Comment replies -->
+    <span class="total-replies" ng-show="event.related_object.comments.length > 0" style="margin-top:5px;">
+        <i class="fa fa-comment-o"></i> {{event.related_object.comments.length}}
+    </span>
     <div ng-if="event.employee.id != event.user.employee.id" class="comment-replies">
-        <span class="total-replies" ng-show="event.related_object.comments.length > 0" style="margin-top:5px;">
-            <i class="fa fa-comment-o"></i> {{event.related_object.comments.length}}
-        </span>
         <div class="comment-reply" ng-repeat="comment in event.related_object.comments | orderBy:'created_date'">
             <div ng-controller="CommentCtrl">
                 <div class="comment-actions pull-right">

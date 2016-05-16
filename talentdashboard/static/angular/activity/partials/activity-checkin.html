@@ -45,13 +45,15 @@
             <h3 class="comment-title-employee-name"><strong><span class="sensitive-text">{{ event.employee.full_name }}</span></strong></h3>
             <div class="checkin-type">{{ event.related_object.type.name }} Check-in <span ng-show="{{ event.related_object.happiness }}">&rarr; {{ event.related_object.happiness.assessment_verbose }}</span></div>
         </div>
+
     </div>
 
     <!-- Comment replies -->
+    <span class="total-replies" ng-show="event.related_object.comments.length > 0" style="margin-top:5px;">
+        <i class="fa fa-comment-o"></i> {{event.related_object.comments.length}}
+    </span>
     <div ng-if="event.show_conversation" class="comment-replies">
-        <span class="total-replies" ng-show="event.related_object.comments.length > 0" style="margin-top:5px;">
-            <i class="fa fa-comment-o"></i> {{event.related_object.comments.length}}
-        </span>
+
         <div class="comment-reply" ng-repeat="comment in event.related_object.comments | orderBy:'created_date'">
             <div ng-controller="CommentCtrl">
                 <div class="comment-actions pull-right">

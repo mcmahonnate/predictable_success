@@ -61,10 +61,10 @@
     </div>
 
     <!-- Comment replies -->
+    <span class="total-replies" ng-show="event.related_object.replies.length > 0" style="margin-top:5px;">
+        <i class="fa fa-comment-o"></i> {{event.related_object.replies.length}}
+    </span>
     <div class="comment-replies">
-        <span class="total-replies" ng-show="event.related_object.replies.length > 0" style="margin-top:5px;">
-            <i class="fa fa-comment-o"></i> {{event.related_object.replies.length}}
-        </span>
         <div class="comment-reply" ng-repeat="comment in event.related_object.replies | orderBy:'created_date'">
             <div ng-controller="CommentCtrl">
                 <div class="comment-actions pull-right">
