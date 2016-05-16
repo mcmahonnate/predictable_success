@@ -5,10 +5,12 @@
     }
 
     .activity-items {
+        margin-bottom: 25px;
+        border: 1px solid #D0D3D6;
+        border-radius: 2px;
+
         .activity-item {
-            margin-bottom: 25px;
             border-bottom: 1px solid #ebedf3;
-            padding-bottom: 25px;
         }
 
         .activity-title-employee-name {
@@ -17,6 +19,10 @@
         .activity-header {
             display: block; 
             min-width: 90%;
+            border-bottom: 1px solid #D0D3D6;
+        }
+        .activity-description {
+            margin: 10px;
         }
         .activity-owner-avatar-container {
             display: block; 
@@ -40,7 +46,45 @@
             color: #bbb;
         }
     } 
+    .activate-reply {
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        @media not screen and (max-width : 640px) {
+            width: 73% !important;
+        }
+        @media only screen and (max-width : 640px) {
+            width: 70% !important;
+        }
+    }
+    .deactivate-reply {
+        border: none !important;
+        border-radius: 0px;
+    }
+    .activate-reply-image {
+        @media not screen and (max-width : 640px) {
+            opacity: 1;
+        }
+        @media only screen and (max-width : 640px) {
+            opacity: 0;
+            width: 0 !important;
+        }
+    }
+    .deactivate-reply-image {
+        opacity: .5;
+    }
+    .animate-show {
+        opacity: 1;
+    }
 
+    .animate-show.ng-hide-add, .animate-show.ng-hide-remove {
+        -moz-transition: opacity .3s ease-in;
+        -webkit-transition: opacity .3s ease-in;
+        transition: opacity .3s ease-in;
+    }
+
+    .animate-show.ng-hide {
+      opacity: 0;
+    }
 
 
     /* Activity Type [Check-in] */
@@ -48,13 +92,12 @@
         padding: 20px 10px;
         display: block;
         overflow: hidden;
-        margin: 20px 0px 0 68px;
-        background: #f1f1f1;
+        margin: 0;
+        background: #fff;
 
         @media only screen and (max-width : 990px) {
             padding: 15px 10px;
             clear: both;
-            margin-top: 30px;
         }
         h3 {
             margin-bottom: 5px;
@@ -133,8 +176,9 @@
     }
     .total-replies {
         display: block;
-        margin-bottom: 8px;
-        font-weight: bold;  
+        margin: 10px;
+        font-weight: bold;
+        color: #ccc;
     }
     .edit-textarea {
         margin: 12px 0 8px;
@@ -187,19 +231,16 @@
 
 
   .comment-replies {
-    margin: 10px 0px 0 68px;
 
-      @media only screen and (max-width : 640px) {
-          margin: 10px 0 0;
-      } 
-
+    @media only screen and (max-width : 640px) {
+        margin: 10px 0 0;
+    }
     .comment-reply {
-      margin-bottom: 2px;
       padding: 15px 15px 20px;
       background-color: #efefef;
     }
     .comment-reply-textarea {
-        padding: 10px;
+        padding: 10px 10px 20px 10px;
         background-color: #efefef;
 
         textarea {
@@ -215,9 +256,12 @@
             border:1px solid #ccc;
             display: inline;
             vertical-align: top;
-            width: 80%;
+            width: 88%;
             height: 36px;
-            transition: height .3s ease-out;
+            resize: none;
+            -moz-transition: all .3s ease-out;
+            -webkit-transition: all .3s ease-out;
+            transition: all .3s ease-out;
 
             textarea:focus {
                 min-height: 120px;
@@ -225,10 +269,10 @@
             }
 
             @media only screen and (max-width : 1280px) {
-                width: 80%;
+                width: 88%;
             }
             @media only screen and (max-width : 640px) {
-                width: 100%;
+                width: 80%;
                 margin-bottom: 5px;
             }   
         }
@@ -238,7 +282,7 @@
         margin-left: 1px;   
     }
     .comment-reply-copy {
-        margin: 5px 52px;
+        margin: 5px 5px 5px 52px;
         font-size: 14px;
         line-height: 20px;
         white-space: pre-wrap;
@@ -263,15 +307,14 @@
         -moz-border-radius: 3px;
         -webkit-border-radius: 3px;
         border-radius: 3px;
-      height: 36px;
-      width: 19%;
+        height: 36px;
         background-color:#434343;
         font-size:14px;
         color:#fff;
         cursor: pointer;
         display: inline;
         vertical-align: top;
-        margin-left: 0;
+        margin-left: 10px;
 
         @media only screen and (max-width : 640px) {
             width: 100%;

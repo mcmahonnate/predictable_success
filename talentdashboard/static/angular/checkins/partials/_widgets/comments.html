@@ -2,14 +2,14 @@
 <div class="activity">
     <div class="activity-items distributions" style="margin-bottom: 0;border: none">
         <div class="comment-replies">
-            <span class="total-replies" ng-show="devzoneComments.comments.length > 0" style="margin-top:5px;">
-                <i class="fa fa-comment-o"></i> {{devzoneComments.comments.length}}
+            <span class="total-replies" ng-show="viewCheckin.comments.length > 0" style="margin-top:5px;">
+                <i class="fa fa-comment-o"></i> {{viewCheckin.comments.length}}
             </span>
 
-            <div class="comment-reply" ng-repeat="comment in devzoneComments.comments | orderBy:'created_date'">
+            <div class="comment-reply" ng-repeat="comment in viewCheckin.comments | orderBy:'-created_date':true">
                 <div ng-controller="CommentCtrl">
                     <div class="comment-actions pull-right">
-                        <span ng-show="comment.owner.id==devzoneComments.currentUser.id">
+                        <span ng-show="comment.owner.id==currentUser.id">
                             <i class="fa fa-ellipsis-h show-popover"></i>
                             <ul class="popover-items" style="display:none">
                                 <li class="popover-item">
@@ -17,7 +17,7 @@
                                         Edit</a>
                                 </li>
                                 <li class="popover-item">
-                                    <a ng-click="delete(comment, devzoneComments.comments)"><i class="fa fa-trash-o"></i>
+                                    <a ng-click="delete(comment, viewCheckin.comments)"><i class="fa fa-trash-o"></i>
                                         Delete</a>
                                 </li>
                             </ul>
@@ -53,14 +53,14 @@
                 </div>
             </div>
             <div class="comment-reply-textarea">
-                <form name="replyForm" ng-controller="AddEmployeeZoneActivityCommentCtrl">
+                <form name="replyForm" ng-controller="AddCheckInActivityCommentCtrl">
                     <div class="small-headshot pull-left" ng-class="{'activate-reply-image': activateReply, 'deactivate-reply-image': !activateReply}" style="margin-left: 7px">
-                        <img ng-src="{{ devzoneComments.currentUser.employee.avatar_small }}" alt="{{ devzoneComments.currentUser.employee.full_name }}'s avatar" class="headshot-image"/>
+                        <img ng-src="{{ currentUser.employee.avatar_small }}" alt="{{ currentUser.employee.full_name }}'s avatar" class="headshot-image"/>
                     </div>
                     <textarea class="form-control" ng-class="{'activate-reply': activateReply, 'deactivate-reply': !activateReply}" ng-focus="activateReply=true" name="content" msd-elastic ng-model="newComment.content" rows="1" cols="40" placeholder="Reply to this conversation..."></textarea>
-                    <div style="display: inline-block;" class="small-comment animate-show" ng-show="activateReply"><button class="small-comment" ng-disabled="!newComment.content" ng-click="add(replyForm, devzoneComments.id, devzoneComments.comments)">Post</button></div>
+                    <div style="display: inline-block;" class="small-comment animate-show" ng-show="activateReply"><button class="small-comment" ng-disabled="!newComment.content" ng-click="add(replyForm, viewCheckin.checkin.id, viewCheckin.comments)">Post</button></div>
                 </form>
             </div>
         </div>
-    </div>
+    </div>    
 </div>

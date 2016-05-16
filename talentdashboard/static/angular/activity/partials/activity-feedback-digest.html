@@ -1,17 +1,12 @@
 <div class="activity-item">
     <div class="activity-header">
-        <div class="activity-owner-avatar-container">
-            <a ng-href="#/employees/{{ event.user.employee.id }}" class="medium-headshot">
-                <img ng-src="{{ event.user.employee.avatar_small }}" alt="{{ event.user.employee.full_name }}'s avatar" class="headshot-image"/>
-            </a>
-        </div>
         <div class="activity-description">
             <a ng-href="#/employees/{{ event.user.employee.id }}" class="activity-title-employee-name">{{ event.user.employee.full_name }}</a>
             {{ event.verb }}
             <span ng-show="event.employee.id != event.user.employee.id">
                 to <a ng-href="#/employees/{{ event.employee.id }}" class="activity-title-employee-name">{{ event.employee.full_name }}</a>
             </span>
-            <span class="timestamp" data-toggle="tooltip" data-placement="top" title="{{ event.date | date:'MMM d, yyyy h:mma' }}">{{ event.date | fromNow }}</span>
+            <span class="timestamp pull-right" data-toggle="tooltip" data-placement="top" title="{{ event.date | date:'MMM d, yyyy h:mma' }}">{{ event.date | fromNow }}</span>
         </div>    
     </div>
     <div class="activity-checkin row" ng-if="!event.show_conversation">

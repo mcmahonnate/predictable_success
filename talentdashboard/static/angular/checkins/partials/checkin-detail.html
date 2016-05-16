@@ -14,10 +14,15 @@
 			<h1>{{ viewCheckin.checkin.employee.full_name }}</h1>
 			<p class="timestamp">{{ viewCheckin.checkin.host.full_name }} checked in {{ viewCheckin.checkin.date | fromNow }}</p>
 		</div>
-	</div>	
+	</div>
+	<div class="checkin-happiness panel" ng-show="viewCheckin.checkin.happiness">
+		<h2 class="panel-title pull-left">Happiness:
+			<span class="employee-happiness-color-{{viewCheckin.checkin.happiness.assessment}}">{{ viewCheckin.checkin.happiness.assessment_verbose }}</span>
+		</h2>
+	</div>
     <div class="checkin-summary panel">
         <div class="pull-right" style="margin-left: 20px;" ng-show="(viewCheckin.checkin.host.id == currentUser.employee.id) && !viewCheckin.showSummaryEdit">
-            <i class="fa fa-cog show-popover"></i>
+            <i class="fa fa-ellipsis-h show-popover"></i>
             <ul class="popover-items" style="display:none">
                 <li class="popover-item">
                     <a ng-click="viewCheckin.showSummaryEdit=true" class="edit"><i class="fa fa-pencil-square-o"></i> Edit</a>
@@ -53,12 +58,9 @@
         	    <button class="btn btn-success pull-right" ng-click="viewCheckin.saveSummary(viewCheckin.checkin);">Save Edits</button>
             </div>
         </div>
+		<div ng-show="viewCheckin.checkin.published" ng-include="'/static/angular/checkins/partials/_widgets/comments.html'"></div>
 	</div>
-	<div class="checkin-happiness panel" ng-show="viewCheckin.checkin.happiness">
-		<h2 class="panel-title pull-left">Happiness: 
-			<span class="employee-happiness-color-{{viewCheckin.checkin.happiness.assessment}}">{{ viewCheckin.checkin.happiness.assessment_verbose }}</span>
-		</h2>
-	</div>	
+
     <div class="checkin-tasks panel todos" ng-if="viewCheckin.checkin.tasks.length > 0">
 		<h2 class="panel-title">Tasks</h2>
 	    <tabset ng-show="viewCheckin.checkin.tasks.length > 0">
@@ -100,7 +102,4 @@
 	        </tab>
 	    </tabset>
     </div>
-
-    <div ng-show="viewCheckin.checkin.published" ng-include="'/static/angular/checkins/partials/add-comment.html'"></div>
-    <div ng-show="viewCheckin.checkin.published" ng-include="'/static/angular/checkins/partials/comments.html'"></div>
 </div>

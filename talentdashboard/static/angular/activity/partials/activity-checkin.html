@@ -1,17 +1,12 @@
 <div class="activity-item">
     <div class="activity-header">
-        <div class="activity-owner-avatar-container">
-            <a ng-href="#/employees/{{ event.user.employee.id }}" class="medium-headshot">
-                <img ng-src="{{ event.user.employee.avatar_small }}" alt="{{ event.user.employee.full_name }}'s avatar" class="headshot-image"/>
-            </a>
-        </div>
         <div class="activity-description">
             <a ng-href="#/employees/{{ event.user.employee.id }}" class="activity-title-employee-name">{{ event.user.employee.full_name }}</a>
             {{ event.verb }}
             <span ng-show="event.employee.id != event.user.employee.id">
                 with <a ng-href="#/employees/{{ event.employee.id }}" class="activity-title-employee-name">{{ event.employee.full_name }}</a>
             </span>
-            <span class="timestamp" data-toggle="tooltip" data-placement="top" title="{{ event.date | date:'MMM d, yyyy h:mma' }}">{{ event.date | fromNow }}</span>
+            <span class="timestamp pull-right" data-toggle="tooltip" data-placement="top" title="{{ event.date | date:'MMM d, yyyy h:mma' }}">{{ event.date | fromNow }}</span>
         </div>    
     </div>
     <a class="activity-checkin row" ng-if="event.show_conversation" href="#/checkins/{{ event.event_id }}">
@@ -54,27 +49,27 @@
 
     <!-- Comment replies -->
     <div ng-if="event.show_conversation" class="comment-replies">
-        <span class="total-replies" ng-show="event.related_object.comments.length == 1" style="margin-top:20px;">
-            {{event.related_object.comments.length}} reply
+        <span class="total-replies" ng-show="event.related_object.comments.length > 0" style="margin-top:5px;">
+            <i class="fa fa-comment-o"></i> {{event.related_object.comments.length}}
         </span>
-        <span class="total-replies" ng-show="event.related_object.comments.length > 1" style="margin-top:20px;">
-            {{event.related_object.comments.length}} replies
-        </span>
-
         <div class="comment-reply" ng-repeat="comment in event.related_object.comments | orderBy:'created_date'">
             <div ng-controller="CommentCtrl">
-                <div class="comment-actions pull-right" ng-show="comment.owner.id==currentUser.id">
-                    <i class="fa fa-cog show-popover"></i>
-                    <ul class="popover-items" style="display:none">
-                        <li class="popover-item">
-                            <a ng-click="edit(comment)" class="edit"><i class="fa fa-pencil-square-o"></i>
-                                Edit</a>
-                        </li>
-                        <li class="popover-item">
-                            <a ng-click="delete(comment, event.related_object.comments)"><i class="fa fa-trash-o"></i>
-                                Delete</a>
-                        </li>
-                    </ul>
+                <div class="comment-actions pull-right">
+                    <span ng-show="comment.owner.id==currentUser.id">
+                        <i class="fa fa-ellipsis-h show-popover"></i>
+                        <ul class="popover-items" style="display:none">
+                            <li class="popover-item">
+                                <a ng-click="edit(comment)" class="edit"><i class="fa fa-pencil-square-o"></i>
+                                    Edit</a>
+                            </li>
+                            <li class="popover-item">
+                                <a ng-click="delete(comment, event.related_object.comments)"><i class="fa fa-trash-o"></i>
+                                    Delete</a>
+                            </li>
+                        </ul>
+                    </span>
+                    <span class="timestamp"
+                      title="{{ comment.created_date | date:'MMM d, yyyy h:mma' }}">{{ comment.created_date | fromNow }}</span>
                 </div>
                 <div class="comment-reply-avatar-container">
                     <a ng-href="#/employees/{{ comment.owner.employee.id }}" class="small-headshot">
@@ -82,11 +77,8 @@
                              alt="{{ comment.owner.employee.full_name }}'s avatar" class="headshot-image"/>
                     </a>
                 </div>
-                <a class="comment-reply-name"
-                   ng-href="#/employees/{{ comment.owner.employee.id }}">{{ comment.owner.employee.full_name }}</a>
-                   replied 
-                <span class="timestamp"
-                      title="{{ comment.created_date | date:'MMM d, yyyy h:mma' }}">{{ comment.created_date | fromNow }}</span>
+                <a class="comment-reply-name" ng-href="#/employees/{{ comment.owner.employee.id }}">{{ comment.owner.employee.full_name }}</a>
+
 
                 <div style="padding-left:50px;" ng-show="editMode">
                     <form name="replyEditForm">
@@ -108,8 +100,11 @@
         </div>
         <div class="comment-reply-textarea">
             <form name="replyForm" ng-controller="AddCheckInActivityCommentCtrl">
-                <textarea class="form-control" name="content" msd-elastic ng-model="newComment.content" rows="1" cols="40" placeholder="Add a reply..."></textarea>
-                <button class="small-comment" ng-disabled="!newComment.content" ng-click="add(replyForm, event.related_object.id, event.related_object.comments)">Comment</button>
+                <div class="small-headshot pull-left" ng-class="{'activate-reply-image': activateReply, 'deactivate-reply-image': !activateReply}" style="margin-left: 7px">
+                    <img ng-src="{{ currentUser.employee.avatar_small }}" alt="{{ currentUser.employee.full_name }}'s avatar" class="headshot-image"/>
+                </div>
+                <textarea class="form-control" ng-class="{'activate-reply': activateReply, 'deactivate-reply': !activateReply}" ng-focus="activateReply=true" name="content" msd-elastic ng-model="newComment.content" rows="1" cols="40" placeholder="Reply to this conversation..."></textarea>
+                <div style="display: inline-block;" class="small-comment animate-show" ng-show="activateReply"><button class="small-comment" ng-disabled="!newComment.content" ng-click="add(replyForm, event.related_object.id, event.related_object.comments)">Post</button></div>
             </form>
         </div>
     </div>    

@@ -4,7 +4,6 @@
 
     function ConversationController(analytics, ConversationService, DevZoneService, Notification, $location, $modal, $parse, $rootScope, $routeParams, $scope, $window) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
-
         var vm = this;
         vm.is_employee = false;
         vm.is_org_dev = false;

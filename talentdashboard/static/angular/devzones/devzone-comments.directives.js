@@ -10,7 +10,9 @@ function devzoneComments() {
             comments: '=',
             id: '='
         },
-        controller: function () {
+        controller: function ($rootScope) {
+            var vm = this;
+            vm.currentUser = $rootScope.currentUser;
         },
         controllerAs: 'devzoneComments',
         bindToController: true,

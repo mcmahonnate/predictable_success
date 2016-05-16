@@ -1,9 +1,0 @@
-<div class="panel new-comment">
-    <h2 class="panel-title">Add Comment</h2>
-    <form name="addCommentForm">
-        <textarea class="form-control" ng-model="viewCheckin.newComment.content" name="content" ng-class="{'expand': viewCheckin.newComment.expandTextArea, 'compress': !viewCheckin.newComment.expandTextArea}" ng-blur="viewCheckin.newComment.expandTextArea=false" ng-click="viewCheckin.newComment.expandTextArea=true;" rows="1" cols="40" placeholder="Add a comment about {{viewCheckin.checkin.employee.full_name}}."></textarea>
-        <div class="visibility" style="display:none;">
-            <button class="btn btn-primary pull-right" ng-disabled="!viewCheckin.newComment.content" ng-click="viewCheckin.addComment(addCommentForm);">Comment</button>
-        </div> 
-    </form>        
-</div>    
