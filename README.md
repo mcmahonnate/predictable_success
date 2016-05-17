@@ -44,12 +44,7 @@ Install solr:
 ./install_solr.sh
 
 ```
-Update to latest schema: 
-```
-./install_solr.sh
-
-```
-First go to Heroku websolr to retrieve schema.xml. Then, open the file below and then paste the most up-to-date schema:
+Go to Heroku websolr to retrieve schema.xml. Then, open the file below and then paste the most up-to-date schema:
 ```
 cd ~/solr-4.4.0/example/solr/employees/conf/schema.xml
 
@@ -57,6 +52,12 @@ cd ~/solr-4.4.0/example/solr/employees/conf/schema.xml
 Run indexing command. 
 ```
 python manage.py tenant_reindex_employees --settings=talentdashboard.settings.local
+
+```
+Run gulp 
+```
+node_modules/gulp/bin/gulp.js scripts
+node_modules/gulp/bin/gulp.js watch
 
 ```
 
