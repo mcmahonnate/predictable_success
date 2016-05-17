@@ -39,6 +39,11 @@ cat .env.requirements > .env
 
 Edit the .env file to include the appropriate environment variable settings. See a team member for details.
 
+Install solr:
+```
+./install_solr.sh
+```
+
 You should now be able to run the server with:
 ```
 ./up.sh
