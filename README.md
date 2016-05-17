@@ -42,6 +42,22 @@ Edit the .env file to include the appropriate environment variable settings. See
 Install solr:
 ```
 ./install_solr.sh
+
+```
+Update to latest schema: 
+```
+./install_solr.sh
+
+```
+First go to Heroku websolr to retrieve schema.xml. Then, open the file below and then paste the most up-to-date schema:
+```
+cd ~/solr-4.4.0/example/solr/employees/conf/schema.xml
+
+```
+Run indexing command. 
+```
+python manage.py tenant_reindex_employees --settings=talentdashboard.settings.local
+
 ```
 
 You should now be able to run the server with:
