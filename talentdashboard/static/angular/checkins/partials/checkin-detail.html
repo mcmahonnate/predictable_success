@@ -27,15 +27,15 @@
                     <div class="activity-popover comment" ng-class="{'mousedown': showMouseDownParent, 'mouseover': showMouseOverParent}"></div>
                     <i class="fa fa-ellipsis-h show-activity-popover" style="color: #aaa;" ng-mouseover="showMouseOverParent=true" ng-mouseleave="showMouseOverParent=false"></i>
                 </div>
+                <ul class="activity-popover-items" ng-show="$root.popOver=='parent' + viewCheckin.checkin.id" style="margin-top: 30px;">
+                    <li class="activity-popover-item">
+                        <a ng-click="viewCheckin.showSummaryEdit=true" class="edit"><i class="fa fa-pencil-square-o"></i> Edit</a>
+                    </li>
+                    <li class="activity-popover-item">
+                        <a ng-click="viewCheckin.deleteCheckin(viewCheckin.checkin)"><i class="fa fa-trash-o"></i> Delete</a>
+                    </li>
+                </ul>
             </div>
-            <ul class="popover-items" ng-show="$root.popOver=='parent' + viewCheckin.checkin.id">
-                <li class="popover-item">
-                    <a ng-click="viewCheckin.showSummaryEdit=true" class="edit"><i class="fa fa-pencil-square-o"></i> Edit</a>
-                </li>
-                <li class="popover-item">
-                    <a ng-click="viewCheckin.deleteCheckin(viewCheckin.checkin)"><i class="fa fa-trash-o"></i> Delete</a>
-                </li>
-            </ul>
         </div>
     	<div ng-hide="viewCheckin.showSummaryEdit">
     		<!-- <span class="checkin-summary-instance" data-ng-bind-html="checkin.summary | new_line | cut:true:length"></span> -->

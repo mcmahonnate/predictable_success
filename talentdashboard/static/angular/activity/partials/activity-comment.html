@@ -11,11 +11,11 @@
                     <div class="activity-popover comment" ng-class="{'mousedown': showMouseDownParent, 'mouseover': showMouseOverParent}"></div>
                     <i class="fa fa-ellipsis-h show-activity-popover" ng-mouseover="showMouseOverParent=true" ng-mouseleave="showMouseOverParent=false"></i>
                 </div>
-                <ul class="popover-items" ng-show="$root.popOver==event.related_object.id">
-                    <li class="popover-item">
+                <ul class="activity-popover-items" ng-show="$root.popOver==event.related_object.id">
+                    <li class="activity-popover-item">
                         <a ng-click="edit(event.related_object)" class="edit"><i class="fa fa-pencil-square-o"></i> Edit</a>
                     </li>
-                    <li class="popover-item">
+                    <li class="activity-popover-item">
                         <a ng-click="deleteEvent(event, events)"><i class="fa fa-trash-o"></i> Delete</a>
                     </li>
                 </ul>
@@ -76,12 +76,12 @@
                             <div class="activity-popover reply" ng-class="{'mousedown': showMouseDown, 'mouseover': showMouseOver}"></div>
                             <i class="fa fa-ellipsis-h show-activity-popover" ng-mouseover="showMouseOver=true" ng-mouseleave="showMouseOver=false"></i>
                         </div>
-                        <ul class="popover-items" ng-show="$root.popOver==comment.id">
-                            <li class="popover-item">
+                        <ul class="activity-popover-items" ng-show="$root.popOver==comment.id">
+                            <li class="activity-popover-item">
                                 <a ng-click="edit(comment)" class="edit"><i class="fa fa-pencil-square-o"></i>
                                     Edit</a>
                             </li>
-                            <li class="popover-item">
+                            <li class="activity-popover-item">
                                 <a ng-click="delete(comment, event.related_object.replies)"><i class="fa fa-trash-o"></i>
                                     Delete</a>
                             </li>
