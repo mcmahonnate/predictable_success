@@ -22,8 +22,13 @@
 	</div>
     <div class="checkin-summary panel">
         <div class="pull-right" style="margin-left: 20px;" ng-show="(viewCheckin.checkin.host.id == currentUser.employee.id) && !viewCheckin.showSummaryEdit">
-            <i class="fa fa-ellipsis-h show-popover"></i>
-            <ul class="popover-items" style="display:none">
+            <div class="activity" ng-controller="CommentCtrl">
+                <div class="activity-popover-container" ng-mousedown="showMouseDownParent=true" ng-mouseup="togglePopOver('parent' + viewCheckin.checkin.id);showMouseDownParent=false;">
+                    <div class="activity-popover comment" ng-class="{'mousedown': showMouseDownParent, 'mouseover': showMouseOverParent}"></div>
+                    <i class="fa fa-ellipsis-h show-activity-popover" style="color: #aaa;" ng-mouseover="showMouseOverParent=true" ng-mouseleave="showMouseOverParent=false"></i>
+                </div>
+            </div>
+            <ul class="popover-items" ng-show="$root.popOver=='parent' + viewCheckin.checkin.id">
                 <li class="popover-item">
                     <a ng-click="viewCheckin.showSummaryEdit=true" class="edit"><i class="fa fa-pencil-square-o"></i> Edit</a>
                 </li>

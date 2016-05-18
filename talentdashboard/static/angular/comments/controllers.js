@@ -24,6 +24,10 @@ angular.module('tdb.comments.controllers', [])
             );
         };
 
+        $scope.togglePopOver = function(item) {
+            $rootScope.popOver = $rootScope.popOver!=item ? item : null;
+        }
+
         $scope.updateEvent = function(form, event) {
             if(form.$invalid) return;
             Comment.update($scope.editingComment, function(result) {

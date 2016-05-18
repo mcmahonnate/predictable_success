@@ -1,5 +1,56 @@
 .activity {
 
+    .activity-popover-container {
+        display: inline-block;
+        width: 22px;
+        height: 22px;
+        border-radius: 11px;
+        text-align: center;
+        position: relative;
+        background-color: #BFBFBF;
+        border: 1px solid #efefef;
+        margin-right: 5px;
+        .reply {
+          background-color: #efefef;
+        }
+        .comment {
+          background-color: #fff;
+        }
+    }
+    .activity-popover.mouseover {
+        background-color: #DADFE1;
+    }
+    .activity-popover {
+        width: 22px;
+        height: 22px;
+        border-radius: 11px;
+        text-align: center;
+        -moz-transition: all .1s ease-in;
+        -webkit-transition: all .1s ease-in;
+        transition: all .1s ease-in;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .activity-popover.mousedown {
+        width: 0px;
+        height: 0px;
+    }
+
+    .show-activity-popover {
+        color: #aaa;
+        cursor: pointer;
+        vertical-align: middle;
+        font-size: 20px;
+        color: inherit;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
     .panel-title {
         margin-bottom: 20px; 
     }
@@ -8,6 +59,7 @@
         margin-bottom: 25px;
         border: 1px solid #D0D3D6;
         border-radius: 2px;
+        background-color: #ffffff;
 
         .activity-item {
             border-bottom: 1px solid #ebedf3;

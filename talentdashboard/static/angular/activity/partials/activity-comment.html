@@ -7,8 +7,11 @@
             <a ng-href="#/employees/{{ event.employee.id }}" class="activity-title-employee-name">{{ event.employee.full_name }}</a>
             <span class="timestamp pull-right" data-toggle="tooltip" data-placement="top" title="{{ event.date | date:'MMM d, yyyy h:mma' }}">{{ event.date | fromNow }}</span>
             <span ng-show="event.user.id==currentUser.id" class="comment-actions pull-right">
-                <i class="fa fa-ellipsis-h show-popover"></i>
-                <ul class="popover-items" style="display:none">
+                <div class="activity-popover-container" ng-mousedown="showMouseDownParent=true" ng-mouseup="togglePopOver(event.related_object.id);showMouseDownParent=false;">
+                    <div class="activity-popover comment" ng-class="{'mousedown': showMouseDownParent, 'mouseover': showMouseOverParent}"></div>
+                    <i class="fa fa-ellipsis-h show-activity-popover" ng-mouseover="showMouseOverParent=true" ng-mouseleave="showMouseOverParent=false"></i>
+                </div>
+                <ul class="popover-items" ng-show="$root.popOver==event.related_object.id">
                     <li class="popover-item">
                         <a ng-click="edit(event.related_object)" class="edit"><i class="fa fa-pencil-square-o"></i> Edit</a>
                     </li>
@@ -69,8 +72,11 @@
             <div ng-controller="CommentCtrl">
                 <div class="comment-actions pull-right">
                     <span ng-show="comment.owner.id==currentUser.id">
-                        <i class="fa fa-ellipsis-h show-popover"></i>
-                        <ul class="popover-items" style="display:none">
+                        <div class="activity-popover-container" ng-mousedown="showMouseDown=true" ng-mouseup="togglePopOver(comment.id);showMouseDown=false;">
+                            <div class="activity-popover reply" ng-class="{'mousedown': showMouseDown, 'mouseover': showMouseOver}"></div>
+                            <i class="fa fa-ellipsis-h show-activity-popover" ng-mouseover="showMouseOver=true" ng-mouseleave="showMouseOver=false"></i>
+                        </div>
+                        <ul class="popover-items" ng-show="$root.popOver==comment.id">
                             <li class="popover-item">
                                 <a ng-click="edit(comment)" class="edit"><i class="fa fa-pencil-square-o"></i>
                                     Edit</a>
@@ -82,7 +88,7 @@
                         </ul>
                     </span>
                     <span class="timestamp"
-                      title="{{ comment.created_date | date:'MMM d, yyyy h:mma' }}">{{ comment.created_date | fromNow }}</span>
+                      title="{{ comment.created_date | date:'MMM d, yyyy h:mma' }}" style="vertical-align: top">{{ comment.created_date | fromNow }}</span>
                 </div>
                 <div class="comment-reply-avatar-container">
                     <a ng-href="#/employees/{{ comment.owner.employee.id }}" class="small-headshot">
