@@ -60,8 +60,9 @@ Run indexing command.
 python manage.py tenant_reindex_employees --settings=talentdashboard.settings.local
 
 ```
-Run gulp 
+Install and run gulp 
 ```
+npm install --save-dev gulp
 node_modules/gulp/bin/gulp.js scripts
 node_modules/gulp/bin/gulp.js watch
 
