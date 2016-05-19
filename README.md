@@ -60,7 +60,13 @@ Run indexing command.
 python manage.py tenant_reindex_employees --settings=talentdashboard.settings.local
 
 ```
-Install and run gulp 
+Install bower. 
+```
+npm install -g bower-installer
+bower-installer 
+```
+
+Install and run gulp. 
 ```
 npm install --save-dev gulp
 node_modules/gulp/bin/gulp.js scripts
