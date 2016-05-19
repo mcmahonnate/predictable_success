@@ -2,6 +2,7 @@ angular.module('tdb.activity.controllers', [])
     .controller('ActivityCtrl', ['$scope', '$rootScope', '$routeParams', '$window', '$attrs', 'Event', 'Comment', function($scope, $rootScope, $routeParams, $window, $attrs, Event, Comment) {
         var view = $attrs.view;
         $scope.events = [];
+        $scope.view = view;
         $scope.nextPage = 1;
         $scope.hasNextPage = true;
         $scope.busy = false;
@@ -10,6 +11,9 @@ angular.module('tdb.activity.controllers', [])
                 $scope.busy = true;
                 var request = null;
                 switch (view) {
+                    case 'me':
+                        request = Event.getEmployeeEvents($routeParams.employeeId, $scope.nextPage);
+                        break;
                     case 'employee':
                         request = Event.getEmployeeEvents($routeParams.id, $scope.nextPage);
                         break;
