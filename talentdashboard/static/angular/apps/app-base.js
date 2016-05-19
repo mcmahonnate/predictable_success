@@ -33,7 +33,6 @@ var app = angular.module('tdb', [
             when('/feedback/:id/worksheet', {templateUrl: '/static/angular/feedback/partials/feedback_worksheet.html', controller: 'FeedbackWorksheetController as feedbackWorksheet', resolve: {authorizeRoute: authorizeRoute}}).
             when('/feedback/digest/:id', {templateUrl: '/static/angular/feedback/partials/feedback_digest_for_coaches.html', controller: 'FeedbackDigestController as feedbackWorksheet', resolve: {authorizeRoute: authorizeRoute}}).
             when('/feedback/:id', {templateUrl: '/static/angular/feedback/partials/my_feedback.html', controller: 'FeedbackDigestController as feedback', resolve: {authorizeRoute: authorizeRoute}}).
-            when('/my-profile', {templateUrl: '/static/angular/partials/profile.html', controller: 'ProfileCtrl', resolve: {authorizeRoute: authorizeRoute}}).
             when('/projects/:projectId', {templateUrl: '/static/angular/projects/partials/project-detail.html', controller: 'ProjectController as viewProject', resolve: {authorizeRoute: authorizeRoute}}).
             when('/projects', {templateUrl: '/static/angular/projects/partials/projects.html', controller: 'ProjectsController as projects', resolve: {authorizeRoute: authorizeRoute}}).
             when('/qualities/perception/request/:requestId/reply', {templateUrl: '/static/angular/qualities/partials/submission.html', controller: 'AssessQualitiesController as assessQualities', resolve: {authorizeRoute: authorizeRoute}}).
