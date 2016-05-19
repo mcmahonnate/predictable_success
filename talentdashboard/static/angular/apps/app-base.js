@@ -10,7 +10,6 @@ var app = angular.module('tdb', [
         'tdb.kpi.services',
         'tdb.org.controllers', 'tdb.org.services',
         'tdb.preferences.services',
-        'tdb.profile.controllers', 'tdb.profile.services',
         'tdb.pvp.controllers', 'tdb.pvp.services',
         'tdb.search.controllers', 'tdb.search.services',
         'tdb.tasks.controllers', 'tdb.tasks.services',
