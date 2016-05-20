@@ -6,26 +6,31 @@ from django.db.models import Sum
 from org.models import Employee
 
 
+class ScoringCategory(models.Model):
+    name = models.CharField(
+        max_length=255,null=True
+    )
+
+    def __unicode__(self):
+        return self.name
+
 class ScoringCriteria(models.Model):
     name = models.CharField(
         max_length=255,
     )
     description = models.TextField()
+    category = models.ForeignKey(ScoringCategory, related_name='criteria', null=True)
 
     def __unicode__(self):
         return self.name
 
-
 class ScoringOption(models.Model):
-    name = models.CharField(
-        max_length=255,
-    )
     criteria = models.ForeignKey(ScoringCriteria, related_name='options')
     description = models.TextField(null=True, blank=True)
     value = models.IntegerField(default=0)
 
     def __unicode__(self):
-        return self.name
+        return self.criteria.category.name + '- ' + self.criteria.name + ': ' + self.description
 
 
 class ProjectManager(models.Manager):
@@ -74,7 +79,7 @@ class PrioritizationRule(models.Model):
     objects = PrioritizationRuleManager()
     date = models.DateTimeField(null=False, blank=False, default=datetime.now)
     description = models.TextField(null=True, blank=True)
-    criteria = models.ManyToManyField(ScoringCriteria, related_name='rules', null=False, blank=False)
+    categories = models.ManyToManyField(ScoringCategory, related_name='rules', null=False, blank=False)
 
     def __unicode__(self):
         return '%s' % self.date
