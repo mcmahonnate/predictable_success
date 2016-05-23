@@ -1,5 +1,17 @@
 .activity {
-
+    .reload-animation {
+        -moz-transition: opacity .4s ease-in, margin-top .3s ease-in;
+        -webkit-transition: opacity .4s ease-in, margin-top .3s ease-in;
+        transition: opacity .4s ease-in, margin-top .3s ease-in;
+    }
+    .reload-enter {
+        margin-top: 0px;
+        opacity: 1;
+    }
+    .reload-exit {
+        margin-top: 400px;
+        opacity: 0;
+    }
     .activity-popover-container {
         display: inline-block;
         width: 22px;

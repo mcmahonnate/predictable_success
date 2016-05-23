@@ -1,15 +1,20 @@
 angular.module('tdb.activity.controllers', [])
-    .controller('ActivityCtrl', ['$scope', '$rootScope', '$routeParams', '$window', '$attrs', 'Event', 'Comment', function($scope, $rootScope, $routeParams, $window, $attrs, Event, Comment) {
+    .controller('ActivityCtrl', ['$attrs', '$rootScope', '$routeParams', '$scope', '$timeout', '$window', 'Event', 'Comment', function($attrs, $rootScope, $routeParams, $scope, $timeout, $window, Event, Comment) {
         var view = $attrs.view;
         $scope.events = [];
         $scope.view = view;
         $scope.nextPage = 1;
         $scope.hasNextPage = true;
         $scope.busy = false;
+        $scope.reloadFinished = true;
         $scope.type = null;
         $scope.loadNextPage = function() {
             if ($scope.hasNextPage && !$scope.busy) {
                 $scope.busy = true;
+                if ($scope.nextPage == 1) {
+                    // Only animate on the first page of a reload.
+                    $scope.reloadFinished = false;
+                }
                 var request = null;
                 switch (view) {
                     case 'me':
@@ -32,9 +37,14 @@ angular.module('tdb.activity.controllers', [])
                         break;
                 }
                 request.$promise.then(function (page) {
-                    $scope.events = $scope.events.concat(page.results);
+                    if ($scope.nextPage == 1) {
+                        $scope.events = page.results;
+                    } else {
+                        $scope.events = $scope.events.concat(page.results);
+                    }
                     $scope.nextPage++;
                     $scope.hasNextPage = page.has_next;
+                    $scope.reloadFinished = true;
                     $scope.busy = false;
                 });
             }
@@ -43,7 +53,6 @@ angular.module('tdb.activity.controllers', [])
         $scope.loadNextPage();
 
         $scope.$on("filterComments", function(e, filter) {
-            $scope.events = [];
             $scope.nextPage = 1;
             $scope.hasNextPage = true;
             $scope.type = filter.type;
