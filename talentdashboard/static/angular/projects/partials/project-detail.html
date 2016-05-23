@@ -14,8 +14,8 @@
         <h3 class="modal-title">Project Scoring Evaluation</h3>
         <div style="margin: 15px 0" ng-repeat="score in viewProject.project.scores">
             <label class="control-label pull-left"><strong>{{score.criteria_description}}:</strong></label><br/>
-            {{score.description}}<br>
-            {{ score.value }} points
+            Choice: {{score.description}}<br>
+            Score: {{ score.value }} points
         </div>
     </div>
     <div class="panel" style="overflow:hidden;" ng-show="viewProject.project.owners.length > 0">
