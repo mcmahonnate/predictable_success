@@ -11,6 +11,7 @@ function ProfileController(Employee, analytics, $location, $rootScope, $routePar
     vm.moreInfoCollapse = true;
     vm.filterCommentsByType = filterCommentsByType;
     vm.filter = {type: null, employee: null};
+    vm.filterCommentsDone = false;
 
     activate();
 
@@ -30,12 +31,18 @@ function ProfileController(Employee, analytics, $location, $rootScope, $routePar
 
     function filterCommentsByType(type) {
         vm.filter.type = type;
+        vm.filterCommentsDone = false;
         filterComments();
     }
 
     function filterComments() {
         $scope.$broadcast('filterComments', vm.filter);
     }
+
+    $scope.$on("filterCommentsDone", function(e, finished) {
+        vm.filterCommentsDone = finished;
+        $scope.$apply();
+    })
 
 
 }

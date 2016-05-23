@@ -589,6 +589,24 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
     };
 })
 
+.directive('activity', function($animate, $parse) {
+    return function(scope, element, attrs){
+        scope.$watch(attrs.finishedLoading, function(newValue){
+            if (newValue) {
+                $animate.addClass(element, 'reload-enter').then(function() {
+                    scope.$emit('filterCommentsDone', true)
+                });
+                element.removeClass('reload-exit');
+            } else {
+                $animate.addClass(element, 'reload-exit').then(function() {});
+                element.removeClass('reload-enter');
+
+            }
+        });
+
+    };
+})
+
 .directive('getPopupPosition', function() {
     return function(scope, element, attrs){
         scope.$watch("popup.top", function() {

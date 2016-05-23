@@ -10,15 +10,14 @@
             <h2 class="profile-info-lablel">{{profile.employee.full_name}}</h2>
         </div>
         <div class="activity-filters">
-            <div class="activity-filter-item" ng-click="profile.filterCommentsByType('')"><span class="fa fa-globe activity-filter-item-icon"></span><span class="activity-filter-item-label">All</span></div>
-            <div class="activity-filter-item" ng-click="profile.filterCommentsByType('checkin')"><span class="fa fa-check activity-filter-item-icon"></span><span class="activity-filter-item-label">Check-Ins</span></div>
-            <div class="activity-filter-item" ng-click="profile.filterCommentsByType('feedbackdigest')"><span class="fa fa-send activity-filter-item-icon"></span><span class="activity-filter-item-label">Feedback</span></div>
-            <div class="activity-filter-item" ng-click="profile.filterCommentsByType('employeezone')"><span class="fa fa-heartbeat activity-filter-item-icon"></span><span class="activity-filter-item-label">ID</span></div>
-            <div class="activity-filter-item" ng-click="profile.filterCommentsByType('comment')"><span class="fa fa-pencil-square-o activity-filter-item-icon"></span><span class="activity-filter-item-label">Notes</span></div>
-            <div class="activity-filter-item"><span class="glyphicon-regular glyphicon-dumbell activity-filter-item-icon"></span><span class="activity-filter-item-label">Strengths</span></div>
+            <div class="activity-filter-item" ng-class="{'selected': profile.filter.type==null}" ng-click="profile.filterCommentsByType(null)"><span class="fa fa-globe activity-filter-item-icon"></span><span class="activity-filter-item-label">All</span></div>
+            <div class="activity-filter-item" ng-class="{'selected': profile.filter.type=='checkin'}" ng-click="profile.filterCommentsByType('checkin')"><span class="fa fa-check activity-filter-item-icon"></span><span class="activity-filter-item-label">Check-Ins</span></div>
+            <div class="activity-filter-item" ng-class="{'selected': profile.filter.type=='feedbackdigest'}" ng-click="profile.filterCommentsByType('feedbackdigest')"><span class="fa fa-send activity-filter-item-icon"></span><span class="activity-filter-item-label">Feedback</span></div>
+            <div class="activity-filter-item" ng-class="{'selected': profile.filter.type=='employeezone'}" ng-click="profile.filterCommentsByType('employeezone')"><span class="fa fa-heartbeat activity-filter-item-icon"></span><span class="activity-filter-item-label">ID</span></div>
+            <div class="activity-filter-item" ng-class="{'selected': profile.filter.type=='comment'}" ng-click="profile.filterCommentsByType('comment')"><span class="fa fa-pencil-square-o activity-filter-item-icon"></span><span class="activity-filter-item-label">Notes</span></div>
         </div>
         <div>
-            <div class="profile-info-more centered" ng-click="profile.moreInfoCollapse=!profile.moreInfoCollapse">
+            <div class="profile-info-more centered" ng-class="{'flash': profile.filterCommentsDone==true}" ng-click="profile.moreInfoCollapse=!profile.moreInfoCollapse">
                 <i class="fa fa-chevron-down collapse-toggle"></i>
             </div>
             <div class="profile-info-container" collapse="profile.moreInfoCollapse">
@@ -91,15 +90,51 @@
     }
     .profile .profile-info-more {
         background-color: #efefef;
+        color: #ccc;
         cursor: pointer;
+    }
+    .profile .profile-info-more .collapse-toggle{
+        opacity: 1;
     }
     .profile .profile-info-more:hover {
         background-color: #ccc;
+        color: #efefef;
     }
 
-    .profile .profile-info-more i{
-        color: #ccc;
+    .flash {
+        -webkit-animation-name: flash-animation;
+        -webkit-animation-duration: 0.7s;
+        -webkit-animation-iteration-count: 1;
+        -webkit-animation-timing-function: ease-out;
+
+        animation-name: flash-animation;
+        animation-duration: 0.7s;
+        animation-iteration-count: 1;
+        animation-timing-function: ease-out;
     }
+
+    @-webkit-keyframes flash-animation {
+        0% {
+            background-color: #ccc;
+            color: #efefef;
+        }
+        100% {
+            background-color: #efefef;
+            color: #ccc;
+        }
+    }
+
+    @keyframes flash-animation {
+        0% {
+            background-color: #efefef;
+            background-color: #ccc;
+        }
+        100% {
+            background-color: #efefef;
+            color: #ccc;
+        }
+    }
+
     .profile .activity.panel {
         padding: 0px;
         background-color: transparent;
@@ -114,7 +149,7 @@
     .profile .profile-info-lablel {
         margin: 10px 0;
         display: block;
-        color: #aaa;
+        color: #323940;
     }
     .profile .profile-info-sub-lablel {
         color: #aaa;
@@ -137,7 +172,10 @@
         cursor: pointer;
     }
     .activity-filter-item:hover {
-        color: #bfbfbf;
+        color: #666;
+    }
+    .activity-filter-item.selected {
+        color: #666;
     }
     .activity-filter-item .activity-filter-item-icon {
         font-size: 50px !important;

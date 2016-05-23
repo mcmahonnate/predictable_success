@@ -29,8 +29,11 @@ class EmployeeEventList(views.APIView):
             raise PermissionDenied
         type = request.GET.get('type', '')
         if type:
-            content_type = ContentType.objects.get(model=type)
-            qs = Event.objects.get_events_for_employee(requester, employee, content_type)
+            try:
+                content_type = ContentType.objects.get(model=type)
+                qs = Event.objects.get_events_for_employee(requester, employee, content_type)
+            except ContentType.DoesNotExist:
+                raise Http404
         else:
             qs = Event.objects.get_events_for_employee(requester, employee)
         qs = qs.extra(order_by=['-date'])

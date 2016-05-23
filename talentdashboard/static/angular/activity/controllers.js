@@ -52,6 +52,7 @@ angular.module('tdb.activity.controllers', [])
 
         $scope.loadNextPage();
 
+
         $scope.$on("filterComments", function(e, filter) {
             $scope.nextPage = 1;
             $scope.hasNextPage = true;
