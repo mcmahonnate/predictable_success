@@ -1,24 +1,70 @@
 <div class="profile">
-    <div class="profile-demographic panel">
-        <div class="large-avatar-container">
-            <div class="xxxlarge-headshot">
+    <div class="profile-demographic panel top">
+        <div class="xxlarge-avatar-container">
+            <div class="xxlarge-headshot centered">
                 <img ng-src="{{ profile.employee.avatar }}" alt="{{ profile.employee.full_name }}'s avatar" class="headshot-image" />
             </div>
-            <div class="employee-attribute employee-attribute-large" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{ talentCategories[profile.employee.talent_category].label }}">
-                <span class="segment employee-segment-background-color-{{profile.employee.talent_category}}"></span>
-            </div>
 
-            <div class="employee-attribute employee-attribute-large employee-happiness-large" rel="tooltip" data-toggle="tooltip" data-placement="right" data-original-title="{{ talentCategories[profile.employee.talent_category].label }}">
-                <span class="employee-happiness-background-color-{{profile.employee.happiness}} happiness-{{profile.employee.happiness}}"></span>
-            </div>
+        </div>
+        <div class="profile-info-container centered">
+            <h2 class="profile-info-lablel">{{profile.employee.full_name}}</h2>
         </div>
         <div class="activity-filters">
-            <div class="activity-filter-item"><span class="fa fa-globe activity-filter-item-icon"></span><span class="activity-filter-item-label">All</span></div>
-            <div class="activity-filter-item"><span class="fa fa-check activity-filter-item-icon"></span><span class="activity-filter-item-label">Check-Ins</span></div>
-            <div class="activity-filter-item"><span class="fa fa-send activity-filter-item-icon"></span><span class="activity-filter-item-label">Feedback</span></div>
-            <div class="activity-filter-item"><span class="fa fa-heartbeat activity-filter-item-icon"></span><span class="activity-filter-item-label">ID</span></div>
-            <div class="activity-filter-item"><span class="fa fa-pencil-square-o activity-filter-item-icon"></span><span class="activity-filter-item-label">Notes</span></div>
+            <div class="activity-filter-item" ng-click="profile.filterCommentsByType('')"><span class="fa fa-globe activity-filter-item-icon"></span><span class="activity-filter-item-label">All</span></div>
+            <div class="activity-filter-item" ng-click="profile.filterCommentsByType('checkin')"><span class="fa fa-check activity-filter-item-icon"></span><span class="activity-filter-item-label">Check-Ins</span></div>
+            <div class="activity-filter-item" ng-click="profile.filterCommentsByType('feedbackdigest')"><span class="fa fa-send activity-filter-item-icon"></span><span class="activity-filter-item-label">Feedback</span></div>
+            <div class="activity-filter-item" ng-click="profile.filterCommentsByType('employeezone')"><span class="fa fa-heartbeat activity-filter-item-icon"></span><span class="activity-filter-item-label">ID</span></div>
+            <div class="activity-filter-item" ng-click="profile.filterCommentsByType('comment')"><span class="fa fa-pencil-square-o activity-filter-item-icon"></span><span class="activity-filter-item-label">Notes</span></div>
             <div class="activity-filter-item"><span class="glyphicon-regular glyphicon-dumbell activity-filter-item-icon"></span><span class="activity-filter-item-label">Strengths</span></div>
+        </div>
+        <div>
+            <div class="profile-info-more centered" ng-click="profile.moreInfoCollapse=!profile.moreInfoCollapse">
+                <i class="fa fa-chevron-down collapse-toggle"></i>
+            </div>
+            <div class="profile-info-container" collapse="profile.moreInfoCollapse">
+                <ol class="bio-list">
+                    <li class="shaded">
+                        <strong>Hire date:</strong> {{ profile.employee.hire_date | date:'MM/dd/yyyy' }}
+                    </li>
+                    <li ng-show="profile.employee.departure_date">
+                        <strong>Departure Date:</strong> {{ profile.employee.departure_date | date:'MM/dd/yyyy' }}
+                    </li>
+                    <li>
+                        <strong>Team Lead:</strong> <a ng-href="#/employees/{{profile.employee.leader.id}}">{{ profile.employee.leader.full_name }}</a>
+                    </li>
+                    <li ng-if="customer.show_coaches" class="clear">
+                        <strong>Coach:</strong> <a ng-href="#/employees/{{profile.employee.coach.id}}">{{ profile.employee.coach.full_name }}</a>
+                    </li>
+                    <li class="shaded">
+                        <strong>Team:</strong> <span ng-if="profile.employee.team"><a ng-href="#/teams/{{profile.employee.team.id}}">{{ profile.employee.team.name }}</a></span>
+                    </li>
+                    <li ng-repeat="(key, value) in profile.attributes | groupBy: 'category.name'" ng-class-odd="" ng-class-even="'shaded'">
+                        <strong>{{key}}:</strong>
+                                <span ng-repeat="attribute in value">
+                                  <text ng-if="!$last">{{ attribute.name }},</text>
+                                  <text ng-if="$last">{{ attribute.name }}</text>
+                                </span>
+                    </li>
+                    <li ng-if="customer.show_vops" ng-class="vops_class">
+                        <strong>Synergist Style:</strong>
+                        <span ng-if="employee.vops_visionary > 299"><a ng-click="showAttributes('synergist-view', 'Visionary');">Visionary</a></span>
+                        <span ng-if="employee.vops_operator > 299"><a ng-click="showAttributes('synergist-view', 'Operator');">Operator</a></span>
+                        <span ng-if="employee.vops_processor > 299"><a ng-click="showAttributes('synergist-view', 'Processor');">Processor</a></span>
+                        <span ng-if="employee.vops_synergist > 299"><a ng-click="showAttributes('synergist-view', 'Synergist');">Synergist</a></span>
+                    </li>
+                    <li ng-if="customer.show_mbti" ng-class="mbti_class">
+                        <strong>Myers Briggs:</strong> <span ng-if="mbti"><a ng-click="showAttributes('mbti-view');">{{ mbti.type | uppercase}}</a></span>
+                    </li>
+                    <li ng-if="customer.show_kolbe" ng-class="kolbe_class">
+                        <strong>Kolbe:</strong>
+                        <span ng-if="employee.kolbe_fact_finder"><a ng-click="showAttributes('kolbe-view', 'Fact Finder');">{{ employee.kolbe_fact_finder }}</a>,</span>
+                        <span ng-if="employee.kolbe_follow_thru"><a ng-click="showAttributes('kolbe-view', 'Follow Thru');">{{ employee.kolbe_follow_thru }}</a>,</span>
+                        <span ng-if="employee.kolbe_quick_start"><a ng-click="showAttributes('kolbe-view', 'Quick Start');">{{ employee.kolbe_quick_start }}</a>,</span>
+                        <span ng-if="employee.kolbe_implementor"><a ng-click="showAttributes('kolbe-view', 'Implementor');">{{ employee.kolbe_implementor }}</a></span>
+                    </li>
+
+                </ol>
+            </div>
         </div>
     </div>
     <div ng-controller="ActivityCtrl" data-view="me">
@@ -31,22 +77,50 @@
         max-width: 700px;
   	    margin: 40px auto;
     }
-    .profile .large-avatar-container {
-        margin: 0;
+    .profile .xxlarge-avatar-container {
+        vertical-align: top;
+        position: relative;
+        margin-top: -59px;
     }
     .profile .profile-demographic {
         padding: 0;
         border: 1px solid #D0D3D6;
     }
+    .profile-demographic.top{
+        margin-top: 100px;
+    }
+    .profile .profile-info-more {
+        background-color: #efefef;
+        cursor: pointer;
+    }
+    .profile .profile-info-more:hover {
+        background-color: #ccc;
+    }
+
+    .profile .profile-info-more i{
+        color: #ccc;
+    }
     .profile .activity.panel {
         padding: 0px;
         background-color: transparent;
     }
-
     .profile .activity-items {
         margin-top: 0;
     }
-
+    .profile .profile-info-container {
+        vertical-align: top;
+        margin: 20px;
+    }
+    .profile .profile-info-lablel {
+        margin: 10px 0;
+        display: block;
+        color: #aaa;
+    }
+    .profile .profile-info-sub-lablel {
+        color: #aaa;
+        margin: 10px 0;
+        display: block;
+    }
     .activity-filters {
         background-color: #efefef;
         color: #ccc;
@@ -63,7 +137,7 @@
         cursor: pointer;
     }
     .activity-filter-item:hover {
-        color: #BFBFBF;
+        color: #bfbfbf;
     }
     .activity-filter-item .activity-filter-item-icon {
         font-size: 50px !important;
@@ -71,4 +145,20 @@
     .activity-filter-item .activity-filter-item-label {
         display: block;
     }
+    .xxlarge-headshot {
+        border-radius: 90px;
+        width: 150px;
+        height: 150px;
+        border: 5px solid #f1f1f1;
+        transition: .3s;
+        overflow: hidden;
+        display: block;
+    }
+    .xxlarge-headshot img {
+        width: 100%;
+    }
+    .xxlarge-headshot.centered {
+        margin: auto;
+    }
+
 </style>

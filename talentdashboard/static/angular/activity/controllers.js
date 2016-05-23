@@ -6,28 +6,29 @@ angular.module('tdb.activity.controllers', [])
         $scope.nextPage = 1;
         $scope.hasNextPage = true;
         $scope.busy = false;
+        $scope.type = null;
         $scope.loadNextPage = function() {
             if ($scope.hasNextPage && !$scope.busy) {
                 $scope.busy = true;
                 var request = null;
                 switch (view) {
                     case 'me':
-                        request = Event.getEmployeeEvents($routeParams.employeeId, $scope.nextPage);
+                        request = Event.getEmployeeEvents($routeParams.employeeId, $scope.nextPage, $scope.type);
                         break;
                     case 'employee':
-                        request = Event.getEmployeeEvents($routeParams.id, $scope.nextPage);
+                        request = Event.getEmployeeEvents($routeParams.id, $scope.nextPage, $scope.type);
                         break;
                     case 'company':
-                        request = Event.get({page: $scope.nextPage});
+                        request = Event.get({page: $scope.nextPage, type: $scope.type});
                         break;
                     case 'leader':
-                        request = Event.getLeadEvents($routeParams.id, $scope.nextPage);
+                        request = Event.getLeadEvents($routeParams.id, $scope.nextPage, $scope.type);
                         break;
                     case 'team':
-                        request = Event.getTeamEvents($routeParams.teamId, $scope.nextPage);
+                        request = Event.getTeamEvents($routeParams.teamId, $scope.nextPage, $scope.type);
                         break;
                     case 'coach':
-                        request = Event.getCoachEvents($scope.nextPage);
+                        request = Event.getCoachEvents($scope.nextPage, $scope.type);
                         break;
                 }
                 request.$promise.then(function (page) {
@@ -40,6 +41,14 @@ angular.module('tdb.activity.controllers', [])
         };
 
         $scope.loadNextPage();
+
+        $scope.$on("filterComments", function(e, filter) {
+            $scope.events = [];
+            $scope.nextPage = 1;
+            $scope.hasNextPage = true;
+            $scope.type = filter.type;
+            $scope.loadNextPage();
+        });
 
         $rootScope.$on("comments.commentCreated", function(e, comment) {
             Event.getEventForComment({id: comment.id}, function(event) {

@@ -11,6 +11,7 @@ from talentdashboard.views.views import StandardResultsSetPagination, Permission
 from org.models import Employee
 from checkins.models import CheckIn
 from blah.models import Comment
+from django.contrib.contenttypes.models import ContentType
 from django.utils.log import getLogger
 
 logger = getLogger('talentdashboard')
@@ -26,8 +27,12 @@ class EmployeeEventList(views.APIView):
         employee = Employee.objects.get(id=employee_id)
         if not employee.is_viewable_by_user(request.user):
             raise PermissionDenied
-
-        qs = Event.objects.get_events_for_employee(requester, employee)
+        type = request.GET.get('type', '')
+        if type:
+            content_type = ContentType.objects.get(model=type)
+            qs = Event.objects.get_events_for_employee(requester, employee, content_type)
+        else:
+            qs = Event.objects.get_events_for_employee(requester, employee)
         qs = qs.extra(order_by=['-date'])
         paginator = StandardResultsSetPagination()
         result_page = paginator.paginate_queryset(qs, request)

@@ -8,12 +8,34 @@ function ProfileController(Employee, analytics, $location, $rootScope, $routePar
     analytics.trackPage($scope, $location.absUrl(), location_url);
     var vm = this;
     vm.employee = null;
+    vm.moreInfoCollapse = true;
+    vm.filterCommentsByType = filterCommentsByType;
+    vm.filter = {type: null, employee: null};
 
-    Employee.get(
-        {id: $routeParams.employeeId},
-        function (data) {
-            vm.employee = data;
-            vm.employee.hire_date = $rootScope.parseDate(vm.employee.hire_date);
-        }
-    );
+    activate();
+
+    function activate() {
+        getEmployee();
+    };
+
+    function getEmployee() {
+        Employee.get(
+            {id: $routeParams.employeeId},
+            function (data) {
+                vm.employee = data;
+                vm.employee.hire_date = $rootScope.parseDate(vm.employee.hire_date);
+            }
+        );
+    }
+
+    function filterCommentsByType(type) {
+        vm.filter.type = type;
+        filterComments();
+    }
+
+    function filterComments() {
+        $scope.$broadcast('filterComments', vm.filter);
+    }
+
+
 }

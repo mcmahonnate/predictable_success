@@ -16,9 +16,7 @@ angular.module('tdb.controllers', [])
                 $rootScope.$apply();
             }
             if (!element.hasClass('show-activity-popover')) {
-                console.log($rootScope.popOver);
                 $rootScope.popOver = null;
-                console.log($rootScope.popOver);
                 $rootScope.$apply();
             }
         });
