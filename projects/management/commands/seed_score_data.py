@@ -18,16 +18,11 @@ class Command(BaseCommand):
 
         with open(file_path, 'rU') as f:
             reader = csv.reader(f)
+            next(reader, None)
             for row in reader:
-                name = row[0]
-                print 'NAME'
-                print name
                 category, created = ScoringCategory.objects.get_or_create(
                     name=row[0]
                     )
-
-                print 'CATEGORY!!'
-                print category
 
                 criteria, created = ScoringCriteria.objects.get_or_create(
                     name=row[1],
@@ -38,11 +33,11 @@ class Command(BaseCommand):
                 option, created = ScoringOption.objects.get_or_create(
                     criteria=criteria,
                     description=row[2],
-                    value=int(row[3])
+                    value=float(row[3])
                 )
-
-        scoring_categories = ScoringCategory.objects.all()
-        date = datetime.datetime.now()
-        rules = PrioritizationRule.objects.create(description='Rules as of' + str(date),
-                                       categories=scoring_categories)
-        rules.save()
+        #
+        # scoring_categories = ScoringCategory.objects.all()
+        # date = datetime.datetime.now()
+        # rules = PrioritizationRule.objects.create(description='Rules as of' + str(date),
+        #                                categories=scoring_categories)
+        # rules.save()

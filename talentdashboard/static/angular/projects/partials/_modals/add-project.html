@@ -100,9 +100,9 @@
             <panel>
                 <h3 class="modal-title">Project Scoring Evaluation</h3>
                 <div style="margin: 15px 0" ng-repeat="category in addProject.categories">
-                    <h3>{{category.name}}</h3>
+                    <hr>
+                    <h3 style="color:#0f9d58;">{{category.name}}</h3>
                    <div style="margin: 15px 0" ng-repeat="criteria in category.criteria">
-
                         <label class="control-label pull-left">{{criteria.name}}:</label><br/>
                         <select class="form-control" name="singleSelect" ng-model="criteria.selected">
                             <option ng-repeat="option in criteria.options" value="{{option.id}}" ng-selected="option.id == criteria.selected">{{option.description}}</option>
