@@ -16,7 +16,7 @@ angular.module('tdb.activity.services', ['ngResource'])
         Event.getEmployeeEvents = function(id, page, type, success, failure) { return this.get({ path: 'employees', id: id, page: page, type: type}, success, failure); };
         Event.getTeamEvents = function(id, page, type, success, failure) { return this.get({ path: 'teams', id: id, page: page, type: type }, success, failure); };
         Event.getLeadEvents = function(id, page, type, success, failure) { return this.get({ path: 'leads', id: id, page: page, type: type}, success, failure); };
-        Event.getCoachEvents = function(page, type, success, failure) { return this.get({ path: 'coaches', page: page, type: type}, success, failure); };
+        Event.getCoachEvents = function(id, page, type, success, failure) { return this.get({ path: 'coaches', id: id, page: page, type: type}, success, failure); };
 
         return Event;
     }])

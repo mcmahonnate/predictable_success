@@ -9,6 +9,11 @@
         <div class="profile-info-container centered">
             <h2 class="profile-info-lablel">{{profile.employee.full_name}}</h2>
         </div>
+        <div class="profile-filters">
+            <div class="profile-filter-item" ng-click="profile.filterCommentsByView('me')">Profile</div>
+            <div class="profile-filter-item" ng-click="profile.filterCommentsByView('leader')">Team</div>
+            <div class="profile-filter-item" ng-click="profile.filterCommentsByView('coach')">Coachees</div>
+        </div>
         <div class="activity-filters">
             <div class="activity-filter-item" ng-class="{'selected': profile.filter.type==null}" ng-click="profile.filterCommentsByType(null)"><span class="fa fa-globe activity-filter-item-icon"></span><span class="activity-filter-item-label">All</span></div>
             <div class="activity-filter-item" ng-class="{'selected': profile.filter.type=='checkin'}" ng-click="profile.filterCommentsByType('checkin')"><span class="fa fa-check activity-filter-item-icon"></span><span class="activity-filter-item-label">Check-Ins</span></div>
@@ -155,6 +160,20 @@
         color: #aaa;
         margin: 10px 0;
         display: block;
+    }
+    .profile-filters {
+        background-color: #efefef;
+        color: #ccc;
+        display: table;
+        width: 100%;
+        padding: 10px 10px 5px 10px;
+    }
+    .profile-filters .profile-filter-item {
+        margin: 2px auto;
+        display: table-cell;
+        height: 25px;
+        text-align: center;
+        cursor: pointer;
     }
     .activity-filters {
         background-color: #efefef;

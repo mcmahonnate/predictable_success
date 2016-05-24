@@ -1,8 +1,7 @@
 angular.module('tdb.activity.controllers', [])
     .controller('ActivityCtrl', ['$attrs', '$rootScope', '$routeParams', '$scope', '$timeout', '$window', 'Event', 'Comment', function($attrs, $rootScope, $routeParams, $scope, $timeout, $window, Event, Comment) {
-        var view = $attrs.view;
         $scope.events = [];
-        $scope.view = view;
+        $scope.view = $attrs.view;
         $scope.nextPage = 1;
         $scope.hasNextPage = true;
         $scope.busy = false;
@@ -16,9 +15,10 @@ angular.module('tdb.activity.controllers', [])
                     $scope.reloadFinished = false;
                 }
                 var request = null;
-                switch (view) {
+                console.log($scope.view);
+                switch ($scope.view) {
                     case 'me':
-                        request = Event.getEmployeeEvents($routeParams.employeeId, $scope.nextPage, $scope.type);
+                        request = Event.getEmployeeEvents($routeParams.id, $scope.nextPage, $scope.type);
                         break;
                     case 'employee':
                         request = Event.getEmployeeEvents($routeParams.id, $scope.nextPage, $scope.type);
@@ -33,20 +33,22 @@ angular.module('tdb.activity.controllers', [])
                         request = Event.getTeamEvents($routeParams.teamId, $scope.nextPage, $scope.type);
                         break;
                     case 'coach':
-                        request = Event.getCoachEvents($scope.nextPage, $scope.type);
+                        request = Event.getCoachEvents($routeParams.id, $scope.nextPage, $scope.type);
                         break;
                 }
-                request.$promise.then(function (page) {
-                    if ($scope.nextPage == 1) {
-                        $scope.events = page.results;
-                    } else {
-                        $scope.events = $scope.events.concat(page.results);
-                    }
-                    $scope.nextPage++;
-                    $scope.hasNextPage = page.has_next;
-                    $scope.reloadFinished = true;
-                    $scope.busy = false;
-                });
+                if (request) {
+                    request.$promise.then(function (page) {
+                        if ($scope.nextPage == 1) {
+                            $scope.events = page.results;
+                        } else {
+                            $scope.events = $scope.events.concat(page.results);
+                        }
+                        $scope.nextPage++;
+                        $scope.hasNextPage = page.has_next;
+                        $scope.reloadFinished = true;
+                        $scope.busy = false;
+                    });
+                }
             }
         };
 
@@ -57,6 +59,7 @@ angular.module('tdb.activity.controllers', [])
             $scope.nextPage = 1;
             $scope.hasNextPage = true;
             $scope.type = filter.type;
+            $scope.view = filter.view;
             $scope.loadNextPage();
         });
 
@@ -65,6 +68,7 @@ angular.module('tdb.activity.controllers', [])
                 $scope.events.push(event);
             })
         });
+
 
         $scope.saveComment = function(event) {
             var comment = new Comment(event.related_object);

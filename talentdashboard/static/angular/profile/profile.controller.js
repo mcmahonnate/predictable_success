@@ -10,7 +10,8 @@ function ProfileController(Employee, analytics, $location, $rootScope, $routePar
     vm.employee = null;
     vm.moreInfoCollapse = true;
     vm.filterCommentsByType = filterCommentsByType;
-    vm.filter = {type: null, employee: null};
+    vm.filterCommentsByView = filterCommentsByView;
+    vm.filter = {type: null, view: 'me'};
     vm.filterCommentsDone = false;
 
     activate();
@@ -21,7 +22,7 @@ function ProfileController(Employee, analytics, $location, $rootScope, $routePar
 
     function getEmployee() {
         Employee.get(
-            {id: $routeParams.employeeId},
+            {id: $routeParams.id},
             function (data) {
                 vm.employee = data;
                 vm.employee.hire_date = $rootScope.parseDate(vm.employee.hire_date);
@@ -35,9 +36,16 @@ function ProfileController(Employee, analytics, $location, $rootScope, $routePar
         filterComments();
     }
 
+    function filterCommentsByView(view) {
+        vm.filter.view = view;
+        vm.filterCommentsDone = false;
+        filterComments();
+    }
+
     function filterComments() {
         $scope.$broadcast('filterComments', vm.filter);
     }
+
 
     $scope.$on("filterCommentsDone", function(e, finished) {
         vm.filterCommentsDone = finished;

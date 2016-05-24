@@ -8,6 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from ..models import Event
 from .serializers import EventSerializer
 from talentdashboard.views.views import StandardResultsSetPagination, PermissionsViewAllEmployees
+from org.api.permissions import PermissionsViewThisEmployee
 from org.models import Employee
 from checkins.models import CheckIn
 from blah.models import Comment
@@ -33,7 +34,7 @@ class EmployeeEventList(views.APIView):
                 content_type = ContentType.objects.get(model=type)
                 qs = Event.objects.get_events_for_employee(requester, employee, content_type)
             except ContentType.DoesNotExist:
-                raise Http404
+                return
         else:
             qs = Event.objects.get_events_for_employee(requester, employee)
         qs = qs.extra(order_by=['-date'])
@@ -91,12 +92,22 @@ class LeadEventList(views.APIView):
             return Response(None, status=status.HTTP_403_FORBIDDEN)
 
 
-class CoachEventList(views.APIView):
+class MyCoachEventList(views.APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, format=None):
         requester = Employee.objects.get(user__id=request.user.id)
         employee_ids = Employee.objects.get_current_employees_by_coach(coach_id=requester.id).values('id')
+        return _get_event_list_for_employees(request, requester, employee_ids)
+
+
+class CoachEventList(views.APIView):
+    permission_classes = (IsAuthenticated, PermissionsViewThisEmployee)
+
+    def get(self, request, pk, format=None):
+        coach = Employee.objects.get(id=pk)
+        requester = Employee.objects.get(user__id=request.user.id)
+        employee_ids = Employee.objects.get_current_employees_by_coach(coach_id=coach.id).values('id')
         return _get_event_list_for_employees(request, requester, employee_ids)
 
 
