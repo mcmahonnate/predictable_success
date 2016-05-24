@@ -15,7 +15,6 @@ angular.module('tdb.activity.controllers', [])
                     $scope.reloadFinished = false;
                 }
                 var request = null;
-                console.log($scope.view);
                 switch ($scope.view) {
                     case 'me':
                         request = Event.getEmployeeEvents($routeParams.id, $scope.nextPage, $scope.type);

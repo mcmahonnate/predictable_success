@@ -12,7 +12,6 @@ function ProfileController(Employee, analytics, $location, $rootScope, $routePar
     vm.filterCommentsByType = filterCommentsByType;
     vm.filterCommentsByView = filterCommentsByView;
     vm.filter = {type: null, view: 'me'};
-    vm.filterCommentsDone = false;
 
     activate();
 
@@ -32,13 +31,11 @@ function ProfileController(Employee, analytics, $location, $rootScope, $routePar
 
     function filterCommentsByType(type) {
         vm.filter.type = type;
-        vm.filterCommentsDone = false;
         filterComments();
     }
 
     function filterCommentsByView(view) {
         vm.filter.view = view;
-        vm.filterCommentsDone = false;
         filterComments();
     }
 
@@ -47,10 +44,6 @@ function ProfileController(Employee, analytics, $location, $rootScope, $routePar
     }
 
 
-    $scope.$on("filterCommentsDone", function(e, finished) {
-        vm.filterCommentsDone = finished;
-        $scope.$apply();
-    })
 
 
 }

@@ -200,7 +200,8 @@ class Employee(MPTTModel):
                 Relationship(employee=self, related_employee=field_value, relation_type=relation_type).save()
 
     def is_coach(self):
-        return CoachCapacity.objects.filter(employee=self).exists()
+        coach_count = Employee.objects.filter(coach__id=self.id, departure_date__isnull=True).count()
+        return coach_count > 0
 
     def is_lead(self):
         leadership_count = Employee.objects.filter(leader__id=self.id, departure_date__isnull=True).count()

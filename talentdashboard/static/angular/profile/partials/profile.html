@@ -1,4 +1,5 @@
 <div class="profile">
+
     <div class="profile-demographic panel top">
         <div class="xxlarge-avatar-container">
             <div class="xxlarge-headshot centered">
@@ -9,11 +10,11 @@
         <div class="profile-info-container centered">
             <h2 class="profile-info-lablel">{{profile.employee.full_name}}</h2>
         </div>
-        <div class="profile-filters">
-            <div class="profile-filter-item" ng-click="profile.filterCommentsByView('me')">Profile</div>
-            <div class="profile-filter-item" ng-click="profile.filterCommentsByView('leader')">Team</div>
-            <div class="profile-filter-item" ng-click="profile.filterCommentsByView('coach')">Coachees</div>
-        </div>
+        <tabset class="profile-tabs" ng-show="profile.employee.is_lead || profile.employee.is_coach">
+            <tab index="0" heading="Profile" select="profile.filterCommentsByView('me')"></tab>
+            <tab index="1" ng-show="profile.employee.is_lead" heading="Team" select="profile.filterCommentsByView('leader')"></tab>
+            <tab index="2" ng-show="profile.employee.is_coach" heading="Coachees" select="profile.filterCommentsByView('coach')"></tab>
+        </tabset>
         <div class="activity-filters">
             <div class="activity-filter-item" ng-class="{'selected': profile.filter.type==null}" ng-click="profile.filterCommentsByType(null)"><span class="fa fa-globe activity-filter-item-icon"></span><span class="activity-filter-item-label">All</span></div>
             <div class="activity-filter-item" ng-class="{'selected': profile.filter.type=='checkin'}" ng-click="profile.filterCommentsByType('checkin')"><span class="fa fa-check activity-filter-item-icon"></span><span class="activity-filter-item-label">Check-Ins</span></div>
@@ -22,7 +23,7 @@
             <div class="activity-filter-item" ng-class="{'selected': profile.filter.type=='comment'}" ng-click="profile.filterCommentsByType('comment')"><span class="fa fa-pencil-square-o activity-filter-item-icon"></span><span class="activity-filter-item-label">Notes</span></div>
         </div>
         <div>
-            <div class="profile-info-more centered" ng-class="{'flash': profile.filterCommentsDone==true}" ng-click="profile.moreInfoCollapse=!profile.moreInfoCollapse">
+            <div class="profile-info-more centered" ng-click="profile.moreInfoCollapse=!profile.moreInfoCollapse">
                 <i class="fa fa-chevron-down collapse-toggle"></i>
             </div>
             <div class="profile-info-container" collapse="profile.moreInfoCollapse">
@@ -106,40 +107,6 @@
         color: #efefef;
     }
 
-    .flash {
-        -webkit-animation-name: flash-animation;
-        -webkit-animation-duration: 0.7s;
-        -webkit-animation-iteration-count: 1;
-        -webkit-animation-timing-function: ease-out;
-
-        animation-name: flash-animation;
-        animation-duration: 0.7s;
-        animation-iteration-count: 1;
-        animation-timing-function: ease-out;
-    }
-
-    @-webkit-keyframes flash-animation {
-        0% {
-            background-color: #ccc;
-            color: #efefef;
-        }
-        100% {
-            background-color: #efefef;
-            color: #ccc;
-        }
-    }
-
-    @keyframes flash-animation {
-        0% {
-            background-color: #efefef;
-            background-color: #ccc;
-        }
-        100% {
-            background-color: #efefef;
-            color: #ccc;
-        }
-    }
-
     .profile .activity.panel {
         padding: 0px;
         background-color: transparent;
@@ -147,6 +114,23 @@
     .profile .activity-items {
         margin-top: 0;
     }
+    .profile .profile-tabs .nav-tabs {
+        margin: 0;
+    }
+
+    .profile .profile-tabs .nav-tabs > li > a {
+        color: #aaa;
+    }
+
+    .profile .profile-tabs .nav > li > a {
+        padding: 5px 15px;
+    }
+
+    .profile .profile-tabs .nav-tabs > li.active > a {
+        background-color: #efefef;
+        color: #555555;
+    }
+
     .profile .profile-info-container {
         vertical-align: top;
         margin: 20px;
@@ -156,6 +140,7 @@
         display: block;
         color: #323940;
     }
+
     .profile .profile-info-sub-lablel {
         color: #aaa;
         margin: 10px 0;
