@@ -108,6 +108,7 @@ class Employee(MPTTModel):
     last_name = models.CharField(max_length=255, null=True, blank=True,)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, null=True, blank=True)
     namely_id = models.CharField(max_length=255, null=True, blank=True,)
+    yei_id = models.CharField(max_length=255, null=True, blank=True,)
     avatar = models.ImageField(upload_to="media/avatars/%Y/%m/%d", max_length=100, blank=True, default="/media/avatars/geneRick.jpg")
     avatar_small = models.ImageField(upload_to="media/avatars/small/%Y/%m/%d", max_length=100, null=True, blank=True, default="/media/avatars/small/geneRick.jpeg")
     job_title = models.CharField(max_length=255, blank=True,)
