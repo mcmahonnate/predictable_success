@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from org.api.serializers import SanitizedEmployeeSerializer, SimpleUserSerializer, MinimalEmployeeSerializer
-from django.contrib.contenttypes.models import ContentType
+from org.api.serializers import SimpleUserSerializer, MinimalEmployeeSerializer
 from blah.models import Comment
 from blah.api.serializers import CommentSerializer
 from checkins.models import CheckIn
@@ -9,10 +8,28 @@ from devzones.models import EmployeeZone
 from devzones.api.serializers import EmployeeZoneForActivityFeedSerializer
 from feedback.models import FeedbackDigest
 from feedback.api.serializers import SummarizedFeedbackDigestSerializer
-from ..models import Event
-from django.utils.log import getLogger
+from ..models import Event, ThirdPartyEvent
 
-logger = getLogger('talentdashboard')
+
+class ThirdPartyEventSerializer(serializers.ModelSerializer):
+    employee = MinimalEmployeeSerializer()
+    owner = MinimalEmployeeSerializer()
+    link = serializers.SerializerMethodField()
+    third_party = serializers.SerializerMethodField()
+    image_url = serializers.SerializerMethodField()
+
+    def get_third_party(self,obj):
+        return obj.third_party.name
+
+    def get_image_url(self,obj):
+        return obj.third_party.image_url
+
+    def get_link(self, obj):
+        return "%s%s" % (obj.third_party.url, obj.object_id)
+
+    class Meta:
+        model = ThirdPartyEvent
+        fields = ('id', 'object_id', 'employee', 'owner', 'description', 'link', 'third_party', 'image_url')
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -30,7 +47,8 @@ class EventSerializer(serializers.ModelSerializer):
             Comment: CommentSerializer,
             CheckIn: CheckInSerializer,
             EmployeeZone: EmployeeZoneForActivityFeedSerializer,
-            FeedbackDigest: SummarizedFeedbackDigestSerializer
+            FeedbackDigest: SummarizedFeedbackDigestSerializer,
+            ThirdPartyEvent: ThirdPartyEventSerializer
         }
 
     def get_related_objects(self, instance):

@@ -69,6 +69,7 @@ class MyTeamEventList(views.APIView):
         employee_ids = employees.filter(departure_date__isnull=True).values('id')
         return _get_event_list_for_employees(request, requester, employee_ids)
 
+
 class LeadEventList(views.APIView):
     permission_classes = (IsAuthenticated,)
 
