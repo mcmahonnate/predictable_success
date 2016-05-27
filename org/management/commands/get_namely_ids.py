@@ -2,20 +2,11 @@ from customers.models import Customer
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
 from django.db import connection
-from optparse import make_option
 from org.models import Employee
 import requests
 
 
 class Command(BaseCommand):
-
-    option_list = BaseCommand.option_list + (
-        make_option('--user_id',
-            action='store',
-            dest='user_id',
-            default='',
-            help='The uid of the account to update. Use ALL to update all current employee accounts.'),
-    )
 
     def handle(self, *args, **options):
         limit = 25
