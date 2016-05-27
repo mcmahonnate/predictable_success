@@ -9,7 +9,15 @@ from devzones.models import EmployeeZone, Conversation
 from feedback.models import FeedbackDigest
 from customers.models import Customer
 from org.models import Employee
-from .models import Event
+from .models import Event, ThirdPartyEvent
+
+
+@receiver(post_save, sender=ThirdPartyEvent)
+def third_party_event_save_handler(sender, instance, created, **kwargs):
+    if created:
+        content_type = ContentType.objects.get_for_model(sender)
+        event = Event(event_type=content_type, event_id=instance.id, employee=instance.employee, user=instance.owner.user, date=instance.date)
+        event.save()
 
 
 @receiver(post_save, sender=Comment)
@@ -79,6 +87,7 @@ def employee_zone_save_handler(sender, instance, created, update_fields, **kwarg
 @receiver(post_delete, sender=CheckIn)
 @receiver(post_delete, sender=EmployeeZone)
 @receiver(post_delete, sender=FeedbackDigest)
+@receiver(post_delete, sender=ThirdPartyEvent)
 def object_delete_handler(sender, instance, **kwargs):
     content_type = ContentType.objects.get_for_model(sender)
     comment_type = ContentType.objects.get_for_model(Comment)

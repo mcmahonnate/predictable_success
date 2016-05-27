@@ -4,12 +4,25 @@ from devzones.models import EmployeeZone
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
-from django.utils.log import getLogger
 from feedback.models import FeedbackDigest
 from org.models import Employee
 import datetime
 
-logger = getLogger('talentdashboard')
+
+class ThirdParty(models.Model):
+    name = models.CharField(max_length=255, null=False, blank=False)
+    url = models.CharField(max_length=255, null=False, blank=False)
+    verb = models.CharField(max_length=100, null=True, blank=True)
+    image_url = models.CharField(max_length=255, null=True, blank=True)
+
+
+class ThirdPartyEvent(models.Model):
+    third_party = models.ForeignKey(ThirdParty, related_name='events')
+    object_id = models.CharField(max_length=255, null=False, blank=False)
+    employee = models.ForeignKey(Employee, null=False, blank=False, related_name='+')
+    owner = models.ForeignKey(Employee, null=False, blank=False, related_name='+')
+    date = models.DateTimeField(null=False, blank=False)
+    description = models.TextField(null=True, blank=True)
 
 
 class EventManager(models.Manager):
@@ -54,6 +67,7 @@ class Event(models.Model):
         comment_type = ContentType.objects.get_for_model(Comment)
         checkin_type = ContentType.objects.get_for_model(CheckIn)
         employee_zone_type = ContentType.objects.get_for_model(EmployeeZone)
+        third_party_event_type = ContentType.objects.get_for_model(ThirdPartyEvent)
         if self.event_type.id is comment_type.id:
             comment = Comment.objects.get(pk=self.event_id)
             return comment.content
@@ -63,6 +77,9 @@ class Event(models.Model):
         elif self.event_type.id is checkin_type.id:
             checkin = CheckIn.objects.get(pk=self.event_id)
             return checkin.get_summary(user)
+        elif self.event_type.id is third_party_event_type.id:
+            third_party_event = ThirdPartyEvent.objects.get(pk=self.event_id)
+            return third_party_event.description
         return None
 
     @property
@@ -71,6 +88,7 @@ class Event(models.Model):
         checkin_type = ContentType.objects.get_for_model(CheckIn)
         feedback_digest_type = ContentType.objects.get_for_model(FeedbackDigest)
         employee_zone_type = ContentType.objects.get_for_model(EmployeeZone)
+        third_party_event_type = ContentType.objects.get_for_model(ThirdPartyEvent)
         if self.event_type.id is comment_type.id:
             return 'wrote a note'
         elif self.event_type.id is employee_zone_type.id:
@@ -81,6 +99,9 @@ class Event(models.Model):
                 return 'had a development conversation'
         elif self.event_type.id is feedback_digest_type.id:
             return 'delivered feedback'
+        elif self.event_type.id is third_party_event_type.id:
+            third_party_event = ThirdPartyEvent.objects.get(id=self.event_id)
+            return third_party_event.third_party.verb
         elif self.event_type.id is checkin_type.id:
             check_in = CheckIn.objects.get(id=self.event_id)
             if check_in.employee.user == self.user:

@@ -22,15 +22,20 @@
 	</div>
     <div class="checkin-summary panel">
         <div class="pull-right" style="margin-left: 20px;" ng-show="(viewCheckin.checkin.host.id == currentUser.employee.id) && !viewCheckin.showSummaryEdit">
-            <i class="fa fa-ellipsis-h show-popover"></i>
-            <ul class="popover-items" style="display:none">
-                <li class="popover-item">
-                    <a ng-click="viewCheckin.showSummaryEdit=true" class="edit"><i class="fa fa-pencil-square-o"></i> Edit</a>
-                </li>
-                <li class="popover-item">
-                    <a ng-click="viewCheckin.deleteCheckin(viewCheckin.checkin)"><i class="fa fa-trash-o"></i> Delete</a>
-                </li>
-            </ul>
+            <div class="activity" ng-controller="CommentCtrl">
+                <div class="activity-popover-container" ng-mousedown="showMouseDownParent=true" ng-mouseup="togglePopOver('parent' + viewCheckin.checkin.id);showMouseDownParent=false;">
+                    <div class="activity-popover comment" ng-class="{'mousedown': showMouseDownParent, 'mouseover': showMouseOverParent}"></div>
+                    <i class="fa fa-ellipsis-h show-activity-popover" style="color: #aaa;" ng-mouseover="showMouseOverParent=true" ng-mouseleave="showMouseOverParent=false"></i>
+                </div>
+                <ul class="activity-popover-items" ng-show="$root.popOver=='parent' + viewCheckin.checkin.id" style="margin-top: 30px;">
+                    <li class="activity-popover-item">
+                        <a ng-click="viewCheckin.showSummaryEdit=true" class="edit"><i class="fa fa-pencil-square-o"></i> Edit</a>
+                    </li>
+                    <li class="activity-popover-item">
+                        <a ng-click="viewCheckin.deleteCheckin(viewCheckin.checkin)"><i class="fa fa-trash-o"></i> Delete</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     	<div ng-hide="viewCheckin.showSummaryEdit">
     		<!-- <span class="checkin-summary-instance" data-ng-bind-html="checkin.summary | new_line | cut:true:length"></span> -->

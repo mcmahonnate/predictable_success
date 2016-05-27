@@ -9,9 +9,12 @@
                 <div ng-controller="CommentCtrl">
                     <div class="comment-actions pull-right">
                         <span ng-show="comment.owner.id==devzoneComments.currentUser.id">
-                            <i class="fa fa-ellipsis-h show-popover"></i>
-                            <ul class="popover-items" style="display:none">
-                                <li class="popover-item">
+                            <div class="activity-popover-container" ng-mousedown="showMouseDown=true" ng-mouseup="togglePopOver(comment.id);showMouseDown=false;">
+                                <div class="activity-popover reply" ng-class="{'mousedown': showMouseDown, 'mouseover': showMouseOver}"></div>
+                                <i class="fa fa-ellipsis-h show-activity-popover" ng-mouseover="showMouseOver=true" ng-mouseleave="showMouseOver=false"></i>
+                            </div>
+                            <ul class="activity-popover-items" ng-show="$root.popOver==comment.id">
+                                <li class="activity-popover-item">
                                     <a ng-click="edit(comment)" class="edit"><i class="fa fa-pencil-square-o"></i>
                                         Edit</a>
                                 </li>
@@ -22,7 +25,7 @@
                             </ul>
                         </span>
                         <span class="timestamp"
-                          title="{{ comment.created_date | date:'MMM d, yyyy h:mma' }}">{{ comment.created_date | fromNow }}</span>
+                          title="{{ comment.created_date | date:'MMM d, yyyy h:mma' }}" style="vertical-align: top">{{ comment.created_date | fromNow }}</span>
                     </div>
                     <div class="comment-reply-avatar-container">
                         <a ng-href="#/employees/{{ comment.owner.employee.id }}" class="small-headshot">

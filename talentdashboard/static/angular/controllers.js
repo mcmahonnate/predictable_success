@@ -12,7 +12,13 @@ angular.module('tdb.controllers', [])
         $document.on('click', function (event) {
             element = angular.element(event.target);
             if ((!element.hasClass('nav-item') && !element.hasClass('nav-input')) && $rootScope.activeTab && !element.hasClass('nav-item-icon')) {
-                $rootScope.activeTab = null
+                $rootScope.activeTab = null;
+                $rootScope.$apply();
+            }
+            if (!element.hasClass('show-activity-popover')) {
+                console.log($rootScope.popOver);
+                $rootScope.popOver = null;
+                console.log($rootScope.popOver);
                 $rootScope.$apply();
             }
         });

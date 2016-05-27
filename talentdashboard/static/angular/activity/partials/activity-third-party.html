@@ -1,0 +1,29 @@
+<div class="activity-item">
+    <div class="activity-header">
+        <div class="activity-description">
+            <a ng-href="#/employees/{{ event.user.employee.id }}" class="activity-title-employee-name">{{ event.user.employee.full_name }}</a>
+            {{ event.verb }}
+            <span ng-show="event.employee.id != event.user.employee.id">
+                <a ng-href="#/employees/{{ event.employee.id }}" class="activity-title-employee-name">{{ event.employee.full_name }}</a>
+            </span>
+            <span class="timestamp pull-right" data-toggle="tooltip" data-placement="top" title="{{ event.date | date:'MMM d, yyyy h:mma' }}">{{ event.date | fromNow }}</span>
+        </div>
+    </div>
+    <a class="activity-checkin row" ng-if="event.show_conversation" href="{{ event.related_object.link }}" target="_blank">
+        <div class="avatar-container col-xs-2">
+            <span class="large-headshot">
+                <img ng-src="{{ event.related_object.employee.avatar_small }}" alt="{{ event.related_object.employee.full_name }}" class="headshot-image"/>
+            </span>
+            <div class="employee-attribute" rel="tooltip" data-toggle="tooltip" data-placement="right"
+                 data-original-title="{{ talentCategories[event.employee.current_talent_category].label }}">
+                <span class="segment employee-segment-background-color-{{ event.employee.current_talent_category }}"></span>
+            </div>
+        </div>
+        <div class="activity-checkin-details" ng-class="{'col-xs-12 col-sm-10': view='employee-view', 'col-xs-12 col-sm-10': view='team'}">
+            <div class="activity-checkin-type pull-right">
+                <img ng-src="{{ event.related_object.image_url }}" alt="Third party image" class="activity-third-party-event-image"/>
+            </div>
+            <div class="activity-comment comment-text" ng-show="!editMode" read-more ng-model="event.description" words="false" length="400"></div>
+        </div>
+    </a>
+</div>
