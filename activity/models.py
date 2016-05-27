@@ -29,20 +29,23 @@ class EventManager(models.Manager):
     """
     A manager that retrieves events for a particular model.
     """
-    def get_events_for_all_employees(self, requester):
+    def get_events_for_all_employees(self, requester, exclude_third_party_events=True):
         events = self.exclude(employee__id=requester.id)
+        if exclude_third_party_events:
+            content_type = ContentType.objects.get_for_model(ThirdPartyEvent)
+            events = events.exclude(event_type__pk=content_type.pk)
         events = events.extra(order_by=['-date'])
 
         return events
 
-    def get_events_for_employee(self, requester, employee):
-        events = self.get_events_for_all_employees(requester)
+    def get_events_for_employee(self, requester, employee, exclude_third_party_events=True):
+        events = self.get_events_for_all_employees(requester=requester, exclude_third_party_events=exclude_third_party_events)
         events = events.filter(employee__id=employee.id)
 
         return events
 
-    def get_events_for_employees(self, requester, employee_ids):
-        events = self.get_events_for_all_employees(requester)
+    def get_events_for_employees(self, requester, employee_ids, exclude_third_party_events=True):
+        events = self.get_events_for_all_employees(requester=requester, exclude_third_party_events=exclude_third_party_events)
         events = events.filter(employee__id__in=employee_ids)
 
         return events
