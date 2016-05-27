@@ -21,7 +21,7 @@ function AddProjectController(project, ProjectsService, Notification, EmployeeSe
     vm.cancel = cancel;
     vm.save = save;
     vm.panel_index = 0;
-    vm.ruleSet = [];
+    vm.categories = [];
 
     activate()
 
@@ -46,18 +46,20 @@ function AddProjectController(project, ProjectsService, Notification, EmployeeSe
     function getCriteria() {
         ProjectsService.getCurrentCriteria()
             .then(function (data) {
-                vm.ruleSet = data.criteria;
+                vm.categories = data.categories;
                 if (vm.project.scores) {
-                    angular.forEach(vm.ruleSet, function (rule) {
-                        angular.forEach(vm.project.scores, function (score) {
-                            if (rule.id == score.criteria_id) {
-                                rule.selected = score.id;
-                            }
-                        });
+                    angular.forEach(vm.categories, function (category) {
+                        angular.forEach(category.criteria, function(criteria){
+                            angular.forEach(vm.project.scores, function (score) {
+                                if (criteria.id == score.criteria_id) {
+                                    criteria.selected = score.id;
+                                }
+                            });
+                       });
                     });
                     vm.project.scores = [];
                 }
-                return vm.ruleSet;
+                return vm.categories;
         });
     }
 
@@ -92,10 +94,15 @@ function AddProjectController(project, ProjectsService, Notification, EmployeeSe
             var pk = vm.selectedTeamMembers[i].pk ? vm.selectedTeamMembers[i].pk : vm.selectedTeamMembers[i].id;
             vm.project.team_members.push(pk);
         }
-        angular.forEach(vm.ruleSet, function (rule) {
-            if (rule.selected) {
-                vm.project.scores.push(rule.selected);
+        angular.forEach(vm.categories, function (category) {
+
+          angular.forEach(category.criteria, function(criteria){
+            if (criteria.selected){
+
+                vm.project.scores.push(criteria.selected);
             }
+           });
+
         });
         if (vm.project.id) {
             ProjectsService.update(vm.project)
