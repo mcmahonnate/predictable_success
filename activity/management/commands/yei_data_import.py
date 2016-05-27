@@ -62,7 +62,7 @@ class Command(BaseCommand):
                 tenant.yei_api_token is None:
             return
         # Get yei feed
-        api_url = "https://%s:%s@%s/api/2/posts?filter=recognition&sort_by=date&sort_dir=%s&per_page=%s&user_id=52eed69b549d52ba8600ab15" % ('fool', tenant.yei_api_token, tenant.yei_api_url, sort_dir, limit)
+        api_url = "https://%s:%s@%s/api/2/posts?filter=recognition&sort_by=date&sort_dir=%s&per_page=%s&user_profile=52eed69b549d52ba8600ab15" % ('fool', tenant.yei_api_token, tenant.yei_api_url, sort_dir, limit)
         headers = {'Authorization': 'Basic %s' % b64encode(tenant.yei_api_token)}
         response_code = None
         keep_alive = True
@@ -83,30 +83,32 @@ class Command(BaseCommand):
                     owner_status = post['from']['status']
                     if not private and owner_status == 'active':
                         object_id = post['id']
-                        event_count = ThirdPartyEvent.objects.filter(object_id=object_id).count()
-                        if event_count > 0 and stop_when_imported_found:
-                            print 'All caught up!'
-                            return
-                        elif event_count == 0:
-                            owner_id = post['from']['id']
-                            owner_email = post['from']['profile_email']
-                            owner = self.get_employee(id=owner_id, email=owner_email)
-                            if owner is not None:
-                                description = post['message']
-                                date = post['created_at']
-                                create_date = parse(date).astimezone(tz.tzlocal())
-                                recipients = post['to']
-                                for recipient in recipients:
-                                    if recipient['status'] == 'active':
-                                        recipient_id = recipient['id']
-                                        recipient_email = recipient['profile_email']
-                                        recipient = self.get_employee(id=recipient_id, email=recipient_email)
-                                        if recipient:
+                        owner_id = post['from']['id']
+                        owner_email = post['from']['profile_email']
+                        owner = self.get_employee(id=owner_id, email=owner_email)
+                        if owner is not None:
+                            description = post['message']
+                            date = post['created_at']
+                            create_date = parse(date).astimezone(tz.tzlocal())
+                            recipients = post['to']
+                            for recipient in recipients:
+                                if recipient['status'] == 'active':
+                                    recipient_id = recipient['id']
+                                    recipient_email = recipient['profile_email']
+                                    recipient = self.get_employee(id=recipient_id, email=recipient_email)
+                                    if recipient:
+                                        event_count = ThirdPartyEvent.objects.filter(object_id=object_id, employee_id=recipient.id).count()
+                                        if event_count == 0:
                                             event = ThirdPartyEvent(object_id=object_id, employee=recipient,
                                                         owner=owner, description=description,
                                                         date=create_date, third_party=third_party)
                                             event.save()
                                             print 'Added recognition for %s from %s' % (recipient_email, owner_email)
+                                        elif event_count > 0 and stop_when_imported_found:
+                                            print 'All caught up!'
+                                            return
+                                        else:
+                                            print 'Recognition already exists for %s' % recipient_email
                 page += 1
             else:
                 keep_alive = False
