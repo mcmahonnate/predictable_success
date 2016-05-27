@@ -62,7 +62,7 @@ class Command(BaseCommand):
                 tenant.yei_api_token is None:
             return
         # Get yei feed
-        api_url = "https://%s:%s@%s/api/2/posts?filter=recognition&sort_by=date&sort_dir=%s&per_page=%s&user_profile=52eed69b549d52ba8600ab15" % ('fool', tenant.yei_api_token, tenant.yei_api_url, sort_dir, limit)
+        api_url = "https://%s:%s@%s/api/2/posts?filter=recognition&sort_by=date&sort_dir=%s&per_page=%s" % ('fool', tenant.yei_api_token, tenant.yei_api_url, sort_dir, limit)
         headers = {'Authorization': 'Basic %s' % b64encode(tenant.yei_api_token)}
         response_code = None
         keep_alive = True
