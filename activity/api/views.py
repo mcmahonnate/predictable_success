@@ -1,4 +1,5 @@
 from django.http import Http404
+from django.contrib.contenttypes.models import ContentType
 from rest_framework import views
 from rest_framework import generics
 from rest_framework.response import Response
@@ -12,10 +13,15 @@ from org.api.permissions import PermissionsViewThisEmployee
 from org.models import Employee
 from checkins.models import CheckIn
 from blah.models import Comment
-from django.contrib.contenttypes.models import ContentType
-from django.utils.log import getLogger
 
-logger = getLogger('talentdashboard')
+
+def exclude_third_party_events(request):
+    request.QUERY_PARAMS.get('exclude_third_party_events', '')
+    exclude = True
+    if request.QUERY_PARAMS.get('exclude_third_party_events', '').lower() == 'false':
+        exclude = False
+    return exclude
+
 
 class EmployeeEventList(views.APIView):
     permission_classes = (IsAuthenticated,)
@@ -29,14 +35,16 @@ class EmployeeEventList(views.APIView):
         if not employee.is_viewable_by_user(request.user):
             raise PermissionDenied
         type = request.GET.get('type', '')
+        exclude = exclude_third_party_events(request)
         if type:
             try:
                 content_type = ContentType.objects.get(model=type)
-                qs = Event.objects.get_events_for_employee(requester, employee, content_type)
+                qs = Event.objects.get_events_for_employee(requester=requester, employee=employee, exclude_third_party_events=exclude, type=content_type)
             except ContentType.DoesNotExist:
                 return
         else:
             qs = Event.objects.get_events_for_employee(requester, employee)
+        qs = Event.objects.get_events_for_employee(requester=requester, employee=employee, exclude_third_party_events=exclude)
         qs = qs.extra(order_by=['-date'])
         paginator = StandardResultsSetPagination()
         result_page = paginator.paginate_queryset(qs, request)
@@ -51,17 +59,18 @@ class EventList(views.APIView):
     """
     def get(self, request):
         requester = Employee.objects.get(user__id=request.user.id)
-        qs = Event.objects.get_events_for_all_employees(requester)
+        exclude = exclude_third_party_events(request)
+        qs = Event.objects.get_events_for_all_employees(requester=requester, exclude_third_party_events=exclude)
         paginator = StandardResultsSetPagination()
         result_page = paginator.paginate_queryset(qs, request)
         serializer = EventSerializer(result_page, many=True, context={'request': request})
         return paginator.get_paginated_response(serializer.data)
 
 
-def _get_event_list_for_employees(request, requester, employee_ids):
+def _get_event_list_for_employees(request, requester, employee_ids, exclude_third_party_events=True):
     if not employee_ids:
         return Response(None, status=status.HTTP_404_NOT_FOUND)
-    qs = Event.objects.get_events_for_employees(requester=requester, employee_ids=employee_ids)
+    qs = Event.objects.get_events_for_employees(requester=requester, employee_ids=employee_ids, exclude_third_party_events=exclude_third_party_events)
     qs = qs.extra(order_by=['-date'])
     paginator = StandardResultsSetPagination()
     result_page = paginator.paginate_queryset(qs, request)
@@ -76,7 +85,9 @@ class MyTeamEventList(views.APIView):
         requester = Employee.objects.get(user__id=request.user.id)
         employees = requester.get_descendants()
         employee_ids = employees.filter(departure_date__isnull=True).values('id')
-        return _get_event_list_for_employees(request, requester, employee_ids)
+        exclude = exclude_third_party_events(request)
+        return _get_event_list_for_employees(request=request, requester=requester, employee_ids=employee_ids, exclude_third_party_events=exclude)
+
 
 class LeadEventList(views.APIView):
     permission_classes = (IsAuthenticated,)
@@ -87,7 +98,8 @@ class LeadEventList(views.APIView):
         if requester.is_ancestor_of(other=lead, include_self=True):
             employees = lead.get_descendants()
             employee_ids = employees.filter(departure_date__isnull=True).values('id')
-            return _get_event_list_for_employees(request, requester, employee_ids)
+            exclude = exclude_third_party_events(request)
+            return _get_event_list_for_employees(request=request, requester=requester, employee_ids=employee_ids, exclude_third_party_events=exclude)
         else:
             return Response(None, status=status.HTTP_403_FORBIDDEN)
 
@@ -98,7 +110,8 @@ class MyCoachEventList(views.APIView):
     def get(self, request, format=None):
         requester = Employee.objects.get(user__id=request.user.id)
         employee_ids = Employee.objects.get_current_employees_by_coach(coach_id=requester.id).values('id')
-        return _get_event_list_for_employees(request, requester, employee_ids)
+        exclude = exclude_third_party_events(request)
+        return _get_event_list_for_employees(request=request, requester=requester, employee_ids=employee_ids, exclude_third_party_events=exclude)
 
 
 class CoachEventList(views.APIView):
@@ -117,7 +130,8 @@ class TeamEventList(views.APIView):
     def get(self, request, pk, format=None):
         requester = Employee.objects.get(user__id=request.user.id)
         employee_ids = Employee.objects.get_current_employees_by_team(team_id=pk).values('id')
-        return _get_event_list_for_employees(request, requester, employee_ids)
+        exclude = exclude_third_party_events(request)
+        return _get_event_list_for_employees(request=request, requester=requester, employee_ids=employee_ids, exclude_third_party_events=exclude)
 
 
 class CheckInEventList(generics.ListAPIView):

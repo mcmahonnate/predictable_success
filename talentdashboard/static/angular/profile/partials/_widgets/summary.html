@@ -1,0 +1,71 @@
+<div class="activity-items distributions">
+    <div class="activity-item">
+        <div class="activity-header">
+            <div class="activity-description">
+                <h3 style="color: #666;">About</h3>
+            </div>
+        </div>
+        <div class="activity-checkin row profile-summary">
+            <div class="activity-checkin-details">
+                <div style="margin-bottom: 8px">
+                    <span class="profile-summary-label">Myers Briggs</span>
+                    <div style="display: flex;padding-top:5px">
+                        <div style="display: inline-block;margin: auto 0px;">
+                            <strong>ISTP</strong> - <span>Logical. Quietly analytical. Practical.  Adaptable. Curious. Cool. Observer.  Problem-solver. Exact. Realistic. Troubleshooter. Hands-on. Variety. Adventurous. Independent.</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div collapse="summary.collapse">
+            <div class="activity-checkin row profile-summary">
+                <div class="activity-checkin-details">
+                    <div style="margin-bottom: 8px">
+                        <span class="profile-summary-label">Support Team</span>
+                        <div style="padding: 0 5px; min-height: 65px;display: flex;padding-top:5px">
+
+                            <div class="pull-left" style="width: 250px;">
+                                <div class="small-headshot" style="display: inline-block;width:40px">
+                                    <img ng-src="{{ summary.employee.leader.avatar_small }}" alt="{{ summary.employee.leader.full_name }}'s avatar" class="headshot-image"/>
+                                </div>
+                                <div style="display: inline-block;margin: auto 0px">
+                                    <strong><a ng-href="#/employees/{{summary.employee.leader.id}}">{{ summary.employee.leader.full_name }}</a></strong>
+                                    <div style="color: #aaa;">Team Lead</div>
+                                </div>
+                            </div>
+                            <div class="pull-left" style="width: 250px;display: flex">
+                                <div class="small-headshot" style="display: inline-block;width:40px">
+                                    <img ng-src="{{ summary.employee.coach.avatar_small }}" alt="{{ summary.employee.coach.full_name }}'s avatar" class="headshot-image"/>
+                                </div>
+                                <div style="display: inline-block;margin: auto 0px;">
+                                    <strong><a ng-href="#/employees/{{summary.employee.coach.id}}">{{ summary.employee.coach.full_name }}</a></strong>
+                                    <div style="color: #aaa;">Coach</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="comment-replies centered profile-more-info" ng-click="summary.collapse=!summary.collapse">
+            <span class="fa fa-chevron-down" ></span>
+        </div>
+    </div>
+</div>
+
+<style>
+    .profile-summary {
+        padding: 10px 10px;
+    }
+    .profile-summary .profile-summary-label{
+        color: #aaa;padding-bottom:8px;
+    }
+    .profile-more-info {
+        cursor: pointer;
+    }
+    .profile-more-info:hover{
+        background-color: #aaa;
+        color: #fff;
+    }
+</style>

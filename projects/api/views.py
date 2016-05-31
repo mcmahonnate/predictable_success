@@ -85,7 +85,6 @@ class ProjectCommentList(CommentList):
         pk = self.kwargs['pk']
         return Project.objects.get(pk=pk)
 
-
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
 def project_rules(request):

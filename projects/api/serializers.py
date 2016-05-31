@@ -18,18 +18,17 @@ class CreateUpdateProjectSerializer(serializers.ModelSerializer):
 
 class ScoringOptionSerializer(serializers.ModelSerializer):
     criteria_id = serializers.SerializerMethodField()
-    criteria_name = serializers.SerializerMethodField()
+    criteria_description = serializers.SerializerMethodField()
 
     def get_criteria_id(self, obj):
         return obj.criteria.id
 
-    def get_criteria_name(self, obj):
-        return obj.criteria.name
+    def get_criteria_description(self, obj):
+        return obj.criteria.description
 
     class Meta:
         model = ScoringOption
-        fields = ('id', 'name', 'description', 'value', 'criteria_id', 'criteria_name')
-
+        fields = ('id', 'description', 'value', 'criteria_id', 'criteria_description')
 
 class ScoringCriteriaSerializer(serializers.ModelSerializer):
     options = ScoringOptionSerializer(many=True)
@@ -38,13 +37,21 @@ class ScoringCriteriaSerializer(serializers.ModelSerializer):
         model = ScoringCriteria
         fields = ('id', 'name', 'description', 'options')
 
-
-class PrioritizationRuleSerializer(serializers.ModelSerializer):
+class ScoringCategorySerializer(serializers.ModelSerializer):
     criteria = ScoringCriteriaSerializer(many=True)
 
     class Meta:
+        model = ScoringCategory
+        fields = ('id', 'name', 'criteria')
+
+
+
+class PrioritizationRuleSerializer(serializers.ModelSerializer):
+    categories = ScoringCategorySerializer(many=True)
+
+    class Meta:
         model = PrioritizationRule
-        fields = ('id', 'date', 'description', 'criteria')
+        fields = ('id', 'date', 'description', 'categories')
 
 
 class ProjectSerializer(serializers.ModelSerializer):

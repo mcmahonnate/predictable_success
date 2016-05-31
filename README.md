@@ -49,13 +49,26 @@ Go to Heroku websolr to retrieve schema.xml. Then, open the file below and then 
 cd ~/solr-4.4.0/example/solr/employees/conf/schema.xml
 
 ```
+Cd into the solr package and start running solr locally. 
+```
+cd ~/Users/[username]/solr-4.4.0/example
+java -jar start.jar
+```
+
 Run indexing command. 
 ```
 python manage.py tenant_reindex_employees --settings=talentdashboard.settings.local
 
 ```
-Run gulp 
+Install bower. 
 ```
+npm install -g bower-installer
+bower-installer 
+```
+
+Install and run gulp. 
+```
+npm install --save-dev gulp
 node_modules/gulp/bin/gulp.js scripts
 node_modules/gulp/bin/gulp.js watch
 
