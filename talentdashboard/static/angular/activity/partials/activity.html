@@ -1,15 +1,16 @@
 <div infinite-scroll="loadNextPage()" infinite-scroll-distance="2" class="activity panel" ng-if="currentUser.can_view_comments">
     <div ng-class="{'reload-enter': reloadFinished, 'reload-exit': !reloadFinished}" class="reload-animation">
         <h2 ng-if="view != 'me'" class="panel-title">Activity</h2>
-        <div ng-if="type == null && reloadFinished" ng-include="'/static/angular/profile/partials/_widgets/summary.html'" ng-controller="SummaryController as summary"></div>
 
         <!-- Activity stream -->
-        <div class="activity-items distributions" ng-repeat="event in events | orderBy:'date':true">
-            <div ng-if="event.type == 'comment'" ng-include="'/static/angular/activity/partials/activity-comment.html'"></div>
-            <div ng-if="event.type == 'check in'" ng-include="'/static/angular/activity/partials/activity-checkin.html'"></div>
-            <div ng-if="event.type == 'employee zone'" ng-include="'/static/angular/activity/partials/activity-employee-zone.html'"></div>
-            <div ng-if="event.type == 'feedback digest'" ng-include="'/static/angular/activity/partials/activity-feedback-digest.html'"></div>
-            <div ng-if="event.type == 'third party event'" ng-include="'/static/angular/activity/partials/activity-third-party.html'"></div>
+        <div class="activity-items distributions">
+            <div ng-repeat="event in events | orderBy:'date':true">
+                <div ng-if="event.type == 'comment'" ng-include="'/static/angular/activity/partials/activity-comment.html'"></div>
+                <div ng-if="event.type == 'check in'" ng-include="'/static/angular/activity/partials/activity-checkin.html'"></div>
+                <div ng-if="event.type == 'employee zone'" ng-include="'/static/angular/activity/partials/activity-employee-zone.html'"></div>
+                <div ng-if="event.type == 'feedback digest'" ng-include="'/static/angular/activity/partials/activity-feedback-digest.html'"></div>
+                <div ng-if="event.type == 'third party event'" ng-include="'/static/angular/activity/partials/activity-third-party.html'"></div>
+            </div>
         </div>
 
         <!-- No activity message -->

@@ -31,6 +31,12 @@ def lead_employee_search(request, pk):
     return _find_employees_filtered_by_employee_descendants(request, lead)
 
 @api_view(['GET'])
+@permission_classes((IsAuthenticated, PermissionsViewThisEmployee))
+def coach_employee_search(request, pk):
+    kwargs = {'coach_ids': [pk]}
+    return _find_employees(request, **kwargs)
+
+@api_view(['GET'])
 def my_coachees_employee_search(request):
     return _find_employees_filtered_by_relationship_to_current_user(request, 'coach_ids')
 

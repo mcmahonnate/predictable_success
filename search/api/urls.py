@@ -4,6 +4,7 @@ from views import *
 urlpatterns = patterns('',
     url(r'^employees/$', employee_search),
     url(r'^employees/lead/(?P<pk>[0-9]+)/$', lead_employee_search),
+    url(r'^employees/coach/(?P<pk>[0-9]+)/$', coach_employee_search),
     url(r'^employees/my-team/$', my_team_employee_search),
     url(r'^employees/(?P<pk>[0-9]+)/leaders/$', employee_leaders_search),
     url(r'^employees/my-coachees/$', my_coachees_employee_search),

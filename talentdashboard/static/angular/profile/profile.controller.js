@@ -2,13 +2,15 @@ angular
     .module('profile')
     .controller('ProfileController', ProfileController);
 
-function ProfileController(Employee, ThirdParties, analytics, $location, $rootScope, $routeParams, $scope) {
+function ProfileController(Employee, EmployeeSearch, ThirdParties, analytics, $location, $rootScope, $routeParams, $scope) {
     /* Since this page can be the root for some users let's make sure we capture the correct page */
     var location_url = $location.url().indexOf('/profile') < 0 ? '/profile' : $location.url();
     analytics.trackPage($scope, $location.absUrl(), location_url);
     var vm = this;
     vm.employee = null;
     vm.moreInfoCollapse = true;
+    vm.teamMembers = [];
+    vm.coachees = [];
     vm.filterCommentsByType = filterCommentsByType;
     vm.filterCommentsByView = filterCommentsByView;
     vm.filterCommentsByThirdParty = filterCommentsByThirdParty;
@@ -18,7 +20,6 @@ function ProfileController(Employee, ThirdParties, analytics, $location, $rootSc
     activate();
 
     function activate() {
-        resetFilter();
         getEmployee();
         getThirdParties();
     };
@@ -42,12 +43,30 @@ function ProfileController(Employee, ThirdParties, analytics, $location, $rootSc
         )
     }
 
+    function getTeamSummary() {
+        vm.teamMembers = EmployeeSearch.leadEmployees({id: $routeParams.id});
+    }
+
+    function getCoachSummary() {
+        vm.coachees = EmployeeSearch.coachEmployees({id: $routeParams.id});
+    }
+
     function filterCommentsByType(type) {
         vm.filter.type = type;
+        vm.filter.third_party = null;
         filterComments();
     }
 
     function filterCommentsByView(view) {
+        switch(view) {
+            case 'coach':
+                console.log('test');
+                getCoachSummary();
+                break;
+            case 'leader':
+                getTeamSummary();
+                break;
+        }
         vm.filter.view = view;
         filterComments();
     }
@@ -61,12 +80,5 @@ function ProfileController(Employee, ThirdParties, analytics, $location, $rootSc
 
     function filterComments() {
         $scope.$broadcast('filterComments', vm.filter);
-        resetFilter()
     }
-
-    function resetFilter() {
-        vm.filter.type = null;
-        vm.filter.third_party = null;
-    }
-
 }

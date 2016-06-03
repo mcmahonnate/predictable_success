@@ -1,75 +1,39 @@
 <div class="profile">
-
-    <div class="profile-demographic panel top">
-        <div class="xxlarge-avatar-container">
+    <tabset class="profile-tabs" ng-show="profile.employee.is_lead || profile.employee.is_coach">
+        <tab index="0" heading="Profile" select="profile.filterCommentsByView('me')"></tab>
+        <tab index="1" ng-show="profile.employee.is_lead" heading="Team" select="profile.filterCommentsByView('leader')"></tab>
+        <tab index="2" ng-show="profile.employee.is_coach" heading="Coachees" select="profile.filterCommentsByView('coach')"></tab>
+    </tabset>
+    <div class="profile-demographic panel" ng-class="{'has-top-tabs': profile.employee.is_lead || profile.employee.is_coach, 'profile-tab-selected': profile.filter.view=='me'}">
+        <div class="xxlarge-avatar-container" style="display: inline-block;">
             <div class="xxlarge-headshot centered">
                 <img ng-src="{{ profile.employee.avatar }}" alt="{{ profile.employee.full_name }}'s avatar" class="headshot-image" />
             </div>
-
         </div>
-        <div class="profile-info-container centered">
+        <div class="profile-info-container" style="display: inline-block;width: 470px;">
             <h2 class="profile-info-lablel">{{profile.employee.full_name}}</h2>
+            <span class="profile-info-sub-lablel">{{profile.employee.team.name}}</span>
+            <div class="profile-info-sub-lablel">"When Tim communicates he likes to classify data into explicit, understandable chunks.
+His go to is to present logical arguments backed by specifics and reality."</div>
         </div>
-        <tabset class="profile-tabs" ng-show="profile.employee.is_lead || profile.employee.is_coach">
-            <tab index="0" heading="Profile" select="profile.filterCommentsByView('me')"></tab>
-            <tab index="1" ng-show="profile.employee.is_lead" heading="Team" select="profile.filterCommentsByView('leader')"></tab>
-            <tab index="2" ng-show="profile.employee.is_coach" heading="Coachees" select="profile.filterCommentsByView('coach')"></tab>
-        </tabset>
+        <div>
+            <div class="profile-info-container" collapse="profile.moreInfoCollapse">
+                <div ng-show="profile.filter.view=='me'" ng-include="'/static/angular/profile/partials/_widgets/employee-summary.html'"></div>
+                <div ng-show="profile.filter.view=='leader'" ng-include="'/static/angular/profile/partials/_widgets/leader-summary.html'"></div>
+                <div ng-show="profile.filter.view=='coach'" ng-include="'/static/angular/profile/partials/_widgets/coach-summary.html'"></div>
+            </div>
+            <div class="profile-info-more centered" ng-click="profile.moreInfoCollapse=!profile.moreInfoCollapse">
+                <i class="fa fa-chevron-down collapse-toggle"></i>
+            </div>
+        </div>
         <div class="activity-filters">
             <div class="activity-filter-item" ng-class="{'selected': profile.filter.type==null}" ng-click="profile.filterCommentsByType(null)"><span class="fa fa-globe activity-filter-item-icon"></span><span class="activity-filter-item-label">All</span></div>
             <div class="activity-filter-item" ng-class="{'selected': profile.filter.type=='checkin'}" ng-click="profile.filterCommentsByType('checkin')"><span class="fa fa-check activity-filter-item-icon"></span><span class="activity-filter-item-label">Check-Ins</span></div>
             <div class="activity-filter-item" ng-class="{'selected': profile.filter.type=='feedbackdigest'}" ng-click="profile.filterCommentsByType('feedbackdigest')"><span class="fa fa-send activity-filter-item-icon"></span><span class="activity-filter-item-label">Feedback</span></div>
             <div class="activity-filter-item" ng-class="{'selected': profile.filter.type=='employeezone'}" ng-click="profile.filterCommentsByType('employeezone')"><span class="fa fa-heartbeat activity-filter-item-icon"></span><span class="activity-filter-item-label">ID</span></div>
             <div class="activity-filter-item" ng-class="{'selected': profile.filter.type=='comment'}" ng-click="profile.filterCommentsByType('comment')"><span class="fa fa-pencil-square-o activity-filter-item-icon"></span><span class="activity-filter-item-label">Notes</span></div>
-        </div>
-        <div>
-            <div class="profile-info-more centered" ng-click="profile.moreInfoCollapse=!profile.moreInfoCollapse">
-                <i class="fa fa-chevron-down collapse-toggle"></i>
-            </div>
-            <div class="profile-info-container" collapse="profile.moreInfoCollapse">
-                <ol class="bio-list">
-                    <li class="shaded">
-                        <strong>Hire date:</strong> {{ profile.employee.hire_date | date:'MM/dd/yyyy' }}
-                    </li>
-                    <li ng-show="profile.employee.departure_date">
-                        <strong>Departure Date:</strong> {{ profile.employee.departure_date | date:'MM/dd/yyyy' }}
-                    </li>
-                    <li>
-                        <strong>Team Lead:</strong> <a ng-href="#/employees/{{profile.employee.leader.id}}">{{ profile.employee.leader.full_name }}</a>
-                    </li>
-                    <li ng-if="customer.show_coaches" class="clear">
-                        <strong>Coach:</strong> <a ng-href="#/employees/{{profile.employee.coach.id}}">{{ profile.employee.coach.full_name }}</a>
-                    </li>
-                    <li class="shaded">
-                        <strong>Team:</strong> <span ng-if="profile.employee.team"><a ng-href="#/teams/{{profile.employee.team.id}}">{{ profile.employee.team.name }}</a></span>
-                    </li>
-                    <li ng-repeat="(key, value) in profile.attributes | groupBy: 'category.name'" ng-class-odd="" ng-class-even="'shaded'">
-                        <strong>{{key}}:</strong>
-                                <span ng-repeat="attribute in value">
-                                  <text ng-if="!$last">{{ attribute.name }},</text>
-                                  <text ng-if="$last">{{ attribute.name }}</text>
-                                </span>
-                    </li>
-                    <li ng-if="customer.show_vops" ng-class="vops_class">
-                        <strong>Synergist Style:</strong>
-                        <span ng-if="employee.vops_visionary > 299"><a ng-click="showAttributes('synergist-view', 'Visionary');">Visionary</a></span>
-                        <span ng-if="employee.vops_operator > 299"><a ng-click="showAttributes('synergist-view', 'Operator');">Operator</a></span>
-                        <span ng-if="employee.vops_processor > 299"><a ng-click="showAttributes('synergist-view', 'Processor');">Processor</a></span>
-                        <span ng-if="employee.vops_synergist > 299"><a ng-click="showAttributes('synergist-view', 'Synergist');">Synergist</a></span>
-                    </li>
-                    <li ng-if="customer.show_mbti" ng-class="mbti_class">
-                        <strong>Myers Briggs:</strong> <span ng-if="mbti"><a ng-click="showAttributes('mbti-view');">{{ mbti.type | uppercase}}</a></span>
-                    </li>
-                    <li ng-if="customer.show_kolbe" ng-class="kolbe_class">
-                        <strong>Kolbe:</strong>
-                        <span ng-if="employee.kolbe_fact_finder"><a ng-click="showAttributes('kolbe-view', 'Fact Finder');">{{ employee.kolbe_fact_finder }}</a>,</span>
-                        <span ng-if="employee.kolbe_follow_thru"><a ng-click="showAttributes('kolbe-view', 'Follow Thru');">{{ employee.kolbe_follow_thru }}</a>,</span>
-                        <span ng-if="employee.kolbe_quick_start"><a ng-click="showAttributes('kolbe-view', 'Quick Start');">{{ employee.kolbe_quick_start }}</a>,</span>
-                        <span ng-if="employee.kolbe_implementor"><a ng-click="showAttributes('kolbe-view', 'Implementor');">{{ employee.kolbe_implementor }}</a></span>
-                    </li>
+            <div ng-repeat="third_party in profile.third_parties" class="activity-filter-item" ng-class="{'selected': profile.filter.third_party==third_party.name}" ng-click="profile.filterCommentsByThirdParty(third_party.name)"><img ng-src="{{ third_party.image_url }}" alt="Third party image" class="activity-filter-item-icon"/><span class="activity-filter-item-label">{{third_party.name}}</span></div>
 
-                </ol>
-            </div>
         </div>
     </div>
     <div ng-controller="ActivityCtrl" data-view="me">
@@ -82,26 +46,32 @@
         max-width: 700px;
   	    margin: 40px auto;
     }
+    .profile .activity.panel{
+        webkit-box-shadow: None;
+        box-shadow: None;
+    }
     .profile .xxlarge-avatar-container {
         vertical-align: top;
         position: relative;
-        margin-top: -59px;
+        padding: 20px 0px 0 25px;
     }
     .profile .profile-demographic {
         padding: 0;
         border: 1px solid #D0D3D6;
     }
-    .profile-demographic.top{
-        margin-top: 100px;
+    .profile .profile-demographic.has-top-tabs {
+        border-top: None;
+        border-top-left-radius: 0px;
     }
     .profile .profile-info-more {
-        background-color: #efefef;
+        background-color: #fff;
         color: #ccc;
         cursor: pointer;
     }
     .profile .profile-info-more .collapse-toggle{
         opacity: 1;
     }
+
     .profile .profile-info-more:hover {
         background-color: #ccc;
         color: #efefef;
@@ -110,12 +80,13 @@
     .profile .activity.panel {
         padding: 0px;
         background-color: transparent;
+        border: None;
     }
     .profile .activity-items {
         margin-top: 0;
     }
     .profile .profile-tabs .nav-tabs {
-        margin: 0;
+        margin: 0 3px 0 0;
     }
 
     .profile .profile-tabs .nav-tabs > li > a {
@@ -127,8 +98,12 @@
     }
 
     .profile .profile-tabs .nav-tabs > li.active > a {
-        background-color: #efefef;
         color: #555555;
+    }
+
+    .profile .profile-tabs .nav > li:not(.active) a:hover {
+        color: #fff;
+        background-color: #ccc;
     }
 
     .profile .profile-info-container {
@@ -170,8 +145,8 @@
     .activity-filters .activity-filter-item {
         margin: 2px auto;
         display: table-cell;
-        width: 55px;
-        height: 55px;
+        width: 15%;
+        height: 35px;
         text-align: center;
         cursor: pointer;
     }
@@ -181,16 +156,29 @@
     .activity-filter-item.selected {
         color: #666;
     }
+    .activity-filter-item.selected img{
+        filter: brightness(2) grayscale(100%) !important;
+        -webkit-filter: brightness(2) grayscale(100%) !important;
+    }
     .activity-filter-item .activity-filter-item-icon {
-        font-size: 50px !important;
+        font-size: 35px !important;
+    }
+    .activity-filter-item img.activity-filter-item-icon {
+        height: 30px !important;
+        filter: brightness(2) grayscale(100%) opacity(0.4);
+        -webkit-filter: brightness(2) grayscale(100%) opacity(0.4);
+    }
+    .activity-filter-item:hover img.activity-filter-item-icon {
+        filter: brightness(2) grayscale(100%);
+        -webkit-filter: brightness(2) grayscale(100%);
     }
     .activity-filter-item .activity-filter-item-label {
         display: block;
     }
     .xxlarge-headshot {
         border-radius: 90px;
-        width: 150px;
-        height: 150px;
+        width: 125px;
+        height: 125px;
         border: 5px solid #f1f1f1;
         transition: .3s;
         overflow: hidden;
@@ -202,5 +190,14 @@
     .xxlarge-headshot.centered {
         margin: auto;
     }
+    .profile .activity .comment-replies .comment-reply-textarea textarea {
+        max-width: 595px;
+    }
 
+</style>
+
+<style media="not screen and (max-width: 640px)">
+    .profile .activate-reply {
+        width: 78% !important;
+    }
 </style>
