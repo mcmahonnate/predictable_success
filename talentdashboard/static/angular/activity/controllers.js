@@ -7,6 +7,7 @@ angular.module('tdb.activity.controllers', [])
         $scope.busy = false;
         $scope.reloadFinished = true;
         $scope.type = null;
+        $scope.third_party = null;
         $scope.loadNextPage = function() {
             if ($scope.hasNextPage && !$scope.busy) {
                 $scope.busy = true;
@@ -17,10 +18,10 @@ angular.module('tdb.activity.controllers', [])
                 var request = null;
                 switch ($scope.view) {
                     case 'me':
-                        request = Event.getEmployeeEvents($routeParams.id, $scope.nextPage, $scope.type);
+                        request = Event.getEmployeeEvents($routeParams.id, $scope.nextPage, $scope.type, $scope.third_party);
                         break;
                     case 'employee':
-                        request = Event.getEmployeeEvents($routeParams.id, $scope.nextPage, $scope.type);
+                        request = Event.getEmployeeEvents($routeParams.id, $scope.nextPage, $scope.type, $scope.third_party);
                         break;
                     case 'company':
                         request = Event.get({page: $scope.nextPage, type: $scope.type});
@@ -53,12 +54,12 @@ angular.module('tdb.activity.controllers', [])
 
         $scope.loadNextPage();
 
-
         $scope.$on("filterComments", function(e, filter) {
             $scope.nextPage = 1;
             $scope.hasNextPage = true;
             $scope.type = filter.type;
             $scope.view = filter.view;
+            $scope.third_party = filter.third_party;
             $scope.loadNextPage();
         });
 

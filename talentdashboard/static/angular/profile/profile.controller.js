@@ -2,7 +2,7 @@ angular
     .module('profile')
     .controller('ProfileController', ProfileController);
 
-function ProfileController(Employee, analytics, $location, $rootScope, $routeParams, $scope) {
+function ProfileController(Employee, ThirdParties, analytics, $location, $rootScope, $routeParams, $scope) {
     /* Since this page can be the root for some users let's make sure we capture the correct page */
     var location_url = $location.url().indexOf('/profile') < 0 ? '/profile' : $location.url();
     analytics.trackPage($scope, $location.absUrl(), location_url);
@@ -11,12 +11,16 @@ function ProfileController(Employee, analytics, $location, $rootScope, $routePar
     vm.moreInfoCollapse = true;
     vm.filterCommentsByType = filterCommentsByType;
     vm.filterCommentsByView = filterCommentsByView;
-    vm.filter = {type: null, view: 'me'};
+    vm.filterCommentsByThirdParty = filterCommentsByThirdParty;
+    vm.filter = {type: null, view: 'me', third_party: null};
+    vm.third_parties = [];
 
     activate();
 
     function activate() {
+        resetFilter();
         getEmployee();
+        getThirdParties();
     };
 
     function getEmployee() {
@@ -29,6 +33,15 @@ function ProfileController(Employee, analytics, $location, $rootScope, $routePar
         );
     }
 
+    function getThirdParties() {
+        ThirdParties.query(
+            null,
+            function (data) {
+                vm.third_parties = data;
+            }
+        )
+    }
+
     function filterCommentsByType(type) {
         vm.filter.type = type;
         filterComments();
@@ -39,11 +52,21 @@ function ProfileController(Employee, analytics, $location, $rootScope, $routePar
         filterComments();
     }
 
-    function filterComments() {
-        $scope.$broadcast('filterComments', vm.filter);
+    function filterCommentsByThirdParty(third_party) {
+        vm.filter.type = 'thirdpartyevent';
+        vm.filter.third_party = third_party;
+        filterComments();
+
     }
 
+    function filterComments() {
+        $scope.$broadcast('filterComments', vm.filter);
+        resetFilter()
+    }
 
-
+    function resetFilter() {
+        vm.filter.type = null;
+        vm.filter.third_party = null;
+    }
 
 }
