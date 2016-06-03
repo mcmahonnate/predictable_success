@@ -11,17 +11,16 @@
                 <div ng-if="event.type == 'feedback digest'" ng-include="'/static/angular/activity/partials/activity-feedback-digest.html'"></div>
                 <div ng-if="event.type == 'third party event'" ng-include="'/static/angular/activity/partials/activity-third-party.html'"></div>
             </div>
+            <!-- No activity message -->
+            <div ng-show="events.length==0" class="panel panel-empty">
+                <img class="grumpycat" src="../static/images/grumpycat.png" alt="Grumpy Cat" />
+                <h2>"Mmmmeeh... i don't see any activity yet. Use the button above or this link to
+                    <a href="" ng-click="myCheckins.requestCheckIn()">request a check-in from your Team Lead or Coach</a>."
+                </h2>
+            </div>
         </div>
 
-        <!-- No activity message -->
-        <div ng-show="events.length==0" class="no-comments">
-            <p>
-                <span ng-show="view == 'company'">There are no discussions yet.</span>
-                <span ng-show="view == 'employee'">Start the discussion by entering a comment above.</span>
-                <span ng-show="view == 'me'">You don't have any discussions yet.</span>
-                <span ng-show="view == 'team'">There are no discussions yet.</span>
-            </p>
-        </div>
+
     </div>
     <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner"/></div>
 </div>

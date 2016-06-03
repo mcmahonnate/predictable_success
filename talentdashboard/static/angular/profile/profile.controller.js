@@ -2,7 +2,7 @@ angular
     .module('profile')
     .controller('ProfileController', ProfileController);
 
-function ProfileController(Employee, EmployeeSearch, ThirdParties, analytics, $location, $rootScope, $routeParams, $scope) {
+function ProfileController(Employee, EmployeeSearch, SalaryReport, TalentReport, ThirdParties, analytics, $location, $rootScope, $routeParams, $scope) {
     /* Since this page can be the root for some users let's make sure we capture the correct page */
     var location_url = $location.url().indexOf('/profile') < 0 ? '/profile' : $location.url();
     analytics.trackPage($scope, $location.absUrl(), location_url);
@@ -45,10 +45,13 @@ function ProfileController(Employee, EmployeeSearch, ThirdParties, analytics, $l
 
     function getTeamSummary() {
         vm.teamMembers = EmployeeSearch.leadEmployees({id: $routeParams.id});
+        $scope.talentReport = TalentReport.leadEmployees({id: $routeParams.id});
+        $scope.salaryReport = SalaryReport.leadEmployees({id: $routeParams.id});
     }
 
     function getCoachSummary() {
         vm.coachees = EmployeeSearch.coachEmployees({id: $routeParams.id});
+        $scope.talentReport = TalentReport.coachEmployees({id: $routeParams.id});
     }
 
     function filterCommentsByType(type) {
@@ -60,7 +63,6 @@ function ProfileController(Employee, EmployeeSearch, ThirdParties, analytics, $l
     function filterCommentsByView(view) {
         switch(view) {
             case 'coach':
-                console.log('test');
                 getCoachSummary();
                 break;
             case 'leader':

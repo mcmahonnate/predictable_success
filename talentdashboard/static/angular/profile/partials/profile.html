@@ -18,9 +18,9 @@ His go to is to present logical arguments backed by specifics and reality."</div
         </div>
         <div>
             <div class="profile-info-container" collapse="profile.moreInfoCollapse">
-                <div ng-show="profile.filter.view=='me'" ng-include="'/static/angular/profile/partials/_widgets/employee-summary.html'"></div>
-                <div ng-show="profile.filter.view=='leader'" ng-include="'/static/angular/profile/partials/_widgets/leader-summary.html'"></div>
-                <div ng-show="profile.filter.view=='coach'" ng-include="'/static/angular/profile/partials/_widgets/coach-summary.html'"></div>
+                <div class="fade-in" ng-show="profile.filter.view=='me'" ng-include="'/static/angular/profile/partials/_widgets/employee-summary.html'"></div>
+                <div class="fade-in" ng-show="profile.filter.view=='leader'" ng-include="'/static/angular/profile/partials/_widgets/leader-summary.html'"></div>
+                <div class="fade-in" ng-show="profile.filter.view=='coach'" ng-include="'/static/angular/profile/partials/_widgets/coach-summary.html'"></div>
             </div>
             <div class="profile-info-more centered" ng-click="profile.moreInfoCollapse=!profile.moreInfoCollapse">
                 <i class="fa fa-chevron-down collapse-toggle"></i>
