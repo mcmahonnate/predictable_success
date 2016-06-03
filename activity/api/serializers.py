@@ -8,7 +8,14 @@ from devzones.models import EmployeeZone
 from devzones.api.serializers import EmployeeZoneForActivityFeedSerializer
 from feedback.models import FeedbackDigest
 from feedback.api.serializers import SummarizedFeedbackDigestSerializer
-from ..models import Event, ThirdPartyEvent
+from ..models import Event, ThirdParty, ThirdPartyEvent
+
+
+class ThirdPartySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ThirdParty
+        fields = ('id', 'name', 'image_url')
 
 
 class ThirdPartyEventSerializer(serializers.ModelSerializer):
