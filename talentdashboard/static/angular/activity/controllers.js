@@ -1,5 +1,8 @@
 angular.module('tdb.activity.controllers', [])
     .controller('ActivityCtrl', ['$attrs', '$rootScope', '$routeParams', '$scope', '$timeout', '$window', 'Event', 'Comment', function($attrs, $rootScope, $routeParams, $scope, $timeout, $window, Event, Comment) {
+        var pause = false;
+        var loaded = false;
+        var tempEvents = [];
         $scope.events = [];
         $scope.view = $attrs.view;
         $scope.nextPage = 1;
@@ -8,6 +11,21 @@ angular.module('tdb.activity.controllers', [])
         $scope.reloadFinished = true;
         $scope.type = null;
         $scope.third_party = null;
+
+        function finishLoading(){
+            if (!pause && loaded) {
+                if ($scope.nextPage == 1) {
+                    $scope.events = tempEvents.results;
+                } else {
+                    $scope.events = $scope.events.concat(tempEvents.results);
+                }
+                $scope.nextPage++;
+                $scope.hasNextPage = tempEvents.has_next;
+                $scope.reloadFinished = true;
+                $scope.busy = false;
+            }
+        }
+
         $scope.loadNextPage = function() {
             if ($scope.hasNextPage && !$scope.busy) {
                 $scope.busy = true;
@@ -37,16 +55,19 @@ angular.module('tdb.activity.controllers', [])
                         break;
                 }
                 if (request) {
+                    pause = false;
+                    loaded = false;
+                    if ($scope.nextPage == 1) {
+                        pause = true;
+                        $timeout(function() {
+                            pause = false;
+                            finishLoading();
+                        }, 500)
+                    }
                     request.$promise.then(function (page) {
-                        if ($scope.nextPage == 1) {
-                            $scope.events = page.results;
-                        } else {
-                            $scope.events = $scope.events.concat(page.results);
-                        }
-                        $scope.nextPage++;
-                        $scope.hasNextPage = page.has_next;
-                        $scope.reloadFinished = true;
-                        $scope.busy = false;
+                        loaded = true;
+                        tempEvents = page;
+                        finishLoading();
                     });
                 }
             }
