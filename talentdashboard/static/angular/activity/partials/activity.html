@@ -1,6 +1,6 @@
 <div infinite-scroll="loadNextPage()" infinite-scroll-distance="2" class="activity panel" ng-if="currentUser.can_view_comments">
     <div ng-class="{'reload-enter': reloadFinished, 'reload-exit': !reloadFinished}" class="reload-animation">
-        <h2 ng-if="view != 'me'" class="panel-title">Activity</h2>
+        <h2 ng-if="filter.view != 'me'" class="panel-title">Activity</h2>
 
         <!-- Activity stream -->
         <div class="activity-items distributions">

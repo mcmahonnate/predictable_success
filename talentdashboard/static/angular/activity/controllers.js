@@ -4,13 +4,11 @@ angular.module('tdb.activity.controllers', [])
         var loaded = false;
         var tempEvents = [];
         $scope.events = [];
-        $scope.view = $attrs.view;
+        $scope.filter = {type: null, view: $attrs.view, third_party: null, employee: null};;
         $scope.nextPage = 1;
         $scope.hasNextPage = true;
         $scope.busy = false;
         $scope.reloadFinished = true;
-        $scope.type = null;
-        $scope.third_party = null;
 
         function finishLoading(){
             if (!pause && loaded) {
@@ -34,24 +32,24 @@ angular.module('tdb.activity.controllers', [])
                     $scope.reloadFinished = false;
                 }
                 var request = null;
-                switch ($scope.view) {
+                switch ($scope.filter.view) {
                     case 'me':
-                        request = Event.getEmployeeEvents($routeParams.id, $scope.nextPage, $scope.type, $scope.third_party);
+                        request = Event.getEmployeeEvents($routeParams.id, $scope.nextPage, $scope.filter.type, $scope.filter.third_party);
                         break;
                     case 'employee':
-                        request = Event.getEmployeeEvents($routeParams.id, $scope.nextPage, $scope.type, $scope.third_party);
+                        request = Event.getEmployeeEvents($routeParams.id, $scope.nextPage, $scope.filter.type, $scope.filter.third_party);
                         break;
                     case 'company':
-                        request = Event.get({page: $scope.nextPage, type: $scope.type});
+                        request = Event.get({page: $scope.nextPage, type: $scope.filter.type});
                         break;
                     case 'leader':
-                        request = Event.getLeadEvents($routeParams.id, $scope.nextPage, $scope.type);
+                        request = Event.getLeadEvents($routeParams.id, $scope.nextPage, $scope.filter.type);
                         break;
                     case 'team':
-                        request = Event.getTeamEvents($routeParams.teamId, $scope.nextPage, $scope.type);
+                        request = Event.getTeamEvents($routeParams.teamId, $scope.nextPage, $scope.filter.type);
                         break;
                     case 'coach':
-                        request = Event.getCoachEvents($routeParams.id, $scope.nextPage, $scope.type);
+                        request = Event.getCoachEvents($routeParams.id, $scope.nextPage, $scope.filter.type);
                         break;
                 }
                 if (request) {
@@ -78,9 +76,7 @@ angular.module('tdb.activity.controllers', [])
         $scope.$on("filterComments", function(e, filter) {
             $scope.nextPage = 1;
             $scope.hasNextPage = true;
-            $scope.type = filter.type;
-            $scope.view = filter.view;
-            $scope.third_party = filter.third_party;
+            $scope.filter = filter;
             $scope.loadNextPage();
         });
 

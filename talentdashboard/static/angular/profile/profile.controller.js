@@ -14,7 +14,7 @@ function ProfileController(Employee, EmployeeSearch, SalaryReport, TalentReport,
     vm.filterCommentsByType = filterCommentsByType;
     vm.filterCommentsByView = filterCommentsByView;
     vm.filterCommentsByThirdParty = filterCommentsByThirdParty;
-    vm.filter = {type: null, view: 'me', third_party: null};
+    vm.filter = {type: null, view: 'employee', third_party: null, employee: null};
     vm.third_parties = [];
 
     activate();
@@ -30,6 +30,7 @@ function ProfileController(Employee, EmployeeSearch, SalaryReport, TalentReport,
             function (data) {
                 vm.employee = data;
                 vm.employee.hire_date = $rootScope.parseDate(vm.employee.hire_date);
+                vm.filter.employee = vm.employee;
             }
         );
     }
