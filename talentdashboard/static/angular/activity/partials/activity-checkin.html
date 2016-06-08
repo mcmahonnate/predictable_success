@@ -2,10 +2,11 @@
 <div class="activity-item">
     <div class="activity-header">
         <div class="activity-description">
-            <a ng-href="#/employees/{{ event.user.employee.id }}" class="activity-title-employee-name">{{ event.user.employee.full_name }}</a>
+            <employee-name employee="event.user.employee"></employee-name>
             {{ event.verb }}
             <span ng-show="event.employee.id != event.user.employee.id">
-                with <a ng-href="#/employees/{{ event.employee.id }}" class="activity-title-employee-name">{{ event.employee.full_name }}</a>
+                with
+                <employee-name employee="event.employee"></employee-name>
             </span>
             <span class="timestamp pull-right" data-toggle="tooltip" data-placement="top" title="{{ event.date | date:'MMM d, yyyy h:mma' }}">{{ event.date | fromNow }}</span>
         </div>    

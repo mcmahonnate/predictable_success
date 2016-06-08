@@ -125,6 +125,15 @@ class TeamMemberList(APIView):
         serializer = EmployeeSerializer(employees, many=True, context={'request': request})
         return Response(serializer.data)
 
+
+@api_view(['GET'])
+def my_profile(request):
+    current_user = request.user
+    employee = Employee.objects.get(user=current_user)
+    serializer = EmployeeSerializer(employee, many=False, context={'request': request})
+    return Response(serializer.data)
+
+
 @api_view(['GET'])
 def my_team_lead(request):
     current_user = request.user

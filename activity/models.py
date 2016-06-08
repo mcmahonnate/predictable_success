@@ -30,8 +30,10 @@ class EventManager(models.Manager):
     A manager that retrieves events for a particular model.
     """
 
-    def get_events_for_all_employees(self, requester, exclude_third_party_events=True, type=None, third_party=None):
-        events = self.exclude(employee__id=requester.id)
+    def get_events_for_all_employees(self, requester, exclude_third_party_events=True, type=None, third_party=None, exclude_requester=True):
+        events = self.all()
+        if exclude_requester:
+            events = self.exclude(employee__id=requester.id)
         if type:
             events = events.filter(event_type__pk=type.pk)
         if exclude_third_party_events:
@@ -46,9 +48,9 @@ class EventManager(models.Manager):
 
         return events
 
-    def get_events_for_employee(self, requester, employee, exclude_third_party_events=True, type=None, third_party=None):
+    def get_events_for_employee(self, requester, employee, exclude_third_party_events=True, type=None, third_party=None, exclude_requester=True):
         events = self.get_events_for_all_employees(requester=requester, exclude_third_party_events=exclude_third_party_events,
-                                                   type=type, third_party=third_party)
+                                                   type=type, third_party=third_party, exclude_requester=exclude_requester)
         events = events.filter(employee__id=employee.id)
         return events
 
@@ -116,7 +118,7 @@ class Event(models.Model):
         elif self.event_type.id is checkin_type.id:
             check_in = CheckIn.objects.get(id=self.event_id)
             if check_in.employee.user == self.user:
-                return 'shared their %s check-in' % check_in.get_type_description()
+                return 'shared a %s check-in' % check_in.get_type_description()
             else:
                 return 'had a %s check-in' % check_in.get_type_description()
         return None

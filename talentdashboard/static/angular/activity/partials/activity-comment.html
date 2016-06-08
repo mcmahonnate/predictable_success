@@ -2,10 +2,10 @@
 <div class="activity-item" ng-controller="CommentCtrl" summary-length="500">
     <div class="activity-header">
         <div class="activity-description">
-            <a ng-href="#/employees/{{ event.user.employee.id }}" class="activity-title-employee-name">{{ event.user.employee.full_name }}</a>
+            <employee-name employee="event.user.employee"></employee-name>
             {{ event.verb }}
             <span ng-show="event.type == 'comment'">about</span>
-            <a ng-href="#/employees/{{ event.employee.id }}" class="activity-title-employee-name">{{ event.employee.full_name }}</a>
+            <employee-name employee="event.employee"></employee-name>
             <span class="timestamp pull-right" data-toggle="tooltip" data-placement="top" title="{{ event.date | date:'MMM d, yyyy h:mma' }}">{{ event.date | fromNow }}</span>
             <span ng-show="event.user.id==currentUser.id" class="comment-actions pull-right">
                 <div class="activity-popover-container" ng-mousedown="showMouseDownParent=true" ng-mouseup="togglePopOver(event.related_object.id);showMouseDownParent=false;">

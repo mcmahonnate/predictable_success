@@ -219,6 +219,16 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
         }
     };
 })
+.directive('employeeName', ['$rootScope', function($rootScope) {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope:{'employee': '&'},
+        templateUrl: '/static/angular/org/partials/_widgets/employee-name.html',
+        link: function (scope, element, attrs) {
+        }
+    }
+}])
 .directive('happinessChart', ['$rootScope', 'AnnotationChart', function($rootScope) {
     return {
         restrict: 'A',

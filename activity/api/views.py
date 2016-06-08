@@ -45,6 +45,26 @@ def get_third_party(request):
         raise Http404
 
 
+class MyEventList(views.APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, format=None):
+        comment_type = ContentType.objects.get_for_model(Comment)
+        requester = Employee.objects.get(user__id=request.user.id)
+        exclude = exclude_third_party_events(request)
+        content_type = get_content_type(request)
+        third_party = get_third_party(request)
+        qs = Event.objects.get_events_for_employee(requester=requester, employee=requester,
+                                                   exclude_third_party_events=exclude, type=content_type,
+                                                   third_party=third_party, exclude_requester=False)
+        qs = qs.exclude(event_type=comment_type)
+        qs = qs.extra(order_by=['-date'])
+        paginator = StandardResultsSetPagination()
+        result_page = paginator.paginate_queryset(qs, request)
+        serializer = EventSerializer(result_page, many=True, context={'request': request})
+        return paginator.get_paginated_response(serializer.data)
+
+
 class EmployeeEventList(views.APIView):
     permission_classes = (IsAuthenticated,)
 

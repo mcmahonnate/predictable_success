@@ -46,7 +46,10 @@ His go to is to present logical arguments backed by specifics and reality."</div
 
         </div>
     </div>
-    <div ng-controller="ActivityCtrl" data-view="employee">
+    <div ng-if="filter.view!='me'" ng-controller="ActivityCtrl" data-view="employee">
+        <div ng-include="'/static/angular/activity/partials/activity.html'"></div>
+    </div>
+    <div ng-if="filter.view=='me'" ng-controller="ActivityCtrl" data-view="me">
         <div ng-include="'/static/angular/activity/partials/activity.html'"></div>
     </div>
 </div>

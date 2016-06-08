@@ -34,7 +34,7 @@ angular.module('tdb.activity.controllers', [])
                 var request = null;
                 switch ($scope.filter.view) {
                     case 'me':
-                        request = Event.getEmployeeEvents($routeParams.id, $scope.nextPage, $scope.filter.type, $scope.filter.third_party);
+                        request = Event.getEmployeeEvents(null, $scope.nextPage, $scope.filter.type, $scope.filter.third_party);
                         break;
                     case 'employee':
                         request = Event.getEmployeeEvents($routeParams.id, $scope.nextPage, $scope.filter.type, $scope.filter.third_party);

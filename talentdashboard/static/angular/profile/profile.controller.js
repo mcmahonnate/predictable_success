@@ -2,7 +2,7 @@ angular
     .module('profile')
     .controller('ProfileController', ProfileController);
 
-function ProfileController(Employee, EmployeeSearch, SalaryReport, TalentReport, ThirdParties, analytics, $location, $rootScope, $routeParams, $scope) {
+function ProfileController(Employee, EmployeeSearch, Profile, SalaryReport, TalentReport, ThirdParties, analytics, $location, $rootScope, $routeParams, $scope) {
     /* Since this page can be the root for some users let's make sure we capture the correct page */
     var location_url = $location.url().indexOf('/profile') < 0 ? '/profile' : $location.url();
     analytics.trackPage($scope, $location.absUrl(), location_url);
@@ -14,7 +14,7 @@ function ProfileController(Employee, EmployeeSearch, SalaryReport, TalentReport,
     vm.filterCommentsByType = filterCommentsByType;
     vm.filterCommentsByView = filterCommentsByView;
     vm.filterCommentsByThirdParty = filterCommentsByThirdParty;
-    vm.filter = {type: null, view: 'employee', third_party: null, employee: null};
+    vm.filter = {type: null, view: null, third_party: null, employee: null};
     vm.third_parties = [];
 
     activate();
@@ -25,14 +25,29 @@ function ProfileController(Employee, EmployeeSearch, SalaryReport, TalentReport,
     };
 
     function getEmployee() {
-        Employee.get(
-            {id: $routeParams.id},
-            function (data) {
-                vm.employee = data;
-                vm.employee.hire_date = $rootScope.parseDate(vm.employee.hire_date);
-                vm.filter.employee = vm.employee;
-            }
-        );
+        var id;
+        if ($routeParams.id) {
+            Employee.get(
+                {id: $routeParams.id},
+                function (data) {
+                    vm.employee = data;
+                    vm.employee.hire_date = $rootScope.parseDate(vm.employee.hire_date);
+                    vm.filter.view = 'employee';
+                    vm.filter.employee = vm.employee;
+                }
+            );
+        } else {
+            Profile.get(
+                null,
+                function (data) {
+                    vm.employee = data;
+                    vm.employee.hire_date = $rootScope.parseDate(vm.employee.hire_date);
+                    vm.filter.view = 'me';
+                    vm.filter.employee = vm.employee;
+                }
+            );
+        }
+
     }
 
     function getThirdParties() {

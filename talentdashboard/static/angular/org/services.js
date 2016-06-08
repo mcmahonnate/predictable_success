@@ -11,6 +11,12 @@ angular.module('tdb.org.services', ['ngResource'])
         return currentUsers;
     }])
 
+    .factory('Profile', ['$resource', '$http', function($resource, $http) {
+        var res = $resource('api/v1/org/profile/');
+
+        return res;
+    }])
+
     .factory('Employee', ['$resource', function($resource) {
         var actions = {
             'addNew': { method:'POST', data:{full_name:'@full_name', hire_date: '@hire_date', coach_id: '@coach_id'}, isArray: false },

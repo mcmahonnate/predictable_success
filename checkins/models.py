@@ -106,7 +106,8 @@ class CheckIn(models.Model):
         return list(Comment.objects.get_for_object(self))
 
     def get_summary(self, user):
-        if user.has_perm('checkins.view_checkin_summary'):
+        if user.has_perm('checkins.view_checkin_summary') or \
+                        user.employee.id == self.employee.id:
             return self.summary
         return None
 
