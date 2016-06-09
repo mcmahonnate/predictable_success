@@ -3,6 +3,10 @@ angular.module('tdb.activity.controllers', [])
         var pause = false;
         var loaded = false;
         var tempEvents = [];
+        $scope.showHeader = true;
+        if ($attrs.showHeader) {
+            $scope.showHeader = ($attrs.showHeader!='false');
+        }
         $scope.events = [];
         $scope.filter = {type: null, view: $attrs.view, third_party: null, employee: null};;
         $scope.nextPage = 1;
@@ -33,9 +37,6 @@ angular.module('tdb.activity.controllers', [])
                 }
                 var request = null;
                 switch ($scope.filter.view) {
-                    case 'me':
-                        request = Event.getEmployeeEvents(null, $scope.nextPage, $scope.filter.type, $scope.filter.third_party);
-                        break;
                     case 'employee':
                         request = Event.getEmployeeEvents($routeParams.id, $scope.nextPage, $scope.filter.type, $scope.filter.third_party);
                         break;

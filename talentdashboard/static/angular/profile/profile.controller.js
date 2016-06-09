@@ -16,8 +16,9 @@ function ProfileController(Employee, EmployeeSearch, Profile, SalaryReport, Tale
     vm.filterCommentsByThirdParty = filterCommentsByThirdParty;
     vm.requestFeedback = requestFeedback;
     vm.requestCheckIn = requestCheckIn;
-    vm.filter = {type: null, view: null, third_party: null, employee: null};
+    vm.filter = {type: null, view: 'employee', third_party: null, employee: null};
     vm.third_parties = [];
+    vm.isSelf = false;
 
     activate();
 
@@ -29,22 +30,22 @@ function ProfileController(Employee, EmployeeSearch, Profile, SalaryReport, Tale
     function getEmployee() {
         var id;
         if ($routeParams.id) {
+            vm.isSelf = false;
             Employee.get(
                 {id: $routeParams.id},
                 function (data) {
                     vm.employee = data;
                     vm.employee.hire_date = $rootScope.parseDate(vm.employee.hire_date);
-                    vm.filter.view = 'employee';
                     vm.filter.employee = vm.employee;
                 }
             );
         } else {
+            vm.isSelf = true;
             Profile.get(
                 null,
                 function (data) {
                     vm.employee = data;
                     vm.employee.hire_date = $rootScope.parseDate(vm.employee.hire_date);
-                    vm.filter.view = 'me';
                     vm.filter.employee = vm.employee;
                 }
             );
@@ -62,14 +63,26 @@ function ProfileController(Employee, EmployeeSearch, Profile, SalaryReport, Tale
     }
 
     function getTeamSummary() {
-        vm.teamMembers = EmployeeSearch.leadEmployees({id: $routeParams.id});
-        $scope.talentReport = TalentReport.leadEmployees({id: $routeParams.id});
-        $scope.salaryReport = SalaryReport.leadEmployees({id: $routeParams.id});
+        if (vm.isSelf) {
+            vm.teamMembers = EmployeeSearch.myTeam();
+            $scope.talentReport = TalentReport.myTeam();
+            $scope.salaryReport = SalaryReport.myTeam();
+        } else {
+            vm.teamMembers = EmployeeSearch.leadEmployees({id: $routeParams.id});
+            $scope.talentReport = TalentReport.leadEmployees({id: $routeParams.id});
+            $scope.salaryReport = SalaryReport.leadEmployees({id: $routeParams.id});
+        }
     }
 
     function getCoachSummary() {
-        vm.coachees = EmployeeSearch.coachEmployees({id: $routeParams.id});
-        $scope.talentReport = TalentReport.coachEmployees({id: $routeParams.id});
+        if (vm.isSelf) {
+            vm.coachees = EmployeeSearch.myCoachees();
+            $scope.talentReport = TalentReport.myCoachees();
+        }
+        else {
+            vm.coachees = EmployeeSearch.coachEmployees({id: $routeParams.id});
+            $scope.talentReport = TalentReport.coachEmployees({id: $routeParams.id});
+        }
     }
 
     function filterCommentsByType(type) {
