@@ -1,0 +1,5 @@
+<span>
+    <a ng-if='$root.currentUser.employee.id!=employee().id' ng-href='#/employees/{{ employee().id }}' class='activity-title-employee-name'>{{ employee().full_name }}</a>
+    <strong ng-if='$root.currentUser.employee.id==employee().id'>You</strong>
+    {{employee}}
+</span>

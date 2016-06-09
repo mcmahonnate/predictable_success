@@ -7,6 +7,7 @@ urlpatterns = [
     url(r'^coaches/change/$', change_coach, name='change-coach'),
     url(r'^coaches/current/$', CurrentCoach.as_view(), name='my-coach'),
     url(r'^employees/all-access/$', cache_page(60*1440)(all_access_employees)),
+    url(r'^profile/$', my_profile),
     url(r'^team/(?P<pk>[0-9]+)/leads/$', team_leads),
     url(r'^team/(?P<pk>[0-9]+)/members/$', TeamMemberList.as_view(), name='employee-list'),
     url(r'^team-lead/my/$', my_team_lead),

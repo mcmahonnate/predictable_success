@@ -13,16 +13,19 @@ from org.api.permissions import PermissionsViewThisEmployee
 def employee_search(request):
     return _find_employees(request)
 
+
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
 def employee_leaders_search(request, pk):
     employee = Employee.objects.get(id=pk)
     return _find_employees_filtered_by_employee_ancestors(request, employee)
 
+
 @api_view(['GET'])
 def my_team_employee_search(request):
     current_employee = Employee.objects.get(user=request.user)
     return _find_employees_filtered_by_employee_descendants(request, current_employee)
+
 
 @api_view(['GET'])
 @permission_classes((IsAuthenticated, PermissionsViewThisEmployee))
@@ -30,17 +33,28 @@ def lead_employee_search(request, pk):
     lead = Employee.objects.get(id=pk)
     return _find_employees_filtered_by_employee_descendants(request, lead)
 
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated, PermissionsViewThisEmployee))
+def coach_employee_search(request, pk):
+    kwargs = {'coach_ids': [pk]}
+    return _find_employees(request, **kwargs)
+
+
 @api_view(['GET'])
 def my_coachees_employee_search(request):
     return _find_employees_filtered_by_relationship_to_current_user(request, 'coach_ids')
+
 
 def _find_employees_filtered_by_employee_descendants(request, employee):
     kwargs = {'tree_id': employee.tree_id, 'lft': "[%d TO *]" % employee.lft, 'rght': "[* TO %d]" % employee.rght, 'pk': employee.pk}
     return _find_employees(request, **kwargs)
 
+
 def _find_employees_filtered_by_employee_ancestors(request, employee):
     kwargs = {'tree_id': employee.tree_id, 'lft': "[* TO %d]" % employee.lft, 'rght': "[%d TO *]" % employee.rght, 'pk': employee.pk}
     return _find_employees(request, **kwargs)
+
 
 def _find_employees_filtered_by_relationship_to_current_user(request, relationship_field):
     current_employee = Employee.objects.get(user=request.user)
@@ -79,11 +93,13 @@ def my_team_salary_report(request):
     current_employee = Employee.objects.get(user=request.user)
     return _get_salary_report_filtered_by_employee_descendants(request, current_employee)
 
+
 @api_view(['GET'])
 @permission_classes((IsAuthenticated, PermissionsViewThisEmployee))
 def lead_salary_report(request, pk):
     lead = Employee.objects.get(id=pk)
     return _get_salary_report_filtered_by_employee_descendants(request, lead)
+
 
 @api_view(['GET'])
 def my_coachees_salary_report(request):
@@ -105,11 +121,20 @@ def my_team_talent_report(request):
     current_employee = Employee.objects.get(user=request.user)
     return _get_talent_report_filtered_by_employee_descendants(request, current_employee)
 
+
 @api_view(['GET'])
 @permission_classes((IsAuthenticated, PermissionsViewThisEmployee))
 def lead_talent_report(request, pk):
     lead = Employee.objects.get(id=pk)
     return _get_talent_report_filtered_by_employee_descendants(request, lead)
+
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated, PermissionsViewThisEmployee))
+def coach_talent_report(request, pk):
+    kwargs = {'coach_ids': [pk]}
+    return _get_talent_report(request, **kwargs)
+
 
 @api_view(['GET'])
 def my_coachees_talent_report(request):
@@ -120,6 +145,7 @@ def _get_salary_report_filtered_by_employee_descendants(request, employee):
     kwargs = {'tree_id': employee.tree_id, 'lft': "[%d TO *]" % employee.lft, 'rght': "[* TO %d]" % employee.rght, 'pk': employee.pk}
 
     return _get_salary_report(request, **kwargs)
+
 
 def _get_salary_report_filtered_by_relationship_to_current_user(request, relationship_field):
     current_employee = Employee.objects.get(user=request.user)

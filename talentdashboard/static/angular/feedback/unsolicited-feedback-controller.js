@@ -2,7 +2,7 @@
         .module('feedback')
         .controller('UnsolicitedFeedbackController', UnsolicitedFeedbackController);
 
-    function UnsolicitedFeedbackController($location, $modal, $scope, $rootScope, $timeout, analytics, Notification, FeedbackSubmissionService) {
+    function UnsolicitedFeedbackController($location, $modal, $scope, $rootScope, $routeParams, $timeout, analytics, Employee, FeedbackSubmissionService, Notification) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         BaseSubmitFeedbackController.call(this, $location, $modal, $rootScope);
         
@@ -14,7 +14,13 @@
         activate();
  
         function activate() {
-            getEmployees();
+            if ($routeParams.employeeId) {
+                getEmployee();
+            }
+            else
+            {
+                getEmployees();
+            }
             getMySubmissions();
         }
 
@@ -29,6 +35,15 @@
                 $('body').removeClass('modal-open');
             } 
         };
+
+        function getEmployee() {
+            Employee.get(
+                {id: $routeParams.employeeId},
+                function (data) {
+                    vm.subject = data;
+                }
+            );
+        }
 
         function getEmployees() {
             return FeedbackSubmissionService.getEmployees()

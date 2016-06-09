@@ -86,7 +86,6 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
     happiness_verbose  = serializers.SerializerMethodField()
     happiness = serializers.SerializerMethodField()
     happiness_date = serializers.SerializerMethodField()
-    is_lead = serializers.SerializerMethodField()
     kolbe_fact_finder = serializers.SerializerMethodField()
     kolbe_follow_thru = serializers.SerializerMethodField()
     kolbe_quick_start = serializers.SerializerMethodField()
@@ -105,9 +104,6 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
         if obj.current_happiness is None:
             return None
         return obj.current_happiness.assessment_verbose()
-
-    def get_is_lead(self, obj):
-        return obj.is_lead()
 
     def get_talent_category(self, obj):
          try:
@@ -211,7 +207,7 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Employee
-        fields = ('id', 'full_name', 'first_name', 'last_name', 'gender', 'email', 'avatar', 'avatar_small', 'job_title', 'hire_date', 'leader', 'happiness', 'happiness_date', 'happiness_verbose', 'coach', 'kolbe_fact_finder','kolbe_follow_thru', 'kolbe_quick_start', 'kolbe_implementor', 'vops_visionary', 'vops_operator', 'vops_processor', 'vops_synergist', 'departure_date', 'team', 'display', 'current_salary', 'current_bonus', 'talent_category', 'last_checkin_date', 'is_lead')
+        fields = ('id', 'full_name', 'first_name', 'last_name', 'gender', 'email', 'avatar', 'avatar_small', 'job_title', 'hire_date', 'leader', 'happiness', 'happiness_date', 'happiness_verbose', 'coach', 'kolbe_fact_finder','kolbe_follow_thru', 'kolbe_quick_start', 'kolbe_implementor', 'vops_visionary', 'vops_operator', 'vops_processor', 'vops_synergist', 'departure_date', 'team', 'display', 'current_salary', 'current_bonus', 'talent_category', 'last_checkin_date', 'is_lead', 'is_coach')
 
 
 class SimpleUserSerializer(serializers.ModelSerializer):

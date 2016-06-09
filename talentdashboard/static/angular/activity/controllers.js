@@ -1,47 +1,92 @@
 angular.module('tdb.activity.controllers', [])
-    .controller('ActivityCtrl', ['$scope', '$rootScope', '$routeParams', '$window', '$attrs', 'Event', 'Comment', function($scope, $rootScope, $routeParams, $window, $attrs, Event, Comment) {
-        var view = $attrs.view;
+    .controller('ActivityCtrl', ['$attrs', '$rootScope', '$routeParams', '$scope', '$timeout', '$window', 'Event', 'Comment', function($attrs, $rootScope, $routeParams, $scope, $timeout, $window, Event, Comment) {
+        var pause = false;
+        var loaded = false;
+        var tempEvents = [];
+        $scope.showHeader = true;
+        if ($attrs.showHeader) {
+            $scope.showHeader = ($attrs.showHeader!='false');
+        }
         $scope.events = [];
+        $scope.filter = {type: null, view: $attrs.view, third_party: null, employee: null};;
         $scope.nextPage = 1;
         $scope.hasNextPage = true;
         $scope.busy = false;
+        $scope.reloadFinished = true;
+
+        function finishLoading(){
+            if (!pause && loaded) {
+                if ($scope.nextPage == 1) {
+                    $scope.events = tempEvents.results;
+                } else {
+                    $scope.events = $scope.events.concat(tempEvents.results);
+                }
+                $scope.nextPage++;
+                $scope.hasNextPage = tempEvents.has_next;
+                $scope.reloadFinished = true;
+                $scope.busy = false;
+            }
+        }
+
         $scope.loadNextPage = function() {
             if ($scope.hasNextPage && !$scope.busy) {
                 $scope.busy = true;
+                if ($scope.nextPage == 1) {
+                    // Only animate on the first page of a reload.
+                    $scope.reloadFinished = false;
+                }
                 var request = null;
-                switch (view) {
+                switch ($scope.filter.view) {
                     case 'employee':
-                        request = Event.getEmployeeEvents($routeParams.id, $scope.nextPage);
+                        request = Event.getEmployeeEvents($routeParams.id, $scope.nextPage, $scope.filter.type, $scope.filter.third_party);
                         break;
                     case 'company':
-                        request = Event.get({page: $scope.nextPage});
+                        request = Event.get({page: $scope.nextPage, type: $scope.filter.type});
                         break;
                     case 'leader':
-                        request = Event.getLeadEvents($routeParams.id, $scope.nextPage);
+                        request = Event.getLeadEvents($routeParams.id, $scope.nextPage, $scope.filter.type);
                         break;
                     case 'team':
-                        request = Event.getTeamEvents($routeParams.teamId, $scope.nextPage);
+                        request = Event.getTeamEvents($routeParams.teamId, $scope.nextPage, $scope.filter.type);
                         break;
                     case 'coach':
-                        request = Event.getCoachEvents($scope.nextPage);
+                        request = Event.getCoachEvents($routeParams.id, $scope.nextPage, $scope.filter.type);
                         break;
                 }
-                request.$promise.then(function (page) {
-                    $scope.events = $scope.events.concat(page.results);
-                    $scope.nextPage++;
-                    $scope.hasNextPage = page.has_next;
-                    $scope.busy = false;
-                });
+                if (request) {
+                    pause = false;
+                    loaded = false;
+                    if ($scope.nextPage == 1) {
+                        pause = true;
+                        $timeout(function() {
+                            pause = false;
+                            finishLoading();
+                        }, 500)
+                    }
+                    request.$promise.then(function (page) {
+                        loaded = true;
+                        tempEvents = page;
+                        finishLoading();
+                    });
+                }
             }
         };
 
         $scope.loadNextPage();
+
+        $scope.$on("filterComments", function(e, filter) {
+            $scope.nextPage = 1;
+            $scope.hasNextPage = true;
+            $scope.filter = filter;
+            $scope.loadNextPage();
+        });
 
         $rootScope.$on("comments.commentCreated", function(e, comment) {
             Event.getEventForComment({id: comment.id}, function(event) {
                 $scope.events.push(event);
             })
         });
+
 
         $scope.saveComment = function(event) {
             var comment = new Comment(event.related_object);

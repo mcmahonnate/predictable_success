@@ -29,25 +29,35 @@ class EventManager(models.Manager):
     """
     A manager that retrieves events for a particular model.
     """
-    def get_events_for_all_employees(self, requester, exclude_third_party_events=True):
-        events = self.exclude(employee__id=requester.id)
+
+    def get_events_for_all_employees(self, requester, exclude_third_party_events=True, type=None, third_party=None, exclude_requester=True):
+        events = self.all()
+        if exclude_requester:
+            events = self.exclude(employee__id=requester.id)
+        if type:
+            events = events.filter(event_type__pk=type.pk)
         if exclude_third_party_events:
             content_type = ContentType.objects.get_for_model(ThirdPartyEvent)
             events = events.exclude(event_type__pk=content_type.pk)
+        elif third_party:
+            third_party_event_content_type = ContentType.objects.get_for_model(ThirdPartyEvent)
+            if type.id == third_party_event_content_type.id:
+                third_party_event_ids = ThirdPartyEvent.objects.filter(third_party=third_party).values_list('id', flat=True)
+                events = events.filter(event_id__in=third_party_event_ids)
         events = events.extra(order_by=['-date'])
 
         return events
 
-    def get_events_for_employee(self, requester, employee, exclude_third_party_events=True):
-        events = self.get_events_for_all_employees(requester=requester, exclude_third_party_events=exclude_third_party_events)
+    def get_events_for_employee(self, requester, employee, exclude_third_party_events=True, type=None, third_party=None, exclude_requester=True):
+        events = self.get_events_for_all_employees(requester=requester, exclude_third_party_events=exclude_third_party_events,
+                                                   type=type, third_party=third_party, exclude_requester=exclude_requester)
         events = events.filter(employee__id=employee.id)
-
         return events
 
-    def get_events_for_employees(self, requester, employee_ids, exclude_third_party_events=True):
-        events = self.get_events_for_all_employees(requester=requester, exclude_third_party_events=exclude_third_party_events)
+    def get_events_for_employees(self, requester, employee_ids, exclude_third_party_events=True, type=None, third_party=None):
+        events = self.get_events_for_all_employees(requester=requester, exclude_third_party_events=exclude_third_party_events,
+                                                   type=type, third_party=third_party)
         events = events.filter(employee__id__in=employee_ids)
-
         return events
 
     def get_events_for_object(self, obj):
@@ -108,7 +118,7 @@ class Event(models.Model):
         elif self.event_type.id is checkin_type.id:
             check_in = CheckIn.objects.get(id=self.event_id)
             if check_in.employee.user == self.user:
-                return 'shared their %s check-in' % check_in.get_type_description()
+                return 'shared a %s check-in' % check_in.get_type_description()
             else:
                 return 'had a %s check-in' % check_in.get_type_description()
         return None

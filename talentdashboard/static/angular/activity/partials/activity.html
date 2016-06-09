@@ -1,22 +1,25 @@
-<div infinite-scroll="loadNextPage()" infinite-scroll-distance="2" class="activity panel" ng-if="currentUser.can_view_comments">
-    <h2 class="panel-title">Activity</h2>
+<div infinite-scroll="loadNextPage()" infinite-scroll-distance="2" class="activity panel">
+    <div ng-class="{'reload-enter': reloadFinished, 'reload-exit': !reloadFinished}" class="reload-animation">
+        <h2 ng-if="showHeader" class="panel-title">Activity</h2>
 
-    <!-- Activity stream -->
-    <div class="activity-items distributions" ng-repeat="event in events | orderBy:'date':true">
-        <div ng-if="event.type == 'comment'" ng-include="'/static/angular/activity/partials/activity-comment.html'"></div>
-        <div ng-if="event.type == 'check in'" ng-include="'/static/angular/activity/partials/activity-checkin.html'"></div>
-        <div ng-if="event.type == 'employee zone'" ng-include="'/static/angular/activity/partials/activity-employee-zone.html'"></div>
-        <div ng-if="event.type == 'feedback digest'" ng-include="'/static/angular/activity/partials/activity-feedback-digest.html'"></div>
-        <div ng-if="event.type == 'third party event'" ng-include="'/static/angular/activity/partials/activity-third-party.html'"></div>
+        <!-- Activity stream -->
+        <div class="activity-items distributions">
+            <div ng-repeat="event in events | orderBy:'date':true">
+                <div ng-if="event.type == 'comment'" ng-include="'/static/angular/activity/partials/activity-comment.html'"></div>
+                <div ng-if="event.type == 'check in'" ng-include="'/static/angular/activity/partials/activity-checkin.html'"></div>
+                <div ng-if="event.type == 'employee zone'" ng-include="'/static/angular/activity/partials/activity-employee-zone.html'"></div>
+                <div ng-if="event.type == 'feedback digest'" ng-include="'/static/angular/activity/partials/activity-feedback-digest.html'"></div>
+                <div ng-if="event.type == 'third party event'" ng-include="'/static/angular/activity/partials/activity-third-party.html'"></div>
+            </div>
+            <!-- No activity message -->
+            <div ng-show="events.length==0" class="panel panel-empty">
+                <h2>"Mmmmeeh... i don't see any activity yet.</h2>
+                <img class="grumpycat" src="../static/images/grumpycat.png" alt="Grumpy Cat" />
+
+            </div>
+        </div>
+
+
     </div>
-
-    <!-- No activity message -->
-    <div ng-show="comments.length==0" class="no-comments">
-        <p>
-            <span ng-show="view == 'employee-view'">Start the discussion by entering a comment above.</span>
-            <span ng-show="view == 'team-view'">There are not any discussions yet.</span>
-        </p>
-    </div>
-
     <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner"/></div>
 </div>

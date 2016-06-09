@@ -30,7 +30,7 @@
         </div>   
     </div>
 </div>    
-<div ng-include="'/static/angular/feedback/partials/_modals/unsolicited-select-person.html'"></div>
+<div ng-if="!submitFeedback.subject" ng-include="'/static/angular/feedback/partials/_modals/unsolicited-select-person.html'"></div>
 
 <style>
     .form-group {margin-bottom: 15px;}
