@@ -2,7 +2,7 @@ angular
     .module('profile')
     .controller('ProfileController', ProfileController);
 
-function ProfileController(Employee, EmployeeSearch, Profile, SalaryReport, TalentReport, ThirdParties, analytics, $location, $rootScope, $routeParams, $scope) {
+function ProfileController(Employee, EmployeeSearch, Profile, SalaryReport, TalentReport, ThirdParties, analytics, $location, $modal, $rootScope, $routeParams, $scope) {
     /* Since this page can be the root for some users let's make sure we capture the correct page */
     var location_url = $location.url().indexOf('/profile') < 0 ? '/profile' : $location.url();
     analytics.trackPage($scope, $location.absUrl(), location_url);
@@ -14,6 +14,8 @@ function ProfileController(Employee, EmployeeSearch, Profile, SalaryReport, Tale
     vm.filterCommentsByType = filterCommentsByType;
     vm.filterCommentsByView = filterCommentsByView;
     vm.filterCommentsByThirdParty = filterCommentsByThirdParty;
+    vm.requestFeedback = requestFeedback;
+    vm.requestCheckIn = requestCheckIn;
     vm.filter = {type: null, view: null, third_party: null, employee: null};
     vm.third_parties = [];
 
@@ -98,5 +100,42 @@ function ProfileController(Employee, EmployeeSearch, Profile, SalaryReport, Tale
 
     function filterComments() {
         $scope.$broadcast('filterComments', vm.filter);
+    }
+
+    function requestCheckIn() {
+        var modalInstance = $modal.open({
+            animation: true,
+            windowClass: 'xx-dialog fade zoom',
+            backdrop: 'static',
+            templateUrl: '/static/angular/checkins/partials/_modals/request-checkin.html',
+            controller: 'RequestCheckInController as request',
+            resolve: {
+
+            }
+        });
+        modalInstance.result.then(
+            function (request) {
+                console.log(request);
+                vm.myRequests.push(request);
+            }
+        );
+    }
+
+    function requestFeedback() {
+        var modalInstance = $modal.open({
+            animation: true,
+            windowClass: 'xx-dialog fade zoom',
+            backdrop: 'static',
+            templateUrl: '/static/angular/feedback/partials/_modals/request-feedback.html',
+            controller: 'RequestFeedbackController as request',
+            resolve: {
+
+            }
+        });
+        modalInstance.result.then(
+            function (sentFeedbackRequests) {
+                getMyRecentlySentRequests();
+            }
+        );
     }
 }

@@ -12,8 +12,9 @@
         </div>
         <div class="profile-info-container" style="display: inline-block;width: 504px;">
             <div class="pull-right" style="height: 40px;" ng-if="profile.filter.view=='me'">
-                <button ng-class="{'fade-in': profile.filter.type == 'checkin', 'hide': profile.filter.type != 'checkin'}"  style="height: 35px;padding: 4px 20px;" class="btn btn-success" ng-click="myCheckins.requestCheckIn()" type="button"><i class="fa fa-comment"></i> Request<span class="hide-for-mobile"> Check-In</span></button>
-                <button ng-class="{'fade-in': profile.filter.type == 'feedbackdigest', 'hide': profile.filter.type != 'feedbackdigest'}" style="height: 35px;padding: 4px 20px;" class="btn btn-success" ng-click="myCheckins.requestCheckIn()" type="button"><i class="fa fa-comment"></i> Ask<span class="hide-for-mobile"> for Feedback</span></button>
+                <button ng-class="{'fade-in': profile.filter.type == 'checkin', 'hide': profile.filter.type != 'checkin'}"  style="height: 35px;padding: 4px 20px;" class="btn btn-success" ng-click="profile.requestCheckIn()" type="button"><i class="fa fa-comment"></i> Request<span class="hide-for-mobile"> Check-In</span></button>
+                <button ng-class="{'fade-in': profile.filter.type == 'feedbackdigest', 'hide': profile.filter.type != 'feedbackdigest'}" style="height: 35px;padding: 4px 20px;" class="btn btn-success" ng-click="profile.requestFeedback()" type="button"><i class="fa fa-comment"></i> Ask<span class="hide-for-mobile"> for Feedback</span></button>
+
             </div>
             <div class="pull-right" style="height: 40px;" ng-if="profile.filter.view!='me'">
                 <a ng-class="{'fade-in': !profile.filter.type, 'hide': profile.filter.type}"  style="height: 35px;" class="btn btn-success" ng-href="#/checkin/{{profile.filter.employee.id}}" type="button"><i class="fa fa-check"></i> Check-In<span class="hide-for-mobile"> with {{profile.filter.employee.first_name}}</span></a>
@@ -28,6 +29,7 @@ His go to is to present logical arguments backed by specifics and reality."</div
         </div>
         <div>
             <div class="profile-info-container" collapse="profile.moreInfoCollapse">
+                <div class="fade-in" ng-show="profile.filter.view=='me'" ng-include="'/static/angular/profile/partials/_widgets/employee-summary.html'"></div>
                 <div class="fade-in" ng-show="profile.filter.view=='employee'" ng-include="'/static/angular/profile/partials/_widgets/employee-summary.html'"></div>
                 <div class="fade-in" ng-show="profile.filter.view=='leader'" ng-include="'/static/angular/profile/partials/_widgets/leader-summary.html'"></div>
                 <div class="fade-in" ng-show="profile.filter.view=='coach'" ng-include="'/static/angular/profile/partials/_widgets/coach-summary.html'"></div>
@@ -41,15 +43,15 @@ His go to is to present logical arguments backed by specifics and reality."</div
             <div class="activity-filter-item" ng-class="{'selected': profile.filter.type=='checkin'}" ng-click="profile.filterCommentsByType('checkin')"><span class="fa fa-check activity-filter-item-icon"></span><span class="activity-filter-item-label">Check-Ins</span></div>
             <div class="activity-filter-item" ng-class="{'selected': profile.filter.type=='feedbackdigest'}" ng-click="profile.filterCommentsByType('feedbackdigest')"><span class="fa fa-send activity-filter-item-icon"></span><span class="activity-filter-item-label">Feedback</span></div>
             <div class="activity-filter-item" ng-class="{'selected': profile.filter.type=='employeezone'}" ng-click="profile.filterCommentsByType('employeezone')"><span class="fa fa-heartbeat activity-filter-item-icon"></span><span class="activity-filter-item-label">ID</span></div>
-            <div class="activity-filter-item" ng-class="{'selected': profile.filter.type=='comment'}" ng-click="profile.filterCommentsByType('comment')"><span class="fa fa-pencil-square-o activity-filter-item-icon"></span><span class="activity-filter-item-label">Notes</span></div>
+            <div ng-if="profile.filter.view!='me'" class="activity-filter-item" ng-class="{'selected': profile.filter.type=='comment'}" ng-click="profile.filterCommentsByType('comment')"><span class="fa fa-pencil-square-o activity-filter-item-icon"></span><span class="activity-filter-item-label">Notes</span></div>
             <div ng-repeat="third_party in profile.third_parties" class="activity-filter-item" ng-class="{'selected': profile.filter.third_party==third_party.name}" ng-click="profile.filterCommentsByThirdParty(third_party.name)"><img ng-src="{{ third_party.image_url }}" alt="Third party image" class="activity-filter-item-icon"/><span class="activity-filter-item-label">{{third_party.name}}</span></div>
 
         </div>
     </div>
-    <div ng-if="filter.view!='me'" ng-controller="ActivityCtrl" data-view="employee">
+    <div ng-if="profile.filter.view!='me'" ng-controller="ActivityCtrl" data-view="employee">
         <div ng-include="'/static/angular/activity/partials/activity.html'"></div>
     </div>
-    <div ng-if="filter.view=='me'" ng-controller="ActivityCtrl" data-view="me">
+    <div ng-if="profile.filter.view=='me'" ng-controller="ActivityCtrl" data-view="me">
         <div ng-include="'/static/angular/activity/partials/activity.html'"></div>
     </div>
 </div>
