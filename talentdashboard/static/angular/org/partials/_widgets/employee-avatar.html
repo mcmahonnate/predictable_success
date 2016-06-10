@@ -1,0 +1,11 @@
+<span class="small-headshot">
+    <span ng-if='$root.currentUser.employee.id!=employee().id'>
+        <a ng-if='employee().requester_has_access' ng-href="#/employees/{{ employee().id }}">
+            <img ng-src="{{ employee().avatar_small }}" alt="{{ employee().full_name }}'s avatar" class="headshot-image"/>
+        </a>
+        <img ng-if='!employee().requester_has_access' ng-src="{{ employee().avatar_small }}" alt="{{ employee().full_name }}'s avatar" class="headshot-image"/>
+    </span>
+    <span ng-if='$root.currentUser.employee.id==employee().id'>
+        <img ng-src="{{ employee().avatar_small }}" alt="{{ employee().full_name }}'s avatar" class="headshot-image"/>
+    </span>
+</span>

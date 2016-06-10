@@ -92,12 +92,9 @@
                       title="{{ comment.created_date | date:'MMM d, yyyy h:mma' }}" style="vertical-align: top">{{ comment.created_date | fromNow }}</span>
                 </div>
                 <div class="comment-reply-avatar-container">
-                    <a ng-href="#/employees/{{ comment.owner.employee.id }}" class="small-headshot">
-                        <img ng-src="{{ comment.owner.employee.avatar_small }}"
-                             alt="{{ comment.owner.employee.full_name }}'s avatar" class="headshot-image"/>
-                    </a>
+                    <employee-avatar employee="comment.owner.employee"></employee-avatar>
                 </div>
-                <a class="comment-reply-name" ng-href="#/employees/{{ comment.owner.employee.id }}">{{ comment.owner.employee.full_name }}</a>
+                <employee-name employee="comment.owner.employee"></employee-name>
 
 
                 <div style="padding-left:50px;" ng-show="editMode">

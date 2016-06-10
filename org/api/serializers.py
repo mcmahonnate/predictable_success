@@ -11,16 +11,25 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'name', 'leader')
 
 
-class SanitizedEmployeeSerializer(serializers.HyperlinkedModelSerializer):
+class BaseEmployeeSerializer(serializers.HyperlinkedModelSerializer):
+    requester_has_access = serializers.SerializerMethodField()
+
+    def get_requester_has_access(self, obj):
+        if 'request' in self.context:
+            return obj.is_viewable_by_user(self.context['request'].user)
+        return False
+
+
+class SanitizedEmployeeSerializer(BaseEmployeeSerializer):
     ''' Contains only information about an employee that can be displayed to any user.
     '''
 
     class Meta:
         model = Employee
-        fields = ('id', 'full_name', 'first_name', 'last_name', 'avatar', 'avatar_small')
+        fields = ('id', 'full_name', 'first_name', 'last_name', 'avatar', 'avatar_small', 'requester_has_access')
 
 
-class SanitizedEmployeeWithRelationshpsSerializer(serializers.HyperlinkedModelSerializer):
+class SanitizedEmployeeWithRelationshpsSerializer(BaseEmployeeSerializer):
     ''' Contains only information about an employee that can be displayed to any user.
     '''
     coach = SanitizedEmployeeSerializer()
@@ -28,10 +37,10 @@ class SanitizedEmployeeWithRelationshpsSerializer(serializers.HyperlinkedModelSe
 
     class Meta:
         model = Employee
-        fields = ('id', 'full_name', 'first_name', 'last_name', 'avatar', 'avatar_small', 'coach', 'leader')
+        fields = ('id', 'full_name', 'first_name', 'last_name', 'avatar', 'avatar_small', 'requester_has_access', 'coach', 'leader')
 
 
-class MinimalEmployeeSerializer(serializers.HyperlinkedModelSerializer):
+class MinimalEmployeeSerializer(BaseEmployeeSerializer):
     avatar = serializers.SerializerMethodField()
     avatar_small = serializers.SerializerMethodField()
     current_talent_category = serializers.SerializerMethodField()
@@ -49,14 +58,17 @@ class MinimalEmployeeSerializer(serializers.HyperlinkedModelSerializer):
         return url
 
     def get_current_talent_category(self, obj):
-        return obj.current_talent_category()
+        if 'request' in self.context and \
+                obj.is_viewable_by_user(self.context['request'].user):
+            return obj.current_talent_category()
+        return None
 
     class Meta:
         model = Employee
-        fields = ('id', 'full_name', 'first_name', 'display', 'avatar', 'avatar_small', 'current_talent_category')
+        fields = ('id', 'full_name', 'first_name', 'display', 'avatar', 'avatar_small', 'requester_has_access', 'current_talent_category', 'requester_has_access')
 
 
-class EmployeeNameSerializer(serializers.HyperlinkedModelSerializer):
+class EmployeeNameSerializer(BaseEmployeeSerializer):
     avatar = serializers.SerializerMethodField()
     avatar_small = serializers.SerializerMethodField()
 
@@ -74,16 +86,16 @@ class EmployeeNameSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Employee
-        fields = ('id', 'full_name', 'first_name', 'display', 'avatar', 'avatar_small')
+        fields = ('id', 'full_name', 'first_name', 'display', 'avatar', 'avatar_small', 'requester_has_access')
 
 
-class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
+class EmployeeSerializer(BaseEmployeeSerializer):
     team = TeamSerializer()
-    coach = MinimalEmployeeSerializer()
-    leader = MinimalEmployeeSerializer()
+    coach = serializers.SerializerMethodField()
+    leader = serializers.SerializerMethodField()
     avatar = serializers.SerializerMethodField()
     avatar_small = serializers.SerializerMethodField()
-    happiness_verbose  = serializers.SerializerMethodField()
+    happiness_verbose = serializers.SerializerMethodField()
     happiness = serializers.SerializerMethodField()
     happiness_date = serializers.SerializerMethodField()
     kolbe_fact_finder = serializers.SerializerMethodField()
@@ -99,6 +111,13 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
     talent_category = serializers.SerializerMethodField()
     last_checkin_date = serializers.SerializerMethodField()
 
+    def get_coach(self, obj):
+        serializer = MinimalEmployeeSerializer(context=self.context)
+        return serializer.to_representation(obj.coach)
+
+    def get_leader(self, obj):
+        serializer = MinimalEmployeeSerializer(context=self.context)
+        return serializer.to_representation(obj.leader)
 
     def get_happiness_verbose(self, obj):
         if obj.current_happiness is None:
@@ -204,10 +223,9 @@ class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
         except ObjectDoesNotExist:
             return None   
 
-
     class Meta:
         model = Employee
-        fields = ('id', 'full_name', 'first_name', 'last_name', 'gender', 'email', 'avatar', 'avatar_small', 'job_title', 'hire_date', 'leader', 'happiness', 'happiness_date', 'happiness_verbose', 'coach', 'kolbe_fact_finder','kolbe_follow_thru', 'kolbe_quick_start', 'kolbe_implementor', 'vops_visionary', 'vops_operator', 'vops_processor', 'vops_synergist', 'departure_date', 'team', 'display', 'current_salary', 'current_bonus', 'talent_category', 'last_checkin_date', 'is_lead', 'is_coach')
+        fields = ('id', 'full_name', 'first_name', 'last_name', 'gender', 'email', 'avatar', 'avatar_small', 'requester_has_access', 'job_title', 'hire_date', 'leader', 'happiness', 'happiness_date', 'happiness_verbose', 'coach', 'kolbe_fact_finder','kolbe_follow_thru', 'kolbe_quick_start', 'kolbe_implementor', 'vops_visionary', 'vops_operator', 'vops_processor', 'vops_synergist', 'departure_date', 'team', 'display', 'current_salary', 'current_bonus', 'talent_category', 'last_checkin_date', 'is_lead', 'is_coach')
 
 
 class SimpleUserSerializer(serializers.ModelSerializer):
@@ -303,6 +321,7 @@ class AttributeSerializer(serializers.HyperlinkedModelSerializer):
         model = Attribute
         fields = ['employee', 'name', 'category', 'display']
 
+
 class CreateEmployeeSerializer(serializers.HyperlinkedModelSerializer):
     team = serializers.PrimaryKeyRelatedField(allow_null=True, required=False, queryset=Team.objects.all())
     coach = serializers.PrimaryKeyRelatedField(allow_null=True, required=False, queryset=Employee.objects.all())
@@ -311,6 +330,7 @@ class CreateEmployeeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Employee
         fields = ('first_name', 'last_name', 'email', 'job_title', 'hire_date', 'team', 'display', 'coach', 'leader')
+
 
 class EditEmployeeSerializer(serializers.HyperlinkedModelSerializer):
     team = serializers.PrimaryKeyRelatedField(allow_null=True, queryset=Team.objects.all())

@@ -96,16 +96,6 @@ class EmployeeDetail(APIView):
             return Response(serializer.errors, status=400)
 
 
-class Profile(APIView):
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request, format=None):
-        current_user = request.user
-        if current_user.employee is not None:
-            serializer = EmployeeSerializer(current_user.employee, context={'request': request})
-            return Response(serializer.data)
-        return Response(None, status=status.HTTP_404_NOT_FOUND)
-
 class CurrentCoach(RetrieveAPIView):
     serializer_class = SanitizedEmployeeSerializer
 

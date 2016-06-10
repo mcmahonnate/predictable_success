@@ -1,5 +1,7 @@
 <span>
-    <a ng-if='$root.currentUser.employee.id!=employee().id' ng-href='#/employees/{{ employee().id }}' class='activity-title-employee-name'>{{ employee().full_name }}</a>
+    <span ng-if='$root.currentUser.employee.id!=employee().id'>
+        <a ng-if='employee().requester_has_access' ng-href='#/employees/{{ employee().id }}' class='activity-title-employee-name'>{{ employee().full_name }}</a>
+        <strong ng-if='!employee().requester_has_access'>{{ employee().full_name }}</strong>
+    </span>
     <strong ng-if='$root.currentUser.employee.id==employee().id'>You</strong>
-    {{employee}}
 </span>

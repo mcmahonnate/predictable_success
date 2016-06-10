@@ -9,7 +9,7 @@
                         <img ng-src="{{ profile.employee.leader.avatar_small }}" alt="{{ profile.employee.leader.full_name }}'s avatar" class="headshot-image"/>
                     </div>
                     <div style="display: inline-block;margin: auto 0px">
-                        <strong><a ng-href="#/employees/{{profile.employee.leader.id}}">{{ profile.employee.leader.full_name }}</a></strong>
+                        <employee-name employee="profile.employee.leader"></employee-name>
                         <div style="color: #aaa;">Team Lead</div>
                     </div>
                 </div>
@@ -18,7 +18,7 @@
                         <img ng-src="{{ profile.employee.coach.avatar_small }}" alt="{{ profile.employee.coach.full_name }}'s avatar" class="headshot-image"/>
                     </div>
                     <div style="display: inline-block;margin: auto 0px;">
-                        <strong><a ng-href="#/employees/{{profile.employee.coach.id}}">{{ profile.employee.coach.full_name }}</a></strong>
+                        <employee-name employee="profile.employee.coach"></employee-name>
                         <div style="color: #aaa;">Coach</div>
                     </div>
                 </div>

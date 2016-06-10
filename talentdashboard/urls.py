@@ -10,7 +10,7 @@ from views.payment import ChargeView, PaymentView
 from views.homepage import IndexView
 from insights.views import Signup, Report, Survey, Confirmation
 from engagement.api.views import RetrieveUpdateDestroyHappiness, CreateHappiness, EmployeeHappinessList
-from org.api.views import Profile, EmployeeDetail, account_activate, account_activate_login
+from org.api.views import EmployeeDetail, account_activate, account_activate_login
 
 router = routers.DefaultRouter()
 router.register(r'^api/v1/teams', TeamViewSet)
@@ -104,9 +104,6 @@ urlpatterns = [
     url(r'^api/v1/org/', include('org.api.urls')),
     url(r'^api/v1/qualities/', include('qualities.api.urls')),
     url(r'^api/v1/search/', include('search.api.urls')),
-
-
-    url(r'^api/v1/profile/$', Profile.as_view()),
 
     #url(r'^slack/$', Slack.as_view()),
 

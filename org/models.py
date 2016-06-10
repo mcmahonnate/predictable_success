@@ -16,8 +16,6 @@ import datetime
 import blah
 
 
-
-
 class Relationship(models.Model):
     RELATION_TYPES = Choices(
         ('coach', _('Coach')),
