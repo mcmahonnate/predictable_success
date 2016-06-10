@@ -14,7 +14,7 @@
         <span class="large-headshot">
             <img ng-src="{{ employee().avatar_small }}" alt="{{ employee().full_name }}" class="headshot-image"/>
         </span>
-        <div ng-if="employee().current_talent_category" class="employee-attribute" rel="tooltip" data-toggle="tooltip" data-placement="right"
+        <div ng-if="employee().current_talent_category && $root.currentUser.employee.id!=employee().id" class="employee-attribute" rel="tooltip" data-toggle="tooltip" data-placement="right"
              data-original-title="{{ talentCategories[employee().current_talent_category].label }}">
             <span class="segment employee-segment-background-color-{{ employee().current_talent_category }}"></span>
         </div>
