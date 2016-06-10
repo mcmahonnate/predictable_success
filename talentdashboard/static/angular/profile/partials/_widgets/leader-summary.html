@@ -4,7 +4,7 @@
             <div class="profile-summary-label">Team</div>
             <div style="padding: 0 5px; min-height: 65px;display: flex;padding-top:5px">
 
-                <div ng-repeat="employee in profile.teamMembers" class="pull-left" style="width: 250px;">
+                <div ng-repeat="employee in profile.teamMembers | orderBy:'lft'" class="pull-left" style="width: 250px;">
                     <div class="small-headshot" style="display: inline-block;width:40px">
                         <img ng-src="{{ employee.avatar_small }}" alt="{{ employee.full_name }}'s avatar" class="headshot-image"/>
                     </div>

@@ -62,7 +62,7 @@ function ProfileController(Employee, EmployeeSearch, Profile, SalaryReport, Tale
     }
 
     function getTeamSummary() {
-        if (vm.isSelf) {
+        if (vm.filter.self) {
             vm.teamMembers = EmployeeSearch.myTeam();
             $scope.talentReport = TalentReport.myTeam();
             $scope.salaryReport = SalaryReport.myTeam();
@@ -74,7 +74,7 @@ function ProfileController(Employee, EmployeeSearch, Profile, SalaryReport, Tale
     }
 
     function getCoachSummary() {
-        if (vm.isSelf) {
+        if (vm.filter.self) {
             vm.coachees = EmployeeSearch.myCoachees();
             $scope.talentReport = TalentReport.myCoachees();
         }
