@@ -127,7 +127,6 @@ function ProfileController(Employee, EmployeeSearch, Profile, SalaryReport, Tale
         });
         modalInstance.result.then(
             function (request) {
-                console.log(request);
                 vm.myRequests.push(request);
             }
         );
