@@ -8,11 +8,13 @@ angular.module('tdb.activity.controllers', [])
             $scope.showHeader = ($attrs.showHeader!='false');
         }
         $scope.events = [];
-        $scope.filter = {type: null, view: $attrs.view, third_party: null, employee: null};;
+        $scope.filter = {type: null, view: $attrs.view, third_party: null, employee: null};
         $scope.nextPage = 1;
         $scope.hasNextPage = true;
         $scope.busy = false;
         $scope.reloadFinished = true;
+        $scope.loadNextPage = loadNextPage;
+
 
         function finishLoading(){
             if (!pause && loaded) {
@@ -28,7 +30,7 @@ angular.module('tdb.activity.controllers', [])
             }
         }
 
-        $scope.loadNextPage = function() {
+        function loadNextPage() {
             if ($scope.hasNextPage && !$scope.busy) {
                 $scope.busy = true;
                 if ($scope.nextPage == 1) {
@@ -36,6 +38,7 @@ angular.module('tdb.activity.controllers', [])
                     $scope.reloadFinished = false;
                 }
                 var request = null;
+                console.log($scope.filter);
                 switch ($scope.filter.view) {
                     case 'employee':
                         request = Event.getEmployeeEvents($routeParams.id, $scope.nextPage, $scope.filter.type, $scope.filter.third_party);
@@ -72,13 +75,11 @@ angular.module('tdb.activity.controllers', [])
             }
         };
 
-        $scope.loadNextPage();
-
         $scope.$on("filterComments", function(e, filter) {
             $scope.nextPage = 1;
             $scope.hasNextPage = true;
             $scope.filter = filter;
-            $scope.loadNextPage();
+            loadNextPage();
         });
 
         $rootScope.$on("comments.commentCreated", function(e, comment) {

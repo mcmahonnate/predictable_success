@@ -16,9 +16,8 @@ function ProfileController(Employee, EmployeeSearch, Profile, SalaryReport, Tale
     vm.filterCommentsByThirdParty = filterCommentsByThirdParty;
     vm.requestFeedback = requestFeedback;
     vm.requestCheckIn = requestCheckIn;
-    vm.filter = {type: null, view: 'employee', third_party: null, employee: null};
+    vm.filter = {type: null, view: 'employee', third_party: null, employee: null, self: true};
     vm.third_parties = [];
-    vm.isSelf = false;
 
     activate();
 
@@ -30,7 +29,7 @@ function ProfileController(Employee, EmployeeSearch, Profile, SalaryReport, Tale
     function getEmployee() {
         var id;
         if ($routeParams.id) {
-            vm.isSelf = false;
+            vm.filter.self = false;
             Employee.get(
                 {id: $routeParams.id},
                 function (data) {
@@ -40,7 +39,7 @@ function ProfileController(Employee, EmployeeSearch, Profile, SalaryReport, Tale
                 }
             );
         } else {
-            vm.isSelf = true;
+            vm.filter.self = true;
             Profile.get(
                 null,
                 function (data) {

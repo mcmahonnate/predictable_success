@@ -223,7 +223,7 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
     return {
         restrict: 'E',
         replace: true,
-        scope:{'employee': '&'},
+        scope:{'employee': '&', size: '@'},
         templateUrl: '/static/angular/org/partials/_widgets/employee-avatar.html',
         link: function (scope, element, attrs) {
         }

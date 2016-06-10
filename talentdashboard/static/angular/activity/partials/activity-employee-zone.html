@@ -11,13 +11,8 @@
     </div>
     <a class="activity-checkin row" href="#/id/{{ event.related_object.conversation_id }}">
         <div class="avatar-container col-xs-2">
-            <span class="large-headshot">
-                <img ng-src="{{ event.employee.avatar_small }}" alt="{{ event.employee.full_name }}" class="headshot-image"/>
-            </span>
-            <div class="employee-attribute" rel="tooltip" data-toggle="tooltip" data-placement="right"
-                 data-original-title="{{ talentCategories[event.employee.current_talent_category].label }}">
-                <span class="segment employee-segment-background-color-{{ event.employee.current_talent_category }}"></span>
-            </div>
+            <employee-avatar ng-if="!filter.self || filter.view!='employee'" size="large" employee="event.employee"></employee-avatar>
+            <employee-avatar ng-if="filter.self && filter.view=='employee'" size="large" employee="event.user.employee"></employee-avatar>
         </div>
         <div class="activity-checkin-details" ng-class="{'col-xs-12 col-sm-10': view='employee-view', 'col-xs-12 col-sm-10': view='team'}">
             <div class="activity-checkin-type pull-right">
@@ -57,7 +52,7 @@
                       title="{{ comment.created_date | date:'MMM d, yyyy h:mma' }}" style="vertical-align: top">{{ comment.created_date | fromNow }}</span>
                 </div>
                 <div class="comment-reply-avatar-container">
-                    <employee-avatar employee="comment.owner.employee"></employee-avatar>
+                    <employee-avatar size="small" employee="comment.owner.employee"></employee-avatar>
                 </div>
                 <employee-name employee="comment.owner.employee"></employee-name>
 
