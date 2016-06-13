@@ -13,8 +13,8 @@ class Command(BaseCommand):
         limit = 25
         tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
         if tenant.is_public_tenant() or \
-                tenant.yei_api_url is None or \
-                tenant.yei_api_token is None:
+                not tenant.yei_api_url or \
+                not tenant.yei_api_token:
             return
         # Get yei feed
         api_url = "https://%s:%s@%s/api/2/user_profiles?filter=active&per_page=%s" % ('fool', tenant.yei_api_token, tenant.yei_api_url, limit)
