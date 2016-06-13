@@ -1,12 +1,14 @@
 from django.core.mail import EmailMultiAlternatives
 from django.core.management.base import BaseCommand
 from django.db import connection
+from django.db.models import Count
+from django.conf import settings
 from django.template import Context
 from django.template.loader import render_to_string
 from django.conf import settings
 from customers.models import Customer
 from org.models import Employee
-from feedback.models import FeedbackRequest, FeedbackSubmission
+from feedback.models import FeedbackSubmission
 
 
 class Command(BaseCommand):
@@ -22,12 +24,21 @@ class Command(BaseCommand):
             feedback_submissions = FeedbackSubmission.objects.received_not_delivered()
             coachee_ids = coach.coachees.values_list('id', flat=True)
             feedback_submissions = feedback_submissions.filter(subject__id__in=coachee_ids).order_by('subject__full_name')
-            if feedback_submissions.count() > 0:
-                subject = 'Weekly Feedback Report'
+            feedback_submissions = feedback_submissions.values('subject__id', 'subject__full_name', 'subject__avatar_small').annotate(submission_count=Count('subject__id'))
+            submissions_count = feedback_submissions.count()
+            print feedback_submissions
+            print feedback_submissions
+            if submissions_count > 0:
+                if submissions_count == 1:
+                    subject = '%s of your Coachees has feedback waiting for them' % submissions_count
+                else:
+                    subject = '%s of your Coachees have feedback waiting for them' % submissions_count
                 context = Context(
                     {
                         'site': tenant.domain_url,
+                        'image_site': settings.S3_URL,
                         'feedback_submissions': feedback_submissions,
+                        'num_of_coachees': submissions_count,
                         'coach': coach
                     }
                 )

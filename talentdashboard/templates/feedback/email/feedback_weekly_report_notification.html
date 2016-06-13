@@ -1,5 +1,43 @@
 {% extends "layouts/email.html" %}
 
 {% block content %}
-
+    {% if num_of_coachees > 1 %}
+        <p>We noticed {{ num_of_coachees }} of your Coachees have feedback waiting to be delivered to them.
+            Click the links below to review, prepare and deliver their feedback.
+        </p>
+    {% else %}
+        <p>We noticed one of your Coachees has feedback waiting to be delivered to them.
+            Click the link below to review, prepare and deliver their feedback.
+        </p>
+    {% endif %}
+    <br/>
+    <br/>
+    <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;border-spacing:0;width:100%;text-align:justify;margin:0;padding:0;border-width:0;">
+        <tbody>
+        {% load feedback_extras %}
+        {% for feedback_submission in feedback_submissions %}
+            {% if forloop.counter|divisibleby:2 %}
+                <tr>
+            {% else %}
+                <tr style="background-color: #f9f9f9;">
+            {% endif %}
+                <td valign="top" style="height:80px;width:50px">
+                    <img class="medium-headshot" height="50" style="vertical-align:text-top;" src="{{ image_site }}{{ feedback_submission.subject__avatar_small | remove_beginning_slash }}"/></a>
+                </td>
+                <td valign="top">
+                    <p>
+                    <a href="https://{{site}}/#/feedback/{{feedback_submission.subject__id}}/worksheet/"><b>{{feedback_submission.subject__full_name}}</b></a>
+                        {% if feedback_submission.submission_count > 1 %}
+                            has {{feedback_submission.submission_count}} pieces of feedback waiting. Click here to get the deets:
+                        {% else %}
+                            has {{feedback_submission.submission_count}} piece of feedback waiting. Click here to get the deets:
+                        {% endif %}
+                        <br/>
+                    <a href="https://{{site}}/#/feedback/{{feedback_submission.subject__id}}/worksheet/">https://{{site}}/#/feedback/{{feedback_submission.subject__id}}/worksheet/</a>
+                    <br/>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock content%}
