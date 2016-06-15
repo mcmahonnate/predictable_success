@@ -7,6 +7,7 @@
         BaseSubmitFeedbackController.call(this, $location, $modal, $rootScope);
         
         var vm = this;
+        vm.employeeId = $routeParams.employeeId;
         vm.mySubmissions = [];
         vm.employees = [];
         vm.subject = null;
@@ -14,7 +15,7 @@
         activate();
  
         function activate() {
-            if ($routeParams.employeeId) {
+            if (vm.employeeId) {
                 getEmployee();
             }
             else
@@ -38,7 +39,7 @@
 
         function getEmployee() {
             Employee.get(
-                {id: $routeParams.employeeId},
+                {id: vm.employeeId},
                 function (data) {
                     vm.subject = data;
                 }
