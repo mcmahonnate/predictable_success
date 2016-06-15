@@ -11,7 +11,9 @@ from serializers import *
 from org.models import Employee
 from org.api.permissions import UserIsEmployee, UserIsCoachOfEmployee
 from ..models import FeedbackRequest, FeedbackProgressReport, FeedbackProgressReports, FeedbackDigest, EmployeeFeedbackReports, EmployeeSubmissionReport
+from ..signals import post_many_save
 from permissions import UserIsEmployeeOrDigestDeliverer, UserIsSubjectOrReviewerOrCoach
+
 
 # FeedbackRequest
 class CreateFeedbackRequest(CreateAPIView):
@@ -32,7 +34,8 @@ class CreateFeedbackRequest(CreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
-        serializer.save(requester=self.request.user.employee)
+        feedback_requests = serializer.save(requester=self.request.user.employee)
+        post_many_save.send(sender=FeedbackRequest, requester=self.request.user.employee, feedback_requests=feedback_requests)
 
 
 class RecentFeedbackRequestsIveSentList(ListAPIView):

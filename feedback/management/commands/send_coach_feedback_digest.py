@@ -26,8 +26,6 @@ class Command(BaseCommand):
             feedback_submissions = feedback_submissions.filter(subject__id__in=coachee_ids).order_by('subject__full_name')
             feedback_submissions = feedback_submissions.values('subject__id', 'subject__full_name', 'subject__avatar_small').annotate(submission_count=Count('subject__id'))
             submissions_count = feedback_submissions.count()
-            print feedback_submissions
-            print feedback_submissions
             if submissions_count > 0:
                 if submissions_count == 1:
                     subject = '%s of your Coachees has feedback waiting for them' % submissions_count

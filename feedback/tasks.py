@@ -7,6 +7,7 @@ from django.db import connection
 from customers.models import Customer
 from org.models import Employee
 from datetime import datetime, timedelta
+import requests
 
 @app.task
 def send_feedback_request_email(request_id):
@@ -141,3 +142,17 @@ def send_feedback_was_helpful_email(employee_id, days_ago):
     msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
     msg.attach_alternative(html_content, "text/html")
     msg.send()
+
+
+@app.task
+def send_coach_coachee_requested_feedback_slack(coach_slack_name, coachee_id, coachee_name, reviewer_names):
+    if len(reviewer_names) == 1:
+        names = reviewer_names[0]
+    else:
+        names = ', '.join(reviewer_names[:-1]) + ' & ' + reviewer_names[-1]
+    link = "<https://fool.scoutmap.com/#/feedback/%s/worksheet|Click here>" % coachee_id
+    channel = "@%s" % coach_slack_name
+    text = "One of the people you coach, %s, just requested feedback from %s. %s to check it out!" % (coachee_name, names, link)
+    data = {"channel": channel, "text": text}
+    tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
+    requests.post(tenant.slack_bot, json=data)
