@@ -1,15 +1,18 @@
 {% extends "layouts/email.html" %}
 
 {% block content %}
+    <p style="font-size: 15px;">
+        Hi {{ coach.first_name }},
+    </p>
+    <p style="font-size: 15px;">
     {% if num_of_coachees > 1 %}
-        <p>We noticed {{ num_of_coachees }} of your Coachees have feedback waiting to be delivered to them.
+        We noticed {{ num_of_coachees }} of your Coachees have feedback waiting to be delivered to them.
             Click the links below to review, prepare and deliver their feedback.
-        </p>
     {% else %}
-        <p>We noticed one of your Coachees has feedback waiting to be delivered to them.
+        We noticed one of your Coachees has feedback waiting to be delivered to them.
             Click the link below to review, prepare and deliver their feedback.
-        </p>
     {% endif %}
+    </p>
     <br/>
     <br/>
     <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;border-spacing:0;width:100%;text-align:justify;margin:0;padding:0;border-width:0;">
@@ -28,12 +31,21 @@
                     <p>
                     <a href="https://{{site}}/#/feedback/{{feedback_submission.subject__id}}/worksheet/"><b>{{feedback_submission.subject__full_name}}</b></a>
                         {% if feedback_submission.submission_count > 1 %}
-                            has {{feedback_submission.submission_count}} pieces of feedback waiting. Click here to get the deets:
+                            has {{feedback_submission.submission_count}} pieces of feedback waiting.
                         {% else %}
-                            has {{feedback_submission.submission_count}} piece of feedback waiting. Click here to get the deets:
+                            has {{feedback_submission.submission_count}} piece of feedback waiting.
+                        {% endif %}
+                        {% if feedback_submission.request_count > 0 %}
+                            {% if feedback_submission.request_count > 1 %}
+                                    {{feedback_submission.subject__first_name}} is still waiting for {{ feedback_submission.request_count }} more people to give feedback.
+                            {% else %}
+                                    {{feedback_submission.subject__first_name}} is just waiting for one more person to leave feedback.
+                            {% endif %}
                         {% endif %}
                         <br/>
-                    <a href="https://{{site}}/#/feedback/{{feedback_submission.subject__id}}/worksheet/">https://{{site}}/#/feedback/{{feedback_submission.subject__id}}/worksheet/</a>
+                        <br/>
+                        <a href="https://{{site}}/#/feedback/{{feedback_submission.subject__id}}/worksheet/">Click here to see more.</a>
+                        <br/>
                     <br/>
                 </td>
             </tr>

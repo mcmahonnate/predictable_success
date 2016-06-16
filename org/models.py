@@ -38,7 +38,7 @@ class Relationship(models.Model):
 class EmployeeManager(TreeManager):
     def get_coaches(self):
         coaches = self.get_current_employees()
-        return coaches.filter(coachees__isnull=False).order_by('full_name')
+        return coaches.exclude(coachees__isnull=True).order_by('full_name')
 
     def get_current_employees(self, team_id=None, show_hidden=False):
         employees = self.filter(departure_date__isnull=True)
