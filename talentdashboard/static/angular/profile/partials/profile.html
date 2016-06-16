@@ -12,6 +12,7 @@
         </div>
         <div class="profile-info-container" style="display: inline-block;width: 504px;">
             <div class="pull-right" style="height: 40px;" ng-if="profile.filter.self && profile.filter.view=='employee'">
+                <button ng-class="{'fade-in': !profile.filter.type, 'hide': profile.filter.type}"  style="height: 35px;padding: 4px 20px;" class="btn btn-success" ng-click="profile.requestCheckIn()" type="button"><i class="fa fa-comment"></i> Request<span class="hide-for-mobile"> Check-In</span></button>
                 <button ng-class="{'fade-in': profile.filter.type == 'checkin', 'hide': profile.filter.type != 'checkin'}"  style="height: 35px;padding: 4px 20px;" class="btn btn-success" ng-click="profile.requestCheckIn()" type="button"><i class="fa fa-comment"></i> Request<span class="hide-for-mobile"> Check-In</span></button>
                 <button ng-class="{'fade-in': profile.filter.type == 'feedbackdigest', 'hide': profile.filter.type != 'feedbackdigest'}" style="height: 35px;padding: 4px 20px;" class="btn btn-success" ng-click="profile.requestFeedback()" type="button"><i class="fa fa-comment"></i> Ask<span class="hide-for-mobile"> for Feedback</span></button>
             </div>
@@ -29,8 +30,7 @@
             </div>
             <h2 class="profile-info-lablel">{{profile.employee.full_name}}</h2>
             <span class="profile-info-sub-lablel">{{profile.employee.team.name}}</span>
-            <div class="profile-info-sub-lablel">"When Tim communicates he likes to classify data into explicit, understandable chunks.
-His go to is to present logical arguments backed by specifics and reality."</div>
+            <div class="profile-info-sub-lablel"></div>
         </div>
         <div>
             <div class="profile-info-container" collapse="profile.moreInfoCollapse">
