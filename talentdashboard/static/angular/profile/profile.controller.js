@@ -16,7 +16,7 @@ function ProfileController(Employee, EmployeeSearch, Profile, SalaryReport, Tale
     vm.filterCommentsByThirdParty = filterCommentsByThirdParty;
     vm.requestFeedback = requestFeedback;
     vm.requestCheckIn = requestCheckIn;
-    vm.filter = {type: null, view: 'employee', third_party: null, employee: null, self: true};
+    vm.filter = {type: null, view: 'employee', third_party: null, employee: null, self: true, exclude_third_party_events: true};
     vm.third_parties = [];
 
     activate();
@@ -87,6 +87,7 @@ function ProfileController(Employee, EmployeeSearch, Profile, SalaryReport, Tale
     function filterCommentsByType(type) {
         vm.filter.type = type;
         vm.filter.third_party = null;
+        vm.filter.exclude_third_party_events = true;
         filterComments();
     }
 
@@ -105,6 +106,7 @@ function ProfileController(Employee, EmployeeSearch, Profile, SalaryReport, Tale
 
     function filterCommentsByThirdParty(third_party) {
         vm.filter.type = 'thirdpartyevent';
+        vm.filter.exclude_third_party_events = false;
         vm.filter.third_party = third_party;
         filterComments();
 

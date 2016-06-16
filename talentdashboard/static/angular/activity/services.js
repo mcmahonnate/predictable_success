@@ -13,10 +13,10 @@ angular.module('tdb.activity.services', ['ngResource'])
             }
         };
         Event = $resource('/api/v1/events/:path/:id/', null, actions);
-        Event.getEmployeeEvents = function(id, page, type, third_party, success, failure) { return this.get({ path: 'employees', id: id, page: page, type: type, exclude_third_party_events: false, third_party: third_party}, success, failure); };
-        Event.getTeamEvents = function(id, page, type, third_party, success, failure) { return this.get({ path: 'teams', id: id, page: page, type: type, exclude_third_party_events: false, third_party: third_party}, success, failure); };
-        Event.getLeadEvents = function(id, page, type, third_party, success, failure) { return this.get({ path: 'leads', id: id, page: page, type: type, exclude_third_party_events: false, third_party: third_party}, success, failure); };
-        Event.getCoachEvents = function(id, page, type, third_party, success, failure) { return this.get({ path: 'coaches', id: id, page: page, type: type, exclude_third_party_events: false, third_party: third_party}, success, failure); };
+        Event.getEmployeeEvents = function(id, page, type, third_party, exclude_third_party_events, success, failure) { return this.get({ path: 'employees', id: id, page: page, type: type, exclude_third_party_events: exclude_third_party_events, third_party: third_party}, success, failure); };
+        Event.getTeamEvents = function(id, page, type, third_party, exclude_third_party_events, success, failure) { return this.get({ path: 'teams', id: id, page: page, type: type, exclude_third_party_events: exclude_third_party_events, third_party: third_party}, success, failure); };
+        Event.getLeadEvents = function(id, page, type, third_party, exclude_third_party_events, success, failure) { return this.get({ path: 'leads', id: id, page: page, type: type, exclude_third_party_events: exclude_third_party_events, third_party: third_party}, success, failure); };
+        Event.getCoachEvents = function(id, page, type, third_party, exclude_third_party_events, success, failure) { return this.get({ path: 'coaches', id: id, page: page, type: type, exclude_third_party_events: exclude_third_party_events, third_party: third_party}, success, failure); };
         return Event;
     }])
 
