@@ -6,6 +6,7 @@ from django.core.management.base import BaseCommand
 from django.db import connection
 from optparse import make_option
 from org.models import Employee, Team
+from search.indexes import EmployeeIndex
 import io
 import requests
 import urllib2 as urllib
@@ -211,4 +212,8 @@ class Command(BaseCommand):
                     last_record = namely_id
             else:
                 keep_alive = False
+        Employee.objects.rebuild()
+        indexer = EmployeeIndex()
+        employees = Employee.objects.all()
+        indexer.process(employees, tenant)
         return
