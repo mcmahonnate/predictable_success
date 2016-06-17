@@ -12,12 +12,14 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class BaseEmployeeSerializer(serializers.HyperlinkedModelSerializer):
+    can_view_talent_category = False
     requester_has_access = serializers.SerializerMethodField()
 
     def get_requester_has_access(self, obj):
-        #if 'request' in self.context:
-        #    return obj.is_viewable_by_user(self.context['request'].user)
-        return True
+        if 'request' in self.context:
+            self.can_view_talent_category = True
+            return obj.is_viewable_by_user(self.context['request'].user)
+        return False
 
 
 class SanitizedEmployeeSerializer(BaseEmployeeSerializer):
@@ -58,8 +60,7 @@ class MinimalEmployeeSerializer(BaseEmployeeSerializer):
         return url
 
     def get_current_talent_category(self, obj):
-        if 'request' in self.context and \
-                obj.is_viewable_by_user(self.context['request'].user):
+        if self.can_view_talent_category:
             return obj.current_talent_category()
         return None
 
