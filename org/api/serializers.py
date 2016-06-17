@@ -15,9 +15,9 @@ class BaseEmployeeSerializer(serializers.HyperlinkedModelSerializer):
     requester_has_access = serializers.SerializerMethodField()
 
     def get_requester_has_access(self, obj):
-        if 'request' in self.context:
-            return obj.is_viewable_by_user(self.context['request'].user)
-        return False
+        #if 'request' in self.context:
+        #    return obj.is_viewable_by_user(self.context['request'].user)
+        return True
 
 
 class SanitizedEmployeeSerializer(BaseEmployeeSerializer):
