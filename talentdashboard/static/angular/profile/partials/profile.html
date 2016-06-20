@@ -1,9 +1,23 @@
 <div class="profile">
-    <tabset class="profile-tabs" ng-show="profile.employee.is_lead || profile.employee.is_coach">
-        <tab index="0" heading="Profile" select="profile.filterCommentsByView('employee')"></tab>
-        <tab index="1" ng-show="profile.employee.is_lead" heading="Team" select="profile.filterCommentsByView('leader')"></tab>
-        <tab index="2" ng-show="profile.employee.is_coach" heading="Coachees" select="profile.filterCommentsByView('coach')"></tab>
-    </tabset>
+    <div style="height: 46px;">
+        <div class="pull-right"  ng-if="profile.filter.self && profile.filter.view=='employee'">
+            <button ng-class="{'btn-success': profile.filter.type!='checkin', 'btn-default': profile.filter.type=='checkin'}" style="height: 35px;padding: 4px 20px;" class="btn" ng-click="profile.requestFeedback()" type="button"><i class="fa fa-send"></i> Ask<span class="hide-for-mobile"> for Feedback</span></button>
+            <button ng-class="{'btn-default': profile.filter.type!='checkin', 'btn-success': profile.filter.type=='checkin'}" style="height: 35px;padding: 4px 20px;" class="btn btn-default" ng-click="profile.requestCheckIn()" type="button"><i class="fa fa-check"></i> Request<span class="hide-for-mobile"> Check-In</span></button>
+        </div>
+        <div class="pull-right" style="height: 40px;" ng-if="profile.filter.self && profile.filter.view!='employee'">
+            <a ng-class="{'btn-default': profile.filter.type!='checkin', 'btn-success': profile.filter.type=='checkin'}" style="height: 35px;padding: 6px 20px;" class="btn" ng-href="#/feedback/submit/" type="button"><i class="fa fa-send"></i> Give Feedback</a>
+            <a ng-class="{'btn-success': profile.filter.type!='checkin', 'btn-default': profile.filter.type=='checkin'}" style="height: 35px;padding: 6px 20px;" class="btn" ng-href="#/checkin/" type="button"><i class="fa fa-check"></i> Check-In</a>
+        </div>
+        <div class="pull-right" style="height: 40px;" ng-if="!profile.filter.self && profile.filter.view=='employee'">
+            <a ng-class="{'btn-success': profile.filter.type!='checkin', 'btn-default': profile.filter.type=='checkin'}" class="btn" style="height: 35px;padding: 6px 20px;" ng-href="#/feedback/submit/{{profile.filter.employee.id}}" type="button"><i class="fa fa-send"></i> Give Feedback</a>
+            <a ng-class="{'btn-default': profile.filter.type!='checkin', 'btn-success': profile.filter.type=='checkin'}" class="btn" style="height: 35px;padding: 6px 20px;" ng-href="#/checkin/{{profile.filter.employee.id}}" type="button"><i class="fa fa-check"></i> Check-In</a>
+        </div>
+        <tabset class="profile-tabs" ng-show="profile.employee.is_lead || profile.employee.is_coach">
+            <tab index="0" heading="Profile" select="profile.filterCommentsByView('employee')"></tab>
+            <tab index="1" ng-show="profile.employee.is_lead" heading="Team" select="profile.filterCommentsByView('leader')"></tab>
+            <tab index="2" ng-show="profile.employee.is_coach" heading="Coachees" select="profile.filterCommentsByView('coach')"></tab>
+        </tabset>
+    </div>
     <div class="profile-demographic panel" ng-class="{'has-top-tabs': profile.employee.is_lead || profile.employee.is_coach, 'profile-tab-selected': profile.filter.view=='employee'}">
         <div class="xxlarge-avatar-container" style="display: inline-block;">
             <div class="xxlarge-headshot centered">
@@ -11,23 +25,6 @@
             </div>
         </div>
         <div class="profile-info-container" style="display: inline-block;width: 504px;">
-            <div class="pull-right" style="height: 40px;" ng-if="profile.filter.self && profile.filter.view=='employee'">
-                <button ng-class="{'fade-in': !profile.filter.type, 'hide': profile.filter.type}"  style="height: 35px;padding: 4px 20px;" class="btn btn-success" ng-click="profile.requestCheckIn()" type="button"><i class="fa fa-comment"></i> Request<span class="hide-for-mobile"> Check-In</span></button>
-                <button ng-class="{'fade-in': profile.filter.type == 'checkin', 'hide': profile.filter.type != 'checkin'}"  style="height: 35px;padding: 4px 20px;" class="btn btn-success" ng-click="profile.requestCheckIn()" type="button"><i class="fa fa-comment"></i> Request<span class="hide-for-mobile"> Check-In</span></button>
-                <button ng-class="{'fade-in': profile.filter.type == 'feedbackdigest', 'hide': profile.filter.type != 'feedbackdigest'}" style="height: 35px;padding: 4px 20px;" class="btn btn-success" ng-click="profile.requestFeedback()" type="button"><i class="fa fa-comment"></i> Ask<span class="hide-for-mobile"> for Feedback</span></button>
-            </div>
-            <div class="pull-right" style="height: 40px;" ng-if="profile.filter.self && profile.filter.view!='employee'">
-                <a ng-class="{'fade-in': !profile.filter.type, 'hide': profile.filter.type}"  style="height: 35px;" class="btn btn-success" ng-href="#/checkin/" type="button"><i class="fa fa-check"></i> Check-In</a>
-                <a ng-class="{'fade-in': profile.filter.type == 'checkin', 'hide': profile.filter.type != 'checkin'}"  style="height: 35px;" class="btn btn-success" ng-href="#/checkin/" type="button"><i class="fa fa-check"></i> Check-In</a>
-                <a ng-class="{'fade-in': profile.filter.type == 'feedbackdigest', 'hide': profile.filter.type != 'feedbackdigest'}" style="height: 35px;" class="btn btn-success" ng-href="#/feedback/submit/" type="button"><i class="fa fa-send"></i> Give Feedback</a>
-                <button ng-class="{'fade-in': profile.filter.type == 'comment', 'hide': profile.filter.type != 'comment'}" style="height: 35px;" class="btn btn-success" ng-click="myCheckins.requestCheckIn()" type="button"><i class="fa fa-pencil"></i> Write a note </button>
-            </div>
-            <div class="pull-right" style="height: 40px;" ng-if="!profile.filter.self && profile.filter.view=='employee'">
-                <a ng-class="{'fade-in': !profile.filter.type, 'hide': profile.filter.type}"  style="height: 35px;" class="btn btn-success" ng-href="#/checkin/{{profile.filter.employee.id}}" type="button"><i class="fa fa-check"></i> Check-In<span class="hide-for-mobile"> with {{profile.filter.employee.first_name}}</span></a>
-                <a ng-class="{'fade-in': profile.filter.type == 'checkin', 'hide': profile.filter.type != 'checkin'}"  style="height: 35px;" class="btn btn-success" ng-href="#/checkin/{{profile.filter.employee.id}}" type="button"><i class="fa fa-check"></i> Check-In<span class="hide-for-mobile"> with {{profile.filter.employee.first_name}}</span></a>
-                <a ng-class="{'fade-in': profile.filter.type == 'feedbackdigest', 'hide': profile.filter.type != 'feedbackdigest'}" style="height: 35px;" class="btn btn-success" ng-href="#/feedback/submit/{{profile.filter.employee.id}}" type="button"><i class="fa fa-send"></i> Give Feedback<span class="hide-for-mobile"> to {{profile.filter.employee.first_name}}</span></a>
-                <button ng-class="{'fade-in': profile.filter.type == 'comment', 'hide': profile.filter.type != 'comment'}" style="height: 35px;" class="btn btn-success" ng-click="myCheckins.requestCheckIn()" type="button"><i class="fa fa-pencil"></i> Write a note <span class="hide-for-mobile"> about {{profile.filter.employee.first_name}}</span></button>
-            </div>
             <h2 class="profile-info-lablel">{{profile.employee.full_name}}</h2>
             <span class="profile-info-sub-lablel">{{profile.employee.team.name}}</span>
             <div class="profile-info-sub-lablel"></div>
@@ -108,6 +105,7 @@
     }
     .profile .profile-tabs .nav-tabs {
         margin: 0 3px 0 0;
+        padding-top: 17px;
     }
 
     .profile .profile-tabs .nav-tabs > li > a {
