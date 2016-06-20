@@ -17,8 +17,9 @@ class BaseEmployeeSerializer(serializers.HyperlinkedModelSerializer):
 
     def get_requester_has_access(self, obj):
         if 'request' in self.context:
-            self.can_view_talent_category = True
-            return obj.is_viewable_by_user(self.context['request'].user)
+            if obj.is_viewable_by_user(self.context['request'].user):
+                self.can_view_talent_category = True
+                return True
         return False
 
 

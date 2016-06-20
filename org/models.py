@@ -215,7 +215,6 @@ class Employee(MPTTModel):
     @property
     def can_view_all_employees(self):
         if self._can_view_all_employees is None:
-            print 'we should only have to do this once per call'
             self._can_view_all_employees = self.user.has_perm('org.view_employees')
         return self._can_view_all_employees
 
