@@ -265,15 +265,23 @@ angular.module('tdb.org.controllers', [])
         $scope.compSummaries = {};
         Customers.get(function (data) {
             $scope.customer = data;
+        });
+
+        $scope.loadCompensation = function() {
             if ($scope.customer.show_individual_comp) {
                 $scope.compSummaries = CompSummary.getAllSummariesForEmployee($routeParams.id);
             }
-        });
+        }
+
         $rootScope.$watch('currentUser', function (newVal, oldVal) {
             if (newVal != oldVal) {
                 $scope.currentUser = $rootScope.currentUser;
             }
         }, true);
+
+        $scope.loadEmployeePvPs = function() {
+            $scope.$broadcast('loadEmployeePvPs');
+        }
 
         $scope.dynamicTooltipText = "LOGOUT";
 
@@ -301,12 +309,14 @@ angular.module('tdb.org.controllers', [])
         );
 
         $scope.happyIndex = 0;
-        Engagement.query(
-            {id: $routeParams.id},
-            function (data) {
-                $scope.happys = data;
-            }
-        );
+        $scope.loadHappiness = function () {
+            Engagement.query(
+                {id: $routeParams.id},
+                function (data) {
+                    $scope.happys = data;
+                }
+            );
+        }
         $scope.isSurveySending = false;
         $scope.sendSurvey = function () {
             $scope.isSurveySending = true;

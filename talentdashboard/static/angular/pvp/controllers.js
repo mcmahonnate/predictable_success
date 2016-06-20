@@ -3,9 +3,16 @@ angular.module('tdb.pvp.controllers', [])
     .controller('EmployeePvpEvaluationsCtrl', ['$scope', '$routeParams', 'PvpEvaluation', '$modal', function($scope, $routeParams, PvpEvaluation, $modal) {
         $scope.pvpIndex = 0;
         $scope.pvps = null;
-        PvpEvaluation.getAllEvaluationsForEmployee($routeParams.id).$promise.then(function(response) {
-            $scope.pvps = response;
+
+        $scope.$on("loadEmployeePvPs", function(e, filter) {
+            loadEmployeePvPs();
         });
+
+        function loadEmployeePvPs() {
+            PvpEvaluation.getAllEvaluationsForEmployee($routeParams.id).$promise.then(function (response) {
+                $scope.pvps = response;
+            });
+        }
 
         $scope.selectPvP = function(index) {
             $scope.pvpIndex = index;
