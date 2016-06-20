@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from ..models import PvpEvaluation, EvaluationRound, PvpDescription
 from org.models import Employee
-from org.api.serializers import EmployeeSerializer, UserSerializer, TeamSerializer
+from org.api.serializers import MinimalEmployeeSerializer, UserSerializer, TeamSerializer
 from blah.api.serializers import EmployeeCommentSerializer
 
 
@@ -111,7 +111,7 @@ class PvpDescriptionSerializer(serializers.HyperlinkedModelSerializer):
 
 class PvpEvaluationSerializer(serializers.ModelSerializer):
     talent_category = serializers.IntegerField()
-    employee = EmployeeSerializer()
+    employee = MinimalEmployeeSerializer()
     evaluation_round = EvaluationRoundSerializer()
     evaluator = UserSerializer()
     comment = EmployeeCommentSerializer()
