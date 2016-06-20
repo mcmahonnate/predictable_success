@@ -63,11 +63,6 @@ function DevZonesReportController(DevZonesReportService, Notification, analytics
             row.conversation_sent_to_development_lead = report.conversation_sent_to_development_lead;
             row.conversation_completed = report.conversation_completed;
             row.conversation_completed_date = report.conversation_completed_date;
-            report.answers = $filter('orderBy')(report.answers, 'question_order', false)
-            angular.forEach(report.answers, function (answer) {
-                row['question_' + answer.id] = answer.question_text;
-                row['answer_' + answer.id] = answer.text;
-            });
             vm.csv.push(row);
 
         });
