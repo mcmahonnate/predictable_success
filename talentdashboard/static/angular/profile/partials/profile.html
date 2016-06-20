@@ -5,8 +5,8 @@
             <button ng-class="{'btn-default': profile.filter.type!='checkin', 'btn-success': profile.filter.type=='checkin'}" style="height: 35px;padding: 4px 20px;" class="btn btn-default" ng-click="profile.requestCheckIn()" type="button"><i class="fa fa-check"></i> Request<span class="hide-for-mobile"> Check-In</span></button>
         </div>
         <div class="pull-right" style="height: 40px;" ng-if="profile.filter.self && profile.filter.view!='employee'">
-            <a ng-class="{'btn-default': profile.filter.type!='checkin', 'btn-success': profile.filter.type=='checkin'}" style="height: 35px;padding: 6px 20px;" class="btn" ng-href="#/feedback/submit/" type="button"><i class="fa fa-send"></i> Give Feedback</a>
-            <a ng-class="{'btn-success': profile.filter.type!='checkin', 'btn-default': profile.filter.type=='checkin'}" style="height: 35px;padding: 6px 20px;" class="btn" ng-href="#/checkin/" type="button"><i class="fa fa-check"></i> Check-In</a>
+            <a ng-class="{'btn-success': profile.filter.type=='feedbackdigest', 'btn-default': profile.filter.type!='feedbackdigest'}" style="height: 35px;padding: 6px 20px;" class="btn" ng-href="#/feedback/submit/" type="button"><i class="fa fa-send"></i> Give Feedback</a>
+            <a ng-class="{'btn-success': profile.filter.type!='feedbackdigest', 'btn-default': profile.filter.type=='feedbackdigest'}" style="height: 35px;padding: 6px 20px;" class="btn" ng-href="#/checkin/" type="button"><i class="fa fa-check"></i> Check-In</a>
         </div>
         <div class="pull-right" style="height: 40px;" ng-if="!profile.filter.self && profile.filter.view=='employee'">
             <a ng-class="{'btn-success': profile.filter.type!='checkin', 'btn-default': profile.filter.type=='checkin'}" class="btn" style="height: 35px;padding: 6px 20px;" ng-href="#/feedback/submit/{{profile.filter.employee.id}}" type="button"><i class="fa fa-send"></i> Give Feedback</a>
