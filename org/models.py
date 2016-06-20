@@ -92,6 +92,7 @@ class EmployeeManager(TreeManager):
 
 class Employee(MPTTModel):
     objects = EmployeeManager()
+    _can_view_all_employees = None
     MALE = 'M'
     FEMALE = 'F'
     GENDER_CHOICES = (
@@ -211,6 +212,13 @@ class Employee(MPTTModel):
             if field_value is not None:
                 Relationship(employee=self, related_employee=field_value, relation_type=relation_type).save()
 
+    @property
+    def can_view_all_employees(self):
+        if self._can_view_all_employees is None:
+            print 'we should only have to do this once per call'
+            self._can_view_all_employees = self.user.has_perm('org.view_employees')
+        return self._can_view_all_employees
+
     def is_coach(self):
         coach_count = Employee.objects.filter(coach__id=self.id, departure_date__isnull=True).count()
         return coach_count > 0
@@ -220,7 +228,7 @@ class Employee(MPTTModel):
         return leadership_count > 0
 
     def is_viewable_by_user(self, user, allowCoach=True):
-        if user.is_superuser:
+        if user.employee.can_view_all_employees:
             return True
         if self.user and self.user == user:
             return True
@@ -228,8 +236,7 @@ class Employee(MPTTModel):
             return True
         if user.employee.is_ancestor_of(self):
             return True
-        if user.has_perm('org.view_employees'):
-            return True
+
         return False
 
     def is_ancestor_of(self, other, include_self=False):
