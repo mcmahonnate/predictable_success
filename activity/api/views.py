@@ -58,7 +58,7 @@ class MyEventList(views.APIView):
                                                    exclude_third_party_events=exclude, type=content_type,
                                                    third_party=third_party, exclude_requester=False)
         qs = qs.exclude(event_type=comment_type)
-        qs = qs.extra(order_by=['-date'])
+        qs = qs.order_by('-date')
         paginator = StandardResultsSetPagination()
         result_page = paginator.paginate_queryset(qs, request)
         serializer = EventSerializer(result_page, many=True, context={'request': request})
@@ -82,7 +82,7 @@ class EmployeeEventList(views.APIView):
         qs = Event.objects.get_events_for_employee(requester=requester, employee=employee,
                                                    exclude_third_party_events=exclude, type=content_type,
                                                    third_party=third_party)
-        qs = qs.extra(order_by=['-date'])
+        qs = qs.order_by('-date')
         paginator = StandardResultsSetPagination()
         result_page = paginator.paginate_queryset(qs, request)
         serializer = EventSerializer(result_page, many=True, context={'request': request})
@@ -116,7 +116,7 @@ def _get_event_list_for_employees(request, requester, employee_ids):
     qs = Event.objects.get_events_for_employees(requester=requester, employee_ids=employee_ids,
                                                 exclude_third_party_events=exclude, type=content_type,
                                                 third_party=third_party)
-    qs = qs.extra(order_by=['-date'])
+    qs = qs.order_by('-date')
     paginator = StandardResultsSetPagination()
     result_page = paginator.paginate_queryset(qs, request)
     serializer = EventSerializer(result_page, many=True, context={'request': request})

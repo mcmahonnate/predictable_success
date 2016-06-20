@@ -12,7 +12,7 @@
     </span>
     <span ng-if="size=='large'">
         <span class="large-headshot">
-            <img ng-src="{{ employee().avatar_small }}" alt="{{ employee().full_name }}" class="headshot-image"/>
+            <img ng-src="{{ employee().avatar }}" alt="{{ employee().full_name }}" class="headshot-image"/>
         </span>
         <div ng-if="employee().current_talent_category && $root.currentUser.employee.id!=employee().id" class="employee-attribute" rel="tooltip" data-toggle="tooltip" data-placement="right"
              data-original-title="{{ talentCategories[employee().current_talent_category].label }}">
