@@ -18,7 +18,8 @@
         vm.enableSend = true;
         vm.questions = {
             excelsAtQuestion: $rootScope.customer.feedback_excels_at_question,
-            couldImproveOnQuestion: $rootScope.customer.feedback_could_improve_on_question
+            couldImproveOnQuestion: $rootScope.customer.feedback_could_improve_on_question,
+            leadershipQuestion: $rootScope.customer.feedforward_leadership_question
         };
         vm.tips = $rootScope.customer.feedback_tips;
         $rootScope.highlightFocusAreas = highlightFocusAreas;

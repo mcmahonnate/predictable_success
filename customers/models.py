@@ -34,6 +34,7 @@ class Customer(TenantMixin):
     feedback_welcome = models.TextField(default="Welcome, we hope you like our new feedback app. It's a safe place to ask for and give feedback. You can do it whenever, with whomever, and about whatever you'd like. The best part is, it's just between you and your coach. &mdash;The Scoutmap Team")
     feedback_excels_at_question = models.TextField(default="What does this individual do when they are at their best?")
     feedback_could_improve_on_question = models.TextField(default="What, if anything, is holding them back?")
+    feedforward_leadership_question = models.TextField(default="If you consider this person to be a leader, what is one thing they could do to help you do your job better?")
     feedback_tips = models.TextField(blank=True)
     checkin_welcome = models.TextField(default="Welcome, we hope you like our new checkin feature. It's a safe place to ask for help from your Coach or Team Lead. The best part is, it's just between you and them. &mdash;The Scoutmap Team")
     projects_welcome = models.TextField(default="Welcome, we hope you like our new projects feature. It's a safe place to ask for help from your Coach or Team Lead. The best part is, it's just between you and them. &mdash;The Scoutmap Team")

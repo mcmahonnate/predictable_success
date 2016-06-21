@@ -113,14 +113,17 @@ class FeedbackSubmission(models.Model):
     reviewer = models.ForeignKey(Employee, related_name='feedback_submissions')
     excels_at = models.TextField(blank=True)
     could_improve_on = models.TextField(blank=True)
+    help_with = models.TextField(blank=True)
     excels_at_summarized = models.TextField(blank=True)
     could_improve_on_summarized = models.TextField(blank=True)
+    help_with_summarized = models.TextField(blank=True)
     excels_at_was_helpful = models.BooleanField(default=False)
     excels_at_was_helpful_date = models.DateTimeField(null=True, blank=True)
     could_improve_on_was_helpful = models.BooleanField(default=False)
     could_improve_on_was_helpful_date = models.DateTimeField(null=True, blank=True)
     excels_at_helpful = models.OneToOneField('FeedbackHelpful', null=True, blank=True, related_name='excels_at_submission')
     could_improve_on_helpful = models.OneToOneField('FeedbackHelpful', null=True, blank=True, related_name='could_improve_on_submission')
+    help_with_helpful = models.OneToOneField('FeedbackHelpful', null=True, blank=True, related_name='help_with_submission')
 
     has_been_delivered = models.BooleanField(default=False)
     unread = models.BooleanField(default=True)
@@ -141,6 +144,8 @@ class FeedbackSubmission(models.Model):
                 self.excels_at_was_helpful_date = datetime.now()
             if orig.could_improve_on_was_helpful != self.could_improve_on_was_helpful:
                 self.could_improve_on_was_helpful_date = datetime.now()
+            if orig.help_with_was_helpful != self.help_with_was_helpful:
+                self.help_with_was_helpful_date = datetime.now()
         super(FeedbackSubmission, self).save(*args, **kwargs)
 
     @property

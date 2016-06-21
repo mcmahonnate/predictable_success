@@ -35,7 +35,7 @@
         <div class="modal-body">
             <panel>
                 <h3 class="modal-title">Feedback Questions</h3>
-                <p class="modal-subtext">Here's the two questions we'll ask the people you select.</p>
+                <p class="modal-subtext">Here's the three questions we'll ask the people you select.</p>
                 <ol class="modal-question-list">
                     <li>
                         {{ request.questions.excelsAtQuestion }} 
@@ -49,6 +49,14 @@
                         {{ request.questions.couldImproveOnQuestion }} 
                         <span ng-show="areas" class="focus-areas">(Please consider these areas: 
                             <span ng-class="highlight ? 'flash' : ''">{{ areas }}</span> 
+                            <span ng-show="currentUser.employee.first_name">&mdash;{{currentUser.employee.first_name}})</span>
+                            <span ng-show="!currentUser.employee.first_name">&mdash;{{currentUser.employee.full_name}})</span>
+                        </span>
+                    </li>
+                    <li>
+                        {{ request.questions.leadershipQuestion }}
+                        <span ng-show="areas" class="focus-areas">(Please consider these areas:
+                            <span ng-class="highlight ? 'flash' : ''">{{ areas }}</span>
                             <span ng-show="currentUser.employee.first_name">&mdash;{{currentUser.employee.first_name}})</span>
                             <span ng-show="!currentUser.employee.first_name">&mdash;{{currentUser.employee.full_name}})</span>
                         </span>
@@ -76,10 +84,14 @@
         <div class="modal-body">
             <panel>
                 <h3 class="modal-title">Choose Feedback Coach</h3>
-                <span class="xxxlarge-headshot">
+                <span ng-show="request.currentCoach" class="xxxlarge-headshot">
                     <img ng-src="{{request.currentCoach.avatar}}" alt="{{request.currentCoach.full_name}}" class="headshot-image">
                 </span>
                 <div ng-show="!request.currentCoach">
+                    <span class="xxxlarge-headshot">
+                        <img src="../static/images/grumpycat.png" alt="grump cat avatar" class="headshot-image">
+                    </span>
+
                     <p class="centered change-coach-message">
                         You currently don't have a Feedback Coach. <br />Please <a href="" class="underlined" ng-click="request.changeCoach()">select a coach</a>.
                     </p>
@@ -126,6 +138,14 @@
                             {{ request.questions.couldImproveOnQuestion }} 
                             <span ng-show="areas" class="focus-areas">(Please consider these areas: 
                                 <span ng-class="highlight ? 'flash' : ''">{{ areas }}</span> 
+                                <span ng-show="currentUser.employee.first_name">&mdash;{{currentUser.employee.first_name}})</span>
+                                <span ng-show="!currentUser.employee.first_name">&mdash;{{currentUser.employee.full_name}})</span>
+                            </span>
+                        </li>
+                        <li>
+                            {{ request.questions.leadershipQuestion }}
+                            <span ng-show="areas" class="focus-areas">(Please consider these areas:
+                                <span ng-class="highlight ? 'flash' : ''">{{ areas }}</span>
                                 <span ng-show="currentUser.employee.first_name">&mdash;{{currentUser.employee.first_name}})</span>
                                 <span ng-show="!currentUser.employee.first_name">&mdash;{{currentUser.employee.full_name}})</span>
                             </span>
