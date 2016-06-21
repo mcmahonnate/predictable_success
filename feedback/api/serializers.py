@@ -40,14 +40,14 @@ class CreateFeedbackSubmissionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FeedbackSubmission
-        fields = ['id', 'feedback_request', 'subject', 'excels_at', 'could_improve_on', 'anonymous']
+        fields = ['id', 'feedback_request', 'subject', 'excels_at', 'could_improve_on', 'help_with', 'anonymous']
         read_only_fields = ['id',]
 
 
 class CoachEditFeedbackSubmissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = FeedbackSubmission
-        fields = ['id', 'excels_at_summarized', 'could_improve_on_summarized',]
+        fields = ['id', 'excels_at_summarized', 'could_improve_on_summarized', 'help_with_summarized']
         read_only_fields = ['id',]
 
 
@@ -84,13 +84,26 @@ class EmployeeEditFeedbackSubmissionSerializer(serializers.ModelSerializer):
                 instance.could_improve_on_helpful.reason = validated_data['could_improve_on_helpful']['reason']
                 instance.could_improve_on_helpful.save()
             instance.save()
+        if validated_data['help_with_helpful']:
+            if instance.help_with_helpful is None:
+                help_with_helpful = FeedbackHelpful.objects.create(**validated_data['help_with_helpful'])
+                help_with_helpful.given_by = instance.reviewer
+                help_with_helpful.received_by = instance.subject
+                help_with_helpful.save()
+                instance.help_with_helpful = help_with_helpful
+            else:
+                instance.help_with_helpful.helpfulness = validated_data['help_with_helpful']['helpfulness']
+                instance.help_with_helpful.reason = validated_data['help_with_helpful']['reason']
+                instance.help_with_helpful.save()
+            instance.save()
         return instance
 
     excels_at_helpful = FeedbackHelpfulSerializer(required=False, allow_null=True)
     could_improve_on_helpful = FeedbackHelpfulSerializer(required=False, allow_null=True)
+    help_with_helpful = FeedbackHelpfulSerializer(required=False, allow_null=True)
     class Meta:
         model = FeedbackSubmission
-        fields = ['id', 'excels_at_helpful', 'could_improve_on_helpful',]
+        fields = ['id', 'excels_at_helpful', 'could_improve_on_helpful', 'help_with_helpful']
         read_only_fields = ['id',]
 
 
@@ -123,12 +136,13 @@ class FeedbackSubmissionSerializerForReviewer(serializers.ModelSerializer):
     reviewer = SanitizedEmployeeSerializer()
     excels_at_helpful = FeedbackHelpfulSerializer()
     could_improve_on_helpful = FeedbackHelpfulSerializer()
+    help_with_helpful = FeedbackHelpfulSerializer()
 
     class Meta:
         model = FeedbackSubmission
         fields = ('id', 'feedback_date', 'subject', 'reviewer',
-                  'excels_at', 'could_improve_on', 'unread',
-                  'has_been_delivered', 'anonymous', 'excels_at_helpful', 'could_improve_on_helpful')
+                  'excels_at', 'could_improve_on', 'help_with', 'unread',
+                  'has_been_delivered', 'anonymous', 'excels_at_helpful', 'could_improve_on_helpful', 'help_with_helpful')
 
 
 class FeedbackSubmissionSerializerForCoaches(serializers.ModelSerializer):
@@ -140,6 +154,7 @@ class FeedbackSubmissionSerializerForCoaches(serializers.ModelSerializer):
     message = serializers.SerializerMethodField()
     excels_at_helpful = FeedbackHelpfulSerializer()
     could_improve_on_helpful = FeedbackHelpfulSerializer()
+    help_with_helpful = FeedbackHelpfulSerializer()
 
     def get_message(self, submission):
         if submission.feedback_request:
@@ -162,10 +177,10 @@ class FeedbackSubmissionSerializerForCoaches(serializers.ModelSerializer):
     class Meta:
         model = FeedbackSubmission
         fields = ('id', 'feedback_date', 'subject', 'reviewer',
-                  'excels_at', 'could_improve_on', 'excels_at_summarized',
-                  'could_improve_on_summarized', 'unread',
+                  'excels_at', 'could_improve_on', 'help_with', 'excels_at_summarized',
+                  'could_improve_on_summarized', 'help_with_summarized', 'unread',
                   'has_been_delivered', 'anonymous', 'has_digest',
-                  'was_requested', 'message', 'excels_at_helpful', 'could_improve_on_helpful')
+                  'was_requested', 'message', 'excels_at_helpful', 'could_improve_on_helpful', 'help_with_helpful')
 
 
 class FeedbackSubmissionSerializerForEmployee(serializers.ModelSerializer):
@@ -174,8 +189,10 @@ class FeedbackSubmissionSerializerForEmployee(serializers.ModelSerializer):
     reviewer = SanitizedEmployeeSerializer(source='anonymized_reviewer')
     excels_at = serializers.SerializerMethodField()
     could_improve_on = serializers.SerializerMethodField()
+    help_with = serializers.SerializerMethodField()
     excels_at_helpful = FeedbackHelpfulSerializer()
     could_improve_on_helpful = FeedbackHelpfulSerializer()
+    help_with_helpful = FeedbackHelpfulSerializer()
 
     def get_could_improve_on(self, submission):
         return submission.could_improve_on_summarized if submission.could_improve_on_summarized else submission.could_improve_on
@@ -183,11 +200,14 @@ class FeedbackSubmissionSerializerForEmployee(serializers.ModelSerializer):
     def get_excels_at(self, submission):
         return submission.excels_at_summarized if submission.excels_at_summarized else submission.excels_at
 
+    def get_help_with(self, submission):
+        return submission.help_with_summarized if submission.help_with_summarized else submission.help_with
+
     class Meta:
         model = FeedbackSubmission
         fields = ('id', 'feedback_date', 'subject', 'reviewer',
-                  'excels_at', 'could_improve_on', 'unread',
-                  'has_been_delivered', 'anonymous', 'excels_at_helpful', 'could_improve_on_helpful')
+                  'excels_at', 'could_improve_on', 'help_with', 'unread',
+                  'has_been_delivered', 'anonymous', 'excels_at_helpful', 'could_improve_on_helpful', 'help_with_helpful')
 
 
 class EmployeeFeedbackReportSerializer(serializers.Serializer):

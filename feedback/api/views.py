@@ -125,6 +125,7 @@ class FeedbackRequestsToDoList(ListAPIView):
         """
         return FeedbackRequest.objects.pending_for_reviewer(self.request.user.employee)
 
+
 @api_view(['GET'])
 @permission_classes((IsAuthenticated, ))
 def feedback_progress_reports(request):
@@ -189,6 +190,7 @@ class CoachUpdateFeedbackSubmission(generics.UpdateAPIView):
         submission = self.get_object()
         return submission.subject
 
+
 class EmployeeUpdateFeedbackSubmission(generics.UpdateAPIView):
     queryset = FeedbackSubmission.objects.all()
     permission_classes = (IsAuthenticated, UserIsEmployee)
@@ -197,6 +199,7 @@ class EmployeeUpdateFeedbackSubmission(generics.UpdateAPIView):
     def get_employee(self):
         submission = self.get_object()
         return submission.subject
+
 
 class RetrieveMyFeedbackDigests(ListAPIView):
     permission_classes = (IsAuthenticated,)

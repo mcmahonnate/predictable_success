@@ -20,9 +20,9 @@
         </div>
         <p class="hide-for-print" ng-show="!feedbackWorksheet.digest" style="color:#888">Click the 'Add' button on someone's feedback to get started.</p>
         <div ng-show="feedbackWorksheet.digest.submissions.length>0">
-            <div class="feedback-submission" ng-repeat="submission in feedbackWorksheet.digest.submissions">
+            <div ng-show="feedbackWorksheet.hasExcelsAtSubmissions" ng-repeat="submission in feedbackWorksheet.digest.submissions">
                 <h4 ng-show="$first" class="section-title">{{ feedbackWorksheet.questions.excelsAtQuestion }}</h4>
-                <div ng-show="submission.excels_at || submission.excels_at_summarized">
+                <div class="feedback-submission" ng-show="submission.excels_at || submission.excels_at_summarized">
                     <!-- Edit button -->
                     <a ng-show="view != 'delivered-view'" ng-href="#/feedback/submission/{{ submission.id }}/process" class="btn btn-xs btn-default pull-right"><i class="fa fa-pencil"></i> Edit</a>
                     <a ng-show="view == 'delivered-view'" ng-href="#/feedback/submission/{{ submission.id }}/process" class="btn btn-xs btn-default pull-right hide-for-print"><i class="fa fa-eye"></i> View</a>
@@ -63,10 +63,9 @@
 
             <div class="page-break"><!-- Used for printing --></div>
 
-            
-            <div class="feedback-submission" ng-repeat="submission in feedbackWorksheet.digest.submissions">
+            <div ng-show="feedbackWorksheet.hasCouldImproveOnSubmissions" ng-repeat="submission in feedbackWorksheet.digest.submissions">
                 <h4 ng-show="$first" class="section-title">{{ feedbackWorksheet.questions.couldImproveOnQuestion }}</h4>
-                <div ng-show="submission.could_improve_on || submission.could_improve_on_summarized">
+                <div class="feedback-submission" ng-show="submission.could_improve_on || submission.could_improve_on_summarized">
                     <!-- Edit button -->
                     <a ng-show="view != 'delivered-view'" ng-href="#/feedback/submission/{{ submission.id }}/process" class="btn btn-xs btn-default pull-right"><i class="fa fa-pencil"></i> Edit</a>
                     <a ng-show="view == 'delivered-view'" ng-href="#/feedback/submission/{{ submission.id }}/process" class="btn btn-xs btn-default pull-right"><i class="fa fa-eye"></i> View</a>
@@ -100,6 +99,48 @@
                         </div>
                         <div ng-show="!submission.could_improve_on_summarized" style="white-space: pre-line;">
                             {{ submission.could_improve_on }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="page-break"><!-- Used for printing --></div>
+
+            <div ng-show="feedbackWorksheet.hasHelpWithSubmissions" ng-repeat="submission in feedbackWorksheet.digest.submissions">
+                <h4 ng-show="$first" class="section-title">{{ feedbackWorksheet.questions.leadershipQuestion }}</h4>
+                <div class="feedback-submission" ng-show="submission.help_with || submission.help_with_summarized">
+                    <!-- Edit button -->
+                    <a ng-show="view != 'delivered-view'" ng-href="#/feedback/submission/{{ submission.id }}/process" class="btn btn-xs btn-default pull-right"><i class="fa fa-pencil"></i> Edit</a>
+                    <a ng-show="view == 'delivered-view'" ng-href="#/feedback/submission/{{ submission.id }}/process" class="btn btn-xs btn-default pull-right"><i class="fa fa-eye"></i> View</a>
+
+                    <!-- Headshot -->
+                    <div ng-show="!submission.anonymous" class="pull-left">
+                        <span class="medium-headshot">
+                            <img ng-src="{{ submission.reviewer.avatar_small }}" alt="{{ submission.reviewer.full_name }}'s avatar" />
+                        </span>
+                    </div>
+
+                    <!-- Anonyous Headshot -->
+                    <div ng-show="submission.anonymous" class="pull-left">
+                        <span class="medium-headshot">
+                            <img src="//hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg"/>
+                        </span>
+                    </div>
+
+                    <div style="padding-left:60px;">
+                        <div>
+                            <span ng-show="!submission.anonymous">
+                                <strong>{{ submission.reviewer.full_name }}</strong>
+                            </span>
+                            <span ng-show="submission.anonymous">
+                                <strong>Anonymous</strong>
+                            </span>
+                            <span class="time timestamp" data-toggle="tooltip" data-placement="top" title="{{ submission.date | date:'MMM d, yyyy h:mma' }}"> {{ submission.feedback_date | fromNow }}</span>
+                        </div>
+                        <div ng-show="submission.help_with_summarized" style="white-space: pre-line;">
+                            {{ submission.help_with_summarized }}
+                        </div>
+                        <div ng-show="!submission.help_with_summarized" style="white-space: pre-line;">
+                            {{ submission.help_with }}
                         </div>
                     </div>
                 </div>
