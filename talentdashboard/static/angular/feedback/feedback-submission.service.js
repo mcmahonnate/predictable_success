@@ -126,11 +126,13 @@ function FeedbackSubmissionService($http, $log, FeedbackSubmissionResource, Empl
         return {
             excels_at: feedback.excelsAt,
             could_improve_on: feedback.couldImproveOn,
+            help_with: feedback.helpWith,
             anonymous: feedback.anonymous
         };
     }
 
     function _sendFeedback(submission) {
+        console.log(submission);
         return FeedbackSubmissionResource.save(submission, success, fail).$promise;
 
         function success(response) {
