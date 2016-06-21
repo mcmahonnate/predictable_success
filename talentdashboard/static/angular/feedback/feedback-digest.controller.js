@@ -15,9 +15,13 @@
         vm.goTo = goTo;
         vm.coach = null;
         vm.employee = null;
+        vm.hasExcelsAtSubmissions = false;
+        vm.hasCouldImproveOnSubmissions = false;
+        vm.hasHelpWithSubmissions = false;
         vm.questions = {
             excelsAtQuestion: $rootScope.customer.feedback_excels_at_question,
-            couldImproveOnQuestion: $rootScope.customer.feedback_could_improve_on_question
+            couldImproveOnQuestion: $rootScope.customer.feedback_could_improve_on_question,
+            leadershipQuestion: $rootScope.customer.feedforward_leadership_question
         };
         activate();
 
@@ -31,6 +35,17 @@
                     vm.digest = data;
                     vm.coach = vm.digest.delivered_by;
                     vm.employee = vm.digest.subject;
+                    angular.forEach(vm.digest.submissions, function(submission) {
+                        if (submission.excels_at) {
+                            vm.hasExcelsAtSubmissions = true;
+                        }
+                        if (submission.could_improve_on) {
+                            vm.hasCouldImproveOnSubmissions = true;
+                        }
+                        if (submission.help_with) {
+                            vm.hasHelpWithSubmissions = true;
+                        }
+                    });
                     return vm.digest;
                 })
                 .catch(function() {
