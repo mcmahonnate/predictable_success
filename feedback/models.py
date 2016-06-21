@@ -144,8 +144,6 @@ class FeedbackSubmission(models.Model):
                 self.excels_at_was_helpful_date = datetime.now()
             if orig.could_improve_on_was_helpful != self.could_improve_on_was_helpful:
                 self.could_improve_on_was_helpful_date = datetime.now()
-            if orig.help_with_was_helpful != self.help_with_was_helpful:
-                self.help_with_was_helpful_date = datetime.now()
         super(FeedbackSubmission, self).save(*args, **kwargs)
 
     @property

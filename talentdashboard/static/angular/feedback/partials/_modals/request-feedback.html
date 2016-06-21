@@ -83,7 +83,7 @@
     <div class="form-group" ng-show="request.panel_index==2">    
         <div class="modal-body">
             <panel>
-                <h3 class="modal-title">Choose Feedback Coach</h3>
+                <h3 class="modal-title">Choose Your Coach</h3>
                 <span ng-show="request.currentCoach" class="xxxlarge-headshot">
                     <img ng-src="{{request.currentCoach.avatar}}" alt="{{request.currentCoach.full_name}}" class="headshot-image">
                 </span>
@@ -93,7 +93,7 @@
                     </span>
 
                     <p class="centered change-coach-message">
-                        You currently don't have a Feedback Coach. <br />Please <a href="" class="underlined" ng-click="request.changeCoach()">select a coach</a>.
+                        You currently don't have a Coach. <br />Please <a href="" class="underlined" ng-click="request.changeCoach()">select a coach</a>.
                     </p>
                 </div>
                 <div ng-show="request.currentCoach">

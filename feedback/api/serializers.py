@@ -141,7 +141,7 @@ class FeedbackSubmissionSerializerForReviewer(serializers.ModelSerializer):
     class Meta:
         model = FeedbackSubmission
         fields = ('id', 'feedback_date', 'subject', 'reviewer',
-                  'excels_at', 'could_improve_on', 'unread',
+                  'excels_at', 'could_improve_on', 'help_with', 'unread',
                   'has_been_delivered', 'anonymous', 'excels_at_helpful', 'could_improve_on_helpful', 'help_with_helpful')
 
 
@@ -177,8 +177,8 @@ class FeedbackSubmissionSerializerForCoaches(serializers.ModelSerializer):
     class Meta:
         model = FeedbackSubmission
         fields = ('id', 'feedback_date', 'subject', 'reviewer',
-                  'excels_at', 'could_improve_on', 'excels_at_summarized',
-                  'could_improve_on_summarized', 'unread',
+                  'excels_at', 'could_improve_on', 'help_with', 'excels_at_summarized',
+                  'could_improve_on_summarized', 'help_with_summarized', 'unread',
                   'has_been_delivered', 'anonymous', 'has_digest',
                   'was_requested', 'message', 'excels_at_helpful', 'could_improve_on_helpful', 'help_with_helpful')
 

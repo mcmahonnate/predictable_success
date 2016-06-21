@@ -79,6 +79,45 @@
                             </tr>
                         </tbody>
                     </table>
+                    <div ng-show="processFeedback.submission.help_with">
+                        <h3 class="panel-title">{{ processFeedback.questions.leadershipQuestion }}</h3>
+                        <table class="table" style="margin-bottom:45px">
+                            <thead>
+                                <tr>
+                                  <th style="width:20%"></th>
+                                  <th class="centered" style="width:65%"></th>
+                                  <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-show="processFeedback.submission.help_with">
+                                    <td class="centered">
+                                        <span class="large-headshot" style="margin: 10px auto 5px;">
+                                            <img class="headshot-image" ng-src="{{ processFeedback.submission.reviewer.avatar_small }}" alt="{{ processFeedback.submission.reviewer.full_name }}'s avatar" />
+                                        </span>
+                                        <strong>{{ processFeedback.submission.reviewer.full_name }}</strong>
+                                        <span ng-show="processFeedback.submission.anonymous" class="tag tag-anonymous pull-right">Anonymous</span>
+                                    </td>
+                                    <td style="padding:20px">
+                                        <div class="activity comment-copy" style="padding: 15px 0">
+                                            <div class="comment-text" ng-class="{'comment-disabled': processFeedback.submission.help_with_summarized.length}" ng-bind-html="processFeedback.submission.help_with | new_line"></div>
+                                        </div>
+                                        <div class="comment-editor" ng-show="!processFeedback.submission.has_been_delivered || processFeedback.submission.help_with_summarized.length">
+                                            <div class="comment-reply-copy" style="padding: 10px; background-color: #efefef; border-radius: 5px">
+                                                <span style="margin: 0 0 10px 10px">Summarize (Optional)</span>
+                                                <textarea ng-show="!processFeedback.submission.has_been_delivered" placeholder="If {{ processFeedback.submission.reviewer.first_name }} has asked that you summarize their feedback you can do that here." name="help_with_summarized" ng-model="processFeedback.submission.help_with_summarized" msd-elastic class="form-control" style="min-height: 15px; margin: 5px; width: 98%;" rows="1"></textarea>
+                                                <div ng-show="processFeedback.submission.has_been_delivered">
+
+                                                    <div class="comment-summarized">{{ processFeedback.submission.help_with_summarized }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                         <div class="form-group">
                             <button ng-show="processFeedback.submission.has_been_delivered" class="btn btn-success pull-right" type="button" ng-click="processFeedback.back()">&larr; Back</button>
                             <button ng-show="!processFeedback.submission.has_been_delivered"class="btn btn-default" type="button" ng-click="processFeedback.close()">&larr; Back</button>
