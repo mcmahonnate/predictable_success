@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.validators import validate_email
 from django.db import connection, models
-from django.db.models import Q
+from django.db.models import Count, F, Q
 from django.utils.translation import ugettext as _
 from model_utils import Choices, FieldTracker
 from mptt.models import MPTTModel, TreeForeignKey, TreeManager
@@ -36,9 +36,15 @@ class Relationship(models.Model):
 
 
 class EmployeeManager(TreeManager):
-    def get_coaches(self):
+    def get_current_coaches(self):
         coaches = self.get_current_employees()
         return coaches.exclude(coachees__isnull=True).order_by('full_name')
+
+    def get_available_coaches(self, employee):
+        coaches = self.filter(coaching_profile__isnull=False)
+        coaches = coaches.exclude(coaching_profile__blacklist=employee)
+        return coaches.annotate(coachee_count=Count('coachees'))\
+            .filter(coaching_profile__max_allowed_coachees__gt=F('coachee_count'))
 
     def get_current_employees(self, team_id=None, show_hidden=False):
         employees = self.filter(departure_date__isnull=True)
@@ -524,3 +530,13 @@ class CoachCapacity(models.Model):
 
 class CoachCapacityError(Exception):
     pass
+
+
+class CoachProfile(models.Model):
+    employee = models.ForeignKey(Employee, related_name='coaching_profile')
+    max_allowed_coachees = models.IntegerField(default=0)
+    blacklist = models.ManyToManyField(Employee, related_name='+', null=True, blank=True)
+    approach = models.TextField(blank=True, default='')
+
+    def __str__(self):
+        return "%s's coaching profile" % self.employee.full_name

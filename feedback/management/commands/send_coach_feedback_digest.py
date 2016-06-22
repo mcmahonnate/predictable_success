@@ -18,7 +18,7 @@ class Command(BaseCommand):
         if tenant.is_public_tenant():
             return
 
-        coaches = Employee.objects.get_coaches()
+        coaches = Employee.objects.get_current_coaches()
 
         for coach in coaches:
             feedback_submissions = FeedbackSubmission.objects.received_not_delivered()
