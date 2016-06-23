@@ -2,14 +2,13 @@ from blah.api.views import CommentList
 from blah.api.serializers import CommentSerializer
 from dateutil import parser
 from org.api.permissions import UserIsEmployeeOrLeaderOrCoachOfEmployee, UserIsEmployee, PermissionsViewAllEmployees
-from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import *
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_204_NO_CONTENT
 from talentdashboard.views.views import StandardResultsSetPagination
-from .permissions import UserIsConversationParticipantOrHasAllAccess, UserIsAssessorOrHasAllAccess, UserIsAssessor, UserIsMeetingParticipantOrHasAllAccess, UserIsConversationParticipantOrHasAllAccessOrIsEmployee
+from .permissions import UserIsAssessorOrHasAllAccess, UserIsAssessor, UserIsMeetingParticipantOrHasAllAccess, UserIsConversationParticipantOrHasAllAccessOrIsEmployee
 from .serializers import *
 
 

@@ -2,7 +2,7 @@ from django.contrib.auth.views import password_reset_confirm, login
 from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.utils.http import urlsafe_base64_decode
-from rest_framework.generics import RetrieveAPIView
+from rest_framework.generics import CreateAPIView, RetrieveAPIView, UpdateAPIView
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -217,3 +217,51 @@ def account_activate_login(request, uidb64=None, template_name=None, authenticat
     uid = urlsafe_base64_decode(uidb64)
     user = User.objects.get(pk=uid)
     return login(request, template_name=template_name, extra_context={'email': user.email}, authentication_form=authentication_form)
+
+
+class RetrieveCoachProfile(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, pk, format=None):
+        try:
+            profile = CoachProfile.objects.get(employee__id=pk)
+            serializer = CoachProfileSerializer(profile, context={'request': request})
+            return Response(serializer.data)
+        except Employee.DoesNotExist:
+            return Response(None)
+
+
+class CreateCoachProfile(CreateAPIView):
+    serializer_class = CreateUpdateCoachProfileSerializer
+    permission_classes = (IsAuthenticated, PermissionsViewAllEmployees)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        saved = self.perform_create(serializer)
+        serializer = CoachProfileSerializer(instance=saved, context={'request': request})
+
+        return Response(serializer.data)
+
+    def perform_create(self, serializer):
+        return serializer.save()
+
+
+class UpdateCoachProfile(UpdateAPIView):
+    queryset = CoachProfile.objects.all()
+    serializer_class = CreateUpdateCoachProfileSerializer
+    permission_classes = (IsAuthenticated, UserIsEmployee)
+
+    def get_employee(self):
+        profile = self.get_object()
+        return profile.employee
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        serializer = CoachProfileSerializer(instance, context={'request': request})
+        return Response(serializer.data)

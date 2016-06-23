@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from django.core.exceptions import ObjectDoesNotExist
 from preferences.api.serializers import UserPreferencesSerializer
-from ..models import Team, Employee, Leadership, Mentorship, Attribute, AttributeCategory
+from ..models import *
 
 
 class TeamSerializer(serializers.HyperlinkedModelSerializer):
@@ -360,3 +360,23 @@ class EditEmployeeSerializer(serializers.HyperlinkedModelSerializer):
 
 class CoachChangeRequestSerializer(serializers.Serializer):
     new_coach = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
+
+
+class CoachProfileSerializer(serializers.HyperlinkedModelSerializer):
+    employee = SanitizedEmployeeSerializer()
+    blacklist = SanitizedEmployeeSerializer(many=True)
+
+    class Meta:
+        model = CoachProfile
+        fields = ['employee', 'max_allowed_coachees', 'blacklist', 'approach']
+
+
+class CreateUpdateCoachProfileSerializer(serializers.ModelSerializer):
+    employee = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
+    max_allowed_coachees = serializers.IntegerField()
+    blacklist = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all(), many=True)
+    approach = serializers.CharField()
+
+    class Meta:
+        model = CoachProfile
+        fields = ('id', 'employee', 'max_allowed_coachees', 'blacklist', 'approach')
