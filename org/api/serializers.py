@@ -368,7 +368,7 @@ class CoachProfileSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = CoachProfile
-        fields = ['employee', 'max_allowed_coachees', 'blacklist', 'approach']
+        fields = ['id', 'employee', 'max_allowed_coachees', 'blacklist', 'approach']
 
 
 class CreateUpdateCoachProfileSerializer(serializers.ModelSerializer):
