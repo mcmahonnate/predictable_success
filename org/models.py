@@ -43,6 +43,9 @@ class EmployeeManager(TreeManager):
     def get_available_coaches(self, employee):
         coaches = self.filter(coaching_profile__isnull=False)
         coaches = coaches.exclude(coaching_profile__blacklist=employee)
+        coaches = coaches.exclude(id=employee.id)
+        if employee.leader:
+            coaches = coaches.exclude(id=employee.leader.id)
         return coaches.annotate(coachee_count=Count('coachees'))\
             .filter(coaching_profile__max_allowed_coachees__gt=F('coachee_count'))
 
@@ -165,19 +168,8 @@ class Employee(MPTTModel):
 
     def update_coach(self, coach):
         try:
-            old_coach_capacity = None
-            if self.coach:
-                old_coach_capacity = CoachCapacity.objects.get(employee=self.coach)
-
-            coach_capacity = CoachCapacity.objects.get(employee=coach)
-            if coach_capacity.is_full():
-                raise CoachCapacityError()
-            else:
-                self.coach = coach
-                self.save()
-                coach_capacity.save()
-                if old_coach_capacity:
-                    old_coach_capacity.save()
+            self.coach = coach
+            self.save()
         except CoachCapacity.DoesNotExist:
             pass
 
