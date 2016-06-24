@@ -1,0 +1,25 @@
+<form name="changeCoachForm" novalidate="novalidate">
+    <div>
+        <div class="modal-body">
+            <h3 ng-show="!request.currentCoach" class="modal-title">Select new Coach</h3>
+            <h3 ng-show="request.currentCoach" class="modal-title">Change coach</h3>
+
+            <div>
+                <slick infinite=true dots=true slides-to-show=3 slides-to-scroll=3>
+                    <div ng-repeat="coach in changeCoach.availableCoaches">
+                        <span class="xxlarge-avatar-container" style="padding: 0">
+                            <span class="xxlarge-headshot centered">
+                                <img ng-src="{{ coach.avatar }}" alt="{{ coach.full_name }}'s avatar" class="headshot-image" />
+                            </span>
+                        </span>
+                        {{coach.full_name}}
+                    </div>
+                </slick>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" ng-click="changeCoach.cancel()" class="btn btn-light pull-left">Cancel</button>
+            <button type="button" class="btn btn-success" ng-click="changeCoach.save(changeCoachForm)">Save Coach</button>
+        </div>
+    </div>
+</form>
