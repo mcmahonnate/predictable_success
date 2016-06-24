@@ -2,22 +2,23 @@ angular
     .module('profile')
     .controller('CoachProfileController', CoachProfileController);
 
-function CoachProfileController(CoachProfileService, EmployeeSearch, employeeId, $modalInstance) {
+function CoachProfileController(CoachProfileService, EmployeeSearch, employeeId, Notification, $modalInstance) {
     var vm = this;
     vm.profile = {id: null, employee: null, blacklist: null, max_allowed_coachees: null};
     vm.coach = null;
     vm.employees = [];
+    vm.panel_index = 0;
     vm.save = save;
     vm.update = update;
     vm.cancel = cancel;
     vm.capacity = null;
     vm.capacityChoices = [
-        {text: '4 - 6', min: 4, max: 6},
-        {text: '7 - 9', min: 7, max: 9},
-        {text: '10 - 12', min: 10, max: 12},
-        {text: '13 - 15', min: 13, max: 15},
-        {text: '16 - 18', min: 16, max: 18},
-        {text: 'more than 18', min: 19, max: 50},
+        {text: '4 - 6 Coachees', min: 4, max: 6},
+        {text: '7 - 9 Coachees', min: 7, max: 9},
+        {text: '10 - 12 Coachees', min: 10, max: 12},
+        {text: '13 - 15 Coachees', min: 13, max: 15},
+        {text: '16 - 18 Coachees', min: 16, max: 18},
+        {text: 'more than 18 Coachees', min: 19, max: 50},
     ];
 
     activate()
@@ -67,6 +68,7 @@ function CoachProfileController(CoachProfileService, EmployeeSearch, employeeId,
             .then(function(profile){
                 $modalInstance.close(profile);
                 vm.profile = profile;
+                Notification.success("Your coaching profile has been saved.");
             }, function(error){
                 $modalInstance.close(profile);
                 Notification.error("Sorry we had a problem saving this profile.");

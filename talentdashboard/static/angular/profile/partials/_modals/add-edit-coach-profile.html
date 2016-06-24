@@ -1,5 +1,5 @@
 <form id="profile-modal" novalidate="novalidate">
-    <div>
+    <div ng-show="coachProfile.panel_index==0">
         <div class="modal-body">
             <h3 class="modal-title"><span ng-show="coachProfile.profile">{{coachProfile.profile.employee.full_name}}'s </span>Coaching Profile</h3>
             <div ng-show="!coachProfile.profile" class="row">
@@ -66,6 +66,19 @@
         </div>
         <div class="modal-footer">
             <button type="button" ng-click="coachProfile.cancel()" class="btn btn-light pull-left">Cancel</button>
+            <button ng-disabled="!coachProfile.capacity || !coachProfile.profile.approach" type="button" class="btn btn-success" ng-click="coachProfile.panel_index=1">Preview &rarr;</button>
+        </div>
+    </div>
+    <div ng-show="coachProfile.panel_index==1">
+        <div class="modal-body">
+            <h3 class="modal-title">Public Coaching Profile</h3>
+            <div ng-include="'/static/angular/profile/partials/_widgets/coach-profile-public.html'"></div>
+            <h3 class="modal-title">Private Coaching Preferences</h3>
+            <div ng-include="'/static/angular/profile/partials/_widgets/coach-profile-private.html'"></div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" ng-click="coachProfile.cancel()" class="btn btn-light pull-left">Cancel</button>
+            <button type="button" ng-click="coachProfile.panel_index=0" class="btn btn-light">&larr; Back</button>
             <button type="button" class="btn btn-success" ng-click="coachProfile.save(coachProfileForm)">Save</button>
         </div>
     </div>

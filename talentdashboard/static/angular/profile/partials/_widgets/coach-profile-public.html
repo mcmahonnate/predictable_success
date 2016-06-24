@@ -1,0 +1,17 @@
+<div class="profile" style="margin-bottom: 0; margin-top: 25px;">
+    <div class="profile-info-container pull-left" style="width: 150px;margin-left:0; margin-top:0;">
+        <div class="xxlarge-avatar-container" style="padding: 0">
+            <div class="xxlarge-headshot centered">
+                <img ng-src="{{ coachProfile.profile.employee.avatar }}" alt="{{ coachProfile.profile.employee.full_name }}'s avatar" class="headshot-image" />
+            </div>
+        </div>
+        <h3 class="profile-info-lablel centered">{{coachProfile.profile.employee.full_name}}</h3>
+        <div class="profile-info-sub-lablel centered" style="margin: 0;">Team: {{coachProfile.profile.employee.team}}</div>
+        <div class="profile-info-sub-lablel centered" style="margin: 0;">Tenure: {{ coachProfile.profile.employee.hire_date | fromNow : true}}</div>
+    </div>
+    <div class="profile-info-container pull-right" style="width: 360px;margin:0 0 20px">
+        <h3 class="profile-info-lablel">Coaching Approach</h3>
+        <span class="profile-info-sub-lablel">{{coachProfile.profile.approach}}</span>
+    </div>
+    <div style="clear:both"></div>
+</div>

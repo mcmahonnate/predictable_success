@@ -225,7 +225,11 @@ class RetrieveCoachProfile(APIView):
     def get(self, request, pk, format=None):
         try:
             profile = CoachProfile.objects.get(employee__id=pk)
-            serializer = CoachProfileSerializer(profile, context={'request': request})
+            if request.user.has_perm('org.view_employees') or \
+                            request.user.employee.id == profile.employee.id:
+                serializer = CoachProfileSerializer(profile, context={'request': request})
+            else:
+                serializer = PublicCoachProfileSerializer(profile, context={'request': request})
             return Response(serializer.data)
         except Employee.DoesNotExist:
             return Response(None)
