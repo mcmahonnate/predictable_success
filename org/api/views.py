@@ -109,7 +109,7 @@ class TeamMemberList(APIView):
         employees = Employee.objects.get_current_employees()
         employees = employees.filter(team__id=pk)
 
-        serializer = EmployeeSerializer(employees, many=True, context={'request': request})
+        serializer = MinimalEmployeeSerializer(employees, many=True, context={'request': request})
         return Response(serializer.data)
 
 
@@ -127,7 +127,7 @@ def my_team_lead(request):
     employee = Employee.objects.get(user=current_user)
     if employee.user == current_user or current_user.is_superuser:
         lead = employee.leader
-        serializer = EmployeeSerializer(lead, many=False, context={'request': request})
+        serializer = MinimalEmployeeSerializer(lead, many=False, context={'request': request})
 
         return Response(serializer.data)
     else:
@@ -141,7 +141,7 @@ def my_employees(request):
     if lead.user == current_user or current_user.is_superuser:
         employees = lead.get_children()
         employees = employees.filter(departure_date__isnull=True)
-        serializer = EmployeeSerializer(employees, many=True, context={'request': request})
+        serializer = MinimalEmployeeSerializer(employees, many=True, context={'request': request})
 
         return Response(serializer.data)
     else:
@@ -156,7 +156,7 @@ def team_lead_employees(request, pk):
     if current_employee.is_ancestor_of(other=lead, include_self=True):
         employees = lead.get_children()
         employees = employees.filter(departure_date__isnull=True)
-        serializer = EmployeeSerializer(employees, many=True, context={'request': request})
+        serializer = MinimalEmployeeSerializer(employees, many=True, context={'request': request})
 
         return Response(serializer.data)
     else:
@@ -177,7 +177,7 @@ def all_access_employees(request):
 def team_leads(request, pk):
     leaders = Leadership.objects.filter(leader__team_id=pk).values('leader_id')
     employees = Employee.objects.filter(id__in=leaders, departure_date__isnull=True)
-    serializer = EmployeeSerializer(employees, many=True, context={'request': request})
+    serializer = MinimalEmployeeSerializer(employees, many=True, context={'request': request})
 
     return Response(serializer.data)
 

@@ -52,7 +52,11 @@ class SanitizedEmployeeWithRelationshpsSerializer(BaseEmployeeSerializer):
 class MinimalEmployeeSerializer(BaseEmployeeSerializer):
     avatar = serializers.SerializerMethodField()
     avatar_small = serializers.SerializerMethodField()
-    current_talent_category = serializers.SerializerMethodField()
+    talent_category = serializers.SerializerMethodField()
+    happiness_verbose = serializers.SerializerMethodField()
+    happiness = serializers.SerializerMethodField()
+    happiness_date = serializers.SerializerMethodField()
+    last_checkin_date = serializers.SerializerMethodField()
 
     def get_avatar(self, obj):
         url = ''
@@ -66,14 +70,37 @@ class MinimalEmployeeSerializer(BaseEmployeeSerializer):
             url = obj.avatar_small.url
         return url
 
-    def get_current_talent_category(self, obj):
+    def get_talent_category(self, obj):
         if self.can_view_talent_category:
             return obj.current_talent_category()
         return None
 
+    def get_happiness(self, obj):
+        happiness = -1
+        if obj.current_happiness:
+            happiness = obj.current_happiness.assessment
+        return happiness
+
+    def get_happiness_date(self, obj):
+        happiness_date = None
+        if obj.current_happiness:
+            happiness_date = obj.current_happiness.assessed_date
+        return happiness_date
+
+    def get_happiness_verbose(self, obj):
+        if obj.current_happiness is None:
+            return None
+        return obj.current_happiness.assessment_verbose()
+
+    def get_last_checkin_date(self, obj):
+        try:
+            return obj.checkins.latest().date
+        except ObjectDoesNotExist:
+            return None
+
     class Meta:
         model = Employee
-        fields = ('id', 'full_name', 'first_name', 'display', 'avatar', 'avatar_small', 'requester_has_access', 'current_talent_category', 'requester_has_access')
+        fields = ('id', 'full_name', 'first_name', 'display', 'avatar', 'avatar_small', 'happiness', 'happiness_date', 'happiness_verbose', 'last_checkin_date', 'requester_has_access', 'talent_category', 'requester_has_access')
 
 
 class EmployeeNameSerializer(BaseEmployeeSerializer):
