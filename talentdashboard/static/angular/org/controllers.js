@@ -499,10 +499,12 @@ angular.module('tdb.org.controllers', [])
         $scope.busy = false;
     }])
 
-    .controller('ChangeCoachController', ['$modalInstance', 'CoachService', 'currentCoach', function($modalInstance, CoachService, currentCoach) {
+    .controller('ChangeCoachController', ['$modal', '$modalInstance', 'CoachService', 'currentCoach', function($modal, $modalInstance, CoachService, currentCoach) {
         var vm = this;
         vm.availableCoaches = [];
+        vm.coachClusters = [];
         vm.currentCoach = currentCoach;
+        vm.showProfile = showProfile;
         vm.newCoach = null;
         vm.save = save;
         vm.cancel = cancel;
@@ -513,8 +515,27 @@ angular.module('tdb.org.controllers', [])
             CoachService.getAvailableCoaches()
                 .then(function(data) {
                     vm.availableCoaches = data;
-                    return vm.availableCoaches;
+                    var i,j,temparray,chunk = 3;
+                    for (i=0,j=vm.availableCoaches.length; i<j; i+=chunk) {
+                        temparray = vm.availableCoaches.slice(i,i+chunk);
+                        vm.coachClusters.push(temparray)
+                     }
                 });
+        }
+
+        function showProfile(employeeId) {
+            console.log(employeeId);
+            console.log('test');
+            var modalInstance = $modal.open({
+                animation: true,
+                templateUrl: '/static/angular/profile/partials/_modals/coach-profile.html',
+                controller: 'CoachProfileController as coachProfile',
+                resolve: {
+                    employeeId: function () {
+                        return employeeId
+                    }
+                }
+            });
         }
 
         function save(form) {

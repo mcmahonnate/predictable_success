@@ -76,6 +76,7 @@
         function changeCoach() {
             var modalInstance = $modal.open({
                 animation: true,
+                backdrop: 'static',
                 templateUrl: '/static/angular/profile/partials/_modals/change-coach.html',
                 controller: 'ChangeCoachController',
                 controllerAs: 'changeCoach',
