@@ -1,0 +1,9 @@
+<ol class="bio-list" style="border: 1px solid #aaa;">
+    <li>
+        <strong style="margin-right:10px">Capacity:</strong> {{ coachProfile.capacity.text }} Coachees
+    </li>
+    <li class="shaded">
+        <strong style="margin-right:10px">Block List:</strong>
+        <span ng-repeat="employee in coachProfile.profile.blacklist">{{employee.full_name}}<span ng-if="!$last">, </span> </span>
+    </li>
+</ol>

@@ -113,18 +113,33 @@ angular.module('tdb.org.controllers', [])
         };
     }])
 
-    .controller('CoachDetailCtrl', ['$scope', 'Event', '$rootScope', '$location', '$routeParams', 'User', 'Employee', 'Coachees', 'SalaryReport', 'TalentReport', '$http', 'analytics', 'Engagement', 'TalentCategories', function ($scope, Event, $rootScope, $location, $routeParams, User, Employee, Coachees, SalaryReport, TalentReport, $http, analytics, Engagement, TalentCategories) {
+    .controller('CoachDetailCtrl', ['analytics', 'Coachees', 'SalaryReport', 'TalentReport', '$location', '$modal', '$rootScope', '$routeParams', '$scope', function (analytics, Coachees, SalaryReport, TalentReport, $location, $modal, $rootScope, $routeParams, $scope) {
         /* Since this page can be the root for some users let's make sure we capture the correct page */
         var location_url = $location.url().indexOf('/my-coachees') < 0 ? '/my-coachees' : $location.url();
         analytics.trackPage($scope, $location.absUrl(), location_url);
         $scope.coach = $rootScope.currentUser.employee;
         Coachees.query({ id: $routeParams.id }).$promise.then(function (response) {
-
             $scope.employees = response;
-            //console.log($scope.employees)
         });
         $scope.talentReport = TalentReport.myCoachees();
         $scope.salaryReport = SalaryReport.myCoachees();
+        if ($routeParams.edit_profile=='true') {
+            editProfile();
+        }
+
+        function editProfile() {
+            var modalInstance = $modal.open({
+                animation: true,
+                backdrop: 'static',
+                templateUrl: '/static/angular/profile/partials/_modals/add-edit-coach-profile.html',
+                controller: 'CoachProfileController as coachProfile',
+                resolve: {
+                    employeeId: function () {
+                        return $scope.coach.id;
+                    }
+                }
+            });
+        };
     }])
 
     .controller('AddEditBioCtrl', ['$scope', '$rootScope', '$routeParams', '$modalInstance', '$location', 'employee', 'leadership', 'employees', 'teams', 'Employee', 'EmployeeLeader', 'EmployeeSearch', 'fileReader', 'PhotoUpload', function($scope, $rootScope, $routeParams, $modalInstance, $location, employee, leadership, employees, teams, Employee, EmployeeLeader, EmployeeSearch, fileReader, PhotoUpload) {
@@ -137,7 +152,6 @@ angular.module('tdb.org.controllers', [])
                 $scope.coaches = angular.copy($scope.employees);
         });
 
-        // $scope.preview = $scope.employee.avatar;
         $scope.image = {
             uploadedImg: '',
             croppedImg: $scope.employee.avatar
@@ -391,7 +405,7 @@ angular.module('tdb.org.controllers', [])
             var modalInstance = $modal.open({
                 animation: true,
                 backdrop: 'static',
-                templateUrl: '/static/angular/org/partials/modals/add-edit-employee.html',
+                templateUrl: '/static/angular/org/partials/_modals/add-edit-employee.html',
                 controller: 'AddEditBioCtrl',
                 resolve: {
                     employee: function () {
@@ -485,10 +499,12 @@ angular.module('tdb.org.controllers', [])
         $scope.busy = false;
     }])
 
-    .controller('ChangeCoachController', ['$modalInstance', 'CoachService', 'currentCoach', function($modalInstance, CoachService, currentCoach) {
+    .controller('ChangeCoachController', ['$modal', '$modalInstance', 'CoachService', 'currentCoach', function($modal, $modalInstance, CoachService, currentCoach) {
         var vm = this;
         vm.availableCoaches = [];
+        vm.coachClusters = [];
         vm.currentCoach = currentCoach;
+        vm.showProfile = showProfile;
         vm.newCoach = null;
         vm.save = save;
         vm.cancel = cancel;
@@ -499,8 +515,27 @@ angular.module('tdb.org.controllers', [])
             CoachService.getAvailableCoaches()
                 .then(function(data) {
                     vm.availableCoaches = data;
-                    return vm.availableCoaches;
+                    var i,j,temparray,chunk = 3;
+                    for (i=0,j=vm.availableCoaches.length; i<j; i+=chunk) {
+                        temparray = vm.availableCoaches.slice(i,i+chunk);
+                        vm.coachClusters.push(temparray)
+                     }
                 });
+        }
+
+        function showProfile(employeeId) {
+            console.log(employeeId);
+            console.log('test');
+            var modalInstance = $modal.open({
+                animation: true,
+                templateUrl: '/static/angular/profile/partials/_modals/coach-profile.html',
+                controller: 'CoachProfileController as coachProfile',
+                resolve: {
+                    employeeId: function () {
+                        return employeeId
+                    }
+                }
+            });
         }
 
         function save(form) {

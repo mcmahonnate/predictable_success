@@ -1,11 +1,10 @@
 from django.contrib.auth.views import password_reset_confirm, login
 from django.core.urlresolvers import reverse
-from django.db.models import F
 from django.http import Http404
 from django.utils.http import urlsafe_base64_decode
-from rest_framework.generics import RetrieveAPIView
+from rest_framework.generics import CreateAPIView, RetrieveAPIView, UpdateAPIView
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -14,13 +13,10 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 import dateutil.parser
 from talentdashboard.views.views import add_salary_to_employee
-from .serializers import EmployeeSerializer, CreateEmployeeSerializer, EditEmployeeSerializer, CoachChangeRequestSerializer, SanitizedEmployeeSerializer, SanitizedEmployeeWithRelationshpsSerializer
+from .serializers import *
 from .permissions import *
 from ..models import *
-from django.utils.log import getLogger
 
-
-logger = getLogger('talentdashboard')
 
 @permission_classes((IsAuthenticated,))
 class EmployeeDetail(APIView):
@@ -105,6 +101,7 @@ class CurrentCoach(RetrieveAPIView):
             raise Http404
         return coach
 
+
 class TeamMemberList(APIView):
     permission_classes = (IsAuthenticated, PermissionsViewAllEmployees)
 
@@ -136,6 +133,7 @@ def my_team_lead(request):
     else:
         return Response(None, status=status.HTTP_403_FORBIDDEN)
 
+
 @api_view(['GET'])
 def my_employees(request):
     current_user = request.user
@@ -148,6 +146,7 @@ def my_employees(request):
         return Response(serializer.data)
     else:
         return Response(None, status=status.HTTP_403_FORBIDDEN)
+
 
 @api_view(['GET'])
 def team_lead_employees(request, pk):
@@ -163,6 +162,7 @@ def team_lead_employees(request, pk):
     else:
         return Response(None, status=status.HTTP_403_FORBIDDEN)
 
+
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
 def all_access_employees(request):
@@ -170,6 +170,7 @@ def all_access_employees(request):
     serializer = SanitizedEmployeeSerializer(employees, many=True, context={'request': request})
 
     return Response(serializer.data)
+
 
 @api_view(['GET'])
 @permission_classes((IsAuthenticated, PermissionsViewAllEmployees))
@@ -180,14 +181,16 @@ def team_leads(request, pk):
 
     return Response(serializer.data)
 
+
 def show_org_chart(request):
     return render_to_response("org_chart.html",
                           {'nodes':Employee.objects.get_current_employees(show_hidden=True)},
                           context_instance=RequestContext(request))
 
+
 @api_view(['GET'])
 def available_coaches(request):
-    coaches = [c.employee for c in CoachCapacity.objects.filter(num_coachees__lt=F('max_allowed_coachees'))]
+    coaches = Employee.objects.get_available_coaches(employee=request.user.employee)
     serializer = SanitizedEmployeeSerializer(coaches, many=True)
     return Response(data=serializer.data)
 
@@ -209,7 +212,60 @@ def change_coach(request):
 def account_activate(request, uidb64=None, token=None, template_name=None, set_password_form=None):
     return password_reset_confirm(request, uidb64=uidb64, token=token, template_name=template_name, set_password_form=set_password_form, post_reset_redirect=reverse('account_activate_login', kwargs={'uidb64': uidb64}))
 
+
 def account_activate_login(request, uidb64=None, template_name=None, authentication_form=None):
     uid = urlsafe_base64_decode(uidb64)
     user = User.objects.get(pk=uid)
     return login(request, template_name=template_name, extra_context={'email': user.email}, authentication_form=authentication_form)
+
+
+class RetrieveCoachProfile(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, pk, format=None):
+        try:
+            profile = CoachProfile.objects.get(employee__id=pk)
+            if request.user.has_perm('org.view_employees') or \
+                            request.user.employee.id == profile.employee.id:
+                serializer = CoachProfileSerializer(profile, context={'request': request})
+            else:
+                serializer = PublicCoachProfileSerializer(profile, context={'request': request})
+            return Response(serializer.data)
+        except Employee.DoesNotExist:
+            return Response(None)
+
+
+class CreateCoachProfile(CreateAPIView):
+    serializer_class = CreateUpdateCoachProfileSerializer
+    permission_classes = (IsAuthenticated, PermissionsViewAllEmployees)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        saved = self.perform_create(serializer)
+        serializer = CoachProfileSerializer(instance=saved, context={'request': request})
+
+        return Response(serializer.data)
+
+    def perform_create(self, serializer):
+        return serializer.save()
+
+
+class UpdateCoachProfile(UpdateAPIView):
+    queryset = CoachProfile.objects.all()
+    serializer_class = CreateUpdateCoachProfileSerializer
+    permission_classes = (IsAuthenticated, UserIsEmployee)
+
+    def get_employee(self):
+        profile = self.get_object()
+        return profile.employee
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        serializer = CoachProfileSerializer(instance, context={'request': request})
+        return Response(serializer.data)

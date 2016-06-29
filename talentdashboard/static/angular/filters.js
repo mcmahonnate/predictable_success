@@ -13,10 +13,10 @@ app.filter('reverse', function() {
 });
 
 app.filter('fromNow', function() {
-    return function(date) {
+    return function(date, withoutSuffix) {
 
         if (date) {
-            return moment(date).fromNow();
+            return moment(date).fromNow(withoutSuffix);
         } else {
             return '';
         }  

@@ -176,7 +176,7 @@ angular.module('tdb.controllers', [])
         $scope.addEmployee = function (employee, leadership, employees, teams) {
             var modalInstance = $modal.open({
                 animation: true,
-                templateUrl: '/static/angular/org/partials/modals/add-edit-employee.html',
+                templateUrl: '/static/angular/org/partials/_modals/add-edit-employee.html',
                 controller: 'AddEditBioCtrl',
                 resolve: {
                     employee: function () {

@@ -108,7 +108,7 @@ angular.module('tdb.import.controllers', [])
             function openEditModal(employee, leadership, employees, teams, index, leaderUpload) {
                 var modalInstance = $modal.open({
                     animation: true,
-                    templateUrl: '/static/angular/org/partials/modals/add-edit-employee.html',
+                    templateUrl: '/static/angular/org/partials/_modals/add-edit-employee.html',
                     controller: 'importModalCtrl',
                     resolve: {
                         employee: function () {

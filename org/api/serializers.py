@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from django.core.exceptions import ObjectDoesNotExist
 from preferences.api.serializers import UserPreferencesSerializer
-from ..models import Team, Employee, Leadership, Mentorship, Attribute, AttributeCategory
+from ..models import *
 
 
 class TeamSerializer(serializers.HyperlinkedModelSerializer):
@@ -26,10 +26,16 @@ class BaseEmployeeSerializer(serializers.HyperlinkedModelSerializer):
 class SanitizedEmployeeSerializer(BaseEmployeeSerializer):
     ''' Contains only information about an employee that can be displayed to any user.
     '''
+    team = serializers.SerializerMethodField()
+
+    def get_team(self, object):
+        if object.team is None:
+            return None
+        return object.team.name
 
     class Meta:
         model = Employee
-        fields = ('id', 'full_name', 'first_name', 'last_name', 'avatar', 'avatar_small', 'requester_has_access')
+        fields = ('id', 'full_name', 'first_name', 'last_name', 'avatar', 'avatar_small', 'requester_has_access', 'team', 'hire_date')
 
 
 class SanitizedEmployeeWithRelationshpsSerializer(BaseEmployeeSerializer):
@@ -360,3 +366,29 @@ class EditEmployeeSerializer(serializers.HyperlinkedModelSerializer):
 
 class CoachChangeRequestSerializer(serializers.Serializer):
     new_coach = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
+
+
+class CoachProfileSerializer(serializers.HyperlinkedModelSerializer):
+    employee = SanitizedEmployeeSerializer()
+    blacklist = SanitizedEmployeeSerializer(many=True)
+
+    class Meta:
+        model = CoachProfile
+        fields = ['id', 'employee', 'max_allowed_coachees', 'blacklist', 'approach']
+
+
+class PublicCoachProfileSerializer(CoachProfileSerializer):
+    def __init__(self, *args, **kwargs):
+        super(CoachProfileSerializer, self).__init__(*args, **kwargs)
+        self.fields.pop("blacklist")
+        self.fields.pop("max_allowed_coachees")
+
+class CreateUpdateCoachProfileSerializer(serializers.ModelSerializer):
+    employee = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
+    max_allowed_coachees = serializers.IntegerField()
+    blacklist = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all(), many=True)
+    approach = serializers.CharField()
+
+    class Meta:
+        model = CoachProfile
+        fields = ('id', 'employee', 'max_allowed_coachees', 'blacklist', 'approach')
