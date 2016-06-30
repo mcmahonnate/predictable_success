@@ -9,7 +9,7 @@
             <span class="timestamp pull-right" data-toggle="tooltip" data-placement="top" title="{{ event.date | date:'MMM d, yyyy h:mma' }}">{{ event.date | fromNow }}</span>
         </div>
     </div>
-    <a class="activity-checkin row" href="#/id/{{ event.related_object.conversation_id }}">
+    <a class="activity-checkin row" ng-href="#/id/{{ event.related_object.conversation_id }}">
         <div class="avatar-container col-xs-2">
             <employee-avatar ng-if="!filter.self || filter.view!='employee'" size="large" employee="event.employee"></employee-avatar>
             <employee-avatar ng-if="filter.self && filter.view=='employee'" size="large" employee="event.user.employee"></employee-avatar>

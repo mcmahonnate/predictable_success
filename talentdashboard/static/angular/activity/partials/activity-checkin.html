@@ -11,7 +11,7 @@
             <span class="timestamp pull-right" data-toggle="tooltip" data-placement="top" title="{{ event.date | date:'MMM d, yyyy h:mma' }}">{{ event.date | fromNow }}</span>
         </div>    
     </div>
-    <a class="activity-checkin row" ng-if="event.show_conversation" href="#/checkins/{{ event.event_id }}">
+    <a class="activity-checkin row" ng-if="event.description" href="#/checkins/{{ event.event_id }}">
         <div class="avatar-container col-xs-2">
             <employee-avatar ng-if="!filter.self || filter.view!='employee'" size="large" employee="event.employee"></employee-avatar>
             <employee-avatar ng-if="filter.self && filter.view=='employee'" size="large" employee="event.user.employee"></employee-avatar>
@@ -25,7 +25,7 @@
             <span class="activity-checkin-summary  comment-text" read-more ng-model="event.description" words="false" length="400"></span>
         </div>
     </a>
-    <div class="activity-checkin row" ng-if="!event.show_conversation">
+    <div class="activity-checkin row" ng-if="!event.description">
         <div class="avatar-container col-xs-2">
             <employee-avatar ng-if="!filter.self || filter.view!='employee'" size="large" employee="event.employee"></employee-avatar>
             <employee-avatar ng-if="filter.self && filter.view=='employee'" size="large" employee="event.user.employee"></employee-avatar>

@@ -216,6 +216,12 @@ class FeedbackDigest(TimeStampedModel):
         self.save()
         send_feedback_digest_email.subtask((self.id,)).apply_async()
 
+    def get_summary(self, user):
+        if user.employee.id == self.subject.id or \
+                        user.employee.id == self.delivered_by.id:
+            return self.summary
+        return None
+
     def share(self, share_with):
         send_share_feedback_digest_email.subtask((self.id, share_with.id)).apply_async()
 

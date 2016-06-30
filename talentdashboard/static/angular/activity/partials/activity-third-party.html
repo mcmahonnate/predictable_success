@@ -16,7 +16,8 @@
             <div class="activity-checkin-type pull-right">
                 <img ng-src="{{ event.related_object.image_url }}" alt="Third party image" class="activity-third-party-event-image"/>
             </div>
-            <div class="activity-comment comment-text" ng-show="!editMode" read-more ng-model="event.description" words="false" length="400"></div>
+            <h3 class="comment-title-employee-name"><strong><span class="sensitive-text">{{ event.employee.full_name }}</span></strong></h3>
+            <div class="activity-checkin-summary comment-text" ng-show="!editMode" read-more ng-model="event.description" words="false" length="400"></div>
         </div>
     </a>
 </div>

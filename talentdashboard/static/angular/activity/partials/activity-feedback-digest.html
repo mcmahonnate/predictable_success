@@ -8,7 +8,7 @@
             <span class="timestamp pull-right" data-toggle="tooltip" data-placement="top" title="{{ event.date | date:'MMM d, yyyy h:mma' }}">{{ event.date | fromNow }}</span>
         </div>    
     </div>
-    <div class="activity-checkin row" ng-if="!event.show_conversation">
+    <div class="activity-checkin row" ng-if="event.employee.id!=$root.currentUser.employee.id && event.user.employee.id!=$root.currentUser.employee.id">
         <div class="avatar-container col-xs-2">
             <employee-avatar ng-if="!filter.self || filter.view!='employee'" size="large" employee="event.employee"></employee-avatar>
             <employee-avatar ng-if="filter.self && filter.view=='employee'" size="large" employee="event.user.employee"></employee-avatar>
@@ -21,4 +21,23 @@
             <div class="checkin-type">Feedback Delivered!</div>
         </div>
     </div>
+    <a class="activity-checkin row" ng-if="event.employee.id==$root.currentUser.employee.id || event.user.employee.id==$root.currentUser.employee.id" ng-href="#/feedback/{{ event.related_object.id }}">
+        <div class="avatar-container col-xs-2">
+            <employee-avatar ng-if="!filter.self || filter.view!='employee'" size="large" employee="event.employee"></employee-avatar>
+            <employee-avatar ng-if="filter.self && filter.view=='employee'" size="large" employee="event.user.employee"></employee-avatar>
+        </div>
+        <div class="activity-checkin-details" ng-class="{'col-xs-12 col-sm-10': view='employee-view', 'col-xs-12 col-sm-10': view='team'}">
+            <div class="activity-checkin-type pull-right">
+                <div class="fa fa-send activity-icon"></div>
+            </div>
+            <h3 class="comment-title-employee-name"><strong><span class="sensitive-text">{{ event.employee.full_name }}</span></strong></h3>
+            <div ng-if="event.description">
+                <div class="checkin-type">Feedback Summary</div>
+                <span class="activity-checkin-summary  comment-text" read-more ng-model="event.description" words="false" length="400"></span>
+            </div>
+            <div ng-if="!event.description">
+                <div class="checkin-type">Feedback Delivered!</div>
+            </div>
+        </div>
+    </a>
 </div>    

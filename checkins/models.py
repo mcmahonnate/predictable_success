@@ -106,9 +106,15 @@ class CheckIn(models.Model):
         return list(Comment.objects.get_for_object(self))
 
     def get_summary(self, user):
-        if user.has_perm('checkins.view_checkin_summary') or \
-                        user.employee.id == self.employee.id:
-            return self.summary
+        if self.shareable:
+            if self.published:
+                return self.summary
+            elif user.employee.id == self.employee.id or \
+                    user.employee.id == self.host.id:
+                return self.summary
+        else:
+            if user.has_perm('checkins.view_checkin_summary'):
+                return self.summary
         return None
 
     def get_type_description(self):

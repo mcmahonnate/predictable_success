@@ -75,12 +75,12 @@ class Event(models.Model):
     objects = EventManager()
 
     def description(self, user):
-        if not self.show_conversation:
-            return None
         comment_type = ContentType.objects.get_for_model(Comment)
         checkin_type = ContentType.objects.get_for_model(CheckIn)
         employee_zone_type = ContentType.objects.get_for_model(EmployeeZone)
+        feedback_digest_type = ContentType.objects.get_for_model(FeedbackDigest)
         third_party_event_type = ContentType.objects.get_for_model(ThirdPartyEvent)
+
         if self.event_type.id is comment_type.id:
             comment = Comment.objects.get(pk=self.event_id)
             return comment.content
@@ -90,6 +90,9 @@ class Event(models.Model):
         elif self.event_type.id is checkin_type.id:
             checkin = CheckIn.objects.get(pk=self.event_id)
             return checkin.get_summary(user)
+        elif self.event_type.id is feedback_digest_type.id:
+            feedback_digest = FeedbackDigest.objects.get(pk=self.event_id)
+            return feedback_digest.get_summary(user)
         elif self.event_type.id is third_party_event_type.id:
             third_party_event = ThirdPartyEvent.objects.get(pk=self.event_id)
             return third_party_event.description
