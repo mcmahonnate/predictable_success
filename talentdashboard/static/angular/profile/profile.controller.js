@@ -113,6 +113,7 @@ function ProfileController(Employee, EmployeeSearch, Profile, SalaryReport, Tale
     }
 
     function filterComments() {
+        vm.moreInfoCollapse = true;
         $scope.$broadcast('filterComments', vm.filter);
     }
 
