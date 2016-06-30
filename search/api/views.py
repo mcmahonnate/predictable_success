@@ -31,6 +31,8 @@ def my_team_employee_search(request):
 @permission_classes((IsAuthenticated, PermissionsViewThisEmployee))
 def lead_employee_search(request, pk):
     lead = Employee.objects.get(id=pk)
+    if request.QUERY_PARAMS.get('children', '').lower() == 'true':
+        return team_employee_search(request, pk)
     return _find_employees_filtered_by_employee_descendants(request, lead)
 
 
@@ -44,6 +46,17 @@ def coach_employee_search(request, pk):
 @api_view(['GET'])
 def my_coachees_employee_search(request):
     return _find_employees_filtered_by_relationship_to_current_user(request, 'coach_ids')
+
+
+@api_view(['GET'])
+def my_team_employee_search(request):
+    return _find_employees_filtered_by_relationship_to_current_user(request, 'leader_ids')
+
+
+@api_view(['GET'])
+def team_employee_search(request, pk):
+    kwargs = {'leader_ids': [pk]}
+    return _find_employees(request, **kwargs)
 
 
 def _find_employees_filtered_by_employee_descendants(request, employee):

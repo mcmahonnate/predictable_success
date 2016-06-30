@@ -1,18 +1,20 @@
 <div class="activity-checkin row profile-summary">
     <div class="activity-checkin-details">
         <div style="margin-bottom: 8px">
-            <div class="profile-summary-label">Coachees</div>
-            <div style="padding: 0 5px; min-height: 65px;display: flex;padding-top:5px">
-
-                <div ng-repeat="employee in profile.coachees" class="pull-left" style="width: 250px;">
-                    <div class="small-headshot" style="display: inline-block;width:40px">
-                        <img ng-src="{{ employee.avatar_small }}" alt="{{ employee.full_name }}'s avatar" class="headshot-image"/>
-                    </div>
-                    <div style="display: inline-block;margin: auto 0px">
-                        <strong><a ng-href="#/employees/{{employee.pk}}">{{ employee.full_name }}</a></strong>
-                        <div style="color: #aaa;" ng-show="employee.leader_full_name">{{employee.leader_full_name}}</div>
-                    </div>
-                </div>
+            <h2 class="panel-title">Coachees</h2>
+            <div class="change-coach">
+                <carousel interval="profile.slideInterval">
+                    <slide ng-repeat="coacheeCluster in profile.coacheeClusters">
+                        <a ng-href="#/profile/{{ employee.pk }}" ng-repeat="employee in coacheeCluster" class="coach-profile" style="display:inline-block">
+                            <div class="xxlarge-avatar-container" ng-class="{'disable': changeCoach.newCoach && (changeCoach.newCoach.id != coach.id)}" style="padding: 0 20px;">
+                                <div class="large-headshot centered">
+                                    <img ng-src="{{ employee.avatar }}" alt="{{ employee.full_name }}'s avatar" class="headshot-image" />
+                                </div>
+                            </div>
+                            <div>{{employee.full_name}}</div>
+                        </a>
+                    </slide>
+                </carousel>
             </div>
         </div>
     </div>

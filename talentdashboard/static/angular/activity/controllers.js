@@ -40,7 +40,6 @@ angular.module('tdb.activity.controllers', [])
                 var request = null;
                 switch ($scope.filter.view) {
                     case 'employee':
-                        console.log($scope.filter);
                         request = Event.getEmployeeEvents($routeParams.id, $scope.nextPage, $scope.filter.type, $scope.filter.third_party, $scope.filter.exclude_third_party_events);
                         break;
                     case 'company':
@@ -79,7 +78,6 @@ angular.module('tdb.activity.controllers', [])
             $scope.nextPage = 1;
             $scope.hasNextPage = true;
             $scope.filter = filter;
-            console.log($scope.filter);
             loadNextPage();
         });
 

@@ -155,7 +155,7 @@ class EmployeeSerializer(BaseEmployeeSerializer):
             serializer = MinimalEmployeeSerializer(context=self.context)
             return serializer.to_representation(obj.leader)
         return None
-    
+
     def get_happiness_verbose(self, obj):
         if obj.current_happiness is None:
             return None

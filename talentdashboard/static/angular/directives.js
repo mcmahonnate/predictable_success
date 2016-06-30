@@ -432,28 +432,48 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
                     [TalentCategories.categories[0].label, nodata, 0]];
                 var table = new google.visualization.arrayToDataTable(data);
                 var options;
-                if (attrs.size=='small'){
+                if (attrs.size=='small') {
                     options = {
                         pieSliceText: 'label',
-                        pieSliceTextStyle: {fontSize:18},
+                        pieSliceTextStyle: {fontSize: 18},
                         backgroundColor: '#fff',
-                        tooltip:{
+                        tooltip: {
                             isHtml: false
                         },
                         pieSliceBorderColor: '#efefef',
-                        tooltipFontSize:'18',
-                        legend:'none',
-                        width:'100%',
-                        height:'100%',
-                        chartArea:{
-                            left:"4px",
-                            top:"0",
+                        tooltipFontSize: '18',
+                        legend: 'none',
+                        width: '100%',
+                        height: '100%',
+                        chartArea: {
+                            left: "4px",
+                            top: "0",
                             height: "100%",
                             width: "96%"
                         },
                         pieHole: 0.3,
                         colors: chart_colors
-                    };                    
+                    };
+                }
+                else if (attrs.size=='xsmall'){
+                    options = {
+                        pieSliceText: 'none',
+                        backgroundColor: '#fff',
+                        tooltip:{
+                            isHtml: false
+                        },
+                        pieSliceBorderColor: '#efefef',
+                        tooltipFontSize:'12',
+                        legend:'none',
+                        chartArea:{
+                            left:"0",
+                            top:"5px",
+                            height: "100%",
+                            width: "96%"
+                        },
+                        pieHole: 0.3,
+                        colors: chart_colors
+                    };
                 } else {
                     options = {
                         pieSliceText: 'label',

@@ -7,13 +7,17 @@ function ProfileController(Employee, EmployeeSearch, Profile, SalaryReport, Tale
     var location_url = $location.url().indexOf('/profile') < 0 ? '/profile' : $location.url();
     analytics.trackPage($scope, $location.absUrl(), location_url);
     var vm = this;
+    vm.slideInterval = -1;
     vm.employee = null;
     vm.moreInfoCollapse = true;
     vm.teamMembers = [];
+    vm.teamMemberClusters = [];
     vm.coachees = [];
+    vm.coacheeClusters = [];
     vm.filterCommentsByType = filterCommentsByType;
     vm.filterCommentsByView = filterCommentsByView;
     vm.filterCommentsByThirdParty = filterCommentsByThirdParty;
+    vm.getTeamMembers = getTeamMembers;
     vm.requestFeedback = requestFeedback;
     vm.requestCheckIn = requestCheckIn;
     vm.filter = {type: null, view: 'employee', third_party: null, employee: null, self: true, exclude_third_party_events: true};
@@ -63,24 +67,54 @@ function ProfileController(Employee, EmployeeSearch, Profile, SalaryReport, Tale
 
     function getTeamSummary() {
         if (vm.filter.self) {
-            vm.teamMembers = EmployeeSearch.myTeam();
+            EmployeeSearch.myTeam({children:true}, function(data) {
+                    vm.teamMembers = data;
+                    vm.teamMemberClusters = createEmployeeClusters(data);
+                });
             $scope.talentReport = TalentReport.myTeam();
             $scope.salaryReport = SalaryReport.myTeam();
         } else {
-            vm.teamMembers = EmployeeSearch.leadEmployees({id: $routeParams.id});
+            EmployeeSearch.leadEmployees({id: $routeParams.id, children:true}, function(data) {
+                    vm.teamMembers = data;
+                    vm.teamMemberClusters = createEmployeeClusters(data);
+                });
             $scope.talentReport = TalentReport.leadEmployees({id: $routeParams.id});
             $scope.salaryReport = SalaryReport.leadEmployees({id: $routeParams.id});
         }
     }
 
+    function createEmployeeClusters(employees) {
+        var employeeClusters = [];
+        var i,j,temparray,chunk = 5;
+        for (i=0,j=employees.length; i<j; i+=chunk) {
+            temparray = employees.slice(i,i+chunk);
+            employeeClusters.push(temparray)
+         }
+        return employeeClusters;
+    }
+
+    function getTeamMembers(employee){
+        employee.teamMembers = EmployeeSearch.leadEmployees({id: employee.pk, children:true});
+    }
+
     function getCoachSummary() {
         if (vm.filter.self) {
-            vm.coachees = EmployeeSearch.myCoachees();
-            $scope.talentReport = TalentReport.myCoachees();
+            EmployeeSearch.myCoachees(null, function(data) {
+                    vm.coachees = data;
+                    vm.coacheeClusters = createEmployeeClusters(data);
+                });
+            TalentReport.myCoachees(null, function(data) {
+                $scope.talentReport = data;
+            });
         }
         else {
-            vm.coachees = EmployeeSearch.coachEmployees({id: $routeParams.id});
-            $scope.talentReport = TalentReport.coachEmployees({id: $routeParams.id});
+            EmployeeSearch.coachEmployees({id: $routeParams.id}, function(data) {
+                    vm.coachees = data;
+                    vm.coacheeClusters = createEmployeeClusters(data);
+                });
+            TalentReport.coachEmployees({id: $routeParams.id}, function(data) {
+                $scope.talentReport = data;
+            });
         }
     }
 

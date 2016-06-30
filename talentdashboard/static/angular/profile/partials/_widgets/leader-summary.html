@@ -1,22 +1,36 @@
 <div class="activity-checkin row profile-summary">
     <div class="activity-checkin-details">
         <div style="margin: 8px">
-            <div class="profile-summary-label">Team</div>
-            <div style="padding: 0 5px; min-height: 65px;display: flex;padding-top:5px">
-
-                <div ng-repeat="employee in profile.teamMembers | orderBy:'lft'" class="pull-left" style="width: 250px;">
-                    <div class="small-headshot" style="display: inline-block;width:40px">
-                        <img ng-src="{{ employee.avatar_small }}" alt="{{ employee.full_name }}'s avatar" class="headshot-image"/>
+            <h2 class="panel-title" style="padding-left: 25px">Team</h2>
+            <div class="change-coach" style="padding-bottom: 40px;">
+                <carousel interval="profile.slideInterval">
+                    <slide ng-repeat="teamMemberCluster in profile.teamMemberClusters">
+                        <div ng-repeat="employee in teamMemberCluster" class="coach-profile" style="display:inline-block">
+                            <div class="xxlarge-avatar-container" ng-class="{'disable': changeCoach.newCoach && (changeCoach.newCoach.id != coach.id)}" style="padding: 0 20px;">
+                                <a ng-click="profile.orgChartSelect=employee" style="cursor: pointer">
+                                    <div class="large-headshot centered">
+                                        <img ng-src="{{ employee.avatar }}" alt="{{ employee.full_name }}'s avatar" class="headshot-image" />
+                                    </div>
+                                </a>
+                            </div>
+                            <div>{{employee.full_name}}</div>
+                        </div>
+                    </slide>
+                </carousel>
+            </div>
+            <div>
+                <div style="width: 54%; display:inline-block;vertical-align:top;">
+                    <div style="padding-top: 25px;">
+                        <a href="javascript:void(0)" data-toggle="modal" data-target="#distributions-modal" class="pull-right underline mobile-hide">Explanation</a>
+                        <h2 class="panel-title" style="margin-left:25px">Development Portfolio</h2>
                     </div>
-                    <div style="display: inline-block;margin: auto 0px">
-                        <strong><a ng-href="#/employees/{{employee.pk}}">{{ employee.full_name }}</a></strong>
-                        <div style="color: #aaa;" ng-show="employee.coach_full_name">{{employee.coach_full_name}}</div>
+                    <div class="talent-pie-chart-container" style="margin: 20px 0">
+                        <div x-talent-category-chart size="xsmall"></div>
                     </div>
                 </div>
+                <div ng-include="'/static/angular/partials/_widgets/salary-total.html'" style="width: 45%; display:inline-block;vertical-align:top;"></div>
             </div>
-            <div ng-include="'/static/angular/partials/_widgets/chart-talent-portfolio.html'"></div>
             <div ng-include="'/static/angular/partials/_widgets/talent-salary-totals.html'"></div>
-            <div ng-include="'/static/angular/partials/_widgets/salary-total.html'"></div>
         </div>
     </div>
 </div>

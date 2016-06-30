@@ -30,14 +30,16 @@
             <div class="profile-info-sub-lablel"></div>
         </div>
         <div>
-            <div class="profile-info-container" collapse="profile.moreInfoCollapse">
-                <div class="fade-in" ng-show="profile.filter.view=='employee'" ng-include="'/static/angular/profile/partials/_widgets/employee-summary.html'"></div>
-                <div class="fade-in" ng-show="profile.filter.view=='leader'" ng-include="'/static/angular/profile/partials/_widgets/leader-summary.html'"></div>
-                <div class="fade-in" ng-show="profile.filter.view=='coach'" ng-include="'/static/angular/profile/partials/_widgets/coach-summary.html'"></div>
-            </div>
             <div class="profile-info-more centered" ng-click="profile.moreInfoCollapse=!profile.moreInfoCollapse">
-                <i class="fa fa-chevron-down collapse-toggle"></i>
+                <i ng-show="profile.moreInfoCollapse" class="fa fa-chevron-down collapse-toggle"></i>
+                <i ng-show="!profile.moreInfoCollapse" class="fa fa-chevron-up collapse-toggle"></i>
             </div>
+            <div class="profile-info-container" collapse="profile.moreInfoCollapse">
+                <div class="fade-in" ng-if="profile.filter.view=='employee'" ng-include="'/static/angular/profile/partials/_widgets/employee-summary.html'"></div>
+                <div class="fade-in" ng-if="profile.filter.view=='leader'" ng-include="'/static/angular/profile/partials/_widgets/leader-summary.html'"></div>
+                <div class="fade-in" ng-if="profile.filter.view=='coach'" ng-include="'/static/angular/profile/partials/_widgets/coach-summary.html'"></div>
+            </div>
+
         </div>
         <div class="activity-filters">
             <div class="activity-filter-item" ng-class="{'selected': profile.filter.type==null}" ng-click="profile.filterCommentsByType(null)"><span class="fa fa-globe activity-filter-item-icon"></span><span class="activity-filter-item-label">All</span></div>
