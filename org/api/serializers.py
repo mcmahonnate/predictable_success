@@ -151,9 +151,11 @@ class EmployeeSerializer(BaseEmployeeSerializer):
         return serializer.to_representation(obj.coach)
 
     def get_leader(self, obj):
-        serializer = MinimalEmployeeSerializer(context=self.context)
-        return serializer.to_representation(obj.leader)
-
+        if obj.leader:
+            serializer = MinimalEmployeeSerializer(context=self.context)
+            return serializer.to_representation(obj.leader)
+        return None
+    
     def get_happiness_verbose(self, obj):
         if obj.current_happiness is None:
             return None
