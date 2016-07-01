@@ -38,6 +38,11 @@ angular.module('tdb.tasks.controllers', [])
         $scope.canAddNew = false;
         $scope.todos = [];
         $scope.done = [];
+        $scope.showDone = function() {
+            if ($scope.done.length == 0) {
+                $scope.loadTasks(true);
+            }
+        }
 
         $scope.loadTasks = function(completed) {
             $scope.busy = true;
@@ -136,7 +141,6 @@ angular.module('tdb.tasks.controllers', [])
         };
 
         $scope.loadTasks(false); //load todos
-        $scope.loadTasks(true); //load done todos
 
     }])
 
