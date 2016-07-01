@@ -2,7 +2,7 @@ angular
     .module('profile')
     .controller('ProfileController', ProfileController);
 
-function ProfileController(Employee, EmployeeSearch, Profile, SalaryReport, TalentReport, ThirdParties, analytics, $location, $modal, $rootScope, $routeParams, $scope) {
+function ProfileController(CoachProfileService, Employee, EmployeeSearch, Profile, SalaryReport, TalentReport, ThirdParties, analytics, $location, $modal, $rootScope, $routeParams, $scope) {
     /* Since this page can be the root for some users let's make sure we capture the correct page */
     var location_url = $location.url().indexOf('/profile') < 0 ? '/profile' : $location.url();
     analytics.trackPage($scope, $location.absUrl(), location_url);
@@ -14,6 +14,8 @@ function ProfileController(Employee, EmployeeSearch, Profile, SalaryReport, Tale
     vm.teamMemberClusters = [];
     vm.coachees = [];
     vm.coacheeClusters = [];
+    vm.coachingApproach = null;
+    vm.editCoachProfile = editCoachProfile;
     vm.filterCommentsByType = filterCommentsByType;
     vm.filterCommentsByView = filterCommentsByView;
     vm.filterCommentsByThirdParty = filterCommentsByThirdParty;
@@ -106,6 +108,10 @@ function ProfileController(Employee, EmployeeSearch, Profile, SalaryReport, Tale
             TalentReport.myCoachees(null, function(data) {
                 $scope.talentReport = data;
             });
+            CoachProfileService.get($rootScope.currentUser.employee.id)
+                .then(function(data){
+                    vm.coachingApproach = data.approach;
+                });
         }
         else {
             EmployeeSearch.coachEmployees({id: $routeParams.id}, function(data) {
@@ -115,8 +121,32 @@ function ProfileController(Employee, EmployeeSearch, Profile, SalaryReport, Tale
             TalentReport.coachEmployees({id: $routeParams.id}, function(data) {
                 $scope.talentReport = data;
             });
+            CoachProfileService.get($routeParams.id)
+                .then(function(data){
+                    vm.coachingApproach = data.approach;
+                });
         }
+
     }
+
+    function editCoachProfile() {
+        var modalInstance = $modal.open({
+            animation: true,
+            backdrop: 'static',
+            templateUrl: '/static/angular/profile/partials/_modals/add-edit-coach-profile.html',
+            controller: 'CoachProfileController as coachProfile',
+            resolve: {
+                employeeId: function () {
+                    return vm.employee.id;
+                }
+            }
+        });
+        modalInstance.result.then(
+            function (data) {
+                vm.coachingApproach = data.approach;
+            }
+        );
+    };
 
     function filterCommentsByType(type) {
         vm.filter.type = type;

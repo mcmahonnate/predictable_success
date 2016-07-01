@@ -524,8 +524,6 @@ angular.module('tdb.org.controllers', [])
         }
 
         function showProfile(employeeId) {
-            console.log(employeeId);
-            console.log('test');
             var modalInstance = $modal.open({
                 animation: true,
                 templateUrl: '/static/angular/profile/partials/_modals/coach-profile.html',

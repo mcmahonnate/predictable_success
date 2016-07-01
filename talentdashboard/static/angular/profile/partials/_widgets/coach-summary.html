@@ -20,6 +20,16 @@
                     </slide>
                 </carousel>
             </div>
+            <div style="margin: 20px 0">
+                <a href ng-if="profile.filter.self" ng-click="profile.editCoachProfile()" class="pull-right">Edit</a>
+                <h2 ng-if="profile.coachingApproach" class="panel-title">
+                    <span ng-if="profile.filter.self">My </span>
+                    <span ng-if="!profile.filter.self">{{profile.employee.first_name}}'s </span>
+                    Coaching Approach
+
+                </h2>
+                <div class="profile-info-sub-lablel">{{profile.coachingApproach}}</div>
+            </div>
         </div>
     </div>
 </div>
