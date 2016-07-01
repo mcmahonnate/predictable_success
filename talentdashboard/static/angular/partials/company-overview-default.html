@@ -9,7 +9,7 @@
             <div ng-if="customer.show_kpi" ng-include="'/static/angular/partials/_widgets/revenue-per-employee.html'"></div>
         </div>
         <div class="col col-md-7">    
-            <div ng-include="'/static/angular/partials/_widgets/todos.html'" data-filter="mine" data-view="my-view" data-page-size="5" ng-controller="TaskListCtrl"></div>
+            <div ng-include="'/static/angular/partials/_widgets/todos.html'" data-filter="mine" data-view="my-view" data-pageSize="5" ng-controller="TaskListCtrl"></div>
             <div ng-include="'/static/angular/activity/partials/activity.html'" ng-controller="ActivityCtrl" data-view="company"></div>
         </div>
     </div>

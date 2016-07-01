@@ -34,7 +34,7 @@ angular.module('tdb.tasks.controllers', [])
         var employee_id = $scope.employee ? $scope.employee.id : null;
         $scope.view = $attrs.view;
         $scope.filter = $attrs.filter;
-        $scope.pageSize = $attrs.pageSize;
+        $scope.pageSize = $attrs.pageSize ? $attrs.pageSize : 5;
         $scope.canAddNew = false;
         $scope.todos = [];
         $scope.done = [];
@@ -44,24 +44,21 @@ angular.module('tdb.tasks.controllers', [])
             }
         }
 
+
         $scope.loadTasks = function(completed) {
             $scope.busy = true;
 
             var page;
             var filter = $scope.filter;
 
-            if (!$scope.page_size) {
-                var page_size = 5;
-            }
-
             if (completed) {page = $scope.done_page + 1}
             else {page = $scope.todo_page + 1}
 
-            var query = {completed: completed, filter: filter, page: page, page_size: 20};
+            var query = {completed: completed, filter: filter, page: page, page_size: $scope.pageSize};
 
             if (employee_id) {
                 $scope.canAddNew = true;
-                query = {employee_id: employee_id, completed: completed, page: page, page_size: page_size};
+                query = {employee_id: employee_id, completed: completed, page: page, page_size: $scope.pageSize};
             }
 
             Task.get(query, function(data) {
