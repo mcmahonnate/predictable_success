@@ -37,12 +37,12 @@
                 </table>
             </div>
         </tab>
-        <tab heading="Finished">
+        <tab heading="Finished" ng-click="feedbackCoachWidget.showDigestsIveDelivered()">
             <div ng-show="feedbackCoachWidget.digests.length === 0" class="todos-empty">
                 <p ng-show="view == 'my-view'">You have not delivered any feedback yet.</p>
             </div>
             <div ng-if="feedbackCoachWidget.digests.length > 0">
-                <table class="table table-striped" style="margin-bottom:45px">
+                <table class="table table-striped" style="margin-bottom:5px">
                     <thead>
                         <tr>
                           <th style="width:50%">Employee</th>
@@ -67,6 +67,7 @@
                         </tr>
                     </tbody>
                 </table>
+                <button class="btn btn-link btn-sm" ng-show="feedbackCoachWidget.digestsHasNext" ng-click="feedbackCoachWidget.getDigestsIveDelivered()">See More</button>
             </div>
         </tab>
     </tabset>    

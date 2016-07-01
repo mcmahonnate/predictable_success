@@ -179,10 +179,11 @@ class FeedbackDigestManager(models.Manager):
         return self.filter(subject=employee, has_been_delivered=True).latest('delivery_date')
 
     def get_all_delivered_for_employee(self, employee):
-        return self.filter(subject=employee, has_been_delivered=True)
+        return self.filter(subject=employee, has_been_delivered=True).order_by('-delivery_date')
 
     def get_all_ive_delivered(self, employee):
-        return self.filter(delivered_by=employee, has_been_delivered=True, subject__departure_date__isnull=True)
+        return self.filter(delivered_by=employee, has_been_delivered=True, subject__departure_date__isnull=True)\
+            .order_by('-delivery_date')
 
 
 class FeedbackDigest(TimeStampedModel):

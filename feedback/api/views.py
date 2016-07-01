@@ -8,6 +8,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from dateutil import parser
 from serializers import *
+from talentdashboard.views.views import StandardResultsSetPagination
 from org.models import Employee
 from org.api.permissions import UserIsEmployee, UserIsCoachOfEmployee
 from ..models import FeedbackRequest, FeedbackProgressReport, FeedbackProgressReports, FeedbackDigest, EmployeeFeedbackReports, EmployeeSubmissionReport
@@ -217,6 +218,13 @@ class RetrieveMyFeedbackDigests(ListAPIView):
 class RetrieveFeedbackDigestsIveDelivered(ListAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = SummarizedFeedbackDigestSerializer
+
+    def get(self, request):
+        paginator = StandardResultsSetPagination()
+        print self.queryset
+        result_page = paginator.paginate_queryset(self.get_queryset(), request)
+        serializer = self.serializer_class(result_page, many=True, context={'request': request})
+        return paginator.get_paginated_response(serializer.data)
 
     def get_queryset(self):
         try:

@@ -10,12 +10,22 @@
         vm.progressReports = [];
         vm.digests = [];
         vm.getFeedbackProgressReport = getFeedbackProgressReport;
+        vm.showDigestsIveDelivered = showDigestsIveDelivered;
+        vm.getDigestsIveDelivered = getDigestsIveDelivered;
+        vm.digestsHasNext = true;
+        vm.digestsPage = 0;
+        vm.pageSize = 3;
 
         activate();
 
         function activate() {
             getFeedbackProgressReport();
-            getDigestsIveDelivered()
+        }
+
+        function showDigestsIveDelivered() {
+            if (vm.digests.length==0) {
+                vm.getDigestsIveDelivered();
+            }
         }
 
         function getFeedbackProgressReport() {
@@ -30,9 +40,11 @@
         }
 
         function getDigestsIveDelivered() {
-            return FeedbackDigestService.getDigestsIveDelivered()
+            vm.digestsPage += 1;
+            return FeedbackDigestService.getDigestsIveDelivered({page: vm.digestsPage, page_size: vm.pageSize})
                 .then(function (data) {
-                    vm.digests = data;
+                    vm.digests = vm.digests.concat(data.results);
+                    vm.digestsHasNext  = data.has_next;
                     if (vm.digests.length > 0) {
                         vm.show = true;
                     }

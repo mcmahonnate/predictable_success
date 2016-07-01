@@ -17,7 +17,7 @@
                 <div class="row todo" ng-repeat="task in todos | orderBy:'-created_date'">
                     <div ng-include="'/static/angular/partials/_widgets/task-list-item.html'"></div>
                 </div>
-                <button class="btn btn-link btn-sm" ng-show="todo_has_next && !busy" ng-click="loadTasks(false)">Load More Tasks</button>
+                <button class="btn btn-link btn-sm" ng-show="todo_has_next && !busy" ng-click="loadTasks(false)">See More Tasks</button>
             </div>
             <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
         </tab>
@@ -35,7 +35,7 @@
                 <div class="row todo" ng-repeat="task in done | orderBy:'-due_date'">
                     <div ng-include="'/static/angular/partials/_widgets/task-list-item.html'"></div>
                 </div>
-                <button class="btn btn-link btn-sm" ng-show="done_has_next && !busy" ng-click="loadTasks(true)">Load More Tasks</button>
+                <button class="btn btn-link btn-sm" ng-show="done_has_next && !busy" ng-click="loadTasks(true)">See More Tasks</button>
             </div>
             <div ng-show="busy" class="no-results"><img src="../static/images/loader.gif" alt="Loading spinner" /></div>
         </tab>

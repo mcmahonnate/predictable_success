@@ -61,9 +61,9 @@ function FeedbackDigestService($log, $http) {
         }
     }
 
-    function getDigestsIveDelivered() {
+    function getDigestsIveDelivered(data) {
         var url = '/api/v1/feedback/digests/delivered/';
-        return $http.get(url)
+        return $http.get(url, {params:data})
             .then(success)
             .catch(fail);
 
