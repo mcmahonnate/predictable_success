@@ -1,7 +1,11 @@
 <div class="activity-checkin row profile-summary">
     <div class="activity-checkin-details">
         <div style="margin-bottom: 8px">
-            <h2 class="panel-title">Coachees</h2>
+            <h2 class="panel-title">
+                <span ng-if="profile.filter.self">My </span>
+                <span ng-if="!profile.filter.self">{{profile.employee.first_name}}'s </span>
+                Coachees
+            </h2>
             <div class="change-coach">
                 <carousel interval="profile.slideInterval">
                     <slide ng-repeat="coacheeCluster in profile.coacheeClusters">

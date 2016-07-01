@@ -1,27 +1,34 @@
 <div class="activity-checkin row profile-summary">
     <div class="activity-checkin-details">
         <div style="margin-bottom: 8px">
-            <span class="profile-summary-label">Support Team</span>
-            <div style="padding: 0 5px; min-height: 65px;display: flex;padding-top:5px">
-
-                <div class="pull-left" style="width: 250px;" ng-if="profile.employee.leader">
-                    <div class="small-headshot" style="display: inline-block;width:40px">
-                        <img ng-src="{{ profile.employee.leader.avatar_small }}" alt="{{ profile.employee.leader.full_name }}'s avatar" class="headshot-image"/>
-                    </div>
-                    <div style="display: inline-block;margin: auto 0px">
-                        <employee-name employee="profile.employee.leader"></employee-name>
-                        <div style="color: #aaa;">Team Lead</div>
-                    </div>
-                </div>
-                <div class="pull-left" style="width: 250px;display: flex" ng-if="profile.employee.coach">
-                    <div class="small-headshot" style="display: inline-block;width:40px">
-                        <img ng-src="{{ profile.employee.coach.avatar_small }}" alt="{{ profile.employee.coach.full_name }}'s avatar" class="headshot-image"/>
-                    </div>
-                    <div style="display: inline-block;margin: auto 0px;">
-                        <employee-name employee="profile.employee.coach"></employee-name>
-                        <div style="color: #aaa;">Coach</div>
-                    </div>
-                </div>
+            <h2 class="panel-title">
+                <span ng-if="profile.filter.self">Your </span>
+                <span ng-if="!profile.filter.self">{{profile.employee.first_name}}'s </span>
+                Support Team
+            </h2>
+            <div class="change-coach">
+                <carousel interval="profile.slideInterval">
+                    <slide>
+                        <div ng-if="profile.employee.leader" class="coach-profile" style="display:inline-block">
+                            <div class="xxlarge-avatar-container" style="padding: 0 20px;">
+                                <div class="large-headshot centered">
+                                    <img ng-src="{{ profile.employee.leader.avatar }}" alt="{{ profile.employee.leader.full_name }}'s avatar" class="headshot-image" />
+                                </div>
+                            </div>
+                            <div>{{profile.employee.leader.full_name}}</div>
+                            <div style="color: #aaa;">Team Lead</div>
+                        </div>
+                        <div ng-if="profile.employee.coach" class="coach-profile" style="display:inline-block">
+                            <div class="xxlarge-avatar-container" style="padding: 0 20px;">
+                                <div class="large-headshot centered">
+                                    <img ng-src="{{ profile.employee.coach.avatar }}" alt="{{ profile.employee.coach.full_name }}'s avatar" class="headshot-image" />
+                                </div>
+                            </div>
+                            <div>{{profile.employee.coach.full_name}}</div>
+                            <div style="color: #aaa;">Coach</div>
+                        </div>
+                    </slide>
+                </carousel>
             </div>
         </div>
     </div>

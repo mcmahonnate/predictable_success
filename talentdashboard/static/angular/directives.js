@@ -464,12 +464,13 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
                         },
                         pieSliceBorderColor: '#efefef',
                         tooltipFontSize:'12',
-                        legend:'none',
+                        width: '315',
+                        height: '200',
                         chartArea:{
-                            left:"0",
-                            top:"5px",
-                            height: "100%",
-                            width: "96%"
+                            left:'4',
+                            top:'5',
+                            height: '200',
+                            width: '315'
                         },
                         pieHole: 0.3,
                         colors: chart_colors

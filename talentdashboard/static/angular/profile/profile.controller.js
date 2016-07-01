@@ -85,7 +85,7 @@ function ProfileController(Employee, EmployeeSearch, Profile, SalaryReport, Tale
 
     function createEmployeeClusters(employees) {
         var employeeClusters = [];
-        var i,j,temparray,chunk = 5;
+        var i,j,temparray,chunk = 4;
         for (i=0,j=employees.length; i<j; i+=chunk) {
             temparray = employees.slice(i,i+chunk);
             employeeClusters.push(temparray)

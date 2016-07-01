@@ -13,9 +13,14 @@
             <a ng-class="{'btn-default': profile.filter.type!='checkin', 'btn-success': profile.filter.type=='checkin'}" class="btn" style="height: 35px;padding: 6px 20px;" ng-href="#/checkin/{{profile.filter.employee.id}}" type="button"><i class="fa fa-check"></i> Check-In</a>
         </div>
         <tabset class="profile-tabs" ng-show="profile.employee.is_lead || profile.employee.is_coach">
-            <tab index="0" heading="Profile" select="profile.filterCommentsByView('employee')"></tab>
-            <tab index="1" ng-show="profile.employee.is_lead" heading="Team" select="profile.filterCommentsByView('leader')"></tab>
-            <tab index="2" ng-show="profile.employee.is_coach" heading="Coachees" select="profile.filterCommentsByView('coach')"></tab>
+            <!-- tabs for profile view -->
+            <tab ng-if="!profile.filter.self" index="0" heading="Profile" select="profile.filterCommentsByView('employee')"></tab>
+            <tab ng-if="!profile.filter.self" index="1" ng-show="profile.employee.is_lead" heading="Team" select="profile.filterCommentsByView('leader')"></tab>
+            <tab ng-if="!profile.filter.self" index="2" ng-show="profile.employee.is_coach" heading="Coachees" select="profile.filterCommentsByView('coach')"></tab>
+            <!-- tabs for self view -->
+            <tab ng-if="profile.filter.self" index="0" heading="Me" select="profile.filterCommentsByView('employee')"></tab>
+            <tab ng-if="profile.filter.self" index="1" ng-show="profile.employee.is_lead" heading="My Team" select="profile.filterCommentsByView('leader')"></tab>
+            <tab ng-if="profile.filter.self" index="2" ng-show="profile.employee.is_coach" heading="My Coachees" select="profile.filterCommentsByView('coach')"></tab>
         </tabset>
     </div>
     <div class="profile-demographic panel" ng-class="{'has-top-tabs': profile.employee.is_lead || profile.employee.is_coach, 'profile-tab-selected': profile.filter.view=='employee'}">
@@ -26,20 +31,19 @@
         </div>
         <div class="profile-info-container" style="display: inline-block;width: 504px;">
             <h2 class="profile-info-lablel">{{profile.employee.full_name}}</h2>
-            <span class="profile-info-sub-lablel">{{profile.employee.team.name}}</span>
+            <div class="profile-info-sub-lablel">
+                <a href data-toggle="modal" data-target="#distributions-modal" style="color: #aaa;">
+                    More about
+                    <span ng-if="profile.filter.self && profile.filter.view=='employee'">Me</span>
+                    <span ng-if="profile.filter.self && profile.filter.view!='employee'">My</span>
+                    <span ng-if="!profile.filter.self && profile.filter.view=='employee'">{{profile.employee.first_name}}</span>
+                    <span ng-if="!profile.filter.self && profile.filter.view!='employee'">{{profile.employee.first_name}}'s</span>
+                    <span ng-if="profile.filter.view=='leader'">Team</span>
+                    <span ng-if="profile.filter.view=='coach'">Coachees</span>
+                    <span class="fa fa-info-circle" style="font-size:17px"></span>
+                </a>
+            </div>
             <div class="profile-info-sub-lablel"></div>
-        </div>
-        <div>
-            <div class="profile-info-more centered" ng-click="profile.moreInfoCollapse=!profile.moreInfoCollapse">
-                <i ng-show="profile.moreInfoCollapse" class="fa fa-chevron-down collapse-toggle"></i>
-                <i ng-show="!profile.moreInfoCollapse" class="fa fa-chevron-up collapse-toggle"></i>
-            </div>
-            <div class="profile-info-container" collapse="profile.moreInfoCollapse">
-                <div class="fade-in" ng-if="profile.filter.view=='employee'" ng-include="'/static/angular/profile/partials/_widgets/employee-summary.html'"></div>
-                <div class="fade-in" ng-if="profile.filter.view=='leader'" ng-include="'/static/angular/profile/partials/_widgets/leader-summary.html'"></div>
-                <div class="fade-in" ng-if="profile.filter.view=='coach'" ng-include="'/static/angular/profile/partials/_widgets/coach-summary.html'"></div>
-            </div>
-
         </div>
         <div class="activity-filters">
             <div class="activity-filter-item" ng-class="{'selected': profile.filter.type==null}" ng-click="profile.filterCommentsByType(null)"><span class="fa fa-globe activity-filter-item-icon"></span><span class="activity-filter-item-label">All</span></div>
@@ -48,11 +52,23 @@
             <div class="activity-filter-item" ng-class="{'selected': profile.filter.type=='employeezone'}" ng-click="profile.filterCommentsByType('employeezone')"><span class="fa fa-heartbeat activity-filter-item-icon"></span><span class="activity-filter-item-label">ID</span></div>
             <div ng-if="!profile.filter.self" class="activity-filter-item" ng-class="{'selected': profile.filter.type=='comment'}" ng-click="profile.filterCommentsByType('comment')"><span class="fa fa-pencil-square-o activity-filter-item-icon"></span><span class="activity-filter-item-label">Notes</span></div>
             <div ng-repeat="third_party in profile.third_parties" class="activity-filter-item" ng-class="{'selected': profile.filter.third_party==third_party.name}" ng-click="profile.filterCommentsByThirdParty(third_party.name)"><img ng-src="{{ third_party.image_url }}" alt="Third party image" class="activity-filter-item-icon"/><span class="activity-filter-item-label">{{third_party.name}}</span></div>
-
         </div>
     </div>
 
     <div ng-controller="ActivityCtrl" data-show-header="false">
         <div ng-include="'/static/angular/activity/partials/activity.html'"></div>
+    </div>
+</div>
+
+<div class="modal fade in" id="distributions-modal" data-keyboard="true" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <div class="modal-body">
+                <div class="fade-in" ng-if="profile.filter.view=='employee'" ng-include="'/static/angular/profile/partials/_widgets/employee-summary.html'"></div>
+                <div class="fade-in" ng-if="profile.filter.view=='leader'" ng-include="'/static/angular/profile/partials/_widgets/leader-summary.html'"></div>
+                <div class="fade-in" ng-if="profile.filter.view=='coach'" ng-include="'/static/angular/profile/partials/_widgets/coach-summary.html'"></div>
+            </div>
+        </div>
     </div>
 </div>

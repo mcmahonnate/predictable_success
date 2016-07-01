@@ -1,7 +1,10 @@
 <div class="activity-checkin row profile-summary">
     <div class="activity-checkin-details">
-        <div style="margin: 8px">
-            <h2 class="panel-title" style="padding-left: 25px">Team</h2>
+            <h2 class="panel-title" style="padding-left: 25px">
+                <span ng-if="profile.filter.self">My </span>
+                <span ng-if="!profile.filter.self">{{profile.employee.first_name}}'s </span>
+                Team
+            </h2>
             <div class="change-coach" style="padding-bottom: 40px;">
                 <carousel interval="profile.slideInterval">
                     <slide ng-repeat="teamMemberCluster in profile.teamMemberClusters">
@@ -18,20 +21,39 @@
                     </slide>
                 </carousel>
             </div>
-            <div>
-                <div style="width: 54%; display:inline-block;vertical-align:top;">
-                    <div style="padding-top: 25px;">
-                        <a href="javascript:void(0)" data-toggle="modal" data-target="#distributions-modal" class="pull-right underline mobile-hide">Explanation</a>
-                        <h2 class="panel-title" style="margin-left:25px">Development Portfolio</h2>
-                    </div>
+            <div style="display: inline-block;width:315px;vertical-align: top">
+                <div>
+                    <h2 class="panel-title" style="margin-left:25px">Development Portfolio</h2>
                     <div class="talent-pie-chart-container" style="margin: 20px 0">
                         <div x-talent-category-chart size="xsmall"></div>
                     </div>
                 </div>
-                <div ng-include="'/static/angular/partials/_widgets/salary-total.html'" style="width: 45%; display:inline-block;vertical-align:top;"></div>
+
             </div>
-            <div ng-include="'/static/angular/partials/_widgets/talent-salary-totals.html'"></div>
-        </div>
+            <div style="display: inline-block;width:218px">
+                <h2 class="panel-title">Total People Investment</h2>
+                <span class="total">{{salaryReport.total_salaries | currency | noCents }}</span>
+            </div>
+            <div class="panel salary-totals stripes">
+                <h2 class="panel-title">Invests by Development</h2>
+                <div class="salary-total-type" ng-repeat="(category, report) in salaryReport.categories track by $index" ng-if="category>0">
+                    <a href="#/employees/?talent_category={{category}}&team_id={{team.id}}">
+                        <i class="glyphicon glyphicon-user pull-left employee-segment employee-segment-color-{{category}}"></i>
+                        <span class="salary-total-amount">{{report.salaries | currency | noCents }}</span>
+                        <span class="salary-segment-label">{{talentCategories[category].label}}</span>
+                    </a>
+                </div>
+                <div class="salary-total-type" ng-if="salaryReport.categories['0']">
+                    <a href="#/employees/?talent_category={{category}}&team_id={{team.id}}">
+                        <i class="glyphicon glyphicon-user pull-left employee-segment employee-segment-color-0"></i>
+                        <span class="salary-total-amount">{{salaryReport.categories['0'].salaries | currency | noCents }}</span>
+                        <span class="salary-segment-label">{{talentCategories[0].label}}</span>
+                    </a>
+                </div>
+            </div>
+
+
+
     </div>
 </div>
 
