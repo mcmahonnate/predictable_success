@@ -34,7 +34,7 @@ angular.module('tdb.tasks.controllers', [])
         var employee_id = $scope.employee ? $scope.employee.id : null;
         $scope.view = $attrs.view;
         $scope.filter = $attrs.filter;
-        $scope.pageSize = $attrs.pageSize ? $attrs.pageSize : 5;
+        $scope.pageSize = $attrs.pageSize ? $attrs.pageSize : 3;
         $scope.canAddNew = false;
         $scope.todos = [];
         $scope.done = [];
