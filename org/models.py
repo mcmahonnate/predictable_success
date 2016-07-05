@@ -38,7 +38,13 @@ class Relationship(models.Model):
 class EmployeeManager(TreeManager):
     def get_current_coaches(self):
         coaches = self.get_current_employees()
-        return coaches.exclude(coachees__isnull=True).order_by('full_name')
+        coaches = coaches.annotate(coachee_count=Count('coachees'))
+        return coaches.filter(Q(coachee_count__gt=0) | Q(coaching_profile__isnull=False)).order_by('full_name')
+
+    def get_blacklisted_employees(self):
+        employees = self.get_current_employees()
+        employees = employees.annotate(blacklisted_by_count=Count('blacklisted_by'))
+        return employees.filter(blacklisted_by_count__gt=0).order_by('-blacklisted_by_count')
 
     def get_available_coaches(self, employee):
         coaches = self.filter(coaching_profile__isnull=False)
@@ -527,7 +533,7 @@ class CoachCapacityError(Exception):
 class CoachProfile(models.Model):
     employee = models.ForeignKey(Employee, related_name='coaching_profile')
     max_allowed_coachees = models.IntegerField(default=0)
-    blacklist = models.ManyToManyField(Employee, related_name='+', null=True, blank=True)
+    blacklist = models.ManyToManyField(Employee, related_name='blacklisted_by', null=True, blank=True)
     approach = models.TextField(blank=True, default='')
 
     def __str__(self):

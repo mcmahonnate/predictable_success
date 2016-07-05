@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from rest_framework.fields import IntegerField
 from django.core.exceptions import ObjectDoesNotExist
 from preferences.api.serializers import UserPreferencesSerializer
 from ..models import *
@@ -36,6 +37,12 @@ class SanitizedEmployeeSerializer(BaseEmployeeSerializer):
     class Meta:
         model = Employee
         fields = ('id', 'full_name', 'first_name', 'last_name', 'avatar', 'avatar_small', 'requester_has_access', 'team', 'hire_date')
+
+
+class BlacklistedEmployeeSerializer(SanitizedEmployeeSerializer):
+    def __init__(self, *args, **kwargs):
+        super(BlacklistedEmployeeSerializer, self).__init__(*args, **kwargs)
+        self.fields['blacklisted_by_count'] = IntegerField(read_only=True)
 
 
 class SanitizedEmployeeWithRelationshpsSerializer(BaseEmployeeSerializer):
@@ -430,12 +437,12 @@ class CoachSerializer(BaseEmployeeSerializer):
     coaching_profile = serializers.SerializerMethodField()
 
     def get_coaching_profile(self, obj):
-        print obj.coaching_profile.all()
-        if obj.coaching_profile:
+        try:
+            profile = obj.coaching_profile.get()
             serializer = CoachProfileSerializer(context=self.context)
-            return serializer.to_representation(obj.coaching_profile.get())
-        return None
-
+            return serializer.to_representation(profile)
+        except CoachProfile.DoesNotExsist:
+            return None
 
     class Meta:
         model = Employee
@@ -456,18 +463,27 @@ class CoachReportSerializer(serializers.ModelSerializer):
 
     def get_number_blacklisted(self, obj):
         profile = self.get_coaching_profile(obj)
-        return profile.blacklist.count()
+        if profile:
+            return profile.blacklist.count()
+        return None
 
     def get_filled_out_approach(self, obj):
         profile = self.get_coaching_profile(obj)
-        return not(profile.approach == '')
+        if profile:
+            return not(profile.approach == '')
+        return None
 
     def get_capacity(self, obj):
         profile = self.get_coaching_profile(obj)
-        return profile.max_allowed_coachees
+        if profile:
+            return profile.max_allowed_coachees
+        return None
 
     def get_coaching_profile(self, obj):
-        return obj.coaching_profile.get()
+        try:
+            return obj.coaching_profile.get()
+        except CoachProfile.DoesNotExsist:
+            return None
 
     class Meta:
         model = Employee

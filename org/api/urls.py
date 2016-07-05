@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^coaches/profile/$', CreateCoachProfile.as_view()),
     url(r'^coaches/profile/(?P<pk>[0-9]+)/update/$', UpdateCoachProfile.as_view()),
     url(r'^coaches/report/$', coaches_report),
+    url(r'^coaches/report/blacklist/$', coaches_blacklist_report),
     url(r'^employees/all-access/$', cache_page(60*1440)(all_access_employees)),
     url(r'^employees/(?P<pk>[0-9]+)/coaching/profile/$', RetrieveCoachProfile.as_view()),
     url(r'^profile/$', my_profile),
