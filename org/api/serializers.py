@@ -454,6 +454,7 @@ class CoachReportSerializer(serializers.ModelSerializer):
     capacity = serializers.SerializerMethodField()
     filled_out_approach = serializers.SerializerMethodField()
     number_blacklisted = serializers.SerializerMethodField()
+    max_allowed_coachees = serializers.SerializerMethodField()
 
     def get_coaching_profile(self, obj):
         return obj.coaching_profile.get()
@@ -473,11 +474,17 @@ class CoachReportSerializer(serializers.ModelSerializer):
             return not(profile.approach == '')
         return None
 
-    def get_capacity(self, obj):
+    def get_max_allowed_coachees(self, obj):
         profile = self.get_coaching_profile(obj)
         if profile:
             return profile.max_allowed_coachees
-        return None
+        return 0
+
+    def get_capacity(self, obj):
+        max_allowed_coachees = self.get_max_allowed_coachees(obj)
+        number_of_coachees = self.get_number_of_coachees(obj)
+        return max_allowed_coachees - number_of_coachees
+
 
     def get_coaching_profile(self, obj):
         try:
@@ -487,4 +494,4 @@ class CoachReportSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Employee
-        fields = ('id', 'full_name', 'avatar', 'number_of_coachees', 'capacity', 'filled_out_approach', 'number_blacklisted')
+        fields = ('id', 'full_name', 'avatar', 'max_allowed_coachees', 'number_of_coachees', 'capacity', 'filled_out_approach', 'number_blacklisted')
