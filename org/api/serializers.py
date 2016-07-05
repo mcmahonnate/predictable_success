@@ -316,6 +316,7 @@ class UserSerializer(serializers.ModelSerializer):
         if obj.groups.filter(name='AllAccess').exists() | obj.is_superuser:
                 return True
         return False
+
     def get_is_team_lead(self, obj):
         if not obj.has_perm('org.view_employees_I_lead'):
             return False
@@ -412,6 +413,7 @@ class PublicCoachProfileSerializer(CoachProfileSerializer):
         self.fields.pop("blacklist")
         self.fields.pop("max_allowed_coachees")
 
+
 class CreateUpdateCoachProfileSerializer(serializers.ModelSerializer):
     employee = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
     max_allowed_coachees = serializers.IntegerField()
@@ -421,3 +423,20 @@ class CreateUpdateCoachProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = CoachProfile
         fields = ('id', 'employee', 'max_allowed_coachees', 'blacklist', 'approach')
+
+
+class CoachSerializer(BaseEmployeeSerializer):
+    coachees = SanitizedEmployeeSerializer(many=True)
+    coaching_profile = serializers.SerializerMethodField()
+
+    def get_coaching_profile(self, obj):
+        print obj.coaching_profile.all()
+        if obj.coaching_profile:
+            serializer = CoachProfileSerializer(context=self.context)
+            return serializer.to_representation(obj.coaching_profile.get())
+        return None
+
+
+    class Meta:
+        model = Employee
+        fields = ('id', 'full_name', 'first_name', 'last_name', 'avatar', 'avatar_small', 'requester_has_access', 'coachees', 'coaching_profile')

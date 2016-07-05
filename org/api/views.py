@@ -189,6 +189,14 @@ def show_org_chart(request):
 
 
 @api_view(['GET'])
+@permission_classes((IsAuthenticated, PermissionsViewAllEmployees))
+def all_coaches(request):
+    coaches = Employee.objects.get_current_coaches()
+    serializer = CoachSerializer(coaches, many=True)
+    return Response(data=serializer.data)
+
+
+@api_view(['GET'])
 def available_coaches(request):
     coaches = Employee.objects.get_available_coaches(employee=request.user.employee)
     serializer = SanitizedEmployeeSerializer(coaches, many=True)
