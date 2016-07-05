@@ -197,6 +197,14 @@ def all_coaches(request):
 
 
 @api_view(['GET'])
+@permission_classes((IsAuthenticated, PermissionsViewAllEmployees))
+def coaches_report(request):
+    coaches = Employee.objects.get_current_coaches()
+    serializer = CoachReportSerializer(coaches, many=True)
+    return Response(data=serializer.data)
+
+
+@api_view(['GET'])
 def available_coaches(request):
     coaches = Employee.objects.get_available_coaches(employee=request.user.employee)
     serializer = SanitizedEmployeeSerializer(coaches, many=True)

@@ -440,3 +440,35 @@ class CoachSerializer(BaseEmployeeSerializer):
     class Meta:
         model = Employee
         fields = ('id', 'full_name', 'first_name', 'last_name', 'avatar', 'avatar_small', 'requester_has_access', 'coachees', 'coaching_profile')
+
+
+class CoachReportSerializer(serializers.ModelSerializer):
+    number_of_coachees = serializers.SerializerMethodField()
+    capacity = serializers.SerializerMethodField()
+    filled_out_approach = serializers.SerializerMethodField()
+    number_blacklisted = serializers.SerializerMethodField()
+
+    def get_coaching_profile(self, obj):
+        return obj.coaching_profile.get()
+
+    def get_number_of_coachees(self, obj):
+        return obj.coachees.count()
+
+    def get_number_blacklisted(self, obj):
+        profile = self.get_coaching_profile(obj)
+        return profile.blacklist.count()
+
+    def get_filled_out_approach(self, obj):
+        profile = self.get_coaching_profile(obj)
+        return not(profile.approach == '')
+
+    def get_capacity(self, obj):
+        profile = self.get_coaching_profile(obj)
+        return profile.max_allowed_coachees
+
+    def get_coaching_profile(self, obj):
+        return obj.coaching_profile.get()
+
+    class Meta:
+        model = Employee
+        fields = ('id', 'full_name', 'avatar', 'number_of_coachees', 'capacity', 'filled_out_approach', 'number_blacklisted')
