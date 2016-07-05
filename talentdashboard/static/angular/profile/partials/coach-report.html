@@ -43,8 +43,8 @@
                     <tr ng-class="{'bg-danger': (coach.capacity<0), 'bg-warning': (coach.capacity<2 && coach.capacity>-1)}" ng-repeat="coach in coachReport.capacityReport | orderBy:coachReport.capacityReportPredicate:coachReport.capacityReportReverse">
                         <td>{{ $index+1 }}.</td>
                         <td>
-                            <a ng-href="#/employees/{{coach.id}}" class="tiny-headshot pull-left"><img ng-src="{{ coach.avatar }}" alt="{{ coach.full_name }}'s avatar"/></a>
-                            <a href="#/employees/{{coach.id}}">{{coach.full_name}}</a>
+                            <a href="" ng-click="coachReport.showProfile(coach.id)" class="tiny-headshot pull-left"><img ng-src="{{ coach.avatar }}" alt="{{ coach.full_name }}'s avatar"/></a>
+                            <a href="" ng-click="coachReport.showProfile(coach.id)">{{coach.full_name}}</a>
                         </td>
                         <td style="text-align: center">{{coach.capacity}}</td>
                         <td style="text-align: center">{{coach.max_allowed_coachees}}</td>

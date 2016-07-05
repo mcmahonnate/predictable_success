@@ -2,8 +2,9 @@ angular
     .module('profile')
     .controller('CoachProfileController', CoachProfileController);
 
-function CoachProfileController(CoachProfileService, EmployeeSearch, employeeId, Notification, $modalInstance) {
+function CoachProfileController(CoachProfileService, EmployeeSearch, employeeId, Notification, showPrivate, $modalInstance) {
     var vm = this;
+    vm.showPrivate = showPrivate
     vm.profile = {id: null, employee: null, blacklist: null, max_allowed_coachees: null};
     vm.coach = null;
     vm.employees = [];

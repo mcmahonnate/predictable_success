@@ -3,6 +3,7 @@
     <div class="modal-body">
         <h3 class="modal-title">{{coachProfile.profile.employee.full_name}}'s Coaching Profile</h3>
         <div ng-include="'/static/angular/profile/partials/_widgets/coach-profile-public.html'"></div>
+        <div ng-if="coachProfile.profile.blacklist && coachProfile.showPrivate" ng-include="'/static/angular/profile/partials/_widgets/coach-profile-private.html'"></div>
     </div>
     <div class="modal-footer">
         <button type="button" ng-click="coachProfile.cancel()" class="btn btn-light">&larr; Back</button>

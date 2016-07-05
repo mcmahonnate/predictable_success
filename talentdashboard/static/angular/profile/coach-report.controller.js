@@ -12,6 +12,7 @@ function CoachReportController(analytics, CoachReportService, $location, $modal,
     vm.blockedReportPredicate = 'blacklisted_by_count';
     vm.blockedReportReverse = true;
     vm.blockedReportBusy = true;
+    vm.showProfile = showProfile;
     vm.capacityReportOrder = function (predicate) {
         vm.capacityReportReverse = (vm.capacityReportPredicate === predicate) ? !vm.capacityReportReverse : true;
         vm.capacityReportPredicate = predicate;
@@ -83,6 +84,22 @@ function CoachReportController(analytics, CoachReportService, $location, $modal,
             row.name = report.full_name;
             row.blacklisted_by_count = report.blacklisted_by_count;
             vm.blockedCSV.push(row);
+        });
+    }
+
+    function showProfile(employeeId) {
+        var modalInstance = $modal.open({
+            animation: true,
+            templateUrl: '/static/angular/profile/partials/_modals/coach-profile.html',
+            controller: 'CoachProfileController as coachProfile',
+            resolve: {
+                employeeId: function () {
+                    return employeeId
+                },
+                showPrivate: function () {
+                    return true
+                }
+            }
         });
     }
 }
