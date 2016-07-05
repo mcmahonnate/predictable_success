@@ -1,0 +1,95 @@
+<div class="container" data-hj-masked>
+    <h1>Coaching Report</h1>
+    <div>
+        <div class="panel">
+            <table class="table">
+                <caption class="panel-title">
+                    Coaching Capacity
+                    <button ng-disabled="coachReport.capacityReportBusy" class="btn btn-default pull-right" type="button" ng-csv="coachReport.capacityCSV" filename="coach-capacity-report.csv" csv-header="['Id', 'Employee', 'Current Capacity', 'Desired # of Coachees', 'Current # of Coachees', '# of Blocked', 'Filled Out Approach']">
+                        <span class="fa fa-download"></span> Download
+                    </button>
+                </caption>
+
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>
+                            <a href="" ng-click="coachReport.capacityReportOrder('full_name');"><strong>Employee</strong></a>
+                            <span class="sortorder fa" ng-show="coachReport.capacityReportPredicate === 'full_name'" ng-class="coachReport.capacityReportReverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                        </th>
+                        <th>
+                            <a href="" ng-click="coachReport.capacityReportOrder('capacity');"><strong>Current Capacity</strong></a>
+                            <span class="sortorder fa" ng-show="coachReport.capacityReportPredicate === 'capacity'" ng-class="coachReport.capacityReportReverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                        </th>
+                        <th>
+                            <a href="" ng-click="coachReport.capacityReportOrder('max_allowed_coachees');"><strong>Desired # of Coachees</strong></a>
+                            <span class="sortorder fa" ng-show="coachReport.capacityReportPredicate === 'max_allowed_coachees'" ng-class="coachReport.capacityReportReverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                        </th>
+                        <th>
+                            <a href="" ng-click="coachReport.capacityReportOrder('number_of_coachees');"><strong>Current # of Coachees</strong></a>
+                            <span class="sortorder fa" ng-show="coachReport.capacityReportPredicate === 'number_of_coachees'" ng-class="coachReport.capacityReportReverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                        </th>
+                        <th>
+                            <a href="" ng-click="coachReport.capacityReportOrder('number_blacklisted');"><strong># of Blocked</strong></a>
+                            <span class="sortorder fa" ng-show="coachReport.capacityReportPredicate === 'number_blacklisted'" ng-class="coachReport.capacityReportReverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                        </th>
+                        <th>
+                            <a href="" ng-click="coachReport.capacityReportOrder('filled_out_approach');"><strong>Filled Out Approach</strong></a>
+                            <span class="sortorder fa" ng-show="coachReport.capacityReportPredicate === 'filled_out_approach'" ng-class="coachReport.capacityReportReverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-class="{'bg-danger': (coach.capacity<0), 'bg-warning': (coach.capacity<2 && coach.capacity>-1)}" ng-repeat="coach in coachReport.capacityReport | orderBy:coachReport.capacityReportPredicate:coachReport.capacityReportReverse">
+                        <td>{{ $index+1 }}.</td>
+                        <td>
+                            <a ng-href="#/employees/{{coach.id}}" class="tiny-headshot pull-left"><img ng-src="{{ coach.avatar }}" alt="{{ coach.full_name }}'s avatar"/></a>
+                            <a href="#/employees/{{coach.id}}">{{coach.full_name}}</a>
+                        </td>
+                        <td style="text-align: center">{{coach.capacity}}</td>
+                        <td style="text-align: center">{{coach.max_allowed_coachees}}</td>
+                        <td style="text-align: center">{{coach.number_of_coachees}}</td>
+                        <td style="text-align: center">{{coach.number_blacklisted}}</td>
+                        <td style="text-align: center">
+                            <i ng-show="coach.filled_out_approach" class="fa fa-check" title="Filled out coaching approach"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="panel">
+            <table class="table">
+                <caption class="panel-title">
+                    Blocked
+                    <button ng-disabled="coachReport.blockedReportBusy" class="btn btn-default pull-right" type="button" ng-csv="coachReport.blockedCSV" filename="coach-report-blocked.csv" csv-header="['Id', 'Employee', '# of Coaches Blocked']">
+                        <span class="fa fa-download"></span> Download
+                    </button>
+                </caption>
+
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>
+                            <a href="" ng-click="coachReport.blockedReportOrder('full_name');"><strong>Employee</strong></a>
+                            <span class="sortorder fa" ng-show="coachReport.blockedReportPredicate === 'full_name'" ng-class="coachReport.blockedReportReverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                        </th>
+                        <th style="text-align: center">
+                            <a href="" ng-click="coachReport.blockedReportOrder('blacklisted_by_count');"><strong># of Coaches Blocked</strong></a>
+                            <span class="sortorder fa" ng-show="coachReport.blockedReportPredicate === 'blacklisted_by_count'" ng-class="coachReport.blockedReportReverse ? 'fa-caret-up' : 'fa-caret-down'"></span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="employee in coachReport.blockedReport | orderBy:coachReport.blockedReportPredicate:coachReport.blockedReportReverse">
+                        <td>{{ $index+1 }}.</td>
+                        <td>
+                            <a ng-href="#/employees/{{employee.id}}" class="tiny-headshot pull-left"><img ng-src="{{ employee.avatar_small }}" alt="{{ employee.full_name }}'s avatar"/></a>
+                            <a href="#/employees/{{employee.id}}">{{employee.full_name}}</a>
+                        </td>
+                        <td style="text-align: center">{{employee.blacklisted_by_count}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
