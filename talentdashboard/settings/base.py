@@ -24,8 +24,6 @@ CELERY_TIMEZONE = 'America/New_York'
 BROKER_URL = os.environ['RABBITMQ_BIGWIG_URL']
 
 MANAGERS = ADMINS = (
-    ('Doug Dosberg', 'ddosberg@fool.com'),
-    ('Mark Kennedy', 'mkennedy@fool.com'),
     ('Nate McMahon', 'nmcmahon@fool.com'),
 )
 
