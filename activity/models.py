@@ -15,6 +15,9 @@ class ThirdParty(models.Model):
     verb = models.CharField(max_length=100, null=True, blank=True)
     image_url = models.CharField(max_length=255, null=True, blank=True)
 
+    def __str__(self):
+        return self.name
+
 
 class ThirdPartyEvent(models.Model):
     third_party = models.ForeignKey(ThirdParty, related_name='events')
@@ -24,6 +27,8 @@ class ThirdPartyEvent(models.Model):
     date = models.DateTimeField(null=False, blank=False)
     description = models.TextField(null=True, blank=True)
 
+    def __str__(self):
+        return "%s: %s %s %s" % (self.third_party.name, self.owner.full_name, self.third_party.verb, self.employee.full_name)
 
 class EventManager(models.Manager):
     """

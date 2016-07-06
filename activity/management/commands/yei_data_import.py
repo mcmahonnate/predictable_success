@@ -74,7 +74,7 @@ class Command(BaseCommand):
             response_code = response.status_code
             if len(posts) > 0:
                 try:
-                    third_party = ThirdParty.objects.get(name='yei post')
+                    third_party = ThirdParty.objects.get(name='Gold')
                 except ThirdParty.DoesNotExist:
                     print "Please create a ThirdParty object for 'yei post'"
                     return
