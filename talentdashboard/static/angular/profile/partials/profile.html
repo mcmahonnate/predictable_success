@@ -65,9 +65,9 @@
         <div class="modal-content">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <div class="modal-body">
-                <div class="fade-in" ng-if="profile.filter.view=='employee'" ng-include="'/static/angular/profile/partials/_widgets/employee-summary.html'"></div>
-                <div class="fade-in" ng-if="profile.filter.view=='leader'" ng-include="'/static/angular/profile/partials/_widgets/leader-summary.html'"></div>
-                <div class="fade-in" ng-if="profile.filter.view=='coach'" ng-include="'/static/angular/profile/partials/_widgets/coach-summary.html'"></div>
+                <div ng-if="profile.filter.view=='employee'" ng-include="'/static/angular/profile/partials/_widgets/employee-summary.html'"></div>
+                <div ng-if="profile.filter.view=='leader'" ng-include="'/static/angular/profile/partials/_widgets/leader-summary.html'"></div>
+                <div ng-if="profile.filter.view=='coach'" ng-include="'/static/angular/profile/partials/_widgets/coach-summary.html'"></div>
             </div>
         </div>
     </div>
