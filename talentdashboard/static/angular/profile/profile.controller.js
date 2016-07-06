@@ -138,6 +138,9 @@ function ProfileController(CoachProfileService, Employee, EmployeeSearch, Profil
             resolve: {
                 employeeId: function () {
                     return vm.employee.id;
+                },
+                showPrivate: function () {
+                    return false
                 }
             }
         });
