@@ -43,12 +43,14 @@
             vm.digestsPage += 1;
             return FeedbackDigestService.getDigestsIveDelivered({page: vm.digestsPage, page_size: vm.pageSize})
                 .then(function (data) {
-                    vm.digests = vm.digests.concat(data.results);
-                    vm.digestsHasNext  = data.has_next;
-                    if (vm.digests.length > 0) {
-                        vm.show = true;
+                    if (data) {
+                        vm.digests = vm.digests.concat(data.results);
+                        vm.digestsHasNext = data.has_next;
+                        if (vm.digests.length > 0) {
+                            vm.show = true;
+                        }
+                        return vm.digests;
                     }
-                    return vm.digests;
                 });
         }
     }

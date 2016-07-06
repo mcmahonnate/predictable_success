@@ -14,6 +14,7 @@
         vm.stepNext = stepNext;
         vm.stepBack = stepBack;
         vm.cancel = cancel;
+        vm.showProfile = showProfile;
         vm.panel_index = 0;
         vm.enableSend = true;
         vm.questions = {
@@ -104,5 +105,21 @@
 
         function cancel() {
             $modalInstance.dismiss();
+        }
+
+        function showProfile(employeeId) {
+            var modalInstance = $modal.open({
+                animation: true,
+                templateUrl: '/static/angular/profile/partials/_modals/coach-profile.html',
+                controller: 'CoachProfileController as coachProfile',
+                resolve: {
+                    employeeId: function () {
+                        return employeeId
+                    },
+                    showPrivate: function () {
+                        return false
+                    }
+                }
+            });
         }
     }

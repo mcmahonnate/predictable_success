@@ -4,7 +4,7 @@
         <div class="modal-body">
             <panel>
                 <h3 class="modal-title">Who would you like feedback from?</h3>
-                <p class="modal-subtext">Select a few people you work with on a regular basis, or who you've worked with recently.</p>
+                <p class="modal-subtext">Select a few people you work with on a regular basis, or who you've worked with recently (we recommend 5-7).</p>
                 <ui-select
                         id="to"
                         multiple
@@ -83,7 +83,7 @@
     <div class="form-group" ng-show="request.panel_index==2">    
         <div class="modal-body">
             <panel>
-                <h3 class="modal-title">Choose Your Coach</h3>
+                <h3 class="modal-title">Your Current Coach</h3>
                 <span ng-show="request.currentCoach" class="xxxlarge-headshot">
                     <img ng-src="{{request.currentCoach.avatar}}" alt="{{request.currentCoach.full_name}}" class="headshot-image">
                 </span>
@@ -92,13 +92,21 @@
                         <img src="../static/images/grumpycat.png" alt="grump cat avatar" class="headshot-image">
                     </span>
 
-                    <p class="centered change-coach-message">
+                    <p class="change-coach-message">
                         You currently don't have a Coach. <br />Please <a href="" class="underlined" ng-click="request.changeCoach()">select a coach</a>.
                     </p>
                 </div>
                 <div ng-show="request.currentCoach">
                     <h3 class="centered"><strong>{{request.currentCoach.full_name}}</strong></h3>
-                    <p class="centered change-coach-message">{{ request.currentCoach.full_name }} will deliver your feeback. If you'd like you may <a href="" class="underlined" ng-click="request.changeCoach()">select a different coach</a>.</p>
+                    <div class="centered">
+                        <a href ng-click="request.showProfile(request.currentCoach.id)">View Profile</a>
+                    </div>
+                    <p class="centered change-coach-message" style="margin-bottom: 0">{{ request.currentCoach.full_name }} will deliver your feeback. If you'd like you may</p>
+                    <p class="centered change-coach-message" style="margin-top: 0"><a href="" class="underlined" ng-click="request.changeCoach()">select a different coach</a>.</p>
+
+                    <p class="centered change-coach-message">
+                        Feel free to switch up your coach at any time. Your coach should be someone you feel safe confiding in — and who you feel will be a good supporter of you.
+                    </p>
                 </div>
             </panel>
         </div>
