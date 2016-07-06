@@ -25,8 +25,9 @@
                     <div>
                         <div class="subnav-title">My Stuff</div>
                         <ul>
-                            <li ng-if="currentUser.is_team_lead"><a ng-href="#/my-team">Team</a></li>
-                            <li ng-if="currentUser.can_coach_employees"><a ng-href="#/my-coachees">Coaching</a></li>
+                            <li><a ng-href="#/">My Profile</a></li>
+                            <li ng-if="currentUser.is_team_lead"><a ng-href="#/my-team">My Team</a></li>
+                            <li ng-if="currentUser.can_coach_employees"><a ng-href="#/my-coachees">My Coachees</a></li>
                             <li><a ng-if="customer.show_devzones" ng-href="#/id"><span class="fa fa-heartbeat" style="margin-right: 5px;"></span> ID</a></li>
                             <li><a ng-if="customer.show_shareable_checkins" ng-href="#/checkins"><span class="fa fa-check" style="margin-right: 5px;"></span> Check-Ins</a></li>
                             <li><a ng-if="customer.show_feedback" ng-href="#/feedback"><span class="fa fa-send" style="margin-right: 5px;"></span> Feedback</a></li>
@@ -259,6 +260,7 @@
                     My Stuff
                 </div>
                 <ul ng-show="isMyStuffOpen" class="mobile-sub-menu" role="menu">
+                    <li><a ng-href="#/" ng-click="toggleMenu()">My Profile</a></li>
                     <li ng-if="currentUser.is_team_lead"><a ng-href="#/my-team" ng-click="toggleMenu()">My Team</a></li>
                     <li ng-if="currentUser.can_coach_employees"><a ng-href="#/my-coachees" ng-click="toggleMenu()">My Coachees</a></li>
                     <li ng-if="customer.show_shareable_checkins">

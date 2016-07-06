@@ -18,7 +18,7 @@ var app = angular.module('tdb', [
         'angular-carousel', 'analytics', 'ui.bootstrap', 'ngCsv','ngImgCrop', 'ngRoute', 'ngAnimate', 'ui-notification', 'ngMessages', 'readMore', 'ngCookies', 'ui.select', 'selectize','ngTouch'])
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.
-            when('/', {templateUrl: '/static/angular/feedback/partials/index.html', controller: 'FeedbackController as feedback', resolve: {authorizeRoute: authorizeRoute}}).
+            when('/', {templateUrl: '/static/angular/profile/partials/profile.html', controller: 'ProfileController as profile', resolve: {authorizeRoute: authorizeRoute}}).
             when('/checkins/:checkinId', {templateUrl: '/static/angular/checkins/partials/checkin-detail.html', controller: 'CheckInController as viewCheckin', resolve: {authorizeRoute: authorizeRoute}}).
             when('/checkins', {templateUrl: '/static/angular/checkins/partials/checkins.html', controller: 'CheckInsController as myCheckins', resolve: {authorizeRoute: authorizeRoute}}).
             when('/id', {templateUrl: '/static/angular/devzones/partials/index.html', controller: 'DevZonesController as devzones', resolve: {authorizeRoute: authorizeRoute}}).
