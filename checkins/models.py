@@ -113,7 +113,8 @@ class CheckIn(models.Model):
                     user.employee.id == self.host.id:
                 return self.summary
         else:
-            if user.has_perm('checkins.view_checkin_summary'):
+            if user.has_perm('checkins.view_checkin_summary') and \
+                    user.employee.id != self.employee.id:
                 return self.summary
         return None
 
