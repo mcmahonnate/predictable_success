@@ -136,6 +136,9 @@ angular.module('tdb.org.controllers', [])
                 resolve: {
                     employeeId: function () {
                         return $scope.coach.id;
+                    },
+                    showPrivate: function () {
+                        return false
                     }
                 }
             });
@@ -531,6 +534,9 @@ angular.module('tdb.org.controllers', [])
                 resolve: {
                     employeeId: function () {
                         return employeeId
+                    },
+                    showPrivate: function () {
+                        return false
                     }
                 }
             });
