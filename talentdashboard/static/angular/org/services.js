@@ -67,14 +67,6 @@ angular.module('tdb.org.services', ['ngResource'])
         return Coach;
     }])
 
-    .factory('Mentorship', ['$resource', '$http', function($resource, $http) {
-        var Mentorship = $resource('/api/v1/mentorships/:id/');
-
-        Mentorship.getMentorshipsForMentee = function(id) { return this.query({mentee_id: id}); };
-
-        return Mentorship;
-    }])
-
     .factory('Leadership', ['$resource', '$http', function($resource, $http) {
         var Leadership = $resource('/api/v1/leaderships/:id/');
 

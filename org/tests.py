@@ -1,7 +1,6 @@
 from django.test import TestCase
 from org.models import Employee
 from org.models import Team
-from org.models import Mentorship
 from org.models import Leadership
 
 
@@ -17,15 +16,6 @@ class TeamTests(TestCase):
         name = 'Sales Team'
         team = Team(name=name)
         self.assertEquals(str(team), name)
-
-
-class MentorshipTests(TestCase):
-    def test_str(self):
-        expected = 'John Doe mentor of Joe Schmoe'
-        john = Employee(full_name='John Doe')
-        joe = Employee(full_name='Joe Schmoe')
-        mentorship = Mentorship(mentor=john, mentee=joe)
-        self.assertEquals(str(mentorship), expected)
 
 
 class LeadershipTests(TestCase):

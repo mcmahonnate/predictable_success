@@ -455,14 +455,6 @@ class Team(models.Model):
 blah.register(Team)
 
 
-class Mentorship(models.Model):
-    mentor = models.ForeignKey(Employee, related_name='+')
-    mentee = models.ForeignKey(Employee, related_name='+')
-
-    def __str__(self):
-        return "%s mentor of %s" % (self.mentor.full_name, self.mentee.full_name)
-
-
 class Leadership(models.Model):
     leader = models.ForeignKey(Employee, related_name='+', null=True, blank=True)
     employee = models.ForeignKey(Employee, related_name='leaderships')

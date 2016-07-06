@@ -334,15 +334,6 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'first_name', 'last_name', 'can_edit_employees', 'can_view_comments', 'can_coach_employees', 'can_evaluate_employees', 'can_view_company_dashboard', 'can_view_projects', 'is_team_lead', 'employee', 'last_login', 'preferences', 'permissions')
 
 
-class MentorshipSerializer(serializers.HyperlinkedModelSerializer):
-    mentor = SanitizedEmployeeSerializer()
-    mentee = SanitizedEmployeeSerializer()
-
-    class Meta:
-        model = Mentorship
-        fields = ['mentor', 'mentee',]
-
-
 class LeadershipSerializer(serializers.HyperlinkedModelSerializer):
     leader = SanitizedEmployeeSerializer()
     employee = SanitizedEmployeeSerializer()

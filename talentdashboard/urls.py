@@ -14,7 +14,6 @@ from org.api.views import EmployeeDetail, account_activate, account_activate_log
 
 router = routers.DefaultRouter()
 router.register(r'^api/v1/teams', TeamViewSet)
-router.register(r'^api/v1/mentorships', MentorshipViewSet)
 router.register(r'^api/v1/leaderships', LeadershipsViewSet)
 router.register(r'^api/v1/attributes', AttributeViewSet)
 

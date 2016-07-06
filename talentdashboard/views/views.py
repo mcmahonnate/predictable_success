@@ -20,7 +20,7 @@ from json import dumps
 from kpi.api.serializers import KPIIndicatorSerializer, KPIPerformanceSerializer
 from kpi.models import Performance, Indicator
 from org.api.permissions import *
-from org.api.serializers import SanitizedEmployeeSerializer, UserSerializer, EmployeeSerializer, TeamSerializer, MentorshipSerializer, LeadershipSerializer, AttributeSerializer, MinimalEmployeeSerializer, EditEmployeeSerializer, CreateEmployeeSerializer
+from org.api.serializers import SanitizedEmployeeSerializer, UserSerializer, EmployeeSerializer, TeamSerializer, LeadershipSerializer, AttributeSerializer, MinimalEmployeeSerializer, EditEmployeeSerializer, CreateEmployeeSerializer
 from org.teamreports import get_mbti_report_for_team
 from pvp.api.serializers import TalentCategoryReportSerializer
 from rest_framework.decorators import api_view, permission_classes
@@ -58,21 +58,6 @@ class CoachList(generics.ListAPIView):
 class TeamViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = TeamSerializer
     queryset = Team.objects.all()
-
-
-class MentorshipViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer_class = MentorshipSerializer
-    queryset = Mentorship.objects.all()
-
-    def get_queryset(self):
-        mentee_id = self.request.QUERY_PARAMS.get('mentee_id', None)
-        mentor_id = self.request.QUERY_PARAMS.get('mentor_id', None)
-        if mentee_id is not None:
-            self.queryset = self.queryset.filter(mentee__id=mentee_id)
-        if mentor_id is not None:
-            self.queryset = self.queryset.filter(mentor__id=mentor_id)
-
-        return self.queryset
 
 
 class LeadershipsViewSet(viewsets.ReadOnlyModelViewSet):
