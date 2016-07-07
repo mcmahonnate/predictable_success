@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from org.models import Employee, CoachCapacity
+from org.models import Employee
 from ...models import FeedbackRequest, FeedbackSubmission
 
 excels_at_answer = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur porta, sapien sit amet blandit tempor, dui leo porttitor arcu, eu consectetur dui purus non velit."
@@ -13,12 +13,6 @@ class Command(BaseCommand):
         FeedbackSubmission.objects.all().delete()
         username = raw_input("Enter your username: ")
         me = Employee.objects.filter(user__username=username).first()
-        try:
-            capacity = CoachCapacity.objects.get(employee=me)
-            capacity.max_allowed_coachees += 5
-            capacity.save()
-        except CoachCapacity.DoesNotExist:
-            pass
 
         employees = Employee.objects.exclude(pk=me.pk).all()[:5]
         for employee in employees:

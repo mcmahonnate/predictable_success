@@ -173,11 +173,8 @@ class Employee(MPTTModel):
         self.save()
 
     def update_coach(self, coach):
-        try:
-            self.coach = coach
-            self.save()
-        except CoachCapacity.DoesNotExist:
-            pass
+        self.coach = coach
+        self.save()
 
     def save(self, *args, **kwargs):
         if self.first_name and self.last_name:
@@ -499,26 +496,6 @@ class AttributeCategory(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class CoachCapacity(models.Model):
-    employee = models.OneToOneField(Employee, related_name='+')
-    max_allowed_coachees = models.IntegerField(default=0)
-    num_coachees = models.IntegerField(default=0)
-
-    def save(self, *args, **kwargs):
-        self.num_coachees = self.employee.coachees.filter(departure_date__isnull=True).count()
-        super(CoachCapacity, self).save(*args, **kwargs)
-
-    def is_full(self):
-        return self.num_coachees >= self.max_allowed_coachees
-
-    def __unicode__(self):
-        return self.employee.full_name
-
-
-class CoachCapacityError(Exception):
-    pass
 
 
 class CoachProfile(models.Model):

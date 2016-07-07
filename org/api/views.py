@@ -225,13 +225,10 @@ def change_coach(request):
     if not serializer.is_valid():
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     coach = serializer.validated_data['new_coach']
-    try:
-        employee = request.user.employee
-        employee.update_coach(coach)
-        return Response(status=status.HTTP_202_ACCEPTED)
-    except CoachCapacity.DoesNotExist:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
-
+    employee = request.user.employee
+    employee.update_coach(coach)
+    return Response(status=status.HTTP_202_ACCEPTED)
+    
 
 def account_activate(request, uidb64=None, token=None, template_name=None, set_password_form=None):
     return password_reset_confirm(request, uidb64=uidb64, token=token, template_name=template_name, set_password_form=set_password_form, post_reset_redirect=reverse('account_activate_login', kwargs={'uidb64': uidb64}))
