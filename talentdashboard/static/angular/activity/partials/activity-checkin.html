@@ -44,7 +44,7 @@
     <span class="total-replies" ng-show="event.related_object.comments.length > 0" style="margin-top:5px;">
         <i class="fa fa-comment-o"></i> {{event.related_object.comments.length}}
     </span>
-    <div ng-if="event.show_conversation" class="comment-replies">
+    <div ng-if="event.show_conversation || event.description" class="comment-replies">
 
         <div class="comment-reply" ng-repeat="comment in event.related_object.comments | orderBy:'created_date'">
             <div ng-controller="CommentCtrl">

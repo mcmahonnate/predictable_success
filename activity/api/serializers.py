@@ -95,7 +95,9 @@ class EventSerializer(serializers.ModelSerializer):
 
     def get_serializer_for_related_object(self, obj, show_conversation):
         serializer = self.related_object_serializers[obj.__class__]
-        if serializer is CheckInSerializer and not show_conversation:
+        user = self.context['request'].user
+        if serializer is CheckInSerializer and \
+            (not show_conversation or user.employee == obj.employee.id):
             serializer = SanitizedCheckInSerializer
         return serializer(context=self.context)
 
