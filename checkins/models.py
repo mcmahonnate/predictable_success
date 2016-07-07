@@ -109,12 +109,10 @@ class CheckIn(models.Model):
         if self.shareable:
             if self.published:
                 return self.summary
-            elif user.employee.id == self.employee.id or \
-                    user.employee.id == self.host.id:
+            elif self.visible_to_employee and \
+                    (user.employee.id == self.employee.id or user.employee.id == self.host.id):
                 return self.summary
-        else:
-            if user.has_perm('checkins.view_checkin_summary') and \
-                    user.employee.id != self.employee.id:
+            elif user.employee.id == self.host.id:
                 return self.summary
         return None
 
