@@ -1,13 +1,14 @@
-from rest_framework import serializers
-from org.api.serializers import SimpleUserSerializer, MinimalEmployeeSerializer
 from blah.models import Comment
 from blah.api.serializers import CommentSerializer
 from checkins.models import CheckIn
 from checkins.api.serializers import CheckInSerializer, SanitizedCheckInSerializer
 from devzones.models import EmployeeZone
 from devzones.api.serializers import EmployeeZoneForActivityFeedSerializer
+from django.contrib.contenttypes.models import ContentType
 from feedback.models import FeedbackDigest
 from feedback.api.serializers import SummarizedFeedbackDigestSerializer
+from org.api.serializers import SimpleUserSerializer, MinimalEmployeeSerializer
+from rest_framework import serializers
 from ..models import Event, ThirdParty, ThirdPartyEvent
 
 
@@ -46,6 +47,7 @@ class EventSerializer(serializers.ModelSerializer):
     description = serializers.SerializerMethodField()
     verb = serializers.SerializerMethodField()
     related_object = serializers.SerializerMethodField()
+    show_conversation = serializers.SerializerMethodField()
 
     def __init__(self, *args, **kwargs):
         super(serializers.ModelSerializer, self).__init__(*args, **kwargs)
@@ -57,6 +59,13 @@ class EventSerializer(serializers.ModelSerializer):
             FeedbackDigest: SummarizedFeedbackDigestSerializer,
             ThirdPartyEvent: ThirdPartyEventSerializer
         }
+
+    def get_show_conversation(self, obj):
+        user = self.context['request'].user
+        checkin_type = ContentType.objects.get_for_model(CheckIn)
+        if obj.event_type.id == checkin_type.id and user.employee.id == obj.employee.id:
+            return False
+        return obj.show_conversation
 
     def get_related_objects(self, instance):
         ids = {}
