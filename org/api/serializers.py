@@ -467,7 +467,7 @@ class CoachReportSerializer(serializers.ModelSerializer):
         return obj.coaching_profile.get()
 
     def get_number_of_coachees(self, obj):
-        return obj.coachees.count()
+        return obj.coachees.filter(departure_date__isnull=True).count()
 
     def get_number_blacklisted(self, obj):
         profile = self.get_coaching_profile(obj)
