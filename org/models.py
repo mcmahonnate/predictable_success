@@ -182,10 +182,9 @@ class Employee(MPTTModel):
     def save(self, *args, **kwargs):
         if self.first_name and self.last_name:
             self.full_name = self.first_name + " " + self.last_name
-        super(Employee, self).save(*args, **kwargs)
         if self.field_tracker.has_changed('departure_date') and self.coach is not None:
-            coach_capacity = CoachCapacity.objects.get(employee=self.coach)
-            coach_capacity.save()
+            self.coach = None
+        super(Employee, self).save(*args, **kwargs)
         if self.field_tracker.has_changed('email') and self.user is not None:
             self.user.email = self.email
             try:
@@ -527,6 +526,10 @@ class CoachProfile(models.Model):
     max_allowed_coachees = models.IntegerField(default=0)
     blacklist = models.ManyToManyField(Employee, related_name='blacklisted_by', null=True, blank=True)
     approach = models.TextField(blank=True, default='')
+
+    @property
+    def blacklisted_employees_that_are_still_employeed(self):
+        return self.blacklist.filter(departure_date__isnull=True)
 
     def __str__(self):
         return "%s's coaching profile" % self.employee.full_name

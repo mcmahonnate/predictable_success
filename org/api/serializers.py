@@ -414,7 +414,13 @@ class CoachChangeRequestSerializer(serializers.Serializer):
 
 class CoachProfileSerializer(serializers.HyperlinkedModelSerializer):
     employee = SanitizedEmployeeSerializer()
-    blacklist = SanitizedEmployeeSerializer(many=True)
+    blacklist = serializers.SerializerMethodField()
+
+    def get_blacklist(self, obj):
+        if obj.blacklisted_employees_that_are_still_employeed:
+            serializer = SanitizedEmployeeSerializer(many=True, context=self.context)
+            return serializer.to_representation(obj.blacklisted_employees_that_are_still_employeed)
+        return None
 
     class Meta:
         model = CoachProfile
@@ -472,7 +478,7 @@ class CoachReportSerializer(serializers.ModelSerializer):
     def get_number_blacklisted(self, obj):
         profile = self.get_coaching_profile(obj)
         if profile:
-            return profile.blacklist.count()
+            return profile.blacklist.filter(departure_date__isnull=True).count()
         return None
 
     def get_filled_out_approach(self, obj):
