@@ -114,6 +114,9 @@ class CheckIn(models.Model):
                 return self.summary
             elif user.employee.id == self.host.id:
                 return self.summary
+        elif user.has_perm('checkins.view_checkin_summary') and \
+                    user.employee.id != self.employee.id:
+            return self.summary
         return None
 
     def get_type_description(self):
