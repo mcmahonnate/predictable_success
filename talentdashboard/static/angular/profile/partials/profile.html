@@ -1,4 +1,4 @@
-<div class="profile">
+<div class="profile" ng-if="profile.employee">
     <div style="height: 46px;">
         <div class="pull-right"  ng-if="profile.filter.self && profile.filter.view=='employee'">
             <button ng-class="{'btn-success': profile.filter.type!='checkin', 'btn-default': profile.filter.type=='checkin'}" style="height: 35px;padding: 4px 20px;" class="btn" ng-click="profile.requestFeedback()" type="button"><i class="fa fa-send"></i> Ask<span class="hide-for-mobile"> for Feedback</span></button>
@@ -12,18 +12,18 @@
             <a ng-class="{'btn-success': profile.filter.type!='checkin', 'btn-default': profile.filter.type=='checkin'}" class="btn" style="height: 35px;padding: 6px 20px;" ng-href="#/feedback/submit/{{profile.filter.employee.id}}" type="button"><i class="fa fa-send"></i> Give Feedback</a>
             <a ng-class="{'btn-default': profile.filter.type!='checkin', 'btn-success': profile.filter.type=='checkin'}" class="btn" style="height: 35px;padding: 6px 20px;" ng-href="#/checkin/{{profile.filter.employee.id}}" type="button"><i class="fa fa-check"></i> Check-In</a>
         </div>
-        <tabset class="profile-tabs" ng-show="profile.employee.is_lead || profile.employee.is_coach">
+        <tabset class="profile-tabs" ng-show="(profile.employee.is_lead && profile.employee.requester_has_access_to_team) || (profile.employee.is_coach && profile.employee.requester_has_access_to_coachees)">
             <!-- tabs for profile view -->
             <tab ng-if="!profile.filter.self" index="0" heading="Profile" select="profile.filterCommentsByView('employee')"></tab>
-            <tab ng-if="!profile.filter.self" index="1" ng-show="profile.employee.is_lead" heading="Team" select="profile.filterCommentsByView('leader')"></tab>
-            <tab ng-if="!profile.filter.self" index="2" ng-show="profile.employee.is_coach" heading="Coachees" select="profile.filterCommentsByView('coach')"></tab>
+            <tab ng-if="!profile.filter.self" index="1" ng-show="profile.employee.is_lead && profile.employee.requester_has_access_to_team" heading="Team" select="profile.filterCommentsByView('leader')"></tab>
+            <tab ng-if="!profile.filter.self" index="2" ng-show="profile.employee.is_coach && profile.employee.requester_has_access_to_coachees" heading="Coachees" select="profile.filterCommentsByView('coach')"></tab>
             <!-- tabs for self view -->
             <tab ng-if="profile.filter.self" index="0" heading="Me" select="profile.filterCommentsByView('employee')"></tab>
             <tab ng-if="profile.filter.self" index="1" ng-show="profile.employee.is_lead" heading="My Team" select="profile.filterCommentsByView('leader')"></tab>
             <tab ng-if="profile.filter.self" index="2" ng-show="profile.employee.is_coach" heading="My Coachees" select="profile.filterCommentsByView('coach')"></tab>
         </tabset>
     </div>
-    <div class="profile-demographic panel" ng-class="{'has-top-tabs': profile.employee.is_lead || profile.employee.is_coach, 'profile-tab-selected': profile.filter.view=='employee'}">
+    <div class="profile-demographic panel" ng-class="{'has-top-tabs': (profile.employee.is_lead && profile.employee.requester_has_access_to_team) || (profile.employee.is_coach && profile.employee.requester_has_access_to_coachees), 'profile-tab-selected': profile.filter.view=='employee'}">
         <div class="xxlarge-avatar-container" style="display: inline-block;">
             <div class="xxlarge-headshot centered">
                 <img ng-src="{{ profile.employee.avatar }}" alt="{{ profile.employee.full_name }}'s avatar" class="headshot-image" />
@@ -57,6 +57,12 @@
 
     <div ng-controller="ActivityCtrl" data-show-header="false">
         <div ng-include="'/static/angular/activity/partials/activity.html'"></div>
+    </div>
+</div>
+<div class="checkin" ng-if="!profile.employee">
+    <div class="panel panel-empty fade-in" style="background-color: inherit;">
+        <img class="grumpycat" src="../static/images/grumpycat.png" alt="Grumpy Cat" />
+        <h2>"Mmmmeeh... you don't have access to this page"</h2>
     </div>
 </div>
 

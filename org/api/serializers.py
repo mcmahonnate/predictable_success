@@ -152,6 +152,22 @@ class EmployeeSerializer(BaseEmployeeSerializer):
     current_bonus = serializers.SerializerMethodField()
     talent_category = serializers.SerializerMethodField()
     last_checkin_date = serializers.SerializerMethodField()
+    requester_has_access_to_team = serializers.SerializerMethodField()
+    requester_has_access_to_coachees = serializers.SerializerMethodField()
+
+    def get_requester_has_access_to_team(self, obj):
+        user = self.context['request'].user
+        if user.employee.is_ancestor_of(other=obj, include_self=True) or \
+                user.employee.can_view_all_employees:
+            return True
+        return False
+
+    def get_requester_has_access_to_coachees(self, obj):
+        user = self.context['request'].user
+        if obj.id == user.employee.id or \
+                user.employee.can_view_all_employees:
+            return True
+        return False
 
     def get_coach(self, obj):
         serializer = MinimalEmployeeSerializer(context=self.context)
@@ -269,7 +285,7 @@ class EmployeeSerializer(BaseEmployeeSerializer):
 
     class Meta:
         model = Employee
-        fields = ('id', 'full_name', 'first_name', 'last_name', 'gender', 'email', 'avatar', 'avatar_small', 'requester_has_access', 'job_title', 'hire_date', 'leader', 'happiness', 'happiness_date', 'happiness_verbose', 'coach', 'kolbe_fact_finder','kolbe_follow_thru', 'kolbe_quick_start', 'kolbe_implementor', 'vops_visionary', 'vops_operator', 'vops_processor', 'vops_synergist', 'departure_date', 'team', 'display', 'current_salary', 'current_bonus', 'talent_category', 'last_checkin_date', 'is_lead', 'is_coach')
+        fields = ('id', 'full_name', 'first_name', 'last_name', 'gender', 'email', 'avatar', 'avatar_small', 'requester_has_access', 'requester_has_access_to_team', 'requester_has_access_to_coachees', 'job_title', 'hire_date', 'leader', 'happiness', 'happiness_date', 'happiness_verbose', 'coach', 'kolbe_fact_finder','kolbe_follow_thru', 'kolbe_quick_start', 'kolbe_implementor', 'vops_visionary', 'vops_operator', 'vops_processor', 'vops_synergist', 'departure_date', 'team', 'display', 'current_salary', 'current_bonus', 'talent_category', 'last_checkin_date', 'is_lead', 'is_coach')
 
 
 class SimpleUserSerializer(serializers.ModelSerializer):

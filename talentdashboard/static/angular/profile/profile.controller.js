@@ -2,7 +2,7 @@ angular
     .module('profile')
     .controller('ProfileController', ProfileController);
 
-function ProfileController(CoachProfileService, Employee, EmployeeSearch, Profile, SalaryReport, TalentReport, ThirdParties, analytics, $location, $modal, $rootScope, $routeParams, $scope) {
+function ProfileController(CoachProfileService, Employee, EmployeeSearch, Notification, Profile, SalaryReport, TalentReport, ThirdParties, analytics, $location, $modal, $rootScope, $routeParams, $scope) {
     /* Since this page can be the root for some users let's make sure we capture the correct page */
     var location_url = $location.url().indexOf('/profile') < 0 ? '/profile' : $location.url();
     analytics.trackPage($scope, $location.absUrl(), location_url);
@@ -42,6 +42,8 @@ function ProfileController(CoachProfileService, Employee, EmployeeSearch, Profil
                     vm.employee = data;
                     vm.employee.hire_date = $rootScope.parseDate(vm.employee.hire_date);
                     vm.filter.employee = vm.employee;
+                }, function(error){
+                    Notification.error("Sorry you don't have access to this profile.");
                 }
             );
         } else {
