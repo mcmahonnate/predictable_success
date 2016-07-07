@@ -22,6 +22,7 @@ function ProfileController(CoachProfileService, Employee, EmployeeSearch, Notifi
     vm.getTeamMembers = getTeamMembers;
     vm.requestFeedback = requestFeedback;
     vm.requestCheckIn = requestCheckIn;
+    vm.showBlankPage = false;
     vm.filter = {type: null, view: 'employee', third_party: null, employee: null, self: true, exclude_third_party_events: true};
     vm.third_parties = [];
 
@@ -43,6 +44,7 @@ function ProfileController(CoachProfileService, Employee, EmployeeSearch, Notifi
                     vm.employee.hire_date = $rootScope.parseDate(vm.employee.hire_date);
                     vm.filter.employee = vm.employee;
                 }, function(error){
+                    vm.showBlankPage = true;
                     Notification.error("Sorry you don't have access to this profile.");
                 }
             );
