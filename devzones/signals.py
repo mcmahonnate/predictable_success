@@ -21,7 +21,7 @@ def employee_zone_save_handler(sender, instance, created, update_fields, **kwarg
     if not created and update_fields:
         if 'completed' in update_fields and instance.completed and instance.development_led_conversation:
             conversation = instance.development_led_conversation
-            send_conversation_shared_notification.subtask((conversation.id,)).apply_async()
+            # send_conversation_shared_notification.subtask((conversation.id,)).apply_async()
             conversation.is_draft = False
             conversation.date = datetime.now()
             conversation.completed = True
