@@ -2,7 +2,7 @@ angular
     .module('devzones')
     .controller('DevZonesController', DevZonesController);
 
-function DevZonesController(ConversationService, DevZoneService, MeetingService, Notification, analytics, $location, $modal, $scope, $sce, $rootScope) {
+function DevZonesController(ConversationService, MeetingService, Notification, UserPreferencesService, analytics, $location, $modal, $rootScope, $scope, $timeout) {
     /* Since this page can be the root for some users let's make sure we capture the correct page */
     var location_url = $location.url().indexOf('/id') < 0 ? '/id' : $location.url();
     analytics.trackPage($scope, $location.absUrl(), location_url);
@@ -14,7 +14,6 @@ function DevZonesController(ConversationService, DevZoneService, MeetingService,
     vm.showEmptyScreen = false;
     vm.selfie = null;
     vm.idSessionIntro = $rootScope.customer.devzones_id_session_intro;
-    vm.welcome = $sce.trustAsHtml($rootScope.customer.devzones_welcome);
     vm.is_org_dev = $rootScope.currentUser.can_edit_employees;
     vm.myConversations = null;
     vm.myTeamLeadConversations = [];
@@ -25,6 +24,7 @@ function DevZonesController(ConversationService, DevZoneService, MeetingService,
     vm.getMyMeetingsLoaded = false;
     vm.predicate = 'advice[0].severity';
     vm.reverse = true;
+    vm.showWelcome = showWelcome;
     vm.submitDevZone = submitDevZone;
     vm.requestCheckIn = requestCheckIn;
     vm.requestFeedback = requestFeedback;
@@ -35,6 +35,27 @@ function DevZonesController(ConversationService, DevZoneService, MeetingService,
         vm.reverse = (vm.predicate === predicate) ? !vm.reverse : true;
         vm.predicate = predicate;
     };
+    $timeout(function(){
+        if ($rootScope.currentUser) {
+            if ($rootScope.currentUser.preferences.show_devzone_intro_pop) {
+                showWelcome();
+                UserPreferencesService.showDevzoneIntroPop(false);
+            }
+        }
+    }, 1250);
+    function showWelcome() {
+        var modalInstance = $modal.open({
+            animation: true,
+            windowClass: 'fade zoom devzones-welcome-modal',
+            templateUrl: '/static/angular/devzones/partials/_modals/welcome-message.html',
+            controller: function($modalInstance, $scope, $rootScope, $sce) {
+                $scope.welcome = $sce.trustAsHtml($rootScope.customer.devzones_welcome);
+                $scope.close = function () {
+                    $modalInstance.dismiss();
+                }
+            }
+        });
+    }
     activate();
 
     function activate() {
