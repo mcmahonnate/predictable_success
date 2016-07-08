@@ -67,5 +67,5 @@ app.config(function($resourceProvider) {
 });
 
 var authorizeRoute = function($http) {
-    return $http.get("/api/v1/user-status/");
+    return $http.get("/api/v1/org/user/");
 }

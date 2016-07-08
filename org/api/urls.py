@@ -1,5 +1,7 @@
 from django.conf.urls import *
 from django.views.decorators.cache import cache_page
+from preferences.api.views import RetrieveUpdateUserPreferences
+from talentdashboard.views.views import user_status, UserList
 from views import *
 
 urlpatterns = [
@@ -19,4 +21,7 @@ urlpatterns = [
     url(r'^team-lead/my/$', my_team_lead),
     url(r'^team-lead/my/employees/$', my_employees),
     url(r'^team-lead/(?P<pk>[0-9]+)/employees/$', team_lead_employees),
+    url(r'^user/$', user_status),
+    url(r'^user/preferences/$', RetrieveUpdateUserPreferences.as_view()),
+    url(r'^users/$', UserList.as_view()),
 ]

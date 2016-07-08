@@ -1,12 +1,12 @@
 angular.module('tdb.org.services', ['ngResource'])
     .factory('User', ['$resource', '$http', function($resource, $http) {
-        var currentUser = $resource('api/v1/user-status/');
+        var currentUser = $resource('api/v1/org/user/');
 
         return currentUser;
     }])
 
     .factory('Users', ['$resource', '$http', function($resource, $http) {
-        var currentUsers = $resource('api/v1/users/');
+        var currentUsers = $resource('api/v1/org/users/');
 
         return currentUsers;
     }])

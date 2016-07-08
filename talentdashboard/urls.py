@@ -43,8 +43,6 @@ urlpatterns = [
     url(r'^api/v1/customer/$', customer),
     url(r'^api/v1/kpi-performance/$', current_kpi_performance),
     url(r'^api/v1/kpi-indicator/$', current_kpi_indicator),
-    url(r'^api/v1/user-status/$', user_status),
-    url(r'^api/v1/users/$', UserList.as_view()),
     url(r'^api/v1/coaches/$', cache_page(60*1440)(CoachList.as_view()), name='coach-list'),
     url(r'^api/v1/coachees/$', coachee_list),
     url(r'^api/v1/engagement-survey/(?P<pk>.+)/(?P<sid>.+)/$', EngagementSurvey.as_view()),
