@@ -1,6 +1,6 @@
 <div id="feedback" class="container" data-hj-masked>
     <div>
-        <a href="" data-toggle="modal" data-target=".feedback-welcome-modal" class="pull-right show-welcome-modal">Show welcome message</a>
+        <a href="" ng-click="feedback.showWelcome()" data-toggle="modal" data-target=".feedback-welcome-modal" class="pull-right show-welcome-modal">Show welcome message</a>
         <h1>Feedback
             <div class="button-group">
                 <button class="btn btn-success btn-feedback" ng-click="feedback.requestFeedback()" type="button"><i class="fa fa-comment"></i> Ask <span class="hide-for-mobile">for Feedback</span></button>
@@ -186,5 +186,4 @@
             </table>
         </div>
     </div>
-    <div ng-include="'/static/angular/feedback/partials/_modals/welcome-message.html'"></div>
 </div>

@@ -2,13 +2,20 @@ angular
     .module('feedback')
     .controller('FeedbackController', FeedbackController);
 
-function FeedbackController(FeedbackRequestService, FeedbackDigestService, FeedbackSubmissionService, analytics, $modal, $location, $scope, $rootScope, $sce, $timeout) {
+function FeedbackController(FeedbackRequestService, FeedbackDigestService, FeedbackSubmissionService, UserPreferencesService, analytics, $location, $modal, $rootScope, $sce, $scope, $timeout) {
     /* Since this page can be the root for some users let's make sure we capture the correct page */
     var location_url = $location.url().indexOf('/feedback') < 0 ? '/feedback' : $location.url();
     analytics.trackPage($scope, $location.absUrl(), location_url);
-
     var vm = this;
-    vm.showWelcome = false;
+    $timeout(function(){
+        if ($rootScope.currentUser) {
+            if ($rootScope.currentUser.preferences.show_feedback_intro_pop) {
+                showWelcome();
+                UserPreferencesService.showFeedbackIntroPop(false);
+            }
+        }
+    }, 1250);
+
     vm.feedbackRequests = [];
     vm.myRecentlySentRequests = [];
     vm.myDigests = [];
@@ -19,7 +26,7 @@ function FeedbackController(FeedbackRequestService, FeedbackDigestService, Feedb
     vm.toggleCollapse = toggleCollapse;
     vm.requestFeedback = requestFeedback;
     vm.giveUnsolicitedFeedback = giveUnsolicitedFeedback;
-    vm.welcome = $sce.trustAsHtml($rootScope.customer.feedback_welcome);
+    vm.showWelcome = showWelcome;
     vm.myRecentlySentRequestsLoaded = false;
     vm.feedbackRequestsLoaded = false;
     vm.mySubmissionsLoaded = false;
@@ -33,7 +40,19 @@ function FeedbackController(FeedbackRequestService, FeedbackDigestService, Feedb
     $rootScope.hideRequestMessage = false;
 
     activate();
-
+    function showWelcome() {
+        var modalInstance = $modal.open({
+            animation: true,
+            windowClass: 'fade zoom feedback-welcome-modal',
+            templateUrl: '/static/angular/feedback/partials/_modals/welcome-message.html',
+            controller: function($modalInstance, $scope, $rootScope, $sce) {
+                $scope.welcome = $sce.trustAsHtml($rootScope.customer.feedback_welcome);
+                $scope.close = function () {
+                    $modalInstance.dismiss();
+                }
+            }
+        });
+    }
     function activate() {
         getMyRecentlySentRequests()
         getFeedbackRequests();
@@ -41,7 +60,7 @@ function FeedbackController(FeedbackRequestService, FeedbackDigestService, Feedb
         getMyDigests();
         getMyHelpfulnessReport();
     };
-
+    
     function toggleCollapse() {
         vm.collapseFeedbackGiven = !vm.collapseFeedbackGiven;
     }

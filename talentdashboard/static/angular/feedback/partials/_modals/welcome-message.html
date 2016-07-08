@@ -1,19 +1,11 @@
-<div 
-    tabindex="-1" 
-    role="dialog" 
-    class="modal feedback-welcome-modal fade zoom"  
-    data-keyboard="false">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <a class="close" ng-click="request.cancel()" data-dismiss="modal">&times;</a>
-            <form id="feedback-modal" novalidate="novalidate">
-                <a ng-show="submitFeedback.subject" class="close" href="#/feedback" data-dismiss="modal">&times;</a>
-                <div class="modal-body">
-                    <h3 class="modal-title">Welcome to 360 Feedback!</h3>
-                    <div ng-bind-html="feedback.welcome"></div>
-                    <button type="button" class="btn btn-success" data-dismiss="modal"> Get Started &rarr;</button>
-                </div>
-            </form>  
+<div>
+    <a class="close" ng-click="close()" data-dismiss="modal">&times;</a>
+    <form id="feedback-modal" novalidate="novalidate">
+        <div class="modal-body">
+            <h3 class="modal-title">Welcome to 360 Feedback!</h3>
+            <div ng-bind-html="welcome"></div>
+            <button ng-click="close()" type="button" class="btn btn-success" data-dismiss="modal"> Get Started &rarr;</button>
         </div>
-    </div>                  
+    </form>
 </div>
+
