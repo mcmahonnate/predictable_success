@@ -2,7 +2,6 @@ from rest_framework.generics import *
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from org.api.serializers import UserPreferencesSerializer
-from preferences.models import UserPreferences
 
 
 class RetrieveUpdateUserPreferences(RetrieveUpdateAPIView):
@@ -18,12 +17,6 @@ class RetrieveUpdateUserPreferences(RetrieveUpdateAPIView):
         return Response(serializer.data)
 
     def retrieve(self, request, *args, **kwargs):
-        user = request.user
-        try:
-            preferences = user.preferences
-        except UserPreferences.DoesNotExist:
-            preferences = UserPreferences(user=user)
-            preferences.save()
         instance = request.user.preferences
         serializer = self.get_serializer(instance, context={'request':request})
         return Response(serializer.data)
