@@ -30,7 +30,7 @@
                 } else {
                     vm.showEmptyScreen = false;
                 }
-                if (vm.myRecentlySentRequests.length == 0) {
+                if (vm.myRecentlySentRequests.length == 0 && vm.qualities.length == 0 && vm.prompts.length == 0) {
                     vm.requestPerception(-1);
                 }
             }
