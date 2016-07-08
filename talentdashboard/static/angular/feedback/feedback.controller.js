@@ -7,14 +7,6 @@ function FeedbackController(FeedbackRequestService, FeedbackDigestService, Feedb
     var location_url = $location.url().indexOf('/feedback') < 0 ? '/feedback' : $location.url();
     analytics.trackPage($scope, $location.absUrl(), location_url);
     var vm = this;
-    $timeout(function(){
-        if ($rootScope.currentUser) {
-            if ($rootScope.currentUser.preferences.show_feedback_intro_pop) {
-                showWelcome();
-                UserPreferencesService.showFeedbackIntroPop(false);
-            }
-        }
-    }, 1250);
 
     vm.feedbackRequests = [];
     vm.myRecentlySentRequests = [];
@@ -39,7 +31,14 @@ function FeedbackController(FeedbackRequestService, FeedbackDigestService, Feedb
     $rootScope.hideMessage = false;
     $rootScope.hideRequestMessage = false;
 
-    activate();
+    $timeout(function(){
+        if ($rootScope.currentUser) {
+            if ($rootScope.currentUser.preferences.show_feedback_intro_pop) {
+                showWelcome();
+                UserPreferencesService.showFeedbackIntroPop(false);
+            }
+        }
+    }, 1250);
     function showWelcome() {
         var modalInstance = $modal.open({
             animation: true,
@@ -53,6 +52,9 @@ function FeedbackController(FeedbackRequestService, FeedbackDigestService, Feedb
             }
         });
     }
+
+    activate();
+
     function activate() {
         getMyRecentlySentRequests()
         getFeedbackRequests();
@@ -60,7 +62,7 @@ function FeedbackController(FeedbackRequestService, FeedbackDigestService, Feedb
         getMyDigests();
         getMyHelpfulnessReport();
     };
-    
+
     function toggleCollapse() {
         vm.collapseFeedbackGiven = !vm.collapseFeedbackGiven;
     }

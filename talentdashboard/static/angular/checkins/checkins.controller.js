@@ -2,7 +2,7 @@ angular
     .module('checkins')
     .controller('CheckInsController', CheckInsController);
 
-function CheckInsController(CheckInsService, CheckInRequestService, Notification, analytics, $location, $modal, $scope, $sce, $rootScope, $window) {
+function CheckInsController(CheckInsService, CheckInRequestService, Notification, UserPreferencesService, analytics, $location, $modal, $rootScope, $scope, $timeout, $window) {
     /* Since this page can be the root for some users let's make sure we capture the correct page */
     var location_url = $location.url().indexOf('/checkins') < 0 ? '/checkins' : $location.url();
     analytics.trackPage($scope, $location.absUrl(), location_url);
@@ -17,10 +17,30 @@ function CheckInsController(CheckInsService, CheckInRequestService, Notification
     vm.requestsLoaded = false;
     vm.todosLoaded = false;
     vm.showEmptyScreen = false;
-    vm.welcome = $sce.trustAsHtml($rootScope.customer.checkin_welcome);
+    vm.showWelcome = showWelcome;
     vm.requestCheckIn = requestCheckIn;
     vm.cancelRequest = cancelRequest;
-
+    $timeout(function(){
+        if ($rootScope.currentUser) {
+            if ($rootScope.currentUser.preferences.show_checkin_intro_pop) {
+                showWelcome();
+                UserPreferencesService.showCheckinIntroPop(false);
+            }
+        }
+    }, 1250);
+    function showWelcome() {
+        var modalInstance = $modal.open({
+            animation: true,
+            windowClass: 'fade zoom checkin-welcome-modal',
+            templateUrl: '/static/angular/checkins/partials/_modals/welcome-message.html',
+            controller: function($modalInstance, $scope, $rootScope, $sce) {
+                $scope.welcome = $sce.trustAsHtml($rootScope.customer.checkin_welcome);
+                $scope.close = function () {
+                    $modalInstance.dismiss();
+                }
+            }
+        });
+    }
     activate();
 
     function activate() {
