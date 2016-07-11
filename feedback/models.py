@@ -240,7 +240,8 @@ class FeedbackProgressReports(object):
         for employee in employees:
             progress_report = FeedbackProgressReport(employee)
             progress_report.load()
-            if progress_report.all_submissions_not_delivered.count() > 0:
+            if progress_report.all_submissions_not_delivered.count() > 0 or\
+                            progress_report.recent_feedback_requests_ive_sent.count() > 0:
                 self.progress_reports.append(progress_report)
 
 
