@@ -19,7 +19,7 @@
         </p>
     </div>
 
-    <div class="alert alert-success slide-up" role="alert" ng-repeat="prompt in qualitiesReport.prompts">
+    <div class="alert alert-success slide-up" role="alert" ng-repeat="prompt in qualitiesReport.unsolicited_prompts">
         <a class="btn btn-success btn-feedback pull-right" ng-href="#/qualities/perception/submission/{{prompt.id}}/self" type="button">
             Start
         </a>
@@ -30,6 +30,16 @@
         </p>
     </div>
 
+    <div class="alert alert-info slide-up" role="alert" ng-repeat="prompt in qualitiesReport.solicited_prompts">
+        <a class="btn btn-info btn-feedback pull-right" ng-href="#/qualities/perception/submission/{{prompt.id}}/self" type="button">
+            Start
+        </a>
+        <i class="fa fa-exclamation-circle sent-icon alert-info"></i>
+        <h2 class="alert-title">While you are waiting...</h2>
+        <p class="alert-message">
+            While you are waiting to hear back from your peeps give us the deets on how you see yourself regarding {{ prompt.name }}. Having this information will help us help you better identify your current and future Super Powers.
+        </p>
+    </div>
 
     <div class="panel panel-empty fade-in" ng-show="qualitiesReport.showEmptyScreen">
         <img class="grumpycat" src="../static/images/grumpycat.png" alt="Grumpy Cat" />

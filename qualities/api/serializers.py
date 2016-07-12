@@ -70,7 +70,8 @@ class PerceivedQualitiesReportItemSerializer(serializers.Serializer):
 
 class PerceivedQualitiesReportSerializer(serializers.Serializer):
     employee = SanitizedEmployeeSerializer()
-    prompts = MinimalQualityClusterSerializer(many=True)
+    solicited_prompts = MinimalQualityClusterSerializer(many=True)
+    unsolicited_prompts = MinimalQualityClusterSerializer(many=True)
     qualities = PerceivedQualitiesReportItemSerializer(many=True)
 
 

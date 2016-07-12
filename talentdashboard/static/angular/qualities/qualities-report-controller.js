@@ -7,7 +7,8 @@
         var vm = this;
         vm.showEmptyScreen = false;
         vm.qualities = [];
-        vm.prompts = [];
+        vm.unsolicited_prompts = [];
+        vm.solicited_prompts = [];
         vm.myRecentlySentRequests = [];
         vm.qualitiesLoaded = false;
         vm.myRecentlySentRequestsLoaded = false;
@@ -44,7 +45,8 @@
             return PerceivedQualityService.getMyQualities()
                 .then(function (data) {
                     vm.qualities = data.qualities;
-                    vm.prompts = data.prompts;
+                    vm.unsolicited_prompts = data.unsolicited_prompts;
+                    vm.solicited_prompts = data.solicited_prompts;
                     vm.qualitiesLoaded = true;
                     checkIsEmpty();
                     return null;

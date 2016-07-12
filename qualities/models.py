@@ -14,13 +14,38 @@ class Quality(models.Model):
 
 
 class QualityClusterManager(models.Manager):
+
     def need_self_assessment(self, employee):
+        requests = PerceptionRequest.objects.recent_perception_requests_ive_sent(requester=employee)
+        requests_cluster_ids = requests.values_list('category__id', flat=True).distinct()
+        self_perceptions = PerceivedQuality.objects.self_perception(subject=employee)
+        self_cluster_ids = self_perceptions.values_list('cluster__id', flat=True).distinct()
+        blind_perceptions = PerceivedQuality.objects.blind(subject=employee)
+        blind_cluster_ids = blind_perceptions.values_list('cluster__id', flat=True).distinct()
+
+        return self.filter(Q(id__in=blind_cluster_ids) or Q(id__in=requests_cluster_ids))\
+            .exclude(id__in=self_cluster_ids)
+
+    def been_assessed_but_need_self_assessment(self, employee):
+        # If someone has recognized me for strengths and I have not done a self assessment.
         self_perceptions = PerceivedQuality.objects.self_perception(subject=employee)
         self_cluster_ids = self_perceptions.values_list('cluster__id', flat=True).distinct()
         blind_perceptions = PerceivedQuality.objects.blind(subject=employee)
         blind_cluster_ids = blind_perceptions.values_list('cluster__id', flat=True).distinct()
 
         return self.filter(id__in=blind_cluster_ids).exclude(id__in=self_cluster_ids)
+
+    def have_requested_but_need_self_assessment(self, employee):
+        # If I have asked someone to do an assessment and I have not done a self assessment.
+        requests = PerceptionRequest.objects.recent_perception_requests_ive_sent(requester=employee)
+        requests_cluster_ids = requests.values_list('category__id', flat=True).distinct()
+        self_perceptions = PerceivedQuality.objects.self_perception(subject=employee)
+        self_cluster_ids = self_perceptions.values_list('cluster__id', flat=True).distinct()
+        blind_perceptions = PerceivedQuality.objects.blind(subject=employee)
+        blind_cluster_ids = blind_perceptions.values_list('cluster__id', flat=True).distinct()
+
+        return self.filter(id__in=requests_cluster_ids).exclude(id__in=self_cluster_ids)\
+            .exclude(id__in=blind_cluster_ids)
 
 
 class QualityCluster(models.Model):
@@ -149,11 +174,13 @@ class PerceivedQualitiesReport(object):
     def __init__(self, employee):
         self.employee = employee
         self.qualities = []
-        self.prompts = []
+        self.unsolicited_prompts = []
+        self.solicited_prompts = []
 
     def load(self):
-        self.prompts = QualityCluster.objects.need_self_assessment(employee=self.employee)
-        exclude_clusters = self.prompts.values_list('id', flat=True)
+        self.unsolicited_prompts = QualityCluster.objects.been_assessed_but_need_self_assessment(employee=self.employee)
+        self.solicited_prompts = QualityCluster.objects.have_requested_but_need_self_assessment(employee=self.employee)
+        exclude_clusters = QualityCluster.objects.need_self_assessment(employee=self.employee).values_list('id', flat=True)
         shared_qualities = PerceivedQuality.objects.shared(subject=self.employee, exclude_clusters=exclude_clusters)
         hidden_qualities = PerceivedQuality.objects.hidden(subject=self.employee, exclude_clusters=exclude_clusters)
         blind_qualities = PerceivedQuality.objects.blind(subject=self.employee, exclude_clusters=exclude_clusters)
