@@ -10,7 +10,7 @@ class Command(BaseCommand):
             action='store',
             dest='schema_name',
             default='',
-            help='The name of the tenant')
+            help='The name of the tenant'),
     )
 
     def handle(self, *args, **options):
