@@ -24,7 +24,9 @@ def employee_leaders_search(request, pk):
 @api_view(['GET'])
 def my_team_employee_search(request):
     current_employee = Employee.objects.get(user=request.user)
-    return _find_employees_filtered_by_employee_descendants(request, current_employee)
+    if request.QUERY_PARAMS.get('children', '').lower() == 'true':
+        return _find_employees_filtered_by_employee_descendants(request=request, employee=current_employee, sanitize=False)
+    return _find_employees_filtered_by_relationship_to_current_user(request=request, relationship_field='leader_ids', sanitize=False)
 
 
 @api_view(['GET'])
@@ -49,19 +51,14 @@ def my_coachees_employee_search(request):
 
 
 @api_view(['GET'])
-def my_team_employee_search(request):
-    return _find_employees_filtered_by_relationship_to_current_user(request, 'leader_ids')
-
-
-@api_view(['GET'])
 def team_employee_search(request, pk):
     kwargs = {'leader_ids': [pk]}
     return _find_employees(request, **kwargs)
 
 
-def _find_employees_filtered_by_employee_descendants(request, employee):
+def _find_employees_filtered_by_employee_descendants(request, employee, sanitize=True):
     kwargs = {'tree_id': employee.tree_id, 'lft': "[%d TO *]" % employee.lft, 'rght': "[* TO %d]" % employee.rght, 'pk': employee.pk}
-    return _find_employees(request, **kwargs)
+    return _find_employees(request=request, sanitize=sanitize, **kwargs)
 
 
 def _find_employees_filtered_by_employee_ancestors(request, employee):
@@ -69,13 +66,13 @@ def _find_employees_filtered_by_employee_ancestors(request, employee):
     return _find_employees(request, **kwargs)
 
 
-def _find_employees_filtered_by_relationship_to_current_user(request, relationship_field):
+def _find_employees_filtered_by_relationship_to_current_user(request, relationship_field, sanitize=True):
     current_employee = Employee.objects.get(user=request.user)
     kwargs = {relationship_field: [current_employee.id]}
-    return _find_employees(request, **kwargs)
+    return _find_employees(request=request, sanitize=sanitize, **kwargs)
 
 
-def _find_employees(request, **kwargs):
+def _find_employees(request, sanitize=True, **kwargs):
     index = EmployeeIndex()
     filters = {
         'talent_categories': request.QUERY_PARAMS.getlist('talent_category', None),
@@ -86,7 +83,8 @@ def _find_employees(request, **kwargs):
         'rows': 500,
     }
     filters.update(kwargs)
-    sanitize = not(request.user.has_perm('org.view_employees'))
+    if request.user.has_perm('org.view_employees'):
+        sanitize = False
     results = index.find_employees(request.tenant, sanitize=sanitize, **filters)
     return Response(results)
 

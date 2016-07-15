@@ -73,14 +73,18 @@ function ProfileController(CoachProfileService, Employee, EmployeeSearch, Notifi
 
     function getTeamSummary() {
         if (vm.filter.self) {
-            EmployeeSearch.myTeam({children:true}, function(data) {
+            EmployeeSearch.myTeam({children:false}, function(data) {
+                    $scope.myTeam = true;
+                    $scope.lead = data;
                     vm.teamMembers = data;
                     vm.teamMemberClusters = createEmployeeClusters(data);
                 });
             $scope.talentReport = TalentReport.myTeam();
             $scope.salaryReport = SalaryReport.myTeam();
         } else {
-            EmployeeSearch.leadEmployees({id: $routeParams.id, children:true}, function(data) {
+            EmployeeSearch.leadEmployees({id: $routeParams.id, children:false}, function(data) {
+                    $scope.myTeam = false;
+                    $scope.lead = data;
                     vm.teamMembers = data;
                     vm.teamMemberClusters = createEmployeeClusters(data);
                 });

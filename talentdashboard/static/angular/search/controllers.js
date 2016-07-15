@@ -82,7 +82,7 @@ angular.module('tdb.search.controllers', [])
                     break;
                 case 'my-team':
                     $scope.categoryName = 'My Team';
-                    $scope.employees = EmployeeSearch.myTeam(query);
+                    $scope.employees = EmployeeSearch.myTeamDescendants(query);
                     break;
                 case 'team-lead':
                     $scope.categoryName = 'Team';

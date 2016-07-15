@@ -2,7 +2,8 @@ angular.module('tdb.search.services', ['ngResource'])
 
     .factory('EmployeeSearch', ['$resource', function ($resource) {
         var actions = {
-            myTeam: {method: 'GET', isArray: true, url: '/api/v1/search/employees/my-team/'},
+            myTeam: {method: 'GET', isArray: true, url: '/api/v1/search/employees/my-team/?children=true'},
+            myTeamDescendants: {method: 'GET', isArray: true, url: '/api/v1/search/employees/my-team/?children=true'},
             leadEmployees: {method: 'GET', isArray: true, url: '/api/v1/search/employees/lead/:id/'},
             coachEmployees: {method: 'GET', isArray: true, url: '/api/v1/search/employees/coach/:id/'},
             myCoachees: {method: 'GET', isArray: true, url: '/api/v1/search/employees/my-coachees/'},
