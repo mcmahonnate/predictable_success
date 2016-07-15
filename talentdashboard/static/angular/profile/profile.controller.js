@@ -75,7 +75,7 @@ function ProfileController(CoachProfileService, Employee, EmployeeSearch, Notifi
         if (vm.filter.self) {
             EmployeeSearch.myTeam({children:false}, function(data) {
                     $scope.myTeam = true;
-                    $scope.lead = data;
+                    $scope.lead = vm.employee;
                     vm.teamMembers = data;
                     vm.teamMemberClusters = createEmployeeClusters(data);
                 });
@@ -84,7 +84,7 @@ function ProfileController(CoachProfileService, Employee, EmployeeSearch, Notifi
         } else {
             EmployeeSearch.leadEmployees({id: $routeParams.id, children:false}, function(data) {
                     $scope.myTeam = false;
-                    $scope.lead = data;
+                    $scope.lead = vm.employee;
                     vm.teamMembers = data;
                     vm.teamMemberClusters = createEmployeeClusters(data);
                 });
