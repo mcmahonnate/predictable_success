@@ -43,7 +43,7 @@
                         <li><a ng-click="setZoneFilter(null)">All Zones</a></li>
                     </ul>
                 </div>
-                <div class="dropdown pull-right" style="margin-right:5px" ng-show="currentUser.permissions.indexOf('org.view_employees_all') > -1">
+                <div class="dropdown pull-right" style="margin-right:5px" ng-show="currentUser.permissions.indexOf('org.view_employees') > -1">
                     <button class="btn dropdown-toggle" ng-class="{'btn-default': !currentTeam, 'btn-info': currentTeam}" type="button" id="teamList" data-toggle="dropdown" aria-expanded="true">
                         <span ng-if="!currentTeam">All Teams</span> {{currentTeam.name}}
                         <span class="caret"></span>
