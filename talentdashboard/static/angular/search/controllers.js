@@ -7,9 +7,9 @@ angular.module('tdb.search.controllers', [])
         $scope.employees = EmployeeSearch.query();
  	}])
 
-    .controller('EmployeeSearchCtrl', ['$scope', '$routeParams', '$location', '$filter', 'HappinessOptions', 'EmployeeSearch', 'TalentCategories', 'Team', 'view', 'analytics', function ($scope, $routeParams, $location, $filter, HappinessOptions, EmployeeSearch, TalentCategories, Team, view, analytics) {
-        console.log($location.url());
+    .controller('EmployeeSearchCtrl', ['$scope', '$routeParams', '$location', '$filter', 'Employee', 'HappinessOptions', 'EmployeeSearch', 'TalentCategories', 'Team', 'view', 'analytics', function ($scope, $routeParams, $location, $filter, Employee, HappinessOptions, EmployeeSearch, TalentCategories, Team, view, analytics) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
+        $scope.group = null;
         $scope.filters = {
             talentCategory: $routeParams.talent_category ,
             happiness: $routeParams.happiness,
@@ -77,15 +77,21 @@ angular.module('tdb.search.controllers', [])
             }
             switch(view) {
                 case 'my-coachees':
-                    $scope.categoryName = 'My Coachees';
+                    $scope.group = 'My Coachees';
                     $scope.employees = EmployeeSearch.myCoachees(query);
                     break;
                 case 'my-team':
-                    $scope.categoryName = 'My Team';
+                    $scope.group = 'My Team';
                     $scope.employees = EmployeeSearch.myTeamDescendants(query);
                     break;
                 case 'team-lead':
-                    $scope.categoryName = 'Team';
+                    Employee.get(
+                        {id: $routeParams.id},
+                        function (data) {
+                            $scope.group = data.full_name + "'s Team";
+                        }
+                    );
+
                     $scope.employees = EmployeeSearch.leadEmployees(query);
                     break;
                 default:

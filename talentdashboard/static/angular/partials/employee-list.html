@@ -1,6 +1,6 @@
 <div class="container">
     <div class="row sorts">
-        <h1><span ng-if="!categoryName">All Employees</span>{{categoryName}}</h1>
+        <h1><span ng-if="!group">All Employees</span>{{group}}</h1>
         <div class="dropdown pull-right" ng-if="customer.show_vops" style="margin-left:5px">
             <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
                 <span ng-if="!synergistStyle">Synergist Style</span> {{synergistStyle | titleCase}}
@@ -26,7 +26,7 @@
                 <li ng-click="setHappyFilter(null)" role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)">All Moods</a></li>
             </ul>
         </div>
-        <div class="dropdown pull-right" style="margin-right:5px">
+        <div class="dropdown pull-right" style="margin-right:5px" ng-show="currentUser.permissions.indexOf('org.view_employees_all') > -1">
             <button class="btn btn-default dropdown-toggle" type="button" id="teamList" data-toggle="dropdown" aria-expanded="true">
                 <span ng-if="!currentTeam">All Teams</span> {{currentTeam.name}}
                 <span class="caret"></span>
