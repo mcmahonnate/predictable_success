@@ -147,13 +147,16 @@ def send_feedback_was_helpful_email(employee_id, days_ago):
 @app.task
 def send_coach_coachee_requested_feedback_slack(coach_slack_name, coachee_id, coachee_name, reviewer_names):
     tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
+    print 'slack start'
     if len(reviewer_names) == 1:
         names = reviewer_names[0]
     else:
         names = ', '.join(reviewer_names[:-1]) + ' & ' + reviewer_names[-1]
-    link = "<https://%s/#/my-coachees| here>" % (tenant.domain_url ,coachee_id)
+    print 'names'
+    link = "<https://%s/#/my-coachees| here>" % tenant.domain_url
     channel = "@%s" % coach_slack_name
     text = "One of the people you coach, %s, just requested feedback from %s. Keep an eye on your weekly Feedback Digest email to stay up to date on your coachees' feedback or check them out %s." % (coachee_name, names, link)
     data = {"channel": channel, "text": text}
-    tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
+    print 'slack submit'
     requests.post(tenant.slack_bot, json=data)
+    print 'slack end'
