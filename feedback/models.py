@@ -61,6 +61,7 @@ class FeedbackRequest(models.Model):
     reviewer = models.ForeignKey(Employee, related_name='requests_for_feedback')
     message = models.TextField(blank=True)
     was_declined = models.BooleanField(default=False)
+    was_declined_reason = models.TextField(blank=True)
     was_responded_to = models.BooleanField(default=False)
 
     def send_notification_email(self):
@@ -80,28 +81,28 @@ class FeedbackRequest(models.Model):
 
 class FeedbackSubmissionManager(models.Manager):
     def submitted_not_delivered(self, reviewer):
-        return self.filter(reviewer=reviewer).filter(has_been_delivered=False)
+        return self.filter(reviewer=reviewer).filter(has_been_delivered=False, choose_not_to_deliver=False)
 
     def submitted(self, reviewer):
         return self.filter(reviewer=reviewer)
 
     def received_not_delivered(self, subject=None):
         if subject:
-            return self.filter(subject=subject, has_been_delivered=False)
+            return self.filter(subject=subject, has_been_delivered=False, choose_not_to_deliver=False)
         else:
-            return self.filter(has_been_delivered=False)
+            return self.filter(has_been_delivered=False, choose_not_to_deliver=False)
 
     def received_not_delivered_and_not_in_digest(self, subject):
-        return self.received_not_delivered(subject).filter(feedback_digest__isnull=True)
+        return self.received_not_delivered(subject).filter(feedback_digest__isnull=True, choose_not_to_deliver=False)
 
     def ready_for_processing(self, subject):
-        return self.filter(subject=subject).filter(feedback_digest=None)
+        return self.filter(subject=subject).filter(feedback_digest=None, choose_not_to_deliver=False)
 
     def solicited_and_ready_for_processing(self, subject):
-        return self.ready_for_processing(subject).exclude(feedback_request=None)
+        return self.ready_for_processing(subject).exclude(feedback_request=None, choose_not_to_deliver=False)
 
     def unsolicited_and_ready_for_processing(self, subject):
-        return self.ready_for_processing(subject).filter(feedback_request=None)
+        return self.ready_for_processing(subject).filter(feedback_request=None, choose_not_to_deliver=False)
 
 
 class FeedbackSubmission(models.Model):
@@ -126,6 +127,8 @@ class FeedbackSubmission(models.Model):
     help_with_helpful = models.OneToOneField('FeedbackHelpful', null=True, blank=True, related_name='help_with_submission')
 
     has_been_delivered = models.BooleanField(default=False)
+    choose_not_to_deliver = models.BooleanField(default=False)
+    choose_not_to_deliver_reason = models.TextField(blank=True)
     unread = models.BooleanField(default=True)
     anonymous = models.BooleanField(default=False)
 
