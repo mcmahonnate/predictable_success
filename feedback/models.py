@@ -24,7 +24,7 @@ def get_display(key, choices):
 
 
 def default_feedback_request_expiration_date():
-    return datetime.now() + timedelta(weeks=6)
+    return datetime.now() + timedelta(weeks=3)
 
 
 class FeedbackRequestManager(models.Manager):
