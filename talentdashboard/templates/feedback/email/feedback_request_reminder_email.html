@@ -1,20 +1,33 @@
 {% extends "layouts/email.html" %}
+
 {% load humanize %}
+{% load feedback_extras %}
 
 {% block content %}
         <p>
             Hi, {{ recipient.first_name }}!
         </p>
         <p>
-            Don't forget {% if feedback_request_count > 1%}these Fools are {% else %}this Fool is {% endif %}waiting for your feedback:
+            You are likely already on top of this but we thought we'd give you the ole friendly reminder anyway. Below are the people waiting for your feedback.
+        </p>
+        <p>
+            Just so you know a person's feedback request expires. To help you prioritize we bubbled the requests that will expire soon to the top:
 
             <ul>
-            {% for request in feedback_requests %}
-                <li>{{ request.requester.full_name }} requested feedback {{ request.request_date|naturaltime }} <a href="{{ domain_url }}/feedback/request/{{ request.id }}/reply"> -- Leave feedback for {{ request.requester.first_name }}</a></li>
+            {% for request in old_requests %}
+                <li>{{ request.requester.full_name }} expires in {{ request.expiration_date | time_since }} <a href="{{ domain_url }}/feedback/request/{{ request.id }}/reply"> -- Leave feedback for {{ request.requester.first_name }}</a></li>
+            {% endfor %}
+            {% for request in middle_aged_requests %}
+                <li>{{ request.requester.full_name }} expires in {{ request.expiration_date | time_since }} <a href="{{ domain_url }}/feedback/request/{{ request.id }}/reply"> -- Leave feedback for {{ request.requester.first_name }}</a></li>
+            {% endfor %}
+            {% for request in new_requests %}
+                <li>{{ request.requester.full_name }} expires in {{ request.expiration_date | time_since }} <a href="{{ domain_url }}/feedback/request/{{ request.id }}/reply"> -- Leave feedback for {{ request.requester.first_name }}</a></li>
             {% endfor %}
             </ul>
+
         </p>
         <p>
             This can take as little as three minutes{% if feedback_request_count %} each{% endif %}, and it will really matter to them! Hit us up on slack <a href="https://fool.slack.com/messages/360-feedback-help/details/">#360-feedback-help</a> if you have any questions.
         </p>
+
 {% endblock content%}

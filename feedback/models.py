@@ -30,7 +30,7 @@ def default_feedback_request_expiration_date():
 class FeedbackRequestManager(models.Manager):
     def pending_for_reviewer(self, reviewer):
         return self.filter(reviewer=reviewer).filter(submission=None)\
-            .exclude(expiration_date__lt=datetime.today())
+            .exclude(expiration_date__lt=datetime.today()).order_by('expiration_date')
 
     def unanswered_for_requester(self, requester):
         return self.filter(requester=requester).filter(submission=None)\

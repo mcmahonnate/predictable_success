@@ -24,7 +24,7 @@ class Command(BaseCommand):
         tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
         if tenant.is_public_tenant():
             return
-        requests = FeedbackRequest.objects.filter(was_responded_to=False)
+        requests = FeedbackRequest.objects.filter(submission=None)
         weeks = options['weeks']
         try:
             weeks = int(weeks)

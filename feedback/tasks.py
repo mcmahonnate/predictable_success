@@ -4,6 +4,7 @@ from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 from django.db import connection
+from django.db.models import Q
 from customers.models import Customer
 from org.models import Employee
 from datetime import datetime, timedelta
@@ -45,15 +46,26 @@ def send_feedback_request_reminder_email(employee_id, customer_id):
 
     from feedback.models import FeedbackRequest
     feedback_requests = FeedbackRequest.objects.pending_for_reviewer(reviewer=employee)
+    one_day_from_now = datetime.now() + timedelta(days=1)
+    one_day_ago = datetime.now() + timedelta(days=-1)
+    seven_days_from_now = datetime.now() + timedelta(days=7)
+    new_requests = feedback_requests.filter(request_date__gte=one_day_ago)
+    old_requests = feedback_requests.filter(expiration_date__lte=seven_days_from_now)
+    middle_aged_requests = feedback_requests.exclude(request_date__gte=one_day_ago)\
+        .exclude(expiration_date__lte=seven_days_from_now)
 
-    domain_url = 'https://%s/#' % (tenant.domain_url)
+    print one_day_from_now
+    print seven_days_from_now
+    domain_url = 'https://%s/#' % tenant.domain_url
     context = {
         'recipient': employee,
-        'feedback_requests': feedback_requests,
+        'new_requests': new_requests,
+        'middle_aged_requests': middle_aged_requests,
+        'old_requests': old_requests,
         'feedback_request_count': feedback_requests.count(),
         'domain_url': domain_url,
     }
-    subject = "Don't forget! You have %s %s waiting for your feedback!" % (feedback_requests.count(), ('people' if feedback_requests.count() > 1 else 'person'))
+    subject = "You have %s %s waiting for your feedback!" % (feedback_requests.count(), ('people' if feedback_requests.count() > 1 else 'person'))
     text_content = render_to_string('feedback/email/feedback_request_reminder_email.txt', context)
     html_content = render_to_string('feedback/email/feedback_request_reminder_email.html', context)
     msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
