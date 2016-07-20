@@ -8,18 +8,18 @@
             Hi, {{ recipient.first_name }}!
         </p>
         <p>
-            You are likely already on top of this but we thought we'd give you the ole friendly reminder anyway. Below are the people waiting for your feedback.
+            You are likely already on top of this but we thought we'd give you the ol' friendly reminder anyway. Below are the people waiting for your feedback.
         </p>
         <p>
-            Just so you know a person's feedback request expires. To help you prioritize we bubbled the requests that will expire soon to the top:
+            Just so you know a person's feedback request expires. To help you prioritize, we've sorted requests by expiration date:
             {% if old_requests or middle_aged_requests %}
             <h3>Outstanding Requests:</h3>
             <ul>
             {% for request in old_requests %}
-                <li>{{ request.requester.full_name }} request expires in {{ request.expiration_date | time_since }} <a href="{{ domain_url }}/feedback/request/{{ request.id }}/reply"> -- Leave feedback for {{ request.requester.first_name }}</a></li>
+                <li>{{ request.requester.full_name }}'s request expires in {{ request.expiration_date | time_since }} <a href="{{ domain_url }}/feedback/request/{{ request.id }}/reply"> -- Leave feedback for {{ request.requester.first_name }}</a></li>
             {% endfor %}
             {% for request in middle_aged_requests %}
-                <li>{{ request.requester.full_name }} request expires in {{ request.expiration_date | time_since }} <a href="{{ domain_url }}/feedback/request/{{ request.id }}/reply"> -- Leave feedback for {{ request.requester.first_name }}</a></li>
+                <li>{{ request.requester.full_name }}'s request expires in {{ request.expiration_date | time_since }} <a href="{{ domain_url }}/feedback/request/{{ request.id }}/reply"> -- Leave feedback for {{ request.requester.first_name }}</a></li>
             {% endfor %}
             </ul>
             {% endif %}
@@ -28,13 +28,16 @@
             <ul>
 
             {% for request in new_requests %}
-                <li>{{ request.requester.full_name }} expires in {{ request.expiration_date | time_since }} <a href="{{ domain_url }}/feedback/request/{{ request.id }}/reply"> -- Leave feedback for {{ request.requester.first_name }}</a></li>
+                <li>{{ request.requester.full_name }}'s request expires in {{ request.expiration_date | time_since }} <a href="{{ domain_url }}/feedback/request/{{ request.id }}/reply"> -- Leave feedback for {{ request.requester.first_name }}</a></li>
             {% endfor %}
             </ul>
             {% endif %}
         </p>
         <p>
-            This can take as little as three minutes{% if feedback_request_count %} each{% endif %}, and it will really matter to them! Hit us up on slack <a href="https://fool.slack.com/messages/360-feedback-help/details/">#360-feedback-help</a> if you have any questions.
+            This can take as little as five minutes{% if feedback_request_count %} each{% endif %}, and it will really matter to them!
         </p>
-
+        <p>Thanks! <br>--The Scoutmap Team</p>
+        <p>
+            *What happens when a requests expires?  Your input won't get included in their feedback. If you need more time, please let them know or ask us for help on slack <a href="https://fool.slack.com/messages/360-feedback-help/details/">#360-feedback-help</a>.
+        </p>
 {% endblock content%}
