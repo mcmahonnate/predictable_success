@@ -15,4 +15,4 @@ def remove_beginning_slash(value):
 
 @register.filter
 def time_since(value):
-    return '%(time)s' % {'time': timeuntil(value).split(', ')[0]}
+    return '%(time)s' % {'time': timeuntil(value)}

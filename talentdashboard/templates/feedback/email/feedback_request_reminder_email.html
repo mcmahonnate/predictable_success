@@ -12,19 +12,26 @@
         </p>
         <p>
             Just so you know a person's feedback request expires. To help you prioritize we bubbled the requests that will expire soon to the top:
-
+            {% if old_requests or middle_aged_requests %}
+            <h3>Outstanding Requests:</h3>
             <ul>
             {% for request in old_requests %}
-                <li>{{ request.requester.full_name }} expires in {{ request.expiration_date | time_since }} <a href="{{ domain_url }}/feedback/request/{{ request.id }}/reply"> -- Leave feedback for {{ request.requester.first_name }}</a></li>
+                <li>{{ request.requester.full_name }} request expires in {{ request.expiration_date | time_since }} <a href="{{ domain_url }}/feedback/request/{{ request.id }}/reply"> -- Leave feedback for {{ request.requester.first_name }}</a></li>
             {% endfor %}
             {% for request in middle_aged_requests %}
-                <li>{{ request.requester.full_name }} expires in {{ request.expiration_date | time_since }} <a href="{{ domain_url }}/feedback/request/{{ request.id }}/reply"> -- Leave feedback for {{ request.requester.first_name }}</a></li>
+                <li>{{ request.requester.full_name }} request expires in {{ request.expiration_date | time_since }} <a href="{{ domain_url }}/feedback/request/{{ request.id }}/reply"> -- Leave feedback for {{ request.requester.first_name }}</a></li>
             {% endfor %}
+            </ul>
+            {% endif %}
+            {% if new_requests %}
+            <h3>Brand New Requests: These requests came in during the last 24 hours</h3>
+            <ul>
+
             {% for request in new_requests %}
                 <li>{{ request.requester.full_name }} expires in {{ request.expiration_date | time_since }} <a href="{{ domain_url }}/feedback/request/{{ request.id }}/reply"> -- Leave feedback for {{ request.requester.first_name }}</a></li>
             {% endfor %}
             </ul>
-
+            {% endif %}
         </p>
         <p>
             This can take as little as three minutes{% if feedback_request_count %} each{% endif %}, and it will really matter to them! Hit us up on slack <a href="https://fool.slack.com/messages/360-feedback-help/details/">#360-feedback-help</a> if you have any questions.
