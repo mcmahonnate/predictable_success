@@ -34,7 +34,6 @@ class Command(BaseCommand):
                     for request in feedback_requests:
                         if request['requester__id'] == submission['subject__id']:
                             submission['request_count'] = request['request_count']
-                print feedback_submissions
                 feedback_submissions_count = len(feedback_submissions)
                 if feedback_submissions_count > 0:
                     if feedback_submissions_count == 1:
