@@ -14,6 +14,7 @@ function FeedbackReportController(FeedbackReportService, $scope, $location, $rou
     vm.predicate = 'employee.full_name';
     vm.reverse = false;
     vm.buildCSV = buildCSV;
+    vm.reportType = 'totals';
     vm.csv = [];
 
     vm.order = function (predicate) {

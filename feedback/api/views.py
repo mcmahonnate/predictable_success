@@ -11,7 +11,7 @@ from serializers import *
 from talentdashboard.views.views import StandardResultsSetPagination
 from org.models import Employee
 from org.api.permissions import UserIsEmployee, UserIsCoachOfEmployee
-from ..models import FeedbackRequest, FeedbackProgressReport, FeedbackProgressReports, FeedbackDigest, EmployeeFeedbackReports, EmployeeSubmissionReport
+from ..models import *
 from ..signals import post_many_save
 from permissions import UserIsEmployeeOrDigestDeliverer, UserIsSubjectOrReviewerOrCoach
 
@@ -160,11 +160,17 @@ def employee_feedback_report(request):
     try:
         start_date = request.QUERY_PARAMS.get('start_date', None)
         end_date = request.QUERY_PARAMS.get('end_date', None)
+        report_type = request.QUERY_PARAMS.get('report_type', None)
         start_date = parser.parse(start_date).date()
         end_date = parser.parse(end_date).date()
-        report = EmployeeFeedbackReports({'start_date': start_date, 'end_date': end_date})
-        report.load()
-        serializer = EmployeeFeedbackReportsSerializer(report)
+        if report_type and report_type=='timestamps':
+            report = EmployeeFeedbackReport(start_date=start_date, end_date=end_date)
+            report.load()
+            serializer = EmployeeFeedbackReportSerializer(report)
+        else:
+            report = TotalFeedbackReports({'start_date': start_date, 'end_date': end_date})
+            report.load()
+            serializer = TotalFeedbackReportsSerializer(report)
         return Response(serializer.data)
     except AttributeError:
         raise Http404()

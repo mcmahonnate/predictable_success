@@ -52,6 +52,9 @@ class FeedbackRequestManager(models.Manager):
             .filter(has_no_submission | has_no_digest)\
             .filter(was_declined=False)
 
+    def all_requests(self, start_date, end_date):
+        return FeedbackRequest.objects.filter(Q(request_date__lte=end_date) and Q(request_date__gte=start_date))
+
 
 class FeedbackRequest(models.Model):
     objects = FeedbackRequestManager()
@@ -103,6 +106,10 @@ class FeedbackSubmissionManager(models.Manager):
 
     def unsolicited_and_ready_for_processing(self, subject):
         return self.ready_for_processing(subject).filter(feedback_request=None, choose_not_to_deliver=False)
+
+    def all_unsolicited(self, start_date, end_date):
+        submissions = self.filter(feedback_request=None, choose_not_to_deliver=False)
+        return submissions.filter(Q(feedback_date__lte=end_date) and Q(feedback_date__gte=start_date))
 
 
 class FeedbackSubmission(models.Model):
@@ -267,7 +274,20 @@ class FeedbackProgressReport(object):
         self.all_submissions_not_delivered_and_not_in_digest = FeedbackSubmission.objects.received_not_delivered_and_not_in_digest(self.employee)
 
 
-class EmployeeFeedbackReports(object):
+class EmployeeFeedbackReport(object):
+    def __init__(self, start_date, end_date):
+        self.start_date = start_date
+        self.end_date = end_date
+        self.requests = []
+        self.unsolicited_submissions = []
+
+    def load(self):
+        self.requests = FeedbackRequest.objects.all_requests(start_date=self.start_date, end_date=self.end_date)
+        self.unsolicited_submissions = FeedbackSubmission.objects.all_unsolicited(start_date=self.start_date,
+                                                                                  end_date=self.end_date)
+
+
+class TotalFeedbackReports(object):
     def __init__(self, object):
         self.employee_report = []
         self.start_date = object.get('start_date', datetime.today() - timedelta(days=365))
@@ -321,7 +341,7 @@ class EmployeeFeedbackReports(object):
             d = {}
             for dct in v:
                 d.update(dct)
-            report = EmployeeFeedbackReport(d)
+            report = TotalFeedbackReport(d)
             self.employee_report.append(report)
             self.total_i_requested_total += report.total_i_requested
             self.total_requested_of_me_total += report.total_requested_of_me
@@ -336,7 +356,7 @@ class EmployeeFeedbackReports(object):
             self.total_i_gave_that_was_helpful += report.total_i_gave_that_was_helpful
 
 
-class EmployeeFeedbackReport(object):
+class TotalFeedbackReport(object):
     def __init__(self, object):
         employee_id = object['employee_id']
         self.employee = Employee.objects.get(pk=employee_id)

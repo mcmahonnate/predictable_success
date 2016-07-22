@@ -225,7 +225,36 @@ class FeedbackSubmissionSerializerForEmployee(serializers.ModelSerializer):
                   'has_been_delivered', 'anonymous', 'excels_at_helpful', 'could_improve_on_helpful', 'help_with_helpful')
 
 
+class FeedbackSubmissionReportSerializer(serializers.ModelSerializer):
+    feedback_date = serializers.DateTimeField(required=False)
+    subject = SanitizedEmployeeSerializer()
+    reviewer = SanitizedEmployeeSerializer()
+
+    class Meta:
+        model = FeedbackSubmission
+        fields = ('id', 'feedback_date', 'subject', 'reviewer')
+
+
+class FeedbackRequestReportSerializer(serializers.ModelSerializer):
+    request_date = serializers.DateTimeField(required=False)
+    expiration_date = serializers.DateField(required=False)
+    requester = SanitizedEmployeeSerializer()
+    reviewer = SanitizedEmployeeSerializer()
+    submission = FeedbackSubmissionReportSerializer()
+
+    class Meta:
+        model = FeedbackRequest
+        fields = ['id', 'request_date', 'expiration_date', 'requester', 'reviewer', 'submission']
+
+
 class EmployeeFeedbackReportSerializer(serializers.Serializer):
+    start_date = serializers.DateTimeField()
+    end_date = serializers.DateTimeField()
+    requests = FeedbackRequestReportSerializer(many=True)
+    unsolicited_submissions = FeedbackSubmissionReportSerializer(many=True)
+
+
+class TotalFeedbackReportSerializer(serializers.Serializer):
     employee = MinimalEmployeeSerializer()
     total_i_requested = serializers.IntegerField()
     total_requested_of_me = serializers.IntegerField()
@@ -240,7 +269,7 @@ class EmployeeFeedbackReportSerializer(serializers.Serializer):
     total_i_gave_that_was_helpful = serializers.IntegerField()
 
 
-class EmployeeFeedbackReportsSerializer(serializers.Serializer):
+class TotalFeedbackReportsSerializer(serializers.Serializer):
     start_date = serializers.DateTimeField()
     end_date = serializers.DateTimeField()
     total_i_requested_total = serializers.IntegerField()
@@ -255,7 +284,7 @@ class EmployeeFeedbackReportsSerializer(serializers.Serializer):
     total_could_improve_i_gave_that_was_helpful = serializers.IntegerField()
     total_i_gave_that_was_helpful = serializers.IntegerField()
 
-    employee_report = EmployeeFeedbackReportSerializer(many=True)
+    employee_report = TotalFeedbackReportSerializer(many=True)
 
 
 class EmployeeSubmissionReportSerializer(serializers.Serializer):

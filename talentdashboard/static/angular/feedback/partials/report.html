@@ -1,6 +1,10 @@
 <div class="container" data-hj-masked>
     <h1>Employee Feedback Report</h1>
     <div class="panel">
+        <div class="btn-group" style="margin-bottom: 20px">
+            <label class="btn btn-default" ng-model="feedbackReport.reportType" btn-radio="'totals'">Show totals for each person</label>
+            <label class="btn btn-default" ng-model="feedbackReport.reportType" btn-radio="'timestamps'">Show timestamps for each action</label>
+        </div>
         <div style="width:300px;">
 			<div class="form-group">
 				<label for="startDate"><strong>Start Date</strong></label>
@@ -10,7 +14,7 @@
 				<label for="endDate"><strong>End Date</strong></label>
 				<input id="endDate" ng-model="feedbackReport.endDate" name="endDate" class="form-control" />
 			</div>
-			<span ng-click="feedbackReport.getFeedbackReport()" class="btn btn-primary">Submit</span>
+			<span ng-click="feedbackReport.getFeedbackReport()" ng-disabled="!feedbackReport.startDate || !feedbackReport.endDate" class="btn btn-primary">Submit</span>
         </div>
     </div>
     <div>
