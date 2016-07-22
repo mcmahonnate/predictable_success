@@ -7,8 +7,8 @@ function FeedbackReportService($http, $log, FeedbackRequestResource) {
         getFeedbackReport: getFeedbackReport
     };
 
-    function getFeedbackReport(start_date, end_date) {
-        return $http.get('/api/v1/feedback/reports/employees/', {params:{start_date: start_date, end_date: end_date}})
+    function getFeedbackReport(start_date, end_date, report_type) {
+        return $http.get('/api/v1/feedback/reports/employees/', {params:{start_date: start_date, end_date: end_date, report_type: report_type}})
             .then(success)
             .catch(fail);
 
