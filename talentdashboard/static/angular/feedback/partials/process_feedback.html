@@ -2,9 +2,9 @@
     <div class="pull-right">
         <h2 class="panel-title" style="margin-bottom:0">{{ processFeedback.submission.feedback_date | date:'longDate' }}</h2>
     </div>
-    <div style="padding-top:20px">
+    <div style="padding-top:20px;">
             <h1><a href="#/feedback">Feedback</a> &raquo; for {{ processFeedback.submission.subject.full_name }}</h1>
-            <div class="panel" style="min-height:auto">
+            <div class="panel" style="min-height:auto;padding-bottom: 10px">
                 <form name="processFeedback.form">
                     <h3 class="panel-title" >{{ processFeedback.questions.excelsAtQuestion }}</h3>
                     <table class="table" style="margin-bottom:45px">
@@ -127,6 +127,7 @@
                             <button ng-show="!processFeedback.submission.has_been_delivered" ng-disabled="processFeedback.form.$pristine" class="btn btn-default pull-right" type="button" ng-click="processFeedback.save()" style="margin-right:5px;">Save</button>
                         </div>
                 </form>
+                <div class="centered" style="color:#aaa;">If this feedback is inappropriate or out of date you can choose to remove it. Just click <a href=""ng-click="processFeedback.doNotDeliver()"><span class="fa fa-ban"></span> Remove</a></div>
             </div>
         </div>
     </div>

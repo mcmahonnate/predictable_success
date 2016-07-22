@@ -60,7 +60,6 @@ class FeedbackHelpfulSerializer(serializers.ModelSerializer):
 class EmployeeEditFeedbackSubmissionSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         if validated_data['excels_at_helpful']:
-            print validated_data['excels_at_helpful']
             if instance.excels_at_helpful is None:
                 excels_at_helpful = FeedbackHelpful.objects.create(**validated_data['excels_at_helpful'])
                 excels_at_helpful.given_by = instance.reviewer
@@ -105,6 +104,22 @@ class EmployeeEditFeedbackSubmissionSerializer(serializers.ModelSerializer):
         model = FeedbackSubmission
         fields = ['id', 'excels_at_helpful', 'could_improve_on_helpful', 'help_with_helpful']
         read_only_fields = ['id',]
+
+
+class DoNotDeliverFeedbackSubmissionSerializer(serializers.ModelSerializer):
+    def update(self, instance, validated_data):
+        if validated_data['choose_not_to_deliver'] and validated_data['choose_not_to_deliver_reason']:
+            instance.choose_not_to_deliver = validated_data['choose_not_to_deliver']
+            instance.choose_not_to_deliver_reason = validated_data['choose_not_to_deliver_reason']
+            instance.save()
+        return instance
+
+    subject = SanitizedEmployeeSerializer(required=False)
+    reviewer = SanitizedEmployeeSerializer(required=False)
+    class Meta:
+        model = FeedbackSubmission
+        fields = ['id', 'subject', 'reviewer', 'choose_not_to_deliver', 'choose_not_to_deliver_reason']
+        read_only_fields = ['id', 'subject', 'reviewer']
 
 
 class WriteableFeedbackSubmissionSerializer(serializers.ModelSerializer):

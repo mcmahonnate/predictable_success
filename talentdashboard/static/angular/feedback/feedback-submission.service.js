@@ -12,8 +12,22 @@ function FeedbackSubmissionService($http, $log, FeedbackSubmissionResource, Empl
         getFeedbackIveSubmitted: getFeedbackIveSubmitted,
         updateExcelsWasHelpful: updateExcelsWasHelpful,
         updateCouldImproveOnWasHelpful: updateCouldImproveOnWasHelpful,
-        getMyHelpfulnessReport: getMyHelpfulnessReport
+        getMyHelpfulnessReport: getMyHelpfulnessReport,
+        doNotDeliver: doNotDeliver,
     };
+
+    function doNotDeliver(id, reason) {
+        return FeedbackSubmissionResource.doNotDeliver({id: id}, {id: id, choose_not_to_deliver: true,
+            choose_not_to_deliver_reason: reason}, success, fail).$promise;
+
+        function success(response) {
+            return response;
+        }
+
+        function fail(response) {
+            $log.error('doNotDeliver failed');
+        }
+    }
 
     function getFeedbackIveSubmitted() {
         var url = '/api/v1/feedback/submissions/my/';

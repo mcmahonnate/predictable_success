@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^requests/todo/$', FeedbackRequestsToDoList.as_view(), name='todo-requests'),
     url(r'^submissions/$', CreateFeedbackSubmission.as_view()),
     url(r'^submissions/my/$', RetrieveMyFeedbackSubmissions.as_view()),
+    url(r'^submissions/(?P<pk>[0-9]*)/do-not-deliver/$', DoNotDeliverFeedbackSubmission.as_view()),
     url(r'^submissions/(?P<pk>[0-9]*)/helpful/$', EmployeeUpdateFeedbackSubmission.as_view()),
     url(r'^submissions/(?P<pk>[0-9]*)/summary/$', CoachUpdateFeedbackSubmission.as_view()),
     url(r'^submissions/(?P<pk>[0-9]*)/$', RetrieveFeedbackSubmission.as_view()),

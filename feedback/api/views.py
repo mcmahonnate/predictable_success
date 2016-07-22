@@ -202,6 +202,16 @@ class EmployeeUpdateFeedbackSubmission(generics.UpdateAPIView):
         return submission.subject
 
 
+class DoNotDeliverFeedbackSubmission(generics.UpdateAPIView):
+    queryset = FeedbackSubmission.objects.all()
+    permission_classes = (IsAuthenticated, UserIsCoachOfEmployee,)
+    serializer_class = DoNotDeliverFeedbackSubmissionSerializer
+
+    def get_employee(self):
+        submission = self.get_object()
+        return submission.subject
+
+
 class RetrieveMyFeedbackDigests(ListAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = FeedbackDigestSerializerForEmployee
@@ -221,7 +231,6 @@ class RetrieveFeedbackDigestsIveDelivered(ListAPIView):
 
     def get(self, request):
         paginator = StandardResultsSetPagination()
-        print self.queryset
         result_page = paginator.paginate_queryset(self.get_queryset(), request)
         serializer = self.serializer_class(result_page, many=True, context={'request': request})
         return paginator.get_paginated_response(serializer.data)

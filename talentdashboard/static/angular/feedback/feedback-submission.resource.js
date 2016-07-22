@@ -14,6 +14,10 @@ function FeedbackSubmissionResource($resource) {
             'updateWasHelpful': {
                 'method': 'PUT',
                 'url': '/api/v1/feedback/submissions/:id/helpful/'
+            },
+            'doNotDeliver': {
+                'method': 'PUT',
+                'url': '/api/v1/feedback/submissions/:id/do-not-deliver/'
             }
         };
     return $resource('/api/v1/feedback/submissions/:id/', null, actions);

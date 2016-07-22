@@ -1,0 +1,17 @@
+<form id="feedback-modal" novalidate="novalidate">
+    <a class="close" ng-click="doNotDeliver.cancel()" data-dismiss="modal">&times;</a>
+
+    <div class="form-group">
+        <div class="modal-body">
+            <panel class="checkin">
+                <h3 class="modal-title">Remove Feedback</h3>
+                <p>Choosing to remove feedback is irreversible. You will not be able to recover it. If you would like to proceed provide a reason below then click submit.</p>
+                <textarea style="min-height:120px;" class="form-control" cols="30" rows="5" ng-model="doNotDeliver.message" placeholder="Provide a reason that you are choosing to remove this feedback."></textarea>
+            </panel>
+        </div>
+        <div class="modal-footer">
+            <button type="button" ng-click="doNotDeliver.cancel()" data-dismiss="modal" class="btn btn-light pull-left">Cancel</button>
+            <button ng-disabled="!doNotDeliver.message" type="button" class="btn btn-success" ng-click="doNotDeliver.submit()">Submit</button>
+        </div>
+    </div>
+</form>

@@ -2,6 +2,10 @@
         .module('feedback')
         .controller('ProcessSubmissionController', ProcessSubmissionController);
 
+    angular
+        .module('feedback')
+        .controller('DoNotDeliverController', DoNotDeliverController);
+
     function ProcessSubmissionController($routeParams, $location, $modal, $scope, $rootScope, $window, analytics, Notification, FeedbackSubmissionService, FeedbackDigestService) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         var vm = this;
@@ -10,6 +14,7 @@
         vm.form = null;
         vm.addToDigest = addToDigest;
         vm.removeFromDigest = removeFromDigest;
+        vm.doNotDeliver = doNotDeliver;
         vm.save = save;
         vm.close = close;
         vm.back = back;
@@ -111,5 +116,41 @@
                     }
                 }
             );
+        }
+
+        function doNotDeliver() {
+            var modalInstance = $modal.open({
+                animation: true,
+                windowClass: 'xx-dialog fade zoom',
+                templateUrl: '/static/angular/feedback/partials/_modals/do-not-deliver-feedback.html',
+                controller: 'DoNotDeliverController as doNotDeliver',
+                resolve: {
+                    id: function () {
+                        return vm.submission.id
+                    },
+                }
+            });
+            modalInstance.result.then(
+                function (value) {
+                    back();
+                }
+            );
+        }
+    }
+
+    function DoNotDeliverController($modalInstance, id, FeedbackSubmissionService, Notification) {
+        var vm = this;
+        vm.message = '';
+        vm.submit = submit;
+        vm.cancel = cancel;
+        function submit() {
+            FeedbackSubmissionService.doNotDeliver(id, vm.message)
+                .then(function (data) {
+                    Notification.warning(data.reviewer.full_name + "'s feedback for " + data.subject.full_name + " has been removed.");
+                    $modalInstance.close();
+                });
+        }
+        function cancel() {
+            $modalInstance.dismiss();
         }
     }
