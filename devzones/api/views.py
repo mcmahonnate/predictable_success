@@ -152,7 +152,7 @@ class UpdateEmployeeZone(RetrieveUpdateAPIView):
 class ShareEmployeeZone(GenericAPIView):
     queryset = EmployeeZone.objects.all()
     serializer_class = EmployeeZoneSerializer
-    permission_classes = (IsAuthenticated, UserIsAssessor)
+    permission_classes = (IsAuthenticated, UserIsAssessorOrHasAllAccess)
 
     def get_employee_zone(self):
         try:
