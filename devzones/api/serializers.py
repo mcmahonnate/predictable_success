@@ -73,6 +73,7 @@ class EmployeeZoneReportSerializer(serializers.ModelSerializer):
     zone = ZoneSerializer()
     meeting_name = serializers.SerializerMethodField()
     development_lead = serializers.SerializerMethodField()
+    development_lead_assessment_id = serializers.SerializerMethodField()
     conversation_sent_to_development_lead = serializers.SerializerMethodField()
     conversation_zone = serializers.SerializerMethodField()
     conversation_completed = serializers.SerializerMethodField()
@@ -85,7 +86,6 @@ class EmployeeZoneReportSerializer(serializers.ModelSerializer):
         if obj.completed:
             return obj.date
         return None
-
 
     def get_conversation_zone(self, obj):
         try:
@@ -137,12 +137,18 @@ class EmployeeZoneReportSerializer(serializers.ModelSerializer):
         except (AttributeError, ObjectDoesNotExist):
             return None
 
+    def get_development_lead_assessment_id(self, obj):
+        try:
+            return obj.development_conversation.development_lead_assessment.id
+        except Conversation.DoesNotExist:
+            return None
+
     def get_conversation_sent_to_development_lead(self, obj):
-        if obj.development_conversation.development_lead_assessment:
+        try:
             return (obj.development_conversation.development_lead_assessment.completed or
                     obj.development_conversation.development_lead_assessment.is_draft)
-        else:
-            return False
+        except Conversation.DoesNotExist:
+            return None
 
     def get_meeting_name(self, obj):
         try:
@@ -152,7 +158,7 @@ class EmployeeZoneReportSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmployeeZone
-        fields = ('id', 'employee', 'assessor', 'zone', 'date', 'completed', 'times_retaken', 'development_lead', 'conversation_sent_to_development_lead', 'new_employee', 'meeting_name', 'conversation_completed', 'conversation_completed_date', 'conversation_gap', 'conversation_gap_severity', 'conversation_zone')
+        fields = ('id', 'employee', 'assessor', 'zone', 'date', 'completed', 'times_retaken', 'development_lead', 'development_lead_assessment_id', 'conversation_sent_to_development_lead', 'new_employee', 'meeting_name', 'conversation_completed', 'conversation_completed_date', 'conversation_gap', 'conversation_gap_severity', 'conversation_zone')
 
 
 class EmployeeZoneSerializer(serializers.ModelSerializer):
