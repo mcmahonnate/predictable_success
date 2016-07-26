@@ -75,7 +75,7 @@
                         <td>{{ $index+1 }}.</td>
                         <td>
                             <a ng-href="#/employees/{{report.employee.id}}" class="tiny-headshot pull-left"><img ng-src="{{ report.employee.avatar_small }}" alt="{{ report.employee.full_name }}'s avatar"/></a>
-                            <a ng-href="api/v1/devzones/selfies/{{report.employee.id}}/share/" target="_blank">{{report.employee.full_name}}</a>
+                            <a ng-href="api/v1/devzones/selfies/{{report.development_lead_assessment_id}}/share/" target="_blank">{{report.employee.full_name}}</a>
                         </td>
                         <td style="text-align: center">{{report.meeting_name}}</td>
                         <td style="text-align: center">{{report.development_lead.full_name}}</td>
