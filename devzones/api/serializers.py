@@ -139,14 +139,19 @@ class EmployeeZoneReportSerializer(serializers.ModelSerializer):
 
     def get_development_lead_assessment_id(self, obj):
         try:
-            return obj.development_conversation.development_lead_assessment.id
+            if obj.development_conversation.development_lead_assessment:
+                return obj.development_conversation.development_lead_assessment.id
+            else:
+                None
         except Conversation.DoesNotExist:
             return None
 
     def get_conversation_sent_to_development_lead(self, obj):
         try:
-            return (obj.development_conversation.development_lead_assessment.completed or
-                    obj.development_conversation.development_lead_assessment.is_draft)
+            if obj.development_conversation.development_lead_assessment:
+                return (obj.development_conversation.development_lead_assessment.completed or
+                        obj.development_conversation.development_lead_assessment.is_draft)
+            return None
         except Conversation.DoesNotExist:
             return None
 
