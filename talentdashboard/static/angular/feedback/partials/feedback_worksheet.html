@@ -39,12 +39,12 @@
 				</table>	
             </div>
             <div class="panel" ng-show="feedbackWorksheet.progressReport.unanswered_requests.length>0">
-                <h3 class="panel-title">Unanswered Requests</h3>
+                <h3 class="panel-title">Unanswered Requests <button class="btn btn-success btn-sm pull-right" ng-click="feedbackWorksheet.poke()">Poke</button></h3>
                 <table class="table" style="margin-bottom:0">
                     <thead>
                         <tr>
                           <th class="width-65-percent">From</th>
-                          <th class="width-30-percent">Sent</th>
+                          <th class="width-30-percent">Expires</th>
                           <th></th>
                         </tr>
                     </thead>
@@ -57,7 +57,7 @@
                                 <strong>{{ request.reviewer.full_name }}</strong>
                             </td>
                             <td class="timeago">
-                                {{ request.request_date | fromNow }}
+                                {{ request.expiration_date | fromNow }}
                             </td>
                         </tr>
                     </tbody>
