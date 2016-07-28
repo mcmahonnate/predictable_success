@@ -2,7 +2,7 @@
         .module('feedback')
         .controller('FeedbackWorksheetController', FeedbackWorksheetController);
 
-    function FeedbackWorksheetController($routeParams, $location, $window, $scope, $rootScope, analytics, Notification, FeedbackRequestService, FeedbackDigestService) {
+    function FeedbackWorksheetController($routeParams, $location, $modal, $window, $scope, $rootScope, analytics, Notification, FeedbackRequestService, FeedbackDigestService) {
         analytics.trackPage($scope, $location.absUrl(), $location.url());
         var vm = this;
         vm.employeeId = $routeParams.id;
@@ -13,6 +13,7 @@
         vm.save = save;
         vm.deliverDigest = deliverDigest;
         vm.printDigest = printDigest;
+        vm.poke = poke;
         vm.showProgressReport = true;
         vm.coach = $rootScope.currentUser.employee;
         vm.employee = null;
@@ -29,6 +30,27 @@
         function activate() {
             getFeedbackProgressReport();
             getCurrentDigest();
+        }
+
+        function poke() {
+            $modal.open({
+                animation: true,
+                windowClass: 'xx-dialog fade zoom',
+                backdrop: 'static',
+                templateUrl: '/static/angular/feedback/partials/_modals/poke.html',
+                controller: 'PokeForFeedbackController as poke',
+                resolve: {
+                    coach: function () {
+                        return vm.coach;
+                    },
+                    employee: function () {
+                        return vm.employee;
+                    },
+                    requests: function () {
+                        return vm.progressReport.unanswered_requests;
+                    },
+                }
+            });
         }
 
         function getCurrentDigest() {

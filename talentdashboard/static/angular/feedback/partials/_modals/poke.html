@@ -1,0 +1,18 @@
+<form id="feedback-modal" novalidate="novalidate">
+    <a class="close" ng-click="poke.cancel()" data-dismiss="modal">&times;</a>
+
+    <div class="form-group">
+        <div class="modal-body">
+            <panel class="checkin">
+                <h3 class="modal-title">Remind</h3>
+                <p>Send a friendly reminder to the following people to finish their feedback for <strong>{{poke.employee.full_name}}</strong>.</p>
+                <p><span ng-repeat="request in poke.requests"><span ng-if="$middle">, </span><span ng-if="$last"> and </span><span style="color: #3d8b3d;">{{ request.reviewer.full_name }}</span></span> </p>
+                <textarea style="min-height:175px;" class="form-control" cols="30" rows="5" ng-model="poke.message" placeholder="Personalize your message. Don't worry we'll include a link for them to compete thier feedback."></textarea>
+            </panel>
+        </div>
+        <div class="modal-footer">
+            <button type="button" ng-click="poke.cancel()" data-dismiss="modal" class="btn btn-light pull-left">Cancel</button>
+            <button ng-disabled="!poke.message" type="button" class="btn btn-success" ng-click="poke.submit()">Submit</button>
+        </div>
+    </div>
+</form>

@@ -4,10 +4,6 @@ angular
 
 function FeedbackRequestResource($resource) {
     var actions = {
-        'sendFeedbackRequests': {
-            method: 'POST',
-            isArray: true
-        },
         'getFeedbackRequests': {
             url: '/api/v1/feedback/requests/todo/',
             method: 'GET',
@@ -17,7 +13,15 @@ function FeedbackRequestResource($resource) {
             url: '/api/v1/feedback/requests/recently-sent/',
             method: 'GET',
             isArray: true
-        }
+        },
+        'poke': {
+            method: 'PUT',
+            isArray: true
+        },
+        'sendFeedbackRequests': {
+            method: 'POST',
+            isArray: true
+        },
     };
     return $resource('/api/v1/feedback/requests/:id/', null, actions);
 }

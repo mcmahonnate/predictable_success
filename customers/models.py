@@ -8,6 +8,7 @@ class Customer(TenantMixin):
     namely_api_token = models.CharField(max_length=255, blank=True)
     yei_api_url = models.CharField(max_length=255, blank=True)
     yei_api_token = models.CharField(max_length=255, blank=True)
+    slack_url = models.CharField(max_length=255, blank=True)
     slack_api_url = models.CharField(max_length=255, blank=True)
     slack_api_token = models.CharField(max_length=255, blank=True)
     slack_bot = models.CharField(max_length=255, blank=True)

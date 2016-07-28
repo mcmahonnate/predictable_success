@@ -36,7 +36,7 @@ class SanitizedEmployeeSerializer(BaseEmployeeSerializer):
 
     class Meta:
         model = Employee
-        fields = ('id', 'full_name', 'first_name', 'last_name', 'avatar', 'avatar_small', 'requester_has_access', 'team', 'hire_date')
+        fields = ('id', 'full_name', 'first_name', 'last_name', 'avatar', 'avatar_small', 'requester_has_access', 'team', 'hire_date', 'gender')
 
 
 class BlacklistedEmployeeSerializer(SanitizedEmployeeSerializer):

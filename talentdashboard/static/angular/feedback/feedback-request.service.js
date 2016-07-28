@@ -10,8 +10,21 @@ function FeedbackRequestService($http, $log, FeedbackRequestResource) {
         getPotentialReviewers: getPotentialReviewers,
         getFeedbackProgressReportForEmployee: getFeedbackProgressReportForEmployee,
         getFeedbackProgressReportForEmployees: getFeedbackProgressReportForEmployees,
-        getMyRecentlySentRequests: getMyRecentlySentRequests
+        getMyRecentlySentRequests: getMyRecentlySentRequests,
+        poke: poke
     };
+
+    function poke(requests, message, employee_id, coach_id) {
+        return FeedbackRequestResource.poke({id: 'poke'}, {message: message, requests: requests, employee_id: employee_id, coach_id: coach_id}, success, fail).$promise;
+
+        function success(response) {
+            return response;
+        }
+
+        function fail(response) {
+            $log.error('poke failed');
+        }
+    }
 
     function sendFeedbackRequests(reviewers, message) {
         var requests = [];

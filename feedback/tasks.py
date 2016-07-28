@@ -10,6 +10,7 @@ from org.models import Employee
 from datetime import datetime, timedelta
 import requests
 
+
 @app.task
 def send_feedback_request_email(request_id):
     from feedback.models import FeedbackRequest
@@ -54,8 +55,6 @@ def send_feedback_request_reminder_email(employee_id, customer_id):
     middle_aged_requests = feedback_requests.exclude(request_date__gte=one_day_ago)\
         .exclude(expiration_date__lte=seven_days_from_now)
 
-    print one_day_from_now
-    print seven_days_from_now
     domain_url = 'https://%s/#' % tenant.domain_url
     context = {
         'recipient': employee,
@@ -71,6 +70,36 @@ def send_feedback_request_reminder_email(employee_id, customer_id):
     msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
     msg.attach_alternative(html_content, "text/html")
     msg.send()
+
+
+@app.task
+def poke_for_feedback_email(coach_id, employee_id, request_ids, message):
+    from customers.models import Customer
+    from feedback.models import FeedbackRequest
+    from org.models import Employee
+
+    tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
+    coach = Employee.objects.get(id=coach_id)
+    employee = Employee.objects.get(id=employee_id)
+    domain_url = 'https://%s/#' % tenant.domain_url
+    context = {
+        'employee': employee,
+        'coach': coach,
+        'slack_url': tenant.slack_url,
+        'message': message,
+        'feedback_request_url': None,
+        'domain_url': domain_url,
+    }
+    subject = "You have a request from %s about %s's feedback" % (coach.full_name, employee.full_name)
+    feedback_requests = FeedbackRequest.objects.filter(id__in=request_ids)
+    for feedback_request in feedback_requests:
+        recipient_email = feedback_request.reviewer.email
+        context['feedback_request_url'] = "%s/feedback/request/%s/reply" % (domain_url, feedback_request.id)
+        text_content = render_to_string('feedback/email/poke_for_feedback.txt', context)
+        html_content = render_to_string('feedback/email/poke_for_feedback.html', context)
+        msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
 
 
 @app.task
@@ -159,16 +188,12 @@ def send_feedback_was_helpful_email(employee_id, days_ago):
 @app.task
 def send_coach_coachee_requested_feedback_slack(coach_slack_name, coachee_id, coachee_name, reviewer_names):
     tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
-    print 'slack start'
     if len(reviewer_names) == 1:
         names = reviewer_names[0]
     else:
         names = ', '.join(reviewer_names[:-1]) + ' & ' + reviewer_names[-1]
-    print 'names'
     link = "<https://%s/#/my-coachees| here>" % tenant.domain_url
     channel = "@%s" % coach_slack_name
     text = "One of the people you coach, %s, just requested feedback from %s. Keep an eye on your weekly Feedback Digest email to stay up to date on your coachees' feedback or check them out %s." % (coachee_name, names, link)
     data = {"channel": channel, "text": text}
-    print 'slack submit'
     requests.post(tenant.slack_bot, json=data)
-    print 'slack end'

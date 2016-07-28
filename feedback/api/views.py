@@ -10,9 +10,10 @@ from dateutil import parser
 from serializers import *
 from talentdashboard.views.views import StandardResultsSetPagination
 from org.models import Employee
-from org.api.permissions import UserIsEmployee, UserIsCoachOfEmployee
+from org.api.permissions import UserIsEmployee, UserIsCoachOfEmployee, UserIsEmployeeOrCoachOfEmployee
 from ..models import *
 from ..signals import post_many_save
+from ..tasks import poke_for_feedback_email
 from permissions import UserIsEmployeeOrDigestDeliverer, UserIsSubjectOrReviewerOrCoach
 
 
@@ -55,6 +56,7 @@ class RetrieveFeedbackRequest(RetrieveAPIView):
     def get_employee(self):
         request = self.get_object()
         return request.reviewer
+
 
 # FeedbackSubmission
 class CreateFeedbackSubmission(CreateAPIView):
@@ -355,3 +357,19 @@ class AddRemoveDigestSubmission(APIView):
             digest.submissions.remove(serializer.validated_data['submission'])
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PokeForFeedback(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def put(self, request):
+        request_ids = []
+        if 'message' in request.DATA and 'requests' in request.DATA:
+            message = request.DATA['message']
+            employee_id = request.DATA['employee_id']
+            coach_id = request.DATA['coach_id']
+            for item in request.DATA['requests']:
+                request_ids.append(item['id'])
+            poke_for_feedback_email.subtask((coach_id, employee_id, request_ids, message,)).apply_async()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)

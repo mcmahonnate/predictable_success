@@ -3,6 +3,7 @@ from views import *
 
 urlpatterns = [
     url(r'^requests/$', CreateFeedbackRequest.as_view()),
+    url(r'^requests/poke/$', PokeForFeedback.as_view()),
     url(r'^requests/recently-sent/$', RecentFeedbackRequestsIveSentList.as_view()),
     url(r'^requests/(?P<pk>[0-9]*)/$', RetrieveFeedbackRequest.as_view()),
     url(r'^requests/todo/$', FeedbackRequestsToDoList.as_view(), name='todo-requests'),
