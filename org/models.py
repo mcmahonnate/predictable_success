@@ -105,6 +105,23 @@ class EmployeeManager(TreeManager):
         return employees
 
 
+class _Pronoun(object):
+    def __init__(self):
+        self.subject = 'they'
+        self.object = 'them'
+        self.reflexive = 'themself'
+        self.possessive_determiner = 'thier'
+        self.possessive_pronoun = 'thiers'
+
+    def load(self, gender):
+        if gender:
+            self.subject = 'she' if gender=='F' else 'he'
+            self.object = 'her' if gender=='F' else 'him'
+            self.reflexive = 'herself' if gender=='F' else 'himself'
+            self.possessive_determiner = 'her' if gender=='F' else 'his'
+            self.possessive_pronoun = 'hers' if gender=='F' else 'his'
+
+
 class Employee(MPTTModel):
     objects = EmployeeManager()
     _can_view_all_employees = None
@@ -217,6 +234,12 @@ class Employee(MPTTModel):
         if self._can_view_all_employees is None:
             self._can_view_all_employees = self.user.has_perm('org.view_employees')
         return self._can_view_all_employees
+
+    @property
+    def pronoun(self):
+        pronoun = _Pronoun()
+        pronoun.load(self.gender)
+        return pronoun
 
     def is_coach(self):
         coach_count = Employee.objects.filter(coach__id=self.id, departure_date__isnull=True).count()

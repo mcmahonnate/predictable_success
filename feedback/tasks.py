@@ -1,13 +1,14 @@
 from __future__ import absolute_import
-from talentdashboard.celery import app
+from customers.models import Customer
+from datetime import datetime, timedelta
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 from django.db import connection
 from django.db.models import Q
-from customers.models import Customer
 from org.models import Employee
-from datetime import datetime, timedelta
+from talentdashboard.celery import app
+
 import requests
 
 
@@ -195,5 +196,49 @@ def send_coach_coachee_requested_feedback_slack(coach_slack_name, coachee_id, co
     link = "<https://%s/#/my-coachees| here>" % tenant.domain_url
     channel = "@%s" % coach_slack_name
     text = "One of the people you coach, %s, just requested feedback from %s. Keep an eye on your weekly Feedback Digest email to stay up to date on your coachees' feedback or check them out %s." % (coachee_name, names, link)
+    data = {"channel": channel, "text": text}
+    requests.post(tenant.slack_bot, json=data)
+
+
+@app.task
+def send_helpful_slack(helpful_id):
+    from feedback.models import FeedbackHelpful
+    tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
+    if tenant.slack_bot is None:
+        return
+    helpful = FeedbackHelpful.objects.get(id=helpful_id)
+    digest_id = None
+
+    try:
+        if helpful.excels_at_submission and helpful.excels_at_submission.feedback_digest:
+            digest_id = helpful.excels_at_submission.feedback_digest.id
+    except AttributeError:
+        pass
+
+    try:
+        if digest_id is None and helpful.could_improve_on_submission and \
+                helpful.could_improve_on_submission.feedback_digest:
+            digest_id = helpful.could_improve_on_submission.feedback_digest.id
+    except AttributeError:
+        pass
+    try:
+        if digest_id is None and helpful.help_with_submission and helpful.help_with_submission.feedback_digest:
+            digest_id = helpful.help_with_submission.feedback_digest.id
+        elif digest_id is None:
+            return
+    except AttributeError:
+        pass
+
+    link = "<https://%s/#/feedback/%s/| Click here to see more>" % (tenant.domain_url, digest_id)
+
+    if helpful.given_by.slack_name is None:
+        return
+    if helpful.reason:
+        text = "%s thought your feedback was :+1: %s. Here's what %s said:\r\n\r\n'%s'\r\n\r\n%s." % \
+               (helpful.received_by.full_name, helpful.helpfulness_verbose(), \
+                helpful.received_by.pronoun.subject, helpful.reason, link)
+    else:
+        text = "%s thought your feedback was :+1: %s. %s." % (helpful.received_by.full_name, helpful.helpfulness_verbose(), link)
+    channel = "@%s" % helpful.received_by.slack_name
     data = {"channel": channel, "text": text}
     requests.post(tenant.slack_bot, json=data)
