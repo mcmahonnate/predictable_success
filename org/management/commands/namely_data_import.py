@@ -157,6 +157,10 @@ class Command(BaseCommand):
                             employee.email = email
                             employee.save()
                             print "Updated %s's email" % employee.full_name
+                        if email and (employee.user and employee.user.email != email):
+                            employee.user.email = email
+                            employee.user.save()
+                            print "Updated %s's user email" % employee.full_name
                         if gender and (employee.gender is None or employee.gender != gender):
                             employee.gender = gender
                             employee.save()
