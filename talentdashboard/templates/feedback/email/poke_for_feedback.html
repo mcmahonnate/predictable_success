@@ -2,13 +2,15 @@
 
 {% block content %}
         <p>
-            <pre style="font-family: inherit;">
-                <span style="font-size:14px;white-space: pre-wrap;">{{ message }}</span>
-            </pre>
+<pre style="font-family: inherit;">
+<span style="font-size:14px;white-space: pre-wrap;">
+{{ message }}
+</span>
+</pre>
         </p>
         <div style="background-color: #f9f9f9;padding: 20px 20px 0 20px;">
 		    <div style="background-color: #fff;padding: 20px;">
-                <span style="font-weight: 500;">Complete Kara's feedback here:</span>
+                <span style="font-weight: 500;">Complete {{ employee.first_name }}'s feedback here:</span>
                 <br>
 		        <br>
                 <a href="{{ feedback_request_url }}" style="font-size: 16px; font-weight: 500;">{{ feedback_request_url }}</a>
