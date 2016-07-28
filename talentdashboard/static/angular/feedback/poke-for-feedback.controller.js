@@ -13,7 +13,7 @@ angular
         if (vm.employee.gender == 'F') {
             pronoun = 'her'
         } else if (vm.employee.gender == 'M') {
-            pronoun = 'he'
+            pronoun = 'his'
         }
 
         vm.message = 'Hi,\r\nI\'m ' + vm.employee.first_name + '\'s coach and I\'m hoping to deliver ' + pronoun;
