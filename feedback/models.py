@@ -28,13 +28,19 @@ def default_feedback_request_expiration_date():
 
 
 class FeedbackRequestManager(models.Manager):
-    def pending_for_reviewer(self, reviewer):
+    def pending_for_reviewer(self, reviewer, show_recently_expired=False):
+        expiration_date = datetime.today()
+        if show_recently_expired:
+            expiration_date = datetime.today() - timedelta(weeks=1)
         return self.filter(reviewer=reviewer).filter(submission=None)\
-            .exclude(expiration_date__lt=datetime.today()).order_by('expiration_date')
+            .exclude(expiration_date__lt=expiration_date).order_by('expiration_date')
 
-    def unanswered_for_requester(self, requester):
+    def unanswered_for_requester(self, requester, show_recently_expired=False):
+        date = datetime.today()
+        if show_recently_expired:
+            date = datetime.today() - timedelta(weeks=1)
         return self.filter(requester=requester).filter(submission=None)\
-            .exclude(expiration_date__lt=datetime.today())
+            .exclude(expiration_date__lt=date)
 
     def recent_feedback_requests_ive_sent(self, requester):
         return self.filter(requester=requester)\
@@ -266,7 +272,7 @@ class FeedbackProgressReport(object):
         self.all_submissions_not_delivered_and_not_in_digest = []
 
     def load(self):
-        self.unanswered_requests = FeedbackRequest.objects.unanswered_for_requester(self.employee)
+        self.unanswered_requests = FeedbackRequest.objects.unanswered_for_requester(requester=self.employee, show_recently_expired=True)
         self.solicited_submissions = FeedbackSubmission.objects.solicited_and_ready_for_processing(self.employee)
         self.unsolicited_submissions = FeedbackSubmission.objects.unsolicited_and_ready_for_processing(self.employee)
         self.recent_feedback_requests_ive_sent = FeedbackRequest.objects.recent_feedback_requests_ive_sent_that_have_not_been_delivered(self.employee)

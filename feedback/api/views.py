@@ -126,7 +126,7 @@ class FeedbackRequestsToDoList(ListAPIView):
         """
         Return all FeedbackRequests sent to the user that haven't been completed.
         """
-        return FeedbackRequest.objects.pending_for_reviewer(self.request.user.employee)
+        return FeedbackRequest.objects.pending_for_reviewer(self.request.user.employee, show_recently_expired=True)
 
 
 @api_view(['GET'])
