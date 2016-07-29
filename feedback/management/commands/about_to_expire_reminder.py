@@ -71,7 +71,7 @@ class Command(BaseCommand):
             when = 'tomorrow'
         links = '\r\n'
         for pending_request in  pending_requests:
-            link = "%s - <https://%s/#/feedback/request/%s/reply/| Give feedback>\r\n" % (pending_request.requester.full_name, domain_url, pending_request.id)
+            link = "%s - <https://%s/#/feedback/request/%s/reply/?src=slack| Give feedback>\r\n" % (pending_request.requester.full_name, domain_url, pending_request.id)
             links = links + link
         text = ":octopusbounce: Friendly reminder, the following requests for your feedback will expire %s: %s" % (when, links)
         channel = "@%s" % to
