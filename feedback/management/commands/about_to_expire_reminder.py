@@ -1,5 +1,5 @@
 import requests
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from django.core.management.base import BaseCommand
 from django.db import connection
 from django.db.models.query_utils import Q
@@ -7,6 +7,7 @@ from optparse import make_option
 from customers.models import Customer
 from org.models import Employee
 from feedback.models import FeedbackRequest
+
 
 class Command(BaseCommand):
 
@@ -29,12 +30,12 @@ class Command(BaseCommand):
         day_of_week = self.get_day_of_week()
         pending_requests = FeedbackRequest.objects.pending_for_reviewer(reviewer=employee)
         if day_of_week == 6:
-            start_date = datetime.today() + timedelta(days=1)
-            end_date = datetime.today() + timedelta(days=3)
-            pending_requests.filter(Q(expiration_date__gte=start_date) and Q(expiration_date__lte=end_date))
-        elif day_of_week > 2:
-            tomorrow = datetime.today() + timedelta(days=1)
-            pending_requests.filter(expiration_date=tomorrow)
+            start_date = date.today() + timedelta(days=1)
+            end_date = date.today() + timedelta(days=3)
+            pending_requests = pending_requests.filter(Q(expiration_date__gte=start_date) & Q(expiration_date__lte=end_date))
+        elif day_of_week > 1:
+            tomorrow = date.today() + timedelta(days=1)
+            pending_requests = pending_requests.filter(expiration_date=tomorrow)
         else:
             return []
         return pending_requests
@@ -72,7 +73,7 @@ class Command(BaseCommand):
         for pending_request in  pending_requests:
             link = "%s - <https://%s/#/feedback/request/%s/reply/| Give feedback>\r\n" % (pending_request.requester.full_name, domain_url, pending_request.id)
             links = links + link
-        text = ":octopusbounce: Hurry, hurry the following people's feedback request will expire %s: %s" % (when, links)
+        text = ":octopusbounce: Friendly reminder, the following requests for your feedback will expire %s: %s" % (when, links)
         channel = "@%s" % to
         data = {"channel": channel, "text": text}
         requests.post(slack_bot, json=data)
