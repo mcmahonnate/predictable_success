@@ -207,29 +207,28 @@ def send_helpful_slack(helpful_id):
     if tenant.slack_bot is None:
         return
     helpful = FeedbackHelpful.objects.get(id=helpful_id)
-    digest_id = None
+    submission_id = None
 
     try:
-        if helpful.excels_at_submission and helpful.excels_at_submission.feedback_digest:
-            digest_id = helpful.excels_at_submission.feedback_digest.id
+        if helpful.excels_at_submission:
+            submission_id = helpful.excels_at_submission.id
     except AttributeError:
         pass
 
     try:
-        if digest_id is None and helpful.could_improve_on_submission and \
-                helpful.could_improve_on_submission.feedback_digest:
-            digest_id = helpful.could_improve_on_submission.feedback_digest.id
+        if submission_id is None and helpful.could_improve_on_submission:
+            submission_id = helpful.could_improve_on_submission.id
     except AttributeError:
         pass
     try:
-        if digest_id is None and helpful.help_with_submission and helpful.help_with_submission.feedback_digest:
-            digest_id = helpful.help_with_submission.feedback_digest.id
-        elif digest_id is None:
+        if submission_id is None and helpful.help_with_submission:
+            submission_id = helpful.help_with_submission.id
+        elif submission_id is None:
             return
     except AttributeError:
         pass
 
-    link = "<https://%s/#/feedback/%s/?src=slack| Click here to see more>" % (tenant.domain_url, digest_id)
+    link = "<https://%s/#/feedback/submission/%s/?src=slack| Click here to see more>" % (tenant.domain_url, submission_id)
 
     if helpful.given_by.slack_name is None:
         return
