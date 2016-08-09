@@ -13,8 +13,8 @@ Pre-requisites:
 
 Clone the repo:
 ```
-git clone git@github.com:mcmahonnate/django-talentdashboard.git
-cd django-talentdashboard/
+git clone git@github.com:mcmahonnate/predictable_success.git
+cd predictable_success/
 ```
 
 Create and populate the database:
@@ -57,7 +57,7 @@ java -jar start.jar
 
 Run indexing command. 
 ```
-python manage.py tenant_reindex_employees --settings=talentdashboard.settings.local
+python manage.py tenant_reindex_employees --settings=predictable_success.settings.local
 
 ```
 Install bower. 

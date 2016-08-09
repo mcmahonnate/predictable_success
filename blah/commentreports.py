@@ -1,5 +1,4 @@
 from .models import Comment
-from pvp.models import PvpEvaluation, EvaluationRound
 from org.models import Employee
 from django.contrib.contenttypes.models import ContentType
 from datetime import date, timedelta
@@ -16,20 +15,6 @@ class TalentCategoryReport:
         self.evaluation_date = evaluation_date
         self.total_evaluations = total_evaluations
         self.categories = categories
-
-def build_talent_category_report_for_employees(employees, neglected):
-    evaluation_round = EvaluationRound.objects.most_recent()
-    if neglected:
-        evaluations = PvpEvaluation.objects.filter(evaluation_round_id=evaluation_round.id).exclude(employee__in=employees)
-    else:
-        evaluations = PvpEvaluation.objects.filter(evaluation_round_id=evaluation_round.id).filter(employee__in=employees)
-    total_evaluations = 0
-    categories = {}
-    for talent_category in PvpEvaluation.SUMMARY_SCORE_SCALE:
-        matching_evaluations = [evaluation for evaluation in evaluations if evaluation.talent_category() == talent_category]
-        categories[talent_category] = len(matching_evaluations)
-        total_evaluations += categories[talent_category]
-    return TalentCategoryReport(evaluation_date=evaluation_round.date, total_evaluations=total_evaluations, categories=categories)
 
 def get_employees_with_comments(days_ago, neglected):
     employee_type = ContentType.objects.get(model="employee")

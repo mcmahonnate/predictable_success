@@ -1,5 +1,4 @@
 from blah.models import Comment
-from checkins.models import CheckIn
 from django.http import Http404
 from django.contrib.contenttypes.models import ContentType
 from org.api.permissions import PermissionsViewThisEmployee
@@ -10,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
-from talentdashboard.views.views import StandardResultsSetPagination, PermissionsViewAllEmployees
+from predictable_success.views.views import StandardResultsSetPagination, PermissionsViewAllEmployees
 from .serializers import EventSerializer, ThirdPartySerializer
 from ..models import Event, ThirdParty, ThirdPartyEvent
 
@@ -179,19 +178,6 @@ class ThirdPartyList(generics.ListAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = ThirdPartySerializer
     queryset = ThirdParty.objects.all()
-
-
-class CheckInEventList(generics.ListAPIView):
-    permission_classes = (IsAuthenticated,)
-    serializer_class = EventSerializer
-
-    def get_object(self):
-        pk = self.kwargs['pk']
-        return CheckIn.objects.get(pk=pk)
-
-    def get_queryset(self):
-        subject = self.get_object()
-        return Event.objects.get_events_for_object(subject)
 
 
 class CommentEvent(generics.RetrieveAPIView):

@@ -33,7 +33,6 @@ class EmployeeIndex(object):
                     comp = None
                 leader = employee.current_leader
                 team = employee.team
-                happiness = employee.current_happiness
                 document = {
                     'id': document_id,
                     'pk': employee.id,
@@ -47,18 +46,10 @@ class EmployeeIndex(object):
                     'avatar_small': employee.avatar_small.url if employee.avatar_small else '',
                     'job_title': employee.job_title,
                     'hire_date': employee.hire_date,
-                    'happiness': happiness.assessment if happiness else 0,
-                    'happiness_date': happiness.assessed_date if happiness else None,
-                    'kolbe_fact_finder': employee.get_kolbe_fact_finder,
-                    'kolbe_follow_thru': employee.get_kolbe_follow_thru,
-                    'kolbe_quick_start': employee.get_kolbe_quick_start,
-                    'kolbe_implementor': employee.get_kolbe_implementor,
                     'vops_visionary': employee.get_vops_visionary,
                     'vops_operator': employee.get_vops_operator,
                     'vops_processor': employee.get_vops_processor,
                     'vops_synergist': employee.get_vops_synergist,
-                    'last_checkin_about': employee.last_checkin_about.date if employee.last_checkin_about else None,
-                    'last_checkin_type': employee.last_checkin_about.type.name if employee.last_checkin_about else None,
                     'last_comment_about': employee.last_comment_about.created_date if employee.last_comment_about else None,
                     'departure_date': employee.departure_date,
                     'team_id': team.id if team else None,
@@ -66,8 +57,6 @@ class EmployeeIndex(object):
                     'display': employee.display,
                     'current_salary': comp.salary if comp else None,
                     'current_bonus': comp.bonus if comp else None,
-                    'talent_category': employee.current_talent_category(),
-                    'talent_category_date': employee.current_talent_category_date(),
                     'coach_id': employee.coach.id if employee.coach else None,
                     'coach_full_name': employee.coach.full_name if employee.coach else None,
                     'leader_id': leader.id if leader else None,
@@ -82,9 +71,7 @@ class EmployeeIndex(object):
         self._index_documents(documents)
 
     def find_employees(self, tenant, sanitize=True,
-                       talent_categories=None,
                        team_ids=None,
-                       happiness=None,
                        vops=None,
                        coach_ids=None,
                        leader_ids=None,
@@ -98,8 +85,7 @@ class EmployeeIndex(object):
             'sort': 'full_name asc',
             'rows': rows,
             'start': self._get_start(page, rows),
-            'fq': self._get_filters(tenant, talent_categories=talent_categories, team_ids=team_ids, happiness=happiness,
-                                    coach_ids=coach_ids, leader_ids=leader_ids),
+            'fq': self._get_filters(tenant, team_ids=team_ids, coach_ids=coach_ids, leader_ids=leader_ids),
         }
 
         if sanitize:
@@ -116,7 +102,7 @@ class EmployeeIndex(object):
         results = self.solr.search('*:*', headers=self._get_auth_headers(), **query)
         return results
 
-    def get_salary_report(self, tenant, talent_categories=None, team_ids=None, happiness=None, leader_ids=None,
+    def get_salary_report(self, tenant, team_ids=None, leader_ids=None,
                           coach_ids=None, tree_id=None, lft=None, rght=None, pk=None):
         query = {
             'q': '*:*',
@@ -125,8 +111,7 @@ class EmployeeIndex(object):
             'stats': 'true',
             'stats.facet': 'talent_category',
             "stats.field": "current_salary",
-            'fq': self._get_filters(tenant, talent_categories=talent_categories, team_ids=team_ids, happiness=happiness,
-                                    leader_ids=leader_ids, coach_ids=coach_ids),
+            'fq': self._get_filters(tenant, team_ids=team_ids, leader_ids=leader_ids, coach_ids=coach_ids),
         }
 
         if tree_id:
@@ -158,40 +143,6 @@ class EmployeeIndex(object):
                 'salaries': category['sum']
             }
             report['categories'][key] = value
-        return report
-
-    def get_talent_report(self, tenant, talent_categories=None, team_ids=None, happiness=None, leader_ids=None,
-                          coach_ids=None, tree_id=None, lft=None, rght=None, pk=None):
-        query = {
-            'q': '*:*',
-            'wt': 'json',
-            'rows': 0,
-            'facet': 'true',
-            "facet.field": "talent_category",
-            'fq': self._get_filters(tenant, talent_categories=talent_categories, team_ids=team_ids, happiness=happiness,
-                                    leader_ids=leader_ids, coach_ids=coach_ids),
-        }
-
-        if tree_id:
-            query['fq'].append('tree_id:%s' % tree_id)
-            query['fq'].append('lft:%s' % lft)
-            query['fq'].append('rght:%s' % rght)
-            query['fq'].append('-pk:%s' % pk)
-
-        query_string = urlencode(query, doseq=True)
-        url = "%s/select?%s" % (settings.EMPLOYEES_SOLR_URL, query_string)
-        results = requests.get(url, headers=self._get_auth_headers()).json()
-        count = results['response']['numFound']
-        results = results['facet_counts']['facet_fields']['talent_category']
-
-        if results is None:
-            return results
-
-        report = {
-            'count': count,
-            'categories': dict(zip(results[0::2], results[1::2])),
-        }
-
         return report
 
     def _get_start(self, page, rows):
@@ -238,9 +189,7 @@ class EmployeeIndex(object):
     def _get_filters(self, tenant, talent_categories=None, team_ids=None, happiness=None, leader_ids=None,
                      coach_ids=None, display=True):
         filters = ['tenant:%s' % tenant.schema_name]
-        self._add_filters(filters, 'talent_category', talent_categories)
         self._add_filters(filters, 'team_id', team_ids)
-        self._add_filters(filters, 'happiness', happiness)
         self._add_filters(filters, 'leader_id', leader_ids)
         self._add_filters(filters, 'coach_id', coach_ids)
         return filters

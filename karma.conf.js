@@ -15,9 +15,9 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-        'talentdashboard/static/bower_components/angular/angular.js',
-        'talentdashboard/static/bower_components/angular-mocks/angular-mocks.js',
-        'talentdashboard/static/angular/**/*.js',
+        'predictable_success/static/bower_components/angular/angular.js',
+        'predictable_success/static/bower_components/angular-mocks/angular-mocks.js',
+        'predictable_success/static/angular/**/*.js',
         'jstest/spec/**/*.js'
     ],
 

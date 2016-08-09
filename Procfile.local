@@ -1,1 +1,1 @@
-web: python manage.py collectstatic --noinput --settings=talentdashboard.settings.local; gunicorn talentdashboard.wsgi_local --settings=talentdashboard.settings.local
+web: python manage.py collectstatic --noinput --settings=predictable_success.settings.local; gunicorn predictable_success.wsgi_local --settings=predictable_success.settings.local

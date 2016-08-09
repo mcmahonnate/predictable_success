@@ -7,7 +7,6 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from org.api.permissions import PermissionsViewAllEmployees
 from comp.api.serializers import CompensationSummarySerializer
 
 

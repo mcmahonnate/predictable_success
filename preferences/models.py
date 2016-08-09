@@ -11,7 +11,4 @@ class UserPreferences(models.Model):
     )
     user = models.OneToOneField(User, related_name='preferences')
     dashboard_view = models.IntegerField(choices=DASHBOARD_VIEW_CHOICES, default=DISCUSSION_FOCUSED_DASHBOARD_VIEW)
-    show_checkin_intro_pop = models.BooleanField(default=True)
-    show_devzone_intro_pop = models.BooleanField(default=True)
-    show_feedback_intro_pop = models.BooleanField(default=True)
     show_strengths_intro_pop = models.BooleanField(default=True)

@@ -5,6 +5,7 @@ from django.contrib.auth.models import User, Group
 from django.conf import settings
 from tenant_schemas.signals import post_schema_sync
 
+
 @receiver(post_schema_sync)
 def create_initial_user_and_set_site(sender, **kwargs):
     tenant = kwargs['tenant']

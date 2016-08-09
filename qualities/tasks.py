@@ -1,5 +1,5 @@
 from __future__ import absolute_import
-from talentdashboard.celery import app
+from predictable_success.celery import app
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings

@@ -1,5 +1,5 @@
 from __future__ import absolute_import
-from talentdashboard.celery import app
+from predictable_success.celery import app
 from django.core.mail import EmailMultiAlternatives
 from django.core.urlresolvers import reverse
 from django.utils.html import strip_tags

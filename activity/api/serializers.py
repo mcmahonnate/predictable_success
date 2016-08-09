@@ -1,12 +1,6 @@
 from blah.models import Comment
 from blah.api.serializers import CommentSerializer
-from checkins.models import CheckIn
-from checkins.api.serializers import CheckInSerializer, SanitizedCheckInSerializer
-from devzones.models import EmployeeZone
-from devzones.api.serializers import EmployeeZoneForActivityFeedSerializer
 from django.contrib.contenttypes.models import ContentType
-from feedback.models import FeedbackDigest
-from feedback.api.serializers import SummarizedFeedbackDigestSerializer
 from org.api.serializers import SimpleUserSerializer, MinimalEmployeeSerializer
 from rest_framework import serializers
 from ..models import Event, ThirdParty, ThirdPartyEvent
@@ -54,18 +48,8 @@ class EventSerializer(serializers.ModelSerializer):
         self.related_objects = {}
         self.related_object_serializers = {
             Comment: CommentSerializer,
-            CheckIn: CheckInSerializer,
-            EmployeeZone: EmployeeZoneForActivityFeedSerializer,
-            FeedbackDigest: SummarizedFeedbackDigestSerializer,
             ThirdPartyEvent: ThirdPartyEventSerializer
         }
-
-    def get_show_conversation(self, obj):
-        user = self.context['request'].user
-        checkin_type = ContentType.objects.get_for_model(CheckIn)
-        if obj.event_type.id == checkin_type.id and user.employee.id == obj.employee.id:
-            return False
-        return obj.show_conversation
 
     def get_related_objects(self, instance):
         ids = {}
@@ -105,10 +89,6 @@ class EventSerializer(serializers.ModelSerializer):
     def get_serializer_for_related_object(self, obj, show_conversation):
         serializer = self.related_object_serializers[obj.__class__]
         user = self.context['request'].user
-        if serializer is CheckInSerializer:
-            if not show_conversation or \
-                    (not obj.visible_to_employee and user.employee.id == obj.employee.id):
-                serializer = SanitizedCheckInSerializer
         return serializer(context=self.context)
 
     def get_type(self, obj):

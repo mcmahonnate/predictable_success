@@ -1,0 +1,513 @@
+/* Base style rules for the Scoutmap
+
+** Foundational stuff ==================================== */   
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font:inherit;font-size:100%;vertical-align:baseline}
+html{line-height:1}
+ol,ul{list-style:none}
+table{border-collapse:collapse;border-spacing:0}
+caption,th,td{text-align:left;font-weight:normal;vertical-align:middle}
+q,blockquote{quotes:none}
+q:before,q:after,blockquote:before,blockquote:after{content:"";content:none}
+a img{border:none}
+article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section,summary{display:block}
+
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 13.5px;
+    line-height: 18px;
+}
+a {color: #2f742f;}
+a:hover {color: #275e27;}
+p {line-height: 18px;font-size: 14px;}
+strong {font-weight: bold;}
+th {color: #666;}
+textarea {overflow:hidden;}
+
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak],
+.ng-cloak, .x-ng-cloak,
+.ng-hide {
+    display: none !important;
+}
+.ng-hide-add,
+.ng-hide-remove {
+  display: none !important;
+}
+.button-group {
+    display:inline-block;
+
+    @media only screen and (max-width : 640px) {
+        display:block;
+    } 
+}
+
+
+
+/* Timestamps */
+.time {
+    color: #999;
+}
+.time:before {
+    content: "\00b7";
+    padding:0 2px; 
+}
+
+
+
+/* Confirmations */
+.confirmation {
+    background: #fff;
+    border-radius: 10px;
+    padding: 35px;
+    margin-top: 10%;
+}
+.confirmation-message {
+    margin-top: 20px;
+    font-size: 16px;
+    line-height: 24px;
+}
+.confirmation-thanks {
+    margin-top: 35px;
+    font-size: 16px;
+    line-height: 24px;
+}
+.email-confirmation {
+    .logo {
+        margin: 0 0 50px;
+        width: 250px;
+    }
+}
+
+
+/* Layout ==================================== */
+.container {
+	margin-top:40px;
+	padding-left: 80px;
+
+    /* For mobile experiences we move the navigation bar to the top of the viewport */
+    @media only screen and (max-width : 640px) {
+        margin-top: 50px;
+        padding: 15px;
+    }
+}
+
+/* This is for the blank layout template */
+.generic .container {
+    padding-left: 0;
+}
+
+/* Typeography ==================================== */
+h1,h2,h3 {
+    font-family: 'Oswald', Helvetica, Arial, sans;
+}
+h1 {
+    margin: 0 0 25px;
+    font-size: 30px;
+
+    @media only screen and (max-width : 640px) {
+        font-size: 25px;
+        line-height: 28px;
+        margin-top: 10px;
+    }
+} 
+h2 {
+    font-size: 26px;
+}
+h3 {
+    font-size: 18px;
+}
+
+
+.caret {
+ 	border-left: 6px solid transparent;
+  	border-right: 6px solid transparent;
+  	border-top: 6px solid #000000;
+}
+
+ul, ol {
+	padding: 0;
+}
+
+.section-title {
+    border-bottom: 2px solid #ccc;
+    font-weight: bold;
+    padding: 8px 0;
+    margin-bottom: 14px; 
+    font-size: 14px;       
+}
+
+
+/* Modal Headshot box ==================================== */
+    
+.headshot-box {
+    position: absolute;
+    top: 60px;
+    right: -172px;
+    z-index: 9;
+    width: 150px;
+    color: #fff;
+
+    .headshot {
+        width: 85px;
+        border-radius: 80px;
+        display: block;
+    }
+
+    .headshot-name {
+        font-weight: bold;
+        font-size: 16px;
+        display: block;
+    }
+} 
+.arrow-right {
+    width: 0;
+    height: 0;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-left: 15px solid#fff;
+    position: absolute;
+    right: -14px;
+    top: 85px;
+    z-index: 10;
+}
+
+
+/* Popover Edit/Delete ==================================== */
+.popover-items {
+    background: #fff;
+    border: 1px solid #ccc;
+    width: 100px;
+    z-index: 9;
+    right: 0;
+    top: 17px;
+    border-radius: 3px;
+    box-shadow: 3px 3px 5px -3px #444;
+    position: absolute;
+    padding: 10px;
+}
+.popover-items-wide {
+    width: 175px;
+} 
+.popover-item {
+    list-style: none;
+    color: #777;
+    cursor: pointer;
+
+    .fa {
+        width: 16px;
+    }
+}
+.show-popover {
+    color: #aaa;
+    cursor: pointer;
+    vertical-align: middle;
+    margin-right: 10px;
+    font-size: 20px;    
+}
+.show-popover:hover {
+    color: #1a7f7e;
+}
+
+.dropdown-menu li a {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
+    color: #222;
+    overflow: hidden;
+
+    .employee-name {
+        display: inline-block;
+        margin: 4px 0;
+    }
+}
+.dropdown-menu li a:hover {
+    background: #f1f1f1;
+}
+
+.close {
+    z-index: 9;
+    position: absolute;
+    margin: 5px 13px;
+    font-size: 24px;
+    font-weight: normal;
+    right: 0;
+}
+
+
+/* Layout on Employees page ============================================= */
+.masonry {
+    margin: 0px auto;
+}
+.masonry,
+.masonry li { /* apply before masonry add class */
+    position: absolute; /* important to add it before enter animation start */
+    -webkit-transition-duration: .7s;
+    transition-duration: .7s;
+    -webkit-transition-property: all;
+    transition-property: all;
+}
+
+.masonry .masonry-enter { /* limit animated properties for entering elements */
+    -webkit-transition-property: -webkit-transform, opacity;
+    transition-property: transform, opacity;
+}
+
+.masonry-enter,
+.masonry-leave.masonry-leave-active {
+    opacity: 0;
+    -webkit-transform: scale(0.1);
+    transform: scale(0.1);
+}
+
+.masonry-leave,
+.masonry-enter.masonry-enter-active {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+}
+
+
+
+
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0,0,0,.5);
+    -webkit-box-shadow: 0 0 1px rgba(0,0,0,.5);
+}
+
+
+texarea.expandable {
+	min-height: 27px;
+	height: 60px;
+	height: 36px;
+	transition: height .3s ease-out;
+}
+
+textarea.expandable:focus {
+	height: 200px;
+}
+
+
+/* UI Select  */
+.ui-select-bootstrap .ui-select-choices-row>a{
+    padding: 3px 12px; 
+    
+    .names {
+        padding-top: 4px;
+    } 
+}
+.selectize-input.selectize-focus {
+    border-color: #ccc !important;
+}
+.ui-select-match {
+    float: left;
+}
+.ui-select-multiple.ui-select-bootstrap {
+    height: auto;
+    padding: 5px 5px;
+}
+.ui-select-search {
+    background: url(/static/images/pencil.png) 3px 4.16666667% no-repeat transparent;
+    background-size: 13px;
+    background-position: 3px;
+}
+.ui-select-search:focus {
+    background:none;
+}
+
+.ui-select-match .btn-primary {
+    border-color: #d9d9d9 !important;
+    background-image: linear-gradient(#f1f1f1, #f3f3f3) !important;
+    color: #000;
+}
+
+
+
+/* Bootstrap Overrides */
+.alert {
+    padding: 20px;
+    margin-bottom: 15px;
+    position: relative;
+
+    .alert-title {
+        font-weight: bold;
+        font-size: 20px;
+        margin-bottom: 6px;
+    }
+    .alert-message {
+        padding-left: 50px;
+    }
+    .sent-icon {
+        float: left;
+        font-size: 38px;
+        margin-right: 12px;
+        opacity: .3;
+    }
+}
+.alert-previous-feedback {
+    padding: 15px;
+    margin-bottom: 25px;
+
+    .fa {
+        font-size: 20px;
+        vertical-align: top;
+    }
+    a {
+        text-decoration: underline;
+        color: #31708f;
+    }
+    a:hover {
+        text-decoration:none;
+    }
+    .close {
+        margin: 0 15px;
+        top: 11px;
+    }
+}
+
+
+
+
+.modal-backdrop.in {
+  opacity: 0.9;
+  filter: alpha(opacity=90);
+}
+.modal-footer .btn + .btn {
+    margin-left: 0;
+    margin-bottom: 3px;    
+}
+
+
+.modal {
+  text-align: center;
+  padding: 0!important;
+}
+   
+.modal:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+.modal-dialog {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+    max-width: 600px;
+    margin-right: -4px; /* Adjusts for spacing */
+    margin-top: 0;    
+    
+    @media only screen and (max-width : 640px) {
+        position: absolute;
+        top: 8%;
+        left: 0;
+        max-width: 95%;
+    }
+}
+
+
+
+    
+.modal-body {
+    position: relative;
+    padding: 20px 30px;
+
+    textarea {
+        font-size: 16px;
+    }
+
+    .dropdown {
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+}
+.modal-footer {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    background: #f1f1f1;
+}
+.modal-title {
+    font-size: 22px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    line-height: 26px;
+}
+.modal-body p {
+  margin: 15px 0;
+}
+.radio + .radio, .checkbox + .checkbox {
+ 	margin-top: 5px;
+}
+
+
+
+
+
+.nav-tabs {
+    margin: 45px 0 0;
+
+    .nav {
+        cursor: pointer;
+    }
+}
+.nav-tabs > li.active > a {
+    font-weight: bold;
+}
+
+.dropdown a {
+	cursor: pointer;
+}
+
+.dropdown-menu .divider {
+  	margin: 10px 0 5px;
+  	padding: 0;
+}
+
+
+.nav > li > a {
+	@media only screen and (max-width : 1280px) {
+		padding: 6px 10px;
+		font-size: 13px;
+	}
+}	
+
+
+.tooltip-inner {
+            max-width: none;
+            white-space: nowrap;
+        }
+
+
+
+.smooth {
+    opacity: 1;
+}
+.smooth.ng-enter,
+.fade.ng-leave {
+    -webkit-transition: all 1s ease;
+    transition: all 1s ease;
+}
+.smooth.ng-enter {
+    opacity: 0;
+}
+.smooth.ng-enter-active {
+    opacity: 1;
+}
+.smooth.ng-leave {
+    opacity: 1;
+}
+.smooth.ng-leave-active {
+    opacity: 0;
+}
+.disable-table {
+    opacity: .5;
+    cursor: default;
+}

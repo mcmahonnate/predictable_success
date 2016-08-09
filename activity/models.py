@@ -1,10 +1,7 @@
 from blah.models import Comment
-from checkins.models import CheckIn
-from devzones.models import EmployeeZone
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
-from feedback.models import FeedbackDigest
 from org.models import Employee
 import datetime
 

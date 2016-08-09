@@ -1,7 +1,7 @@
 from django.conf.urls import *
 from django.views.decorators.cache import cache_page
 from preferences.api.views import RetrieveUpdateUserPreferences
-from talentdashboard.views.views import user_status, UserList
+from predictable_success.views.views import user_status, UserList
 from views import *
 
 urlpatterns = [

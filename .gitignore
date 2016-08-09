@@ -62,14 +62,14 @@ venv/pysqlite2-doc/docutils.css
 
 venv/pysqlite2-doc/install-source.txt
 
-talentdashboard/static/feedback.js
+predictable_success/static/feedback.js
 
-talentdashboard/static/qualities.js
+predictable_success/static/qualities.js
 
-talentdashboard/static/checkins.js
+predictable_success/static/checkins.js
 
-talentdashboard/static/projects.js
+predictable_success/static/projects.js
 
-talentdashboard/static/devzones.js
+predictable_success/static/devzones.js
 
-talentdashboard/static/profile.js
+predictable_success/static/profile.js

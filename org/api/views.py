@@ -12,7 +12,7 @@ from rest_framework.exceptions import PermissionDenied
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 import dateutil.parser
-from talentdashboard.views.views import add_salary_to_employee
+from predictable_success.views.views import add_salary_to_employee
 from .serializers import *
 from .permissions import *
 from ..models import *

@@ -1,7 +1,7 @@
 {
     "allowedExtensions":["less"],
     "defaults": {
-        "watchFolder": "talentdashboard/static/css/scoutmap",
+        "watchFolder": "predictable_success/static/css/scoutmap",
         "outputFolder": "static/CACHE/css/"
     }
 }

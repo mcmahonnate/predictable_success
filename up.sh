@@ -10,8 +10,8 @@ elif [ ! -z "$ENVIRONMENT" ]; then
     exit 1
 else
     pip install -r requirements.txt;
-    python manage.py collectstatic --noinput --settings=talentdashboard.settings.local;
-    python manage.py runserver 0.0.0.0:8000
+    python manage.py collectstatic --noinput --settings=predictable_success.settings.local;
+    python manage.py runserver 0.0.0.0:8001
 fi
 
 
