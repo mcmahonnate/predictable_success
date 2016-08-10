@@ -75,9 +75,7 @@ def _find_employees_filtered_by_relationship_to_current_user(request, relationsh
 def _find_employees(request, sanitize=True, **kwargs):
     index = EmployeeIndex()
     filters = {
-        'talent_categories': request.QUERY_PARAMS.getlist('talent_category', None),
         'team_ids': request.QUERY_PARAMS.getlist('team_id', None),
-        'happiness': request.QUERY_PARAMS.getlist('happiness', None),
         'vops': request.QUERY_PARAMS.get('vops', None),
         'page': 1,
         'rows': 500,

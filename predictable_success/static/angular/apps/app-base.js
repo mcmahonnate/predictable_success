@@ -22,7 +22,7 @@ var app = angular.module('tdb', [
             when('/qualities/perception/my', {templateUrl: '/static/angular/qualities/partials/strengths-report.html', controller: 'QualitiesReportController as qualitiesReport', resolve: {authorizeRoute: authorizeRoute}}).
             otherwise({redirectTo: '/'});
     }])
-    .run(['$document', '$rootScope', 'User', 'Customers', 'privacyMode', function($document, $rootScope, User, TalentCategories, Customers, privacyMode) {
+    .run(['$document', '$rootScope', 'User', 'Customers', 'privacyMode', function($document, $rootScope, User, Customers, privacyMode) {
         $rootScope.customer = Customers.get();
         $rootScope.currentUser = User.get();
 
