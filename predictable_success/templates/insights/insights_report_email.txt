@@ -1,6 +1,0 @@
-Just so you have it, here is the link to your Insights Dashboard.
-
-https://{{report_url}}
-
-Give it a look-see every now and again to see who has responded to your survey.
-

@@ -5,7 +5,7 @@
 
   ga('create', 'UA-45570095-1', 'auto');
   host = window.location.host;
-  if (host.search("localhost:8000") < 0 && host.search("0.0.0.0:8000") < 0) {
+  if (host.search("localhost:8001") < 0 && host.search("0.0.0.0:8001") < 0) {
     ga('send', 'pageview');
   } else {
       console.log('not tracked ' + window.location.pathname)

@@ -1,9 +1,0 @@
-
-Hi, {{ recipient_first_name }}!
-We thought you'd like to know that within the last {{ days_ago }} {% if helpful_count == 1 %}{{ helpful_count }} person{% else %}{{ helpful_count }} people{% endif %} thought your feedback was helpful.
-
-{% for helpful_submission in helpful_submissions %}
-    {{ helpful_submission.received_by.full_name }} - {{ feedback_url }}{% if helpful_submission.excels_at_submission %}{{ helpful_submission.excels_at_submission.id }}{% else %}{{ helpful_submission.could_improve_on_submission.id }}{% endif %}
-{% endfor %}
-
-Thanks for making a difference.

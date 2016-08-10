@@ -1,6 +1,0 @@
-Hi, {{ recipient_first_name }}!
-
-{{ requester_full_name }} has asked you for feedback.
-
-To leave feedback for {{ requester_full_name }}, please visit this page: {{ response_url }}
-

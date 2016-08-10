@@ -1,6 +1,0 @@
-
-Hi, {{ recipient_first_name }}!
-
-Your coach, {{ delivered_by_full_name }}, has finished compiling your feedback. Click here to give it a look:
-
-{{ digest_url }}
