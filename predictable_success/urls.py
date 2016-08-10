@@ -40,28 +40,20 @@ urlpatterns = [
     url(r'^account/reset/done/$', password_reset_complete, {'template_name': 'password_reset_complete.html'}),
     url(r'^account/', include('django.contrib.auth.urls')),
     url(r'^accounts/password/reset/$', password_reset, {'is_admin_site': True, 'template_name': 'password_reset_form.html', 'email_template_name': 'password_reset_email.html'}),
-    url(r'^api/v1/customer/$', customer),
-    url(r'^api/v1/coaches/$', cache_page(60*1440)(CoachList.as_view()), name='coach-list'),
-    url(r'^api/v1/coachees/$', coachee_list),
-
-    url(r'^api/v1/employees/$', (cache_page(60*1440)(EmployeeList.as_view())), name='employee-list'),
-    url(r'^api/v1/employees/(?P<pk>[0-9]+)/$', EmployeeDetail.as_view(), name='employee-detail'),
-    url(r'^api/v1/employee-names/$', EmployeeNames.as_view(), name='employee-name-list'),
-    url(r'^api/v1/leaderships/employees/(?P<pk>[0-9]+)/$', LeadershipDetail.as_view()),
 
     url(r'^api/v1/image-upload/employees/(?P<pk>[0-9]+)/$', ImageUploadView.as_view()),
-
     url(r'^api/v1/import-data/employee$', upload_employee),
     url(r'^api/v1/import-data/leadership$', upload_leadership),
     url(r'^api/v1/import-data/teams$', upload_teams),
 
     url(r'^api/v1/reports/comments$', comment_report_timespan),
-
     url(r'^api/v1/reports/activity$', last_activity_report),
 
+    url(r'^api/v1/customer/', include('customers.api.urls')),
     url(r'^api/v1/comments/', include('blah.api.urls')),
     url(r'^api/v1/compensation/', include('comp.api.urls')),
     url(r'^api/v1/events/', include('activity.api.urls')),
+    url(r'^api/v1/leadership-style/', include('leadership_styles.api.urls')),
     url(r'^api/v1/org/', include('org.api.urls')),
     url(r'^api/v1/qualities/', include('qualities.api.urls')),
     url(r'^api/v1/search/', include('search.api.urls')),

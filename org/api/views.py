@@ -1,21 +1,37 @@
+from dateutil import parser
 from django.contrib.auth.views import password_reset_confirm, login
 from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.utils.http import urlsafe_base64_decode
-from rest_framework.generics import CreateAPIView, RetrieveAPIView, UpdateAPIView
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from rest_framework.exceptions import PermissionDenied
+from django.http import HttpResponse
 from django.template import RequestContext
 from django.shortcuts import render_to_response
-import dateutil.parser
+from json import dumps
 from predictable_success.views.views import add_salary_to_employee
 from .serializers import *
 from .permissions import *
 from ..models import *
+
+
+@api_view(['GET'])
+def coachee_list(request):
+    employee = Employee.objects.get(user__id=request.user.id)
+    employees = Employee.objects.get_current_employees(show_hidden=True)
+    employees = employees.filter(coach__id=employee.id)
+    serializer = MinimalEmployeeSerializer(employees, many=True, context={'request': request})
+    return Response(serializer.data)
+
+
+class CoachList(ListAPIView):
+    serializer_class = SanitizedEmployeeSerializer
+    queryset = Employee.objects.get_current_employees(show_hidden=True)
 
 
 @permission_classes((IsAuthenticated,))
@@ -47,10 +63,10 @@ class EmployeeDetail(APIView):
                 return Response(serializer.errors, status=400)
         if 'hire_date' in request.DATA and request.DATA['hire_date'] is not None:
             date_string = request.DATA['hire_date']
-            request.DATA['hire_date'] = dateutil.parser.parse(date_string).date()
+            request.DATA['hire_date'] = parser.parse(date_string).date()
         if 'departure_date' in request.DATA and request.DATA['departure_date'] is not None:
             date_string = request.DATA['departure_date']
-            request.DATA['departure_date'] = dateutil.parser.parse(date_string).date()
+            request.DATA['departure_date'] = parser.parse(date_string).date()
         if 'leader_id' in request.DATA and request.DATA['leader_id'] is not None:
             employee.current_leader = Employee.objects.get(id=request.DATA['leader_id'])
             employee.save()
@@ -63,10 +79,10 @@ class EmployeeDetail(APIView):
 
         if 'hire_date' in request.DATA and request.DATA['hire_date'] is not None:
             date_string = request.DATA['hire_date']
-            request.DATA['hire_date'] = dateutil.parser.parse(date_string).date()
+            request.DATA['hire_date'] = parser.parse(date_string).date()
         if 'departure_date' in request.DATA and request.DATA['departure_date'] is not None:
             date_string = request.DATA['departure_date']
-            request.DATA['departure_date'] = dateutil.parser.parse(date_string).date()
+            request.DATA['departure_date'] = parser.parse(date_string).date()
 
         # by name (for upload)
         if 'team_leader' in request.DATA:
@@ -92,6 +108,94 @@ class EmployeeDetail(APIView):
             return Response(serializer.errors, status=400)
 
 
+class EmployeeList(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, format=None):
+        group_name = request.QUERY_PARAMS.get('group_name', None)
+        show_hidden = request.QUERY_PARAMS.get('show_hidden', False)
+        view_all = request.QUERY_PARAMS.get('view_all', False)
+        full_name = request.QUERY_PARAMS.get('full_name', None)
+
+        if not view_all:
+            employees = Employee.objects.get_current_employees_employee_has_access_to(request.user.employee)
+        else:
+            employees = Employee.objects.get_current_employees(show_hidden=show_hidden)
+
+        if group_name:
+            employees = Employee.objects.get_current_employees_by_group_name(name=group_name,show_hidden=show_hidden)
+
+        if full_name:
+            employees = Employee.objects.filter(full_name=full_name)
+            if employees:
+                employee = employees[0]
+                serializer = SanitizedEmployeeSerializer(employee, context={'request':request})
+                return Response(serializer.data)
+            else:
+                return Response({'leader': 'field error'}, status=400)
+        serializer = SanitizedEmployeeSerializer(employees, many=True, context={'request': request})
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        if 'hire_date' in request.DATA and request.DATA['hire_date'] is not None:
+            date_string = request.DATA['hire_date']
+            request.DATA['hire_date'] = parser.parse(date_string).date()
+
+        serializer = CreateEmployeeSerializer(data=request.DATA, context={'request': request})
+        if serializer.is_valid():
+            employee = serializer.save()
+            add_salary_to_employee(employee, request.DATA)
+            serializer = EmployeeSerializer(employee, context={'request':request})
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=400)
+
+    def put(self, request, pk, format=None):
+        employee = Employee.objects.get(id=pk)
+
+        if employee is not None:
+            employee.first_name = request.DATA["_first_name"]
+            employee.last_name = request.DATA["_last_name"]
+            employee.email = request.DATA["_email"]
+            if request.DATA["_hire_date"] is not None:
+                employee.hire_date = parser.parse(request.DATA["_hire_date"])
+            else:
+                employee.hire_date = None
+            if request.DATA["_departure_date"] is not None:
+                employee.departure_date = parser.parse(request.DATA["_departure_date"])
+            else:
+                employee.departure_date = None
+            if request.DATA["_team_id"] is not None:
+                team_id = request.DATA["_team_id"]
+                employee.team = Team.objects.get(id=team_id)
+            else:
+                employee.team = None
+            if request.DATA["_coach_id"] is not None:
+                coach_id = request.DATA["_coach_id"]
+                employee.coach = Employee.objects.get(id=coach_id)
+            else:
+                employee.coach = None
+            if request.DATA["_leader_id"] is not None:
+                leader_id = request.DATA["_leader_id"]
+                employee.current_leader = Employee.objects.get(id=leader_id)
+            else:
+                employee.current_leader = None
+            employee.save()
+            serializer = EmployeeSerializer(employee, many=False, context={'request': request})
+            return Response(serializer.data)
+        return Response(None, status=status.HTTP_404_NOT_FOUND)
+
+
+class EmployeeNames(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, format=None):
+        employees = Employee.objects.get_current_employees()
+        employees = employees.values_list('full_name',flat=True)
+        employees_list = list(employees)
+        return HttpResponse(dumps(employees_list), content_type='application/json')
+
+
 class CurrentCoach(RetrieveAPIView):
     serializer_class = SanitizedEmployeeSerializer
 
@@ -110,6 +214,34 @@ class TeamMemberList(APIView):
         employees = employees.filter(team__id=pk)
 
         serializer = MinimalEmployeeSerializer(employees, many=True, context={'request': request})
+        return Response(serializer.data)
+
+
+class LeadershipDetail(APIView):
+    permission_classes = (IsAuthenticated,)
+    model = Leadership
+
+    def get(self, request, pk, format=None):
+        employee = Employee.objects.get(id=pk)
+        if employee is not None:
+            try:
+                leaderships = Leadership.objects.filter(employee__id=employee.id)
+                leadership = leaderships.latest('start_date')
+                serializer = LeadershipSerializer(leadership, many=False, context={'request': request})
+                return Response(serializer.data)
+            except Leadership.DoesNotExist:
+                pass
+        return Response(None, status=status.HTTP_404_NOT_FOUND)
+
+    def post(self, request, pk, format=None):
+        employee = Employee.objects.get(id=pk)
+        leader_id = request.DATA["leader_id"]
+        leader = Employee.objects.get(id = leader_id)
+        leadership = Leadership()
+        leadership.employee = employee
+        leadership.leader = leader
+        leadership.save()
+        serializer = LeadershipSerializer(leadership, many=False, context={'request': request})
         return Response(serializer.data)
 
 

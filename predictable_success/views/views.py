@@ -1,8 +1,5 @@
 from comp.api.views import add_salary_to_employee
-from customers.api.serializers import CustomerSerializer
 from dateutil import parser
-from django.http import HttpResponse
-from json import dumps
 from org.api.permissions import *
 from org.api.serializers import SanitizedEmployeeSerializer, UserSerializer, EmployeeSerializer, TeamSerializer, LeadershipSerializer, AttributeSerializer, MinimalEmployeeSerializer, EditEmployeeSerializer, CreateEmployeeSerializer
 from rest_framework.decorators import api_view
@@ -24,11 +21,6 @@ class UserList(generics.ListAPIView):
     queryset = Employee.objects.get_current_employees(show_hidden=True)
     queryset = queryset.exclude(user__isnull=True).filter(user__is_active=True)
     permission_classes = (IsAuthenticated,)
-
-
-class CoachList(generics.ListAPIView):
-    serializer_class = SanitizedEmployeeSerializer
-    queryset = Employee.objects.get_current_employees(show_hidden=True)
 
 
 class TeamViewSet(viewsets.ReadOnlyModelViewSet):
@@ -118,84 +110,6 @@ def last_activity_report(request):
     return Response(response_data)
 
 
-class EmployeeList(APIView):
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request, format=None):
-        group_name = request.QUERY_PARAMS.get('group_name', None)
-        show_hidden = request.QUERY_PARAMS.get('show_hidden', False)
-        view_all = request.QUERY_PARAMS.get('view_all', False)
-        full_name = request.QUERY_PARAMS.get('full_name', None)
-
-        if not view_all:
-            employees = Employee.objects.get_current_employees_employee_has_access_to(request.user.employee)
-        else:
-            employees = Employee.objects.get_current_employees(show_hidden=show_hidden)
-
-        if group_name:
-            employees = Employee.objects.get_current_employees_by_group_name(name=group_name,show_hidden=show_hidden)
-
-        if full_name:
-            employees = Employee.objects.filter(full_name=full_name)
-            if employees:
-                employee = employees[0]
-                serializer = SanitizedEmployeeSerializer(employee, context={'request':request})
-                return Response(serializer.data)
-            else:
-                return Response({'leader': 'field error'}, status=400)
-        serializer = SanitizedEmployeeSerializer(employees, many=True, context={'request': request})
-        return Response(serializer.data)
-
-    def post(self, request, format=None):
-        if 'hire_date' in request.DATA and request.DATA['hire_date'] is not None:
-            date_string = request.DATA['hire_date']
-            request.DATA['hire_date'] = parser.parse(date_string).date()
-
-        serializer = CreateEmployeeSerializer(data=request.DATA, context={'request': request})
-        if serializer.is_valid():
-            employee = serializer.save()
-            add_salary_to_employee(employee, request.DATA)
-            serializer = EmployeeSerializer(employee, context={'request':request})
-            return Response(serializer.data)
-        else:
-            return Response(serializer.errors, status=400)
-
-    def put(self, request, format=None):
-        employee = Employee.objects.get(id=pk)
-        
-        if employee is not None:
-            employee.first_name = request.DATA["_first_name"]
-            employee.last_name = request.DATA["_last_name"]
-            employee.email = request.DATA["_email"]
-            if request.DATA["_hire_date"] is not None:
-                employee.hire_date = parser.parse(request.DATA["_hire_date"])
-            else:
-                employee.hire_date = None
-            if request.DATA["_departure_date"] is not None:
-                employee.departure_date = parser.parse(request.DATA["_departure_date"])
-            else:
-                employee.departure_date = None
-            if request.DATA["_team_id"] is not None:
-                team_id = request.DATA["_team_id"]
-                employee.team = Team.objects.get(id=team_id)
-            else:
-                employee.team = None
-            if request.DATA["_coach_id"] is not None:
-                coach_id = request.DATA["_coach_id"]
-                employee.coach = Employee.objects.get(id=coach_id)
-            else:
-                employee.coach = None
-            if request.DATA["_leader_id"] is not None:
-                leader_id = request.DATA["_leader_id"]
-                employee.current_leader = Employee.objects.get(id=leader_id)
-            else:
-                employee.current_leader = None
-            employee.save()
-            serializer = EmployeeSerializer(employee, many=False, context={'request': request})
-            return Response(serializer.data)
-        return Response(None, status=status.HTTP_404_NOT_FOUND)
-
-
 @api_view(['POST'])
 def upload_employee(request):
     team_id = -1
@@ -249,16 +163,6 @@ def upload_leadership(request):
     return response_item
 
 
-class EmployeeNames(APIView):
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request, format=None):
-        employees = Employee.objects.get_current_employees()
-        employees = employees.values_list('full_name',flat=True)
-        employees_list = list(employees)
-        return HttpResponse(dumps(employees_list), content_type='application/json')
-
-
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 3
     page_size_query_param = 'page_size'
@@ -279,34 +183,6 @@ class LargeResultsSetPagination(PageNumberPagination):
                          'has_next': self.page.has_next(),
                          'page' : self.page.number,
                          'results': data})
-
-
-class LeadershipDetail(APIView):
-    permission_classes = (IsAuthenticated,)
-    model = Leadership
-
-    def get(self, request, pk, format=None):
-        employee = Employee.objects.get(id=pk)
-        if employee is not None:
-            try:
-                leaderships = Leadership.objects.filter(employee__id=employee.id)
-                leadership = leaderships.latest('start_date')
-                serializer = LeadershipSerializer(leadership, many=False, context={'request': request})
-                return Response(serializer.data)
-            except Leadership.DoesNotExist:
-                pass
-        return Response(None, status=status.HTTP_404_NOT_FOUND)
-
-    def post(self, request, pk, format=None):
-        employee = Employee.objects.get(id=pk)
-        leader_id = request.DATA["leader_id"]
-        leader = Employee.objects.get(id = leader_id)
-        leadership = Leadership()
-        leadership.employee = employee
-        leadership.leader = leader
-        leadership.save()
-        serializer = LeadershipSerializer(leadership, many=False, context={'request': request})
-        return Response(serializer.data)
 
 
 @api_view(['POST'])
@@ -339,22 +215,8 @@ class ImageUploadView(APIView):
 
 
 @api_view(['GET'])
-def coachee_list(request):
-    employee = Employee.objects.get(user__id=request.user.id)
-    employees = Employee.objects.get_current_employees(show_hidden=True)
-    employees = employees.filter(coach__id=employee.id)
-    serializer = MinimalEmployeeSerializer(employees, many=True, context={'request': request})
-    return Response(serializer.data)
-
-@api_view(['GET'])
 def user_status(request):
     serializer = UserSerializer(request.user, context={'request': request})
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
-def customer(request):
-    serializer = CustomerSerializer(request.tenant)
     return Response(serializer.data)
 
 
