@@ -26,7 +26,7 @@ class QuestionManager(models.Manager):
 
         #if we have not answered any questions start with the first question
         if last_question_answered is None:
-            return self.get_first_question(employee_leadership_style)
+            return self.get_first_question()
         previous_question = last_question_answered.previous_question
         if previous_question is None:
             #if we have no previous question get the next question(s)
@@ -117,10 +117,10 @@ class EmployeeLeadershipStyle(models.Model):
     active = models.BooleanField(default=False)
     completed = models.BooleanField(default=False)
     field_tracker = FieldTracker(fields=['active', 'is_draft', 'completed'])
-    visionary_score = models.IntegerField()
-    operator_score = models.IntegerField()
-    processor_score = models.IntegerField()
-    synergist_score = models.IntegerField()
+    visionary_score = models.IntegerField(null=True, blank=True)
+    operator_score = models.IntegerField(null=True, blank=True)
+    processor_score = models.IntegerField(null=True, blank=True)
+    synergist_score = models.IntegerField(null=True, blank=True)
 
     def _calculate_scores(self):
         if not self.completed and self.all_questions_answered() and self.answers.count() > 0:

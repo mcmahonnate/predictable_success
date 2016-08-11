@@ -14,8 +14,7 @@ function LeadershipStyleResource($resource) {
         },
         'getMy': {
             method: 'GET',
-            url: '/api/v1/leadership-style/:id/',
-            isArray: true
+            url: '/api/v1/leadership-style/:id/'
         },
         'getUnfinished': {
             method: 'GET',

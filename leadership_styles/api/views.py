@@ -44,9 +44,11 @@ class RetrieveMyEmployeeLeadershipStyle(RetrieveAPIView):
 
     def get(self, request, format=None):
         employee = self.request.user.employee
-        leadership_style = EmployeeLeadershipStyle.objects.filter(employee=employee, assessor=employee).latest('date')
-        if leadership_style is None:
-            raise Http404()
+        try:
+            leadership_style = EmployeeLeadershipStyle.objects.filter(employee=employee, assessor=employee).latest('date')
+        except EmployeeLeadershipStyle.DoesNotExist:
+            leadership_style = EmployeeLeadershipStyle(employee=employee, assessor=employee)
+            leadership_style.save()
         serializer = EmployeeLeadershipStyleSerializer(leadership_style, context={'request': request})
         return Response(serializer.data)
 
@@ -68,7 +70,7 @@ class UpdateEmployeeLeadershipStyle(RetrieveUpdateAPIView):
     permission_classes = (IsAuthenticated, UserIsAssessorOrHasAllAccess,)
     serializer_class = UpdateEmployeeLeadershipStyleSerializer
 
-    def get_employee_leadership_style(self):
+    def get_leadership_style(self):
         return self.get_object()
 
     def update(self, request, *args, **kwargs):

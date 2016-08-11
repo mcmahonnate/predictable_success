@@ -9,11 +9,11 @@ var iife = require('gulp-iife');
 var sourcemaps = require('gulp-sourcemaps');
 
 
-gulp.task('devzones-scripts', function() {
-    return gulp.src('./predictable_success/static/angular/devzones/**/*.js')
+gulp.task('leadership-style-scripts', function() {
+    return gulp.src('./predictable_success/static/angular/leadership-style/**/*.js')
         .pipe(sourcemaps.init())
         .pipe(angularFilesort())
-        .pipe(concat('devzones.js'))
+        .pipe(concat('leadership-style.js'))
         .pipe(iife())
         .pipe(ngAnnotate())
         .pipe(sourcemaps.write())
@@ -54,6 +54,6 @@ gulp.task('watch', function() {
     gulp.watch('./predictable_success/**/*.js', ['scripts']);
 });
 
-gulp.task('scripts', ['devzones-scripts', 'profile-scripts', 'qualities-scripts']);
+gulp.task('scripts', ['leadership-style-scripts', 'profile-scripts', 'qualities-scripts']);
 
 gulp.task('default', ['watch']);

@@ -1,10 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<div id="devzones" class="container" data-hj-masked>
+    <div>
+        <h1>Leadership Style</h1>
+    </div>
 
-</body>
-</html>
+    <div ng-show="!index.busy" ng-class="{'slide-up-active': hideMessage}" class="alert alert-success slide-up" role="alert">
+        <a class="btn btn-success btn-feedback pull-right" ng-show="!index.myLeadershipStyle.completed" ng-click="index.takeQuiz()" type="button">
+            <i class="fa fa-comment"></i>
+            <span ng-if="!index.myLeadershipStyle.answers.length>0" class="hide-for-mobile">Take the </span>
+            <span ng-if="index.myLeadershipStyle.answers.length>0" class="hide-for-mobile">Finish the </span>
+            Quiz
+        </a>
+        <h2 class="alert-title">Take the Quiz!</h2>
+        <div class="alert-message" style="padding-left:0; padding-top: 10px">
+            <div>
+                <div class="comment-text">
+                    You have a natural leadership style. With your own strengths and weaknesses. Discover who you are and how to unlock your best self.
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,19 +1,9 @@
 {% extends "layouts/app.html" %}
 {% load staticfiles %}
-{% block title %}Scoutmap{% endblock title %}
+{% block title %}Predictable Success{% endblock title %}
 
 {% block content %}
     <div ng-controller="BaseAppCtrl">
-
-        {% if perms.org.view_employees %}
-            <div ng-include="'/static/angular/partials/_widgets/navigation/nav-all-access.html'"></div>
-        {% elif user.employee.is_lead and perms.org.view_employees_I_lead %}
-            <div ng-include="'/static/angular/partials/_widgets/navigation/nav-lead.html'"></div>
-        {% elif user.employee.is_coach %}
-            <div ng-include="'/static/angular/partials/_widgets/navigation/nav-coach.html'"></div>
-        {% else %}
-            <div ng-include="'/static/angular/partials/_widgets/navigation/nav-individual.html'"></div>    
-        {% endif %}
 
         <div class="overlay" ng-class="{show:showmenu}" ng-swipe-left="showmenu=true"></div>
         <div ng-view class="smooth"></div> 
