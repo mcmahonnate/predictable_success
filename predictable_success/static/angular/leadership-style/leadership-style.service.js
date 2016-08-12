@@ -10,7 +10,8 @@ function LeadershipStyleService($http, $log, LeadershipStyleResource) {
         getMyUnfinishedLeadershipStyle: getMyUnfinishedLeadershipStyle,
         retakeLeadershipStyle: retakeLeadershipStyle,
         shareLeadershipStyle: shareLeadershipStyle,
-        updateLeadershipStyle: updateLeadershipStyle
+        updateLeadershipStyle: updateLeadershipStyle,
+        goToPreviousQuestion: goToPreviousQuestion
     };
 
     function createLeadershipStyle(leadershipStyle) {
@@ -94,6 +95,18 @@ function LeadershipStyleService($http, $log, LeadershipStyleResource) {
 
         function fail(response) {
             $log.error('updateLeadershipStyle failed');
+        }
+    }
+
+    function goToPreviousQuestion(leadershipStyle) {
+        return LeadershipStyleResource.goToPreviousQuestion({id: leadershipStyle.id}, null, success, fail).$promise;
+
+        function success(response) {
+            return response;
+        }
+
+        function fail(response) {
+            $log.error('goToPreviousQuestion failed');
         }
     }
 }

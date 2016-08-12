@@ -21,10 +21,17 @@ class AnswerSerializer(serializers.ModelSerializer):
 
 class QuestionSerializer(serializers.ModelSerializer):
     answers = AnswerSerializer(many=True)
+    answer = serializers.SerializerMethodField()
+
+    def get_answer(self, obj):
+        if obj.answer is None:
+            return None
+        serializer = AnswerSerializer(context=self.context)
+        return serializer.to_representation(obj.answer)
 
     class Meta:
         model = Question
-        fields = ('id', 'text', 'answers')
+        fields = ('id', 'text', 'answers', 'answer')
 
 
 class CreateEmployeeLeadershipStyleSerializer(serializers.ModelSerializer):
@@ -58,8 +65,18 @@ class EmployeeLeadershipStyleReportSerializer(serializers.ModelSerializer):
 class EmployeeLeadershipStyleSerializer(serializers.ModelSerializer):
     employee = SanitizedEmployeeSerializer()
     assessor = SanitizedEmployeeSerializer()
-    next_question = QuestionSerializer()
+    next_question = serializers.SerializerMethodField()
     answers = serializers.SerializerMethodField()
+
+    def get_next_question(self, obj):
+        next_question = obj.next_question()
+        if next_question is None:
+            return None
+        for answer in obj.answers.all():
+            if next_question.id == answer.question.id:
+                next_question.answer = answer
+        serializer = QuestionSerializer(context=self.context)
+        return serializer.to_representation(next_question)
 
     def get_answers(self, obj):
         if obj.completed:
@@ -70,7 +87,9 @@ class EmployeeLeadershipStyleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmployeeLeadershipStyle
-        fields = ('id', 'active', 'employee', 'assessor', 'next_question', 'notes', 'answers', 'date', 'completed', 'times_retaken', 'is_draft')
+        fields = ('id', 'active', 'employee', 'assessor', 'next_question', 'notes', 'answers', 'date',
+                  'total_questions', 'total_answered', 'completed', 'times_retaken', 'is_draft',
+                  'visionary_score', 'operator_score', 'processor_score', 'synergist_score')
 
 
 class MinimalEmployeeLeadershipStyleSerializer(serializers.ModelSerializer):

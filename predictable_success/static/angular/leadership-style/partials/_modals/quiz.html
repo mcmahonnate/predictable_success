@@ -42,71 +42,36 @@
             <button type="button" class="btn btn-success" ng-click="quiz.startSelfie()">Get Started &rarr;</button>
         </div>
     </div>
-    <div class="form-group" ng-show="quiz.leadershipStyle.next_question && quiz.panel_index==2 && !quiz.leadershipStyle.zone">
-        <div class="modal-body">
+    <div class="form-group" ng-show="quiz.leadershipStyle.next_question && quiz.panel_index==2">
+        <div class="modal-body" style="padding-bottom: 0px">
             <panel class="devzone">
-                <h3 class="modal-title">{{ quiz.leadershipStyle.next_question.text }}...</h3>
+                <h3 class="modal-title" style="padding-bottom: 10px; padding-top: 5px">{{ quiz.leadershipStyle.next_question.text }}...</h3>
 
-                <div ng-show="quiz.leadershipStyle.next_question.answers.length>1" class="selfie-answer well well-sm" style="display:flex" ng-repeat="answer in quiz.leadershipStyle.next_question.answers" ng-class="{'selfie-answer-selected': quiz.selectedAnswer==answer, 'selfie-answer':quiz.selectedAnswer!=answer}" ng-click="quiz.selectedAnswer=answer">
+                <div ng-show="quiz.leadershipStyle.next_question.answers.length>1" class="selfie-answer well well-sm" style="display:flex" ng-repeat="answer in quiz.leadershipStyle.next_question.answers" ng-class="{'selfie-answer-selected': quiz.selectedAnswer.id==answer.id, 'selfie-answer':quiz.selectedAnswer.id!=answer.id}" ng-click="quiz.selectedAnswer=answer">
                     <div class="selfie-answer-label" style="width: 91%;">
                         <h4><strong>{{ answer.text }}</strong></h4>
                     </div>
                     <div style="margin: auto 0px;">
-                        <i class="fa fa-check-circle-o selected-icon" ng-show="quiz.selectedAnswer==answer"></i>
+                        <i class="fa fa-check-circle-o selected-icon" ng-show="quiz.selectedAnswer.id==answer.id"></i>
                     </div>
                 </div>
-
             </panel>
         </div>
+        <div class="modal-page-count centered">{{ quiz.leadershipStyle.total_answered + 1 }} of {{ quiz.leadershipStyle.total_questions }}</div>
         <div class="modal-footer">
-            <button type="button" ng-show="quiz.leadershipStyle.next_question.answers.length>1" class="btn btn-success" ng-disabled="quiz.busy" ng-click="quiz.answerQuestion(quiz.leadershipStyle.next_question.answers[0])">&larr; Previous</button>
+            <button type="button" ng-show="quiz.leadershipStyle.total_answered>1" class="btn btn-light pull-left" ng-disabled="quiz.busy" ng-click="quiz.previousQuestion(quiz.leadershipStyle)">&larr; Previous</button>
             <button type="button" ng-click="quiz.close()" data-dismiss="modal" class="btn btn-light">Save &amp; Close</button>
             <button type="button" ng-show="quiz.leadershipStyle.next_question.answers.length==1" class="btn btn-success" ng-disabled="quiz.busy" ng-click="quiz.answerQuestion(quiz.leadershipStyle.next_question.answers[0])">Next &rarr;</button>
-            <button type="button" ng-show="quiz.leadershipStyle.next_question.answers.length>1" class="btn btn-success" ng-disabled="!quiz.selectedAnswer || quiz.busy" ng-click="quiz.answerQuestion(quiz.selectedAnswer)">Next &rarr;</button>
+            <button type="button" ng-show="quiz.leadershipStyle.next_question.answers.length>1" class="btn btn-success" ng-disabled="!quiz.selectedAnswer || quiz.busy" ng-click="quiz.answerQuestion(quiz.selectedAnswer)">
+                <span ng-show="quiz.leadershipStyle.total_answered + 1 < quiz.leadershipStyle.total_questions">Next &rarr;</span>
+                <span ng-show="quiz.leadershipStyle.total_answered + 1 == quiz.leadershipStyle.total_questions">Submit</span>
+            </button>
         </div>
     </div>
-    <div class="form-group" ng-show="(quiz.leadershipStyle.zone || quiz.leadershipStyle.zones.length>1) && quiz.panel_index>0 && quiz.panel_index<3">
+    <div class="form-group" ng-show="!quiz.leadershipStyle.next_question && quiz.panel_index==2">
         <div class="modal-body">
             <panel class="devzone">
-                <h3 class="modal-title">Ok great!</h3>
-                <p>On the following screen you'll see your development zone result.</p>
-                <p>If you don't agree with your result you'll have the opportunity to go back and retake the questionnaire.</p>
-                <p>Once you think your result represents where you are on your development journey you'll be asked to share your development zone. You will also have the opportunity to add any comments you have before sharing it.</p>
-            </panel>
-        </div>
-        <div class="modal-footer">
-            <button type="button" ng-click="quiz.close()" data-dismiss="modal" class="btn btn-light">Save &amp; Close</button>
-            <button type="button" class="btn btn-success" ng-click="quiz.panel_index=3">Next &rarr;</button>
-        </div>
-    </div>
-    <div class="form-group" ng-show="quiz.panel_index==3">
-        <div class="modal-body">
-            <panel class="devzone">
-                <h3 class="modal-title">Your Selfie Results</h3>
-
-
-                <div ng-show="quiz.leadershipStyle.zones.length>1">
-                    <p>Hurray! It looks like you came up with 2 development zones. Select the one that feels like the best fit for you.</p>
-                    <div class="selfie-answer well well-sm" style="display:flex" ng-repeat="zone in quiz.leadershipStyle.zones | orderBy:'order' " ng-class="{'selfie-answer-selected': quiz.leadershipStyle.zone.id==zone.id, 'selfie-answer':quiz.leadershipStyle.zone.id!=zone.id}" ng-click="quiz.leadershipStyle.zone=zone;quiz.selectedAnswer=4;">
-                        <div class="selfie-answer-label" style="width: 91%;">
-                            <h4><strong>{{ zone.name }}</strong></h4>
-                            <div collapse="quiz.leadershipStyle.zone.id!=zone.id">
-                                <p ng-bind-html="zone.description" style="margin-top:5px;"></p>
-                            </div>
-                        </div>
-                        <div style="margin: auto 0px;">
-                            <i class="fa fa-check-circle-o selected-icon" ng-show="quiz.leadershipStyle.zone.id==zone.id"></i>
-                        </div>
-                    </div>
-                    <div class="selfie-answer well well-sm" style="display:flex" ng-class="{'selfie-answer-selected': quiz.selectedAnswer==5, 'selfie-answer':quiz.selectedAnswer!=5}" ng-click="quiz.selectedAnswer=5;quiz.leadershipStyle.zone=null">
-                        <div class="selfie-answer-label" style="width: 91%;">
-                            <h4><strong>None of these feel right. I'd like to take the quiz again.</strong></h4>
-                        </div>
-                        <div style="margin: auto 0px;">
-                            <i class="fa fa-check-circle-o selected-icon" ng-show="quiz.selectedAnswer==5"></i>
-                        </div>
-                    </div>
-                </div>
+                <h3 class="modal-title">Your Results</h3>
                 <div ng-show="quiz.leadershipStyle.zones.length==0">
                     <div class="well">
                         <h3 class="modal-title">{{ quiz.leadershipStyle.zone.name }}</h3>

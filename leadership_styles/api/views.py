@@ -65,6 +65,23 @@ class RetrieveUnfinishedEmployeeLeadershipStyle(RetrieveAPIView):
         return Response(serializer.data)
 
 
+class UpdatePreviousQuestion(GenericAPIView):
+    queryset = EmployeeLeadershipStyle.objects.all()
+    serializer_class = EmployeeLeadershipStyleSerializer
+    permission_classes = (IsAuthenticated, UserIsEmployee)
+
+    def get_employee(self):
+        leadership_style = self.get_object()
+        return leadership_style.employee
+
+    def put(self, request, pk, format=None):
+        employee_leadership_style = self.get_object()
+        employee_leadership_style.last_question_answered = employee_leadership_style.last_question_answered.previous_question
+        employee_leadership_style.save()
+        serializer = EmployeeLeadershipStyleSerializer(employee_leadership_style, context={'request':request})
+        return Response(serializer.data)
+
+
 class UpdateEmployeeLeadershipStyle(RetrieveUpdateAPIView):
     queryset = EmployeeLeadershipStyle.objects.all()
     permission_classes = (IsAuthenticated, UserIsAssessorOrHasAllAccess,)

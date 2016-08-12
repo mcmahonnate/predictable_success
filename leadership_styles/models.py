@@ -17,6 +17,12 @@ LEADERSHIP_STYLES = (
     (PROCESSOR, 'Processor'),
     (SYNERGIST, 'Synergist'),
 )
+SELF = 0
+OTHERS = 1
+ASSESSMENT_TYPE = (
+    (SELF, 'Self Assessment'),
+    (OTHERS, '360 Assessment')
+)
 
 
 class QuestionManager(models.Manager):
@@ -26,7 +32,7 @@ class QuestionManager(models.Manager):
 
         #if we have not answered any questions start with the first question
         if last_question_answered is None:
-            return self.get_first_question()
+            return self.get_first_question(assessment_type=employee_leadership_style.assessment_type)
         previous_question = last_question_answered.previous_question
         if previous_question is None:
             #if we have no previous question get the next question(s)
@@ -47,18 +53,29 @@ class QuestionManager(models.Manager):
 
         return self.filter()
 
-    def get_first_question(self):
-        question = self.get(previous_question__isnull=True)
+    def get_first_question(self, assessment_type):
+        question = self.get(previous_question__isnull=True, assessment_type=assessment_type, active=True)
         return question
 
 
 class Question(models.Model):
     objects = QuestionManager()
+    assessment_type = models.IntegerField(choices=ASSESSMENT_TYPE)
     text = models.TextField()
     randomize_answers = models.BooleanField(default=False)
     previous_question = models.ForeignKey('Question', related_name='next_questions', null=True, blank=True)
     randomize_next_questions = models.BooleanField(default=False)
     order = models.IntegerField(default=0)
+    active = models.BooleanField(default=True)
+    _answer = None
+
+    @property
+    def answer(self):
+        return self._answer
+
+    @answer.setter
+    def answer(self, value):
+        self._answer = value
 
     def answers(self):
         if self.randomize_answers:
@@ -106,6 +123,7 @@ class EmployeeLeadershipStyleManager(models.Manager):
 
 class EmployeeLeadershipStyle(models.Model):
     objects = EmployeeLeadershipStyleManager()
+    assessment_type = models.IntegerField(choices=ASSESSMENT_TYPE)
     assessor = models.ForeignKey(Employee, related_name='+')
     employee = models.ForeignKey(Employee, related_name='employee_leadership_styles')
     date = models.DateTimeField(null=False, blank=False, default=datetime.now)
@@ -130,6 +148,14 @@ class EmployeeLeadershipStyle(models.Model):
             self.synergist_score = self.answers.filter(leadership_style=SYNERGIST).count() * SCORE_MULTIPLIER
             self.date = datetime.now()
             self.save()
+
+    @property
+    def total_questions(self):
+        return Question.objects.filter(assessment_type=self.assessment_type, active=True).count()
+
+    @property
+    def total_answered(self):
+        return self.answers.count()
 
     def next_question(self):
         self._calculate_scores()
