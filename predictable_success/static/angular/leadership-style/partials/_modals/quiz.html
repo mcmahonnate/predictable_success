@@ -57,14 +57,14 @@
                 </div>
             </panel>
         </div>
-        <div class="modal-page-count centered">{{ quiz.leadershipStyle.total_answered + 1 }} of {{ quiz.leadershipStyle.total_questions }}</div>
+        <div class="modal-page-count centered">{{ quiz.leadershipStyle.next_question.order + 1 }} of {{ quiz.leadershipStyle.total_questions }}</div>
         <div class="modal-footer">
             <button type="button" ng-show="quiz.leadershipStyle.total_answered>1" class="btn btn-light pull-left" ng-disabled="quiz.busy" ng-click="quiz.previousQuestion(quiz.leadershipStyle)">&larr; Previous</button>
             <button type="button" ng-click="quiz.close()" data-dismiss="modal" class="btn btn-light">Save &amp; Close</button>
             <button type="button" ng-show="quiz.leadershipStyle.next_question.answers.length==1" class="btn btn-success" ng-disabled="quiz.busy" ng-click="quiz.answerQuestion(quiz.leadershipStyle.next_question.answers[0])">Next &rarr;</button>
             <button type="button" ng-show="quiz.leadershipStyle.next_question.answers.length>1" class="btn btn-success" ng-disabled="!quiz.selectedAnswer || quiz.busy" ng-click="quiz.answerQuestion(quiz.selectedAnswer)">
-                <span ng-show="quiz.leadershipStyle.total_answered + 1 < quiz.leadershipStyle.total_questions">Next &rarr;</span>
-                <span ng-show="quiz.leadershipStyle.total_answered + 1 == quiz.leadershipStyle.total_questions">Submit</span>
+                <span ng-show="quiz.leadershipStyle.next_question.order + 1 < quiz.leadershipStyle.total_questions">Next &rarr;</span>
+                <span ng-show="quiz.leadershipStyle.next_question.order + 1 == quiz.leadershipStyle.total_questions">Submit</span>
             </button>
         </div>
     </div>
@@ -72,34 +72,15 @@
         <div class="modal-body">
             <panel class="devzone">
                 <h3 class="modal-title">Your Results</h3>
-                <div ng-show="quiz.leadershipStyle.zones.length==0">
-                    <div class="well">
-                        <h3 class="modal-title">{{ quiz.leadershipStyle.zone.name }}</h3>
-                        <p ng-bind-html="quiz.leadershipStyle.zone.description"></p>
-                    </div>
-                    <p>Does this feel like an accurate description of how you're doing?</p>
-                    <div class="selfie-answer well well-sm" style="display:flex" ng-class="{'selfie-answer-selected': quiz.selectedAnswer==4, 'selfie-answer':quiz.selectedAnswer!=4}" ng-click="quiz.selectedAnswer=4">
-                        <div class="selfie-answer-label" style="width: 91%;">
-                            <h4><strong>This is right or pretty close.</strong></h4>
-                        </div>
-                        <div style="margin: auto 0px;">
-                            <i class="fa fa-check-circle-o selected-icon" ng-show="quiz.selectedAnswer==4"></i>
-                        </div>
-                    </div>
-                    <div class="selfie-answer well well-sm" style="display:flex" ng-class="{'selfie-answer-selected': quiz.selectedAnswer==5, 'selfie-answer':quiz.selectedAnswer!=5}" ng-click="quiz.selectedAnswer=5">
-                        <div class="selfie-answer-label" style="width: 91%;">
-                            <h4><strong>This doesn't feel right at all. I'd like to take the quiz again.</strong></h4>
-                        </div>
-                        <div style="margin: auto 0px;">
-                            <i class="fa fa-check-circle-o selected-icon" ng-show="quiz.selectedAnswer==5"></i>
-                        </div>
-                    </div>
+                <p>Your most dominant leadership style is that of a <strong>{{ }}</strong></p>
+                <div class="well">
+                    <h4 class="modal-title">Your Totals</h4>
+                    <p ng-repeat="score in quiz.scores | orderBy:'-score'"><strong>{{ score.style }}</strong> {{ score.score }}</p>
                 </div>
             </panel>
         </div>
         <div class="modal-footer">
-            <button type="button" ng-click="quiz.close()" data-dismiss="modal" class="btn btn-light">Save &amp; Close</button>
-            <button type="button" class="btn btn-success" ng-disabled="!quiz.selectedAnswer || quiz.busy" ng-click="quiz.panel_index=quiz.selectedAnswer">Next &rarr;</button>
+            <button type="button" ng-click="quiz.close()" data-dismiss="modal" class="btn btn-success">Continue &rarr;</button>
         </div>
     </div>
     <div class="form-group" ng-show="quiz.panel_index==4">

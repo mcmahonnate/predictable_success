@@ -19,12 +19,33 @@ function QuizController(analytics, LeadershipStyleService, Notification, leaders
     vm.finish = finish;
     vm.employee = $rootScope.currentUser.employee;
     vm.selectedAnswer = null;
+    vm.scores = [];
 
     activate()
 
     function activate() {
         if (leadershipStyle.next_question) {
             vm.selectedAnswer = leadershipStyle.next_question.answer;
+        }
+        isComplete();
+    }
+
+    function isComplete() {
+        if (vm.leadershipStyle.completed || !vm.leadershipStyle.next_question) {
+            if (!vm.leadershipStyle.completed) {
+                vm.leadershipStyle.assessor = vm.leadershipStyle.assessor.id;
+                vm.leadershipStyle.completed = true;
+                LeadershipStyleService.updateLeadershipStyle(vm.leadershipStyle)
+                            .then(function(result){
+                                vm.leadershipStyle = result;
+                                vm.busy = false;
+                            }
+                        );
+            }
+            vm.scores.push({'style' : 'Visionary', 'score': vm.leadershipStyle.visionary_score});
+            vm.scores.push({'style' : 'Operator', 'score': vm.leadershipStyle.operator_score});
+            vm.scores.push({'style' : 'Processor', 'score': vm.leadershipStyle.processor_score});
+            vm.scores.push({'style' : 'Synergist', 'score': vm.leadershipStyle.synergist_score});
         }
     }
 
@@ -34,25 +55,32 @@ function QuizController(analytics, LeadershipStyleService, Notification, leaders
 
     function close() {
         $modalInstance.close(vm.leadershipStyle)
-        Notification.success('Your progress has been saved.')
+        if (!vm.leadershipStyle.completed) {
+            Notification.success('Your progress has been saved.')
+        }
     }
 
     function answerQuestion(answer) {
         vm.busy = true;
         vm.leadershipStyle.last_question_answered = vm.leadershipStyle.next_question.id;
-        if (vm.leadershipStyle.next_question.answer && vm.leadershipStyle.next_question.answer.id != answer.id) {
-            var answers = [answer.id];
-            angular.forEach(vm.leadershipStyle.answers, function(value) {
-                if (vm.leadershipStyle.next_question.answer.id != value) {
-                    answers.push(value);
-                }
-            })
-            vm.leadershipStyle.answers = answers;
+        if (vm.leadershipStyle.next_question.answer) {
+            if (vm.leadershipStyle.next_question.answer.id != answer.id) {
+                var answers = [answer.id];
+                angular.forEach(vm.leadershipStyle.answers, function (value) {
+                    if (vm.leadershipStyle.next_question.answer.id != value) {
+                        answers.push(value);
+                    }
+                })
+                vm.leadershipStyle.answers = answers;
+            }
+        } else {
+            vm.leadershipStyle.answers.push(answer.id);
         }
         vm.leadershipStyle.assessor = vm.leadershipStyle.assessor.id;
         LeadershipStyleService.updateLeadershipStyle(vm.leadershipStyle)
             .then(function(result){
                 vm.leadershipStyle = result;
+                isComplete();
                 if (vm.leadershipStyle.next_question) {
                     vm.selectedAnswer = vm.leadershipStyle.next_question.answer;
                 } else {

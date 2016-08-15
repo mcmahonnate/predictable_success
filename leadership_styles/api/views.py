@@ -47,7 +47,7 @@ class RetrieveMyEmployeeLeadershipStyle(RetrieveAPIView):
         try:
             leadership_style = EmployeeLeadershipStyle.objects.filter(employee=employee, assessor=employee).latest('date')
         except EmployeeLeadershipStyle.DoesNotExist:
-            leadership_style = EmployeeLeadershipStyle(employee=employee, assessor=employee)
+            leadership_style = EmployeeLeadershipStyle(employee=employee, assessor=employee, assessment_type=0)
             leadership_style.save()
         serializer = EmployeeLeadershipStyleSerializer(leadership_style, context={'request': request})
         return Response(serializer.data)

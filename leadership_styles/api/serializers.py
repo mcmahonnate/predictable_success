@@ -31,7 +31,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Question
-        fields = ('id', 'text', 'answers', 'answer')
+        fields = ('id', 'text', 'answers', 'answer', 'order')
 
 
 class CreateEmployeeLeadershipStyleSerializer(serializers.ModelSerializer):

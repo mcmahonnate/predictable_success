@@ -4,7 +4,7 @@
     </div>
 
     <div ng-show="!index.busy" ng-class="{'slide-up-active': hideMessage}" class="alert alert-success slide-up" role="alert">
-        <a class="btn btn-success btn-feedback pull-right" ng-show="!index.myLeadershipStyle.completed" ng-click="index.takeQuiz()" type="button">
+        <a class="btn btn-success btn-feedback pull-right" ng-click="index.takeQuiz()" type="button">
             <i class="fa fa-comment"></i>
             <span ng-if="!index.myLeadershipStyle.answers.length>0" class="hide-for-mobile">Take the </span>
             <span ng-if="index.myLeadershipStyle.answers.length>0" class="hide-for-mobile">Finish the </span>
