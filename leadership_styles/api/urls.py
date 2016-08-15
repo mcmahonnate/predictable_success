@@ -8,4 +8,8 @@ urlpatterns = [
     url(r'^(?P<pk>[0-9]*)/$', RetrieveEmployeeLeadershipStyle.as_view()),
     url(r'^(?P<pk>[0-9]*)/previous-question/$', UpdatePreviousQuestion.as_view()),
     url(r'^(?P<pk>[0-9]*)/update/$', UpdateEmployeeLeadershipStyle.as_view()),
+    url(r'^requests/$', CreateRequest.as_view()),
+    url(r'^requests/recently-sent/$', RecentRequestsIveSentList.as_view()),
+    url(r'^requests/(?P<pk>[0-9]*)/$', RetrieveRequest.as_view()),
+    url(r'^requests/todo/$', RequestsToDoList.as_view(), name='todo-requests'),
 ]

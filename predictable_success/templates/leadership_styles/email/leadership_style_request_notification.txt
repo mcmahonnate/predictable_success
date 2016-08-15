@@ -1,0 +1,6 @@
+Hi, {{ recipient_first_name }}!
+
+{{ requester_full_name }} would like you to take this quick assessment of their Leadership Style. This can take as little as three minutes, and it will really matter to {{ requester_first_name }}!
+
+Click here to get started: {{ response_url }}
+

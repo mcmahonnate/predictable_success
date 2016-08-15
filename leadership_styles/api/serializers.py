@@ -119,3 +119,23 @@ class UpdateEmployeeLeadershipStyleSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmployeeLeadershipStyle
         fields = ('id', 'assessor', 'last_question_answered', 'answers', 'notes', 'completed', 'date', 'is_draft')
+
+
+class RequestSerializer(serializers.ModelSerializer):
+    request_date = serializers.DateTimeField(required=False)
+    expiration_date = serializers.DateField(required=False)
+    requester = SanitizedEmployeeSerializer()
+    reviewer = SanitizedEmployeeSerializer()
+
+    class Meta:
+        model = LeadershipStyleRequest
+        fields = ['id', 'request_date', 'expiration_date', 'requester', 'reviewer', 'message', 'was_responded_to', 'was_declined']
+
+
+class CreateRequestSerializer(serializers.ModelSerializer):
+    reviewer = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
+    message = serializers.CharField(required=False, allow_blank=True)
+
+    class Meta:
+        model = LeadershipStyleRequest
+        fields = ['reviewer', 'message']

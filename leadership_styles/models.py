@@ -5,6 +5,7 @@ from django.db.models import Q, F
 from org.models import Employee
 from datetime import datetime, date, timedelta
 from model_utils import FieldTracker
+from tasks import send_leadership_style_request_email
 
 VISIONARY = 0
 OPERATOR = 1
@@ -103,6 +104,51 @@ class Answer(models.Model):
         return "%s %s - %s" % (self.order, self.text, LEADERSHIP_STYLES[self.leadership_style][1])
 
 
+def default_leadership_style_request_expiration_date():
+    return datetime.now() + timedelta(weeks=3)
+
+
+class LeadershipStyleRequestManager(models.Manager):
+    def pending_for_reviewer(self, reviewer):
+        return self.filter(reviewer=reviewer).filter(submission=None)
+
+    def unanswered_for_requester(self, requester):
+        return self.filter(requester=requester).filter(submission=None)
+
+    def recent_leadership_style_requests_ive_sent(self, requester):
+        return self.filter(requester=requester)\
+            .exclude(expiration_date__lt=datetime.today())
+
+    def recent_leadership_style_requests_ive_sent_that_have_not_been_completed(self, requester):
+        requests = self.recent_leadership_style_requests_ive_sent(requester)
+        return requests.filter(was_responded_to=False)
+
+
+class LeadershipStyleRequest(models.Model):
+    objects = LeadershipStyleRequestManager()
+    expiration_date = models.DateField(null=True, blank=True, default=default_leadership_style_request_expiration_date)
+    message = models.TextField(blank=True)
+    requester = models.ForeignKey(Employee, related_name='leadership_style_requests')
+    request_date = models.DateTimeField(auto_now_add=True)
+    reviewer = models.ForeignKey(Employee, related_name='requests_for_leadership_style')
+    was_declined = models.BooleanField(default=False)
+    was_responded_to = models.BooleanField(default=False)
+
+    def send_notification_email(self):
+        send_leadership_style_request_email.subtask((self.id,)).apply_async()
+
+    @property
+    def expired(self):
+        return not self.has_been_answered and self.expiration_date < datetime.today()
+
+    @property
+    def has_been_answered(self):
+        return hasattr(self, 'submission')
+
+    def __str__(self):
+        return "Leadership style request from %s for %s" % (self.requester, self.reviewer)
+
+
 class EmployeeLeadershipStyleManager(models.Manager):
     def get_all_finished_for_employee(self, employee):
         return self.filter(employee=employee, assessor=employee, completed=True)
@@ -126,6 +172,7 @@ class EmployeeLeadershipStyle(models.Model):
     assessment_type = models.IntegerField(choices=ASSESSMENT_TYPE)
     assessor = models.ForeignKey(Employee, related_name='+')
     employee = models.ForeignKey(Employee, related_name='employee_leadership_styles')
+    request = models.ForeignKey(LeadershipStyleRequest, null=True, blank=True, related_name='submission')
     date = models.DateTimeField(null=False, blank=False, default=datetime.now)
     answers = models.ManyToManyField(Answer, related_name='+', null=True, blank=True)
     last_question_answered = models.ForeignKey(Question, related_name='+', null=True, blank=True)
@@ -190,3 +237,4 @@ class EmployeeLeadershipStyle(models.Model):
 
     def __str__(self):
         return "%s %s %s" % (self.employee.full_name, self.date, self.completed)
+
