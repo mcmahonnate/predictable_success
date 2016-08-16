@@ -2,7 +2,7 @@ angular
     .module('leadership-style')
     .controller('LeadershipStyleController', LeadershipStyleController);
 
-function LeadershipStyleController(LeadershipStyleService, Notification, UserPreferencesService, analytics, $location, $modal, $rootScope, $scope, $timeout) {
+function LeadershipStyleController(LeadershipStyleService, LeadershipStyleRequestService, analytics, $location, $modal, $rootScope, $scope, $timeout) {
     /* Since this page can be the root for some users let's make sure we capture the correct page */
     var location_url = $location.url().indexOf('/id') < 0 ? '/id' : $location.url();
     analytics.trackPage($scope, $location.absUrl(), location_url);
@@ -12,6 +12,10 @@ function LeadershipStyleController(LeadershipStyleService, Notification, UserPre
     vm.showEmptyScreen = false;
     vm.myLeadershipStyle = null;
     vm.takeQuiz = takeQuiz;
+    vm.requestLeadershipStyle = requestLeadershipStyle;
+    $rootScope.successRequestMessage = false;
+    $rootScope.hideMessage = false;
+    $rootScope.hideRequestMessage = false;
     activate();
 
     function activate() {
@@ -50,4 +54,33 @@ function LeadershipStyleController(LeadershipStyleService, Notification, UserPre
             }
         );
     };
+
+    function getMyRecentlySentRequests() {
+        LeadershipStyleService.getMyRecentlySentRequests()
+            .then(function (data) {
+                vm.myRecentlySentRequests = data;
+                return vm.myRecentlySentRequests;
+            });
+    }
+
+
+    function requestLeadershipStyle(panel) {
+            var modalInstance = $modal.open({
+                animation: true,
+                windowClass: 'xx-dialog fade zoom',
+                backdrop: 'static',
+                templateUrl: '/static/angular/leadership-style/partials/_modals/request-leadership-style.html',
+                controller: 'LeadershipStyleRequestController as request',
+                resolve: {
+                    panel: function () {
+                        return panel
+                    }
+                }
+            });
+            modalInstance.result.then(
+                function (sentLeadershipStyleRequests) {
+                    getMyRecentlySentRequests();
+                }
+            );
+        }
 }

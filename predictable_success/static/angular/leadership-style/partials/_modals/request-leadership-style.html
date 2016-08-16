@@ -1,0 +1,60 @@
+<form id="feedback-modal" novalidate="novalidate">
+    <a class="close" ng-click="request.cancel()" data-dismiss="modal">&times;</a>
+    <div class="form-group" ng-show="request.panel_index==-1">
+        <div class="modal-body">
+            <panel>
+                <h3 class="modal-title">Super Powers</h3>
+                <p class="modal-subtext">How self aware are you?  Do you know what specific skills your team depends on you for? How do they match up with the skills you think you bring to your team?  Where are you aligned? Where are your blind spots? This is the place to find out.</p>
+                <p class="modal-subtext">We will help you identify your specific Super Powers, the places where both you and your team draw value for you. It will also identify potential Blind Spots, the skills others depend on you for but you don't recognize in yourself.  And finally, it provides Proving Grounds, those untapped skills that you possess but may be under utilized.</p>
+                <p class="modal-subtext">The data and insights collected are for you alone.  You get to decide what get's shared with others. Click the button below to get started.</p>
+            </panel>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success" ng-click="request.stepNext()">Get Started &rarr;</button>
+        </div>
+    </div>
+    <div class="form-group" ng-show="request.panel_index==0">
+        <div class="modal-body">
+            <panel>
+                <h3 class="modal-title">Who would you like ask about your Super Powers?</h3>
+                <p class="modal-subtext">Select a few people you work with on a regular basis, or that you've worked with recently.</p>
+                <ui-select
+                        id="to"
+                        multiple
+                        autofocus
+                        ng-model="request.selectedReviewers"
+                        reset-search-input="true"
+                        theme="bootstrap"
+                        style="max-width:350px;font-size:16px;"
+                        >
+                    <ui-select-match placeholder="Type an employee name">{{$item.full_name}}</ui-select-match>
+                    <ui-select-choices
+                            repeat="reviewer in request.potentialReviewers | filter: {full_name: $select.search} | orderBy: 'full_name'">
+                        <span class="tiny-headshot">
+                            <img class="headshot-image" ng-src="{{ reviewer.avatar_small }}" alt="{{ reviewer.full_name }}'s avatar" />
+                        </span>
+                        <div class="names" ng-bind-html="reviewer.full_name | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
+            </panel>
+        </div>
+        <div class="modal-footer">
+            <button ng-show="request.panel_index>0" type="button" ng-click="request.stepBack()" class="btn btn-light">&larr; Back</button>
+            <button type="button" ng-click="request.cancel()" data-dismiss="modal" class="btn btn-light pull-left">Cancel</button>
+            <button ng-show="request.panel_index<3" ng-disabled="!request.selectedReviewers" type="button" class="btn btn-success" ng-click="request.stepNext()">Add a Message &rarr;</button>
+        </div>
+    </div>
+    <div class="form-group" ng-show="request.panel_index==1">
+        <div class="modal-body">
+            <panel>
+                <h3 class="modal-title">Add a message</h3>
+                <textarea style="min-height:120px;" class="form-control" cols="30" rows="5" ng-model="request.message" placeholder="Add additonal context to your request."></textarea>
+            </panel>
+        </div>
+        <div class="modal-footer">
+            <button type="button" ng-click="request.stepBack()" class="btn btn-light">&larr; Back</button>
+            <button type="button" ng-click="request.cancel()"  class="btn btn-light pull-left">Cancel</button>
+            <button type="button" ng-click="request.sendLeadershipStyleRequests()" class="btn btn-success" data-dismiss="modal">Submit Requests</button>
+        </div>
+    </div>
+</form>
