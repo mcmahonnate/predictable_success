@@ -4,10 +4,10 @@ from tenant_schemas_celery.app import CeleryApp
 from django.conf import settings
 
 # Lets the celery command line program know where project settings are.
-# os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'predictable_success.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'predictable_success.settings.local')
 
 # Creates the instance of the Celery app.
-app = CeleryApp('predictable_success',include=['feedback.tasks', 'org.tasks', 'checkins.tasks'],)
+app = CeleryApp('predictable_success',include=['org.tasks', 'leadership_styles.tasks'],)
 
 app.config_from_object('django.conf:settings')
 

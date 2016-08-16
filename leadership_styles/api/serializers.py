@@ -37,14 +37,11 @@ class QuestionSerializer(serializers.ModelSerializer):
 class CreateEmployeeLeadershipStyleSerializer(serializers.ModelSerializer):
     employee = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
     assessor = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
-    next_question = QuestionSerializer(required=False)
-    answers = serializers.PrimaryKeyRelatedField(queryset=Answer.objects.all(), many=True, required=False)
-    notes = serializers.CharField(required=False, allow_blank=True)
+    request = serializers.PrimaryKeyRelatedField(queryset=LeadershipStyleRequest.objects.all(), required=False, allow_null=True)
 
     class Meta:
         model = EmployeeLeadershipStyle
-        fields = ('id', 'employee', 'assessor', 'next_question', 'notes', 'answers', 'is_draft')
-        read_only_fields = ('next_question', 'answers')
+        fields = ('id', 'employee', 'assessor', 'request', 'assessment_type')
 
 
 class EmployeeLeadershipStyleReportSerializer(serializers.ModelSerializer):
@@ -105,7 +102,7 @@ class EmployeeLeadershipStyleForActivityFeedSerializer(MinimalEmployeeLeadership
 
     class Meta:
         model = EmployeeLeadershipStyle
-        fields = ('id', 'employee', 'assessor', 'zone', 'notes', 'date', 'active', 'is_draft', 'completed')
+        fields = ('id', 'employee', 'assessor', 'date', 'active', 'is_draft', 'completed')
 
 
 class UpdateEmployeeLeadershipStyleSerializer(serializers.ModelSerializer):
@@ -126,10 +123,18 @@ class RequestSerializer(serializers.ModelSerializer):
     expiration_date = serializers.DateField(required=False)
     requester = SanitizedEmployeeSerializer()
     reviewer = SanitizedEmployeeSerializer()
+    submission_id = serializers.SerializerMethodField()
+
+    def get_submission_id(self, obj):
+        try:
+            submission = obj.submission.get()
+            return submission.id
+        except EmployeeLeadershipStyle.DoesNotExist:
+            return None
 
     class Meta:
         model = LeadershipStyleRequest
-        fields = ['id', 'request_date', 'expiration_date', 'requester', 'reviewer', 'message', 'was_responded_to', 'was_declined']
+        fields = ['id', 'request_date', 'expiration_date', 'requester', 'reviewer', 'submission_id', 'message', 'was_responded_to', 'was_declined']
 
 
 class CreateRequestSerializer(serializers.ModelSerializer):

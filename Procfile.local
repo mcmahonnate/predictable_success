@@ -1,1 +1,2 @@
 web: python manage.py collectstatic --noinput --settings=predictable_success.settings.local; gunicorn predictable_success.wsgi_local --settings=predictable_success.settings.local
+worker: celery worker -A predictable_success.celery -settings=predictable_success.settings.local

@@ -10,6 +10,7 @@ from customers.models import Customer
 @app.task
 def send_leadership_style_request_email(request_id):
     from leadership_styles.models import LeadershipStyleRequest
+    print 'send_notification_email task'
     leadership_style_request = LeadershipStyleRequest.objects.get(id=request_id)
     recipient_email = leadership_style_request.reviewer.email
     if not recipient_email:
@@ -19,11 +20,11 @@ def send_leadership_style_request_email(request_id):
     context = {
         'recipient_first_name': leadership_style_request.reviewer.first_name,
         'requester_full_name': leadership_style_request.requester.full_name,
+        'requester_first_name': leadership_style_request.requester.first_name,
         'custom_message': leadership_style_request.message,
-        'category': leadership_style_request.category.name,
         'response_url': response_url,
     }
-    subject = "Someone needs your quick input"
+    subject = "%s needs some quick input from you" % leadership_style_request.requester.full_name
     text_content = render_to_string('leadership_styles/email/leadership_style_request_notification.txt', context)
     html_content = render_to_string('leadership_styles/email/leadership_style_request_notification.html', context)
     msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])

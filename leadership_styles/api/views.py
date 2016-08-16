@@ -14,7 +14,11 @@ class CreateEmployeeLeadershipStyle(CreateAPIView):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
+        if serializer.data['request']:
+            leadership_style_request_id = serializer.data['request']
+            leadership_style_request = LeadershipStyleRequest.objects.get(id=leadership_style_request_id)
+            if leadership_style_request.was_responded_to:
+                return Response("This request has already been answered.", status=status.HTTP_403_FORBIDDEN)
         saved = self.perform_create(serializer)
         serializer = EmployeeLeadershipStyleSerializer(instance=saved, context={'request': request})
 
@@ -147,7 +151,7 @@ class RecentRequestsIveSentList(ListAPIView):
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        return LeadershipStyleRequest.objects.recent_perception_requests_ive_sent_that_have_not_been_completed(requester=self.request.user.employee)
+        return LeadershipStyleRequest.objects.recent_leadership_style_requests_ive_sent_that_have_not_been_completed(requester=self.request.user.employee)
 
 
 class RetrieveRequest(RetrieveAPIView):

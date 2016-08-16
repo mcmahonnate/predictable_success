@@ -14,8 +14,8 @@ function LeadershipStyleService($http, $log, LeadershipStyleResource) {
         goToPreviousQuestion: goToPreviousQuestion
     };
 
-    function createLeadershipStyle(leadershipStyle) {
-        return LeadershipStyleResource.create(leadershipStyle, success, fail).$promise;
+    function createLeadershipStyle(request) {
+        return LeadershipStyleResource.create({employee: request.requester.id, assessor: request.reviewer.id, request: request.id, assessment_type: 1}, success, fail).$promise;
 
         function success(response) {
             return response;
