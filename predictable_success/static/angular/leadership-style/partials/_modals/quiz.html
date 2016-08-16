@@ -3,7 +3,8 @@
         <div class="modal-body">
             <panel class="checkin">
                 <h3 class="modal-title">Leadership Styles Quiz</h3>
-		        <p>Take this simple quiz and discover your personal Predictable Success<sup><small>®</small></sup> leadership style.</p>
+		        <p ng-if="quiz.leadershipStyle.assessment_type==0">Take this simple quiz and discover your personal Predictable Success<sup><small>®</small></sup> leadership style.</p>
+                <p ng-if="quiz.leadershipStyle.assessment_type==1">Help {{quiz.employee.first_name}} discover their personal Predictable Success<sup><small>®</small></sup> leadership style by taking this simple quiz.</p>
                 <p><strong>Instructions</strong>: For each question, select the answer which you think is most appropriate.</p>
                 <p><strong>Note</strong>: For some questions you may find yourself forced to choose between two or more 'right' answers, or having to choose the 'least wrong' answer. This is deliberate: don't overthink it - go with your instinctive first reaction.</p>
             </panel>

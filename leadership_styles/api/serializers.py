@@ -84,7 +84,7 @@ class EmployeeLeadershipStyleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmployeeLeadershipStyle
-        fields = ('id', 'active', 'employee', 'assessor', 'next_question', 'notes', 'answers', 'date',
+        fields = ('id', 'assessment_type', 'active', 'employee', 'assessor', 'next_question', 'notes', 'answers', 'date',
                   'total_questions', 'total_answered', 'completed', 'times_retaken', 'is_draft',
                   'visionary_score', 'operator_score', 'processor_score', 'synergist_score')
 
