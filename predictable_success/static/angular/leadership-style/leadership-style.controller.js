@@ -4,7 +4,7 @@ angular
 
 function LeadershipStyleController(LeadershipStyleService, LeadershipStyleRequestService, analytics, $location, $modal, $rootScope, $routeParams, $scope, $timeout) {
     /* Since this page can be the root for some users let's make sure we capture the correct page */
-    var location_url = $location.url().indexOf('/id') < 0 ? '/id' : $location.url();
+    var location_url = $location.url().indexOf('/leadership_style') < 0 ? '/id' : $location.url();
     analytics.trackPage($scope, $location.absUrl(), location_url);
 
     var vm = this;
