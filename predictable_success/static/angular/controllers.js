@@ -142,7 +142,7 @@ angular.module('tdb.controllers', [])
             team: {id: null, name: ''},
             hire_date: '',
             departure_date: '',
-            avatar: 'https://hippoculture.s3.amazonaws.com/media/avatars/geneRick.jpg'
+            avatar: 'https://predictable-success.s3.amazonaws.com/media/avatars/geneRick.jpg'
         };
         $scope.$on('$routeChangeSuccess', function() {
             if ($routeParams.id) {
