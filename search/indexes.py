@@ -149,7 +149,7 @@ class EmployeeIndex(object):
         return rows * (page - 1)
 
     def _get_auth_headers(self):
-        timestamp = int(time.time())
+        timestamp = str(int(time.time()))
         nonce = str(uuid.uuid4())
         auth = hmac.new(
             settings.WEBSOLR_SECRET,
