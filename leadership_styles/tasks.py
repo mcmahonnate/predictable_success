@@ -31,3 +31,22 @@ def send_leadership_style_request_email(request_id):
     msg.attach_alternative(html_content, "text/html")
     msg.send()
 
+
+@app.task
+def send_quiz_link_email(quiz_link_id):
+    from leadership_styles.models import QuizUrl
+    print 'send_quiz_link_email'
+    quiz = QuizUrl.objects.get(id=quiz_link_id)
+    recipient_email = quiz.email
+    if not recipient_email:
+        return
+    context = {
+        'quiz_url': quiz.url,
+    }
+    subject = "Here's your link"
+    text_content = render_to_string('leadership_styles/email/leadership_style_request_notification.txt', context)
+    html_content = render_to_string('leadership_styles/email/leadership_style_request_notification.html', context)
+    msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
+

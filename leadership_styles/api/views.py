@@ -1,8 +1,11 @@
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
 from org.api.permissions import UserIsEmployeeOrLeaderOrCoachOfEmployee, UserIsEmployee, PermissionsViewAllEmployees
 from rest_framework import status
 from rest_framework.generics import *
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from .permissions import UserIsAssessorOrHasAllAccess
 from .serializers import *
 
@@ -173,3 +176,62 @@ class RequestsToDoList(ListAPIView):
         Return all Requests sent to the user that haven't been completed.
         """
         return LeadershipStyleRequest.objects.pending_for_reviewer(self.request.user.employee)
+
+
+class CreateQuizUrl(APIView):
+    permission_classes = (AllowAny,)
+
+    def post(self, request, format=None):
+        email = request.DATA["email"]
+        domain_url = request.tenant.domain_url
+        generate_quiz_link(email=email, domain_url=domain_url)
+
+        return Response(None)
+
+
+class GetQuiz(APIView):
+    permission_classes = (AllowAny,)
+
+    def get(self, request, pk, format=None):
+        try:
+            signer = Signer()
+            quiz_id = signer.unsign(pk)
+            quiz = QuizUrl.objects.get(id=quiz_id, active=True)
+
+            #create User
+            try:
+                user = User.objects.get(email=quiz.email)
+                return Response(None, status=status.HTTP_404_NOT_FOUND)
+            except User.DoesNotExist:
+                password = User.objects.make_random_password()
+                user = User.objects.create_user(username=quiz.email, email=quiz.email, password=password)
+                user.is_active = True
+                user.save()
+
+            #authenticate & login
+            user = authenticate(username=quiz.email, password=password)
+            login(request=request, user=user)
+
+            #create Employee
+            try:
+                employee = user.employee
+            except Employee.DoesNotExist:
+                employee = Employee(full_name=quiz.email, email=quiz.email)
+                employee.user = user
+                employee.save()
+
+            #create LeadershipStyle
+            try:
+                leadership_style = EmployeeLeadershipStyle.objects.filter(employee=employee, assessor=employee).latest('date')
+            except EmployeeLeadershipStyle.DoesNotExist:
+                leadership_style = EmployeeLeadershipStyle(employee=employee, assessor=employee, assessment_type=0)
+                leadership_style.save()
+            serializer = EmployeeLeadershipStyleSerializer(leadership_style, context={'request': request})
+
+            #deactivate quiz url
+            quiz.active = False
+            quiz.save()
+            return Response(serializer.data)
+
+        except:
+            return Response(None, status=status.HTTP_404_NOT_FOUND)
