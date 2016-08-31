@@ -49,6 +49,7 @@ urlpatterns = [
     url(r'^api/v1/reports/comments$', comment_report_timespan),
     url(r'^api/v1/reports/activity$', last_activity_report),
 
+    url(r'^', include('leadership_styles.urls')),
     url(r'^api/v1/customer/', include('customers.api.urls')),
     url(r'^api/v1/comments/', include('blah.api.urls')),
     url(r'^api/v1/compensation/', include('comp.api.urls')),
@@ -57,6 +58,7 @@ urlpatterns = [
     url(r'^api/v1/org/', include('org.api.urls')),
     url(r'^api/v1/qualities/', include('qualities.api.urls')),
     url(r'^api/v1/search/', include('search.api.urls')),
+
 
     url(r'^', include(router.urls)),
 ]

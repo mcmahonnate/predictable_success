@@ -1,5 +1,7 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
+from django.http import Http404
+from django.shortcuts import redirect
 from org.api.permissions import UserIsEmployeeOrLeaderOrCoachOfEmployee, UserIsEmployee, PermissionsViewAllEmployees
 from rest_framework import status
 from rest_framework.generics import *
@@ -196,7 +198,16 @@ class GetQuiz(APIView):
         try:
             signer = Signer()
             quiz_id = signer.unsign(pk)
-            quiz = QuizUrl.objects.get(id=quiz_id, active=True)
+            quiz = QuizUrl.objects.get(id=quiz_id)
+            if not quiz.active:
+                employee_leadership_style = quiz.employee_leadership_style.get()
+                print employee_leadership_style
+                if not employee_leadership_style.completed:
+                    print 'not completed'
+                    return redirect(request.tenant.build_url('/#/?takeQuiz=true'))
+                else:
+                    print 'completed'
+                    return redirect(request.tenant.build_url('/#/'))
 
             #create User
             try:
@@ -225,13 +236,14 @@ class GetQuiz(APIView):
                 leadership_style = EmployeeLeadershipStyle.objects.filter(employee=employee, assessor=employee).latest('date')
             except EmployeeLeadershipStyle.DoesNotExist:
                 leadership_style = EmployeeLeadershipStyle(employee=employee, assessor=employee, assessment_type=0)
+                leadership_style.quiz_url = quiz
                 leadership_style.save()
-            serializer = EmployeeLeadershipStyleSerializer(leadership_style, context={'request': request})
 
             #deactivate quiz url
             quiz.active = False
             quiz.save()
-            return Response(serializer.data)
+
+            return redirect(request.tenant.build_url('/#/?takeQuiz=true'))
 
         except:
-            return Response(None, status=status.HTTP_404_NOT_FOUND)
+            raise Http404("This quiz does not exist.")

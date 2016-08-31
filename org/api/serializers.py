@@ -150,8 +150,6 @@ class EmployeeSerializer(BaseEmployeeSerializer):
     vops_synergist = serializers.SerializerMethodField()
     current_salary = serializers.SerializerMethodField()
     current_bonus = serializers.SerializerMethodField()
-    talent_category = serializers.SerializerMethodField()
-    last_checkin_date = serializers.SerializerMethodField()
     requester_has_access_to_team = serializers.SerializerMethodField()
     requester_has_access_to_coachees = serializers.SerializerMethodField()
 
@@ -183,13 +181,6 @@ class EmployeeSerializer(BaseEmployeeSerializer):
         if obj.current_happiness is None:
             return None
         return obj.current_happiness.assessment_verbose()
-
-    def get_talent_category(self, obj):
-         try:
-            current_talent_category = obj.current_talent_category()
-            return current_talent_category
-         except:
-             return None
 
     def get_current_salary(self, obj):
          try:
@@ -277,15 +268,10 @@ class EmployeeSerializer(BaseEmployeeSerializer):
             url = obj.avatar_small.url
         return url
 
-    def get_last_checkin_date(self, obj):
-        try:
-            return obj.checkins.latest().date
-        except ObjectDoesNotExist:
-            return None   
 
     class Meta:
         model = Employee
-        fields = ('id', 'full_name', 'first_name', 'last_name', 'gender', 'email', 'avatar', 'avatar_small', 'requester_has_access', 'requester_has_access_to_team', 'requester_has_access_to_coachees', 'job_title', 'hire_date', 'leader', 'happiness', 'happiness_date', 'happiness_verbose', 'coach', 'kolbe_fact_finder','kolbe_follow_thru', 'kolbe_quick_start', 'kolbe_implementor', 'vops_visionary', 'vops_operator', 'vops_processor', 'vops_synergist', 'departure_date', 'team', 'display', 'current_salary', 'current_bonus', 'talent_category', 'last_checkin_date', 'is_lead', 'is_coach')
+        fields = ('id', 'full_name', 'first_name', 'last_name', 'gender', 'email', 'avatar', 'avatar_small', 'requester_has_access', 'requester_has_access_to_team', 'requester_has_access_to_coachees', 'job_title', 'hire_date', 'leader', 'happiness', 'happiness_date', 'happiness_verbose', 'coach', 'kolbe_fact_finder','kolbe_follow_thru', 'kolbe_quick_start', 'kolbe_implementor', 'vops_visionary', 'vops_operator', 'vops_processor', 'vops_synergist', 'departure_date', 'team', 'display', 'current_salary', 'current_bonus', 'is_lead', 'is_coach')
 
 
 class SimpleUserSerializer(serializers.ModelSerializer):

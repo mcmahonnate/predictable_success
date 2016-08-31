@@ -13,5 +13,4 @@ urlpatterns = [
     url(r'^requests/(?P<pk>[0-9]*)/$', RetrieveRequest.as_view()),
     url(r'^requests/todo/$', RequestsToDoList.as_view(), name='todo-requests'),
     url(r'^send-quiz/$', CreateQuizUrl.as_view()),
-    url(r'^take-quiz/(?P<pk>.+)/$', GetQuiz.as_view()),
 ]

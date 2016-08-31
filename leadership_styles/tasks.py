@@ -16,7 +16,7 @@ def send_leadership_style_request_email(request_id):
     if not recipient_email:
         return
     tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
-    response_url = 'https://%s/#/leadership_style/request/%d/reply' % (tenant.domain_url, leadership_style_request.id)
+    response_url = 'https://%s/#/leadership-style/request/%d/reply' % (tenant.domain_url, leadership_style_request.id)
     context = {
         'recipient_first_name': leadership_style_request.reviewer.first_name,
         'requester_full_name': leadership_style_request.requester.full_name,

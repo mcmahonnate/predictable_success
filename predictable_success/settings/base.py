@@ -4,6 +4,9 @@ import dj_database_url
 import raven
 
 SITE_ID=1
+
+SITE_PROTOCOL = os.environ.get("SITE_PROTOCOL", 'http://')
+SITE_PORT = os.environ.get("SITE_PORT", None)
 SECRET_KEY = os.environ['SECRET_KEY']
 TEMPLATE_DEBUG = DEBUG = os.environ.get("DEBUG", False)
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))

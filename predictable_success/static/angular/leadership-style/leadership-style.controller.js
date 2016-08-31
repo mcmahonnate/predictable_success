@@ -20,15 +20,14 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
 
     function activate() {
         if ($routeParams.requestId) {
-            vm.busy = true;
             respondToRequest();
         } else {
             getMyLeadershipStyle();
         }
-
     };
 
     function respondToRequest() {
+        vm.busy = true;
         LeadershipStyleRequestService.getRequest($routeParams.requestId)
             .then(function(request){
                 if (request.submission_id) {
@@ -55,6 +54,9 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         LeadershipStyleService.getMyLeadershipStyle()
             .then(function(leadershipStyle){
                 vm.myLeadershipStyle = leadershipStyle;
+                if ($routeParams.takeQuiz && $routeParams.takeQuiz=='true') {
+                    takeQuiz(leadershipStyle);
+                }
                 vm.busy = false;
             }, function(){
                 vm.busy = false;

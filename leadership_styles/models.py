@@ -27,6 +27,33 @@ ASSESSMENT_TYPE = (
 )
 
 
+class QuizUrl(models.Model):
+    email = models.CharField(max_length=255)
+    url = models.CharField(max_length=255, null=True, blank=True)
+    active = models.BooleanField(default=True)
+    completed = models.BooleanField(default=False)
+    sent_date = models.DateField(auto_now_add=True)
+
+    def send_quiz_link(self):
+        send_quiz_link_email.subtask((self.id,)).apply_async()
+
+    def __str__(self):
+        return "%s was sent a self asessment on %s" % (self.email, self.sent_date)
+
+
+def generate_quiz_link(email, domain_url):
+    quiz = QuizUrl()
+    quiz.email = email
+    quiz.save()
+    signer = Signer()
+    signed_id = signer.sign(quiz.id)
+    url = 'https://' + domain_url + '/#/take-the-quiz/' + signed_id
+    quiz.url = url
+    quiz.save()
+
+    return quiz
+
+
 class QuestionManager(models.Manager):
     def get_next_question(self, employee_leadership_style):
         #get the last question answered
@@ -173,6 +200,7 @@ class EmployeeLeadershipStyle(models.Model):
     assessment_type = models.IntegerField(choices=ASSESSMENT_TYPE)
     assessor = models.ForeignKey(Employee, related_name='+')
     employee = models.ForeignKey(Employee, related_name='employee_leadership_styles')
+    quiz_url = models.ForeignKey(QuizUrl, null=True, blank=True, related_name='employee_leadership_style')
     request = models.ForeignKey(LeadershipStyleRequest, null=True, blank=True, related_name='submission')
     date = models.DateTimeField(null=False, blank=False, default=datetime.now)
     answers = models.ManyToManyField(Answer, related_name='+', null=True, blank=True)
@@ -238,30 +266,3 @@ class EmployeeLeadershipStyle(models.Model):
 
     def __str__(self):
         return "%s %s %s" % (self.employee.full_name, self.date, self.completed)
-
-
-class QuizUrl(models.Model):
-    email = models.CharField(max_length=255)
-    url = models.CharField(max_length=255, null=True, blank=True)
-    active = models.BooleanField(default=True)
-    completed = models.BooleanField(default=False)
-    sent_date = models.DateField(auto_now_add=True)
-
-    def send_quiz_link(self):
-        send_quiz_link_email.subtask((self.id,)).apply_async()
-
-    def __str__(self):
-        return "%s was sent a self asessment on %s" % (self.email, self.sent_date)
-
-
-def generate_quiz_link(email, domain_url):
-    quiz = QuizUrl()
-    quiz.email = email
-    quiz.save()
-    signer = Signer()
-    signed_id = signer.sign(quiz.id)
-    url = 'https://' + domain_url + '/#/take-the-quiz/' + signed_id
-    quiz.url = url
-    quiz.save()
-
-    return quiz
