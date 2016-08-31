@@ -1,11 +1,4 @@
 <div id="devzones" class="container" data-hj-masked>
-    <div>
-        <h1>Leadership Style
-            <div class="button-group">
-                <button class="btn btn-success btn-feedback" ng-click="index.requestLeadershipStyle(0)" type="button"><i class="fa fa-comment"></i> Ask</button>
-            </div>
-        </h1>
-    </div>
     <!-- Leadership Style request message -->
     <div ng-class="{'slide-up-active': hideRequestMessage}" class="alert alert-success slide-up" role="alert" ng-show="successRequestMessage">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -17,10 +10,9 @@
         </p>
     </div>
 
-    <div ng-show="!index.busy" ng-class="{'slide-up-active': hideMessage}" class="alert alert-success slide-up" role="alert">
+    <div ng-show="index.showTakeQuizNotification" ng-class="{'slide-up-active': hideMessage}" class="alert alert-success slide-up" role="alert">
         <a class="btn btn-success btn-feedback pull-right" ng-click="index.takeQuiz(index.myLeadershipStyle)" type="button">
             <i class="fa fa-comment"></i>
-            <span ng-if="!index.myLeadershipStyle.answers.length>0" class="hide-for-mobile">Take the </span>
             <span ng-if="index.myLeadershipStyle.answers.length>0" class="hide-for-mobile">Finish the </span>
             Quiz
         </a>

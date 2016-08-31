@@ -1,0 +1,3 @@
+Here is your personalized link to start your quiz:
+
+{{ quiz_link }}

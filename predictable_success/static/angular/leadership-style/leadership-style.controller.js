@@ -11,6 +11,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     vm.busy = true;
     vm.showEmptyScreen = false;
     vm.myLeadershipStyle = null;
+    vm.showTakeQuizNotification = false;
     vm.takeQuiz = takeQuiz;
     vm.requestLeadershipStyle = requestLeadershipStyle;
     $rootScope.successRequestMessage = false;
@@ -56,6 +57,8 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                 vm.myLeadershipStyle = leadershipStyle;
                 if ($routeParams.takeQuiz && $routeParams.takeQuiz=='true') {
                     takeQuiz(leadershipStyle);
+                } else if (!leadershipStyle.completed) {
+                    takeQuiz(leadershipStyle);
                 }
                 vm.busy = false;
             }, function(){
@@ -81,6 +84,9 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
             function (leadershipStyle) {
                 if (leadershipStyle.employee.id == leadershipStyle.assessor.id) {
                     vm.myLeadershipStyle = leadershipStyle;
+                    if (!vm.myLeadershipStyle.completed) {
+                        vm.showTakeQuizNotification = true
+                    }
                 }
             }
         );

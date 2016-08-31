@@ -1,0 +1,10 @@
+{% extends "layouts/email.html" %}
+
+{% block content %}
+        <p>
+            Here is your personalized link to start your quiz:
+        </p>
+        <p>
+            <a href="{{ quiz_url }}">{{ quiz_url }}</a>
+        </p>
+{% endblock content%}

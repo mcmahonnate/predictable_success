@@ -1,7 +1,8 @@
 import blah
 from blah.models import Comment
+from customers.models import Customer
 from django.core.signing import Signer
-from django.db import models
+from django.db import connection, models
 from django.db.models import Q, F
 from org.models import Employee
 from datetime import datetime, date, timedelta
@@ -42,12 +43,13 @@ class QuizUrl(models.Model):
 
 
 def generate_quiz_link(email, domain_url):
+    customer = Customer.objects.filter(schema_name=connection.schema_name).first()
     quiz = QuizUrl()
     quiz.email = email
     quiz.save()
     signer = Signer()
     signed_id = signer.sign(quiz.id)
-    url = 'https://' + domain_url + '/#/take-the-quiz/' + signed_id
+    url = customer.build_url('/take-the-quiz/' + signed_id)
     quiz.url = url
     quiz.save()
 
