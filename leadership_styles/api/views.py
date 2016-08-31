@@ -180,17 +180,6 @@ class RequestsToDoList(ListAPIView):
         return LeadershipStyleRequest.objects.pending_for_reviewer(self.request.user.employee)
 
 
-class CreateQuizUrl(APIView):
-    permission_classes = (AllowAny,)
-
-    def post(self, request, format=None):
-        email = request.DATA["email"]
-        domain_url = request.tenant.domain_url
-        generate_quiz_link(email=email, domain_url=domain_url)
-
-        return Response(None)
-
-
 class GetQuiz(APIView):
     permission_classes = (AllowAny,)
 

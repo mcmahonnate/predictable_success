@@ -1,0 +1,21 @@
+{% extends "layouts/blank.html" %}
+{% load staticfiles %}
+{% block title %}Take the Quiz{% endblock title %}
+
+{% block content %}
+    <div class="start-quiz-form">
+        <form method="post" action="{% url 'start-quiz' %}">
+            {% csrf_token %}
+            <h1>Take the Quiz</h1>
+
+            <p style="margin: 15px 0;">You have a natural leadership style. With your own strengths and weaknesses. Discover who you are and how to unlock your best self.</p>
+
+            <input type="email" autofocus class="form-control input-lg" name="email" placeholder="Your e-mail">
+
+            {% if form.email.errors %}
+            <div class="error-message" style="margin-bottom: 15px;">{{ form.email.errors }}</div>
+            {% endif %}
+            <button class="btn btn-success btn-block" style="margin-bottom: 15px;" type="submit">Get Started</button>
+        </form>
+    </div>
+{% endblock %}
