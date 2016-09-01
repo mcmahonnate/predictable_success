@@ -59,11 +59,27 @@ class EmployeeLeadershipStyleReportSerializer(serializers.ModelSerializer):
         fields = ('id', 'employee', 'assessor', 'date', 'completed', 'times_retaken')
 
 
+class ScoreSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Score
+        fields = ('id', 'score', 'style', 'trait', 'style_verbose', 'trait_verbose')
+
+
+class LeadershipStyleDescriptionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = LeadershipStyleDescription
+        fields = ('id', 'style', 'style_verbose', 'description')
+
+
 class EmployeeLeadershipStyleSerializer(serializers.ModelSerializer):
     employee = SanitizedEmployeeSerializer()
     assessor = SanitizedEmployeeSerializer()
     next_question = serializers.SerializerMethodField()
     answers = serializers.SerializerMethodField()
+    scores = ScoreSerializer(many=True)
+    tease = serializers.SerializerMethodField()
 
     def get_next_question(self, obj):
         next_question = obj.next_question()
@@ -82,11 +98,18 @@ class EmployeeLeadershipStyleSerializer(serializers.ModelSerializer):
         else:
             return [answer.id for answer in obj.answers.all()]
 
+    def get_tease(self, obj):
+        if not obj.completed:
+            return None
+        dominant = obj.scores.order_by('-score').first()
+        description = LeadershipStyleDescription.objects.get(style=dominant.style)
+        serializer = LeadershipStyleDescriptionSerializer(context=self.context)
+        return serializer.to_representation(description)
+
     class Meta:
         model = EmployeeLeadershipStyle
         fields = ('id', 'assessment_type', 'active', 'employee', 'assessor', 'next_question', 'notes', 'answers', 'date',
-                  'total_questions', 'total_answered', 'completed', 'times_retaken', 'is_draft',
-                  'visionary_score', 'operator_score', 'processor_score', 'synergist_score')
+                  'total_questions', 'total_answered', 'completed', 'times_retaken', 'is_draft', 'scores', 'tease')
 
 
 class MinimalEmployeeLeadershipStyleSerializer(serializers.ModelSerializer):

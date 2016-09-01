@@ -9,23 +9,95 @@ from datetime import datetime, date, timedelta
 from model_utils import FieldTracker
 from tasks import send_leadership_style_request_email, send_quiz_link_email
 
+#Styles
 VISIONARY = 0
 OPERATOR = 1
 PROCESSOR = 2
 SYNERGIST = 3
-SCORE_MULTIPLIER = 30
+
 LEADERSHIP_STYLES = (
     (VISIONARY, 'Visionary'),
     (OPERATOR, 'Operator'),
     (PROCESSOR, 'Processor'),
     (SYNERGIST, 'Synergist'),
 )
+
+#Traits
+DOMINANT = 0
+PRIMARY = 1
+SECONDARY = 2
+INACTIVE = 3
+
+DOMINANT_STYLE_MAX = 960
+DOMINANT_STYLE_MIN = 480
+PRIMARY_STYLE_MAX = 479
+PRIMARY_STYLE_MIN = 240
+SECONDARY_STYLE_MAX = 239
+SECONDARY_STYLE_MIN = 120
+INACTIVE_STYLE_MAX = 119
+INACTIVE_STYLE_MIN = 0
+
+TRAITS = (
+    (DOMINANT, 'Dominant'),
+    (PRIMARY, 'Primary'),
+    (SECONDARY, 'Secondary'),
+    (INACTIVE, 'Inactive'),
+)
+
+#Assessment
 SELF = 0
 OTHERS = 1
 ASSESSMENT_TYPE = (
     (SELF, 'Self Assessment'),
     (OTHERS, '360 Assessment')
 )
+
+#Scoring
+SCORE_MULTIPLIER = 30
+
+
+class LeadershipStyleDescription(models.Model):
+    style = models.IntegerField(choices=LEADERSHIP_STYLES)
+    description = models.TextField()
+
+    @property
+    def style_verbose(self):
+        return LEADERSHIP_STYLES[self.style][1]
+
+    def __str__(self):
+        return self.style_verbose
+
+
+class ScoreManager(models.Manager):
+
+    def create_score(self, score, style):
+        if score >= DOMINANT_STYLE_MIN:
+            trait = DOMINANT
+        elif PRIMARY_STYLE_MIN <= score <= PRIMARY_STYLE_MAX:
+            trait = PRIMARY
+        elif SECONDARY_STYLE_MIN <= score <= SECONDARY_STYLE_MAX:
+            trait = SECONDARY
+        else:
+            trait = INACTIVE
+
+        score = Score(style=style, score=score, trait=trait)
+        score.save()
+        return score
+
+
+class Score(models.Model):
+    objects = ScoreManager()
+    trait = models.IntegerField(choices=TRAITS)
+    style = models.IntegerField(choices=LEADERSHIP_STYLES)
+    score = models.IntegerField()
+
+    @property
+    def trait_verbose(self):
+        return TRAITS[self.trait][1]
+
+    @property
+    def style_verbose(self):
+        return LEADERSHIP_STYLES[self.style][1]
 
 
 class QuizUrl(models.Model):
@@ -181,7 +253,7 @@ class LeadershipStyleRequest(models.Model):
 
 class EmployeeLeadershipStyleManager(models.Manager):
     def get_all_finished_for_employee(self, employee):
-        return self.filter(employee=employee, assessor=employee, completed=True)
+        return self.filter(employee=employee, assessor=employee, assessment_type=SELF, completed=True)
 
     def get_all_drafts(self):
         return self.filter(is_draft=True)
@@ -213,17 +285,22 @@ class EmployeeLeadershipStyle(models.Model):
     active = models.BooleanField(default=False)
     completed = models.BooleanField(default=False)
     field_tracker = FieldTracker(fields=['active', 'is_draft', 'completed'])
-    visionary_score = models.IntegerField(null=True, blank=True)
-    operator_score = models.IntegerField(null=True, blank=True)
-    processor_score = models.IntegerField(null=True, blank=True)
-    synergist_score = models.IntegerField(null=True, blank=True)
+    scores = models.ManyToManyField(Score, related_name='employee_leadership_style', null=True, blank=True)
 
     def _calculate_scores(self):
         if not self.completed and self.all_questions_answered() and self.answers.count() > 0:
             self.visionary_score = self.answers.filter(leadership_style=VISIONARY).count() * SCORE_MULTIPLIER
+            self.scores.add(Score.objects.create_score(score=self.visionary_score,style=VISIONARY))
+
             self.operator_score = self.answers.filter(leadership_style=OPERATOR).count() * SCORE_MULTIPLIER
+            self.scores.add(Score.objects.create_score(score=self.operator_score, style=OPERATOR))
+
             self.processor_score = self.answers.filter(leadership_style=PROCESSOR).count() * SCORE_MULTIPLIER
+            self.scores.add(Score.objects.create_score(score=self.processor_score, style=PROCESSOR))
+
             self.synergist_score = self.answers.filter(leadership_style=SYNERGIST).count() * SCORE_MULTIPLIER
+            self.scores.add(Score.objects.create_score(score=self.synergist_score, style=SYNERGIST))
+
             self.date = datetime.now()
             self.save()
 
@@ -236,10 +313,14 @@ class EmployeeLeadershipStyle(models.Model):
         return self.answers.count()
 
     def next_question(self):
-        self._calculate_scores()
         if self.completed:
             return None
-        return Question.objects.get_next_question(self)
+        question = Question.objects.get_next_question(self)
+        if question is None:
+            self._calculate_scores()
+            self.completed = True
+            self.save()
+        return question
 
     def all_questions_answered(self):
         if self.last_question_answered is not None:

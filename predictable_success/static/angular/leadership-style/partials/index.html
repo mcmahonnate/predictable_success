@@ -26,4 +26,14 @@
         </div>
     </div>
 
+    <div class="panel panel-empty fade-in" ng-show="index.myLeadershipStyle.scores.length > 0">
+        <h3 class="modal-title">Your Results</h3>
+        <p>Your most dominant leadership style is that of a <strong>{{ index.myLeadershipStyle.tease.style_verbose }}</strong></p>
+        {{ index.myLeadershipStyle.tease.description }}
+        <div class="well">
+            <h4 class="modal-title">Your Totals</h4>
+            <p ng-repeat="score in index.myLeadershipStyle.scores | orderBy:'-score'"><strong>{{ score.style_verbose }}</strong> {{ score.score }}</p>
+        </div>
+    </div>
+
 </div>

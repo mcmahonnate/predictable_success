@@ -27,26 +27,6 @@ function QuizController(analytics, LeadershipStyleService, Notification, leaders
         if (leadershipStyle.next_question) {
             vm.selectedAnswer = leadershipStyle.next_question.answer;
         }
-        isComplete();
-    }
-
-    function isComplete() {
-        if (vm.leadershipStyle.completed || !vm.leadershipStyle.next_question) {
-            if (!vm.leadershipStyle.completed) {
-                vm.leadershipStyle.assessor = vm.leadershipStyle.assessor.id;
-                vm.leadershipStyle.completed = true;
-                LeadershipStyleService.updateLeadershipStyle(vm.leadershipStyle)
-                            .then(function(result){
-                                vm.leadershipStyle = result;
-                                vm.busy = false;
-                            }
-                        );
-            }
-            vm.scores.push({'style' : 'Visionary', 'score': vm.leadershipStyle.visionary_score});
-            vm.scores.push({'style' : 'Operator', 'score': vm.leadershipStyle.operator_score});
-            vm.scores.push({'style' : 'Processor', 'score': vm.leadershipStyle.processor_score});
-            vm.scores.push({'style' : 'Synergist', 'score': vm.leadershipStyle.synergist_score});
-        }
     }
 
     function cancel() {
@@ -80,11 +60,12 @@ function QuizController(analytics, LeadershipStyleService, Notification, leaders
         LeadershipStyleService.updateLeadershipStyle(vm.leadershipStyle)
             .then(function(result){
                 vm.leadershipStyle = result;
-                isComplete();
                 if (vm.leadershipStyle.next_question) {
                     vm.selectedAnswer = vm.leadershipStyle.next_question.answer;
-                } else {
+                }
+                if (vm.leadershipStyle.completed) {
                     vm.selectedAnswer = null;
+                    close();
                 }
                 vm.busy = false;
             }

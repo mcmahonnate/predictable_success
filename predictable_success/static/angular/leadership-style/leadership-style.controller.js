@@ -12,6 +12,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     vm.showEmptyScreen = false;
     vm.myLeadershipStyle = null;
     vm.showTakeQuizNotification = false;
+    vm.scores = [];
     vm.takeQuiz = takeQuiz;
     vm.requestLeadershipStyle = requestLeadershipStyle;
     $rootScope.successRequestMessage = false;
