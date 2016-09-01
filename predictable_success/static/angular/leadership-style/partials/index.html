@@ -1,4 +1,4 @@
-<div id="devzones" class="container" data-hj-masked>
+<div class="container leadership-style" data-hj-masked>
     <!-- Leadership Style request message -->
     <div ng-class="{'slide-up-active': hideRequestMessage}" class="alert alert-success slide-up" role="alert" ng-show="successRequestMessage">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -26,13 +26,17 @@
         </div>
     </div>
 
-    <div class="panel panel-empty fade-in" ng-show="index.myLeadershipStyle.scores.length > 0">
-        <h3 class="modal-title">Your Results</h3>
-        <p>Your most dominant leadership style is that of a <strong>{{ index.myLeadershipStyle.tease.style_verbose }}</strong></p>
-        {{ index.myLeadershipStyle.tease.description }}
-        <div class="well">
-            <h4 class="modal-title">Your Totals</h4>
-            <p ng-repeat="score in index.myLeadershipStyle.scores | orderBy:'-score'"><strong>{{ score.style_verbose }}</strong> {{ score.score }}</p>
+    <div class="panel fade-in" ng-show="index.myLeadershipStyle.scores.length > 0">
+        <h3 class="modal-title panel-title">Your Results</h3>
+
+        <div ng-bind-html="index.myLeadershipStyle.tease.description"></div>
+        <div class="leadership-style-scores">
+            <div class="well">
+                <h3 class="leadership-style-title">Here's how you scored</h3>
+                <p ng-repeat="score in index.myLeadershipStyle.scores | orderBy:'-score'"><strong>{{ score.style_verbose }}</strong> - {{ score.score }} out of 960</p>
+            </div>
+            <p class="leadership-style-description">This is just a peek into who you are! To get the full picture, invite your team to take the 360 Assessment.</p>
+            <button ng-click="" class="btn btn-success btn-block call-to-action" style="margin-bottom: 15px;" type="submit">Invite your Team to take the 360 Assessment</button>
         </div>
     </div>
 
