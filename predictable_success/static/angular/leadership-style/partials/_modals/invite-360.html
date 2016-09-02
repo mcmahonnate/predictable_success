@@ -1,0 +1,15 @@
+<form id="invite-360-modal" class="invite-360" novalidate="novalidate">
+    <div class="form-group">
+        <div class="modal-body">
+            <panel>
+                <h3 class="modal-title">360 Assessment</h3>
+                <h4 class="header">Email Address <a href="" class="pull-right" ng-click="invite360.addEmail()">+ Add another invitation</a></h4>
+                <input ng-repeat="invite in invite360.invites" ng-model="invite.email" type="email" autofocus class="form-control input-lg fade-in" name="email" placeholder="name@domain.com">
+            </panel>
+        </div>
+        <div class="modal-footer">
+            <button type="button" ng-click="invite360.cancel()"  class="btn btn-light pull-left">Cancel</button>
+            <button type="button" ng-click="invite360.submit()" class="btn btn-success" data-dismiss="modal">Send Invitations</button>
+        </div>
+    </div>
+</form>

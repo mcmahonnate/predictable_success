@@ -13,6 +13,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     vm.myLeadershipStyle = null;
     vm.showTakeQuizNotification = false;
     vm.scores = [];
+    vm.invite = invite;
     vm.takeQuiz = takeQuiz;
     vm.requestLeadershipStyle = requestLeadershipStyle;
     $rootScope.successRequestMessage = false;
@@ -101,7 +102,6 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
             });
     }
 
-
     function requestLeadershipStyle(panel) {
             var modalInstance = $modal.open({
                 animation: true,
@@ -112,6 +112,26 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                 resolve: {
                     panel: function () {
                         return panel
+                    }
+                }
+            });
+            modalInstance.result.then(
+                function (sentLeadershipStyleRequests) {
+                    getMyRecentlySentRequests();
+                }
+            );
+        }
+
+        function invite() {
+            var modalInstance = $modal.open({
+                animation: true,
+                windowClass: 'xx-dialog fade zoom',
+                backdrop: 'static',
+                templateUrl: '/static/angular/leadership-style/partials/_modals/invite-360.html',
+                controller: 'Invite360Controller as invite360',
+                resolve: {
+                    panel: function () {
+                        return null
                     }
                 }
             });

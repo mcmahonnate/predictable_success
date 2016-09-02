@@ -9,7 +9,7 @@ from datetime import datetime, date, timedelta
 from model_utils import FieldTracker
 from tasks import send_leadership_style_request_email, send_quiz_link_email
 
-#Styles
+# Styles
 VISIONARY = 0
 OPERATOR = 1
 PROCESSOR = 2
@@ -22,7 +22,7 @@ LEADERSHIP_STYLES = (
     (SYNERGIST, 'Synergist'),
 )
 
-#Traits
+# Traits
 DOMINANT = 0
 PRIMARY = 1
 SECONDARY = 2
@@ -44,7 +44,7 @@ TRAITS = (
     (INACTIVE, 'Inactive'),
 )
 
-#Assessment
+# Assessment
 SELF = 0
 OTHERS = 1
 ASSESSMENT_TYPE = (
@@ -52,7 +52,7 @@ ASSESSMENT_TYPE = (
     (OTHERS, '360 Assessment')
 )
 
-#Scoring
+# Scoring
 SCORE_MULTIPLIER = 30
 
 
@@ -230,7 +230,8 @@ class LeadershipStyleRequest(models.Model):
     objects = LeadershipStyleRequestManager()
     expiration_date = models.DateField(null=True, blank=True, default=default_leadership_style_request_expiration_date)
     message = models.TextField(blank=True)
-    requester = models.ForeignKey(Employee, related_name='leadership_style_requests')
+    requester = models.ForeignKey(Employee, related_name='leadership_style_requests', null=True, blank=True)
+    requester_email = models.ForeignKey(Employee, null=True, blank=True)
     request_date = models.DateTimeField(auto_now_add=True)
     reviewer = models.ForeignKey(Employee, related_name='requests_for_leadership_style')
     was_declined = models.BooleanField(default=False)

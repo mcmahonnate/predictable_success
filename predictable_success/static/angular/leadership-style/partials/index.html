@@ -36,7 +36,7 @@
                 <p ng-repeat="score in index.myLeadershipStyle.scores | orderBy:'-score'"><strong>{{ score.style_verbose }}</strong> - {{ score.score }} out of 960</p>
             </div>
             <p class="leadership-style-description">This is just a peek into who you are! To get the full picture, invite your team to take the 360 Assessment.</p>
-            <button ng-click="" class="btn btn-success btn-block call-to-action" style="margin-bottom: 15px;" type="submit">Invite your Team to take the 360 Assessment</button>
+            <button ng-click="index.invite()" class="btn btn-success btn-block call-to-action" style="margin-bottom: 15px;" type="submit">Invite your Team to take the 360 Assessment</button>
         </div>
     </div>
 
