@@ -2,7 +2,11 @@
 
 {% block content %}
         <p>
-            Hi, {{ recipient_first_name }}!
+            {% if recipient_first_name %}
+                Hi, {{ recipient_first_name }}!
+            {% else %}
+                Hi!
+            {% endif %}
         </p>
         <p>
             {{ requester_full_name }} would like you to take this quick assessment of their Leadership Style. This can take as little as three minutes, and it will really matter to {{ requester_first_name }}!

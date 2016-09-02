@@ -230,10 +230,10 @@ class LeadershipStyleRequest(models.Model):
     objects = LeadershipStyleRequestManager()
     expiration_date = models.DateField(null=True, blank=True, default=default_leadership_style_request_expiration_date)
     message = models.TextField(blank=True)
-    requester = models.ForeignKey(Employee, related_name='leadership_style_requests', null=True, blank=True)
-    requester_email = models.ForeignKey(Employee, null=True, blank=True)
+    requester = models.ForeignKey(Employee, related_name='leadership_style_requests')
     request_date = models.DateTimeField(auto_now_add=True)
-    reviewer = models.ForeignKey(Employee, related_name='requests_for_leadership_style')
+    reviewer = models.ForeignKey(Employee, related_name='requests_for_leadership_style', null=True, blank=True)
+    reviewer_email = models.CharField(max_length=255, null=True, blank=True)
     was_declined = models.BooleanField(default=False)
     was_responded_to = models.BooleanField(default=False)
 

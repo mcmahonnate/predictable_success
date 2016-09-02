@@ -27,19 +27,25 @@
 
         function submit() {
             vm.enableSend = false;
-            LeadershipStyleRequestService.sendLeadershipStyleRequests(null, vm.message)
-                .then(function(sentPerceptioRequests) {
+            var invites = [];
+            angular.forEach(vm.invites, function(invite){
+                if (invite.email) {
+                    invites.push(invite);
+                }
+            })
+            LeadershipStyleRequestService.sendInvites(invites, vm.message)
+                .then(function(invites) {
 
                     /* Big success message */
                     $rootScope.successRequestMessage = true;
-                    $rootScope.successRequestMessageRecipient = vm.selectedReviewers;
+                    $rootScope.successRequestMessageRecipient = vm.invites;
 
                     /* Hide success message after a few seconds */
                     $timeout(function() {
                         $rootScope.hideRequestMessage = true;
                     }, 10000);
 
-                    $modalInstance.close(sentPerceptioRequests)
+                    $modalInstance.close(invites)
                 });
         }
 

@@ -4,7 +4,7 @@ from models import generate_quiz_link
 
 
 class StartQuiz(TemplateView):
-    template = "/leadership_styles/start_quiz.html"
+    template = "start_quiz.html"
 
     def get(self, request, **kwargs):
         if request.tenant.is_public_tenant():

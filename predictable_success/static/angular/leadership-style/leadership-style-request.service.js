@@ -4,16 +4,17 @@ angular
 
 function LeadershipStyleRequestService($log, LeadershipStyleRequestResource) {
     return {
-        sendLeadershipStyleRequests: sendLeadershipStyleRequests,
         getMyRecentlySentRequests: getMyRecentlySentRequests,
-        getRequest: getRequest
+        getRequest: getRequest,
+        sendInvites: sendInvites,
+        sendLeadershipStyleRequests: sendLeadershipStyleRequests,
     };
 
     function sendLeadershipStyleRequests(reviewers, message) {
         var requests = [];
 
         for(var i=0; i < reviewers.length; i++) {
-            var reviewer_id = reviewers[i].pk ? reviewers[i].pk : reviewers[i].id
+            var reviewer_id = reviewers[i].pk ? reviewers[i].pk : reviewers[i].id;
             requests.push({reviewer: reviewer_id, message: message});
         }
 
@@ -25,6 +26,25 @@ function LeadershipStyleRequestService($log, LeadershipStyleRequestResource) {
 
         function fail(response) {
             $log.error('sendLeadershipStyleRequests failed');
+        }
+    }
+
+    function sendInvites(emails, message) {
+        var requests = [];
+
+        for(var i=0; i < emails.length; i++) {
+            var email = emails[i].email;
+            requests.push({reviewer_email: email, message: message});
+        }
+
+        return LeadershipStyleRequestResource.sendLeadershipStyleRequests(requests, success, fail).$promise;
+
+        function success(sentLeadershipStyleRequests) {
+            return sentLeadershipStyleRequests;
+        }
+
+        function fail(response) {
+            $log.error('sendInvites failed');
         }
     }
 

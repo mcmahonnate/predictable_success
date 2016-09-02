@@ -161,9 +161,10 @@ class RequestSerializer(serializers.ModelSerializer):
 
 
 class CreateRequestSerializer(serializers.ModelSerializer):
-    reviewer = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
+    reviewer = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all(), required=False)
+    reviewer_email = serializers.CharField(required=False, allow_blank=True)
     message = serializers.CharField(required=False, allow_blank=True)
 
     class Meta:
         model = LeadershipStyleRequest
-        fields = ['reviewer', 'message']
+        fields = ['reviewer', 'reviewer_email', 'message']
