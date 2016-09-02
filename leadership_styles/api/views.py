@@ -180,6 +180,45 @@ class RequestsToDoList(ListAPIView):
         return LeadershipStyleRequest.objects.pending_for_reviewer(self.request.user.employee)
 
 
+class ReplyTo360(APIView):
+    permission_classes = (AllowAny,)
+
+    def get(self, request, pk, format=None):
+        #try:
+        signer = Signer()
+        request360_id = int(signer.unsign(pk))
+        request360 = LeadershipStyleRequest.objects.get(id=request360_id)
+        redirect_url = request.tenant.build_url("/#/leadership-style/request/%d/reply" % request360_id)
+
+        users = User.objects.filter(email=request360.reviewer_email)
+        if users.exists():
+            return redirect(redirect_url)
+
+        #create User
+        password = User.objects.make_random_password()
+        user = User.objects.create_user(username=request360.reviewer_email, email=request360.reviewer_email, password=password)
+        user.is_active = True
+        user.save()
+
+        #create Employee
+        employee = Employee(full_name=request360.reviewer_email, email=request360.reviewer_email)
+        employee.user = user
+        employee.save()
+
+        #update request with employee
+        request360.reviewer = employee
+        request360.save()
+        
+        #authenticate & login
+        user = authenticate(username=request360.reviewer_email, password=password)
+        login(request=request, user=user)
+
+        return redirect(redirect_url)
+
+        #except:
+        #    raise Http404("This request does not exist.")
+
+
 class GetQuiz(APIView):
     permission_classes = (AllowAny,)
 

@@ -7,4 +7,5 @@ urlpatterns = [
     url(r'^confirmation/?$', TemplateView.as_view(template_name="confirmation.html"), name='confirmation'),
     url(r'^take-the-quiz/$', StartQuiz.as_view(), name='start-quiz'),
     url(r'^take-the-quiz/(?P<pk>.+)/$', GetQuiz.as_view()),
+    url(r'^360/request/(?P<pk>.+)/$', ReplyTo360.as_view()),
 ]

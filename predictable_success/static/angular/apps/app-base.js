@@ -14,6 +14,7 @@ var app = angular.module('tdb', [
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.
             when('/', {templateUrl: '/static/angular/leadership-style/partials/index.html' , controller: 'LeadershipStyleController as index', resolve: {authorizeRoute: authorizeRoute}}).
+            when('/leadership-style/request/:requestId/reply', {templateUrl: '/static/angular/leadership-style/partials/index.html', controller: 'LeadershipStyleController as index', resolve: {authorizeRoute: authorizeRoute}}).
             when('/qualities/perception/request/:requestId/reply', {templateUrl: '/static/angular/qualities/partials/submission.html', controller: 'AssessQualitiesController as assessQualities', resolve: {authorizeRoute: authorizeRoute}}).
             when('/qualities/perception/submission', {templateUrl: '/static/angular/qualities/partials/submission.html', controller: 'AssessQualitiesController as assessQualities', resolve: {authorizeRoute: authorizeRoute}}).
             when('/qualities/perception/submission/:categoryId/:employeeId', {templateUrl: '/static/angular/qualities/partials/submission.html', controller: 'AssessQualitiesController as assessQualities', resolve: {authorizeRoute: authorizeRoute}}).

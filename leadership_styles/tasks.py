@@ -1,27 +1,31 @@
 from __future__ import absolute_import
-from predictable_success.celery import app
-from django.template.loader import render_to_string
-from django.core.mail import EmailMultiAlternatives
-from django.conf import settings
-from django.db import connection
 from customers.models import Customer
+from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
+from django.core.signing import Signer
+from django.db import connection
+from django.template.loader import render_to_string
+from predictable_success.celery import app
 
 
 @app.task
 def send_leadership_style_request_email(request_id):
     from leadership_styles.models import LeadershipStyleRequest
     print 'send_notification_email task'
+    tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
     leadership_style_request = LeadershipStyleRequest.objects.get(id=request_id)
     if leadership_style_request.reviewer is None:
+        signer = Signer()
         recipient_email = leadership_style_request.reviewer_email
         recipient_first_name = None
+        response_url = tenant.build_url("/360/request/%s" % signer.sign(request_id))
     else:
         recipient_email = leadership_style_request.reviewer.email
         recipient_first_name = leadership_style_request.reviewer.first_name
+        response_url = tenant.build_url("/#/leadership-style/request/%d/reply" % leadership_style_request.id)
     if not recipient_email:
         return
-    tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
-    response_url = tenant.build_url("/#/leadership-style/request/%d/reply" % leadership_style_request.id)
+
     context = {
         'recipient_first_name': recipient_first_name,
         'requester_full_name': leadership_style_request.requester.full_name,

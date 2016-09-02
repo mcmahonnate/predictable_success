@@ -19,3 +19,4 @@ class StartQuiz(TemplateView):
         generate_quiz_link(email=email, domain_url=domain_url)
 
         return HttpResponseRedirect("/confirmation")
+
