@@ -208,7 +208,7 @@ class ReplyTo360(APIView):
         #update request with employee
         request360.reviewer = employee
         request360.save()
-        
+
         #authenticate & login
         user = authenticate(username=request360.reviewer_email, password=password)
         login(request=request, user=user)
