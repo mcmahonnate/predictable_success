@@ -56,7 +56,7 @@
                     getCluster(request.category);
                     if (request.was_responded_to) {
                         Notification.error("You've already answered this request.");
-                        goTo('qualities/perception/my');
+                        goTo('competencies');
                     }
                     vm.perception_request_id = request.id;
                     vm.subject = request.requester;
@@ -64,7 +64,7 @@
                 },
                 function() {
                     Notification.error("You don't have access to this request.");
-                    goTo('qualities/perception/my');
+                    goTo('competencies');
                 }
             )
         }
@@ -165,7 +165,7 @@
                     } else {
                         Notification.success("Thanks we'll get those to " + vm.subject.first_name + " pronto.");
                     }
-                    goTo('qualities/perception/my');
+                    goTo('competencies');
                 },
                 function(response) {
                     Notification.error(response.data);

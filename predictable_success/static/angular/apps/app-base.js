@@ -15,10 +15,10 @@ var app = angular.module('tdb', [
         $routeProvider.
             when('/', {templateUrl: '/static/angular/leadership-style/partials/index.html' , controller: 'LeadershipStyleController as index', resolve: {authorizeRoute: authorizeRoute}}).
             when('/leadership-style/request/:requestId/reply', {templateUrl: '/static/angular/leadership-style/partials/index.html', controller: 'LeadershipStyleController as index', resolve: {authorizeRoute: authorizeRoute}}).
-            when('/qualities/perception/request/:requestId/reply', {templateUrl: '/static/angular/qualities/partials/submission.html', controller: 'AssessQualitiesController as assessQualities', resolve: {authorizeRoute: authorizeRoute}}).
-            when('/qualities/perception/submission', {templateUrl: '/static/angular/qualities/partials/submission.html', controller: 'AssessQualitiesController as assessQualities', resolve: {authorizeRoute: authorizeRoute}}).
-            when('/qualities/perception/submission/:categoryId/:employeeId', {templateUrl: '/static/angular/qualities/partials/submission.html', controller: 'AssessQualitiesController as assessQualities', resolve: {authorizeRoute: authorizeRoute}}).
-            when('/qualities/perception/my', {templateUrl: '/static/angular/qualities/partials/strengths-report.html', controller: 'QualitiesReportController as qualitiesReport', resolve: {authorizeRoute: authorizeRoute}}).
+            when('/competencies/request/:requestId/reply', {templateUrl: '/static/angular/qualities/partials/submission.html', controller: 'AssessQualitiesController as assessQualities', resolve: {authorizeRoute: authorizeRoute}}).
+            when('/competencies/submission', {templateUrl: '/static/angular/qualities/partials/submission.html', controller: 'AssessQualitiesController as assessQualities', resolve: {authorizeRoute: authorizeRoute}}).
+            when('/competencies/submission/:categoryId/:employeeId', {templateUrl: '/static/angular/qualities/partials/submission.html', controller: 'AssessQualitiesController as assessQualities', resolve: {authorizeRoute: authorizeRoute}}).
+            when('/competencies/', {templateUrl: '/static/angular/qualities/partials/strengths-report.html', controller: 'QualitiesReportController as qualitiesReport', resolve: {authorizeRoute: authorizeRoute}}).
             otherwise({redirectTo: '/'});
     }])
     .run(['$document', '$rootScope', 'User', 'Customers', 'privacyMode', function($document, $rootScope, User, Customers, privacyMode) {

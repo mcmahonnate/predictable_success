@@ -38,7 +38,7 @@
         }
 
         function giveUnsolicited() {
-            $location.path('/qualities/perception/submission');
+            $location.path('/competencies/submission');
         }
 
         function getPerceivedQualities() {
