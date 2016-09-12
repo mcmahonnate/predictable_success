@@ -19,13 +19,12 @@ cd predictable_success/
 
 Create and populate the database:
 ```
-createdb scoutmap
-psql -d scoutmap -f scoutmap.sql
+createdb predictable_success
 ```
 
 Set up your virtual environments (python and node):
 ```
-mkvirtualenv scoutmap
+mkvirtualenv predictable-success
 pip install -r requirements.txt
 pip install nodeenv
 nodeenv -p
@@ -81,28 +80,10 @@ You should now be able to run the server with:
 
 Set up your Heroku remotes:
 ```
-git remote add test git@heroku.com:test-scoutmap.git
-git remote add staging git@heroku.com:staging-scoutmap.git
-git remote add live git@heroku.com:live-scoutmap.git
-```
-
-Enable pipelines in heroku:
-```
-heroku labs:enable pipelines
-heroku plugins:install git://github.com/heroku/heroku-pipeline.git
-```
-
-Deploy to test:
-```
-git push test
+git remote add staging-predictable-success https://git.heroku.com/staging-predictable-success.git
 ```
 
 Deploy to staging:
 ```
-git push staging
-```
-
-Promote staging to live:
-```
-heroku pipeline:promote --app staging-scoutmap
+git push staging-predictable-success
 ```
