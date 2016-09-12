@@ -54,11 +54,16 @@ cd ~/Users/[username]/solr-4.4.0/example
 java -jar start.jar
 ```
 
+Migrate the database.
+```
+python manage.py migrate_schemas
+```
+
 Run indexing command. 
 ```
 python manage.py tenant_reindex_employees --settings=predictable_success.settings.local
-
 ```
+
 Install bower. 
 ```
 npm install -g bower-installer
