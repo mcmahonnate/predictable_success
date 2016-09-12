@@ -78,6 +78,27 @@ node_modules/gulp/bin/gulp.js watch
 
 ```
 
+Set up tenants (in a Python shell)
+```
+from customers.models import Customer
+
+# create your public tenant
+tenant = Customer(
+    domain_url='localhost',
+    schema_name='public',
+    name='public'
+)
+tenant.save()
+
+# private
+demo_tenant = Customer(
+    domain_url='demo.localhost',
+    schema_name='demo',
+    name='demo'
+)
+demo_tenant.save()
+```
+
 You should now be able to run the server with:
 ```
 ./up.sh
