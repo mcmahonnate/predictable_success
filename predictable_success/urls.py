@@ -8,7 +8,7 @@ from forms import *
 from org.api.views import EmployeeDetail, account_activate, account_activate_login
 from rest_framework import routers
 from views.homepage import IndexView
-from views.payment import ChargeView, PaymentView
+from views.payment import ThanksView, PaymentView
 from views.views import *
 
 
@@ -30,8 +30,11 @@ urlpatterns = [
     url(r'^org/chart/$', 'org.api.views.show_org_chart'),
     url(r'^account/activate/login/(?P<uidb64>[0-9A-Za-z]+)/$', account_activate_login, {'template_name': 'activation/activate_account_login.html', 'authentication_form': AuthenticationForm}, name='account_activate_login'),
     url(r'^account/activate/(?P<uidb64>[0-9A-Za-z]+)/(?P<token>.+)/$', account_activate, {'template_name': 'activation/activate_account.html', 'set_password_form': CustomSetPasswordForm}, name='account_activate'),
+
+    # Payment views
     url(r'^account/payment/?$', PaymentView.as_view(), name='payment'),
-    url(r'^account/thanks/?$', ChargeView.as_view(), name='charge'),
+    url(r'^account/thanks/?$', ThanksView.as_view(), name='thanks'),
+
     url(r'^account/login/?$', login,{'template_name':'login.html', 'authentication_form':CustomAuthenticationForm}, name='login'),
     url(r'^account/password_reset/done/$', password_reset_done, {'template_name': 'password_reset_done.html'}),
     url(r'^account/reset/(?P<uidb64>[0-9A-Za-z]+)/(?P<token>.+)/$', password_reset_confirm, {'template_name': 'password_reset_confirm.html', 'set_password_form': CustomSetPasswordForm}),

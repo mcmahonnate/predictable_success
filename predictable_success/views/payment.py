@@ -1,66 +1,64 @@
 import stripe
 
-from django.shortcuts import redirect, render_to_response
 from django.conf import settings
-from django.views.generic import TemplateView
+from django.shortcuts import redirect, render_to_response
 from django.template import RequestContext
+from django.views.generic import TemplateView
+
 
 class PaymentView(TemplateView):
-   template = "payment.html"
-
-   def get(self, request, **kwargs):
-       return render_to_response(self.template, {
-           'stripe_key': settings.STRIPE_PUBLISHABLE_KEY,
-           'monthly_price': settings.MONTHLY_PLAN_PRICE,
-           'yearly_price': settings.YEARLY_PLAN_PRICE
-       }, context_instance=RequestContext(request))
-
-class ChargeView(TemplateView):
-    success_url = "thanks.html"
+    template = "payment.html"
+    success_url = "thanks"
     fail_url = "payment"
-    
+
     def get(self, request, **kwargs):
         return render_to_response(self.template, {
-            'stripe_key': settings.STRIPE_KEY,
+            'stripe_key': settings.STRIPE_PUBLISHABLE_KEY,
             'monthly_price': settings.MONTHLY_PLAN_PRICE,
             'yearly_price': settings.YEARLY_PLAN_PRICE
         }, context_instance=RequestContext(request))
-        
 
     def post(self, request, *args, **kwargs):
-        stripe_keys = {
-            'secret_key': settings.STRIPE_SECRET_KEY,
-            'publishable_key': settings.STRIPE_PUBLISHABLE_KEY
-        }
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+        stripe_token = request.POST.get('stripeToken', '')
+        stripe_email = request.POST.get('stripeEmail', '')
 
-        stripe.api_key = stripe_keys['secret_key']
-        token = request.POST.get('stripeToken', '')
-        email = request.POST.get('stripeEmail', '')
-        employees = request.POST.get('employees', '')
-        plan = request.POST.get('plan', '')
-        company = request.POST.get('company', '')
-        total = request.POST.get('total', '')
-        
+        if not stripe_token:
+            raise Exception('Missing stripeToken.')
+
+        if not stripe_email:
+            raise Exception('Missing stripeEmail.')
+
         try:
-
-            # Create a Customer
             customer = stripe.Customer.create(
-                source=token,
-                plan=plan,
-                quantity=employees,
-                description=company,
-                email=email
+                source=stripe_token,
+                email=stripe_email
             )
 
-            return render_to_response(self.success_url, {
-                'plan': plan,
-                'employees': employees,
-                'total': total,
-                'email': email
-            }, context_instance=RequestContext(request))
+            # TODO: Product SKU needs to be configurable across environments
+            product_sku = 'sku_9C3P7b1Qa3KjtV'
 
+            order = stripe.Order.create(
+                currency='usd',
+                items=[{
+                    "type": 'sku',
+                    "parent": product_sku,
+                }],
+                customer=customer
+            )
 
+            order.pay(customer=customer)
+
+            return redirect(self.success_url)
         except stripe.CardError, e:
+            print('Card has been declined: %s' % e)
+            pass
 
-          # The card has been declined
-          pass
+
+class ThanksView(TemplateView):
+    template = "thanks.html"
+
+    def get(self, request, **kwargs):
+        return render_to_response(self.template, {
+            'stripe_key': settings.STRIPE_PUBLISHABLE_KEY,
+        }, context_instance=RequestContext(request))

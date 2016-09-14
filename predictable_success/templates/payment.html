@@ -1,85 +1,45 @@
 {% extends "layouts/main.html" %}
 {% load staticfiles %}
+
+
 {% block title %}Payment{% endblock title %}
 
-{% block css %}
-{% endblock css %}
+{% block css %}{% endblock css %}
 
 {% block content %}
-    <div class="container">
-        <form action="{% url 'charge' %}" method="POST">
-            {% csrf_token %}
+<div class="container">
+    <form action="{% url 'payment' %}" method="POST">{% csrf_token %}
 
-            <div class="row">
-                <div class="pricing col-sm-7 col-sm-offset-1">
-                    <h1>Checkout</h1>
-                    <div class="company-details">
-                        <div class="arrow">1</div>
-                        <h3>Enter company name:</h3>
-                        <input class="form-control input-md" id="companyName" name="company" />
-                    </div>    
-                    <div class="plans">
-                        <div class="arrow">2</div>
-                        <h3>Select your plan:</h3>
-                        <div class="row">
-                            <div class="col-xs-12 col-md-6">
-                                <div class="plan panel panel-default" data-plan="Monthly Plan" data-price="5">
-                                    <h1>$5<span class="duration">/month</span></h1>
-                                    <div class="byline">per employee</div>
-                                </div>
-                            </div>
-                            <div class="col-xs-12 col-md-6">
-                                <div class="plan panel panel-default" data-plan="Yearly Plan" data-price="60">
-                                    <h1>$60<span class="duration">/year</span></h1>
-                                    <div class="byline">per employee</div>
-                                </div>
+        <div class="row">
+            <div class="pricing col-sm-12 col-sm-offset-1">
+                <h1>Checkout</h1>
+
+                <div class="plans">
+                    <div class="row">
+                        <div class="col-xs-2 col-md-2">
+                            <div class="plan panel panel-default">
+                                <h1>$50</h1>
                             </div>
                         </div>
                     </div>
-                    <div class="employees">
-                        <div class="arrow">3</div>
-                        <h3>How many employees?</h3>
-                        <small class="help-text">Use slider and arrow keys to adjust employee count</small>
-                        <form class="total-employees-slider col-md-12" role="form">
-                            <div id="slider"></div>
-                        </form>
-                    </div>
                 </div>
-                <div class="col-sm-4">
-                    <div class="summary">
-                            <h2>Order Summary</h2>
-                            <p><span class="plan-label">Select your plan</span></p>
-                            <p><span class="employees-label">0</span> Employees</p>
-                            <input type="hidden" id="employees" name="employees" value="0">
-                            <input type="hidden" id="amount" name="amount" value="">
-                            <input type="hidden" id="plan" name="plan" value="Yearly Plan">
-                            <input type="hidden" id="total" name="total" value="0">
-                            <div class="form-group total row">
-                                <label for="total" class="col-sm-4 control-label total-label"><strong>Total: </strong></label>
-                                <div class="col-sm-8">
-                                    <p class="grand-total">$<span id="grand-total-amount"></span></p>
-                                </div>
-                            </div>
-                            <input
-                                class="btn btn-primary btn-lg btn-block pay-button"
-                                type="submit"
-                                value="Pay with Card"
-                                data-key="{{ stripe_key }}"
-                                data-amount="0"
-                                data-currency="us"
-                                data-name="ScoutMap"
-                                data-description="Payment for $5"
-                                disabled
-                                />
-                    </div>
-                    <img src="{% static 'images/stripe.png' %}" alt="Stripe logo" class="stripe-logo" />
-                    <p class="stripe-security-msg">*Stripe uses an advanced 256-bit encryption system. For more information please <a href="http://www.stripe.com/help/security" target="_blank">click here</a>.</p>
-                </div>
-            </div>
-        </form>
-    </div>
-{% endblock content %}
 
-{% block javascript %}
-    <script src="{% static 'javascript/payment.js' %}"></script>
-{% endblock javascript %}
+                <div>
+                    <script
+                        src="https://checkout.stripe.com/checkout.js" 
+                        class="stripe-button"
+                        data-key="{{ stripe_key }}"
+                        data-amount="5000"
+                        data-name="The Motley Fool LLC"
+                        data-description="Predictable Success for $50"
+                        data-locale="auto">
+                    </script>
+                </div>
+
+                <img src="{% static 'images/stripe.png' %}" alt="Stripe logo" class="stripe-logo" />
+                <p class="stripe-security-msg">*Stripe uses an advanced 256-bit encryption system. For more information please <a href="http://www.stripe.com/help/security" target="_blank">click here</a>.</p>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock content %}
