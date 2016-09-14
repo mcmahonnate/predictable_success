@@ -1,8 +1,8 @@
     angular
         .module('leadership-style')
-        .controller('Invite360Controller', Invite360Controller);
+        .controller('InviteController', InviteController);
 
-    function Invite360Controller(LeadershipStyleRequestService, $timeout, $modalInstance, $rootScope) {
+    function InviteController(LeadershipStyleInviteService, $timeout, $modalInstance, $rootScope) {
         var vm = this;
         vm.subject = $rootScope.currentUser.employee;
         vm.message = '';
@@ -30,10 +30,10 @@
             var invites = [];
             angular.forEach(vm.invites, function(invite){
                 if (invite.email) {
-                    invites.push(invite);
+                    invites.push(invite.email);
                 }
             })
-            LeadershipStyleRequestService.sendRequests(invites, vm.message)
+            LeadershipStyleInviteService.sendInvites(invites)
                 .then(function(invites) {
 
                     /* Big success message */

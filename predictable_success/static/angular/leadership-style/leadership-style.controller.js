@@ -127,6 +127,26 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                 animation: true,
                 windowClass: 'xx-dialog fade zoom',
                 backdrop: 'static',
+                templateUrl: '/static/angular/leadership-style/partials/_modals/invite.html',
+                controller: 'InviteController as invite',
+                resolve: {
+                    panel: function () {
+                        return null
+                    }
+                }
+            });
+            modalInstance.result.then(
+                function (team) {
+                    console.log(team);
+                }
+            );
+        }
+
+        function invite360() {
+            var modalInstance = $modal.open({
+                animation: true,
+                windowClass: 'xx-dialog fade zoom',
+                backdrop: 'static',
                 templateUrl: '/static/angular/leadership-style/partials/_modals/invite-360.html',
                 controller: 'Invite360Controller as invite360',
                 resolve: {
