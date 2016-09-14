@@ -35,8 +35,7 @@ class PaymentView(TemplateView):
                 email=stripe_email
             )
 
-            # TODO: Product SKU needs to be configurable across environments
-            product_sku = 'sku_9C3P7b1Qa3KjtV'
+            product_sku = settings.STRIPE_PRODUCT_SKU
 
             order = stripe.Order.create(
                 currency='usd',
