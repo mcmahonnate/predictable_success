@@ -8,7 +8,7 @@ from django.views.generic import TemplateView
 
 class PaymentView(TemplateView):
     template = "payment.html"
-    success_url = "thanks"
+    success_url = "index"
     fail_url = "payment"
 
     def get(self, request, **kwargs):
@@ -50,12 +50,3 @@ class PaymentView(TemplateView):
         except stripe.CardError, e:
             print('Card has been declined: %s' % e)
             pass
-
-
-class ThanksView(TemplateView):
-    template = "thanks.html"
-
-    def get(self, request, **kwargs):
-        return render_to_response(self.template, {
-            'stripe_key': settings.STRIPE_PUBLISHABLE_KEY,
-        }, context_instance=RequestContext(request))
