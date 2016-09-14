@@ -6,8 +6,8 @@ function LeadershipStyleRequestService($log, LeadershipStyleRequestResource) {
     return {
         getMyRecentlySentRequests: getMyRecentlySentRequests,
         getRequest: getRequest,
-        sendInvites: sendInvites,
         sendLeadershipStyleRequests: sendLeadershipStyleRequests,
+        sendRequests: sendRequests,
     };
 
     function sendLeadershipStyleRequests(reviewers, message) {
@@ -29,7 +29,7 @@ function LeadershipStyleRequestService($log, LeadershipStyleRequestResource) {
         }
     }
 
-    function sendInvites(emails, message) {
+    function sendRequests(emails, message) {
         var requests = [];
 
         for(var i=0; i < emails.length; i++) {
@@ -44,7 +44,7 @@ function LeadershipStyleRequestService($log, LeadershipStyleRequestResource) {
         }
 
         function fail(response) {
-            $log.error('sendInvites failed');
+            $log.error('sendRequests failed');
         }
     }
 

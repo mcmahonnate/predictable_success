@@ -150,12 +150,11 @@ class CreateRequest(CreateAPIView):
         serializer.save(requester=self.request.user.employee)
 
 
-class CreateTeam(APIView):
+class InviteTeam(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request, format=None):
-        owner_id = request.data['owner']
-        employee = Employee.objects.get(id=owner_id)
+        employee = request.user.employee
         emails = request.data['emails']
         team = TeamLeadershipStyle.objects.create_team(owner=employee, emails=emails)
         serializer = TeamLeadershipStyleSerializer(instance=team, context={'request': request})
