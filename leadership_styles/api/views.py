@@ -1,6 +1,5 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
-from django.http import Http404
 from django.shortcuts import redirect
 from org.api.permissions import UserIsEmployeeOrLeaderOrCoachOfEmployee, UserIsEmployee, PermissionsViewAllEmployees
 from rest_framework import status
@@ -151,6 +150,19 @@ class CreateRequest(CreateAPIView):
         serializer.save(requester=self.request.user.employee)
 
 
+class CreateTeam(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, format=None):
+        owner_id = request.data['owner']
+        employee = Employee.objects.get(id=owner_id)
+        emails = request.data['emails']
+        team = TeamLeadershipStyle.objects.create_team(owner=employee, emails=emails)
+        serializer = TeamLeadershipStyleSerializer(instance=team, context={'request': request})
+
+        return Response(serializer.data)
+
+
 class RecentRequestsIveSentList(ListAPIView):
     serializer_class = RequestSerializer
     permission_classes = (IsAuthenticated,)
@@ -184,94 +196,99 @@ class ReplyTo360(APIView):
     permission_classes = (AllowAny,)
 
     def get(self, request, pk, format=None):
-        #try:
-        signer = Signer()
-        request360_id = int(signer.unsign(pk))
-        request360 = LeadershipStyleRequest.objects.get(id=request360_id)
-        redirect_url = request.tenant.build_url("/#/leadership-style/request/%d/reply" % request360_id)
+        try:
+            signer = Signer()
+            request360_id = int(signer.unsign(pk))
+            request360 = LeadershipStyleRequest.objects.get(id=request360_id)
+            redirect_url = request.tenant.build_url("/#/leadership-style/request/%d/reply" % request360_id)
 
-        users = User.objects.filter(email=request360.reviewer_email)
-        if users.exists():
+            users = User.objects.filter(email=request360.reviewer_email)
+            if users.exists():
+                return redirect(redirect_url)
+
+            #create User
+            password = User.objects.make_random_password()
+            user = User.objects.create_user(username=request360.reviewer_email, email=request360.reviewer_email, password=password)
+            user.is_active = True
+            user.save()
+
+            #create Employee
+            employee = Employee(full_name=request360.reviewer_email, email=request360.reviewer_email)
+            employee.user = user
+            employee.save()
+
+            #update request with employee
+            request360.reviewer = employee
+            request360.save()
+
+            #authenticate & login
+            user = authenticate(username=request360.reviewer_email, password=password)
+            login(request=request, user=user)
+
             return redirect(redirect_url)
-
-        #create User
-        password = User.objects.make_random_password()
-        user = User.objects.create_user(username=request360.reviewer_email, email=request360.reviewer_email, password=password)
-        user.is_active = True
-        user.save()
-
-        #create Employee
-        employee = Employee(full_name=request360.reviewer_email, email=request360.reviewer_email)
-        employee.user = user
-        employee.save()
-
-        #update request with employee
-        request360.reviewer = employee
-        request360.save()
-
-        #authenticate & login
-        user = authenticate(username=request360.reviewer_email, password=password)
-        login(request=request, user=user)
-
-        return redirect(redirect_url)
-
-        #except:
-        #    raise Http404("This request does not exist.")
+        except:
+            return redirect(request.tenant.build_url('/take-the-quiz'))
 
 
 class GetQuiz(APIView):
     permission_classes = (AllowAny,)
 
     def get(self, request, pk, format=None):
-        try:
+        #try:
+        if ":" in pk:
             signer = Signer()
             quiz_id = signer.unsign(pk)
             quiz = QuizUrl.objects.get(id=quiz_id)
-            if not quiz.active:
-                employee_leadership_style = quiz.employee_leadership_style.get()
-                print employee_leadership_style
-                if not employee_leadership_style.completed:
-                    print 'not completed'
-                    return redirect(request.tenant.build_url('/#/?takeQuiz=true'))
-                else:
-                    print 'completed'
-                    return redirect(request.tenant.build_url('/#/'))
+        else:
+            # Assume pk is an email address
+            quiz = QuizUrl.objects.filter(email=pk).last()
 
-            #create User
-            try:
-                user = User.objects.get(email=quiz.email)
-                return Response(None, status=status.HTTP_404_NOT_FOUND)
-            except User.DoesNotExist:
+        if not quiz.active:
+            employee_leadership_style = quiz.employee_leadership_style.get()
+            if not employee_leadership_style.completed:
+                return redirect(request.tenant.build_url('/#/?takeQuiz=true'))
+            else:
+                return redirect(request.tenant.build_url('/#/'))
+
+        #create User
+        try:
+            user = User.objects.get(email=quiz.email)
+            if not user.is_active:
                 password = User.objects.make_random_password()
-                user = User.objects.create_user(username=quiz.email, email=quiz.email, password=password)
+                user.set_password(password)
                 user.is_active = True
                 user.save()
+        except User.DoesNotExist:
+            password = User.objects.make_random_password()
+            user = User.objects.create_user(username=quiz.email, email=quiz.email, password=password)
+            user.is_active = True
+            user.save()
 
-            #authenticate & login
-            user = authenticate(username=quiz.email, password=password)
-            login(request=request, user=user)
+        #authenticate & login
+        user = authenticate(username=quiz.email, password=password)
+        login(request=request, user=user)
 
-            #create Employee
-            try:
-                employee = user.employee
-            except Employee.DoesNotExist:
-                employee = Employee(full_name=quiz.email, email=quiz.email)
-                employee.user = user
-                employee.save()
+        #create Employee
+        try:
+            employee = user.employee
+        except Employee.DoesNotExist:
+            employee = Employee(full_name=quiz.email, email=quiz.email)
+            employee.user = user
+            employee.save()
 
-            #create LeadershipStyle
-            try:
-                leadership_style = EmployeeLeadershipStyle.objects.filter(employee=employee, assessor=employee).latest('date')
-            except EmployeeLeadershipStyle.DoesNotExist:
-                leadership_style = EmployeeLeadershipStyle(employee=employee, assessor=employee, assessment_type=0)
-                leadership_style.quiz_url = quiz
-                leadership_style.save()
+        #create LeadershipStyle
+        try:
+            leadership_style = EmployeeLeadershipStyle.objects.filter(employee=employee, assessor=employee).latest('date')
+        except EmployeeLeadershipStyle.DoesNotExist:
+            leadership_style = EmployeeLeadershipStyle(employee=employee, assessor=employee, assessment_type=0)
+            leadership_style.quiz_url = quiz
+            leadership_style.save()
 
-            #deactivate quiz url
-            quiz.active = False
-            quiz.save()
+        #deactivate quiz url
+        quiz.active = False
+        quiz.save()
 
-            return redirect(request.tenant.build_url('/#/?takeQuiz=true'))
+        return redirect(request.tenant.build_url('/#/?takeQuiz=true'))
 
-        except:
-            raise Http404("This quiz does not exist.")
+        #except:
+        #    return redirect(request.tenant.build_url('/take-the-quiz'))

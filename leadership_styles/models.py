@@ -114,10 +114,11 @@ class QuizUrl(models.Model):
         return "%s was sent a self asessment on %s" % (self.email, self.sent_date)
 
 
-def generate_quiz_link(email, domain_url):
+def generate_quiz_link(email):
     customer = Customer.objects.filter(schema_name=connection.schema_name).first()
     quiz = QuizUrl()
     quiz.email = email
+    quiz.active = True
     quiz.save()
     signer = Signer()
     signed_id = signer.sign(quiz.id)
@@ -269,12 +270,20 @@ class EmployeeLeadershipStyleManager(models.Manager):
         reminder_date = date.today()-timedelta(weeks=2)
         return self.filter(active=True, completed=False, date__gt=reminder_date, employee=F('assessor'))
 
+    def get_or_create_leadership_style(self, employee):
+        try:
+            leadership_style = self.get(employee=employee)
+        except EmployeeLeadershipStyle.DoesNotExist():
+            leadership_style = EmployeeLeadershipStyle(employee=employee, assessor=employee, assessment_type=SELF)
+            leadership_style.save()
+        return leadership_style
+
 
 class EmployeeLeadershipStyle(models.Model):
     objects = EmployeeLeadershipStyleManager()
+    employee = models.OneToOneField(Employee, related_name='leadership_style')
     assessment_type = models.IntegerField(choices=ASSESSMENT_TYPE)
     assessor = models.ForeignKey(Employee, related_name='+')
-    employee = models.ForeignKey(Employee, related_name='employee_leadership_styles')
     quiz_url = models.ForeignKey(QuizUrl, null=True, blank=True, related_name='employee_leadership_style')
     request = models.ForeignKey(LeadershipStyleRequest, null=True, blank=True, related_name='submission')
     date = models.DateTimeField(null=False, blank=False, default=datetime.now)
@@ -350,3 +359,37 @@ class EmployeeLeadershipStyle(models.Model):
 
     def __str__(self):
         return "%s %s %s" % (self.employee.full_name, self.date, self.completed)
+
+
+class TeamLeadershipStyleManager(models.Manager):
+
+    @staticmethod
+    def create_team(owner, emails):
+        team = TeamLeadershipStyle(owner=owner)
+        team.save()
+        team.team_members.add(owner)
+        for email in emails:
+            user = Employee.objects.get_or_create_user(email=email)
+            employee = Employee.objects.get_or_create_employee(user=user)
+            team.team_members.add(employee)
+            try:
+                leadership_style = employee.leadership_style
+            except EmployeeLeadershipStyle.DoesNotExist:
+                quiz = generate_quiz_link(email=email)
+                team.quiz_requests.add(quiz)
+        team.save()
+        return team
+
+
+class TeamLeadershipStyle(models.Model):
+    objects = TeamLeadershipStyleManager()
+    name = models.CharField(max_length=255, null=True, blank=True)
+    owner = models.ForeignKey(Employee, related_name='+')
+    team_members = models.ManyToManyField(Employee, related_name='team_leadership_styles', null=True, blank=True)
+    quiz_requests = models.ManyToManyField(QuizUrl, related_name='team_leadership_styles', null=True, blank=True)
+
+    def __str__(self):
+        if self.name:
+            return "Team %s owned by %s" % (self.name, self.owner.full_name)
+        else:
+            return "Team owned by %s" % self.owner.full_name

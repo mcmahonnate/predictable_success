@@ -168,3 +168,12 @@ class CreateRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = LeadershipStyleRequest
         fields = ['reviewer', 'reviewer_email', 'message']
+
+
+class TeamLeadershipStyleSerializer(serializers.ModelSerializer):
+    owner = SanitizedEmployeeSerializer()
+    team_members = SanitizedEmployeeSerializer(many=True)
+
+    class Meta:
+        model = TeamLeadershipStyle
+        fields = ['owner', 'team_members']

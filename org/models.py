@@ -104,6 +104,27 @@ class EmployeeManager(TreeManager):
         employees = self.filter(user__in=users)
         return employees
 
+    @staticmethod
+    def get_or_create_user(email):
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            password = User.objects.make_random_password()
+            user = User.objects.create_user(username=email, email=email, password=password)
+            user.is_active = False
+            user.save()
+        return user
+
+    @staticmethod
+    def get_or_create_employee(user):
+        try:
+            employee = user.employee
+        except Employee.DoesNotExist:
+            employee = Employee(full_name=user.email, email=user.email)
+            employee.user = user
+            employee.save()
+        return employee
+
 
 class _Pronoun(object):
     def __init__(self):
@@ -200,12 +221,6 @@ class Employee(MPTTModel):
         super(Employee, self).save(*args, **kwargs)
         if self.field_tracker.has_changed('email') and self.user is not None:
             self.user.email = self.email
-            try:
-                # Sometimes the username can be an email address
-                validate_email(self.user.username)
-                self.user.username = self.email.split("@")[0]
-            except ValidationError as e:
-                pass
             self.user.save()
         new_leader_id = self.leader.id if self.leader else 0
         old_leader_id = self.current_leader.id if self.current_leader else 0
