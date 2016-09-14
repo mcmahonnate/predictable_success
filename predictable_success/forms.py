@@ -3,9 +3,6 @@ from django.contrib.auth.forms import AuthenticationForm, SetPasswordForm
 from django.forms.widgets import PasswordInput, TextInput
 
 
-class StripeForm(forms.Form):
-    stripe_token = forms.CharField()
-
 class CustomAuthenticationForm(AuthenticationForm):
     username = forms.CharField(widget=TextInput(attrs={'placeholder': 'Username or Email', 'autofocus':''}))
     password = forms.CharField(widget=PasswordInput(attrs={'placeholder':'Password'}))
