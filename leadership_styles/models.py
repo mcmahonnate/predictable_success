@@ -380,6 +380,9 @@ class TeamLeadershipStyleManager(models.Manager):
         team.save()
         return team
 
+    def get_teams_by_employee(self, employee):
+        return self.filter(team_members=employee)
+
 
 class TeamLeadershipStyle(models.Model):
     objects = TeamLeadershipStyleManager()

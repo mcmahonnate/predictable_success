@@ -162,7 +162,7 @@ class InviteTeam(APIView):
         return Response(serializer.data)
 
 
-class TeamLeadershipStyle(RetrieveAPIView):
+class RetrieveTeamLeadershipStyle(RetrieveAPIView):
     permission_classes = (IsAuthenticated, UserIsTeamMember)
     serializer_class = TeamLeadershipStyleSerializer
     queryset = TeamLeadershipStyle.objects.all()
@@ -170,6 +170,14 @@ class TeamLeadershipStyle(RetrieveAPIView):
     def get_team_members(self):
         team = self.get_object()
         return team.team_members.all()
+
+
+class RetrieveMyTeamLeadershipStyles(ListAPIView):
+    serializer_class = TeamLeadershipStyleSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        return TeamLeadershipStyle.objects.get_teams_by_employee(employee=self.request.user.employee)
 
 
 class RecentRequestsIveSentList(ListAPIView):

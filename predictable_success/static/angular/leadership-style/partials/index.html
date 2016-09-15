@@ -35,9 +35,24 @@
                 <h3 class="leadership-style-title">Here's how you scored</h3>
                 <p ng-repeat="score in index.myLeadershipStyle.scores | orderBy:'-score'"><strong>{{ score.style_verbose }}</strong> - {{ score.score }} out of 960</p>
             </div>
-            <p class="leadership-style-description">This is just a peek ...</p>
-            <button ng-click="index.invite()" class="btn btn-success btn-block call-to-action" style="margin-bottom: 15px;" type="submit">Invite your Team to take the Quiz</button>
+            <div ng-if="index.teams.length==0">
+                <p class="leadership-style-description">This is just a peek ...</p>
+                <button ng-click="index.invite()" class="btn btn-success btn-block call-to-action" style="margin-bottom: 15px;" type="submit">Invite your Team to take the Quiz</button>
+            </div>
         </div>
-    </div>
 
+    </div>
+    <div class="panel fade-in" ng-repeat="team in index.teams">
+        <h3 class="modal-title panel-title" ng-if="team.name">{{ team.name }}</h3>
+        <h3 class="modal-title panel-title" ng-if="!team.name">Your Team <span class="fa fa-pencil"></span></h3>
+        <div ng-repeat="team_member in team.team_members">
+            <strong>{{ team_member.full_name }}</strong>
+            <progressbar ng-if="team_member.leadership_style && !team_member.leadership_style.completed" class="progress-striped active" value="team_member.leadership_style.answers.length" max="33"> <i ng-show="showWarning">!!! Watch out !!!</i></progressbar>
+            <progressbar ng-if="!team_member.leadership_style" class="progress-striped active" value="0" max="33"></progressbar>
+            <div ng-if="team_member.leadership_style.completed" style="padding-bottom: 15px">
+                <span>{{ team_member.leadership_style.tease.style_verbose }} </span>
+            </div>
+        </div>
+        <button ng-click="index.invite()" class="btn btn-success btn-block call-to-action" style="margin-bottom: 15px;" type="submit">Invite More Team Members</button>
+    </div>
 </div>

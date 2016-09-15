@@ -2,7 +2,7 @@ angular
     .module('leadership-style')
     .controller('LeadershipStyleController', LeadershipStyleController);
 
-function LeadershipStyleController(LeadershipStyleService, LeadershipStyleRequestService, analytics, $location, $modal, $rootScope, $routeParams, $scope, $timeout) {
+function LeadershipStyleController(LeadershipStyleService, LeadershipStyleRequestService, LeadershipStyleTeamService, analytics, $location, $modal, $rootScope, $routeParams, $scope, $timeout) {
     /* Since this page can be the root for some users let's make sure we capture the correct page */
     var location_url = $location.url().indexOf('/leadership_style') < 0 ? '/id' : $location.url();
     analytics.trackPage($scope, $location.absUrl(), location_url);
@@ -13,8 +13,10 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     vm.myLeadershipStyle = null;
     vm.showTakeQuizNotification = false;
     vm.scores = [];
+    vm.teams = [];
     vm.invite = invite;
     vm.takeQuiz = takeQuiz;
+    vm.getMyTeams = getMyTeams;
     vm.requestLeadershipStyle = requestLeadershipStyle;
     $rootScope.successRequestMessage = false;
     $rootScope.hideMessage = false;
@@ -26,8 +28,20 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
             respondToRequest();
         } else {
             getMyLeadershipStyle();
+            getMyTeams();
         }
     };
+
+    function getMyTeams() {
+        LeadershipStyleTeamService.getMyTeams()
+            .then(function(teams){
+                vm.teams = teams;
+                console.log(vm.teams);
+                vm.busy = false;
+            }, function(){
+                vm.busy = false;
+            })
+    }
 
     function respondToRequest() {
         vm.busy = true;
@@ -130,14 +144,14 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                 templateUrl: '/static/angular/leadership-style/partials/_modals/invite.html',
                 controller: 'InviteController as invite',
                 resolve: {
-                    panel: function () {
+                    team: function () {
                         return null
                     }
                 }
             });
             modalInstance.result.then(
                 function (team) {
-                    console.log(team);
+                    vm.teams.push(team);
                 }
             );
         }
