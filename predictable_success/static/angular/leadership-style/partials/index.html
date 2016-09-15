@@ -42,7 +42,7 @@
         </div>
 
     </div>
-    <div class="panel fade-in" ng-repeat="team in index.teams">
+    <div class="panel fade-in" ng-repeat="team in index.teamsIOwn">
         <h3 class="modal-title panel-title" ng-if="team.name">{{ team.name }}</h3>
         <h3 class="modal-title panel-title" ng-if="!team.name">Your Team <span class="fa fa-pencil"></span></h3>
         <div ng-repeat="team_member in team.team_members">

@@ -4,7 +4,12 @@ angular
 
 function LeadershipStyleTeamResource($resource) {
     var actions = {
-        'getMyTeams': {
+        'getTeamsIBelongTo': {
+            method: 'GET',
+            isArray: true
+        },
+        'getTeamsIOwn': {
+            url: '/api/v1/leadership-style/teams/owned',
             method: 'GET',
             isArray: true
         },
@@ -13,5 +18,5 @@ function LeadershipStyleTeamResource($resource) {
             isArray: false
         },
     };
-    return $resource('/api/v1/leadership-style/teams/', null, actions);
+    return $resource('/api/v1/leadership-style/teams/:id', null, actions);
 }

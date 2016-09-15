@@ -172,12 +172,20 @@ class RetrieveTeamLeadershipStyle(RetrieveAPIView):
         return team.team_members.all()
 
 
-class RetrieveMyTeamLeadershipStyles(ListAPIView):
+class RetrieveTeamLeadershipStylesIBelongTo(ListAPIView):
     serializer_class = TeamLeadershipStyleSerializer
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        return TeamLeadershipStyle.objects.get_teams_by_employee(employee=self.request.user.employee)
+        return TeamLeadershipStyle.objects.get_teams_by_team_member(employee=self.request.user.employee)
+
+
+class RetrieveTeamsLeadershipStylesIOwn(ListAPIView):
+    serializer_class = TeamLeadershipStyleSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        return TeamLeadershipStyle.objects.get_teams_by_owner(employee=self.request.user.employee)
 
 
 class RecentRequestsIveSentList(ListAPIView):

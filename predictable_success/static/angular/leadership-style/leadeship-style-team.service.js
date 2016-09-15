@@ -4,20 +4,34 @@ angular
 
 function LeadershipStyleTeamService($log, LeadershipStyleTeamResource) {
     return {
-        getMyTeams: getMyTeams,
+        getTeamsIOwn: getTeamsIOwn,
+        getTeamsIBelongTo: getTeamsIBelongTo,
         getTeam: getTeam,
     };
 
-    function getMyTeams() {
+    function getTeamsIBelongTo() {
 
-        return LeadershipStyleTeamResource.getMyTeams(null, success, fail).$promise;
+        return LeadershipStyleTeamResource.getTeamsIBelongTo(null, success, fail).$promise;
 
         function success(teams) {
             return teams;
         }
 
         function fail(response) {
-            $log.error('getMyTeams failed');
+            $log.error('getTeamsIBelongTo failed');
+        }
+    }
+
+    function getTeamsIOwn() {
+
+        return LeadershipStyleTeamResource.getTeamsIOwn(null, success, fail).$promise;
+
+        function success(teams) {
+            return teams;
+        }
+
+        function fail(response) {
+            $log.error('getTeamsIOwn failed');
         }
     }
 

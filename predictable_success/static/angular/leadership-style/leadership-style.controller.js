@@ -13,10 +13,9 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     vm.myLeadershipStyle = null;
     vm.showTakeQuizNotification = false;
     vm.scores = [];
-    vm.teams = [];
+    vm.teamsIOwn = [];
     vm.invite = invite;
     vm.takeQuiz = takeQuiz;
-    vm.getMyTeams = getMyTeams;
     vm.requestLeadershipStyle = requestLeadershipStyle;
     $rootScope.successRequestMessage = false;
     $rootScope.hideMessage = false;
@@ -28,15 +27,14 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
             respondToRequest();
         } else {
             getMyLeadershipStyle();
-            getMyTeams();
+            getTeamsIOwn();
         }
     };
 
-    function getMyTeams() {
-        LeadershipStyleTeamService.getMyTeams()
+    function getTeamsIOwn() {
+        LeadershipStyleTeamService.getTeamsIOwn()
             .then(function(teams){
-                vm.teams = teams;
-                console.log(vm.teams);
+                vm.teamsIOwn = teams;
                 vm.busy = false;
             }, function(){
                 vm.busy = false;
@@ -151,7 +149,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
             });
             modalInstance.result.then(
                 function (team) {
-                    vm.teams.push(team);
+                    vm.teamsIOwn.push(team);
                 }
             );
         }
