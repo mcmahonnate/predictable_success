@@ -251,61 +251,61 @@ class GetQuiz(APIView):
     permission_classes = (AllowAny,)
 
     def get(self, request, pk, format=None):
-        #try:
-        if ":" in pk:
-            signer = Signer()
-            quiz_id = signer.unsign(pk)
-            quiz = QuizUrl.objects.get(id=quiz_id)
-        else:
-            # Assume pk is an email address
-            quiz = QuizUrl.objects.filter(email=pk).last()
-
-        if not quiz.active:
-            employee_leadership_style = quiz.employee_leadership_style.get()
-            if not employee_leadership_style.completed:
-                return redirect(request.tenant.build_url('/#/?takeQuiz=true'))
-            else:
-                return redirect(request.tenant.build_url('/#/'))
-
-        #create User
         try:
-            user = User.objects.get(email=quiz.email)
-            if not user.is_active:
+            if ":" in pk:
+                signer = Signer()
+                quiz_id = signer.unsign(pk)
+                quiz = QuizUrl.objects.get(id=quiz_id)
+            else:
+                # Assume pk is an email address
+                quiz = QuizUrl.objects.filter(email=pk).last()
+
+            if not quiz.active:
+                employee_leadership_style = quiz.employee_leadership_style.get()
+                if not employee_leadership_style.completed:
+                    return redirect(request.tenant.build_url('/#/?takeQuiz=true'))
+                else:
+                    return redirect(request.tenant.build_url('/#/'))
+
+            #create User
+            try:
+                user = User.objects.get(email=quiz.email)
+                if not user.is_active:
+                    password = User.objects.make_random_password()
+                    user.set_password(password)
+                    user.is_active = True
+                    user.save()
+            except User.DoesNotExist:
                 password = User.objects.make_random_password()
-                user.set_password(password)
+                user = User.objects.create_user(username=quiz.email, email=quiz.email, password=password)
                 user.is_active = True
                 user.save()
-        except User.DoesNotExist:
-            password = User.objects.make_random_password()
-            user = User.objects.create_user(username=quiz.email, email=quiz.email, password=password)
-            user.is_active = True
-            user.save()
 
-        #authenticate & login
-        user = authenticate(username=quiz.email, password=password)
-        login(request=request, user=user)
+            #authenticate & login
+            user = authenticate(username=quiz.email, password=password)
+            login(request=request, user=user)
 
-        #create Employee
-        try:
-            employee = user.employee
-        except Employee.DoesNotExist:
-            employee = Employee(full_name=quiz.email, email=quiz.email)
-            employee.user = user
-            employee.save()
+            #create Employee
+            try:
+                employee = user.employee
+            except Employee.DoesNotExist:
+                employee = Employee(full_name=quiz.email, email=quiz.email)
+                employee.user = user
+                employee.save()
 
-        #create LeadershipStyle
-        try:
-            leadership_style = EmployeeLeadershipStyle.objects.filter(employee=employee, assessor=employee).latest('date')
-        except EmployeeLeadershipStyle.DoesNotExist:
-            leadership_style = EmployeeLeadershipStyle(employee=employee, assessor=employee, assessment_type=0)
-            leadership_style.quiz_url = quiz
-            leadership_style.save()
+            #create LeadershipStyle
+            try:
+                leadership_style = EmployeeLeadershipStyle.objects.filter(employee=employee, assessor=employee).latest('date')
+            except EmployeeLeadershipStyle.DoesNotExist:
+                leadership_style = EmployeeLeadershipStyle(employee=employee, assessor=employee, assessment_type=0)
+                leadership_style.quiz_url = quiz
+                leadership_style.save()
 
-        #deactivate quiz url
-        quiz.active = False
-        quiz.save()
+            #deactivate quiz url
+            quiz.active = False
+            quiz.save()
 
-        return redirect(request.tenant.build_url('/#/?takeQuiz=true'))
+            return redirect(request.tenant.build_url('/#/?takeQuiz=true'))
 
-        #except:
-        #    return redirect(request.tenant.build_url('/take-the-quiz'))
+        except:
+            return redirect(request.tenant.build_url('/take-the-quiz'))
