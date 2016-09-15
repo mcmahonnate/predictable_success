@@ -73,13 +73,28 @@ class LeadershipStyleDescriptionSerializer(serializers.ModelSerializer):
         fields = ('id', 'style', 'style_verbose', 'description')
 
 
-class EmployeeLeadershipStyleSerializer(serializers.ModelSerializer):
+class EmployeeLeadershipStyleBaseSerializer(serializers.ModelSerializer):
+    scores = ScoreSerializer(many=True)
+    tease = serializers.SerializerMethodField()
+
+    def get_tease(self, obj):
+        if not obj.completed:
+            return None
+        dominant = obj.scores.order_by('-score').first()
+        description = LeadershipStyleDescription.objects.get(style=dominant.style)
+        serializer = LeadershipStyleDescriptionSerializer(context=self.context)
+        return serializer.to_representation(description)
+
+    class Meta:
+        model = EmployeeLeadershipStyle
+        fields = ('id', 'date', 'completed', 'scores', 'tease')
+
+
+class EmployeeLeadershipStyleSerializer(EmployeeLeadershipStyleBaseSerializer):
     employee = SanitizedEmployeeSerializer()
     assessor = SanitizedEmployeeSerializer()
     next_question = serializers.SerializerMethodField()
     answers = serializers.SerializerMethodField()
-    scores = ScoreSerializer(many=True)
-    tease = serializers.SerializerMethodField()
 
     def get_next_question(self, obj):
         next_question = obj.next_question()
@@ -98,34 +113,10 @@ class EmployeeLeadershipStyleSerializer(serializers.ModelSerializer):
         else:
             return [answer.id for answer in obj.answers.all()]
 
-    def get_tease(self, obj):
-        if not obj.completed:
-            return None
-        dominant = obj.scores.order_by('-score').first()
-        description = LeadershipStyleDescription.objects.get(style=dominant.style)
-        serializer = LeadershipStyleDescriptionSerializer(context=self.context)
-        return serializer.to_representation(description)
-
     class Meta:
         model = EmployeeLeadershipStyle
         fields = ('id', 'assessment_type', 'active', 'employee', 'assessor', 'next_question', 'notes', 'answers', 'date',
                   'total_questions', 'total_answered', 'completed', 'times_retaken', 'is_draft', 'scores', 'tease')
-
-
-class MinimalEmployeeLeadershipStyleSerializer(serializers.ModelSerializer):
-    assessor = SanitizedEmployeeSerializer()
-    employee = SanitizedEmployeeSerializer()
-
-    class Meta:
-        model = EmployeeLeadershipStyle
-        fields = ('id', 'employee', 'assessor', 'notes', 'date', 'active', 'is_draft', 'completed')
-
-
-class EmployeeLeadershipStyleForActivityFeedSerializer(MinimalEmployeeLeadershipStyleSerializer):
-
-    class Meta:
-        model = EmployeeLeadershipStyle
-        fields = ('id', 'employee', 'assessor', 'date', 'active', 'is_draft', 'completed')
 
 
 class UpdateEmployeeLeadershipStyleSerializer(serializers.ModelSerializer):
@@ -170,10 +161,19 @@ class CreateRequestSerializer(serializers.ModelSerializer):
         fields = ['reviewer', 'reviewer_email', 'message']
 
 
+class TeamMemberSerializer(serializers.ModelSerializer):
+    leadership_style = EmployeeLeadershipStyleBaseSerializer()
+
+    class Meta:
+        model = Employee
+        fields = ['id', 'full_name', 'first_name', 'last_name', 'email', 'leadership_style']
+
+
 class TeamLeadershipStyleSerializer(serializers.ModelSerializer):
     owner = SanitizedEmployeeSerializer()
-    team_members = SanitizedEmployeeSerializer(many=True)
+    team_members = TeamMemberSerializer(many=True)
 
     class Meta:
         model = TeamLeadershipStyle
-        fields = ['owner', 'team_members']
+        fields = ['id', 'owner', 'team_members']
+

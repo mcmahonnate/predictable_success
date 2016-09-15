@@ -1,6 +1,21 @@
 from rest_framework import permissions
 
 
+class UserIsTeamMember(permissions.BasePermission):
+    """ Ensures that the current user is a team member of
+    the TeamLeadershipStyle.
+
+    Any view that uses this permission needs to implement
+    the get_team_members() method that should return a list
+    of Employees.
+    """
+    def has_permission(self, request, view):
+        if request.user.has_perm('org.view_employees'):
+            return True
+        team_members = view.get_team_members()
+        return request.user.employee in team_members
+
+
 class UserIsAssessor(permissions.BasePermission):
     """ Ensures that the current user is the assessor
     of the EmployeeZone.

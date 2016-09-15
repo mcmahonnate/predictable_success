@@ -7,7 +7,7 @@ from rest_framework.generics import *
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .permissions import UserIsAssessorOrHasAllAccess
+from .permissions import UserIsAssessorOrHasAllAccess, UserIsTeamMember
 from .serializers import *
 
 
@@ -160,6 +160,16 @@ class InviteTeam(APIView):
         serializer = TeamLeadershipStyleSerializer(instance=team, context={'request': request})
 
         return Response(serializer.data)
+
+
+class TeamLeadershipStyle(RetrieveAPIView):
+    permission_classes = (IsAuthenticated, UserIsTeamMember)
+    serializer_class = TeamLeadershipStyleSerializer
+    queryset = TeamLeadershipStyle.objects.all()
+
+    def get_team_members(self):
+        team = self.get_object()
+        return team.team_members.all()
 
 
 class RecentRequestsIveSentList(ListAPIView):
