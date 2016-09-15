@@ -275,15 +275,13 @@ class GetQuiz(APIView):
                     user.set_password(password)
                     user.is_active = True
                     user.save()
+                    user = _authenticate_and_login(username=quiz.email, password=password, request=request)
             except User.DoesNotExist:
                 password = User.objects.make_random_password()
                 user = User.objects.create_user(username=quiz.email, email=quiz.email, password=password)
                 user.is_active = True
                 user.save()
-
-            #authenticate & login
-            user = authenticate(username=quiz.email, password=password)
-            login(request=request, user=user)
+                user = _authenticate_and_login(username=quiz.email, password=password, request=request)
 
             #create Employee
             try:
@@ -309,3 +307,10 @@ class GetQuiz(APIView):
 
         except:
             return redirect(request.tenant.build_url('/take-the-quiz'))
+
+
+def _authenticate_and_login(username, password, request):
+        #authenticate & login
+        user = authenticate(username=username, password=password)
+        login(request=request, user=user)
+        return user
