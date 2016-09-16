@@ -46,6 +46,9 @@ class PaymentView(TemplateView):
 
             order.pay(customer=customer)
 
+            # TODO: save customer to new team model
+            print(customer.id)
+
             return redirect(self.success_url)
         except stripe.CardError, e:
             print('Card has been declined: %s' % e)
