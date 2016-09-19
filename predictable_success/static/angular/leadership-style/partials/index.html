@@ -35,9 +35,9 @@
                 <h3 class="leadership-style-title">Here's how you scored</h3>
                 <p ng-repeat="score in index.myLeadershipStyle.scores | orderBy:'-score'"><strong>{{ score.style_verbose }}</strong> - {{ score.score }} out of 960</p>
             </div>
-            <div ng-if="index.teams.length==0">
+            <div ng-if="index.teamsIOwn.length==0">
                 <p class="leadership-style-description">This is just a peek ...</p>
-                <button ng-click="index.invite()" class="btn btn-success btn-block call-to-action" style="margin-bottom: 15px;" type="submit">Invite your Team to take the Quiz</button>
+                <a href="/account/payment" class="btn btn-success btn-block call-to-action" style="margin-bottom: 15px;" type="submit">Invite your Team to take the Quiz</a>
             </div>
         </div>
 
@@ -53,6 +53,6 @@
                 <span>{{ team_member.leadership_style.tease.style_verbose }} </span>
             </div>
         </div>
-        <button ng-click="index.invite()" class="btn btn-success btn-block call-to-action" style="margin-bottom: 15px;" type="submit">Invite More Team Members</button>
+        <button ng-click="index.invite(team.id)" class="btn btn-success btn-block call-to-action" style="margin-bottom: 15px;" type="submit">Invite More Team Members</button>
     </div>
 </div>

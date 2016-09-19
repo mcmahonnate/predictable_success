@@ -35,6 +35,13 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         LeadershipStyleTeamService.getTeamsIOwn()
             .then(function(teams){
                 vm.teamsIOwn = teams;
+                if ($routeParams.team_id && $routeParams.addMembers=='true') {
+                    angular.forEach(vm.teamsIOwn, function (value) {
+                        if (value.id == $routeParams.team_id && value.team_members.length <= 1) {
+                            invite($routeParams.team_id);
+                        }
+                    });
+                }
                 vm.busy = false;
             }, function(){
                 vm.busy = false;
@@ -69,9 +76,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         LeadershipStyleService.getMyLeadershipStyle()
             .then(function(leadershipStyle){
                 vm.myLeadershipStyle = leadershipStyle;
-                if ($routeParams.takeQuiz && $routeParams.takeQuiz=='true') {
-                    takeQuiz(leadershipStyle);
-                } else if (!leadershipStyle.completed) {
+                if (!leadershipStyle.completed) {
                     takeQuiz(leadershipStyle);
                 }
                 vm.busy = false;
@@ -134,7 +139,8 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
             );
         }
 
-        function invite() {
+        function invite(team_id) {
+            console.log(team_id);
             var modalInstance = $modal.open({
                 animation: true,
                 windowClass: 'xx-dialog fade zoom',
@@ -142,14 +148,23 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                 templateUrl: '/static/angular/leadership-style/partials/_modals/invite.html',
                 controller: 'InviteController as invite',
                 resolve: {
-                    team: function () {
-                        return null
+                    team_id: function () {
+                        return team_id
                     }
                 }
             });
             modalInstance.result.then(
                 function (team) {
-                    vm.teamsIOwn.push(team);
+                    var addNew = true;
+                    angular.forEach(vm.teamsIOwn, function(value) {
+                        if (value.id == value.id) {
+                            addNew = false;
+                            value.team_members = team.team_members;
+                        }
+                    });
+                    if (addNew) {
+                        vm.teamsIOwn.push(team);
+                    }
                 }
             );
         }

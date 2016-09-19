@@ -1,9 +1,11 @@
 import stripe
 
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.shortcuts import redirect, render_to_response
 from django.template import RequestContext
 from django.views.generic import TemplateView
+from leadership_styles.models import TeamLeadershipStyle
 
 
 class PaymentView(TemplateView):
@@ -46,10 +48,9 @@ class PaymentView(TemplateView):
 
             order.pay(customer=customer)
 
-            # TODO: save customer to new team model
-            print(customer.id)
+            team = TeamLeadershipStyle.objects.create_team(request.user.employee, customer_id=customer.id)
 
-            return redirect(self.success_url)
+            return redirect("%s#/?team_id=%s&addMembers=true" % (reverse(self.success_url), team.id))
         except stripe.CardError, e:
             print('Card has been declined: %s' % e)
             pass

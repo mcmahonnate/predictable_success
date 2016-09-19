@@ -7,10 +7,10 @@ function LeadershipStyleInviteService($log, LeadershipStyleInviteResource) {
         sendInvites: sendInvites,
     };
 
-    function sendInvites(emails)  {
+    function sendInvites(team_id, emails)  {
         var invites = {emails: emails};
 
-        return LeadershipStyleInviteResource.sendInvites(invites, success, fail).$promise;
+        return LeadershipStyleInviteResource.sendInvites({id:team_id}, invites, success, fail).$promise;
 
         function success(sentInvites) {
             return sentInvites;

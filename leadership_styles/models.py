@@ -364,10 +364,15 @@ class EmployeeLeadershipStyle(models.Model):
 class TeamLeadershipStyleManager(models.Manager):
 
     @staticmethod
-    def create_team(owner, emails):
-        team = TeamLeadershipStyle(owner=owner)
+    def create_team(owner, customer_id):
+        team = TeamLeadershipStyle(owner=owner, customer_id=customer_id)
         team.save()
         team.team_members.add(owner)
+        team.save()
+        return team
+
+    @staticmethod
+    def add_team_members(team, emails):
         for email in emails:
             user = Employee.objects.get_or_create_user(email=email)
             employee = Employee.objects.get_or_create_employee(user=user)
@@ -389,6 +394,7 @@ class TeamLeadershipStyleManager(models.Manager):
 
 class TeamLeadershipStyle(models.Model):
     objects = TeamLeadershipStyleManager()
+    customer_id = models.CharField(max_length=255)
     name = models.CharField(max_length=255, null=True, blank=True)
     owner = models.ForeignKey(Employee, related_name='+')
     team_members = models.ManyToManyField(Employee, related_name='team_leadership_styles', null=True, blank=True)

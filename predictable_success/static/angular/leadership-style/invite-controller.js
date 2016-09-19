@@ -2,7 +2,7 @@
         .module('leadership-style')
         .controller('InviteController', InviteController);
 
-    function InviteController(LeadershipStyleInviteService, $timeout, $modalInstance, $rootScope) {
+    function InviteController(LeadershipStyleInviteService, team_id, $timeout, $modalInstance, $rootScope) {
         var vm = this;
         vm.subject = $rootScope.currentUser.employee;
         vm.message = '';
@@ -33,7 +33,7 @@
                     invites.push(invite.email);
                 }
             })
-            LeadershipStyleInviteService.sendInvites(invites)
+            LeadershipStyleInviteService.sendInvites(team_id, invites)
                 .then(function(invites) {
 
                     /* Big success message */
