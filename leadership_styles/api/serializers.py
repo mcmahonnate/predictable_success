@@ -83,8 +83,6 @@ class EmployeeLeadershipStyleBaseSerializer(serializers.ModelSerializer):
     def get_percentage_complete(self, obj):
         question_count = Question.objects.filter(active=True, assessment_type=SELF).count()
         answer_count = obj.answers.all().count()
-        print answer_count
-        print question_count
         if answer_count == 0:
             return 0
         else:
