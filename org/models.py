@@ -1,5 +1,6 @@
 from blah.models import Comment
 from customers.models import Customer
+from django.conf import settings
 from django.contrib.auth.models import User, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
@@ -7,13 +8,34 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.validators import validate_email
 from django.db import connection, models
 from django.db.models import Count, F, Q
+from django.utils.http import urlencode
 from django.utils.translation import ugettext as _
+from hashlib import md5
 from model_utils import Choices, FieldTracker
 from mptt.models import MPTTModel, TreeForeignKey, TreeManager
 from StringIO import StringIO
 from PIL import Image, ExifTags
-import datetime
 import blah
+import datetime
+import requests
+
+
+def get_gravatar_display_name(email):
+    try:
+        email_hash = md5(email.strip().lower()).hexdigest()
+        response = requests.get(settings.GRAVATAR_PROFILE + email_hash + '.json')
+        if response.status_code == 200:
+            gravatar_profile = response.json()
+            return gravatar_profile['entry'][0]['displayName']
+    except:
+        pass
+    return None
+
+
+def get_gravatar_image(email, default):
+    email_hash = md5(email.strip().lower()).hexdigest()
+    url = "%s%s?%s" % (settings.GRAVATAR_IMAGE, email_hash, urlencode({'d':default}))
+    return url
 
 
 class Relationship(models.Model):
@@ -120,6 +142,10 @@ class EmployeeManager(TreeManager):
         try:
             employee = user.employee
         except Employee.DoesNotExist:
+            # See if a Gravatar profile exists
+            #full_name = get_gravatar_display_name(user.email)
+            #if full_name is None:
+            #    full_name = user.email
             employee = Employee(full_name=user.email, email=user.email)
             employee.user = user
             employee.save()

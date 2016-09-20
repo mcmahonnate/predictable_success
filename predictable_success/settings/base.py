@@ -19,6 +19,10 @@ DATABASE_ROUTERS = (
     'tenant_schemas.routers.TenantSyncRouter',
 )
 
+#Gravatar API
+GRAVATAR_PROFILE = 'https://www.gravatar.com/'
+GRAVATAR_IMAGE = 'https://www.gravatar.com/avatar/'
+
 # Celery settings
 CELERY_ALWAYS_EAGER = False
 CELERY_TIMEZONE = 'America/New_York'

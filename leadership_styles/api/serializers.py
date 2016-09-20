@@ -1,6 +1,7 @@
 from blah.api.serializers import CommentSerializer
 from rest_framework import serializers
 from org.api.serializers import SanitizedEmployeeSerializer
+from org.models import get_gravatar_image
 from ..models import *
 
 
@@ -74,8 +75,21 @@ class LeadershipStyleDescriptionSerializer(serializers.ModelSerializer):
 
 
 class EmployeeLeadershipStyleBaseSerializer(serializers.ModelSerializer):
+    percentage_complete = serializers.SerializerMethodField()
     scores = ScoreSerializer(many=True)
     tease = serializers.SerializerMethodField()
+
+    def get_percentage_complete(self, obj):
+        question_count = Question.objects.filter(active=True, assessment_type=SELF).count()
+        answer_count = obj.answers.all().count()
+        print answer_count
+        print question_count
+        if answer_count == 0:
+            return 0
+        else:
+            p = (float(answer_count)/float(question_count)) * 100
+            p = round(p)
+            return int(p)
 
     def get_tease(self, obj):
         if not obj.completed:
@@ -87,7 +101,7 @@ class EmployeeLeadershipStyleBaseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmployeeLeadershipStyle
-        fields = ('id', 'date', 'completed', 'scores', 'tease')
+        fields = ('id', 'date', 'percentage_complete', 'completed', 'scores', 'tease')
 
 
 class EmployeeLeadershipStyleSerializer(EmployeeLeadershipStyleBaseSerializer):
@@ -162,11 +176,20 @@ class CreateRequestSerializer(serializers.ModelSerializer):
 
 
 class TeamMemberSerializer(serializers.ModelSerializer):
+    avatar = serializers.SerializerMethodField()
     leadership_style = EmployeeLeadershipStyleBaseSerializer()
+
+    def get_avatar(self, obj):
+        avatar_field = Employee._meta.get_field('avatar')
+        if avatar_field.default == obj.avatar:
+            tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
+            default_url = tenant.build_url(avatar_field.default)
+            gravatar = get_gravatar_image(email=obj.email, default=default_url)
+            return gravatar
 
     class Meta:
         model = Employee
-        fields = ['id', 'full_name', 'first_name', 'last_name', 'email', 'leadership_style']
+        fields = ['id', 'full_name', 'first_name', 'last_name', 'email', 'avatar', 'leadership_style']
 
 
 class TeamLeadershipStyleSerializer(serializers.ModelSerializer):
