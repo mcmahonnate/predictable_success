@@ -1,7 +1,8 @@
 from blah.api.serializers import CommentSerializer
-from rest_framework import serializers
+from django.conf import settings
 from org.api.serializers import SanitizedEmployeeSerializer
 from org.models import get_gravatar_image
+from rest_framework import serializers
 from ..models import *
 
 
@@ -182,9 +183,7 @@ class TeamMemberSerializer(serializers.ModelSerializer):
     def get_avatar(self, obj):
         avatar_field = Employee._meta.get_field('avatar')
         if avatar_field.default == obj.avatar:
-            tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
-            default_url = tenant.build_url(avatar_field.default)
-            gravatar = get_gravatar_image(email=obj.email, default=default_url)
+            gravatar = get_gravatar_image(email=obj.email)
             return gravatar
 
     class Meta:

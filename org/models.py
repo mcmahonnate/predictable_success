@@ -32,9 +32,9 @@ def get_gravatar_display_name(email):
     return None
 
 
-def get_gravatar_image(email, default):
+def get_gravatar_image(email):
     email_hash = md5(email.strip().lower()).hexdigest()
-    url = "%s%s?%s" % (settings.GRAVATAR_IMAGE, email_hash, urlencode({'d':default}))
+    url = "%s%s?d=mm" % (settings.GRAVATAR_IMAGE, email_hash)
     return url
 
 
