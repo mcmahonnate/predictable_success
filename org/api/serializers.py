@@ -27,7 +27,14 @@ class BaseEmployeeSerializer(serializers.HyperlinkedModelSerializer):
 class SanitizedEmployeeSerializer(BaseEmployeeSerializer):
     ''' Contains only information about an employee that can be displayed to any user.
     '''
+    avatar = serializers.SerializerMethodField()
     team = serializers.SerializerMethodField()
+
+    def get_avatar(self, obj):
+        avatar_field = Employee._meta.get_field('avatar')
+        if avatar_field.default == obj.avatar:
+            gravatar = get_gravatar_image(email=obj.email)
+            return gravatar
 
     def get_team(self, object):
         if object.team is None:

@@ -44,19 +44,27 @@
     </div>
     <div ng-repeat="team in index.teamsIOwn | orderBy:'customer_id'">
         <h2 ng-if="team.name" style="color: #aaa;">{{ team.name }}
-            <button ng-click="index.invite(team.id)" class="btn btn-success pull-right" style="margin-bottom: 15px;" type="submit">Invite More Team Members</button>
+            <button ng-click="index.invite(team.id)" class="btn btn-success pull-right" style="margin-top: -10px;" type="submit">Invite More Team Members</button>
         </h2>
         <h2 ng-if="!team.name" style="color: #aaa;margin-bottom:25px">Give Your Team a Name
             <span class="fa fa-pencil"></span>
-            <button ng-click="index.invite(team.id)" class="btn btn-success pull-right" style="margin-bottom: 15px;" type="submit">Invite More Team Members</button>
+            <button ng-click="index.invite(team.id)" class="btn btn-success pull-right" style="margin-top: -10px;" type="submit">Invite More Team Members</button>
         </h2>
 
         <div class="panel fade-in" ng-if="$first && index.myLeadershipStyle.scores.length" >
-            <h3 class="modal-title">You
-                <i class="fa fa-chevron-down pull-right collapse-toggle" ng-show="!collapse" ng-click="collapse=!collapse"></i>
-                <i class="fa fa-chevron-right pull-right collapse-toggle" ng-show="collapse" ng-click="collapse=!collapse"></i>
-            </h3>
-            <div collapse="collapse">
+            <div style="min-height: 55px;">
+                <div class="avatar-container col-xs-1" style="margin-right: 25px">
+                    <employee-avatar size="large" employee="index.myLeadershipStyle.employee"></employee-avatar>
+                </div>
+                <h3 class="modal-title">You
+                    <i class="fa fa-chevron-down pull-right collapse-toggle" ng-show="!collapse" ng-click="collapse=!collapse"></i>
+                    <i class="fa fa-chevron-right pull-right collapse-toggle" ng-show="collapse" ng-click="collapse=!collapse"></i>
+                </h3>
+                <h3 class="modal-title sub-title {{index.myLeadershipStyle.tease.style_verbose}}">
+                {{ index.myLeadershipStyle.tease.style_verbose }}
+                </h3>
+            </div>
+            <div collapse="collapse" style="padding-top: 8px;">
                 <div ng-bind-html="index.myLeadershipStyle.tease.description"></div>
                 <div class="leadership-style-scores">
                     <div class="well">
@@ -92,7 +100,7 @@
                     </h3>
                 </div>
             </div>
-            <div collapse="team_member.collapse" ng-if="team_member.leadership_style && team_member.leadership_style.completed">
+            <div collapse="team_member.collapse" ng-if="team_member.leadership_style && team_member.leadership_style.completed" style="padding-top: 8px;">
                 <div ng-bind-html="team_member.leadership_style.tease.description"></div>
                 <div class="leadership-style-scores">
                     <div class="well">
