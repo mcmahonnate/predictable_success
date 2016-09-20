@@ -3,9 +3,9 @@
     <div ng-class="{'slide-up-active': hideRequestMessage}" class="alert alert-success slide-up" role="alert" ng-show="successRequestMessage">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <i class="fa fa-paper-plane sent-icon"></i>
-        <h2 class="alert-title">Request<span ng-show="successRequestMessageRecipient.length>1">s</span> Sent!</h2>
+        <h2 class="alert-title">Invitation<span ng-show="successRequestMessageRecipient.length>1">s</span> Sent!</h2>
         <p class="alert-message">
-            Your request has been sent to
+            Invitations have been sent to
             <span ng-repeat="employee in successRequestMessageRecipient">{{ employee.full_name }}{{$last ? '' : ($index==successRequestMessageRecipient.length-2) ? ' and ' : ', '}}</span>.
         </p>
     </div>
@@ -26,7 +26,7 @@
         </div>
     </div>
 
-    <div class="panel fade-in" ng-show="index.myLeadershipStyle.scores.length > 0">
+    <div class="panel fade-in" ng-if="index.myLeadershipStyle.scores.length > 0 && index.teamsIOwn==0" >
         <h3 class="modal-title panel-title">Your Results</h3>
 
         <div ng-bind-html="index.myLeadershipStyle.tease.description"></div>
@@ -36,23 +36,47 @@
                 <p ng-repeat="score in index.myLeadershipStyle.scores | orderBy:'-score'"><strong>{{ score.style_verbose }}</strong> - {{ score.score }} out of 960</p>
             </div>
             <div ng-if="index.teamsIOwn.length==0">
-                <p class="leadership-style-description">This is just a peek ...</p>
-                <a href="/account/payment" class="btn btn-success btn-block call-to-action" style="margin-bottom: 15px;" type="submit">Invite your Team to take the Quiz</a>
+                <p class="leadership-style-description">[INSERT COPY HERE]</p>
+                <a href="/account/payment" class="btn btn-success btn-block call-to-action" style="margin-bottom: 15px;" type="submit">Invite up to 8 Team members for just $$$</a>
             </div>
         </div>
 
     </div>
-    <div class="panel fade-in" ng-repeat="team in index.teamsIOwn">
-        <h3 class="modal-title panel-title" ng-if="team.name">{{ team.name }}</h3>
-        <h3 class="modal-title panel-title" ng-if="!team.name">Your Team <span class="fa fa-pencil"></span></h3>
-        <div ng-repeat="team_member in team.team_members">
-            <strong>{{ team_member.full_name }}</strong>
-            <progressbar ng-if="team_member.leadership_style && !team_member.leadership_style.completed" class="progress-striped active" value="team_member.leadership_style.answers.length" max="33"> <i ng-show="showWarning">!!! Watch out !!!</i></progressbar>
-            <progressbar ng-if="!team_member.leadership_style" class="progress-striped active" value="0" max="33"></progressbar>
-            <div ng-if="team_member.leadership_style.completed" style="padding-bottom: 15px">
-                <span>{{ team_member.leadership_style.tease.style_verbose }} </span>
+    <div ng-repeat="team in index.teamsIOwn | orderBy:'customer_id'">
+        <h2 ng-if="team.name" style="color: #aaa;">{{ team.name }}
+            <button ng-click="index.invite(team.id)" class="btn btn-success pull-right" style="margin-bottom: 15px;" type="submit">Invite More Team Members</button>
+        </h2>
+        <h2 ng-if="!team.name" style="color: #aaa;margin-bottom:25px">Give Your Team a Name
+            <span class="fa fa-pencil"></span>
+            <button ng-click="index.invite(team.id)" class="btn btn-success pull-right" style="margin-bottom: 15px;" type="submit">Invite More Team Members</button>
+        </h2>
+
+        <div class="panel fade-in" ng-if="$first && index.myLeadershipStyle.scores.length" >
+            <h3 class="modal-title panel-title">You
+                <i class="fa fa-chevron-down pull-right collapse-toggle" ng-show="!collapse" ng-click="collapse=!collapse"></i>
+                <i class="fa fa-chevron-right pull-right collapse-toggle" ng-show="collapse" ng-click="collapse=!collapse"></i>
+            </h3>
+            <div collapse="collapse">
+                <div ng-bind-html="index.myLeadershipStyle.tease.description"></div>
+                <div class="leadership-style-scores">
+                    <div class="well">
+                        <h3 class="leadership-style-title">Scores</h3>
+                        <p ng-repeat="score in index.myLeadershipStyle.scores | orderBy:'-score'"><strong>{{ score.style_verbose }}</strong> - {{ score.score }} out of 960</p>
+                    </div>
+                </div>
             </div>
         </div>
-        <button ng-click="index.invite(team.id)" class="btn btn-success btn-block call-to-action" style="margin-bottom: 15px;" type="submit">Invite More Team Members</button>
+        <div class="panel fade-in" ng-repeat="team_member in team.team_members  | orderBy:'full_name'" ng-if="team_member.leadership_style.id != index.myLeadershipStyle.id">
+            <h3 class="modal-title panel-title">{{ team_member.full_name }}</h3>
+            <div ng-if="team_member.leadership_style && team_member.leadership_style.complete">
+                <div ng-bind-html="team_member.leadership_style.tease.description"></div>
+                <div class="leadership-style-scores">
+                    <div class="well">
+                        <h3 class="leadership-style-title">Scores</h3>
+                        <p ng-repeat="score in team_member.leadership_style.scores | orderBy:'-score'"><strong>{{ score.style_verbose }}</strong> - {{ score.score }} out of 960</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
