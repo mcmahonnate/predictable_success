@@ -50,9 +50,9 @@ You have <em>your</em> score. Now, invite up to eight team members to take this 
     <div ng-repeat="team in index.teamsIOwn | orderBy:'customer_id'">
 
         <div class="panel fade-in">
-            <h3 class="modal-title">Get Your Hand Crafted Report</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ac lectus pellentesque, mattis enim sit amet, facilisis felis. Nunc sed mi sapien. Proin in mauris at elit fringilla condimentum nec id tellus. Nullam at leo ut risus faucibus luctus non et turpis. Nam eleifend ipsum sed lacinia mollis. Nam augue ex, interdum hendrerit ante eget, porttitor hendrerit libero. Maecenas nec erat odio. Vivamus tincidunt suscipit leo, fringilla sollicitudin odio tincidunt vitae. Suspendisse at ligula ut diam pellentesque imperdiet vel sed lectus. Praesent et ante quis erat luctus sollicitudin tincidunt sed arcu. Donec ac felis non nulla aliquam dapibus sed a risus.</p>
-                <button ng-click="index.invite(team.id)" class="btn btn-success" style="margin-top: 10px;" type="submit">Get Your Report!</button>
+            <h3 class="modal-title">Get Your Report</h3>
+            <p>Your invitations have been sent and you can see the progress below.  When the members of your team have completed the quiz, or you are ready to send your team’s data along for your one-time, customized report, click the button below.</p>
+                <button ng-click="index.invite(team.id)" class="btn btn-success" style="margin-top: 10px;width:100%" type="submit">Get My Report</button>
         </div>
         <div class="invite-360" style="height: 25px;">
             <h4 ng-if="index.teamsIOwn.length > 0" class="header"><a href="" class="pull-right" ng-click="index.invite(team.id)">+ Invite more team members</a></h4>
