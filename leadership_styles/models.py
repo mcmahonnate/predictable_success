@@ -103,6 +103,7 @@ class Score(models.Model):
 class QuizUrl(models.Model):
     email = models.CharField(max_length=255)
     url = models.CharField(max_length=255, null=True, blank=True)
+    invited_by = models.ForeignKey(Employee, related_name='+', null=True, blank=True)
     active = models.BooleanField(default=True)
     completed = models.BooleanField(default=False)
     sent_date = models.DateField(auto_now_add=True)
@@ -114,11 +115,12 @@ class QuizUrl(models.Model):
         return "%s was sent a self asessment on %s" % (self.email, self.sent_date)
 
 
-def generate_quiz_link(email):
+def generate_quiz_link(email, invited_by=None):
     customer = Customer.objects.filter(schema_name=connection.schema_name).first()
     quiz = QuizUrl()
-    quiz.email = email
     quiz.active = True
+    quiz.email = email
+    quiz.invited_by = invited_by
     quiz.save()
     signer = Signer()
     signed_id = signer.sign(quiz.id)
@@ -380,7 +382,7 @@ class TeamLeadershipStyleManager(models.Manager):
             try:
                 leadership_style = employee.leadership_style
             except EmployeeLeadershipStyle.DoesNotExist:
-                quiz = generate_quiz_link(email=email)
+                quiz = generate_quiz_link(email=email, invited_by=team.owner)
                 team.quiz_requests.add(quiz)
         team.save()
         return team

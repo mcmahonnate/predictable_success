@@ -52,10 +52,16 @@ def send_quiz_link_email(quiz_link_id):
     context = {
         'quiz_url': quiz.url,
     }
-    subject = "Here's your personalized link"
-    text_content = render_to_string('email/quiz_link.txt', context)
-    html_content = render_to_string('email/quiz_link.html', context)
+    if quiz.invited_by:
+        subject = "You've received an invitation from %s" % quiz.invited_by.full_name
+        text_content = render_to_string('email/invite_link.txt', context)
+        html_content = render_to_string('email/invite_link.html', context)
+    else:
+        subject = "Here's your personalized link"
+        text_content = render_to_string('email/quiz_link.txt', context)
+        html_content = render_to_string('email/quiz_link.html', context)
     msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
     msg.attach_alternative(html_content, "text/html")
     msg.send()
 
+#[[email address}} has just completed the Leadership Style quiz and wnats you to join in.
