@@ -47,12 +47,8 @@ You have <em>your</em> score. Now, invite up to eight team members to take this 
 
     </div>
     <div ng-repeat="team in index.teamsIOwn | orderBy:'customer_id'">
-        <h2 ng-if="team.name" style="color: #aaa;">{{ team.name }}
-            <button ng-click="index.invite(team.id)" class="btn btn-success pull-right" style="margin-top: -10px;" type="submit">Invite More Team Members</button>
-        </h2>
         <h2 ng-if="!team.name" style="color: #aaa;margin-bottom:25px">Give Your Team a Name
             <span class="fa fa-pencil"></span>
-            <button ng-click="index.invite(team.id)" class="btn btn-success pull-right" style="margin-top: -10px;" type="submit">Invite More Team Members</button>
         </h2>
 
         <div class="panel fade-in">
@@ -60,8 +56,10 @@ You have <em>your</em> score. Now, invite up to eight team members to take this 
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ac lectus pellentesque, mattis enim sit amet, facilisis felis. Nunc sed mi sapien. Proin in mauris at elit fringilla condimentum nec id tellus. Nullam at leo ut risus faucibus luctus non et turpis. Nam eleifend ipsum sed lacinia mollis. Nam augue ex, interdum hendrerit ante eget, porttitor hendrerit libero. Maecenas nec erat odio. Vivamus tincidunt suscipit leo, fringilla sollicitudin odio tincidunt vitae. Suspendisse at ligula ut diam pellentesque imperdiet vel sed lectus. Praesent et ante quis erat luctus sollicitudin tincidunt sed arcu. Donec ac felis non nulla aliquam dapibus sed a risus.</p>
                 <button ng-click="index.invite(team.id)" class="btn btn-success" style="margin-top: 10px;" type="submit">Get Your Report!</button>
         </div>
-
-        <div class="panel fade-in" ng-if="$first && index.myLeadershipStyle.scores.length" >
+        <div class="invite-360" style="height: 25px;">
+            <h4 ng-if="index.teamsIOwn.length > 0" class="header"><a href="" class="pull-right" ng-click="index.invite(team.id)">+ Invite more team members</a></h4>
+        </div>
+        <div class="panel fade-in" ng-if="$first && index.myLeadershipStyle.scores.length" ng-init="collapse=true">
             <div style="min-height: 55px;">
                 <div class="avatar-container col-xs-1" style="margin-right: 25px">
                     <employee-avatar size="large" employee="index.myLeadershipStyle.employee"></employee-avatar>
@@ -84,6 +82,7 @@ You have <em>your</em> score. Now, invite up to eight team members to take this 
                 </div>
             </div>
         </div>
+
         <div class="panel fade-in" ng-repeat="team_member in team.team_members  | orderBy:'full_name'" ng-if="team_member.leadership_style.id != index.myLeadershipStyle.id" ng-init="team_member.collapse=true">
             <div style="min-height: 55px;">
                 <div class="avatar-container col-xs-1" style="margin-right: 25px">
