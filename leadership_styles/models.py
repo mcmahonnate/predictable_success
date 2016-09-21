@@ -120,7 +120,8 @@ def generate_quiz_link(email, invited_by=None):
     quiz = QuizUrl()
     quiz.active = True
     quiz.email = email
-    quiz.invited_by = invited_by
+    if invited_by:
+        quiz.invited_by = invited_by
     quiz.save()
     signer = Signer()
     signed_id = signer.sign(quiz.id)
