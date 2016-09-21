@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from org.api.permissions import UserIsEmployeeOrLeaderOrCoachOfEmployee, UserIsEmployee, PermissionsViewAllEmployees
+from predictable_success.utils import authenticate_and_login
 from rest_framework import status
 from rest_framework.generics import *
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -283,13 +284,13 @@ class GetQuiz(APIView):
                     user.set_password(password)
                     user.is_active = True
                     user.save()
-                    user = _authenticate_and_login(username=quiz.email, password=password, request=request)
+                    user = authenticate_and_login(username=quiz.email, password=password, request=request)
             except User.DoesNotExist:
                 password = User.objects.make_random_password()
                 user = User.objects.create_user(username=quiz.email, email=quiz.email, password=password)
                 user.is_active = True
                 user.save()
-                user = _authenticate_and_login(username=quiz.email, password=password, request=request)
+                user = authenticate_and_login(username=quiz.email, password=password, request=request)
 
             #create Employee
             try:
@@ -316,9 +317,3 @@ class GetQuiz(APIView):
         except:
             return redirect(request.tenant.build_url('/take-the-quiz'))
 
-
-def _authenticate_and_login(username, password, request):
-        #authenticate & login
-        user = authenticate(username=username, password=password)
-        login(request=request, user=user)
-        return user

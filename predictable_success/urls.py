@@ -7,6 +7,7 @@ from django.views.generic.base import TemplateView
 from forms import *
 from org.api.views import EmployeeDetail, account_activate, account_activate_login
 from rest_framework import routers
+from sign_in.views import GetSignInLink, SignIn
 from views.homepage import IndexView
 from views.payment import PaymentView
 from views.views import *
@@ -31,7 +32,9 @@ urlpatterns = [
     url(r'^account/activate/login/(?P<uidb64>[0-9A-Za-z]+)/$', account_activate_login, {'template_name': 'activation/activate_account_login.html', 'authentication_form': AuthenticationForm}, name='account_activate_login'),
     url(r'^account/activate/(?P<uidb64>[0-9A-Za-z]+)/(?P<token>.+)/$', account_activate, {'template_name': 'activation/activate_account.html', 'set_password_form': CustomSetPasswordForm}, name='account_activate'),
     url(r'^account/payment/?$', PaymentView.as_view(), name='payment'),
-    url(r'^account/login/?$', login,{'template_name':'login.html', 'authentication_form':CustomAuthenticationForm}, name='login'),
+    url(r'^account/login/?$', GetSignInLink.as_view(), name='login'),
+    url(r'^account/login/sent/?$', TemplateView.as_view(template_name="sign_in/link_sent.html"), name='sign_in_link_sent'),
+    url(r'^account/login/(?P<pk>.+)/?$', SignIn.as_view(), name='sign_in'),
     url(r'^account/password_reset/done/$', password_reset_done, {'template_name': 'password_reset_done.html'}),
     url(r'^account/reset/(?P<uidb64>[0-9A-Za-z]+)/(?P<token>.+)/$', password_reset_confirm, {'template_name': 'password_reset_confirm.html', 'set_password_form': CustomSetPasswordForm}),
     url(r'^account/reset/complete/$', password_reset_complete, {'template_name': 'password_reset_complete.html'}),

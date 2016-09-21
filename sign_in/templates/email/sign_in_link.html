@@ -1,0 +1,13 @@
+{% extends "layouts/email.html" %}
+
+{% block content %}
+        <p>
+            Click and confirm that you want to sign in to the Synergist. This link will expire in fifteen minutes and can only be used once.
+        </p>
+        <p>
+            <a href="{{ sign_in_url }}">{{ sign_in_url }}</a>
+        </p>
+        <p style="color:#aaa; font-size:14px; text-align:center;">
+            If you did not make this request, please contact us at <a href="mailto:{{ support_email }}">{{ support_email }}</a>
+        </p>
+{% endblock content%}

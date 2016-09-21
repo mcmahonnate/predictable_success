@@ -8,14 +8,15 @@
             {% csrf_token %}
             <h1>Take the Quiz</h1>
 
-            <p class="start-quiz-message">You have a natural leadership style. With your own strengths and weaknesses. Discover who you are and how to unlock your best self.</p>
+            <p class="message">You have a natural leadership style. With your own strengths and weaknesses. Discover who you are and how to unlock your best self.</p>
 
             <input type="email" autofocus class="form-control input-lg" name="email" placeholder="Your e-mail">
 
             {% if form.email.errors %}
             <div class="error-message" style="margin-bottom: 15px;">{{ form.email.errors }}</div>
             {% endif %}
-            <button class="btn btn-success btn-block" style="margin-bottom: 15px;" type="submit">Get Started</button>
+            <button class="btn btn-success btn-block" style="margin-bottom: 8px;" type="submit">Get Started</button>
+            <p class="centered" style="color: #aaa;">Already taken the quiz? <a href="/account/login">Sign in here.</a></p>
         </form>
     </div>
 {% endblock %}
