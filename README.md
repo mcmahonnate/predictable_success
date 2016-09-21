@@ -104,6 +104,16 @@ You should now be able to run the server with:
 ./up.sh
 ```
 
+Start up rabbitmq (at least on OSX with homebrew):
+```
+/usr/local/sbin/rabbitmq-server
+```
+
+Set up rabbitmq (based on the .env):
+- Go to: http://127.0.0.1:15672/
+- Add a mq_scoutmap user
+- Add a mq_vhost virtualhost which that user has access to
+
 Set up your Heroku remotes:
 ```
 git remote add staging-predictable-success https://git.heroku.com/staging-predictable-success.git
