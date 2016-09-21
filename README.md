@@ -50,7 +50,7 @@ cd ~/solr-4.4.0/example/solr/employees/conf/schema.xml
 ```
 Cd into the solr package and start running solr locally. 
 ```
-cd ~/Users/[username]/solr-4.4.0/example
+cd ~/solr-4.4.0/example
 java -jar start.jar
 ```
 
