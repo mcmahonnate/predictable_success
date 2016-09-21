@@ -117,6 +117,7 @@ Start up rabbitmq (at least on OSX with homebrew):
 
 Set up rabbitmq (based on the .env):
 - Go to: http://127.0.0.1:15672/
+- Login with guest/guest
 - Add a mq_scoutmap user
 - Add a mq_vhost virtualhost which that user has access to
 
