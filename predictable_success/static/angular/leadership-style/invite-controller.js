@@ -28,9 +28,11 @@
         function submit() {
             vm.enableSend = false;
             var invites = [];
+            var invite_notification = [];
             angular.forEach(vm.invites, function(invite){
                 if (invite.email) {
                     invites.push(invite.email);
+                    invite_notification.push(invite);
                 }
             })
             LeadershipStyleInviteService.sendInvites(team_id, invites)
@@ -38,7 +40,7 @@
 
                     /* Big success message */
                     $rootScope.successRequestMessage = true;
-                    $rootScope.successRequestMessageRecipient = vm.invites;
+                    $rootScope.successRequestMessageRecipient = invite_notification;
 
                     /* Hide success message after a few seconds */
                     $timeout(function() {
