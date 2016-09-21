@@ -1,4 +1,7 @@
 <div class="container leadership-style" data-hj-masked>
+    <div class="account-menu">
+        <a class="dashboard pull-right" href="/logout"><i class="fa fa-sign-out"></i> Sign Out</a>
+    </div>
     <!-- Leadership Style request message -->
     <div ng-class="{'slide-up-active': hideRequestMessage}" class="alert alert-success slide-up" role="alert" ng-show="successRequestMessage">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -32,13 +35,14 @@
         <div ng-bind-html="index.myLeadershipStyle.tease.description"></div>
         <div class="leadership-style-scores">
             <div class="well">
-                <h3 class="leadership-style-title">Here's how you scored</h3>
-                <p ng-repeat="score in index.myLeadershipStyle.scores | orderBy:'-score'"><strong>{{ score.style_verbose }}</strong> - {{ score.score }} out of 960</p>
+            <div class="call-to-action" ng-if="index.teamsIOwn.length==0">
+                <h3 class="title">[ACTION REQUESTED] Now, come take the next step &#8230;</h3>
+                <p class="message">
+You have <em>your</em> score. Now, invite up to eight team members to take this quiz&#8212;and get a <span style="text-decoration: underline">personalized</span> report from our experts to help you and your team become more self-aware, more collaborative, and more powerful. Understand how your team's complementary skills can be best unleashed, all for a nominal fee. (Each report will be personalized based on <span style="text-decoration: underline">your</span> team, after all!) To learn more or get started, simply click the button below to get started:</p>
+                <a href="/account/payment" class="btn btn-success btn-block" style="margin-bottom: 15px;" type="submit">Get Started</a>
             </div>
-            <div ng-if="index.teamsIOwn.length==0">
-                <p class="leadership-style-description">[INSERT COPY HERE]</p>
-                <a href="/account/payment" class="btn btn-success btn-block call-to-action" style="margin-bottom: 15px;" type="submit">Invite up to 8 Team members for just $$$</a>
             </div>
+
         </div>
 
     </div>
