@@ -1,5 +1,6 @@
 from blah.api.serializers import CommentSerializer
 from django.conf import settings
+from django.middleware.csrf import get_token
 from org.api.serializers import SanitizedEmployeeSerializer
 from org.models import get_gravatar_image
 from rest_framework import serializers
@@ -108,6 +109,8 @@ class EmployeeLeadershipStyleSerializer(EmployeeLeadershipStyleBaseSerializer):
     assessor = SanitizedEmployeeSerializer()
     next_question = serializers.SerializerMethodField()
     answers = serializers.SerializerMethodField()
+    csrf_token = serializers.SerializerMethodField()
+    stripe_key = serializers.SerializerMethodField()
 
     def get_next_question(self, obj):
         next_question = obj.next_question()
@@ -126,10 +129,18 @@ class EmployeeLeadershipStyleSerializer(EmployeeLeadershipStyleBaseSerializer):
         else:
             return [answer.id for answer in obj.answers.all()]
 
+    def get_csrf_token(self, obj):
+        req = self.context.get('request')
+        return get_token(req)
+
+    def get_stripe_key(self, obj):
+        return settings.STRIPE_PUBLISHABLE_KEY
+
     class Meta:
         model = EmployeeLeadershipStyle
         fields = ('id', 'assessment_type', 'active', 'employee', 'assessor', 'next_question', 'notes', 'answers', 'date',
-                  'total_questions', 'total_answered', 'completed', 'times_retaken', 'is_draft', 'scores', 'tease')
+                  'total_questions', 'total_answered', 'completed', 'times_retaken', 'is_draft', 'scores', 'tease',
+                  'csrf_token', 'stripe_key', )
 
 
 class UpdateEmployeeLeadershipStyleSerializer(serializers.ModelSerializer):

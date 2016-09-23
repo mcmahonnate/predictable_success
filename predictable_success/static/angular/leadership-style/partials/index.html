@@ -40,7 +40,49 @@
                 <h3 class="title">[ACTION REQUESTED] Now, come take the next step &#8230;</h3>
                 <p class="message">
 You have <em>your</em> score. Now, invite up to eight team members to take this quiz&#8212;and get a <span style="text-decoration: underline">personalized</span> report from our experts to help you and your team become more self-aware, more collaborative, and more powerful. Understand how your team's complementary skills can be best unleashed, all for a nominal fee. (Each report will be personalized based on <span style="text-decoration: underline">your</span> team, after all!) To learn more or get started, simply click the button below to get started:</p>
-                <a href="/account/payment" class="btn btn-success btn-block" style="margin-bottom: 15px;" type="submit">Get Started for just $199</a>
+                
+                <form action="/account/payment" method="POST" id="paymentForm">
+                <input type="hidden" name="csrfmiddlewaretoken" ng-value="index.myLeadershipStyle.csrf_token">
+                
+                <button class="btn btn-success btn-block" id="stripePay" style="margin-bottom: 15px;" type="submit">Get Started for just $199</button>
+                <input type="hidden" id="stripeToken" name="stripeToken" value="" />
+                <input type="hidden" id="stripeEmail" name="stripeEmail" value="" />
+                </form>
+
+                <script>
+                    $(function () {
+                        var handler = StripeCheckout.configure({
+                            key: '{{index.myLeadershipStyle.stripe_key}}',
+                            locale: 'auto',
+                            token: function(token) {
+                                var $stripeToken = $('#stripeToken');
+                                var $stripeEmail = $('#stripeEmail');
+
+                                $stripeToken.val(token.id);
+                                $stripeEmail.val(token.email);
+
+                                var $paymentForm = $('#paymentForm');
+                                $paymentForm.submit();
+                            }
+                        });
+
+                        document.getElementById('stripePay').addEventListener('click', function(e) {
+                            // Open Checkout with further options:
+                            handler.open({
+                                name: 'The Motley Fool LLC',
+                                description: 'Predictable Success for $199',
+                                amount: 19900
+                            });
+
+                            e.preventDefault();
+                        });
+
+                        // Close Checkout on page navigation:
+                        window.addEventListener('popstate', function() {
+                            handler.close();
+                        });
+                    });
+                </script>
             </div>
             </div>
 
