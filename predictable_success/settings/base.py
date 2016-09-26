@@ -43,7 +43,7 @@ REQUIRED_GROUPS = (
     'View Comments',
 )
 
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 # Email settings
 EMAIL_USE_SSL = True
