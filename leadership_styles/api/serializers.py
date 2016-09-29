@@ -69,11 +69,11 @@ class ScoreSerializer(serializers.ModelSerializer):
         fields = ('id', 'score', 'style', 'trait', 'style_verbose', 'trait_verbose')
 
 
-class LeadershipStyleDescriptionSerializer(serializers.ModelSerializer):
+class LeadershipStyleTeaseSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = LeadershipStyleDescription
-        fields = ('id', 'style', 'style_verbose', 'description')
+        model = LeadershipStyleTease
+        fields = ('id', 'style', 'style_verbose', 'tease')
 
 
 class EmployeeLeadershipStyleBaseSerializer(serializers.ModelSerializer):
@@ -95,9 +95,9 @@ class EmployeeLeadershipStyleBaseSerializer(serializers.ModelSerializer):
         if not obj.completed:
             return None
         dominant = obj.scores.order_by('-score').first()
-        description = LeadershipStyleDescription.objects.get(style=dominant.style)
-        serializer = LeadershipStyleDescriptionSerializer(context=self.context)
-        return serializer.to_representation(description)
+        tease = LeadershipStyleTease.objects.get(style=dominant.style)
+        serializer = LeadershipStyleTeaseSerializer(context=self.context)
+        return serializer.to_representation(tease)
 
     class Meta:
         model = EmployeeLeadershipStyle

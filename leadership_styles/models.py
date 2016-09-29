@@ -56,9 +56,9 @@ ASSESSMENT_TYPE = (
 SCORE_MULTIPLIER = 30
 
 
-class LeadershipStyleDescription(models.Model):
+class LeadershipStyleTease(models.Model):
     style = models.IntegerField(choices=LEADERSHIP_STYLES)
-    description = models.TextField()
+    tease = models.TextField()
 
     @property
     def style_verbose(self):
@@ -303,7 +303,7 @@ class EmployeeLeadershipStyle(models.Model):
     def _calculate_scores(self):
         if not self.completed and self.all_questions_answered() and self.answers.count() > 0:
             self.visionary_score = self.answers.filter(leadership_style=VISIONARY).count() * SCORE_MULTIPLIER
-            self.scores.add(Score.objects.create_score(score=self.visionary_score,style=VISIONARY))
+            self.scores.add(Score.objects.create_score(score=self.visionary_score, style=VISIONARY))
 
             self.operator_score = self.answers.filter(leadership_style=OPERATOR).count() * SCORE_MULTIPLIER
             self.scores.add(Score.objects.create_score(score=self.operator_score, style=OPERATOR))
