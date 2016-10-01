@@ -76,6 +76,13 @@ class LeadershipStyleTeaseSerializer(serializers.ModelSerializer):
         fields = ('id', 'style', 'style_verbose', 'tease')
 
 
+class LeadershipStyleDescriptionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = LeadershipStyleDescription
+        fields = ('id', 'name', 'description')
+
+
 class EmployeeLeadershipStyleBaseSerializer(serializers.ModelSerializer):
     percentage_complete = serializers.SerializerMethodField()
     scores = ScoreSerializer(many=True)
@@ -111,6 +118,7 @@ class EmployeeLeadershipStyleSerializer(EmployeeLeadershipStyleBaseSerializer):
     answers = serializers.SerializerMethodField()
     csrf_token = serializers.SerializerMethodField()
     stripe_key = serializers.SerializerMethodField()
+    description = serializers.SerializerMethodField()
 
     def get_next_question(self, obj):
         next_question = obj.next_question()
@@ -121,6 +129,13 @@ class EmployeeLeadershipStyleSerializer(EmployeeLeadershipStyleBaseSerializer):
                 next_question.answer = answer
         serializer = QuestionSerializer(context=self.context)
         return serializer.to_representation(next_question)
+
+    def get_description(self, obj):
+        if not obj.completed:
+            return None
+        description = LeadershipStyleDescription.objects.get_description(scores=obj.scores)
+        serializer = LeadershipStyleDescriptionSerializer(context=self.context)
+        return serializer.to_representation(description)
 
     def get_answers(self, obj):
         if obj.completed:
@@ -140,7 +155,7 @@ class EmployeeLeadershipStyleSerializer(EmployeeLeadershipStyleBaseSerializer):
         model = EmployeeLeadershipStyle
         fields = ('id', 'assessment_type', 'active', 'employee', 'assessor', 'next_question', 'notes', 'answers', 'date',
                   'total_questions', 'total_answered', 'completed', 'times_retaken', 'is_draft', 'scores', 'tease',
-                  'csrf_token', 'stripe_key', )
+                  'csrf_token', 'stripe_key', 'description')
 
 
 class UpdateEmployeeLeadershipStyleSerializer(serializers.ModelSerializer):

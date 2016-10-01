@@ -1,6 +1,7 @@
 import blah
 from blah.models import Comment
 from customers.models import Customer
+from django.contrib.postgres.fields import ArrayField
 from django.core.signing import Signer
 from django.db import connection, models
 from django.db.models import Q, F
@@ -66,6 +67,87 @@ class LeadershipStyleTease(models.Model):
 
     def __str__(self):
         return self.style_verbose
+
+
+class LeadershipStyleDescriptionManager(models.Manager):
+
+    def get_description(self, scores):
+        operating_scores = scores.filter(Q(trait=DOMINANT) | Q(trait=PRIMARY) | Q(trait=SECONDARY)).order_by('-score')
+        if operating_scores.count() == 4:
+            descriptions = self.filter(well_rounded=True, well_rounded_preferred_style=operating_scores[0].style)
+        elif operating_scores.count() == 3:
+            descriptions = self._get_description_for_multi_scores(operating_scores)
+        elif operating_scores.count() == 2:
+            descriptions = self._get_description_for_multi_scores(operating_scores)
+        else:
+            descriptions = self.filter(dominant_style_first=operating_scores[0].style)
+        return descriptions[0]
+
+    def _get_description_for_multi_scores(self, operating_scores):
+        if operating_scores[0].score >= DOMINANT_STYLE_MIN:
+            descriptions = self.filter(dominant_style_first=operating_scores[0].style)
+            if descriptions.count() == 0:
+                descriptions = self.filter(primary_style_first=operating_scores[0].style)
+                d = descriptions.filter(primary_style_second=operating_scores[1].style)
+                if d.count() > 0:
+                    descriptions = d
+                else:
+                    d = descriptions.filter(secondary_style_first=operating_scores[1].style)
+                    if d.count() > 0:
+                        descriptions = d
+                        if operating_scores.count() == 3:
+                            d = descriptions.filter(secondary_style_second=operating_scores[2].style)
+                            if d.count() > 0:
+                                descriptions = d
+            else:
+                if operating_scores[1].score >= DOMINANT_STYLE_MIN:
+                    d = descriptions.filter(dominant_style_second=operating_scores[1].style)
+                    if d.count() > 0:
+                        descriptions = d
+                    else:
+                        d = descriptions.filter(primary_style_first=operating_scores[1].style)
+                        if d.count() > 0:
+                            descriptions = d
+                        else:
+                            d = descriptions.filter(secondary_style_first=operating_scores[1].style)
+                            if d.count() > 0:
+                                descriptions = d
+                                if operating_scores.count() == 3:
+                                    d = descriptions.filter(secondary_style_second=operating_scores[2].style)
+                                    if d.count() > 0:
+                                        descriptions = d
+        else:
+            descriptions = self.filter(primary_style_first=operating_scores[0].style)
+            d = descriptions.filter(primary_style_second=operating_scores[1].style)
+            if d.count() > 0:
+                descriptions = d
+            else:
+                d = descriptions.filter(secondary_style_first=operating_scores[1].style)
+                if d.count() > 0:
+                    descriptions = d
+                    if operating_scores.count() == 3:
+                        d = descriptions.filter(secondary_style_second=operating_scores[2].style)
+                        if d.count() > 0:
+                            descriptions = d
+
+        return descriptions
+
+
+class LeadershipStyleDescription(models.Model):
+    objects = LeadershipStyleDescriptionManager()
+    name = models.CharField(max_length=255)
+    dominant_style_first = models.IntegerField(choices=LEADERSHIP_STYLES, null=True, blank=True)
+    dominant_style_second = models.IntegerField(choices=LEADERSHIP_STYLES, null=True, blank=True)
+    primary_style_first = models.IntegerField(choices=LEADERSHIP_STYLES, null=True, blank=True)
+    primary_style_second = models.IntegerField(choices=LEADERSHIP_STYLES, null=True, blank=True)
+    secondary_style_first = models.IntegerField(choices=LEADERSHIP_STYLES, null=True, blank=True)
+    secondary_style_second = models.IntegerField(choices=LEADERSHIP_STYLES, null=True, blank=True)
+    well_rounded_preferred_style = models.IntegerField(choices=LEADERSHIP_STYLES, null=True, blank=True)
+    well_rounded = models.BooleanField(default=False)
+    description = models.TextField()
+
+    def __str__(self):
+        return self.name
 
 
 class ScoreManager(models.Manager):
