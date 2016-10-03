@@ -108,13 +108,22 @@ You have <em>your</em> score. Now, invite up to eight team members to take this 
                     <i class="fa fa-chevron-down pull-right collapse-toggle" ng-show="!collapse" ng-click="collapse=!collapse"></i>
                     <i class="fa fa-chevron-right pull-right collapse-toggle" ng-show="collapse" ng-click="collapse=!collapse"></i>
                 </h3>
-                <h3 class="modal-title sub-title {{index.myLeadershipStyle.description.name}}">
-                {{ index.myLeadershipStyle.tease.style_verbose }}
-                    <span class="sub-title" ng-repeat="score in index.myLeadershipStyle.scores | orderBy : 'score' : true" ng-if="!$first">, {{score.style_verbose}} - {{score.score}}</span>
+                <h3 class="modal-title">
+                    <span ng-repeat="score in index.myLeadershipStyle.scores | orderBy : 'score' : true">
+                        <span class="sub-title {{ score.style_verbose }}" ng-if="$first">{{score.style_verbose}} - {{score.score}},</span>
+                        <span class="sub-title" ng-if="!$first && !$last">{{score.style_verbose}} - {{score.score}},</span>
+                        <span class="sub-title" ng-if="$last">{{score.style_verbose}} - {{score.score}}</span>
+                    </span>
                 </h3>
             </div>
             <div collapse="collapse" style="padding-top: 8px;">
                 <div ng-bind-html="index.myLeadershipStyle.description.description"></div>
+                <div class="leadership-style-scores">
+                    <div class="well">
+                        <h3 class="leadership-style-title">Scores</h3>
+                        <p ng-repeat="score in index.myLeadershipStyle.scores | orderBy:'-score'"><strong>{{ score.style_verbose }}</strong> - {{ score.score }} out of 960</p>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -139,9 +148,12 @@ You have <em>your</em> score. Now, invite up to eight team members to take this 
                     </h3>
                 </div>
                 <div ng-if="team_member.leadership_style && team_member.leadership_style.completed">
-                    <h3 class="modal-title sub-title {{team_member.leadership_style.tease.style_verbose}}">
-                    {{ team_member.leadership_style.tease.style_verbose }}
-                        <span class="sub-title" ng-repeat="score in team_member.leadership_style.scores | orderBy : 'score' : true" ng-if="!$first">, {{score.style_verbose}} - {{score.score}}</span>
+                    <h3 class="modal-title">
+                        <span ng-repeat="score in team_member.leadership_style.scores | orderBy : 'score' : true">
+                            <span class="sub-title {{ score.style_verbose }}" ng-if="$first">{{score.style_verbose}} - {{score.score}},</span>
+                            <span class="sub-title" ng-if="!$first && !$last">{{score.style_verbose}} - {{score.score}},</span>
+                            <span class="sub-title" ng-if="$last">{{score.style_verbose}} - {{score.score}}</span>
+                        </span>
                     </h3>
                 </div>
             </div>
