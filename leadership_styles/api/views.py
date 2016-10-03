@@ -160,7 +160,7 @@ class RequestTeamReport(APIView):
         if request.user.employee == team.owner:
             message = request.data['message']
             team.request_team_report(message=message)
-
+            return Response(None, status=status.HTTP_200_OK)
         else:
             raise PermissionDenied
 
