@@ -86,6 +86,7 @@ class LeadershipStyleDescriptionSerializer(serializers.ModelSerializer):
 class EmployeeLeadershipStyleBaseSerializer(serializers.ModelSerializer):
     percentage_complete = serializers.SerializerMethodField()
     scores = ScoreSerializer(many=True)
+    description = serializers.SerializerMethodField()
     tease = serializers.SerializerMethodField()
 
     def get_percentage_complete(self, obj):
@@ -98,6 +99,13 @@ class EmployeeLeadershipStyleBaseSerializer(serializers.ModelSerializer):
             p = round(p)
             return int(p)
 
+    def get_description(self, obj):
+        if not obj.completed:
+            return None
+        description = LeadershipStyleDescription.objects.get_description(scores=obj.scores)
+        serializer = LeadershipStyleDescriptionSerializer(context=self.context)
+        return serializer.to_representation(description)
+
     def get_tease(self, obj):
         if not obj.completed:
             return None
@@ -108,7 +116,7 @@ class EmployeeLeadershipStyleBaseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmployeeLeadershipStyle
-        fields = ('id', 'date', 'percentage_complete', 'completed', 'scores', 'tease')
+        fields = ('id', 'date', 'percentage_complete', 'completed', 'scores', 'tease', 'description')
 
 
 class EmployeeLeadershipStyleSerializer(EmployeeLeadershipStyleBaseSerializer):
@@ -118,7 +126,6 @@ class EmployeeLeadershipStyleSerializer(EmployeeLeadershipStyleBaseSerializer):
     answers = serializers.SerializerMethodField()
     csrf_token = serializers.SerializerMethodField()
     stripe_key = serializers.SerializerMethodField()
-    description = serializers.SerializerMethodField()
 
     def get_next_question(self, obj):
         next_question = obj.next_question()
@@ -129,13 +136,6 @@ class EmployeeLeadershipStyleSerializer(EmployeeLeadershipStyleBaseSerializer):
                 next_question.answer = answer
         serializer = QuestionSerializer(context=self.context)
         return serializer.to_representation(next_question)
-
-    def get_description(self, obj):
-        if not obj.completed:
-            return None
-        description = LeadershipStyleDescription.objects.get_description(scores=obj.scores)
-        serializer = LeadershipStyleDescriptionSerializer(context=self.context)
-        return serializer.to_representation(description)
 
     def get_answers(self, obj):
         if obj.completed:
