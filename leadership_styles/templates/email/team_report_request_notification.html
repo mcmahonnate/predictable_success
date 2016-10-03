@@ -2,8 +2,13 @@
 
 {% block content %}
         <p>
-            {{ team.owner.full_name }} {{ team.owner.email }}
+            <b>{{ team.owner.full_name }} {{ team.owner.email }}</b>
         </p>
+        {% if message %}
+        <p>
+            "{{  message }}"
+        </p>
+        {% endif %}
         {% for leadership_style in leadership_styles %}
             {% if not leadership_style.completed %}
             <p>
