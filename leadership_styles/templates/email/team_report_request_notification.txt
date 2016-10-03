@@ -1,0 +1,9 @@
+{{ team.owner.full_name }} {{ team.owner.email }}
+
+{% for member in team.team_members %}
+{% if member.leadership_style.completed %}
+{{ member.full_name }} Not Completed
+{% else %}
+{{ member.full_name }} {% for score in member.leadership_style.scores %}{{ score.style_verbose }} - {{ score.score }}{% endfor %}
+{% endif %}
+{% endfor %}

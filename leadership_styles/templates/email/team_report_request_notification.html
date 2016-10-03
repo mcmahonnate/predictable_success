@@ -1,0 +1,22 @@
+{% extends "layouts/email.html" %}
+
+{% block content %}
+        <p>
+            {{ team.owner.full_name }} {{ team.owner.email }}
+        </p>
+        {% for member in team.team_members %}
+            {% if member.leadership_style.completed %}
+            <p>
+                {{ member.full_name }} Not Completed
+            </p>
+            {% else %}
+            <p>
+            {{ member.full_name }}
+            {% for score in member.leadership_style.scores %}
+                {{ score.style_verbose }} - {{ score.score }}
+            {% endfor %}
+            </p>
+            {% endif %}
+
+        {% endfor %}
+{% endblock content%}

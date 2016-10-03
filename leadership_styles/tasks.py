@@ -64,4 +64,24 @@ def send_quiz_link_email(quiz_link_id):
     msg.attach_alternative(html_content, "text/html")
     msg.send()
 
+
+@app.task
+def send_team_report_request_email(team_id, message):
+    from leadership_styles.models import TeamLeadershipStyle
+    print 'send_team_report_request_email task'
+    tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
+    team = TeamLeadershipStyle.objects.get(id=team_id)
+    recipient_email = settings.TEAM_REPORT_EMAIL
+
+    context = {
+        'team': team,
+        'message': message,
+    }
+    subject = "%s has requested their team report" % team.owner.full_name
+    text_content = render_to_string('email/team_report_request_notification.txt', context)
+    html_content = render_to_string('email/team_report_request_notification.html', context)
+    msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
+
 #[[email address}} has just completed the Leadership Style quiz and wnats you to join in.

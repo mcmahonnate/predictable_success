@@ -12,6 +12,8 @@ TEMPLATE_DEBUG = DEBUG = os.environ.get("DEBUG", False)
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
+
+TEAM_REPORT_EMAIL = os.environ['TEAM_REPORT_EMAIL']
 # Database settings
 DATABASES = { 'default': dj_database_url.config(default=os.environ.get('DATABASE_URL')) }
 DATABASES['default']['ENGINE'] = 'tenant_schemas.postgresql_backend'

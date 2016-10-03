@@ -1,14 +1,13 @@
 import blah
 from blah.models import Comment
 from customers.models import Customer
-from django.contrib.postgres.fields import ArrayField
 from django.core.signing import Signer
 from django.db import connection, models
 from django.db.models import Q, F
 from org.models import Employee
 from datetime import datetime, date, timedelta
 from model_utils import FieldTracker
-from tasks import send_leadership_style_request_email, send_quiz_link_email
+from tasks import send_leadership_style_request_email, send_quiz_link_email, send_team_report_request_email
 
 # Styles
 VISIONARY = 0
@@ -484,6 +483,9 @@ class TeamLeadershipStyle(models.Model):
     owner = models.ForeignKey(Employee, related_name='+')
     team_members = models.ManyToManyField(Employee, related_name='team_leadership_styles', null=True, blank=True)
     quiz_requests = models.ManyToManyField(QuizUrl, related_name='team_leadership_styles', null=True, blank=True)
+
+    def request_team_report(self, message):
+        send_team_report_request_email.subtask((self.id, message)).apply_async()
 
     def __str__(self):
         if self.name:
