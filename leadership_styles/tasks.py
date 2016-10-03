@@ -74,7 +74,8 @@ def send_team_report_request_email(team_id, message):
     recipient_email = settings.TEAM_REPORT_EMAIL
 
     context = {
-        'team': team,
+        'owner': team.owner,
+        'team_members': team.team_members,
         'message': message,
     }
     subject = "%s has requested their team report" % team.owner.full_name

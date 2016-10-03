@@ -2,9 +2,9 @@
 
 {% block content %}
         <p>
-            {{ team.owner.full_name }} {{ team.owner.email }}
+            {{ owner.full_name }} {{ owner.email }}
         </p>
-        {% for member in team.team_members %}
+        {% for member in team_members %}
             {% if member.leadership_style.completed %}
             <p>
                 {{ member.full_name }} Not Completed
