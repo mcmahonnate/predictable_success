@@ -119,7 +119,7 @@ class LeadershipStyleDescriptionManager(models.Manager):
         else:
             descriptions = self.filter(primary_style_first=operating_scores[0].style)
             d = descriptions.filter(primary_style_second=operating_scores[1].style)
-            if d.count() > 0:
+            if d.count() > 0 and operating_scores.count() == 2:
                 descriptions = d
             else:
                 d = descriptions.filter(secondary_style_first=operating_scores[1].style)
@@ -180,6 +180,9 @@ class Score(models.Model):
     @property
     def style_verbose(self):
         return LEADERSHIP_STYLES[self.style][1]
+
+    def __str__(self):
+        return "%s %s" % (self.style_verbose, self.score)
 
 
 class QuizUrl(models.Model):
