@@ -118,12 +118,6 @@ You have <em>your</em> score. Now, invite up to eight team members to take this 
             </div>
             <div collapse="collapse" style="padding-top: 8px;">
                 <div ng-bind-html="index.myLeadershipStyle.description.description"></div>
-                <div class="leadership-style-scores">
-                    <div class="well">
-                        <h3 class="leadership-style-title">Scores</h3>
-                        <p ng-repeat="score in index.myLeadershipStyle.scores | orderBy:'-score'"><strong>{{ score.style_verbose }}</strong> - {{ score.score }} out of 960</p>
-                    </div>
-                </div>
             </div>
         </div>
 
