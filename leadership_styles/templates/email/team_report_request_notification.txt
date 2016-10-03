@@ -4,6 +4,6 @@
 {% if member.leadership_style.completed %}
 {{ member.full_name }} Not Completed
 {% else %}
-{{ member.full_name }} {% for score in member.leadership_style.scores %}{{ score.style_verbose }} - {{ score.score }}{% endfor %}
+{{ member.full_name }} {% for score in member.leadership_style.scores.all %}{{ score.style_verbose }} - {{ score.score }}{% endfor %}
 {% endif %}
 {% endfor %}

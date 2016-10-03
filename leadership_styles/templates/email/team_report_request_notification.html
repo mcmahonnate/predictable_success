@@ -12,7 +12,7 @@
             {% else %}
             <p>
             {{ member.full_name }}
-            {% for score in member.leadership_style.scores %}
+            {% for score in member.leadership_style.scores.all %}
                 {{ score.style_verbose }} - {{ score.score }}
             {% endfor %}
             </p>
