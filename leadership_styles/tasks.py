@@ -71,8 +71,7 @@ def send_team_report_request_email(team_id, message):
     print 'send_team_report_request_email task'
     tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
     team = TeamLeadershipStyle.objects.get(id=team_id)
-    team_member_ids = team.values_list('team_members__id', flat=True)
-    leadership_styles = EmployeeLeadershipStyle.filter(employee__id__in=team_member_ids)
+    leadership_styles = EmployeeLeadershipStyle.objects.filter(employee__in=team.team_members.all())
     recipient_email = settings.TEAM_REPORT_EMAIL
 
     context = {
