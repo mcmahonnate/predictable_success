@@ -17,6 +17,11 @@ function LeadershipStyleTeamResource($resource) {
             method: 'GET',
             isArray: false
         },
+        'requestTeamReport': {
+            url: '/api/v1/leadership-style/teams/:id/request-report/',
+            method: 'POST',
+            isArray: false
+        },
     };
     return $resource('/api/v1/leadership-style/teams/:id', null, actions);
 }

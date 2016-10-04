@@ -7,6 +7,7 @@ function LeadershipStyleTeamService($log, LeadershipStyleTeamResource) {
         getTeamsIOwn: getTeamsIOwn,
         getTeamsIBelongTo: getTeamsIBelongTo,
         getTeam: getTeam,
+        requestTeamReport: requestTeamReport,
     };
 
     function getTeamsIBelongTo() {
@@ -46,6 +47,18 @@ function LeadershipStyleTeamService($log, LeadershipStyleTeamResource) {
 
         function fail(response) {
             $log.error('getTeam failed');
+        }
+    }
+
+    function requestTeamReport(id, message) {
+        return LeadershipStyleTeamResource.requestTeamReport({id: id}, {message: message}, success, fail).$promise;
+
+        function success(response) {
+            return response;
+        }
+
+        function fail(response) {
+            $log.error('requestTeamReport failed');
         }
     }
 }
