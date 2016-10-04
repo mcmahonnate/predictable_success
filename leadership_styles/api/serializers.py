@@ -126,6 +126,7 @@ class EmployeeLeadershipStyleSerializer(EmployeeLeadershipStyleBaseSerializer):
     answers = serializers.SerializerMethodField()
     csrf_token = serializers.SerializerMethodField()
     stripe_key = serializers.SerializerMethodField()
+    teams = serializers.SerializerMethodField()
 
     def get_next_question(self, obj):
         next_question = obj.next_question()
@@ -144,6 +145,13 @@ class EmployeeLeadershipStyleSerializer(EmployeeLeadershipStyleBaseSerializer):
         else:
             return [answer.id for answer in obj.answers.all()]
 
+    def get_teams(self, obj):
+        if obj.completed:
+            serializer = TeamLeadershipStyleSerializer(context=self.context, many=True)
+            return serializer.to_representation(obj.employee.team_leadership_styles)
+        else:
+            return []
+
     def get_csrf_token(self, obj):
         req = self.context.get('request')
         return get_token(req)
@@ -155,7 +163,7 @@ class EmployeeLeadershipStyleSerializer(EmployeeLeadershipStyleBaseSerializer):
         model = EmployeeLeadershipStyle
         fields = ('id', 'assessment_type', 'active', 'employee', 'assessor', 'next_question', 'notes', 'answers', 'date',
                   'total_questions', 'total_answered', 'completed', 'times_retaken', 'is_draft', 'scores', 'tease',
-                  'csrf_token', 'stripe_key', 'description')
+                  'csrf_token', 'stripe_key', 'description', 'teams')
 
 
 class UpdateEmployeeLeadershipStyleSerializer(serializers.ModelSerializer):

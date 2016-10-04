@@ -7,7 +7,7 @@ from django.db.models import Q, F
 from org.models import Employee
 from datetime import datetime, date, timedelta
 from model_utils import FieldTracker
-from tasks import send_leadership_style_request_email, send_quiz_link_email, send_team_report_request_email
+from tasks import *
 
 # Styles
 VISIONARY = 0
@@ -399,6 +399,7 @@ class EmployeeLeadershipStyle(models.Model):
 
             self.date = datetime.now()
             self.save()
+            self.send_completed_notification_email()
 
     @property
     def total_questions(self):
@@ -434,10 +435,10 @@ class EmployeeLeadershipStyle(models.Model):
         return False
 
     def save(self, *args, **kwargs):
-        if self.completed and 'update_fields' in kwargs and 'completed' in kwargs['update_fields']:
-            self.date = datetime.now()
-
         super(EmployeeLeadershipStyle, self).save(*args, **kwargs)
+
+    def send_completed_notification_email(self):
+        send_completed_notification_email.subtask((self.id,)).apply_async()
 
     @property
     def comments(self):
