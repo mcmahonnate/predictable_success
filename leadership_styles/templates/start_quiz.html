@@ -6,20 +6,54 @@
     {% if user_does_not_exist %}
     <div class="alert alert-warning" role="alert"><i class="fa fa-exclamation-triangle"></i> This sign-in link has already been used. Please request a new one below.</div>
     {% endif %}
-    <div class="start-quiz-form">
+    <div class="landing-form">
         <form method="post" action="{% url 'start-quiz' %}">
             {% csrf_token %}
-            <h1>Take the Quiz</h1>
+            <div class="header">
+                <h1>Get the Fool Report</h1>
+                <h2>Discover your personal leadership style and uncover how it fits with others on your team.</h2>
+            </div>
+            <br />
 
-            <p class="message">You have a natural leadership style. With your own strengths and weaknesses. Discover who you are and how to unlock your best self.</p>
+            <div style="padding-top: 30px;">
+                <div class="arrow_box" style="float: left; text-transform: uppercase; font-size: 22px; font-weight: bold;">Step One</div>
+                <div style="margin-left: 300px; margin-top: 24px; font-size: 22px; text-transform: uppercase; font-weight: bold;">Take the Quiz</div>
+            </div>
 
-            <input type="email" autofocus class="form-control input-lg" name="email" placeholder="Your e-mail">
+            <div style="clear: both;"></div>
+
+            <div style="width: 50%; float: left; font-size: 24px; padding: 50px 40px 20px 50px; line-height: 28px;">
+                Over the years we've discovered there are four types of Fool needed to grow a successful business. Using a leadership assessment developed by our friends at Predictable Success we've been able to:
+            </div>
+
+            <div style="width: 50%; float: right; padding: 50px 20px 20px 50px">
+                <ul style="list-style-type: circle;">
+                    <li>Increase personal performance by matching the right leadership style to the right role.</li>
+                    <li>Maximize team performance by bringing together the right mixture ofleadership styles at the appropriate time.</li>
+                    <li>Get to the root of team dysfunction by developing a shared vocabulary to address conflict.</li>
+                    <li>Improve the quality of decisions at every level of the organization.</li>
+                </ul>
+
+                <input type="email" autofocus class="form-control input-lg" style="margin-top: 40px;" name="email" placeholder="Your e-mail">
+
+                {% if form.email.errors %}
+                <div class="error-message" style="margin-bottom: 15px;">{{ form.email.errors }}</div>
+                {% endif %}
+                <button class="btn btn-success btn-block" style="margin-bottom: 8px;" type="submit">Find out what type of Fool you are</button>
+                <p class="centered" style="color: #aaa;">Already taken the quiz? <a href="/account/login">Sign in here.</a></p>
+            </div>
+
+            <!--
+            <div style="clear: both;"></div>
+
+            <input type="email" autofocus class="form-control input-lg" style="width: 200px;" name="email" placeholder="Your e-mail">
 
             {% if form.email.errors %}
             <div class="error-message" style="margin-bottom: 15px;">{{ form.email.errors }}</div>
             {% endif %}
-            <button class="btn btn-success btn-block" style="margin-bottom: 8px;" type="submit">Get Started</button>
+            <button class="btn btn-success btn-block" style="margin-bottom: 8px;" type="submit">Find out what type of Fool you are</button>
             <p class="centered" style="color: #aaa;">Already taken the quiz? <a href="/account/login">Sign in here.</a></p>
+            -->
         </form>
     </div>
 {% endblock %}
