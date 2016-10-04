@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 from customers.models import Customer
+from datetime import datetime
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.core.signing import Signer

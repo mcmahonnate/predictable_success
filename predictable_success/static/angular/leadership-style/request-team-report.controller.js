@@ -10,8 +10,8 @@
 
         function submit(){
             LeadershipStyleTeamService.requestTeamReport(team_id, vm.message)
-                .then(function(response){
-                    $modalInstance.close()
+                .then(function(team){
+                    $modalInstance.close(team)
                     Notification.success("We are generating your report and will email to you when it's ready. Please allow 3-5 business days.")
                 }, function(){
                     $modalInstance.close()

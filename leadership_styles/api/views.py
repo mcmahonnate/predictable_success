@@ -160,7 +160,11 @@ class RequestTeamReport(APIView):
         if request.user.employee == team.owner:
             message = request.data['message']
             team.request_team_report(message=message)
-            return Response(None, status=status.HTTP_200_OK)
+            team.requested_report = True
+            team.requested_date = datetime.now()
+            team.save()
+            serializer = TeamLeadershipStyleSerializer(instance=team, context={'request': request})
+            return Response(serializer.data)
         else:
             raise PermissionDenied
 

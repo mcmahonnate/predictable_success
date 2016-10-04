@@ -479,6 +479,9 @@ class TeamLeadershipStyleManager(models.Manager):
 class TeamLeadershipStyle(models.Model):
     objects = TeamLeadershipStyleManager()
     customer_id = models.CharField(max_length=255)
+    requested_report = models.BooleanField(default=False)
+    requested_date = models.DateTimeField(null=True, blank=True)
+    received_report = models.BooleanField(default=False)
     name = models.CharField(max_length=255, null=True, blank=True)
     owner = models.ForeignKey(Employee, related_name='+')
     team_members = models.ManyToManyField(Employee, related_name='team_leadership_styles', null=True, blank=True)

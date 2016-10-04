@@ -91,10 +91,18 @@ You have <em>your</em> score. Now, invite up to eight team members to take this 
     </div>
     <div ng-repeat="team in index.teamsIOwn | orderBy:'customer_id'">
 
-        <div class="panel fade-in">
+        <div class="panel fade-in" ng-if="!team.requested_report && team.can_request_report">
             <h3 class="modal-title">Get YOUR Team Report</h3>
             <p>Your invitations have been sent and you can see the progress below.  When the members of your team have completed the quiz, or you are ready to send your team’s data along for your one-time, customized report, click the button below.</p>
-                <button ng-click="index.requestTeamReport(team.id)" class="btn btn-success" style="margin-top: 10px;width:100%" type="submit">Get YOUR Team Report</button>
+            <button ng-click="index.requestTeamReport(team.id, $index)" class="btn btn-success" style="margin-top: 10px;width:100%" type="submit">Get YOUR Team Report</button>
+        </div>
+        <div class="panel fade-in" ng-if="!team.requested_report && !team.can_request_report">
+            <h3 class="modal-title">Get YOUR Team Report</h3>
+            <p>Before we can generate YOUR Team Report at least 6 of your Team Members need to complete their Leadership Style quiz.</p>
+        </div>
+        <div class="panel fade-in" ng-if="team.requested_report && !team.received_report">
+            <h3 class="modal-title">Your Team Report</h3>
+            <p>We are working on your team report. Please allow 3-5 business days.
         </div>
         <div class="invite-360" style="height: 25px;">
             <h4 ng-if="index.teamsIOwn.length > 0" class="header"><a href="" class="pull-right" ng-click="index.invite(team.id)">+ Invite more team members</a></h4>

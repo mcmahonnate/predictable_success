@@ -190,7 +190,8 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         );
     }
 
-    function requestTeamReport(team_id) {
+    function requestTeamReport(team_id, index) {
+        console.log(index);
         var modalInstance = $modal.open({
             animation: true,
             windowClass: 'xx-dialog fade zoom',
@@ -203,5 +204,11 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                 }
             }
         });
+        modalInstance.result.then(
+            function (response) {
+                vm.teamsIOwn[index] = response;
+                console.log(vm.teamsIOwn[index]);
+            }
+        );
     }
 }

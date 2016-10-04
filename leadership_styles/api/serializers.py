@@ -218,8 +218,16 @@ class TeamMemberSerializer(serializers.ModelSerializer):
 class TeamLeadershipStyleSerializer(serializers.ModelSerializer):
     owner = SanitizedEmployeeSerializer()
     team_members = TeamMemberSerializer(many=True)
+    can_request_report = serializers.SerializerMethodField()
+
+    def get_can_request_report(self, obj):
+        leadership_styles = EmployeeLeadershipStyle.objects.filter(employee__in=obj.team_members.all())
+        if leadership_styles.filter(completed=True).count() > 5:
+            return True
+        else:
+            return False
 
     class Meta:
         model = TeamLeadershipStyle
-        fields = ['id', 'owner', 'team_members']
+        fields = ['id', 'owner', 'team_members', 'requested_report', 'requested_date', 'can_request_report']
 
