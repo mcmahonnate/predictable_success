@@ -200,9 +200,11 @@ def generate_quiz_link(email, invited_by=None):
     customer = Customer.objects.filter(schema_name=connection.schema_name).first()
     quiz = QuizUrl()
     quiz.active = True
-    quiz.email = email
+    quiz.email = email.strip().lower()
+
     if invited_by:
         quiz.invited_by = invited_by
+
     quiz.save()
     signer = Signer()
     signed_id = signer.sign(quiz.id)
