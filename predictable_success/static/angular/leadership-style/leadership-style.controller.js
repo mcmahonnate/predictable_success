@@ -2,7 +2,7 @@ angular
     .module('leadership-style')
     .controller('LeadershipStyleController', LeadershipStyleController);
 
-function LeadershipStyleController(LeadershipStyleService, LeadershipStyleRequestService, LeadershipStyleTeamService, analytics, $location, $modal, $rootScope, $routeParams, $scope, $timeout) {
+function LeadershipStyleController(LeadershipStyleService, LeadershipStyleRequestService, analytics, $location, $modal, $rootScope, $routeParams, $scope, $timeout) {
     /* Since this page can be the root for some users let's make sure we capture the correct page */
     var location_url = $location.url().indexOf('/leadership_style') < 0 ? '/' : $location.url();
     analytics.trackPage($scope, $location.absUrl(), location_url);
@@ -13,7 +13,6 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     vm.myLeadershipStyle = null;
     vm.showTakeQuizNotification = false;
     vm.scores = [];
-    vm.teamsIOwn = [];
     vm.invite = invite;
     vm.takeQuiz = takeQuiz;
     vm.requestLeadershipStyle = requestLeadershipStyle;
@@ -28,26 +27,8 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
             respondToRequest();
         } else {
             getMyLeadershipStyle();
-            getTeamsIOwn();
         }
     };
-
-    function getTeamsIOwn() {
-        LeadershipStyleTeamService.getTeamsIOwn()
-            .then(function(teams){
-                vm.teamsIOwn = teams;
-                if ($routeParams.team_id && $routeParams.addMembers=='true') {
-                    angular.forEach(vm.teamsIOwn, function (value) {
-                        if (value.id == $routeParams.team_id && value.team_members.length <= 1) {
-                            invite($routeParams.team_id);
-                        }
-                    });
-                }
-                vm.busy = false;
-            }, function(){
-                vm.busy = false;
-            })
-    }
 
     function respondToRequest() {
         vm.busy = true;
@@ -157,14 +138,14 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         modalInstance.result.then(
             function (team) {
                 var addNew = true;
-                angular.forEach(vm.teamsIOwn, function(value) {
+                angular.forEach(vm.myLeadershipStyle.teams, function(value) {
                     if (value.id == value.id) {
                         addNew = false;
                         value.team_members = team.team_members;
                     }
                 });
                 if (addNew) {
-                    vm.teamsIOwn.push(team);
+                    vm.myLeadershipStyle.teams.push(team);
                 }
             }
         );
@@ -206,8 +187,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         });
         modalInstance.result.then(
             function (response) {
-                vm.teamsIOwn[index] = response;
-                console.log(vm.teamsIOwn[index]);
+                vm.myLeadershipStyle.teams[index] = response;
             }
         );
     }
