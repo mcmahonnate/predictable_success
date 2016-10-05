@@ -7,7 +7,7 @@ from django.db.models import Q, F
 from org.models import Employee
 from datetime import datetime, date, timedelta
 from model_utils import FieldTracker
-from tasks import send_leadership_style_request_email, send_quiz_link_email
+from tasks import *
 
 # Styles
 VISIONARY = 0
@@ -68,6 +68,84 @@ class LeadershipStyleTease(models.Model):
         return self.style_verbose
 
 
+class LeadershipStyleDescriptionManager(models.Manager):
+
+    def get_description(self, scores):
+        operating_scores = scores.filter(Q(trait=DOMINANT) | Q(trait=PRIMARY) | Q(trait=SECONDARY)).order_by('-score')
+        if operating_scores.count() == 4:
+            descriptions = self.filter(well_rounded=True, well_rounded_preferred_style=operating_scores[0].style)
+        elif operating_scores.count() == 3:
+            descriptions = self._get_description_for_multi_scores(operating_scores)
+        elif operating_scores.count() == 2:
+            descriptions = self._get_description_for_multi_scores(operating_scores)
+        else:
+            descriptions = self.filter(dominant_style_first=operating_scores[0].style)
+        return descriptions[0]
+
+    def _get_description_for_multi_scores(self, operating_scores):
+        if operating_scores[0].score >= DOMINANT_STYLE_MIN:
+            descriptions = self.filter(Q(dominant_style_first=operating_scores[0].style) &
+                                       (Q(dominant_style_second=operating_scores[1].style) |
+                                        Q(secondary_style_first=operating_scores[1].style)))
+            if descriptions.count() > 0:
+                if operating_scores[1].score >= DOMINANT_STYLE_MIN:
+                    d = descriptions.filter(dominant_style_second=operating_scores[1].style)
+                    if d.count() > 0:
+                        descriptions = d
+                    else:
+                        if operating_scores.count() == 3:
+                            descriptions = descriptions.filter(secondary_style_first=operating_scores[1].style,
+                                                               secondary_style_second=operating_scores[2].style)
+                        else:
+                            descriptions = None
+
+            if descriptions is None or descriptions.count() == 0:
+                descriptions = self.filter(primary_style_first=operating_scores[0].style)
+                d = descriptions.filter(primary_style_second=operating_scores[1].style)
+                if d.count() > 0:
+                    descriptions = d
+                else:
+                    d = descriptions.filter(secondary_style_first=operating_scores[1].style)
+                    if d.count() > 0:
+                        descriptions = d
+                        if operating_scores.count() == 3:
+                            d = descriptions.filter(secondary_style_second=operating_scores[2].style)
+                            if d.count() > 0:
+                                descriptions = d
+        else:
+            descriptions = self.filter(primary_style_first=operating_scores[0].style)
+            d = descriptions.filter(primary_style_second=operating_scores[1].style)
+            if d.count() > 0 and operating_scores.count() == 2:
+                descriptions = d
+            else:
+                d = descriptions.filter(secondary_style_first=operating_scores[1].style)
+                if d.count() > 0:
+                    descriptions = d
+                    if operating_scores.count() == 3:
+                        d = descriptions.filter(secondary_style_second=operating_scores[2].style)
+                        if d.count() > 0:
+                            descriptions = d
+
+        return descriptions
+
+
+class LeadershipStyleDescription(models.Model):
+    objects = LeadershipStyleDescriptionManager()
+    name = models.CharField(max_length=255)
+    dominant_style_first = models.IntegerField(choices=LEADERSHIP_STYLES, null=True, blank=True)
+    dominant_style_second = models.IntegerField(choices=LEADERSHIP_STYLES, null=True, blank=True)
+    primary_style_first = models.IntegerField(choices=LEADERSHIP_STYLES, null=True, blank=True)
+    primary_style_second = models.IntegerField(choices=LEADERSHIP_STYLES, null=True, blank=True)
+    secondary_style_first = models.IntegerField(choices=LEADERSHIP_STYLES, null=True, blank=True)
+    secondary_style_second = models.IntegerField(choices=LEADERSHIP_STYLES, null=True, blank=True)
+    well_rounded_preferred_style = models.IntegerField(choices=LEADERSHIP_STYLES, null=True, blank=True)
+    well_rounded = models.BooleanField(default=False)
+    description = models.TextField()
+
+    def __str__(self):
+        return self.name
+
+
 class ScoreManager(models.Manager):
 
     def create_score(self, score, style):
@@ -99,6 +177,9 @@ class Score(models.Model):
     def style_verbose(self):
         return LEADERSHIP_STYLES[self.style][1]
 
+    def __str__(self):
+        return "%s %s" % (self.style_verbose, self.score)
+
 
 class QuizUrl(models.Model):
     email = models.CharField(max_length=255)
@@ -119,9 +200,11 @@ def generate_quiz_link(email, invited_by=None):
     customer = Customer.objects.filter(schema_name=connection.schema_name).first()
     quiz = QuizUrl()
     quiz.active = True
-    quiz.email = email
+    quiz.email = email.strip().lower()
+
     if invited_by:
         quiz.invited_by = invited_by
+
     quiz.save()
     signer = Signer()
     signed_id = signer.sign(quiz.id)
@@ -316,6 +399,7 @@ class EmployeeLeadershipStyle(models.Model):
 
             self.date = datetime.now()
             self.save()
+            self.send_completed_notification_email()
 
     @property
     def total_questions(self):
@@ -351,10 +435,10 @@ class EmployeeLeadershipStyle(models.Model):
         return False
 
     def save(self, *args, **kwargs):
-        if self.completed and 'update_fields' in kwargs and 'completed' in kwargs['update_fields']:
-            self.date = datetime.now()
-
         super(EmployeeLeadershipStyle, self).save(*args, **kwargs)
+
+    def send_completed_notification_email(self):
+        send_completed_notification_email.subtask((self.id,)).apply_async()
 
     @property
     def comments(self):
@@ -398,10 +482,16 @@ class TeamLeadershipStyleManager(models.Manager):
 class TeamLeadershipStyle(models.Model):
     objects = TeamLeadershipStyleManager()
     customer_id = models.CharField(max_length=255)
+    requested_report = models.BooleanField(default=False)
+    requested_date = models.DateTimeField(null=True, blank=True)
+    received_report = models.BooleanField(default=False)
     name = models.CharField(max_length=255, null=True, blank=True)
     owner = models.ForeignKey(Employee, related_name='+')
     team_members = models.ManyToManyField(Employee, related_name='team_leadership_styles', null=True, blank=True)
     quiz_requests = models.ManyToManyField(QuizUrl, related_name='team_leadership_styles', null=True, blank=True)
+
+    def request_team_report(self, message):
+        send_team_report_request_email.subtask((self.id, message)).apply_async()
 
     def __str__(self):
         if self.name:

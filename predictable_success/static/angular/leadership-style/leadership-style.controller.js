@@ -2,7 +2,7 @@ angular
     .module('leadership-style')
     .controller('LeadershipStyleController', LeadershipStyleController);
 
-function LeadershipStyleController(LeadershipStyleService, LeadershipStyleRequestService, LeadershipStyleTeamService, analytics, $location, $modal, $rootScope, $routeParams, $scope, $timeout) {
+function LeadershipStyleController(LeadershipStyleService, LeadershipStyleRequestService, analytics, $location, $modal, $rootScope, $routeParams, $scope, $timeout) {
     /* Since this page can be the root for some users let's make sure we capture the correct page */
     var location_url = $location.url().indexOf('/leadership_style') < 0 ? '/' : $location.url();
     analytics.trackPage($scope, $location.absUrl(), location_url);
@@ -13,10 +13,10 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     vm.myLeadershipStyle = null;
     vm.showTakeQuizNotification = false;
     vm.scores = [];
-    vm.teamsIOwn = [];
     vm.invite = invite;
     vm.takeQuiz = takeQuiz;
     vm.requestLeadershipStyle = requestLeadershipStyle;
+    vm.requestTeamReport = requestTeamReport;
     $rootScope.successRequestMessage = false;
     $rootScope.hideMessage = false;
     $rootScope.hideRequestMessage = false;
@@ -27,7 +27,6 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
             respondToRequest();
         } else {
             getMyLeadershipStyle();
-            getTeamsIOwn();
         }
 
         $scope.status = {
@@ -45,23 +44,6 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
             vm.status.isopen = !vm.status.isopen;
         };
     };
-
-    function getTeamsIOwn() {
-        LeadershipStyleTeamService.getTeamsIOwn()
-            .then(function(teams){
-                vm.teamsIOwn = teams;
-                if ($routeParams.team_id && $routeParams.addMembers=='true') {
-                    angular.forEach(vm.teamsIOwn, function (value) {
-                        if (value.id == $routeParams.team_id && value.team_members.length <= 1) {
-                            invite($routeParams.team_id);
-                        }
-                    });
-                }
-                vm.busy = false;
-            }, function(){
-                vm.busy = false;
-            })
-    }
 
     function respondToRequest() {
         vm.busy = true;
@@ -135,74 +117,95 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     }
 
     function requestLeadershipStyle(panel) {
-            var modalInstance = $modal.open({
-                animation: true,
-                windowClass: 'xx-dialog fade zoom',
-                backdrop: 'static',
-                templateUrl: '/static/angular/leadership-style/partials/_modals/request-leadership-style.html',
-                controller: 'LeadershipStyleRequestController as request',
-                resolve: {
-                    panel: function () {
-                        return panel
-                    }
+        var modalInstance = $modal.open({
+            animation: true,
+            windowClass: 'xx-dialog fade zoom',
+            backdrop: 'static',
+            templateUrl: '/static/angular/leadership-style/partials/_modals/request-leadership-style.html',
+            controller: 'LeadershipStyleRequestController as request',
+            resolve: {
+                panel: function () {
+                    return panel
                 }
-            });
-            modalInstance.result.then(
-                function (sentLeadershipStyleRequests) {
-                    getMyRecentlySentRequests();
-                }
-            );
-        }
+            }
+        });
+        modalInstance.result.then(
+            function (sentLeadershipStyleRequests) {
+                getMyRecentlySentRequests();
+            }
+        );
+    }
 
-        function invite(team_id) {
-            console.log(team_id);
-            var modalInstance = $modal.open({
-                animation: true,
-                windowClass: 'xx-dialog fade zoom',
-                backdrop: 'static',
-                templateUrl: '/static/angular/leadership-style/partials/_modals/invite.html',
-                controller: 'InviteController as invite',
-                resolve: {
-                    team_id: function () {
-                        return team_id
-                    }
+    function invite(team_id) {
+        console.log(team_id);
+        var modalInstance = $modal.open({
+            animation: true,
+            windowClass: 'xx-dialog fade zoom',
+            backdrop: 'static',
+            templateUrl: '/static/angular/leadership-style/partials/_modals/invite.html',
+            controller: 'InviteController as invite',
+            resolve: {
+                team_id: function () {
+                    return team_id
                 }
-            });
-            modalInstance.result.then(
-                function (team) {
-                    var addNew = true;
-                    angular.forEach(vm.teamsIOwn, function(value) {
-                        if (value.id == value.id) {
-                            addNew = false;
-                            value.team_members = team.team_members;
-                        }
-                    });
-                    if (addNew) {
-                        vm.teamsIOwn.push(team);
+            }
+        });
+        modalInstance.result.then(
+            function (team) {
+                var addNew = true;
+                angular.forEach(vm.myLeadershipStyle.teams, function(value) {
+                    if (value.id == value.id) {
+                        addNew = false;
+                        value.team_members = team.team_members;
                     }
+                });
+                if (addNew) {
+                    vm.myLeadershipStyle.teams.push(team);
                 }
-            );
-        }
+            }
+        );
+    }
 
-        function invite360() {
-            var modalInstance = $modal.open({
-                animation: true,
-                windowClass: 'xx-dialog fade zoom',
-                backdrop: 'static',
-                templateUrl: '/static/angular/leadership-style/partials/_modals/invite-360.html',
-                controller: 'Invite360Controller as invite360',
-                resolve: {
-                    panel: function () {
-                        return null
-                    }
+    function invite360() {
+        var modalInstance = $modal.open({
+            animation: true,
+            windowClass: 'xx-dialog fade zoom',
+            backdrop: 'static',
+            templateUrl: '/static/angular/leadership-style/partials/_modals/invite-360.html',
+            controller: 'Invite360Controller as invite360',
+            resolve: {
+                panel: function () {
+                    return null
                 }
-            });
-            modalInstance.result.then(
-                function (sentLeadershipStyleRequests) {
-                    getMyRecentlySentRequests();
+            }
+        });
+        modalInstance.result.then(
+            function (sentLeadershipStyleRequests) {
+                getMyRecentlySentRequests();
+            }
+        );
+    }
+
+    function requestTeamReport(team_id, index) {
+        console.log(index);
+        var modalInstance = $modal.open({
+            animation: true,
+            windowClass: 'xx-dialog fade zoom',
+            backdrop: 'static',
+            templateUrl: '/static/angular/leadership-style/partials/_modals/request-team-report.html',
+            controller: 'RequestTeamReportController as reportRequest',
+            resolve: {
+                team_id: function () {
+                    return team_id
                 }
-            );
-        }
+            }
+        });
+        modalInstance.result.then(
+            function (response) {
+                vm.myLeadershipStyle.teams[index] = response;
+            }
+        );
+    }
 }
 
 /*

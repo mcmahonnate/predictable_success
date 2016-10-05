@@ -43,13 +43,13 @@
         </div>
     </div>
 
-    <div class="panel fade-in" ng-if="index.myLeadershipStyle.scores.length > 0 && index.teamsIOwn==0" >
+    <div class="panel fade-in" ng-if="index.myLeadershipStyle.scores.length > 0 && index.myLeadershipStyle.teams.length==0" >
         <h3 class="modal-title panel-title">Your Results</h3>
 
-        <div ng-bind-html="index.myLeadershipStyle.tease.description"></div>
+        <div ng-bind-html="index.myLeadershipStyle.description.description"></div>
         <div class="leadership-style-scores">
             <div class="well">
-            <div class="call-to-action" ng-if="index.teamsIOwn.length==0">
+            <div class="call-to-action" ng-if="index.myLeadershipStyle.teams.length==0">
                 <h3 class="title">[ACTION REQUESTED] Now, come take the next step &#8230;</h3>
                 <p class="message">
 You have <em>your</em> score. Now, invite up to eight team members to take this quiz&#8212;and get a <span style="text-decoration: underline">personalized</span> report from our experts to help you and your team become more self-aware, more collaborative, and more powerful. Understand how your team's complementary skills can be best unleashed, all for a nominal fee. (Each report will be personalized based on <span style="text-decoration: underline">your</span> team, after all!) To learn more or get started, simply click the button below to get started:</p>
@@ -83,8 +83,8 @@ You have <em>your</em> score. Now, invite up to eight team members to take this 
                             // Open Checkout with further options:
                             handler.open({
                                 name: 'The Motley Fool LLC',
-                                description: 'Predictable Success for $149',
-                                amount: 14900
+                                description: 'Predictable Success for $199',
+                                amount: 19900
                             });
 
                             e.preventDefault();
@@ -102,15 +102,21 @@ You have <em>your</em> score. Now, invite up to eight team members to take this 
         </div>
 
     </div>
-    <div ng-repeat="team in index.teamsIOwn | orderBy:'customer_id'">
-
-        <div class="panel fade-in">
-            <h3 class="modal-title">Get Your Report</h3>
-            <p>Your invitations have been sent and you can see the progress below.  When the members of your team have completed the quiz, or you are ready to send your team’s data along for your one-time, customized report, click the button below.</p>
-                <button ng-click="index.invite(team.id)" class="btn btn-success" style="margin-top: 10px;width:100%" type="submit">Get My Report</button>
-        </div>
-        <div class="invite-360" style="height: 25px;">
-            <h4 ng-if="index.teamsIOwn.length > 0" class="header"><a href="" class="pull-right" ng-click="index.invite(team.id)">+ Invite more team members</a></h4>
+    <div ng-repeat="team in index.myLeadershipStyle.teams | orderBy:'customer_id'">
+        <div ng-if="team.owner.id==index.myLeadershipStyle.employee.id">
+            <div class="panel fade-in" ng-if="!team.requested_report">
+                <h3 class="modal-title">Get YOUR Team Report</h3>
+                <p>Your invitations have been. You can see their progress below.  When the members of your team have completed the quiz, or you are ready to send your team’s data along for your one-time, customized report, click the button below.</p>
+                <button ng-disabled="!team.can_request_report" ng-click="index.requestTeamReport(team.id, $index)" class="btn btn-success" style="margin-top: 10px;width:100%" type="submit">Get YOUR Team Report</button>
+                <p class="centered" style="color: #aaa;" ng-if="!team.can_request_report">Before we can generate YOUR Team Report at least 6 of your Team Members need to complete their Leadership Style quiz.</p>
+            </div>
+            <div class="panel fade-in" ng-if="team.requested_report && !team.received_report">
+                <h3 class="modal-title">Your Team Report</h3>
+                <p>We are working on your team report. Please allow 3-5 business days.
+            </div>
+            <div class="invite-360" style="height: 25px;">
+                <h4 ng-if="index.myLeadershipStyle.teams.length > 0" class="header"><a href="" class="pull-right" ng-click="index.invite(team.id)">+ Invite more team members</a></h4>
+            </div>
         </div>
         <div class="panel fade-in" ng-if="$first && index.myLeadershipStyle.scores.length" ng-init="collapse=true">
             <div style="min-height: 55px;">
@@ -121,18 +127,16 @@ You have <em>your</em> score. Now, invite up to eight team members to take this 
                     <i class="fa fa-chevron-down pull-right collapse-toggle" ng-show="!collapse" ng-click="collapse=!collapse"></i>
                     <i class="fa fa-chevron-right pull-right collapse-toggle" ng-show="collapse" ng-click="collapse=!collapse"></i>
                 </h3>
-                <h3 class="modal-title sub-title {{index.myLeadershipStyle.tease.style_verbose}}">
-                {{ index.myLeadershipStyle.tease.style_verbose }}
+                <h3 class="modal-title">
+                    <span ng-repeat="score in index.myLeadershipStyle.scores | orderBy : 'score' : true">
+                        <span class="sub-title {{ score.style_verbose }}" ng-if="$first">{{score.style_verbose}} - {{score.score}},</span>
+                        <span class="sub-title" ng-if="!$first && !$last">{{score.style_verbose}} - {{score.score}},</span>
+                        <span class="sub-title" ng-if="$last">{{score.style_verbose}} - {{score.score}}</span>
+                    </span>
                 </h3>
             </div>
             <div collapse="collapse" style="padding-top: 8px;">
-                <div ng-bind-html="index.myLeadershipStyle.tease.description"></div>
-                <div class="leadership-style-scores">
-                    <div class="well">
-                        <h3 class="leadership-style-title">Scores</h3>
-                        <p ng-repeat="score in index.myLeadershipStyle.scores | orderBy:'-score'"><strong>{{ score.style_verbose }}</strong> - {{ score.score }} out of 960</p>
-                    </div>
-                </div>
+                <div ng-bind-html="index.myLeadershipStyle.description.description"></div>
             </div>
         </div>
 
@@ -157,19 +161,17 @@ You have <em>your</em> score. Now, invite up to eight team members to take this 
                     </h3>
                 </div>
                 <div ng-if="team_member.leadership_style && team_member.leadership_style.completed">
-                    <h3 class="modal-title sub-title {{team_member.leadership_style.tease.style_verbose}}">
-                    {{ team_member.leadership_style.tease.style_verbose }}
+                    <h3 class="modal-title">
+                        <span ng-repeat="score in team_member.leadership_style.scores | orderBy : 'score' : true">
+                            <span class="sub-title {{ score.style_verbose }}" ng-if="$first">{{score.style_verbose}} - {{score.score}},</span>
+                            <span class="sub-title" ng-if="!$first && !$last">{{score.style_verbose}} - {{score.score}},</span>
+                            <span class="sub-title" ng-if="$last">{{score.style_verbose}} - {{score.score}}</span>
+                        </span>
                     </h3>
                 </div>
             </div>
             <div collapse="team_member.collapse" ng-if="team_member.leadership_style && team_member.leadership_style.completed" style="padding-top: 8px;">
-                <div ng-bind-html="team_member.leadership_style.tease.description"></div>
-                <div class="leadership-style-scores">
-                    <div class="well">
-                        <h3 class="leadership-style-title">Scores</h3>
-                        <p ng-repeat="score in team_member.leadership_style.scores | orderBy:'-score'"><strong>{{ score.style_verbose }}</strong> - {{ score.score }} out of 960</p>
-                    </div>
-                </div>
+                <div ng-bind-html="team_member.leadership_style.description.description"></div>
             </div>
         </div>
     </div>

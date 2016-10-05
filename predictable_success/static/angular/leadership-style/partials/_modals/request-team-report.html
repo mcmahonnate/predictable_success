@@ -1,0 +1,14 @@
+<form name="outterForm" id="invite-360-modal" class="invite-360">
+    <div class="form-group">
+        <div class="modal-body">
+            <panel>
+                <h3 class="modal-title">Get YOUR Team Report</h3>
+                <textarea style="min-height:120px;" class="form-control" cols="30" rows="5" ng-model="reportRequest.message" placeholder="Anything you wish to add before we send your request?"></textarea>
+            </panel>
+        </div>
+        <div class="modal-footer">
+            <button type="button" ng-click="reportRequest.cancel()"  class="btn btn-light pull-left">Cancel</button>
+            <button type="button" ng-click="reportRequest.submit()" class="btn btn-success" data-dismiss="modal">Submit</button>
+        </div>
+    </div>
+</form>

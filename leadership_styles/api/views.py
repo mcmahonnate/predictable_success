@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from org.api.permissions import UserIsEmployeeOrLeaderOrCoachOfEmployee, UserIsEmployee, PermissionsViewAllEmployees
 from predictable_success.utils import authenticate_and_login
+from rest_framework.exceptions import PermissionDenied
 from rest_framework import status
 from rest_framework.generics import *
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -149,6 +150,23 @@ class CreateRequest(CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(requester=self.request.user.employee)
+
+
+class RequestTeamReport(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, pk, format=None):
+        team = TeamLeadershipStyle.objects.get(id=pk)
+        if request.user.employee == team.owner:
+            message = request.data['message']
+            team.request_team_report(message=message)
+            team.requested_report = True
+            team.requested_date = datetime.now()
+            team.save()
+            serializer = TeamLeadershipStyleSerializer(instance=team, context={'request': request})
+            return Response(serializer.data)
+        else:
+            raise PermissionDenied
 
 
 class InviteTeamMembers(APIView):

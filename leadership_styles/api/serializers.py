@@ -76,9 +76,17 @@ class LeadershipStyleTeaseSerializer(serializers.ModelSerializer):
         fields = ('id', 'style', 'style_verbose', 'tease')
 
 
+class LeadershipStyleDescriptionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = LeadershipStyleDescription
+        fields = ('id', 'name', 'description')
+
+
 class EmployeeLeadershipStyleBaseSerializer(serializers.ModelSerializer):
     percentage_complete = serializers.SerializerMethodField()
     scores = ScoreSerializer(many=True)
+    description = serializers.SerializerMethodField()
     tease = serializers.SerializerMethodField()
 
     def get_percentage_complete(self, obj):
@@ -91,6 +99,13 @@ class EmployeeLeadershipStyleBaseSerializer(serializers.ModelSerializer):
             p = round(p)
             return int(p)
 
+    def get_description(self, obj):
+        if not obj.completed:
+            return None
+        description = LeadershipStyleDescription.objects.get_description(scores=obj.scores)
+        serializer = LeadershipStyleDescriptionSerializer(context=self.context)
+        return serializer.to_representation(description)
+
     def get_tease(self, obj):
         if not obj.completed:
             return None
@@ -101,7 +116,7 @@ class EmployeeLeadershipStyleBaseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmployeeLeadershipStyle
-        fields = ('id', 'date', 'percentage_complete', 'completed', 'scores', 'tease')
+        fields = ('id', 'date', 'percentage_complete', 'completed', 'scores', 'tease', 'description')
 
 
 class EmployeeLeadershipStyleSerializer(EmployeeLeadershipStyleBaseSerializer):
@@ -111,6 +126,7 @@ class EmployeeLeadershipStyleSerializer(EmployeeLeadershipStyleBaseSerializer):
     answers = serializers.SerializerMethodField()
     csrf_token = serializers.SerializerMethodField()
     stripe_key = serializers.SerializerMethodField()
+    teams = serializers.SerializerMethodField()
 
     def get_next_question(self, obj):
         next_question = obj.next_question()
@@ -129,6 +145,13 @@ class EmployeeLeadershipStyleSerializer(EmployeeLeadershipStyleBaseSerializer):
         else:
             return [answer.id for answer in obj.answers.all()]
 
+    def get_teams(self, obj):
+        if obj.completed:
+            serializer = TeamLeadershipStyleSerializer(context=self.context, many=True)
+            return serializer.to_representation(obj.employee.team_leadership_styles)
+        else:
+            return []
+
     def get_csrf_token(self, obj):
         req = self.context.get('request')
         return get_token(req)
@@ -140,7 +163,7 @@ class EmployeeLeadershipStyleSerializer(EmployeeLeadershipStyleBaseSerializer):
         model = EmployeeLeadershipStyle
         fields = ('id', 'assessment_type', 'active', 'employee', 'assessor', 'next_question', 'notes', 'answers', 'date',
                   'total_questions', 'total_answered', 'completed', 'times_retaken', 'is_draft', 'scores', 'tease',
-                  'csrf_token', 'stripe_key', )
+                  'csrf_token', 'stripe_key', 'description', 'teams')
 
 
 class UpdateEmployeeLeadershipStyleSerializer(serializers.ModelSerializer):
@@ -203,8 +226,16 @@ class TeamMemberSerializer(serializers.ModelSerializer):
 class TeamLeadershipStyleSerializer(serializers.ModelSerializer):
     owner = SanitizedEmployeeSerializer()
     team_members = TeamMemberSerializer(many=True)
+    can_request_report = serializers.SerializerMethodField()
+
+    def get_can_request_report(self, obj):
+        leadership_styles = EmployeeLeadershipStyle.objects.filter(employee__in=obj.team_members.all())
+        if leadership_styles.filter(completed=True).count() > 5:
+            return True
+        else:
+            return False
 
     class Meta:
         model = TeamLeadershipStyle
-        fields = ['id', 'owner', 'team_members']
+        fields = ['id', 'owner', 'team_members', 'requested_report', 'requested_date', 'can_request_report']
 

@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 from customers.models import Customer
+from datetime import datetime
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.core.signing import Signer
@@ -63,5 +64,50 @@ def send_quiz_link_email(quiz_link_id):
     msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
     msg.attach_alternative(html_content, "text/html")
     msg.send()
+
+
+@app.task
+def send_team_report_request_email(team_id, message):
+    from leadership_styles.models import EmployeeLeadershipStyle, TeamLeadershipStyle
+    print 'send_team_report_request_email task'
+    tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
+    team = TeamLeadershipStyle.objects.get(id=team_id)
+    leadership_styles = EmployeeLeadershipStyle.objects.filter(employee__in=team.team_members.all())
+    recipient_email = settings.TEAM_REPORT_EMAIL
+
+    context = {
+        'team': team,
+        'leadership_styles': leadership_styles,
+        'message': message,
+    }
+    subject = "%s has requested their team report" % team.owner.full_name
+    text_content = render_to_string('email/team_report_request_notification.txt', context)
+    html_content = render_to_string('email/team_report_request_notification.html', context)
+    msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
+
+
+@app.task
+def send_completed_notification_email(leadership_style_id):
+    from leadership_styles.models import EmployeeLeadershipStyle, TeamLeadershipStyle
+    print 'send_completed_notification_email'
+    tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
+    team_page_link = tenant.build_url('/')
+    leadership_style = EmployeeLeadershipStyle.objects.get(id=leadership_style_id)
+    for team in leadership_style.employee.team_leadership_styles.all():
+        recipient_email = team.owner.email
+
+        context = {
+            'team_member_name': leadership_style.employee.full_name,
+            'team_page_link': team_page_link,
+        }
+        subject = "%s has finished their quiz" % leadership_style.employee.full_name
+        text_content = render_to_string('email/quiz_finished_notification.txt', context)
+        html_content = render_to_string('email/quiz_finished_notification.html', context)
+        msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
+
 
 #[[email address}} has just completed the Leadership Style quiz and wnats you to join in.
