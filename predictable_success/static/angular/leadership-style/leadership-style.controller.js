@@ -28,6 +28,21 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         } else {
             getMyLeadershipStyle();
         }
+
+        $scope.status = {
+            isopen: false
+        };
+
+        $scope.toggled = function(open) {
+            $log.log('Dropdown is now: ', open);
+        };
+
+        $scope.toggleDropdown = function($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.status.isopen = !$scope.status.isopen;
+            vm.status.isopen = !vm.status.isopen;
+        };
     };
 
     function respondToRequest() {
@@ -192,3 +207,32 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         );
     }
 }
+
+/*
+// angular.module('leadership-style', ['ui.bootstrap']);
+angular.module('leadership-style', ['ngAnimate', 'ngSanitize', 'ui.bootstrap']);
+
+angular.module('leadership-style').controller('DropdownCtrl', function ($scope, $log) {
+  $scope.items = [
+    'The first choice!',
+    'And another choice for you.',
+    'but wait! A third!'
+  ];
+
+  $scope.status = {
+    isopen: false
+  };
+
+  $scope.toggled = function(open) {
+    $log.log('Dropdown is now: ', open);
+  };
+
+  $scope.toggleDropdown = function($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+    $scope.status.isopen = !$scope.status.isopen;
+  };
+
+  $scope.appendToEl = angular.element(document.querySelector('#dropdown-long-content'));
+});
+*/

@@ -1,7 +1,20 @@
 <div class="container leadership-style" data-hj-masked>
+    <!-- <div class="account-menu">
+        <a class="dashboard pull-right" href="/logout"><i class="fa fa-sign-out"></i> Sign Out ahill@fool.com {{ request.user }}</a>
+    </div> -->
+
     <div class="account-menu">
-        <a class="dashboard pull-right" href="/logout"><i class="fa fa-sign-out"></i> Sign Out</a>
+        <!-- Single button -->
+        <div class="btn-group dashboard pull-right" dropdown is-open="status.isopen">
+          <button id="single-button" type="button" class="btn btn-primary" dropdown-toggle ng-disabled="disabled">
+            {{ $root.currentUser.employee.full_name }} <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" dropdown-menu role="menu" aria-labelledby="single-button">
+            <li role="menuitem"><a href="/logout">Logout</a></li>
+          </ul>
+        </div>
     </div>
+
     <!-- Leadership Style request message -->
     <div ng-class="{'slide-up-active': hideRequestMessage}" class="alert alert-success slide-up" role="alert" ng-show="successRequestMessage">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -44,7 +57,7 @@ You have <em>your</em> score. Now, invite up to eight team members to take this 
                 <form action="/account/payment" method="POST" id="paymentForm">
                 <input type="hidden" name="csrfmiddlewaretoken" ng-value="index.myLeadershipStyle.csrf_token">
                 
-                <button class="btn btn-success btn-block" id="stripePay" style="margin-bottom: 15px;" type="submit">Get Started for just $199</button>
+                <button class="btn btn-success btn-block" id="stripePay" style="margin-bottom: 15px;" type="submit">Get Started for just $149</button>
                 <input type="hidden" id="stripeToken" name="stripeToken" value="" />
                 <input type="hidden" id="stripeEmail" name="stripeEmail" value="" />
                 </form>
@@ -70,8 +83,8 @@ You have <em>your</em> score. Now, invite up to eight team members to take this 
                             // Open Checkout with further options:
                             handler.open({
                                 name: 'The Motley Fool LLC',
-                                description: 'Predictable Success for $149',
-                                amount: 14900
+                                description: 'Predictable Success for $199',
+                                amount: 19900
                             });
 
                             e.preventDefault();

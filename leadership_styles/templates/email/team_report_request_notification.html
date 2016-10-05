@@ -9,19 +9,5 @@
             "{{  message }}"
         </p>
         {% endif %}
-        {% for leadership_style in leadership_styles %}
-            {% if not leadership_style.completed %}
-            <p>
-                {{ leadership_style.employee.full_name }} Not Completed
-            </p>
-            {% else %}
-            <p>
-            {{ leadership_style.employee.full_name }}
-            {% for score in leadership_style.scores.all|dictsortreversed:"score" %}
-                {{ score.style_verbose }} - {{ score.score }}
-            {% endfor %}
-            </p>
-            {% endif %}
-
-        {% endfor %}
+        <p>See the attachment to retrieve their team scores.</p>
 {% endblock content%}

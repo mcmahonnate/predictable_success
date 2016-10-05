@@ -1,6 +1,7 @@
 from __future__ import absolute_import
+import csv
+import StringIO
 from customers.models import Customer
-from datetime import datetime
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.core.signing import Signer
@@ -68,16 +69,31 @@ def send_quiz_link_email(quiz_link_id):
 
 @app.task
 def send_team_report_request_email(team_id, message):
+
+    def create_csv(employees):
+        csvfile = StringIO.StringIO()
+        csvwriter = csv.writer(csvfile)
+        csvwriter.writerow(['Name', 'Status', 'Visionary', 'Operator', 'Processor', 'Synergist'])
+        for employee in employees:
+            try:
+                leadership_style = EmployeeLeadershipStyle.objects.get(employee=employee)
+                if leadership_style.completed:
+                    scores = leadership_style.scores.all()
+                    csvwriter.writerow([employee.full_name, 'complete', scores[0].score, scores[1].score,
+                                        scores[2].score, scores[3].score])
+                else:
+                    csvwriter.writerow([employee.full_name, 'incomplete', '', '', '', ''])
+            except EmployeeLeadershipStyle.DoesNotExist:
+                    csvwriter.writerow([employee.full_name, 'not started', '', '', '', ''])
+        return csvfile.getvalue()
+
     from leadership_styles.models import EmployeeLeadershipStyle, TeamLeadershipStyle
     print 'send_team_report_request_email task'
-    tenant = Customer.objects.filter(schema_name=connection.schema_name).first()
     team = TeamLeadershipStyle.objects.get(id=team_id)
-    leadership_styles = EmployeeLeadershipStyle.objects.filter(employee__in=team.team_members.all())
+    csv_file = create_csv(team.team_members.all())
     recipient_email = settings.TEAM_REPORT_EMAIL
-
     context = {
         'team': team,
-        'leadership_styles': leadership_styles,
         'message': message,
     }
     subject = "%s has requested their team report" % team.owner.full_name
@@ -85,6 +101,7 @@ def send_team_report_request_email(team_id, message):
     html_content = render_to_string('email/team_report_request_notification.html', context)
     msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
     msg.attach_alternative(html_content, "text/html")
+    msg.attach('scores.csv', csv_file, 'text/csv')
     msg.send()
 
 
