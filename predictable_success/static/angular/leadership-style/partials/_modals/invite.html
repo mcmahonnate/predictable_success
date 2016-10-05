@@ -2,8 +2,11 @@
     <div class="form-group">
         <div class="modal-body">
             <panel>
-                <h3 class="modal-title">Invite Your Team</h3>
-                <h4 class="header">Email Address <a href="" class="pull-right" ng-click="invite.addEmail()">+ Add another invitation</a></h4>
+                <h3 class="modal-title">
+                    <span ng-if="!invite.has_team_members">Invite up to {{ invite.remaining_invites }} Team members</span>
+                    <span ng-if="invite.has_team_members">You have {{ invite.remaining_invites }} invites remaining</span>
+                </h3>
+                <h4 class="header" ng-if="invite.remaining_invites > invite.invites.length">Email Address <a href="" class="pull-right" ng-click="invite.addEmail()">+ Add another invitation</a></h4>
                 <ng-form name="innerForm" ng-repeat="invite in invite.invites">
                     <input ng-if="$first" ng-init="invalid=false" ng-blur="invalid=innerForm.email.$error.email" ng-model="invite.email" type="email" ng-class="{'alert-danger': invalid && innerForm.email.$error.email}" autofocus autocomplete="off" class="form-control input-lg fade-in" name="email" placeholder="name@domain.com" required>
                     <input ng-if="$index > 0" ng-init="invalid=false" ng-blur="invalid=innerForm.email.$error.email" ng-model="invite.email" type="email" ng-class="{'alert-danger': invalid && innerForm.email.$error.email}" autocomplete="off" class="form-control input-lg fade-in" name="email" placeholder="name@domain.com">

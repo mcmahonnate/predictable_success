@@ -227,6 +227,10 @@ class TeamLeadershipStyleSerializer(serializers.ModelSerializer):
     owner = SanitizedEmployeeSerializer()
     team_members = TeamMemberSerializer(many=True)
     can_request_report = serializers.SerializerMethodField()
+    remaining_invites = serializers.SerializerMethodField()
+
+    def get_remaining_invites(self, obj):
+        return TEAM_MEMBER_CAP - obj.team_members.count()
 
     def get_can_request_report(self, obj):
         leadership_styles = EmployeeLeadershipStyle.objects.filter(employee__in=obj.team_members.all())
@@ -237,5 +241,5 @@ class TeamLeadershipStyleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TeamLeadershipStyle
-        fields = ['id', 'owner', 'team_members', 'requested_report', 'requested_date', 'can_request_report', 'is_team_full']
+        fields = ['id', 'owner', 'team_members', 'requested_report', 'requested_date', 'can_request_report', 'is_team_full', 'remaining_invites']
 

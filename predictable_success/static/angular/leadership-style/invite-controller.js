@@ -2,8 +2,10 @@
         .module('leadership-style')
         .controller('InviteController', InviteController);
 
-    function InviteController(LeadershipStyleInviteService, team_id, $timeout, $modalInstance, $rootScope) {
+    function InviteController(LeadershipStyleInviteService, team_id, remaining_invites, team_member_count, $timeout, $modalInstance, $rootScope) {
         var vm = this;
+        vm.remaining_invites = remaining_invites;
+        vm.has_team_members = team_member_count > 0 ? true :  false;
         vm.subject = $rootScope.currentUser.employee;
         vm.message = '';
         vm.submit = submit;
@@ -15,9 +17,10 @@
         activate();
 
         function activate() {
-            addEmail();
-            addEmail();
-            addEmail();
+            var count = remaining_invites >=3 ? 3 : remaining_invites;
+            for (var i = 0; i < count; i++) {
+                addEmail();
+            }
         }
 
         function addEmail() {

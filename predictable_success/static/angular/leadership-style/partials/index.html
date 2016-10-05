@@ -115,7 +115,7 @@ You have <em>your</em> score. Now, invite up to eight team members to take this 
                 <p>We are working on your team report. Please allow 3-5 business days.
             </div>
             <div class="invite-360" style="height: 25px;">
-                <h4 ng-if="index.myLeadershipStyle.teams.length > 0" class="header"><a href="" class="pull-right" ng-click="index.invite(team.id)">+ Invite more team members</a></h4>
+                <h4 ng-if="!team.is_team_full" class="header"><a href="" class="pull-right" ng-click="index.invite(team.id, team.remaining_invites, team.team_members.length)">+ Invite more team members</a></h4>
             </div>
         </div>
         <div class="panel fade-in" ng-if="$first && index.myLeadershipStyle.scores.length" ng-init="collapse=true">

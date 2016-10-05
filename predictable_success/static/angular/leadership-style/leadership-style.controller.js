@@ -136,8 +136,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         );
     }
 
-    function invite(team_id) {
-        console.log(team_id);
+    function invite(team_id, remaining_invites, team_member_count) {
         var modalInstance = $modal.open({
             animation: true,
             windowClass: 'xx-dialog fade zoom',
@@ -145,9 +144,16 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
             templateUrl: '/static/angular/leadership-style/partials/_modals/invite.html',
             controller: 'InviteController as invite',
             resolve: {
-                team_id: function () {
+                team_id: function() {
                     return team_id
+                },
+                remaining_invites: function() {
+                    return remaining_invites
+                },
+                team_member_count : function() {
+                    return team_member_count
                 }
+
             }
         });
         modalInstance.result.then(
