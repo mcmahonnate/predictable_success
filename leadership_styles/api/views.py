@@ -8,6 +8,7 @@ from rest_framework import status
 from rest_framework.generics import *
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework import status
 from rest_framework.views import APIView
 from .permissions import UserIsAssessorOrHasAllAccess, UserIsTeamMember
 from .serializers import *
@@ -175,10 +176,14 @@ class InviteTeamMembers(APIView):
     def post(self, request, pk, format=None):
         team = TeamLeadershipStyle.objects.get(id=pk)
         emails = request.data['emails']
-        team = TeamLeadershipStyle.objects.add_team_members(team=team, emails=emails)
-        serializer = TeamLeadershipStyleSerializer(instance=team, context={'request': request})
+        try:
+            team = TeamLeadershipStyle.objects.add_team_members(team=team, emails=emails)
+            serializer = TeamLeadershipStyleSerializer(instance=team, context={'request': request})
+            return Response(serializer.data)
+        except ValidationError, err:
+            content = {'validation error': ';'.join(err.messages)}
+            return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response(serializer.data)
 
 
 class RetrieveTeamLeadershipStyle(RetrieveAPIView):

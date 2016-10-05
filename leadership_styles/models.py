@@ -2,6 +2,7 @@ import blah
 from blah.models import Comment
 from customers.models import Customer
 from django.core.signing import Signer
+from django.core.exceptions import ValidationError
 from django.db import connection, models
 from django.db.models import Q, F
 from org.models import Employee
@@ -54,6 +55,9 @@ ASSESSMENT_TYPE = (
 
 # Scoring
 SCORE_MULTIPLIER = 30
+
+#Teams
+TEAM_MEMBER_CAP = 10
 
 
 class LeadershipStyleTease(models.Model):
@@ -460,6 +464,8 @@ class TeamLeadershipStyleManager(models.Manager):
 
     @staticmethod
     def add_team_members(team, emails):
+        if team.will_team_be_full(len(emails)):
+            raise ValidationError(message="Teams can only have %s team members." % TEAM_MEMBER_CAP)
         for email in emails:
             user = Employee.objects.get_or_create_user(email=email)
             employee = Employee.objects.get_or_create_employee(user=user)
@@ -489,6 +495,18 @@ class TeamLeadershipStyle(models.Model):
     owner = models.ForeignKey(Employee, related_name='+')
     team_members = models.ManyToManyField(Employee, related_name='team_leadership_styles', null=True, blank=True)
     quiz_requests = models.ManyToManyField(QuizUrl, related_name='team_leadership_styles', null=True, blank=True)
+
+    @property
+    def is_team_full(self):
+        if self.team_members.all().count() >= TEAM_MEMBER_CAP:
+            return True
+        return False
+
+    def will_team_be_full(self, new_member_count):
+        print self.team_members.count()
+        print new_member_count
+        print self.team_members.count() + new_member_count
+        return (self.team_members.count() + new_member_count) > TEAM_MEMBER_CAP
 
     def request_team_report(self, message):
         send_team_report_request_email.subtask((self.id, message)).apply_async()
