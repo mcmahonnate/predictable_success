@@ -43,64 +43,96 @@
         </div>
     </div>
 
-    <div class="panel fade-in" ng-if="index.myLeadershipStyle.scores.length > 0 && index.myLeadershipStyle.teams.length==0" >
-        <h3 class="modal-title panel-title">Your Results</h3>
-
-        <div ng-bind-html="index.myLeadershipStyle.description.description"></div>
-        <div class="leadership-style-scores">
-            <div class="well">
-            <div class="call-to-action" ng-if="index.myLeadershipStyle.teams.length==0">
-                <h3 class="title">[ACTION REQUESTED] Now, come take the next step &#8230;</h3>
-                <p class="message">
-You have <em>your</em> score. Now, invite up to eight team members to take this quiz&#8212;and get a <span style="text-decoration: underline">personalized</span> report from our experts to help you and your team become more self-aware, more collaborative, and more powerful. Understand how your team's complementary skills can be best unleashed, all for a nominal fee. (Each report will be personalized based on <span style="text-decoration: underline">your</span> team, after all!) To learn more or get started, simply click the button below to get started:</p>
-                
-                <form action="/account/payment" method="POST" id="paymentForm">
-                <input type="hidden" name="csrfmiddlewaretoken" ng-value="index.myLeadershipStyle.csrf_token">
-                
-                <button class="btn btn-success btn-block" id="stripePay" style="margin-bottom: 15px;" type="submit">Get Started for just $149</button>
-                <input type="hidden" id="stripeToken" name="stripeToken" value="" />
-                <input type="hidden" id="stripeEmail" name="stripeEmail" value="" />
-                </form>
-
-                <script>
-                    $(function () {
-                        var handler = StripeCheckout.configure({
-                            key: '{{index.myLeadershipStyle.stripe_key}}',
-                            locale: 'auto',
-                            token: function(token) {
-                                var $stripeToken = $('#stripeToken');
-                                var $stripeEmail = $('#stripeEmail');
-
-                                $stripeToken.val(token.id);
-                                $stripeEmail.val(token.email);
-
-                                var $paymentForm = $('#paymentForm');
-                                $paymentForm.submit();
-                            }
-                        });
-
-                        document.getElementById('stripePay').addEventListener('click', function(e) {
-                            // Open Checkout with further options:
-                            handler.open({
-                                name: 'The Motley Fool LLC',
-                                description: 'Predictable Success for $199',
-                                amount: 19900
-                            });
-
-                            e.preventDefault();
-                        });
-
-                        // Close Checkout on page navigation:
-                        window.addEventListener('popstate', function() {
-                            handler.close();
-                        });
-                    });
-                </script>
+    <div class="panel fade-in" ng-if="index.myLeadershipStyle.scores.length > 0 && index.myLeadershipStyle.teams.length==0">
+        <div class="panel-header" style="background-color: #3498db;">
+            <div class="avatar-container col-xs-1" style="margin-right: 25px">
+                <employee-avatar size="large" employee="index.myLeadershipStyle.employee"></employee-avatar>
             </div>
-            </div>
-
+            <h3 class="modal-title sub-title">You</h3>
+            <h3 class="modal-title">
+                <span ng-repeat="score in index.myLeadershipStyle.scores | orderBy : 'score' : true">
+                    <span class="sub-title" ng-if="$first">{{score.style_verbose}} - {{score.score}},</span>
+                    <span class="sub-title" ng-if="!$first && !$last">{{score.style_verbose}} - {{score.score}},</span>
+                    <span class="sub-title" ng-if="$last">{{score.style_verbose}} - {{score.score}}</span>
+                </span>
+            </h3>
         </div>
+        <div>
+            <div class="landing-form" style="padding-top: 26px; margin-left: -26px;">
+                <div class="arrow_box step_complete" style="float: left; text-transform: uppercase; font-size: 22px; font-weight: bold;">Step One</div>
+                <div style="margin-left: 300px; margin-top: 24px; font-size: 22px; text-transform: uppercase; font-weight: bold;">Read Your Results</div>
+            </div>
+            <div style="padding-top: 40px;">
+                <div ng-bind-html="index.myLeadershipStyle.description.description"></div>
+            </div>
+            <div class="landing-form">
+                <div ng-if="index.myLeadershipStyle.teams.length==0">
+                    <div style="padding-top: 30px; margin-left: -26px;">
+                        <div class="arrow_box step_complete" style="float: left; text-transform: uppercase; font-size: 22px; font-weight: bold;">Step Two</div>
+                        <div style="margin-left: 300px; margin-top: 24px; font-size: 22px; text-transform: uppercase; font-weight: bold;">Get Your Team Report</div>
+                    </div>
+                    <div style="clear: both;"></div>
+                    <div class="clearfix">
+                        <div style="width: 50%; float: left; font-size: 24px; padding: 50px 20px 20px 40px; line-height: 28px;">
+                            Now that you know your leadership style the next step is to discover your team mate's style. Sign up today to get a detailed bespoke report that will show you:
+                        </div>
 
+                        <div style="width: 50%; float: right; padding: 50px 20px 20px 20px">
+                            <ul style="list-style-type: circle; border-bottom: solid 1px #aaa;padding-bottom: 15px;">
+                                <li>Your team's ability to make and execute high quality decisions.</li>
+                                <li>Which team mates have a natural tendency to butt heads.</li>
+                                <li>What style you need to increase in your team to improve performance.</li>
+                                <li>The overall culture of your team.</li>
+                                <li>How aligned your team is to the Motley Fool team.</li>
+                            </ul>
+                            <div class="centered" style="margin: 15px 0;"><span style="color: #aaa; font-size: 15px; font-weight: 700;">INVESTMENT | $199 (Up to 10 team members)</span></div>
+                            <form action="/account/payment" method="POST" id="paymentForm">
+                            <input type="hidden" name="csrfmiddlewaretoken" ng-value="index.myLeadershipStyle.csrf_token">
+
+                            <button class="btn btn-success btn-block" id="stripePay" style="margin-bottom: 15px;" type="submit">Sign up for a Team Analysis</button>
+                            <input type="hidden" id="stripeToken" name="stripeToken" value="" />
+                            <input type="hidden" id="stripeEmail" name="stripeEmail" value="" />
+                            </form>
+
+                            <script>
+                                $(function () {
+                                    var handler = StripeCheckout.configure({
+                                        key: '{{index.myLeadershipStyle.stripe_key}}',
+                                        locale: 'auto',
+                                        token: function(token) {
+                                            var $stripeToken = $('#stripeToken');
+                                            var $stripeEmail = $('#stripeEmail');
+
+                                            $stripeToken.val(token.id);
+                                            $stripeEmail.val(token.email);
+
+                                            var $paymentForm = $('#paymentForm');
+                                            $paymentForm.submit();
+                                        }
+                                    });
+
+                                    document.getElementById('stripePay').addEventListener('click', function(e) {
+                                        // Open Checkout with further options:
+                                        handler.open({
+                                            name: 'The Motley Fool LLC',
+                                            description: 'Predictable Success for $199',
+                                            amount: 19900
+                                        });
+
+                                        e.preventDefault();
+                                    });
+
+                                    // Close Checkout on page navigation:
+                                    window.addEventListener('popstate', function() {
+                                        handler.close();
+                                    });
+                                });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div ng-repeat="team in index.myLeadershipStyle.teams | orderBy:'customer_id'">
         <div ng-if="team.owner.id==index.myLeadershipStyle.employee.id">
