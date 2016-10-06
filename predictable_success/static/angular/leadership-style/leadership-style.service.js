@@ -4,6 +4,7 @@ angular
 
 function LeadershipStyleService($http, $log, LeadershipStyleResource) {
     return {
+        completeLeadershipStyle: completeLeadershipStyle,
         createLeadershipStyle: createLeadershipStyle,
         getLeadershipStyle: getLeadershipStyle,
         getMyLeadershipStyle: getMyLeadershipStyle,
@@ -13,6 +14,19 @@ function LeadershipStyleService($http, $log, LeadershipStyleResource) {
         updateLeadershipStyle: updateLeadershipStyle,
         goToPreviousQuestion: goToPreviousQuestion
     };
+
+    function completeLeadershipStyle(leadershipStyle) {
+        return LeadershipStyleResource.complete({id: leadershipStyle.id}, leadershipStyle, success, fail).$promise;
+
+        function success(response) {
+            return response;
+        }
+
+        function fail(response) {
+            $log.error('completeLeadershipStyle failed');
+        }
+    }
+
 
     function createLeadershipStyle(request) {
         return LeadershipStyleResource.create({employee: request.requester.id, assessor: request.reviewer.id, request: request.id, assessment_type: 1}, success, fail).$promise;

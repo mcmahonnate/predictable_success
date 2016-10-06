@@ -101,15 +101,10 @@ function QuizController(analytics, LeadershipStyleService, Notification, leaders
 
     function finish() {
         vm.busy = true;
-        LeadershipStyleService.updateEmployeeZone({id: vm.leadershipStyle.id, zone: vm.leadershipStyle.zone.id, notes: vm.leadershipStyle.notes, completed: true})
+        LeadershipStyleService.completeLeadershipStyle(vm.leadershipStyle)
             .then(function(result){
                 vm.leadershipStyle = result;
-                Notification.success('Your quiz results has been shared.')
-                $modalInstance.close(result);
-                if (leadershipStyle.id) {
-                    $location.path('/id/' + result.id);
-                }
-                vm.busy = false;
+                close();
             }
         );
     }

@@ -4,6 +4,10 @@ angular
 
 function LeadershipStyleResource($resource) {
     var actions = {
+        'complete': {
+            method: 'PUT',
+            url: '/api/v1/leadership-style/:id/finish/'
+        },
         'create': {
             method: 'POST',
             url: '/api/v1/leadership-style/create/'

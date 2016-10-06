@@ -388,7 +388,7 @@ class EmployeeLeadershipStyle(models.Model):
     scores = models.ManyToManyField(Score, related_name='employee_leadership_style', null=True, blank=True)
 
     def _calculate_scores(self):
-        if not self.completed and self.all_questions_answered() and self.answers.count() > 0:
+        if self.all_questions_answered() and self.answers.count() > 0:
             self.visionary_score = self.answers.filter(leadership_style=VISIONARY).count() * SCORE_MULTIPLIER
             self.scores.add(Score.objects.create_score(score=self.visionary_score, style=VISIONARY))
 
@@ -400,10 +400,7 @@ class EmployeeLeadershipStyle(models.Model):
 
             self.synergist_score = self.answers.filter(leadership_style=SYNERGIST).count() * SCORE_MULTIPLIER
             self.scores.add(Score.objects.create_score(score=self.synergist_score, style=SYNERGIST))
-
-            self.date = datetime.now()
             self.save()
-            self.send_completed_notification_email()
 
     @property
     def total_questions(self):
@@ -417,10 +414,6 @@ class EmployeeLeadershipStyle(models.Model):
         if self.completed:
             return None
         question = Question.objects.get_next_question(self)
-        if question is None:
-            self._calculate_scores()
-            self.completed = True
-            self.save()
         return question
 
     def all_questions_answered(self):
@@ -439,6 +432,11 @@ class EmployeeLeadershipStyle(models.Model):
         return False
 
     def save(self, *args, **kwargs):
+        if 'update_fields' in kwargs and 'completed' in kwargs['update_fields']:
+            self.date = datetime.now()
+            self._calculate_scores()
+            self.save()
+            self.send_completed_notification_email()
         super(EmployeeLeadershipStyle, self).save(*args, **kwargs)
 
     def send_completed_notification_email(self):

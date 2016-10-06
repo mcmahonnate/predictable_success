@@ -112,6 +112,22 @@ class UpdateEmployeeLeadershipStyle(RetrieveUpdateAPIView):
         return Response(serializer.data)
 
 
+class CompleteEmployeeLeadershipStyle(GenericAPIView):
+    queryset = EmployeeLeadershipStyle.objects.all()
+    serializer_class = EmployeeLeadershipStyleSerializer
+    permission_classes = (IsAuthenticated, UserIsAssessorOrHasAllAccess)
+
+    def get_leadership_style(self):
+        return self.get_object()
+
+    def put(self, request, pk, format=None):
+        leadership_style = EmployeeLeadershipStyle.objects.get(id=pk)
+        leadership_style.completed = True
+        leadership_style.save(update_fields=['completed'])
+        serializer = EmployeeLeadershipStyleSerializer(instance=leadership_style, context={'request': request})
+        return Response(serializer.data)
+
+
 class RetakeEmployeeLeadershipStyle(GenericAPIView):
     queryset = EmployeeLeadershipStyle.objects.all()
     serializer_class = EmployeeLeadershipStyleSerializer
