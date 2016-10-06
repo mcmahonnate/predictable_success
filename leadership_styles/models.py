@@ -4,7 +4,7 @@ from customers.models import Customer
 from django.core.signing import Signer
 from django.core.exceptions import ValidationError
 from django.db import connection, models
-from django.db.models import Q, F
+from django.db.models import Q, F, Avg
 from org.models import Employee
 from datetime import datetime, date, timedelta
 from model_utils import FieldTracker
@@ -502,10 +502,41 @@ class TeamLeadershipStyle(models.Model):
             return True
         return False
 
+    @property
+    def visionary_average(self):
+        scores = Score.objects.filter(employee_leadership_style__employee__in=self.team_members.all(), style=VISIONARY)
+        return scores.aggregate(average=Avg('score'))['average']
+
+    @property
+    def operator_average(self):
+        scores = Score.objects.filter(employee_leadership_style__employee__in=self.team_members.all(), style=OPERATOR)
+        return scores.aggregate(average=Avg('score'))['average']
+
+    @property
+    def processor_average(self):
+        scores = Score.objects.filter(employee_leadership_style__employee__in=self.team_members.all(), style=PROCESSOR)
+        return scores.aggregate(average=Avg('score'))['average']
+
+    @property
+    def synergist_average(self):
+        scores = Score.objects.filter(employee_leadership_style__employee__in=self.team_members.all(), style=SYNERGIST)
+        return scores.aggregate(average=Avg('score'))['average']
+
+    @property
+    def number_of_quizes_completed(self):
+        return EmployeeLeadershipStyle.objects.filter(employee__in=self.team_members.all(), completed=True).count()
+
+    @property
+    def number_of_quizes_started(self):
+        return EmployeeLeadershipStyle.objects.filter(employee__in=self.team_members.all(), completed=False).count()
+
+    @property
+    def number_of_quizes_not_started(self):
+        team_member_count = self.team_members.count()
+        quiz_count = EmployeeLeadershipStyle.objects.filter(employee__in=self.team_members.all()).count()
+        return team_member_count - quiz_count
+
     def will_team_be_full(self, new_member_count):
-        print self.team_members.count()
-        print new_member_count
-        print self.team_members.count() + new_member_count
         return (self.team_members.count() + new_member_count) > TEAM_MEMBER_CAP
 
     def request_team_report(self, message):

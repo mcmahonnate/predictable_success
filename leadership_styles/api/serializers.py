@@ -241,5 +241,8 @@ class TeamLeadershipStyleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TeamLeadershipStyle
-        fields = ['id', 'owner', 'team_members', 'requested_report', 'requested_date', 'can_request_report', 'is_team_full', 'remaining_invites']
+        fields = ['id', 'owner', 'team_members', 'requested_report', 'requested_date', 'can_request_report',
+                  'is_team_full', 'remaining_invites', 'visionary_average', 'operator_average', 'processor_average',
+                  'synergist_average', 'number_of_quizes_completed', 'number_of_quizes_started',
+                  'number_of_quizes_not_started']
 
