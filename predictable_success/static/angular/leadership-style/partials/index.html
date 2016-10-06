@@ -62,30 +62,30 @@
                 <div class="arrow_box step_complete" style="float: left; text-transform: uppercase; font-size: 22px; font-weight: bold;">Step One</div>
                 <div style="margin-left: 300px; margin-top: 24px; font-size: 22px; text-transform: uppercase; font-weight: bold;">Read Your Results</div>
             </div>
-            <div style="padding-top: 40px;">
+            <div style="padding-top: 60px;">
                 <div ng-bind-html="index.myLeadershipStyle.description.description"></div>
             </div>
             <div class="landing-form">
                 <div ng-if="index.myLeadershipStyle.teams.length==0">
-                    <div style="padding-top: 30px; margin-left: -26px;">
+                    <div style="padding-top: 5px; margin-left: -26px;">
                         <div class="arrow_box step_complete" style="float: left; text-transform: uppercase; font-size: 22px; font-weight: bold;">Step Two</div>
                         <div style="margin-left: 300px; margin-top: 24px; font-size: 22px; text-transform: uppercase; font-weight: bold;">Get Your Team Report</div>
                     </div>
                     <div style="clear: both;"></div>
                     <div class="clearfix">
-                        <div style="width: 50%; float: left; font-size: 24px; padding: 50px 20px 20px 40px; line-height: 28px;">
+                        <div style="width: 50%; float: left; font-size: 22px; font-weight: 500; color: #aaa; padding: 50px 20px 20px 40px; line-height: 28px;">
                             Now that you know your leadership style the next step is to discover your team mate's style. Sign up today to get a detailed bespoke report that will show you:
                         </div>
 
                         <div style="width: 50%; float: right; padding: 50px 20px 20px 20px">
-                            <ul style="list-style-type: circle; border-bottom: solid 1px #aaa;padding-bottom: 15px;">
-                                <li>Your team's ability to make and execute high quality decisions.</li>
-                                <li>Which team mates have a natural tendency to butt heads.</li>
-                                <li>What style you need to increase in your team to improve performance.</li>
-                                <li>The overall culture of your team.</li>
-                                <li>How aligned your team is to the Motley Fool team.</li>
+                            <ul style="list-style-type: disc; border-bottom: solid 1px #aaa;padding-bottom: 15px;font-size: 15px; font-weight:500; color:#7f8c8d;">
+                                <li style="margin-bottom: 10px;">Your team's ability to make and execute high quality decisions.</li>
+                                <li style="margin: 10px 0;">Which team mates have a natural tendency to butt heads.</li>
+                                <li style="margin: 10px 0;">What style you need to increase in your team to improve performance.</li>
+                                <li style="margin: 10px 0;">The overall culture of your team.</li>
+                                <li style="margin: 10px 0;">How aligned your team is to the Motley Fool team.</li>
                             </ul>
-                            <div class="centered" style="margin: 15px 0;"><span style="color: #aaa; font-size: 15px; font-weight: 700;">INVESTMENT | $199 (Up to 10 team members)</span></div>
+                            <div class="centered" style="margin: 15px 0;"><span style="color: #7f8c8d; font-size: 16px; font-weight: 700;">INVESTMENT | $199 (Up to 10 team members)</span></div>
                             <form action="/account/payment" method="POST" id="paymentForm">
                             <input type="hidden" name="csrfmiddlewaretoken" ng-value="index.myLeadershipStyle.csrf_token">
 
