@@ -10,7 +10,7 @@ class StartQuiz(TemplateView):
         if request.tenant.is_public_tenant():
             return render(request, 'homepage.html')
         else:
-            return render(request, 'start_quiz.html') # Go to application
+            return render(request, 'start_quiz.html') # Take the quiz
 
     def post(self, request, *args, **kwargs):
         data = request.POST
