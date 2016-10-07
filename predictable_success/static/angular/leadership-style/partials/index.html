@@ -149,33 +149,33 @@
             </div>
         </div>
         <div class="panel fade-in" ng-if="$first && index.myLeadershipStyle.scores.length" ng-init="collapse=true">
-            <div style="min-height: 55px;">
+            <div class="panel-header" style="background-color: #6BB9F0;min-height: 55px">
                 <div class="avatar-container col-xs-1" style="margin-right: 25px">
                     <employee-avatar size="large" employee="index.myLeadershipStyle.employee"></employee-avatar>
                 </div>
-                <h3 class="modal-title">You
+                <h3 class="modal-title" style="color: #fff;">You
                     <i class="fa fa-chevron-down pull-right collapse-toggle" ng-show="!collapse" ng-click="collapse=!collapse"></i>
                     <i class="fa fa-chevron-right pull-right collapse-toggle" ng-show="collapse" ng-click="collapse=!collapse"></i>
                 </h3>
                 <h3 class="modal-title">
                     <span ng-repeat="score in index.myLeadershipStyle.scores | orderBy : 'score' : true">
-                        <span class="sub-title {{ score.style_verbose }}" ng-if="$first">{{score.style_verbose}} - {{score.score}},</span>
+                        <span class="sub-title" ng-if="$first">{{score.style_verbose}} - {{score.score}},</span>
                         <span class="sub-title" ng-if="!$first && !$last">{{score.style_verbose}} - {{score.score}},</span>
                         <span class="sub-title" ng-if="$last">{{score.style_verbose}} - {{score.score}}</span>
                     </span>
                 </h3>
             </div>
-            <div collapse="collapse" style="padding-top: 8px;">
+            <div collapse="collapse" style="padding-top: 60px;">
                 <div ng-bind-html="index.myLeadershipStyle.description.description"></div>
             </div>
         </div>
 
         <div class="panel fade-in" ng-repeat="team_member in team.team_members  | orderBy:'full_name'" ng-if="team_member.leadership_style.id != index.myLeadershipStyle.id" ng-init="team_member.collapse=true">
-            <div style="min-height: 55px;">
+            <div class="panel-header" style="background-color: #6BB9F0;min-height: 55px">
                 <div class="avatar-container col-xs-1" style="margin-right: 25px">
                     <employee-avatar size="large" employee="team_member"></employee-avatar>
                 </div>
-                <h3 class="modal-title">
+                <h3 class="modal-title" style="color: #fff;">
                     {{ team_member.full_name }}
                     <span ng-if="team_member.leadership_style && team_member.leadership_style.completed">
                         <i class="fa fa-chevron-down pull-right collapse-toggle" ng-show="!team_member.collapse" ng-click="team_member.collapse=!team_member.collapse"></i>
@@ -193,14 +193,14 @@
                 <div ng-if="team_member.leadership_style && team_member.leadership_style.completed">
                     <h3 class="modal-title">
                         <span ng-repeat="score in team_member.leadership_style.scores | orderBy : 'score' : true">
-                            <span class="sub-title {{ score.style_verbose }}" ng-if="$first">{{score.style_verbose}} - {{score.score}},</span>
+                            <span class="sub-title" ng-if="$first">{{score.style_verbose}} - {{score.score}},</span>
                             <span class="sub-title" ng-if="!$first && !$last">{{score.style_verbose}} - {{score.score}},</span>
                             <span class="sub-title" ng-if="$last">{{score.style_verbose}} - {{score.score}}</span>
                         </span>
                     </h3>
                 </div>
             </div>
-            <div collapse="team_member.collapse" ng-if="team_member.leadership_style && team_member.leadership_style.completed" style="padding-top: 8px;">
+            <div collapse="team_member.collapse" ng-if="team_member.leadership_style && team_member.leadership_style.completed" style="padding-top: 60px;">
                 <div ng-bind-html="team_member.leadership_style.description.description"></div>
             </div>
         </div>
