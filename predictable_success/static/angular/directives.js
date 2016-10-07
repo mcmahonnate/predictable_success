@@ -239,6 +239,9 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
         }
     }
 }])
+
+
+
 .directive('happinessChart', ['$rootScope', 'AnnotationChart', function($rootScope) {
     return {
         restrict: 'A',

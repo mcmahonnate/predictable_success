@@ -85,49 +85,15 @@
                             </ul>
                             <div class="centered" style="margin: 15px 0;"><span style="color: #7f8c8d; font-size: 16px; font-weight: 700;">INVESTMENT | $199 (Up to 10 team members)</span></div>
                             <form action="/account/payment" method="POST" id="paymentForm">
-                            <input type="hidden" name="csrfmiddlewaretoken" ng-value="index.myLeadershipStyle.csrf_token">
+                            <input type="hidden" name="csrfmiddlewaretoken" ng-value="index.myLeadershipStyle.csrf_token" >
 
                             <button class="btn btn-success btn-block" id="stripePay" style="margin-bottom: 15px;" type="submit">Sign up for a Team Analysis</button>
                             <input type="hidden" id="stripeToken" name="stripeToken" value="" />
                             <input type="hidden" id="stripeEmail" name="stripeEmail" value="" />
-                            <input type="hidden" id="stripeKey" name="stripeEmail" ng-value="index.myLeadershipStyle.stripe_key" />
-
                             </form>
 
-                            <script>
-                                $(function () {
-                                    var handler = StripeCheckout.configure({
-                                        key: $('#stripeKey'),
-                                        locale: 'auto',
-                                        token: function(token) {
-                                            var $stripeToken = $('#stripeToken');
-                                            var $stripeEmail = $('#stripeEmail');
+                            <stripe-payments key="index.myLeadershipStyle.stripe_key"></stripe-payments>
 
-                                            $stripeToken.val(token.id);
-                                            $stripeEmail.val(token.email);
-
-                                            var $paymentForm = $('#paymentForm');
-                                            $paymentForm.submit();
-                                        }
-                                    });
-
-                                    document.getElementById('stripePay').addEventListener('click', function(e) {
-                                        // Open Checkout with further options:
-                                        handler.open({
-                                            name: 'The Motley Fool LLC',
-                                            description: 'Predictable Success for $199',
-                                            amount: 19900
-                                        });
-
-                                        e.preventDefault();
-                                    });
-
-                                    // Close Checkout on page navigation:
-                                    window.addEventListener('popstate', function() {
-                                        handler.close();
-                                    });
-                                });
-                            </script>
                         </div>
                     </div>
                 </div>
