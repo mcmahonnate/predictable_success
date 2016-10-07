@@ -90,12 +90,14 @@
                             <button class="btn btn-success btn-block" id="stripePay" style="margin-bottom: 15px;" type="submit">Sign up for a Team Analysis</button>
                             <input type="hidden" id="stripeToken" name="stripeToken" value="" />
                             <input type="hidden" id="stripeEmail" name="stripeEmail" value="" />
+                            <input type="hidden" id="stripeKey" name="stripeEmail" ng-value="index.myLeadershipStyle.stripe_key" />
+
                             </form>
 
                             <script>
                                 $(function () {
                                     var handler = StripeCheckout.configure({
-                                        key: '{{index.myLeadershipStyle.stripe_key}}',
+                                        key: $('#stripeKey'),
                                         locale: 'auto',
                                         token: function(token) {
                                             var $stripeToken = $('#stripeToken');
