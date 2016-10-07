@@ -5,7 +5,7 @@
     function InviteController(LeadershipStyleInviteService, team_id, remaining_invites, team_member_count, $timeout, $modalInstance, $rootScope) {
         var vm = this;
         vm.remaining_invites = remaining_invites;
-        vm.has_team_members = team_member_count > 0 ? true :  false;
+        vm.has_team_members = team_member_count > 1 ? true :  false;
         vm.subject = $rootScope.currentUser.employee;
         vm.message = '';
         vm.submit = submit;

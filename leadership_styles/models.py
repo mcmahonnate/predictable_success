@@ -57,7 +57,7 @@ ASSESSMENT_TYPE = (
 SCORE_MULTIPLIER = 30
 
 #Teams
-TEAM_MEMBER_CAP = 10
+TEAM_MEMBER_CAP = 11
 
 
 class LeadershipStyleTease(models.Model):
