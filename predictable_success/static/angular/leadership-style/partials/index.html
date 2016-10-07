@@ -95,7 +95,7 @@
                             <script>
                                 $(function () {
                                     var handler = StripeCheckout.configure({
-                                        key: '{{index.myLeadershipStyle.stripe_key}}',
+                                        key: $interpolate('{{index.myLeadershipStyle.stripe_key}}'),
                                         locale: 'auto',
                                         token: function(token) {
                                             var $stripeToken = $('#stripeToken');
