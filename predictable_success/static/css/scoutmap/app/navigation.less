@@ -347,5 +347,53 @@ nav {
     margin: 7px 13px;
 }
 
+.account-menu {
+  .dropdown {
 
+  }
+  .dropdown-toggle {
+    color: #aaa !important;
+    text-decoration: none;
+  }
+  .dropdown-toggle:hover {
+    color: #7f8c8d !important;
+    background-color: transparent !important;
+    text-decoration: none;
+  }
+  .btn-group.open .dropdown-toggle {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+  .dropdown-menu {
+    margin-top: 10px;
+    color: rgba(0,0,0,.6) !important;
+    border-color: #aaa !important;
+    -webkit-box-shadow:  0 1px 2px rgba(0,0,0,.25),0 0 1px rgba(0,0,0,.35);
+    box-shadow:  0 1px 2px rgba(0,0,0,.25),0 0 1px rgba(0,0,0,.35);
+  }
+  .dropdown-arrow:after {
+    content: "";
+    position: absolute;
+    top: -9px;
+    left: 51px;
+    border-style: solid;
+    border-width: 0px 10px 10px;
+    border-color: #fff transparent;
+    display: block;
+    width: 0;
+    z-index: 1;
+  }
 
+  .dropdown-arrow:before {
+    content: "";
+    position: absolute;
+    top: -11px;
+    left: 50px;
+    border-style: solid;
+    border-width: 0px 11px 11px;
+    border-color: #aaa transparent;
+    display: block;
+    width: 0;
+    z-index: 0;
+  }
+}

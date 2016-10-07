@@ -1,16 +1,14 @@
 <div class="container leadership-style" data-hj-masked>
-    <!-- <div class="account-menu">
-        <a class="dashboard pull-right" href="/logout"><i class="fa fa-sign-out"></i> Sign Out ahill@fool.com {{ request.user }}</a>
-    </div> -->
 
     <div class="account-menu">
         <!-- Single button -->
         <div class="btn-group dashboard pull-right" dropdown is-open="status.isopen">
-          <button id="single-button" type="button" class="btn btn-primary" dropdown-toggle ng-disabled="disabled">
-            {{ $root.currentUser.employee.full_name }} <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" dropdown-menu role="menu" aria-labelledby="single-button">
-            <li role="menuitem"><a href="/logout">Logout</a></li>
+          <a href="" dropdown-toggle ng-disabled="disabled">
+            {{ $root.currentUser.employee.full_name }}
+          </a>
+          <ul class="dropdown-menu centered" dropdown-menu role="menu" aria-labelledby="single-button">
+            <div class="dropdown-arrow"></div>
+            <li role="menuitem"><a href="/logout">Sign out</a></li>
           </ul>
         </div>
     </div>
