@@ -101,8 +101,10 @@ demo_tenant.save()
 
 Load the question and answer fixtures (change the schema if you used something different than demo):
 ```
-./manage.py tenant_command loaddata question.json --schema=demo
-./manage.py tenant_command loaddata answer.json --schema=demo
+./manage.py tenant_command loaddata question.json --schema=public
+./manage.py tenant_command loaddata answer.json --schema=public
+./manage.py tenant_command loaddata leadershipstyletease.json --schema=public
+./manage.py tenant_command loaddata leadershipstyledescription.json --schema=public
 ```
 
 You should now be able to run the server with:

@@ -21,7 +21,9 @@ class Customer(TenantMixin):
 
     def build_url(self, path):
         port = ":%s" % settings.SITE_PORT if settings.SITE_PORT else ''
-        return "%s%s%s%s" % (settings.SITE_PROTOCOL, self.domain_url, port, path)
+        if self.is_public_tenant():
+            domain_url = "www." + self.domain_url
+        return "%s%s%s%s" % (settings.SITE_PROTOCOL, domain_url, port, path)
 
     def __str__(self):
         return "%s, %s" % (self.name, self.domain_url)

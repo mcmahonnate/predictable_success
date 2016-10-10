@@ -10,13 +10,10 @@ class IndexView(TemplateView):
     template = "homepage.html"
 
     def get(self, request, **kwargs):
-        if request.tenant.is_public_tenant():
-            return render(request, 'homepage.html')
+        if request.user.is_authenticated():
+            return render(request, 'index.html') # Go to application
         else:
-            if request.user.is_authenticated():
-                return render(request, 'index.html') # Go to application
-            else:
-                return render(request, 'start_quiz.html') # Go to take quiz
+            return render(request, 'start_quiz.html') # Go to take quiz
 
     def post(self, request, *args, **kwargs):
         data = request.POST
