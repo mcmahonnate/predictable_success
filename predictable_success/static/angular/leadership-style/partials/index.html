@@ -116,7 +116,7 @@
                 <h4 ng-if="!team.is_team_full" class="header"><a href="" class="pull-right" ng-click="index.invite(team.id, team.remaining_invites, team.team_members.length)">+ Invite more team members</a></h4>
             </div>
         </div>
-        <div class="panel fade-in" ng-if="$first && index.myLeadershipStyle.scores.length" ng-init="collapse=true">
+        <div class="panel fade-in" ng-if="$first && index.myLeadershipStyle.scores.length" ng-init="collapse=false">
             <div class="panel-header complete" style="min-height: 55px">
                 <div class="avatar-container col-xs-1" style="margin-right: 25px">
                     <employee-avatar size="large" employee="index.myLeadershipStyle.employee"></employee-avatar>
