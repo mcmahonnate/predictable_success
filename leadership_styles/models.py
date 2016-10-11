@@ -390,7 +390,6 @@ class EmployeeLeadershipStyle(models.Model):
     def _calculate_scores(self):
         if self.all_questions_answered() and self.answers.count() > 0:
             self.scores.clear()
-            self.scores.save()
             self.visionary_score = self.answers.filter(leadership_style=VISIONARY).count() * SCORE_MULTIPLIER
             self.scores.add(Score.objects.create_score(score=self.visionary_score, style=VISIONARY))
 
