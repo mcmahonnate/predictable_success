@@ -72,7 +72,7 @@
             <panel class="devzone">
                 <h3 class="modal-title centered">You're All Done</h3>
                 <div class="centered" style="padding-top:40px;padding-bottom:40px">
-                    <button type="button" style="font-size:20px;" ng-click="quiz.finish()" data-dismiss="modal" class="btn btn-success">Click Here To See Your Results</button>
+                    <button type="button" style="font-size:20px;" ng-click="quiz.finish()" ng-disabled="quiz.busy" data-dismiss="modal" class="btn btn-success">Click Here To See Your Results</button>
                 </div>
             </panel>
         </div>

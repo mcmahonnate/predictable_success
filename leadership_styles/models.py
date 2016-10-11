@@ -388,7 +388,8 @@ class EmployeeLeadershipStyle(models.Model):
     scores = models.ManyToManyField(Score, related_name='employee_leadership_style', null=True, blank=True)
 
     def _calculate_scores(self):
-        if self.all_questions_answered() and self.answers.count() > 0:
+        if self.all_questions_answered() and self.answers.count() > 0 and not self.completed:
+            self.scores.clear()
             self.visionary_score = self.answers.filter(leadership_style=VISIONARY).count() * SCORE_MULTIPLIER
             self.scores.add(Score.objects.create_score(score=self.visionary_score, style=VISIONARY))
 

@@ -105,6 +105,11 @@ function QuizController(analytics, LeadershipStyleService, Notification, leaders
             .then(function(result){
                 vm.leadershipStyle = result;
                 close();
+                vm.busy = false;
+            }, function(){
+                close();
+                $location.reload();
+                vm.busy = false;
             }
         );
     }
