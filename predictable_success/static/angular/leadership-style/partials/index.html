@@ -25,17 +25,35 @@
         </p>
     </div>
 
-    <div ng-show="index.showTakeQuizNotification" ng-class="{'slide-up-active': hideMessage}" class="alert alert-success slide-up" role="alert">
-        <a class="btn btn-success btn-feedback pull-right" ng-click="index.takeQuiz(index.myLeadershipStyle)" type="button">
-            <i class="fa fa-comment"></i>
-            <span ng-if="index.myLeadershipStyle.answers.length>0" class="hide-for-mobile">Finish the </span>
-            Quiz
-        </a>
-        <h2 class="alert-title">Take the Quiz!</h2>
-        <div class="alert-message" style="padding-left:0; padding-top: 10px">
-            <div>
-                <div class="comment-text">
-                    You have a natural leadership style. With your own strengths and weaknesses. Discover who you are and how to unlock your best self.
+    <div ng-show="index.showTakeQuizNotification" class="panel fade-in">
+        <div>
+            <div class="landing-form">
+                <div class="header panel-header">
+                    <h1>Find Your Fool</h1>
+                    <h2>Discover your personal leadership style and uncover how it fits with others on your team.</h2>
+                </div>
+                <br />
+                <div ng-if="index.myLeadershipStyle.teams.length==0">
+                    <div style="padding-top: 8px; margin-left: -26px;">
+                        <div class="arrow_box" style="float: left; text-transform: uppercase; font-size: 22px; font-weight: bold;">Step One</div>
+                        <div style="margin-left: 300px; margin-top: 24px; font-size: 22px; text-transform: uppercase; font-weight: bold;">Finish Your Quiz</div>
+                    </div>
+                    <div style="clear: both;"></div>
+                    <div class="clearfix">
+                        <div style="width: 50%; float: left; font-size: 22px; font-weight: 500; color: #aaa; padding: 50px 20px 20px 40px; line-height: 28px;">
+                            Over the years we've discovered there are four types of Fool needed to grow a successful business. Using a leadership assessment developed by our friends at Predictable Success we've been able to:
+                        </div>
+
+                        <div style="width: 50%; float: right; padding: 50px 20px 20px 20px">
+                            <ul style="list-style-type: disc; padding-bottom: 15px;font-size: 15px; font-weight:500; color:#7f8c8d;">
+                                <li style="margin-bottom: 10px;">Increase personal performance by matching the right leadership style to the right role.</li>
+                                <li style="margin: 10px 0;">Maximize team performance by bringing together the right mixture of leadership styles at the appropriate time.</li>
+                                <li style="margin: 10px 0;">Get to the root of team dysfunction by developing a shared vocabulary to address conflict.</li>
+                                <li style="margin: 10px 0;">Improve the quality of decisions at every level of the organization.</li>
+                            </ul>
+                            <button class="btn btn-success btn-block" style="margin-bottom: 15px;" ng-click="index.takeQuiz(index.myLeadershipStyle)">Finish Your Quiz</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

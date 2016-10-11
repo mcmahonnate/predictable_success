@@ -75,6 +75,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
             .then(function(leadershipStyle){
                 vm.myLeadershipStyle = leadershipStyle;
                 if (!leadershipStyle.completed) {
+                    vm.showTakeQuizNotification = true;
                     takeQuiz(leadershipStyle);
                 }
                 vm.busy = false;
@@ -120,6 +121,8 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                     vm.myLeadershipStyle = leadershipStyle;
                     if (!vm.myLeadershipStyle.completed) {
                         vm.showTakeQuizNotification = true
+                    } else {
+                        vm.showTakeQuizNotification = false;
                     }
                 }
             }
