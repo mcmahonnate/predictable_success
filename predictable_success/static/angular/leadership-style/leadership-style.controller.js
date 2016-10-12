@@ -6,7 +6,6 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     /* Since this page can be the root for some users let's make sure we capture the correct page */
     var location_url = $location.url().indexOf('/leadership_style') < 0 ? '/' : $location.url();
     analytics.trackPage($scope, $location.absUrl(), location_url);
-
     var vm = this;
     vm.busy = true;
     vm.showEmptyScreen = false;
@@ -46,6 +45,12 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         };
     };
 
+    function updateTeamChart(team) {
+        team.chartLabels = ['Visionary', 'Operator', 'Processor', 'Synergist'];
+        //team.chartColors =['#e74c3c', '#2e8dcd', '#a17917', '#27ae60'];
+        team.chartData = [team.visionary_average, team.operator_average, team.processor_average, team.synergist_average]
+    }
+
     function respondToRequest() {
         vm.busy = true;
         LeadershipStyleRequestService.getRequest($routeParams.requestId)
@@ -77,6 +82,10 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                 if (!leadershipStyle.completed) {
                     vm.showTakeQuizNotification = true;
                     takeQuiz(leadershipStyle);
+                } else {
+                     angular.forEach(leadershipStyle.teams, function (team) {
+                         updateTeamChart(team);
+                     })
                 }
                 vm.busy = false;
             }, function(){
@@ -214,7 +223,6 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     }
 
     function requestTeamReport(team_id, index) {
-        console.log(index);
         var modalInstance = $modal.open({
             animation: true,
             windowClass: 'xx-dialog fade zoom',
@@ -234,32 +242,3 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         );
     }
 }
-
-/*
-// angular.module('leadership-style', ['ui.bootstrap']);
-angular.module('leadership-style', ['ngAnimate', 'ngSanitize', 'ui.bootstrap']);
-
-angular.module('leadership-style').controller('DropdownCtrl', function ($scope, $log) {
-  $scope.items = [
-    'The first choice!',
-    'And another choice for you.',
-    'but wait! A third!'
-  ];
-
-  $scope.status = {
-    isopen: false
-  };
-
-  $scope.toggled = function(open) {
-    $log.log('Dropdown is now: ', open);
-  };
-
-  $scope.toggleDropdown = function($event) {
-    $event.preventDefault();
-    $event.stopPropagation();
-    $scope.status.isopen = !$scope.status.isopen;
-  };
-
-  $scope.appendToEl = angular.element(document.querySelector('#dropdown-long-content'));
-});
-*/

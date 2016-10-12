@@ -130,6 +130,8 @@
                 <h3 class="modal-title">Your Team Report</h3>
                 <p>We are working on your team report. Please allow 3-5 business days.
             </div>
+            <span animated-counter count-to="80" value="0" duration="2"></span>% Complete
+            <canvas id="pie" height="80px" class="chart chart-doughnut" chart-data="team.chartData" chart-labels="team.chartLabels" chart-colors="team.chartColors"></canvas>
             <div class="invite-360" style="height: 25px;">
                 <h4 ng-if="!team.is_team_full" class="header"><a href="" class="pull-right" ng-click="index.invite(team.id, team.remaining_invites, team.team_members.length)">+ Invite more team members</a></h4>
             </div>

@@ -8,7 +8,7 @@ var app = angular.module('tdb', [
         'tdb.org.controllers', 'tdb.org.services',
         'tdb.preferences.services',
         'tdb.search.controllers', 'tdb.search.services',
-        'angular.filter',
+        'angular.filter', 'chart.js',
         'leadership-style', 'profile', 'qualities',
         'angular-carousel', 'analytics', 'ui.bootstrap', 'ngCsv','ngImgCrop', 'ngRoute', 'ngAnimate', 'ui-notification', 'ngMessages', 'readMore', 'ngCookies', 'ui.select', 'selectize','ngTouch'])
     .config(['$routeProvider', function($routeProvider) {
