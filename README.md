@@ -132,3 +132,10 @@ Deploy to staging:
 ```
 git push staging-predictable-success
 ```
+
+Steps to run the site in local dev:
+1. Make sure Postgres is started
+2. cd ~/solr-4.4.0/example && java -jar start.jar
+3. /usr/local/sbin/rabbitmq-server
+4. ./up.sh
+5. node_modules/gulp/bin/gulp.js watch
