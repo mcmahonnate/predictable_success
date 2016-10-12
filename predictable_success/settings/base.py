@@ -259,7 +259,7 @@ if os.environ.get("HEROKU_APP_NAME", False):
     os.environ['HEROKU_RELEASE_NAME'] = release.name
 
 RAVEN_CONFIG = {
-    'dsn': 'https://f1a18dde65b54d21978a126d6f6e907c:3a723d634f8a45629cfbba4034bce984@app.getsentry.com/42421',
+    'dsn': 'https://30dd7d32fd2a4718a605c9f2ebadf9f9:7935a6100fff4589b36fdb230a097ae8@sentry.io/105604',
     'release': os.environ.get('HEROKU_RELEASE_NAME', None),
     'tags': {},
 }
