@@ -59,7 +59,9 @@ DEFAULT_FROM_EMAIL = 'The Synergizer Team <' + SUPPORT_EMAIL_ADDRESS + '>'
 DEMO_REQUEST_EMAIL_TO = 'nate@fool.com'
 DEMO_REQUEST_EMAIL_SUBJECT = ' requested a demo'
 
-ALLOWED_HOSTS = ['.synergizer-sandbox.com', '.findyourfool.com', 'www.findyourfool.com', 'live-predictable-success.herokuapp.com', 'staging-predictable-success.herokuapp.com']
+CANONICAL_HOST = 'www.findyourfool.com'
+ALLOWED_HOSTS = ('.synergizer-sandbox.com', '.findyourfool.com', 'www.findyourfool.com',
+    'live-predictable-success.herokuapp.com', 'staging-predictable-success.herokuapp.com')
 INTERNAL_IPS = (
     '0.0.0.0',
     '127.0.0.1',
@@ -145,6 +147,7 @@ AUTHENTICATION_BACKENDS = (
 
 MIDDLEWARE_CLASSES = (
     'predictable_success.middleware.SSLRedirect',
+    'predictable_success.middleware.NakedDomainRedirect',
     'tenant_schemas.middleware.TenantMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
