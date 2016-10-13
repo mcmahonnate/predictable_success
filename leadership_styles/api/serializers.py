@@ -88,6 +88,38 @@ class EmployeeLeadershipStyleBaseSerializer(serializers.ModelSerializer):
     scores = ScoreSerializer(many=True)
     description = serializers.SerializerMethodField()
     tease = serializers.SerializerMethodField()
+    v = serializers.SerializerMethodField()
+    o = serializers.SerializerMethodField()
+    p = serializers.SerializerMethodField()
+    s = serializers.SerializerMethodField()
+
+    def get_v(self, obj):
+        try:
+            score = obj.scores.all().get(style=VISIONARY)
+            return score.score
+        except:
+            return None
+
+    def get_o(self, obj):
+        try:
+            score = obj.scores.all().get(style=OPERATOR)
+            return score.score
+        except:
+            return None
+
+    def get_p(self, obj):
+        try:
+            score = obj.scores.all().get(style=PROCESSOR)
+            return score.score
+        except:
+            return None
+
+    def get_s(self, obj):
+        try:
+            score = obj.scores.all().get(style=SYNERGIST)
+            return score.score
+        except:
+            return None
 
     def get_percentage_complete(self, obj):
         question_count = Question.objects.filter(active=True, assessment_type=SELF).count()
@@ -116,7 +148,7 @@ class EmployeeLeadershipStyleBaseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmployeeLeadershipStyle
-        fields = ('id', 'date', 'percentage_complete', 'completed', 'scores', 'tease', 'description')
+        fields = ('id', 'date', 'percentage_complete', 'completed', 'scores', 'tease', 'description', 'v', 'o', 'p', 's')
 
 
 class EmployeeLeadershipStyleSerializer(EmployeeLeadershipStyleBaseSerializer):

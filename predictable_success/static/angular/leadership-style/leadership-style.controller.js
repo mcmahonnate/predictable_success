@@ -16,10 +16,36 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     vm.takeQuiz = takeQuiz;
     vm.requestLeadershipStyle = requestLeadershipStyle;
     vm.requestTeamReport = requestTeamReport;
+
     $rootScope.successRequestMessage = false;
     $rootScope.hideMessage = false;
     $rootScope.hideRequestMessage = false;
     activate();
+
+    function orderByVisionary(a,b){
+        var noDataValue=0;
+        var aValue = (!a.leadership_style) ? noDataValue : a.leadership_style.v;
+        var bValue = (!b.leadership_style) ? noDataValue : b.leadership_style.v;
+        return bValue - aValue;
+    }
+    function orderByOperator(a,b){
+        var noDataValue=0;
+        var aValue = (!a.leadership_style) ? noDataValue : a.leadership_style.o;
+        var bValue = (!b.leadership_style) ? noDataValue : b.leadership_style.o;
+        return bValue - aValue;
+    }
+    function orderByProcessor(a,b){
+        var noDataValue=0;
+        var aValue = (!a.leadership_style) ? noDataValue : a.leadership_style.p;
+        var bValue = (!b.leadership_style) ? noDataValue : b.leadership_style.p;
+        return bValue - aValue;
+    }
+    function orderBySynergist(a,b){
+        var noDataValue=0;
+        var aValue = (!a.leadership_style) ? noDataValue : a.leadership_style.s;
+        var bValue = (!b.leadership_style) ? noDataValue : b.leadership_style.s;
+        return bValue - aValue;
+    }
 
     function activate() {
         if ($routeParams.requestId) {
@@ -47,7 +73,6 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
 
     function updateTeamChart(team) {
         team.chartLabels = ['Visionary', 'Operator', 'Processor', 'Synergist'];
-        //team.chartColors =['#e74c3c', '#2e8dcd', '#a17917', '#27ae60'];
         team.chartData = [team.visionary_average, team.operator_average, team.processor_average, team.synergist_average]
     }
 
@@ -85,6 +110,34 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                 } else {
                      angular.forEach(leadershipStyle.teams, function (team) {
                          updateTeamChart(team);
+                         var i = 0;
+                         angular.forEach(team.team_members, function (team_member) {
+                            team_member.index = i;
+                            i = i + 1;
+                         });
+                         team.team_members_sort = angular.copy(team.team_members)
+                         team.chartClick = function chartClick(points, evt){
+                             switch (points[0]._index) {
+                                 case 0:
+                                     team.team_members_sort.sort(orderByVisionary);
+                                     break;
+                                 case 1:
+                                     team.team_members_sort.sort(orderByOperator);
+                                     break;
+                                 case 2:
+                                     team.team_members_sort.sort(orderByProcessor);
+                                     break;
+                                 case 3:
+                                     team.team_members_sort.sort(orderBySynergist);
+                                     break;
+                             }
+
+                             var i = 0;
+                             angular.forEach(team.team_members_sort, function (team_member) {
+                                team.team_members[team_member.index].index = i;
+                                i = i + 1;
+                             })
+                         };
                      })
                 }
                 vm.busy = false;

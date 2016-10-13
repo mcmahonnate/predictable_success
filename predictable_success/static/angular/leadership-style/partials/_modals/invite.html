@@ -9,8 +9,6 @@
                 <h4 class="header" ng-if="invite.remaining_invites > invite.invites.length">Email Address <a href="" class="pull-right" ng-click="invite.addEmail()">+ Add another invitation</a></h4>
                 <ng-form name="innerForm" ng-repeat="invite in invite.invites">
                     <div ng-if="$first" style="margin-bottom: 15px">
-                        <input style="width: 49%;display: inline-block;margin-right:5px;" ng-init="invalid=false" ng-blur="invalid=innerForm.email.$error.email" ng-model="invite.email" type="email" ng-class="{'alert-danger': invalid && innerForm.email.$error.email}" autofocus autocomplete="off" class="form-control input-lg fade-in" name="email" placeholder="First Name" required>
-                        <input style="width: 49%;display: inline-block;" ng-init="invalid=false" ng-blur="invalid=innerForm.email.$error.email" ng-model="invite.email" type="email" ng-class="{'alert-danger': invalid && innerForm.email.$error.email}" autofocus autocomplete="off" class="form-control input-lg fade-in" name="email" placeholder="Last Name" required>
                         <input ng-init="invalid=false" ng-blur="invalid=innerForm.email.$error.email" ng-model="invite.email" type="email" ng-class="{'alert-danger': invalid && innerForm.email.$error.email}" autocomplete="off" class="form-control input-lg fade-in" name="email" placeholder="name@domain.com" required>
                     </div>
                     <div ng-if="$index > 0" style="margin-bottom: 15px">
