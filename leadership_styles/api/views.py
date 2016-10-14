@@ -51,6 +51,14 @@ class RetrieveEmployeeLeadershipStyle(RetrieveAPIView):
             raise Http404()
 
 
+class RetrieveLeadershipStyleTeases(ListAPIView):
+    serializer_class = LeadershipStyleTeaseSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        return LeadershipStyleTease.objects.all()
+
+
 class RetrieveMyEmployeeLeadershipStyle(RetrieveAPIView):
     permission_classes = (IsAuthenticated,)
 

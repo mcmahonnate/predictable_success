@@ -519,7 +519,6 @@ class TeamLeadershipStyle(models.Model):
             return 0
         else:
             p = (float(total_complete)/float(team_member_count))
-            print p
             p = round(p)
             return int(p)
 

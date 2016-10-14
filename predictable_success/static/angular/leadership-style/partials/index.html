@@ -119,61 +119,59 @@
         </div>
     </div>
     <div ng-repeat="team in index.myLeadershipStyle.teams | orderBy:'customer_id'">
-        <!--<div ng-if="team.owner.id==index.myLeadershipStyle.employee.id">
-            <div class="panel fade-in" ng-if="!team.requested_report">
-                <h3 class="modal-title">Get YOUR Team Report</h3>
-                <p>Your invitations have been sent. You can see their progress below.  When the members of your team have completed the quiz, or you are ready to send your team’s data along for your one-time, customized report, click the button below.</p>
-                <button ng-disabled="!team.can_request_report" ng-click="index.requestTeamReport(team.id, $index)" class="btn btn-success" style="margin-top: 10px;width:100%" type="submit">Get YOUR Team Report</button>
-                <p class="centered" style="color: #aaa;" ng-if="!team.can_request_report">Before we can generate YOUR Team Report at least 6 of your Team Members need to complete their Leadership Style quiz.</p>
+        <div class="panel fade-in clearfix" ng-if="!team.requested_report">
+            <div class="panel-header complete">
+                <h3 class="modal-title sub-title">Your Team</h3>
             </div>
-            <div class="panel fade-in" ng-if="team.requested_report && !team.received_report">
-                <h3 class="modal-title">Your Team Report</h3>
-                <p>We are working on your team report. Please allow 3-5 business days.
+            <div style="padding-top: 60px;">
+                <div class="pull-left" style="width:55%;" ng-bind-html="index.tease.tease"></div>
+                <div class="pull-right" style="width:70%;margin-right:-30%;">
+                    <canvas style="margin-right:22%;" id="pie" class="chart chart-doughnut pull-right" chart-data="team.chartData" chart-labels="team.chartLabels" chart-options="team.chartOptions" chart-colors="team.chartColors" chart-click="team.chartClick"></canvas>
+                </div>
             </div>
-        </div>-->
-        <div class="panel fade-in" ng-if="!team.requested_report">
-            <h3 class="modal-title">Your Team</h3>
-            <canvas id="pie" height="100px" class="chart chart-doughnut" chart-data="team.chartData" chart-labels="team.chartLabels" chart-options="team.chartOptions" chart-colors="team.chartColors" chart-click="team.chartClick"></canvas>
         </div>
         <div class="invite-360" style="height: 25px;">
             <h4 ng-if="!team.is_team_full" class="header"><a href="" class="pull-right" ng-click="index.invite(team.id, team.remaining_invites, team.team_members.length)">+ Invite more team members</a></h4>
         </div>
-        <div style="position: absolute;width: 75%;">
-            <ul class="isotope table-like">
-                <li ng-repeat="team_member in team.team_members  | orderBy:'full_name'" ng-style="{top: (((team_member.index) * 155) + 'px')}" ng-class="{'incomplete': !team_member.leadership_style || !team_member.leadership_style.completed}" >
-
+        <div style="position: relative;">
+            <div style="position: absolute;width: 100%;">
+                <ul class="isotope table-like">
+                    <li ng-repeat="team_member in team.team_members  | orderBy:'full_name'" ng-style="{top: (((team_member.index) * 155) + 'px')}" ng-class="{'incomplete': !team_member.leadership_style || !team_member.leadership_style.completed}" >
+                        <div class="clearfix" style="width: 100%">
                             <div class="avatar-container col-xs-1" style="margin-right: 25px">
                                 <employee-avatar size="large" employee="team_member"></employee-avatar>
                             </div>
-                            <div style="width: 80%;">
-                                <h3 class="modal-title" style="color: #fff;margin-bottom: 8px;">
-                                    {{ team_member.full_name }}
-                                </h3>
+                            <div class="pull-right col-xs-3" style="text-align: right;margin-top: -5px">
+                                <span ng-repeat="score in team_member.leadership_style.scores | orderBy : 'score' : true">
+                                    <p style="margin-bottom: 5px;"><span class="sub-title" style="font-size: 18px">{{score.style_verbose}} - {{score.score}}</span></p>
+                                </span>
                             </div>
-                            <div ng-if="!team_member.leadership_style || !team_member.leadership_style.completed">
-                                <h3 class="modal-title sub-title" ng-if="!team_member.leadership_style">
-                                    0% Completed
-                                </h3>
-                                <h3 class="modal-title sub-title" ng-if="team_member.leadership_style">
-                                    {{ team_member.leadership_style.percentage_complete }}% Completed
-                                </h3>
+                            <div class="col-xs-7">
+                                <div>
+                                    <h3 class="modal-title" style="color: #fff;margin-bottom: 8px;">
+                                        {{ team_member.full_name }}
+                                    </h3>
+                                </div>
+                                <div ng-if="!team_member.leadership_style || !team_member.leadership_style.completed">
+                                    <h3 class="modal-title sub-title" style="margin-bottom: 0;" ng-if="!team_member.leadership_style">
+                                        0% Completed
+                                    </h3>
+                                    <h3 class="modal-title sub-title" style="margin-bottom: 0;" ng-if="team_member.leadership_style">
+                                        {{ team_member.leadership_style.percentage_complete }}% Completed
+                                    </h3>
+                                </div>
+                                <div style="display: block" ng-if="team_member.leadership_style && team_member.leadership_style.completed">
+                                    <h3 class="modal-title sub-title" style="margin-bottom: 0;">
+                                        {{ team_member.leadership_style.description.name }}
+                                    </h3>
+                                </div>
                             </div>
-                            <div style="display: block" ng-if="team_member.leadership_style && team_member.leadership_style.completed">
-                                <h3 class="modal-title sub-title">
-                                    {{ team_member.leadership_style.description.name }}
-                                </h3>
-                            </div>
-                            <div class="pull-right">
-                                    <span ng-repeat="score in team_member.leadership_style.scores | orderBy : 'score' : true">
-                                        <p><span class="sub-title">{{score.style_verbose}} - {{score.score}}</span></p>
-                                    </span>
-                            </div>
-                </li>
-            </ul>
+                        </div>
+
+                    </li>
+                </ul>
+            </div>
         </div>
-
-
-
     </div>
 </div>
 
@@ -228,6 +226,7 @@
     -webkit-transition: top .7s ease-in-out;
     -moz-transition: top .7s ease-in-out;
     transition: top .7s ease-in-out;
+    cursor: pointer;
 }
 
 .table-like > li.header {

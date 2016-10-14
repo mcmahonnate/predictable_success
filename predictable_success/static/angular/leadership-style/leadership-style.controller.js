@@ -12,7 +12,10 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     vm.myLeadershipStyle = null;
     vm.showTakeQuizNotification = false;
     vm.scores = [];
+    vm.tease = null;
+    vm.teases = [];
     vm.invite = invite;
+    vm.setTease = setTease;
     vm.takeQuiz = takeQuiz;
     vm.requestLeadershipStyle = requestLeadershipStyle;
     vm.requestTeamReport = requestTeamReport;
@@ -53,6 +56,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         } else {
             getMyLeadershipStyle();
             getTeamsIOwn();
+            getTeases();
         }
 
         $scope.status = {
@@ -71,11 +75,29 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         };
     };
 
+    function getTeases() {
+        LeadershipStyleService.getTeases()
+            .then(function(request){
+                vm.teases = request;
+            })
+    }
+
+    function setTease(style_id){
+        angular.forEach(vm.teases, function (tease) {
+            if (tease.style == style_id) {
+                vm.tease = tease;
+            }
+        })
+    }
+
     function updateTeamChart(team) {
         team.chartLabels = ['Visionary', 'Operator', 'Processor', 'Synergist'];
         team.chartData = [team.visionary_average, team.operator_average, team.processor_average, team.synergist_average]
         team.chartOptions = {
             responsiveAnimationDuration: 400,
+            tooltips: {
+                enabled: false,
+            },
             hover: {
                 onHover: function (events) {
                     if (events.length > 0 &&  events[0]._chart) {
@@ -193,6 +215,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                                      team.team_members_sort.sort(orderBySynergist);
                                      break;
                              }
+                             setTease(points[0]._index);
 
                              var i = 0;
                              angular.forEach(team.team_members_sort, function (team_member) {
