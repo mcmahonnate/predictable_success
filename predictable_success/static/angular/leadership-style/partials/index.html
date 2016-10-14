@@ -119,7 +119,7 @@
         </div>
     </div>
     <div ng-repeat="team in index.myLeadershipStyle.teams | orderBy:'customer_id'">
-        <div ng-if="team.owner.id==index.myLeadershipStyle.employee.id">
+        <!--<div ng-if="team.owner.id==index.myLeadershipStyle.employee.id">
             <div class="panel fade-in" ng-if="!team.requested_report">
                 <h3 class="modal-title">Get YOUR Team Report</h3>
                 <p>Your invitations have been sent. You can see their progress below.  When the members of your team have completed the quiz, or you are ready to send your team’s data along for your one-time, customized report, click the button below.</p>
@@ -130,11 +130,13 @@
                 <h3 class="modal-title">Your Team Report</h3>
                 <p>We are working on your team report. Please allow 3-5 business days.
             </div>
-        </div>
+        </div>-->
         <div class="panel fade-in" ng-if="!team.requested_report">
-            <span animated-counter count-to="80" value="0" duration="2"></span>% Complete
-            <canvas id="pie" height="80px" class="chart chart-doughnut" chart-data="team.chartData" chart-labels="team.chartLabels" chart-colors="team.chartColors" chart-click="team.chartClick"></canvas>
-
+            <h3 class="modal-title">Your Team</h3>
+            <canvas id="pie" height="100px" class="chart chart-doughnut" chart-data="team.chartData" chart-labels="team.chartLabels" chart-options="team.chartOptions" chart-colors="team.chartColors" chart-click="team.chartClick"></canvas>
+            <div class="centered">
+                <span class="centered counter-value"><span animated-counter count-to="team.percentage_complete" value="0" duration="1"></span>%</span>
+            </div>
         </div>
         <div class="invite-360" style="height: 25px;">
             <h4 ng-if="!team.is_team_full" class="header"><a href="" class="pull-right" ng-click="index.invite(team.id, team.remaining_invites, team.team_members.length)">+ Invite more team members</a></h4>
@@ -246,6 +248,19 @@
   float: left;
   padding: 5px 4px;
   font-size: 18px;
+}
+
+.counter-value {
+    font-family: 'Oswald', Helvetica, Arial, sans;
+    font-size: 40px;
+    font-weight: 500;
+    color: #aaa;
+}
+.counter-label {
+    font-family: 'Oswald', Helvetica, Arial, sans;
+    font-size: 15px;
+    font-weight: 400;
+    color: #aaa;
 }
 
 </style>

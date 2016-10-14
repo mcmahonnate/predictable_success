@@ -412,10 +412,9 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
 })
 
 .directive('animatedCounter', ['$timeout', function($timeout) {
-    console.log('counter');
     return {
         replace: false,
-        scope: true,
+        scope: {'countTo': '='},
         link: function (scope, element, attrs) {
             var e = element[0];
             var num, refreshInterval, duration, steps, step, countTo, value, increment;
@@ -423,7 +422,7 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
                 refreshInterval = 30;
                 step = 0;
                 scope.timoutId = null;
-                countTo = parseInt(attrs.countTo) || 0;
+                countTo = parseInt(scope.countTo) || 0;
                 scope.value = parseInt(attrs.value, 10) || 0;
                 duration = (parseFloat(attrs.duration) * 1000) || 0;
 

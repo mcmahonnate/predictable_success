@@ -84,7 +84,6 @@ class LeadershipStyleDescriptionSerializer(serializers.ModelSerializer):
 
 
 class EmployeeLeadershipStyleBaseSerializer(serializers.ModelSerializer):
-    percentage_complete = serializers.SerializerMethodField()
     scores = ScoreSerializer(many=True)
     description = serializers.SerializerMethodField()
     tease = serializers.SerializerMethodField()
@@ -120,16 +119,6 @@ class EmployeeLeadershipStyleBaseSerializer(serializers.ModelSerializer):
             return score.score
         except:
             return None
-
-    def get_percentage_complete(self, obj):
-        question_count = Question.objects.filter(active=True, assessment_type=SELF).count()
-        answer_count = obj.answers.all().count()
-        if answer_count == 0:
-            return 0
-        else:
-            p = (float(answer_count)/float(question_count)) * 100
-            p = round(p)
-            return int(p)
 
     def get_description(self, obj):
         if not obj.completed:
@@ -276,5 +265,5 @@ class TeamLeadershipStyleSerializer(serializers.ModelSerializer):
         fields = ['id', 'owner', 'team_members', 'requested_report', 'requested_date', 'can_request_report',
                   'is_team_full', 'remaining_invites', 'visionary_average', 'operator_average', 'processor_average',
                   'synergist_average', 'number_of_quizes_completed', 'number_of_quizes_started',
-                  'number_of_quizes_not_started']
+                  'number_of_quizes_not_started', 'percentage_complete']
 

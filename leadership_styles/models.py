@@ -387,6 +387,17 @@ class EmployeeLeadershipStyle(models.Model):
     field_tracker = FieldTracker(fields=['active', 'is_draft', 'completed'])
     scores = models.ManyToManyField(Score, related_name='employee_leadership_style', null=True, blank=True)
 
+    @property
+    def percentage_complete(self):
+        question_count = Question.objects.filter(active=True, assessment_type=SELF).count()
+        answer_count = self.answers.all().count()
+        if answer_count == 0:
+            return 0
+        else:
+            p = (float(answer_count)/float(question_count)) * 100
+            p = round(p)
+            return int(p)
+
     def _calculate_scores(self):
         if self.all_questions_answered() and self.answers.count() > 0:
             self.scores.clear()
@@ -494,6 +505,23 @@ class TeamLeadershipStyle(models.Model):
     owner = models.ForeignKey(Employee, related_name='+')
     team_members = models.ManyToManyField(Employee, related_name='team_leadership_styles', null=True, blank=True)
     quiz_requests = models.ManyToManyField(QuizUrl, related_name='team_leadership_styles', null=True, blank=True)
+
+    @property
+    def percentage_complete(self):
+        total_complete = 0
+        team_member_count = self.team_members.all().count()
+        for team_member in self.team_members.all():
+            try:
+                total_complete += team_member.leadership_style.percentage_complete
+            except:
+                total_complete += 0
+        if team_member_count == 0:
+            return 0
+        else:
+            p = (float(total_complete)/float(team_member_count))
+            print p
+            p = round(p)
+            return int(p)
 
     @property
     def is_team_full(self):

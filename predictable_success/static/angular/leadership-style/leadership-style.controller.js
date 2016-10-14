@@ -74,6 +74,34 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     function updateTeamChart(team) {
         team.chartLabels = ['Visionary', 'Operator', 'Processor', 'Synergist'];
         team.chartData = [team.visionary_average, team.operator_average, team.processor_average, team.synergist_average]
+        team.chartOptions = {
+            animation: {
+                onProgress: function (animation) {
+                    console.log(animation.chartInstance.chart.ctx)
+                    var ctx = animation.chartInstance.chart.ctx;
+                    var canvasWidthvar = animation.chartInstance.chart.width;
+                    var canvasHeight = animation.chartInstance.chart.height;
+                    var constant = 100;
+                    var fontsize = (canvasHeight/constant).toFixed(2);
+                    //ctx.font="2.8em Verdana";
+                    ctx.font=fontsize +"em Oswald, Helvetica";
+                    ctx.textBaseline="middle";
+                    var tpercentage = team.percentage_complete + "%";
+                    var textWidth = ctx.measureText(tpercentage).width;
+                    var txtPosx = Math.round((canvasWidthvar - textWidth)/2);
+                    ctx.fillText(tpercentage, txtPosx, (canvasHeight/2.15));
+                    ctx.font=fontsize/3 +"em Helvetica";
+                    ctx.textBaseline="middle";
+                    var tcomplete = "Quiz Completion";
+                    var textWidth = ctx.measureText(tcomplete).width;
+                    var textHeight = ctx.measureText(tcomplete).height;
+                    var txtPosx = Math.round((canvasWidthvar - textWidth)/2);
+                    ctx.fillText(tcomplete, txtPosx, (canvasHeight/3.5) * 2);
+
+                    console.log(animation.chartInstance.chart.width);
+                }
+            }
+      };
     }
 
     function respondToRequest() {
