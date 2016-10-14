@@ -75,30 +75,64 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         team.chartLabels = ['Visionary', 'Operator', 'Processor', 'Synergist'];
         team.chartData = [team.visionary_average, team.operator_average, team.processor_average, team.synergist_average]
         team.chartOptions = {
+            responsiveAnimationDuration: 400,
+            hover: {
+                onHover: function (events) {
+                    if (events.length > 0 &&  events[0]._chart) {
+                        team.animate_show_style = events[0]._index;
+                    } else {
+                        team.animate_show_style = null;
+                    }
+                }
+            },
             animation: {
                 onProgress: function (animation) {
-                    console.log(animation.chartInstance.chart.ctx)
                     var ctx = animation.chartInstance.chart.ctx;
                     var canvasWidthvar = animation.chartInstance.chart.width;
                     var canvasHeight = animation.chartInstance.chart.height;
                     var constant = 100;
-                    var fontsize = (canvasHeight/constant).toFixed(2);
-                    //ctx.font="2.8em Verdana";
-                    ctx.font=fontsize +"em Oswald, Helvetica";
-                    ctx.textBaseline="middle";
-                    var tpercentage = team.percentage_complete + "%";
-                    var textWidth = ctx.measureText(tpercentage).width;
-                    var txtPosx = Math.round((canvasWidthvar - textWidth)/2);
-                    ctx.fillText(tpercentage, txtPosx, (canvasHeight/2.15));
-                    ctx.font=fontsize/3 +"em Helvetica";
-                    ctx.textBaseline="middle";
-                    var tcomplete = "Quiz Completion";
-                    var textWidth = ctx.measureText(tcomplete).width;
-                    var textHeight = ctx.measureText(tcomplete).height;
-                    var txtPosx = Math.round((canvasWidthvar - textWidth)/2);
-                    ctx.fillText(tcomplete, txtPosx, (canvasHeight/3.5) * 2);
-
-                    console.log(animation.chartInstance.chart.width);
+                    var fontsize = (canvasHeight / constant).toFixed(2);
+                    ctx.font = fontsize + "em Oswald, Helvetica";
+                    ctx.fillStyle = "#aaa;";
+                    ctx.textBaseline = "middle";
+                    var increment, textLabel, textValue;
+                    if (team.animate_show_style != null) {
+                        switch (team.animate_show_style) {
+                            case 0:
+                                increment = team.visionary_average / animation.animationObject.numSteps;
+                                textValue = Math.round((animation.animationObject.currentStep * increment));
+                                textLabel = "Visionary";
+                                break;
+                            case 1:
+                                increment = team.operator_average / animation.animationObject.numSteps;
+                                textValue = Math.round((animation.animationObject.currentStep * increment));
+                                textLabel = "Operator";
+                                break;
+                            case 2:
+                                increment = team.processor_average / animation.animationObject.numSteps;
+                                textValue = Math.round((animation.animationObject.currentStep * increment));
+                                textLabel = "Processor";
+                                break;
+                            case 3:
+                                increment = team.synergist_average / animation.animationObject.numSteps;
+                                textValue = Math.round((animation.animationObject.currentStep * increment));
+                                textLabel = "Synergist";
+                                break;
+                        }
+                    } else {
+                        increment = team.percentage_complete / animation.animationObject.numSteps;
+                        textValue = Math.round((animation.animationObject.currentStep * increment)) + "%";
+                        textLabel = "Quiz Completion";
+                    }
+                    var textWidth = ctx.measureText(textValue).width;
+                    var txtPosx = Math.round((canvasWidthvar - textWidth) / 2);
+                    ctx.fillText(textValue, txtPosx, (canvasHeight / 2.15));
+                    ctx.font = fontsize / 3 + "em Helvetica";
+                    ctx.fillStyle = "#aaa;";
+                    ctx.textBaseline = "middle";
+                    textWidth = ctx.measureText(textLabel).width;
+                    txtPosx = Math.round((canvasWidthvar - textWidth) / 2);
+                    ctx.fillText(textLabel, txtPosx, (canvasHeight / 3.5) * 2);
                 }
             }
       };
