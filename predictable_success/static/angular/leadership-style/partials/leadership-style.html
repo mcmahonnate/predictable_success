@@ -1,0 +1,19 @@
+<div class="panel">
+    <div class="panel-header complete">
+        <div class="avatar-container col-xs-1" style="margin-right: 25px">
+            <employee-avatar size="large" employee="team_member"></employee-avatar>
+        </div>
+        <h3 class="modal-title sub-title">{{ team_member.full_name }}</h3>
+        <h3 class="modal-title">
+            <span ng-repeat="score in team_member.leadership_style.scores | orderBy : 'score' : true">
+                <span class="sub-title" ng-if="$first">{{score.style_verbose}} - {{score.score}},</span>
+                <span class="sub-title" ng-if="!$first && !$last">{{score.style_verbose}} - {{score.score}},</span>
+                <span class="sub-title" ng-if="$last">{{score.style_verbose}} - {{score.score}}</span>
+            </span>
+        </h3>
+    </div>
+    <div style="padding-top: 60px;">
+        <div ng-bind-html="team_member.leadership_style.description.description"></div>
+    </div>
+    <button class="btn btn-success" ng-click="index.gotoPage(0)">Go Back</button>
+</div>

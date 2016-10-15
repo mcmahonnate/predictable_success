@@ -8,6 +8,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     analytics.trackPage($scope, $location.absUrl(), location_url);
     var vm = this;
     vm.busy = true;
+    vm.page = 0;
     vm.showEmptyScreen = false;
     vm.myLeadershipStyle = null;
     vm.showTakeQuizNotification = false;
@@ -15,6 +16,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     vm.tease = null;
     vm.teases = [];
     vm.invite = invite;
+    vm.gotoPage = gotoPage;
     vm.setTease = setTease;
     vm.takeQuiz = takeQuiz;
     vm.requestLeadershipStyle = requestLeadershipStyle;
@@ -24,6 +26,12 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     $rootScope.hideMessage = false;
     $rootScope.hideRequestMessage = false;
     activate();
+
+    function gotoPage(page) {
+        console.log(vm.page);
+        console.log(page);
+        vm.page = page;
+    }
 
     function orderByVisionary(a,b){
         var noDataValue=0;
@@ -336,26 +344,6 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                 if (addNew) {
                     vm.myLeadershipStyle.teams.push(team);
                 }
-            }
-        );
-    }
-
-    function invite360() {
-        var modalInstance = $modal.open({
-            animation: true,
-            windowClass: 'xx-dialog fade zoom',
-            backdrop: 'static',
-            templateUrl: '/static/angular/leadership-style/partials/_modals/invite-360.html',
-            controller: 'Invite360Controller as invite360',
-            resolve: {
-                panel: function () {
-                    return null
-                }
-            }
-        });
-        modalInstance.result.then(
-            function (sentLeadershipStyleRequests) {
-                getMyRecentlySentRequests();
             }
         );
     }

@@ -411,6 +411,51 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
     };
 })
 
+.directive('animationend', function() {
+	return {
+		restrict: 'A',
+		scope: {
+			animationend: '&'
+		},
+		link: function(scope, element, attrs) {
+			var callback = scope.animationend(),
+				  events = 'animationend webkitAnimationEnd MSAnimationEnd' +
+						'transitionend webkitTransitionEnd';
+
+			element.on(events, function(event) {
+				callback.call(element[0], element, attrs);
+			});
+		}
+	};
+})
+
+.directive('currentpage', ['$window', function($window) {
+	return {
+		restrict: 'A',
+		scope: {
+			currentpage: '=',
+            page: '='
+		},
+		link: function(scope, element, attrs) {
+            scope.$watch("currentpage", function() {
+                if (parseInt(scope.page) == scope.currentpage) {
+                    element.addClass('pt-page-current');
+                }
+            })
+			var events = 'animationend webkitAnimationEnd MSAnimationEnd' +
+						'transitionend webkitTransitionEnd';
+
+			element.on(events, function(event) {
+                if(parseInt(scope.page) != scope.currentpage && element.hasClass('pt-page-current')) {
+                    element.removeClass('pt-page-current');
+                    $("html,body").animate({scrollTop:0}, "fast");
+                }
+			});
+		}
+	};
+}])
+
+
 .directive('talentCategoryChart', ['$location', 'TalentCategories', function($location, TalentCategories) {
     return function(scope, element, attrs){
         scope.$watch("talentReport", function() {

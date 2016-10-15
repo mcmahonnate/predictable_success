@@ -118,63 +118,78 @@
             </div>
         </div>
     </div>
-    <div ng-repeat="team in index.myLeadershipStyle.teams | orderBy:'customer_id'">
-        <div class="panel fade-in clearfix" ng-if="!team.requested_report">
-            <div class="panel-header complete">
-                <h3 class="modal-title sub-title">Your Team</h3>
+    <div id="pt-main" class="pt-perspective" ng-repeat="team in index.myLeadershipStyle.teams | orderBy:'customer_id'" ng-if="$first">
+        <div class="pt-page" currentpage="index.page" page="0" ng-class="{'pt-page-moveFromLeftFade': index.page==0, 'pt-page-moveToLeftFade': index.page !=0}">
+            <div class="panel fade-in clearfix" ng-if="!team.requested_report">
+                <div class="panel-header complete">
+                    <h3 class="modal-title sub-title">Your Team</h3>
+                </div>
+                <div style="padding-top: 60px;">
+                    <div ng-if="index.tease" class="pull-left fade-in" style="width:55%;" ng-bind-html="index.tease.tease"></div>
+                    <div ng-if="!index.tease" class="pull-left fade-in" style="width:55%;">
+                        <div ng-if="!team.requested_report">
+                            <h3 class="modal-title">Get YOUR Team Report</h3>
+                            <p>Your invitations have been sent. You can see their progress below.  When the members of your team have completed the quiz, or you are ready to send your team’s data along for your one-time, customized report, click the button below.</p>
+                            <button ng-disabled="!team.can_request_report" ng-click="index.requestTeamReport(team.id, $index)" class="btn btn-success" style="margin-top: 10px;width:100%" type="submit">Get YOUR Team Report</button>
+                            <p class="centered" style="color: #aaa;" ng-if="!team.can_request_report">Before we can generate YOUR Team Report at least 6 of your Team Members need to complete their Leadership Style quiz.</p>
+                        </div>
+                        <div ng-if="team.requested_report && !team.received_report">
+                            <h3 class="modal-title">Your Team Report</h3>
+                            <p>We are working on your team report. Please allow 3-5 business days.
+                        </div>
+                    </div>
+                    <div class="pull-right" style="width:70%;margin-right:-30%;">
+                        <canvas style="margin-right:22%;" id="pie" class="chart chart-doughnut pull-right" chart-data="team.chartData" chart-labels="team.chartLabels" chart-options="team.chartOptions" chart-colors="team.chartColors" chart-click="team.chartClick"></canvas>
+                    </div>
+                </div>
             </div>
-            <div style="padding-top: 60px;">
-                <div class="pull-left" style="width:55%;" ng-bind-html="index.tease.tease"></div>
-                <div class="pull-right" style="width:70%;margin-right:-30%;">
-                    <canvas style="margin-right:22%;" id="pie" class="chart chart-doughnut pull-right" chart-data="team.chartData" chart-labels="team.chartLabels" chart-options="team.chartOptions" chart-colors="team.chartColors" chart-click="team.chartClick"></canvas>
+            <div class="invite-360" style="height: 25px;">
+                <h4 ng-if="!team.is_team_full" class="header"><a href="" class="pull-right" ng-click="index.invite(team.id, team.remaining_invites, team.team_members.length)">+ Invite more team members</a></h4>
+            </div>
+            <div style="position: relative;">
+                <div style="position: absolute;width: 100%;">
+                    <ul class="isotope table-like">
+                        <li ng-repeat="team_member in team.team_members  | orderBy:'full_name'" ng-click="index.gotoPage(team_member.id)" ng-style="{top: (((team_member.index) * 155) + 'px')}" ng-class="{'incomplete': !team_member.leadership_style || !team_member.leadership_style.completed}" >
+                            <div class="clearfix" style="width: 100%">
+                                <div class="avatar-container col-xs-1" style="margin-right: 25px">
+                                    <employee-avatar size="large" employee="team_member"></employee-avatar>
+                                </div>
+                                <div class="pull-right col-xs-3" style="text-align: right;margin-top: -5px">
+                                    <span ng-repeat="score in team_member.leadership_style.scores | orderBy : 'score' : true">
+                                        <p style="margin-bottom: 5px;"><span class="sub-title" style="font-size: 18px">{{score.style_verbose}} - {{score.score}}</span></p>
+                                    </span>
+                                </div>
+                                <div class="col-xs-7">
+                                    <div>
+                                        <h3 class="modal-title" style="color: #fff;margin-bottom: 8px;">
+                                            {{ team_member.full_name }}
+                                        </h3>
+                                    </div>
+                                    <div ng-if="!team_member.leadership_style || !team_member.leadership_style.completed">
+                                        <h3 class="modal-title sub-title" style="margin-bottom: 0;" ng-if="!team_member.leadership_style">
+                                            0% Completed
+                                        </h3>
+                                        <h3 class="modal-title sub-title" style="margin-bottom: 0;" ng-if="team_member.leadership_style">
+                                            {{ team_member.leadership_style.percentage_complete }}% Completed
+                                        </h3>
+                                    </div>
+                                    <div style="display: block" ng-if="team_member.leadership_style && team_member.leadership_style.completed">
+                                        <h3 class="modal-title sub-title" style="margin-bottom: 0;">
+                                            {{ team_member.leadership_style.description.name }}
+                                        </h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
-        <div class="invite-360" style="height: 25px;">
-            <h4 ng-if="!team.is_team_full" class="header"><a href="" class="pull-right" ng-click="index.invite(team.id, team.remaining_invites, team.team_members.length)">+ Invite more team members</a></h4>
-        </div>
-        <div style="position: relative;">
-            <div style="position: absolute;width: 100%;">
-                <ul class="isotope table-like">
-                    <li ng-repeat="team_member in team.team_members  | orderBy:'full_name'" ng-style="{top: (((team_member.index) * 155) + 'px')}" ng-class="{'incomplete': !team_member.leadership_style || !team_member.leadership_style.completed}" >
-                        <div class="clearfix" style="width: 100%">
-                            <div class="avatar-container col-xs-1" style="margin-right: 25px">
-                                <employee-avatar size="large" employee="team_member"></employee-avatar>
-                            </div>
-                            <div class="pull-right col-xs-3" style="text-align: right;margin-top: -5px">
-                                <span ng-repeat="score in team_member.leadership_style.scores | orderBy : 'score' : true">
-                                    <p style="margin-bottom: 5px;"><span class="sub-title" style="font-size: 18px">{{score.style_verbose}} - {{score.score}}</span></p>
-                                </span>
-                            </div>
-                            <div class="col-xs-7">
-                                <div>
-                                    <h3 class="modal-title" style="color: #fff;margin-bottom: 8px;">
-                                        {{ team_member.full_name }}
-                                    </h3>
-                                </div>
-                                <div ng-if="!team_member.leadership_style || !team_member.leadership_style.completed">
-                                    <h3 class="modal-title sub-title" style="margin-bottom: 0;" ng-if="!team_member.leadership_style">
-                                        0% Completed
-                                    </h3>
-                                    <h3 class="modal-title sub-title" style="margin-bottom: 0;" ng-if="team_member.leadership_style">
-                                        {{ team_member.leadership_style.percentage_complete }}% Completed
-                                    </h3>
-                                </div>
-                                <div style="display: block" ng-if="team_member.leadership_style && team_member.leadership_style.completed">
-                                    <h3 class="modal-title sub-title" style="margin-bottom: 0;">
-                                        {{ team_member.leadership_style.description.name }}
-                                    </h3>
-                                </div>
-                            </div>
-                        </div>
-
-                    </li>
-                </ul>
-            </div>
+        <div class="pt-page" currentpage="index.page" page="team_member.id" ng-repeat="team_member in team.team_members" ng-class="{'pt-page-moveFromRightFade': index.page==team_member.id, 'pt-page-moveToRightFade': index.page !=team_member.id}">
+            <div ng-include="'/static/angular/leadership-style/partials/leadership-style.html'"></div>
         </div>
     </div>
 </div>
-
 
 <style>
 
@@ -245,5 +260,35 @@
   padding: 5px 4px;
   font-size: 18px;
 }
+.pt-perspective {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	perspective: 1200px;
+	transform-style: preserve-3d;
+}
 
+.pt-page {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	visibility: hidden;
+	backface-visibility: hidden;
+	transform: translate3d(0, 0, 0);
+}
+
+.pt-page-current,
+.no-js .pt-page {
+	visibility: visible;
+}
+
+.no-js body {
+	overflow: auto;
+}
+
+.pt-page-ontop {
+	z-index: 999;
+}
 </style>
