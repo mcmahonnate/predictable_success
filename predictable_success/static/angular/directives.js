@@ -434,7 +434,8 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
 		restrict: 'A',
 		scope: {
 			currentpage: '=',
-            page: '='
+            page: '=',
+            scrolltop: '='
 		},
 		link: function(scope, element, attrs) {
             scope.$watch("currentpage", function() {
@@ -448,7 +449,9 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
 			element.on(events, function(event) {
                 if(parseInt(scope.page) != scope.currentpage && element.hasClass('pt-page-current')) {
                     element.removeClass('pt-page-current');
-                    $("html,body").animate({scrollTop:0}, "fast");
+                    if (scope.scrolltop) {
+                        $("html,body").animate({scrollTop: 0}, "fast");
+                    }
                 }
 			});
 		}
