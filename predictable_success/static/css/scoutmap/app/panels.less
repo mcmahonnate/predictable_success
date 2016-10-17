@@ -17,6 +17,8 @@
     color: inherit;
     font-weight: bold;
     line-height: 22px;
+
+
 }
 
 .panel-header {
@@ -24,7 +26,52 @@
     padding: 20px;
     border-top-left-radius: 4px !important;
     border-top-right-radius: 4px !important;
+
+    .panel-header-avatar {
+        float: left;
+        width: 10%;
+        @media only screen and (max-width : 768px) {
+            width: 16%;
+        }
+        @media only screen and (max-width : 420px) {
+            width: 30%;
+            margin-left: -10px;
+        }
+    }
+
+    .panel-header-title {
+        float: left;
+        width: 90%;
+        padding-left: 10px;
+
+        @media only screen and (max-width : 768px) {
+            width: 84%;
+        }
+        @media only screen and (max-width : 420px) {
+            width: 70%;
+            padding-left: 0px;
+        }
+        h2 {
+            font-size: 26px;
+            line-height: 34px;
+        }
+        h3 {
+            font-size: 18px;
+            line-height: 22px;
+        }
+    }
 }
+
+.panel-header:after {
+   content: " "; /* Older browser do not support empty content */
+   visibility: hidden;
+   display: block;
+   height: 0;
+   clear: both;
+}
+
+
+
 
 .panel-body {
 	text-align: left;

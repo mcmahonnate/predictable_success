@@ -47,7 +47,7 @@
                         </div>
 
                         <div class="copy-box-right">
-                            <ul style="list-style-type: disc; padding-bottom: 15px;font-size: 15px; font-weight:500; color:#7f8c8d;">
+                            <ul>
                                 <li style="margin-bottom: 10px;">Increase personal performance by matching the right leadership style to the right role.</li>
                                 <li style="margin: 10px 0;">Maximize team performance by bringing together the right mixture of leadership styles at the appropriate time.</li>
                                 <li style="margin: 10px 0;">Get to the root of team dysfunction by developing a shared vocabulary to address conflict.</li>
@@ -63,57 +63,62 @@
 
     <div class="panel fade-in" ng-if="index.myLeadershipStyle.scores.length > 0 && index.myLeadershipStyle.teams.length==0">
         <div class="panel-header complete">
-            <div class="avatar-container col-xs-1" style="margin-right: 25px">
+            <div class="panel-header-avatar">
                 <employee-avatar size="large" employee="index.myLeadershipStyle.employee"></employee-avatar>
             </div>
-            <h3 class="modal-title sub-title">You</h3>
-            <h3 class="modal-title">
-                <span ng-repeat="score in index.myLeadershipStyle.scores | orderBy : 'score' : true">
-                    <span class="sub-title" ng-if="$first">{{score.style_verbose}} - {{score.score}},</span>
-                    <span class="sub-title" ng-if="!$first && !$last">{{score.style_verbose}} - {{score.score}},</span>
-                    <span class="sub-title" ng-if="$last">{{score.style_verbose}} - {{score.score}}</span>
-                </span>
-            </h3>
+            <div class="panel-header-title sub-title">
+                <h2>You</h2>
+                <h3>
+                    <span ng-repeat="score in index.myLeadershipStyle.scores | orderBy : 'score' : true">
+                        <span ng-if="$first">{{score.style_verbose}} - {{score.score}},</span>
+                        <span ng-if="!$first && !$last">{{score.style_verbose}} - {{score.score}},</span>
+                        <span ng-if="$last">{{score.style_verbose}} - {{score.score}}</span>
+                    </span>
+                </h3>
+            </div>
         </div>
         <div>
-            <div class="landing-form" style="padding-top: 26px; margin-left: -26px;">
-                <div class="arrow_box step_complete" style="float: left; text-transform: uppercase; font-size: 22px; font-weight: bold;">Step One</div>
-                <div style="margin-left: 300px; margin-top: 24px; font-size: 22px; text-transform: uppercase; font-weight: bold;">Read Your Results</div>
-            </div>
-            <div style="padding-top: 60px;">
-                <div ng-bind-html="index.myLeadershipStyle.description.description"></div>
-            </div>
             <div class="landing-form">
+                <div class="arrow-container">
+                    <div class="arrow_box step_complete">Step One</div>
+                    <div class="arrow_label">Read Your Results</div>
+                </div>
+
+                <div class="description-container">
+                    <div ng-bind-html="index.myLeadershipStyle.description.description"></div>
+                </div>
                 <div ng-if="index.myLeadershipStyle.teams.length==0">
-                    <div style="padding-top: 5px; margin-left: -26px;">
-                        <div class="arrow_box step_complete" style="float: left; text-transform: uppercase; font-size: 22px; font-weight: bold;">Step Two</div>
-                        <div style="margin-left: 300px; margin-top: 24px; font-size: 22px; text-transform: uppercase; font-weight: bold;">Get Your Team Report</div>
+                    <div class="arrow-container">
+                        <div class="arrow_box step_complete">Step Two</div>
+                        <div class="arrow_label">Get Your Team Report</div>
                     </div>
                     <div style="clear: both;"></div>
                     <div class="clearfix">
-                        <div style="width: 50%; float: left; font-size: 22px; font-weight: 500; color: #aaa; padding: 50px 20px 20px 40px; line-height: 28px;">
-                            Now that you know your leadership style the next step is to discover your team mate's style. Sign up today to get a detailed bespoke report that will show you:
-                        </div>
+                        <div style="padding-top: 20px">
+                            <div class="copy-box-left">
+                                Now that you know your leadership style the next step is to discover your team mate's style. Sign up today to get a detailed bespoke report that will show you:
+                            </div>
 
-                        <div style="width: 50%; float: right; padding: 50px 20px 20px 20px">
-                            <ul style="list-style-type: disc; border-bottom: solid 1px #aaa;padding-bottom: 15px;font-size: 15px; font-weight:500; color:#7f8c8d;">
-                                <li style="margin-bottom: 10px;">Your team's ability to make and execute high quality decisions.</li>
-                                <li style="margin: 10px 0;">Which team mates have a natural tendency to butt heads.</li>
-                                <li style="margin: 10px 0;">What style you need to increase in your team to improve performance.</li>
-                                <li style="margin: 10px 0;">The overall culture of your team.</li>
-                                <li style="margin: 10px 0;">How aligned your team is to the Motley Fool team.</li>
-                            </ul>
-                            <div class="centered" style="margin: 15px 0;"><span style="color: #7f8c8d; font-size: 16px; font-weight: 700;">INVESTMENT | $199 (Up to 10 team members)</span></div>
-                            <form action="/account/payment" method="POST" id="paymentForm">
-                            <input type="hidden" name="csrfmiddlewaretoken" ng-value="index.myLeadershipStyle.csrf_token" >
+                            <div class="copy-box-right">
+                                <ul>
+                                    <li style="margin-bottom: 10px;">Your team's ability to make and execute high quality decisions.</li>
+                                    <li style="margin: 10px 0;">Which team mates have a natural tendency to butt heads.</li>
+                                    <li style="margin: 10px 0;">What style you need to increase in your team to improve performance.</li>
+                                    <li style="margin: 10px 0;">The overall culture of your team.</li>
+                                    <li style="margin: 10px 0;">How aligned your team is to the Motley Fool team.</li>
+                                </ul>
+                                <div class="centered" style="margin: 15px 0;"><span style="color: #7f8c8d; font-size: 16px; font-weight: 700;">INVESTMENT | $199 (Up to 10 team members)</span></div>
+                                <form action="/account/payment" method="POST" id="paymentForm">
+                                <input type="hidden" name="csrfmiddlewaretoken" ng-value="index.myLeadershipStyle.csrf_token" >
 
-                            <button class="btn btn-success btn-block" id="stripePay" style="margin-bottom: 15px;" type="submit">Sign up for a Team Analysis</button>
-                            <input type="hidden" id="stripeToken" name="stripeToken" value="" />
-                            <input type="hidden" id="stripeEmail" name="stripeEmail" value="" />
-                            </form>
+                                <button class="btn btn-success btn-block" id="stripePay" style="margin-bottom: 15px;" type="submit">Sign up for a Team Analysis</button>
+                                <input type="hidden" id="stripeToken" name="stripeToken" value="" />
+                                <input type="hidden" id="stripeEmail" name="stripeEmail" value="" />
+                                </form>
 
-                            <stripe-payments key="index.myLeadershipStyle.stripe_key"></stripe-payments>
+                                <stripe-payments key="index.myLeadershipStyle.stripe_key"></stripe-payments>
 
+                            </div>
                         </div>
                     </div>
                 </div>
