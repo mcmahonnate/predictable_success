@@ -8,6 +8,7 @@ function LeadershipStyleService($http, $log, LeadershipStyleResource) {
         createLeadershipStyle: createLeadershipStyle,
         getLeadershipStyle: getLeadershipStyle,
         getMyLeadershipStyle: getMyLeadershipStyle,
+        getTeases: getTeases,
         getMyUnfinishedLeadershipStyle: getMyUnfinishedLeadershipStyle,
         retakeLeadershipStyle: retakeLeadershipStyle,
         shareLeadershipStyle: shareLeadershipStyle,
@@ -61,6 +62,18 @@ function LeadershipStyleService($http, $log, LeadershipStyleResource) {
 
         function fail(response) {
             $log.error('getMyLeadershipStyle failed');
+        }
+    }
+
+    function getTeases() {
+        return LeadershipStyleResource.getTeases(null, success, fail).$promise;
+
+        function success(response) {
+            return response;
+        }
+
+        function fail(response) {
+            $log.error('getTeases failed');
         }
     }
 

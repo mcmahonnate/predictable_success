@@ -14,7 +14,9 @@
     "js-xlsx": "~0.8.0",
     "angular-bootstrap": "0.13.3",
     "ngImgCrop": "~0.3.2",
-    "angular-selectize2": "~3.0.0"
+    "angular-selectize2": "~3.0.0",
+    "chart.js": "~2.3.0",
+    "angular-chart.js": "~1.0.3"
   },
   "resolutions": {
     "angular": "1.3.14"

@@ -6,21 +6,57 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     /* Since this page can be the root for some users let's make sure we capture the correct page */
     var location_url = $location.url().indexOf('/leadership_style') < 0 ? '/' : $location.url();
     analytics.trackPage($scope, $location.absUrl(), location_url);
-
     var vm = this;
     vm.busy = true;
+    vm.page = 0;
     vm.showEmptyScreen = false;
     vm.myLeadershipStyle = null;
     vm.showTakeQuizNotification = false;
     vm.scores = [];
+    vm.tease = null;
+    vm.teases = [];
     vm.invite = invite;
+    vm.gotoPage = gotoPage;
+    vm.setTease = setTease;
     vm.takeQuiz = takeQuiz;
     vm.requestLeadershipStyle = requestLeadershipStyle;
     vm.requestTeamReport = requestTeamReport;
+
     $rootScope.successRequestMessage = false;
     $rootScope.hideMessage = false;
     $rootScope.hideRequestMessage = false;
     activate();
+
+    function gotoPage(page) {
+        console.log(vm.page);
+        console.log(page);
+        vm.page = page;
+    }
+
+    function orderByVisionary(a,b){
+        var noDataValue=0;
+        var aValue = (!a.leadership_style) ? noDataValue : a.leadership_style.v;
+        var bValue = (!b.leadership_style) ? noDataValue : b.leadership_style.v;
+        return bValue - aValue;
+    }
+    function orderByOperator(a,b){
+        var noDataValue=0;
+        var aValue = (!a.leadership_style) ? noDataValue : a.leadership_style.o;
+        var bValue = (!b.leadership_style) ? noDataValue : b.leadership_style.o;
+        return bValue - aValue;
+    }
+    function orderByProcessor(a,b){
+        var noDataValue=0;
+        var aValue = (!a.leadership_style) ? noDataValue : a.leadership_style.p;
+        var bValue = (!b.leadership_style) ? noDataValue : b.leadership_style.p;
+        return bValue - aValue;
+    }
+    function orderBySynergist(a,b){
+        var noDataValue=0;
+        var aValue = (!a.leadership_style) ? noDataValue : a.leadership_style.s;
+        var bValue = (!b.leadership_style) ? noDataValue : b.leadership_style.s;
+        return bValue - aValue;
+    }
 
     function activate() {
         if ($routeParams.requestId) {
@@ -28,6 +64,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         } else {
             getMyLeadershipStyle();
             getTeamsIOwn();
+            getTeases();
         }
 
         $scope.status = {
@@ -45,6 +82,91 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
             vm.status.isopen = !vm.status.isopen;
         };
     };
+
+    function getTeases() {
+        LeadershipStyleService.getTeases()
+            .then(function(request){
+                vm.teases = request;
+            })
+    }
+
+    function setTease(style_id){
+        angular.forEach(vm.teases, function (tease) {
+            if (tease.style == style_id) {
+                vm.tease = tease;
+            }
+        })
+    }
+
+    function updateTeamChart(team) {
+        team.chartLabels = ['Visionary', 'Operator', 'Processor', 'Synergist'];
+        team.chartData = [team.visionary_average, team.operator_average, team.processor_average, team.synergist_average]
+        team.chartOptions = {
+            responsiveAnimationDuration: 400,
+            tooltips: {
+                enabled: false,
+            },
+            hover: {
+                onHover: function (events) {
+                    if (events.length > 0 &&  events[0]._chart) {
+                        team.animate_show_style = events[0]._index;
+                    } else {
+                        team.animate_show_style = null;
+                    }
+                }
+            },
+            animation: {
+                onProgress: function (animation) {
+                    var ctx = animation.chartInstance.chart.ctx;
+                    var canvasWidthvar = animation.chartInstance.chart.width;
+                    var canvasHeight = animation.chartInstance.chart.height;
+                    var constant = 100;
+                    var fontsize = (canvasHeight / constant).toFixed(2);
+                    ctx.font = fontsize + "em Oswald, Helvetica";
+                    ctx.fillStyle = "#aaa;";
+                    ctx.textBaseline = "middle";
+                    var increment, textLabel, textValue;
+                    if (team.animate_show_style != null) {
+                        switch (team.animate_show_style) {
+                            case 0:
+                                increment = team.visionary_average / animation.animationObject.numSteps;
+                                textValue = Math.round((animation.animationObject.currentStep * increment));
+                                textLabel = "Visionary";
+                                break;
+                            case 1:
+                                increment = team.operator_average / animation.animationObject.numSteps;
+                                textValue = Math.round((animation.animationObject.currentStep * increment));
+                                textLabel = "Operator";
+                                break;
+                            case 2:
+                                increment = team.processor_average / animation.animationObject.numSteps;
+                                textValue = Math.round((animation.animationObject.currentStep * increment));
+                                textLabel = "Processor";
+                                break;
+                            case 3:
+                                increment = team.synergist_average / animation.animationObject.numSteps;
+                                textValue = Math.round((animation.animationObject.currentStep * increment));
+                                textLabel = "Synergist";
+                                break;
+                        }
+                    } else {
+                        increment = team.percentage_complete / animation.animationObject.numSteps;
+                        textValue = Math.round((animation.animationObject.currentStep * increment)) + "%";
+                        textLabel = "Quiz Completion";
+                    }
+                    var textWidth = ctx.measureText(textValue).width;
+                    var txtPosx = Math.round((canvasWidthvar - textWidth) / 2);
+                    ctx.fillText(textValue, txtPosx, (canvasHeight / 2.15));
+                    ctx.font = fontsize / 3 + "em Helvetica";
+                    ctx.fillStyle = "#aaa;";
+                    ctx.textBaseline = "middle";
+                    textWidth = ctx.measureText(textLabel).width;
+                    txtPosx = Math.round((canvasWidthvar - textWidth) / 2);
+                    ctx.fillText(textLabel, txtPosx, (canvasHeight / 3.5) * 2);
+                }
+            }
+      };
+    }
 
     function respondToRequest() {
         vm.busy = true;
@@ -77,6 +199,39 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                 if (!leadershipStyle.completed) {
                     vm.showTakeQuizNotification = true;
                     takeQuiz(leadershipStyle);
+                } else {
+                     angular.forEach(leadershipStyle.teams, function (team) {
+                         updateTeamChart(team);
+                         var i = 0;
+                         angular.forEach(team.team_members, function (team_member) {
+                            team_member.index = i;
+                            i = i + 1;
+                         });
+                         team.team_members_sort = angular.copy(team.team_members)
+                         team.chartClick = function chartClick(points, evt){
+                             switch (points[0]._index) {
+                                 case 0:
+                                     team.team_members_sort.sort(orderByVisionary);
+                                     break;
+                                 case 1:
+                                     team.team_members_sort.sort(orderByOperator);
+                                     break;
+                                 case 2:
+                                     team.team_members_sort.sort(orderByProcessor);
+                                     break;
+                                 case 3:
+                                     team.team_members_sort.sort(orderBySynergist);
+                                     break;
+                             }
+                             setTease(points[0]._index);
+
+                             var i = 0;
+                             angular.forEach(team.team_members_sort, function (team_member) {
+                                team.team_members[team_member.index].index = i;
+                                i = i + 1;
+                             })
+                         };
+                     })
                 }
                 vm.busy = false;
             }, function(){
@@ -193,28 +348,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         );
     }
 
-    function invite360() {
-        var modalInstance = $modal.open({
-            animation: true,
-            windowClass: 'xx-dialog fade zoom',
-            backdrop: 'static',
-            templateUrl: '/static/angular/leadership-style/partials/_modals/invite-360.html',
-            controller: 'Invite360Controller as invite360',
-            resolve: {
-                panel: function () {
-                    return null
-                }
-            }
-        });
-        modalInstance.result.then(
-            function (sentLeadershipStyleRequests) {
-                getMyRecentlySentRequests();
-            }
-        );
-    }
-
     function requestTeamReport(team_id, index) {
-        console.log(index);
         var modalInstance = $modal.open({
             animation: true,
             windowClass: 'xx-dialog fade zoom',
@@ -234,32 +368,3 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         );
     }
 }
-
-/*
-// angular.module('leadership-style', ['ui.bootstrap']);
-angular.module('leadership-style', ['ngAnimate', 'ngSanitize', 'ui.bootstrap']);
-
-angular.module('leadership-style').controller('DropdownCtrl', function ($scope, $log) {
-  $scope.items = [
-    'The first choice!',
-    'And another choice for you.',
-    'but wait! A third!'
-  ];
-
-  $scope.status = {
-    isopen: false
-  };
-
-  $scope.toggled = function(open) {
-    $log.log('Dropdown is now: ', open);
-  };
-
-  $scope.toggleDropdown = function($event) {
-    $event.preventDefault();
-    $event.stopPropagation();
-    $scope.status.isopen = !$scope.status.isopen;
-  };
-
-  $scope.appendToEl = angular.element(document.querySelector('#dropdown-long-content'));
-});
-*/

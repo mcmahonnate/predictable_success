@@ -20,6 +20,11 @@ function LeadershipStyleResource($resource) {
             method: 'GET',
             url: '/api/v1/leadership-style/:id/'
         },
+        'getTeases': {
+            method: 'GET',
+            url: '/api/v1/leadership-style/teases/',
+            isArray: true
+        },
         'getUnfinished': {
             method: 'GET',
             url: '/api/v1/leadership-style/unfinished/'
