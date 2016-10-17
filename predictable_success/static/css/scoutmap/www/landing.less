@@ -7,7 +7,6 @@
 
     @media only screen and (max-width : 420px) {
         width: 100%;
-        padding: 25px 45px;
     }
 
     h1 {
@@ -15,6 +14,14 @@
         line-height: 28px;
         color: white;
         font-weight: bold;
+        @media only screen and (max-width : 1280px) {
+            margin-bottom: 15px;
+            line-height: 30px;
+            font-size: 25px;
+        }
+        @media only screen and (max-width : 420px) {
+            line-height: 28px;
+        }
     }
 
     h2 {
@@ -22,8 +29,42 @@
         line-height: 28px;
         color: white;
         font-weight: bold;
+        @media only screen and (max-width : 1280px) {
+            line-height: 21px;
+            font-size: 17px;
+        }
+        @media only screen and (max-width : 420px) {
+            line-height: 28px;
+        }
     }
 
+    .arrow-container {
+        padding-top: 30px;
+        @media only screen and (max-width : 1280px) {
+            padding-top: 10px;
+        }
+        @media only screen and (max-width : 420px) {
+            padding-top: 10px;
+        }
+
+        .arrow_label {
+            margin-left: 300px;
+            margin-top: 24px;
+            font-size: 22px;
+            text-transform: uppercase;
+            font-weight: bold;
+
+            @media only screen and (max-width : 1280px) {
+                margin-top: 12px;
+                font-size: 20px;
+            }
+            @media only screen and (max-width : 420px) {
+                margin-left: 175px;
+                margin-top: 12px;
+                font-size: 20px;
+            }
+        }
+    }
     .arrow_box {
         position: relative;
         background: #88b7d5;
@@ -31,6 +72,15 @@
         padding: 25px;
         color: white;
         font-size: 18px;
+        @media only screen and (max-width : 1280px) {
+            padding: 15px;
+            font-size: 15px;
+        }
+        @media only screen and (max-width : 420px) {
+            padding: 15px;
+            font-size: 15px;
+            width: 150px;
+        }
     }
 
     .arrow_box:after {
@@ -46,11 +96,26 @@
         border-left-color: #88b7d5;
         border-width: 34px;
         margin-top: -34px;
+        @media only screen and (max-width : 1280px) {
+            border-width: 24px;
+            margin-top: -24px;
+        }
+        @media only screen and (max-width : 420px) {
+            border-width: 24px;
+            margin-top: -24px;
+        }
     }
 
     .header {
         background: green;
         padding: 55px 45px 35px;
+        @media only screen and (max-width : 1280px) {
+            padding: 20px 15px 15px;
+        }
+        @media only screen and (max-width : 420px) {
+            width: 100%;
+            padding: 55px 45px 35px;
+        }
     }
 
     input {
@@ -69,6 +134,91 @@
 
     .step_complete:after {
         border-left-color: #ccc !important;
+    }
+    .copy-box-left {
+        @media only screen and (min-width : 1600px) {
+            width: 50%;
+            float: left;
+            font-size: 22px;
+            font-weight: 500;
+            color: #aaa;
+            padding: 50px 40px 20px 50px;
+            line-height: 28px;
+        }
+        @media only screen and (max-width : 1280px) {
+            width: 50%;
+            float: left;
+            font-size: 18px;
+            font-weight: 500;
+            color: #aaa;
+            padding: 10px 20px 20px 25px;
+            line-height: 22px;
+        }
+        @media only screen and (max-width : 420px) {
+            width: 100%;
+            font-size: 18px;
+            font-weight: 500;
+            color: #aaa;
+            padding: 10px 10px;
+            line-height: 22px;
+        }
+    }
+    .copy-box-right {
+        @media only screen and (min-width : 1600px) {
+            width: 50%;
+            float: right;
+            padding: 50px 50px 20px 50px;
+        }
+        @media only screen and (max-width : 1280px) {
+            width: 50%;
+            float: right;
+            padding: 10px 20px 20px 20px;
+        }
+        @media only screen and (max-width : 420px) {
+            width: 100%;
+            padding: 10px 20px 20px 20px;
+        }
+    }
+
+    .copy-box-right ul {
+        list-style-type: disc;
+        color:#7f8c8d;
+        @media only screen and (max-width : 1280px) {
+            font-size: 15px;
+            font-weight:400;
+        }
+        @media only screen and (max-width : 420px) {
+            font-size: 15px;
+            font-weight: 400;
+        }
+        li {
+            margin-bottom: 10px;
+            @media only screen and (max-width : 1280px) {
+                margin-bottom: 5px;
+            }
+            @media only screen and (max-width : 420px) {
+                margin-bottom: 5px;
+            }
+        }
+    }
+
+    .copy-box-right input {
+        margin-top: 40px;
+        @media only screen and (max-width : 1280px) {
+            margin-top: 10px;
+        }
+        @media only screen and (max-width : 420px) {
+            margin-top: 10px;
+        }
+    }
+
+    .copy-box-right .btn {
+        @media only screen and (max-width : 1280px) {
+            padding: 15px;
+        }
+        @media only screen and (max-width : 420px) {
+            padding: 15px;
+        }
     }
 }
 
