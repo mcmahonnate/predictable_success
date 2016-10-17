@@ -82,12 +82,21 @@ textarea {overflow:hidden;}
 /* Layout ==================================== */
 .container {
 	margin-top:40px;
-	padding-left: 80px;
+	padding-left: 15px;
 
     /* For mobile experiences we move the navigation bar to the top of the viewport */
     @media only screen and (max-width : 640px) {
         margin-top: 50px;
         padding: 15px;
+    }
+
+    @media only screen and (max-width : 1280px) {
+        margin-top: 50px;
+        padding: 15px;
+    }
+    @media only screen and (max-width : 420px) {
+        margin-top: 40px;
+        padding: 5px;
     }
 }
 
@@ -441,7 +450,7 @@ textarea.expandable:focus {
     font-size: 22px;
     margin-bottom: 15px;
     font-weight: bold;
-    line-height: 26px;
+    line-height: 30px;
 }
 .modal-body p {
   margin: 15px 0;

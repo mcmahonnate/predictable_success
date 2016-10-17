@@ -30,21 +30,23 @@
             <div class="landing-form">
                 <div class="header panel-header">
                     <h1>Find Your Fool</h1>
-                    <h2>Discover your personal leadership style and uncover how it fits with others on your team.</h2>
+                    <h2>
+                        <span class="hide-for-mobile">Discover your personal leadership style and uncover how it fits with your team.</span>
+                        <span class="mobile-show">Discover your personal leadership style.</span>
+                    </h2>
                 </div>
-                <br />
                 <div ng-if="index.myLeadershipStyle.teams.length==0">
-                    <div style="padding-top: 8px; margin-left: -26px;">
-                        <div class="arrow_box" style="float: left; text-transform: uppercase; font-size: 22px; font-weight: bold;">Step One</div>
-                        <div style="margin-left: 300px; margin-top: 24px; font-size: 22px; text-transform: uppercase; font-weight: bold;">Finish Your Quiz</div>
+                    <div class="arrow-container">
+                        <div class="arrow_box">Step One</div>
+                        <div class="arrow_label">Finish Your Quiz</div>
                     </div>
                     <div style="clear: both;"></div>
                     <div class="clearfix">
-                        <div style="width: 50%; float: left; font-size: 22px; font-weight: 500; color: #aaa; padding: 50px 20px 20px 40px; line-height: 28px;">
+                        <div class="copy-box-left">
                             Over the years we've discovered there are four types of Fool needed to grow a successful business. Using a leadership assessment developed by our friends at Predictable Success we've been able to:
                         </div>
 
-                        <div style="width: 50%; float: right; padding: 50px 20px 20px 20px">
+                        <div class="copy-box-right">
                             <ul style="list-style-type: disc; padding-bottom: 15px;font-size: 15px; font-weight:500; color:#7f8c8d;">
                                 <li style="margin-bottom: 10px;">Increase personal performance by matching the right leadership style to the right role.</li>
                                 <li style="margin: 10px 0;">Maximize team performance by bringing together the right mixture of leadership styles at the appropriate time.</li>

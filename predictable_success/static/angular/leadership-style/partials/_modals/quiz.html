@@ -60,10 +60,10 @@
         </div>
         <div class="modal-page-count centered">{{ quiz.leadershipStyle.next_question.order + 1 }} of {{ quiz.leadershipStyle.total_questions }}</div>
         <div class="modal-footer">
-            <button type="button" ng-show="quiz.leadershipStyle.next_question.order>0" class="btn btn-light pull-left" ng-disabled="quiz.busy" ng-click="quiz.previousQuestion(quiz.leadershipStyle)">&larr; Previous</button>
+            <button type="button" ng-show="quiz.leadershipStyle.next_question.order>0" class="btn btn-light pull-left" ng-disabled="quiz.busy" ng-click="quiz.previousQuestion(quiz.leadershipStyle)"><span class="fa fa-caret-left"></span> <span class="hide-for-mobile">Previous</span> </button>
             <button type="button" ng-click="quiz.close()" data-dismiss="modal" class="btn btn-light">Save &amp; Close</button>
             <button type="button" ng-show="quiz.leadershipStyle.next_question.answers.length>1" class="btn btn-success" ng-disabled="!quiz.selectedAnswer || quiz.busy" ng-click="quiz.answerQuestion(quiz.selectedAnswer)">
-                Next &rarr;
+                <span class="hide-for-mobile">Next</span> <span class="fa fa-caret-right"></span>
             </button>
         </div>
     </div>
@@ -72,7 +72,7 @@
             <panel class="devzone">
                 <h3 class="modal-title centered">You're All Done</h3>
                 <div class="centered" style="padding-top:40px;padding-bottom:40px">
-                    <button type="button" style="font-size:20px;" ng-click="quiz.finish()" ng-disabled="quiz.busy" data-dismiss="modal" class="btn btn-success">Click Here To See Your Results</button>
+                    <button type="button" style="font-size:20px;" ng-click="quiz.finish()" ng-disabled="quiz.busy" data-dismiss="modal" class="btn btn-success">Click To See Your Results</button>
                 </div>
             </panel>
         </div>
