@@ -12,6 +12,8 @@
 }
 .leadership-style-title {
   margin-bottom: 20px;
+  font-size: 26px;
+  line-height: 36px;
   color: #000 !important;
 }
 
@@ -106,4 +108,40 @@ img.leadership-style.synergist {
         width: 100%;
         padding: 15px 15px 20px 20px;
     }
+}
+
+.team-summary {
+  padding-top: 35px;
+  @media only screen and (max-width : 420px) {
+      padding-top: 30px;
+      padding-bottom: 30px;
+  }
+
+  .team-summary-description {
+    float: left;
+    width:55%;
+    @media only screen and (max-width : 420px) {
+        width: 100%;
+    }
+  }
+
+  .team-summary-chart {
+    float: right;
+    width:70%;
+    padding-bottom: 30px;
+
+    @media only screen and (min-width : 420px) {
+      margin-right:-30%;
+    }
+    canvas {
+      @media only screen and (min-width : 420px) {
+        margin-right:22%;
+      }
+    }
+    @media only screen and (max-width : 420px) {
+        padding-top: 30px;
+        width: 100%;
+        padding-bottom: 30px;
+    }
+  }
 }

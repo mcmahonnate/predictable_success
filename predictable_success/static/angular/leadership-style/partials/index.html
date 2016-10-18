@@ -131,11 +131,11 @@
                 <div class="panel-header complete">
                     <h3 class="modal-title sub-title">Your Team</h3>
                 </div>
-                <div style="padding-top: 60px;">
-                    <div class="pt-perspective pull-left fade-in" style="width:55%;" >
+                <div class="team-summary">
+                    <div class="pt-perspective team-summary-description fade-in">
                         <div class="pt-page" currentpage="index.tease.id" page="tease.id" scrolltop="false" ng-repeat="tease in index.teases" ng-bind-html="tease.tease" ng-class="{'pt-page-scaleUpCenter pt-page-delay400': index.tease.id==tease.id, 'pt-page-scaleDownCenter': index.tease.id !=tease.id}"></div>
                         <div ng-if="!index.tease">
-                            <div ng-if="!team.requested_report">
+                            <div ng-if="!team.requested_report" style="padding-left: 20px;padding-right: 20px">
                                 <h2 class="leadership-style-title">Get YOUR Team Report</h2>
                                 <p class="leadership-style-description">Your invitations have been sent. You can see their progress below.  When the members of your team have completed the quiz, or you are ready to send your team’s data along for your one-time, customized report, click the button below.</p>
                                 <button ng-disabled="!team.can_request_report" ng-click="index.requestTeamReport(team.id, $index)" class="btn btn-success" style="margin-top: 10px;width:100%" type="submit">Get YOUR Team Report</button>
@@ -147,8 +147,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="pull-right" style="width:70%;margin-right:-30%;">
-                        <canvas style="margin-right:22%;" id="pie" class="chart chart-doughnut pull-right" chart-data="team.chartData" chart-labels="team.chartLabels" chart-options="team.chartOptions" chart-colors="team.chartColors" chart-click="team.chartClick"></canvas>
+                    <div class="team-summary-chart">
+                        <canvas id="pie" class="chart chart-doughnut pull-right" chart-data="team.chartData" chart-labels="team.chartLabels" chart-options="team.chartOptions" chart-colors="team.chartColors" chart-click="team.chartClick"></canvas>
                     </div>
                 </div>
             </div>
@@ -159,16 +159,16 @@
                 <div style="position: absolute;width: 100%;">
                     <ul class="isotope table-like">
                         <li ng-repeat="team_member in team.team_members  | orderBy:'full_name'" ng-click="index.gotoPage(team_member.id)" ng-style="{top: (((team_member.index) * 155) + 'px')}" ng-class="{'incomplete': !team_member.leadership_style || !team_member.leadership_style.completed}" >
-                            <div class="clearfix" style="width: 100%">
-                                <div class="avatar-container col-xs-1" style="margin-right: 25px">
+                            <div class="clearfix panel-header" style="width: 100%; background-color: transparent">
+                                <div class="panel-header-avatar">
                                     <employee-avatar size="large" employee="team_member"></employee-avatar>
                                 </div>
-                                <div class="pull-right col-xs-3" style="text-align: right;margin-top: -5px">
-                                    <span ng-repeat="score in team_member.leadership_style.scores | orderBy : 'score' : true">
-                                        <p style="margin-bottom: 5px;"><span class="sub-title" style="font-size: 18px">{{score.style_verbose}} - {{score.score}}</span></p>
-                                    </span>
-                                </div>
-                                <div class="col-xs-7">
+                                <div class="panel-header-title" style="margin-top: -5px">
+                                    <div class="pull-right hide-for-mobile">
+                                        <span ng-repeat="score in team_member.leadership_style.scores | orderBy : 'score' : true">
+                                            <p style="margin-bottom: 5px;"><span class="sub-title" style="font-size: 18px">{{score.style_verbose}} - {{score.score}}</span></p>
+                                        </span>
+                                    </div>
                                     <div>
                                         <h3 class="modal-title" style="color: #fff;margin-bottom: 8px;">
                                             {{ team_member.full_name }}
