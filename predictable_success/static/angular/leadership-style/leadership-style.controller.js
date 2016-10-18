@@ -28,11 +28,13 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     activate();
 
     function gotoPage(page) {
-        console.log(vm.page);
-        console.log(page);
         vm.page = page;
     }
-
+    function orderByFullName(a,b){
+        var aValue = a.full_name;
+        var bValue = b.full_name;
+        return ((aValue < bValue) ? -1 : ((aValue > bValue) ? 1 : 0));
+    }
     function orderByVisionary(a,b){
         var noDataValue=0;
         var aValue = (!a.leadership_style) ? noDataValue : a.leadership_style.v;
@@ -191,6 +193,34 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
             })
     }
 
+    function chartClick(points, evt, team){
+         switch (points[0]._index) {
+             case 0:
+                 sortTeamMembers(team, orderByVisionary);
+                 break;
+             case 1:
+                 sortTeamMembers(team, orderByOperator);
+                 break;
+             case 2:
+                 sortTeamMembers(team, orderByProcessor);
+                 break;
+             case 3:
+                 sortTeamMembers(team, orderBySynergist);
+                 break;
+         }
+         setTease(points[0]._index);
+    }
+
+    function sortTeamMembers(team, order) {
+        team.team_members_sort.sort(order);
+
+        var i = 0;
+        angular.forEach(team.team_members_sort, function (team_member) {
+            team.team_members[team_member.index].index = i;
+            i = i + 1;
+        })
+    }
+
     function getMyLeadershipStyle() {
         vm.busy = true;
         LeadershipStyleService.getMyLeadershipStyle()
@@ -202,34 +232,9 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                 } else {
                      angular.forEach(leadershipStyle.teams, function (team) {
                          updateTeamChart(team);
-                         var i = 0;
-                         angular.forEach(team.team_members, function (team_member) {
-                            team_member.index = i;
-                            i = i + 1;
-                         });
-                         team.team_members_sort = angular.copy(team.team_members)
-                         team.chartClick = function chartClick(points, evt){
-                             switch (points[0]._index) {
-                                 case 0:
-                                     team.team_members_sort.sort(orderByVisionary);
-                                     break;
-                                 case 1:
-                                     team.team_members_sort.sort(orderByOperator);
-                                     break;
-                                 case 2:
-                                     team.team_members_sort.sort(orderByProcessor);
-                                     break;
-                                 case 3:
-                                     team.team_members_sort.sort(orderBySynergist);
-                                     break;
-                             }
-                             setTease(points[0]._index);
-
-                             var i = 0;
-                             angular.forEach(team.team_members_sort, function (team_member) {
-                                team.team_members[team_member.index].index = i;
-                                i = i + 1;
-                             })
+                         indexTeamMembers(team);
+                         team.chartClick = function (points, evt){
+                             chartClick(points, evt, team);
                          };
                      })
                 }
@@ -238,6 +243,15 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                 vm.busy = false;
             }
         )
+    }
+
+    function indexTeamMembers(team) {
+         var i = 0;
+         angular.forEach(team.team_members, function (team_member) {
+            team_member.index = i;
+            i = i + 1;
+         });
+        team.team_members_sort = angular.copy(team.team_members);
     }
 
     function getTeamsIOwn() {
@@ -336,14 +350,19 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
             function (team) {
                 var addNew = true;
                 angular.forEach(vm.myLeadershipStyle.teams, function(value) {
-                    if (value.id == value.id) {
+                    if (team.id == value.id) {
                         addNew = false;
-                        value.team_members = team.team_members;
+                        value.team_members = angular.copy(team.team_members);
+                        indexTeamMembers(value);
+                        sortTeamMembers(value, orderByFullName);
                     }
                 });
+
+
                 if (addNew) {
                     vm.myLeadershipStyle.teams.push(team);
                 }
+
             }
         );
     }
