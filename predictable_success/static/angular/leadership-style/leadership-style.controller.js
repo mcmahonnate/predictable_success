@@ -291,6 +291,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                     if (!vm.myLeadershipStyle.completed) {
                         vm.showTakeQuizNotification = true
                     } else {
+                        vm.page = vm.myLeadershipStyle.employee.id;
                         vm.showTakeQuizNotification = false;
                     }
                 }
