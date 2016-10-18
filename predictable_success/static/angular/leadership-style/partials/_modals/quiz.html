@@ -71,8 +71,26 @@
         <div class="modal-body">
             <panel class="devzone">
                 <h3 class="modal-title centered">You're All Done</h3>
-                <div class="centered" style="padding-top:40px;padding-bottom:40px">
-                    <button type="button" style="font-size:20px;" ng-click="quiz.finish()" ng-disabled="quiz.busy" data-dismiss="modal" class="btn btn-success">Click To See Your Results</button>
+                <div style="font-size: 18px;" ng-if="quiz.leadershipStyle.who_can_see_my_results.length>0">
+                    <p>
+                        When you click the button below you will be able to see your results and the results of your team. Your results will also be shared with your team.
+                    </p>
+                    <p>
+                        Here's who is on your team:
+                        <div class="clearfix" style="color: #aaa; font-weight: 400;">
+                            <span ng-repeat="team in quiz.leadershipStyle.who_can_see_my_results">
+                                <ul style="display:block; float: left; margin-right: 15px" ng-repeat="team_member in team.team_members track by $index" ng-if="$index % 4 == 0">
+                                    <li ng-repeat="i in [$index, $index + 1, $index + 2, $index + 3]" ng-if="team.team_members[i] != null" style="margin-bottom: 10px;">{{ team.team_members[i].full_name }}</li>
+                                </ul>
+                            </span>
+                        </div>
+                    </p>
+                    <div class="centered" style="padding-top:0px;padding-bottom:0px">
+                        <button type="button" style="font-size:20px;" ng-click="quiz.finish()" ng-disabled="quiz.busy" data-dismiss="modal" class="btn btn-success">See Your Results</button>
+                    </div>
+                </div>
+                <div class="centered" ng-if="quiz.leadershipStyle.who_can_see_my_results.length==0" style="padding-top:40px;padding-bottom:40px">
+                    <button type="button" style="font-size:20px;" ng-click="quiz.finish()" ng-disabled="quiz.busy" data-dismiss="modal" class="btn btn-success">See Your Results</button>
                 </div>
             </panel>
         </div>

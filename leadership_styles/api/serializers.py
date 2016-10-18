@@ -148,6 +148,15 @@ class EmployeeLeadershipStyleSerializer(EmployeeLeadershipStyleBaseSerializer):
     csrf_token = serializers.SerializerMethodField()
     stripe_key = serializers.SerializerMethodField()
     teams = serializers.SerializerMethodField()
+    who_can_see_my_results = serializers.SerializerMethodField()
+
+    def get_who_can_see_my_results(self, obj):
+        if not obj.completed:
+            serializer = TeamMemberNameSerializer(context=self.context, many=True)
+            teams = TeamLeadershipStyle.objects.get_teams_by_team_member(obj.employee)
+            return serializer.to_representation(teams)
+        else:
+            return []
 
     def get_next_question(self, obj):
         next_question = obj.next_question()
@@ -184,7 +193,7 @@ class EmployeeLeadershipStyleSerializer(EmployeeLeadershipStyleBaseSerializer):
         model = EmployeeLeadershipStyle
         fields = ('id', 'assessment_type', 'active', 'employee', 'assessor', 'next_question', 'notes', 'answers', 'date',
                   'total_questions', 'total_answered', 'completed', 'times_retaken', 'is_draft', 'scores', 'tease',
-                  'csrf_token', 'stripe_key', 'description', 'teams')
+                  'csrf_token', 'stripe_key', 'description', 'teams', 'who_can_see_my_results')
 
 
 class UpdateEmployeeLeadershipStyleSerializer(serializers.ModelSerializer):
@@ -227,6 +236,14 @@ class CreateRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = LeadershipStyleRequest
         fields = ['reviewer', 'reviewer_email', 'message']
+
+
+class TeamMemberNameSerializer(serializers.ModelSerializer):
+    team_members = SanitizedEmployeeSerializer(many=True)
+
+    class Meta:
+            model = TeamLeadershipStyle
+            fields = ['id', 'owner', 'team_members']
 
 
 class TeamMemberSerializer(serializers.ModelSerializer):

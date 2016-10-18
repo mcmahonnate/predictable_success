@@ -53,7 +53,7 @@
                                 <li style="margin: 10px 0;">Get to the root of team dysfunction by developing a shared vocabulary to address conflict.</li>
                                 <li style="margin: 10px 0;">Improve the quality of decisions at every level of the organization.</li>
                             </ul>
-                            <button class="btn btn-success btn-block" style="margin-bottom: 15px;" ng-click="index.takeQuiz(index.myLeadershipStyle)">Finish Your Quiz</button>
+                            <button class="btn btn-submit btn-block" style="margin-bottom: 15px;" ng-click="index.takeQuiz(index.myLeadershipStyle)">Finish Your Quiz</button>
                         </div>
                     </div>
                 </div>
@@ -111,7 +111,7 @@
                                 <form action="/account/payment" method="POST" id="paymentForm">
                                 <input type="hidden" name="csrfmiddlewaretoken" ng-value="index.myLeadershipStyle.csrf_token" >
 
-                                <button class="btn btn-success btn-block" id="stripePay" style="margin-bottom: 15px;" type="submit">Sign up for a Team Analysis</button>
+                                <button class="btn btn-submit btn-block" id="stripePay" style="margin-bottom: 15px;" type="submit">Sign up for a Team Analysis</button>
                                 <input type="hidden" id="stripeToken" name="stripeToken" value="" />
                                 <input type="hidden" id="stripeEmail" name="stripeEmail" value="" />
                                 </form>

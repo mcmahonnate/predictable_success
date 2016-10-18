@@ -18,7 +18,7 @@
             </div>
 
             <div class="arrow-container">
-                <div class="arrow_box">Step One</div>
+                <div class="arrow_box completed">Step One</div>
                 <div class="arrow_label">Take the Quiz</div>
             </div>
 
@@ -41,7 +41,7 @@
                 {% if form.email.errors %}
                 <div class="error-message" style="margin-bottom: 15px;">{{ form.email.errors }}</div>
                 {% endif %}
-                <button class="btn btn-success btn-block" style="margin-bottom: 8px;" type="submit">Get started</button>
+                <button class="btn btn-submit btn-block" style="margin-bottom: 8px;" type="submit">Get started</button>
                 <p class="centered" style="color: #aaa;">Already taken the quiz? <a href="/account/login">Sign in here.</a></p>
             </div>
 
