@@ -132,24 +132,29 @@
                     <h3 class="modal-title sub-title">Your Team</h3>
                 </div>
                 <div class="team-summary">
-                    <div class="pt-perspective team-summary-description fade-in">
-                        <div class="pt-page" currentpage="index.tease.id" page="tease.id" scrolltop="false" ng-repeat="tease in index.teases" ng-bind-html="tease.tease" ng-class="{'pt-page-scaleUpCenter pt-page-delay400': index.tease.id==tease.id, 'pt-page-scaleDownCenter': index.tease.id !=tease.id}"></div>
-                        <div ng-if="!index.tease">
-                            <div ng-if="!team.requested_report" style="padding-left: 20px;padding-right: 20px">
-                                <h2 class="leadership-style-title">Get YOUR Team Report</h2>
-                                <p class="leadership-style-description">Your invitations have been sent. You can see their progress below.  When the members of your team have completed the quiz, or you are ready to send your team’s data along for your one-time, customized report, click the button below.</p>
-                                <button ng-disabled="!team.can_request_report" ng-click="index.requestTeamReport(team.id, $index)" class="btn btn-success" style="margin-top: 10px;width:100%" type="submit">Get YOUR Team Report</button>
-                                <p class="centered" style="color: #aaa;" ng-if="!team.can_request_report">Before we can generate YOUR Team Report at least 6 of your Team Members need to complete their Leadership Style quiz.</p>
-                            </div>
-                            <div ng-if="team.requested_report && !team.received_report">
-                                <h3 class="modal-title">Your Team Report</h3>
-                                <p>We are working on your team report. Please allow 3-5 business days.
+                    <div class="team-summary-chart">
+                        <h2 class="chart-title centered">Team Averages</h2>
+                        <canvas id="pie" class="chart chart-doughnut pull-right" chart-data="team.chartData" chart-labels="team.chartLabels" chart-options="team.chartOptions" chart-colors="team.chartColors" chart-click="team.chartClick"></canvas>
+                    </div>
+                    <div class="team-summary-description" style="position: relative">
+                        <div class="pt-perspective fade-in">
+                            <div class="pt-page" currentpage="index.tease.id" page="tease.id" scrolltop="false" ng-repeat="tease in index.teases" ng-bind-html="tease.tease" ng-class="{'pt-page-scaleUpCenter pt-page-delay400': index.tease.id==tease.id, 'pt-page-scaleDownCenter': index.tease.id !=tease.id}"></div>
+                            <div ng-if="index.tease" style="opacity: 0" ng-bind-html="index.tease.tease"></div>
+                            <div ng-if="!index.tease">
+                                <div ng-if="!team.requested_report" style="padding-left: 20px;padding-right: 20px">
+                                    <h2 class="leadership-style-title">Get YOUR Team Report</h2>
+                                    <p class="leadership-style-description">Your invitations have been sent. You can see their progress below.  When the members of your team have completed the quiz, or you are ready to send your team’s data along for your one-time, customized report, click the button below.</p>
+                                    <button ng-disabled="!team.can_request_report" ng-click="index.requestTeamReport(team.id, $index)" class="btn btn-success" style="margin-top: 10px;width:100%" type="submit">Get YOUR Team Report</button>
+                                    <p class="centered" style="color: #aaa;" ng-if="!team.can_request_report">Before we can generate YOUR Team Report at least 6 of your Team Members need to complete their Leadership Style quiz.</p>
+                                </div>
+                                <div ng-if="team.requested_report && !team.received_report">
+                                    <h3 class="modal-title">Your Team Report</h3>
+                                    <p>We are working on your team report. Please allow 3-5 business days.
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="team-summary-chart">
-                        <canvas id="pie" class="chart chart-doughnut pull-right" chart-data="team.chartData" chart-labels="team.chartLabels" chart-options="team.chartOptions" chart-colors="team.chartColors" chart-click="team.chartClick"></canvas>
-                    </div>
+
                 </div>
             </div>
             <div class="invite-360" style="height: 25px;">
