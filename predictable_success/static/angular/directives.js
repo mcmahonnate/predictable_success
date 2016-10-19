@@ -458,7 +458,9 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
                     }
                     if (element.hasClass('pt-page-current')) {
                         element.removeClass('pt-page-current');
-                        $("html,body").animate({scrollTop: 0}, "fast");
+                        if (scope.scrolltop) {
+                            $("html,body").animate({scrollTop: 0}, "fast");
+                        }
                     }
                 }
 			});
