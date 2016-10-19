@@ -136,7 +136,7 @@
                         <h2 class="chart-title centered">Team Averages</h2>
                         <canvas id="pie" class="chart chart-doughnut pull-right" chart-data="team.chartData" chart-labels="team.chartLabels" chart-options="team.chartOptions" chart-colors="team.chartColors" chart-click="team.chartClick"></canvas>
                     </div>
-                    <div class="team-summary-description" style="position: relative;margin-left: 20px;">
+                    <div class="team-summary-description" style="position: relative;">
                         <div class="pt-perspective fade-in">
                             <div class="pt-page" animate-page-transition="index.tease.id" page="tease.id" scrolltop="false" ng-repeat="tease in index.teases" ng-bind-html="tease.tease" in-class="pt-page-scaleUpCenter pt-page-delay400" out-class="pt-page-scaleDownCenter"></div>
                             <div ng-if="index.tease" style="opacity: 0" ng-bind-html="index.tease.tease"></div>
