@@ -429,27 +429,35 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
 	};
 })
 
-.directive('currentpage', ['$window', function($window) {
+.directive('animatePageTransition', ['$window', function($window) {
 	return {
 		restrict: 'A',
 		scope: {
-			currentpage: '=',
+			animatePageTransition: '=',
             page: '=',
-            scrolltop: '='
+            scrolltop: '=',
 		},
 		link: function(scope, element, attrs) {
-            scope.$watch("currentpage", function() {
-                if (parseInt(scope.page) == scope.currentpage) {
-                    element.addClass('pt-page-current');
+            scope.$watch("animatePageTransition", function() {
+                if (parseInt(scope.page) == scope.animatePageTransition) {
+                    element.addClass('pt-page-current ' + attrs.inClass);
+                } else {
+                    element.addClass(attrs.outClass);
+                    if (element.hasClass(attrs.inClass)) {
+                        element.removeClass(attrs.inClass);
+                    }
                 }
             })
 			var events = 'animationend webkitAnimationEnd MSAnimationEnd' +
 						'transitionend webkitTransitionEnd';
 
 			element.on(events, function(event) {
-                if(parseInt(scope.page) != scope.currentpage && element.hasClass('pt-page-current')) {
-                    element.removeClass('pt-page-current');
-                    if (scope.scrolltop) {
+                if (parseInt(scope.page) != scope.animatePageTransition) {
+                    if (element.hasClass(attrs.outClass)) {
+                        element.removeClass(attrs.outClass);
+                    }
+                    if (element.hasClass('pt-page-current')) {
+                        element.removeClass('pt-page-current');
                         $("html,body").animate({scrollTop: 0}, "fast");
                     }
                 }

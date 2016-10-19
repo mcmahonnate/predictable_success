@@ -126,7 +126,7 @@
         </div>
     </div>
     <div id="pt-main" class="pt-perspective" ng-repeat="team in index.myLeadershipStyle.teams | orderBy:'customer_id'" ng-if="$first">
-        <div class="pt-page" currentpage="index.page" page="0" scrolltop="true" ng-class="{'pt-page-moveFromLeftFade': index.page==0, 'pt-page-moveToLeftFade': index.page !=0}">
+        <div class="pt-page" animate-page-transition="index.page" page="0" scrolltop="true" in-class="pt-page-moveFromLeftFade" out-class="pt-page-moveToLeftFade">
             <div class="panel fade-in clearfix" ng-if="!team.requested_report">
                 <div class="panel-header complete">
                     <h3 class="modal-title sub-title">Your Team</h3>
@@ -199,7 +199,7 @@
                 </div>
             </div>
         </div>
-        <div class="pt-page" currentpage="index.page" scrolltop="true" page="team_member.id" ng-repeat="team_member in team.team_members" ng-class="{'pt-page-moveFromRightFade': index.page==team_member.id, 'pt-page-moveToRightFade': index.page !=team_member.id}">
+        <div class="pt-page" animate-page-transition="index.page" scrolltop="true" page="team_member.id" in-class="pt-page-moveFromRightFade" out-class="pt-page-moveToRightFade" ng-repeat="team_member in team.team_members">
             <div ng-include="'/static/angular/leadership-style/partials/leadership-style.html'"></div>
         </div>
     </div>
