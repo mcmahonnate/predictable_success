@@ -293,6 +293,13 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                     } else {
                         vm.page = vm.myLeadershipStyle.employee.id;
                         vm.showTakeQuizNotification = false;
+                        angular.forEach(leadershipStyle.teams, function (team) {
+                             updateTeamChart(team);
+                             indexTeamMembers(team);
+                             team.chartClick = function (points, evt){
+                                 chartClick(points, evt, team);
+                             };
+                         })
                     }
                 }
             }
