@@ -1,4 +1,4 @@
-<div class="panel" ng-swipe-right="index.gotoPage(0)">
+<div class="panel clearfix" ng-swipe-right="index.gotoPage(0)">
     <div class="panel-header complete">
         <div class="panel-header-avatar">
             <employee-avatar size="large" employee="team_member"></employee-avatar>
@@ -17,5 +17,7 @@
     <div class="description-container">
         <div ng-bind-html="team_member.leadership_style.description.description"></div>
     </div>
-    <button class="btn btn-success" ng-click="index.gotoPage(0)">Go Back</button>
+    <div style="margin-bottom: 30px">
+        <button class="btn btn-submit" style="font-size: 18px;margin-left: auto;margin-right: auto;display: block;" ng-click="index.gotoPage(0)">See Your Team Results</button>
+    </div>
 </div>
