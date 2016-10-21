@@ -156,6 +156,12 @@
                     </div>
 
                 </div>
+                <div class="panel-footer">
+                    <button class="btn btn-sort btn-visionary" ng-click="index.sortTeamMembers(team, index.orderByVisionary)" ng-class="{'btn-active': index.currentOrder==index.orderByVisionary}">Visionary</button>
+                    <button class="btn btn-sort btn-operator" ng-click="index.sortTeamMembers(team, index.orderByOperator)" ng-class="{'btn-active': index.currentOrder==index.orderByOperator}">Operator</button>
+                    <button class="btn btn-sort btn-processor" ng-click="index.sortTeamMembers(team, index.orderByProcessor)" ng-class="{'btn-active': index.currentOrder==index.orderByProcessor}">Processor</button>
+                    <button class="btn btn-sort btn-synergist" ng-click="index.sortTeamMembers(team, index.orderBySynergist)" ng-class="{'btn-active': index.currentOrder==index.orderBySynergist}">Synergist</button>
+                </div>
             </div>
             <div class="invite-360" style="height: 25px;">
                 <h4 ng-if="!team.is_team_full" class="header"><a href="" class="pull-right" ng-click="index.invite(team.id, team.remaining_invites, team.team_members.length)">+ Invite more team members</a></h4>
@@ -312,5 +318,45 @@
 
 .pt-page-ontop {
 	z-index: 999;
+}
+
+.btn-sort {
+    color: #fff;
+    border: None;
+}
+.btn-sort:hover {
+    color: #fff;
+    opacity: .5;
+}
+.btn-sort:focus {
+    color: #fff;
+}
+.btn-visionary {
+    background-color: #d65335;
+}
+.btn-visionary:hover {
+    background-color: #d65335;
+}
+.btn-operator {
+    background-color: #51a9b7;
+}
+.btn-operator:hover {
+    background-color: #51a9b7;
+}
+.btn-processor {
+    background-color: #f7ca18;
+}
+.btn-processor:hover {
+    background-color: #f7ca18;
+}
+.btn-synergist {
+    background-color: #69b63b;
+}
+.btn-synergist:hover {
+    background-color: #69b63b;
+}
+.btn-active {
+    outline: 10px auto -webkit-focus-ring-color;
+    outline-offset: -2px;
 }
 </style>

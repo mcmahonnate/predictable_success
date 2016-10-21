@@ -15,12 +15,18 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     vm.scores = [];
     vm.tease = null;
     vm.teases = [];
+    vm.currentOrder = null;
     vm.invite = invite;
     vm.gotoPage = gotoPage;
-    vm.setTease = setTease;
-    vm.takeQuiz = takeQuiz;
+    vm.orderByVisionary = orderByVisionary
+    vm.orderByOperator = orderByOperator;
+    vm.orderByProcessor = orderByProcessor;
+    vm.orderBySynergist = orderBySynergist;
     vm.requestLeadershipStyle = requestLeadershipStyle;
     vm.requestTeamReport = requestTeamReport;
+    vm.sortTeamMembers = sortTeamMembers;
+    vm.setTease = setTease;
+    vm.takeQuiz = takeQuiz;
 
     $rootScope.successRequestMessage = false;
     $rootScope.hideMessage = false;
@@ -102,6 +108,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
 
     function updateTeamChart(team) {
         team.chartLabels = ['Visionary', 'Operator', 'Processor', 'Synergist'];
+        team.chartColors = ['#d65335', '#51a9b7', '#f7ca18', '#69b63b'];
         team.chartData = [team.visionary_average, team.operator_average, team.processor_average, team.synergist_average]
         team.chartOptions = {
             responsiveAnimationDuration: 400,
@@ -125,7 +132,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                     var constant = 100;
                     var fontsize = (canvasHeight / constant).toFixed(2);
                     ctx.font = fontsize + "em Oswald, Helvetica";
-                    ctx.fillStyle = "#aaa;";
+                    ctx.fillStyle = "#aaaaaa";
                     ctx.textBaseline = "middle";
                     var increment, textLabel, textValue;
                     if (team.animate_show_style != null) {
@@ -160,7 +167,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                     var txtPosx = Math.round((canvasWidthvar - textWidth) / 2);
                     ctx.fillText(textValue, txtPosx, (canvasHeight / 2.15));
                     ctx.font = fontsize / 3 + "em Helvetica";
-                    ctx.fillStyle = "#aaa;";
+                    ctx.fillStyle = "#aaaaaa";
                     ctx.textBaseline = "middle";
                     textWidth = ctx.measureText(textLabel).width;
                     txtPosx = Math.round((canvasWidthvar - textWidth) / 2);
@@ -212,6 +219,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     }
 
     function sortTeamMembers(team, order) {
+        vm.currentOrder = order;
         team.team_members_sort.sort(order);
 
         var i = 0;
