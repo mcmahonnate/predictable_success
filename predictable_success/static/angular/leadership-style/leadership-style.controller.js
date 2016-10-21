@@ -16,6 +16,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     vm.tease = null;
     vm.teases = [];
     vm.currentOrder = null;
+    vm.discard = discard;
     vm.invite = invite;
     vm.gotoPage = gotoPage;
     vm.orderByVisionary = orderByVisionary
@@ -24,6 +25,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     vm.orderBySynergist = orderBySynergist;
     vm.requestLeadershipStyle = requestLeadershipStyle;
     vm.requestTeamReport = requestTeamReport;
+    vm.remind = remind;
     vm.sortTeamMembers = sortTeamMembers;
     vm.setTease = setTease;
     vm.takeQuiz = takeQuiz;
@@ -344,6 +346,36 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                 getMyRecentlySentRequests();
             }
         );
+    }
+
+    function discard(employee) {
+        var modalInstance = $modal.open({
+            animation: true,
+            windowClass: 'xx-dialog fade zoom',
+            backdrop: 'static',
+            templateUrl: '/static/angular/leadership-style/partials/_modals/discard-invite.html',
+            controller: 'DiscardInviteController as discard',
+            resolve: {
+                employee: function () {
+                    return employee
+                }
+            }
+        });
+    }
+
+    function remind(employee) {
+        var modalInstance = $modal.open({
+            animation: true,
+            windowClass: 'xx-dialog fade zoom',
+            backdrop: 'static',
+            templateUrl: '/static/angular/leadership-style/partials/_modals/quiz-reminder.html',
+            controller: 'SendQuizReminderController as remind',
+            resolve: {
+                employee: function () {
+                    return employee
+                }
+            }
+        });
     }
 
     function invite(team_id, remaining_invites, team_member_count) {

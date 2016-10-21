@@ -1,0 +1,12 @@
+<div class="form-group">
+    <div class="modal-body">
+        <panel>
+            <h3 class="modal-title">Remind {{ remind.employee.full_name }} to finish their quiz.</h3>
+            <textarea style="min-height:120px;" class="form-control" cols="30" rows="5" ng-model="request.message" placeholder="Add a message."></textarea>
+        </panel>
+    </div>
+    <div class="modal-footer">
+        <button type="button" ng-click="remind.cancel()"  class="btn btn-light pull-left">Cancel</button>
+        <button type="button" ng-click="remind.submit()" class="btn btn-submit" data-dismiss="modal">Send Reminder</button>
+    </div>
+</div>

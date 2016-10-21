@@ -1,0 +1,11 @@
+<div class="modal-body">
+	<h3 class="modal-title">
+        <span>Are you sure?</span>
+    </h3>
+    <p>Warning! This will delete {{ discard.employee.full_name }} from your team. Do you want to proceed?</p>
+
+</div>
+<div class="modal-footer">
+    <button type="btn btn-default" ng-click="discard.cancel()" class="btn btn-light">No</button>
+    <button type="btn btn-default" ng-click="discard.submit()" class="btn btn-light">Yes</button>
+</div>
