@@ -157,11 +157,25 @@
 
                 </div>
                 <div class="panel-footer">
-                    <button class="btn btn-sort btn-visionary" ng-click="index.sortTeamMembers(team, index.orderByVisionary)" ng-class="{'btn-active': index.currentOrder==index.orderByVisionary}">Visionary</button>
-                    <button class="btn btn-sort btn-operator" ng-click="index.sortTeamMembers(team, index.orderByOperator)" ng-class="{'btn-active': index.currentOrder==index.orderByOperator}">Operator</button>
-                    <button class="btn btn-sort btn-processor" ng-click="index.sortTeamMembers(team, index.orderByProcessor)" ng-class="{'btn-active': index.currentOrder==index.orderByProcessor}">Processor</button>
-                    <button class="btn btn-sort btn-synergist" ng-click="index.sortTeamMembers(team, index.orderBySynergist)" ng-class="{'btn-active': index.currentOrder==index.orderBySynergist}">Synergist</button>
+                    <span class="glyphicon-regular glyphicons-sorting" style="vertical-align: middle; color: #aaa; margin-right: 10px"></span>
+                    <button class="btn btn-sort btn-visionary" ng-click="index.sortTeamMembers(team, index.orderByVisionary)" ng-class="{'btn-active': index.currentOrder==0}">
+                        <span class="mobile-show">V</span>
+                        <span class="hide-for-mobile">Visionary</span>
+                    </button>
+                    <button class="btn btn-sort btn-operator" ng-click="index.sortTeamMembers(team, index.orderByOperator)" ng-class="{'btn-active': index.currentOrder==1}">
+                        <span class="mobile-show">O</span>
+                        <span class="hide-for-mobile">Operator</span>
+                    </button>
+                    <button class="btn btn-sort btn-processor" ng-click="index.sortTeamMembers(team, index.orderByProcessor)" ng-class="{'btn-active': index.currentOrder==2}">
+                        <span class="mobile-show">P</span>
+                        <span class="hide-for-mobile">Processor</span>
+                    </button>
+                    <button class="btn btn-sort btn-synergist" ng-click="index.sortTeamMembers(team, index.orderBySynergist)" ng-class="{'btn-active': index.currentOrder==3}">
+                        <span class="mobile-show">S</span>
+                        <span class="hide-for-mobile">Synergist</span>
+                    </button>
                 </div>
+
             </div>
             <div class="invite-360" style="height: 25px;">
                 <h4 ng-if="!team.is_team_full" class="header"><a href="" class="pull-right" ng-click="index.invite(team.id, team.remaining_invites, team.team_members.length)">+ Invite more team members</a></h4>
@@ -177,7 +191,9 @@
                                 <div class="panel-header-title" style="margin-top: -5px">
                                     <div class="pull-right hide-for-mobile">
                                         <span ng-repeat="score in team_member.leadership_style.scores | orderBy : 'score' : true">
-                                            <p style="margin-bottom: 5px;"><span class="sub-title" style="font-size: 18px">{{score.style_verbose}} - {{score.score}}</span></p>
+                                            <p style="margin-bottom: 5px;">
+                                                <span class="sub-title" style="font-size: 18px" ng-class="{'highligh-sort':score.style==index.currentOrder, 'dim-sort':(index.currentOrder!=null && score.style!=index.currentOrder)}">{{score.style_verbose}} - {{score.score}}</span>
+                                            </p>
                                         </span>
                                     </div>
                                     <div>
@@ -356,7 +372,21 @@
     background-color: #69b63b;
 }
 .btn-active {
-    outline: 10px auto -webkit-focus-ring-color;
+    outline: 8px auto rgb(97, 157, 215);
     outline-offset: -2px;
+}
+.glyphicons-sorting:before {
+    content: "\e404";
+}
+.highligh-sort {
+    font-weight: 500;
+}
+.dim-sort {
+    opacity: .4;
+}
+.sub-title {
+    -webkit-transition: opacity .7s ease-in;
+    -moz-transition: opacity .7s ease-in;
+    transition: opacity .7s ease-in-out;
 }
 </style>

@@ -37,29 +37,34 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         vm.page = page;
     }
     function orderByFullName(a,b){
+        vm.currentOrder = null;
         var aValue = a.full_name;
         var bValue = b.full_name;
         return ((aValue < bValue) ? -1 : ((aValue > bValue) ? 1 : 0));
     }
     function orderByVisionary(a,b){
+        vm.currentOrder = 0;
         var noDataValue=0;
         var aValue = (!a.leadership_style) ? noDataValue : a.leadership_style.v;
         var bValue = (!b.leadership_style) ? noDataValue : b.leadership_style.v;
         return bValue - aValue;
     }
     function orderByOperator(a,b){
+        vm.currentOrder = 1;
         var noDataValue=0;
         var aValue = (!a.leadership_style) ? noDataValue : a.leadership_style.o;
         var bValue = (!b.leadership_style) ? noDataValue : b.leadership_style.o;
         return bValue - aValue;
     }
     function orderByProcessor(a,b){
+        vm.currentOrder = 2;
         var noDataValue=0;
         var aValue = (!a.leadership_style) ? noDataValue : a.leadership_style.p;
         var bValue = (!b.leadership_style) ? noDataValue : b.leadership_style.p;
         return bValue - aValue;
     }
     function orderBySynergist(a,b){
+        vm.currentOrder = 3;
         var noDataValue=0;
         var aValue = (!a.leadership_style) ? noDataValue : a.leadership_style.s;
         var bValue = (!b.leadership_style) ? noDataValue : b.leadership_style.s;
@@ -219,7 +224,6 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     }
 
     function sortTeamMembers(team, order) {
-        vm.currentOrder = order;
         team.team_members_sort.sort(order);
 
         var i = 0;

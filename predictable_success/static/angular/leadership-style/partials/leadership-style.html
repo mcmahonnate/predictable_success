@@ -1,23 +1,47 @@
 <div class="panel clearfix" ng-swipe-right="index.gotoPage(0)">
-    <div class="panel-header complete">
-        <div class="panel-header-avatar">
-            <employee-avatar size="large" employee="team_member"></employee-avatar>
+    <div ng-if="!team_member.leadership_style.completed">
+        <div class="panel-header incomplete" >
+            <div class="panel-header-avatar">
+                <employee-avatar size="large" employee="team_member"></employee-avatar>
+            </div>
+            <div class="panel-header-title sub-title">
+                <h2>{{ team_member.full_name }}</h2>
+                <h3 class="modal-title sub-title" style="margin-bottom: 0;" ng-if="!team_member.leadership_style">
+                    0% Completed
+                </h3>
+                <h3 class="modal-title sub-title" style="margin-bottom: 0;" ng-if="team_member.leadership_style">
+                    {{ team_member.leadership_style.percentage_complete }}% Completed
+                </h3>
+            </div>
         </div>
-        <div class="panel-header-title sub-title">
-            <h2>{{ team_member.full_name }}</h2>
-            <h3>
-                <span ng-repeat="score in team_member.leadership_style.scores | orderBy : 'score' : true">
-                    <span class="sub-title" ng-if="$first">{{score.style_verbose}} - {{score.score}},</span>
-                    <span class="sub-title" ng-if="!$first && !$last">{{score.style_verbose}} - {{score.score}},</span>
-                    <span class="sub-title" ng-if="$last">{{score.style_verbose}} - {{score.score}}</span>
-                </span>
-            </h3>
+        <div class="description-container">
+
+        </div>
+        <div style="margin-bottom: 30px">
+            <button class="btn btn-submit" style="font-size: 18px;margin-left: auto;margin-right: auto;display: block;" ng-click="index.gotoPage(0)">Back to Team Results</button>
         </div>
     </div>
-    <div class="description-container">
-        <div ng-bind-html="team_member.leadership_style.description.description"></div>
-    </div>
-    <div style="margin-bottom: 30px">
-        <button class="btn btn-submit" style="font-size: 18px;margin-left: auto;margin-right: auto;display: block;" ng-click="index.gotoPage(0)">See Your Team Results</button>
+    <div ng-if="team_member.leadership_style.completed">
+        <div class="panel-header complete" >
+            <div class="panel-header-avatar">
+                <employee-avatar size="large" employee="team_member"></employee-avatar>
+            </div>
+            <div class="panel-header-title sub-title">
+                <h2>{{ team_member.full_name }}</h2>
+                <h3>
+                    <span ng-repeat="score in team_member.leadership_style.scores | orderBy : 'score' : true">
+                        <span class="sub-title" ng-if="$first">{{score.style_verbose}} - {{score.score}},</span>
+                        <span class="sub-title" ng-if="!$first && !$last">{{score.style_verbose}} - {{score.score}},</span>
+                        <span class="sub-title" ng-if="$last">{{score.style_verbose}} - {{score.score}}</span>
+                    </span>
+                </h3>
+            </div>
+        </div>
+        <div class="description-container">
+            <div ng-bind-html="team_member.leadership_style.description.description"></div>
+        </div>
+        <div style="margin-bottom: 30px">
+            <button class="btn btn-submit" style="font-size: 18px;margin-left: auto;margin-right: auto;display: block;" ng-click="index.gotoPage(0)">See Your Team Results</button>
+        </div>
     </div>
 </div>
