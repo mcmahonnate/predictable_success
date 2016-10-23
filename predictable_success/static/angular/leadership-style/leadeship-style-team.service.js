@@ -7,6 +7,7 @@ function LeadershipStyleTeamService($log, LeadershipStyleTeamResource) {
         getTeamsIOwn: getTeamsIOwn,
         getTeamsIBelongTo: getTeamsIBelongTo,
         getTeam: getTeam,
+        removeTeamMember: removeTeamMember,
         requestTeamReport: requestTeamReport,
     };
 
@@ -47,6 +48,18 @@ function LeadershipStyleTeamService($log, LeadershipStyleTeamResource) {
 
         function fail(response) {
             $log.error('getTeam failed');
+        }
+    }
+
+    function removeTeamMember(id, team_member) {
+        return LeadershipStyleTeamResource.removeTeamMember({id: id}, {team_member: team_member.id}, success, fail).$promise;
+
+        function success(response) {
+            return response;
+        }
+
+        function fail(response) {
+            $log.error('removeTeamMember failed');
         }
     }
 

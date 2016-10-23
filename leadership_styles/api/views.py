@@ -10,7 +10,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from .permissions import UserIsAssessorOrHasAllAccess, UserIsTeamMember
+from .permissions import UserIsAssessorOrHasAllAccess, UserIsTeamMember, UserIsTeamOwner
 from .serializers import *
 
 
@@ -208,6 +208,28 @@ class InviteTeamMembers(APIView):
             content = {'validation error': ';'.join(err.messages)}
             return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
+
+class RemoveTeamMember(GenericAPIView):
+    permission_classes = (IsAuthenticated, UserIsTeamOwner)
+    queryset = TeamLeadershipStyle.objects.all()
+    serializer_class = TeamLeadershipStyleSerializer
+
+    def get_team_owner(self):
+        team = self.get_object()
+        return team.owner
+
+    def post(self, request, pk, format=None):
+        try:
+            team = self.get_object()
+            employee_id = request.data['team_member']
+            employee = Employee.objects.get(id=employee_id)
+            team.team_members.remove(employee)
+            serializer = TeamLeadershipStyleSerializer(instance=team, context={'request': request})
+            return Response(serializer.data)
+        except TeamLeadershipStyle.DoesNotExist:
+            raise Http404()
+        except Employee.DoesNotExist:
+            raise Http404()
 
 
 class RetrieveTeamLeadershipStyle(RetrieveAPIView):

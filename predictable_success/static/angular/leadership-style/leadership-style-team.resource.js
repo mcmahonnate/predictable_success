@@ -17,6 +17,10 @@ function LeadershipStyleTeamResource($resource) {
             method: 'GET',
             isArray: false
         },
+        'removeTeamMember': {
+            method: 'POST',
+            url: '/api/v1/leadership-style/teams/:id/members/remove/'
+        },
         'requestTeamReport': {
             url: '/api/v1/leadership-style/teams/:id/request-report/',
             method: 'POST',

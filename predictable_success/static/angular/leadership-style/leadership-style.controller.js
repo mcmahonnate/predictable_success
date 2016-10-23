@@ -348,7 +348,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         );
     }
 
-    function discard(employee) {
+    function discard(employee, team_id) {
         var modalInstance = $modal.open({
             animation: true,
             windowClass: 'xx-dialog fade zoom',
@@ -358,9 +358,18 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
             resolve: {
                 employee: function () {
                     return employee
-                }
+                },
+                team_id: function() {
+                    return team_id
+                },
             }
         });
+        modalInstance.result.then(
+            function (team) {
+                updateTeam(team);
+                vm.page = 0;
+            }
+        );
     }
 
     function remind(employee) {
@@ -400,24 +409,21 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         });
         modalInstance.result.then(
             function (team) {
-                var addNew = true;
-                angular.forEach(vm.myLeadershipStyle.teams, function(value) {
-                    if (team.id == value.id) {
-                        addNew = false;
-                        value.team_members = angular.copy(team.team_members);
-                        indexTeamMembers(value);
-                        sortTeamMembers(value, orderByFullName);
-                    }
-                });
-
-
-                if (addNew) {
-                    vm.myLeadershipStyle.teams.push(team);
-                }
-
+                updateTeam(team);
             }
         );
     }
+
+    function updateTeam(team) {
+        angular.forEach(vm.myLeadershipStyle.teams, function(value) {
+            if (team.id == value.id) {
+                value.team_members = angular.copy(team.team_members);
+                indexTeamMembers(value);
+                sortTeamMembers(value, orderByFullName);
+            }
+        });
+    }
+
 
     function requestTeamReport(team_id, index) {
         var modalInstance = $modal.open({

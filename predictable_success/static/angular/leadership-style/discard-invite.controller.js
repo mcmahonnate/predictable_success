@@ -2,20 +2,17 @@
         .module('leadership-style')
         .controller('DiscardInviteController', DiscardInviteController);
 
-    function DiscardInviteController(employee, LeadershipStyleTeamService, Notification, $modalInstance) {
+    function DiscardInviteController(employee, team_id, LeadershipStyleTeamService, Notification, $modalInstance) {
         var vm = this;
         vm.employee = employee;
         vm.cancel = cancel;
         vm.submit = submit;
 
         function submit(){
-            LeadershipStyleTeamService.requestTeamReport(team_id, vm.message)
+            LeadershipStyleTeamService.removeTeamMember(team_id, employee)
                 .then(function(team){
                     $modalInstance.close(team)
-                    Notification.success("We are generating your report and will email to you when it's ready. Please allow 3-5 business days.")
-                }, function(){
-                    $modalInstance.close()
-                    Notification.error("Oops! We ran into an error.  We've reported the error and will it resolved soon.")
+                    Notification.success(employee.full_name + " has been removed.")
                 }
             )
 

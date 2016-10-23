@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^(?P<pk>[0-9]*)/finish/$', CompleteEmployeeLeadershipStyle.as_view()),
     url(r'^teams/owned/$', RetrieveTeamsLeadershipStylesIOwn.as_view()),
     url(r'^teams/(?P<pk>[0-9]*)/invite/$', InviteTeamMembers.as_view()),
+    url(r'^teams/(?P<pk>[0-9]*)/members/remove/$', RemoveTeamMember.as_view()),
     url(r'^teams/(?P<pk>[0-9]*)/request-report/$', RequestTeamReport.as_view()),
     url(r'^teams/(?P<pk>[0-9]*)/$', RetrieveTeamLeadershipStyle.as_view()),
     url(r'^teams/$', RetrieveTeamLeadershipStylesIBelongTo.as_view()),

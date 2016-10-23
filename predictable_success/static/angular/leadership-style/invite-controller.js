@@ -2,7 +2,7 @@
         .module('leadership-style')
         .controller('InviteController', InviteController);
 
-    function InviteController(LeadershipStyleInviteService, team_id, remaining_invites, team_member_count, $timeout, $modalInstance, $rootScope) {
+    function InviteController(LeadershipStyleInviteService, Notification, team_id, remaining_invites, team_member_count, $timeout, $modalInstance, $rootScope) {
         var vm = this;
         vm.remaining_invites = remaining_invites;
         vm.has_team_members = team_member_count > 1 ? true :  false;
@@ -31,25 +31,34 @@
         function submit() {
             vm.enableSend = false;
             var invites = [];
-            var invite_notification = [];
+            var invite_notifications = [];
             angular.forEach(vm.invites, function(invite){
                 if (invite.email) {
                     invites.push(invite.email);
-                    invite_notification.push(invite);
+                    invite_notifications.push(invite);
                 }
             })
             LeadershipStyleInviteService.sendInvites(team_id, invites)
                 .then(function(invites) {
+                    var message;
+                    if (invite_notifications.length == 1) {
+                        message = 'An invitation has been sent to ' + invite_notifications['0'].email;
+                    } else if (invite_notifications.length == 2) {
+                        message = 'Invitations have been sent to ' +  invite_notifications['0'].email + ' and '  + invite_notifications['1'].email;
+                    } else {
+                        message = 'Invitations have been sent to ';
+                        angular.forEach(invite_notifications, function(value, key) {
+                            if (key == 0) {
+                                message = message + value.email;
+                            } else if (key < invite_notifications.length-1) {
+                                message = message + ', ' + value.email;
+                            } else if (key == invite_notifications.length-1) {
+                                message = message + ' and ' + value.email;
+                            }
+                        })
+                    }
 
-                    /* Big success message */
-                    $rootScope.successRequestMessage = true;
-                    $rootScope.successRequestMessageRecipient = invite_notification;
-
-                    /* Hide success message after a few seconds */
-                    $timeout(function() {
-                        $rootScope.hideRequestMessage = true;
-                    }, 10000);
-
+                    Notification.success(message)
                     $modalInstance.close(invites)
                 });
         }
