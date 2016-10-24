@@ -349,6 +349,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     }
 
     function discard(employee, team_id) {
+        vm.gotoPage(0);
         var modalInstance = $modal.open({
             animation: true,
             windowClass: 'xx-dialog fade zoom',
@@ -367,7 +368,6 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         modalInstance.result.then(
             function (team) {
                 updateTeam(team);
-                vm.page = 0;
             }
         );
     }
@@ -418,6 +418,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         angular.forEach(vm.myLeadershipStyle.teams, function(value) {
             if (team.id == value.id) {
                 value.team_members = angular.copy(team.team_members);
+                value.remaining_invites = team.remaining_invites;
                 indexTeamMembers(value);
                 sortTeamMembers(value, orderByFullName);
             }
