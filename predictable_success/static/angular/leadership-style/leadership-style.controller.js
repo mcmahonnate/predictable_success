@@ -372,7 +372,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         );
     }
 
-    function remind(employee) {
+    function remind(quiz) {
         var modalInstance = $modal.open({
             animation: true,
             windowClass: 'xx-dialog fade zoom',
@@ -380,11 +380,16 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
             templateUrl: '/static/angular/leadership-style/partials/_modals/quiz-reminder.html',
             controller: 'SendQuizReminderController as remind',
             resolve: {
-                employee: function () {
-                    return employee
+                quiz: function () {
+                    return quiz
                 }
             }
         });
+        modalInstance.result.then(
+            function (value) {
+                quiz.last_reminder_sent = value.last_reminder_sent;
+            }
+        );
     }
 
     function invite(team_id, remaining_invites, team_member_count) {
@@ -419,6 +424,8 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
             if (team.id == value.id) {
                 value.team_members = angular.copy(team.team_members);
                 value.remaining_invites = team.remaining_invites;
+                value.percentage_complete = team.percentage_complete;
+                updateTeamChart(value);
                 indexTeamMembers(value);
                 sortTeamMembers(value, orderByFullName);
             }

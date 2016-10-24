@@ -191,10 +191,14 @@ class QuizUrl(models.Model):
     invited_by = models.ForeignKey(Employee, related_name='+', null=True, blank=True)
     active = models.BooleanField(default=True)
     completed = models.BooleanField(default=False)
-    sent_date = models.DateField(auto_now_add=True)
+    sent_date = models.DateTimeField(auto_now_add=True)
+    last_reminder_sent = models.DateTimeField(null=True, blank=True)
 
     def send_quiz_link(self):
         send_quiz_link_email.subtask((self.id,)).apply_async()
+
+    def send_reminder(self, message, reminded_by_id):
+        send_reminder_quiz_link_email.subtask((self.id, message, reminded_by_id)).apply_async()
 
     def __str__(self):
         return "%s was sent a self asessment on %s" % (self.email, self.sent_date)
@@ -363,7 +367,7 @@ class EmployeeLeadershipStyleManager(models.Manager):
     def get_or_create_leadership_style(self, employee):
         try:
             leadership_style = self.get(employee=employee)
-        except EmployeeLeadershipStyle.DoesNotExist():
+        except EmployeeLeadershipStyle.DoesNotExist:
             leadership_style = EmployeeLeadershipStyle(employee=employee, assessor=employee, assessment_type=SELF)
             leadership_style.save()
         return leadership_style

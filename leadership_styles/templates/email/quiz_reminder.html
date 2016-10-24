@@ -1,0 +1,21 @@
+{% extends "layouts/email.html" %}
+
+{% block content %}
+        <h2>It takes just 5 minutes</h2>
+        {%  if message %}
+            <p>From {{ reminded_by_name }}:</p>
+            <p>"{{ message }}"</p>
+        {%  endif %}
+        {%  if has_started_quiz %}
+        <p>
+            Click the link below to finish your quiz:
+        </p>
+        {%  else %}
+        <p>
+            Click the link below to take your quiz:
+        </p>
+        {%  endif %}
+        <p>
+            <a href="{{ quiz_url }}">{{ quiz_url }}</a>
+        </p>
+{% endblock content%}

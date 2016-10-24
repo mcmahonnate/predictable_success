@@ -209,6 +209,22 @@ class InviteTeamMembers(APIView):
             return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
 
+class SendQuizReminder(GenericAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = QuizUrl.objects.all()
+    serializer_class = QuizUrlSerializer
+
+    def post(self, request, pk, format=None):
+        quiz = self.get_object()
+        message = request.data['message']
+        quiz.send_reminder(message=message, reminded_by_id=request.user.employee.id)
+        quiz.last_reminder_sent = datetime.now()
+        quiz.save()
+        serializer = QuizUrlSerializer(instance=quiz, context={'request': request})
+
+        return Response(serializer.data)
+
+
 class RemoveTeamMember(GenericAPIView):
     permission_classes = (IsAuthenticated, UserIsTeamOwner)
     queryset = TeamLeadershipStyle.objects.all()

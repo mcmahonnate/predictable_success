@@ -68,6 +68,42 @@ def send_quiz_link_email(quiz_link_id):
 
 
 @app.task
+def send_reminder_quiz_link_email(quiz_link_id, message, reminded_by_id):
+    from leadership_styles.models import EmployeeLeadershipStyle, QuizUrl
+    from org.models import Employee
+
+    print 'send_reminder_quiz_link_email'
+    quiz = QuizUrl.objects.get(id=quiz_link_id)
+    reminded_by = Employee.objects.get(id=reminded_by_id)
+    recipient_email = quiz.email
+    if not recipient_email:
+        return
+
+    has_started_quiz = False
+    try:
+        if quiz.employee_leadership_style.get().answers.count() > 0:
+            has_started_quiz = True
+    except EmployeeLeadershipStyle.DoesNotExist:
+        pass
+
+    context = {
+        'has_started_quiz': has_started_quiz,
+        'message': message,
+        'quiz_url': quiz.url,
+        'reminded_by_name': reminded_by.full_name,
+    }
+    subject = "Don't forget to take your quiz"
+    if has_started_quiz:
+        subject = "Don't forget to finish your quiz"
+
+    text_content = render_to_string('email/quiz_reminder.txt', context)
+    html_content = render_to_string('email/quiz_reminder.html', context)
+    msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
+
+
+@app.task
 def send_team_report_request_email(team_id, message):
 
     def create_csv(employees):

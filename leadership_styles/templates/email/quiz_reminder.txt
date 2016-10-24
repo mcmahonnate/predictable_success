@@ -1,0 +1,11 @@
+It takes just 5 minutes
+{%  if message %}
+From {{ reminded_by_name }}:
+"{{ message }}"
+{%  endif %}
+{%  if has_started_quiz %}
+Click the link below to finish your quiz:
+{%  else %}
+Click the link below to take your quiz:
+{%  endif %}
+{{ quiz_url }}

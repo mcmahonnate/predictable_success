@@ -8,6 +8,10 @@ function LeadershipStyleInviteResource($resource) {
             method: 'POST',
             url: '/api/v1/leadership-style/teams/:id/invite/'
         },
+        'remind': {
+            method: 'POST',
+            url: '/api/v1/leadership-style/quiz/:id/remind/'
+        }
     };
     return $resource('/api/v1/leadership-style/teams/:id/', null, actions);
 }

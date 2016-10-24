@@ -7,6 +7,12 @@ from rest_framework import serializers
 from ..models import *
 
 
+class QuizUrlSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = QuizUrl
+        fields = ['id', 'sent_date', 'last_reminder_sent']
+
+
 class AnswerSerializer(serializers.ModelSerializer):
     question_text = serializers.SerializerMethodField()
     question_order = serializers.SerializerMethodField()
@@ -249,6 +255,7 @@ class TeamMemberNameSerializer(serializers.ModelSerializer):
 class TeamMemberSerializer(serializers.ModelSerializer):
     avatar = serializers.SerializerMethodField()
     leadership_style = EmployeeLeadershipStyleBaseSerializer()
+    quiz = serializers.SerializerMethodField()
 
     def get_avatar(self, obj):
         avatar_field = Employee._meta.get_field('avatar')
@@ -256,9 +263,21 @@ class TeamMemberSerializer(serializers.ModelSerializer):
             gravatar = get_gravatar_image(email=obj.email)
             return gravatar
 
+    def get_quiz(self, obj):
+        try:
+            quiz = obj.leadership_style.quiz_url
+        except (EmployeeLeadershipStyle.DoesNotExist, QuizUrl.DoesNotExist):
+            try:
+                quiz = QuizUrl.objects.get(email=obj.email, active=True)
+            except QuizUrl.DoesNotExist:
+                quiz = generate_quiz_link(email=obj.email)
+
+        serializer = QuizUrlSerializer(context=self.context)
+        return serializer.to_representation(quiz)
+
     class Meta:
         model = Employee
-        fields = ['id', 'full_name', 'first_name', 'last_name', 'email', 'avatar', 'leadership_style']
+        fields = ['id', 'full_name', 'first_name', 'last_name', 'email', 'avatar', 'leadership_style', 'quiz']
 
 
 class TeamLeadershipStyleSerializer(serializers.ModelSerializer):
