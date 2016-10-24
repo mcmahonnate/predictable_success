@@ -209,6 +209,15 @@ class InviteTeamMembers(APIView):
             return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
 
+class FollowupAboutTeam(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, format=None):
+        followup = TeamAnalysisFollowUp(employee=request.user.employee)
+        followup.save()
+        return Response(None, status=status.HTTP_200_OK)
+
+
 class SendQuizReminder(GenericAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = QuizUrl.objects.all()

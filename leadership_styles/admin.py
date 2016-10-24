@@ -10,6 +10,7 @@ admin.site.register(LeadershipStyleRequest)
 admin.site.register(Question)
 admin.site.register(QuizUrl)
 admin.site.register(Score)
+admin.site.register(TeamAnalysisFollowUp)
 admin.site.register(TeamLeadershipStyle)
 
 

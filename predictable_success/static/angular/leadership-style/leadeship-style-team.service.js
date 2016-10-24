@@ -4,12 +4,26 @@ angular
 
 function LeadershipStyleTeamService($log, LeadershipStyleTeamResource) {
     return {
+        followup: followup,
         getTeamsIOwn: getTeamsIOwn,
         getTeamsIBelongTo: getTeamsIBelongTo,
         getTeam: getTeam,
         removeTeamMember: removeTeamMember,
         requestTeamReport: requestTeamReport,
     };
+
+    function followup() {
+
+        return LeadershipStyleTeamResource.followup(null, success, fail).$promise;
+
+        function success(response) {
+            return response;
+        }
+
+        function fail(response) {
+            $log.error('followup failed');
+        }
+    }
 
     function getTeamsIBelongTo() {
 

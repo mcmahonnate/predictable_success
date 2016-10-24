@@ -577,3 +577,11 @@ class TeamLeadershipStyle(models.Model):
             return "Team %s owned by %s" % (self.name, self.owner.full_name)
         else:
             return "Team owned by %s" % self.owner.full_name
+
+
+class TeamAnalysisFollowUp(models.Model):
+    employee = models.ForeignKey(Employee, related_name='+', null=False, blank=False)
+    date = models.DateTimeField(null=False, blank=False, default=datetime.now)
+
+    def __str__(self):
+        return self.employee.full_name

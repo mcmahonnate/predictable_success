@@ -26,8 +26,9 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     vm.requestLeadershipStyle = requestLeadershipStyle;
     vm.requestTeamReport = requestTeamReport;
     vm.remind = remind;
-    vm.sortTeamMembers = sortTeamMembers;
+    vm.showOrderPageDown = showOrderPageDown;
     vm.setTease = setTease;
+    vm.sortTeamMembers = sortTeamMembers;
     vm.takeQuiz = takeQuiz;
 
     $rootScope.successRequestMessage = false;
@@ -38,6 +39,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     function gotoPage(page) {
         vm.page = page;
     }
+
     function orderByFullName(a,b){
         vm.currentOrder = null;
         var aValue = a.full_name;
@@ -241,7 +243,6 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
             .then(function(leadershipStyle){
                 vm.myLeadershipStyle = leadershipStyle;
                 if (!leadershipStyle.completed) {
-                    vm.showTakeQuizNotification = true;
                     takeQuiz(leadershipStyle);
                 } else {
                      angular.forEach(leadershipStyle.teams, function (team) {
@@ -300,6 +301,9 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         });
         modalInstance.result.then(
             function (leadershipStyle) {
+                if (!leadershipStyle.completed) {
+                    vm.showTakeQuizNotification = true;
+                }
                 if (leadershipStyle.employee.id == leadershipStyle.assessor.id) {
                     vm.myLeadershipStyle = leadershipStyle;
                     if (!vm.myLeadershipStyle.completed) {
@@ -452,4 +456,16 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
             }
         );
     }
+
+    function showOrderPageDown() {
+        var modalInstance = $modal.open({
+            animation: true,
+            windowClass: 'xx-dialog fade zoom',
+            backdrop: 'static',
+            templateUrl: '/static/angular/leadership-style/partials/_modals/order-page-down.html',
+            controller: 'OrderPageDownController as orderPageDown',
+            resolve: {}
+        });
+    }
+
 }

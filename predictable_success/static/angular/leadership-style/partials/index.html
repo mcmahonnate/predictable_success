@@ -17,7 +17,7 @@
     <span ng-show="successRequestMessageRecipient.length==1">An invitation has been sent to</span>
     <span ng-repeat="invitee in successRequestMessageRecipient"><span ng-show="$last && successRequestMessageRecipient.length > 1"> and </span>{{ invitee.email }}<span ng-show="!($last) && successRequestMessageRecipient.length > 2">, </span></span>.
 
-    <div ng-show="index.showTakeQuizNotification" class="panel fade-in">
+    <div ng-show="index.showTakeQuizNotification" class="panel">
         <div>
             <div class="landing-form">
                 <div class="header panel-header">
@@ -100,16 +100,18 @@
                                     <li style="margin: 10px 0;">How aligned your team is to the Motley Fool team.</li>
                                 </ul>
                                 <div class="centered" style="margin: 15px 0;"><span style="color: #7f8c8d; font-size: 16px; font-weight: 700;">INVESTMENT | $199 (Up to 10 team members)</span></div>
-                                <form action="/account/payment" method="POST" id="paymentForm">
-                                <input type="hidden" name="csrfmiddlewaretoken" ng-value="index.myLeadershipStyle.csrf_token" >
-
-                                <button class="btn btn-submit btn-block" id="stripePay" style="margin-bottom: 15px;" type="submit">Sign up for a Team Analysis</button>
-                                <input type="hidden" id="stripeToken" name="stripeToken" value="" />
-                                <input type="hidden" id="stripeEmail" name="stripeEmail" value="" />
-                                </form>
-
-                                <stripe-payments key="index.myLeadershipStyle.stripe_key"></stripe-payments>
-
+                                <div ng-if="$root.customer.order_page_enabled">
+                                    <form action="/account/payment" method="POST" id="paymentForm">
+                                       <input type="hidden" name="csrfmiddlewaretoken" ng-value="index.myLeadershipStyle.csrf_token" >
+                                        <button class="btn btn-submit btn-block" id="stripePay" style="margin-bottom: 15px;" type="submit">Sign up for a Team Analysis</button>
+                                        <input type="hidden" id="stripeToken" name="stripeToken" value="" />
+                                        <input type="hidden" id="stripeEmail" name="stripeEmail" value="" />
+                                    </form>
+                                    <stripe-payments key="index.myLeadershipStyle.stripe_key"></stripe-payments>
+                                </div>
+                                <div ng-if="!$root.customer.order_page_enabled">
+                                    <button class="btn btn-submit btn-block" style="margin-bottom: 15px;" ng-click="index.showOrderPageDown()">Sign up for a Team Analysis</button>
+                                </div>
                             </div>
                         </div>
                     </div>

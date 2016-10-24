@@ -12,6 +12,7 @@ class Customer(TenantMixin):
     slack_api_token = models.CharField(max_length=255, blank=True)
     slack_bot = models.CharField(max_length=255, blank=True)
     created_on = models.DateField(auto_now_add=True)
+    order_page_enabled = models.BooleanField(default=True)
     show_individual_comp = models.BooleanField(default=True)
     show_qualities = models.BooleanField(default=False)
     activation_email = models.TextField(default="Welcome to Scoutmap!")
