@@ -5,6 +5,7 @@
     function RequestTeamReportController(team_id, LeadershipStyleTeamService, Notification, $modalInstance) {
         var vm = this;
         vm.message = '';
+        vm.page = 0;
         vm.cancel = cancel;
         vm.submit = submit;
 

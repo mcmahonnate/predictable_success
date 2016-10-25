@@ -31,9 +31,6 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     vm.sortTeamMembers = sortTeamMembers;
     vm.takeQuiz = takeQuiz;
 
-    $rootScope.successRequestMessage = false;
-    $rootScope.hideMessage = false;
-    $rootScope.hideRequestMessage = false;
     activate();
 
     function gotoPage(page) {
@@ -426,6 +423,8 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     function updateTeam(team) {
         angular.forEach(vm.myLeadershipStyle.teams, function(value) {
             if (team.id == value.id) {
+                value.requested_report = team.requested_report;
+                value.requested_date = team.requested_date;
                 value.team_members = angular.copy(team.team_members);
                 value.remaining_invites = team.remaining_invites;
                 value.percentage_complete = team.percentage_complete;
@@ -451,8 +450,8 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
             }
         });
         modalInstance.result.then(
-            function (response) {
-                vm.myLeadershipStyle.teams[index] = response;
+            function (team) {
+                updateTeam(team);
             }
         );
     }

@@ -1,14 +1,30 @@
-<form name="outterForm" id="invite-360-modal" class="invite-360">
-    <div class="form-group">
-        <div class="modal-body">
-            <panel>
-                <h3 class="modal-title">Get YOUR Team Report</h3>
-                <textarea style="min-height:120px;" class="form-control" cols="30" rows="5" ng-model="reportRequest.message" placeholder="Anything you wish to add before we send your request?"></textarea>
-            </panel>
-        </div>
-        <div class="modal-footer">
-            <button type="button" ng-click="reportRequest.cancel()"  class="btn btn-light pull-left">Cancel</button>
-            <button type="button" ng-click="reportRequest.submit()" class="btn btn-success" data-dismiss="modal">Submit</button>
-        </div>
+<div ng-if="reportRequest.page==0">
+    <div class="modal-header alert-warning">
+        <h3 class="modal-title">
+            <span class="fa fa-exclamation-circle" style="font-size: 29px;margin-right: 8px;"></span> <span>Get the most out of your report</span>
+        </h3>
     </div>
-</form>
+    <div class="modal-body">
+        <p class="leadership-style-description">Because we craft your report by hand we can only generate one report for you. To get the most out of your report double check to make sure that you have used up your available invitations and that all your quizzes are complete.</p>
+    </div>
+    <div class="modal-footer">
+        <button type="btn btn-default" ng-click="reportRequest.cancel()" class="btn btn-light">Cancel</button>
+        <button type="btn btn-default" ng-click="reportRequest.page=1" class="btn btn-light">Proceed</button>
+    </div>
+</div>
+<div ng-if="reportRequest.page==1">
+    <form name="outterForm" id="invite-360-modal" class="invite-360">
+        <div class="form-group">
+            <div class="modal-body">
+                <panel>
+                    <h3 class="modal-title">Get YOUR Team Report</h3>
+                    <textarea style="min-height:120px;" class="form-control" cols="30" rows="5" ng-model="reportRequest.message" placeholder="Anything you wish to add before we send your request?"></textarea>
+                </panel>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-click="reportRequest.cancel()"  class="btn btn-light pull-left">Cancel</button>
+                <button type="button" ng-click="reportRequest.submit()" class="btn btn-success" data-dismiss="modal">Submit</button>
+            </div>
+        </div>
+    </form>
+</div>
