@@ -140,7 +140,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                     ctx.font = fontsize + "em Oswald, Helvetica";
                     ctx.fillStyle = "#aaaaaa";
                     ctx.textBaseline = "middle";
-                    var increment, textLabel, textValue;
+                    var increment, textLabel, textValue, textWidth, txtPosx;
                     if (team.animate_show_style != null) {
                         switch (team.animate_show_style) {
                             case 0:
@@ -164,20 +164,47 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                                 textLabel = "Synergist";
                                 break;
                         }
+                        textWidth = ctx.measureText(textValue).width;
+                        txtPosx = Math.round((canvasWidthvar - textWidth) / 2);
+                        ctx.fillText(textValue, txtPosx, (canvasHeight / 2.15));
+                        ctx.font = fontsize / 3 + "em Helvetica";
+                        ctx.fillStyle = "#aaaaaa";
+                        ctx.textBaseline = "middle";
+                        textWidth = ctx.measureText(textLabel).width;
+                        txtPosx = Math.round((canvasWidthvar - textWidth) / 2);
+                        ctx.fillText(textLabel, txtPosx, (canvasHeight / 3.5) * 2);
                     } else {
-                        increment = team.percentage_complete / animation.animationObject.numSteps;
-                        textValue = Math.round((animation.animationObject.currentStep * increment)) + "%";
-                        textLabel = "Quiz Completion";
+                        ctx.font = fontsize / 2 + "em Oswald, Helvetica";
+                        textValue = team.description.name.split(" - ")[0];
+                        textWidth = ctx.measureText(textValue).width;
+                        var label;
+                        txtPosx = Math.round((canvasWidthvar - textWidth) / 2);
+                        if (team.description.name.split(" - ").length == 1) {
+                            ctx.fillText(textValue, txtPosx, (canvasHeight / 2));
+                        } else {
+                            ctx.fillText(textValue, txtPosx, (canvasHeight / 2.15));
+                            label = team.description.name.split(" - ")[1];
+                        }
+
+                        if (label) {
+                            ctx.font = fontsize / 3 + "em Helvetica";
+                            ctx.fillStyle = "#aaaaaa";
+                            ctx.textBaseline = "middle";
+                            textValue = label.split(" and ")[0];
+                            textWidth = ctx.measureText(textValue).width;
+                            txtPosx = Math.round((canvasWidthvar - textWidth) / 2);
+                            ctx.fillText(textValue, txtPosx, (canvasHeight / 3.75) * 2);
+                            if (label.split(" and ").length > 1) {
+                                ctx.font = fontsize / 3 + "em Helvetica";
+                                ctx.fillStyle = "#aaaaaa";
+                                ctx.textBaseline = "middle";
+                                textValue = " & " + label.split(" and ")[1];
+                                textWidth = ctx.measureText(textValue).width;
+                                txtPosx = Math.round((canvasWidthvar - textWidth) / 2);
+                                ctx.fillText(textValue, txtPosx, (canvasHeight / 3.4) * 2);
+                            }
+                        }
                     }
-                    var textWidth = ctx.measureText(textValue).width;
-                    var txtPosx = Math.round((canvasWidthvar - textWidth) / 2);
-                    ctx.fillText(textValue, txtPosx, (canvasHeight / 2.15));
-                    ctx.font = fontsize / 3 + "em Helvetica";
-                    ctx.fillStyle = "#aaaaaa";
-                    ctx.textBaseline = "middle";
-                    textWidth = ctx.measureText(textLabel).width;
-                    txtPosx = Math.round((canvasWidthvar - textWidth) / 2);
-                    ctx.fillText(textLabel, txtPosx, (canvasHeight / 3.5) * 2);
                 }
             }
       };

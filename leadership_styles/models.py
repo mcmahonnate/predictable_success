@@ -86,6 +86,20 @@ class LeadershipStyleDescriptionManager(models.Manager):
             descriptions = self.filter(dominant_style_first=operating_scores[0].style)
         return descriptions[0]
 
+    def get_description_by_list(self, list_of_scores):
+        operating_scores = [x for x in list_of_scores if (x['trait'] == DOMINANT or x['trait'] == PRIMARY or x['trait'] == SECONDARY)]
+        operating_scores.sort(key=lambda x: x['score'], reverse=True)
+
+        if len(operating_scores) == 4:
+            descriptions = self.filter(well_rounded=True, well_rounded_preferred_style=operating_scores[0]['style'])
+        elif len(operating_scores) == 3:
+            descriptions = self._get_description_for_multi_scores(operating_scores)
+        elif len(operating_scores) == 2:
+            descriptions = self._get_description_for_multi_scores(operating_scores)
+        else:
+            descriptions = self.filter(dominant_style_first=operating_scores[0]['style'])
+        return descriptions[0]
+
     def _get_description_for_multi_scores(self, operating_scores):
         if operating_scores[0].score >= DOMINANT_STYLE_MIN:
             descriptions = self.filter(Q(dominant_style_first=operating_scores[0].style) &

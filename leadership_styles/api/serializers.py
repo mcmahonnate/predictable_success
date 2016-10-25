@@ -285,6 +285,31 @@ class TeamLeadershipStyleSerializer(serializers.ModelSerializer):
     team_members = TeamMemberSerializer(many=True)
     can_request_report = serializers.SerializerMethodField()
     remaining_invites = serializers.SerializerMethodField()
+    description = serializers.SerializerMethodField()
+
+    def get_trait(self, score):
+        if score >= DOMINANT_STYLE_MIN:
+            trait = DOMINANT
+        elif PRIMARY_STYLE_MIN <= score <= PRIMARY_STYLE_MAX:
+            trait = PRIMARY
+        elif SECONDARY_STYLE_MIN <= score <= SECONDARY_STYLE_MAX:
+            trait = SECONDARY
+        else:
+            trait = INACTIVE
+        return trait
+
+    def get_description(self, obj):
+        v_trait = self.get_trait(obj.visionary_average)
+        o_trait = self.get_trait(obj.operator_average)
+        p_trait = self.get_trait(obj.processor_average)
+        s_trait = self.get_trait(obj.synergist_average)
+        scores = [{'trait': v_trait, 'style': VISIONARY, 'score': obj.visionary_average},
+                  {'trait': o_trait, 'style': OPERATOR, 'score': obj.operator_average},
+                  {'trait': p_trait, 'style': PROCESSOR, 'score': obj.processor_average},
+                  {'trait': s_trait, 'style': SYNERGIST, 'score': obj.synergist_average}]
+        description = LeadershipStyleDescription.objects.get_description_by_list(list_of_scores=scores)
+        serializer = LeadershipStyleDescriptionSerializer(context=self.context)
+        return serializer.to_representation(description)
 
     def get_remaining_invites(self, obj):
         return TEAM_MEMBER_CAP - obj.team_members.count()
@@ -298,7 +323,7 @@ class TeamLeadershipStyleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TeamLeadershipStyle
-        fields = ['id', 'owner', 'team_members', 'requested_report', 'requested_date', 'can_request_report',
+        fields = ['id', 'owner', 'description', 'team_members', 'requested_report', 'requested_date', 'can_request_report',
                   'is_team_full', 'remaining_invites', 'visionary_average', 'operator_average', 'processor_average',
                   'synergist_average', 'number_of_quizes_completed', 'number_of_quizes_started',
                   'number_of_quizes_not_started', 'percentage_complete']
