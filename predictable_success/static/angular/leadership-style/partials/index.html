@@ -12,11 +12,7 @@
           </ul>
         </div>
     </div>
-
-    <span ng-show="successRequestMessageRecipient.length>1">Invitations have been sent to</span>
-    <span ng-show="successRequestMessageRecipient.length==1">An invitation has been sent to</span>
-    <span ng-repeat="invitee in successRequestMessageRecipient"><span ng-show="$last && successRequestMessageRecipient.length > 1"> and </span>{{ invitee.email }}<span ng-show="!($last) && successRequestMessageRecipient.length > 2">, </span></span>.
-
+    
     <div ng-show="index.showTakeQuizNotification" class="panel">
         <div>
             <div class="landing-form">
