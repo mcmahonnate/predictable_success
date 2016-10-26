@@ -1,0 +1,12 @@
+<div class="modal-header" ng-class="{'btn-visionary': tease.tease.style==0, 'btn-operator': tease.tease.style==1, 'btn-processor': tease.tease.style==2, 'btn-synergist': tease.tease.style==3}">
+    <button ng-click="tease.cancel()" class="close">&times;</button>
+    <h3 class="modal-title" style="color: #fff;">
+        {{ tease.tease.style_verbose }}
+    </h3>
+</div>
+<div class="modal-body">
+        <div ng-bind-html="tease.tease.tease"></div>
+</div>
+<div class="modal-footer">
+    <button type="btn btn-default" ng-click="tease.cancel()" class="btn btn-light">Close</button>
+</div>

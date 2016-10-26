@@ -27,6 +27,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     vm.requestTeamReport = requestTeamReport;
     vm.remind = remind;
     vm.showOrderPageDown = showOrderPageDown;
+    vm.showTease = showTease;
     vm.setTease = setTease;
     vm.sortTeamMembers = sortTeamMembers;
     vm.takeQuiz = takeQuiz;
@@ -248,12 +249,11 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                  sortTeamMembers(team, orderBySynergist);
                  break;
          }
-         setTease(points[0]._index);
     }
 
     function sortTeamMembers(team, order) {
         team.team_members_sort.sort(order);
-
+        setTease(vm.currentOrder);
         var i = 0;
         angular.forEach(team.team_members_sort, function (team_member) {
             team.team_members[team_member.index].index = i;
@@ -494,4 +494,18 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         });
     }
 
+    function showTease(tease) {
+        var modalInstance = $modal.open({
+            animation: true,
+            windowClass: 'xx-dialog fade zoom',
+            backdrop: 'static',
+            templateUrl: '/static/angular/leadership-style/partials/_modals/leadership-style-tease.html',
+            controller: 'TeaseController as tease',
+            resolve: {
+                tease: function() {
+                    return tease;
+                }
+            }
+        });
+    }
 }
