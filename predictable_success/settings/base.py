@@ -54,8 +54,8 @@ EMAIL_PORT = os.environ.get("EMAIL_PORT", '')
 EMAIL_HOST_USER = os.environ.get("EMAIL_USER", '')
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD", '')
 EMAIL_SENDING_DOMAIN = os.environ.get("EMAIL_SENDING_DOMAIN", '')
-SUPPORT_EMAIL_ADDRESS = 'support@' + EMAIL_SENDING_DOMAIN
-DEFAULT_FROM_EMAIL = 'The Synergizer Team <' + SUPPORT_EMAIL_ADDRESS + '>'
+SUPPORT_EMAIL_ADDRESS = 'findyourfool@fool.com'
+DEFAULT_FROM_EMAIL = 'The FindYourFool Team <' + SUPPORT_EMAIL_ADDRESS + '>'
 DEMO_REQUEST_EMAIL_TO = 'nate@fool.com'
 DEMO_REQUEST_EMAIL_SUBJECT = ' requested a demo'
 
