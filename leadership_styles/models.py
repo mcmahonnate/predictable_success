@@ -75,16 +75,10 @@ class LeadershipStyleTease(models.Model):
 class LeadershipStyleDescriptionManager(models.Manager):
 
     def get_description(self, scores):
-        operating_scores = scores.filter(Q(trait=DOMINANT) | Q(trait=PRIMARY) | Q(trait=SECONDARY)).order_by('-score')
-        if operating_scores.count() == 4:
-            descriptions = self.filter(well_rounded=True, well_rounded_preferred_style=operating_scores[0].style)
-        elif operating_scores.count() == 3:
-            descriptions = self._get_description_for_multi_scores(operating_scores)
-        elif operating_scores.count() == 2:
-            descriptions = self._get_description_for_multi_scores(operating_scores)
-        else:
-            descriptions = self.filter(dominant_style_first=operating_scores[0].style)
-        return descriptions[0]
+        operating_scores = scores.filter(Q(trait=DOMINANT) | Q(trait=PRIMARY) | Q(trait=SECONDARY))\
+            .order_by('-score').values()
+
+        return self.get_description_by_list(list_of_scores=operating_scores)
 
     def get_description_by_list(self, list_of_scores):
         operating_scores = [x for x in list_of_scores if (x['trait'] == DOMINANT or x['trait'] == PRIMARY or x['trait'] == SECONDARY)]
@@ -101,46 +95,46 @@ class LeadershipStyleDescriptionManager(models.Manager):
         return descriptions[0]
 
     def _get_description_for_multi_scores(self, operating_scores):
-        if operating_scores[0].score >= DOMINANT_STYLE_MIN:
-            descriptions = self.filter(Q(dominant_style_first=operating_scores[0].style) &
-                                       (Q(dominant_style_second=operating_scores[1].style) |
-                                        Q(secondary_style_first=operating_scores[1].style)))
+        if operating_scores[0]['score'] >= DOMINANT_STYLE_MIN:
+            descriptions = self.filter(Q(dominant_style_first=operating_scores[0]['style']) &
+                                       (Q(dominant_style_second=operating_scores[1]['style']) |
+                                        Q(secondary_style_first=operating_scores[1]['style'])))
             if descriptions.count() > 0:
-                if operating_scores[1].score >= DOMINANT_STYLE_MIN:
-                    d = descriptions.filter(dominant_style_second=operating_scores[1].style)
+                if operating_scores[1]['score'] >= DOMINANT_STYLE_MIN:
+                    d = descriptions.filter(dominant_style_second=operating_scores[1]['style'])
                     if d.count() > 0:
                         descriptions = d
                     else:
-                        if operating_scores.count() == 3:
-                            descriptions = descriptions.filter(secondary_style_first=operating_scores[1].style,
-                                                               secondary_style_second=operating_scores[2].style)
+                        if len(operating_scores) == 3:
+                            descriptions = descriptions.filter(secondary_style_first=operating_scores[1]['style'],
+                                                               secondary_style_second=operating_scores[2]['style'])
                         else:
                             descriptions = None
 
             if descriptions is None or descriptions.count() == 0:
-                descriptions = self.filter(primary_style_first=operating_scores[0].style)
-                d = descriptions.filter(primary_style_second=operating_scores[1].style)
+                descriptions = self.filter(primary_style_first=operating_scores[0]['style'])
+                d = descriptions.filter(primary_style_second=operating_scores[1]['style'])
                 if d.count() > 0:
                     descriptions = d
                 else:
-                    d = descriptions.filter(secondary_style_first=operating_scores[1].style)
+                    d = descriptions.filter(secondary_style_first=operating_scores[1]['style'])
                     if d.count() > 0:
                         descriptions = d
-                        if operating_scores.count() == 3:
-                            d = descriptions.filter(secondary_style_second=operating_scores[2].style)
+                        if len(operating_scores) == 3:
+                            d = descriptions.filter(secondary_style_second=operating_scores[2]['style'])
                             if d.count() > 0:
                                 descriptions = d
         else:
-            descriptions = self.filter(primary_style_first=operating_scores[0].style)
-            d = descriptions.filter(primary_style_second=operating_scores[1].style)
-            if d.count() > 0 and operating_scores.count() == 2:
+            descriptions = self.filter(primary_style_first=operating_scores[0]['style'])
+            d = descriptions.filter(primary_style_second=operating_scores[1]['style'])
+            if d.count() > 0 and len(operating_scores) == 2:
                 descriptions = d
             else:
-                d = descriptions.filter(secondary_style_first=operating_scores[1].style)
+                d = descriptions.filter(secondary_style_first=operating_scores[1]['style'])
                 if d.count() > 0:
                     descriptions = d
-                    if operating_scores.count() == 3:
-                        d = descriptions.filter(secondary_style_second=operating_scores[2].style)
+                    if len(operating_scores) == 3:
+                        d = descriptions.filter(secondary_style_second=operating_scores[2]['style'])
                         if d.count() > 0:
                             descriptions = d
 
