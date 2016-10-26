@@ -48,7 +48,7 @@ REQUIRED_GROUPS = (
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 # Email settings
-EMAIL_USE_SSL = True
+EMAIL_USE_TLS = True
 EMAIL_HOST = os.environ.get("EMAIL_HOST", '')
 EMAIL_PORT = os.environ.get("EMAIL_PORT", '')
 EMAIL_HOST_USER = os.environ.get("EMAIL_USER", '')
