@@ -13,7 +13,7 @@ var app = angular.module('tdb', [
         'angular-carousel', 'analytics', 'ui.bootstrap', 'ngCsv','ngImgCrop', 'ngRoute', 'ngAnimate', 'ui-notification', 'ngMessages', 'readMore', 'ngCookies', 'ui.select', 'selectize','ngTouch'])
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.
-            when('/', {templateUrl: '/static/angular/leadership-style/partials/index.html' , controller: 'LeadershipStyleController as index', resolve: {authorizeRoute: authorizeRoute}}).
+            when('/', {templateUrl: '/static/angular/leadership-style/partials/index.html' , controller: 'LeadershipStyleController as index', resolve: {authorizeRoute: authorizeRoute}, reloadOnSearch: false}).
             when('/leadership-style/request/:requestId/reply', {templateUrl: '/static/angular/leadership-style/partials/index.html', controller: 'LeadershipStyleController as index', resolve: {authorizeRoute: authorizeRoute}}).
             when('/competencies/request/:requestId/reply', {templateUrl: '/static/angular/qualities/partials/submission.html', controller: 'AssessQualitiesController as assessQualities', resolve: {authorizeRoute: authorizeRoute}}).
             when('/competencies/submission', {templateUrl: '/static/angular/qualities/partials/submission.html', controller: 'AssessQualitiesController as assessQualities', resolve: {authorizeRoute: authorizeRoute}}).

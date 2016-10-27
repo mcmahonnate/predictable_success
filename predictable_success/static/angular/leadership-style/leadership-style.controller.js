@@ -2,13 +2,13 @@ angular
     .module('leadership-style')
     .controller('LeadershipStyleController', LeadershipStyleController);
 
-function LeadershipStyleController(LeadershipStyleService, LeadershipStyleRequestService, LeadershipStyleTeamService, analytics, $location, $modal, $rootScope, $routeParams, $scope, $timeout) {
+function LeadershipStyleController(LeadershipStyleService, LeadershipStyleRequestService, LeadershipStyleTeamService, analytics, $location, $modal, $rootScope, $routeParams, $scope, $timeout, $window) {
     /* Since this page can be the root for some users let's make sure we capture the correct page */
     var location_url = $location.url().indexOf('/leadership_style') < 0 ? '/' : $location.url();
     analytics.trackPage($scope, $location.absUrl(), location_url);
     var vm = this;
     vm.busy = true;
-    vm.page = 0;
+    vm.page = $routeParams.page ? $routeParams.page : 0;
     vm.showEmptyScreen = false;
     vm.myLeadershipStyle = null;
     vm.showTakeQuizNotification = false;
@@ -35,7 +35,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     activate();
 
     function gotoPage(page) {
-        vm.page = page;
+        $location.search('page', page)
     }
 
     function orderByFullName(a,b){
@@ -333,7 +333,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                     if (!vm.myLeadershipStyle.completed) {
                         vm.showTakeQuizNotification = true
                     } else {
-                        vm.page = vm.myLeadershipStyle.employee.id;
+                        gotoPage(vm.myLeadershipStyle.employee.id);
                         vm.showTakeQuizNotification = false;
                         angular.forEach(leadershipStyle.teams, function (team) {
                              updateTeamChart(team);
@@ -508,4 +508,8 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
             }
         });
     }
+
+    $scope.$on('$routeUpdate', function(event, next, current) {
+        vm.page = $routeParams.page ? $routeParams.page : 0;
+    });
 }
