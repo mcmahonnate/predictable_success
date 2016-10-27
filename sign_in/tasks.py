@@ -17,7 +17,7 @@ def send_sign_in_link_email(sign_in_link_id):
         'sign_in_url': sign_in_link.url,
         'support_email': settings.SUPPORT_EMAIL_ADDRESS
     }
-    subject = "Sign in to the Synergist"
+    subject = "Sign in to Find Your Fool"
     text_content = render_to_string('email/sign_in_link.txt', context)
     html_content = render_to_string('email/sign_in_link.html', context)
     msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])
