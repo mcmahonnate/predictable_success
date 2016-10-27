@@ -10,6 +10,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
+from sign_in.tasks import send_account_created_link_email
 from .permissions import UserIsAssessorOrHasAllAccess, UserIsTeamMember, UserIsTeamOwner
 from .serializers import *
 
@@ -132,6 +133,8 @@ class CompleteEmployeeLeadershipStyle(GenericAPIView):
         leadership_style = EmployeeLeadershipStyle.objects.get(id=pk)
         leadership_style.completed = True
         leadership_style.save(update_fields=['completed'])
+        if leadership_style.assessment_type == SELF:
+            send_account_created_link_email.subtask((leadership_style.employee.id,)).apply_async()
         serializer = EmployeeLeadershipStyleSerializer(instance=leadership_style, context={'request': request})
         return Response(serializer.data)
 
@@ -361,7 +364,10 @@ class GetQuiz(APIView):
                 quiz = QuizUrl.objects.get(id=quiz_id)
             else:
                 # Assume pk is an email address
-                quiz = QuizUrl.objects.filter(email=pk).last()
+                if QuizUrl.objects.filter(email=pk).count() == 0:
+                    quiz = generate_quiz_link(email=pk, send_email=False)
+                else:
+                    quiz = QuizUrl.objects.filter(email=pk).last()
 
             if not quiz.active:
                 employee_leadership_style = quiz.employee_leadership_style.get()

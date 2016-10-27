@@ -212,7 +212,7 @@ class QuizUrl(models.Model):
         return "%s was sent a self asessment on %s" % (self.email, self.sent_date)
 
 
-def generate_quiz_link(email, invited_by=None):
+def generate_quiz_link(email, invited_by=None, send_email=True):
     customer = Customer.objects.filter(schema_name=connection.schema_name).first()
     quiz = QuizUrl()
     quiz.active = True
@@ -227,6 +227,9 @@ def generate_quiz_link(email, invited_by=None):
     url = customer.build_url('/take-the-quiz/' + signed_id)
     quiz.url = url
     quiz.save()
+
+    if send_email:
+        quiz.send_quiz_link()
 
     return quiz
 

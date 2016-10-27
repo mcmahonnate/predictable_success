@@ -22,6 +22,5 @@ def quiz_url_save_handler(sender, instance, created, **kwargs):
     if created:
         # Set any other quiz links to inactive.
         QuizUrl.objects.filter(email=instance.email).exclude(id=instance.id).update(active=False)
-        #email active quiz link
-        instance.send_quiz_link()
+
 

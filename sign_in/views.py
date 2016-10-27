@@ -47,7 +47,8 @@ class GetSignInLink(TemplateView):
     template = "sign_in/get_link.html"
 
     def get(self, request, **kwargs):
-        context = {'support_email': settings.SUPPORT_EMAIL_ADDRESS}
+        email = request.GET.get('email')
+        context = {'support_email': settings.SUPPORT_EMAIL_ADDRESS, 'email': email}
         if request.GET.get('error', None):
             if request.GET['error'] == 'already_used':
                 context['already_used'] = True

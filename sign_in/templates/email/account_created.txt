@@ -1,0 +1,15 @@
+{% if employee_first_name %}
+Hi {{ employee_first_name }},
+{% endif %}
+Thank you for finishing your quiz.  So that you can always see your quiz results we've created an account for you.  In fact you are already signed in.  Just go back to the same device and browser you took your quiz from and go here:
+{{ findyourfool_url }}
+
+Signing In
+--------------------
+We've provided a secure and simple way to sign in with just your email address. Signing in to FindYourFool using your email address requires no passwords.
+
+If you ever have to sign in from another device, or if you've had to sign out for some reason, simply click the link below. We will send you an email with a special sign in link. Clicking that link will sign you in. That's all there is to it.
+
+{{ signin_url }}?email={{ employee_email }}
+
+If you did not make this request, please contact us at <a href="mailto:{{ support_email }}">{{ support_email }}

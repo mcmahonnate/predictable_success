@@ -1,0 +1,25 @@
+{% extends "layouts/email.html" %}
+
+{% block content %}
+        {% if employee_first_name %}
+            <p>Hi {{ employee_first_name }},</p>
+        {% endif %}
+        <p>
+            Thank you for finishing your quiz.  We've created an account for you so that you can always see your quiz results.  In fact you are already signed in.  Just go back to the same device and browser you took your quiz from and go here:
+        </p>
+        <p>
+            <a href="{{ findyourfool_url }}">{{ findyourfool_url }}</a>
+        </p>
+        <h2>Signing In</h2>
+        <p>
+            We've provided a secure and simple way to sign in with just your email address. <b>Signing in to FindYourFool using your email address requires no passwords.</b>
+        </p>
+        <p>If you ever have to sign in from another device, or if you've had to sign out for some reason, simply click the link below. We will send you an email with a special sign in link. Clicking that link will sign you in. That's all there is to it.
+        </p>
+        <p>
+            <a href="{{ signin_url }}?email={{ employee_email }}">{{ signin_url }}?email={{ employee_email }}</a>
+        </p>
+        <p style="color:#aaa; font-size:14px; text-align:center;">
+            If you did not make this request, please contact us at <a href="mailto:{{ support_email }}">{{ support_email }}</a>
+        </p>
+{% endblock content%}
