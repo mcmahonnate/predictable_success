@@ -4,13 +4,12 @@ var app = angular.module('tdb', [
         'tdb.comments.controllers', 'tdb.comments.services',
         'tdb.comp.services',
         'tdb.customers.services',
-        'tdb.import.controllers', 'tdb.import.services',
         'tdb.org.controllers', 'tdb.org.services',
         'tdb.preferences.services',
         'tdb.search.controllers', 'tdb.search.services',
         'angular.filter', 'chart.js',
         'leadership-style', 'profile', 'qualities',
-        'angular-carousel', 'analytics', 'ui.bootstrap', 'ngCsv','ngImgCrop', 'ngRoute', 'ngAnimate', 'ui-notification', 'ngMessages', 'readMore', 'ngCookies', 'ui.select', 'selectize','ngTouch'])
+        'analytics', 'ui.bootstrap', 'ngCsv','ngImgCrop', 'ngRoute', 'ngAnimate', 'ui-notification', 'ngMessages', 'readMore', 'ngCookies', 'ui.select', 'selectize','ngTouch'])
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.
             when('/', {templateUrl: '/static/angular/leadership-style/partials/index.html' , controller: 'LeadershipStyleController as index', resolve: {authorizeRoute: authorizeRoute}, reloadOnSearch: false}).

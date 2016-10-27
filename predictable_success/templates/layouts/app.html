@@ -14,10 +14,6 @@
 {% endblock css %}
 
 {% block javascript %}
-    <script src="//www.google.com/jsapi" type="text/javascript"></script>
-    <script type="text/javascript">
-    google.load('visualization', '1', {packages: ['corechart','annotationchart']});
-    </script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular-route.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular-sanitize.min.js"></script>
@@ -38,7 +34,6 @@
     <script src="{% static 'bower_components/chart.js/dist/Chart.min.js' %}"></script>
     <script src="{% static 'bower_components/angular-chart.js/dist/angular-chart.min.js' %}"></script>
     <script src="{% static 'lib/angular-carousel/angular-mobile.js' %}"></script>
-    <script src="{% static 'lib/angular-carousel/angular-carousel.min.js' %}"></script>
     <script src="{% static 'lib/ng-csv/ng-csv.min.js' %}"></script>
     <script src="{% static 'angular/services.js' %}"></script>
     <script src="{% static 'angular/activity/controllers.js' %}"></script>
@@ -47,8 +42,6 @@
     <script src="{% static 'angular/comments/services.js' %}"></script>
     <script src="{% static 'angular/comp/services.js' %}"></script>
     <script src="{% static 'angular/customers/services.js' %}"></script>
-    <script src="{% static 'angular/import/controllers.js' %}"></script>
-    <script src="{% static 'angular/import/services.js' %}"></script>
     <script src="{% static 'angular/org/controllers.js' %}"></script>
     <script src="{% static 'angular/org/services.js' %}"></script>
     <script src="{% static 'angular/preferences/services.js' %}"></script>
