@@ -43,12 +43,12 @@ function QuizController(analytics, LeadershipStyleService, Notification, leaders
     }
 
     function cancel() {
-        analytics.trackEvent('quiz', 'cancel', null);
+        analytics.trackEvent('Cancel button', 'click', null);
         $modalInstance.close(vm.leadershipStyle)
     }
 
     function close() {
-        analytics.trackEvent('quiz', 'save and close', null);
+        analytics.trackEvent('Save and close button', 'click', null);
         $modalInstance.close(vm.leadershipStyle)
         if (!vm.leadershipStyle.completed) {
             Notification.success('Your progress has been saved.')
@@ -56,6 +56,7 @@ function QuizController(analytics, LeadershipStyleService, Notification, leaders
     }
 
     function answerQuestion(answer) {
+        analytics.trackEvent('Answer', 'click', null);
         vm.busy = true;
         vm.leadershipStyle.last_question_answered = vm.leadershipStyle.next_question.id;
         if (vm.leadershipStyle.next_question.answer) {
@@ -89,7 +90,7 @@ function QuizController(analytics, LeadershipStyleService, Notification, leaders
 
     function previousQuestion(){
         vm.busy = true;
-        analytics.trackEvent('quiz', 'go back', null);
+        analytics.trackEvent('Go back button', 'click', null);
         LeadershipStyleService.goToPreviousQuestion(vm.leadershipStyle)
             .then(function(result){
                 vm.leadershipStyle = result;
@@ -117,7 +118,7 @@ function QuizController(analytics, LeadershipStyleService, Notification, leaders
 
     function finish() {
         vm.busy = true;
-        analytics.trackEvent('quiz', 'See Results', null);
+        analytics.trackEvent('See Results button', 'click', null);
         LeadershipStyleService.completeLeadershipStyle(vm.leadershipStyle)
             .then(function(result){
                 vm.leadershipStyle = result;

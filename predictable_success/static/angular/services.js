@@ -88,19 +88,20 @@ angular.module('analytics', ['ng'])
 .service('analytics', ['$window', function($window) {
     return {
         setDimension: function (dimensionValue) {
-            scope.$on('$viewContentLoaded', function(event) {
-                switch (dimensionValue) {
-                    case 'Prospect':
-                        $window.ga('set', 'dimension1', dimensionValue);
-                        break;
-                    case 'Paid Member':
-                        $window.ga('set', 'dimension2', dimensionValue);
-                        break;
-                    case 'Team Member':
-                        $window.ga('set', 'dimension3', dimensionValue);
-                        break;
-                }
-            });
+            switch (dimensionValue) {
+                case 'Prospect':
+                    $window.ga('set', 'dimension1', dimensionValue);
+                    break;
+                case 'Paid Member':
+                    $window.ga('set', 'dimension2', dimensionValue);
+                    break;
+                case 'Team Member':
+                    $window.ga('set', 'dimension3', dimensionValue);
+                    break;
+            }
+            if (host.indexOf("0.0.0.0") > 0 || host.indexOf("localhost") > 0) {
+                console.log(dimensionValue);
+            }
         },
         setPage: function (locationPath) {
             $window.ga('set', 'page', locationPath);

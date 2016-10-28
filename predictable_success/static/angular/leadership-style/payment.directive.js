@@ -2,7 +2,7 @@
         .module('leadership-style')
         .directive('stripePayments', stripePaymentsDirective);
 
-    function stripePaymentsDirective($rootScope) {
+    function stripePaymentsDirective($rootScope, analytics) {
         return {
             restrict: 'E',
             scope: { key: '=' },
@@ -22,6 +22,7 @@
                                 }
                 });
                 document.getElementById('stripePay').addEventListener('click', function(e) {
+                    analytics.trackEvent('landing page', 'buy', null);
                     // Open Checkout with further options:
                     handler.open({
                         name: 'The Motley Fool LLC',

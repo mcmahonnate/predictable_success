@@ -4,6 +4,7 @@ angular
 
 function LeadershipStyleController(LeadershipStyleService, LeadershipStyleRequestService, LeadershipStyleTeamService, analytics, $location, $modal, $rootScope, $routeParams, $scope, $timeout, $window) {
     var vm = this;
+    vm.is_team_owner = false;
     vm.busy = true;
     vm.page = $routeParams.page ? $routeParams.page : 0;
     vm.showEmptyScreen = false;
@@ -30,6 +31,31 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     vm.takeQuiz = takeQuiz;
 
     activate();
+
+    function activate() {
+        if ($routeParams.requestId) {
+            respondToRequest();
+        } else {
+            getMyLeadershipStyle();
+            getTeamsIOwn();
+            getTeases();
+        }
+
+        $scope.status = {
+            isopen: false
+        };
+
+        $scope.toggled = function(open) {
+            $log.log('Dropdown is now: ', open);
+        };
+
+        $scope.toggleDropdown = function($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.status.isopen = !$scope.status.isopen;
+            vm.status.isopen = !vm.status.isopen;
+        };
+    };
 
     function gotoPage(page) {
         $location.search('page', page)
@@ -69,31 +95,6 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         var bValue = (!b.leadership_style) ? noDataValue : b.leadership_style.s;
         return bValue - aValue;
     }
-
-    function activate() {
-        if ($routeParams.requestId) {
-            respondToRequest();
-        } else {
-            getMyLeadershipStyle();
-            getTeamsIOwn();
-            getTeases();
-        }
-
-        $scope.status = {
-            isopen: false
-        };
-
-        $scope.toggled = function(open) {
-            $log.log('Dropdown is now: ', open);
-        };
-
-        $scope.toggleDropdown = function($event) {
-            $event.preventDefault();
-            $event.stopPropagation();
-            $scope.status.isopen = !$scope.status.isopen;
-            vm.status.isopen = !vm.status.isopen;
-        };
-    };
 
     function getTeases() {
         LeadershipStyleService.getTeases()
@@ -267,6 +268,9 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                     takeQuiz(leadershipStyle);
                 } else {
                      angular.forEach(leadershipStyle.teams, function (team) {
+                         if (team.owner.id == $rootScope.currentUser.employee.id) {
+                             vm.is_team_owner = true;
+                         }
                          updateTeamChart(team);
                          indexTeamMembers(team);
                          team.chartClick = function (points, evt){
@@ -274,11 +278,22 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                          };
                      })
                 }
+                setTrackingDimension(leadershipStyle);
                 vm.busy = false;
             }, function(){
                 vm.busy = false;
             }
         )
+    }
+
+    function setTrackingDimension(leadershipStyle) {
+        if (vm.is_team_owner) {
+            analytics.setDimension('Paid Member');
+        } else if (leadershipStyle.teams.length == 0 && leadershipStyle.who_can_see_my_results.length == 0) {
+            analytics.setDimension('Prospect');
+        } else if (leadershipStyle.teams.length == 0 && leadershipStyle.who_can_see_my_results.length > 0){
+            analytics.setDimension('Team Member');
+        }
     }
 
     function indexTeamMembers(team) {
@@ -481,6 +496,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     }
 
     function showOrderPageDown() {
+        analytics.trackEvent('landing page', 'buy', null);
         var modalInstance = $modal.open({
             animation: true,
             windowClass: 'xx-dialog fade zoom',
