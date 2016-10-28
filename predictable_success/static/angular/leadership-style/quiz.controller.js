@@ -3,12 +3,10 @@ angular
     .controller('QuizController', QuizController);
 
 function QuizController(analytics, LeadershipStyleService, Notification, leadershipStyle, $location, $modal, $modalInstance, $rootScope, $scope) {
-    var location_url = '/quiz/' + leadershipStyle.id;
-    analytics.trackPage($scope, $location.absUrl(), location_url);
     var vm = this;
 
     vm.leadershipStyle = leadershipStyle;
-    vm.panel_index = 0;
+    vm.panelIndex = 0;
     vm.busy = false;
     vm.cancel = cancel;
     vm.close = close;
@@ -21,6 +19,21 @@ function QuizController(analytics, LeadershipStyleService, Notification, leaders
     vm.selectedAnswer = null;
     vm.scores = [];
 
+    $scope.$watchGroup(['quiz.leadershipStyle.next_question', 'quiz.panelIndex'], function(newValues, oldValues) {
+        if (!vm.leadershipStyle.next_question && vm.panelIndex==2) {
+            analytics.setPage('/quiz/finished');
+        } else {
+            if (vm.panelIndex == 0 && vm.leadershipStyle.answers.length == 0) {
+                analytics.setPage('/quiz/start/');
+            } else if (vm.panelIndex == 0 && vm.leadershipStyle.answers.length > 0) {
+                analytics.setPage('/quiz/continue/');
+            } else {
+                analytics.setPage('/quiz/question/' + (vm.leadershipStyle.next_question.order + 1));
+            }
+        }
+        analytics.trackPage();
+    });
+
     activate()
 
     function activate() {
@@ -30,10 +43,12 @@ function QuizController(analytics, LeadershipStyleService, Notification, leaders
     }
 
     function cancel() {
-        $modalInstance.dismiss();
+        analytics.trackEvent('quiz', 'cancel', null);
+        $modalInstance.close(vm.leadershipStyle)
     }
 
     function close() {
+        analytics.trackEvent('quiz', 'save and close', null);
         $modalInstance.close(vm.leadershipStyle)
         if (!vm.leadershipStyle.completed) {
             Notification.success('Your progress has been saved.')
@@ -74,6 +89,7 @@ function QuizController(analytics, LeadershipStyleService, Notification, leaders
 
     function previousQuestion(){
         vm.busy = true;
+        analytics.trackEvent('quiz', 'go back', null);
         LeadershipStyleService.goToPreviousQuestion(vm.leadershipStyle)
             .then(function(result){
                 vm.leadershipStyle = result;
@@ -91,7 +107,7 @@ function QuizController(analytics, LeadershipStyleService, Notification, leaders
         vm.busy = true;
         LeadershipStyleService.retakeLeadershipStyle(vm.leadershipStyle)
             .then(function(result){
-                vm.panel_index=0;
+                vm.panelIndex=0;
                 vm.selectedAnswer=null;
                 vm.leadershipStyle = result;
                 vm.busy = false;
@@ -101,6 +117,7 @@ function QuizController(analytics, LeadershipStyleService, Notification, leaders
 
     function finish() {
         vm.busy = true;
+        analytics.trackEvent('quiz', 'See Results', null);
         LeadershipStyleService.completeLeadershipStyle(vm.leadershipStyle)
             .then(function(result){
                 vm.leadershipStyle = result;

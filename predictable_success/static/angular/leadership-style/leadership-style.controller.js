@@ -3,7 +3,6 @@ angular
     .controller('LeadershipStyleController', LeadershipStyleController);
 
 function LeadershipStyleController(LeadershipStyleService, LeadershipStyleRequestService, LeadershipStyleTeamService, analytics, $location, $modal, $rootScope, $routeParams, $scope, $timeout, $window) {
-    analytics.trackPage($scope, $location.absUrl(), $location.url());
     var vm = this;
     vm.busy = true;
     vm.page = $routeParams.page ? $routeParams.page : 0;
@@ -509,6 +508,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
 
     $scope.$on('$routeUpdate', function(event, next, current) {
         vm.page = $routeParams.page ? $routeParams.page : 0;
-        analytics.trackPage($scope, $location.absUrl(), $location.url());
+        analytics.setPage($location.url());
+        analytics.trackPage();
     });
 }

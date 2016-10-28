@@ -87,28 +87,48 @@ angular.module('analytics', ['ng'])
 
 .service('analytics', ['$window', function($window) {
     return {
-        trackPage: function (scope, absoluteUrl, locationPath) {
-
-          if (absoluteUrl.indexOf("0.0.0.0") < 0 && absoluteUrl.indexOf("localhost") < 0) {
+        setDimension: function (dimensionValue) {
             scope.$on('$viewContentLoaded', function(event) {
-              $window.ga('send', 'pageview', locationPath);
+                switch (dimensionValue) {
+                    case 'Prospect':
+                        $window.ga('set', 'dimension1', dimensionValue);
+                        break;
+                    case 'Paid Member':
+                        $window.ga('set', 'dimension2', dimensionValue);
+                        break;
+                    case 'Team Member':
+                        $window.ga('set', 'dimension3', dimensionValue);
+                        break;
+                }
             });
-          } else {
-            console.log('Page not tracked', locationPath);
-          }
         },
-        trackEvent: function (scope, absoluteUrl, category, action, label) {
-
-          if (absoluteUrl.indexOf("0.0.0.0") < 0 && absoluteUrl.indexOf("localhost") < 0) {
-              $window.ga('send', {
-                hitType: 'event',
-                eventCategory: category,
-                eventAction: action,
-                eventLabel: label
-              });
-          } else {
-            console.log('Event not tracked', label);
-          }
+        setPage: function (locationPath) {
+            $window.ga('set', 'page', locationPath);
+            var host = $window.location.host;
+            if (host.indexOf("0.0.0.0") > 0 || host.indexOf("localhost") > 0) {
+                console.log(locationPath);
+            }
+        },
+        trackPage: function () {
+            var host = $window.location.host;
+            if (host.indexOf("0.0.0.0") < 0 && host.indexOf("localhost") < 0) {
+                $window.ga('send', 'pageview');
+            } else {
+                console.log('Page not tracked');
+            }
+        },
+        trackEvent: function (category, action, label) {
+            var host = $window.location.host;
+            if (host.indexOf("0.0.0.0") < 0 && host.indexOf("localhost") < 0) {
+                $window.ga('send', {
+                    hitType: 'event',
+                    eventCategory: category,
+                    eventAction: action,
+                    eventLabel: label
+                });
+            } else {
+                console.log('Event not tracked', action);
+            }
         }
     };
 }]);

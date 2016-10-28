@@ -1,5 +1,5 @@
 <form id="selfie-modal" novalidate="novalidate">
-    <div class="form-group" ng-show="quiz.panel_index==0 && !quiz.leadershipStyle.answers.length>0">
+    <div class="form-group" ng-show="quiz.panelIndex==0 && !quiz.leadershipStyle.answers.length>0">
         <div class="modal-body">
             <panel class="checkin">
                 <h3 class="modal-title">Leadership Styles Quiz</h3>
@@ -11,11 +11,11 @@
         </div>
         <div class="modal-footer">
             <button type="button" ng-click="quiz.cancel()" data-dismiss="modal" class="btn btn-light pull-left">Cancel</button>
-            <button ng-show="false" type="button" class="btn btn-success" ng-click="quiz.panel_index=1">I have more questions</button>
-            <button type="button" class="btn btn-success" ng-disabled="quiz.busy" ng-click="quiz.panel_index=2">Get Started &rarr;</button>
+            <button ng-show="false" type="button" class="btn btn-success" ng-click="quiz.panelIndex=1">I have more questions</button>
+            <button type="button" class="btn btn-success" ng-disabled="quiz.busy" ng-click="quiz.panelIndex=2">Get Started &rarr;</button>
         </div>
     </div>
-    <div class="form-group" ng-show="quiz.panel_index==0 && quiz.leadershipStyle.answers.length>0">
+    <div class="form-group" ng-show="quiz.panelIndex==0 && quiz.leadershipStyle.answers.length>0">
         <div class="modal-body">
             <panel class="checkin">
 
@@ -27,10 +27,10 @@
         </div>
         <div class="modal-footer">
             <button type="button" ng-click="quiz.cancel()" data-dismiss="modal" class="btn btn-light pull-left">Cancel</button>
-            <button type="button" ng-disabled="quiz.busy" class="btn btn-success" ng-click="quiz.panel_index=2">Continue &rarr;</button>
+            <button type="button" ng-disabled="quiz.busy" class="btn btn-success" ng-click="quiz.panelIndex=2">Continue &rarr;</button>
         </div>
     </div>
-    <div class="form-group" ng-show="quiz.panel_index==1">
+    <div class="form-group" ng-show="quiz.panelIndex==1">
         <div class="modal-body">
             <panel class="checkin">
 
@@ -43,7 +43,7 @@
             <button type="button" class="btn btn-success" ng-click="quiz.startSelfie()">Get Started &rarr;</button>
         </div>
     </div>
-    <div class="form-group" ng-show="quiz.leadershipStyle.next_question && quiz.panel_index==2">
+    <div class="form-group" ng-show="quiz.leadershipStyle.next_question && quiz.panelIndex==2">
         <div class="modal-body" style="padding-bottom: 0px">
             <panel class="devzone">
                 <h3 class="modal-title" style="padding-bottom: 10px; padding-top: 5px">{{ quiz.leadershipStyle.next_question.text }}...</h3>
@@ -67,7 +67,7 @@
             </button>
         </div>
     </div>
-    <div class="form-group" ng-show="!quiz.leadershipStyle.next_question && quiz.panel_index==2">
+    <div class="form-group" ng-show="!quiz.leadershipStyle.next_question && quiz.panelIndex==2">
         <div class="modal-body">
             <panel class="devzone">
                 <h3 class="modal-title centered">You're All Done</h3>
