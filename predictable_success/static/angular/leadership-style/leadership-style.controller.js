@@ -45,11 +45,11 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
             isopen: false
         };
 
-        $scope.toggled = function(open) {
+        $scope.toggled = function (open) {
             $log.log('Dropdown is now: ', open);
         };
 
-        $scope.toggleDropdown = function($event) {
+        $scope.toggleDropdown = function ($event) {
             $event.preventDefault();
             $event.stopPropagation();
             $scope.status.isopen = !$scope.status.isopen;
@@ -58,39 +58,48 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     };
 
     function gotoPage(page) {
+        if (page == 0) {
+            analytics.trackEvent('See team results button', 'click', null);
+        } else {
+            analytics.trackEvent('See team member results tile', 'click', null);
+        }
         $location.search('page', page)
     }
 
-    function orderByFullName(a,b){
+    function orderByFullName(a, b) {
         vm.currentOrder = null;
         var aValue = a.full_name;
         var bValue = b.full_name;
         return ((aValue < bValue) ? -1 : ((aValue > bValue) ? 1 : 0));
     }
-    function orderByVisionary(a,b){
+
+    function orderByVisionary(a, b) {
         vm.currentOrder = 0;
-        var noDataValue=0;
+        var noDataValue = 0;
         var aValue = (!a.leadership_style) ? noDataValue : a.leadership_style.v;
         var bValue = (!b.leadership_style) ? noDataValue : b.leadership_style.v;
         return bValue - aValue;
     }
-    function orderByOperator(a,b){
+
+    function orderByOperator(a, b) {
         vm.currentOrder = 1;
-        var noDataValue=0;
+        var noDataValue = 0;
         var aValue = (!a.leadership_style) ? noDataValue : a.leadership_style.o;
         var bValue = (!b.leadership_style) ? noDataValue : b.leadership_style.o;
         return bValue - aValue;
     }
-    function orderByProcessor(a,b){
+
+    function orderByProcessor(a, b) {
         vm.currentOrder = 2;
-        var noDataValue=0;
+        var noDataValue = 0;
         var aValue = (!a.leadership_style) ? noDataValue : a.leadership_style.p;
         var bValue = (!b.leadership_style) ? noDataValue : b.leadership_style.p;
         return bValue - aValue;
     }
-    function orderBySynergist(a,b){
+
+    function orderBySynergist(a, b) {
         vm.currentOrder = 3;
-        var noDataValue=0;
+        var noDataValue = 0;
         var aValue = (!a.leadership_style) ? noDataValue : a.leadership_style.s;
         var bValue = (!b.leadership_style) ? noDataValue : b.leadership_style.s;
         return bValue - aValue;
@@ -98,12 +107,12 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
 
     function getTeases() {
         LeadershipStyleService.getTeases()
-            .then(function(request){
+            .then(function (request) {
                 vm.teases = request;
             })
     }
 
-    function setTease(style_id){
+    function setTease(style_id) {
         angular.forEach(vm.teases, function (tease) {
             if (tease.style == style_id) {
                 vm.tease = tease;
@@ -122,7 +131,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
             },
             hover: {
                 onHover: function (events) {
-                    if (events.length > 0 &&  events[0]._chart) {
+                    if (events.length > 0 && events[0]._chart) {
                         team.animate_show_style = events[0]._index;
                     } else {
                         team.animate_show_style = null;
@@ -206,47 +215,47 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                     }
                 }
             }
-      };
+        };
     }
 
     function respondToRequest() {
         vm.busy = true;
         LeadershipStyleRequestService.getRequest($routeParams.requestId)
-            .then(function(request){
+            .then(function (request) {
                 if (request.submission_id) {
                     LeadershipStyleService.getLeadershipStyle(request.submission_id)
-                        .then(function(response){
-                            takeQuiz(response)
-                        }
-                    )
+                        .then(function (response) {
+                                takeQuiz(response)
+                            }
+                        )
                 } else {
                     LeadershipStyleService.createLeadershipStyle(request)
-                        .then(function(response){
-                            takeQuiz(response)
-                        }
-                    )
+                        .then(function (response) {
+                                takeQuiz(response)
+                            }
+                        )
                 }
                 vm.busy = false;
-            }, function(){
+            }, function () {
                 vm.busy = false;
             })
     }
 
-    function chartClick(points, evt, team){
-         switch (points[0]._index) {
-             case 0:
-                 sortTeamMembers(team, orderByVisionary);
-                 break;
-             case 1:
-                 sortTeamMembers(team, orderByOperator);
-                 break;
-             case 2:
-                 sortTeamMembers(team, orderByProcessor);
-                 break;
-             case 3:
-                 sortTeamMembers(team, orderBySynergist);
-                 break;
-         }
+    function chartClick(points, evt, team) {
+        switch (points[0]._index) {
+            case 0:
+                sortTeamMembers(team, orderByVisionary);
+                break;
+            case 1:
+                sortTeamMembers(team, orderByOperator);
+                break;
+            case 2:
+                sortTeamMembers(team, orderByProcessor);
+                break;
+            case 3:
+                sortTeamMembers(team, orderBySynergist);
+                break;
+        }
     }
 
     function sortTeamMembers(team, order) {
@@ -262,28 +271,46 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     function getMyLeadershipStyle() {
         vm.busy = true;
         LeadershipStyleService.getMyLeadershipStyle()
-            .then(function(leadershipStyle){
-                vm.myLeadershipStyle = leadershipStyle;
-                if (!leadershipStyle.completed) {
-                    takeQuiz(leadershipStyle);
-                } else {
-                     angular.forEach(leadershipStyle.teams, function (team) {
-                         if (team.owner.id == $rootScope.currentUser.employee.id) {
-                             vm.is_team_owner = true;
-                         }
-                         updateTeamChart(team);
-                         indexTeamMembers(team);
-                         team.chartClick = function (points, evt){
-                             chartClick(points, evt, team);
-                         };
-                     })
+            .then(function (leadershipStyle) {
+                    vm.myLeadershipStyle = leadershipStyle;
+                    if (!leadershipStyle.completed) {
+                        takeQuiz(leadershipStyle);
+                    } else {
+                        angular.forEach(leadershipStyle.teams, function (team) {
+                            if (team.owner.id == $rootScope.currentUser.employee.id) {
+                                vm.is_team_owner = true;
+                            }
+                            updateTeamChart(team);
+                            indexTeamMembers(team);
+                            team.chartClick = function (points, evt) {
+                                chartClick(points, evt, team);
+                            };
+                        })
+                    }
+                    setTrackingDimension(leadershipStyle);
+                    setTrackingPage(leadershipStyle);
+                    vm.busy = false;
+                }, function () {
+                    vm.busy = false;
                 }
-                setTrackingDimension(leadershipStyle);
-                vm.busy = false;
-            }, function(){
-                vm.busy = false;
+            )
+    }
+
+    function setTrackingPage(leadershipStyle) {
+        if (leadershipStyle.teams.length == 0) {
+            if (leadershipStyle.complete) {
+                analytics.setPage('/landing-page');
+            } else {
+                analytics.setPage('/take-the-quiz');
             }
-        )
+        } else {
+            if (vm.page == 0) {
+                analytics.setPage('/team');
+            } else {
+                analytics.setPage('/team/member');
+            }
+        }
+        analytics.trackPage();
     }
 
     function setTrackingDimension(leadershipStyle) {
@@ -291,25 +318,25 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
             analytics.setDimension('Paid Member');
         } else if (leadershipStyle.teams.length == 0 && leadershipStyle.who_can_see_my_results.length == 0) {
             analytics.setDimension('Prospect');
-        } else if (leadershipStyle.teams.length == 0 && leadershipStyle.who_can_see_my_results.length > 0){
+        } else if (leadershipStyle.teams.length == 0 && leadershipStyle.who_can_see_my_results.length > 0) {
             analytics.setDimension('Team Member');
         }
     }
 
     function indexTeamMembers(team) {
-         var i = 0;
-         angular.forEach(team.team_members, function (team_member) {
+        var i = 0;
+        angular.forEach(team.team_members, function (team_member) {
             team_member.index = i;
             i = i + 1;
-         });
+        });
         team.team_members_sort = angular.copy(team.team_members);
     }
 
     function getTeamsIOwn() {
         LeadershipStyleTeamService.getTeamsIOwn()
-            .then(function(teams){
+            .then(function (teams) {
                 vm.teamsIOwn = teams;
-                if ($routeParams.team_id && $routeParams.addMembers=='true') {
+                if ($routeParams.team_id && $routeParams.addMembers == 'true') {
                     angular.forEach(vm.teamsIOwn, function (value) {
                         if (value.id == $routeParams.team_id && value.team_members.length <= 1) {
                             invite($routeParams.team_id, value.remaining_invites, value.team_members.length);
@@ -317,7 +344,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                     });
                 }
                 vm.busy = false;
-            }, function(){
+            }, function () {
                 vm.busy = false;
             })
     }
@@ -330,9 +357,9 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
             templateUrl: '/static/angular/leadership-style/partials/_modals/quiz.html',
             controller: 'QuizController as quiz',
             resolve: {
-                    leadershipStyle: function () {
-                        return leadershipStyle
-                    }
+                leadershipStyle: function () {
+                    return leadershipStyle
+                }
             }
         });
         modalInstance.result.then(
@@ -348,12 +375,12 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                         gotoPage(vm.myLeadershipStyle.employee.id);
                         vm.showTakeQuizNotification = false;
                         angular.forEach(leadershipStyle.teams, function (team) {
-                             updateTeamChart(team);
-                             indexTeamMembers(team);
-                             team.chartClick = function (points, evt){
-                                 chartClick(points, evt, team);
-                             };
-                         })
+                            updateTeamChart(team);
+                            indexTeamMembers(team);
+                            team.chartClick = function (points, evt) {
+                                chartClick(points, evt, team);
+                            };
+                        })
                     }
                 }
             }
@@ -400,7 +427,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                 employee: function () {
                     return employee
                 },
-                team_id: function() {
+                team_id: function () {
                     return team_id
                 },
             }
@@ -440,13 +467,13 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
             templateUrl: '/static/angular/leadership-style/partials/_modals/invite.html',
             controller: 'InviteController as invite',
             resolve: {
-                team_id: function() {
+                team_id: function () {
                     return team_id
                 },
-                remaining_invites: function() {
+                remaining_invites: function () {
                     return remaining_invites
                 },
-                team_member_count : function() {
+                team_member_count: function () {
                     return team_member_count
                 }
 
@@ -460,7 +487,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     }
 
     function updateTeam(team) {
-        angular.forEach(vm.myLeadershipStyle.teams, function(value) {
+        angular.forEach(vm.myLeadershipStyle.teams, function (value) {
             if (team.id == value.id) {
                 value.requested_report = team.requested_report;
                 value.requested_date = team.requested_date;
@@ -496,7 +523,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     }
 
     function showOrderPageDown() {
-        analytics.trackEvent('landing page', 'buy', null);
+        analytics.trackEvent('buy button', 'click', null);
         var modalInstance = $modal.open({
             animation: true,
             windowClass: 'xx-dialog fade zoom',
@@ -515,16 +542,15 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
             templateUrl: '/static/angular/leadership-style/partials/_modals/leadership-style-tease.html',
             controller: 'TeaseController as tease',
             resolve: {
-                tease: function() {
+                tease: function () {
                     return tease;
                 }
             }
         });
     }
 
-    $scope.$on('$routeUpdate', function(event, next, current) {
+    $scope.$on('$routeUpdate', function (event, next, current) {
         vm.page = $routeParams.page ? $routeParams.page : 0;
-        analytics.setPage($location.url());
-        analytics.trackPage();
+        setTrackingPage(vm.myLeadershipStyle);
     });
 }
