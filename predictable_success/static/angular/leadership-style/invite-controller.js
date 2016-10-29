@@ -2,8 +2,10 @@
         .module('leadership-style')
         .controller('InviteController', InviteController);
 
-    function InviteController(LeadershipStyleInviteService, Notification, team_id, remaining_invites, team_member_count, $timeout, $modalInstance, $rootScope) {
+    function InviteController(analytics,LeadershipStyleInviteService, Notification, team_id, remaining_invites, team_member_count, $timeout, $modalInstance, $rootScope) {
         var vm = this;
+        analytics.setPage('/team/invite');
+        analytics.trackPage();
         vm.remaining_invites = remaining_invites;
         vm.has_team_members = team_member_count > 1 ? true :  false;
         vm.subject = $rootScope.currentUser.employee;
@@ -29,6 +31,7 @@
         }
 
         function submit() {
+            analytics.trackEvent('Send invites button', 'click', null);
             vm.enableSend = false;
             var invites = [];
             var invite_notifications = [];
@@ -64,6 +67,7 @@
         }
 
         function cancel() {
+            analytics.trackEvent('Cancel button', 'click', null);
             $modalInstance.dismiss();
         }
     }

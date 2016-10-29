@@ -41,8 +41,8 @@
                 {% if form.email.errors %}
                 <div class="error-message" style="margin-bottom: 15px;">{{ form.email.errors }}</div>
                 {% endif %}
-                <button class="btn btn-submit btn-block" style="margin-bottom: 8px;" type="submit">Get started</button>
-                <p class="centered" style="color: #aaa;">Already taken the quiz? <a href="/account/login">Sign in here.</a></p>
+                <button class="btn btn-submit btn-block" style="margin-bottom: 8px;" type="submit" onClick="trackEvent('Get started button', 'click', null)">Get started</button>
+                <p class="centered" style="color: #aaa;">Already taken the quiz? <a href="/account/login" onClick="trackEvent('Sign in here link', 'click', null)">Sign in here.</a></p>
             </div>
 
             <!--

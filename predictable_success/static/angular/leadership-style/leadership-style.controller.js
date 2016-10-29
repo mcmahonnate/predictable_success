@@ -460,6 +460,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     }
 
     function invite(team_id, remaining_invites, team_member_count) {
+        analytics.trackEvent('invite team', 'click', null);
         var modalInstance = $modal.open({
             animation: true,
             windowClass: 'xx-dialog fade zoom',

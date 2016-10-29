@@ -1,5 +1,29 @@
 {% extends "base.html" %}
+{% block tracking %}
+    host = window.location.host;
+    if (window.location.pathname == "/" || window.location.pathname == "/take-the-quiz/") {
+        page = "/ecap";
+    } else {
+        page = window.location.pathname;
+    }
+    if (host.search("localhost:8001") < 0 && host.search("0.0.0.0:8001") < 0) {
+        ga('set', 'page', page);
+        ga('send', 'pageview');
+    } else {
+      console.log('not tracked ' + page)
+    }
+    trackEvent = function(category, action, label) {
+        if (host.search("localhost:8001") < 0 && host.search("0.0.0.0:8001") < 0) {
+            ga('send', 'event', category, action, label);
+        } else {
+          console.log('event not tracked ' + category)
+        }
+    }
+{% endblock %}
 {% load staticfiles %}
+
 {% block mainclass %}generic{% endblock %}
 
-{% block content %}{% endblock%}
+{% block content %}
+
+{% endblock%}

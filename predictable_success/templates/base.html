@@ -27,7 +27,7 @@
           {%  else %}
           ga('create', 'UA-45570095-2', 'auto');
           {% endif %}
-          ga('send', 'pageview');
+          {% block tracking %}{% endblock %}
         </script>
 
         {% if DEBUG %}

@@ -29,8 +29,8 @@
                 {%  else %}
                     <input autofocus autocomplete="off" class="form-control input-lg" id="id_username" name="email" placeholder="Email Address" type="text">
                 {%  endif %}
-                <button class="btn btn-success btn-block" type="submit"><span class="fa fa-envelope" style="margin-right:15px;"></span> Email me a link to sign in</button>
-                <p class="centered" style="color: #aaa;">Don't have an account? <a href="/take-the-quiz/">Take the quiz to get started.</a></p>
+                <button class="btn btn-success btn-block" type="submit" onClick="trackEvent('Email me a link button', 'click', null)"><span class="fa fa-envelope" style="margin-right:15px;"></span> Email me a link to sign in</button>
+                <p class="centered" style="color: #aaa;">Don't have an account? <a href="/take-the-quiz/" onClick="trackEvent('Take the quiz link', 'click', null)">Take the quiz to get started.</a></p>
                 <input type="hidden" name="next" id="next" value="/#{{ next }}"/>
             </form>
 

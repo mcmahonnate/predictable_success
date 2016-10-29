@@ -88,6 +88,7 @@ angular.module('analytics', ['ng'])
 .service('analytics', ['$window', function($window) {
     return {
         setDimension: function (dimensionValue) {
+            var host = $window.location.host;
             switch (dimensionValue) {
                 case 'Prospect':
                     $window.ga('set', 'dimension1', dimensionValue);
@@ -128,7 +129,7 @@ angular.module('analytics', ['ng'])
                     eventLabel: label
                 });
             } else {
-                console.log('Event not tracked', action);
+                console.log('Event not tracked', category);
             }
         }
     };
