@@ -2,14 +2,18 @@
         .module('leadership-style')
         .controller('RequestTeamReportController', RequestTeamReportController);
 
-    function RequestTeamReportController(team_id, LeadershipStyleTeamService, Notification, $modalInstance) {
+    function RequestTeamReportController(analytics, team_id, LeadershipStyleTeamService, Notification, $modalInstance) {
+        analytics.setPage('/team/request-report');
+        analytics.trackPage();
         var vm = this;
+        vm.trackEvent = analytics.trackEvent;
         vm.message = '';
         vm.page = 0;
         vm.cancel = cancel;
         vm.submit = submit;
 
         function submit(){
+            analytics.trackEvent('Submit button', 'click', null);
             LeadershipStyleTeamService.requestTeamReport(team_id, vm.message)
                 .then(function(team){
                     $modalInstance.close(team)
@@ -23,6 +27,7 @@
         }
 
         function cancel() {
-            $modalInstance.dismiss();
+            analytics.trackEvent('Cancel button', 'click', null);
+            $modalInstance.close();
         }
     }

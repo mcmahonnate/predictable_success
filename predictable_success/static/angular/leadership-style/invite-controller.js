@@ -21,11 +21,14 @@
         function activate() {
             var count = remaining_invites >=3 ? 3 : remaining_invites;
             for (var i = 0; i < count; i++) {
-                addEmail();
+                addEmail(false);
             }
         }
 
-        function addEmail() {
+        function addEmail(trackEvent) {
+            if (trackEvent) {
+                analytics.trackEvent('Add invite button', 'click', null);
+            }
             var invite = angular.copy({'email': ''});
             vm.invites.push(invite);
         }
@@ -68,6 +71,6 @@
 
         function cancel() {
             analytics.trackEvent('Cancel button', 'click', null);
-            $modalInstance.dismiss();
+            $modalInstance.close();
         }
     }

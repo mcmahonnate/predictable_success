@@ -2,12 +2,15 @@
         .module('leadership-style')
         .controller('TeaseController', TeaseController);
 
-    function TeaseController(tease, $modalInstance) {
+    function TeaseController(analytics, tease, $modalInstance) {
+        analytics.setPage('/style-description');
+        analytics.trackPage();
         var vm = this;
         vm.tease = tease;
         vm.cancel = cancel;
 
         function cancel() {
-            $modalInstance.dismiss();
+            analytics.trackEvent("close button", "click", null);
+            $modalInstance.close();
         }
     }

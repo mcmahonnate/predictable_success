@@ -3,12 +3,12 @@
     <div class="account-menu">
         <!-- Single button -->
         <div class="btn-group dashboard pull-right" dropdown is-open="status.isopen">
-          <a href="" dropdown-toggle ng-disabled="disabled">
+          <a href="" dropdown-toggle ng-disabled="disabled" ng-click="index.trackEvent('Account link', 'click', null)">
             {{ $root.currentUser.employee.full_name }}
           </a>
           <ul class="dropdown-menu centered" dropdown-menu role="menu" aria-labelledby="single-button">
             <div class="dropdown-arrow"></div>
-            <li role="menuitem"><a href="/logout">Sign out</a></li>
+            <li role="menuitem"><a href="/logout" ng-click="index.trackEvent('Sign out link', 'click', null)">Sign out</a></li>
           </ul>
         </div>
     </div>
@@ -165,19 +165,19 @@
                 </div>
                 <div class="panel-footer">
                     <span class="glyphicon-regular glyphicons-sorting" style="vertical-align: middle; color: #aaa; margin-right: 10px"></span>
-                    <button class="btn btn-sort btn-visionary" ng-click="index.sortTeamMembers(team, index.orderByVisionary)" ng-class="{'btn-active': index.currentOrder==0}">
+                    <button class="btn btn-sort btn-visionary" ng-click="index.sortClick(team, index.orderByVisionary)" ng-class="{'btn-active': index.currentOrder==0}">
                         <span class="mobile-show">V</span>
                         <span class="hide-for-mobile">Visionary</span>
                     </button>
-                    <button class="btn btn-sort btn-operator" ng-click="index.sortTeamMembers(team, index.orderByOperator)" ng-class="{'btn-active': index.currentOrder==1}">
+                    <button class="btn btn-sort btn-operator" ng-click="index.sortClick(team, index.orderByOperator)" ng-class="{'btn-active': index.currentOrder==1}">
                         <span class="mobile-show">O</span>
                         <span class="hide-for-mobile">Operator</span>
                     </button>
-                    <button class="btn btn-sort btn-processor" ng-click="index.sortTeamMembers(team, index.orderByProcessor)" ng-class="{'btn-active': index.currentOrder==2}">
+                    <button class="btn btn-sort btn-processor" ng-click="index.sortClick(team, index.orderByProcessor)" ng-class="{'btn-active': index.currentOrder==2}">
                         <span class="mobile-show">P</span>
                         <span class="hide-for-mobile">Processor</span>
                     </button>
-                    <button class="btn btn-sort btn-synergist" ng-click="index.sortTeamMembers(team, index.orderBySynergist)" ng-class="{'btn-active': index.currentOrder==3}">
+                    <button class="btn btn-sort btn-synergist" ng-click="index.sortClick(team, index.orderBySynergist)" ng-class="{'btn-active': index.currentOrder==3}">
                         <span class="mobile-show">S</span>
                         <span class="hide-for-mobile">Synergist</span>
                     </button>
@@ -191,7 +191,7 @@
             <div style="position: relative;">
                 <div style="position: absolute;width: 100%;">
                     <ul class="isotope table-like">
-                        <li ng-repeat="team_member in team.team_members  | orderBy:'full_name'" ng-click="index.gotoPage(team_member.id)" ng-style="{top: (((team_member.index) * 155) + 'px')}" ng-class="{'incomplete': !team_member.leadership_style || !team_member.leadership_style.completed}" >
+                        <li ng-repeat="team_member in team.team_members  | orderBy:'full_name'" ng-click="index.gotoPage(team_member.id, true)" ng-style="{top: (((team_member.index) * 155) + 'px')}" ng-class="{'incomplete': !team_member.leadership_style || !team_member.leadership_style.completed}" >
                             <div class="clearfix panel-header" style="width: 100%; background-color: transparent">
                                 <div class="panel-header-avatar">
                                     <employee-avatar size="large" employee="team_member"></employee-avatar>

@@ -4,6 +4,7 @@ angular
 
 function LeadershipStyleController(LeadershipStyleService, LeadershipStyleRequestService, LeadershipStyleTeamService, analytics, $location, $modal, $rootScope, $routeParams, $scope, $timeout, $window) {
     var vm = this;
+    vm.trackEvent = analytics.trackEvent;
     vm.is_team_owner = false;
     vm.busy = true;
     vm.page = $routeParams.page ? $routeParams.page : 0;
@@ -27,7 +28,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     vm.showOrderPageDown = showOrderPageDown;
     vm.showTease = showTease;
     vm.setTease = setTease;
-    vm.sortTeamMembers = sortTeamMembers;
+    vm.sortClick = sortClick;
     vm.takeQuiz = takeQuiz;
 
     activate();
@@ -57,11 +58,14 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         };
     };
 
-    function gotoPage(page) {
-        if (page == 0) {
-            analytics.trackEvent('See team results button', 'click', null);
-        } else {
-            analytics.trackEvent('See team member results tile', 'click', null);
+    function gotoPage(page, trackEvent) {
+
+        if (trackEvent) {
+            if (page == 0) {
+                analytics.trackEvent('See team results button', 'click', null);
+            } else {
+                analytics.trackEvent('See team member results tile', 'click', null);
+            }
         }
         $location.search('page', page)
     }
@@ -242,6 +246,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     }
 
     function chartClick(points, evt, team) {
+        analytics.trackEvent("team average chart", "click", null);
         switch (points[0]._index) {
             case 0:
                 sortTeamMembers(team, orderByVisionary);
@@ -256,6 +261,11 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                 sortTeamMembers(team, orderBySynergist);
                 break;
         }
+    }
+
+    function sortClick(team, order) {
+        analytics.trackEvent("sort button", "click", null);
+        sortTeamMembers(team, order);
     }
 
     function sortTeamMembers(team, order) {
@@ -372,7 +382,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                     if (!vm.myLeadershipStyle.completed) {
                         vm.showTakeQuizNotification = true
                     } else {
-                        gotoPage(vm.myLeadershipStyle.employee.id);
+                        gotoPage(vm.myLeadershipStyle.employee.id, false);
                         vm.showTakeQuizNotification = false;
                         angular.forEach(leadershipStyle.teams, function (team) {
                             updateTeamChart(team);
@@ -416,7 +426,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     }
 
     function discard(employee, team_id) {
-        vm.gotoPage(0);
+        analytics.trackEvent("discard invite button", "click", null);
         var modalInstance = $modal.open({
             animation: true,
             windowClass: 'xx-dialog fade zoom',
@@ -434,12 +444,17 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         });
         modalInstance.result.then(
             function (team) {
-                updateTeam(team);
+                setTrackingPage(vm.myLeadershipStyle);
+                if (team) {
+                    vm.gotoPage(0, false);
+                    updateTeam(team);
+                }
             }
         );
     }
 
     function remind(quiz) {
+        analytics.trackEvent("remind team member button", "click", null);
         var modalInstance = $modal.open({
             animation: true,
             windowClass: 'xx-dialog fade zoom',
@@ -454,7 +469,10 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         });
         modalInstance.result.then(
             function (value) {
-                quiz.last_reminder_sent = value.last_reminder_sent;
+                setTrackingPage(vm.myLeadershipStyle);
+                if (value) {
+                    quiz.last_reminder_sent = value.last_reminder_sent;
+                }
             }
         );
     }
@@ -482,7 +500,10 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         });
         modalInstance.result.then(
             function (team) {
-                updateTeam(team);
+                setTrackingPage(vm.myLeadershipStyle);
+                if (team) {
+                    updateTeam(team);
+                }
             }
         );
     }
@@ -502,8 +523,8 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         });
     }
 
-
     function requestTeamReport(team_id, index) {
+        analytics.trackEvent("request team report button", "click", null);
         var modalInstance = $modal.open({
             animation: true,
             windowClass: 'xx-dialog fade zoom',
@@ -518,7 +539,10 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         });
         modalInstance.result.then(
             function (team) {
-                updateTeam(team);
+                setTrackingPage(vm.myLeadershipStyle);
+                if (team) {
+                    updateTeam(team);
+                }
             }
         );
     }
@@ -533,9 +557,15 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
             controller: 'OrderPageDownController as orderPageDown',
             resolve: {}
         });
+        modalInstance.result.then(
+            function() {
+                setTrackingPage(vm.myLeadershipStyle);
+            }
+        );
     }
 
     function showTease(tease) {
+        analytics.trackEvent("read more about style link", "click", null);
         var modalInstance = $modal.open({
             animation: true,
             windowClass: 'xx-dialog fade zoom',
@@ -548,6 +578,11 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                 }
             }
         });
+        modalInstance.result.then(
+            function() {
+                setTrackingPage(vm.myLeadershipStyle);
+            }
+        );
     }
 
     $scope.$on('$routeUpdate', function (event, next, current) {

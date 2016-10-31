@@ -9,7 +9,7 @@
     </div>
     <div class="modal-footer">
         <button type="btn btn-default" ng-click="reportRequest.cancel()" class="btn btn-light">Cancel</button>
-        <button type="btn btn-default" ng-click="reportRequest.page=1" class="btn btn-light">Proceed</button>
+        <button type="btn btn-default" ng-click="reportRequest.page=1;reportRequest.trackEvent('Proceed button', 'click', null)" class="btn btn-light">Proceed</button>
     </div>
 </div>
 <div ng-if="reportRequest.page==1">
