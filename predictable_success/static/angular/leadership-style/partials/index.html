@@ -186,7 +186,7 @@
 
             </div>
             <div class="invite-360" style="height: 25px;">
-                <h4 ng-if="!team.is_team_full" class="header"><a href="" class="pull-right" ng-click="index.invite(team.id, team.remaining_invites, team.team_members.length, true)">+ Invite more team members</a></h4>
+                <h4 ng-if="!team.is_team_full && team.owner.id == $root.currentUser.employee.id" class="header"><a href="" class="pull-right" ng-click="index.invite(team.id, team.remaining_invites, team.team_members.length, true)">+ Invite more team members</a></h4>
             </div>
             <div style="position: relative;">
                 <div style="position: absolute;width: 100%;">
