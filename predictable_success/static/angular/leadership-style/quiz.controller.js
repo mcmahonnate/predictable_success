@@ -4,7 +4,7 @@ angular
 
 function QuizController(analytics, LeadershipStyleService, Notification, leadershipStyle, $location, $modal, $modalInstance, $rootScope, $scope) {
     var vm = this;
-
+    vm.trackEvent = analytics.trackEvent;
     vm.leadershipStyle = leadershipStyle;
     vm.panelIndex = 0;
     vm.busy = false;

@@ -4,6 +4,7 @@ angular
 
 function LeadershipStyleController(LeadershipStyleService, LeadershipStyleRequestService, LeadershipStyleTeamService, analytics, $location, $modal, $rootScope, $routeParams, $scope, $timeout, $window) {
     var vm = this;
+    var modalOpen = false;
     vm.trackEvent = analytics.trackEvent;
     vm.is_team_owner = false;
     vm.busy = true;
@@ -15,6 +16,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     vm.tease = null;
     vm.teases = [];
     vm.currentOrder = null;
+    vm.disableBuyButton = false;
     vm.discard = discard;
     vm.invite = invite;
     vm.gotoPage = gotoPage;
@@ -307,20 +309,22 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     }
 
     function setTrackingPage(leadershipStyle) {
-        if (leadershipStyle.teams.length == 0) {
-            if (leadershipStyle.complete) {
-                analytics.setPage('/landing-page');
+        if (!modalOpen) {
+            if (leadershipStyle.teams.length == 0) {
+                if (leadershipStyle.completed) {
+                    analytics.setPage('/landing-page');
+                } else {
+                    analytics.setPage('/take-the-quiz');
+                }
             } else {
-                analytics.setPage('/take-the-quiz');
+                if (vm.page == 0) {
+                    analytics.setPage('/team');
+                } else {
+                    analytics.setPage('/team/member');
+                }
             }
-        } else {
-            if (vm.page == 0) {
-                analytics.setPage('/team');
-            } else {
-                analytics.setPage('/team/member');
-            }
+            analytics.trackPage();
         }
-        analytics.trackPage();
     }
 
     function setTrackingDimension(leadershipStyle) {
@@ -349,7 +353,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                 if ($routeParams.team_id && $routeParams.addMembers == 'true') {
                     angular.forEach(vm.teamsIOwn, function (value) {
                         if (value.id == $routeParams.team_id && value.team_members.length <= 1) {
-                            invite($routeParams.team_id, value.remaining_invites, value.team_members.length);
+                            invite($routeParams.team_id, value.remaining_invites, value.team_members.length, false);
                         }
                     });
                 }
@@ -477,8 +481,11 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         );
     }
 
-    function invite(team_id, remaining_invites, team_member_count) {
-        analytics.trackEvent('invite team', 'click', null);
+    function invite(team_id, remaining_invites, team_member_count, trackEvent) {
+        modalOpen = true;
+        if (trackEvent) {
+            analytics.trackEvent('invite team', 'click', null);
+        }
         var modalInstance = $modal.open({
             animation: true,
             windowClass: 'xx-dialog fade zoom',
@@ -500,6 +507,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         });
         modalInstance.result.then(
             function (team) {
+                modalOpen = false;
                 setTrackingPage(vm.myLeadershipStyle);
                 if (team) {
                     updateTeam(team);

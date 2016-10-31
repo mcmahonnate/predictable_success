@@ -12,7 +12,7 @@
         <div class="modal-footer">
             <button type="button" ng-click="quiz.cancel()" data-dismiss="modal" class="btn btn-light pull-left">Cancel</button>
             <button ng-show="false" type="button" class="btn btn-success" ng-click="quiz.panelIndex=1">I have more questions</button>
-            <button type="button" class="btn btn-success" ng-disabled="quiz.busy" ng-click="quiz.panelIndex=2">Get Started &rarr;</button>
+            <button type="button" class="btn btn-success" ng-disabled="quiz.busy" ng-click="quiz.panelIndex=2;quiz.trackEvent('Get started button', 'click', null);">Get Started &rarr;</button>
         </div>
     </div>
     <div class="form-group" ng-show="quiz.panelIndex==0 && quiz.leadershipStyle.answers.length>0">
@@ -27,7 +27,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" ng-click="quiz.cancel()" data-dismiss="modal" class="btn btn-light pull-left">Cancel</button>
-            <button type="button" ng-disabled="quiz.busy" class="btn btn-success" ng-click="quiz.panelIndex=2">Continue &rarr;</button>
+            <button type="button" ng-disabled="quiz.busy" class="btn btn-success" ng-click="quiz.panelIndex=2;quiz.trackEvent('Continue button', 'click', null);">Continue &rarr;</button>
         </div>
     </div>
     <div class="form-group" ng-show="quiz.panelIndex==1">

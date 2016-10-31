@@ -41,7 +41,7 @@
                                 <li style="margin: 10px 0;">Get to the root of team dysfunction by developing a shared vocabulary to address conflict.</li>
                                 <li style="margin: 10px 0;">Improve the quality of decisions at every level of the organization.</li>
                             </ul>
-                            <button class="btn btn-submit btn-block" style="margin-bottom: 15px;" ng-click="index.takeQuiz(index.myLeadershipStyle)">Finish Your Quiz</button>
+                            <button class="btn btn-submit btn-block" style="margin-bottom: 15px;" ng-click="index.takeQuiz(index.myLeadershipStyle);index.trackEvent('Finish your quiz button', 'click', null)">Finish Your Quiz</button>
                         </div>
                     </div>
                 </div>
@@ -99,11 +99,11 @@
                                 <div ng-if="$root.customer.order_page_enabled">
                                     <form action="/account/payment" method="POST" id="paymentForm">
                                        <input type="hidden" name="csrfmiddlewaretoken" ng-value="index.myLeadershipStyle.csrf_token" >
-                                        <button class="btn btn-submit btn-block" id="stripePay" style="margin-bottom: 15px;" type="submit">Sign up for a Team Analysis</button>
+                                        <button class="btn btn-submit btn-block" id="stripePay" ng-disabled="index.disableBuyButton" style="margin-bottom: 15px;" type="submit" ng-click="index.trackEvent('buy button', 'click', null)">Sign up for a Team Analysis</button>
                                         <input type="hidden" id="stripeToken" name="stripeToken" value="" />
                                         <input type="hidden" id="stripeEmail" name="stripeEmail" value="" />
                                     </form>
-                                    <stripe-payments key="index.myLeadershipStyle.stripe_key"></stripe-payments>
+                                    <stripe-payments key="index.myLeadershipStyle.stripe_key" disable-buy-button="index.disableBuyButton"></stripe-payments>
                                 </div>
                                 <div ng-if="!$root.customer.order_page_enabled">
                                     <button class="btn btn-submit btn-block" style="margin-bottom: 15px;" ng-click="index.showOrderPageDown()">Sign up for a Team Analysis</button>
@@ -132,10 +132,10 @@
                             <ol class="leadership-style-description">
                                 <li ng-if="team.remaining_invites>0">
                                     <span ng-if="team.team_members.length==1">
-                                        <a href="" ng-click="index.invite(team.id, team.remaining_invites, team.team_members.length)">Invite your team</a>. You can invite up to <span style="font-weight: 900;font-size: 22px;">{{ team.remaining_invites }}</span> team members.
+                                        <a href="" ng-click="index.invite(team.id, team.remaining_invites, team.team_members.length, true)">Invite your team</a>. You can invite up to <span style="font-weight: 900;font-size: 22px;">{{ team.remaining_invites }}</span> team members.
                                     </span>
                                     <span ng-if="team.team_members.length>1">
-                                        <a href="" ng-click="index.invite(team.id, team.remaining_invites, team.team_members.length)">Invite more team members</a>.
+                                        <a href="" ng-click="index.invite(team.id, team.remaining_invites, team.team_members.length, true)">Invite more team members</a>.
                                         <p class="leadership-style-description" style="margin-top: 13px; color: #696969;"><span style="font-weight: 900;font-size: 35px;">{{ team.remaining_invites }}</span> <span ng-if="team.remaining_invites>1">invites</span><span ng-if="team.remaining_invites==1">invite</span> remaining</p>
                                     </span>
                                 </li>
@@ -186,7 +186,7 @@
 
             </div>
             <div class="invite-360" style="height: 25px;">
-                <h4 ng-if="!team.is_team_full" class="header"><a href="" class="pull-right" ng-click="index.invite(team.id, team.remaining_invites, team.team_members.length)">+ Invite more team members</a></h4>
+                <h4 ng-if="!team.is_team_full" class="header"><a href="" class="pull-right" ng-click="index.invite(team.id, team.remaining_invites, team.team_members.length, true)">+ Invite more team members</a></h4>
             </div>
             <div style="position: relative;">
                 <div style="position: absolute;width: 100%;">
