@@ -133,7 +133,7 @@
                         <span ng-if="!team.requested_report">When your teammates have finished their quiz click <a href="" style="text-decoration: underline" ng-click="index.requestTeamReport(team.id, $index)">here</a> to get your one-time, customized report.</span>
                     </p>
                 </div>
-                <div class="alert alert-info" role="alert" ng-if="team.number_of_quizes_completed < team.team_members.length">
+                <div class="alert alert-info" role="alert" ng-if="(team.number_of_quizes_completed < team.team_members.length) && team.remaining_invites<=4">
                     <a class="btn btn-info btn-feedback pull-right" ng-disabled="true" ng-click="index.invite(team.id, team.remaining_invites, team.team_members.length, true)" type="button">
                         Remind Your Team
                     </a>
