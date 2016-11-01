@@ -568,6 +568,12 @@ class TeamLeadershipStyle(models.Model):
         return EmployeeLeadershipStyle.objects.filter(employee__in=self.team_members.all(), completed=True).count()
 
     @property
+    def number_of_quizes_not_completed(self):
+        team_member_count = self.team_members.count()
+        quiz_count = EmployeeLeadershipStyle.objects.filter(employee__in=self.team_members.all(), completed=True).count()
+        return team_member_count - quiz_count
+
+    @property
     def number_of_quizes_started(self):
         return EmployeeLeadershipStyle.objects.filter(employee__in=self.team_members.all(), completed=False).count()
 

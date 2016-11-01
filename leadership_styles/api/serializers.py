@@ -325,6 +325,6 @@ class TeamLeadershipStyleSerializer(serializers.ModelSerializer):
         model = TeamLeadershipStyle
         fields = ['id', 'owner', 'description', 'team_members', 'requested_report', 'requested_date', 'can_request_report',
                   'is_team_full', 'remaining_invites', 'visionary_average', 'operator_average', 'processor_average',
-                  'synergist_average', 'number_of_quizes_completed', 'number_of_quizes_started',
+                  'synergist_average', 'number_of_quizes_completed', 'number_of_quizes_not_completed', 'number_of_quizes_started',
                   'number_of_quizes_not_started', 'percentage_complete']
 
