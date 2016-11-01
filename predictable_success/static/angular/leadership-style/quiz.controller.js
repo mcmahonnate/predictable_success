@@ -2,7 +2,7 @@ angular
     .module('leadership-style')
     .controller('QuizController', QuizController);
 
-function QuizController(analytics, LeadershipStyleService, Notification, leadershipStyle, $location, $modal, $modalInstance, $rootScope, $scope) {
+function QuizController(analytics, LeadershipStyleService, Notification, leadershipStyle, $location, $modal, $modalInstance, $rootScope, $scope, $window) {
     var vm = this;
     vm.trackEvent = analytics.trackEvent;
     vm.leadershipStyle = leadershipStyle;
@@ -126,7 +126,7 @@ function QuizController(analytics, LeadershipStyleService, Notification, leaders
                 vm.busy = false;
             }, function(){
                 close();
-                $location.reload();
+                $window.location.reload();
                 vm.busy = false;
             }
         );
