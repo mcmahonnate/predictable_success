@@ -128,7 +128,8 @@
                         <span ng-if="team.team_members.length>1">You have {{ team.remaining_invites }} <span ng-if="team.remaining_invites>1">invites</span><span ng-if="team.remaining_invites==1">invite</span> remaining</span>
                     </h2>
                     <p class="alert-message">
-                        <span ng-if="team.number_of_quizes_completed < team.team_members.length">{{ team.number_of_quizes_not_completed }} of your team members still need to finish their quiz.</span>
+                        <span ng-if="(team.team_members.length - team.number_of_quizes_completed) > 1">{{ team.number_of_quizes_not_completed }} of your team members still need to finish their quiz.</span>
+                        <span ng-if="(team.team_members.length - team.number_of_quizes_completed) == 1">1 more person still needs to finish their quiz.</span>
                         <span ng-if="!team.requested_report">When your teammates have finished their quiz click <a href="" style="text-decoration: underline" ng-click="index.requestTeamReport(team.id, $index)">here</a> to get your one-time, customized report.</span>
                     </p>
                 </div>
