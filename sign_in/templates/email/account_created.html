@@ -17,7 +17,7 @@
         <p>If you ever have to sign in from another device, or if you've had to sign out for some reason, simply click the link below. We will send you an email with a special sign in link. Clicking that link will sign you in. That's all there is to it.
         </p>
         <p>
-            <a href="{{ signin_url }}?email={{ employee_email }}">{{ signin_url }}?email={{ employee_email }}</a>
+            <a href="{{ signin_url }}?email={{ employee_email|urlencode }}">{{ signin_url }}?email={{ employee_email }}</a>
         </p>
         <p style="color:#aaa; font-size:14px; text-align:center;">
             If you did not make this request, please contact us at <a href="mailto:{{ support_email }}">{{ support_email }}</a>
