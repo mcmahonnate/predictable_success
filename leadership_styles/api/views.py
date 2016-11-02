@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from org.api.permissions import UserIsEmployeeOrLeaderOrCoachOfEmployee, UserIsEmployee, PermissionsViewAllEmployees
+from org.models import create_user_with_random_username
 from predictable_success.utils import authenticate_and_login
 from rest_framework.exceptions import PermissionDenied
 from rest_framework import status
@@ -331,9 +332,7 @@ class ReplyTo360(APIView):
 
             #create User
             password = User.objects.make_random_password()
-            user = User.objects.create_user(username=request360.reviewer_email, email=request360.reviewer_email, password=password)
-            user.is_active = True
-            user.save()
+            user = create_user_with_random_username(email=request360.reviewer_email, password=password, active=True)
 
             #create Employee
             employee = Employee(full_name=request360.reviewer_email, email=request360.reviewer_email)
@@ -384,13 +383,11 @@ class GetQuiz(APIView):
                     user.set_password(password)
                     user.is_active = True
                     user.save()
-                    user = authenticate_and_login(username=quiz.email, password=password, request=request)
+                    user = authenticate_and_login(email=quiz.email, password=password, request=request)
             except User.DoesNotExist:
                 password = User.objects.make_random_password()
-                user = User.objects.create_user(username=quiz.email, email=quiz.email, password=password)
-                user.is_active = True
-                user.save()
-                user = authenticate_and_login(username=quiz.email, password=password, request=request)
+                user = create_user_with_random_username(email=quiz.email, password=password, active=True)
+                user = authenticate_and_login(email=quiz.email, password=password, request=request)
 
             #create Employee
             try:

@@ -31,7 +31,7 @@ class SignIn(APIView):
                 password = User.objects.make_random_password()
                 user.set_password(password)
                 user.save()
-                user = authenticate_and_login(username=sign_in_link.email, password=password, request=request)
+                user = authenticate_and_login(email=sign_in_link.email, password=password, request=request)
                 sign_in_link.used = True
                 sign_in_link.active = False
                 sign_in_link.save()

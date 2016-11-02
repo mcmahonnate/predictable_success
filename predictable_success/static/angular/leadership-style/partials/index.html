@@ -130,7 +130,7 @@
                     <p class="alert-message">
                         <span ng-if="(team.team_members.length - team.number_of_quizes_completed) > 1">{{ team.number_of_quizes_not_completed }} of your team members still need to finish their quiz.</span>
                         <span ng-if="(team.team_members.length - team.number_of_quizes_completed) == 1">1 more person still needs to finish their quiz.</span>
-                        <span ng-if="!team.requested_report">When your teammates have finished their quiz click <a href="" style="text-decoration: underline" ng-click="index.requestTeamReport(team.id, $index)">here</a> to get your one-time, customized report.</span>
+                        <span ng-if="!team.requested_report">When your teammates have finished their quiz click <a href="" style="text-decoration: underline" ng-click="index.requestTeamReport(team.id, $index)">here</a> to request your one-time, customized report.</span>
                     </p>
                 </div>
                 <div class="alert alert-info" role="alert" ng-if="(team.number_of_quizes_completed < team.team_members.length) && team.remaining_invites<=4">
@@ -143,7 +143,7 @@
                         <span ng-if="(team.team_members.length - team.number_of_quizes_completed) == 1">1 more person still needs to finish their quiz.</span>
                     </h2>
                     <p class="alert-message">
-                        <span ng-if="!team.requested_report">When your teammates have finished their quiz click <a href="" style="text-decoration: underline" ng-click="index.requestTeamReport(team.id, $index)">here</a> to get your one-time, customized report.</span>
+                        <span ng-if="!team.requested_report">When your teammates have finished their quiz click <a href="" style="text-decoration: underline" ng-click="index.requestTeamReport(team.id, $index)">here</a> to request your one-time, customized report.</span>
                     </p>
                     <p class="alert-message" ng-if="team.remaining_invites>0">
                         <span ng-if="team.remaining_invites>1">Remember you can still invite up to {{ team.remaining_invites }} teammates. <a href="" style="text-decoration: underline" ng-click="index.invite(team.id, team.remaining_invites, team.team_members.length, true)">Send more invites.</a></span>

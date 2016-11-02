@@ -9,6 +9,7 @@ from django.core.validators import validate_email
 from django.db import connection, models
 from django.db.models import Count, F, Q
 from django.utils.http import urlencode
+from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext as _
 from hashlib import md5
 from model_utils import Choices, FieldTracker
@@ -18,6 +19,17 @@ from PIL import Image, ExifTags
 import blah
 import datetime
 import requests
+
+
+def create_user_with_random_username(email, password, active=False):
+    temp_username = get_random_string(length=30)
+    user = User.objects.create_user(username=temp_username, email=email, password=password)
+    user.is_active = active
+    user.save()
+    user.username = "user_%s" % user.id
+    user.save()
+
+    return user
 
 
 def get_gravatar_display_name(email):
@@ -132,9 +144,7 @@ class EmployeeManager(TreeManager):
             user = User.objects.get(email=email)
         except User.DoesNotExist:
             password = User.objects.make_random_password()
-            user = User.objects.create_user(username=email, email=email, password=password)
-            user.is_active = False
-            user.save()
+            user = create_user_with_random_username(email=email, password=password, active=False)
         return user
 
     @staticmethod
