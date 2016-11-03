@@ -1,4 +1,4 @@
-<div ng-if="reportRequest.page==0">
+<div ng-if="reportRequest.page==0 && reportRequest.show_warning">
     <div class="modal-header alert-warning">
         <h3 class="modal-title">
             <span class="fa fa-exclamation-circle" style="font-size: 29px;margin-right: 8px;"></span> <span>Get the most out of your report</span>
@@ -12,7 +12,7 @@
         <button type="btn btn-default" ng-click="reportRequest.page=1;reportRequest.trackEvent('Proceed button', 'click', null)" class="btn btn-light">Proceed</button>
     </div>
 </div>
-<div ng-if="reportRequest.page==1">
+<div ng-if="reportRequest.page==1 || !reportRequest.show_warning">
     <form name="outterForm" id="invite-360-modal" class="invite-360">
         <div class="form-group">
             <div class="modal-body">

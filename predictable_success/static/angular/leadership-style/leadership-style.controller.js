@@ -531,7 +531,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         });
     }
 
-    function requestTeamReport(team_id, index) {
+    function requestTeamReport(team, show_warning, index) {
         analytics.trackEvent("request team report button", "click", null);
         var modalInstance = $modal.open({
             animation: true,
@@ -540,8 +540,11 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
             templateUrl: '/static/angular/leadership-style/partials/_modals/request-team-report.html',
             controller: 'RequestTeamReportController as reportRequest',
             resolve: {
+                show_warning: function () {
+                    return show_warning
+                },
                 team_id: function () {
-                    return team_id
+                    return team.id
                 }
             }
         });

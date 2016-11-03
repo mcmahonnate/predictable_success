@@ -2,10 +2,11 @@
         .module('leadership-style')
         .controller('RequestTeamReportController', RequestTeamReportController);
 
-    function RequestTeamReportController(analytics, team_id, LeadershipStyleTeamService, Notification, $modalInstance) {
+    function RequestTeamReportController(analytics, team_id, show_warning,  LeadershipStyleTeamService, Notification, $modalInstance) {
         analytics.setPage('/team/request-report');
         analytics.trackPage();
         var vm = this;
+        vm.show_warning = show_warning;
         vm.trackEvent = analytics.trackEvent;
         vm.message = '';
         vm.page = 0;

@@ -119,7 +119,7 @@
             <!-- Team lead to do reminders -->
             <div ng-if="team.owner.id == $root.currentUser.employee.id">
                 <div class="alert alert-info" role="alert" ng-if="team.remaining_invites>4">
-                    <a class="btn btn-info btn-feedback pull-right" ng-click="index.invite(team.id, team.remaining_invites, team.team_members.length, true)" type="button">
+                    <a class="btn btn-info btn-feedback pull-right" style="margin-left: 10px" ng-click="index.invite(team.id, team.remaining_invites, team.team_members.length, true)" type="button">
                         <i class="glyphicon glyphicon-plus"></i> Invite Your Team
                     </a>
                     <i class="fa fa-exclamation-circle sent-icon"></i>
@@ -130,11 +130,11 @@
                     <p class="alert-message">
                         <span ng-if="(team.team_members.length - team.number_of_quizes_completed) > 1">{{ team.number_of_quizes_not_completed }} of your team members still need to finish their quiz.</span>
                         <span ng-if="(team.team_members.length - team.number_of_quizes_completed) == 1">1 more person still needs to finish their quiz.</span>
-                        <span ng-if="!team.requested_report">When your teammates have finished their quiz click <a href="" style="text-decoration: underline" ng-click="index.requestTeamReport(team.id, $index)">here</a> to request your one-time, customized report.</span>
+                        <span ng-if="!team.requested_report">When your teammates have finished their quiz click <a href="" style="text-decoration: underline" ng-click="index.requestTeamReport(team, true, $index)">here</a> to request your one-time, customized report.</span>
                     </p>
                 </div>
                 <div class="alert alert-info" role="alert" ng-if="(team.number_of_quizes_completed < team.team_members.length) && team.remaining_invites<=4">
-                    <a class="btn btn-info btn-feedback pull-right" ng-disabled="true" ng-click="index.invite(team.id, team.remaining_invites, team.team_members.length, true)" type="button">
+                    <a class="btn btn-info btn-feedback pull-right" style="margin-left: 10px" ng-disabled="true" ng-click="index.invite(team.id, team.remaining_invites, team.team_members.length, true)" type="button">
                         Remind Your Team
                     </a>
                     <i class="fa fa-exclamation-circle sent-icon"></i>
@@ -143,15 +143,37 @@
                         <span ng-if="(team.team_members.length - team.number_of_quizes_completed) == 1">1 more person still needs to finish their quiz.</span>
                     </h2>
                     <p class="alert-message">
-                        <span ng-if="!team.requested_report">When your teammates have finished their quiz click <a href="" style="text-decoration: underline" ng-click="index.requestTeamReport(team.id, $index)">here</a> to request your one-time, customized report.</span>
+                        <span ng-if="!team.requested_report">When your teammates have finished their quiz click <a href="" style="text-decoration: underline" ng-click="index.requestTeamReport(team, true, $index)">here</a> to request your one-time, customized report.</span>
                     </p>
                     <p class="alert-message" ng-if="team.remaining_invites>0">
                         <span ng-if="team.remaining_invites>1">Remember you can still invite up to {{ team.remaining_invites }} teammates. <a href="" style="text-decoration: underline" ng-click="index.invite(team.id, team.remaining_invites, team.team_members.length, true)">Send more invites.</a></span>
                         <span ng-if="team.remaining_invites==1">Remember you can invite one more teammate. <a href="" style="text-decoration: underline" ng-click="index.invite(team.id, team.remaining_invites, team.team_members.length, true)">Send an invite.</a></span>
                     </p>
                 </div>
+                <div class="alert alert-info" role="alert" ng-if="(team.number_of_quizes_completed == team.team_members.length) && team.remaining_invites<=4 && !team.requested_report">
+                    <a class="btn btn-info btn-feedback pull-right" style="margin-left: 10px" ng-click="index.requestTeamReport(team, (team.remaining_invites>0), $index)" type="button">
+                        Request Your Report
+                    </a>
+                    <i class="fa fa-exclamation-circle sent-icon"></i>
+                    <h2 class="alert-title" style="margin-bottom: 10px;">
+                        Request your report
+                    </h2>
+                    <p class="alert-message" ng-if="team.remaining_invites>0">
+                        <span ng-if="team.remaining_invites>1">Before you do, remember you can still invite up to {{ team.remaining_invites }} teammates. <a href="" style="text-decoration: underline" ng-click="index.invite(team.id, team.remaining_invites, team.team_members.length, true)">Send more invites.</a></span>
+                        <span ng-if="team.remaining_invites==1">Before you do, remember you can still invite one more teammate. <a href="" style="text-decoration: underline" ng-click="index.invite(team.id, team.remaining_invites, team.team_members.length, true)">Send an invite.</a></span>
+                    </p>
+                    <p class="alert-message" ng-if="team.remaining_invites==0">
+                        All your team quizzes are done. Be sure to get your customized team report.
+                    </p>
+                </div>
                 <div class="alert alert-info" role="alert" ng-if="team.requested_report && !team.received_report">
-                    Report coming
+                    <i class="fa fa-exclamation-circle sent-icon"></i>
+                    <h2 class="alert-title" style="margin-bottom: 10px;">
+                        We are generating your report
+                    </h2>
+                    <p class="alert-message">
+                        Please allow 3-5 business days. If you need any help or have questions please contact us at <a href="mailto:{{ $root.customer.support_email }}">{{ $root.customer.support_email }}</a>.
+                    </p>
                 </div>
             </div>
             <div class="panel fade-in clearfix">
@@ -170,9 +192,7 @@
                             <p class="leadership-style-description">Scores are distributed across the 4 leadership styles totaling 960. Typically it is ideal for Teams to be as close to 240 across all leadership styles to ensure there is an equal representation of all viewpoints.</p>
                             <p class="leadership-style-description">Click the buttons below, or click the pie chart, to learn more about your Team's leadership styles.</p>
                         </div>
-
                     </div>
-
                 </div>
                 <div class="panel-footer">
                     <span class="glyphicon-regular glyphicons-sorting" style="vertical-align: middle; color: #aaa; margin-right: 10px"></span>
