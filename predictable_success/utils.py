@@ -9,11 +9,7 @@ def track_links(content, src=None,campaign=None):
 
 def authenticate_and_login(email, password, request):
     # authenticate & login
-    try:
-        user = User.objects.get(email=email)
-        user = authenticate(username=user.username, password=password)
-        login(request=request, user=user)
-        return user
-    except User.DoesNotExist:
-        return None
+    user = authenticate(username=email, password=password)
+    login(request=request, user=user)
+    return user
 
