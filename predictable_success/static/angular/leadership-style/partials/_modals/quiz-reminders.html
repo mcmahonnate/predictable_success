@@ -1,0 +1,30 @@
+<div class="form-group">
+    <div class="modal-body">
+        <panel>
+            <h3 class="modal-title">Send reminders to</h3>
+            <ui-select
+                    id="to"
+                    multiple
+                    autofocus
+                    ng-model="remind.selectedTeamMembers"
+                    reset-search-input="true"
+                    theme="bootstrap"
+                    style="font-size:16px;"
+                    >
+                <ui-select-match placeholder="     Type a team members name">{{$item.full_name}}
+                    <span ng-if="$item.quiz.last_reminder_sent" style="color: #aaa;"> reminded {{ $item.quiz.last_reminder_sent | fromNow }}</span>
+                    <span ng-if="!$item.quiz.last_reminder_sent" style="color: #aaa;"> invited {{ $item.quiz.sent_date | fromNow }}</span>
+                </ui-select-match>
+                <ui-select-choices
+                        repeat="member in remind.teamMembers | filter: {full_name: $select.search} | orderBy: 'full_name'">
+                    <div class="names" ng-bind-html="member.full_name | highlight: $select.search"></div>
+                </ui-select-choices>
+            </ui-select>
+            <textarea style="min-height:120px;" class="form-control" cols="30" rows="5" ng-model="remind.message" placeholder="Add a message."></textarea>
+        </panel>
+    </div>
+    <div class="modal-footer">
+        <button type="button" ng-click="remind.cancel()"  class="btn btn-light pull-left">Cancel</button>
+        <button type="button" ng-click="remind.submit()" class="btn btn-submit" data-dismiss="modal">Send Reminders</button>
+    </div>
+</div>

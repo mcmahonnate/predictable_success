@@ -12,10 +12,9 @@
         vm.submit = submit;
 
         function submit(){
-            analytics.trackEvent('Add invite button', 'click', null);
+            analytics.trackEvent('Send reminder button', 'click', null);
             LeadershipStyleInviteService.remind(quiz.id, vm.message)
                 .then(function(value){
-                    analytics.trackEvent('Send reminder button', 'click', null);
                     $modalInstance.close(value)
                     Notification.success("Reminder sent.")
                 }

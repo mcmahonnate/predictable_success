@@ -134,7 +134,7 @@
                     </p>
                 </div>
                 <div class="alert alert-info" role="alert" ng-if="(team.number_of_quizes_completed < team.team_members.length) && team.remaining_invites<=4">
-                    <a class="btn btn-info btn-feedback pull-right" style="margin-left: 10px" ng-disabled="true" ng-click="index.invite(team.id, team.remaining_invites, team.team_members.length, true)" type="button">
+                    <a class="btn btn-info btn-feedback pull-right" style="margin-left: 10px" ng-click="index.remindMany(team)" type="button">
                         Remind Your Team
                     </a>
                     <i class="fa fa-exclamation-circle sent-icon"></i>

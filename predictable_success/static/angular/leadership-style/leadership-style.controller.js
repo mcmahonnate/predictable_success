@@ -27,6 +27,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     vm.requestLeadershipStyle = requestLeadershipStyle;
     vm.requestTeamReport = requestTeamReport;
     vm.remind = remind;
+    vm.remindMany = remindMany;
     vm.showOrderPageDown = showOrderPageDown;
     vm.showTease = showTease;
     vm.setTease = setTease;
@@ -484,6 +485,40 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         );
     }
 
+    function remindMany(team) {
+        analytics.trackEvent("remind team button", "click", null);
+        var team_members = []
+        angular.forEach(team.team_members, function(team_member) {
+            if (!team_member.leadership_style || !team_member.leadership_style.completed) {
+                this.push(team_member);
+            }
+        }, team_members);
+        var modalInstance = $modal.open({
+            animation: true,
+            windowClass: 'xx-dialog fade zoom',
+            backdrop: 'static',
+            templateUrl: '/static/angular/leadership-style/partials/_modals/quiz-reminders.html',
+            controller: 'SendQuizRemindersController as remind',
+            resolve: {
+                team_members: function () {
+                    return team_members
+                }
+            }
+        });
+        modalInstance.result.then(
+            function (quizzes) {
+                setTrackingPage(vm.myLeadershipStyle);
+                angular.forEach(quizzes, function(quiz) {
+                    angular.forEach(team.team_members, function(team_member) {
+                        if (team_member.quiz.id == quiz.id) {
+                            team_member.quiz.last_reminder_sent = quiz.last_reminder_sent;
+                        }
+                    });
+                });
+            }
+        );
+    }
+
     function invite(team_id, remaining_invites, team_member_count, trackEvent) {
         modalOpen = true;
         if (trackEvent) {
@@ -526,6 +561,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                 value.requested_date = team.requested_date;
                 value.team_members = angular.copy(team.team_members);
                 value.remaining_invites = team.remaining_invites;
+                value.is_team_full = team.is_team_full;
                 value.percentage_complete = team.percentage_complete;
                 updateTeamChart(value);
                 indexTeamMembers(value);

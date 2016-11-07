@@ -6,6 +6,7 @@ function LeadershipStyleInviteService($log, LeadershipStyleInviteResource) {
     return {
         sendInvites: sendInvites,
         remind: remind,
+        remindMany: remindMany
     };
 
     function remind(quiz_id, message)  {
@@ -18,6 +19,19 @@ function LeadershipStyleInviteService($log, LeadershipStyleInviteResource) {
 
         function fail(response) {
             $log.error('remind failed');
+        }
+    }
+
+    function remindMany(quiz_ids, message)  {
+
+        return LeadershipStyleInviteResource.remindMany(null, {quiz_ids:quiz_ids, message:message}, success, fail).$promise;
+
+        function success(quizzes) {
+            return quizzes;
+        }
+
+        function fail(response) {
+            $log.error('remindMany failed');
         }
     }
 
