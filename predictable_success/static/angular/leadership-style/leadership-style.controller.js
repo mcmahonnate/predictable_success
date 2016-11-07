@@ -457,7 +457,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
         );
     }
 
-    function remind(quiz) {
+    function remind(quiz, employee) {
         analytics.trackEvent("remind team member button", "click", null);
         var modalInstance = $modal.open({
             animation: true,
@@ -466,6 +466,9 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
             templateUrl: '/static/angular/leadership-style/partials/_modals/quiz-reminder.html',
             controller: 'SendQuizReminderController as remind',
             resolve: {
+                employee: function() {
+                    return employee
+                },
                 quiz: function () {
                     return quiz
                 }

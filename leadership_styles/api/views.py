@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
+from leadership_styles.models import QuizUrl
 from org.api.permissions import UserIsEmployeeOrLeaderOrCoachOfEmployee, UserIsEmployee, PermissionsViewAllEmployees
 from org.models import create_user_with_random_username
 from predictable_success.utils import authenticate_and_login
@@ -235,6 +236,26 @@ class SendQuizReminder(GenericAPIView):
         quiz.save()
         serializer = QuizUrlSerializer(instance=quiz, context={'request': request})
 
+        return Response(serializer.data)
+
+
+class RemindTeamMembers(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, format=None):
+        quiz_ids = request.data['quiz_ids']
+        message = request.data['message']
+
+        for quiz_id in quiz_ids:
+            try:
+                quiz = QuizUrl.objects.get(id=quiz_id)
+                quiz.send_reminder(message=message, reminded_by_id=request.user.employee.id)
+                quiz.last_reminder_sent = datetime.now()
+                quiz.save()
+            except QuizUrl.DoesNotExist:
+                pass
+        quizzes = QuizUrl.objects.filter(id__in=quiz_ids)
+        serializer = QuizUrlSerializer(instance=quizzes, context={'request': request}, many=True)
         return Response(serializer.data)
 
 

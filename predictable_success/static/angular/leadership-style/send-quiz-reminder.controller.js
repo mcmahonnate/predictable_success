@@ -2,10 +2,11 @@
         .module('leadership-style')
         .controller('SendQuizReminderController', SendQuizReminderController);
 
-    function SendQuizReminderController(analytics, quiz, LeadershipStyleInviteService, Notification, $modalInstance) {
+    function SendQuizReminderController(analytics, quiz, employee, LeadershipStyleInviteService, Notification, $modalInstance) {
         var vm = this;
         analytics.setPage('/team/member/remind');
         analytics.trackPage();
+        vm.employee = employee;
         vm.message = '';
         vm.cancel = cancel;
         vm.submit = submit;

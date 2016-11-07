@@ -20,7 +20,7 @@
                 <span ng-if="team_member.quiz.last_reminder_sent"><br>Reminded: {{ team_member.quiz.last_reminder_sent | fromNow }}</span>
             </p>
             <div ng-if="$root.currentUser.employee.id==team.owner.id" style="width:320px; margin-left: auto;margin-right: auto;">
-                <button ng-click="index.remind(team_member.quiz)" class="btn btn-employee" style="display: block;"><span class="fa fa-exclamation-circle"></span> <span class="btn-label">Send a reminder</span></button>
+                <button ng-click="index.remind(team_member.quiz, team_member)" class="btn btn-employee" style="display: block;"><span class="fa fa-exclamation-circle"></span> <span class="btn-label">Send a reminder</span></button>
                 <button ng-click="index.discard(team_member, team.id)" class="btn btn-employee" style="display: block;"><span class="fa fa-trash"></span> <span class="btn-label">Discard this invite</span></button>
             </div>
         </div>
