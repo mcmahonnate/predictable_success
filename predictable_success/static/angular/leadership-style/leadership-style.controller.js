@@ -563,6 +563,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                 value.remaining_invites = team.remaining_invites;
                 value.is_team_full = team.is_team_full;
                 value.percentage_complete = team.percentage_complete;
+                value.number_of_quizes_not_completed = team.number_of_quizes_not_completed;
                 updateTeamChart(value);
                 indexTeamMembers(value);
                 sortTeamMembers(value, orderByFullName);

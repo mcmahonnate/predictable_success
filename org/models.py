@@ -148,15 +148,15 @@ class EmployeeManager(TreeManager):
         return user
 
     @staticmethod
-    def get_or_create_employee(user):
+    def get_or_create_employee(user, full_name=None):
         try:
             employee = user.employee
         except Employee.DoesNotExist:
-            # See if a Gravatar profile exists
-            #full_name = get_gravatar_display_name(user.email)
-            #if full_name is None:
-            #    full_name = user.email
-            employee = Employee(full_name=user.email, email=user.email)
+            employee = Employee(email=user.email)
+            if not full_name:
+                employee.full_name = user.email
+            else:
+                employee.full_name = full_name
             employee.user = user
             employee.save()
         return employee

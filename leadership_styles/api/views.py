@@ -204,9 +204,9 @@ class InviteTeamMembers(APIView):
 
     def post(self, request, pk, format=None):
         team = TeamLeadershipStyle.objects.get(id=pk)
-        emails = request.data['emails']
+        invites = request.data['invites']
         try:
-            team = TeamLeadershipStyle.objects.add_team_members(team=team, emails=emails)
+            team = TeamLeadershipStyle.objects.add_team_members(team=team, invites=invites)
             serializer = TeamLeadershipStyleSerializer(instance=team, context={'request': request})
             return Response(serializer.data)
         except ValidationError, err:

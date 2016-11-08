@@ -29,37 +29,43 @@
             if (trackEvent) {
                 analytics.trackEvent('Add invite button', 'click', null);
             }
-            var invite = angular.copy({'email': ''});
+            var invite = angular.copy({'email': '', 'full_name': ''});
             vm.invites.push(invite);
         }
 
         function submit() {
             analytics.trackEvent('Send invites button', 'click', null);
             vm.enableSend = false;
+
             var invites = [];
             var invite_notifications = [];
             angular.forEach(vm.invites, function(invite){
                 if (invite.email) {
-                    invites.push(invite.email);
+                    invites.push(invite);
                     invite_notifications.push(invite);
                 }
             })
             LeadershipStyleInviteService.sendInvites(team_id, invites)
                 .then(function(invites) {
-                    var message;
+                    var message, notified;
                     if (invite_notifications.length == 1) {
-                        message = 'An invitation has been sent to ' + invite_notifications['0'].email;
+                        notified = invite_notifications['0'].full_name ? invite_notifications['0'].full_name : invite_notifications['0'].email;
+                        message = 'An invitation has been sent to ' + notified;
                     } else if (invite_notifications.length == 2) {
-                        message = 'Invitations have been sent to ' +  invite_notifications['0'].email + ' and '  + invite_notifications['1'].email;
+                        notified = invite_notifications['0'].full_name ? invite_notifications['0'].full_name : invite_notifications['0'].email;
+                        message = 'Invitations have been sent to ' +  notified;
+                        notified = invite_notifications['1'].full_name ? invite_notifications['1'].full_name : invite_notifications['1'].email;
+                        message = message + ' and '  + notified;
                     } else {
                         message = 'Invitations have been sent to ';
                         angular.forEach(invite_notifications, function(value, key) {
+                            notified = value.full_name ? value.full_name : value.email;
                             if (key == 0) {
-                                message = message + value.email;
+                                message = message + notified;
                             } else if (key < invite_notifications.length-1) {
-                                message = message + ', ' + value.email;
+                                message = message + ', ' + notified;
                             } else if (key == invite_notifications.length-1) {
-                                message = message + ' and ' + value.email;
+                                message = message + ' and ' + notified;
                             }
                         })
                     }

@@ -9,24 +9,23 @@
                 <h4 class="header clearfix" ng-if="invite.remaining_invites > invite.invites.length"> <a href="" ng-click="invite.addEmail(true)">+ Add another invitation</a></h4>
                 <ng-form name="innerForm" ng-repeat="invite in invite.invites">
                     <div id="pt-main" class="pt-perspective" ng-init="inputBox=0" ng-if="$first" style="margin-bottom: 15px;padding: 0 15px;overflow: hidden;height: 50px">
-                        <div class="pt-page" animate-page-transition="inputBox" page="0" in-class="pt-page-moveFromLeftFade" out-class="pt-page-moveToLeftFade">
-                            <span class="fa fa-envelope-o invite-control-button btn-info" style="color: #fff;" ng-click="inputBox=1"></span>
-                            <input ng-init="invalid=false" ng-blur="invalid=innerForm.email.$error.email;inputBox = !invalid ? 1: 0" ng-model="invite.email" type="email" ng-class="{'alert-danger': invalid && innerForm.email.$error.email}" autocomplete="off" class="form-control input-lg fade-in invite-control" name="email" placeholder="name@domain.com" required>
+                        <div ng-init="invalid=false;showRequired=false;" class="pt-page" animate-page-transition="inputBox" page="0" in-class="pt-page-moveFromLeftFade" out-class="pt-page-moveToLeftFade">
+                            <span ng-init="hover=false" class="fa invite-control-button btn-info" ng-class="{'fa-envelope-o': !hover, 'fa-arrow-right': hover}" style="color: #fff;" ng-click="showRequired = !invite.email;inputBox = (!invalid && invite.email) ? 1: 0" ng-mouseover="hover=true" ng-mouseleave="hover=false"></span>
+                            <input ng-focus="showRequired=false" ng-blur="invalid=innerForm.email.$error.email;inputBox = (!invalid && invite.email) ? 1: 0" ng-model="invite.email" type="email" ng-class="{'alert-danger': invalid && innerForm.email.$error.email,'required': showRequired}" autocomplete="off" class="form-control input-lg fade-in invite-control" name="email" placeholder="name@domain.com" required>
                         </div>
                         <div class="pt-page" animate-page-transition="inputBox" page="1" in-class="pt-page-moveFromRightFade" out-class="pt-page-moveToRightFade">
-                            <span class="fa fa-user-circle invite-control-button btn-success" style="color: #fff;" ng-click="inputBox=0"></span>
-                            <input ng-init="invalid=false" ng-blur="invalid=innerForm.email.$error.email" ng-model="invite.name" type="email" ng-class="{'alert-danger': invalid && innerForm.email.$error.email}" autocomplete="off" class="form-control input-lg fade-in invite-control" name="full_name" placeholder="First & Last name for {{ invite.email }}">
+                            <span ng-init="hover=false" class="fa invite-control-button btn-success" ng-class="{'fa-user-circle': !hover, 'fa-arrow-left': hover}" style="color: #fff;" ng-click="inputBox=0" ng-mouseover="hover=true" ng-mouseleave="hover=false"></span>
+                            <input ng-model="invite.full_name" type="text" autocomplete="off" class="form-control input-lg fade-in invite-control" name="full_name" placeholder="First & Last name for {{ invite.email }}">
                         </div>
-
                     </div>
                     <div id="pt-main" class="pt-perspective" ng-init="inputBox=0" ng-if="$index > 0" style="margin-bottom: 15px;overflow: hidden;height: 50px">
-                        <div class="pt-page" animate-page-transition="inputBox" page="0" in-class="pt-page-moveFromLeftFade" out-class="pt-page-moveToLeftFade">
-                            <span class="fa fa-envelope-o invite-control-button btn-info" style="color: #fff;" ng-click="inputBox=1"></span>
-                            <input ng-init="invalid=false" ng-blur="invalid=innerForm.email.$error.email;inputBox = !invalid ? 1: 0" ng-model="invite.email" type="email" ng-class="{'alert-danger': invalid && innerForm.email.$error.email}" autocomplete="off" class="form-control input-lg fade-in invite-control" name="email" placeholder="name@domain.com">
+                        <div ng-init="invalid=false;showRequired=false;" class="pt-page" animate-page-transition="inputBox" page="0" in-class="pt-page-moveFromLeftFade" out-class="pt-page-moveToLeftFade">
+                            <span ng-init="hover=false" class="fa invite-control-button btn-info" ng-class="{'fa-envelope-o': !hover, 'fa-arrow-right': hover}" style="color: #fff;" ng-click="showRequired = !invite.email;inputBox = (!invalid && invite.email) ? 1: 0" ng-mouseover="hover=true" ng-mouseleave="hover=false"></span>
+                            <input ng-focus="showRequired=false" ng-blur="invalid=innerForm.email.$error.email;inputBox = (!invalid && invite.email) ? 1: 0" ng-model="invite.email" type="email" ng-class="{'alert-danger': invalid && innerForm.email.$error.email,'required': showRequired}" autocomplete="off" class="form-control input-lg fade-in invite-control" name="email" placeholder="name@domain.com">
                         </div>
                         <div class="pt-page" animate-page-transition="inputBox" page="1" in-class="pt-page-moveFromRightFade" out-class="pt-page-moveToRightFade">
-                            <span class="fa fa-user-circle invite-control-button btn-success" style="color: #fff;" ng-click="inputBox=0"></span>
-                            <input ng-init="invalid=false" ng-blur="invalid=innerForm.email.$error.email;inputBox = !invalid ? 1: 0" ng-model="invite.name" type="email" ng-class="{'alert-danger': invalid && innerForm.email.$error.email}" autocomplete="off" class="form-control input-lg fade-in invite-control" name="full_name" placeholder="First & Last name for {{ invite.email }}">
+                            <span ng-init="hover=false" class="fa fa-user-circle invite-control-button btn-success" ng-class="{'fa-user-circle': !hover, 'fa-arrow-left': hover}" style="color: #fff;" ng-click="inputBox=0" ng-mouseover="hover=true" ng-mouseleave="hover=false"></span>
+                            <input ng-model="invite.full_name" type="text" autocomplete="off" class="form-control input-lg fade-in invite-control" name="full_name" placeholder="First & Last name for {{ invite.email }}">
                         </div>
                     </div>
                 </ng-form>
@@ -60,8 +59,36 @@
         border-top-left-radius: 6px;
         border: solid 1px #ccc;
         height: 46px;
+        width: 56px;
         padding: 6px 16px;
         font-size: 22px;
         line-height: 1.3333333;
+        cursor: pointer;
     }
+    input.required
+    {
+        animation:required .5s;
+        -webkit-animation:required .5s;
+        background-color: #f2dede;border-color: #ebccd1;color: #a94442;
+    }
+
+	@keyframes required
+	{
+	0%   {height:100%}
+	10%  {height:80%}
+	30%  {height:100%}
+	60%  {height:80%}
+	100% {height:100%}
+	}
+
+	@-webkit-keyframes required /* Safari and Chrome */
+	{
+	0%   {height:100%}
+	10%  {height:80%}
+	30%  {height:100%}
+	60%  {height:80%}
+	100% {height:100%}
+	}
+
+
 </style>

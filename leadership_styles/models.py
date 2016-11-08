@@ -488,17 +488,17 @@ class TeamLeadershipStyleManager(models.Manager):
         return team
 
     @staticmethod
-    def add_team_members(team, emails):
-        if team.will_team_be_full(len(emails)):
+    def add_team_members(team, invites):
+        if team.will_team_be_full(len(invites)):
             raise ValidationError(message="Teams can only have %s team members." % TEAM_MEMBER_CAP)
-        for email in emails:
-            user = Employee.objects.get_or_create_user(email=email)
-            employee = Employee.objects.get_or_create_employee(user=user)
+        for invite in invites:
+            user = Employee.objects.get_or_create_user(email=invite['email'])
+            employee = Employee.objects.get_or_create_employee(user=user, full_name=invite['full_name'])
             team.team_members.add(employee)
             try:
                 leadership_style = employee.leadership_style
             except EmployeeLeadershipStyle.DoesNotExist:
-                quiz = generate_quiz_link(email=email, invited_by=team.owner)
+                quiz = generate_quiz_link(email=invite['email'], invited_by=team.owner)
                 team.quiz_requests.add(quiz)
         team.save()
         return team
