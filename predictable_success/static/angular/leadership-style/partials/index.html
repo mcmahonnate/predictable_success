@@ -25,7 +25,7 @@
                 <div ng-if="index.myLeadershipStyle.teams.length==0">
                     <div class="arrow-container">
                         <div class="arrow_box">Step One</div>
-                        <div class="arrow_label">Finish Your Quiz</div>
+                        <div class="arrow_label" style="margin-right: 200px">Finish Your Quiz</div>
                     </div>
                     <div style="clear: both;"></div>
                     <div class="clearfix">
@@ -33,7 +33,7 @@
                             Over the years we've discovered there are four types of Fool needed to grow a successful business. Using a leadership assessment developed by our friends at Predictable Success we've been able to:
                         </div>
 
-                        <div class="copy-box-right">
+                        <div class="copy-box-right" style="padding-right: 50px;">
                             <ul>
                                 <li style="margin-bottom: 10px;">Increase personal performance by matching the right leadership style to the right role.</li>
                                 <li style="margin: 10px 0;">Maximize team performance by bringing together the right mixture of leadership styles at the appropriate time.</li>
@@ -48,64 +48,109 @@
         </div>
     </div>
 
-    <div class="panel fade-in" ng-if="index.myLeadershipStyle.scores.length > 0 && index.myLeadershipStyle.teams.length==0">
-        <div class="panel-header complete">
-            <div class="panel-header-avatar">
-                <employee-avatar size="large" employee="index.myLeadershipStyle.employee"></employee-avatar>
-            </div>
-            <div class="panel-header-title sub-title">
-                <h2>You</h2>
-                <h3>
-                    <span ng-repeat="score in index.myLeadershipStyle.scores | orderBy : 'score' : true">
-                        <span ng-if="$first">{{score.style_verbose}} - {{score.score}},</span>
-                        <span ng-if="!$first && !$last">{{score.style_verbose}} - {{score.score}},</span>
-                        <span ng-if="$last">{{score.style_verbose}} - {{score.score}}</span>
-                    </span>
-                </h3>
-            </div>
+    <div ng-if="index.myLeadershipStyle.scores.length > 0 && index.myLeadershipStyle.teams.length==0">
+        <div class="alert alert-info" role="alert">
+            <i class="fa fa-thumbs-o-up  sent-icon"></i>
+            <h2 class="alert-title" style="margin-bottom: 10px;">Congratulations!</h2>
+            <p class="alert-message" style="font-size: 16px;margin-top: 12px;padding-left: 45px;">
+                You've now completed the free "Find Your Fool" leadership self-assessment, an exclusive collaboration between The Motley Fool and the team at Predictable Success, a leading growth and leadership development consulting firm.
+            </p>
+            <p class="alert-message" style="font-size: 16px;margin-top: 12px;padding-left: 45px;">
+                There are two simple steps for putting these learnings into action...
+            </p>
         </div>
-        <div>
-            <div class="landing-form">
-                <div class="arrow-container">
-                    <div class="arrow_box step_complete">Step One</div>
-                    <div class="arrow_label">Read Your Results</div>
+        <div class="panel fade-in">
+            <div class="panel-header complete">
+                <div class="panel-header-avatar">
+                    <employee-avatar size="large" employee="index.myLeadershipStyle.employee"></employee-avatar>
                 </div>
-
-                <div class="description-container">
-                    <div ng-bind-html="index.myLeadershipStyle.description.description"></div>
+                <div class="panel-header-title sub-title">
+                    <h2>You</h2>
+                    <h3>
+                        <span ng-repeat="score in index.myLeadershipStyle.scores | orderBy : 'score' : true">
+                            <span ng-if="$first">{{score.style_verbose}} - {{score.score}},</span>
+                            <span ng-if="!$first && !$last">{{score.style_verbose}} - {{score.score}},</span>
+                            <span ng-if="$last">{{score.style_verbose}} - {{score.score}}</span>
+                        </span>
+                    </h3>
                 </div>
-                <div ng-if="index.myLeadershipStyle.teams.length==0">
-                    <div class="arrow-container">
-                        <div class="arrow_box step_complete">Step Two</div>
-                        <div class="arrow_label">Get Your Team Report</div>
+            </div>
+            <div>
+                <div class="landing-form">
+                    <div class="arrow-container clearfix">
+                        <div class="pull-left arrow-container-left">
+                            <div class="arrow_box step_complete" style="width: 80%">Step One</div>
+                        </div>
+                        <div class="pull-right arrow-container-right">
+                            <div class="arrow_label">Read Your Results</div>
+                        </div>
                     </div>
-                    <div style="clear: both;"></div>
-                    <div class="clearfix">
-                        <div style="padding-top: 20px">
-                            <div class="copy-box-left">
-                                Now that you know your leadership style the next step is to discover your team mate's style. Sign up today to get a detailed bespoke report that will show you:
+                    <div class="description-container" style="padding-top: 30px;">
+                        <p class="leadership-style-description" style="margin-left: 40px;margin-right: 40px;">
+                            Below, the results of the Find Your Fool quiz are spelled out for you in plain English. You'll discover your personal leadership style and, we hope, become more self&#8212;aware about your preferences. (Bear in mind, the assessment measures preferences, not competency!)
+                        </p>
+                        <p class="leadership-style-description" style="margin-left: 40px;margin-right: 40px;">
+                            The assessment breaks down how you work within groups and teams, and even systems and processes. Why should you care? Because those who know their own tendencies &#8212; and can exploit or compensate for them &#8212; tend to get ahead.
+                        </p>
+                        <p class="leadership-style-description" style="margin-left: 40px;margin-right: 40px;">
+                            For instance, when 75 members of the Advisory Council at the Stanford Graduate School of Business were asked to recommend the most important trait for a leader, "their answer was nearly unanimous: self&#8212;awareness." Or as another research paper found, "A high self&#8212;awareness score was the strongest predictor of overall [leadership] success."
+                        </p>
+                        <p class="leadership-style-description" style="margin-left: 40px;margin-right: 40px;">
+                            We hope you enjoy the free assessment results provided to you below...
+                        </p>
+                    </div>
+                    <div class="description-container" style="padding-top: 30px;">
+                        <div ng-bind-html="index.myLeadershipStyle.description.description"></div>
+                    </div>
+                    <div ng-if="index.myLeadershipStyle.teams.length==0">
+                        <div class="arrow-container clearfix">
+                            <div class="pull-left arrow-container-left">
+                                <div class="arrow_box step_complete" style="width: 80%">Step Two</div>
                             </div>
+                            <div class="pull-right arrow-container-right">
+                                <div class="arrow_label">Claim your exclusive customized team report</div>
+                                <div class="arrow_label">[for a limited time only]</div>
+                            </div>
+                        </div>
+                        <div style="clear: both;"></div>
+                        <div class="clearfix">
+                            <div>
+                                <div class="copy-box-left">
+                                    Next &#8212; and for a limited time only &#8212; you can discover how <span style="text-decoration: underline">your</span> leadership style fits with others on your team or in your organization.
 
-                            <div class="copy-box-right">
-                                <ul>
-                                    <li style="margin-bottom: 10px;">Your team's ability to make and execute high quality decisions.</li>
-                                    <li style="margin: 10px 0;">Which team mates have a natural tendency to butt heads.</li>
-                                    <li style="margin: 10px 0;">What style you need to increase in your team to improve performance.</li>
-                                    <li style="margin: 10px 0;">The overall culture of your team.</li>
-                                    <li style="margin: 10px 0;">How aligned your team is to the Motley Fool team.</li>
-                                </ul>
-                                <div class="centered" style="margin: 15px 0;"><span style="color: #7f8c8d; font-size: 16px; font-weight: 700;">INVESTMENT | $199 (Up to 10 team members)</span></div>
-                                <div ng-if="$root.customer.order_page_enabled">
-                                    <form action="/account/payment" method="POST" id="paymentForm">
-                                       <input type="hidden" name="csrfmiddlewaretoken" ng-value="index.myLeadershipStyle.csrf_token" >
-                                        <button class="btn btn-submit btn-block" id="stripePay" ng-disabled="index.disableBuyButton" style="margin-bottom: 15px;" type="submit" ng-click="index.trackEvent('Open order page button', 'click', null)">Sign up for a Team Analysis</button>
-                                        <input type="hidden" id="stripeToken" name="stripeToken" value="" />
-                                        <input type="hidden" id="stripeEmail" name="stripeEmail" value="" />
-                                    </form>
-                                    <stripe-payments key="index.myLeadershipStyle.stripe_key" disable-buy-button="index.disableBuyButton"></stripe-payments>
                                 </div>
-                                <div ng-if="!$root.customer.order_page_enabled">
-                                    <button class="btn btn-submit btn-block" style="margin-bottom: 15px;" ng-click="index.showOrderPageDown()">Sign up for a Team Analysis</button>
+
+                                <div class="copy-box-right" style="padding-bottom: 0px;">
+                                    <p>Use the simple, secure sign-up link below and you'll gain access to a detailed, tailored report that will help you:</p>
+                                    <ul>
+                                        <li style="margin-bottom: 10px;">Understand the overall culture of your team.</li>
+                                        <li style="margin: 10px 0;">Maximize team performance by bringing together the right mixture of leadership styles at the appropriate time.</li>
+                                        <li style="margin: 10px 0;">Get to the root of team dysfunction by understanding which teammates have a natural tendency to butt heads, and by developing a shared vocabulary to address conflict.</li>
+                                        <li style="margin: 10px 0;">Improve your team’s ability to make and execute high-quality decisions.</li>
+                                    </ul>
+                                    <p>Custom reports like this can cost thousands of dollars. But we're making this available to Fools like you for just $199, which grants access to up to 10 of your teammates. This offer is available for a limited time only, so I encourage you to act quickly...</p>
+                                </div>
+                                <div>
+                                    <div class="call-to-action">
+                                        <div ng-if="$root.customer.order_page_enabled">
+                                            <form action="/account/payment" method="POST" id="paymentForm">
+                                               <input type="hidden" name="csrfmiddlewaretoken" ng-value="index.myLeadershipStyle.csrf_token" >
+                                                <button class="btn btn-submit btn-block" id="stripePay" ng-disabled="index.disableBuyButton" style="margin-bottom: 15px;" type="submit" ng-click="index.trackEvent('Open order page button', 'click', null)">
+                                                    <span class="hide-for-mobile">Click here to claim your customized team report now!</span>
+                                                    <span class="mobile-show">Click here to claim your team report!</span>
+                                                </button>
+                                                <input type="hidden" id="stripeToken" name="stripeToken" value="" />
+                                                <input type="hidden" id="stripeEmail" name="stripeEmail" value="" />
+                                            </form>
+                                            <stripe-payments key="index.myLeadershipStyle.stripe_key" disable-buy-button="index.disableBuyButton"></stripe-payments>
+                                        </div>
+                                        <div ng-if="!$root.customer.order_page_enabled">
+                                            <button class="btn btn-submit btn-block" style="margin-bottom: 15px;" ng-click="index.showOrderPageDown()">
+                                                <span class="hide-for-mobile">Click here to claim your customized team report now!</span>
+                                                <span class="mobile-show">Click here to claim your team report!</span>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

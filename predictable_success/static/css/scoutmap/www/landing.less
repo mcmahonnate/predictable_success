@@ -47,25 +47,47 @@
         @media only screen and (max-width : 420px) {
             padding-top: 10px;
         }
-
-        .arrow_label {
-            margin-right: 200px;
-            text-align: center;
-            margin-top: 24px;
-            font-size: 33px;
-            text-transform: uppercase;
-            font-weight: bold;
-
-            @media only screen and (max-width : 736px) {
-                margin-left: 260px;
-                margin-top: 12px;
-                font-size: 18px;
+        .arrow-container-left {
+            width: 20%;
+            @media only screen and (max-width : 995px) {
+                width: 25%
             }
             @media only screen and (max-width : 420px) {
-                margin-right: 50px;
-                margin-left: 190px;
-                margin-top: 12px;
+                width: 32%
+            }
+        }
+        .arrow-container-right {
+            width: 80%;
+            @media only screen and (max-width : 995px) {
+                width: 75%
+            }
+            @media only screen and (max-width : 420px) {
+                width: 68%
+            }
+        }
+
+        .arrow_label {
+            margin-right: 40px;
+            text-align: center;
+            font-size: 33px;
+            line-height: 40px;
+            text-transform: uppercase;
+            font-weight: bold;
+            @media only screen and (max-width : 995px) {
+                font-size: 25px;
+                line-height: 35px;
+            }
+            @media only screen and (max-width : 736px) {
+                margin-left: 10px;
+                margin-right: 100px;
                 font-size: 18px;
+                line-height: 25px;
+            }
+            @media only screen and (max-width : 420px) {
+                margin-left: 10px;
+                margin-right: 10px;
+                font-size: 18px;
+                line-height: 25px;
             }
         }
     }
@@ -87,7 +109,7 @@
         @media only screen and (max-width : 420px) {
             padding: 15px;
             font-size: 15px;
-            width: 150px;
+            width: 100px;
         }
     }
 
@@ -132,11 +154,18 @@
         font-size: 20px;
     }
 
-    .btn {
-        font-size: 20px;
-        @media only screen and (max-width : 736px) {
-            font-size: 18px;
+    .call-to-action {
+        float: right;
+        width: 51%;
+        padding-left: 20px;
+        padding-right: 20px;
+        @media only screen and (max-width : 995px) {
+            width: 100%;
         }
+    }
+
+    .btn {
+        font-size: 16px !important;
     }
 
     .step_complete {
@@ -176,8 +205,12 @@
     .copy-box-right {
         width: 50%;
         float: right;
-        padding: 50px 50px 20px 50px;
-
+        padding: 50px 50px 20px 30px;
+        @media (min-width: 992px) {
+            width: 50%;
+            float: right;
+            padding: 50px 20px 20px 20px;
+        }
         @media only screen and (max-width : 736px) {
             width: 50%;
             float: right;
@@ -188,12 +221,19 @@
             padding: 15px 15px 20px 20px;
         }
     }
-
+    .copy-box-right p {
+        color:#7f8c8d;
+        font-size: 16px;
+        line-height: 26px;
+        margin-bottom: 20px;
+    }
     .copy-box-right ul {
         list-style-type: disc;
         color:#7f8c8d;
-        font-size: 15px;
+        font-size: 16px;
+        line-height: 26px;
         font-weight:500;
+        margin-left: 22px;
         @media only screen and (max-width : 736px) {
             font-size: 15px;
             font-weight:400;
