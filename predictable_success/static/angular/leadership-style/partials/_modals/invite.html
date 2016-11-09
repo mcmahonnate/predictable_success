@@ -33,7 +33,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" ng-click="invite.cancel()"  class="btn btn-light pull-left">Cancel</button>
-            <button type="button" ng-disabled="outterForm.$invalid" ng-click="invite.submit()" class="btn btn-success" data-dismiss="modal">Send Invitations</button>
+            <button type="button" ng-disabled="outterForm.$invalid || !invite.enableSend" ng-click="invite.submit()" class="btn btn-success" data-dismiss="modal">Send Invitations</button>
         </div>
     </div>
 </form>
