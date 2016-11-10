@@ -20,7 +20,7 @@ angular.module('tdb.org.services', ['ngResource'])
     .factory('Employee', ['$resource', function($resource) {
         var actions = {
             'addNew': { method:'POST', data:{full_name:'@full_name', hire_date: '@hire_date', coach_id: '@coach_id'}, isArray: false },
-            'update': { method:'PUT', data:{full_name:'@full_name', hire_date: '@hire_date', departure_date: '@departure_date', coach_id: '@coach_id'}, isArray: false },
+            'update': { method:'PUT', url: '/api/v1/org/employees/:id/update', data:{full_name:'@full_name', hire_date: '@hire_date', departure_date: '@departure_date'}, isArray: false },
             'potentialReviewers': { method:'GET', url: '/api/v1/feedback/potential-reviewers/', isArray: true },
             'getAllAccess': { method:'GET', url: '/api/v1/org/employees/all-access/', isArray: true }
         };

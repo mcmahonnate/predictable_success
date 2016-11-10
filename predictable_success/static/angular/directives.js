@@ -452,6 +452,7 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
 						'transitionend webkitTransitionEnd';
 
 			element.on(events, function(event) {
+                console.log('test');
                 if (parseInt(scope.page) != scope.animatePageTransition) {
                     if (element.hasClass(attrs.outClass)) {
                         element.removeClass(attrs.outClass);

@@ -2,7 +2,7 @@ angular
     .module('leadership-style')
     .controller('QuizController', QuizController);
 
-function QuizController(analytics, LeadershipStyleService, Notification, leadershipStyle, $location, $modal, $modalInstance, $rootScope, $scope, $window) {
+function QuizController(analytics, Employee, LeadershipStyleService, Notification, leadershipStyle, $location, $modal, $modalInstance, $rootScope, $scope, $window) {
     var vm = this;
     vm.trackEvent = analytics.trackEvent;
     vm.leadershipStyle = leadershipStyle;
@@ -11,7 +11,9 @@ function QuizController(analytics, LeadershipStyleService, Notification, leaders
     vm.cancel = cancel;
     vm.close = close;
     vm.answerQuestion = answerQuestion;
+    vm.continueQuiz = continueQuiz;
     vm.previousQuestion = previousQuestion;
+    vm.saveEmployee = saveEmployee;
     vm.startOver = startOver;
     vm.showWhoCanSeeThis = showWhoCanSeeThis;
     vm.finish = finish;
@@ -20,8 +22,12 @@ function QuizController(analytics, LeadershipStyleService, Notification, leaders
     vm.scores = [];
 
     $scope.$watchGroup(['quiz.leadershipStyle.next_question', 'quiz.panelIndex'], function(newValues, oldValues) {
-        if (!vm.leadershipStyle.next_question && vm.panelIndex==2) {
-            analytics.setPage('/quiz/finished');
+        if (!vm.leadershipStyle.next_question) {
+            if (vm.panelIndex==2) {
+                analytics.setPage('/quiz/whats-your-name/');
+            } else {
+                analytics.setPage('/quiz/finished');
+            }
         } else {
             if (vm.panelIndex == 0 && vm.leadershipStyle.answers.length == 0) {
                 analytics.setPage('/quiz/start/');
@@ -40,6 +46,30 @@ function QuizController(analytics, LeadershipStyleService, Notification, leaders
         if (leadershipStyle.next_question) {
             vm.selectedAnswer = leadershipStyle.next_question.answer;
         }
+    }
+
+    function continueQuiz() {
+        analytics.trackEvent('Continue button', 'click', null);
+        if (vm.leadershipStyle.next_question) {
+            vm.panelIndex = 2;
+        } else {
+            if (vm.leadershipStyle.employee.full_name.indexOf('@') > -1) {
+                vm.panelIndex = 3;
+            } else {
+                vm.panelIndex = 4;
+            }
+        }
+    }
+
+    function saveEmployee(employee) {
+        analytics.trackEvent('Save Name button', 'click', null);
+        vm.busy = true;
+        var data = {id: employee.id, full_name: employee.new_full_name};
+        Employee.update(data, function (response) {
+            vm.leadershipStyle.employee = response;
+            vm.panelIndex = 4;
+            vm.busy = false;
+        });
     }
 
     function cancel() {
@@ -78,6 +108,12 @@ function QuizController(analytics, LeadershipStyleService, Notification, leaders
                 vm.leadershipStyle = result;
                 if (vm.leadershipStyle.next_question) {
                     vm.selectedAnswer = vm.leadershipStyle.next_question.answer;
+                } else {
+                    if (vm.leadershipStyle.employee.full_name.indexOf('@') > -1) {
+                        vm.panelIndex = 3;
+                    } else {
+                        vm.panelIndex = 4;
+                    }
                 }
                 if (vm.leadershipStyle.completed) {
                     vm.selectedAnswer = null;
@@ -90,6 +126,7 @@ function QuizController(analytics, LeadershipStyleService, Notification, leaders
 
     function previousQuestion(){
         vm.busy = true;
+        vm.panelIndex = 2;
         analytics.trackEvent('Go back button', 'click', null);
         LeadershipStyleService.goToPreviousQuestion(vm.leadershipStyle)
             .then(function(result){

@@ -422,3 +422,21 @@ class UpdateCoachProfile(UpdateAPIView):
         self.perform_update(serializer)
         serializer = CoachProfileSerializer(instance, context={'request': request})
         return Response(serializer.data)
+
+
+class UpdateEmployeeProfile(UpdateAPIView):
+    queryset = Employee.objects.all()
+    serializer_class = EditEmployeeSerializer
+    permission_classes = (IsAuthenticated, UserIsEmployee)
+
+    def get_employee(self):
+        return self.get_object()
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        serializer = SanitizedEmployeeSerializer(instance, context={'request': request})
+        return Response(serializer.data)

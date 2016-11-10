@@ -65,7 +65,7 @@
                     <employee-avatar size="large" employee="index.myLeadershipStyle.employee"></employee-avatar>
                 </div>
                 <div class="panel-header-title sub-title">
-                    <h2>You</h2>
+                    <h2>{{index.myLeadershipStyle.employee.full_name}}</h2>
                     <h3>
                         <span ng-repeat="score in index.myLeadershipStyle.scores | orderBy : 'score' : true">
                             <span ng-if="$first">{{score.style_verbose}} - {{score.score}},</span>

@@ -27,7 +27,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" ng-click="quiz.cancel()" data-dismiss="modal" class="btn btn-light pull-left">Cancel</button>
-            <button type="button" ng-disabled="quiz.busy" class="btn btn-success" ng-click="quiz.panelIndex=2;quiz.trackEvent('Continue button', 'click', null);">Continue &rarr;</button>
+            <button type="button" ng-disabled="quiz.busy" class="btn btn-success" ng-click="quiz.continueQuiz()">Continue &rarr;</button>
         </div>
     </div>
     <div class="form-group" ng-show="quiz.panelIndex==1">
@@ -46,7 +46,6 @@
     <div class="form-group" ng-show="quiz.leadershipStyle.next_question && quiz.panelIndex==2">
         <div class="modal-body" style="padding-bottom: 0px">
             <panel class="devzone">
-                <img ng-show="quiz.busy" class="pull-right" ng-class="{'fade-in': quiz.busy}" src="../static/images/gears.gif" alt="Loading spinner"/>
                 <h3 class="modal-title" style="padding-bottom: 10px; padding-top: 5px">{{ quiz.leadershipStyle.next_question.text }}...</h3>
 
                 <button ng-show="quiz.leadershipStyle.next_question.answers.length>1" ng-disabled="quiz.busy" class="selfie-answer well well-sm" style="display:flex" ng-repeat="answer in quiz.leadershipStyle.next_question.answers" ng-class="{'selfie-answer-selected': quiz.selectedAnswer.id==answer.id, 'selfie-answer':quiz.selectedAnswer.id!=answer.id}" ng-click="quiz.selectedAnswer=answer;quiz.answerQuestion(quiz.selectedAnswer)">
@@ -61,14 +60,32 @@
         </div>
         <div class="modal-page-count centered">{{ quiz.leadershipStyle.next_question.order + 1 }} of {{ quiz.leadershipStyle.total_questions }}</div>
         <div class="modal-footer">
-            <button type="button" ng-show="quiz.leadershipStyle.next_question.order>0" ng-disabled="busy" class="btn btn-light pull-left" ng-disabled="quiz.busy" ng-click="quiz.previousQuestion(quiz.leadershipStyle)"><span class="fa fa-caret-left"></span> <span class="hide-for-mobile">Previous</span> </button>
-            <button type="button" ng-click="quiz.close()" data-dismiss="modal" ng-disabled="busy" class="btn btn-light">Save &amp; Close</button>
-            <button type="button" ng-show="quiz.selectedAnswer" ng-disabled="busy" class="btn btn-success" ng-click="quiz.answerQuestion(quiz.selectedAnswer)">
+            <button type="button" ng-show="quiz.leadershipStyle.next_question.order>0" ng-disabled="quiz.busy" class="btn btn-light pull-left" ng-click="quiz.previousQuestion(quiz.leadershipStyle)"><span class="fa fa-caret-left"></span> <span class="hide-for-mobile">Previous</span> </button>
+            <button type="button" ng-click="quiz.close()" data-dismiss="modal" ng-disabled="quiz.busy" class="btn btn-light">Save &amp; Close</button>
+            <button type="button" ng-show="quiz.selectedAnswer" ng-disabled="quiz.busy" class="btn btn-success" ng-click="quiz.answerQuestion(quiz.selectedAnswer)">
                 <span class="hide-for-mobile">Next</span> <span class="fa fa-caret-right"></span>
             </button>
         </div>
     </div>
-    <div class="form-group" ng-show="!quiz.leadershipStyle.next_question && quiz.panelIndex==2">
+    <div class="form-group" ng-show="quiz.panelIndex==3">
+        <div class="modal-body">
+            <panel class="devzone">
+                <h3 class="modal-title centered">What's your name?</h3>
+                <p>One last thing, we noticed we don't have a name for you.</p>
+                <div class="invite-360">
+                    <span ng-init="hover=false" class="fa fa-user-circle invite-control-button btn-success" style="color: #fff;"></span>
+                    <input class="form-control input-lg fade-in invite-control" type="text" ng-model="quiz.leadershipStyle.employee.new_full_name" placeholder="First & Last name">
+                </div>
+            </panel>
+        </div>
+        <div class="modal-footer">
+            <button type="button" ng-disabled="quiz.busy" class="btn btn-light pull-left" ng-click="quiz.previousQuestion(quiz.leadershipStyle)"><span class="fa fa-caret-left"></span> <span class="hide-for-mobile">Previous</span> </button>
+            <button type="button" ng-disabled="!quiz.leadershipStyle.employee.new_full_name || quiz.busy" class="btn btn-success" ng-click="quiz.saveEmployee(quiz.leadershipStyle.employee)">
+                <span class="hide-for-mobile">Next</span> <span class="fa fa-caret-right"></span>
+            </button>
+        </div>
+    </div>
+    <div class="form-group" ng-show="quiz.panelIndex==4">
         <div class="modal-body">
             <panel class="devzone">
                 <h3 class="modal-title centered">You're All Done</h3>

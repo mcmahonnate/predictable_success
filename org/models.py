@@ -208,7 +208,7 @@ class Employee(MPTTModel):
     user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='employee')
     coach = models.ForeignKey('Employee', related_name='coachees', null=True, blank=True)
     leader = TreeForeignKey('self', null=True, blank=True, related_name='employees', db_index=True)
-    field_tracker = FieldTracker(fields=['coach', 'departure_date', 'email'])
+    field_tracker = FieldTracker(fields=['coach', 'departure_date', 'email', 'full_name'])
 
     def upload_avatar(self, file, mime_type):
         def resize(image, size, filename, extension, content_type):
@@ -250,8 +250,10 @@ class Employee(MPTTModel):
         self.save()
 
     def save(self, *args, **kwargs):
-        if self.first_name and self.last_name:
-            self.full_name = self.first_name + " " + self.last_name
+        if self.field_tracker.has_changed('full_name'):
+            self.first_name = self.full_name.split(' ', 1)[0]
+            if len(self.full_name.split(' ', 1)) > 1:
+                self.last_name = self.full_name.split(' ', 1)[1]
         if self.field_tracker.has_changed('departure_date') and self.coach is not None:
             self.coach = None
         super(Employee, self).save(*args, **kwargs)

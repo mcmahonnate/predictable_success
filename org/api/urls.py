@@ -18,6 +18,7 @@ urlpatterns = [
     url(r'^employees/all-access/$', cache_page(60*1440)(all_access_employees)),
     url(r'^employee-names/$', EmployeeNames.as_view(), name='employee-name-list'),
     url(r'^employees/(?P<pk>[0-9]+)/$', EmployeeDetail.as_view(), name='employee-detail'),
+    url(r'^employees/(?P<pk>[0-9]+)/update/$', UpdateEmployeeProfile.as_view()),
     url(r'^employees/(?P<pk>[0-9]+)/coaching/profile/$', RetrieveCoachProfile.as_view()),
     url(r'^employees/$', (cache_page(60*1440)(EmployeeList.as_view())), name='employee-list'),
     url(r'^leaderships/employees/(?P<pk>[0-9]+)/$', LeadershipDetail.as_view()),

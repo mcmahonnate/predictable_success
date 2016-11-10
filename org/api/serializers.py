@@ -378,11 +378,12 @@ class CreateEmployeeSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class EditEmployeeSerializer(serializers.HyperlinkedModelSerializer):
-    team = serializers.PrimaryKeyRelatedField(allow_null=True, queryset=Team.objects.all())
-    coach = serializers.PrimaryKeyRelatedField(allow_null=True, queryset=Employee.objects.all())
-    leader = serializers.PrimaryKeyRelatedField(allow_null=True, queryset=Employee.objects.all())
+    team = serializers.PrimaryKeyRelatedField(allow_null=True, queryset=Team.objects.all(), required=False)
+    coach = serializers.PrimaryKeyRelatedField(allow_null=True, queryset=Employee.objects.all(), required=False)
+    leader = serializers.PrimaryKeyRelatedField(allow_null=True, queryset=Employee.objects.all(), required=False)
 
     def update(self, instance, validated_data):
+        instance.full_name = validated_data.get('full_name', instance.full_name)
         instance.first_name = validated_data.get('first_name', instance.first_name)
         instance.last_name = validated_data.get('last_name', instance.last_name)
         instance.email = validated_data.get('email', instance.email)
@@ -398,7 +399,7 @@ class EditEmployeeSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Employee
-        fields = ('first_name', 'last_name', 'email', 'job_title', 'hire_date', 'departure_date', 'team', 'display', 'leader', 'coach')
+        fields = ('full_name', 'first_name', 'last_name', 'email', 'job_title', 'hire_date', 'departure_date', 'team', 'display', 'leader', 'coach')
 
 
 class CoachChangeRequestSerializer(serializers.Serializer):
