@@ -1,3 +1,4 @@
+{% if employee_first_name %}Hi {{ employee_first_name }},{% endif %}
 Click and confirm that you want to sign in to Find Your Fool. This link will expire in fifteen minutes and can only be used once.
 
 {{ sign_in_url }}

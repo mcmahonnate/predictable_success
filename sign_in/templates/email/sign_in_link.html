@@ -1,6 +1,9 @@
 {% extends "layouts/email.html" %}
 
 {% block content %}
+        {% if employee_first_name %}
+            <p>Hi {{ employee_first_name }},</p>
+        {% endif %}
         <p>
             Click and confirm that you want to sign in to Find Your Fool. This link will expire in fifteen minutes and can only be used once.
         </p>

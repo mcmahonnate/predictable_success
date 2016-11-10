@@ -1,4 +1,5 @@
 It takes just 5 minutes
+{% if employee_first_name %}Hi {{ employee_first_name }},{% endif %}
 {%  if message %}
 From {{ reminded_by_name }}:
 "{{ message }}"

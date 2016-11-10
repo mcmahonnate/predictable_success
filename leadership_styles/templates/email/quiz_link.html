@@ -1,6 +1,9 @@
 {% extends "layouts/email.html" %}
 
 {% block content %}
+        {% if employee_first_name %}
+            <p>Hi {{ employee_first_name }},</p>
+        {% endif %}
         <p>
             Here is your personalized link to start your quiz:
         </p>

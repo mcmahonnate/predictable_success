@@ -1,0 +1,7 @@
+Take the Leadership Style Quiz
+{% if employee_first_name %}
+Hi {{ employee_first_name }},
+{% endif %}
+{% if invited_by_first_name %}{{ invited_by_first_name }} just invited you to discover your personal leadership style.{% endif %}
+Do you know you have a natural leadership style? With your own strengths and weaknesses. You can discover who you are and how to unlock your best self. Click below to get started:
+{{ quiz_url }}

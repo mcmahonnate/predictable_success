@@ -46,15 +46,28 @@ def send_leadership_style_request_email(request_id):
 @app.task
 def send_quiz_link_email(quiz_link_id):
     from leadership_styles.models import QuizUrl
+    from org.models import Employee
+
     print 'send_quiz_link_email'
     quiz = QuizUrl.objects.get(id=quiz_link_id)
     recipient_email = quiz.email
     if not recipient_email:
         return
-    context = {
-        'quiz_url': quiz.url,
-    }
+
+    context = {'quiz_url': quiz.url,}
+    try:
+        employee = Employee.objects.get(email=recipient_email)
+        if employee.first_name:
+            context = {
+                'employee_first_name': employee.first_name,
+                'quiz_url': quiz.url,
+            }
+    except Employee.DoesNotExist:
+        pass
+
     if quiz.invited_by:
+        if quiz.invited_by.first_name:
+            context['invited_by_first_name'] = quiz.invited_by.first_name
         subject = "You've received an invitation from %s" % quiz.invited_by.full_name
         text_content = render_to_string('email/invite_link.txt', context)
         html_content = render_to_string('email/invite_link.html', context)
@@ -96,6 +109,12 @@ def send_reminder_quiz_link_email(quiz_link_id, message, reminded_by_id):
     if has_started_quiz:
         subject = "Don't forget to finish your quiz"
 
+    try:
+        employee = Employee.objects.get(email=recipient_email)
+        if employee.first_name:
+            context['employee_first_name'] = employee.first_name
+    except Employee.DoesNotExist:
+        pass
     text_content = render_to_string('email/quiz_reminder.txt', context)
     html_content = render_to_string('email/quiz_reminder.html', context)
     msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])

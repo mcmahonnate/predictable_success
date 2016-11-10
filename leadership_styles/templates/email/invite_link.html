@@ -2,8 +2,12 @@
 
 {% block content %}
         <h2>Take the Leadership Style Quiz</h2>
+        {% if employee_first_name %}
+            <p>Hi {{ employee_first_name }},</p>
+        {% endif %}
+        {% if invited_by_first_name %}{{ invited_by_first_name }} just invited you to discover your personal leadership style.{% endif %}
         <p>
-            You have a natural leadership style. With your own strengths and weaknesses. Discover who you are and how to unlock your best self. Click below to get started:
+            Do you know you have a natural leadership style? With your own strengths and weaknesses. You can discover who you are and how to unlock your best self. Click below to get started:
         </p>
         <p>
             <a href="{{ quiz_url }}">{{ quiz_url }}</a>

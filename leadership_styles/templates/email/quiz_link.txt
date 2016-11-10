@@ -1,3 +1,4 @@
+{% if employee_first_name %}Hi {{ employee_first_name }},{% endif %}
 Here is your personalized link to start your quiz:
 
 {{ quiz_link }}

@@ -11,6 +11,8 @@ from predictable_success.celery import app
 @app.task
 def send_sign_in_link_email(sign_in_link_id):
     from sign_in.models import SignInLink
+    from org.models import Employee
+
     print 'send_sign_in_link_email'
     sign_in_link = SignInLink.objects.get(id=sign_in_link_id)
     recipient_email = sign_in_link.email
@@ -20,6 +22,12 @@ def send_sign_in_link_email(sign_in_link_id):
         'sign_in_url': sign_in_link.url,
         'support_email': settings.SUPPORT_EMAIL_ADDRESS
     }
+    try:
+        employee = Employee.objects.get(email=recipient_email)
+        if employee.first_name:
+            context['employee_first_name'] = employee.first_name
+    except Employee.DoesNotExist:
+        pass
     subject = "Sign in to Find Your Fool"
     text_content = render_to_string('email/sign_in_link.txt', context)
     html_content = render_to_string('email/sign_in_link.html', context)
