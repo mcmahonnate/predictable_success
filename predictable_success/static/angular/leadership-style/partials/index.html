@@ -223,7 +223,17 @@
             </div>
             <div class="panel fade-in clearfix">
                 <div class="panel-header complete">
-                    <h3 class="modal-title sub-title">Your Team</h3>
+                    <div style="margin-top: -5px">
+                        <div class="pull-right hide-for-mobile">
+                            <p style="margin-bottom: 5px;"><span class="sub-title" style="font-size: 18px;">Visionary - {{team.visionary_average}}</span></p>
+                            <p style="margin-bottom: 5px;"><span class="sub-title" style="font-size: 18px;">Operator - {{team.operator_average}}</span></p>
+                            <p style="margin-bottom: 5px;"><span class="sub-title" style="font-size: 18px;">Processor - {{team.processor_average}}</span></p>
+                            <p><span class="sub-title" style="font-size: 18px;">Synergist - {{team.synergist_average}}</span></p>
+                        </div>
+                        <div>
+                            <h3 class="modal-title" style="color: #fff;margin-bottom: 8px;">Your Team</h3>
+                        </div>
+                    </div>
                 </div>
                 <div class="team-summary">
                     <div class="team-summary-chart">
