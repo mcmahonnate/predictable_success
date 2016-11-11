@@ -40,12 +40,107 @@ p {
 }
 
 
-
 .container-fluid {
   padding-left: 35px;
   padding-right: 35px;
 }
 
+.spinner {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    width: 31px;
+    height: 7px;
+    text-align: center;
+}
+
+.spinner i.spinner__dot {
+    vertical-align: top;
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #7D7D8E;
+    -webkit-animation: pulse 1s infinite ease-in-out;
+    -moz-animation: pulse 1s infinite ease-in-out;
+    animation: pulse 1s infinite ease-in-out;
+    -webkit-animation-fill-mode: both;
+    -moz-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+
+.spinner i.spinner__dot.spinner__dot--one {
+    float: left;
+    -webkit-animation-delay: -0.32s;
+    -moz-animation-delay: -0.32s;
+    animation-delay: -0.32s;
+}
+
+.spinner i.spinner__dot.spinner__dot--two {
+    -webkit-animation-delay: -0.16s;
+    -moz-animation-delay: -0.16s;
+    animation-delay: -0.16s;
+}
+
+.spinner i.spinner__dot.spinner__dot--three {
+    float: right;
+}
+
+.spinner.spinner--inverted i.spinner__dot {
+    background: #fff;
+}
+
+.btn--saving .spinner {
+    width: 15px;
+    opacity: 0.6;
+    margin-right: 8px;
+}
+
+.btn--saving .spinner i.spinner__dot {
+    width: 3px;
+    height: 3px;
+}
+
+.icons .spinner, .in-progress .spinner {
+    width: 26px;
+    height: 32px;
+    padding-top: 14px;
+}
+
+.icons .spinner i, .in-progress .spinner i {
+    width: 6px;
+    height: 6px;
+}
+
+@-webkit-keyframes pulse {
+    0%, 80%, 100% {
+        opacity: 0;
+    }
+
+    40% {
+        opacity: 1;
+    }
+}
+
+@-moz-keyframes pulse {
+    0%, 80%, 100% {
+        opacity: 0;
+    }
+
+    40% {
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+    0%, 80%, 100% {
+        opacity: 0;
+    }
+
+    40% {
+        opacity: 1;
+    }
+}
 
 /*== FORMS ===================================================== */
 input.stroked {
