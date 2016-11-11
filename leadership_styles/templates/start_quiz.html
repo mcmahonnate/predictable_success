@@ -6,7 +6,7 @@
     {% if user_does_not_exist %}
     <div class="alert alert-warning" role="alert"><i class="fa fa-exclamation-triangle"></i> This sign-in link has already been used. Please request a new one below.</div>
     {% endif %}
-    <div class="landing-form">
+    <div class="landing-form clearfix">
         <form method="post" action="{% url 'start-quiz' %}">
             {% csrf_token %}
             <div class="header">
@@ -17,34 +17,34 @@
                 </h2>
             </div>
 
-            <div class="arrow-container">
+            <div class="arrow-container clearfix">
                 <div class="arrow_box completed">Step One</div>
-                <div class="arrow_label" style="margin-right: 200px">Take the Quiz</div>
+                <div class="hide-for-mobile arrow_label" style="margin-right: 200px">Take the Quiz</div>
+                <div class="mobile-show arrow_label" style="margin-right: 65px">Take the Quiz</div>
             </div>
 
-            <div style="clear: both;"></div>
+            <div class="clearfix">
+                <div class="copy-box-left">
+                    Over the years we've discovered there are four types of people needed to grow a successful business. Using a leadership assessment developed by our friends at Predictable Success we've been able to:
+                </div>
 
-            <div class="copy-box-left">
-                Over the years we've discovered there are four types of people needed to grow a successful business. Using a leadership assessment developed by our friends at Predictable Success we've been able to:
+                <div class="copy-box-right" style="padding-right: 50px;">
+                    <ul>
+                        <li>Increase personal performance by matching the right leadership style to the right role.</li>
+                        <li>Maximize team performance by bringing together the right mixture of leadership styles at the appropriate time.</li>
+                        <li>Get to the root of team dysfunction by developing a shared vocabulary to address conflict.</li>
+                        <li>Improve the quality of decisions at every level of the organization.</li>
+                    </ul>
+
+                    <input type="email" autofocus class="form-control input-lg" name="email" placeholder="Your e-mail">
+
+                    {% if form.email.errors %}
+                    <div class="error-message" style="margin-bottom: 15px;">{{ form.email.errors }}</div>
+                    {% endif %}
+                    <button class="btn btn-submit btn-block" style="margin-bottom: 8px;" type="submit" onClick="trackEvent('Get started button', 'click', null)">Get started</button>
+                    <p class="centered" style="color: #aaa;">Already taken the quiz? <a href="/account/login" onClick="trackEvent('Sign in here link', 'click', null)">Sign in here.</a></p>
+                </div>
             </div>
-
-            <div class="copy-box-right" style="padding-right: 50px;">
-                <ul>
-                    <li>Increase personal performance by matching the right leadership style to the right role.</li>
-                    <li>Maximize team performance by bringing together the right mixture of leadership styles at the appropriate time.</li>
-                    <li>Get to the root of team dysfunction by developing a shared vocabulary to address conflict.</li>
-                    <li>Improve the quality of decisions at every level of the organization.</li>
-                </ul>
-
-                <input type="email" autofocus class="form-control input-lg" name="email" placeholder="Your e-mail">
-
-                {% if form.email.errors %}
-                <div class="error-message" style="margin-bottom: 15px;">{{ form.email.errors }}</div>
-                {% endif %}
-                <button class="btn btn-submit btn-block" style="margin-bottom: 8px;" type="submit" onClick="trackEvent('Get started button', 'click', null)">Get started</button>
-                <p class="centered" style="color: #aaa;">Already taken the quiz? <a href="/account/login" onClick="trackEvent('Sign in here link', 'click', null)">Sign in here.</a></p>
-            </div>
-
             <!--
             <div style="clear: both;"></div>
 

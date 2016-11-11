@@ -441,6 +441,9 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
             scope.$watch("animatePageTransition", function() {
                 if (parseInt(scope.page) == scope.animatePageTransition) {
                     element.addClass('pt-page-current ' + attrs.inClass);
+                    if (scope.scrolltop) {
+                        $("html,body").animate({scrollTop: 0}, "fast");
+                    }
                 } else {
                     element.addClass(attrs.outClass);
                     if (element.hasClass(attrs.inClass)) {
@@ -452,17 +455,16 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
 						'transitionend webkitTransitionEnd';
 
 			element.on(events, function(event) {
-                console.log('test');
                 if (parseInt(scope.page) != scope.animatePageTransition) {
                     if (element.hasClass(attrs.outClass)) {
                         element.removeClass(attrs.outClass);
                     }
                     if (element.hasClass('pt-page-current')) {
                         element.removeClass('pt-page-current');
-                        if (scope.scrolltop) {
-                            $("html,body").animate({scrollTop: 0}, "fast");
-                        }
                     }
+                } else {
+                    var e = angular.element(element.parent());
+                    e.height(element.height());
                 }
 			});
 		}

@@ -1,4 +1,4 @@
-<div class="container leadership-style" data-hj-masked>
+<div class="container clearfix leadership-style" data-hj-masked>
 
     <div class="account-menu">
         <!-- Single button -->
@@ -274,9 +274,9 @@
             <div class="invite-360" style="height: 25px;">
                 <h4 ng-if="!team.is_team_full && team.owner.id == $root.currentUser.employee.id" class="header"><a href="" class="pull-right" ng-click="index.invite(team.id, team.remaining_invites, team.team_members.length, true)">+ Invite more team members</a></h4>
             </div>
-            <div style="position: relative;">
+            <div style="position: relative;" ng-style="{height: ((team.team_members.length * 155) + 'px')}">
                 <div style="position: absolute;width: 100%;">
-                    <ul class="isotope table-like">
+                    <ul class="isotope table-like" style="background-color: transparent;">
                         <li ng-repeat="team_member in team.team_members  | orderBy:'full_name'" ng-click="index.gotoPage(team_member.id, true)" ng-style="{top: (((team_member.index) * 155) + 'px')}" ng-class="{'incomplete': !team_member.leadership_style || !team_member.leadership_style.completed}" >
                             <div class="clearfix panel-header" style="width: 100%; background-color: transparent">
                                 <div class="panel-header-avatar">
@@ -408,7 +408,6 @@
 
 .pt-page {
 	width: 100%;
-	height: 100%;
 	position: absolute;
 	top: 0;
 	left: 0;

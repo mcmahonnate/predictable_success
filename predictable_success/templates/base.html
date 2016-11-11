@@ -44,9 +44,20 @@
         <script src="{% static 'javascript/less.js' %}"></script>
         {% endif %}
     </head>
-    <body class="{% block mainclass %}{% endblock %}" ng-app="tdb">
+    <body class="{% block mainclass %}{% endblock %}" ng-app="tdb" style="height: 100%;">
         {% block navigation %}{% endblock navigation %}
-        {% block content %}{% endblock content%}
+        <div style="min-height: 100%;">
+            <div style="min-height: 100vh;margin-bottom:-25px">
+                {% block content %}{% endblock content%}
+            </div>
+        </div>
+        <section class="footer">
+            <footer>
+                <div class="centered">
+                    <p class="copyright">© Copyright 2016, TMF Works, LLC. All rights reserved. | Questions? <a href="mailto:findyourfool@fool.com?Subject=I%20have%20a%20question.">Contact us!</a></p>
+                </div>
+            </footer>
+        </section>
         <div class="javascripts">
             <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
             <script src="//cdnjs.cloudflare.com/ajax/libs/masonry/2.1.08/jquery.masonry.min.js"></script>
