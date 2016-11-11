@@ -159,7 +159,7 @@
             </div>
         </div>
     </div>
-    <div id="pt-main" class="pt-perspective" ng-repeat="team in index.myLeadershipStyle.teams | orderBy:'customer_id'" ng-if="$first">
+    <div id="pt-main" class="pt-perspective" style="margin-bottom: 10px;" ng-repeat="team in index.myLeadershipStyle.teams | orderBy:'customer_id'" ng-if="$first">
         <div class="pt-page" animate-page-transition="index.page" page="0" scrolltop="true" in-class="pt-page-moveFromLeftFade" out-class="pt-page-moveToLeftFade">
             <!-- Team lead to do reminders -->
             <div ng-if="team.owner.id == $root.currentUser.employee.id">

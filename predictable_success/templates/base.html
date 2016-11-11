@@ -47,14 +47,18 @@
     <body class="{% block mainclass %}{% endblock %}" ng-app="tdb" style="height: 100%;">
         {% block navigation %}{% endblock navigation %}
         <div style="min-height: 100%;">
-            <div style="min-height: 100vh;margin-bottom:-25px">
+            <div style="min-height: 100vh;margin-bottom:-45px">
                 {% block content %}{% endblock content%}
             </div>
         </div>
         <section class="footer">
             <footer>
-                <div class="centered">
-                    <p class="copyright">© Copyright 2016, TMF Works, LLC. All rights reserved. | Questions? <a href="mailto:findyourfool@fool.com?Subject=I%20have%20a%20question.">Contact us!</a></p>
+                <div class="footer-links">
+                    <ul>
+                        <li><a href="{% url 'privacy_policy' %}" title="Privacy Policy">Privacy Policy</a> </li>
+                        <li><a class="last" href="{% url 'terms_and_conditions' %}" title="Terms and Conditions">Terms and Conditions</a> </li>
+                    </ul>
+                    <p class="copyright">© Copyright 2016, TMF Works, LLC. All rights reserved.</p>
                 </div>
             </footer>
         </section>

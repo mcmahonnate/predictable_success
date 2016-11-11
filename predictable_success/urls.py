@@ -60,6 +60,8 @@ urlpatterns = [
     url(r'^api/v1/qualities/', include('qualities.api.urls')),
     url(r'^api/v1/search/', include('search.api.urls')),
 
+    url(r'^legal/privacy-policy/?$', TemplateView.as_view(template_name="legal/privacy_policy.html"), name='privacy_policy'),
+    url(r'^legal/terms-and-conditions/?$', TemplateView.as_view(template_name="legal/terms_and_conditions.html"), name='terms_and_conditions'),
 
     url(r'^', include(router.urls)),
 ]
