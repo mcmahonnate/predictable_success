@@ -474,9 +474,10 @@ angular.module('tdb.directives', ['ngTouch','ngAnimate'])
 .directive('spinner', ['$timeout', function($timeout) {
     return {
       restrict: 'E',
-      template: '<div class="spinner centered"><i class="spinner__dot spinner__dot--one"></i><i class="spinner__dot spinner__dot--two"></i><i class="spinner__dot spinner__dot--three"></i></div>',
+      template: "<div class='spinner centered' ng-class='{\"spinner--inverted\":invert}'><i class='spinner__dot spinner__dot--one'></i><i class='spinner__dot spinner__dot--two'></i><i class='spinner__dot spinner__dot--three'></i></div>",
       scope: {
         show: '=',
+        invert: '=',
         delay: '@'
       },
       link: function(scope, elem, attrs) {

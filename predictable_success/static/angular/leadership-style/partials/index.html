@@ -131,6 +131,7 @@
                                     <p>Custom reports like this can cost thousands of dollars. But we're making this available to Fools like you for just $199, which grants access to up to 10 of your teammates. This offer is available for a limited time only, so I encourage you to act quickly...</p>
                                 </div>
                                 <div>
+
                                     <div class="call-to-action">
                                         <div ng-if="$root.customer.order_page_enabled">
                                             <form action="/account/payment" method="POST" id="paymentForm">
@@ -143,6 +144,11 @@
                                                 <input type="hidden" id="stripeEmail" name="stripeEmail" value="" />
                                             </form>
                                             <stripe-payments key="index.myLeadershipStyle.stripe_key" disable-buy-button="index.disableBuyButton"></stripe-payments>
+                                            <div class="loading" ng-show="index.disableBuyButton">
+                                                <div class="centered" style="position: absolute; width: 100%;top: 40%">
+                                                    <spinner show="true" invert="true" delay="200"></spinner>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div ng-if="!$root.customer.order_page_enabled">
                                             <button class="btn btn-submit btn-block" style="margin-bottom: 15px;" ng-click="index.showOrderPageDown()">
@@ -320,10 +326,20 @@
         </div>
     </div>
 </div>
-
 <style>
-
-    .vertical-align-text {
+.loading {
+  position: fixed;
+  z-index: 999;
+  opacity: 0.5;
+  background-color: rgb(0, 0, 0);
+  overflow: show;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+.vertical-align-text {
     display: table-cell;
     vertical-align: middle;
     height:50px;
