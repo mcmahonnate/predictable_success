@@ -17,7 +17,7 @@ function LeadershipStyleService($http, $log, LeadershipStyleResource) {
     };
 
     function completeLeadershipStyle(leadershipStyle) {
-        return LeadershipStyleResource.complete({id: leadershipStyle.id}, leadershipStyle, success, fail).$promise;
+        return LeadershipStyleResource.complete({id: leadershipStyle.id}, null, success, fail).$promise;
 
         function success(response) {
             return response;
