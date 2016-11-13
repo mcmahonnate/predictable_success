@@ -69,6 +69,10 @@ function QuizController(analytics, Employee, LeadershipStyleService, Notificatio
             vm.leadershipStyle.employee = response;
             vm.panelIndex = 4;
             vm.busy = false;
+        }, function () {
+            console.log('Error saving name');
+            vm.panelIndex = 4;
+            vm.busy = false;
         });
     }
 
