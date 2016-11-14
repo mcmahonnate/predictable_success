@@ -48,11 +48,11 @@
             <panel class="devzone">
                 <h3 class="modal-title" style="padding-bottom: 10px; padding-top: 5px">{{ quiz.leadershipStyle.next_question.text }}...</h3>
 
-                <button ng-show="quiz.leadershipStyle.next_question.answers.length>1" ng-disabled="quiz.busy" class="selfie-answer well well-sm" style="display:flex" ng-repeat="answer in quiz.leadershipStyle.next_question.answers" ng-class="{'selfie-answer-selected': quiz.selectedAnswer.id==answer.id, 'selfie-answer':quiz.selectedAnswer.id!=answer.id}" ng-click="quiz.selectedAnswer=answer;quiz.answerQuestion(quiz.selectedAnswer)">
-                    <div class="selfie-answer-label" style="width: 91%;">
+                <button ng-show="quiz.leadershipStyle.next_question.answers.length>1" ng-disabled="quiz.busy" class="selfie-answer well well-sm clearfix" style="display:flex" ng-repeat="answer in quiz.leadershipStyle.next_question.answers" ng-class="{'selfie-answer-selected': quiz.selectedAnswer.id==answer.id, 'selfie-answer':quiz.selectedAnswer.id!=answer.id}" ng-click="quiz.selectedAnswer=answer;quiz.answerQuestion(quiz.selectedAnswer)">
+                    <div class="selfie-answer-label pull-left" style="width: 91%;">
                         <h4><strong>{{ answer.text }}</strong></h4>
                     </div>
-                    <div style="margin: auto 0px;">
+                    <div class="pull-right" style="margin: auto 0px;width: 9%;">
                         <i class="fa fa-check-circle-o selected-icon" ng-show="quiz.selectedAnswer.id==answer.id"></i>
                     </div>
                 </button>
