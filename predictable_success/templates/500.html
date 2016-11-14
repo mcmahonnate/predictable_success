@@ -1,0 +1,25 @@
+{% extends "layouts/blank.html" %}
+{% load humanize %}
+{% load staticfiles %}
+
+{% block title %}Find Your Fool - Whoops!{% endblock title %}
+
+{% block content %}
+<div class="container ps404">
+    <h2 class="centered">Error!</h2>
+    <h3 class="centered" style="color: #c0392b;">We have logged your error and will be reviewing it. Sorry for the hiccup!</h3>
+    <div class="clearfix">
+        <div class="pull-left ps404-image"><img src="../static/images/predictable-success-death-rattle.png" alt="404"/></div>
+        <div class="pull-right ps404-content">
+            <h3>Death Rattle</h3>
+            <p>Eventually, for all bureaucracies, there is a last final attempt to resuscitate the organization, whether by the appointment of bankruptcy practitioners or by being acquired. Either way, the organization will not survive in its present form.</p>
+            <p>After a brief Death Rattle (when illusory signs of life may be seen), the organization dies in its present form.</p>
+        </div>
+    </div>
+
+    <div class="centered">
+        <a href="{% url 'index' %}" class="centered btn btn-info">Let's get you back to Predictable Success</a>
+    </div>
+</div>
+{% endblock %}
+

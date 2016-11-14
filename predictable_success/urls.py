@@ -23,6 +23,7 @@ admin.autodiscover()
 urlpatterns = [
     url(r'^$', IndexView.as_view(), name='index'),
     url(r'^404/?$', TemplateView.as_view(template_name="404.html"), name='404'),
+    url(r'^500/?$', TemplateView.as_view(template_name="500.html"), name='500'),
     url(r'^error/?$', TemplateView.as_view(template_name="error.html"), name='error'),
     url(r'^feedback/$', TemplateView.as_view(template_name="feedback.html"), name='feedback_home'),
     url(r'^logout/$', logout,{'next_page': '/account/login/'}),
