@@ -23,7 +23,7 @@ function QuizController(analytics, LeadershipStyleService, Notification, leaders
 
     $scope.$watchGroup(['quiz.leadershipStyle.next_question', 'quiz.panelIndex'], function(newValues, oldValues) {
         if (!vm.leadershipStyle.next_question) {
-            if (vm.panelIndex==2) {
+            if (vm.panelIndex==3) {
                 analytics.setPage('/quiz/whats-your-name/');
             } else {
                 analytics.setPage('/quiz/finished');
