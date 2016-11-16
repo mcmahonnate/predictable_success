@@ -135,6 +135,7 @@ class UpdateEmployee(GenericAPIView):
         instance.first_name = instance.full_name.split(' ', 1)[0]
         if len(instance.full_name.split(' ', 1)) > 1:
             instance.last_name = instance.full_name.split(' ', 1)[1]
+        instance.save()
         serializer = self.get_serializer(instance, context={'request': request})
         return Response(serializer.data)
 
