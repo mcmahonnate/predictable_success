@@ -67,7 +67,7 @@ function QuizController(analytics, LeadershipStyleService, Notification, leaders
         var data = {id: employee.id, full_name: employee.new_full_name};
         LeadershipStyleService.updateEmployee(data)
             .then(function(result){
-                vm.leadershipStyle.employee = response;
+                vm.leadershipStyle.employee = result;
                 vm.panelIndex = 4;
                 vm.busy = false;
             }, function () {
