@@ -250,11 +250,6 @@ class Employee(MPTTModel):
         self.save()
 
     def save(self, *args, **kwargs):
-        if self.field_tracker.has_changed('full_name'):
-            if self.full_name.find("@") == -1:
-                self.first_name = self.full_name.split(' ', 1)[0]
-            if len(self.full_name.split(' ', 1)) > 1:
-                self.last_name = self.full_name.split(' ', 1)[1]
         if self.field_tracker.has_changed('departure_date') and self.coach is not None:
             self.coach = None
         super(Employee, self).save(*args, **kwargs)

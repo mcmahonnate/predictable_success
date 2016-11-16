@@ -13,8 +13,21 @@ function LeadershipStyleService($http, $log, LeadershipStyleResource) {
         retakeLeadershipStyle: retakeLeadershipStyle,
         shareLeadershipStyle: shareLeadershipStyle,
         updateLeadershipStyle: updateLeadershipStyle,
+        updateEmployee: updateEmployee,
         goToPreviousQuestion: goToPreviousQuestion
     };
+
+    function updateEmployee(employee) {
+        return LeadershipStyleResource.updateEmployee({id: employee.id}, {full_name: employee.full_name}, success, fail).$promise;
+
+        function success(response) {
+            return response;
+        }
+
+        function fail(response) {
+            $log.error('updateEmployee failed');
+        }
+    }
 
     function completeLeadershipStyle(leadershipStyle) {
         return LeadershipStyleResource.complete({id: leadershipStyle.id}, null, success, fail).$promise;

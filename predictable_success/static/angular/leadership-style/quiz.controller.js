@@ -2,7 +2,7 @@ angular
     .module('leadership-style')
     .controller('QuizController', QuizController);
 
-function QuizController(analytics, Employee, LeadershipStyleService, Notification, leadershipStyle, $location, $modal, $modalInstance, $rootScope, $scope, $window) {
+function QuizController(analytics, LeadershipStyleService, Notification, leadershipStyle, $location, $modal, $modalInstance, $rootScope, $scope, $window) {
     var vm = this;
     vm.trackEvent = analytics.trackEvent;
     vm.leadershipStyle = leadershipStyle;
@@ -64,20 +64,17 @@ function QuizController(analytics, Employee, LeadershipStyleService, Notificatio
     function saveEmployee(employee) {
         analytics.trackEvent('Save Name button', 'click', null);
         vm.busy = true;
-        if (employee.new_full_name) {
-            var data = {id: employee.id, full_name: employee.new_full_name};
-            Employee.update(data, function (response) {
+        var data = {id: employee.id, full_name: employee.new_full_name};
+        LeadershipStyleService.updateEmployee(data)
+            .then(function(result){
                 vm.leadershipStyle.employee = response;
                 vm.panelIndex = 4;
                 vm.busy = false;
             }, function () {
                 vm.panelIndex = 4;
                 vm.busy = false;
-            });
-        } else {
-            vm.panelIndex = 4;
-            vm.busy = false;
-        }
+            }
+        );
     }
 
     function cancel() {

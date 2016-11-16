@@ -123,6 +123,22 @@ class UpdateEmployeeLeadershipStyle(RetrieveUpdateAPIView):
         return Response(serializer.data)
 
 
+class UpdateEmployee(GenericAPIView):
+    queryset = Employee.objects.all()
+    permission_classes = (IsAuthenticated,)
+    serializer_class = SanitizedEmployeeSerializer
+
+    def put(self, request, pk, format=None):
+        instance = self.get_object()
+        full_name = request.DATA["full_name"]
+        instance.full_name = full_name
+        instance.first_name = instance.full_name.split(' ', 1)[0]
+        if len(instance.full_name.split(' ', 1)) > 1:
+            instance.last_name = instance.full_name.split(' ', 1)[1]
+        serializer = self.get_serializer(instance, context={'request': request})
+        return Response(serializer.data)
+
+
 class CompleteEmployeeLeadershipStyle(GenericAPIView):
     queryset = EmployeeLeadershipStyle.objects.all()
     serializer_class = EmployeeLeadershipStyleSerializer

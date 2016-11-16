@@ -41,6 +41,10 @@ function LeadershipStyleResource($resource) {
             method: 'PUT',
             url: '/api/v1/leadership-style/:id/update/'
         },
+        'updateEmployee': {
+            method: 'PUT',
+            url: '/api/v1/leadership-style/employee/:id/update/'
+        },
         'goToPreviousQuestion': {
             method: 'PUT',
             url: '/api/v1/leadership-style/:id/previous-question/'
