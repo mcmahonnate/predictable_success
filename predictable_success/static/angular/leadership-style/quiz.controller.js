@@ -64,16 +64,20 @@ function QuizController(analytics, Employee, LeadershipStyleService, Notificatio
     function saveEmployee(employee) {
         analytics.trackEvent('Save Name button', 'click', null);
         vm.busy = true;
-        var data = {id: employee.id, full_name: employee.new_full_name};
-        Employee.update(data, function (response) {
-            vm.leadershipStyle.employee = response;
+        if (employee.new_full_name) {
+            var data = {id: employee.id, full_name: employee.new_full_name};
+            Employee.update(data, function (response) {
+                vm.leadershipStyle.employee = response;
+                vm.panelIndex = 4;
+                vm.busy = false;
+            }, function () {
+                vm.panelIndex = 4;
+                vm.busy = false;
+            });
+        } else {
             vm.panelIndex = 4;
             vm.busy = false;
-        }, function () {
-            console.log('Error saving name');
-            vm.panelIndex = 4;
-            vm.busy = false;
-        });
+        }
     }
 
     function cancel() {

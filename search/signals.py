@@ -16,10 +16,10 @@ def user_logged_in_handler(sender, request, user, **kwargs):
         pass
 
 
-@receiver(post_save, sender=Employee)
-def employee_save_handler(sender, **kwargs):
-    employee = kwargs['instance']
-    _index([employee])
+#@receiver(post_save, sender=Employee)
+#def employee_save_handler(sender, **kwargs):
+#    employee = kwargs['instance']
+#    _index([employee])
 
 
 @receiver(post_delete, sender=Employee)
