@@ -46,7 +46,8 @@
                     handler.open({
                         name: 'The Motley Fool LLC',
                         description: 'Predictable Success for $199',
-                        amount: 19900
+                        amount: 19900,
+                        email: $rootScope.currentUser.email
                     });
 
                     e.preventDefault();

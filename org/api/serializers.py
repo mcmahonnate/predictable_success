@@ -340,7 +340,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'can_edit_employees', 'can_view_comments', 'can_coach_employees', 'can_evaluate_employees', 'can_view_company_dashboard', 'can_view_projects', 'is_team_lead', 'employee', 'last_login', 'preferences', 'permissions')
+        fields = ('id', 'username', 'first_name', 'last_name', 'can_edit_employees', 'can_view_comments', 'can_coach_employees', 'can_evaluate_employees', 'can_view_company_dashboard', 'can_view_projects', 'is_team_lead', 'employee', 'last_login', 'preferences', 'permissions', 'email')
 
 
 class LeadershipSerializer(serializers.HyperlinkedModelSerializer):
