@@ -68,6 +68,7 @@ function QuizController(analytics, LeadershipStyleService, Notification, leaders
         LeadershipStyleService.updateEmployee(data)
             .then(function(result){
                 vm.leadershipStyle.employee = result;
+                $rootScope.currentUser.employee = result;
                 vm.panelIndex = 4;
                 vm.busy = false;
             }, function () {

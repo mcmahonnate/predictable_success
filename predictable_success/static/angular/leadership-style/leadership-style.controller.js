@@ -17,6 +17,7 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     vm.teases = [];
     vm.currentOrder = null;
     vm.disableBuyButton = false;
+    vm.editUser = editUser;
     vm.discard = discard;
     vm.invite = invite;
     vm.gotoPage = gotoPage;
@@ -453,6 +454,31 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
                 if (team) {
                     vm.gotoPage(0, false);
                     updateTeam(team);
+                }
+            }
+        );
+    }
+
+    function editUser(employee) {
+        analytics.trackEvent("edit user button", "click", null);
+        var modalInstance = $modal.open({
+            animation: true,
+            windowClass: 'xx-dialog fade zoom',
+            backdrop: 'static',
+            templateUrl: '/static/angular/leadership-style/partials/_modals/edit-user.html',
+            controller: 'EditUserController as editUser',
+            resolve: {
+                employee: function () {
+                    return employee
+                }
+            }
+        });
+        modalInstance.result.then(
+            function (employee) {
+                setTrackingPage(vm.myLeadershipStyle);
+                if (employee) {
+                    $rootScope.currentUser.employee = employee;
+                    vm.myLeadershipStyle.employee = employee;
                 }
             }
         );

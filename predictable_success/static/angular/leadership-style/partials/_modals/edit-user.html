@@ -1,0 +1,17 @@
+<div class="form-group">
+    <div class="modal-body">
+        <panel class="devzone">
+            <h3 class="modal-title centered">What's your name?</h3>
+            <div class="invite-360">
+                <span ng-init="hover=false" class="fa fa-user-circle invite-control-button btn-success" style="color: #fff;"></span>
+                <input class="form-control input-lg fade-in invite-control" type="text" ng-model="editUser.employee.new_full_name" placeholder="First & Last name">
+            </div>
+        </panel>
+    </div>
+    <div class="modal-footer">
+        <button type="btn btn-default" ng-click="editUser.cancel()" class="btn btn-light">Cancel</button>
+        <button type="button" ng-disabled="(editUser.employee.new_full_name == editUser.employee.full_name) || !editUser.employee.new_full_name || editUser.busy" class="btn btn-success" ng-click="editUser.submit()">
+            Save
+        </button>
+    </div>
+</div>
