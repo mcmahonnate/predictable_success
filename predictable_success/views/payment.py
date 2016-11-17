@@ -6,6 +6,7 @@ from django.shortcuts import redirect, render_to_response
 from django.template import RequestContext
 from django.views.generic import TemplateView
 from leadership_styles.models import TeamLeadershipStyle
+from payment.models import Coupon
 
 
 class PaymentView(TemplateView):
@@ -22,6 +23,12 @@ class PaymentView(TemplateView):
         stripe.api_key = settings.STRIPE_SECRET_KEY
         stripe_token = request.POST.get('stripeToken', '')
         stripe_email = request.POST.get('stripeEmail', '')
+        code = request.POST.get('couponCode', '')
+        coupon_code = None
+        if code:
+            coupon = Coupon.objects.getCoupon(code=code)
+            if coupon:
+                coupon_code = coupon.code
 
         if not stripe_token:
             raise Exception('Missing stripeToken.')
@@ -43,7 +50,8 @@ class PaymentView(TemplateView):
                     "type": 'sku',
                     "parent": product_sku,
                 }],
-                customer=customer
+                customer=customer,
+                coupon=coupon_code
             )
 
             order.pay(customer=customer)

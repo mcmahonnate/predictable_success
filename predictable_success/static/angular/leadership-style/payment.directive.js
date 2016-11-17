@@ -5,7 +5,7 @@
     function stripePaymentsDirective($rootScope, analytics) {
         return {
             restrict: 'E',
-            scope: { key: '=', disableBuyButton: '=' },
+            scope: { key: '=', disableBuyButton: '=', couponCode: '=' },
             link: function (scope, element, attrs) {
                 var has_token = false;
                 var handler = StripeCheckout.configure({
@@ -41,12 +41,19 @@
                                     $paymentForm.submit();
                                 }
                 });
+                var description = 'Predictable Success for ';
+                if (scope.amount != 0) {
+                    var amount = scope.amount / 100;
+                    description = description + '$' + amount.toString()
+                } else {
+                    description = description + 'FREE';
+                }
                 document.getElementById('stripePay').addEventListener('click', function(e) {
                     // Open Checkout with further options:
                     handler.open({
                         name: 'The Motley Fool LLC',
-                        description: 'Predictable Success for $199',
-                        amount: 19900,
+                        description: description,
+                        amount: scope.amount,
                         email: $rootScope.currentUser.email
                     });
 
