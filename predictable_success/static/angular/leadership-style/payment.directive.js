@@ -52,9 +52,8 @@
                     // Open Checkout with further options:
                     handler.open({
                         name: 'The Motley Fool LLC',
-                        description: description,
-                        amount: scope.amount,
-                        email: $rootScope.currentUser.email
+                        description: 'Predictable Success for $39',
+                        amount: 3900
                     });
 
                     e.preventDefault();
