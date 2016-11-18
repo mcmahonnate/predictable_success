@@ -6,7 +6,7 @@ from django.shortcuts import redirect, render_to_response
 from django.template import RequestContext
 from django.views.generic import TemplateView
 from leadership_styles.models import TeamLeadershipStyle
-from payment.models import Coupon
+from order.models import Coupon
 
 
 class PaymentView(TemplateView):

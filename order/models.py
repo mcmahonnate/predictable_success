@@ -10,10 +10,11 @@ class CouponManager(models.Manager):
         time_now = datetime.utcnow().replace(tzinfo=pytz.utc)
         normalized_code = code.strip().upper()
         try:
-            coupon = self.objects.get(Q(code=normalized_code) & (Q(expires_at__lt=time_now) | Q(expires_at__isnull=True)))
-        except:
+            coupon = self.get(Q(code=normalized_code) & (Q(expires_at__lt=time_now) | Q(expires_at__isnull=True)))
+        except Coupon.DoesNotExist:
             coupon = None
         return coupon
+
 
 class Coupon(models.Model):
     objects = CouponManager()

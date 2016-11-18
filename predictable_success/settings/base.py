@@ -184,6 +184,7 @@ SHARED_APPS = (
     'django.contrib.staticfiles',
     'leadership_styles',
     'mptt',
+    'order',
     'org',
     'predictable_success',
     'preferences',
