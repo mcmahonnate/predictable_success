@@ -10,12 +10,14 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     vm.busy = true;
     vm.page = $routeParams.page ? $routeParams.page : 0;
     vm.showEmptyScreen = false;
+    vm.showCoupon = false;
     vm.myLeadershipStyle = null;
     vm.showTakeQuizNotification = false;
     vm.scores = [];
     vm.tease = null;
     vm.teases = [];
     vm.currentOrder = null;
+    vm.couponCode = null;
     vm.disableBuyButton = false;
     vm.editUser = editUser;
     vm.discard = discard;
@@ -36,6 +38,16 @@ function LeadershipStyleController(LeadershipStyleService, LeadershipStyleReques
     vm.takeQuiz = takeQuiz;
 
     activate();
+
+    $scope.$watch('$root.currentUser.email', function() {
+        vm.showCoupon = false;
+        if ($rootScope.currentUser && $rootScope.currentUser.email) {
+            if ($rootScope.currentUser.email.indexOf("@fool.com") > -1 ||
+                $rootScope.currentUser.email.indexOf("@predictablesuccess.com") > -1) {
+                vm.showCoupon = true;
+            }
+        }
+    });
 
     function activate() {
         if ($routeParams.requestId) {

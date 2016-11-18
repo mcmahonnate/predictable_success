@@ -45,7 +45,7 @@ class Coupon(models.Model):
 class Charge(models.Model):
     amount = models.IntegerField()
     coupon = models.ForeignKey(Coupon, related_name='charges', null=True, blank=True)
-    stripe_id = models.IntegerField()
+    stripe_id = models.CharField(max_length=255)
 
     def __str__(self):
-        return "Charge amount $%s" % (self.amount)
+        return "Charge amount ${:.2f}".format(self.amount/100)
