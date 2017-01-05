@@ -120,7 +120,11 @@ class LeadershipStyleDescriptionManager(models.Manager):
                     d = descriptions.filter(secondary_style_first=operating_scores[1]['style'])
                     if d.count() > 0:
                         descriptions = d
-                        if len(operating_scores) == 3:
+                        if len(operating_scores) == 2:
+                            d = descriptions.filter(secondary_style_second__isnull=True)
+                            if d.count() > 0:
+                                descriptions = d
+                        elif len(operating_scores) == 3:
                             d = descriptions.filter(secondary_style_second=operating_scores[2]['style'])
                             if d.count() > 0:
                                 descriptions = d
