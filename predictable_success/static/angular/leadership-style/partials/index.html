@@ -136,7 +136,8 @@
                                     <div class="call-to-action">
                                         <div ng-if="$root.customer.order_page_enabled">
                                             <form action="/account/payment" method="POST" id="paymentForm">
-                                               <input type="hidden" name="csrfmiddlewaretoken" ng-value="index.myLeadershipStyle.csrf_token" >
+                                                <input type="hidden" name="csrfmiddlewaretoken" ng-value="index.myLeadershipStyle.csrf_token" >
+                                                <input class="form-control input-lg" ng-show="index.showCoupon" ng-model="index.couponCode" type="text" id="couponCode" name="couponCode" value="" placeholder="Enter Promo Code"/>
                                                 <button class="btn btn-submit btn-block" id="stripePay" ng-disabled="index.disableBuyButton" style="margin-bottom: 15px;" type="submit" ng-click="index.trackEvent('Open order page button', 'click', null)">
                                                     <span class="hide-for-mobile">Click here to claim your customized team report now!</span>
                                                     <span class="mobile-show">Click here to claim your team report!</span>
@@ -144,7 +145,7 @@
                                                 <input type="hidden" id="stripeToken" name="stripeToken" value="" />
                                                 <input type="hidden" id="stripeEmail" name="stripeEmail" value="" />
                                             </form>
-                                            <stripe-payments key="index.myLeadershipStyle.stripe_key" disable-buy-button="index.disableBuyButton"></stripe-payments>
+                                            <stripe-payments key="index.myLeadershipStyle.stripe_key" coupon-code="index.couponCode" disable-buy-button="index.disableBuyButton"></stripe-payments>
                                             <div class="loading" ng-show="index.disableBuyButton">
                                                 <div class="centered" style="position: absolute; width: 100%;top: 40%">
                                                     <spinner show="true" invert="true" delay="200"></spinner>

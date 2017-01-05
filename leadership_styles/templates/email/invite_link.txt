@@ -1,4 +1,4 @@
-Take the Leadership Style Quiz
+Take the Find Your Fool Quiz
 {% if employee_first_name %}
 Hi {{ employee_first_name }},
 {% endif %}

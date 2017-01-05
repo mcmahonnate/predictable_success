@@ -72,7 +72,7 @@ def send_quiz_link_email(quiz_link_id):
         text_content = render_to_string('email/invite_link.txt', context)
         html_content = render_to_string('email/invite_link.html', context)
     else:
-        subject = "Here's your personalized link"
+        subject = "Here's your quiz link"
         text_content = render_to_string('email/quiz_link.txt', context)
         html_content = render_to_string('email/quiz_link.html', context)
     msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [recipient_email])

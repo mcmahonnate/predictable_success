@@ -5,6 +5,7 @@ from django.views.generic import TemplateView
 from models import generate_quiz_link
 from sign_in.models import SignInLink
 
+
 class StartQuiz(TemplateView):
     template = "start_quiz.html"
 

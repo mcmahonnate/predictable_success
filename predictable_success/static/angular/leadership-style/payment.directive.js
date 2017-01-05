@@ -2,10 +2,10 @@
         .module('leadership-style')
         .directive('stripePayments', stripePaymentsDirective);
 
-    function stripePaymentsDirective($rootScope, analytics) {
+    function stripePaymentsDirective(analytics, orderService) {
         return {
             restrict: 'E',
-            scope: { key: '=', disableBuyButton: '=' },
+            scope: { key: '=', disableBuyButton: '=', couponCode: '=' },
             link: function (scope, element, attrs) {
                 var has_token = false;
                 var handler = StripeCheckout.configure({
@@ -41,16 +41,42 @@
                                     $paymentForm.submit();
                                 }
                 });
+                var amount = 3900;
                 document.getElementById('stripePay').addEventListener('click', function(e) {
-                    // Open Checkout with further options:
-                    handler.open({
-                        name: 'The Motley Fool LLC',
-                        description: 'Predictable Success for $39',
-                        amount: 3900
-                    });
+                    if (scope.couponCode) {
+                        orderService.applyCoupon(scope.couponCode, amount)
+                            .then(function (coupon) {
+                                if (coupon) {
+                                    openDialog(coupon.discounted_price);
+                                } else {
+                                    openDialog(amount);
+                                }
+                            }, function() {
+                                openDialog(amount);
+                            })
+                    } else {
+                        openDialog(amount);
+                    }
 
                     e.preventDefault();
                 });
+
+                function openDialog(amount) {
+                    handler.open({
+                        name: 'The Motley Fool LLC',
+                        description: getDescription(amount),
+                        amount: amount
+                    });
+                }
+
+                function getDescription(amount) {
+                    var description = 'Predictable Success for ';
+                    var amount_decimal = (amount / 100).toFixed(2);
+
+                    description = description + '$' + amount_decimal.toString()
+
+                    return description
+                }
 
                 // Close Checkout on page navigation:
                 window.addEventListener('popstate', function() {
