@@ -2,13 +2,11 @@ var app = angular.module('tdb', [
         'tdb.services', 'tdb.controllers', 'tdb.directives', 'tdb.filters',
         'tdb.activity.controllers', 'tdb.activity.services',
         'tdb.comments.controllers', 'tdb.comments.services',
-        'tdb.comp.services',
         'tdb.customers.services',
         'tdb.org.controllers', 'tdb.org.services',
-        'tdb.preferences.services',
         'tdb.search.controllers', 'tdb.search.services',
         'angular.filter', 'chart.js',
-        'leadership-style', 'profile', 'qualities',
+        'leadership-style',
         'analytics', 'ui.bootstrap', 'ngCsv','ngImgCrop', 'ngRoute', 'ngAnimate', 'ui-notification', 'ngMessages', 'readMore', 'ngCookies', 'ui.select', 'selectize','ngTouch'])
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.
