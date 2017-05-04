@@ -59,7 +59,6 @@ urlpatterns = [
     url(r'^api/v1/leadership-style/', include('leadership_styles.api.urls')),
     url(r'^api/v1/order/', include('order.api.urls')),
     url(r'^api/v1/org/', include('org.api.urls')),
-    url(r'^api/v1/qualities/', include('qualities.api.urls')),
     url(r'^api/v1/search/', include('search.api.urls')),
 
     url(r'^legal/privacy-policy/?$', TemplateView.as_view(template_name="legal/privacy_policy.html"), name='privacy_policy'),
