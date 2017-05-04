@@ -32,6 +32,6 @@ gulp.task('watch', function() {
     gulp.watch('./predictable_success/**/*.js', ['scripts']);
 });
 
-gulp.task('scripts', ['leadership-style-scripts', 'profile-scripts', 'qualities-scripts']);
+gulp.task('scripts', ['leadership-style-scripts',]);
 
 gulp.task('default', ['watch']);
