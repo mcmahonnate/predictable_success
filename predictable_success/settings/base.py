@@ -187,8 +187,6 @@ SHARED_APPS = (
     'order',
     'org',
     'predictable_success',
-    'preferences',
-    'qualities',
     'raven.contrib.django.raven_compat',
     'rest_framework',
     'search',

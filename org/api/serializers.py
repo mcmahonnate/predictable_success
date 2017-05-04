@@ -2,7 +2,6 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.fields import IntegerField
 from django.core.exceptions import ObjectDoesNotExist
-from preferences.api.serializers import UserPreferencesSerializer
 from ..models import *
 
 
@@ -299,7 +298,6 @@ class UserSerializer(serializers.ModelSerializer):
     can_view_company_dashboard = serializers.SerializerMethodField()
     can_view_projects = serializers.SerializerMethodField()
     is_team_lead = serializers.SerializerMethodField()
-    preferences = UserPreferencesSerializer()
     permissions = serializers.SerializerMethodField()
 
     def get_permissions(self, obj):
