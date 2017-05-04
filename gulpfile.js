@@ -20,28 +20,6 @@ gulp.task('leadership-style-scripts', function() {
         .pipe(gulp.dest('./predictable_success/static/'));
 });
 
-gulp.task('profile-scripts', function() {
-    return gulp.src('./predictable_success/static/angular/profile/**/*.js')
-        .pipe(sourcemaps.init())
-        .pipe(angularFilesort())
-        .pipe(concat('profile.js'))
-        .pipe(iife())
-        .pipe(ngAnnotate())
-        .pipe(sourcemaps.write())
-        .pipe(gulp.dest('./predictable_success/static/'));
-});
-
-gulp.task('qualities-scripts', function() {
-    return gulp.src('./predictable_success/static/angular/qualities/**/*.js')
-        .pipe(sourcemaps.init())
-        .pipe(angularFilesort())
-        .pipe(concat('qualities.js'))
-        .pipe(iife())
-        .pipe(ngAnnotate())
-        .pipe(sourcemaps.write())
-        .pipe(gulp.dest('./predictable_success/static/'));
-});
-
 gulp.task('less', function () {
     return gulp.src('./predictable_success/static/css/scoutmap/**/*.less')
         .pipe(less({
